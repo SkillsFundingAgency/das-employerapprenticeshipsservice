@@ -47,7 +47,11 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers
 
             try
             {
-                var paymentTransfers = await _paymentService.GetAccountTransfers(message.PeriodEnd, message.ReceiverAccountId);
+                _logger.Info($"Getting account transfers from payment api for AccountId = '{message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
+
+                var paymentTransfers = await _paymentService.GetAccountTransfers(message.PeriodEnd, message.ReceiverAccountId, message.CorrelationId);
+
+                _logger.Info($"Retrieved payment transfers from payment api for AccountId = '{message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
 
                 //Handle multiple transfers for the same account, period end and commitment ID by grouping them together
                 //This can happen if delivery months are different by collection months are not for payments
@@ -72,16 +76,26 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers
                         };
                     }).ToArray();
 
+                _logger.Info($"Retrieved {transfers.Length} grouped account transferts from payment api for AccountId = '{message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
+
                 var transferSenderIds = transfers.Select(t => t.SenderAccountId).Distinct();
+
 
                /*
                 //The following two can be parallelized
+=======
+                _logger.Info($"Getting sender account names for ids:[{string.Join(",", transferSenderIds.Select(x => x.ToString()))}] AccountId = {message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
+
+>>>>>>> CON-3020_Extra-logging-info
                 var transferSenderAccountNames = await _accountRepository.GetAccountNames(transferSenderIds);
 
                 var transferReceiverAccountName = await _accountRepository.GetAccountName(message.ReceiverAccountId);
 
+                _logger.Info($"Getting receiver name AccountId = {message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
+
                 foreach (var transfer in transfers)
                 {
+<<<<<<< HEAD
                     // Can this be different? why assign again?
                     transfer.PeriodEnd = message.PeriodEnd;
                     // can CreateAccountTransfers & the following procedure merged into one and just pass in the Id of transfer
@@ -93,23 +107,57 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers
 
                     // Don't see this getting used any where
                     transfer.ApprenticeCount = paymentDetails.ApprenticeCount;
+=======
+                    try
+                    {
+                        transfer.PeriodEnd = message.PeriodEnd;
 
-                    transfer.SenderAccountName = transferSenderAccountNames[transfer.SenderAccountId];
-                    transfer.ReceiverAccountName = transferReceiverAccountName;
+                        _logger.Info($"Getting payment details for transfer AccountId = {message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
 
+                        var paymentDetails = await _transferRepository.GetTransferPaymentDetails(transfer);
+>>>>>>> CON-3020_Extra-logging-info
+
+                        _logger.Info($"Got payment details for transfer: {(paymentDetails == null ? "null payment details" : paymentDetails.CourseName)} AccountId = {message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
+
+                        if (paymentDetails != null)
+                        {
+                            transfer.CourseName = paymentDetails.CourseName ?? "Unknown Course";
+                            transfer.CourseLevel = paymentDetails.CourseLevel;
+                            transfer.ApprenticeCount = paymentDetails.ApprenticeCount;
+                        }
+
+                        transfer.SenderAccountName = transferSenderAccountNames[transfer.SenderAccountId];
+                        transfer.ReceiverAccountName = transferReceiverAccountName;
+
+                        if (transfer.Amount != (paymentDetails?.PaymentTotal ?? 0))
+                            _logger.Warn("Transfer total does not match transfer payments total");
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Error(ex, $"Failed to process transfer: ReceiverAccountId = {transfer.ReceiverAccountId}, PeriodEnd = {message.PeriodEnd}, ApprenticeshipId = {transfer.ApprenticeshipId}, CorrelationId = {message.CorrelationId}");
+                        throw;
+                    }
+
+<<<<<<< HEAD
                     // If it all goes into stored procedure we will lose this check.
                     if (transfer.Amount != paymentDetails.PaymentTotal)
                         _logger.Warn("Transfer total does not match transfer payments total");
+=======
+>>>>>>> CON-3020_Extra-logging-info
                 }
                 */
 
+
                 await _transferRepository.CreateAccountTransfersV1(transfers);
+
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, $"Could not process transfers for Account Id {message.ReceiverAccountId} and Period End {message.PeriodEnd}");
+                _logger.Error(ex, $"Could not process transfers for Account Id {message.ReceiverAccountId} and Period End {message.PeriodEnd}, CorrelationId = {message.CorrelationId}");
                 throw;
             }
+
+            _logger.Info($"Refresh account transfers handler complete for AccountId = '{message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
         }
     }
 }

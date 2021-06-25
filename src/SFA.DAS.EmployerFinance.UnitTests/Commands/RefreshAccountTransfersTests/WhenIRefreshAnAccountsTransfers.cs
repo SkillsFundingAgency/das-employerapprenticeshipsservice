@@ -85,7 +85,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
             _validator.Setup(x => x.Validate(It.IsAny<RefreshAccountTransfersCommand>()))
                 .Returns(new ValidationResult());
 
-            _paymentService.Setup(x => x.GetAccountTransfers(It.IsAny<string>(), It.IsAny<long>()))
+            _paymentService.Setup(x => x.GetAccountTransfers(It.IsAny<string>(), It.IsAny<long>(), It.IsAny<Guid>()))
                 .ReturnsAsync(_transfers);
 
             _transferRepository.Setup(x => x.GetTransferPaymentDetails(It.IsAny<AccountTransfer>()))
@@ -108,7 +108,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
             await _handler.Handle(_command);
 
             //Assert
-            _paymentService.Verify(x => x.GetAccountTransfers(_command.PeriodEnd, _command.ReceiverAccountId), Times.Once);
+            _paymentService.Verify(x => x.GetAccountTransfers(_command.PeriodEnd, _command.ReceiverAccountId, It.IsAny<Guid>()), Times.Once);
         }
 
         [Test]
@@ -180,7 +180,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
             }
 
             //Assert
-            _paymentService.Verify(x => x.GetAccountTransfers(_command.PeriodEnd, _command.ReceiverAccountId), Times.Never);
+            _paymentService.Verify(x => x.GetAccountTransfers(_command.PeriodEnd, _command.ReceiverAccountId, Guid.NewGuid()), Times.Never);
         }
 
         [Test]
@@ -214,7 +214,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
         public void ThenIfWeCannotGetTransfersWeShouldNotTryToProcessThem()
         {
             //Assert
-            _paymentService.Setup(x => x.GetAccountTransfers(It.IsAny<string>(), It.IsAny<long>()))
+            _paymentService.Setup(x => x.GetAccountTransfers(It.IsAny<string>(), It.IsAny<long>(), It.IsAny<Guid>()))
                 .Throws<WebException>();
 
             //Act + Assert
@@ -228,7 +228,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
         {
             //Assert
             var exception = new Exception();
-            _paymentService.Setup(x => x.GetAccountTransfers(It.IsAny<string>(), It.IsAny<long>()))
+            _paymentService.Setup(x => x.GetAccountTransfers(It.IsAny<string>(), It.IsAny<long>(), It.IsAny<Guid>()))
                 .Throws(exception);
 
             //Act + Assert
@@ -307,7 +307,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
             //(We will not be catching duplicate transfers that exactly match as there is no ID or value in the transfer that remains unique to help us)
             _transfers.Add(_accountTransfer);
 
-            _paymentService.Setup(x => x.GetAccountTransfers(_command.PeriodEnd, _command.ReceiverAccountId))
+            _paymentService.Setup(x => x.GetAccountTransfers(_command.PeriodEnd, _command.ReceiverAccountId, Guid.NewGuid()))
                 .ReturnsAsync(_transfers);
 
             //Act
@@ -335,7 +335,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
             });
 
 
-            _paymentService.Setup(x => x.GetAccountTransfers(_command.PeriodEnd, _command.ReceiverAccountId))
+            _paymentService.Setup(x => x.GetAccountTransfers(_command.PeriodEnd, _command.ReceiverAccountId, Guid.NewGuid()))
                 .ReturnsAsync(_transfers);
 
 

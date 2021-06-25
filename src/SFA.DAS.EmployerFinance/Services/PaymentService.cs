@@ -45,12 +45,12 @@ namespace SFA.DAS.EmployerFinance.Services
             _apprenticeshipInfoService = apprenticeshipInfoService;
             _mapper = mapper;
             _logger = logger;
-            _inProcessCache = inProcessCache;            
+            _inProcessCache = inProcessCache;
             _providerService = providerService;
             _apprenticeships = new List<ApprenticeshipCache>();
         }
 
-        public async Task<ICollection<PaymentDetails>> GetAccountPayments(string periodEnd, long employerAccountId)
+        public async Task<ICollection<PaymentDetails>> GetAccountPayments(string periodEnd, long employerAccountId, Guid correlationId)
         {
             var populatedPayments = new List<PaymentDetails>();
 
@@ -66,22 +66,90 @@ namespace SFA.DAS.EmployerFinance.Services
 
                 var paymentDetails = payments.Items.Select(x => _mapper.Map<PaymentDetails>(x)).ToArray();
 
+                //int paymentDetailsCount = 0;
+
+                _logger.Info($"Fetching provider and apprenticeship for AccountId = {employerAccountId}, periodEnd={periodEnd}, correlationId = {correlationId}");
+
+                var ukprnList = paymentDetails.Select(pd => pd.Ukprn).Distinct();
+                var apprenticeshipIdList = paymentDetails.Select(pd => pd.ApprenticeshipId).Distinct();
+
+                var getProviderDetailsTask = GetProviderDetailsDict(ukprnList);
+                var getApprenticeDetailsTask = GetApprenticeshipDetailsDict(employerAccountId, apprenticeshipIdList);
+
+                await Task.WhenAll(getProviderDetailsTask, getApprenticeDetailsTask);
+
+                var apprenticeshipDetails = getApprenticeDetailsTask.Result;
+                var providerDetails = getProviderDetailsTask.Result;
+
+                _logger.Info($"Fetching {providerDetails.Count} providers and {apprenticeshipDetails.Count} apprenticeship details  for AccountId = {employerAccountId}, periodEnd={periodEnd}, correlationId = {correlationId}");
+
                 foreach (var details in paymentDetails)
                 {
                     details.PeriodEnd = periodEnd;
+                    var getCourseDetailsTask = GetCourseDetails(details);
 
-                    await GetProviderDetails(details);
-                    await GetApprenticeshipDetails(employerAccountId, details);
-                    await GetCourseDetails(details);
+                    providerDetails.TryGetValue(details.Ukprn, out var provider);
+                    details.ProviderName = provider?.Name;
+                    details.IsHistoricProviderName = provider?.IsHistoricProviderName ?? false;
+
+                    if (apprenticeshipDetails.TryGetValue(details.ApprenticeshipId, out var apprenticeship))
+                    {
+                        details.ApprenticeName = $"{apprenticeship.FirstName} {apprenticeship.LastName}";
+                        details.ApprenticeNINumber = apprenticeship.NINumber;
+                        details.CourseStartDate = apprenticeship.StartDate;
+                    }
+
+                    await getCourseDetailsTask;
+                    //_logger.Info($"Metadata retrieved for payment {details.Id}, count: {++paymentDetailsCount}, correlationId = {correlationId}");
                 }
 
                 populatedPayments.AddRange(paymentDetails);
+
+                _logger.Info($"Populated payements page {index} of {totalPages} for AccountId = {employerAccountId}, periodEnd={periodEnd}, correlationId = {correlationId}");
             }
 
             return populatedPayments;
         }
 
-        public async Task<IEnumerable<AccountTransfer>> GetAccountTransfers(string periodEnd, long receiverAccountId)
+        private async Task<Dictionary<long, Models.ApprenticeshipProvider.Provider>> GetProviderDetailsDict(IEnumerable<long> ukprnList)
+        {
+            var resultProviders = new Dictionary<long, Models.ApprenticeshipProvider.Provider>();
+
+            foreach (var ukprn in ukprnList)
+            {
+                if (resultProviders.ContainsKey(ukprn)) continue;
+                var provider = await _providerService.Get(ukprn);
+                resultProviders.Add(ukprn, provider);
+            }
+
+            return resultProviders;
+        }
+
+        private async Task<Dictionary<long, Apprenticeship>> GetApprenticeshipDetailsDict(long employerAccountId, IEnumerable<long> apprenticeshipIdList)
+        {
+            var resultApprenticeships = new Dictionary<long, Apprenticeship>();
+
+            var taskList = apprenticeshipIdList.Select(id =>
+            {
+                return GetApprenticeship(employerAccountId, id);
+            });
+
+            //foreach (var apprenticeshipId in apprenticeshipIdList)
+            //{
+            //    if (resultApprenticeships.ContainsKey(apprenticeshipId)) continue;
+            //    var apprenticeship = await GetApprenticeship(employerAccountId, apprenticeshipId);
+            //    resultApprenticeships.Add(apprenticeshipId, apprenticeship);
+            //}
+
+            var apprenticeships = await Task.WhenAll(taskList);
+            resultApprenticeships = apprenticeships
+                .Where(app => app != null)
+                .ToDictionary(app => app.Id, app => app);
+
+            return resultApprenticeships;
+        }
+
+        public async Task<IEnumerable<AccountTransfer>> GetAccountTransfers(string periodEnd, long receiverAccountId, Guid correlationId)
         {
             var pageOfTransfers =
                 await _paymentsEventsApiClient.GetTransfers(periodEnd, receiverAccountId: receiverAccountId);
@@ -116,7 +184,7 @@ namespace SFA.DAS.EmployerFinance.Services
                 payment.CourseName = standard?.CourseName;
                 payment.CourseLevel = standard?.Level;
             }
-            else if(payment.FrameworkCode.HasValue && payment.FrameworkCode > 0)
+            else if (payment.FrameworkCode.HasValue && payment.FrameworkCode > 0)
             {
                 await GetFrameworkCourseDetails(payment);
             }
@@ -206,7 +274,7 @@ namespace SFA.DAS.EmployerFinance.Services
             }
 
             return null;
-        }        
+        }
 
         private async Task<Standard> GetStandard(long standardCode)
         {
