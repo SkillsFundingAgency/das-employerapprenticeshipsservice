@@ -66,7 +66,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
             _levyImportCleanerStrategy = new LevyImportCleanerStrategy(_levyRepository.Object, _hmrcDateService.Object, _logger.Object, _currentDateTime.Object);
 
             _refreshEmployerLevyDataCommandHandler = new RefreshEmployerLevyDataCommandHandler(_validator.Object, _levyRepository.Object, _mediator.Object,
-                _levyEventFactory.Object, _genericEventFactory.Object, _hashingService.Object, _levyImportCleanerStrategy, _eventPublisher);
+                _levyEventFactory.Object, _genericEventFactory.Object, _hashingService.Object, _levyImportCleanerStrategy, _eventPublisher, Mock.Of<ILog>());
         }
 
         [Test]
