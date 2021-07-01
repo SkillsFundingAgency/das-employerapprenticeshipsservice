@@ -1,19 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerFinance.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Factories;
+using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.HashingService;
-using SFA.DAS.Validation;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.EmployerFinance.Messages.Commands;
-using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.NServiceBus.Services;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
 {
@@ -27,6 +26,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
         private readonly IHashingService _hashingService;
         private readonly ILevyImportCleanerStrategy _levyImportCleanerStrategy;
         private readonly IEventPublisher _eventPublisher;
+        private readonly ILog _logger;
 
         public RefreshEmployerLevyDataCommandHandler(
             IValidator<RefreshEmployerLevyDataCommand> validator,
@@ -36,7 +36,8 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
             IGenericEventFactory genericEventFactory,
             IHashingService hashingService,
             ILevyImportCleanerStrategy levyImportCleanerStrategy,
-            IEventPublisher eventPublisher)
+            IEventPublisher eventPublisher,
+            ILog logger)
         {
             _validator = validator;
             _dasLevyRepository = dasLevyRepository;
@@ -46,6 +47,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
             _hashingService = hashingService;
             _levyImportCleanerStrategy = levyImportCleanerStrategy;
             _eventPublisher = eventPublisher;
+            _logger = logger;
         }
 
         protected override async Task HandleCore(RefreshEmployerLevyDataCommand message)
@@ -114,6 +116,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
 
             foreach (var empRef in updatedEmpRefs)
             {
+                _logger.Info($"Processing declarations for {message.AccountId}, PAYE: {ObscurePayeScheme(empRef)}");
                 levyTransactionTotalAmount += await _dasLevyRepository.ProcessDeclarations(message.AccountId, empRef);
             }
 
@@ -141,6 +144,22 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
             var genericEvent = _genericEventFactory.Create(declarationUpdatedEvent);
 
             return _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
+        }
+
+        private string ObscurePayeScheme(string payeSchemeId)
+        {
+            var length = payeSchemeId.Length;
+
+            var response = new StringBuilder(payeSchemeId);
+
+            for (var i = 1; i < length - 1; i++)
+                if (response[i].ToString() != "/")
+                {
+                    response.Remove(i, 1);
+                    response.Insert(i, "*");
+                }
+
+            return response.ToString();
         }
     }
 }
