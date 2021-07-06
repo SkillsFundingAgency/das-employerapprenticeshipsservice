@@ -67,10 +67,10 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers
                             ApprenticeshipId = firstGroupItem.ApprenticeshipId,
                             ReceiverAccountId = firstGroupItem.ReceiverAccountId,
                             // assumption we are not getting this information back from payment, that is why we are getting it again from the local db
-                            ReceiverAccountName = firstGroupItem.ReceiverAccountName,
+                            ReceiverAccountName = !string.IsNullOrWhiteSpace(firstGroupItem.ReceiverAccountName) ? firstGroupItem.ReceiverAccountName : "RXX",
                             SenderAccountId = firstGroupItem.SenderAccountId,
                             // assumption we are not getting this information back from payment, that is why we are getting it again from the local db
-                            SenderAccountName = firstGroupItem.SenderAccountName,
+                            SenderAccountName = !string.IsNullOrWhiteSpace(firstGroupItem.SenderAccountName) ? firstGroupItem.SenderAccountName : "SXX",
                             Type = firstGroupItem.Type
                             // Not mapping the RequiredPaymentId - I assume this is not required, but we are trying to insert it into the transfers table.
                         };
