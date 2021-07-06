@@ -19,6 +19,7 @@ namespace SFA.DAS.EmployerFinance.Services
 {
     public class ApprenticeshipCache
     {
+        public long Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string NINumber { get; set; }
@@ -125,9 +126,9 @@ namespace SFA.DAS.EmployerFinance.Services
             return resultProviders;
         }
 
-        private async Task<Dictionary<long, Apprenticeship>> GetApprenticeshipDetailsDict(long employerAccountId, IEnumerable<long> apprenticeshipIdList)
+        private async Task<Dictionary<long, ApprenticeshipCache>> GetApprenticeshipDetailsDict(long employerAccountId, IEnumerable<long> apprenticeshipIdList)
         {
-            var resultApprenticeships = new Dictionary<long, Apprenticeship>();
+            var resultApprenticeships = new Dictionary<long, ApprenticeshipCache>();
 
             var taskList = apprenticeshipIdList.Select(id =>
             {
@@ -239,6 +240,7 @@ namespace SFA.DAS.EmployerFinance.Services
                     var apprenticeship = await _commitmentsApiClient.GetEmployerApprenticeship(employerAccountId, apprenticeshipId);
                     _apprenticeships.Add(new ApprenticeshipCache
                     {
+                        Id = apprenticeship.Id,
                         FirstName = apprenticeship.FirstName,
                         LastName = apprenticeship.LastName,
                         NINumber = apprenticeship.NINumber,
