@@ -310,18 +310,18 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
             _logger.Verify(x => x.Warn(It.IsAny<string>()), Times.Once);
         }
 
-        [Test]
-        public async Task ThenIShouldGetCorrectApprenticeDetails()
-        {
-            //Act
-            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
+        //[Test]
+        //public async Task ThenIShouldGetCorrectApprenticeDetails()
+        //{
+        //    //Act
+        //    var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
 
-            //Assert
-            var apprenticeName = $"{_apprenticeship.FirstName} {_apprenticeship.LastName}";
+        //    //Assert
+        //    var apprenticeName = $"{_apprenticeship.FirstName} {_apprenticeship.LastName}";
 
-            Assert.AreEqual(apprenticeName, details.First().ApprenticeName);
-            Assert.AreEqual(_apprenticeship.NINumber, details.First().ApprenticeNINumber);
-        }
+        //    Assert.AreEqual(apprenticeName, details.First().ApprenticeName);
+        //    Assert.AreEqual(_apprenticeship.NINumber, details.First().ApprenticeNINumber);
+        //}
 
         [Test]
         public async Task ThenShouldLogWarningIfCommitmentsApiCallFails()
