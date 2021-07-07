@@ -71,7 +71,8 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers
                             SenderAccountId = firstGroupItem.SenderAccountId,
                             // assumption we are not getting this information back from payment, that is why we are getting it again from the local db
                             SenderAccountName = !string.IsNullOrWhiteSpace(firstGroupItem.SenderAccountName) ? firstGroupItem.SenderAccountName : "SXX",
-                            Type = firstGroupItem.Type
+                            Type = firstGroupItem.Type,
+                            CourseName = "CXXX"
                             // Not mapping the RequiredPaymentId - I assume this is not required, but we are trying to insert it into the transfers table.
                         };
                     }).ToArray();
