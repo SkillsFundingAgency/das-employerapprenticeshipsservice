@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerAccountsApi.Http
         {
             var httpClient = new HttpClientBuilder()
                 .WithDefaultHeaders()
-                .WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(_employerAccountsApiConfig))
+                //.WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(_employerAccountsApiConfig))
                 .Build();
 
             httpClient.BaseAddress = new Uri(_employerAccountsApiConfig.BaseUrl);
