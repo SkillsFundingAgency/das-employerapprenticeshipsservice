@@ -82,7 +82,7 @@ namespace SFA.DAS.EmployerFinance.Services
                 var apprenticeshipDetails = getApprenticeDetailsTask.Result;
                 var providerDetails = getProviderDetailsTask.Result;
 
-                _logger.Info($"Fetching {providerDetails.Count} providers and {apprenticeshipDetails.Count} apprenticeship details  for AccountId = {employerAccountId}, periodEnd={periodEnd}, correlationId = {correlationId}");
+                _logger.Info($"Fetched provider and apprenticeship for AccountId = {employerAccountId}, periodEnd={periodEnd}, correlationId = {correlationId} - with {providerDetails.Count} providers and {apprenticeshipDetails.Count} apprenticeship details");
 
                 foreach (var details in paymentDetails)
                 {
@@ -233,27 +233,27 @@ namespace SFA.DAS.EmployerFinance.Services
         {
             try
             {
-                var apprenticeshipFromCache =_apprenticeships.FirstOrDefault(x => x.ApprenticeshipId == apprenticeshipId);
+                //var apprenticeshipFromCache =_apprenticeships.FirstOrDefault(x => x.ApprenticeshipId == apprenticeshipId);
 
-                if (apprenticeshipFromCache == null)
-                {
+                //if (apprenticeshipFromCache == null)
+                //{
                     var apprenticeship = await _commitmentsApiClient.GetEmployerApprenticeship(employerAccountId, apprenticeshipId);
-                    _apprenticeships.Add(new ApprenticeshipCache
+                    return new ApprenticeshipCache
                     {
                         Id = apprenticeship.Id,
                         FirstName = apprenticeship.FirstName,
                         LastName = apprenticeship.LastName,
                         NINumber = apprenticeship.NINumber,
                         StartDate = apprenticeship.StartDate
-                    });
-                }
-                else
-                {
-                    _logger.Info("Found apprenticeship from cache :" + apprenticeshipFromCache.ApprenticeshipId);
-                }
+                    };
+                //}
+                //else
+                //{
+                //    _logger.Info("Found apprenticeship from cache :" + apprenticeshipFromCache.ApprenticeshipId);
+                //}
 
-                _logger.Info("Cache apprenticeship size :" + _apprenticeships.Count());
-                return apprenticeshipFromCache;
+                //_logger.Info("Cache apprenticeship size :" + _apprenticeships.Count());
+                //return apprenticeshipFromCache;
             }
             catch (Exception e)
             {
