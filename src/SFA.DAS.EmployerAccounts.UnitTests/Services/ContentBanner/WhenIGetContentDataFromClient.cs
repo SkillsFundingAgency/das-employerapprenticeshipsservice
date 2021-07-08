@@ -18,32 +18,22 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.ContentBanner
         private ContentClientApiConfiguration _configuration;
         private string _testData;
 
-        private string _apiBaseUrl;
-        private string _clientId;
-        private string _clientSecret;
+        private string _apiBaseUrl;        
         private string _identifierUri;
-        private string _tenent;
         string applicationId = "eas-acc";
         string type = "banner";
         Mock<HttpMessageHandler> _mockHttpMessageHandler;
 
-
         [SetUp]
         public void Arrange()
         {
-            _apiBaseUrl = $"http://{Guid.NewGuid().ToString()}/";
-            _clientId = Guid.NewGuid().ToString();
-            _clientSecret = Guid.NewGuid().ToString();
+            _apiBaseUrl = $"http://{Guid.NewGuid().ToString()}/";            
             _identifierUri = Guid.NewGuid().ToString();
-            _tenent = Guid.NewGuid().ToString();
 
-            _configuration = new ContentClientApiConfiguration
+           _configuration = new ContentClientApiConfiguration
             {
                 ApiBaseUrl = _apiBaseUrl,
-                ClientId = _clientId,
-                ClientSecret = _clientSecret,
-                IdentifierUri = _identifierUri,
-                Tenant = _tenent
+                IdentifierUri = _identifierUri                
             };
 
             _mockHttpMessageHandler = new Mock<HttpMessageHandler>();
