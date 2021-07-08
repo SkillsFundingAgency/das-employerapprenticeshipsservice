@@ -230,7 +230,7 @@
       <Version>3.0.0.63765</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus">
-      <Version>3.0.0.63765</Version>
+      <Version>3.0.0.53181</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus.StructureMap">
       <Version>3.0.0.63765</Version>
