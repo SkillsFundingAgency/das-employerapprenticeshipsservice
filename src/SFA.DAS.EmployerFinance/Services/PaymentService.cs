@@ -75,6 +75,10 @@ namespace SFA.DAS.EmployerFinance.Services
                 var apprenticeshipIdList = paymentDetails.Select(pd => pd.ApprenticeshipId).Distinct();
 
                 var getProviderDetailsTask = GetProviderDetailsDict(ukprnList);
+
+                /// This is getting the list of all apprneticeships in one go, they need to be staggered
+                /// otherwise commitment api struggles to keep up with the requests.
+                /// Similar to this https://github.com/SkillsFundingAgency/das-commitments/blob/a1f6cfd34fd1546c559f7bc50bb9fb8627300320/src/SFA.DAS.Commitments.Notification.WebJob/EmailServices/ProviderAlertSummaryEmailService.cs#L58
                 var getApprenticeDetailsTask = GetApprenticeshipDetailsDict(employerAccountId, apprenticeshipIdList);
 
                 await Task.WhenAll(getProviderDetailsTask, getApprenticeDetailsTask);
@@ -229,6 +233,12 @@ namespace SFA.DAS.EmployerFinance.Services
             }
         }
 
+        /// <summary>
+        /// Done for spike, this is calling 
+        /// </summary>
+        /// <param name="employerAccountId"></param>
+        /// <param name="apprenticeshipId"></param>
+        /// <returns></returns>
         private async Task<ApprenticeshipCache> GetApprenticeship(long employerAccountId, long apprenticeshipId)
         {
             try
