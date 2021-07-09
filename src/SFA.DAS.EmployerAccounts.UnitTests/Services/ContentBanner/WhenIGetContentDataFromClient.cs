@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -17,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.ContentBanner
         private IContentApiClient _sut;
         private ContentClientApiConfiguration _configuration;
         private string _testData;
-
+        
         private string _apiBaseUrl;        
         private string _identifierUri;
         string applicationId = "eas-acc";
@@ -27,6 +28,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.ContentBanner
         [SetUp]
         public void Arrange()
         {
+            ConfigurationManager.AppSettings["EnvironmentName"] = "LOCAL";
             _apiBaseUrl = $"http://{Guid.NewGuid().ToString()}/";            
             _identifierUri = Guid.NewGuid().ToString();
 
