@@ -177,7 +177,7 @@
       <Version>1.0.0.53229</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.CookieService">
-      <Version>1.0.0.27423</Version>
+      <Version>1.0.3</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.EmployerAccounts.Api.Client">
       <Version>1.6.2515</Version>
