@@ -37,7 +37,7 @@ steps:
   displayName: 'Restore solution EAS'
   inputs:
     solution: 'src/SFA.DAS.EAS.sln'
-    vsVersion: 15.0
+    vsVersion: 16.0
     msbuildArgs: '/t:restore'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
@@ -47,7 +47,7 @@ steps:
   displayName: 'Build solution EAS'
   inputs:
     solution: 'src/SFA.DAS.EAS.sln'
-    vsVersion: 15.0
+    vsVersion: 16.0
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
