@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="Aspose.Pdf" Version="17.2.0" />
-    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="Dapper" Version="1.50.2" />
     <PackageReference Include="EntityFramework" Version="6.2.0" />
     <PackageReference Include="HMRC.ESFA.Levy.Api.Client" version="1.0.43" />
