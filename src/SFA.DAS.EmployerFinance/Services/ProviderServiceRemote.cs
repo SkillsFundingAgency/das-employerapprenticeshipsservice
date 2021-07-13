@@ -27,6 +27,7 @@ namespace SFA.DAS.EmployerFinance.Services
                 var provider = await _apiClient.Get<ProviderResponseItem>(new GetProviderRequest(ukPrn));
                 if(provider != null)
                 {
+                    _logger.Info($"Obtained provider details with UKPRN {ukPrn} from apprenticeship API.");
                     return MapFrom(provider);
                 }                
             }
