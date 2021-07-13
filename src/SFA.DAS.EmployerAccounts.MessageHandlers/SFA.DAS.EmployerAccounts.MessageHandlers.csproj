@@ -4,7 +4,7 @@
     <IsGenerateRunCommandFileDisabled>true</IsGenerateRunCommandFileDisabled>
     <IsWebJobProject>true</IsWebJobProject>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <WebJobName>EmployerAccounts-MessageHandlers</WebJobName>
     <WebJobType>Continuous</WebJobType>
   </PropertyGroup>
