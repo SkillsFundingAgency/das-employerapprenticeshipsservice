@@ -14,7 +14,7 @@ variables:
   buildPlatform: 'any cpu'
 
 pool:
-  name: 'DAS - Continuous Integration'
+  name: 'DAS - Continuous Integration Beta'
   demands:
     - Agent.OS -equals Windows_NT
 
