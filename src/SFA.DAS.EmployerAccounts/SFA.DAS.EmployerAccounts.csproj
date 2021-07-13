@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="Aspose.Pdf" Version="17.2.0" />
-    <PackageReference Include="AutoMapper" Version="5.1.1" />
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="Dapper" Version="1.50.2" />
     <PackageReference Include="EntityFramework" Version="6.2.0" />
     <PackageReference Include="HMRC.ESFA.Levy.Api.Client" version="1.0.43" />
@@ -22,7 +22,7 @@
     <PackageReference Include="Polly" Version="5.7.0" />
     <PackageReference Include="RestSharp" Version="105.2.3" />
     <PackageReference Include="SFA.DAS.ActiveDirectory" Version="1.0.3" />
-    <PackageReference Include="SFA.DAS.Audit.Client" Version="1.0.0.20553" />    
+    <PackageReference Include="SFA.DAS.Audit.Client" Version="1.0.0.20553" />
     <PackageReference Include="SFA.DAS.Authentication" Version="1.1.2" />
     <PackageReference Include="SFA.DAS.Authentication.Extensions.Legacy" Version="1.0.29" />
     <PackageReference Include="SFA.DAS.Authorization" Version="6.0.52" />
@@ -62,7 +62,7 @@
     <PackageReference Include="SFA.DAS.Sql.Client" Version="1.0.0.32930" />
     <PackageReference Include="SFA.DAS.Tasks.Api.Client" Version="1.8.44" />
     <PackageReference Include="SFA.DAS.Tasks.API.Types" Version="1.8.44" />
-    <PackageReference Include="SFA.DAS.TokenService.Api.Client" Version="2.1.1" />    
+    <PackageReference Include="SFA.DAS.TokenService.Api.Client" Version="2.1.1" />
     <PackageReference Include="SFA.DAS.UnitOfWork" Version="9.0.13" />
     <PackageReference Include="SFA.DAS.Validation" Version="5.1.167" />
     <PackageReference Include="StructureMap" Version="4.7.1" />
