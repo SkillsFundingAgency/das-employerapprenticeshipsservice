@@ -23,8 +23,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
         {
             var config = context.GetInstance<EmployerAccountsConfiguration>().ContentApi;
 
-            HttpClient httpClient = new HttpClientBuilder()
-                    .WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(config))
+            HttpClient httpClient = new HttpClientBuilder()                    
                     .WithHandler(new RequestIdMessageRequestHandler())
                     .WithHandler(new SessionIdMessageRequestHandler())
                     .WithDefaultHeaders()
