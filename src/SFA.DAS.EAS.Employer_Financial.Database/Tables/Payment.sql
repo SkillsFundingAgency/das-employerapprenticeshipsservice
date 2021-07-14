@@ -63,3 +63,9 @@ GO
 
 CREATE NONCLUSTERED INDEX [IX_Payment_AccountIdCollectionPeriodMonthCollectionPeriodYear] ON [employer_financial].[Payment] ([AccountId], [CollectionPeriodMonth], [CollectionPeriodYear]) INCLUDE ([Amount], [ApprenticeshipId], [CollectionPeriodId], [DeliveryPeriodMonth], [DeliveryPeriodYear], [FundingSource], [PaymentMetaDataId], [PeriodEnd], [Ukprn], [Uln]) WITH (ONLINE = ON)
 GO
+
+CREATE NONCLUSTERED INDEX [IX_Payment_Ukprn] ON [employer_financial].[Payment] ([Ukprn]) WITH (ONLINE = ON)
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Payment_UkprnAccountId] ON [employer_financial].[Payment] ([AccountId], [Ukprn]) WITH (ONLINE = ON)
+GO

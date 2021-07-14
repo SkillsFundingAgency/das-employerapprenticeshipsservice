@@ -47,7 +47,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
             _command = new RefreshPaymentDataCommand
             {
                 AccountId = AccountId,
-                PeriodEnd = PeriodEnd
+                PeriodEnd = PeriodEnd,
+                CorrelationId = Guid.NewGuid()
             };
 
             _existingPaymentIds = new List<Guid>
@@ -74,7 +75,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
             }};
 
             _paymentService = new Mock<IPaymentService>();
-            _paymentService.Setup(x => x.GetAccountPayments(It.IsAny<string>(), It.IsAny<long>()))
+            _paymentService.Setup(x => x.GetAccountPayments(It.IsAny<string>(), It.IsAny<long>(), It.IsAny<Guid>()))
                            .ReturnsAsync(_paymentDetails);
 
             _mediator = new Mock<IMediator>();
@@ -118,14 +119,14 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
             await _handler.Handle(_command);
 
             //Assert
-            _paymentService.Verify(x => x.GetAccountPayments(_command.PeriodEnd, _command.AccountId));
+            _paymentService.Verify(x => x.GetAccountPayments(_command.PeriodEnd, _command.AccountId, It.IsAny<Guid>()));
         }
 
         [Test]
         public async Task ThenTheRepositoryIsNotCalledIfTheCommandIsValidAndThereAreNotPayments()
         {
             //Arrange
-            _paymentService.Setup(x => x.GetAccountPayments(It.IsAny<string>(), It.IsAny<long>()))
+            _paymentService.Setup(x => x.GetAccountPayments(It.IsAny<string>(), It.IsAny<long>(), It.IsAny<Guid>()))
                            .ReturnsAsync(new List<PaymentDetails>());
             //Act
             await _handler.Handle(_command);
@@ -164,7 +165,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
                 new PaymentDetails { Id = _existingPaymentIds[1]}
             };
 
-            _paymentService.Setup(x => x.GetAccountPayments(It.IsAny<string>(), It.IsAny<long>()))
+            _paymentService.Setup(x => x.GetAccountPayments(It.IsAny<string>(), It.IsAny<long>(), It.IsAny<Guid>()))
                 .ReturnsAsync(_paymentDetails);
 
             //Act
@@ -180,7 +181,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
         public async Task ThenWhenAnExceptionIsThrownFromTheApiClientNothingIsProcessedAndAnErrorIsLogged()
         {
             //Assert
-            _paymentService.Setup(x => x.GetAccountPayments(It.IsAny<string>(), It.IsAny<long>()))
+            _paymentService.Setup(x => x.GetAccountPayments(It.IsAny<string>(), It.IsAny<long>(), It.IsAny<Guid>()))
                            .ThrowsAsync(new WebException());
 
             //Act
@@ -191,7 +192,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
             _mediator.Verify(x => x.PublishAsync(It.IsAny<ProcessPaymentEvent>()), Times.Never);
 
             _logger.Verify(x => x.Error(It.IsAny<WebException>(),
-                $"Unable to get payment information for AccountId = '{AccountId}' and PeriodEnd = '{_command.PeriodEnd}'"));
+                $"Unable to get payment information for AccountId = '{AccountId}' and PeriodEnd = '{_command.PeriodEnd}' CorrelationId: {_command.CorrelationId}"));
         }
 
         [Test]
@@ -216,7 +217,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
                 new PaymentDetails { Id = newPaymentGuid}
             };
 
-            _paymentService.Setup(x => x.GetAccountPayments(It.IsAny<string>(), It.IsAny<long>()))
+            _paymentService.Setup(x => x.GetAccountPayments(It.IsAny<string>(), It.IsAny<long>(), It.IsAny<Guid>()))
                            .ReturnsAsync(_paymentDetails);
 
             //Act
@@ -242,7 +243,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
                 new PaymentDetails { Id = fullyFundedPaymentGuid, FundingSource = FundingSource.FullyFundedSfa}
             };
 
-            _paymentService.Setup(x => x.GetAccountPayments(It.IsAny<string>(), It.IsAny<long>()))
+            _paymentService.Setup(x => x.GetAccountPayments(It.IsAny<string>(), It.IsAny<long>(), It.IsAny<Guid>()))
                 .ReturnsAsync(_paymentDetails);
 
             //Act

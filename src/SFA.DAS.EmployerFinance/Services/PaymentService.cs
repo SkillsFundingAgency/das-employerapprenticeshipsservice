@@ -17,6 +17,15 @@ using Payment = SFA.DAS.Provider.Events.Api.Types.Payment;
 
 namespace SFA.DAS.EmployerFinance.Services
 {
+    public class ApprenticeshipCache
+    {
+        public long Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string NINumber { get; set; }
+        public DateTime? StartDate { get; set; }
+        public long ApprenticeshipId { get; set; }
+    }
     public class PaymentService : IPaymentService
     {
         private readonly IPaymentsEventsApiClient _paymentsEventsApiClient;
@@ -26,6 +35,7 @@ namespace SFA.DAS.EmployerFinance.Services
         private readonly ILog _logger;
         private readonly IInProcessCache _inProcessCache;
         private readonly IProviderService _providerService;
+        private readonly List<ApprenticeshipCache> _apprenticeships;
 
         public PaymentService(IPaymentsEventsApiClient paymentsEventsApiClient,
             IEmployerCommitmentApi commitmentsApiClient, IApprenticeshipInfoServiceWrapper apprenticeshipInfoService,
@@ -36,11 +46,12 @@ namespace SFA.DAS.EmployerFinance.Services
             _apprenticeshipInfoService = apprenticeshipInfoService;
             _mapper = mapper;
             _logger = logger;
-            _inProcessCache = inProcessCache;            
+            _inProcessCache = inProcessCache;
             _providerService = providerService;
+            _apprenticeships = new List<ApprenticeshipCache>();
         }
 
-        public async Task<ICollection<PaymentDetails>> GetAccountPayments(string periodEnd, long employerAccountId)
+        public async Task<ICollection<PaymentDetails>> GetAccountPayments(string periodEnd, long employerAccountId, Guid correlationId)
         {
             var populatedPayments = new List<PaymentDetails>();
 
@@ -56,22 +67,94 @@ namespace SFA.DAS.EmployerFinance.Services
 
                 var paymentDetails = payments.Items.Select(x => _mapper.Map<PaymentDetails>(x)).ToArray();
 
+                //int paymentDetailsCount = 0;
+
+                _logger.Info($"Fetching provider and apprenticeship for AccountId = {employerAccountId}, periodEnd={periodEnd}, correlationId = {correlationId}");
+
+                var ukprnList = paymentDetails.Select(pd => pd.Ukprn).Distinct();
+                var apprenticeshipIdList = paymentDetails.Select(pd => pd.ApprenticeshipId).Distinct();
+
+                var getProviderDetailsTask = GetProviderDetailsDict(ukprnList);
+
+                /// This is getting the list of all apprneticeships in one go, they need to be staggered
+                /// otherwise commitment api struggles to keep up with the requests.
+                /// Similar to this https://github.com/SkillsFundingAgency/das-commitments/blob/a1f6cfd34fd1546c559f7bc50bb9fb8627300320/src/SFA.DAS.Commitments.Notification.WebJob/EmailServices/ProviderAlertSummaryEmailService.cs#L58
+                var getApprenticeDetailsTask = GetApprenticeshipDetailsDict(employerAccountId, apprenticeshipIdList);
+
+                await Task.WhenAll(getProviderDetailsTask, getApprenticeDetailsTask);
+
+                var apprenticeshipDetails = getApprenticeDetailsTask.Result;
+                var providerDetails = getProviderDetailsTask.Result;
+
+                _logger.Info($"Fetched provider and apprenticeship for AccountId = {employerAccountId}, periodEnd={periodEnd}, correlationId = {correlationId} - with {providerDetails.Count} providers and {apprenticeshipDetails.Count} apprenticeship details");
+
                 foreach (var details in paymentDetails)
                 {
                     details.PeriodEnd = periodEnd;
+                    var getCourseDetailsTask = GetCourseDetails(details);
 
-                    await GetProviderDetails(details);
-                    await GetApprenticeshipDetails(employerAccountId, details);
-                    await GetCourseDetails(details);
+                    providerDetails.TryGetValue(details.Ukprn, out var provider);
+                    details.ProviderName = provider?.Name;
+                    details.IsHistoricProviderName = provider?.IsHistoricProviderName ?? false;
+
+                    if (apprenticeshipDetails.TryGetValue(details.ApprenticeshipId, out var apprenticeship))
+                    {
+                        details.ApprenticeName = $"{apprenticeship.FirstName} {apprenticeship.LastName}";
+                        details.ApprenticeNINumber = apprenticeship.NINumber;
+                        details.CourseStartDate = apprenticeship.StartDate;
+                    }
+
+                    await getCourseDetailsTask;
+                    //_logger.Info($"Metadata retrieved for payment {details.Id}, count: {++paymentDetailsCount}, correlationId = {correlationId}");
                 }
 
                 populatedPayments.AddRange(paymentDetails);
+
+                _logger.Info($"Populated payements page {index} of {totalPages} for AccountId = {employerAccountId}, periodEnd={periodEnd}, correlationId = {correlationId}");
             }
 
             return populatedPayments;
         }
 
-        public async Task<IEnumerable<AccountTransfer>> GetAccountTransfers(string periodEnd, long receiverAccountId)
+        private async Task<Dictionary<long, Models.ApprenticeshipProvider.Provider>> GetProviderDetailsDict(IEnumerable<long> ukprnList)
+        {
+            var resultProviders = new Dictionary<long, Models.ApprenticeshipProvider.Provider>();
+
+            foreach (var ukprn in ukprnList)
+            {
+                if (resultProviders.ContainsKey(ukprn)) continue;
+                var provider = await _providerService.Get(ukprn);
+                resultProviders.Add(ukprn, provider);
+            }
+
+            return resultProviders;
+        }
+
+        private async Task<Dictionary<long, ApprenticeshipCache>> GetApprenticeshipDetailsDict(long employerAccountId, IEnumerable<long> apprenticeshipIdList)
+        {
+            var resultApprenticeships = new Dictionary<long, ApprenticeshipCache>();
+
+            var taskList = apprenticeshipIdList.Select(id =>
+            {
+                return GetApprenticeship(employerAccountId, id);
+            });
+
+            //foreach (var apprenticeshipId in apprenticeshipIdList)
+            //{
+            //    if (resultApprenticeships.ContainsKey(apprenticeshipId)) continue;
+            //    var apprenticeship = await GetApprenticeship(employerAccountId, apprenticeshipId);
+            //    resultApprenticeships.Add(apprenticeshipId, apprenticeship);
+            //}
+
+            var apprenticeships = await Task.WhenAll(taskList);
+            resultApprenticeships = apprenticeships
+                .Where(app => app != null)
+                .ToDictionary(app => app.Id, app => app);
+
+            return resultApprenticeships;
+        }
+
+        public async Task<IEnumerable<AccountTransfer>> GetAccountTransfers(string periodEnd, long receiverAccountId, Guid correlationId)
         {
             var pageOfTransfers =
                 await _paymentsEventsApiClient.GetTransfers(periodEnd, receiverAccountId: receiverAccountId);
@@ -106,7 +189,7 @@ namespace SFA.DAS.EmployerFinance.Services
                 payment.CourseName = standard?.CourseName;
                 payment.CourseLevel = standard?.Level;
             }
-            else if(payment.FrameworkCode.HasValue && payment.FrameworkCode > 0)
+            else if (payment.FrameworkCode.HasValue && payment.FrameworkCode > 0)
             {
                 await GetFrameworkCourseDetails(payment);
             }
@@ -150,11 +233,37 @@ namespace SFA.DAS.EmployerFinance.Services
             }
         }
 
-        private async Task<Apprenticeship> GetApprenticeship(long employerAccountId, long apprenticeshipId)
+        /// <summary>
+        /// Done for spike, this is calling 
+        /// </summary>
+        /// <param name="employerAccountId"></param>
+        /// <param name="apprenticeshipId"></param>
+        /// <returns></returns>
+        private async Task<ApprenticeshipCache> GetApprenticeship(long employerAccountId, long apprenticeshipId)
         {
             try
             {
-                return await _commitmentsApiClient.GetEmployerApprenticeship(employerAccountId, apprenticeshipId);
+                //var apprenticeshipFromCache =_apprenticeships.FirstOrDefault(x => x.ApprenticeshipId == apprenticeshipId);
+
+                //if (apprenticeshipFromCache == null)
+                //{
+                    var apprenticeship = await _commitmentsApiClient.GetEmployerApprenticeship(employerAccountId, apprenticeshipId);
+                    return new ApprenticeshipCache
+                    {
+                        Id = apprenticeship.Id,
+                        FirstName = apprenticeship.FirstName,
+                        LastName = apprenticeship.LastName,
+                        NINumber = apprenticeship.NINumber,
+                        StartDate = apprenticeship.StartDate
+                    };
+                //}
+                //else
+                //{
+                //    _logger.Info("Found apprenticeship from cache :" + apprenticeshipFromCache.ApprenticeshipId);
+                //}
+
+                //_logger.Info("Cache apprenticeship size :" + _apprenticeships.Count());
+                //return apprenticeshipFromCache;
             }
             catch (Exception e)
             {
@@ -177,7 +286,7 @@ namespace SFA.DAS.EmployerFinance.Services
             }
 
             return null;
-        }        
+        }
 
         private async Task<Standard> GetStandard(long standardCode)
         {
