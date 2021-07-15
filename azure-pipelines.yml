@@ -39,7 +39,7 @@ steps:
     versionSpec: 4.x
 
 - task: NuGetCommand@2
-  displayName: 'NuGet Restore SFA.DAS.ProviderApprenticeshipsService.sln'
+  displayName: 'NuGet Restore SFA.DAS.EAS.sln'
   inputs:
     restoreSolution: 'src/SFA.DAS.EAS.sln'
 
@@ -48,15 +48,13 @@ steps:
   inputs:
     command: restore
     projects: "src/**/*.csproj"
+    noCache: true
 
-- task: VSBuild@1
-  displayName: 'Build solution EAS'
+- task: DotNetCoreCLI@2
+  displayName: Build
   inputs:
-    solution: 'src/SFA.DAS.EAS.sln'
-    vsVersion: 16.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    projects: 'src/**/*.csproj'
+    arguments: '--configuration $(buildConfiguration) --no-restore'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet pack'
