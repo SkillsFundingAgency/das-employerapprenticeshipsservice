@@ -14,7 +14,7 @@ variables:
   buildPlatform: 'any cpu'
 
 pool:
-  name: 'DAS - Continuous Integration'
+  name: 'DAS - Continuous Integration Beta'
   demands:
     - Agent.OS -equals Windows_NT
 
@@ -33,21 +33,27 @@ steps:
     configFilePath: GitVersion.yml
     updateAssemblyInfo: true
 
-- task: VSBuild@1
-  displayName: 'Restore solution EAS'
+- task: NuGetToolInstaller@0
+  displayName: 'Use NuGet 4.3.0'
   inputs:
-    solution: 'src/SFA.DAS.EAS.sln'
-    vsVersion: 15.0
-    msbuildArgs: '/t:restore'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-    clean: true
+    versionSpec: 4.x
+
+- task: NuGetCommand@2
+  displayName: 'NuGet Restore SFA.DAS.ProviderApprenticeshipsService.sln'
+  inputs:
+    restoreSolution: 'src/SFA.DAS.EAS.sln'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet restore all'
+  inputs:
+    command: restore
+    projects: "src/**/*.csproj"
 
 - task: VSBuild@1
   displayName: 'Build solution EAS'
   inputs:
     solution: 'src/SFA.DAS.EAS.sln'
-    vsVersion: 15.0
+    vsVersion: 16.0
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
