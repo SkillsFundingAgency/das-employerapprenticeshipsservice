@@ -3,6 +3,7 @@
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <TargetFramework>net48</TargetFramework>
+    <RuntimeIdentifier>win</RuntimeIdentifier>
   </PropertyGroup>
 
   <ItemGroup>
