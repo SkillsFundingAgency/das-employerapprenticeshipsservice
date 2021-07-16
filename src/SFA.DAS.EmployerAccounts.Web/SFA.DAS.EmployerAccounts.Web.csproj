@@ -14,6 +14,7 @@
     <RootNamespace>SFA.DAS.EmployerAccounts.Web</RootNamespace>
     <AssemblyName>SFA.DAS.EmployerAccounts.Web</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <RuntimeIdentifier>win</RuntimeIdentifier>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
