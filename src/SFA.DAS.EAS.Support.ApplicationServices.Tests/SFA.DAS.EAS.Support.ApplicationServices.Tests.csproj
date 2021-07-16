@@ -10,6 +10,7 @@
     <RootNamespace>SFA.DAS.EAS.Support.ApplicationServices.Tests</RootNamespace>
     <AssemblyName>SFA.DAS.EAS.Support.ApplicationServices.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <RuntimeIdentifier>win</RuntimeIdentifier>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
