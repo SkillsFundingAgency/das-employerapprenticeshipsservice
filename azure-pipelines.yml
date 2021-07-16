@@ -14,7 +14,7 @@ variables:
   buildPlatform: 'any cpu'
 
 pool:
-  name: 'DAS - Continuous Integration Beta'
+  name: 'DAS - Continuous Integration'
   demands:
     - Agent.OS -equals Windows_NT
 
@@ -50,11 +50,14 @@ steps:
     projects: "src/**/*.csproj"
     noCache: true
 
-- task: DotNetCoreCLI@2
-  displayName: Build
+- task: VSBuild@1
+  displayName: 'Build solution EAS'
   inputs:
-    projects: 'src/**/*.csproj'
-    arguments: '--configuration $(buildConfiguration) --no-restore'
+    solution: 'src/SFA.DAS.EAS.sln'
+    vsVersion: 16.0
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet pack'
