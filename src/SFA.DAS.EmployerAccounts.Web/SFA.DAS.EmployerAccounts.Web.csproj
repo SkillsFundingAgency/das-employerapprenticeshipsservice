@@ -204,7 +204,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InvitationController.cs" />
     <Compile Include="Controllers\OrganisationController.cs" />
-    <Compile Include="Controllers\OrganisationSharedController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\SearchPensionRegulatorController.cs" />
     <Compile Include="Controllers\SearchOrganisationController.cs" />
@@ -335,7 +334,6 @@
     <Compile Include="ViewModels\SearchPensionRegulatorResultsViewModel.cs" />
     <Compile Include="ViewModels\SearchOrganisationResultsViewModel.cs" />
     <Compile Include="ViewModels\SearchOrganisationViewModel.cs" />
-    <Compile Include="ViewModels\SelectOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\SendTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\SentTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\SignAgreementViewModel.cs" />
@@ -785,11 +783,6 @@
     <Content Include="Views\EmployerAccount\RenameAccount.cshtml" />
     <Content Include="Views\SearchOrganisation\SearchForOrganisation.cshtml" />
     <Content Include="Views\SearchOrganisation\SearchForOrganisationResults.cshtml" />
-    <Content Include="Views\OrganisationShared\AddOtherOrganisationDetails.cshtml" />
-    <Content Include="Views\OrganisationShared\SelectAddress.cshtml" />
-    <Content Include="Views\OrganisationShared\AddOrganisationAddress.cshtml" />
-    <Content Include="Views\OrganisationShared\ConfirmOrganisationDetails.cshtml" />
-    <Content Include="Views\OrganisationShared\FindAddress.cshtml" />
     <Content Include="Views\Shared\GatewayInform.cshtml" />
     <Content Include="Views\EmployerAccount\Summary.cshtml" />
     <Content Include="Views\Shared\_PayeNotFound.cshtml" />
@@ -876,6 +869,7 @@
     <Content Include="Views\Shared\_Agreement_v4.cshtml" />
     <Content Include="Views\Shared\_Agreement_v5.cshtml" />
     <Content Include="Views\Shared\_Agreement_v6.cshtml" />
+    <Content Include="Views\SearchOrganisation\ConfirmOrganisationDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">

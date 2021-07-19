@@ -16,7 +16,6 @@ using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntity;
 using SFA.DAS.EmployerAccounts.Queries.GetOrganisationById;
-using SFA.DAS.EmployerAccounts.Queries.GetPostcodeAddress;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Validation;
@@ -99,19 +98,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     Exception = e,
                 };
             }
-        }
-
-        public virtual OrchestratorResponse<OrganisationDetailsViewModel> GetAddOtherOrganisationViewModel(string hashedAccountId)
-        {
-            var response = new OrchestratorResponse<OrganisationDetailsViewModel>
-            {
-                Data = new OrganisationDetailsViewModel
-                {
-                    HashedId = hashedAccountId
-                }
-            };
-
-            return response;
         }
 
         public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>> ValidateLegalEntityName(OrganisationDetailsViewModel request)
@@ -201,97 +187,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             _cookieService.Create(data, CookieName, 365);
         }
 
-        public virtual async Task<OrchestratorResponse<SelectOrganisationAddressViewModel>> GetAddressesFromPostcode(
-            FindOrganisationAddressViewModel request)
-        {
-            var viewModel = new SelectOrganisationAddressViewModel
-            {
-                Postcode = request.Postcode,
-                OrganisationName = request.OrganisationName,
-                OrganisationDateOfInception = request.OrganisationDateOfInception,
-                OrganisationHashedId = request.OrganisationHashedId,
-                OrganisationReferenceNumber = request.OrganisationReferenceNumber,
-                OrganisationStatus = request.OrganisationStatus,
-                OrganisationType = request.OrganisationType,
-                PublicSectorDataSource = request.PublicSectorDataSource,
-                Sector = request.Sector
-            };
-
-            try
-            {
-                var addresses = await _mediator.SendAsync(new GetPostcodeAddressRequest { Postcode = request.Postcode });
-
-                viewModel.Addresses = addresses?.Addresses?.Select(x => _mapper.Map<AddressViewModel>(x)).ToList();
-
-                return new OrchestratorResponse<SelectOrganisationAddressViewModel>
-                {
-                    Data = viewModel,
-                    Status = HttpStatusCode.OK
-                };
-            }
-            catch (InvalidRequestException e)
-            {
-                viewModel.ErrorDictionary = e.ErrorMessages;
-
-                return new OrchestratorResponse<SelectOrganisationAddressViewModel>
-                {
-                    Data = viewModel,
-                    Status = HttpStatusCode.BadRequest,
-                    Exception = e
-                };
-            }
-        }
-
-        public OrchestratorResponse<OrganisationDetailsViewModel> StartConfirmOrganisationDetails(AddOrganisationAddressViewModel request)
-        {
-            return new OrchestratorResponse<OrganisationDetailsViewModel>
-            {
-                Data = new OrganisationDetailsViewModel
-                {
-                    HashedId = request.OrganisationHashedId,
-                    Name = request.OrganisationName,
-                    Address = request.OrganisationAddress,
-                    DateOfInception = request.OrganisationDateOfInception,
-                    ReferenceNumber = request.OrganisationReferenceNumber ?? string.Empty,
-                    Type = request.OrganisationType,
-                    PublicSectorDataSource = request.PublicSectorDataSource,
-                    Status = request.OrganisationStatus,
-                    Sector = request.Sector
-                }
-            };
-        }
-
-        public OrchestratorResponse<OrganisationDetailsViewModel> StartConfirmOrganisationDetails(FindOrganisationAddressViewModel request)
-        {
-            return new OrchestratorResponse<OrganisationDetailsViewModel>
-            {
-                Data = new OrganisationDetailsViewModel
-                {
-                    HashedId = request.OrganisationHashedId,
-                    Name = request.OrganisationName,
-                    Address = request.OrganisationAddress,
-                    DateOfInception = request.OrganisationDateOfInception,
-                    ReferenceNumber = request.OrganisationReferenceNumber ?? string.Empty,
-                    Type = request.OrganisationType,
-                    PublicSectorDataSource = request.PublicSectorDataSource,
-                    Status = request.OrganisationStatus,
-                    Sector = request.Sector
-                }
-            };
-        }
-
         public virtual async Task<bool> UserShownWizard(string userId, string hashedAccountId)
         {
             var userResponse = await Mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = hashedAccountId, TeamMemberId = userId });
             return userResponse.User.ShowWizard && userResponse.User.Role == Role.Owner;
-        }
-
-        public virtual Task<OrchestratorResponse<OrganisationAddedNextStepsViewModel>> GetOrganisationAddedNextStepViewModel(
-            string organisationName,
-            string userId,
-            string hashedAccountId)
-        {
-            return GetOrganisationAddedNextStepViewModel(organisationName, userId, hashedAccountId, string.Empty);
         }
 
         public virtual async Task<OrchestratorResponse<OrganisationAddedNextStepsViewModel>> GetOrganisationAddedNextStepViewModel(
