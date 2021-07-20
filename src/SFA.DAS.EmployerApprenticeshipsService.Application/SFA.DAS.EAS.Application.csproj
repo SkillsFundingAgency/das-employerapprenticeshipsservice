@@ -9,7 +9,8 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SFA.DAS.EAS.Application</RootNamespace>
     <AssemblyName>SFA.DAS.EAS.Application</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <RuntimeIdentifier>win</RuntimeIdentifier>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
@@ -246,7 +247,7 @@
       <Version>3.0.0.63765</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus">
-      <Version>3.0.0.63765</Version>
+      <Version>3.0.0.53181</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus.StructureMap">
       <Version>3.0.0.63765</Version>
@@ -304,7 +305,7 @@
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
