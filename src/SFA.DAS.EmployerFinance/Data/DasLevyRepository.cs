@@ -218,6 +218,7 @@ namespace SFA.DAS.EmployerFinance.Data
             return _db.Value.Database.Connection.QuerySingleAsync<decimal>(
                 sql: "[employer_financial].[ProcessDeclarationsTransactions]",
                 param: parameters,
+                commandTimeout: 120,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
