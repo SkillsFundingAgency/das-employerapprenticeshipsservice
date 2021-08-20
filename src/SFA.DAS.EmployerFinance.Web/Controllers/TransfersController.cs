@@ -8,18 +8,18 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
     [DasAuthorize("EmployerFeature.TransfersMatching")]
     [RoutePrefix("accounts/{HashedAccountId}")] public class TransfersController : Controller
     {
-        private readonly TransfersOrchestrator _transfersOrcestrator;
+        private readonly TransfersOrchestrator _transfersOrchestrator;
 
         public TransfersController(TransfersOrchestrator transfersOrchestrator)
         {
-            _transfersOrcestrator = transfersOrchestrator;
+            _transfersOrchestrator = transfersOrchestrator;
         }
 
         [HttpGet]
         [Route("transfers")]
         public async Task<ActionResult> Index(string hashedAccountId)
         {
-            var viewModel = await _transfersOrcestrator.Index();
+            var viewModel = await _transfersOrchestrator.Index(hashedAccountId);
 
             return View(viewModel);
         }
