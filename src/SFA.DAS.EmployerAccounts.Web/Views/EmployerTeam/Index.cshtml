@@ -103,7 +103,25 @@ else
                         </div>
                     }
 
-                    @if (Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy 
+                    @if (Html.IsAuthorized("EmployerFeature.TransfersMatching"))
+                    {
+                        if (Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
+                        {
+                            <div class="card">
+                                <h3 class="heading-medium"><a href="@Url.EmployerFinanceAction("transfers")">Your transfers</a></h3>
+                                <p>View your 25% transfers balance and manage your transfers, including finding a business to transfer your levy to.</p>
+                            </div>
+                        }
+                        else if (Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy)
+                        {
+                            <div class="card">
+                                <h3 class="heading-medium"><a href="@Url.EmployerFinanceAction("transfers")">Your transfers</a></h3>
+                                <p>View your apprentices funded by a transfer. Find a large business to fund your apprenticeship training with a transfer.</p>
+                            </div>
+                        }
+                    }
+
+                    @if (Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy
                          && Html.IsAuthorized("EmployerFeature.TransfersMatching"))
                     {
                         <div class="card">
