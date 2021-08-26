@@ -150,6 +150,6 @@ namespace SFA.DAS.EAS.Web
         public string RequiresVerification() => _baseUrl + "requires_verification";
         public string TokenEndpoint() => $"{_configuration.BaseAddress}{_configuration.TokenEndpoint}";
         public string UserInfoEndpoint() => $"{_configuration.BaseAddress}{_configuration.UserInfoEndpoint}";
-        public string TermsAndConditionsLink() => $"{_configuration.BaseAddress.Replace("/identity", "")}" + "TermsAndConditions";
+        public string TermsAndConditionsLink() => $"{_configuration.BaseAddress.Replace("/identity", "")}{_configuration.TermsAndConditionsLink}";
     }
 }
