@@ -102,7 +102,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
             var redirectResult = (RedirectToRouteResult)result;
 
             Assert.AreEqual("Index", redirectResult.RouteValues["action"].ToString());
-            Assert.AreEqual("Home", redirectResult.RouteValues["controller"].ToString());
         }
     }
 }

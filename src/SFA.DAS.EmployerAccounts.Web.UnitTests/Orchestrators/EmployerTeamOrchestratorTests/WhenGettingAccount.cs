@@ -30,6 +30,7 @@ using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.EmployerAccounts.Queries.GetApprenticeship;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
 {
@@ -93,6 +94,15 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                      {
                          UserRole = Role.Owner
                      });
+
+            _mediator.Setup(m => m.SendAsync(It.IsAny<GetUserByRefQuery>()))
+                    .ReturnsAsync(new GetUserByRefResponse
+                    {
+                      User =  new SFA.DAS.EmployerAccounts.Models.UserProfile.User
+                      {
+                          TermAndConditionsAcceptedOn = DateTime.Now
+                      }
+                    });
 
             _mediator.Setup(m => m.SendAsync(It.Is<GetAccountEmployerAgreementsRequest>(q => q.HashedAccountId == HashedAccountId)))
                      .ReturnsAsync(new GetAccountEmployerAgreementsResponse
