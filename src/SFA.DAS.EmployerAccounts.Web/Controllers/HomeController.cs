@@ -114,9 +114,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [DasAuthorize]
         [Route("termsAndConditions")]
-        public ActionResult TermsAndConditions(string returnUrl)
+        public ActionResult TermsAndConditions(string returnUrl, string hashedAccountId)
         {
-            var termsAndConditionViewModel = new TermsAndConditionViewModel { ReturnUrl = returnUrl };
+            var termsAndConditionViewModel = new TermsAndConditionViewModel { ReturnUrl = returnUrl, HashedAccountId = hashedAccountId };
             return View(termsAndConditionViewModel);
         }
 
@@ -127,6 +127,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             await _homeOrchestrator.UpdateTermAndConditionsAcceptedOn(userRef);
+
+            if (termsAndConditionViewModel.ReturnUrl == "EmployerTeam")
+            {
+                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { termsAndConditionViewModel.HashedAccountId });
+            }
             return RedirectToAction(nameof(Index));
         }
 

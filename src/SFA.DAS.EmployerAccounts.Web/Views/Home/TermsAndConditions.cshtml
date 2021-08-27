@@ -1,10 +1,20 @@
-﻿@{ ViewBag.PageID = "page-terms-and-condition"; }
-@{ ViewBag.Section = "home"; }
-@{ ViewBag.Title = "Term and Conditions"; }
-@*@{ ViewBag.HideNav = true; }
-@{ ViewBag.HideAccounts = "true"; }*@
-@*@{ ViewBag.GaData.Vpv = "/page-auth-homepage"; }*@
-@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
+﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.TermsAndConditionViewModel
+@{
+    ViewBag.PageID = "page-terms-and-condition";
+    ViewBag.Section = "home";
+    ViewBag.Title = "Term and Conditions";
+    Layout = "~/Views/Shared/_Layout_CDN.cshtml";
+    string returnUrl = string.Empty;
+    if (Model.ReturnUrl == "EmployerTeam")
+    {
+        returnUrl = Url.Action("Index", "EmployerTeam", new { Model.HashedAccountId });
+    }
+    else
+    {
+        returnUrl = Url.Action("Index", "Home");
+    }
+
+}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">Terms of use</h1>
@@ -96,13 +106,15 @@
             We may update these terms and conditions at any time without notice. You’ll agree to any changes if you continue to use this service after the terms and conditions have been updated. &nbsp;
         </p>
         <form method="POST">
+            @Html.HiddenFor(x => x.HashedAccountId)
+            @Html.HiddenFor(x => x.ReturnUrl)
             <button class="govuk-button" data-module="govuk-button" type="submit">
                 Continue
             </button>
         </form>
         <br>
         <p>
-            <a href="select-account-with-banner" class="govuk-link govuk-!-margin-top-1 govuk-!-margin-bottom-9">Cancel</a>
+            <a href="@returnUrl" class="govuk-link govuk-!-margin-top-1 govuk-!-margin-bottom-9">Cancel</a>
         </p>
 
         <br><br>
