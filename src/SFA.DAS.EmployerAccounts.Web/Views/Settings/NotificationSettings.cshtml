@@ -64,11 +64,6 @@
 
             <p><button type="submit" class="button">Update</button></p>
             <p><a href="@Url.Action("Index", "Home")" class="text-link">Cancel</a></p>
-          
-            @if (Html.IsAuthorized("EmployerFeature.Recruitments"))
-            {
-                <p><a href="@Url.EmployerRecruitAction(Model.Data.NotificationSettings.First().HashedAccountId)/notifications-manage" class="text-link">Manage the notifications of your recruitment emails</a></p>
-            }
         </div>
     </div>
 </form>
