@@ -20,11 +20,11 @@
 
             <table>
                 <thead>
-                <tr>
-                    <th scope="col">Account name</th>
-                    <th scope="col">Emails</th>
-                    <th scope="col">No emails</th>
-                </tr>
+                    <tr>
+                        <th scope="col">Account name</th>
+                        <th scope="col">Emails</th>
+                        <th scope="col">No emails</th>
+                    </tr>
                 </thead>
 
                 <tbody>
@@ -42,7 +42,7 @@
                             </td>
 
                             <td class="notification-row">
-                                @{ 
+                                @{
                                     var trueId = $"NotificationSettings-true-{i}";
                                     var falseId = $"NotificationSettings-false-{i}";
                                 }
@@ -63,11 +63,11 @@
             </table>
 
             <p><button type="submit" class="button">Update</button></p>
-            <p><a href="@Url.EmployerRecruitAction("notifications-manage")" class="text-link">Cancel</a></p>
-            
+            <p><a href="@Url.Action("Index", "Home")" class="text-link">Cancel</a></p>
+          
             @if (Html.IsAuthorized("EmployerFeature.Recruitments"))
             {
-                <p><a href="@Url.Action("Index", "Home")" class="text-link">Manage the notifications of your recruitment emails</a></p>
+                <p><a href="@Url.EmployerRecruitAction(Model.Data.NotificationSettings.First().HashedAccountId)/notifications-manage" class="text-link">Manage the notifications of your recruitment emails</a></p>
             }
         </div>
     </div>
