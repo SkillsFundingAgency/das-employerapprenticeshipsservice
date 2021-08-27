@@ -2,6 +2,7 @@
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
+using System;
 using System.Collections.Generic;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
@@ -29,5 +30,23 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public ApprenticeshipEmployerType ApprenticeshipEmployerType { get; set; }
         public CallToActionViewModel CallToActionViewModel { get; set; }
         public bool HideTasksBar { get; set; }
+        public DateTime? TermAndConditionsAcceptedOn { get; set; }
+        public DateTime? LastTermsAndConditionsUpdate { get; set; }
+        public bool ShowTermsAndConditionBanner
+        {
+            get
+            {
+                if (LastTermsAndConditionsUpdate.HasValue)
+                {
+                    if (!TermAndConditionsAcceptedOn.HasValue ||
+                        (TermAndConditionsAcceptedOn.Value < LastTermsAndConditionsUpdate.Value))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        }
     }
 }
