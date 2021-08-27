@@ -58,5 +58,51 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
             Assert.IsNotNull(actual);
             Assert.IsAssignableFrom<ViewResult>(actual);
         }
+
+        [Test]
+        public void ThenTheViewModelIsMappedCorrectly()
+        {
+            //Act
+            var result = _homeController.TermsAndConditions("returnUrl", "hashedId");
+
+            //Assert
+            var viewResult = (ViewResult)result;
+            var viewModel = viewResult.Model;
+
+            Assert.IsInstanceOf<TermsAndConditionViewModel>(viewModel);
+            var termsAndConditionViewModel = (TermsAndConditionViewModel)viewModel;
+
+            Assert.AreEqual("returnUrl", termsAndConditionViewModel.ReturnUrl);
+            Assert.AreEqual("hashedId", termsAndConditionViewModel.HashedAccountId);
+        }
+
+
+        [Test]
+        public async Task ThenIsRedirectedToEmployerTeamController()
+        {
+            var termsAndConditionViewModel = new TermsAndConditionViewModel() { HashedAccountId = "HashedId", ReturnUrl = "EmployerTeam" };
+            //Act
+            var result = await _homeController.TermsAndConditions(termsAndConditionViewModel);
+
+            //Assert
+            var redirectResult = (RedirectToRouteResult)result;
+
+            Assert.AreEqual("Index", redirectResult.RouteValues["action"].ToString());
+            Assert.AreEqual("EmployerTeam", redirectResult.RouteValues["controller"].ToString());
+        }
+
+        [Test]
+        public async Task ThenIsRedirectedToHomeController()
+        {
+            var termsAndConditionViewModel = new TermsAndConditionViewModel() { HashedAccountId = "HashedId", ReturnUrl = "Home" };
+            //Act
+            var result = await _homeController.TermsAndConditions(termsAndConditionViewModel);
+
+            //Assert
+            var redirectResult = (RedirectToRouteResult)result;
+
+            Assert.AreEqual("Index", redirectResult.RouteValues["action"].ToString());
+            Assert.AreEqual("Home", redirectResult.RouteValues["controller"].ToString());
+        }
     }
 }
