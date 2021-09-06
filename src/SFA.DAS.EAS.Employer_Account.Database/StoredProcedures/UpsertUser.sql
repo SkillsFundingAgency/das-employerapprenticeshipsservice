@@ -9,4 +9,4 @@ AS
 	USING (SELECT @userRef AS UserRef) AS [Source] 
 	ON [Target].UserRef = [Source].UserRef
 	WHEN MATCHED THEN  UPDATE SET [Target].Email = @email, [Target].FirstName = @firstName, [Target].LastName = @lastName, [Target].CorrelationId = COALESCE(@correlationId, [Target].CorrelationId)
-	WHEN NOT MATCHED THEN  INSERT (UserRef, Email, FirstName, LastName, CorrelationId) VALUES (@userRef, @email, @firstName, @lastName, @correlationId);
+	WHEN NOT MATCHED THEN  INSERT (UserRef, Email, FirstName, LastName, CorrelationId, TermAndConditionsAcceptedOn) VALUES (@userRef, @email, @firstName, @lastName, @correlationId, GETDATE());
