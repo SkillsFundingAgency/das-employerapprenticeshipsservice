@@ -6,6 +6,7 @@ using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
 using SFA.DAS.HashingService;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 {
@@ -41,7 +42,9 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
             var accountDetail = await _accountApiClient.GetAccount(hashedAccountId).ConfigureAwait(false);
             var cohortsCount = await _cohortsService.GetCohortsCount(accountDetail.AccountId).ConfigureAwait(false);
 
-            if (string.Compare(accountDetail.ApprenticeshipEmployerType, "Levy", StringComparison.OrdinalIgnoreCase) != 0 || cohortsCount > 0)
+            Enum.TryParse(accountDetail.ApprenticeshipEmployerType, true, out ApprenticeshipEmployerType employerType);
+
+            if (employerType != ApprenticeshipEmployerType.Levy || cohortsCount > 0)
             {
                 return new OrchestratorResponse<TransfersIndexViewModel>()
                 {
