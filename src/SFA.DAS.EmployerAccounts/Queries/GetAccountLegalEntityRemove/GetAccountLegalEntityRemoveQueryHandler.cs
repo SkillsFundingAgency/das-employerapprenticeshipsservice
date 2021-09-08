@@ -84,6 +84,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove
 
             return commitmentConnectedToEntity == null || (commitmentConnectedToEntity.ActiveCount +
                                                            commitmentConnectedToEntity.PendingApprovalCount +
+                                                           commitmentConnectedToEntity.CompletedCount +
                                                            commitmentConnectedToEntity.PausedCount) == 0;
         }
     }
