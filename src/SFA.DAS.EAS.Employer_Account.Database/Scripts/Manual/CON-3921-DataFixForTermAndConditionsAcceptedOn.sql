@@ -1,6 +1,6 @@
 ﻿-- Update TermsAndConditionsAcceptedOn for all users created afer 28th July 2021
 	 Update U 
-     Set U. TermAndConditionsAcceptedOn = T.CreatedDate
+     Set U.TermAndConditionsAcceptedOn = T.CreatedDate
 	 From [employer_account].[User] U
      Inner join (
 			Select UserId, CreatedDate from (
