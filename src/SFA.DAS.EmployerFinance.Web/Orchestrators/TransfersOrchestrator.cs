@@ -50,7 +50,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                 {
                     Data = new TransfersIndexViewModel()
                     {
-                       CanViewTransfersSection = false
+                       CanViewPledgesSection = false
                     }
                 };
             }
@@ -73,7 +73,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                 {
                     RenderCreateTransfersPledgeButton = renderCreateTransfersPledgeButton,
                     PledgesCount = pledgesCount,
-                    CanViewTransfersSection = true
+                    CanViewPledgesSection = true
                 }
             };
 
