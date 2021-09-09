@@ -16,23 +16,18 @@ namespace SFA.DAS.EmployerFinance.Services
 {
     public class CohortsService : ICohortsService
     {
-        private readonly HttpClient _httpClient;
+        private readonly IApiClient _apiClient;
 
-        public CohortsService(HttpClient httpClient, string cohortsBaseUrl)
+        public CohortsService(IApiClient apiClient)
         {
-            _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri(cohortsBaseUrl);
+            _apiClient = apiClient;
         }
 
         public async Task<int> GetCohortsCount(long accountId)
         {
-            var cohortsCountResponse = await _httpClient.GetAsync(new GetCohortsRequest(accountId).GetUrl).ConfigureAwait(false);
+            var cohortsCountResponse = await _apiClient.Get<GetCohortsResponse>(new GetCohortsRequest(accountId)).ConfigureAwait(false);
 
-            cohortsCountResponse.EnsureSuccessStatusCode();
-            var json = await cohortsCountResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-            var currentCohorts = JsonConvert.DeserializeObject<CurrentCohorts>(json);
-
-            return currentCohorts.Cohorts.Count;
+            return cohortsCountResponse.Cohorts.Count;
         }
     }
 }

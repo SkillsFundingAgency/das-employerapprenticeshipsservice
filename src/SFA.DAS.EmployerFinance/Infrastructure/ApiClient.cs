@@ -7,18 +7,16 @@ using SFA.DAS.EmployerFinance.Interfaces.OuterApi;
 
 namespace SFA.DAS.EmployerFinance.Infrastructure
 {
-    public class ApiClient : IApiClient
+    public abstract class ApiClient : IApiClient
     {
         private readonly HttpClient _httpClient;
-        private readonly ManageApprenticeshipsOuterApiConfiguration _config;
 
-        public ApiClient (
-            HttpClient httpClient, 
-            ManageApprenticeshipsOuterApiConfiguration options)
+        protected HttpClient HttpClient => _httpClient;
+
+        protected ApiClient (
+            HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _config = options;
-            _httpClient.BaseAddress = new Uri(_config.BaseUrl);
         }
 
         public async Task<TResponse> Get<TResponse>(IGetApiRequest request)
@@ -32,10 +30,6 @@ namespace SFA.DAS.EmployerFinance.Infrastructure
             return JsonConvert.DeserializeObject<TResponse>(json);
         }
 
-        private void AddHeaders()
-        {
-            _httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", _config.Key);
-            _httpClient.DefaultRequestHeaders.Add("X-Version", "1");
-        }
+        protected abstract void AddHeaders();
     }
 }
