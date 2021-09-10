@@ -125,7 +125,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
                 && c.LegalEntityIdentifier.Equals(agreement.LegalEntityCode)
                 && c.LegalEntityOrganisationType == agreement.LegalEntitySource);
 
-            if (commitment != null && (commitment.ActiveCount + commitment.PausedCount + commitment.PendingApprovalCount + commitment.CompletedCount + commitment.WithdrawnCount) != 0)
+            if (commitment != null && (commitment.ActiveCount + commitment.PausedCount + commitment.PendingApprovalCount + commitment.WithdrawnCount) != 0)
             {
                 validationResult.AddError(nameof(agreement.HashedAgreementId), "Agreement has already been signed and has active commitments");
                 throw new InvalidRequestException(validationResult.ValidationDictionary);

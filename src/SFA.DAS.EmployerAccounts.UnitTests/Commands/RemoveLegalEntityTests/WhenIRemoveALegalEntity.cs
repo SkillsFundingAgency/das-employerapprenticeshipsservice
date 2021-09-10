@@ -244,23 +244,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
         }
 
         [Test]
-        public async Task ThenTheAgreementIsCheckedToSeeIfItHasBeenSignedAndHasCompletedCommitments()
-        {
-            _commitmentsApi
-                .Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
-                .ReturnsAsync(new List<ApprenticeshipStatusSummary>
-                {
-                    new ApprenticeshipStatusSummary
-                    {
-                        CompletedCount = 1,
-                        LegalEntityIdentifier = _expectedAgreement.LegalEntityCode
-                    }
-                });
-
-            Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
-        }
-
-        [Test]
         public async Task ThenTheAgreementIsCheckedToSeeIfItHasBeenSignedAndHasWithdrawnCommitments()
         {
             _commitmentsApi
