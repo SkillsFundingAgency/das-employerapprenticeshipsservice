@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             parameters.Add("@userRef", new Guid(id), DbType.Guid);
 
             var result = await _db.Value.Database.Connection.QueryAsync<User>(
-                sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName, CorrelationId FROM [employer_account].[User] WHERE UserRef = @userRef",
+                sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName, CorrelationId,TermAndConditionsAcceptedOn FROM [employer_account].[User] WHERE UserRef = @userRef",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);
@@ -91,6 +91,20 @@ namespace SFA.DAS.EmployerAccounts.Data
 
             return _db.Value.Database.Connection.ExecuteAsync(
                 sql: "UPDATE [employer_account].[User] set Email = @email, FirstName = @firstName, LastName = @lastName where UserRef = @userRef",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.Text);
+        }
+
+        public Task UpdateTermAndConditionsAcceptedOn(string userRef)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@termAndConditionsAcceptedOn", DateTime.UtcNow, DbType.DateTime);
+            parameters.Add("@userRef", new Guid(userRef), DbType.Guid);
+
+            return _db.Value.Database.Connection.ExecuteAsync(
+                sql: "UPDATE [employer_account].[User] set TermAndConditionsAcceptedOn = @termAndConditionsAcceptedOn where UserRef = @userRef",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);

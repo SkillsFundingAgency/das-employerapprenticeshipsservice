@@ -21,6 +21,22 @@
     }
 }
 
+
+@if (Model.Data.ShowTermsAndConditionBanner)
+{
+    <div class="govuk-notification-banner govuk-notification-banner--dashboard" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+                Action required
+            </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+            <p class="govuk-notification-banner__heading">
+                We've updated our <a class="govuk-notification-banner__link" href="@Url.Action("TermsAndConditions", "Home", new { returnUrl = "EmployerTeam", HashedAccountId = Model.Data.HashedAccountId })">terms of use</a>. By continuing to use this service you are accepting the updated terms.
+            </p>
+        </div>
+    </div>
+}
 <h1 class="heading-secondary dashboard-heading">
     Account ID: @Model.Data.Account.PublicHashedId
 </h1>
@@ -103,7 +119,7 @@ else
                         </div>
                     }
 
-                    @if (Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy 
+                    @if (Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy
                          && Html.IsAuthorized("EmployerFeature.TransfersMatching"))
                     {
                         <div class="card">

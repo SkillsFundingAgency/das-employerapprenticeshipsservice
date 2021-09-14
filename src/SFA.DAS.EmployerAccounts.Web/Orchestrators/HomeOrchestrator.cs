@@ -9,6 +9,8 @@ using SFA.DAS.EmployerAccounts.Queries.GetProviderInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
 using SFA.DAS.EmployerAccounts.Queries.GetUserInvitations;
 using SFA.DAS.EmployerAccounts.Queries.GetUsers;
+using SFA.DAS.EmployerAccounts.Queries.GetUser;
+using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
@@ -44,7 +46,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             };
         }
 
-        public virtual async Task<OrchestratorResponse<UserAccountsViewModel>> GetUserAccounts(string userId)
+        public virtual async Task<OrchestratorResponse<UserAccountsViewModel>> GetUserAccounts(string userId, DateTime? LastTermsAndConditionsUpdate = null)
         {
             var getUserAccountsQueryResponse = await _mediator.SendAsync(new GetUserAccountsQuery
             {
@@ -54,12 +56,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 UserId = userId
             });
+            var getUserQueryResponse = await _mediator.SendAsync(new GetUserByRefQuery
+            {
+                UserRef = userId
+            });
             return new OrchestratorResponse<UserAccountsViewModel>
             {
                 Data = new UserAccountsViewModel
                 {
                     Accounts = getUserAccountsQueryResponse.Accounts,
-                    Invitations = getUserInvitationsResponse.NumberOfInvites
+                    Invitations = getUserInvitationsResponse.NumberOfInvites,
+                    TermAndConditionsAcceptedOn = getUserQueryResponse.User.TermAndConditionsAcceptedOn,
+                    LastTermsAndConditionsUpdate = LastTermsAndConditionsUpdate
                 }
             };
         }
@@ -108,6 +116,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 FirstName = firstName,
                 CorrelationId = correlationId
             });
-        }       
+        }
+
+        public virtual async Task UpdateTermAndConditionsAcceptedOn(string userRef)
+        {
+            await _mediator.SendAsync(new UpdateTermAndConditionsAcceptedOnCommand
+            {
+                UserRef = userRef
+            });
+        }
     }
 }

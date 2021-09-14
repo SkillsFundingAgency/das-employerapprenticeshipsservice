@@ -19,6 +19,7 @@ using ResourceNotFoundException = SFA.DAS.EmployerAccounts.Web.Exceptions.Resour
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Web.Models;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
@@ -38,8 +39,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             IAccountApiClient accountApiClient,
             IMapper mapper,
             ICookieStorageService<AccountContext> accountContext,
-            ILog logger) 
-            : base(mediator, currentDateTime, accountApiClient, mapper)
+            ILog logger,
+            EmployerAccountsConfiguration configuration) 
+            : base(mediator, currentDateTime, accountApiClient, mapper, configuration)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
             _accountContext = accountContext;
