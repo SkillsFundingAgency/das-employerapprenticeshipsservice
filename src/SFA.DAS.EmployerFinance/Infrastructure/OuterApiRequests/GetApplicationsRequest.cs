@@ -7,15 +7,17 @@ using SFA.DAS.EmployerFinance.Interfaces.OuterApi;
 
 namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests
 {
-    public class GetCohortsRequest : IGetApiRequest
+    public class GetApplicationsRequest : IGetApiRequest
     {
         private readonly long _accountId;
+        private readonly int _pageSize;
 
-        public GetCohortsRequest(long accountId)
+        public GetApplicationsRequest(long accountId, int pageSize)
         {
             _accountId = accountId;
+            _pageSize = pageSize;
         }
 
-        public string GetUrl => $"api/cohorts?accountId={_accountId}";
+        public string GetUrl => $"api/apprenticeships?accountId={_accountId}&PageItemCount={_pageSize}";
     }
 }

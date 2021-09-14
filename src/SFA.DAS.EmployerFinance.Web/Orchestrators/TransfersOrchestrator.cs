@@ -7,6 +7,7 @@ using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
 using SFA.DAS.HashingService;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerFinance.Web.Extensions;
 
 namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 {
@@ -16,7 +17,8 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         private readonly IHashingService _hashingService;
         private readonly ILevyTransferMatchingService _levyTransferMatchingService;
         private readonly IAccountApiClient _accountApiClient;
-        private readonly ICohortsService _cohortsService;
+        private IApprenticeshipService _apprenticeshipService;
+
 
         protected TransfersOrchestrator()
         {
@@ -28,34 +30,46 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
             IHashingService hashingService,
             ILevyTransferMatchingService levyTransferMatchingService,
             IAccountApiClient accountApiClient,
-            ICohortsService cohortsService)
+            IApprenticeshipService apprenticeshipService)
         {
             _authorizationService = authorizationService;
             _hashingService = hashingService;
             _levyTransferMatchingService = levyTransferMatchingService;
             _accountApiClient = accountApiClient;
-            _cohortsService = cohortsService;
+            _apprenticeshipService = apprenticeshipService;
         }
 
         public async Task<OrchestratorResponse<TransfersIndexViewModel>> Index(string hashedAccountId)
         {
             var accountDetail = await _accountApiClient.GetAccount(hashedAccountId).ConfigureAwait(false);
-            var cohortsCount = await _cohortsService.GetCohortsCount(accountDetail.AccountId).ConfigureAwait(false);
-
+          
             Enum.TryParse(accountDetail.ApprenticeshipEmployerType, true, out ApprenticeshipEmployerType employerType);
 
-            if (employerType != ApprenticeshipEmployerType.Levy || cohortsCount > 0)
+            if (employerType != ApprenticeshipEmployerType.Levy)
             {
-                return new OrchestratorResponse<TransfersIndexViewModel>()
-                {
-                    Data = new TransfersIndexViewModel()
-                    {
-                       CanViewPledgesSection = false
-                    }
-                };
+                return GenerateTransfersViewIndexModelForNonLevyOrCurrentlyFundedLevyEmployers();
+            }
+
+            var fundedApprentices = await _apprenticeshipService.GetApprenticeshipsFor(accountDetail.AccountId)
+                .ConfigureAwait(false);
+
+            if (fundedApprentices.GetActivelyFundedApprenticeCount() > 0)
+            {
+                return GenerateTransfersViewIndexModelForNonLevyOrCurrentlyFundedLevyEmployers();
             }
 
             return await GenerateTransfersViewIndexModelForLevyAccounts(hashedAccountId);
+        }
+
+        private static OrchestratorResponse<TransfersIndexViewModel> GenerateTransfersViewIndexModelForNonLevyOrCurrentlyFundedLevyEmployers()
+        {
+            return new OrchestratorResponse<TransfersIndexViewModel>()
+            {
+                Data = new TransfersIndexViewModel()
+                {
+                    CanViewPledgesSection = false
+                }
+            };
         }
 
         private async Task<OrchestratorResponse<TransfersIndexViewModel>> GenerateTransfersViewIndexModelForLevyAccounts(string hashedAccountId)

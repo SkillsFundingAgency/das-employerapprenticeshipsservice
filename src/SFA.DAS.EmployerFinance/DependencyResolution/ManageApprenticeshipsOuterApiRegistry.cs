@@ -14,7 +14,7 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
             For<ManageApprenticeshipsOuterApiConfiguration>().Use(c => c.GetInstance<EmployerFinanceConfiguration>().ManageApprenticeshipsOuterApiConfiguration).Singleton();
             For<IApiClient>().Use<ManageApprenticeshipsApiClient>().Ctor<HttpClient>().Is(new HttpClient()).Singleton(); 
             For<IApiClient>().Add<CommitmentsApiClient>().Named("CAPI").Ctor<HttpClient>().Is(new HttpClient()).Singleton();
-            For<ICohortsService>().Use<CohortsService>().Ctor<IApiClient>().IsNamedInstance("CAPI").Singleton();
+            For<IApprenticeshipService>().Use<ApprenticeshipService>().Ctor<IApiClient>().IsNamedInstance("CAPI").Singleton();
         }
     }
 }

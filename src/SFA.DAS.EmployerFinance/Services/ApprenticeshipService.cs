@@ -10,24 +10,24 @@ using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests;
 using SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses;
 using SFA.DAS.EmployerFinance.Interfaces.OuterApi;
-using SFA.DAS.EmployerFinance.Models.Cohort;
+using SFA.DAS.EmployerFinance.Models.Apprenticeships;
 
 namespace SFA.DAS.EmployerFinance.Services
 {
-    public class CohortsService : ICohortsService
+    public class ApprenticeshipService : IApprenticeshipService
     {
         private readonly IApiClient _apiClient;
 
-        public CohortsService(IApiClient apiClient)
+        public ApprenticeshipService(IApiClient apiClient)
         {
             _apiClient = apiClient;
         }
 
-        public async Task<int> GetCohortsCount(long accountId)
+        public async Task<IEnumerable<ApprenticeshipDetail>> GetApprenticeshipsFor(long accountId)
         {
-            var cohortsCountResponse = await _apiClient.Get<GetCohortsResponse>(new GetCohortsRequest(accountId)).ConfigureAwait(false);
+            var applicationsResponse = await _apiClient.Get<GetApplicationsResponse>(new GetApplicationsRequest(accountId, 500)).ConfigureAwait(false);
 
-            return cohortsCountResponse.Cohorts.Count;
+            return applicationsResponse.Apprenticeships;
         }
     }
 }

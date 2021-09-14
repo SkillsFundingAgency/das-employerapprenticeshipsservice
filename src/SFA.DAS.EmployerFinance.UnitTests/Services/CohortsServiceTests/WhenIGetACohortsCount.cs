@@ -17,13 +17,13 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.CohortsServiceTests
     public class WhenIGetACohortsCount
     {
         private Mock<IApiClient> _apiClient;
-        private CohortsService _service;
+        private ApprenticeshipService _service;
 
         [SetUp]
         public void Setup()
         {
             _apiClient = new Mock<IApiClient>();
-            _service = new CohortsService(_apiClient.Object);
+            _service = new ApprenticeshipService(_apiClient.Object);
         }
 
         [Test]
@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.CohortsServiceTests
         {
             SetupApiClient(1);
 
-            var actual = await _service.GetCohortsCount(1);
+            var actual = await _service.GetApprenticeshipsFor(1);
 
             Assert.AreEqual(1, actual);
         }
@@ -41,7 +41,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.CohortsServiceTests
         {
             SetupApiClient(0, false);
 
-            var actual = await _service.GetCohortsCount(0);
+            var actual = await _service.GetApprenticeshipsFor(0);
 
             Assert.AreEqual(0, actual);
         }
@@ -62,11 +62,11 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.CohortsServiceTests
             }
             
             _apiClient.Setup(o =>
-                    o.Get<GetCohortsResponse>(
-                        It.Is<GetCohortsRequest>(i => i.GetUrl.Equals($"api/cohorts?accountId={accountId}"))))
-                .ReturnsAsync(new GetCohortsResponse
+                    o.Get<GetApplicationsResponse>(
+                        It.Is<GetApplicationsRequest>(i => i.GetUrl.Equals($"api/cohorts?accountId={accountId}"))))
+                .ReturnsAsync(new GetApplicationsResponse
                 {
-                    Cohorts = items
+                    //Apprenticeships = items
                 });
         }
     }
