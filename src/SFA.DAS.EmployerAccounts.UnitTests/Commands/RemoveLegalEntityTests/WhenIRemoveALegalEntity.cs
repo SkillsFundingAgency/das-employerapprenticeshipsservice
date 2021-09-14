@@ -114,7 +114,11 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
                 {
                     new ApprenticeshipStatusSummary
                     {
-                        ActiveCount = 0,PausedCount = 0,PendingApprovalCount = 0,LegalEntityIdentifier = _expectedAgreement.LegalEntityCode
+                        ActiveCount = 0,
+                        PausedCount = 0,
+                        PendingApprovalCount = 0,
+                        CompletedCount = 0,
+                        LegalEntityIdentifier = _expectedAgreement.LegalEntityCode
                     }
                 });
 
@@ -229,7 +233,27 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
                 {
                     new ApprenticeshipStatusSummary
                     {
-                        ActiveCount = 1,PausedCount = 1,PendingApprovalCount = 1,LegalEntityIdentifier = _expectedAgreement.LegalEntityCode
+                        ActiveCount = 1,
+                        PausedCount = 1,
+                        PendingApprovalCount = 1,
+                        LegalEntityIdentifier = _expectedAgreement.LegalEntityCode
+                    }
+                });
+
+            Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
+        }
+
+        [Test]
+        public async Task ThenTheAgreementIsCheckedToSeeIfItHasBeenSignedAndHasWithdrawnCommitments()
+        {
+            _commitmentsApi
+                .Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
+                .ReturnsAsync(new List<ApprenticeshipStatusSummary>
+                {
+                    new ApprenticeshipStatusSummary
+                    {
+                        WithdrawnCount = 1,
+                        LegalEntityIdentifier = _expectedAgreement.LegalEntityCode
                     }
                 });
 
