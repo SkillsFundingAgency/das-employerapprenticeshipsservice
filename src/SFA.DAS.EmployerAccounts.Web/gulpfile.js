@@ -16,11 +16,11 @@ sassOptions = {
     includePaths: [
     'src/govuk_template/assets/stylesheets',
     'src/govuk_frontend_toolkit/stylesheets'
-  ]
+  ],
 };
 
 gulp.task('watch', () => {
-  gulp.watch(input, ['sass'])
+  gulp.watch(input, gulp.series('sass'))
     .on('change', (event) => {
       console.log(`File ${event.path} was ${event.type}, running tasks...`);
     });
@@ -32,4 +32,4 @@ gulp.task('sass', () => gulp
   .pipe(gulp.dest(output)));
 
 
-gulp.task('default', ['sass', 'watch']);
+gulp.task('default', gulp.series('sass', 'watch'));

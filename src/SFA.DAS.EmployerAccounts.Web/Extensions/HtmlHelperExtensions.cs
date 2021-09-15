@@ -129,7 +129,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
 
             return new FooterViewModel(new FooterConfiguration
             {
-                ManageApprenticeshipsBaseUrl = configuration.EmployerAccountsBaseUrl
+                ManageApprenticeshipsBaseUrl = configuration.EmployerAccountsBaseUrl,
+                AuthenticationAuthorityUrl = configuration.Identity.BaseAddress
             },
             new UserContext
             {
