@@ -26,6 +26,7 @@ using FluentAssertions;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.NLog.Logger;
 using System.Net.Http;
+using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorWithCallToActionTests
 {
@@ -137,7 +138,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                 _mockAccountApiClient.Object, 
                 _mockMapper.Object, 
                 _mockAccountContext.Object,
-                _mockLogger.Object);
+                _mockLogger.Object,
+                Mock.Of<EmployerAccountsConfiguration>());
         }
 
         [Test]

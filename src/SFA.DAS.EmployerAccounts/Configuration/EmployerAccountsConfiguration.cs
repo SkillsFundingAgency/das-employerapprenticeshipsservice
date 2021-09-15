@@ -2,6 +2,7 @@
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.Hmrc.Configuration;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
+using System;
 
 namespace SFA.DAS.EmployerAccounts.Configuration
 {
@@ -54,5 +55,6 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string ApplicationId { get; set; }
         public int DefaultCacheExpirationInMinutes { get; set; }
         public string SupportConsoleUsers { get; set; }
+        public DateTime? LastTermsAndConditionsUpdate { get; set; }
     }
 }

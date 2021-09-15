@@ -60,7 +60,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 {
                     return Redirect(ConfigurationFactory.Current.Get().AccountActivationUrl);
                 }
-
+                
                 var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
                 var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
                 var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
@@ -68,7 +68,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName);
 
-                accounts = await _homeOrchestrator.GetUserAccounts(userId);
+                accounts = await _homeOrchestrator.GetUserAccounts(userId, _configuration.LastTermsAndConditionsUpdate);
             }
             else
             {
@@ -108,6 +108,31 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             return RedirectToAction(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName);
+        }
+
+
+        [HttpGet]
+        [DasAuthorize]
+        [Route("termsAndConditions")]
+        public ActionResult TermsAndConditions(string returnUrl, string hashedAccountId)
+        {
+            var termsAndConditionViewModel = new TermsAndConditionViewModel { ReturnUrl = returnUrl, HashedAccountId = hashedAccountId };
+            return View(termsAndConditionViewModel);
+        }
+
+        [HttpPost]
+        [DasAuthorize]
+        [Route("termsAndConditions")]
+        public async Task<ActionResult> TermsAndConditions(TermsAndConditionViewModel termsAndConditionViewModel)
+        {
+            var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+            await _homeOrchestrator.UpdateTermAndConditionsAcceptedOn(userRef);
+
+            if (termsAndConditionViewModel.ReturnUrl == "EmployerTeam")
+            {
+                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { termsAndConditionViewModel.HashedAccountId });
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         [DasAuthorize]
