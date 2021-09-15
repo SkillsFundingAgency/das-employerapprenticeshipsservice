@@ -18,12 +18,13 @@ namespace SFA.DAS.EmployerFinance.Infrastructure
         {
             _httpClient = httpClient;
             _config = options;
-            _httpClient.BaseAddress = new Uri("https://localhost:44350/");
+            _httpClient.BaseAddress = new Uri(_config.BaseUrl);
         }
 
         public async Task<TResponse> Get<TResponse>(IGetApiRequest request)
         {
             AddHeaders();
+
             var response = await _httpClient.GetAsync(request.GetUrl).ConfigureAwait(false);
 
             response.EnsureSuccessStatusCode();

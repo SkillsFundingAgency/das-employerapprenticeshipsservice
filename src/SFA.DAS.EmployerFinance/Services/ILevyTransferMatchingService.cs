@@ -5,6 +5,5 @@ namespace SFA.DAS.EmployerFinance.Services
     public interface ILevyTransferMatchingService
     {
         Task<int> GetPledgesCount(long accountId);
-        Task<int> GetApplicationsCount(long accountId);
     }
 }

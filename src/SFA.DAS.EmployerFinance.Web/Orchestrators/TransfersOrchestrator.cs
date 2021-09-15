@@ -30,12 +30,11 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 
         public async Task<OrchestratorResponse<TransfersIndexViewModel>> Index(string hashedAccountId)
         {
-            bool renderCreateTransfersPledgeButton = true; //await _authorizationService.IsAuthorizedAsync(EmployerUserRole.OwnerOrTransactor);
+            bool renderCreateTransfersPledgeButton = await _authorizationService.IsAuthorizedAsync(EmployerUserRole.OwnerOrTransactor);
 
             var accountId = _hashingService.DecodeValue(hashedAccountId);
 
             var pledgesCount = await _levyTransferMatchingService.GetPledgesCount(accountId);
-            var applicationsCount = await _levyTransferMatchingService.GetApplicationsCount(accountId);
 
             var viewModel = new OrchestratorResponse<TransfersIndexViewModel>()
             {
@@ -43,7 +42,6 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                 {
                     RenderCreateTransfersPledgeButton = renderCreateTransfersPledgeButton,
                     PledgesCount = pledgesCount,
-                    ApplicationsCount = applicationsCount
                 }
             };
 

@@ -21,13 +21,5 @@
 
             return getPledgesResponse.TotalPledges;
         }
-
-        public async Task<int> GetApplicationsCount(long accountId)
-        {
-            //var getApplicationsResponse = await _apiClient.Get<GetApplicationsResponse>(new GetApplicationsRequest(accountId));
-
-            //return getApplicationsResponse.ApplicationsCount;
-            return 2;
-        }
     }
 }
