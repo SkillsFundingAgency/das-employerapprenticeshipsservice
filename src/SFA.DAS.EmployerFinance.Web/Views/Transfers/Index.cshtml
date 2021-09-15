@@ -1,4 +1,4 @@
-﻿@model OrchestratorResponse<TransfersIndexViewModel>
+﻿@model OrchestratorResponse<SFA.DAS.EmployerFinance.Web.ViewModels.Transfers.IndexViewModel>
 
 @{
     ViewBag.PageID = "transfers";
@@ -9,22 +9,27 @@
 }
 
 <h1 class="heading-xlarge">Transfers</h1>
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-        <h2 class="govuk-heading-m">My pledges</h2>
-        <p>Create a public funding pledge which is shown online so that businesses can apply to you for a transfer of funds.</p>
-        <div class="panel panel-border-wide">
-            You have <strong>@Model.Data.PledgesCount</strong> transfer pledges.
-        </div>
-        <div class="">
-            @if (Model.Data.RenderCreateTransfersPledgeButton)
-            {
-                <a class="button" href="@Url.LevyMatchingTransfersAction("pledges/create/inform")" id="CreateTransfersPledgeButton">Create a transfers pledge</a>
-            }
-            <a href="@Url.LevyMatchingTransfersAction("pledges")" class="button button-secondary">View my transfer pledges and applications</a>
+
+@if (Model.Data.IsTransferReceiver)
+{
+   
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h2 class="govuk-heading-m">My pledges</h2>
+            <p>Create a public funding pledge which is shown online so that businesses can apply to you for a transfer of funds.</p>
+            <div class="panel panel-border-wide">
+                You have <strong>@Model.Data.PledgesCount</strong> transfer pledges.
+            </div>
+            <div class="">
+                @if (Model.Data.RenderCreateTransfersPledgeButton)
+                {
+                    <a class="button" href="@Url.LevyMatchingTransfersAction("pledges/create/inform")" id="CreateTransfersPledgeButton">Create a transfers pledge</a>
+                }
+                <a href="@Url.LevyMatchingTransfersAction("pledges")" class="button button-secondary">View my transfer pledges and applications</a>
+            </div>
         </div>
     </div>
-</div>
+}
 
 @section breadcrumb {
     <div class="breadcrumbs">
