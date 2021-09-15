@@ -1,12 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using SFA.DAS.Authorization.EmployerUserRoles.Options;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerFinance.Services;
-using SFA.DAS.EmployerFinance.Web.ViewModels;
 using SFA.DAS.HashingService;
-using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerFinance.Web.ViewModels.Transfers;
 
 namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 {
@@ -14,9 +12,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
     {
         private readonly IAuthorizationService _authorizationService;
         private readonly IHashingService _hashingService;
-        private readonly ILevyTransferMatchingService _levyTransferMatchingService;
-        private readonly IAccountApiClient _accountApiClient;
-        private readonly ICohortsService _cohortsService;
+        private readonly IManageApprenticeshipsService _manageApprenticeshipsService;
 
         protected TransfersOrchestrator()
         {
@@ -26,58 +22,29 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         public TransfersOrchestrator(
             IAuthorizationService authorizationService,
             IHashingService hashingService,
-            ILevyTransferMatchingService levyTransferMatchingService,
-            IAccountApiClient accountApiClient,
-            ICohortsService cohortsService)
+            IManageApprenticeshipsService manageApprenticeshipsService)
         {
             _authorizationService = authorizationService;
             _hashingService = hashingService;
-            _levyTransferMatchingService = levyTransferMatchingService;
-            _accountApiClient = accountApiClient;
-            _cohortsService = cohortsService;
+            _manageApprenticeshipsService = manageApprenticeshipsService;
         }
 
-        public async Task<OrchestratorResponse<TransfersIndexViewModel>> Index(string hashedAccountId)
+        public async Task<OrchestratorResponse<IndexViewModel>> GetIndexViewModel(string hashedAccountId)
         {
-            var accountDetail = await _accountApiClient.GetAccount(hashedAccountId).ConfigureAwait(false);
-            var cohortsCount = await _cohortsService.GetCohortsCount(accountDetail.AccountId).ConfigureAwait(false);
-
-            Enum.TryParse(accountDetail.ApprenticeshipEmployerType, true, out ApprenticeshipEmployerType employerType);
-
-            if (employerType != ApprenticeshipEmployerType.Levy || cohortsCount > 0)
-            {
-                return new OrchestratorResponse<TransfersIndexViewModel>()
-                {
-                    Data = new TransfersIndexViewModel()
-                    {
-                       CanViewPledgesSection = false
-                    }
-                };
-            }
-
-            return await GenerateTransfersViewIndexModelForLevyAccounts(hashedAccountId);
-        }
-
-        private async Task<OrchestratorResponse<TransfersIndexViewModel>> GenerateTransfersViewIndexModelForLevyAccounts(string hashedAccountId)
-        {
-            bool renderCreateTransfersPledgeButton =
-                await _authorizationService.IsAuthorizedAsync(EmployerUserRole.OwnerOrTransactor);
-
             var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var indexTask = _manageApprenticeshipsService.GetIndex(accountId);
+            var renderCreateTransfersPledgeButtonTask = _authorizationService.IsAuthorizedAsync(EmployerUserRole.OwnerOrTransactor);
 
-            var pledgesCount = await _levyTransferMatchingService.GetPledgesCount(accountId);
+            await Task.WhenAll(indexTask, renderCreateTransfersPledgeButtonTask);
 
-            var viewModel = new OrchestratorResponse<TransfersIndexViewModel>()
+            return new OrchestratorResponse<IndexViewModel>
             {
-                Data = new TransfersIndexViewModel()
+                Data = new IndexViewModel
                 {
-                    RenderCreateTransfersPledgeButton = renderCreateTransfersPledgeButton,
-                    PledgesCount = pledgesCount,
-                    CanViewPledgesSection = true
+                    PledgesCount = indexTask.Result.PledgesCount,
+                    IsTransferReceiver = indexTask.Result.IsTransferReceiver
                 }
             };
-
-            return viewModel;
         }
     }
 }

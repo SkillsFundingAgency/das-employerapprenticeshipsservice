@@ -1,4 +1,4 @@
-﻿@model OrchestratorResponse<TransfersIndexViewModel>
+﻿@model OrchestratorResponse<SFA.DAS.EmployerFinance.Web.ViewModels.Transfers.IndexViewModel>
 
 @{
     ViewBag.PageID = "transfers";
@@ -10,7 +10,7 @@
 
 <h1 class="heading-xlarge">Transfers</h1>
 
-@if (Model.Data.CanViewPledgesSection)
+@if (Model.Data.IsTransferReceiver)
 {
    
     <div class="govuk-grid-row">
