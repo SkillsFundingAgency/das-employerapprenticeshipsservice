@@ -3,6 +3,7 @@
     public class GetIndexResponse
     {
         public int PledgesCount { get; set; }
+        public int ApplicationsCount { get; set; }
         public bool IsTransferReceiver { get; set; }
     }
 }

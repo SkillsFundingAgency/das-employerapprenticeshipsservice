@@ -13,7 +13,9 @@
 @if (Model.Data.IsTransferReceiver)
 {
    
-    <div class="govuk-grid-row">
+<div class="govuk-grid-row">
+    @if (Model.Data.IsTransferReceiver)
+    {
         <div class="govuk-grid-column-two-thirds">
             <h2 class="govuk-heading-m">My pledges</h2>
             <p>Create a public funding pledge which is shown online so that businesses can apply to you for a transfer of funds.</p>
@@ -28,7 +30,20 @@
                 <a href="@Url.LevyMatchingTransfersAction("pledges")" class="button button-secondary">View my transfer pledges and applications</a>
             </div>
         </div>
+    }
+
+    <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-heading-m">Apply for transfers funding</h2>
+        <p>Search transfers funding opportunities and apply for a transfer of funds.</p>
+        <div class="panel panel-border-wide">
+            You have <strong>@Model.Data.ApplicationsCount</strong> transfer applications.
+        </div>
+        <div class="govuk-button-group">
+            <a class="button" href="@Url.LevyMatchingTransfersAction("opportunities")" id="ApplyForTransfersButton">Apply for transfer opportunities</a>
+            <a href="@Url.LevyMatchingTransfersAction("applications")" class="button button-secondary">View applications I've submitted</a>
+        </div>
     </div>
+</div>
 }
 
 @section breadcrumb {
