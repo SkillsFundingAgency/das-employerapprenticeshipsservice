@@ -5,5 +5,7 @@
         public bool IsTransferReceiver { get; set; }
         public bool RenderCreateTransfersPledgeButton { get; set; }
         public int PledgesCount { get; set; }
+        public bool IsTransferSender { get; set; }
+        public bool CanViewPledgesSection { get; set; }
     }
 }

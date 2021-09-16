@@ -10,9 +10,8 @@
 
 <h1 class="heading-xlarge">Transfers</h1>
 
-@if (Model.Data.IsTransferReceiver)
+@if (Model.Data.CanViewPledgesSection) 
 {
-   
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <h2 class="govuk-heading-m">My pledges</h2>

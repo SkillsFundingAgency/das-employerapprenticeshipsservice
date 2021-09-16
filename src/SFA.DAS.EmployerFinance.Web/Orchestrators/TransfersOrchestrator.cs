@@ -1,10 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using SFA.DAS.Authorization.EmployerUserRoles.Options;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.HashingService;
 using SFA.DAS.EmployerFinance.Web.ViewModels.Transfers;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 {
@@ -13,6 +15,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         private readonly IAuthorizationService _authorizationService;
         private readonly IHashingService _hashingService;
         private readonly IManageApprenticeshipsService _manageApprenticeshipsService;
+        private readonly IAccountApiClient _accountApiClient;
 
         protected TransfersOrchestrator()
         {
@@ -22,27 +25,47 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         public TransfersOrchestrator(
             IAuthorizationService authorizationService,
             IHashingService hashingService,
-            IManageApprenticeshipsService manageApprenticeshipsService)
+            IManageApprenticeshipsService manageApprenticeshipsService,
+            IAccountApiClient accountApiClient)
         {
             _authorizationService = authorizationService;
             _hashingService = hashingService;
             _manageApprenticeshipsService = manageApprenticeshipsService;
+            _accountApiClient = accountApiClient;
         }
 
         public async Task<OrchestratorResponse<IndexViewModel>> GetIndexViewModel(string hashedAccountId)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var indexTask = _manageApprenticeshipsService.GetIndex(accountId);
+            var accountDetail = _accountApiClient.GetAccount(hashedAccountId);
+
             var renderCreateTransfersPledgeButtonTask = _authorizationService.IsAuthorizedAsync(EmployerUserRole.OwnerOrTransactor);
 
-            await Task.WhenAll(indexTask, renderCreateTransfersPledgeButtonTask);
+            await Task.WhenAll(indexTask, renderCreateTransfersPledgeButtonTask, accountDetail);
+
+            Enum.TryParse(accountDetail.Result.ApprenticeshipEmployerType, true, out ApprenticeshipEmployerType employerType);
+
+            if (indexTask.Result.IsTransferReceiver || employerType == ApprenticeshipEmployerType.NonLevy)
+            {
+                return new OrchestratorResponse<IndexViewModel>()
+                {
+                    Data = new IndexViewModel
+                    {
+                        CanViewPledgesSection = false
+                    }
+                };
+            }
 
             return new OrchestratorResponse<IndexViewModel>
             {
                 Data = new IndexViewModel
                 {
+                    CanViewPledgesSection = true,
                     PledgesCount = indexTask.Result.PledgesCount,
-                    IsTransferReceiver = indexTask.Result.IsTransferReceiver
+                    IsTransferReceiver = indexTask.Result.IsTransferReceiver,
+                    IsTransferSender = indexTask.Result.IsTransferSender,
+                    RenderCreateTransfersPledgeButton = renderCreateTransfersPledgeButtonTask.Result
                 }
             };
         }
