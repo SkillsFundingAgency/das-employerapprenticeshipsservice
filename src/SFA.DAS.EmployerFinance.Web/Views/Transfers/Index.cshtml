@@ -10,9 +10,6 @@
 
 <h1 class="heading-xlarge">Transfers</h1>
 
-@if (Model.Data.IsTransferReceiver)
-{
-   
 <div class="govuk-grid-row">
     @if (Model.Data.IsTransferReceiver)
     {
@@ -32,19 +29,21 @@
         </div>
     }
 
-    <div class="govuk-grid-column-two-thirds">
-        <h2 class="govuk-heading-m">Apply for transfers funding</h2>
-        <p>Search transfers funding opportunities and apply for a transfer of funds.</p>
-        <div class="panel panel-border-wide">
-            You have <strong>@Model.Data.ApplicationsCount</strong> transfer applications.
+    @if (Model.Data.IsTransferSender)
+    {
+        <div class="govuk-grid-column-two-thirds">
+            <h2 class="govuk-heading-m">Apply for transfers funding</h2>
+            <p>Search transfers funding opportunities and apply for a transfer of funds.</p>
+            <div class="panel panel-border-wide">
+                You have <strong>@Model.Data.ApplicationsCount</strong> transfer applications.
+            </div>
+            <div class="govuk-button-group">
+                <a class="button" href="@Url.LevyMatchingTransfersAction("opportunities")" id="ApplyForTransfersButton">Apply for transfer opportunities</a>
+                <a href="@Url.LevyMatchingTransfersAction("applications")" class="button button-secondary">View applications I've submitted</a>
+            </div>
         </div>
-        <div class="govuk-button-group">
-            <a class="button" href="@Url.LevyMatchingTransfersAction("opportunities")" id="ApplyForTransfersButton">Apply for transfer opportunities</a>
-            <a href="@Url.LevyMatchingTransfersAction("applications")" class="button button-secondary">View applications I've submitted</a>
-        </div>
-    </div>
+    }
 </div>
-}
 
 @section breadcrumb {
     <div class="breadcrumbs">
