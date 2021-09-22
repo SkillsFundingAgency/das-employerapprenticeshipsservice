@@ -80,9 +80,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Infrastructure
                     ItExpr.Is<HttpRequestMessage>(c =>
                         c.Method.Equals(HttpMethod.Get)
                         && c.Headers.Contains("Ocp-Apim-Subscription-Key")
-                        && c.Headers.GetValues("Ocp-Apim-Subscription-Key").First().Equals(key)
+                        && c.Headers.GetValues("Ocp-Apim-Subscription-Key").Single().Equals(key)
                         && c.Headers.Contains("X-Version")
-                        && c.Headers.GetValues("X-Version").First().Equals("1")
+                        && c.Headers.GetValues("X-Version").Single().Equals("1")
                         && c.RequestUri.AbsoluteUri.Equals(url)),
                     ItExpr.IsAny<CancellationToken>()
                 )
