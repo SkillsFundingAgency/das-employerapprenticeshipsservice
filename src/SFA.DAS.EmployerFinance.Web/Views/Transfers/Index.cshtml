@@ -39,7 +39,10 @@
             </div>
             <div class="govuk-button-group">
                 <a class="button" href="@Url.LevyMatchingTransfersAction("opportunities")" id="ApplyForTransfersButton">Apply for transfer opportunities</a>
-                <a href="@Url.LevyMatchingTransfersAction("applications")" class="button button-secondary">View applications I've submitted</a>
+                @if (Model.Data.RenderApplicationListButton)
+                {
+                    <a href="@Url.LevyMatchingTransfersAction("applications")" class="button button-secondary">View applications I've submitted</a>
+                }
             </div>
         </div>
     }

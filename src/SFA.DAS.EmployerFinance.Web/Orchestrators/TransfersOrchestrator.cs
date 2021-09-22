@@ -4,6 +4,8 @@ using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.HashingService;
 using SFA.DAS.EmployerFinance.Web.ViewModels.Transfers;
+using SFA.DAS.Authorization.Features.Services;
+using SFA.DAS.Authorization.EmployerFeatures.Models;
 
 namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 {
@@ -12,6 +14,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         private readonly IAuthorizationService _authorizationService;
         private readonly IHashingService _hashingService;
         private readonly IManageApprenticeshipsService _manageApprenticeshipsService;
+        private readonly IFeatureTogglesService<EmployerFeatureToggle> _featureTogglesService;
 
         protected TransfersOrchestrator()
         {
@@ -21,11 +24,13 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         public TransfersOrchestrator(
             IAuthorizationService authorizationService,
             IHashingService hashingService,
-            IManageApprenticeshipsService manageApprenticeshipsService)
+            IManageApprenticeshipsService manageApprenticeshipsService,
+            IFeatureTogglesService<EmployerFeatureToggle> featureTogglesService)
         {
             _authorizationService = authorizationService;
             _hashingService = hashingService;
             _manageApprenticeshipsService = manageApprenticeshipsService;
+            _featureTogglesService = featureTogglesService;
         }
 
         public async Task<OrchestratorResponse<IndexViewModel>> GetIndexViewModel(string hashedAccountId)
@@ -33,6 +38,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var indexTask = _manageApprenticeshipsService.GetIndex(accountId);
             var renderCreateTransfersPledgeButtonTask = _authorizationService.IsAuthorizedAsync(EmployerUserRole.OwnerOrTransactor);
+            var renderApplicationListButton = _featureTogglesService.GetFeatureToggle("ApplicationList");
 
             await Task.WhenAll(indexTask, renderCreateTransfersPledgeButtonTask);
 
@@ -43,7 +49,8 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     PledgesCount = indexTask.Result.PledgesCount,
                     ApplicationsCount = indexTask.Result.ApplicationsCount,
                     IsTransferReceiver = indexTask.Result.IsTransferReceiver,
-                    IsTransferSender = indexTask.Result.IsTransferSender
+                    IsTransferSender = indexTask.Result.IsTransferSender,
+                    RenderApplicationListButton = renderApplicationListButton.IsEnabled
                 }
             };
         }
