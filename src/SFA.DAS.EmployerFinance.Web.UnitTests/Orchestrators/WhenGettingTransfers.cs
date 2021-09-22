@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Authorization.EmployerFeatures.Models;
 using SFA.DAS.Authorization.EmployerUserRoles.Options;
+using SFA.DAS.Authorization.Features.Services;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
@@ -18,6 +20,7 @@ using SFA.DAS.OidcMiddleware.Builders;
 
 namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
 {
+    [TestFixture]
     public class WhenGettingTransfers
     {
         private TransfersOrchestrator _orchestrator;
@@ -25,6 +28,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         private Mock<IHashingService> _hashingService;
         private Mock<IManageApprenticeshipsService> _maService;
         private Mock<IAccountApiClient> _accountApiClient;
+        private Mock<IFeatureTogglesService<EmployerFeatureToggle>> _featureTogglesService;
 
         private const string HashedAccountId = "123ABC";
         private const long AccountId = 1234;
@@ -36,10 +40,12 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
             _hashingService = new Mock<IHashingService>();
             _maService = new Mock<IManageApprenticeshipsService>();
             _accountApiClient = new Mock<IAccountApiClient>();
+            _featureTogglesService = new Mock<IFeatureTogglesService<EmployerFeatureToggle>>();
 
             _hashingService.Setup(h => h.DecodeValue(HashedAccountId)).Returns(AccountId);
+            _featureTogglesService.Setup(x => x.GetFeatureToggle(It.IsAny<string>())).Returns(new EmployerFeatureToggle { IsEnabled = true });
 
-            _orchestrator = new TransfersOrchestrator(_authorisationService.Object, _hashingService.Object, _maService.Object, _accountApiClient.Object);
+            _orchestrator = new TransfersOrchestrator(_authorisationService.Object, _hashingService.Object, _maService.Object, _accountApiClient.Object, _featureTogglesService.Object);
         }
 
         [Test]
