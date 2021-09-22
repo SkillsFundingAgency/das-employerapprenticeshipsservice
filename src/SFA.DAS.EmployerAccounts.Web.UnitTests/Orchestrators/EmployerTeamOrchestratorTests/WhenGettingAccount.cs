@@ -29,6 +29,8 @@ using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.EmployerAccounts.Queries.GetApprenticeship;
+using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
 {
@@ -46,6 +48,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         private Mock<IMapper> _mapper;
         private List<AccountTask> _tasks;
         private AccountTask _testTask;
+        private DateTime LastTermsAndConditionsUpdate;
 
         [SetUp]
         public void Arrange()
@@ -92,6 +95,15 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                      {
                          UserRole = Role.Owner
                      });
+
+            _mediator.Setup(m => m.SendAsync(It.IsAny<GetUserByRefQuery>()))
+                    .ReturnsAsync(new GetUserByRefResponse
+                    {
+                      User =  new SFA.DAS.EmployerAccounts.Models.UserProfile.User
+                      {
+                          TermAndConditionsAcceptedOn = DateTime.Now
+                      }
+                    });
 
             _mediator.Setup(m => m.SendAsync(It.Is<GetAccountEmployerAgreementsRequest>(q => q.HashedAccountId == HashedAccountId)))
                      .ReturnsAsync(new GetAccountEmployerAgreementsResponse
@@ -144,7 +156,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
            
             _mapper = new Mock<IMapper>();
 
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object, _accountApiClient.Object,  _mapper.Object);
+            LastTermsAndConditionsUpdate = DateTime.Now.AddDays(-10);
+            var employerAccountsConfiguration = new EmployerAccountsConfiguration { LastTermsAndConditionsUpdate = LastTermsAndConditionsUpdate };
+
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object, _accountApiClient.Object,  _mapper.Object, employerAccountsConfiguration);
         }
         
         [Test]
@@ -158,6 +173,46 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             Assert.AreEqual(_accountStats.OrganisationCount, actual.Data.OrganisationCount);
             Assert.AreEqual(_accountStats.PayeSchemeCount, actual.Data.PayeSchemeCount);
             Assert.AreEqual(_accountStats.TeamMemberCount, actual.Data.TeamMemberCount);
+        }
+
+        [Test]
+        public async Task ThenShouldDispayTermsAndConditionBanner()
+        {
+            _mediator.Setup(m => m.SendAsync(It.IsAny<GetUserByRefQuery>()))
+             .ReturnsAsync(new GetUserByRefResponse
+             {
+                 User = new SFA.DAS.EmployerAccounts.Models.UserProfile.User
+                 {
+                     TermAndConditionsAcceptedOn = LastTermsAndConditionsUpdate.AddDays(-1)
+                 }
+             });
+
+            // Act
+            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
+
+            //Assert
+            Assert.IsNotNull(actual.Data);
+            Assert.AreEqual(true, actual.Data.ShowTermsAndConditionBanner);
+        }
+
+        [Test]
+        public async Task ThenShouldNotDispayTermsAndConditionBanner()
+        {
+            _mediator.Setup(m => m.SendAsync(It.IsAny<GetUserByRefQuery>()))
+             .ReturnsAsync(new GetUserByRefResponse
+             {
+                 User = new SFA.DAS.EmployerAccounts.Models.UserProfile.User
+                 {
+                     TermAndConditionsAcceptedOn = LastTermsAndConditionsUpdate.AddDays(1)
+                 }
+             });
+
+            // Act
+            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
+
+            //Assert
+            Assert.IsNotNull(actual.Data);
+            Assert.AreEqual(false, actual.Data.ShowTermsAndConditionBanner);
         }
 
         [Test]
