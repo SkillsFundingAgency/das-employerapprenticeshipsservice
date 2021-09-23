@@ -3,32 +3,31 @@
 @{
     ViewBag.PageID = "transfers";
     ViewBag.Section = "finance";
-    ViewBag.Title = "Transfers";
+    ViewBag.Title = "Manage transfers";
     ViewBag.AnalyticsData.Vpv = $"/finance/transfers";
     ViewBag.ZenDeskLabel = "eas-finance";
 }
 
-<h1 class="heading-xlarge">Transfers</h1>
-
-@if (Model.Data.CanViewPledgesSection) 
-{
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-            <h2 class="govuk-heading-m">My pledges</h2>
-            <p>Create a public funding pledge which is shown online so that businesses can apply to you for a transfer of funds.</p>
-            <div class="panel panel-border-wide">
-                You have <strong>@Model.Data.PledgesCount</strong> transfer pledges.
-            </div>
-            <div class="">
-                @if (Model.Data.RenderCreateTransfersPledgeButton)
-                {
-                    <a class="button" href="@Url.LevyMatchingTransfersAction("pledges/create/inform")" id="CreateTransfersPledgeButton">Create a transfers pledge</a>
-                }
-                <a href="@Url.LevyMatchingTransfersAction("pledges")" class="button button-secondary">View my transfer pledges and applications</a>
-            </div>
+<h1 class="heading-xlarge">Manage transfers</h1>
+<div class="govuk-grid-row">
+    @if (Model.Data.CanViewPledgesSection) 
+    {
+    <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-heading-m">My pledges</h2>
+        <p>Create a public funding pledge which is shown online so that businesses can apply to you for a transfer of funds.</p>
+        <div class="panel panel-border-wide">
+            You have <strong>@Model.Data.PledgesCount</strong> transfer pledges.
+        </div>
+        <div class="">
+            @if (Model.Data.RenderCreateTransfersPledgeButton)
+            {
+                <a class="button" href="@Url.LevyMatchingTransfersAction("pledges/create/inform")" id="CreateTransfersPledgeButton">Create a transfers pledge</a>
+            }
+            <a href="@Url.LevyMatchingTransfersAction("pledges")" class="button button-secondary">View my transfer pledges and applications</a>
         </div>
     </div>
-}
+    }
+</div>
 
 @section breadcrumb {
     <div class="breadcrumbs">
