@@ -22,9 +22,9 @@
             <div class="">
                 @if (Model.Data.RenderCreateTransfersPledgeButton)
                 {
-                    <a class="button" href="@Url.LevyMatchingTransfersAction("pledges/create/inform")" id="CreateTransfersPledgeButton">Create a transfers pledge</a>
+                    <a class="button" href="@Url.LevyTransfersMatchingAccountAction("pledges/create/inform")" id="CreateTransfersPledgeButton">Create a transfers pledge</a>
                 }
-                <a href="@Url.LevyMatchingTransfersAction("pledges")" class="button button-secondary">View my transfer pledges and applications</a>
+                <a href="@Url.LevyTransfersMatchingAccountAction("pledges")" class="button button-secondary">View my transfer pledges and applications</a>
             </div>
         </div>
     }
@@ -38,10 +38,10 @@
                 You have <strong>@Model.Data.ApplicationsCount</strong> transfer applications.
             </div>
             <div class="govuk-button-group">
-                <a class="button" href="@Url.LevyMatchingTransfersAction("opportunities")" id="ApplyForTransfersButton">Apply for transfer opportunities</a>
+                <a class="button" href="@Url.LevyTransfersMatchingAction("")" id="ApplyForTransfersButton">Apply for transfer opportunities</a>
                 @if (Model.Data.RenderApplicationListButton)
                 {
-                    <a href="@Url.LevyMatchingTransfersAction("applications")" class="button button-secondary">View applications I've submitted</a>
+                    <a href="@Url.LevyTransfersMatchingAccountAction("applications")" class="button button-secondary">View applications I've submitted</a>
                 }
             </div>
         </div>
