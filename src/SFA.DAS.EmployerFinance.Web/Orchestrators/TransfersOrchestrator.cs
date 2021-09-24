@@ -52,22 +52,12 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 
             Enum.TryParse(accountDetail.Result.ApprenticeshipEmployerType, true, out ApprenticeshipEmployerType employerType);
 
-            if (indexTask.Result.IsTransferReceiver || employerType == ApprenticeshipEmployerType.NonLevy)
-            {
-                return new OrchestratorResponse<IndexViewModel>()
-                {
-                    Data = new IndexViewModel
-                    {
-                        CanViewPledgesSection = false
-                    }
-                };
-            }
 
             return new OrchestratorResponse<IndexViewModel>
             {
                 Data = new IndexViewModel
                 {
-                    CanViewPledgesSection = true,
+                    CanViewPledgesSection = !(indexTask.Result.IsTransferReceiver || employerType == ApprenticeshipEmployerType.NonLevy),
                     PledgesCount = indexTask.Result.PledgesCount,
                     ApplicationsCount = indexTask.Result.ApplicationsCount,
                     IsTransferReceiver = indexTask.Result.IsTransferReceiver,
