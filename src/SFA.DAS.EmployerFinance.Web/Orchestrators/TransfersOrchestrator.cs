@@ -1,9 +1,14 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using SFA.DAS.Authorization.EmployerUserRoles.Options;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerFinance.Services;
-using SFA.DAS.EmployerFinance.Web.ViewModels;
 using SFA.DAS.HashingService;
+using SFA.DAS.EmployerFinance.Web.ViewModels.Transfers;
+using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.Authorization.Features.Services;
+using SFA.DAS.Authorization.EmployerFeatures.Models;
+using SFA.DAS.EAS.Account.Api.Client;
 
 namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 {
@@ -11,7 +16,9 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
     {
         private readonly IAuthorizationService _authorizationService;
         private readonly IHashingService _hashingService;
-        private readonly ILevyTransferMatchingService _levyTransferMatchingService;
+        private readonly IManageApprenticeshipsService _manageApprenticeshipsService;
+        private readonly IAccountApiClient _accountApiClient;
+        private readonly IFeatureTogglesService<EmployerFeatureToggle> _featureTogglesService;
 
         protected TransfersOrchestrator()
         {
@@ -21,31 +28,43 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         public TransfersOrchestrator(
             IAuthorizationService authorizationService,
             IHashingService hashingService,
-            ILevyTransferMatchingService levyTransferMatchingService)
+            IManageApprenticeshipsService manageApprenticeshipsService,
+            IAccountApiClient accountApiClient,
+            IFeatureTogglesService<EmployerFeatureToggle> featureTogglesService)
         {
             _authorizationService = authorizationService;
             _hashingService = hashingService;
-            _levyTransferMatchingService = levyTransferMatchingService;
+            _manageApprenticeshipsService = manageApprenticeshipsService;
+            _accountApiClient = accountApiClient;
+            _featureTogglesService = featureTogglesService;
         }
 
-        public async Task<OrchestratorResponse<TransfersIndexViewModel>> Index(string hashedAccountId)
+        public async Task<OrchestratorResponse<IndexViewModel>> GetIndexViewModel(string hashedAccountId)
         {
-            bool renderCreateTransfersPledgeButton = await _authorizationService.IsAuthorizedAsync(EmployerUserRole.OwnerOrTransactor);
-
             var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var indexTask = _manageApprenticeshipsService.GetIndex(accountId);
+            var accountDetail = _accountApiClient.GetAccount(hashedAccountId);
 
-            var pledgesCount = await _levyTransferMatchingService.GetPledgesCount(accountId);
+            var renderCreateTransfersPledgeButtonTask = _authorizationService.IsAuthorizedAsync(EmployerUserRole.OwnerOrTransactor);
+            var renderApplicationListButton = _featureTogglesService.GetFeatureToggle("ApplicationList");
 
-            var viewModel = new OrchestratorResponse<TransfersIndexViewModel>()
+            await Task.WhenAll(indexTask, renderCreateTransfersPledgeButtonTask, accountDetail);
+
+            Enum.TryParse(accountDetail.Result.ApprenticeshipEmployerType, true, out ApprenticeshipEmployerType employerType);
+
+
+            return new OrchestratorResponse<IndexViewModel>
             {
-                Data = new TransfersIndexViewModel()
+                Data = new IndexViewModel
                 {
-                    RenderCreateTransfersPledgeButton = renderCreateTransfersPledgeButton,
-                    PledgesCount = pledgesCount,
+                    CanViewPledgesSection = !(indexTask.Result.IsTransferReceiver || employerType == ApprenticeshipEmployerType.NonLevy),
+                    CanViewApplySection = !(indexTask.Result.IsTransferSender && employerType == ApprenticeshipEmployerType.Levy),
+                    PledgesCount = indexTask.Result.PledgesCount,
+                    ApplicationsCount = indexTask.Result.ApplicationsCount,
+                    RenderCreateTransfersPledgeButton = renderCreateTransfersPledgeButtonTask.Result,
+                    RenderApplicationListButton = renderApplicationListButton.IsEnabled
                 }
             };
-
-            return viewModel;
         }
     }
 }

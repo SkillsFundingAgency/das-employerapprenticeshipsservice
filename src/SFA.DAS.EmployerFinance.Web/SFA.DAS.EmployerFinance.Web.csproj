@@ -211,7 +211,7 @@
     <Compile Include="ViewModels\TransactionLineViewModel.cs" />
     <Compile Include="ViewModels\TransactionViewModel.cs" />
     <Compile Include="ViewModels\TransactionViewResultViewModel.cs" />
-    <Compile Include="ViewModels\TransfersIndexViewModel.cs" />
+    <Compile Include="ViewModels\Transfers\IndexViewModel.cs" />
     <Compile Include="ViewModels\TransferTransactionDetailsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
