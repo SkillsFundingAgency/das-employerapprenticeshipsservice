@@ -875,6 +875,7 @@
     <Content Include="Views\Shared\_Agreement_v6.cshtml" />
     <Content Include="Views\SearchOrganisation\ConfirmOrganisationDetails.cshtml" />
     <Content Include="Views\Home\TermsAndConditions.cshtml" />
+    <Content Include="Views\Shared\_Agreement_v7.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
