@@ -292,6 +292,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> ViewAllAgreements(string hashedAccountId, string accountLegalEntityHashedId)
         {
             var model = await _orchestrator.GetOrganisationAgreements(accountLegalEntityHashedId);
+            ViewBag.AgreementId = accountLegalEntityHashedId;
+
             return View(model);
         }
     }
