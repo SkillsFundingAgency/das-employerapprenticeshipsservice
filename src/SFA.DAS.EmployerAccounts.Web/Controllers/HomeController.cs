@@ -110,20 +110,32 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return RedirectToAction(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName);
         }
 
+        [HttpGet]
+        [Route("termsAndConditions/overview")]
+        public ActionResult TermsAndConditionsOverview()
+        {
+            var model = new
+            {
+                HideHeaderSignInLink = true
+            };
+
+            return View(model);
+        }
+
 
         [HttpGet]
         [DasAuthorize]
         [Route("termsAndConditions")]
         public ActionResult TermsAndConditions(string returnUrl, string hashedAccountId)
         {
-            var termsAndConditionViewModel = new TermsAndConditionViewModel { ReturnUrl = returnUrl, HashedAccountId = hashedAccountId };
-            return View(termsAndConditionViewModel);
+            var termsAndConditionsNewViewModel = new TermsAndConditionsNewViewModel { ReturnUrl = returnUrl, HashedAccountId = hashedAccountId };
+            return View(termsAndConditionsNewViewModel);
         }
 
         [HttpPost]
         [DasAuthorize]
         [Route("termsAndConditions")]
-        public async Task<ActionResult> TermsAndConditions(TermsAndConditionViewModel termsAndConditionViewModel)
+        public async Task<ActionResult> TermsAndConditions(TermsAndConditionsNewViewModel termsAndConditionViewModel)
         {
             var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             await _homeOrchestrator.UpdateTermAndConditionsAcceptedOn(userRef);
