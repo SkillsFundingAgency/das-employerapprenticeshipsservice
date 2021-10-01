@@ -114,12 +114,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("termsAndConditions/overview")]
         public ActionResult TermsAndConditionsOverview()
         {
-            var model = new
-            {
-                HideHeaderSignInLink = true
-            };
-
-            return View(model);
+            return View();
         }
 
 
