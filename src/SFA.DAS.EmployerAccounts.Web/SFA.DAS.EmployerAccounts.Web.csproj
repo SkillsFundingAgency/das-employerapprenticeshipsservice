@@ -255,6 +255,7 @@
     <Compile Include="Models\AccountContext.cs" />
     <Compile Include="Models\ReturnUrlModel.cs" />
     <Compile Include="Models\HashedAccountIdModel.cs" />
+    <Compile Include="ViewModels\OrganisationAgreementsViewModel.cs" />
     <Compile Include="ViewModels\TermsAndConditionViewModel.cs" />
     <Compile Include="ViewModels\TriageViewModel.cs" />
     <Compile Include="OrchestratorResponse.cs" />

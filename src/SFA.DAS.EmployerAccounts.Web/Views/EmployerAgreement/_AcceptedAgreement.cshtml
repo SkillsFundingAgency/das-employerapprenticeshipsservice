@@ -1,4 +1,5 @@
-﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.OrganisationAgreementViewModel
+﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
+@model SFA.DAS.EmployerAccounts.Web.ViewModels.OrganisationAgreementViewModel
     
 <div class="govuk-accordion__section ">
     <div class="govuk-accordion__section-header">
@@ -21,7 +22,7 @@
                     Agreement between @Model.AccountLegalEntity.Name and <abbr>ESFA</abbr>
                 </h3>
                 <div class="govuk-inset-text">
-                    @ViewData["Inset"]
+                    @ViewData[ControllerConstants.InsetText]
                 </div>
                 <span class="govuk-caption-m">
                     This agreement allows you to spend funds for <b>@Model.AccountLegalEntity.Name</b>.
