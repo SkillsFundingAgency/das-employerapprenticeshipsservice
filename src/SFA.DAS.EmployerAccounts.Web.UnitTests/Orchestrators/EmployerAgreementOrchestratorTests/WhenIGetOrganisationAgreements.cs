@@ -94,7 +94,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
             var actual = await _orchestrator.GetOrganisationAgreements(AccountLegalEntityHashedId);
 
             //Assert
-            Assert.IsNotNull(actual.Data.Any());            
+            Assert.IsNotNull(actual.Data.Agreements.Any());            
         }
     }
 }
