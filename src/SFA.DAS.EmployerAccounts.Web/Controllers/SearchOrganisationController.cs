@@ -91,11 +91,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             viewModel.NewSearch = true;
 
-            if (string.IsNullOrWhiteSpace(viewModel.Address))
-            {
-                return FindAddress(hashedAccountId, viewModel);
-            }
-
             saveOrganisationDataIfItHasAValidName(viewModel);
 
             if (string.IsNullOrEmpty(hashedAccountId))
@@ -106,14 +101,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             var response = new OrchestratorResponse<OrganisationDetailsViewModel> { Data = viewModel };
 
             return View(ControllerConstants.ConfirmOrganisationDetailsViewName, response);
-        }
-
-        [HttpGet]
-        [Route("{HashedAccountId}/organisations/search/manualAdd", Order = 0)]
-        [Route("organisations/search/manualAdd", Order = 1)]
-        public ActionResult AddOtherOrganisationDetails(string hashedAccountId)
-        {
-            return RedirectToAction(ControllerConstants.AddOtherOrganisationDetailsViewName, ControllerConstants.OrganisationSharedControllerName);
         }
 
         private void saveOrganisationDataIfItHasAValidName(OrganisationDetailsViewModel viewModel)
@@ -137,13 +124,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                         }
                     ));
             }
-        }
-
-        private ActionResult FindAddress(string hashedAccountId, OrganisationDetailsViewModel organisation)
-        {
-            var addressViewModel = _mapper.Map<FindOrganisationAddressViewModel>(organisation);
-            var response = new OrchestratorResponse<FindOrganisationAddressViewModel> { Data = addressViewModel };
-            return View(ControllerConstants.FindAddressViewName, response);
         }
 
         private OrchestratorResponse<T> CreateSearchTermValidationErrorModel<T>(T data)

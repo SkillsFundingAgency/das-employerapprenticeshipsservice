@@ -1,21 +1,52 @@
-﻿@model OrchestratorResponse<TransfersIndexViewModel>
+﻿@model OrchestratorResponse<SFA.DAS.EmployerFinance.Web.ViewModels.Transfers.IndexViewModel>
 
 @{
     ViewBag.PageID = "transfers";
-    ViewBag.Section = "transfers";
-    ViewBag.Title = "Transfers";
+    ViewBag.Section = "finance";
+    ViewBag.Title = "Manage transfers";
     ViewBag.AnalyticsData.Vpv = $"/finance/transfers";
     ViewBag.ZenDeskLabel = "eas-finance";
 }
 
-<h1 class="heading-xlarge">Your Transfers</h1>
+<h1 class="heading-xlarge">Manage transfers</h1>
 
-@if (Model.Data.RenderCreateTransfersPledgeButton)
-{
-<div class="govuk-button-group">
-    <a class="govuk-button" data-module="govuk-button" href="@Url.LevyMatchingTransfersAction("pledges")" id="CreateTransfersPledgeButton">Create a transfers pledge</a>
+<div class="govuk-grid-row">
+    @if (Model.Data.CanViewPledgesSection)
+    {
+        <div class="govuk-grid-column-two-thirds">
+            <h2 class="govuk-heading-m">My pledges</h2>
+            <p>Create a public funding pledge which is shown online so that businesses can apply to you for a transfer of funds.</p>
+            <div class="panel panel-border-wide">
+                You have <strong>@Model.Data.PledgesCount</strong> transfer pledges.
+            </div>
+            <div class="">
+                @if (Model.Data.RenderCreateTransfersPledgeButton)
+                {
+                    <a class="button" href="@Url.LevyTransfersMatchingAccountAction("pledges/create/inform")" id="CreateTransfersPledgeButton">Create a transfers pledge</a>
+                }
+                <a href="@Url.LevyTransfersMatchingAccountAction("pledges")" class="button button-secondary">View my transfer pledges and applications</a>
+            </div>
+        </div>
+    }
+
+    @if (Model.Data.CanViewApplySection)
+    {
+        <div class="govuk-grid-column-two-thirds">
+            <h2 class="govuk-heading-m">Apply for transfers funding</h2>
+            <p>Search transfers funding opportunities and apply for a transfer of funds.</p>
+            <div class="panel panel-border-wide">
+                You have <strong>@Model.Data.ApplicationsCount</strong> transfer applications.
+            </div>
+            <div class="govuk-button-group">
+                <a class="button" href="@Url.LevyTransfersMatchingAction("")" id="ApplyForTransfersButton">Apply for transfer opportunities</a>
+                @if (Model.Data.RenderApplicationListButton)
+                {
+                    <a href="@Url.LevyTransfersMatchingAccountAction("applications")" class="button button-secondary">View applications I've submitted</a>
+                }
+            </div>
+        </div>
+    }
 </div>
-}
 
 @section breadcrumb {
     <div class="breadcrumbs">

@@ -19,7 +19,8 @@
         }
         else
         {
-            
+            <form method="post" action="@Url.Action("Accept","Invitation")">
+                @Html.AntiForgeryToken()
                 <table>
                     <thead>
                         <tr>
@@ -39,29 +40,27 @@
                                     <div>@invitation.AccountName</div>
                                 </td>
                                 <td>
-                                
+
                                     <div>@RoleStrings.GetRoleDescription(invitation.Role)</div>
                                 </td>
                                 <td>
-                                 
+
                                     <div>@invitation.ExpiryDays()</div>
                                 </td>
                                 <td class="link-right">
-                                    <form method="post" action="@Url.Action("Accept","Invitation")">
-                                        @Html.AntiForgeryToken()
 
-                                        <div>
-                                            <input type="hidden" name="Invitations[@index].AccountName" value="@invitation.AccountName"/>
-                                            <input type="hidden" name="Invitations[@index].Id" value="@invitation.Id" />
-                                            <input type="hidden" name="invitation" value="@invitation.Id" />
-                                            <button type="submit" id="invitationId" class="link-button" title="Accept invite to @invitation.AccountName">Accept invite</button>
-                                        </div>
-                                    </form>
+                                    <div>
+                                        <input type="hidden" name="Invitations[@index].AccountName" value="@invitation.AccountName" />
+                                        <input type="hidden" name="Invitations[@index].Id" value="@invitation.Id" />
+                                        <input type="hidden" name="invitation" value="@invitation.Id" />
+                                        <button type="submit" id="invitationId" class="link-button" title="Accept invite to @invitation.AccountName">Accept invite</button>
+                                    </div>
                                 </td>
                             </tr>
                         }
                     </tbody>
                 </table>
+            </form>
         }
     </div>
 </div>

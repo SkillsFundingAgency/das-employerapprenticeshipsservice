@@ -13,7 +13,8 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SFA.DAS.EmployerAccounts.Web</RootNamespace>
     <AssemblyName>SFA.DAS.EmployerAccounts.Web</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <RuntimeIdentifier>win</RuntimeIdentifier>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
@@ -137,7 +138,7 @@
       <Version>1.0.16</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.MA.Shared.UI">
-      <Version>1.1.66</Version>
+      <Version>1.1.75</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
@@ -162,6 +163,9 @@
     <PackageReference Include="WebEssentials.AspNetCore.CdnTagHelpers">
       <Version>1.0.16</Version>
     </PackageReference>
+    <PackageReference Include="System.Net.Http">
+      <Version>4.3.4</Version>
+    </PackageReference>
     <PackageReference Include="WebGrease" Version="1.5.2" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />
   </ItemGroup>
@@ -170,7 +174,6 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.IdentityModel" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
@@ -204,7 +207,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InvitationController.cs" />
     <Compile Include="Controllers\OrganisationController.cs" />
-    <Compile Include="Controllers\OrganisationSharedController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\SearchPensionRegulatorController.cs" />
     <Compile Include="Controllers\SearchOrganisationController.cs" />
@@ -253,6 +255,7 @@
     <Compile Include="Models\AccountContext.cs" />
     <Compile Include="Models\ReturnUrlModel.cs" />
     <Compile Include="Models\HashedAccountIdModel.cs" />
+    <Compile Include="ViewModels\TermsAndConditionViewModel.cs" />
     <Compile Include="ViewModels\TriageViewModel.cs" />
     <Compile Include="OrchestratorResponse.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestrator.cs" />
@@ -335,7 +338,6 @@
     <Compile Include="ViewModels\SearchPensionRegulatorResultsViewModel.cs" />
     <Compile Include="ViewModels\SearchOrganisationResultsViewModel.cs" />
     <Compile Include="ViewModels\SearchOrganisationViewModel.cs" />
-    <Compile Include="ViewModels\SelectOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\SendTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\SentTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\SignAgreementViewModel.cs" />
@@ -785,11 +787,6 @@
     <Content Include="Views\EmployerAccount\RenameAccount.cshtml" />
     <Content Include="Views\SearchOrganisation\SearchForOrganisation.cshtml" />
     <Content Include="Views\SearchOrganisation\SearchForOrganisationResults.cshtml" />
-    <Content Include="Views\OrganisationShared\AddOtherOrganisationDetails.cshtml" />
-    <Content Include="Views\OrganisationShared\SelectAddress.cshtml" />
-    <Content Include="Views\OrganisationShared\AddOrganisationAddress.cshtml" />
-    <Content Include="Views\OrganisationShared\ConfirmOrganisationDetails.cshtml" />
-    <Content Include="Views\OrganisationShared\FindAddress.cshtml" />
     <Content Include="Views\Shared\GatewayInform.cshtml" />
     <Content Include="Views\EmployerAccount\Summary.cshtml" />
     <Content Include="Views\Shared\_PayeNotFound.cshtml" />
@@ -876,6 +873,8 @@
     <Content Include="Views\Shared\_Agreement_v4.cshtml" />
     <Content Include="Views\Shared\_Agreement_v5.cshtml" />
     <Content Include="Views\Shared\_Agreement_v6.cshtml" />
+    <Content Include="Views\SearchOrganisation\ConfirmOrganisationDetails.cshtml" />
+    <Content Include="Views\Home\TermsAndConditions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">

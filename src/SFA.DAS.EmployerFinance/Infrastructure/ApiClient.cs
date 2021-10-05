@@ -12,8 +12,8 @@ namespace SFA.DAS.EmployerFinance.Infrastructure
         private readonly HttpClient _httpClient;
         private readonly ManageApprenticeshipsOuterApiConfiguration _config;
 
-        public ApiClient (
-            HttpClient httpClient, 
+        public ApiClient(
+            HttpClient httpClient,
             ManageApprenticeshipsOuterApiConfiguration options)
         {
             _httpClient = httpClient;
@@ -23,19 +23,21 @@ namespace SFA.DAS.EmployerFinance.Infrastructure
 
         public async Task<TResponse> Get<TResponse>(IGetApiRequest request)
         {
-            AddHeaders();
+            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, request.GetUrl);
+            
+            AddHeaders(httpRequestMessage);
 
-            var response = await _httpClient.GetAsync(request.GetUrl).ConfigureAwait(false);
+            var response = await _httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
 
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             return JsonConvert.DeserializeObject<TResponse>(json);
         }
 
-        private void AddHeaders()
+        private void AddHeaders(HttpRequestMessage httpRequestMessage)
         {
-            _httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", _config.Key);
-            _httpClient.DefaultRequestHeaders.Add("X-Version", "1");
+            httpRequestMessage.Headers.Add("Ocp-Apim-Subscription-Key", _config.Key);
+            httpRequestMessage.Headers.Add("X-Version", "1");
         }
     }
 }

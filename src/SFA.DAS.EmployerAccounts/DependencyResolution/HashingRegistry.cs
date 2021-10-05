@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
                 .Ctor<IHashingService>()
                 .Is(c =>
                     new HashingService.HashingService(
-                        c.GetInstance<EmployerAccountsConfiguration>() .PublicAllowedAccountLegalEntityHashstringCharacters,
+                        c.GetInstance<EmployerAccountsConfiguration>().PublicAllowedAccountLegalEntityHashstringCharacters,
                         c.GetInstance<EmployerAccountsConfiguration>().PublicAllowedAccountLegalEntityHashstringSalt));
 
         }

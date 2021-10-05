@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <TargetFramework>net462</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,6 +18,7 @@
     <PackageReference Include="HMRC.ESFA.Levy.Api.Client" version="1.0.43" />
     <PackageReference Include="HMRC.ESFA.Levy.Api.Types" version="1.0.43" />
     <PackageReference Include="MediatR" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Azure.Services.AppAuthentication" Version="1.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="Polly" Version="5.7.0" />
     <PackageReference Include="RestSharp" Version="105.2.3" />
@@ -50,11 +51,11 @@
     <PackageReference Include="SFA.DAS.Configuration" Version="1.0.0.53229" />
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="1.0.0.53229" />
     <PackageReference Include="SFA.DAS.Configuration.FileStorage" Version="1.0.0.49931" />
-    <PackageReference Include="SFA.DAS.CookieService" Version="1.0.0.27423" />
+    <PackageReference Include="SFA.DAS.CookieService" Version="1.0.3" />
     <PackageReference Include="SFA.DAS.Events.Api.Client" Version="1.20.0.26497" />
     <PackageReference Include="SFA.DAS.Events.Api.Types" Version="2.0.0.36524" />
     <PackageReference Include="SFA.DAS.Messaging" Version="3.0.0.63765" />
-    <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus" Version="3.0.0.63765" />
+    <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus" Version="3.0.0.53181" />
     <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus.StructureMap" Version="3.0.0.63765" />
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
     <PackageReference Include="SFA.DAS.NServiceBus" Version="15.0.25" />
