@@ -65,7 +65,7 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
                 AuthenticationAuthorityUrl = configuration.Identity.BaseAddress,
                 ClientId = configuration.Identity.ClientId,
                 EmployerRecruitBaseUrl = configuration.EmployerRecruitBaseUrl,
-                SignOutUrl = new Uri($"{configuration.EmployerFinanceBaseUrl}/services/signOut/"),
+                SignOutUrl = new Uri($"{configuration.EmployerFinanceBaseUrl}/service/signOut/"),
                 ChangeEmailReturnUrl = requestUrl,
                 ChangePasswordReturnUrl = requestUrl
             },
