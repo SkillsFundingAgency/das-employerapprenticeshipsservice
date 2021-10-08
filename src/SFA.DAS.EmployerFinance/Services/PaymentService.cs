@@ -67,8 +67,6 @@ namespace SFA.DAS.EmployerFinance.Services
 
                 var paymentDetails = payments.Items.Select(x => _mapper.Map<PaymentDetails>(x)).ToArray();
 
-                //int paymentDetailsCount = 0;
-
                 _logger.Info($"Fetching provider and apprenticeship for AccountId = {employerAccountId}, periodEnd={periodEnd}, correlationId = {correlationId}");
 
                 var ukprnList = paymentDetails.Select(pd => pd.Ukprn).Distinct();
@@ -105,7 +103,6 @@ namespace SFA.DAS.EmployerFinance.Services
                     }
 
                     await getCourseDetailsTask;
-                    //_logger.Info($"Metadata retrieved for payment {details.Id}, count: {++paymentDetailsCount}, correlationId = {correlationId}");
                 }
 
                 populatedPayments.AddRange(paymentDetails);
@@ -138,13 +135,6 @@ namespace SFA.DAS.EmployerFinance.Services
             {
                 return GetApprenticeship(employerAccountId, id);
             });
-
-            //foreach (var apprenticeshipId in apprenticeshipIdList)
-            //{
-            //    if (resultApprenticeships.ContainsKey(apprenticeshipId)) continue;
-            //    var apprenticeship = await GetApprenticeship(employerAccountId, apprenticeshipId);
-            //    resultApprenticeships.Add(apprenticeshipId, apprenticeship);
-            //}
 
             var apprenticeships = await Task.WhenAll(taskList);
             resultApprenticeships = apprenticeships
@@ -243,27 +233,16 @@ namespace SFA.DAS.EmployerFinance.Services
         {
             try
             {
-                //var apprenticeshipFromCache =_apprenticeships.FirstOrDefault(x => x.ApprenticeshipId == apprenticeshipId);
+                var apprenticeship = await _commitmentsApiClient.GetEmployerApprenticeship(employerAccountId, apprenticeshipId);
+                return new ApprenticeshipCache
+                {
+                    Id = apprenticeship.Id,
+                    FirstName = apprenticeship.FirstName,
+                    LastName = apprenticeship.LastName,
+                    NINumber = apprenticeship.NINumber,
+                    StartDate = apprenticeship.StartDate
+                };
 
-                //if (apprenticeshipFromCache == null)
-                //{
-                    var apprenticeship = await _commitmentsApiClient.GetEmployerApprenticeship(employerAccountId, apprenticeshipId);
-                    return new ApprenticeshipCache
-                    {
-                        Id = apprenticeship.Id,
-                        FirstName = apprenticeship.FirstName,
-                        LastName = apprenticeship.LastName,
-                        NINumber = apprenticeship.NINumber,
-                        StartDate = apprenticeship.StartDate
-                    };
-                //}
-                //else
-                //{
-                //    _logger.Info("Found apprenticeship from cache :" + apprenticeshipFromCache.ApprenticeshipId);
-                //}
-
-                //_logger.Info("Cache apprenticeship size :" + _apprenticeships.Count());
-                //return apprenticeshipFromCache;
             }
             catch (Exception e)
             {
