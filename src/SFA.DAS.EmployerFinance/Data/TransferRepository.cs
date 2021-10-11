@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerFinance.Data
             _db = db;
         }
 
-        public Task CreateAccountTransfersV1(IEnumerable<AccountTransfer> transfers)
+        public Task CreateAccountTransfers(IEnumerable<AccountTransfer> transfers)
         {
             var accountTransfers = transfers as AccountTransfer[] ?? transfers.ToArray();
             var transferDataTable = CreateTransferDataTable(accountTransfers);

@@ -73,7 +73,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers
 
                 _logger.Info($"Retrieved {transfers.Length} grouped account transferts from payment api for AccountId = '{message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
 
-                await _transferRepository.CreateAccountTransfersV1(transfers);
+                await _transferRepository.CreateAccountTransfers(transfers);
             }
             catch (Exception ex)
             {

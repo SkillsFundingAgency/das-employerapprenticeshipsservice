@@ -119,7 +119,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
             await _handler.Handle(_command);
 
             //Assert
-            _transferRepository.Verify(x => x.CreateAccountTransfersV1(It.Is<IEnumerable<AccountTransfer>>(t =>
+            _transferRepository.Verify(x => x.CreateAccountTransfers(It.Is<IEnumerable<AccountTransfer>>(t =>
                 t.All(at => at.ApprenticeshipId.Equals(_accountTransfer.ApprenticeshipId) &&
                             at.SenderAccountId.Equals(_accountTransfer.SenderAccountId) &&
                             at.ReceiverAccountId.Equals(_accountTransfer.ReceiverAccountId) &&
@@ -133,7 +133,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
             await _handler.Handle(_command);
 
             //Assert
-            _transferRepository.Verify(x => x.CreateAccountTransfersV1(
+            _transferRepository.Verify(x => x.CreateAccountTransfers(
                 It.Is<IEnumerable<AccountTransfer>>(transfers =>
                    transfers.All(t => _command.PeriodEnd.Equals(t.PeriodEnd)))), Times.Once);
         }
@@ -206,7 +206,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
             }
 
             //Assert
-            _transferRepository.Verify(x => x.CreateAccountTransfersV1(It.IsAny<IEnumerable<AccountTransfer>>()), Times.Never);
+            _transferRepository.Verify(x => x.CreateAccountTransfers(It.IsAny<IEnumerable<AccountTransfer>>()), Times.Never);
         }
 
         [Test]
@@ -219,7 +219,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
             //Act + Assert
             Assert.ThrowsAsync<WebException>(() => _handler.Handle(_command));
 
-            _transferRepository.Verify(x => x.CreateAccountTransfersV1(_transfers), Times.Never);
+            _transferRepository.Verify(x => x.CreateAccountTransfers(_transfers), Times.Never);
         }
 
         [Test]
@@ -239,7 +239,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
 
             //Assert
             //There should be only one transfer which has combine amount of above
-            _transferRepository.Verify(x => x.CreateAccountTransfersV1(It.Is<IEnumerable<AccountTransfer>>(
+            _transferRepository.Verify(x => x.CreateAccountTransfers(It.Is<IEnumerable<AccountTransfer>>(
                 transfers =>
                     transfers.All(t => t.Amount.Equals(_accountTransfer.Amount * 2)))), Times.Once);
         }
@@ -267,10 +267,10 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
             await _handler.Handle(_command);
 
             //Assert
-            _transferRepository.Verify(x => x.CreateAccountTransfersV1(It.Is<IEnumerable<AccountTransfer>>(
+            _transferRepository.Verify(x => x.CreateAccountTransfers(It.Is<IEnumerable<AccountTransfer>>(
                 transfers => transfers.Count().Equals(2))), Times.Once);
 
-            _transferRepository.Verify(x => x.CreateAccountTransfersV1(It.Is<IEnumerable<AccountTransfer>>(
+            _transferRepository.Verify(x => x.CreateAccountTransfers(It.Is<IEnumerable<AccountTransfer>>(
                 transfers =>
                     transfers.All(t => t.Amount.Equals(_accountTransfer.Amount)))), Times.Once);
         }
