@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
+using Dasync.Collections;
+using Polly;
+using Polly.Retry;
 using SFA.DAS.Caches;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
@@ -17,15 +22,6 @@ using Payment = SFA.DAS.Provider.Events.Api.Types.Payment;
 
 namespace SFA.DAS.EmployerFinance.Services
 {
-    public class ApprenticeshipCache
-    {
-        public long Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string NINumber { get; set; }
-        public DateTime? StartDate { get; set; }
-        public long ApprenticeshipId { get; set; }
-    }
     public class PaymentService : IPaymentService
     {
         private readonly IPaymentsEventsApiClient _paymentsEventsApiClient;
@@ -35,7 +31,6 @@ namespace SFA.DAS.EmployerFinance.Services
         private readonly ILog _logger;
         private readonly IInProcessCache _inProcessCache;
         private readonly IProviderService _providerService;
-        private readonly List<ApprenticeshipCache> _apprenticeships;
 
         public PaymentService(IPaymentsEventsApiClient paymentsEventsApiClient,
             IEmployerCommitmentApi commitmentsApiClient, IApprenticeshipInfoServiceWrapper apprenticeshipInfoService,
@@ -48,7 +43,6 @@ namespace SFA.DAS.EmployerFinance.Services
             _logger = logger;
             _inProcessCache = inProcessCache;
             _providerService = providerService;
-            _apprenticeships = new List<ApprenticeshipCache>();
         }
 
         public async Task<ICollection<PaymentDetails>> GetAccountPayments(string periodEnd, long employerAccountId, Guid correlationId)
@@ -73,10 +67,6 @@ namespace SFA.DAS.EmployerFinance.Services
                 var apprenticeshipIdList = paymentDetails.Select(pd => pd.ApprenticeshipId).Distinct();
 
                 var getProviderDetailsTask = GetProviderDetailsDict(ukprnList);
-
-                /// This is getting the list of all apprneticeships in one go, they need to be staggered
-                /// otherwise commitment api struggles to keep up with the requests.
-                /// Similar to this https://github.com/SkillsFundingAgency/das-commitments/blob/a1f6cfd34fd1546c559f7bc50bb9fb8627300320/src/SFA.DAS.Commitments.Notification.WebJob/EmailServices/ProviderAlertSummaryEmailService.cs#L58
                 var getApprenticeDetailsTask = GetApprenticeshipDetailsDict(employerAccountId, apprenticeshipIdList);
 
                 await Task.WhenAll(getProviderDetailsTask, getApprenticeDetailsTask);
@@ -127,19 +117,20 @@ namespace SFA.DAS.EmployerFinance.Services
             return resultProviders;
         }
 
-        private async Task<Dictionary<long, ApprenticeshipCache>> GetApprenticeshipDetailsDict(long employerAccountId, IEnumerable<long> apprenticeshipIdList)
+        private async Task<ConcurrentDictionary<long, Apprenticeship>> GetApprenticeshipDetailsDict(long employerAccountId, IEnumerable<long> apprenticeshipIdList)
         {
-            var resultApprenticeships = new Dictionary<long, ApprenticeshipCache>();
+            var resultApprenticeships = new ConcurrentDictionary<long, Apprenticeship>();
 
-            var taskList = apprenticeshipIdList.Select(id =>
-            {
-                return GetApprenticeship(employerAccountId, id);
-            });
-
-            var apprenticeships = await Task.WhenAll(taskList);
-            resultApprenticeships = apprenticeships
-                .Where(app => app != null)
-                .ToDictionary(app => app.Id, app => app);
+            var maxConcurrentThreads = 50;
+            await apprenticeshipIdList
+                .ParallelForEachAsync(async apprenticeshipId =>
+                {
+                    var apprenticeship = await GetApprenticeship(employerAccountId, apprenticeshipId);
+                    if (apprenticeship != null)
+                    {
+                        resultApprenticeships.TryAdd(apprenticeship.Id, apprenticeship);
+                    }
+                }, maxDegreeOfParallelism: maxConcurrentThreads);
 
             return resultApprenticeships;
         }
@@ -211,38 +202,11 @@ namespace SFA.DAS.EmployerFinance.Services
             payment.IsHistoricProviderName = provider?.IsHistoricProviderName ?? false;
         }
 
-        private async Task GetApprenticeshipDetails(long employerAccountId, PaymentDetails payment)
-        {
-            var apprenticeship = await GetApprenticeship(employerAccountId, payment.ApprenticeshipId);
-
-            if (apprenticeship != null)
-            {
-                payment.ApprenticeName = $"{apprenticeship.FirstName} {apprenticeship.LastName}";
-                payment.ApprenticeNINumber = apprenticeship.NINumber;
-                payment.CourseStartDate = apprenticeship.StartDate;
-            }
-        }
-
-        /// <summary>
-        /// Done for spike, this is calling 
-        /// </summary>
-        /// <param name="employerAccountId"></param>
-        /// <param name="apprenticeshipId"></param>
-        /// <returns></returns>
-        private async Task<ApprenticeshipCache> GetApprenticeship(long employerAccountId, long apprenticeshipId)
+        private async Task<Apprenticeship> GetApprenticeship(long employerAccountId, long apprenticeshipId)
         {
             try
             {
-                var apprenticeship = await _commitmentsApiClient.GetEmployerApprenticeship(employerAccountId, apprenticeshipId);
-                return new ApprenticeshipCache
-                {
-                    Id = apprenticeship.Id,
-                    FirstName = apprenticeship.FirstName,
-                    LastName = apprenticeship.LastName,
-                    NINumber = apprenticeship.NINumber,
-                    StartDate = apprenticeship.StartDate
-                };
-
+               return await _commitmentsApiClient.GetEmployerApprenticeship(employerAccountId, apprenticeshipId);
             }
             catch (Exception e)
             {

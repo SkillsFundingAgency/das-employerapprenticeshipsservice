@@ -67,13 +67,11 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers
                             ApprenticeshipId = firstGroupItem.ApprenticeshipId,
                             ReceiverAccountId = firstGroupItem.ReceiverAccountId,
                             SenderAccountId = firstGroupItem.SenderAccountId,
-                            Type = firstGroupItem.Type,
+                            Type = firstGroupItem.Type
                         };
                     }).ToArray();
 
                 _logger.Info($"Retrieved {transfers.Length} grouped account transferts from payment api for AccountId = '{message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
-
-                var transferSenderIds = transfers.Select(t => t.SenderAccountId).Distinct();
 
                 await _transferRepository.CreateAccountTransfersV1(transfers);
             }
