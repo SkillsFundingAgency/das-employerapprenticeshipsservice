@@ -78,8 +78,6 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshPaymentData
 
             var failingPayment = payments.Where(p => p.ApprenticeshipId == 743445).ToList();
 
-            _logger.Info($"Got payment for appId: {failingPayment.FirstOrDefault()?.ApprenticeshipId}, paymentIds: [{string.Join("'", failingPayment.Select(x => x.Id))}] and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
-
             var existingPaymentIds = await _dasLevyRepository.GetAccountPaymentIds(message.AccountId);
             var newPayments = payments.Where(p => !existingPaymentIds.Contains(p.Id)).ToArray();
 
@@ -95,8 +93,6 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshPaymentData
             _logger.Info($"CreatePayments for new payments AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
 
             var newNonFullyFundedPayments = newPayments.Where(p => p.FundingSource != FundingSource.FullyFundedSfa);
-
-            _logger.Info($"CreatePayments for appIds: [{string.Join("'", newNonFullyFundedPayments.Select(x => x.ApprenticeshipId))}] AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
 
             await _dasLevyRepository.CreatePayments(newNonFullyFundedPayments);
             await _mediator.PublishAsync(new ProcessPaymentEvent { AccountId = message.AccountId });

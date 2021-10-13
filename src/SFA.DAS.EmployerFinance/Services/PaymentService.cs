@@ -103,16 +103,20 @@ namespace SFA.DAS.EmployerFinance.Services
             return populatedPayments;
         }
 
-        private async Task<Dictionary<long, Models.ApprenticeshipProvider.Provider>> GetProviderDetailsDict(IEnumerable<long> ukprnList)
+        private async Task<ConcurrentDictionary<long, Models.ApprenticeshipProvider.Provider>> GetProviderDetailsDict(IEnumerable<long> ukprnList)
         {
-            var resultProviders = new Dictionary<long, Models.ApprenticeshipProvider.Provider>();
+            var maxConcurrentThreads = 50;
+            var resultProviders = new ConcurrentDictionary<long, Models.ApprenticeshipProvider.Provider>();
 
-            foreach (var ukprn in ukprnList)
-            {
-                if (resultProviders.ContainsKey(ukprn)) continue;
-                var provider = await _providerService.Get(ukprn);
-                resultProviders.Add(ukprn, provider);
-            }
+            await ukprnList
+                .ParallelForEachAsync(async ukprn =>
+                {
+                    if (!resultProviders.ContainsKey(ukprn))
+                    {
+                        var provider = await _providerService.Get(ukprn);
+                        resultProviders.TryAdd(ukprn, provider);
+                    }
+                }, maxDegreeOfParallelism: maxConcurrentThreads);
 
             return resultProviders;
         }
