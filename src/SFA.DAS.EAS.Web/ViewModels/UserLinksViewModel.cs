@@ -4,6 +4,5 @@ namespace SFA.DAS.EAS.Web.ViewModels
     {
         public static string ChangePasswordLink { get; set; }
         public static string ChangeEmailLink { get; set; }
-        public static string TermsAndConditionsLink { get; set; }
     }
 }

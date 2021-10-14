@@ -71,7 +71,6 @@ namespace SFA.DAS.EAS.Web
             JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
             UserLinksViewModel.ChangePasswordLink = $"{constants.ChangePasswordLink()}{urlHelper.Encode("https://" + config.DashboardUrl + "/service/password/change")}";
             UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{urlHelper.Encode("https://" + config.DashboardUrl + "/service/email/change")}";
-            UserLinksViewModel.TermsAndConditionsLink = constants.TermsAndConditionsLink();
         }
 
         private static Func<X509Certificate2> GetSigningCertificate(bool useCertificate)
@@ -150,6 +149,5 @@ namespace SFA.DAS.EAS.Web
         public string RequiresVerification() => _baseUrl + "requires_verification";
         public string TokenEndpoint() => $"{_configuration.BaseAddress}{_configuration.TokenEndpoint}";
         public string UserInfoEndpoint() => $"{_configuration.BaseAddress}{_configuration.UserInfoEndpoint}";
-        public string TermsAndConditionsLink() => $"{_configuration.BaseAddress.Replace("/identity", "")}{_configuration.TermsAndConditionsLink}";
     }
 }

@@ -17,6 +17,5 @@
         public string ChangeEmailLink { get; set; }
         public string RegisterLink { get; set; }
         public string AccountActivationUrl { get; set; }
-        public string TermsAndConditionsLink { get; set; }
     }
 }

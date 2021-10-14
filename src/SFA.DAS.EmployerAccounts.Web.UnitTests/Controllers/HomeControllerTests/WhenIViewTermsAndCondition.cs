@@ -69,8 +69,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
             var viewResult = (ViewResult)result;
             var viewModel = viewResult.Model;
 
-            Assert.IsInstanceOf<TermsAndConditionViewModel>(viewModel);
-            var termsAndConditionViewModel = (TermsAndConditionViewModel)viewModel;
+            Assert.IsInstanceOf<TermsAndConditionsNewViewModel>(viewModel);
+            var termsAndConditionViewModel = (TermsAndConditionsNewViewModel)viewModel;
 
             Assert.AreEqual("returnUrl", termsAndConditionViewModel.ReturnUrl);
             Assert.AreEqual("hashedId", termsAndConditionViewModel.HashedAccountId);
@@ -80,7 +80,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
         [Test]
         public async Task ThenIsRedirectedToEmployerTeamController()
         {
-            var termsAndConditionViewModel = new TermsAndConditionViewModel() { HashedAccountId = "HashedId", ReturnUrl = "EmployerTeam" };
+            var termsAndConditionViewModel = new TermsAndConditionsNewViewModel() { HashedAccountId = "HashedId", ReturnUrl = "EmployerTeam" };
             //Act
             var result = await _homeController.TermsAndConditions(termsAndConditionViewModel);
 
@@ -94,7 +94,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
         [Test]
         public async Task ThenIsRedirectedToHomeController()
         {
-            var termsAndConditionViewModel = new TermsAndConditionViewModel() { HashedAccountId = "HashedId", ReturnUrl = "Home" };
+            var termsAndConditionViewModel = new TermsAndConditionsNewViewModel() { HashedAccountId = "HashedId", ReturnUrl = "Home" };
             //Act
             var result = await _homeController.TermsAndConditions(termsAndConditionViewModel);
 
