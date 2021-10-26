@@ -64,10 +64,10 @@
                         _ga
                     </td>
                     <td class="govuk-table__cell">
-                        Used by Google Analytics, this registers a unique ID to generate statistics about how you use the website
+                        Used by Google Analytics to distinguish users.
                     </td>
                     <td class="govuk-table__cell">
-                        1 year
+                        2 year
                     </td>
                 </tr>
                 <tr>
@@ -78,7 +78,7 @@
                         Google Analytics throttling rate request
                     </td>
                     <td class="govuk-table__cell">
-                        1 year
+                        1 minute
                     </td>
                 </tr>
                 <tr>
@@ -86,10 +86,10 @@
                         _gid
                     </td>
                     <td class="govuk-table__cell">
-                        Google Analytics cookie that registers a unique ID to generate statistics about how you use the website
+                        Used by Google Analytics to distinguish users.
                     </td>
                     <td class="govuk-table__cell">
-                        1 year
+                        1 day
                     </td>
                 </tr>
                 <tr>
@@ -150,16 +150,48 @@
                     <td class="govuk-table__cell">This monitors the performance of the website</td>
                     <td class="govuk-table__cell">Session</td>
                 </tr>
+                <tr>
+                    <td class="govuk-table__cell">
+                        sfa-das-employerapprenticeshipsservice-accountcontext
+                    </td>
+                    <td class="govuk-table__cell">This enables the website to function properly</td>
+                    <td class="govuk-table__cell">1 day</td>
+                </tr>
+                <tr>
+                    <td class="govuk-table__cell">
+                        recruit-data
+                    </td>
+                    <td class="govuk-table__cell">This enables the website to function properly</td>
+                    <td class="govuk-table__cell">Session</td>
+                </tr>
+                <tr>
+                    <td class="govuk-table__cell">
+                        setup-employer-[AccountID]
+                    </td>
+                    <td class="govuk-table__cell">This enables the website to function properly</td>
+                    <td class="govuk-table__cell">Session</td>
+                </tr>
+                <tr>
+                    <td class="govuk-table__cell">
+                        __cfruid
+                    </td>
+                    <td class="govuk-table__cell">Used by the content network, Cloudflare, to identify trusted web traffic.</td>
+                    <td class="govuk-table__cell">1 year</td>
+                </tr>
+                <tr>
+                    <td class="govuk-table__cell">
+                        SFA.DAS.EmployerCommitmentsV2.Web.Auth
+                    </td>
+                    <td class="govuk-table__cell">This enables the website to function properly</td>
+                    <td class="govuk-table__cell">Session</td>
+                </tr>
+
             </tbody>
         </table>
-
         <hr class="govuk-section-break govuk-section-break--l g" />
 
         <h3 class="govuk-heading-s">Change your settings</h3>
         <p>You can <a href="@Url.Action(ControllerConstants.Settings)" class="govuk-link">change which cookies you're happy for us to use</a>.</p>
-
-
-
     </div>
 </div>
 

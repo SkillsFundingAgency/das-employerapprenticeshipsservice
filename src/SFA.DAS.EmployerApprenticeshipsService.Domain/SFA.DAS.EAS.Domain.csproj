@@ -107,7 +107,6 @@
     <Compile Include="Configuration\PaymentProviderConfiguration.cs" />
     <Compile Include="Configuration\PaymentsApiClientConfiguration.cs" />
     <Compile Include="Configuration\EventsApiClientConfiguration.cs" />
-    <Compile Include="Configuration\PostcodeAnywhereConfiguration.cs" />
     <Compile Include="Configuration\ReferenceDataApiClientConfiguration.cs" />
     <Compile Include="Data\Repositories\IDasLevyRepository.cs" />
     <Compile Include="Data\Repositories\IMembershipRepository.cs" />
