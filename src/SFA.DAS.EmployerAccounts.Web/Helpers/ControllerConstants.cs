@@ -100,5 +100,6 @@
         public const string ApproveOrRejectApprentice = "ApproveOrRejectApprentice";
         public const string ViewApprenticeBeforeApprove = "ViewApprenticeBeforeApprove";
         public const string ViewAllAgreementActionName = "ViewAllAgreements";
+        public const string InsetText = "Inset";
     }
 }
