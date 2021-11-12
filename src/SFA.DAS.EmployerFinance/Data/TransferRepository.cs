@@ -30,10 +30,11 @@ namespace SFA.DAS.EmployerFinance.Data
             parameters.Add("@transfers", transferDataTable.AsTableValuedParameter("[employer_financial].[AccountTransferTable]"));
 
             return _db.Value.Database.Connection.ExecuteAsync(
-                sql: "[employer_financial].[CreateAccountTransfers]",
+                sql: "[employer_financial].[CreateAccountTransfersV1]",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
-                commandType: CommandType.StoredProcedure);
+                commandType: CommandType.StoredProcedure,
+                commandTimeout: 300);
         }
 
         public Task<IEnumerable<AccountTransfer>> GetReceiverAccountTransfersByPeriodEnd(long receiverAccountId, string periodEnd)

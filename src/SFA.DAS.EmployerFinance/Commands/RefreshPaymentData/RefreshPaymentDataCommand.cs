@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System;
+using MediatR;
 
 namespace SFA.DAS.EmployerFinance.Commands.RefreshPaymentData
 {
@@ -6,5 +7,6 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshPaymentData
     {
         public long AccountId { get; set; }
         public string PeriodEnd { get; set; }
+        public Guid CorrelationId { get; set; }
     }
 }
