@@ -32,7 +32,6 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
                 var sendOptions = new SendOptions();
 
                 sendOptions.RouteToThisEndpoint();
-                sendOptions.RequireImmediateDispatch(); // Circumvent sender outbox
                 sendOptions.SetMessageId($"{nameof(ImportAccountPaymentsCommand)}-{message.PeriodEndRef}-{account.Id}"); // Allow receiver outbox to de-dupe
 
                 tasks.Add(context.Send(new ImportAccountPaymentsCommand { PeriodEndRef = message.PeriodEndRef, AccountId = account.Id }, sendOptions));
