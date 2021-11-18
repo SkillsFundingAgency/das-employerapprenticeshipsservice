@@ -22,10 +22,12 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
         public async Task Handle(ProcessPeriodEndPaymentsCommand message, IMessageHandlerContext context)
         {
             var response = await _mediator.SendAsync(new GetAllEmployerAccountsRequest());
+            var accounts = response.Accounts;
 
-            var tasks = new List<Task>();
+            var messageTasks = new List<Task>();
+            var sendCounter = 0;
 
-            foreach (var account in response.Accounts)
+            foreach (var account in accounts)
             {
                 _logger.Info($"Creating payment queue message for account ID: '{account.Id}' period end ref: '{message.PeriodEndRef}'");
 
@@ -34,10 +36,19 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
                 sendOptions.RouteToThisEndpoint();
                 sendOptions.SetMessageId($"{nameof(ImportAccountPaymentsCommand)}-{message.PeriodEndRef}-{account.Id}"); // Allow receiver outbox to de-dupe
 
-                tasks.Add(context.Send(new ImportAccountPaymentsCommand { PeriodEndRef = message.PeriodEndRef, AccountId = account.Id }, sendOptions));
+                messageTasks.Add(context.Send(new ImportAccountPaymentsCommand { PeriodEndRef = message.PeriodEndRef, AccountId = account.Id }, sendOptions));
+                sendCounter++;
+
+                if (sendCounter % 1000 == 0)
+                {
+                    await Task.WhenAll(messageTasks);
+                    _logger.Info($"Queued {sendCounter} of {accounts.Count} messages.");
+                    messageTasks.Clear();
+                }
             }
 
-            await Task.WhenAll(tasks);
+            // await final tasks not % 1000
+            await Task.WhenAll(messageTasks);
 
             _logger.Info($"Completed payment message queuing for period end ref: '{message.PeriodEndRef}'");
         }
