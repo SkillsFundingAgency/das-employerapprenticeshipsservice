@@ -74,4 +74,13 @@ EXECUTE #CreateAccount 1, 'JRML7V', 'LDMVWV', @userId, '00445790', 'Tesco Plc', 
 EXECUTE #CreateAccount 2, '84VBNV', 'BDXBDV', @userId, 'SC171417', 'SAINSBURY''S LIMITED', 'No 2 Lochrin Square, 96 Fountainbridge, Edinburgh, EH3 9QA', '1997-01-16 00:00:00.000', 'active', 1, '123/SFZZ029', 'NA', 'AAA124'
 EXECUTE #CreateAccount 3, 'JLVKPM', 'XWBVWN', @userId, '07297044', 'DINE CONTRACT CATERING LIMITED', '1st Floor The Centre, Birchwood Park, Warrington, Lancashire, WA3 6YN', '2010-06-28 00:00:00.000', 'active', 1, '101/ZZR00016', 'NA', 'AAA125'
 
+UPDATE [employer_account].[AccountLegalEntity] 
+SET
+	SignedAgreementVersion = 6,
+	SignedAgreementId = EA.Id
+FROM [SFA.DAS.EAS.Employer_Account.Database].[employer_account].[AccountLegalEntity] ALE
+	JOIN
+		[employer_account].[EmployerAgreement] EA ON EA.AccountLegalEntityId = ALE.LegalEntityId
+
 DROP PROCEDURE #CreateAccount
+
