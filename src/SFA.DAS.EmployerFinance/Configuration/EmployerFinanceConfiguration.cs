@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerFinance.Configuration
         public string RedisConnectionString { get; set; }
         public virtual int FundsExpiryPeriod { get; set; }
         public AccountApiConfiguration AccountApi { get; set; }
-
+        public CommitmentsApiV2ClientConfiguration CommitmentsApi { get; set; }
         public PaymentsApiClientConfiguration PaymentsEventsApi { get; set; } 
 
         public string ReservationsBaseUrl { get; set; }

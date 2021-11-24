@@ -2,10 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.CommitmentsV2.Api.Client;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.MarkerInterfaces;
-using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Models.Organisation;
 using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
@@ -18,14 +17,14 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove
         private readonly IEmployerAgreementRepository _employerAgreementRepository;
         private readonly IHashingService _hashingService;
         private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityHashingService;
-        private readonly IEmployerCommitmentApi _employerCommitmentApi;
+        private ICommitmentsApiClient _employerCommitmentApi;
 
         public GetAccountLegalEntityRemoveQueryHandler(
             IValidator<GetAccountLegalEntityRemoveRequest> validator,
             IEmployerAgreementRepository employerAgreementRepository, 
             IHashingService hashingService,
             IAccountLegalEntityPublicHashingService accountLegalEntityHashingService,
-            IEmployerCommitmentApi employerCommitmentApi)
+            ICommitmentsApiClient employerCommitmentApi)
         {
             _validator = validator;
             _employerAgreementRepository = employerAgreementRepository;
@@ -77,7 +76,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove
         {
             var commitments = await _employerCommitmentApi.GetEmployerAccountSummary(accountId);
 
-            var commitmentConnectedToEntity = commitments.FirstOrDefault(c =>
+            var commitmentConnectedToEntity = commitments.ApprenticeshipStatusSummaryResponse.FirstOrDefault(c =>
                 !string.IsNullOrEmpty(c.LegalEntityIdentifier)
                 && c.LegalEntityIdentifier.Equals(accountLegalEntityModel.Identifier)
                 && c.LegalEntityOrganisationType == accountLegalEntityModel.OrganisationType);

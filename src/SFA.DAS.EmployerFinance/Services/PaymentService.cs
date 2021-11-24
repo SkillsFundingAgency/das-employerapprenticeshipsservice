@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Dasync.Collections;
@@ -12,6 +13,8 @@ using Polly.Retry;
 using SFA.DAS.Caches;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.CommitmentsV2.Api.Client;
+using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.EmployerFinance.Models.ApprenticeshipCourse;
 using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.NLog.Logger;
@@ -25,15 +28,15 @@ namespace SFA.DAS.EmployerFinance.Services
     public class PaymentService : IPaymentService
     {
         private readonly IPaymentsEventsApiClient _paymentsEventsApiClient;
-        private readonly IEmployerCommitmentApi _commitmentsApiClient;
+        private readonly ICommitmentsApiClient _commitmentsApiClient;
         private readonly IApprenticeshipInfoServiceWrapper _apprenticeshipInfoService;
         private readonly IMapper _mapper;
         private readonly ILog _logger;
         private readonly IInProcessCache _inProcessCache;
         private readonly IProviderService _providerService;
 
-        public PaymentService(IPaymentsEventsApiClient paymentsEventsApiClient,
-            IEmployerCommitmentApi commitmentsApiClient, IApprenticeshipInfoServiceWrapper apprenticeshipInfoService,
+        public PaymentService(IPaymentsEventsApiClient paymentsEventsApiClient, //IEmployerCommitmentApi commitmentsApiClient
+            ICommitmentsApiClient commitmentsApiClient, IApprenticeshipInfoServiceWrapper apprenticeshipInfoService,
             IMapper mapper, ILog logger, IInProcessCache inProcessCache, IProviderService providerService)
         {
             _paymentsEventsApiClient = paymentsEventsApiClient;
@@ -88,7 +91,7 @@ namespace SFA.DAS.EmployerFinance.Services
                     if (apprenticeshipDetails.TryGetValue(details.ApprenticeshipId, out var apprenticeship))
                     {
                         details.ApprenticeName = $"{apprenticeship.FirstName} {apprenticeship.LastName}";
-                        details.ApprenticeNINumber = apprenticeship.NINumber;
+                        details.ApprenticeNINumber = apprenticeship.NINumber; //TODO : CON-4043 change the API response to include NINumber
                         details.CourseStartDate = apprenticeship.StartDate;
                     }
 
@@ -121,9 +124,9 @@ namespace SFA.DAS.EmployerFinance.Services
             return resultProviders;
         }
 
-        private async Task<ConcurrentDictionary<long, Apprenticeship>> GetApprenticeshipDetailsDict(long employerAccountId, IEnumerable<long> apprenticeshipIdList)
+        private async Task<ConcurrentDictionary<long, GetApprenticeshipResponse>> GetApprenticeshipDetailsDict(long employerAccountId, IEnumerable<long> apprenticeshipIdList)
         {
-            var resultApprenticeships = new ConcurrentDictionary<long, Apprenticeship>();
+            var resultApprenticeships = new ConcurrentDictionary<long, GetApprenticeshipResponse>();
 
             var maxConcurrentThreads = 50;
             await apprenticeshipIdList
@@ -206,11 +209,11 @@ namespace SFA.DAS.EmployerFinance.Services
             payment.IsHistoricProviderName = provider?.IsHistoricProviderName ?? false;
         }
 
-        private async Task<Apprenticeship> GetApprenticeship(long employerAccountId, long apprenticeshipId)
+        private async Task<GetApprenticeshipResponse> GetApprenticeship(long employerAccountId, long apprenticeshipId)
         {
             try
             {
-               return await _commitmentsApiClient.GetEmployerApprenticeship(employerAccountId, apprenticeshipId);
+                return await _commitmentsApiClient.GetApprenticeship(apprenticeshipId , CancellationToken.None);
             }
             catch (Exception e)
             {

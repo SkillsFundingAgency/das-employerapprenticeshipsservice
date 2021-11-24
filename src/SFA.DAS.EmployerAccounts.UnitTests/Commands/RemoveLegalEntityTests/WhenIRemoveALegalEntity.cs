@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.CommitmentsV2.Api.Client;
+using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity;
@@ -40,7 +43,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
         private Mock<IEmployerAgreementEventFactory> _employerAgreementEventFactory;
         private Mock<IMembershipRepository> _membershipRepository;
         private Mock<IEventPublisher> _eventPublisher;
-        private Mock<IEmployerCommitmentApi> _commitmentsApi;
+        private Mock<ICommitmentsApiClient> _commitmentsApi;
 
         private const string ExpectedHashedAccountId = "34RFD";
         private const long ExpectedAccountId = 123455;
@@ -75,7 +78,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
                         SignedDate = DateTime.Now
                     }
                 });
-            
+
             _expectedAgreement = new EmployerAgreementView
             {
                 AccountLegalEntityId = ExpectedAccountLegalEntityId,
@@ -103,23 +106,27 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
             _membershipRepository = new Mock<IMembershipRepository>();
             _membershipRepository
                 .Setup(mr => mr.GetCaller(ExpectedAccountId, _expectedUserId))
-                .Returns<long, string>((accountId, userRef) => Task.FromResult(new MembershipView {AccountId = ExpectedAccountId, FirstName = "Harry", LastName = "Potter"}));
+                .Returns<long, string>((accountId, userRef) => Task.FromResult(new MembershipView { AccountId = ExpectedAccountId, FirstName = "Harry", LastName = "Potter" }));
 
             _eventPublisher = new Mock<IEventPublisher>();
 
-            _commitmentsApi = new Mock<IEmployerCommitmentApi>();
+            _commitmentsApi = new Mock<ICommitmentsApiClient>();          
             _commitmentsApi
-                .Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
-                .ReturnsAsync(new List<ApprenticeshipStatusSummary>
+                .Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId, CancellationToken.None))
+                .ReturnsAsync(new GetApprenticeshipStatusSummaryResponse()
                 {
-                    new ApprenticeshipStatusSummary
+                    ApprenticeshipStatusSummaryResponse = new List<ApprenticeshipStatusSummaryResponse>()
                     {
-                        ActiveCount = 0,
-                        PausedCount = 0,
-                        PendingApprovalCount = 0,
-                        CompletedCount = 0,
-                        LegalEntityIdentifier = _expectedAgreement.LegalEntityCode
+                        new ApprenticeshipStatusSummaryResponse()
+                        {
+                            ActiveCount = 0,
+                            PausedCount = 0,
+                            PendingApprovalCount = 0,
+                            CompletedCount = 0,
+                            LegalEntityIdentifier = _expectedAgreement.LegalEntityCode
+                        }
                     }
+
                 });
 
             _command = new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId, UserId = _expectedUserId, HashedAccountLegalEntityId = ExpectedHashedAccountLegalEntityId };
@@ -212,7 +219,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
         {
             await _handler.Handle(_command);
 
-            _eventPublisher.Verify(ep => ep.Publish(It.Is<RemovedLegalEntityEvent>(e => 
+            _eventPublisher.Verify(ep => ep.Publish(It.Is<RemovedLegalEntityEvent>(e =>
                 e.AccountId.Equals(ExpectedAccountId)
                 && e.AgreementId.Equals(ExpectedEmployerAgreementId)
                 && e.LegalEntityId.Equals(ExpectedLegalEntityId)
@@ -228,34 +235,42 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
         public async Task ThenTheAgreementIsCheckedToSeeIfItHasBeenSignedAndHasActiveCommitments()
         {
             _commitmentsApi
-                .Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
-                .ReturnsAsync(new List<ApprenticeshipStatusSummary>
-                {
-                    new ApprenticeshipStatusSummary
-                    {
-                        ActiveCount = 1,
-                        PausedCount = 1,
-                        PendingApprovalCount = 1,
-                        LegalEntityIdentifier = _expectedAgreement.LegalEntityCode
-                    }
-                });
+               .Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId, CancellationToken.None))
+               .ReturnsAsync(new GetApprenticeshipStatusSummaryResponse()
+               {
+                   ApprenticeshipStatusSummaryResponse = new List<ApprenticeshipStatusSummaryResponse>()
+                   {
+                       new ApprenticeshipStatusSummaryResponse()
+                       {
+                            ActiveCount = 1,
+                            PausedCount = 1,
+                            PendingApprovalCount = 1,
+                            LegalEntityIdentifier = _expectedAgreement.LegalEntityCode
+                       }
+                   }
+
+               });
 
             Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
         }
 
         [Test]
         public async Task ThenTheAgreementIsCheckedToSeeIfItHasBeenSignedAndHasWithdrawnCommitments()
-        {
+        {            
             _commitmentsApi
-                .Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
-                .ReturnsAsync(new List<ApprenticeshipStatusSummary>
-                {
-                    new ApprenticeshipStatusSummary
+           .Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId, CancellationToken.None))
+           .ReturnsAsync(new GetApprenticeshipStatusSummaryResponse()
+           {
+               ApprenticeshipStatusSummaryResponse = new List<ApprenticeshipStatusSummaryResponse>()
+               {
+                    new ApprenticeshipStatusSummaryResponse()
                     {
                         WithdrawnCount = 1,
                         LegalEntityIdentifier = _expectedAgreement.LegalEntityCode
                     }
-                });
+               }
+
+           });
 
             Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
         }

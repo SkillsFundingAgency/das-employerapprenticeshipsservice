@@ -214,7 +214,7 @@
       <Version>6.0.52</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Commitments.Api.Client">
-      <Version>4.1.355</Version>
+      <Version>8.1.1</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Common.Domain">
       <Version>1.4.283</Version>

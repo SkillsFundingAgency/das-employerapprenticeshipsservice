@@ -18,7 +18,7 @@
     <PackageReference Include="HMRC.ESFA.Levy.Api.Client" version="1.0.43" />
     <PackageReference Include="HMRC.ESFA.Levy.Api.Types" version="1.0.43" />
     <PackageReference Include="MediatR" Version="2.1.0" />
-    <PackageReference Include="Microsoft.Azure.Services.AppAuthentication" Version="1.0.1" />
+    <PackageReference Include="Microsoft.Azure.Services.AppAuthentication" Version="1.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="Polly" Version="5.7.0" />
     <PackageReference Include="RestSharp" Version="105.2.3" />
@@ -31,9 +31,9 @@
     <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles" Version="6.0.52" />
     <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
     <PackageReference Include="SFA.DAS.Caches" Version="1.1.4" />
-    <PackageReference Include="SFA.DAS.Commitments.Api.Client" Version="4.1.355" />
-    <PackageReference Include="SFA.DAS.Commitments.Events" Version="2.1.1073" />
-    <PackageReference Include="SFA.DAS.CommitmentsV2.Api.Client" Version="4.1.1063" />
+    <PackageReference Include="SFA.DAS.Commitments.Api.Client" Version="8.1.1" />
+    <PackageReference Include="SFA.DAS.Commitments.Events" Version="8.1.1" />
+    <PackageReference Include="SFA.DAS.CommitmentsV2.Api.Client" Version="8.1.1" />
     <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.283" />
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.52781" />
     <PackageReference Include="SFA.DAS.Encoding" Version="1.1.61" />

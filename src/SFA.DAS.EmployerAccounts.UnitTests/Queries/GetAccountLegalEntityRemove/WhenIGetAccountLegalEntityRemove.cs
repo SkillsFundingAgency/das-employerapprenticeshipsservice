@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.CommitmentsV2.Api.Client;
+using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
@@ -19,9 +22,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntityRemove
     {
         private Mock<IHashingService> _hashingService;
         private Mock<IAccountLegalEntityPublicHashingService> _accountLegalEntityPublicHashingService;
-        private Mock<IEmployerAgreementRepository> _repository;
-        private Mock<IEmployerCommitmentApi> _commitmentsApi;
-      
+        private Mock<IEmployerAgreementRepository> _repository;        
+        private Mock<ICommitmentsApiClient> _commitmentsApi;
+
         public override GetAccountLegalEntityRemoveRequest Query { get; set; }
         public override GetAccountLegalEntityRemoveQueryHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetAccountLegalEntityRemoveRequest>> RequestValidator { get; set; }
@@ -37,9 +40,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntityRemove
         [SetUp]
         public void Arrange()
         {
-            SetUp();    
+            SetUp();
 
-            Query = new GetAccountLegalEntityRemoveRequest { HashedAccountId = ExpectedHashedAccountId, HashedAccountLegalEntityId = ExpectedHashedAccountLegalEntityId, UserId = ExpectedUserId};
+            Query = new GetAccountLegalEntityRemoveRequest { HashedAccountId = ExpectedHashedAccountId, HashedAccountLegalEntityId = ExpectedHashedAccountLegalEntityId, UserId = ExpectedUserId };
 
             _repository = new Mock<IEmployerAgreementRepository>();
 
@@ -65,9 +68,18 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntityRemove
 
             _accountLegalEntityPublicHashingService = new Mock<IAccountLegalEntityPublicHashingService>();
             _accountLegalEntityPublicHashingService.Setup(x => x.DecodeValue(ExpectedHashedAccountLegalEntityId)).Returns(ExpectedAccountLegalEntityId);
+           
+            _commitmentsApi = new Mock<ICommitmentsApiClient>();
+            _commitmentsApi.Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId, CancellationToken.None))
+                .ReturnsAsync(new GetApprenticeshipStatusSummaryResponse()
+                {
+                    ApprenticeshipStatusSummaryResponse = new List<ApprenticeshipStatusSummaryResponse>()
+                        {
+                            new ApprenticeshipStatusSummaryResponse() { }
 
-            _commitmentsApi = new Mock<IEmployerCommitmentApi>();
-            _commitmentsApi.Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId)).ReturnsAsync(new List<ApprenticeshipStatusSummary> { new ApprenticeshipStatusSummary() });
+                        }
+
+                });           
 
             RequestHandler = new GetAccountLegalEntityRemoveQueryHandler(
                 RequestValidator.Object,

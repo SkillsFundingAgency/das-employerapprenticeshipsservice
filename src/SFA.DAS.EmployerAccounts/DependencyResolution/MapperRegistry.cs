@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Text;
 using AutoMapper;
 using StructureMap;
 using StructureMap.TypeRules;
@@ -10,25 +13,47 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
     {
         public MapperRegistry()
         {
-            var profiles = AppDomain.CurrentDomain
-                .GetAssemblies()
-                .Where(a => a.FullName.StartsWith("SFA.DAS.EmployerAccounts"))
-                .SelectMany(a => a.GetTypes())
-                .Where(t => typeof(Profile).IsAssignableFrom(t) && t.IsConcrete() && t.HasConstructors())
-                .Select(t => (Profile)Activator.CreateInstance(t));
-
-            var config = new MapperConfiguration(c =>
+            try
             {
-                foreach (var profile in profiles)
+                var profiles = AppDomain.CurrentDomain
+                    .GetAssemblies()
+                    .Where(a => a.FullName.StartsWith("SFA.DAS.EmployerAccounts"))
+                    .SelectMany(a => a.GetTypes())
+                    .Where(t => typeof(Profile).IsAssignableFrom(t) && t.IsConcrete() && t.HasConstructors())
+                    .Select(t => (Profile)Activator.CreateInstance(t));
+
+                var config = new MapperConfiguration(c =>
                 {
-                    c.AddProfile(profile);
+                    foreach (var profile in profiles)
+                    {
+                        c.AddProfile(profile);
+                    }
+                });
+
+                var mapper = config.CreateMapper();
+
+                For<IConfigurationProvider>().Use(config).Singleton();
+                For<IMapper>().Use(mapper).Singleton();
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (Exception exSub in ex.LoaderExceptions)
+                {
+                    sb.AppendLine(exSub.Message);
+                    FileNotFoundException exFileNotFound = exSub as FileNotFoundException;
+                    if (exFileNotFound != null)
+                    {
+                        if (!string.IsNullOrEmpty(exFileNotFound.FusionLog))
+                        {
+                            sb.AppendLine("Fusion Log:");
+                            sb.AppendLine(exFileNotFound.FusionLog);
+                        }
+                    }
+                    sb.AppendLine();
                 }
-            });
-
-            var mapper = config.CreateMapper();
-
-            For<IConfigurationProvider>().Use(config).Singleton();
-            For<IMapper>().Use(mapper).Singleton();
+                string errorMessage = sb.ToString();                
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.Hmrc.Configuration;
+using SFA.DAS.Http.Configuration;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.DependencyResolution
@@ -15,6 +16,7 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
             For<ForecastingApiClientConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<ForecastingApiClientConfiguration>(ConfigurationKeys.ForecastingApiClient)).Singleton();
             For<IAccountApiConfiguration>().Use(c => c.GetInstance<EmployerFinanceConfiguration>().AccountApi).Singleton();
             For<EmployerFeaturesConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<EmployerFeaturesConfiguration>(ConfigurationKeys.Features)).Singleton();
+            For<IAzureActiveDirectoryClientConfiguration>().Use(c => c.GetInstance<EmployerFinanceConfiguration>().CommitmentsApi).Singleton();
             For<IHmrcConfiguration>().Use(c => c.GetInstance<EmployerFinanceConfiguration>().Hmrc).Singleton();
         }
     }

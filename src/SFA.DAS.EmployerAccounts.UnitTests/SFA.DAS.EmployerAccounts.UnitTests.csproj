@@ -13,7 +13,7 @@
     <PackageReference Include="NLog" Version="4.6.8" />
     <PackageReference Include="NUnit" Version="3.10.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
-    <PackageReference Include="SFA.DAS.Commitments.Events" Version="2.1.1073" />
+    <PackageReference Include="SFA.DAS.Commitments.Events" Version="8.1.1" />
     <PackageReference Include="SFA.DAS.Testing" Version="1.0.14" />
     <PackageReference Include="SFA.DAS.NServiceBus.Testing" Version="15.0.25" />
     <PackageReference Include="SFA.DAS.Testing.AutoFixture" Version="3.0.169" />

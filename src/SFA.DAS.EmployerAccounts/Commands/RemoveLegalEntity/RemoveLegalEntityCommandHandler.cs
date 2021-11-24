@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.CommitmentsV2.Api.Client;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data;
@@ -34,7 +36,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
         private readonly IEmployerAgreementEventFactory _employerAgreementEventFactory;
         private readonly IMembershipRepository _membershipRepository;
         private readonly IEventPublisher _eventPublisher;
-        private IEmployerCommitmentApi _employerCommitmentApi;
+        private ICommitmentsApiClient _employerCommitmentApi;
 
         public RemoveLegalEntityCommandHandler(
             IValidator<RemoveLegalEntityCommand> validator,
@@ -46,8 +48,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
             IGenericEventFactory genericEventFactory,
             IEmployerAgreementEventFactory employerAgreementEventFactory,
             IMembershipRepository membershipRepository,
-            IEventPublisher eventPublisher,
-            IEmployerCommitmentApi employerCommitmentApi)
+            IEventPublisher eventPublisher,            
+            ICommitmentsApiClient employerCommitmentApi)
         {
             _validator = validator;
             _logger = logger;
@@ -120,10 +122,10 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
         {
             var commitments = await _employerCommitmentApi.GetEmployerAccountSummary(accountId);
 
-            var commitment = commitments.FirstOrDefault(c =>
+            var commitment = commitments.ApprenticeshipStatusSummaryResponse.FirstOrDefault(c =>
                 !string.IsNullOrEmpty(c.LegalEntityIdentifier)
-                && c.LegalEntityIdentifier.Equals(agreement.LegalEntityCode)
-                && c.LegalEntityOrganisationType == agreement.LegalEntitySource);
+                && c.LegalEntityIdentifier.Equals(agreement.LegalEntityCode)            
+                && c.LegalEntityOrganisationType == agreement.LegalEntitySource) ;
 
             if (commitment != null && (commitment.ActiveCount + commitment.PausedCount + commitment.PendingApprovalCount + commitment.WithdrawnCount) != 0)
             {

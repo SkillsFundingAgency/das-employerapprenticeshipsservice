@@ -24,15 +24,16 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
         private HttpClient GetHttpClient(IContext context)
         {
             var config = context.GetInstance<CommitmentsApiClientConfiguration>();
+         
+            var httpClientBuilder = string.IsNullOrWhiteSpace(config.ClientId)
+               ? new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config))
+               : new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(config));
 
-            var httpClient = new HttpClientBuilder()
-                .WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config))
-                .WithHandler(new RequestIdMessageRequestHandler())
-                .WithHandler(new SessionIdMessageRequestHandler())
-                .WithDefaultHeaders()
-                .Build();
-
-            return httpClient;
+            return httpClientBuilder
+                   .WithDefaultHeaders()
+                   .WithHandler(new RequestIdMessageRequestHandler())
+                   .WithHandler(new SessionIdMessageRequestHandler())
+                   .Build();
         }
     }
 }
