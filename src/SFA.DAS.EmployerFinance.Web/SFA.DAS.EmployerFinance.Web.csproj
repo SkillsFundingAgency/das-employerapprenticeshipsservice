@@ -118,6 +118,9 @@
     <PackageReference Include="SFA.DAS.Validation.Mvc">
       <Version>5.1.167</Version>
     </PackageReference>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt">
+      <Version>4.0.2.206221351</Version>
+    </PackageReference>
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="SFA.DAS.Web.Policy" Version="1.1.0.44309" />
     <PackageReference Include="StructureMap" Version="4.7.1" />
