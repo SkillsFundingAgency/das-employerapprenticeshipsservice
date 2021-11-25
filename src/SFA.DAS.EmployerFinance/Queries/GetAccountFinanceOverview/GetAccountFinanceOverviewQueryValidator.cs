@@ -22,10 +22,18 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
         }
 
         public async Task<ValidationResult> ValidateAsync(GetAccountFinanceOverviewQuery query)
-        {
+        {   
             var result = new ValidationResult();
 
-            result.IsUnauthorized = !_authorizationService.IsAuthorized(EmployerUserRole.Any);
+            try
+            {
+                result.IsUnauthorized = !_authorizationService.IsAuthorized(EmployerUserRole.Any);
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                var msg1 = ex.InnerException;
+            }
 
             return result;
         }

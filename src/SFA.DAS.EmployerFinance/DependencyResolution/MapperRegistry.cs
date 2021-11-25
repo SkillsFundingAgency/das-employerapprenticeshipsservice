@@ -35,6 +35,7 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
 
                 For<IConfigurationProvider>().Use(config).Singleton();
                 For<IMapper>().Use(mapper).Singleton();
+                //For<IMapper>().Use(mapper);
             }
             catch (ReflectionTypeLoadException ex)
             {

@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
             {
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
-           
+
             var currentBalance = await GetAccountBalance(query.AccountId);
             var earliestFundsToExpireTask = GetExpiringFunds(query.AccountId);
             var projectedCalculations = await _dasForecastingService.GetProjectedCalculations(query.AccountId);
