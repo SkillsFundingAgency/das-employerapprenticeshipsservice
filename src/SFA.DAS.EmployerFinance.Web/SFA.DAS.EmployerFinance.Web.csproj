@@ -77,13 +77,13 @@
       <Version>1.1.2</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization">
-      <Version>6.0.95</Version>
+      <Version>6.0.96</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.EmployerFeatures">
       <Version>6.0.95</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles">
-      <Version>6.0.95</Version>
+      <Version>6.0.96</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.Mvc">
       <Version>6.0.95</Version>

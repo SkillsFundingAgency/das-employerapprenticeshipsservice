@@ -14,8 +14,8 @@
     <PackageReference Include="NUnit" Version="3.10.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
     <PackageReference Include="SFA.DAS.Authentication" Version="1.1.2" />
-    <PackageReference Include="SFA.DAS.Authorization" Version="6.0.95" />
-    <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles" Version="6.0.95" />
+    <PackageReference Include="SFA.DAS.Authorization" Version="6.0.96" />
+    <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles" Version="6.0.96" />
     <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
     <PackageReference Include="SFA.DAS.Caches" Version="1.1.4" />
     <PackageReference Include="SFA.DAS.EmployerAccounts.Messages" Version="1.6.2103" />
@@ -27,7 +27,7 @@
     <PackageReference Include="SFA.DAS.Testing.AzureStorageEmulator" Version="3.0.99" />
     <PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework" Version="9.0.13" />
     <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="9.0.13" />
-    <PackageReference Include="SFA.DAS.EmployerAccounts.Types" Version="1.6.2103" />
+    <PackageReference Include="SFA.DAS.EmployerAccounts.Types" Version="1.6.2978" />
     <PackageReference Include="SpecFlow" Version="2.4.1" />
     <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="2.4.1" />
     <PackageReference Include="StructureMap" Version="4.7.1" />

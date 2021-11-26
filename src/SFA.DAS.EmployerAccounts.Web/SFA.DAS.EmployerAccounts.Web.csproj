@@ -96,7 +96,7 @@
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
     <PackageReference Include="SFA.DAS.Audit.Client.Web" Version="1.0.0.20553" />
     <PackageReference Include="SFA.DAS.Authorization">
-      <Version>6.0.95</Version>
+      <Version>6.0.96</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.EmployerFeatures">
       <Version>6.0.95</Version>
