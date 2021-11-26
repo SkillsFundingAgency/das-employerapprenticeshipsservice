@@ -34,12 +34,12 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
 
         public async Task<GetAccountFinanceOverviewResponse> Handle(GetAccountFinanceOverviewQuery query)
         {
-            //var validationResult = await _validator.ValidateAsync(query);
+            var validationResult = await _validator.ValidateAsync(query);
 
-            //if (!validationResult.IsValid())
-            //{
-            //    throw new InvalidRequestException(validationResult.ValidationDictionary);
-            //}
+            if (!validationResult.IsValid())
+            {
+                throw new InvalidRequestException(validationResult.ValidationDictionary);
+            }
 
             var currentBalance = await GetAccountBalance(query.AccountId);
             var earliestFundsToExpireTask = GetExpiringFunds(query.AccountId);
