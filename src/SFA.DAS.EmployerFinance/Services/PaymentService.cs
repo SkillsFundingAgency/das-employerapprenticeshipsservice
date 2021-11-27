@@ -139,6 +139,8 @@ namespace SFA.DAS.EmployerFinance.Services
                     }
                 }, maxDegreeOfParallelism: maxConcurrentThreads);
 
+            _logger.Info($"After Calling V2 Commitments Endpoint : GetApprenticeship and  resultApprenticeships count{resultApprenticeships.Count()} ");
+
             return resultApprenticeships;
         }
 
@@ -213,7 +215,10 @@ namespace SFA.DAS.EmployerFinance.Services
         {
             try
             {
+                _logger.Info($"Calling V2 Commitments Endpoint : GetApprenticeship with request apprenticeshipId {apprenticeshipId}");
+                
                 return await _commitmentsApiClient.GetApprenticeship(apprenticeshipId , CancellationToken.None);
+                
             }
             catch (Exception e)
             {

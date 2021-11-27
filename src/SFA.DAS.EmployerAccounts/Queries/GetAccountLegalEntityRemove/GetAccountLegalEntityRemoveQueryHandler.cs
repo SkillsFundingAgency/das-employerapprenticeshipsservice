@@ -73,7 +73,8 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove
         }
 
         private async Task<bool> SetRemovedStatusBasedOnCommitments(long accountId, AccountLegalEntityModel accountLegalEntityModel)
-        {
+        {           
+            
             var commitments = await _employerCommitmentApi.GetEmployerAccountSummary(accountId);
 
             var commitmentConnectedToEntity = commitments.ApprenticeshipStatusSummaryResponse.FirstOrDefault(c =>

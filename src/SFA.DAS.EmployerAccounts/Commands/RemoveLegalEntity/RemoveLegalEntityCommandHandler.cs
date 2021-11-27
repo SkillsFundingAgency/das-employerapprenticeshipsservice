@@ -120,7 +120,11 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
 
         private async Task ValidateLegalEntityHasNoCommitments(EmployerAgreementView agreement, long accountId, ValidationResult validationResult)
         {
+            _logger.Info($"Before Calling Commitments V2 Endpoint GetEmployerAccountSummary for account : {accountId}");
+            
             var commitments = await _employerCommitmentApi.GetEmployerAccountSummary(accountId);
+
+            _logger.Info($"After Calling Commitments V2 Endpoint GetEmployerAccountSummary Count : {commitments.ApprenticeshipStatusSummaryResponse.Count()}");
 
             var commitment = commitments.ApprenticeshipStatusSummaryResponse.FirstOrDefault(c =>
                 !string.IsNullOrEmpty(c.LegalEntityIdentifier)
