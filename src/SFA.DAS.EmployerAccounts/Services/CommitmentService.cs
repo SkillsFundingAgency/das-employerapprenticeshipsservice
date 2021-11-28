@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.Commitments.Api.Client.Interfaces;
-using SFA.DAS.Commitments.Api.Types.Commitment.Types;
+using SFA.DAS.CommitmentsV2.Api.Types.Requests;
+using SFA.DAS.CommitmentsV2.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Commitments;
 
@@ -10,24 +10,26 @@ namespace SFA.DAS.EmployerAccounts.Services
 {
     public class CommitmentService : ICommitmentService
     {
-        private readonly IEmployerCommitmentApi _commitmentApi;
+        private readonly ICommitmentsV2ApiClient _commitmentApi;
 
-        public CommitmentService(IEmployerCommitmentApi commitmentApi)
+        public CommitmentService(ICommitmentsV2ApiClient commitmentApi)
         {
             _commitmentApi = commitmentApi;
         }
 
         public async Task<List<Cohort>> GetEmployerCommitments(long employerAccountId)
         {
-            var commitmentItems = await _commitmentApi.GetEmployerCommitments(employerAccountId);
+            //var commitmentItems = await _commitmentApi.GetEmployerCommitments(employerAccountId);
+            var request = new GetCohortsRequest { AccountId = employerAccountId };
+            var commitmentItems = await _commitmentApi.GetCohorts(request);
 
-            if (commitmentItems == null || !commitmentItems.Any())
+            if (commitmentItems == null || !commitmentItems.Cohorts.Any())
             {
                 return new List<Cohort>();
             }
 
-            return commitmentItems.Where(x => x.CommitmentStatus != CommitmentStatus.Deleted)
-                .Select(x => new Cohort { Id = x.Id }).ToList();
+            return commitmentItems.Cohorts.Where(x => x.CommitmentStatus != CommitmentStatus.Deleted)
+                .Select(x => new Cohort { Id = x.CohortId }).ToList();
         }
     }
 }

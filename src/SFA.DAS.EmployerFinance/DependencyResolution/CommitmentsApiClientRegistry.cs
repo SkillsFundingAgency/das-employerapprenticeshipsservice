@@ -1,0 +1,39 @@
+﻿using SFA.DAS.AutoConfiguration;
+using SFA.DAS.EmployerFinance.Configuration;
+using SFA.DAS.EmployerFinance.Interfaces;
+using SFA.DAS.EmployerFinance.Services;
+using SFA.DAS.Http;
+using SFA.DAS.Http.TokenGenerators;
+using SFA.DAS.NLog.Logger.Web.MessageHandlers;
+using StructureMap;
+using System.Net.Http;
+
+namespace SFA.DAS.EmployerFinance.DependencyResolution
+{
+    public class CommitmentsApiClientRegistry : Registry
+    {
+        public CommitmentsApiClientRegistry()
+        {          
+            For<EmployerFinanceConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<EmployerFinanceConfiguration>(ConfigurationKeys.EmployerFinance)).Singleton();
+            For<CommitmentsApiV2ClientConfiguration>().Use(c => c.GetInstance<EmployerFinanceConfiguration>().CommitmentsApi);
+
+            For<ICommitmentsV2ApiClient>().Use<CommitmentsV2ApiClient>()
+                .Ctor<HttpClient>().Is(c => GetHttpV2Client(c));
+        }
+
+        private HttpClient GetHttpV2Client(IContext context)
+        {
+            var config = context.GetInstance<CommitmentsApiV2ClientConfiguration>();
+
+            var httpClientBuilder = string.IsNullOrWhiteSpace(config.ClientId)
+                ? new HttpClientBuilder()
+                : new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(config));
+
+            return httpClientBuilder
+                .WithDefaultHeaders()
+                .WithHandler(new RequestIdMessageRequestHandler())
+                .WithHandler(new SessionIdMessageRequestHandler())
+                .Build();
+        }
+    }
+}

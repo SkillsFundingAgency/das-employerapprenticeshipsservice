@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
-using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Dtos;
+using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetTransferRequests
@@ -16,13 +16,13 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetTransferRequests
     {
         private readonly Lazy<EmployerAccountsDbContext> _db;
         private readonly IConfigurationProvider _configurationProvider;
-        private readonly IEmployerCommitmentApi _employerCommitmentApi;
-        private readonly IHashingService _hashingService;
+        private readonly ICommitmentsV2ApiClient _employerCommitmentApi;
+        private readonly IHashingService _hashingService;        
 
         public GetTransferRequestsQueryHandler(
             Lazy<EmployerAccountsDbContext> db,
             IConfigurationProvider configurationProvider,
-            IEmployerCommitmentApi employerCommitmentApi,
+            ICommitmentsV2ApiClient employerCommitmentApi,
             IHashingService hashingService)
         {
             _db = db;
@@ -34,9 +34,9 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetTransferRequests
         public async Task<GetTransferRequestsResponse> Handle(GetTransferRequestsQuery message)
         {
             var accountHashedId = _hashingService.HashValue(message.AccountId);
-            var transferRequests = await _employerCommitmentApi.GetTransferRequests(accountHashedId);
+            var transferRequests = await _employerCommitmentApi.GetTransferRequests(message.AccountId);
 
-            var accountIds = transferRequests
+            var accountIds = transferRequests.TransferRequestSummaryResponse
                 .SelectMany(r => new[] { r.HashedSendingEmployerAccountId, r.HashedReceivingEmployerAccountId })
                 .Select(h => _hashingService.DecodeValue(h))
                 .ToList();
@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetTransferRequests
                 .ProjectTo<AccountDto>(_configurationProvider)
                 .ToDictionaryAsync(a => a.HashedId);
 
-            var transferRequestsData = transferRequests
+            var transferRequestsData = transferRequests.TransferRequestSummaryResponse
                 .Select(r => new TransferRequestDto
                 {
                     CreatedDate = r.CreatedOn,

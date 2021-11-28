@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using SFA.DAS.CommitmentsV2.Api.Client;
 using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.CommitmentsV2.Types;
 using SFA.DAS.CommitmentsV2.Types.Dtos;
@@ -14,11 +13,11 @@ namespace SFA.DAS.EmployerAccounts.Services
 {
     public class CommitmentsV2Service : ICommitmentV2Service
     {
-        private readonly ICommitmentsApiClient _commitmentsApiClient;
+        private readonly ICommitmentsV2ApiClient _commitmentsApiClient;
         private readonly IMapper _mapper;
         private readonly IEncodingService _encodingService;
 
-        public CommitmentsV2Service(ICommitmentsApiClient commitmentsApiClient, IMapper mapper, IEncodingService encodingService)
+        public CommitmentsV2Service(ICommitmentsV2ApiClient commitmentsApiClient, IMapper mapper, IEncodingService encodingService)
         {
             _commitmentsApiClient = commitmentsApiClient;
             _mapper = mapper;
@@ -79,6 +78,6 @@ namespace SFA.DAS.EmployerAccounts.Services
                           });
                       });
                   });
-        }
+        }       
     }
 }
