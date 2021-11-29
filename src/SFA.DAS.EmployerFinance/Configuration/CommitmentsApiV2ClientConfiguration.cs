@@ -1,17 +1,11 @@
-﻿using SFA.DAS.Http.Configuration;
+﻿using SFA.DAS.EmployerFinance.Interfaces;
 
 namespace SFA.DAS.EmployerFinance.Configuration
 {
-    public class CommitmentsApiV2ClientConfiguration : ICommitmentsApiV2ClientConfiguration
+    public class CommitmentsApiV2ClientConfiguration : IManagedIdentityClientConfiguration
     {
-        public string ApiBaseUrl { get; set; }
-        public string Tenant { get; set; }
-        public string ClientId { get; set; }
-        public string ClientSecret { get; set; }
+        public string ApiBaseUrl { get; set; }      
         public string IdentifierUri { get; set; }
     }
-
-    public interface ICommitmentsApiV2ClientConfiguration : IAzureActiveDirectoryClientConfiguration
-    {
-    }
+   
 }

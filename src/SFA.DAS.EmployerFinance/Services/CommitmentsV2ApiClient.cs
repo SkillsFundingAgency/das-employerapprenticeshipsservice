@@ -1,10 +1,13 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Azure.Services.AppAuthentication;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SFA.DAS.Authentication.Extensions.Legacy;
 using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Interfaces;
+using System.Configuration;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Services
@@ -24,6 +27,8 @@ namespace SFA.DAS.EmployerFinance.Services
 
         public async Task<GetApprenticeshipResponse> GetApprenticeship(long apprenticeshipId)
         {
+            await AddAuthenticationHeader();
+
             var url = $"{BaseUrl()}api/apprenticeships/{apprenticeshipId}";
             _logger.LogInformation($"Getting GetApprenticeship {url}");
             var response = JsonConvert.DeserializeObject<GetApprenticeshipResponse>(await GetAsync(url));
@@ -38,6 +43,18 @@ namespace SFA.DAS.EmployerFinance.Services
             }
 
             return _config.ApiBaseUrl + "/";
+        }
+
+        private async Task AddAuthenticationHeader()
+        {
+            if (ConfigurationManager.AppSettings["EnvironmentName"].ToUpper() != "LOCAL")
+            {
+                var azureServiceTokenProvider = new AzureServiceTokenProvider();
+                var accessToken = await azureServiceTokenProvider.GetAccessTokenAsync(_config.IdentifierUri);
+
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            }
         }
     }
 }

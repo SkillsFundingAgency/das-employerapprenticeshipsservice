@@ -3,7 +3,6 @@ using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.Http;
-using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.NLog.Logger.Web.MessageHandlers;
 using StructureMap;
 using System.Net.Http;
@@ -23,17 +22,14 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
 
         private HttpClient GetHttpV2Client(IContext context)
         {
-            var config = context.GetInstance<CommitmentsApiV2ClientConfiguration>();
+            HttpClient httpClient = new HttpClientBuilder()
+                   .WithHandler(new RequestIdMessageRequestHandler())
+                   .WithHandler(new SessionIdMessageRequestHandler())
+                   .WithDefaultHeaders()
+                   .Build();
 
-            var httpClientBuilder = string.IsNullOrWhiteSpace(config.ClientId)
-                ? new HttpClientBuilder()
-                : new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(config));
 
-            return httpClientBuilder
-                .WithDefaultHeaders()
-                .WithHandler(new RequestIdMessageRequestHandler())
-                .WithHandler(new SessionIdMessageRequestHandler())
-                .Build();
+            return httpClient;
         }
     }    
 }
