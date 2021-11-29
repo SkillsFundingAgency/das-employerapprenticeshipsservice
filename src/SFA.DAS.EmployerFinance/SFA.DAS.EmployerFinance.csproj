@@ -26,8 +26,6 @@
     <PackageReference Include="SFA.DAS.Authorization.WebApi" Version="6.0.52" />
     <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
     <PackageReference Include="SFA.DAS.Caches" Version="1.1.4" />
-    <PackageReference Include="SFA.DAS.Commitments.Api.Client" Version="4.1.355" />
-    <PackageReference Include="SFA.DAS.Commitments.Api.Types" Version="4.1.355" />
     <PackageReference Include="SFA.DAS.CommitmentsV2.Api.Types" Version="8.1.1" />
     <PackageReference Include="SFA.DAS.CommitmentsV2.Types" Version="8.1.1" />
     <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.283" />

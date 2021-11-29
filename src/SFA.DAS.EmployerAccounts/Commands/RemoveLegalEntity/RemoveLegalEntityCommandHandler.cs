@@ -4,11 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Audit.Types;
-using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Factories;
+using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models;
@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
         private readonly IEmployerAgreementEventFactory _employerAgreementEventFactory;
         private readonly IMembershipRepository _membershipRepository;
         private readonly IEventPublisher _eventPublisher;
-        private IEmployerCommitmentApi _employerCommitmentApi;
+        private ICommitmentsV2ApiClient _employerCommitmentApi;
 
         public RemoveLegalEntityCommandHandler(
             IValidator<RemoveLegalEntityCommand> validator,
@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
             IEmployerAgreementEventFactory employerAgreementEventFactory,
             IMembershipRepository membershipRepository,
             IEventPublisher eventPublisher,
-            IEmployerCommitmentApi employerCommitmentApi)
+            ICommitmentsV2ApiClient employerCommitmentApi)
         {
             _validator = validator;
             _logger = logger;
@@ -120,7 +120,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
         {
             var commitments = await _employerCommitmentApi.GetEmployerAccountSummary(accountId);
 
-            var commitment = commitments.FirstOrDefault(c =>
+            var commitment = commitments.ApprenticeshipStatusSummaryResponse.FirstOrDefault(c =>
                 !string.IsNullOrEmpty(c.LegalEntityIdentifier)
                 && c.LegalEntityIdentifier.Equals(agreement.LegalEntityCode)
                 && c.LegalEntityOrganisationType == agreement.LegalEntitySource);

@@ -27,8 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
                 c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DataRegistry>();
-                c.AddRegistry<DateTimeRegistry>();
-                c.AddRegistry<CommitmentsRegistry>();
+                c.AddRegistry<DateTimeRegistry>();                
                 c.AddRegistry<EmployerAccountsApiClientRegistry>();
                 c.AddRegistry<AccountApiClientRegistry>();
                 c.AddRegistry<EntityFrameworkUnitOfWorkRegistry<EmployerAccountsDbContext>>();
