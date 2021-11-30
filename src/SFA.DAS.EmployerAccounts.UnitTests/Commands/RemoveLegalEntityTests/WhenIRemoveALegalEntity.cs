@@ -107,7 +107,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
 
             _eventPublisher = new Mock<IEventPublisher>();
 
-            _commitmentsApi = new Mock<ICommitmentsV2ApiClient>();           
+            _commitmentsApi = new Mock<ICommitmentsV2ApiClient>();
             _commitmentsApi
               .Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
               .ReturnsAsync(new GetApprenticeshipStatusSummaryResponse()

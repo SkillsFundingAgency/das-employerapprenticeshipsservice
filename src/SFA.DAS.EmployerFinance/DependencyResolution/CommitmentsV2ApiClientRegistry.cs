@@ -3,16 +3,15 @@ using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.Http;
-using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.NLog.Logger.Web.MessageHandlers;
 using StructureMap;
 using System.Net.Http;
 
 namespace SFA.DAS.EmployerFinance.DependencyResolution
 {
-    public class CommitmentsApiClientRegistry : Registry
+    public class CommitmentsV2ApiClientRegistry : Registry
     {
-        public CommitmentsApiClientRegistry()
+        public CommitmentsV2ApiClientRegistry()
         {          
             For<EmployerFinanceConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<EmployerFinanceConfiguration>(ConfigurationKeys.EmployerFinance)).Singleton();
             For<CommitmentsApiV2ClientConfiguration>().Use(c => c.GetInstance<EmployerFinanceConfiguration>().CommitmentsApi);

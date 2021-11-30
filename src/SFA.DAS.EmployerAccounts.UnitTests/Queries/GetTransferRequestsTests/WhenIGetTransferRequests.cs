@@ -60,7 +60,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetTransferRequestsTests
             {
                 HashedTransferRequestId = "DEF456",
                 HashedSendingEmployerAccountId = _account1.HashedId,
-                HashedReceivingEmployerAccountId = _account2.HashedId,                
+                HashedReceivingEmployerAccountId = _account2.HashedId,
                 TransferCost = 123.456m,
             };
 
@@ -69,7 +69,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetTransferRequestsTests
                 HashedTransferRequestId = "GHI789",
                 HashedSendingEmployerAccountId = _account2.HashedId,
                 HashedReceivingEmployerAccountId = _account1.HashedId,
-                TransferCost = 789.012m,              
+                TransferCost = 789.012m,
             };
 
             _getTransferRequestSummaryResponse = new GetTransferRequestSummaryResponse

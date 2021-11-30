@@ -9,9 +9,9 @@ using System.Net.Http;
 
 namespace SFA.DAS.EmployerAccounts.DependencyResolution
 {
-    public class CommitmentsApiClientRegistryV2 : Registry
+    public class CommitmentsV2ApiClientRegistry : Registry
     {
-        public CommitmentsApiClientRegistryV2()
+        public CommitmentsV2ApiClientRegistry()
         {
             For<EmployerAccountsConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<EmployerAccountsConfiguration>(ConfigurationKeys.EmployerAccounts)).Singleton();
             For<CommitmentsApiV2ClientConfiguration>().Use(c => c.GetInstance<EmployerAccountsConfiguration>().CommitmentsApi);

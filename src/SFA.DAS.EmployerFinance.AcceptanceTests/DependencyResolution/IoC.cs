@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution
             {
                 c.AddRegistry<ApprenticeshipLevyRegistry>();
                 c.AddRegistry<CachesRegistry>();
-                c.AddRegistry<CommitmentsApiClientRegistry>();
+                c.AddRegistry<CommitmentsV2ApiClientRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DataRegistry>();
                 c.AddRegistry<EntityFrameworkUnitOfWorkRegistry<EmployerFinanceDbContext>>();

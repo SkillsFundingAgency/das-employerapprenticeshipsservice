@@ -50,7 +50,7 @@ namespace SFA.DAS.EmployerFinance.Api
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<StartupRegistry>();
                 c.AddRegistry<DefaultRegistry>();
-                c.AddRegistry<CommitmentsApiClientRegistry>();
+                c.AddRegistry<CommitmentsV2ApiClientRegistry>();
             });
         }
     }
