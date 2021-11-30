@@ -96,6 +96,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\Commitments\" />
     <Folder Include="Models\Portal\" />
     <Folder Include="Queries\GetAccountLegalEntitiesByHashedAccountId\" />
     <Folder Include="Queries\GetEmployerAgreementById\" />

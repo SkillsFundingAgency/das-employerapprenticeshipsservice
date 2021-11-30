@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetTransferRequestsTests
         private GetTransferRequestsResponse _response;
         private Mock<EmployerAccountsDbContext> _db;
         private IConfigurationProvider _configurationProvider;
-        private Mock<ICommitmentsV2ApiClient> _employerCommitmentApi;
+        private Mock<ICommitmentsV2ApiClient> _commitmentsV2ApiClient;
         private Mock<IHashingService> _hashingService;
         private TransferRequestSummaryResponse _sentTransferRequest;
         private TransferRequestSummaryResponse _receivedTransferRequest;
@@ -39,7 +39,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetTransferRequestsTests
         public void Arrange()
         {
             _db = new Mock<EmployerAccountsDbContext>();
-            _employerCommitmentApi = new Mock<ICommitmentsV2ApiClient>();
+            _commitmentsV2ApiClient = new Mock<ICommitmentsV2ApiClient>();
             _hashingService = new Mock<IHashingService>();
 
             _account1 = new Account
@@ -95,13 +95,13 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetTransferRequestsTests
             });
 
             _db.Setup(d => d.Accounts).Returns(_accountsDbSet);
-            _employerCommitmentApi.Setup(c => c.GetTransferRequests(_account1.Id)).ReturnsAsync(_getTransferRequestSummaryResponse);
+            _commitmentsV2ApiClient.Setup(c => c.GetTransferRequests(_account1.Id)).ReturnsAsync(_getTransferRequestSummaryResponse);
             _hashingService.Setup(h => h.DecodeValue(_account1.HashedId)).Returns(_account1.Id);
             _hashingService.Setup(h => h.DecodeValue(_account2.HashedId)).Returns(_account2.Id);
             _hashingService.Setup(h => h.HashValue(_account1.Id)).Returns(_account1.HashedId);
             _hashingService.Setup(h => h.HashValue(_account2.Id)).Returns(_account2.HashedId);
 
-            _handler = new GetTransferRequestsQueryHandler(new Lazy<EmployerAccountsDbContext>(() => _db.Object), _configurationProvider, _employerCommitmentApi.Object, _hashingService.Object);
+            _handler = new GetTransferRequestsQueryHandler(new Lazy<EmployerAccountsDbContext>(() => _db.Object), _configurationProvider, _commitmentsV2ApiClient.Object, _hashingService.Object);
 
             _query = new GetTransferRequestsQuery
             {

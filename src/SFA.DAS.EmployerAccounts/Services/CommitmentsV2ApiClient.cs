@@ -103,8 +103,7 @@ namespace SFA.DAS.EmployerAccounts.Services
                 var azureServiceTokenProvider = new AzureServiceTokenProvider();
                 var accessToken = await azureServiceTokenProvider.GetAccessTokenAsync(_config.IdentifierUri);
 
-                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);            
             }
         }
     }

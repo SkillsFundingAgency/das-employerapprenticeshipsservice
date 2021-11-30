@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SFA.DAS.CommitmentsV2.Api.Types.Requests;
 using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.CommitmentsV2.Types;
 using SFA.DAS.CommitmentsV2.Types.Dtos;
@@ -78,6 +79,21 @@ namespace SFA.DAS.EmployerAccounts.Services
                           });
                       });
                   });
-        }       
+        }
+
+        public async Task<List<Cohort>> GetEmployerCommitments(long employerAccountId)
+        {
+            //var commitmentItems = await _commitmentApi.GetEmployerCommitments(employerAccountId);
+            var request = new GetCohortsRequest { AccountId = employerAccountId };
+            var commitmentItems = await _commitmentsApiClient.GetCohorts(request);
+
+            if (commitmentItems == null || !commitmentItems.Cohorts.Any())
+            {
+                return new List<Cohort>();
+            }
+
+            return commitmentItems.Cohorts.Where(x => x.CommitmentStatus != CommitmentStatus.Deleted)
+                .Select(x => new Cohort { Id = x.CohortId }).ToList();
+        }
     }
 }

@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
         private const string FrameworkCourseName = "Framework Course";
 
         private Mock<IApprenticeshipInfoServiceWrapper> _apprenticeshipInfoService;
-        private Mock<ICommitmentsV2ApiClient> _commitmentsApiClient;
+        private Mock<ICommitmentsV2ApiClient> _commitmentsV2ApiClient;
         private Mock<IPaymentsEventsApiClient> _paymentsApiClient;
         private Mock<IMapper> _mapper;
         private Mock<ILog> _logger;
@@ -57,7 +57,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
 
             _paymentService = new PaymentService(
                 _paymentsApiClient.Object,
-                _commitmentsApiClient.Object,
+                _commitmentsV2ApiClient.Object,
                 _apprenticeshipInfoService.Object,
                 _mapper.Object,
                 _logger.Object,
@@ -82,7 +82,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
             await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
 
             //Assert
-            _commitmentsApiClient.Verify(x => x.GetApprenticeship(_apprenticeship.Id), Times.Once);
+            _commitmentsV2ApiClient.Verify(x => x.GetApprenticeship(_apprenticeship.Id), Times.Once);
         }
 
 
@@ -326,7 +326,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
         public async Task ThenShouldLogWarningIfCommitmentsApiCallFails()
         {
             //Arrange
-            _commitmentsApiClient.Setup(x => x.GetApprenticeship(It.IsAny<long>()))
+            _commitmentsV2ApiClient.Setup(x => x.GetApprenticeship(It.IsAny<long>()))
                 .Throws<WebException>();
 
             //Act
@@ -497,8 +497,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
 
         private void SetupCommitmentsApiMock()
         {
-            _commitmentsApiClient = new Mock<ICommitmentsV2ApiClient>();
-            _commitmentsApiClient.Setup(x => x.GetApprenticeship(It.IsAny<long>()))
+            _commitmentsV2ApiClient = new Mock<ICommitmentsV2ApiClient>();
+            _commitmentsV2ApiClient.Setup(x => x.GetApprenticeship(It.IsAny<long>()))
                 .ReturnsAsync(_apprenticeship);
         }
 

@@ -17,20 +17,20 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove
         private readonly IEmployerAgreementRepository _employerAgreementRepository;
         private readonly IHashingService _hashingService;
         private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityHashingService;
-        private readonly ICommitmentsV2ApiClient _employerCommitmentApi;
+        private readonly ICommitmentsV2ApiClient _commitmentV2ApiClient;
 
         public GetAccountLegalEntityRemoveQueryHandler(
             IValidator<GetAccountLegalEntityRemoveRequest> validator,
             IEmployerAgreementRepository employerAgreementRepository, 
             IHashingService hashingService,
             IAccountLegalEntityPublicHashingService accountLegalEntityHashingService,
-            ICommitmentsV2ApiClient employerCommitmentApi)
+            ICommitmentsV2ApiClient commitmentV2ApiClient)
         {
             _validator = validator;
             _employerAgreementRepository = employerAgreementRepository;
             _hashingService = hashingService;
             _accountLegalEntityHashingService = accountLegalEntityHashingService;
-            _employerCommitmentApi = employerCommitmentApi;
+            _commitmentV2ApiClient = commitmentV2ApiClient;
         }
 
         public async Task<GetAccountLegalEntityRemoveResponse> Handle(GetAccountLegalEntityRemoveRequest message)
@@ -74,7 +74,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove
 
         private async Task<bool> SetRemovedStatusBasedOnCommitments(long accountId, AccountLegalEntityModel accountLegalEntityModel)
         {
-            var commitments = await _employerCommitmentApi.GetEmployerAccountSummary(accountId);
+            var commitments = await _commitmentV2ApiClient.GetEmployerAccountSummary(accountId);
 
             var commitmentConnectedToEntity = commitments.ApprenticeshipStatusSummaryResponse.FirstOrDefault(c =>
                 !string.IsNullOrEmpty(c.LegalEntityIdentifier)

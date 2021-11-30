@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
         private Mock<IEmployerAgreementEventFactory> _employerAgreementEventFactory;
         private Mock<IMembershipRepository> _membershipRepository;
         private Mock<IEventPublisher> _eventPublisher;
-        private Mock<ICommitmentsV2ApiClient> _commitmentsApi;
+        private Mock<ICommitmentsV2ApiClient> _commitmentsV2ApiClient;
 
         private const string ExpectedHashedAccountId = "34RFD";
         private const long ExpectedAccountId = 123455;
@@ -107,8 +107,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
 
             _eventPublisher = new Mock<IEventPublisher>();
 
-            _commitmentsApi = new Mock<ICommitmentsV2ApiClient>();
-            _commitmentsApi
+            _commitmentsV2ApiClient = new Mock<ICommitmentsV2ApiClient>();
+            _commitmentsV2ApiClient
               .Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
               .ReturnsAsync(new GetApprenticeshipStatusSummaryResponse()
               {
@@ -139,7 +139,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
                 _employerAgreementEventFactory.Object,
                 _membershipRepository.Object,
                 _eventPublisher.Object,
-                _commitmentsApi.Object);
+                _commitmentsV2ApiClient.Object);
         }
 
         [Test]
@@ -231,7 +231,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
         [Test]
         public async Task ThenTheAgreementIsCheckedToSeeIfItHasBeenSignedAndHasActiveCommitments()
         {
-            _commitmentsApi
+            _commitmentsV2ApiClient
                   .Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
                   .ReturnsAsync(new GetApprenticeshipStatusSummaryResponse()
                   {
@@ -253,7 +253,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
         [Test]
         public async Task ThenTheAgreementIsCheckedToSeeIfItHasBeenSignedAndHasWithdrawnCommitments()
         {
-            _commitmentsApi
+            _commitmentsV2ApiClient
               .Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
               .ReturnsAsync(new GetApprenticeshipStatusSummaryResponse()
               {

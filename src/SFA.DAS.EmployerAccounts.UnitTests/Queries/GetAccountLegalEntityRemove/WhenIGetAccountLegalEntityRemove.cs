@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntityRemove
         private Mock<IHashingService> _hashingService;
         private Mock<IAccountLegalEntityPublicHashingService> _accountLegalEntityPublicHashingService;
         private Mock<IEmployerAgreementRepository> _repository;
-        private Mock<ICommitmentsV2ApiClient> _commitmentsApi;
+        private Mock<ICommitmentsV2ApiClient> _commitmentsV2ApiClient;
       
         public override GetAccountLegalEntityRemoveRequest Query { get; set; }
         public override GetAccountLegalEntityRemoveQueryHandler RequestHandler { get; set; }
@@ -66,8 +66,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntityRemove
             _accountLegalEntityPublicHashingService = new Mock<IAccountLegalEntityPublicHashingService>();
             _accountLegalEntityPublicHashingService.Setup(x => x.DecodeValue(ExpectedHashedAccountLegalEntityId)).Returns(ExpectedAccountLegalEntityId);
 
-            _commitmentsApi = new Mock<ICommitmentsV2ApiClient>();
-            _commitmentsApi.Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
+            _commitmentsV2ApiClient = new Mock<ICommitmentsV2ApiClient>();
+            _commitmentsV2ApiClient.Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
                .ReturnsAsync(new GetApprenticeshipStatusSummaryResponse()
                {
                    ApprenticeshipStatusSummaryResponse = new List<ApprenticeshipStatusSummaryResponse>()  { new ApprenticeshipStatusSummaryResponse() { } }
@@ -79,7 +79,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntityRemove
                 _repository.Object,
                 _hashingService.Object,
                 _accountLegalEntityPublicHashingService.Object,
-                _commitmentsApi.Object
+                _commitmentsV2ApiClient.Object
             );
         }
 

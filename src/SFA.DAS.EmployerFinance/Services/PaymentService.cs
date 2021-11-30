@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerFinance.Services
     public class PaymentService : IPaymentService
     {
         private readonly IPaymentsEventsApiClient _paymentsEventsApiClient;
-        private readonly ICommitmentsV2ApiClient _commitmentsApiClient;
+        private readonly ICommitmentsV2ApiClient _commitmentsV2ApiClient;
         private readonly IApprenticeshipInfoServiceWrapper _apprenticeshipInfoService;
         private readonly IMapper _mapper;
         private readonly ILog _logger;
@@ -30,11 +30,11 @@ namespace SFA.DAS.EmployerFinance.Services
         private readonly IProviderService _providerService;
 
         public PaymentService(IPaymentsEventsApiClient paymentsEventsApiClient,
-            ICommitmentsV2ApiClient commitmentsApiClient, IApprenticeshipInfoServiceWrapper apprenticeshipInfoService,
+            ICommitmentsV2ApiClient commitmentsV2ApiClient, IApprenticeshipInfoServiceWrapper apprenticeshipInfoService,
             IMapper mapper, ILog logger, IInProcessCache inProcessCache, IProviderService providerService)
         {
             _paymentsEventsApiClient = paymentsEventsApiClient;
-            _commitmentsApiClient = commitmentsApiClient;
+            _commitmentsV2ApiClient = commitmentsV2ApiClient;
             _apprenticeshipInfoService = apprenticeshipInfoService;
             _mapper = mapper;
             _logger = logger;
@@ -207,7 +207,7 @@ namespace SFA.DAS.EmployerFinance.Services
         {
             try
             {
-                return await _commitmentsApiClient.GetApprenticeship(apprenticeshipId);
+                return await _commitmentsV2ApiClient.GetApprenticeship(apprenticeshipId);
             }
             catch (Exception e)
             {
