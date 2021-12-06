@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string ZenDeskSnippetKey { get; set; }
         public string ZenDeskSectionId { get; set; }
         public string ZenDeskCobrowsingSnippetKey { get; set; }
-        public CommitmentsApiV2ClientConfiguration CommitmentsApi { get; set; }
+        public CommitmentsApiV2ClientConfiguration CommitmentsV2Api { get; set; }
         public RecruitClientApiConfiguration RecruitApi { get; set; }
         public long DefaultServiceTimeoutMilliseconds { get; set; }
         public ContentClientApiConfiguration ContentApi { get; set; }
