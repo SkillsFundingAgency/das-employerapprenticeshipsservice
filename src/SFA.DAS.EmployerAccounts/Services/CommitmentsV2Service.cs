@@ -82,8 +82,7 @@ namespace SFA.DAS.EmployerAccounts.Services
         }
 
         public async Task<List<Cohort>> GetEmployerCommitments(long employerAccountId)
-        {
-            //var commitmentItems = await _commitmentApi.GetEmployerCommitments(employerAccountId);
+        {            
             var request = new GetCohortsRequest { AccountId = employerAccountId };
             var commitmentItems = await _commitmentsApiClient.GetCohorts(request);
 

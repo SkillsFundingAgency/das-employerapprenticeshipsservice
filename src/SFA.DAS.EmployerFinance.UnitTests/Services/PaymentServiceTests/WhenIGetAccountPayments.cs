@@ -319,7 +319,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
             var apprenticeName = $"{_apprenticeship.FirstName} {_apprenticeship.LastName}";
 
             Assert.AreEqual(apprenticeName, details.First().ApprenticeName);
-            Assert.AreEqual(_apprenticeship.NINumber, details.First().ApprenticeNINumber);
         }
 
         [Test]

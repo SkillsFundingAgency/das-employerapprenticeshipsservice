@@ -85,7 +85,6 @@ namespace SFA.DAS.EmployerFinance.Services
                     if (apprenticeshipDetails.TryGetValue(details.ApprenticeshipId, out var apprenticeship))
                     {
                         details.ApprenticeName = $"{apprenticeship.FirstName} {apprenticeship.LastName}";
-                        details.ApprenticeNINumber = apprenticeship.NINumber;
                         details.CourseStartDate = apprenticeship.StartDate;
                     }
 

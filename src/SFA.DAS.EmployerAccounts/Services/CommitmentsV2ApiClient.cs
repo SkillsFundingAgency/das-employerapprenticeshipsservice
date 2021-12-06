@@ -66,11 +66,11 @@ namespace SFA.DAS.EmployerAccounts.Services
             return response;
         }
 
-        public async Task<GetApprenticeshipStatusSummaryResponse> GetEmployerAccountSummary(long employerAccountId)
+        public async Task<GetApprenticeshipStatusSummaryResponse> GetEmployerAccountSummary(long accountId)
         {
             await AddAuthenticationHeader();
 
-            var url = $"{BaseUrl()}api/accounts/{employerAccountId}/employer-account-summary";
+            var url = $"{BaseUrl()}api/accounts/{accountId}/summary";
             _logger.LogInformation($"Getting GetEmployerAccountSummary {url}");
             var response = JsonConvert.DeserializeObject<GetApprenticeshipStatusSummaryResponse>(await GetAsync(url));
             return response;
