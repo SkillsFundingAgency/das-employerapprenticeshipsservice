@@ -17,10 +17,10 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
             For<CommitmentsApiV2ClientConfiguration>().Use(c => c.GetInstance<EmployerFinanceConfiguration>().CommitmentsApi);
 
             For<ICommitmentsV2ApiClient>().Use<CommitmentsV2ApiClient>()
-                .Ctor<HttpClient>().Is(c => GetHttpV2Client(c));
+                .Ctor<HttpClient>().Is(c => GetHttpClient(c));
         }
 
-        private HttpClient GetHttpV2Client(IContext context)
+        private HttpClient GetHttpClient(IContext context)
         {            
             HttpClient httpClient = new HttpClientBuilder()
                    .WithHandler(new RequestIdMessageRequestHandler())

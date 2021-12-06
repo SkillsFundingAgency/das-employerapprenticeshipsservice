@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
         private readonly IEmployerAgreementEventFactory _employerAgreementEventFactory;
         private readonly IMembershipRepository _membershipRepository;
         private readonly IEventPublisher _eventPublisher;
-        private ICommitmentsV2ApiClient _CommitmentsV2ApiClient;
+        private ICommitmentsV2ApiClient _commitmentsV2ApiClient;
 
         public RemoveLegalEntityCommandHandler(
             IValidator<RemoveLegalEntityCommand> validator,
@@ -59,7 +59,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
             _employerAgreementEventFactory = employerAgreementEventFactory;
             _membershipRepository = membershipRepository;
             _eventPublisher = eventPublisher;
-            _CommitmentsV2ApiClient = commitmentsV2ApiClient;
+            _commitmentsV2ApiClient = commitmentsV2ApiClient;
         }
 
         protected override async Task HandleCore(RemoveLegalEntityCommand message)
@@ -118,7 +118,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
 
         private async Task ValidateLegalEntityHasNoCommitments(EmployerAgreementView agreement, long accountId, ValidationResult validationResult)
         {
-            var commitments = await _CommitmentsV2ApiClient.GetEmployerAccountSummary(accountId);
+            var commitments = await _commitmentsV2ApiClient.GetEmployerAccountSummary(accountId);
 
             var commitment = commitments.ApprenticeshipStatusSummaryResponse.FirstOrDefault(c =>
                 !string.IsNullOrEmpty(c.LegalEntityIdentifier)

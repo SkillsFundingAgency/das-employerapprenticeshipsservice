@@ -28,62 +28,80 @@ namespace SFA.DAS.EmployerAccounts.Services
 
         public async Task<GetApprenticeshipResponse> GetApprenticeship(long apprenticeshipId)
         {
-            await AddAuthenticationHeader();
-
             var url = $"{BaseUrl()}api/apprenticeships/{apprenticeshipId}";
             _logger.LogInformation($"Getting GetApprenticeship {url}");
-            var response = JsonConvert.DeserializeObject<GetApprenticeshipResponse>(await GetAsync(url));
-            return response;
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
+            await AddAuthenticationHeader(requestMessage);
+            
+            var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+            
+            var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            return JsonConvert.DeserializeObject<GetApprenticeshipResponse>(json);
         }
 
         public async Task<GetApprenticeshipsResponse> GetApprenticeships(GetApprenticeshipsRequest request)
         {
-            await AddAuthenticationHeader();
-
             var url = $"{BaseUrl()}api/apprenticeships/?accountId={request.AccountId}&reverseSort={request.ReverseSort}{request.SortField}{request.SortField}{request.SearchTerm}";
             _logger.LogInformation($"Getting GetApprenticeships {url}");
-            var response = JsonConvert.DeserializeObject<GetApprenticeshipsResponse>(await GetAsync(url));
-            return response;
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
+            await AddAuthenticationHeader(requestMessage);            
+
+            var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+
+            var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            return JsonConvert.DeserializeObject<GetApprenticeshipsResponse>(json);
         }
 
         public async Task<GetCohortsResponse> GetCohorts(GetCohortsRequest request)
         {
-            await AddAuthenticationHeader();
-
             var url = $"{BaseUrl()}api/cohorts/{request}";
             _logger.LogInformation($"Getting GetCohorts {url}");
-            var response = JsonConvert.DeserializeObject<GetCohortsResponse>(await GetAsync(url));
-            return response;
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
+            await AddAuthenticationHeader(requestMessage);
+
+            var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+
+            var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            return JsonConvert.DeserializeObject<GetCohortsResponse>(json);
         }
 
         public async Task<GetDraftApprenticeshipsResponse> GetDraftApprenticeships(long cohortId)
         {
-            await AddAuthenticationHeader();
-
             var url = $"{BaseUrl()}api/cohorts/{cohortId}/draft-apprenticeships";
             _logger.LogInformation($"Getting GetDraftApprenticeships {url}");
-            var response = JsonConvert.DeserializeObject<GetDraftApprenticeshipsResponse>(await GetAsync(url));
-            return response;
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
+            await AddAuthenticationHeader(requestMessage);
+
+            var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+
+            var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            return JsonConvert.DeserializeObject<GetDraftApprenticeshipsResponse>(json);
         }
 
         public async Task<GetApprenticeshipStatusSummaryResponse> GetEmployerAccountSummary(long accountId)
         {
-            await AddAuthenticationHeader();
-
             var url = $"{BaseUrl()}api/accounts/{accountId}/summary";
             _logger.LogInformation($"Getting GetEmployerAccountSummary {url}");
-            var response = JsonConvert.DeserializeObject<GetApprenticeshipStatusSummaryResponse>(await GetAsync(url));
-            return response;
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
+            await AddAuthenticationHeader(requestMessage);
+            
+            var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+
+            var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            return JsonConvert.DeserializeObject<GetApprenticeshipStatusSummaryResponse>(json);
         }
 
         public async Task<GetTransferRequestSummaryResponse> GetTransferRequests(long accountId)
         {
-            await AddAuthenticationHeader();
-
             var url = $"{BaseUrl()}api/accounts/{accountId}/transfers";
             _logger.LogInformation($"Getting GetTransferRequests {url}");
-            var response = JsonConvert.DeserializeObject<GetTransferRequestSummaryResponse>(await GetAsync(url));
-            return response;
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
+            await AddAuthenticationHeader(requestMessage);            
+
+            var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+            
+            var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            return JsonConvert.DeserializeObject<GetTransferRequestSummaryResponse>(json);
         }
 
         private string BaseUrl()
@@ -95,15 +113,14 @@ namespace SFA.DAS.EmployerAccounts.Services
 
             return _config.ApiBaseUrl + "/";
         }
-
-        private async Task AddAuthenticationHeader()
+      
+        private async Task AddAuthenticationHeader(HttpRequestMessage httpRequestMessage)
         {
             if (ConfigurationManager.AppSettings["EnvironmentName"].ToUpper() != "LOCAL")
             {
                 var azureServiceTokenProvider = new AzureServiceTokenProvider();
                 var accessToken = await azureServiceTokenProvider.GetAccessTokenAsync(_config.IdentifierUri);
-
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);            
+                httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             }
         }
     }

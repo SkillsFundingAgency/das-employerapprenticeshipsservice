@@ -27,12 +27,15 @@ namespace SFA.DAS.EmployerFinance.Services
 
         public async Task<GetApprenticeshipResponse> GetApprenticeship(long apprenticeshipId)
         {
-            await AddAuthenticationHeader();
-
             var url = $"{BaseUrl()}api/apprenticeships/{apprenticeshipId}";
             _logger.LogInformation($"Getting GetApprenticeship {url}");
-            var response = JsonConvert.DeserializeObject<GetApprenticeshipResponse>(await GetAsync(url));
-            return response;
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
+            await AddAuthenticationHeader(requestMessage);
+            
+            var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+           
+            var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            return JsonConvert.DeserializeObject<GetApprenticeshipResponse>(json);
         }
 
         private string BaseUrl()
@@ -45,15 +48,13 @@ namespace SFA.DAS.EmployerFinance.Services
             return _config.ApiBaseUrl + "/";
         }
 
-        private async Task AddAuthenticationHeader()
+        private async Task AddAuthenticationHeader(HttpRequestMessage httpRequestMessage)
         {
             if (ConfigurationManager.AppSettings["EnvironmentName"].ToUpper() != "LOCAL")
             {
                 var azureServiceTokenProvider = new AzureServiceTokenProvider();
                 var accessToken = await azureServiceTokenProvider.GetAccessTokenAsync(_config.IdentifierUri);
-
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-
+                httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             }
         }
     }
