@@ -14,7 +14,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
         public CommitmentsV2ApiClientRegistry()
         {
             For<EmployerAccountsConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<EmployerAccountsConfiguration>(ConfigurationKeys.EmployerAccounts)).Singleton();
-            For<CommitmentsApiV2ClientConfiguration>().Use(c => c.GetInstance<EmployerAccountsConfiguration>().CommitmentsV2Api);
+            For<CommitmentsApiV2ClientConfiguration>().Use(c => c.GetInstance<EmployerAccountsConfiguration>().CommitmentsApi);
 
             For<ICommitmentsV2ApiClient>().Use<CommitmentsV2ApiClient>()
                 .Ctor<HttpClient>().Is(c => GetHttpV2Client(c));
