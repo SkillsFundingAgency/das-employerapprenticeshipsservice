@@ -247,6 +247,11 @@ else
                                                         Transfer request received<a href="@Url.Action("Index", "Transfers")">View details</a>
                                                     </p>
                                                     break;
+                                                case "PledgeApplicationForReview":
+                                                    <p>
+                                                        @task.ItemsDueCount transfer pledge application@(task.ItemsDueCount > 1 ? "s" : "") awaiting your approval <a href="@Url.LevyTransfersMatchingAction("pledges")">View applications</a>
+                                                    </p>
+                                                    break;
                                             }
                                         </li>
                                     }
@@ -271,7 +276,7 @@ else
 }
 
 @if (Model.Data.ShowAcademicYearBanner)
-{
+                                            {
     <section>
         <div class="panel alert-default">
             <h4 class="heading-small">Apprentice records in 2016/17</h4>
@@ -281,27 +286,27 @@ else
 }
 
 @*@if (Model.Data.RequiresAgreementSigning > 0)
-    {
+                                            {
         <section>
             <div class="panel alert-default">
                 <h3 class="heading-small">Spending not enabled (@Model.Data.RequiresAgreementSigning)</h3>
 
                 @if (Model.Data.UserRole == Role.Owner)
-                {
+                                            {
                     <p>You need to <a href="@Url.Action("Index", "EmployerAgreement")">sign an agreement</a> to enable your organisations to spend funds.</p>
                 }
 
-                @if (Model.Data.UserRole == Role.Transactor)
-                {
+                                            @if (Model.Data.UserRole == Role.Transactor)
+                                            {
                     <p>An agreement needs to be signed to enable your organisations to spend funds. <a href="@Url.Action("Index", "EmployerAgreement")">View this agreement</a>.</p>
-                }
+                                            }
             </div>
         </section>
     }
 
     <section>
         @foreach (var task in Model.Data.Tasks)
-        {
+                                            {
             <div class="panel alert-default">
                 <h3 class="heading-small">@task.Type</h3>
                 <p>You have @task.ItemsDueCount items</p>
