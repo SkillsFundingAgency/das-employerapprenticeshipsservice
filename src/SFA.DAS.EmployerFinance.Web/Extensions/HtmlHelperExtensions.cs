@@ -61,6 +61,7 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
                 ManageApprenticeshipsBaseUrl = configuration.EmployerAccountsBaseUrl,
                 ApplicationBaseUrl = configuration.EmployerAccountsBaseUrl,
                 EmployerCommitmentsBaseUrl = configuration.EmployerCommitmentsBaseUrl,
+                EmployerCommitmentsV2BaseUrl = configuration.EmployerCommitmentsV2BaseUrl,
                 EmployerFinanceBaseUrl = configuration.EmployerFinanceBaseUrl,
                 AuthenticationAuthorityUrl = configuration.Identity.BaseAddress,
                 ClientId = configuration.Identity.ClientId,
