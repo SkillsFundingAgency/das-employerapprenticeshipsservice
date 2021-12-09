@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.Services
 
         public async Task<GetCohortsResponse> GetCohorts(GetCohortsRequest request)
         {
-            var url = $"{BaseUrl()}api/cohorts/{request}";
+            var url = $"{BaseUrl()}api/cohorts/?accountId={request.AccountId}";
             _logger.LogInformation($"Getting GetCohorts {url}");
             var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
             await AddAuthenticationHeader(requestMessage);
