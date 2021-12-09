@@ -150,16 +150,9 @@ $warning-colour:    $orange;
   font-weight: 400;
   font-size: 16px;
   line-height: 1.25;
-  margin-bottom: 30px;
+  margin: 30px 0;
   border: 5px solid #1d70b8;
   background-color: #1d70b8;
-  @include media (tablet) {
-      margin-bottom: 50px;
-  }
-}
-
-.govuk-notification-banner--dashboard {
-  margin: 30px 0;
 }
 
 .govuk-notification-banner__header {

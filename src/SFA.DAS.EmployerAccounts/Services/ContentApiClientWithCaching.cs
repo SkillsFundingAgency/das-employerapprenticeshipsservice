@@ -37,9 +37,9 @@ namespace SFA.DAS.EmployerAccounts.Services
 
                 return content;
             }
-            catch
+            catch(Exception ex)
             {
-                throw new ArgumentException($"Failed to get content for {cacheKey}");
+                throw new ArgumentException($"Failed to get content for {cacheKey}", ex);
             }
         }
     } 
