@@ -1,10 +1,10 @@
 ﻿using Microsoft.Azure.Services.AppAuthentication;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SFA.DAS.Authentication.Extensions.Legacy;
 using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Interfaces;
+using SFA.DAS.NLog.Logger;
 using System.Configuration;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -16,9 +16,9 @@ namespace SFA.DAS.EmployerFinance.Services
     {
         private readonly HttpClient _httpClient;
         private readonly CommitmentsApiV2ClientConfiguration _config;
-        private readonly ILogger<CommitmentsV2ApiClient> _logger;
+        private readonly ILog _logger;
 
-        public CommitmentsV2ApiClient(HttpClient httpClient, CommitmentsApiV2ClientConfiguration config, ILogger<CommitmentsV2ApiClient> logger) : base(httpClient)
+        public CommitmentsV2ApiClient(HttpClient httpClient, CommitmentsApiV2ClientConfiguration config, ILog logger) : base(httpClient)
         {
             _httpClient = httpClient;
             _config = config;
@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerFinance.Services
         public async Task<GetApprenticeshipResponse> GetApprenticeship(long apprenticeshipId)
         {
             var url = $"{BaseUrl()}api/apprenticeships/{apprenticeshipId}";
-            _logger.LogInformation($"Getting GetApprenticeship {url}");
+            _logger.Info($"Getting GetApprenticeship {url}");
             var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
             await AddAuthenticationHeader(requestMessage);
             
