@@ -28,13 +28,14 @@ namespace SFA.DAS.EmployerFinance.Services
         public async Task<GetApprenticeshipResponse> GetApprenticeship(long apprenticeshipId)
         {
             var url = $"{BaseUrl()}api/apprenticeships/{apprenticeshipId}";
-            _logger.Info($"Getting GetApprenticeship {url}");
+            _logger.Info($"EmployerFinance Services Getting GetApprenticeship {url}");
             var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
             await AddAuthenticationHeader(requestMessage);
             
-            var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
-           
+            var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);            
+
             var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            _logger.Info($"EmployerFinance Services received response for GetApprenticeship {url}");
             return JsonConvert.DeserializeObject<GetApprenticeshipResponse>(json);
         }
 
