@@ -138,7 +138,7 @@
       <Version>1.0.16</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.MA.Shared.UI">
-      <Version>1.1.75</Version>
+      <Version>1.1.79</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
@@ -255,7 +255,8 @@
     <Compile Include="Models\AccountContext.cs" />
     <Compile Include="Models\ReturnUrlModel.cs" />
     <Compile Include="Models\HashedAccountIdModel.cs" />
-    <Compile Include="ViewModels\TermsAndConditionViewModel.cs" />
+    <Compile Include="ViewModels\OrganisationAgreementsViewModel.cs" />
+    <Compile Include="ViewModels\TermsAndConditionsNewViewModel.cs" />
     <Compile Include="ViewModels\TriageViewModel.cs" />
     <Compile Include="OrchestratorResponse.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestrator.cs" />
@@ -864,8 +865,6 @@
     <Content Include="Views\EmployerTeam\SingleApprenticeshipReadyForReview.cshtml" />
     <Content Include="Views\EmployerTeam\SingleApprenticeshipContinueWithProvider.cshtml" />
     <Content Include="Views\EmployerAgreement\ViewAllAgreements.cshtml" />
-    <Content Include="Views\Shared\_AcceptedAgreement.cshtml" />
-    <Content Include="Views\Shared\_NotAcceptedAgreement.cshtml" />
     <Content Include="Views\EmployerAgreement\CannotRemoveOrganisation.cshtml" />
     <Content Include="Views\EmployerTeam\Empty.cshtml" />
     <Content Include="Views\EmployerAgreement\AcceptedEmployerAgreement.cshtml" />
@@ -876,6 +875,9 @@
     <Content Include="Views\SearchOrganisation\ConfirmOrganisationDetails.cshtml" />
     <Content Include="Views\Home\TermsAndConditions.cshtml" />
     <Content Include="Views\Shared\_Agreement_v7.cshtml" />
+    <Content Include="Views\EmployerAgreement\_AwaitingAcceptance.cshtml" />
+    <Content Include="Views\EmployerAgreement\_AcceptedAgreement.cshtml" />
+    <Content Include="Views\Home\TermsAndConditionsOverview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">

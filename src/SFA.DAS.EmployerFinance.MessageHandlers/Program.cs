@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution;
 using SFA.DAS.EmployerFinance.Startup;
-using System.Configuration;
 using Microsoft.ApplicationInsights.Extensibility;
+using System.Configuration;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers
 {
@@ -14,6 +14,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
         public static void Main()
         {
             TelemetryConfiguration.Active.InstrumentationKey = ConfigurationManager.AppSettings["APPINSIGHTS_INSTRUMENTATIONKEY"];
+
             MainAsync().GetAwaiter().GetResult();
         }
 

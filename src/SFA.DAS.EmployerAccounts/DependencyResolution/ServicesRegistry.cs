@@ -8,8 +8,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
     public class ServicesRegistry : Registry
     {
         public ServicesRegistry()
-        {
-            For<IAddressLookupService>().Use<AddressLookupService>();
+        {            
             For<IRestClientFactory>().Use<RestClientFactory>();
             For<IRestServiceFactory>().Use<RestServiceFactory>();
             For<IHttpServiceFactory>().Use<HttpServiceFactory>();

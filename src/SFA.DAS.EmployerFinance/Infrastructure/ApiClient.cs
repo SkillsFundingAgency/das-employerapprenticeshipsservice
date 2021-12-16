@@ -12,8 +12,8 @@ namespace SFA.DAS.EmployerFinance.Infrastructure
         private readonly HttpClient _httpClient;
         private readonly ManageApprenticeshipsOuterApiConfiguration _config;
 
-        public ApiClient (
-            HttpClient httpClient, 
+        public ApiClient(
+            HttpClient httpClient,
             ManageApprenticeshipsOuterApiConfiguration options)
         {
             _httpClient = httpClient;

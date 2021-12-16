@@ -97,7 +97,7 @@
       <Version>1.0.5</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.MA.Shared.UI">
-      <Version>1.1.75</Version>
+      <Version>1.1.79</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
@@ -211,7 +211,7 @@
     <Compile Include="ViewModels\TransactionLineViewModel.cs" />
     <Compile Include="ViewModels\TransactionViewModel.cs" />
     <Compile Include="ViewModels\TransactionViewResultViewModel.cs" />
-    <Compile Include="ViewModels\TransfersIndexViewModel.cs" />
+    <Compile Include="ViewModels\Transfers\IndexViewModel.cs" />
     <Compile Include="ViewModels\TransferTransactionDetailsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

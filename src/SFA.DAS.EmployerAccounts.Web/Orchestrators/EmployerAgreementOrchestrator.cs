@@ -320,9 +320,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return response;
         }
 
-        public virtual async Task<OrchestratorResponse<ICollection<OrganisationAgreementViewModel>>> GetOrganisationAgreements(string accountLegalEntityHashedId)
+        public virtual async Task<OrchestratorResponse<OrganisationAgreementsViewModel>> GetOrganisationAgreements(string accountLegalEntityHashedId)
         {
-            var response = new OrchestratorResponse<ICollection<OrganisationAgreementViewModel>>();
+            var response = new OrchestratorResponse<OrganisationAgreementsViewModel>();
 
             try
             {
@@ -330,12 +330,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 {
                     AccountLegalEntityHashedId = accountLegalEntityHashedId
                 });
-                
-                response.Data = _mapper.Map<ICollection<EmployerAgreementDto>, ICollection<OrganisationAgreementViewModel>>(result.Agreements);
+
+                response.Data = new OrganisationAgreementsViewModel
+                {
+                    AgreementId = accountLegalEntityHashedId,
+                    Agreements = _mapper.Map<ICollection<EmployerAgreementDto>, ICollection<OrganisationAgreementViewModel>>(result.Agreements)
+                };
             }
             catch (InvalidRequestException ex)
             {
-                return new OrchestratorResponse<ICollection<OrganisationAgreementViewModel>>
+                return new OrchestratorResponse<OrganisationAgreementsViewModel>
                 {
                     Status = HttpStatusCode.BadRequest,                    
                     Exception = ex
@@ -343,7 +347,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
             catch (UnauthorizedAccessException)
             {
-                return new OrchestratorResponse<ICollection<OrganisationAgreementViewModel>>
+                return new OrchestratorResponse<OrganisationAgreementsViewModel>
                 {
                     Status = HttpStatusCode.Unauthorized
                 };
