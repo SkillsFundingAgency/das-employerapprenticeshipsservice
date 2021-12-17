@@ -64,7 +64,7 @@
             {
                 <tr class="govuk-table__row">
                     <td class="govuk-table__cell">@employerAgreement.LegalEntity.Name
-                    <br/>Agreement ID: @employerAgreement.HashedAccountId</td>
+                    <br/>Agreement ID: @employerAgreement.LegalEntity.AccountLegalEntityPublicHashedId</td>
                     <td class="govuk-table__cell">
                         @if (employerAgreement.HasPendingAgreement)
                         {
