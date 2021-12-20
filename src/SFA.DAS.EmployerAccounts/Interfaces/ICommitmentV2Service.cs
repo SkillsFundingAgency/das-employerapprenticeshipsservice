@@ -11,6 +11,8 @@ namespace SFA.DAS.EmployerAccounts.Interfaces
         Task<IEnumerable<Apprenticeship>> GetDraftApprenticeships(Cohort cohort);
 
         Task<IEnumerable<Apprenticeship>> GetApprenticeships(long accountId);
+
+        Task<List<Cohort>> GetEmployerCommitments(long employerAccountId);
     }
 }
 

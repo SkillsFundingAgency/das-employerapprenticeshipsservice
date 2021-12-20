@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Commitments.Api.Client.Interfaces;
-using SFA.DAS.Commitments.Api.Types.Commitment;
+using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.DependencyResolution;
+using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Mappings;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetTransferRequests;
@@ -24,11 +25,11 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetTransferRequestsTests
         private GetTransferRequestsResponse _response;
         private Mock<EmployerAccountsDbContext> _db;
         private IConfigurationProvider _configurationProvider;
-        private Mock<IEmployerCommitmentApi> _employerCommitmentApi;
+        private Mock<ICommitmentsV2ApiClient> _commitmentsV2ApiClient;
         private Mock<IHashingService> _hashingService;
-        private List<TransferRequestSummary> _transferRequests;
-        private TransferRequestSummary _sentTransferRequest;
-        private TransferRequestSummary _receivedTransferRequest;
+        private TransferRequestSummaryResponse _sentTransferRequest;
+        private TransferRequestSummaryResponse _receivedTransferRequest;
+        private GetTransferRequestSummaryResponse _getTransferRequestSummaryResponse;
         private DbSetStub<Account> _accountsDbSet;
         private List<Account> _accounts;
         private Account _account1;
@@ -38,7 +39,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetTransferRequestsTests
         public void Arrange()
         {
             _db = new Mock<EmployerAccountsDbContext>();
-            _employerCommitmentApi = new Mock<IEmployerCommitmentApi>();
+            _commitmentsV2ApiClient = new Mock<ICommitmentsV2ApiClient>();
             _hashingService = new Mock<IHashingService>();
 
             _account1 = new Account
@@ -55,26 +56,29 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetTransferRequestsTests
                 Name = "Account 2"
             };
 
-            _sentTransferRequest = new TransferRequestSummary
+            _sentTransferRequest = new TransferRequestSummaryResponse
             {
                 HashedTransferRequestId = "DEF456",
                 HashedSendingEmployerAccountId = _account1.HashedId,
                 HashedReceivingEmployerAccountId = _account2.HashedId,
-                TransferCost = 123.456m
+                TransferCost = 123.456m,
             };
 
-            _receivedTransferRequest = new TransferRequestSummary
+            _receivedTransferRequest = new TransferRequestSummaryResponse
             {
                 HashedTransferRequestId = "GHI789",
                 HashedSendingEmployerAccountId = _account2.HashedId,
                 HashedReceivingEmployerAccountId = _account1.HashedId,
-                TransferCost = 789.012m
+                TransferCost = 789.012m,
             };
 
-            _transferRequests = new List<TransferRequestSummary>
+            _getTransferRequestSummaryResponse = new GetTransferRequestSummaryResponse
             {
-                _sentTransferRequest,
-                _receivedTransferRequest
+                TransferRequestSummaryResponse = new List<TransferRequestSummaryResponse>
+                {
+                    _sentTransferRequest,
+                    _receivedTransferRequest
+                }
             };
 
             _accounts = new List<Account>
@@ -91,13 +95,13 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetTransferRequestsTests
             });
 
             _db.Setup(d => d.Accounts).Returns(_accountsDbSet);
-            _employerCommitmentApi.Setup(c => c.GetTransferRequests(_account1.HashedId)).ReturnsAsync(_transferRequests);
+            _commitmentsV2ApiClient.Setup(c => c.GetTransferRequests(_account1.Id)).ReturnsAsync(_getTransferRequestSummaryResponse);
             _hashingService.Setup(h => h.DecodeValue(_account1.HashedId)).Returns(_account1.Id);
             _hashingService.Setup(h => h.DecodeValue(_account2.HashedId)).Returns(_account2.Id);
             _hashingService.Setup(h => h.HashValue(_account1.Id)).Returns(_account1.HashedId);
             _hashingService.Setup(h => h.HashValue(_account2.Id)).Returns(_account2.HashedId);
 
-            _handler = new GetTransferRequestsQueryHandler(new Lazy<EmployerAccountsDbContext>(() => _db.Object), _configurationProvider, _employerCommitmentApi.Object, _hashingService.Object);
+            _handler = new GetTransferRequestsQueryHandler(new Lazy<EmployerAccountsDbContext>(() => _db.Object), _configurationProvider, _commitmentsV2ApiClient.Object, _hashingService.Object);
 
             _query = new GetTransferRequestsQuery
             {
