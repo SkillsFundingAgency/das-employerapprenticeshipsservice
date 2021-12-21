@@ -16,7 +16,7 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
-using SFA.DAS.EmployerAccounts.Models.Commitments;
+using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
@@ -41,7 +41,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
         private Mock<IMediator> _mediator;
         private EmployerAgreementView _agreement;
         private AgreementSignedEvent _agreementEvent;
-        private Mock<ICommitmentService> _commintmentService;
+        private Mock<ICommitmentV2Service> _commintmentService;
         private TestableEventPublisher _eventPublisher;
 
         private const long AccountId = 223344;
@@ -103,7 +103,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
 
             _mediator.Setup(x => x.SendAsync(It.Is<GetUserByRefQuery>(s => s.UserRef == _command.ExternalUserId))).ReturnsAsync(new GetUserByRefResponse { User = new User { CorrelationId = "CORRELATION_ID" } });
 
-            _commintmentService = new Mock<ICommitmentService>();
+            _commintmentService = new Mock<ICommitmentV2Service>();
 
             _commintmentService.Setup(x => x.GetEmployerCommitments(It.IsAny<long>()))
                 .ReturnsAsync(new List<Cohort>());
