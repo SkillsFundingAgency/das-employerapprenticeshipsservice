@@ -38,7 +38,6 @@ namespace SFA.DAS.EAS.Account.Api.DependencyResolution
                     };
             });
 
-            For<DbConnection>().Use(c => new SqlConnection(c.GetInstance<EmployerApprenticeshipsServiceConfiguration>().DatabaseConnectionString));
             For<EmployerAccountsDbContext>().Use(c => GetAcccountsDbContext(c));
             For<EmployerFinanceDbContext>().Use(c => GetFinanceDbContext(c));
         }
