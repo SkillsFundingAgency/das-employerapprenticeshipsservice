@@ -1,5 +1,8 @@
+using System;
+using System.Configuration;
 using System.Data.Common;
 using System.Data.SqlClient;
+using Microsoft.Azure.Services.AppAuthentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.Authorization.WebApi;
 using SFA.DAS.EAS.Domain.Configuration;
@@ -10,12 +13,29 @@ namespace SFA.DAS.EAS.Account.Api.DependencyResolution
 {
     public class DefaultRegistry : Registry
     {
+        private const string AzureResource = "https://database.windows.net/";
+
         public DefaultRegistry()
         {
             Scan(s =>
             {
                 s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS"));
                 s.RegisterConcreteTypesAgainstTheFirstInterface();
+            });
+
+            var environmentName = ConfigurationManager.AppSettings["EnvironmentName"];
+
+            For<DbConnection>().Use($"Build DbConnection", c =>
+            {
+                var azureServiceTokenProvider = new AzureServiceTokenProvider();
+
+                return environmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase)
+                    ? new SqlConnection(GetConnectionString(c))
+                    : new SqlConnection
+                    {
+                        ConnectionString = GetConnectionString(c),
+                        AccessToken = azureServiceTokenProvider.GetAccessTokenAsync(AzureResource).Result
+                    };
             });
 
             For<DbConnection>().Use(c => new SqlConnection(c.GetInstance<EmployerApprenticeshipsServiceConfiguration>().DatabaseConnectionString));
@@ -25,8 +45,7 @@ namespace SFA.DAS.EAS.Account.Api.DependencyResolution
 
         private EmployerAccountsDbContext GetAcccountsDbContext(IContext context)
         {
-            var db = new EmployerAccountsDbContext(context.GetInstance<EmployerApprenticeshipsServiceConfiguration>().DatabaseConnectionString);
-            db.Database.BeginTransaction();
+            var db = new EmployerAccountsDbContext(context.GetInstance<DbConnection>(), null);
             return db;
         }
 
@@ -37,5 +56,9 @@ namespace SFA.DAS.EAS.Account.Api.DependencyResolution
             return db;
         }
 
+        private string GetConnectionString(IContext context)
+        {
+            return context.GetInstance<EmployerApprenticeshipsServiceConfiguration>().DatabaseConnectionString;
+        }
     }
 }
