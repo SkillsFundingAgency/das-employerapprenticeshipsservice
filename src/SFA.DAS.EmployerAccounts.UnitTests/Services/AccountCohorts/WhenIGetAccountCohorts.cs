@@ -14,12 +14,13 @@ using SFA.DAS.CommitmentsV2.Types.Dtos;
 using System.Linq;
 using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
 using SFA.DAS.Encoding;
+using SFA.DAS.EmployerAccounts.Interfaces;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AccountCohorts
 {
     public class WhenIGetAccountCohorts
     {
-        private Mock<ICommitmentsApiClient> _mockCommitmentsApiClient;
+        private Mock<ICommitmentsV2ApiClient> _mockCommitmentsV2ApiClient;
         private Mock<IEncodingService> _mockEncodingService;
         private Mock<IMapper> _mockMapper;
         private long _accountId = 123;
@@ -29,17 +30,17 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AccountCohorts
         public void Arrange()
         {
             _mockMapper = new Mock<IMapper>();
-            _mockCommitmentsApiClient = new Mock<ICommitmentsApiClient>();
+            _mockCommitmentsV2ApiClient = new Mock<ICommitmentsV2ApiClient>();
             _mockEncodingService = new Mock<IEncodingService>();
-            _sut = new CommitmentsV2Service(_mockCommitmentsApiClient.Object, _mockMapper.Object, _mockEncodingService.Object);
+            _sut = new CommitmentsV2Service(_mockCommitmentsV2ApiClient.Object, _mockMapper.Object, _mockEncodingService.Object);
         }
 
         [Test]
         public async Task ThenGetApprenticeshipsResponse()
         {
             //Arrange
-            _mockCommitmentsApiClient
-                .Setup(c => c.GetApprenticeships(It.Is<GetApprenticeshipsRequest>(r => r.AccountId == _accountId), CancellationToken.None))
+            _mockCommitmentsV2ApiClient
+                .Setup(c => c.GetApprenticeships(It.Is<GetApprenticeshipsRequest>(r => r.AccountId == _accountId)))
                 .Returns(Task.FromResult(CreateApprenticeshipResponse()));
             var apprenticeships = new List<Apprenticeship>  { new Apprenticeship { ApprenticeshipStatus = EmployerAccounts.Models.CommitmentsV2.ApprenticeshipStatus.Approved,  FirstName ="FirstName" , LastName = "LastName" } };
             _mockMapper
@@ -60,7 +61,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AccountCohorts
         public async Task ThenGetCohortsResponse()
         {
             //Arrange
-            _mockCommitmentsApiClient.Setup(c => c.GetCohorts(It.Is<GetCohortsRequest>(r => r.AccountId == _accountId), CancellationToken.None))
+            _mockCommitmentsV2ApiClient.Setup(c => c.GetCohorts(It.Is<GetCohortsRequest>(r => r.AccountId == _accountId)))
                .Returns(Task.FromResult(GetCohortsResponseForWithTrainingProviderStaus()));
             _mockEncodingService.Setup(x => x.Encode(It.IsAny<long>(), EncodingType.CohortReference)).Returns((long y, EncodingType z) => y + "_Encoded");
 
@@ -85,7 +86,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AccountCohorts
         public async Task ThenGetDraftApprenticeshipsResponse()
         {
             //Arrange
-            _mockCommitmentsApiClient.Setup(c => c.GetDraftApprenticeships(123, It.IsAny<CancellationToken>())).Returns(Task.FromResult(GetDraftApprenticeshipsResponse()));
+            _mockCommitmentsV2ApiClient.Setup(c => c.GetDraftApprenticeships(123)).Returns(Task.FromResult(GetDraftApprenticeshipsResponse()));
             var apprenticeships = new List<Apprenticeship> { new Apprenticeship { FirstName = "FirstName", LastName = "LastName" } };
             _mockMapper.Setup(m => m.Map<IEnumerable<DraftApprenticeshipDto>, IEnumerable<Apprenticeship>>(It.IsAny<IReadOnlyCollection<DraftApprenticeshipDto>>(),
                It.IsAny<Action<IMappingOperationOptions<IEnumerable<DraftApprenticeshipDto>, IEnumerable<Apprenticeship>>>>()))

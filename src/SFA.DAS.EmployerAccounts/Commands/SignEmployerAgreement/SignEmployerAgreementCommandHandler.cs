@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IMediator _mediator;
         private readonly IEventPublisher _eventPublisher;
-        private readonly ICommitmentService _commitmentService;
+        private readonly ICommitmentV2Service _commitmentService;
 
         public SignEmployerAgreementCommandHandler(
             IMembershipRepository membershipRepository,
@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
             IGenericEventFactory genericEventFactory,
             IMediator mediator,
             IEventPublisher eventPublisher,
-            ICommitmentService commitmentService)
+            ICommitmentV2Service commitmentService)
         {
             _membershipRepository = membershipRepository;
             _employerAgreementRepository = employerAgreementRepository;

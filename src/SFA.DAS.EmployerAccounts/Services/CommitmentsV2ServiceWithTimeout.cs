@@ -56,5 +56,17 @@ namespace SFA.DAS.EmployerAccounts.Services
                 throw new ServiceTimeoutException("Call to Commitments V2 Service timed out", ex);
             }
         }
+
+        public async Task<List<Cohort>> GetEmployerCommitments(long employerAccountId)
+        {
+            try
+            {
+                return await _pollyPolicy.ExecuteAsync(() => _commitmentsV2Service.GetEmployerCommitments(employerAccountId));
+            }
+            catch (TimeoutRejectedException ex)
+            {
+                throw new ServiceTimeoutException("Call to Commitments V2 Service timed out", ex);
+            }
+        }
     }
 }
