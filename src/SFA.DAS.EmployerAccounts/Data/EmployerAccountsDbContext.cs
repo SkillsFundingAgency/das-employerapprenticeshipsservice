@@ -39,10 +39,11 @@ namespace SFA.DAS.EmployerAccounts.Data
         {
         }
 
-        public EmployerAccountsDbContext(DbConnection connection, DbTransaction transaction)
+        public EmployerAccountsDbContext(DbConnection connection, DbTransaction transaction = null)
             : base(connection, false)
         {
-            Database.UseTransaction(transaction);
+            if (transaction == null) Database.BeginTransaction();
+            else Database.UseTransaction(transaction);
         }
 
         protected EmployerAccountsDbContext()
