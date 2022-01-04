@@ -28,10 +28,10 @@ namespace SFA.DAS.EAS.Account.Api.DependencyResolution
                 var azureServiceTokenProvider = new AzureServiceTokenProvider();
 
                 return environmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase)
-                    ? new SqlConnection(GetConnectionString(c))
+                    ? new SqlConnection(GetEmployerAccountsConnectionString(c))
                     : new SqlConnection
                     {
-                        ConnectionString = GetConnectionString(c),
+                        ConnectionString = GetEmployerAccountsConnectionString(c),
                         AccessToken = azureServiceTokenProvider.GetAccessTokenAsync(AzureResource).Result
                     };
             });
@@ -49,14 +49,29 @@ namespace SFA.DAS.EAS.Account.Api.DependencyResolution
 
         private EmployerFinanceDbContext GetFinanceDbContext(IContext context)
         {
-            var db = new EmployerFinanceDbContext(context.GetInstance<LevyDeclarationProviderConfiguration>().DatabaseConnectionString);
-            db.Database.BeginTransaction();
-            return db;
+            var environmentName = ConfigurationManager.AppSettings["EnvironmentName"];
+
+            var azureServiceTokenProvider = new AzureServiceTokenProvider();
+
+            var connection = environmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase)
+                ? new SqlConnection(GetEmployerFinanceConnectionString(context))
+                : new SqlConnection
+                {
+                    ConnectionString = GetEmployerFinanceConnectionString(context),
+                    AccessToken = azureServiceTokenProvider.GetAccessTokenAsync(AzureResource).Result
+                };
+
+            return new EmployerFinanceDbContext(connection);
         }
 
-        private string GetConnectionString(IContext context)
+        private string GetEmployerAccountsConnectionString(IContext context)
         {
             return context.GetInstance<EmployerApprenticeshipsServiceConfiguration>().DatabaseConnectionString;
+        }
+
+        private string GetEmployerFinanceConnectionString(IContext context)
+        {
+            return context.GetInstance<LevyDeclarationProviderConfiguration>().DatabaseConnectionString;
         }
     }
 }

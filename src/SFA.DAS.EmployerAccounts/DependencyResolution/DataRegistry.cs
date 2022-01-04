@@ -31,19 +31,19 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
                 var azureServiceTokenProvider = new AzureServiceTokenProvider();
 
                 return environmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase)
-                    ? new SqlConnection(GetConnectionString(c))
+                    ? new SqlConnection(GetEmployerAccountsConnectionString(c))
                     : new SqlConnection
                     {
-                        ConnectionString = GetConnectionString(c),
+                        ConnectionString = GetEmployerAccountsConnectionString(c),
                         AccessToken = azureServiceTokenProvider.GetAccessTokenAsync(AzureResource).Result
                     };
             });
 
-            For<EmployerAccountsDbContext>().Use(c => GetDbContext(c));
-            For<EmployerFinanceDbContext>().Use(c => new EmployerFinanceDbContext(c.GetInstance<EmployerFinanceConfiguration>().DatabaseConnectionString));
+            For<EmployerAccountsDbContext>().Use(c => GetEmployerAccountsDbContext(c));
+            For<EmployerFinanceDbContext>().Use(c => GetEmployerFinanceDbContext(c));
         }
 
-        private EmployerAccountsDbContext GetDbContext(IContext context)
+        private EmployerAccountsDbContext GetEmployerAccountsDbContext(IContext context)
         {
             var unitOfWorkContext = context.GetInstance<IUnitOfWorkContext>();
             var clientSession = unitOfWorkContext.Find<IClientOutboxTransaction>();
@@ -53,9 +53,31 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
             return new EmployerAccountsDbContext(sqlSession.Connection, sqlSession.Transaction);
         }
 
-        private string GetConnectionString(IContext context)
+        private EmployerFinanceDbContext GetEmployerFinanceDbContext(IContext c)
+        {
+            var environmentName = ConfigurationManager.AppSettings["EnvironmentName"];
+
+            var azureServiceTokenProvider = new AzureServiceTokenProvider();
+
+            var connection = environmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase)
+                ? new SqlConnection(GetEmployerFinanceConnectionString(c))
+                : new SqlConnection
+                {
+                    ConnectionString = GetEmployerFinanceConnectionString(c),
+                    AccessToken = azureServiceTokenProvider.GetAccessTokenAsync(AzureResource).Result
+                };
+
+            return new EmployerFinanceDbContext(connection);
+        }
+
+        private string GetEmployerAccountsConnectionString(IContext context)
         {
             return context.GetInstance<EmployerAccountsConfiguration>().DatabaseConnectionString;
+        }
+
+        private string GetEmployerFinanceConnectionString(IContext context)
+        {
+            return context.GetInstance<EmployerFinanceConfiguration>().DatabaseConnectionString;
         }
     }
 }
