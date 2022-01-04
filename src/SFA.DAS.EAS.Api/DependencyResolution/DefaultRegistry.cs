@@ -3,8 +3,6 @@ using System.Configuration;
 using System.Data.Common;
 using System.Data.SqlClient;
 using Microsoft.Azure.Services.AppAuthentication;
-using SFA.DAS.Authorization;
-using SFA.DAS.Authorization.WebApi;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.Data;
 using StructureMap;
@@ -38,13 +36,14 @@ namespace SFA.DAS.EAS.Account.Api.DependencyResolution
                     };
             });
 
+           
             For<EmployerAccountsDbContext>().Use(c => GetAcccountsDbContext(c));
             For<EmployerFinanceDbContext>().Use(c => GetFinanceDbContext(c));
         }
 
         private EmployerAccountsDbContext GetAcccountsDbContext(IContext context)
         {
-            var db = new EmployerAccountsDbContext(context.GetInstance<DbConnection>(), null);
+            var db = new EmployerAccountsDbContext(context.GetInstance<DbConnection>());
             return db;
         }
 

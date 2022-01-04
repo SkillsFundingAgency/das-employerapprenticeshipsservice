@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Data.Entity;
-using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using SFA.DAS.EAS.Domain.Configuration;
@@ -21,24 +19,21 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
             _db = db;
         }
-        
+
         public Task Upsert(User user)
         {
-            return WithConnection(c =>
-            {
-                var parameters = new DynamicParameters();
+            var parameters = new DynamicParameters();
 
-                parameters.Add("@email", user.Email, DbType.String);
-                parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
-                parameters.Add("@firstName", user.FirstName, DbType.String);
-                parameters.Add("@lastName", user.LastName, DbType.String);
-                parameters.Add("@correlationId", null, DbType.String);
+            parameters.Add("@email", user.Email, DbType.String);
+            parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
+            parameters.Add("@firstName", user.FirstName, DbType.String);
+            parameters.Add("@lastName", user.LastName, DbType.String);
+            parameters.Add("@correlationId", null, DbType.String);
 
-                return c.ExecuteAsync(
-                    sql: "[employer_account].[UpsertUser] @userRef, @email, @firstName, @lastName, @correlationId",
-                    param: parameters,
-                    commandType: CommandType.Text);
-            });
+            return _db.Value.Database.Connection.ExecuteAsync(
+                sql: "[employer_account].[UpsertUser] @userRef, @email, @firstName, @lastName, @correlationId",
+                param: parameters,
+                commandType: CommandType.Text);
         }
     }
 }

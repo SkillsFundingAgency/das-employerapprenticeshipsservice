@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
         }
 
-        public EmployerAccountsDbContext(DbConnection connection, DbTransaction transaction)
+        public EmployerAccountsDbContext(DbConnection connection, DbTransaction transaction = null)
             : base(connection, false)
         {
             if (transaction != null) Database.UseTransaction(transaction);
