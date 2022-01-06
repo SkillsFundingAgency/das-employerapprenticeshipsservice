@@ -9,7 +9,8 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SFA.DAS.EmployerAccounts.TestCommon</RootNamespace>
     <AssemblyName>SFA.DAS.EmployerAccounts.TestCommon</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <RuntimeIdentifier>win</RuntimeIdentifier>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
@@ -150,9 +151,6 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authentication">
       <Version>1.1.2</Version>
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.Commitments.Api.Client">
-      <Version>4.1.355</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Common.Domain">
       <Version>1.4.283</Version>

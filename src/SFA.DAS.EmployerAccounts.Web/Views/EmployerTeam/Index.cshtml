@@ -21,6 +21,22 @@
     }
 }
 
+
+@if (Model.Data.ShowTermsAndConditionBanner)
+{
+    <div class="govuk-notification-banner govuk-notification-banner--dashboard" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+                Action required
+            </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+            <p class="govuk-notification-banner__heading">
+                We've updated our <a class="govuk-notification-banner__link" href="@Url.Action("TermsAndConditions", "Home", new { returnUrl = "EmployerTeam", HashedAccountId = Model.Data.HashedAccountId })">terms of use</a>. By continuing to use this service you are accepting the updated terms.
+            </p>
+        </div>
+    </div>
+}
 <h1 class="heading-secondary dashboard-heading">
     Account ID: @Model.Data.Account.PublicHashedId
 </h1>
@@ -57,7 +73,7 @@ else
                     {
                         <div class="card">
                             <h3 class="heading-medium"><a href="@Url.EmployerRecruitAction()">Your apprenticeship adverts</a></h3>
-                            <p>Create adverts to post on Find an apprenticeship, view applications and view previous adverts.</p>
+                            <p>Create adverts to post on find an apprenticeship, view applications, your previous adverts and adverts created by training providers.</p>
                         </div>
                     }
                     @if (Html.IsAuthorized("EmployerFeature.ProviderRelationships"))
@@ -99,9 +115,29 @@ else
                     {
                         <div class="card">
                             <h3 class="heading-medium"><a href="@Url.EmployerIncentivesAction()">Your hire a new apprentice payments</a></h3>
-                            <p>Apply for the payment, view applications and change your payment details.</p>
+                            <p>View applications and change your payment details.</p>
                         </div>
                     }
+
+                    @if (Html.IsAuthorized("EmployerFeature.TransfersMatching"))
+                    {
+                        if (Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
+                        {
+                            <div class="card">
+                                <h3 class="heading-medium"><a href="@Url.EmployerFinanceAction("transfers")">Your transfers</a></h3>
+                                <p>View your 25% transfers balance and manage your transfers, including finding a business to transfer your levy to.</p>
+                            </div>
+                        }
+                        else if (Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy)
+                        {
+                            <div class="card">
+                                <h3 class="heading-medium"><a href="@Url.EmployerFinanceAction("transfers")">Your transfers</a></h3>
+                                <p>View your apprentices funded by a transfer. Find a large business to fund your apprenticeship training with a transfer.</p>
+                            </div>
+                        }
+                    }
+
+
                 </div>
             </section>
 
@@ -188,17 +224,17 @@ else
                                                     break;
                                                 case "AddApprentices":
                                                     <p>
-                                                        <a href="@Url.EmployerCommitmentsAction("apprentices/inform")">Start adding apprentices now</a>
+                                                        <a href="@Url.EmployerCommitmentsV2Action("unapproved/Inform")">Start adding apprentices now</a>
                                                     </p>
                                                     break;
                                                 case "ApprenticeChangesToReview":
                                                     <p>
-                                                        @task.ItemsDueCount apprentice change@(task.ItemsDueCount > 1 ? "s" : "") to review <a href="@Url.EmployerCommitmentsAction("apprentices/manage/all?RecordStatus=ChangesForReview")">View changes</a>
+                                                        @task.ItemsDueCount apprentice change@(task.ItemsDueCount > 1 ? "s" : "") to review <a href="@Url.EmployerCommitmentsV2Action("apprentices")">View changes</a>
                                                     </p>
                                                     break;
                                                 case "CohortRequestReadyForApproval":
                                                     <p>
-                                                        @task.ItemsDueCount cohort request@(task.ItemsDueCount > 1 ? "s" : "") ready for approval <a href="@Url.EmployerCommitmentsAction("apprentices/cohorts/review")">View cohorts</a>
+                                                        @task.ItemsDueCount cohort request@(task.ItemsDueCount > 1 ? "s" : "") ready for approval <a href="@Url.EmployerCommitmentsV2Action("unapproved/review")">View cohorts</a>
                                                     </p>
                                                     break;
                                                 case "ReviewConnectionRequest":

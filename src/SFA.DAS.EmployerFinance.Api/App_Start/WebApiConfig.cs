@@ -32,8 +32,7 @@ namespace SFA.DAS.EmployerFinance.Api
             config.UseStructureMap(c =>
             {
                 c.AddRegistry<AuthorizationRegistry>();
-                c.AddRegistry<CachesRegistry>();
-                c.AddRegistry<CommitmentsRegistry>();
+                c.AddRegistry<CachesRegistry>();                
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DataRegistry>();
                 c.AddRegistry<DateTimeRegistry>();
@@ -51,6 +50,7 @@ namespace SFA.DAS.EmployerFinance.Api
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<StartupRegistry>();
                 c.AddRegistry<DefaultRegistry>();
+                c.AddRegistry<CommitmentsV2ApiClientRegistry>();
             });
         }
     }

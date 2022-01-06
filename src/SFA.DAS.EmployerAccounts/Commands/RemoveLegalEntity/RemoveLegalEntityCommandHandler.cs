@@ -4,11 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Audit.Types;
-using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Factories;
+using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models;
@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
         private readonly IEmployerAgreementEventFactory _employerAgreementEventFactory;
         private readonly IMembershipRepository _membershipRepository;
         private readonly IEventPublisher _eventPublisher;
-        private IEmployerCommitmentApi _employerCommitmentApi;
+        private ICommitmentsV2ApiClient _commitmentsV2ApiClient;
 
         public RemoveLegalEntityCommandHandler(
             IValidator<RemoveLegalEntityCommand> validator,
@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
             IEmployerAgreementEventFactory employerAgreementEventFactory,
             IMembershipRepository membershipRepository,
             IEventPublisher eventPublisher,
-            IEmployerCommitmentApi employerCommitmentApi)
+            ICommitmentsV2ApiClient commitmentsV2ApiClient)
         {
             _validator = validator;
             _logger = logger;
@@ -59,7 +59,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
             _employerAgreementEventFactory = employerAgreementEventFactory;
             _membershipRepository = membershipRepository;
             _eventPublisher = eventPublisher;
-            _employerCommitmentApi = employerCommitmentApi;
+            _commitmentsV2ApiClient = commitmentsV2ApiClient;
         }
 
         protected override async Task HandleCore(RemoveLegalEntityCommand message)
@@ -118,14 +118,14 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
 
         private async Task ValidateLegalEntityHasNoCommitments(EmployerAgreementView agreement, long accountId, ValidationResult validationResult)
         {
-            var commitments = await _employerCommitmentApi.GetEmployerAccountSummary(accountId);
+            var commitments = await _commitmentsV2ApiClient.GetEmployerAccountSummary(accountId);
 
-            var commitment = commitments.FirstOrDefault(c =>
+            var commitment = commitments.ApprenticeshipStatusSummaryResponse.FirstOrDefault(c =>
                 !string.IsNullOrEmpty(c.LegalEntityIdentifier)
                 && c.LegalEntityIdentifier.Equals(agreement.LegalEntityCode)
                 && c.LegalEntityOrganisationType == agreement.LegalEntitySource);
 
-            if (commitment != null && (commitment.ActiveCount + commitment.PausedCount + commitment.PendingApprovalCount) != 0)
+            if (commitment != null && (commitment.ActiveCount + commitment.PausedCount + commitment.PendingApprovalCount + commitment.WithdrawnCount) != 0)
             {
                 validationResult.AddError(nameof(agreement.HashedAgreementId), "Agreement has already been signed and has active commitments");
                 throw new InvalidRequestException(validationResult.ValidationDictionary);

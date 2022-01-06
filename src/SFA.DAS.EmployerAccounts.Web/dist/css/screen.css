@@ -2433,6 +2433,70 @@ a#link-settings {
   padding-left: 0.5em;
   padding-right: 0.5em; }
 
+.govuk-notification-banner {
+  font-family: "nta", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.25;
+  margin: 30px 0;
+  border: 5px solid #1d70b8;
+  background-color: #1d70b8; }
+
+.govuk-notification-banner__header {
+  padding: 2px 15px 5px;
+  border-bottom: 1px solid transparent; }
+  @media (min-width: 641px) {
+    .govuk-notification-banner__header {
+      padding: 2px 20px 5px; } }
+
+.govuk-notification-banner__title {
+  font-family: "nta", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.25;
+  margin: 0;
+  padding: 0;
+  color: #fff; }
+  @media (min-width: 641px) {
+    .govuk-notification-banner__title {
+      font-size: 19px;
+      line-height: 1.35; } }
+
+.govuk-notification-banner__content {
+  color: #0b0c0c;
+  padding: 15px;
+  background-color: #fff; }
+  @media (min-width: 641px) {
+    .govuk-notification-banner__content {
+      padding: 20px; } }
+
+.govuk-notification-banner__content > :last-child {
+  margin-bottom: 0; }
+
+.govuk-notification-banner__heading {
+  font-family: "nta", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.1;
+  margin: 0 0 15px 0;
+  padding: 0; }
+  @media (min-width: 641px) {
+    .govuk-notification-banner__heading {
+      font-size: 24px;
+      line-height: 1.25; } }
+
+.govuk-notification-banner__link {
+  font-family: "nta", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-decoration: underline; }
+
 .previous-next-navigation {
   margin: 40px -3px;
   padding: 3px;

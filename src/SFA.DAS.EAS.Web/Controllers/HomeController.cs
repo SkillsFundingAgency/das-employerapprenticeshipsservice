@@ -99,6 +99,13 @@ namespace SFA.DAS.EAS.Web.Controllers
             return Redirect(Url.EmployerAccountsAction("service/start", false));
         }
 
+        [HttpGet]
+        [Route("termsAndConditions/overview")]
+        public ActionResult TermsAndConditionsOverview()
+        {
+            return Redirect(Url.EmployerAccountsAction("service/termsAndConditions/overview", false));
+        }
+
         private string GetTrackerQueryString()
         {
             var trackerValue = Url.RequestContext.HttpContext.Request.QueryString[GoogleTag];

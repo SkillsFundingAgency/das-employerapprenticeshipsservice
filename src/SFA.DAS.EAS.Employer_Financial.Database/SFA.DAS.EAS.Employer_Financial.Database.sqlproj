@@ -17,7 +17,7 @@
     <ModelCollation>1033, CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <TargetLanguage>CS</TargetLanguage>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <SqlServerVerification>False</SqlServerVerification>
@@ -198,6 +198,7 @@
     <Build Include="Tables\TransactionLine_EOF.sql" />
     <Build Include="StoredProcedures\CreateDraftExpiredFunds.sql" />
     <Build Include="StoredProcedures\GetDraftExpiredFunds.sql" />
+    <Build Include="StoredProcedures\CreateAccountTransfersV1.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />

@@ -2,6 +2,7 @@
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.Hmrc.Configuration;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
+using System;
 
 namespace SFA.DAS.EmployerAccounts.Configuration
 {
@@ -31,7 +32,6 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string LegacyServiceBusConnectionString { get; set; }
         public string MessageServiceBusConnectionString => LegacyServiceBusConnectionString;
         public string NServiceBusLicense { get; set; }
-        public PostcodeAnywhereConfiguration PostcodeAnywhere { get; set; }
         public string PublicAllowedHashstringCharacters { get; set; }
         public string PublicAllowedAccountLegalEntityHashstringCharacters { get; set; }
         public string PublicAllowedAccountLegalEntityHashstringSalt { get; set; }
@@ -54,5 +54,6 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string ApplicationId { get; set; }
         public int DefaultCacheExpirationInMinutes { get; set; }
         public string SupportConsoleUsers { get; set; }
+        public DateTime? LastTermsAndConditionsUpdate { get; set; }
     }
 }

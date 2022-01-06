@@ -9,6 +9,7 @@ using SFA.DAS.EmployerAccounts.Commands.DeleteInvitation;
 using SFA.DAS.EmployerAccounts.Commands.RemoveTeamMember;
 using SFA.DAS.EmployerAccounts.Commands.ResendInvitation;
 using SFA.DAS.EmployerAccounts.Commands.UpdateShowWizard;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
@@ -24,6 +25,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetMember;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUser;
+using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
 using System;
@@ -41,17 +43,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         private readonly ICurrentDateTime _currentDateTime;
         private readonly IAccountApiClient _accountApiClient;
         private readonly IMapper _mapper;
+        private readonly EmployerAccountsConfiguration _configuration;
 
         public EmployerTeamOrchestrator(IMediator mediator,
             ICurrentDateTime currentDateTime,
             IAccountApiClient accountApiClient,
-            IMapper mapper)
+            IMapper mapper,
+            EmployerAccountsConfiguration configuration)
             : base(mediator)
         {
             _mediator = mediator;
             _currentDateTime = currentDateTime;
             _accountApiClient = accountApiClient;
             _mapper = mapper;
+            _configuration = configuration;
         }
         //Needed for tests	
         protected EmployerTeamOrchestrator()
@@ -179,7 +184,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     ExternalUserId = externalUserId
                 });
 
-                await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask).ConfigureAwait(false);
+                var userQueryResponseTask = _mediator.SendAsync(new GetUserByRefQuery
+                {
+                    UserRef = externalUserId
+                });
+
+                await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask, userQueryResponseTask).ConfigureAwait(false);
 
                 var accountResponse = accountResponseTask.Result;
                 var userRoleResponse = userRoleResponseTask.Result;
@@ -187,6 +197,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 var accountStatsResponse = accountStatsResponseTask.Result;
                 var agreementsResponse = agreementsResponseTask.Result;
                 var accountDetailViewModel = apiGetAccountTask.Result;
+                var userQueryResponse = userQueryResponseTask.Result;
 
                 var apprenticeshipEmployerType = (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), accountDetailViewModel.ApprenticeshipEmployerType, true);
 
@@ -219,7 +230,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     SignedAgreementCount = agreementsResponse.EmployerAgreements.Count(x => x.HasSignedAgreement),
                     PendingAgreements = pendingAgreements,
                     ApprenticeshipEmployerType = apprenticeshipEmployerType,
-                    AgreementInfo = _mapper.Map<AccountDetailViewModel, AgreementInfoViewModel>(accountDetailViewModel)
+                    AgreementInfo = _mapper.Map<AccountDetailViewModel, AgreementInfoViewModel>(accountDetailViewModel),
+                    TermAndConditionsAcceptedOn = userQueryResponse.User.TermAndConditionsAcceptedOn,
+                    LastTermsAndConditionsUpdate = _configuration.LastTermsAndConditionsUpdate
                 };
 
                 //note: ApprenticeshipEmployerType is already returned by GetEmployerAccountHashedQuery, but we need to transition to calling the api instead.

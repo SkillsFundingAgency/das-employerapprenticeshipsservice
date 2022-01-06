@@ -16,6 +16,7 @@ using SignInUserViewModel = SFA.DAS.EmployerAccounts.Web.ViewModels.SignInUserVi
 using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Web.Models;
 using SFA.DAS.NLog.Logger;
+using System;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
 {
@@ -41,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
 
             _homeOrchestrator = new Mock<HomeOrchestrator>();
             _homeOrchestrator.Setup(x => x.GetUsers()).ReturnsAsync(new SignInUserViewModel());
-            _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId)).ReturnsAsync(
+            _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId, null)).ReturnsAsync(
                 new OrchestratorResponse<UserAccountsViewModel>
                 {
                     Data = new UserAccountsViewModel
@@ -92,7 +93,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
             await _homeController.Index();
 
             //Assert
-            _homeOrchestrator.Verify(x => x.GetUserAccounts(It.IsAny<string>()), Times.Never);
+            _homeOrchestrator.Verify(x => x.GetUserAccounts(It.IsAny<string>(), It.IsAny<DateTime?>()), Times.Never);
         }
 
         [Test]
@@ -127,7 +128,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
             await _homeController.Index();
 
             //Assert
-            _homeOrchestrator.Verify(x => x.GetUserAccounts(ExpectedUserId), Times.Once);
+            _homeOrchestrator.Verify(x => x.GetUserAccounts(ExpectedUserId, It.IsAny<DateTime?>()), Times.Once);
         }
 
         [Test]
@@ -199,7 +200,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
         {
             //Arrange
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
-            _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId)).ReturnsAsync(
+            _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId, It.IsAny<DateTime?>())).ReturnsAsync(
                 new OrchestratorResponse<UserAccountsViewModel>
                 {
                     Data = new UserAccountsViewModel
@@ -219,6 +220,76 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
             var actualViewResult = actual as ViewResult;
             Assert.IsNotNull(actualViewResult);
             Assert.AreEqual("", actualViewResult.ViewName);
+        }
+
+        [Test]
+        public async Task ThenIfIHaveMoreThanOneAccountIAmRedirectedToTheAccountsIndexPage_WithTermsAndConditionBannerDisplayed()
+        {
+            //Arrange
+            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
+            _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId, It.IsAny<DateTime?>())).ReturnsAsync(
+                new OrchestratorResponse<UserAccountsViewModel>
+                {
+                    Data = new UserAccountsViewModel
+                    {
+                        Accounts = new Accounts<Account>
+                        {
+                            AccountList = new List<Account> { new Account(), new Account() }
+                        },
+
+                        LastTermsAndConditionsUpdate = DateTime.Now,
+                        TermAndConditionsAcceptedOn = DateTime.Now.AddDays(-20)
+                    }
+                });
+
+            //Act
+            var actual = await _homeController.Index();
+
+            //Assert
+            Assert.IsNotNull(actual);
+            var actualViewResult = actual as ViewResult;
+            Assert.IsNotNull(actualViewResult);
+
+            var viewModel = actualViewResult.Model;
+            Assert.IsInstanceOf<OrchestratorResponse<UserAccountsViewModel>>(viewModel);
+            var userAccountsViewModel = (OrchestratorResponse<UserAccountsViewModel>)viewModel;
+
+            Assert.AreEqual(true, userAccountsViewModel.Data.ShowTermsAndConditionBanner);
+        }
+
+        [Test]
+        public async Task ThenIfIHaveMoreThanOneAccountIAmRedirectedToTheAccountsIndexPage_WithTermsAndConditionBannerNotDisplayed()
+        {
+            //Arrange
+            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
+            _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId, It.IsAny<DateTime?>())).ReturnsAsync(
+                new OrchestratorResponse<UserAccountsViewModel>
+                {
+                    Data = new UserAccountsViewModel
+                    {
+                        Accounts = new Accounts<Account>
+                        {
+                            AccountList = new List<Account> { new Account(), new Account() }
+                        },
+
+                        LastTermsAndConditionsUpdate = DateTime.Now.AddDays(-20),
+                        TermAndConditionsAcceptedOn = DateTime.Now
+                    }
+                });
+
+            //Act
+            var actual = await _homeController.Index();
+
+            //Assert
+            Assert.IsNotNull(actual);
+            var actualViewResult = actual as ViewResult;
+            Assert.IsNotNull(actualViewResult);
+
+            var viewModel = actualViewResult.Model;
+            Assert.IsInstanceOf<OrchestratorResponse<UserAccountsViewModel>>(viewModel);
+            var userAccountsViewModel = (OrchestratorResponse<UserAccountsViewModel>)viewModel;
+
+            Assert.AreEqual(false, userAccountsViewModel.Data.ShowTermsAndConditionBanner);
         }
     }
 }

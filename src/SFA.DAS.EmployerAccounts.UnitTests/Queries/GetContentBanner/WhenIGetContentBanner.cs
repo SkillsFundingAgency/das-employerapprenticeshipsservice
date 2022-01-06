@@ -17,7 +17,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
         public override Mock<IValidator<GetContentRequest>> RequestValidator { get; set; }
 
         public Mock<ICacheStorageService> MockCacheStorageService;
-        private Mock<IContentService> _contentBannerService;
+        private Mock<IContentApiClient> _contentBannerService;
         private string _contentType;
         private string _clientId;
         private Mock<ILog> _logger;
@@ -37,7 +37,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
             _contentType = "banner";
             _clientId = "eas-acc";
             _logger = new Mock<ILog>();
-            _contentBannerService = new Mock<IContentService>();
+            _contentBannerService = new Mock<IContentApiClient>();
             _contentBannerService
                 .Setup(cbs => cbs.Get(_contentType, _clientId))
                 .ReturnsAsync(ContentBanner);
@@ -47,8 +47,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
                 ContentType = "banner"
             };
 
-            RequestHandler = new GetContentRequestHandler(RequestValidator.Object, _logger.Object,
-                _contentBannerService.Object, MockCacheStorageService.Object, EmployerAccountsConfiguration);
+            RequestHandler = new GetContentRequestHandler(RequestValidator.Object, _logger.Object, _contentBannerService.Object, EmployerAccountsConfiguration);
         }
 
         [Test]
@@ -76,7 +75,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
             GetContentRequestHandler requestHandler1,
             Mock<IValidator<GetContentRequest>> requestValidator1,
             Mock<ILog> logger,
-            Mock<IContentService> MockContentService)
+            Mock<IContentApiClient> MockContentService)
         {
             //Arrange
             var key = EmployerAccountsConfiguration.ApplicationId;
@@ -93,8 +92,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
             MockContentService.Setup(c => c.Get(query1.ContentType, key))
                 .ReturnsAsync(contentBanner1);
 
-            requestHandler1 = new GetContentRequestHandler(requestValidator1.Object, logger.Object, MockContentService.Object,
-                cacheStorageService1.Object, EmployerAccountsConfiguration);
+            requestHandler1 = new GetContentRequestHandler(requestValidator1.Object, logger.Object, MockContentService.Object, EmployerAccountsConfiguration);
 
             //Act
             var result = await requestHandler1.Handle(query1);

@@ -564,10 +564,6 @@
         "AccountsCosmosDbName": {
             "type": "string",
             "value": "[variables('cosmosDbName')]"
-        },
-        "AccountsCosmosDbPrimaryMasterKey": {
-            "type": "string",
-            "value": "[reference('cosmos-db-resources-deployment').outputs.PrimaryMasterKey.value]"
         }
     }
 }

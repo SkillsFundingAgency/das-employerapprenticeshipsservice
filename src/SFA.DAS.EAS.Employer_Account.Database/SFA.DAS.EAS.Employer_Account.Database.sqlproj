@@ -17,7 +17,7 @@
     <ModelCollation>1033, CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <TargetLanguage>CS</TargetLanguage>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <SqlServerVerification>False</SqlServerVerification>
@@ -25,6 +25,7 @@
     <TargetDatabaseSet>True</TargetDatabaseSet>
     <DefaultSchema>employer_account</DefaultSchema>
     <IsEncryptionOn>True</IsEncryptionOn>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -153,6 +154,7 @@
     <Build Include="StoredProcedures\UpdateAccount_SetAccountApprenticeshipEmployerType.sql" />
     <None Include="Scripts\Manual\CON-1493-ExpireLegalAgreements.sql" />
     <None Include="Scripts\Manual\CON-2796 Migrate And Add v5 Legal Agreement.sql" />
+    <None Include="Scripts\Manual\CON-3367 Migrate And Add v6 Legal Agreement.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EmployerApprenticeshipsService.Database.refactorlog" />
@@ -166,6 +168,7 @@
     <None Include="Scripts\PostDeployment\AML-3762-EOI-API.sql" />
     <None Include="Scripts\Manual\AML-3655_GenerateFinanceDataInserts.sql" />
     <None Include="Scripts\PostDeployment\UpdateAgreementTemplateV3.sql" />
+    <None Include="Scripts\Manual\CON-3921-DataFixForTermAndConditionsAcceptedOn.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Invitation.sql" />

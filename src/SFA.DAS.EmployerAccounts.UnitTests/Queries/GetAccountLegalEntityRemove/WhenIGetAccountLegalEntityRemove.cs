@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Commitments.Api.Client.Interfaces;
-using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.Organisation;
@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntityRemove
         private Mock<IHashingService> _hashingService;
         private Mock<IAccountLegalEntityPublicHashingService> _accountLegalEntityPublicHashingService;
         private Mock<IEmployerAgreementRepository> _repository;
-        private Mock<IEmployerCommitmentApi> _commitmentsApi;
+        private Mock<ICommitmentsV2ApiClient> _commitmentsV2ApiClient;
       
         public override GetAccountLegalEntityRemoveRequest Query { get; set; }
         public override GetAccountLegalEntityRemoveQueryHandler RequestHandler { get; set; }
@@ -66,15 +66,20 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntityRemove
             _accountLegalEntityPublicHashingService = new Mock<IAccountLegalEntityPublicHashingService>();
             _accountLegalEntityPublicHashingService.Setup(x => x.DecodeValue(ExpectedHashedAccountLegalEntityId)).Returns(ExpectedAccountLegalEntityId);
 
-            _commitmentsApi = new Mock<IEmployerCommitmentApi>();
-            _commitmentsApi.Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId)).ReturnsAsync(new List<ApprenticeshipStatusSummary> { new ApprenticeshipStatusSummary() });
+            _commitmentsV2ApiClient = new Mock<ICommitmentsV2ApiClient>();
+            _commitmentsV2ApiClient.Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
+               .ReturnsAsync(new GetApprenticeshipStatusSummaryResponse()
+               {
+                   ApprenticeshipStatusSummaryResponse = new List<ApprenticeshipStatusSummaryResponse>()  { new ApprenticeshipStatusSummaryResponse() { } }
+               });
+
 
             RequestHandler = new GetAccountLegalEntityRemoveQueryHandler(
                 RequestValidator.Object,
                 _repository.Object,
                 _hashingService.Object,
                 _accountLegalEntityPublicHashingService.Object,
-                _commitmentsApi.Object
+                _commitmentsV2ApiClient.Object
             );
         }
 

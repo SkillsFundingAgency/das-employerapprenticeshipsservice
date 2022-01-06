@@ -16,6 +16,7 @@ namespace SFA.DAS.EmployerFinance.Configuration
         public int DefaultCacheExpirationInMinutes { get; set; }
         public string EmployerAccountsBaseUrl { get; set; }
         public string EmployerCommitmentsBaseUrl { get; set; }
+        public string EmployerCommitmentsV2BaseUrl { get; set; }
         public string EmployerFinanceBaseUrl { get; set; }
         public string EmployerPortalBaseUrl { get; set; }
         public string EmployerProjectionsBaseUrl { get; set; }
@@ -25,6 +26,7 @@ namespace SFA.DAS.EmployerFinance.Configuration
         public HmrcConfiguration Hmrc { get; set; }
         public IdentityServerConfiguration Identity { get; set; }
         public string LegacyServiceBusConnectionString { get; set; }
+        public string LevyTransferMatchingBaseUrl { get; set; }
         public string MessageServiceBusConnectionString => LegacyServiceBusConnectionString;
         public string NServiceBusLicense { get; set; }
         public string PublicAllowedHashstringCharacters { get; set; }
@@ -34,6 +36,7 @@ namespace SFA.DAS.EmployerFinance.Configuration
         public virtual int FundsExpiryPeriod { get; set; }
         public AccountApiConfiguration AccountApi { get; set; }
 
+        public CommitmentsApiV2ClientConfiguration CommitmentsApi { get; set; }
         public PaymentsApiClientConfiguration PaymentsEventsApi { get; set; } 
 
         public string ReservationsBaseUrl { get; set; }

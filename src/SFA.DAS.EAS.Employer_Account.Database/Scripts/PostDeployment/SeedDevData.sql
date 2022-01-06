@@ -75,3 +75,4 @@ EXECUTE #CreateAccount 2, '84VBNV', 'BDXBDV', @userId, 'SC171417', 'SAINSBURY''S
 EXECUTE #CreateAccount 3, 'JLVKPM', 'XWBVWN', @userId, '07297044', 'DINE CONTRACT CATERING LIMITED', '1st Floor The Centre, Birchwood Park, Warrington, Lancashire, WA3 6YN', '2010-06-28 00:00:00.000', 'active', 1, '101/ZZR00016', 'NA', 'AAA125'
 
 DROP PROCEDURE #CreateAccount
+

@@ -25,7 +25,6 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public IdProcessorConfiguration IdProcessor { get; set; }
         public string MessageServiceBusConnectionString { get; set; }
         public string NServiceBusLicense { get; set; }
-        public PostcodeAnywhereConfiguration PostcodeAnywhere { get; set; }
         public string PublicAllowedHashstringCharacters { get; set; }
         public string PublicAllowedAccountLegalEntityHashstringCharacters { get; set; }
         public string PublicAllowedAccountLegalEntityHashstringSalt { get; set; }

@@ -17,5 +17,6 @@ namespace SFA.DAS.EmployerAccounts.Interfaces
         Task<Users> GetAllUsers();
         Task UpdateAornPayeQueryAttempt(string userRef, bool success);
         Task<IEnumerable<DateTime>> GetAornPayeQueryAttempts(string userRef);
+        Task UpdateTermAndConditionsAcceptedOn(string userRef);
     }
 }

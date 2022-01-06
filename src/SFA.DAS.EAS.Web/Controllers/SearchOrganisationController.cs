@@ -25,13 +25,5 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             return Redirect(Url.EmployerAccountsAction($"organisations/search/results{paramString}"));
         }
-
-        [HttpGet]
-        [Route("{HashedAccountId}/organisations/search/manualAdd", Order = 0)]
-        [Route("organisations/search/manualAdd", Order = 1)]
-        public ActionResult AddOtherOrganisationDetails()
-        {
-            return Redirect(Url.EmployerAccountsAction("organisations/search/manualAdd"));
-        }
     }
 }

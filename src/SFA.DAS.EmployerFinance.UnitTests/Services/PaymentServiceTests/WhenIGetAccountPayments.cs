@@ -8,9 +8,8 @@ using Castle.Components.DictionaryAdapter;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Caches;
-using SFA.DAS.Commitments.Api.Client.Interfaces;
-using SFA.DAS.Commitments.Api.Types.Apprenticeship;
-using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.CommitmentsV2.Api.Types.Responses;
+using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Models.ApprenticeshipCourse;
 using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.EmployerFinance.Services;
@@ -28,7 +27,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
         private const string FrameworkCourseName = "Framework Course";
 
         private Mock<IApprenticeshipInfoServiceWrapper> _apprenticeshipInfoService;
-        private Mock<IEmployerCommitmentApi> _commitmentsApiClient;
+        private Mock<ICommitmentsV2ApiClient> _commitmentsV2ApiClient;
         private Mock<IPaymentsEventsApiClient> _paymentsApiClient;
         private Mock<IMapper> _mapper;
         private Mock<ILog> _logger;
@@ -38,7 +37,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
         private PaymentService _paymentService;
         private Framework _framework;
         private Standard _standard;
-        private Apprenticeship _apprenticeship;
+        private GetApprenticeshipResponse _apprenticeship;
         private EmployerFinance.Models.ApprenticeshipProvider.Provider _provider;
         private PaymentDetails _standardPayment;
         private PaymentDetails _frameworkPayment;
@@ -58,7 +57,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
 
             _paymentService = new PaymentService(
                 _paymentsApiClient.Object,
-                _commitmentsApiClient.Object,
+                _commitmentsV2ApiClient.Object,
                 _apprenticeshipInfoService.Object,
                 _mapper.Object,
                 _logger.Object,
@@ -70,7 +69,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
         public async Task ThenThePaymentsApiIsCalledToGetPaymentData()
         {
             //Act
-            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
 
             //Assert
             _paymentsApiClient.Verify(x => x.GetPayments(PeriodEnd, AccountId.ToString(), 1, null));
@@ -80,10 +79,10 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
         public async Task ThenTheCommitmentsApiIsCalledToGetApprenticeDetails()
         {
             //Act
-            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
 
             //Assert
-            _commitmentsApiClient.Verify(x => x.GetEmployerApprenticeship(AccountId, _apprenticeship.Id), Times.Once);
+            _commitmentsV2ApiClient.Verify(x => x.GetApprenticeship(_apprenticeship.Id), Times.Once);
         }
 
 
@@ -92,7 +91,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
         {
 
             //Act
-            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
 
             //Assert
             _providerService.Verify(x => x.Get(_provider.Ukprn), Times.Once);
@@ -102,7 +101,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
         public async Task ThenTheAppreticeshipsApiIsCalledToGetStandardDetails()
         {
             //Act
-            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
 
             //Assert
             _apprenticeshipInfoService.Verify(x => x.GetStandardsAsync(false), Times.Once);
@@ -120,8 +119,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
 
 
             //Act
-            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
-            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
 
             //Assert
             _apprenticeshipInfoService.Verify(x => x.GetStandardsAsync(false), Times.Once);
@@ -136,7 +135,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
                      .Returns(() => _frameworkPayment);
 
             //Act
-            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
 
             //Assert
             _apprenticeshipInfoService.Verify(x => x.GetFrameworksAsync(false), Times.Once);
@@ -155,8 +154,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
                 .Returns(new FrameworksView { Frameworks = new List<Framework>() });
 
             //Act
-            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
-            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
 
             //Assert
             _apprenticeshipInfoService.Verify(x => x.GetFrameworksAsync(false), Times.Once);
@@ -167,7 +166,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
         public async Task ThenIShouldGetPaymentDetails()
         {
             //Act
-            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
 
             //Assert
             Assert.AreEqual(AccountId, details.First().EmployerAccountId);
@@ -177,7 +176,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
         public async Task ThenIShouldGetCorrectPeriodEnd()
         {
             //Act
-            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
 
             //Assert
             Assert.AreEqual(PeriodEnd, details.First().PeriodEnd);
@@ -187,7 +186,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
         public async Task ThenIShouldGetCorrectProviderName()
         {
             //Act
-            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
 
             //Assert
             Assert.AreEqual(_provider.Name, details.First().ProviderName);
@@ -197,7 +196,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
         public async Task ThenIShouldGetCorrectStandardCourseName()
         {
             //Act
-            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
 
             //Assert
             Assert.AreEqual(StandardCourseName, details.First().CourseName);
@@ -211,7 +210,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
                     .Returns(() => _frameworkPayment);
 
             //Act
-            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
 
             //Assert
             Assert.AreEqual(FrameworkCourseName, details.First().CourseName);
@@ -225,7 +224,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
                 .Returns(() => _frameworkPayment);
 
             //Act
-            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
 
             //Assert
             Assert.AreEqual(_framework.PathwayName, details.First().PathwayName);
@@ -239,7 +238,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
                 .Returns(() => _frameworkPayment);
 
             // Act
-            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
 
             // Assert
             _apprenticeshipInfoService.Verify(x => x.GetStandardsAsync(false), Times.Never);
@@ -254,7 +253,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
                 .Returns(() => _frameworkPayment);
 
             // Act
-            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
 
             // Assert
             _apprenticeshipInfoService.Verify(x => x.GetStandardsAsync(false), Times.Never);
@@ -269,7 +268,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
                 .Returns(() => _frameworkPayment);
 
             // Act
-            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
 
             // Assert
             _apprenticeshipInfoService.Verify(x => x.GetFrameworksAsync(false), Times.Never);
@@ -284,7 +283,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
                 .Returns(() => _frameworkPayment);
 
             // Act
-            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
 
             // Assert
             _apprenticeshipInfoService.Verify(x => x.GetFrameworksAsync(false), Times.Never);
@@ -304,7 +303,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
                 .Returns(() => _frameworkPayment);
 
             // Act
-            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
 
             // Assert
             _logger.Verify(x => x.Warn(It.IsAny<string>()), Times.Once);
@@ -314,24 +313,23 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
         public async Task ThenIShouldGetCorrectApprenticeDetails()
         {
             //Act
-            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
 
             //Assert
             var apprenticeName = $"{_apprenticeship.FirstName} {_apprenticeship.LastName}";
 
             Assert.AreEqual(apprenticeName, details.First().ApprenticeName);
-            Assert.AreEqual(_apprenticeship.NINumber, details.First().ApprenticeNINumber);
         }
 
         [Test]
         public async Task ThenShouldLogWarningIfCommitmentsApiCallFails()
         {
             //Arrange
-            _commitmentsApiClient.Setup(x => x.GetEmployerApprenticeship(It.IsAny<long>(), It.IsAny<long>()))
+            _commitmentsV2ApiClient.Setup(x => x.GetApprenticeship(It.IsAny<long>()))
                 .Throws<WebException>();
 
             //Act
-            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
 
             //Assert
             _logger.Verify(x => x.Warn(It.IsAny<Exception>(),
@@ -347,7 +345,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
                               .Throws<WebException>();
 
             //Act
-            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
 
             //Assert
             _logger.Verify(x => x.Error(It.IsAny<Exception>(),
@@ -362,7 +360,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
                                       .Throws<WebException>();
 
             //Act
-            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
 
             //Assert
             _logger.Verify(x => x.Warn(It.IsAny<Exception>(), "Could not get standards from apprenticeship API."), Times.Once);
@@ -378,7 +376,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
                                       .Throws<WebException>();
 
             //Act
-            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
 
             //Assert
             _logger.Verify(x => x.Warn(It.IsAny<Exception>(), "Could not get frameworks from apprenticeship API."), Times.Once);
@@ -398,7 +396,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
                 });
 
             //Act
-            var result = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+            var result = await _paymentService.GetAccountPayments(PeriodEnd, AccountId, Guid.NewGuid());
 
             //Assert
             _paymentsApiClient.Verify(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), null), Times.Exactly(numberOfPages));
@@ -449,7 +447,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
                 CourseName = StandardCourseName
             };
 
-            _apprenticeship = new Apprenticeship
+            _apprenticeship = new GetApprenticeshipResponse
             {
                 Id = 545646,
                 FirstName = "John",
@@ -498,8 +496,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
 
         private void SetupCommitmentsApiMock()
         {
-            _commitmentsApiClient = new Mock<IEmployerCommitmentApi>();
-            _commitmentsApiClient.Setup(x => x.GetEmployerApprenticeship(It.IsAny<long>(), It.IsAny<long>()))
+            _commitmentsV2ApiClient = new Mock<ICommitmentsV2ApiClient>();
+            _commitmentsV2ApiClient.Setup(x => x.GetApprenticeship(It.IsAny<long>()))
                 .ReturnsAsync(_apprenticeship);
         }
 

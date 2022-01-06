@@ -15,6 +15,7 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
             For<ContentClientApiConfiguration>().Use(c => c.GetInstance<EmployerFinanceConfiguration>().ContentApi);
             For<IContentClientApiConfiguration>().Use(c => c.GetInstance<ContentClientApiConfiguration>());
             For<IContentApiClient>().Use<ContentApiClient>().Ctor<HttpClient>().Is(c => CreateClient(c));
+            For<IContentApiClient>().DecorateAllWith<ContentApiClientWithCaching>();
         }
         private HttpClient CreateClient(IContext context)
         {

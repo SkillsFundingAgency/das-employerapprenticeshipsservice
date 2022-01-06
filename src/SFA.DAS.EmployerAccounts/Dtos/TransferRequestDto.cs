@@ -1,5 +1,5 @@
-﻿using System;
-using SFA.DAS.Commitments.Api.Types;
+﻿using SFA.DAS.CommitmentsV2.Types;
+using System;
 
 namespace SFA.DAS.EmployerAccounts.Dtos
 {

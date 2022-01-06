@@ -8,8 +8,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
     public class ServicesRegistry : Registry
     {
         public ServicesRegistry()
-        {
-            For<IAddressLookupService>().Use<AddressLookupService>();
+        {            
             For<IRestClientFactory>().Use<RestClientFactory>();
             For<IRestServiceFactory>().Use<RestServiceFactory>();
             For<IHttpServiceFactory>().Use<HttpServiceFactory>();
@@ -18,8 +17,6 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
             For<IReservationsService>().DecorateAllWith<ReservationsServiceWithTimeout>();
             For<ICommitmentV2Service>().Use<CommitmentsV2Service>();
             For<ICommitmentV2Service>().DecorateAllWith<CommitmentsV2ServiceWithTimeout>();
-            For<IContentService>().Use<ContentService>();
-            For<IContentService>().DecorateAllWith<ContentServiceWithCaching>();
         }
     }
 }

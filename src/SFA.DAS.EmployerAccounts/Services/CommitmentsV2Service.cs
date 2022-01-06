@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using SFA.DAS.CommitmentsV2.Api.Client;
+using SFA.DAS.CommitmentsV2.Api.Types.Requests;
 using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.CommitmentsV2.Types;
 using SFA.DAS.CommitmentsV2.Types.Dtos;
@@ -14,11 +14,11 @@ namespace SFA.DAS.EmployerAccounts.Services
 {
     public class CommitmentsV2Service : ICommitmentV2Service
     {
-        private readonly ICommitmentsApiClient _commitmentsApiClient;
+        private readonly ICommitmentsV2ApiClient _commitmentsApiClient;
         private readonly IMapper _mapper;
         private readonly IEncodingService _encodingService;
 
-        public CommitmentsV2Service(ICommitmentsApiClient commitmentsApiClient, IMapper mapper, IEncodingService encodingService)
+        public CommitmentsV2Service(ICommitmentsV2ApiClient commitmentsApiClient, IMapper mapper, IEncodingService encodingService)
         {
             _commitmentsApiClient = commitmentsApiClient;
             _mapper = mapper;
@@ -79,6 +79,20 @@ namespace SFA.DAS.EmployerAccounts.Services
                           });
                       });
                   });
+        }
+
+        public async Task<List<Cohort>> GetEmployerCommitments(long employerAccountId)
+        {            
+            var request = new GetCohortsRequest { AccountId = employerAccountId };
+            var commitmentItems = await _commitmentsApiClient.GetCohorts(request);
+
+            if (commitmentItems == null || !commitmentItems.Cohorts.Any())
+            {
+                return new List<Cohort>();
+            }
+
+            return commitmentItems.Cohorts.Where(x => x.CommitmentStatus != CommitmentStatus.Deleted)
+                .Select(x => new Cohort { Id = x.CohortId }).ToList();
         }
     }
 }

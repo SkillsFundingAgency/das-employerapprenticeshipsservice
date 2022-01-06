@@ -107,8 +107,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
             var commitmentPath = hashedAccountId == null ? $"{path}" : $"{hashedAccountId}/{path}";
            
+            // unlike the rest of the services within MA - commitments v2 does not have 'accounts/' in its urls
             return Action(baseUrl, commitmentPath);
-        }       
+        }
 
         private static string Action(string baseUrl, string path)
         {

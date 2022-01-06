@@ -10,15 +10,12 @@
         public const string AcceptedEmployerAgreementViewName = "AcceptedEmployerAgreement";
         public const string ActionKeyName = "Action";
         public const string ActivitiesUnavailableMessage = "Activities are currently unavailable.";
-        public const string AddOrganisationAddressViewName = "../OrganisationShared/AddOrganisationAddress";
-        public const string AddOrganisationAddressActionName = "AddOrganisationAddress";      
-        public const string AddOtherOrganisationDetailsViewName = "AddOtherOrganisationDetails";
         public const string AmendOrganisationActionName = "AmendOrganisation";
         public const string AmendPayeActionName = "AmendPaye";
         public const string CannotRemoveOrganisationViewName = "CannotRemoveOrganisation";
         public const string CodeKeyName = "code";
         public const string ControllerKeyName = "Controller";
-        public const string ConfirmOrganisationDetailsViewName = "../OrganisationShared/ConfirmOrganisationDetails";
+        public const string ConfirmOrganisationDetailsViewName = "ConfirmOrganisationDetails";
         public const string ConfirmPayeSchemeActionName = "ConfirmPayeScheme";
         public const string ConfirmRemoveOrganisationActionName = "ConfirmRemoveOrganisation";
         public const string ConfirmRemoveOrganisationViewName = "ConfirmRemoveOrganisation";
@@ -32,7 +29,6 @@
         public const string EmployerTeamActionName = "EmployerTeam";
         public const string EmployerTeamControllerName = "EmployerTeam";
         public const string ErrorControllerName = "Error";
-        public const string FindAddressViewName = "../OrganisationShared/FindAddress";
         public const string GatewayInformActionName = "GatewayInform";
         public const string GatewayViewName = "Gateway";
         public const string GateWayResponseActionName = "GateWayResponse";
@@ -52,7 +48,6 @@
         public const string OrganisationAddedNextStepsActionName = "OrganisationAddedNextSteps";
         public const string OrganisationAddedNextStepsViewName = "OrganisationAddedNextSteps";
         public const string OrganisationAddedNextStepsSearchActionName = "OrganisationAddedNextStepsSearch";
-        public const string OrganisationSharedControllerName = "OrganisationShared";
         public const string OrganisationUpdatedNextStepsActionName = "OrganisationUpdatedNextSteps";
         public const string PayeErrorActionName = "PayeError";
         public const string PrivacyActionName = "Privacy";
@@ -105,5 +100,6 @@
         public const string ApproveOrRejectApprentice = "ApproveOrRejectApprentice";
         public const string ViewApprenticeBeforeApprove = "ViewApprenticeBeforeApprove";
         public const string ViewAllAgreementActionName = "ViewAllAgreements";
+        public const string InsetText = "Inset";
     }
 }
