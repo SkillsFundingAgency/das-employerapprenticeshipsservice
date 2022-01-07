@@ -1,6 +1,4 @@
-﻿@using SFA.DAS.Authorization
-@using SFA.DAS.Authorization.Mvc
-@using SFA.DAS.Common.Domain.Types
+﻿@using SFA.DAS.Common.Domain.Types
 @using SFA.DAS.EmployerAccounts.Web.Extensions
 @using SFA.DAS.EmployerAccounts.Web.Helpers
 @using TasksEnum = SFA.DAS.Tasks.API.Types.Enums
@@ -38,20 +36,21 @@
     </div>
 }
 
+<p class="heading-xlarge dashboard-heading-company">@Model.Data.Account.Name</p>
+
 <div class="govuk-inset-text">
     <b>Account ID:</b> @Model.Data.Account.PublicHashedId
     <br />
     <b>Agreement ID:</b>
-    @if (Model.Data.Account.AccountLegalEntities.Count == 1)
+    @if (string.IsNullOrEmpty(Model.Data.SingleAccountLegalEntityId))
     {
-        @Model.Data.Account.AccountLegalEntities.First(x => x.PublicHashedId)
+        <a href="@Url.Action("Index", "EmployerAgreement")">View your agreement ID's</a>
     }
     else
     {
-        <a href="@Html.Action("Organisations")
+        <span>@Model.Data.SingleAccountLegalEntityId</span>
     }
 </div>
-<p class="heading-xlarge dashboard-heading-company">@Model.Data.Account.Name</p>
 
 <hr class="dashboard-heading-separator" />
 
