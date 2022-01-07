@@ -37,9 +37,20 @@
         </div>
     </div>
 }
-<h1 class="heading-secondary dashboard-heading">
-    Account ID: @Model.Data.Account.PublicHashedId
-</h1>
+
+<div class="govuk-inset-text">
+    <b>Account ID:</b> @Model.Data.Account.PublicHashedId
+    <br />
+    <b>Agreement ID:</b>
+    @if (Model.Data.Account.AccountLegalEntities.Count == 1)
+    {
+        @Model.Data.Account.AccountLegalEntities.First(x => x.PublicHashedId)
+    }
+    else
+    {
+        <a href="@Html.Action("Organisations")
+    }
+</div>
 <p class="heading-xlarge dashboard-heading-company">@Model.Data.Account.Name</p>
 
 <hr class="dashboard-heading-separator" />
