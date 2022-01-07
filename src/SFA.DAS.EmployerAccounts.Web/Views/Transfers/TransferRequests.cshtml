@@ -1,7 +1,4 @@
-﻿@using System.Globalization
-@using SFA.DAS.Authorization
-@using SFA.DAS.Authorization.Mvc
-@using SFA.DAS.EmployerAccounts.Web.Extensions
+﻿@using SFA.DAS.EmployerAccounts.Web.Extensions
 @using SFA.DAS.EmployerAccounts.Web.Helpers
 
 @model SFA.DAS.EmployerAccounts.Web.ViewModels.TransferRequestsViewModel
@@ -19,6 +16,7 @@
                 <thead>
                     <tr>
                         <th>Employer</th>
+                        <th>Connection type</th>
                         <th>Status</th>
                         <th>Total cost</th>
                         <th>&nbsp;</th>
@@ -31,6 +29,7 @@
 
                         <tr>
                             <td data-label="Employer">@peerAccount.Name</td>
+                            <td data-label="Connection type">@transferRequest.Type.ToString()</td>
                             <td data-label="Status">@transferRequest.Status.ToString()</td>
                             <td data-label="Total cost">@transferRequest.TransferCost.ToString("C0", culture)</td>
                             <td>
