@@ -117,7 +117,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SendTransferConnectionInvi
             var exception = Assert.ThrowsAsync<ValidationException>(async () => await _handler.Handle(_query));
 
             Assert.That(ExpressionHelper.GetExpressionText(exception.ValidationErrors.Single().Property), Is.EqualTo(nameof(_query.ReceiverAccountPublicHashedId)));
-            Assert.That(exception.ValidationErrors.Single().Message, Is.EqualTo("You can't connect with this employer because they already have pending or accepted connection requests"));
+            Assert.That(exception.ValidationErrors.Single().Message, Is.EqualTo("You can't connect with this employer because they already have a pending or accepted connection request"));
         }
 
         [Test]
