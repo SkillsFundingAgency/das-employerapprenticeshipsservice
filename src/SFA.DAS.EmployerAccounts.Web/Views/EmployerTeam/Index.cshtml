@@ -174,16 +174,6 @@ else
             </div>
         </div>
         <div class="column-one-third">
-            <section class="das-panel das-panel--popular" style="display: none">
-                <h2>Popular on Apprenticeships</h2>
-                <ul class="list">
-                    <li><a href="@Url.EmployerCommitmentsAction("apprentices/manage/all")" class="das-panel__link">Manage your apprentices</a> </li>
-                    <li><a href="@Url.EmployerFinanceAction("finance")" class="das-panel__link">Finance</a> </li>
-                    <li><a href="@Url.EmployerCommitmentsV2Action("unapproved")" class="das-panel__link">Your cohorts</a> </li>
-                    <li><a href="@Url.EmployerCommitmentsAction("apprentices/inform")" class="das-panel__link">Add an apprentice</a> </li>
-                    <li><a href="@Url.Action("Index", "Transfers")" class="das-panel__link">Transfers</a> </li>
-                </ul>
-            </section>
             @if (!Model.Data.HideTasksBar)
             {
                 <section>
