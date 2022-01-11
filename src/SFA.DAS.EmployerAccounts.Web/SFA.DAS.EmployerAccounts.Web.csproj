@@ -877,6 +877,7 @@
     <Content Include="Views\Shared\_Agreement_v6.cshtml" />
     <Content Include="Views\SearchOrganisation\ConfirmOrganisationDetails.cshtml" />
     <Content Include="Views\Home\TermsAndConditions.cshtml" />
+    <Content Include="Views\Shared\_Agreement_v7.cshtml" />
     <Content Include="Views\EmployerAgreement\_AwaitingAcceptance.cshtml" />
     <Content Include="Views\EmployerAgreement\_AcceptedAgreement.cshtml" />
     <Content Include="Views\Home\TermsAndConditionsOverview.cshtml" />

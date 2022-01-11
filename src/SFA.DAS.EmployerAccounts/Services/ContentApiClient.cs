@@ -28,15 +28,10 @@ namespace SFA.DAS.EmployerAccounts.Services
         {
             await AddAuthenticationHeader();
 
-            string banner = string.Empty;
-            switch (type)
-            {
-                case "banner":
-                    var uri = $"{_apiBaseUrl}api/content?applicationId={applicationId}&type={type}";
-                    banner = await GetAsync(uri);
-                    break;
-            }
-            return banner;
+            var uri = $"{_apiBaseUrl}api/content?applicationId={applicationId}&type={type}";
+            var content = await GetAsync(uri);
+
+            return content;
         }
 
         private async Task AddAuthenticationHeader()
