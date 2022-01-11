@@ -20,7 +20,11 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">Your organisations and agreements</h1>
-        <p class="govuk-body">You must add each organisation that will contract with your training providers.</p>
+        <p class="govuk-body">Add organisation(s) that employ apprentices.</p>
+        <div class="govuk-inset-text">
+            <p>To add apprentices you need to tell us which organisation (employer) they will be working for.</p>
+            <p>If you work with more than one organisation, you need to add them here; they will need their own agreement with the ESFA.</p>
+        </div>
         <p class="govuk-body">You can add as many <a class="govuk-link" href="https://www.gov.uk/government/publications/employment-allowance-more-detailed-guidance" target="_blank">connected organisations</a> as you need to.</p>
         <p class="govuk-body">Transfers status:&nbsp;
             <span>
@@ -61,7 +65,9 @@
             @foreach (var employerAgreement in Model.Data.EmployerAgreementsData.EmployerAgreements)
             {
                 <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">@employerAgreement.LegalEntity.Name</td>
+                    <td class="govuk-table__cell">@employerAgreement.LegalEntity.Name
+                        <span class="govuk-caption-m">Agreement ID: @employerAgreement.LegalEntity.AccountLegalEntityPublicHashedId</span>
+                    </td>
                     <td class="govuk-table__cell">
                         @if (employerAgreement.HasPendingAgreement)
                         {

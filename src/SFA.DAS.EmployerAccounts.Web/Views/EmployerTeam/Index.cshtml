@@ -115,7 +115,7 @@ else
                     {
                         <div class="card">
                             <h3 class="heading-medium"><a href="@Url.EmployerIncentivesAction()">Your hire a new apprentice payments</a></h3>
-                            <p>View applications and change your payment details.</p>
+                            <p>Apply for the payment, view applications and change your payment details</p>
                         </div>
                     }
 
@@ -164,6 +164,8 @@ else
                 </div>
             </section>
 
+            @Html.GetContentByType("covid_section")
+            
 
             <div class="panel panel-filled">
                 <h3 class="heading-medium">Help us improve this service</h3>
@@ -284,6 +286,8 @@ else
         </div>
     </section>
 }
+
+
 
 @*@if (Model.Data.RequiresAgreementSigning > 0)
                                             {
