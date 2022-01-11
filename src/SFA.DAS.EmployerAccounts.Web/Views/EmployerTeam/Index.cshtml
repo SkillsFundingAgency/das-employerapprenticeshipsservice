@@ -138,7 +138,7 @@ else
                             <h3 class="govuk-heading-m das-card__heading">
                                 <a href="@Url.EmployerIncentivesAction()" class="govuk-link govuk-link--no-visited-state">Your hire a new apprentice payments</a>
                             </h3>
-                            <p class="govuk-body govuk-!-font-size-16">View applications and change your payment details.</p>
+                            <p class="govuk-body govuk-!-font-size-16">Apply for the payment, view applications and change your payment details.</p>
                         </div>
                     }
 
@@ -184,6 +184,7 @@ else
                     </div>
                 </div>
             </section>
+            @Html.GetContentByType("covid_section")
             <div class="das-highlight">
                 <h2 class="govuk-heading-m">Help us improve this service</h2>
                 <p class="govuk-body govuk-!-margin-bottom-0"><a href="https://www.smartsurvey.co.uk/s/apprenticeshipservicefeedback/" class="govuk-link" rel="nofollow" target="_blank">Take our 3 minute survey</a> so that we can improve this service.</p>
@@ -266,6 +267,7 @@ else
                                     }
                                 </li>
                             }
+<<<<<<< HEAD
                         </ul>
                     }
                     else
@@ -274,6 +276,46 @@ else
                     }
                 </div>
                 @if (Html.IsAuthorized("EmployerFeature.Activities"))
+=======
+                        </div>
+                        @if (Html.IsAuthorized("EmployerFeature.Activities"))
+                        {
+                            <div class="js-tab-pane" id="pane-activity" role="tabpanel">
+                                @Html.Action("Latest", "Activities")
+                            </div>
+                        }
+                    </div>
+                </section>
+            }
+        </div>
+    </div>
+}
+
+@if (Model.Data.ShowAcademicYearBanner)
+{
+    <section>
+        <div class="panel alert-default">
+            <h4 class="heading-small">Apprentice records in 2016/17</h4>
+            <p>It's critical that you complete and approve any apprentice records for the academic year ending 31 July 2017 before <strong>18:00 on 19 October 2017</strong>.  After this date you will not be able to update apprentice details from 2016/17 or make payments for training in this period.</p>
+        </div>
+    </section>
+}
+
+
+
+@*@if (Model.Data.RequiresAgreementSigning > 0)
+    {
+        <section>
+            <div class="panel alert-default">
+                <h3 class="heading-small">Spending not enabled (@Model.Data.RequiresAgreementSigning)</h3>
+
+                @if (Model.Data.UserRole == Role.Owner)
+                {
+                    <p>You need to <a href="@Url.Action("Index", "EmployerAgreement")">sign an agreement</a> to enable your organisations to spend funds.</p>
+                }
+
+                @if (Model.Data.UserRole == Role.Transactor)
+>>>>>>> master
                 {
                     <div class="govuk-tabs__panel" id="activities">
                         @Html.Action("Latest", "Activities")
