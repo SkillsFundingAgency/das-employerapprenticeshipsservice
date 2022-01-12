@@ -1,9 +1,11 @@
-﻿using SFA.DAS.EmployerAccounts.Api.Types;
+﻿
+using SFA.DAS.EmployerAccounts.Models.Account;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetLegalEntity
 {
     public class GetLegalEntityResponse
     {
-        public LegalEntity LegalEntity { get; set; }
+        public AccountLegalEntity LegalEntity { get; set; }
+        public EmployerAgreement LatestAgreement { get ; set ; }
     }
 }

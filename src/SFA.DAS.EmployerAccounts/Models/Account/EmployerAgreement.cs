@@ -15,5 +15,6 @@ namespace SFA.DAS.EmployerAccounts.Models.Account
         public virtual EmployerAgreementStatus StatusId { get; set; }
         public virtual AgreementTemplate Template { get; set; }
         public virtual int TemplateId { get; set; }
+        public virtual string SignedByEmail { get ; set ; }
     }
 }
