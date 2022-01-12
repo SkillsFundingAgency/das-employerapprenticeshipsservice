@@ -6,6 +6,5 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities
     {
         public string HashedLegalEntityId { get; set; }
         public string UserId { get; set; }
-        public bool  SignedOnly { get; set; }
     }
 }
