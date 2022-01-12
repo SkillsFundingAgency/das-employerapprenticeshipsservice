@@ -120,7 +120,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
         {
             var commitments = await _commitmentsV2ApiClient.GetEmployerAccountSummary(accountId);
 
-            var commitment = commitments?.ApprenticeshipStatusSummaryResponse.FirstOrDefault(c =>
+            var commitment = commitments.ApprenticeshipStatusSummaryResponse.FirstOrDefault(c =>
                 !string.IsNullOrEmpty(c.LegalEntityIdentifier)
                 && c.LegalEntityIdentifier.Equals(agreement.LegalEntityCode)
                 && c.LegalEntityOrganisationType == agreement.LegalEntitySource);

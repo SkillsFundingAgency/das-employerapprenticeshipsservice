@@ -76,7 +76,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove
         {
             var commitments = await _commitmentV2ApiClient.GetEmployerAccountSummary(accountId);
 
-            var commitmentConnectedToEntity = commitments?.ApprenticeshipStatusSummaryResponse.FirstOrDefault(c =>
+            var commitmentConnectedToEntity = commitments.ApprenticeshipStatusSummaryResponse.FirstOrDefault(c =>
                 !string.IsNullOrEmpty(c.LegalEntityIdentifier)
                 && c.LegalEntityIdentifier.Equals(accountLegalEntityModel.Identifier)
                 && c.LegalEntityOrganisationType == accountLegalEntityModel.OrganisationType);
