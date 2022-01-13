@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.CosmosDb;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.NLog.Logger;
