@@ -62,7 +62,8 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     PledgesCount = indexTask.Result.PledgesCount,
                     ApplicationsCount = indexTask.Result.ApplicationsCount,
                     RenderCreateTransfersPledgeButton = renderCreateTransfersPledgeButtonTask.Result,
-                    RenderApplicationListButton = renderApplicationListButton.IsEnabled
+                    RenderApplicationListButton = renderApplicationListButton.IsEnabled,
+                    RemainingTransferAllowance = accountDetail.Result.RemainingTransferAllowance
                 }
             };
         }

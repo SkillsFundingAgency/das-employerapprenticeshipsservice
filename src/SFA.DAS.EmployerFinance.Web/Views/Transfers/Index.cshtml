@@ -1,4 +1,6 @@
-﻿@model OrchestratorResponse<SFA.DAS.EmployerFinance.Web.ViewModels.Transfers.IndexViewModel>
+﻿@using System.Globalization
+
+@model OrchestratorResponse<SFA.DAS.EmployerFinance.Web.ViewModels.Transfers.IndexViewModel>
 
 @{
     ViewBag.PageID = "transfers";
@@ -6,11 +8,31 @@
     ViewBag.Title = "Manage transfers";
     ViewBag.AnalyticsData.Vpv = $"/finance/transfers";
     ViewBag.ZenDeskLabel = "eas-finance";
+    var culture = new CultureInfo("en-GB");
 }
 
 <h1 class="heading-xlarge">Manage transfers</h1>
 
 <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-heading-m">My transfer finances</h2>
+        <p>This is a financial snapshot of what is available.</p>
+        <div class="data-wrap">
+            <div class="data">
+                <div class="grey-background">
+                    <span class="bold-small">
+                        Your transfer allowance
+                        <span class="visually-hidden">for</span>
+                        <abbr title="financial year">FY</abbr> 2021/22
+                    </span>
+                    <span class="data-item bold-xlarge">£200,000</span>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
     @if (Model.Data.CanViewPledgesSection)
     {
         <div class="govuk-grid-column-two-thirds">
