@@ -19,6 +19,7 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string EmployerIncentivesBaseUrl { get; set; }
         public string EmployerPortalBaseUrl { get; set; }
         public string EmployerProjectionsBaseUrl { get; set; }
+        public string LevyTransferMatchingBaseUrl { get; set; }
         public string EmployerRecruitBaseUrl { get; set; }
         public string ReservationsBaseUrl { get; set; }
         public string EmployerFavouritesBaseUrl { get; set; }
