@@ -13,9 +13,9 @@
 
 <h1 class="heading-xlarge">Manage transfers</h1>
 
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-        <h2 class="govuk-heading-m">My transfer finances</h2>
+<div class="grid-row">
+    <div class="grid-column-two-thirds">
+        <h2 class="heading-m">My transfer finances</h2>
         <p>This is a financial snapshot of what is available.</p>
         <div class="data-wrap">
             <div class="data">
@@ -35,31 +35,29 @@
 
     @if (Model.Data.CanViewPledgesSection)
     {
-        <div class="govuk-grid-column-two-thirds">
-            <h2 class="govuk-heading-m">My pledges</h2>
+        <div class="grid-column-two-thirds">
+            <h2 class="heading-m">My pledges</h2>
             <p>Create a public funding pledge which is shown online so that businesses can apply to you for a transfer of funds.</p>
             <div class="panel panel-border-wide">
                 You have <strong>@Model.Data.PledgesCount</strong> transfer pledges.
             </div>
-            <div class="">
-                @if (Model.Data.RenderCreateTransfersPledgeButton)
-                {
-                    <a class="button" href="@Url.LevyTransfersMatchingAccountAction("pledges/create/inform")" id="CreateTransfersPledgeButton">Create a transfers pledge</a>
-                }
-                <a href="@Url.LevyTransfersMatchingAccountAction("pledges")" class="button button-secondary">View my transfer pledges and applications</a>
-            </div>
+            @if (Model.Data.RenderCreateTransfersPledgeButton)
+            {
+                <a class="button" href="@Url.LevyTransfersMatchingAccountAction("pledges/create/inform")" id="CreateTransfersPledgeButton">Create a transfers pledge</a>
+            }
+            <a href="@Url.LevyTransfersMatchingAccountAction("pledges")" class="button button-secondary">View my transfer pledges and applications</a>
         </div>
     }
 
     @if (Model.Data.CanViewApplySection)
     {
-        <div class="govuk-grid-column-two-thirds">
-            <h2 class="govuk-heading-m">Apply for transfers funding</h2>
+        <div class="grid-column-two-thirds">
+            <h2 class="heading-m">Apply for transfers funding</h2>
             <p>Search transfers funding opportunities and apply for a transfer of funds.</p>
             <div class="panel panel-border-wide">
                 You have <strong>@Model.Data.ApplicationsCount</strong> transfer applications.
             </div>
-            <div class="govuk-button-group">
+            <div class="button-group">
                 <a class="button" href="@Url.LevyTransfersMatchingAction("")" id="ApplyForTransfersButton">Apply for transfer opportunities</a>
                 @if (Model.Data.RenderApplicationListButton)
                 {
