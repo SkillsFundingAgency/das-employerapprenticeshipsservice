@@ -14,8 +14,8 @@
 <h1 class="heading-xlarge">Manage transfers</h1>
 
 <div class="grid-row">
-    <div class="grid-column-two-thirds">
-        <h2 class="heading-m">My transfer finances</h2>
+    <div class="column-two-thirds">
+        <h2 class="heading-medium">My transfer finances</h2>
         <p>This is a financial snapshot of what is available.</p>
         <div class="data-wrap">
             <div class="data">
@@ -26,8 +26,6 @@
                         <abbr title="financial year">FY</abbr> 2021/22
                     </span>
                     <span class="data-item bold-xlarge">£200,000</span>
-
-
                 </div>
             </div>
         </div>
@@ -35,8 +33,8 @@
 
     @if (Model.Data.CanViewPledgesSection)
     {
-        <div class="grid-column-two-thirds">
-            <h2 class="heading-m">My pledges</h2>
+        <div class="column-two-thirds">
+            <h2 class="heading-medium">My pledges</h2>
             <p>Create a public funding pledge which is shown online so that businesses can apply to you for a transfer of funds.</p>
             <div class="panel panel-border-wide">
                 You have <strong>@Model.Data.PledgesCount</strong> transfer pledges.
@@ -51,8 +49,8 @@
 
     @if (Model.Data.CanViewApplySection)
     {
-        <div class="grid-column-two-thirds">
-            <h2 class="heading-m">Apply for transfers funding</h2>
+        <div class="column-two-thirds">
+            <h2 class="heading-medium">Apply for transfers funding</h2>
             <p>Search transfers funding opportunities and apply for a transfer of funds.</p>
             <div class="panel panel-border-wide">
                 You have <strong>@Model.Data.ApplicationsCount</strong> transfer applications.
