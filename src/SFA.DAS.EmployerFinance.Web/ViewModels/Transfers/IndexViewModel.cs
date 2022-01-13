@@ -8,6 +8,7 @@
         public bool CanViewApplySection { get; set; }
         public int PledgesCount { get; set; }
         public int ApplicationsCount { get; set; }
-        public decimal RemainingTransferAllowance { get; set; }
+        public decimal StartingTransferAllowance { get; set; }
+        public string FinancialYearString { get; set; }
     }
 }

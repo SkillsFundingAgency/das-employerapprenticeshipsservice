@@ -21,10 +21,13 @@
             <span class="bold-small">
                 Your transfer allowance
                 <span class="visually-hidden">for</span>
-                <abbr title="financial year">FY</abbr> 2021/22
+                <abbr title="financial year">FY</abbr> @Model.Data.FinancialYearString
             </span>
-            <span class="data-item bold-xlarge">£200,000</span>
+            <span class="data-item bold-xlarge">@Model.Data.StartingTransferAllowance.ToString("C0", culture)</span>
         </div>
+        <h2 class="heading-medium">Transfers allowance information</h2>
+        <p><strong>Your transfer allowance for this financial year (FY)</strong></p>
+        <p>This is calculated every year on 6 April and shows in your account after 20 April.</p>
     </div>
 
     @if (Model.Data.CanViewPledgesSection)
