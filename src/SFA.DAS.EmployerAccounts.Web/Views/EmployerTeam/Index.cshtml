@@ -226,43 +226,48 @@ else
                                     @switch (task.Type)
                                     {
                                         case "LevyDeclarationDue":
-                                            <p>
+                                            <span>
                                                 Levy declaration due by 19 @DateTime.Now.ToString("MMMM")
-                                            </p>
+                                            </span>
                                             <form action="@Url.Action("DismissTask", "Task")" method="POST">
                                                 <input type="hidden" name="taskType" value="@Enum.GetName(typeof(TasksEnum.TaskType), TasksEnum.TaskType.LevyDeclarationDue)" />
-                                                <button type="submit">Dismiss this message</button>
+                                                <button type="submit" class="govuk-button govuk-button--secondary">Dismiss this message</button>
                                             </form>
                                             break;
                                         case "AgreementToSign":
-                                            <p>
-                                                @task.ItemsDueCount agreement@(task.ItemsDueCount > 1 ? "s" : "") to sign <a href="@Url.Action("ViewUnsignedAgreements", "EmployerAgreement")">View agreements</a>
-                                            </p>
+                                            <span>
+                                                @task.ItemsDueCount agreement@(task.ItemsDueCount > 1 ? "s" : "") to sign <a href="@Url.Action("ViewUnsignedAgreements", "EmployerAgreement")" class="govuk-link govuk-link govuk-link--no-visited-state">View agreements</a>
+                                            </span>
                                             break;
                                         case "AddApprentices":
-                                            <p>
-                                                <a href="@Url.EmployerCommitmentsV2Action("unapproved/Inform")">Start adding apprentices now</a>
-                                            </p>
+                                            <span>
+                                                <a href="@Url.EmployerCommitmentsV2Action("unapproved/Inform")" class="govuk-link govuk-link govuk-link--no-visited-state">Start adding apprentices now</a>
+                                            </span>
                                             break;
                                         case "ApprenticeChangesToReview":
-                                            <p>
-                                                @task.ItemsDueCount apprentice change@(task.ItemsDueCount > 1 ? "s" : "") to review <a href="@Url.EmployerCommitmentsV2Action("apprentices")">View changes</a>
-                                            </p>
+                                            <span>
+                                                @task.ItemsDueCount apprentice change@(task.ItemsDueCount > 1 ? "s" : "") to review <a href="@Url.EmployerCommitmentsV2Action("apprentices")" class="govuk-link govuk-link govuk-link--no-visited-state">View changes</a>
+                                            </span>
                                             break;
                                         case "CohortRequestReadyForApproval":
-                                            <p>
-                                                @task.ItemsDueCount cohort request@(task.ItemsDueCount > 1 ? "s" : "") ready for approval <a href="@Url.EmployerCommitmentsV2Action("unapproved/review")">View cohorts</a>
-                                            </p>
+                                            <span>
+                                                @task.ItemsDueCount cohort request@(task.ItemsDueCount > 1 ? "s" : "") ready for approval <a href="@Url.EmployerCommitmentsV2Action("unapproved/review")" class="govuk-link govuk-link govuk-link--no-visited-state">View cohorts</a>
+                                            </span>
                                             break;
                                         case "ReviewConnectionRequest":
-                                            <p>
-                                                @task.ItemsDueCount connection request@(task.ItemsDueCount > 1 ? "s" : "") to review <a href="@Url.Action("Index", "Transfers")">View details</a>
-                                            </p>
+                                            <span>
+                                                @task.ItemsDueCount connection request@(task.ItemsDueCount > 1 ? "s" : "") to review <a href="@Url.Action("Index", "Transfers")" class="govuk-link govuk-link govuk-link--no-visited-state">View details</a>
+                                            </span>
                                             break;
                                         case "TransferRequestReceived":
-                                            <p>
-                                                Transfer request received<a href="@Url.Action("Index", "Transfers")">View details</a>
-                                            </p>
+                                            <span>
+                                                Transfer request received <a href="@Url.Action("Index", "Transfers")" class="govuk-link">View details</a>
+                                            </span>
+                                            break;
+                                        case "PledgeApplicationForReview":
+                                            <span>
+                                                @task.ItemsDueCount transfer pledge application@(task.ItemsDueCount > 1 ? "s" : "") awaiting your approval <a href="@Url.LevyTransfersMatchingAction("pledges")" class="govuk-link govuk-link--no-visited-state">View applications</a>
+                                            </span>
                                             break;
                                     }
                                 </li>
