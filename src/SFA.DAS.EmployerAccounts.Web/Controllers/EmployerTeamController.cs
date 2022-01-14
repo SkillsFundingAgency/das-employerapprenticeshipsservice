@@ -330,7 +330,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 return Redirect(Url.EmployerRecruitAction());
             }
 
-            return Redirect(Url.EmployerCommitmentsAction("apprentices/inform"));
+            return Redirect(Url.EmployerCommitmentsV2Action("unapproved/Inform"));
         }
 
         [ChildActionOnly]
