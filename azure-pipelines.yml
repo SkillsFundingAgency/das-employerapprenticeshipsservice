@@ -10,8 +10,11 @@ workspace:
     clean: all
 
 variables:
-  buildConfiguration: 'release'
-  buildPlatform: 'any cpu'
+- group: BUILD Management Resources
+- name: buildConfiguration
+  value: release
+- name: buildPlatform
+  value: any cpu
 
 pool:
   name: 'DAS - Continuous Integration'
@@ -24,7 +27,7 @@ resources:
     type: github
     name: SkillsFundingAgency/das-platform-building-blocks
     ref: refs/heads/master
-    endpoint: "GitHub (SFA)"
+    endpoint: SkillsFundingAgency
 
 steps:
 - task: gittools.gitversion.gitversion-task.GitVersion@5
@@ -48,6 +51,8 @@ steps:
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
+- template: azure-pipelines-templates/build/step/dependency-check.yml@das-platform-building-blocks  
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet pack'
