@@ -40,13 +40,11 @@ namespace SFA.DAS.EmployerAccounts.Queries.SendTransferConnectionInvitation
                 ThrowValidationException<SendTransferConnectionInvitationQuery>(q => q.ReceiverAccountPublicHashedId, "You must enter a valid account ID");
             }
 
-            var anyTransferConnectionInvitations = await _db.Value.TransferConnectionInvitations.AnyAsync(i => (
-                                                                                                                   i.SenderAccount.Id == message.AccountId && i.ReceiverAccount.Id == receiverAccount.Id ||
-                                                                                                                   i.SenderAccount.Id == receiverAccount.Id && i.ReceiverAccount.Id == message.AccountId) && (
-                                                                                                                   i.Status == TransferConnectionInvitationStatus.Pending ||
-                                                                                                                   i.Status == TransferConnectionInvitationStatus.Approved));
+            var anyTransferConnectionToSameReceiverInvitations = await _db.Value.TransferConnectionInvitations.AnyAsync(i => 
+                i.SenderAccount.Id == message.AccountId && i.ReceiverAccount.Id == receiverAccount.Id && 
+                (i.Status == TransferConnectionInvitationStatus.Pending || i.Status == TransferConnectionInvitationStatus.Approved));
 
-            if (anyTransferConnectionInvitations)
+            if (anyTransferConnectionToSameReceiverInvitations)
             {
                 ThrowValidationException<SendTransferConnectionInvitationQuery>(q => q.ReceiverAccountPublicHashedId, "You can't connect with this employer because they already have a pending or accepted connection request");
             }
