@@ -52,17 +52,14 @@ namespace SFA.DAS.EmployerAccounts.Models.Account
 
         private void RequiresTransferConnectionInvitationDoesNotExist(Account receiverAccount)
         {
-            var anyReceivedTransferConnectionInvitations = ReceivedTransferConnectionInvitations.Any(i =>
-                i.SenderAccount.Id == receiverAccount.Id && (
-                i.Status == TransferConnectionInvitationStatus.Pending ||
-                i.Status == TransferConnectionInvitationStatus.Approved));
-
+            // transfer connection requests for this account where the
+            // receiving account is the intended receiver - this is a duplicate check
             var anySentTransferConnectionInvitations = SentTransferConnectionInvitations.Any(i =>
                 i.ReceiverAccount.Id == receiverAccount.Id && (
                 i.Status == TransferConnectionInvitationStatus.Pending ||
                 i.Status == TransferConnectionInvitationStatus.Approved));
 
-            if (anyReceivedTransferConnectionInvitations || anySentTransferConnectionInvitations)
+            if (anySentTransferConnectionInvitations)
                 throw new Exception("Requires transfer connection invitation does not exist");
         }
 
