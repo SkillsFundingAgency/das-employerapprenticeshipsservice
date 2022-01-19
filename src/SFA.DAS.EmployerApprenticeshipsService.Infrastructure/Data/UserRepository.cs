@@ -2,20 +2,16 @@
 using System.Data;
 using System.Threading.Tasks;
 using Dapper;
-using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.Sql.Client;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
-    public class UserRepository : BaseRepository, IUserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly Lazy<EmployerAccountsDbContext> _db;
 
-        public UserRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger, Lazy<EmployerAccountsDbContext> db)
-            : base(configuration.DatabaseConnectionString, logger)
+        public UserRepository(Lazy<EmployerAccountsDbContext> db)
         {
             _db = db;
         }
