@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Azure.Services.AppAuthentication, Version=1.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Users\paul\.nuget\packages\microsoft.azure.services.appauthentication\1.0.1\lib\net452\Microsoft.Azure.Services.AppAuthentication.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -150,10 +154,6 @@
       <Project>{C15DEC5C-666D-4CB2-968E-A273EB60D15E}</Project>
       <Name>SFA.DAS.EmployerFinance.Messages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj">
-      <Project>{C5880F73-59D6-4C59-A1A2-DBA38D13E8DC}</Project>
-      <Name>SFA.DAS.EmployerFinance</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -188,6 +188,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Azure.KeyVault.Core">
       <Version>2.0.4</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Azure.Services.AppAuthentication">
+      <Version>1.0.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Caching.Memory">
       <Version>2.2.0</Version>

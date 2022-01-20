@@ -68,6 +68,7 @@
     <Compile Include="Data\MembershipRepository.cs" />
     <Compile Include="Data\UserRepository.cs" />
     <Compile Include="Extensions\EmployerFinancialDbContextExtensions.cs" />
+    <Compile Include="Extensions\SynchronizedStorageSessionExtensions.cs" />
     <Compile Include="Mapping\Profiles\ReferenceDataMappings.cs" />
     <Compile Include="Mapping\Profiles\TransactionMappings.cs" />
     <Compile Include="MarkerInterfaces\IAccountLegalEntityPublicHashingService.cs" />

@@ -6,7 +6,7 @@ using Microsoft.Azure.Services.AppAuthentication;
 using NServiceBus.Persistence;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.EmployerFinance.Extensions;
+using SFA.DAS.EAS.Infrastructure.Extensions;
 using SFA.DAS.NServiceBus.Features.ClientOutbox.Data;
 using SFA.DAS.UnitOfWork.Context;
 using StructureMap;
