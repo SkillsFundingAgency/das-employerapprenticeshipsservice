@@ -3,12 +3,8 @@ using System.Configuration;
 using System.Data.Common;
 using System.Data.SqlClient;
 using Microsoft.Azure.Services.AppAuthentication;
-using NServiceBus.Persistence;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.EAS.Infrastructure.Extensions;
-using SFA.DAS.NServiceBus.Features.ClientOutbox.Data;
-using SFA.DAS.UnitOfWork.Context;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Application.DependencyResolution
@@ -38,14 +34,21 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
             For<EmployerFinanceDbContext>().Use(c => GetEmployerFinanceDbContext(c));
         }
 
-        private EmployerAccountsDbContext GetEmployerAccountsDbContext(IContext context)
+        private EmployerAccountsDbContext GetEmployerAccountsDbContext(IContext c)
         {
-            var unitOfWorkContext = context.GetInstance<IUnitOfWorkContext>();
-            var clientSession = unitOfWorkContext.Find<IClientOutboxTransaction>();
-            var serverSession = unitOfWorkContext.Find<SynchronizedStorageSession>();
-            var sqlSession = clientSession?.GetSqlSession() ?? serverSession.GetSqlSession();
+            var environmentName = ConfigurationManager.AppSettings["EnvironmentName"];
 
-            return new EmployerAccountsDbContext(sqlSession.Connection, sqlSession.Transaction);
+            var azureServiceTokenProvider = new AzureServiceTokenProvider();
+
+            var connection = environmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase)
+                ? new SqlConnection(GetEmployerAccountsConnectionString(c))
+                : new SqlConnection
+                {
+                    ConnectionString = GetEmployerAccountsConnectionString(c),
+                    AccessToken = azureServiceTokenProvider.GetAccessTokenAsync(AzureResource).Result
+                };
+
+            return new EmployerAccountsDbContext(connection);
         }
 
         private EmployerFinanceDbContext GetEmployerFinanceDbContext(IContext c)
