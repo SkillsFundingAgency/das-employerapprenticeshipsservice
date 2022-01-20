@@ -149,6 +149,9 @@
     <PackageReference Include="Microsoft.Owin.Security.ActiveDirectory">
       <Version>3.0.1</Version>
     </PackageReference>
+    <PackageReference Include="SFA.DAS.Authorization.WebApi">
+      <Version>6.0.52</Version>
+    </PackageReference>
     <PackageReference Include="SFA.DAS.EmployerAccounts.Api.Types">
       <Version>1.6.1852</Version>
     </PackageReference>
@@ -169,6 +172,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="SFA.DAS.Authorization.WebApi">
+      <HintPath>..\..\..\..\..\Users\paul\.nuget\packages\sfa.das.authorization.webapi\6.0.52\lib\net462\SFA.DAS.Authorization.WebApi.dll</HintPath>
+    </Reference>
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <PropertyGroup>
