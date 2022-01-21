@@ -16,7 +16,6 @@
                 <thead>
                     <tr>
                         <th>Employer</th>
-                        <th>Connection type</th>
                         <th>Status</th>
                         <th>Total cost</th>
                         <th>&nbsp;</th>
@@ -29,7 +28,6 @@
 
                         <tr>
                             <td data-label="Employer">@peerAccount.Name</td>
-                            <td data-label="Connection type">@transferRequest.Type.ToString()</td>
                             <td data-label="Status">@transferRequest.Status.ToString()</td>
                             <td data-label="Total cost">@transferRequest.TransferCost.ToString("C0", culture)</td>
                             <td>

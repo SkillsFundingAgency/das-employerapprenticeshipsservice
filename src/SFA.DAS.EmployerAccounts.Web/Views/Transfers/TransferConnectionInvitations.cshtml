@@ -13,7 +13,6 @@
                 <thead>
                     <tr>
                         <th>Employer</th>
-                        <th>Connection type</th>
                         <th>Status</th>
                         <th>&nbsp;</th>
                     </tr>
@@ -24,7 +23,6 @@
                         var peerAccount = transferConnectionInvitation.GetPeerAccount(Model.AccountId);
                         <tr>
                             <td data-label="Employer">@peerAccount.Name</td>
-                            <td data-label="Connection type">@transferConnectionInvitation.Type.ToString()</td>
                             <td data-label="Status">@transferConnectionInvitation.Status.ToString()</td>
                             <td>
                                 @if (Html.IsAuthorized("EmployerFeature.TransferConnectionRequests"))
