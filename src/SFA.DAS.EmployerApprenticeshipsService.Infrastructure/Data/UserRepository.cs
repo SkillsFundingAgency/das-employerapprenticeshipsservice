@@ -29,7 +29,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_account].[UpsertUser] @userRef, @email, @firstName, @lastName, @correlationId",
                 param: parameters,
-                commandType: CommandType.Text);
+                commandType: CommandType.Text,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction);
         }
     }
 }
