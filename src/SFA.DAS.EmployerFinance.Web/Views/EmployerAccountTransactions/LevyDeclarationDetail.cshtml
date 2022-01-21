@@ -87,7 +87,7 @@
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
-            <li><a href="@Url.LegacyEasAccountAction($"teams")">Home</a></li>
+            <li><a href="@Url.EmployerAccountsAction($"teams")">Home</a></li>
             <li><a href="@Url.Action("TransactionsView", "EmployerAccountTransactions", new {year = Model.Data.TransactionDate.Year, month = Model.Data.TransactionDate.Month})">Your transactions</a></li>
             <li>@paymentType details</li>
         </ol>
