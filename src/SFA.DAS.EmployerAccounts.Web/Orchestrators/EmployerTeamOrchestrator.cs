@@ -215,6 +215,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 var viewModel = new AccountDashboardViewModel
                 {
                     Account = accountResponse.Account,
+                    SingleAccountLegalEntityId = agreementsResponse.EmployerAgreements.Count == 1 ? agreementsResponse.EmployerAgreements.First().LegalEntity.AccountLegalEntityPublicHashedId : null,
                     UserRole = userRoleResponse.UserRole,
                     HashedUserId = externalUserId,
                     UserFirstName = userResponse.User.FirstName,
