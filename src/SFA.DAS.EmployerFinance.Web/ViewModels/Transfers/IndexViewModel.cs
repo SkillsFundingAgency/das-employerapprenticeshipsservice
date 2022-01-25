@@ -10,5 +10,7 @@
         public int ApplicationsCount { get; set; }
         public decimal StartingTransferAllowance { get; set; }
         public string FinancialYearString { get; set; }
+        public int ActivePledgesTotalAmount { get; set; }
+        public int PledgesAndTransferConnections { get; set; }
     }
 }
