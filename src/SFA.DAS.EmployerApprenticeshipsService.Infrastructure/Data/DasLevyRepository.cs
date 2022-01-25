@@ -4,7 +4,6 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.Sql.Client;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,13 +12,12 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
-    public class DasLevyRepository : BaseRepository, IDasLevyRepository
+    public class DasLevyRepository : IDasLevyRepository
     {
         private readonly LevyDeclarationProviderConfiguration _configuration;
         private readonly Lazy<EmployerFinanceDbContext> _db;
 
         public DasLevyRepository(LevyDeclarationProviderConfiguration configuration, ILog logger, Lazy<EmployerFinanceDbContext> db)
-            : base(configuration.DatabaseConnectionString, logger)
         {
             _configuration = configuration;
             _db = db;

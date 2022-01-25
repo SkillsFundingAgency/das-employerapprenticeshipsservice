@@ -1,7 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
-using System.Web.Http.ModelBinding;
 using SFA.DAS.Authorization.DependencyResolution.StructureMap;
 using SFA.DAS.EAS.Account.Api.DependencyResolution;
 using SFA.DAS.EAS.Account.Api.ExceptionLoggers;

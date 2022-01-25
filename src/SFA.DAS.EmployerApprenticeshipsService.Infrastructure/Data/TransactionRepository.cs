@@ -6,8 +6,6 @@ using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Domain.Models.Transfers;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Sql.Client;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -17,13 +15,12 @@ using SFA.DAS.EAS.Domain.Models.ExpiredFunds;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
-    public class TransactionRepository : BaseRepository, ITransactionRepository
+    public class TransactionRepository : ITransactionRepository
     {
         private readonly IMapper _mapper;
         private readonly Lazy<EmployerFinanceDbContext> _db;
 
-        public TransactionRepository(LevyDeclarationProviderConfiguration configuration, IMapper mapper, ILog logger, Lazy<EmployerFinanceDbContext> db)
-            : base(configuration.DatabaseConnectionString, logger)
+        public TransactionRepository(LevyDeclarationProviderConfiguration configuration, IMapper mapper, Lazy<EmployerFinanceDbContext> db)
         {
             _mapper = mapper;
             _db = db;

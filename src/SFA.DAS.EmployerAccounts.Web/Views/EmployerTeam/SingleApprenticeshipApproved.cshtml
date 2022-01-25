@@ -1,48 +1,47 @@
 ﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.ApprenticeshipViewModel
 
-<section class="dashboard-section">
-    <h2 class="section-heading heading-large" id="call-to-action-your-apprentice">
+<section>
+    <h2 class="govuk-heading-l govuk-!-margin-bottom-2" id="call-to-action-your-apprentice">
         Your apprentice
     </h2>
-
-    <table class="responsive">
-        <tr>
-            <th scope="row" class="tw-35">
+    <table class="govuk-table">
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header das-table-cell-width-35">
                 Name
             </th>
-            <td class="tw-65" id="apprentice-name">
+            <td id="apprentice-name" class="govuk-table__cell das-table-cell-width-65">
                 @(Model?.ApprenticeshipFullName)
             </td>
         </tr>
-        <tr>
-            <th scope="row">
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">
                 Course
             </th>
-            <td id="course-name">
+            <td id="course-name" class="govuk-table__cell">
                 @(Model?.CourseName)
             </td>
         </tr>
-        <tr>
-            <th scope="row">
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">
                 Training Provider
             </th>
-            <td id="provider-name">
+            <td id="provider-name" class="govuk-table__cell">
                 @(Model?.TrainingProvider?.Name)
             </td>
         </tr>
-        <tr>
-            <th scope="row">
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">
                 Start month
             </th>
-            <td id="course-start-date">
+            <td id="course-start-date" class="govuk-table__cell">
                 @(Model?.CourseStartDateText)
             </td>
         </tr>
-        <tr>
-            <th scope="row">
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">
                 Finish month
             </th>
-            <td id="course-end-date">
+            <td id="course-end-date" class="govuk-table__cell">
                 @(Model?.CourseEndDateText)
             </td>
         </tr>
@@ -54,3 +53,4 @@
     </p>
 </section>
 
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">

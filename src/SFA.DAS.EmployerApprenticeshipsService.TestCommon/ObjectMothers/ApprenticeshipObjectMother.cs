@@ -14,7 +14,6 @@ namespace SFA.DAS.EAS.TestCommon.ObjectMothers
                 Id = random.Next(1, 99999),
                 FirstName = firstName,
                 LastName = lastName,
-                NINumber = $"AB {random.Next(10, 99)} {random.Next(10, 99)} {random.Next(10, 99)} C",
                 StartDate = DateTime.Now.AddDays(20)
             };
         }

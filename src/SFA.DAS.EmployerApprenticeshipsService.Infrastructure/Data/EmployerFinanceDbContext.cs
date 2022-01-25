@@ -1,6 +1,7 @@
 ﻿using System;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Threading;
@@ -22,6 +23,13 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public EmployerFinanceDbContext(string nameOrConnectionString)
             : base(nameOrConnectionString)
         {
+        }
+
+        public EmployerFinanceDbContext(DbConnection connection, DbTransaction transaction = null)
+            : base(connection, false)
+        {
+            if (transaction != null) Database.UseTransaction(transaction);
+            else Database.BeginTransaction();
         }
 
         protected EmployerFinanceDbContext()
