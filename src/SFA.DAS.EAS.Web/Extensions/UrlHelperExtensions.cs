@@ -21,6 +21,13 @@ namespace SFA.DAS.EAS.Web.Extensions
 
             return AccountAction(helper, baseUrl, path);
         }
+        public static string EmployerCommitmentsV2Action(this UrlHelper helper, string path)
+        {
+            var configuration = DependencyResolver.Current.GetService<EmployerApprenticeshipsServiceConfiguration>();
+            var baseUrl = configuration.EmployerCommitmentsV2BaseUrl;
+
+            return AccountAction(helper, baseUrl, path);
+        }
 
         public static string EmployerFinanceAction(this UrlHelper helper, string path)
         {
