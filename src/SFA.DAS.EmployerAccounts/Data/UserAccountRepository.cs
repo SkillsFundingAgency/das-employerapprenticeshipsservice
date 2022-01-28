@@ -122,21 +122,20 @@ namespace SFA.DAS.EmployerAccounts.Data
 
         public Task Upsert(User user)
         {
-            return WithConnection(c =>
-            {
-                var parameters = new DynamicParameters();
 
-                parameters.Add("@email", user.Email, DbType.String);
-                parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
-                parameters.Add("@firstName", user.FirstName, DbType.String);
-                parameters.Add("@lastName", user.LastName, DbType.String);
-                parameters.Add("@correlationId", user.CorrelationId, DbType.String);
+            var parameters = new DynamicParameters();
 
-                return c.ExecuteAsync(
-                    sql: "[employer_account].[UpsertUser] @userRef, @email, @firstName, @lastName, @correlationId",
-                    param: parameters,
-                    commandType: CommandType.Text);
-            });
+            parameters.Add("@email", user.Email, DbType.String);
+            parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
+            parameters.Add("@firstName", user.FirstName, DbType.String);
+            parameters.Add("@lastName", user.LastName, DbType.String);
+            parameters.Add("@correlationId", user.CorrelationId, DbType.String);
+
+            return _db.Value.Database.Connection.ExecuteAsync(
+                sql: "[employer_account].[UpsertUser] @userRef, @email, @firstName, @lastName, @correlationId",
+                param: parameters,
+                _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.Text);
         }
     }
 }

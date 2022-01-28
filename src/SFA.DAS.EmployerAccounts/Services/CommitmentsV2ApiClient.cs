@@ -34,7 +34,8 @@ namespace SFA.DAS.EmployerAccounts.Services
             await AddAuthenticationHeader(requestMessage);
             
             var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
-            
+            response.EnsureSuccessStatusCode();
+
             var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             return JsonConvert.DeserializeObject<GetApprenticeshipResponse>(json);
         }
@@ -47,6 +48,7 @@ namespace SFA.DAS.EmployerAccounts.Services
             await AddAuthenticationHeader(requestMessage);            
 
             var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             return JsonConvert.DeserializeObject<GetApprenticeshipsResponse>(json);
@@ -60,6 +62,7 @@ namespace SFA.DAS.EmployerAccounts.Services
             await AddAuthenticationHeader(requestMessage);
 
             var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             return JsonConvert.DeserializeObject<GetCohortsResponse>(json);
@@ -73,6 +76,7 @@ namespace SFA.DAS.EmployerAccounts.Services
             await AddAuthenticationHeader(requestMessage);
 
             var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             return JsonConvert.DeserializeObject<GetDraftApprenticeshipsResponse>(json);
@@ -86,6 +90,7 @@ namespace SFA.DAS.EmployerAccounts.Services
             await AddAuthenticationHeader(requestMessage);
             
             var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             return JsonConvert.DeserializeObject<GetApprenticeshipStatusSummaryResponse>(json);
@@ -99,7 +104,8 @@ namespace SFA.DAS.EmployerAccounts.Services
             await AddAuthenticationHeader(requestMessage);            
 
             var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
-            
+            response.EnsureSuccessStatusCode();
+
             var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             return JsonConvert.DeserializeObject<GetTransferRequestSummaryResponse>(json);
         }
