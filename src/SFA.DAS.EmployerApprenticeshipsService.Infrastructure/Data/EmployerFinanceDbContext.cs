@@ -65,5 +65,11 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             modelBuilder.Entity<Payment>().Property(a => a.EmployerAccountId).HasColumnName("AccountId");
             modelBuilder.Ignore<PaymentDetails>();
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            this.Database.Connection.Dispose();
+            base.Dispose(disposing);
+        }
     }
 }
