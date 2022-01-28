@@ -81,8 +81,6 @@ steps:
   inputs:
     pollingTimeoutSec: '300'
 
-- template: azure-pipelines-templates/build/step/dependency-check.yml@das-platform-building-blocks 
-
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
   inputs:
