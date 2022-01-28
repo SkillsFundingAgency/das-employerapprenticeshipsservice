@@ -10,6 +10,7 @@ workspace:
     clean: all
 
 variables:
+- group: ESFA - SonarCloud
   buildConfiguration: 'release'
   buildPlatform: 'any cpu'
 
@@ -23,8 +24,8 @@ resources:
   - repository: das-platform-building-blocks
     type: github
     name: SkillsFundingAgency/das-platform-building-blocks
-    ref: refs/heads/master
-    endpoint: "GitHub (SFA)"
+    ref: refs/tags/0.4.34
+    endpoint: SkillsFundingAgency
 
 steps:
 - task: gittools.gitversion.gitversion-task.GitVersion@5
@@ -32,6 +33,18 @@ steps:
   inputs:
     configFilePath: GitVersion.yml
     updateAssemblyInfo: true
+
+- task: SonarCloudPrepare@1
+  displayName: Prepare SonarCloud analysis configuration
+  condition: and(succeeded(), or(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/main'), eq(variables['Build.Reason'], 'PullRequest')))
+  inputs:
+    SonarCloud: ESFA - SonarCloud
+    organization: $(SonarCloudOrganisationKey)
+    scannerMode: MSBuild
+    projectName: "$(Build.DefinitionName)"
+    projectKey: SkillsFundingAgency_das-employerapprenticeshipsservice
+    extraProperties: |
+      sonar.cs.opencover.reportsPaths=$(Agent.TempDirectory)/CoverageResults/coverage.opencover.xml
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet restore all'
@@ -63,6 +76,16 @@ steps:
     testAssemblyVer2: '**/bin/**/*UnitTests.dll'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
+- task: SonarCloudAnalyze@1
+  displayName: 'Run SonarCloud analysis'
+
+- task: SonarCloudPublish@1
+  displayName: 'Publish results on build summary'
+  inputs:
+    pollingTimeoutSec: '300'
+
+- template: azure-pipelines-templates/dependency-check.yml@das-platform-building-blocks 
 
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
