@@ -11,8 +11,6 @@ workspace:
 
 variables:
 - group: ESFA - SonarCloud
-  buildConfiguration: 'release'
-  buildPlatform: 'any cpu'
 
 pool:
   name: 'DAS - Continuous Integration'
@@ -59,8 +57,8 @@ steps:
     solution: 'src/SFA.DAS.EAS.sln'
     vsVersion: 16.0
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    platform: 'any cpu'
+    configuration: 'release'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet pack'
@@ -74,8 +72,8 @@ steps:
   displayName: 'VsTest - testAssemblies'
   inputs:
     testAssemblyVer2: '**/bin/**/*UnitTests.dll'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    platform: 'any cpu'
+    configuration: 'release'
 
 - task: SonarCloudAnalyze@1
   displayName: 'Run SonarCloud analysis'
