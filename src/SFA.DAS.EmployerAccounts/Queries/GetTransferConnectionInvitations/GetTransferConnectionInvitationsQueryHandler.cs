@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,7 +28,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetTransferConnectionInvitations
                 .Where(i => i.SenderAccount.Id == message.AccountId && !i.DeletedBySender || i.ReceiverAccount.Id == message.AccountId && !i.DeletedByReceiver)
                 .OrderBy(i => i.ReceiverAccount.Id == message.AccountId ? i.SenderAccount.Name : i.ReceiverAccount.Name)
                 .ThenBy(i => i.CreatedDate)
-                .ProjectTo<TransferConnectionInvitationDto>(_configurationProvider)
+                .ProjectTo<TransferConnectionInvitationDto>(_configurationProvider, new {accountId = message.AccountId})
                 .ToListAsync();
 
             return new GetTransferConnectionInvitationsResponse

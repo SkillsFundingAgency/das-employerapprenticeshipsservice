@@ -35,8 +35,6 @@ namespace SFA.DAS.EmployerAccounts.Models.Account
         {
             RequiresTransferConnectionInvitationSenderIsNotTheReceiver(receiverAccount);
             RequiresMinTransferAllowanceIsAvailable(senderAccountTransferAllowance);
-            RequiresTransferConnectionInvitationSenderIsNotAReceiver();
-            RequiresTransferConnectionInvitationReceiverIsNotASender(receiverAccount);
             RequiresTransferConnectionInvitationDoesNotExist(receiverAccount);
 
             var transferConnectionInvitation = new TransferConnectionInvitation(this, receiverAccount, senderUser);
@@ -54,40 +52,21 @@ namespace SFA.DAS.EmployerAccounts.Models.Account
 
         private void RequiresTransferConnectionInvitationDoesNotExist(Account receiverAccount)
         {
-            var anyReceivedTransferConnectionInvitations = ReceivedTransferConnectionInvitations.Any(i =>
-                i.SenderAccount.Id == receiverAccount.Id && (
-                i.Status == TransferConnectionInvitationStatus.Pending ||
-                i.Status == TransferConnectionInvitationStatus.Approved));
-
+            // transfer connection requests for this account where the
+            // receiving account is the intended receiver - this is a duplicate check
             var anySentTransferConnectionInvitations = SentTransferConnectionInvitations.Any(i =>
                 i.ReceiverAccount.Id == receiverAccount.Id && (
                 i.Status == TransferConnectionInvitationStatus.Pending ||
                 i.Status == TransferConnectionInvitationStatus.Approved));
 
-            if (anyReceivedTransferConnectionInvitations || anySentTransferConnectionInvitations)
+            if (anySentTransferConnectionInvitations)
                 throw new Exception("Requires transfer connection invitation does not exist");
-        }
-
-        private void RequiresTransferConnectionInvitationReceiverIsNotASender(Account receiverAccount)
-        {
-            if (receiverAccount.IsTransferConnectionInvitationSender())
-                throw new Exception("Requires transfer connection invitation receiver is not a sender");
         }
 
         private void RequiresTransferConnectionInvitationSenderIsNotTheReceiver(Account receiverAccount)
         {
             if (receiverAccount.Id == Id)
                 throw new Exception("Requires transfer connection invitation sender is not the receiver");
-        }
-
-        private void RequiresTransferConnectionInvitationSenderIsNotAReceiver()
-        {
-            var isReceiver = ReceivedTransferConnectionInvitations.Any(i =>
-                i.Status == TransferConnectionInvitationStatus.Pending ||
-                i.Status == TransferConnectionInvitationStatus.Approved);
-
-            if (isReceiver)
-                throw new Exception("Requires transfer connection invitation sender is not a receiver");
         }
     }
 }
