@@ -8,7 +8,7 @@ workspace:
     clean: all
 
 variables:
-- group: ESFA - SonarCloud
+- group: BUILD Management Resources
 
 pool:
   name: 'DAS - Continuous Integration'
