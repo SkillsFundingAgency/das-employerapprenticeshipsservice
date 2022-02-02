@@ -4,24 +4,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesByHashedAccountId
 {
     public class GetAccountLegalEntitiesByHashedAccountIdQueryHandler : IAsyncRequestHandler<GetAccountLegalEntitiesByHashedAccountIdRequest, GetAccountLegalEntitiesByHashedAccountIdResponse>
     {
-        private readonly IHashingService _hashingService;
-        private readonly IEmployerAgreementRepository _employerAgreementRepository;
+        private readonly IAccountLegalEntityRepository _accountLegalEntityRepository;
         private readonly IValidator<GetAccountLegalEntitiesByHashedAccountIdRequest> _validator;
 
-        public GetAccountLegalEntitiesByHashedAccountIdQueryHandler(
-            IHashingService hashingService,
-            IEmployerAgreementRepository employerAgreementRepository,
+        public GetAccountLegalEntitiesByHashedAccountIdQueryHandler(IAccountLegalEntityRepository accountLegalEntityRepository,
             IValidator<GetAccountLegalEntitiesByHashedAccountIdRequest> validator)
         {
-            _hashingService = hashingService;
-            _employerAgreementRepository = employerAgreementRepository;
+            _accountLegalEntityRepository = accountLegalEntityRepository;
             _validator = validator;
         }
 
@@ -34,31 +29,12 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesByHashedAccoun
                 throw new InvalidRequestException(result.ValidationDictionary);
             }
 
-            long accountId;
+            var accountLegalEntities = await _accountLegalEntityRepository.GetAccountLegalEntities(message.HashedAccountId);
 
-            if (
-                _hashingService.TryDecodeValue(
-                    message.HashedAccountId,
-                    out accountId))
+            return new GetAccountLegalEntitiesByHashedAccountIdResponse
             {
-                var accountSpecificLegalEntity = await _employerAgreementRepository.GetLegalEntitiesLinkedToAccount(
-                    accountId,
-                    false);
-
-                return new GetAccountLegalEntitiesByHashedAccountIdResponse
-                {
-                    LegalEntities = accountSpecificLegalEntity.ToList()
-                };
-            }
-
-            throw new InvalidRequestException(
-                new Dictionary<string, string>
-                {
-                    {
-                        nameof(message.HashedAccountId), "Hashed account ID cannot be decoded."
-                    }
-                }
-            );
+                LegalEntities = accountLegalEntities.ToList()
+            };
         }
     }
 }

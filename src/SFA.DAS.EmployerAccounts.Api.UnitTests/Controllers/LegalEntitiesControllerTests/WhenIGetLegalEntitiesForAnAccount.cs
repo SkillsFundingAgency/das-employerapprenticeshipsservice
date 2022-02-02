@@ -5,10 +5,11 @@ using System.Web.Http.Results;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Api.Types;
+using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EmployerAccounts.Api.Mappings;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesByHashedAccountId;
-using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
+using SFA.DAS.Testing.AutoFixture;
 using SFA.DAS.Validation;
 using It = Moq.It;
 
@@ -27,13 +28,13 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
             _response = new GetAccountLegalEntitiesByHashedAccountIdResponse
             {
                 LegalEntities =
-                    new List<AccountSpecificLegalEntity>
+                    new List<AccountLegalEntity>
                     {
-                        new AccountSpecificLegalEntity
+                        new AccountLegalEntity
                         {
                             Id = 1
                         },
-                        new AccountSpecificLegalEntity
+                        new AccountLegalEntity
                         {
                             Id = 4
                         }
@@ -48,8 +49,8 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
             var response = await Controller.GetLegalEntities(_hashedAccountId);
 
             Assert.IsNotNull(response);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<ResourceList>>(response);
-            var model = response as OkNegotiatedContentResult<ResourceList>;
+            Assert.IsInstanceOf<OkNegotiatedContentResult<EmployerAccounts.Api.Types.ResourceList>>(response);
+            var model = response as OkNegotiatedContentResult<EmployerAccounts.Api.Types.ResourceList>;
 
             model?.Content.Should().NotBeNull();
 
@@ -58,6 +59,31 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
                 var matchedEntity = model.Content.Single(x => x.Id == legalEntity.Id.ToString());
                 matchedEntity.Href.Should().Be($"/api/accounts/{_hashedAccountId}/legalentities/{legalEntity.Id}");
             }
+        }
+
+        [Test, RecursiveMoqAutoData]
+        public async Task Then_If_Set_To_Include_Details_Then_AccountLegalEntity_List_Returned(
+            List<AccountLegalEntity> legalEntities)
+        {
+            var expectedModel = legalEntities.Select(c=>LegalEntityMapping.MapFromAccountLegalEntity(c, null, false)).ToList();
+            _hashedAccountId = "ABC123";
+            _response = new GetAccountLegalEntitiesByHashedAccountIdResponse
+            {
+                LegalEntities = legalEntities
+            };
+                
+            Mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesByHashedAccountIdRequest>(q => q.HashedAccountId == _hashedAccountId))).ReturnsAsync(_response);
+
+            SetupUrlHelperForAccountLegalEntityOne();
+            SetupUrlHelperForAccountLegalEntityTwo();
+
+            var response = await Controller.GetLegalEntities(_hashedAccountId, true);
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<List<Types.LegalEntity>>>(response);
+            var model = response as OkNegotiatedContentResult<List<Types.LegalEntity>>;
+            model?.Content.Should().NotBeNull();
+            model?.Content.ShouldBeEquivalentTo(expectedModel);
         }
 
         [Test]
@@ -83,7 +109,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
                 .ReturnsAsync(
                     new GetAccountLegalEntitiesByHashedAccountIdResponse
                     {
-                        LegalEntities = new List<AccountSpecificLegalEntity>(0)
+                        LegalEntities = new List<AccountLegalEntity>(0)
                     });
 
             var response = await Controller.GetLegalEntities(_hashedAccountId);

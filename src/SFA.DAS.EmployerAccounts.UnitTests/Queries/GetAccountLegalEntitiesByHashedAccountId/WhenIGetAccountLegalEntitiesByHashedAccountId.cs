@@ -6,7 +6,6 @@ using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesByHashedAccountId;
-using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntitiesByHashedAccountId
@@ -18,65 +17,28 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntitiesByHa
         public override Mock<IValidator<GetAccountLegalEntitiesByHashedAccountIdRequest>> RequestValidator { get; set; }
 
         private const string ExpectedHashedId = "123";
-        private const long ExpectedAccountId = 456;
-        private List<AccountSpecificLegalEntity> _legalEntities;
-        private Mock<IEmployerAgreementRepository> _employerAgreementRepository;
-        private Mock<IHashingService> _hashingService;
-
+        private List<AccountLegalEntity> _legalEntities;
+        private Mock<IAccountLegalEntityRepository> _accountLegalEntityRepository;
+        
         [SetUp]
         public void Arrange()
         {
             base.SetUp();
 
             _legalEntities = GetListOfLegalEntities();
-            new Mock<IMembershipRepository>();
-            _employerAgreementRepository = new Mock<IEmployerAgreementRepository>();
+            _accountLegalEntityRepository = new Mock<IAccountLegalEntityRepository>();
 
             Query = new GetAccountLegalEntitiesByHashedAccountIdRequest
             {
                 HashedAccountId = ExpectedHashedId
             };
 
-            _hashingService = new Mock<IHashingService>();
-
-            long decodeAccountId = ExpectedAccountId;
-
-            _hashingService
-                .Setup(
-                    m => m.TryDecodeValue(
-                        ExpectedHashedId,
-                        out decodeAccountId))
-                .Returns(true);
-
-            _employerAgreementRepository.Setup(
-                    x => x.GetLegalEntitiesLinkedToAccount(
-                        ExpectedAccountId,
-                        false))
+            _accountLegalEntityRepository.Setup(
+                    x => x.GetAccountLegalEntities(
+                        ExpectedHashedId))
                 .ReturnsAsync(_legalEntities);
 
-            RequestHandler = new GetAccountLegalEntitiesByHashedAccountIdQueryHandler(
-                _hashingService.Object,
-                _employerAgreementRepository.Object,
-                RequestValidator.Object);
-        }
-
-        [Test]
-        public  void ThenInvalidRequestExceptionIsThrownIfHashedAccountIdIsInvalid()
-        {
-            long decodedAccountId;
-
-            _hashingService
-                .Setup(
-                    m => m.TryDecodeValue(
-                        ExpectedHashedId,
-                        out decodedAccountId))
-                .Returns(false);
-            
-            Assert.ThrowsAsync<InvalidRequestException>(
-                async () =>
-                    await
-                RequestHandler
-                    .Handle(Query));
+            RequestHandler = new GetAccountLegalEntitiesByHashedAccountIdQueryHandler(_accountLegalEntityRepository.Object, RequestValidator.Object);
         }
 
         [Test]
@@ -86,7 +48,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntitiesByHa
             await RequestHandler.Handle(Query);
 
             //Assert
-            _employerAgreementRepository.Verify(x => x.GetLegalEntitiesLinkedToAccount(ExpectedAccountId, false), Times.Once);
+            _accountLegalEntityRepository.Verify(x => x.GetAccountLegalEntities(ExpectedHashedId), Times.Once);
         }
 
         [Test]
@@ -106,17 +68,17 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntitiesByHa
             }
         }
 
-        private List<AccountSpecificLegalEntity> GetListOfLegalEntities()
+        private List<AccountLegalEntity> GetListOfLegalEntities()
         {
-            return new List<AccountSpecificLegalEntity>
+            return new List<AccountLegalEntity>
             {
-                new AccountSpecificLegalEntity()
+                new AccountLegalEntity()
                 {
                     Id = 1,
                     Name = "LegalEntity1"
                     
                 },
-                new AccountSpecificLegalEntity()
+                new AccountLegalEntity()
                 {
                     Id = 2,
                     Name = "LegalEntity2"
