@@ -58,8 +58,8 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
                         .Add(
                             new Resource
                             {
-                                Id = legalEntity.Id.ToString(),
-                                Href = Url.Route("GetLegalEntity", new { hashedAccountId, legalEntityId = legalEntity.Id })
+                                Id = legalEntity.LegalEntityId.ToString(),
+                                Href = Url.Route("GetLegalEntity", new { hashedAccountId, legalEntityId = legalEntity.LegalEntityId })
                             });
                 }
 
