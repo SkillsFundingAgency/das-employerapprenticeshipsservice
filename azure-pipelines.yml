@@ -2,16 +2,13 @@ trigger:
   batch: true
   branches:
     include:
-      - "*"
-
-pr: none
+      - "master"
 
 workspace:
     clean: all
 
 variables:
-  buildConfiguration: 'release'
-  buildPlatform: 'any cpu'
+- group: BUILD Management Resources
 
 pool:
   name: 'DAS - Continuous Integration'
@@ -23,8 +20,8 @@ resources:
   - repository: das-platform-building-blocks
     type: github
     name: SkillsFundingAgency/das-platform-building-blocks
-    ref: refs/heads/master
-    endpoint: "GitHub (SFA)"
+    ref: refs/tags/0.4.34
+    endpoint: SkillsFundingAgency
 
 steps:
 - task: gittools.gitversion.gitversion-task.GitVersion@5
@@ -32,6 +29,18 @@ steps:
   inputs:
     configFilePath: GitVersion.yml
     updateAssemblyInfo: true
+
+- task: SonarCloudPrepare@1
+  displayName: Prepare SonarCloud analysis configuration
+  condition: and(succeeded(), or(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/main'), eq(variables['Build.Reason'], 'PullRequest')))
+  inputs:
+    SonarCloud: ESFA - SonarCloud
+    organization: $(SonarCloudOrganisationKey)
+    scannerMode: MSBuild
+    projectName: "$(Build.DefinitionName)"
+    projectKey: SkillsFundingAgency_das-employerapprenticeshipsservice
+    extraProperties: |
+      sonar.cs.opencover.reportsPaths=$(Agent.TempDirectory)/CoverageResults/coverage.opencover.xml
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet restore all'
@@ -46,8 +55,8 @@ steps:
     solution: 'src/SFA.DAS.EAS.sln'
     vsVersion: 16.0
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    platform: 'any cpu'
+    configuration: 'release'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet pack'
@@ -61,8 +70,17 @@ steps:
   displayName: 'VsTest - testAssemblies'
   inputs:
     testAssemblyVer2: '**/bin/**/*UnitTests.dll'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    platform: 'any cpu'
+    configuration: 'release'
+
+- task: SonarCloudAnalyze@1
+  displayName: 'Run SonarCloud analysis'
+  condition: and(succeeded(), or(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/main'), eq(variables['Build.Reason'], 'PullRequest')))
+
+- task: SonarCloudPublish@1
+  displayName: 'Publish results on build summary'
+  inputs:
+    pollingTimeoutSec: '300'
 
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
