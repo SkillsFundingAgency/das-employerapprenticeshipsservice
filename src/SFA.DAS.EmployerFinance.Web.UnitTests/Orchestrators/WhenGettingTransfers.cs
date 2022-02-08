@@ -49,51 +49,6 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         }
 
         [Test]
-        public async Task AndTheEmployerIsATransferReceiverThenReturnsIndexViewModelWithCanViewPledgesSectionSetToFalse()
-        {
-            _maService.Setup(o => o.GetIndex(AccountId)).ReturnsAsync(new GetIndexResponse
-            {
-                IsTransferReceiver = true
-            });
-
-            SetupTheAccountApiClient();
-
-            var actual = await _orchestrator.GetIndexViewModel(HashedAccountId);
-
-            Assert.IsFalse(actual.Data.CanViewPledgesSection);
-        }
-
-        [Test]
-        public async Task AndTheEmployerIsNotATransferReceiverButItIsNonLevyThenReturnsIndexViewModelWithCanViewPledgesSectionSetToFalse()
-        {
-            _maService.Setup(o => o.GetIndex(AccountId)).ReturnsAsync(new GetIndexResponse
-            {
-                IsTransferReceiver = false
-            });
-            
-            SetupTheAccountApiClient();
-            
-            var actual = await _orchestrator.GetIndexViewModel(HashedAccountId);
-
-            Assert.IsFalse(actual.Data.CanViewPledgesSection);
-        }
-
-        [Test]
-        public async Task AndTheEmployerIsNotATransferReceiverButItIsLevyThenReturnsIndexViewModelWithCanViewPledgesSectionSetToTrue()
-        {
-            _maService.Setup(o => o.GetIndex(AccountId)).ReturnsAsync(new GetIndexResponse
-            {
-                IsTransferReceiver = false
-            });
-
-            SetupTheAccountApiClient(true);
-
-            var actual = await _orchestrator.GetIndexViewModel(HashedAccountId);
-
-            Assert.IsTrue(actual.Data.CanViewPledgesSection);
-        }
-
-        [Test]
         public async Task AndTheEmployerIsNonLevyThenCanViewApplySectionIsTrue()
         {
             _maService.Setup(o => o.GetIndex(AccountId)).ReturnsAsync(new GetIndexResponse
@@ -142,10 +97,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         [TestCase(false, false)]
         public async Task ThenChecksTheUserIsAuthorisedToCreateTransfers(bool isAuthorised, bool expected)
         {
-            _maService.Setup(o => o.GetIndex(AccountId)).ReturnsAsync(new GetIndexResponse
-            {
-                IsTransferReceiver = false
-            });
+            _maService.Setup(o => o.GetIndex(AccountId)).ReturnsAsync(new GetIndexResponse());
 
             SetupTheAccountApiClient(true);
 
