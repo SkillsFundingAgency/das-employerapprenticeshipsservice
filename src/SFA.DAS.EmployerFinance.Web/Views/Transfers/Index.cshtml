@@ -38,6 +38,14 @@
             </span>
             <span class="data-item bold-xlarge">@Model.Data.PledgesAndTransferConnections.ToString("C0", culture)</span>
         </div>
+        <div class="finance-highlight">
+            <span class="bold-small">
+                Remaining transfer funds
+                <span class="visually-hidden">for</span>
+                <abbr title="financial year">FY</abbr> @Model.Data.FinancialYearString
+            </span>
+            <span class="data-item bold-xlarge">@Model.Data.RemainingTransferAllowance.ToString("C0", culture)</span>
+        </div>
     </div>
 </div>
 
@@ -49,6 +57,8 @@
         <p>Transfer payments will leave your account before payments for your own apprenticeships.</p>
         <h2 class="heading-medium">Pledges and transfer connections</h2>
         <p>This is an estimate of the amount allocated for your transfers in this financial year. It includes any existing transfer commitments carried over from last year.</p>
+        <h2 class="heading-medium">Remaining transfer funds</h2>
+        <p>This is an estimate of what remains for you to pledge to transfers in this financial year.</p>
     </div>
 </div>
 

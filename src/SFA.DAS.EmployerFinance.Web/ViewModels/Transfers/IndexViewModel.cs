@@ -12,5 +12,6 @@
         public string FinancialYearString { get; set; }
         public int ActivePledgesTotalAmount { get; set; }
         public int PledgesAndTransferConnections { get; set; }
+        public decimal RemainingTransferAllowance { get; set; }
     }
 }
