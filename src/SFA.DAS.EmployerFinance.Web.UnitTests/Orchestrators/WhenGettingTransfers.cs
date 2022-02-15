@@ -93,51 +93,6 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
             Assert.IsTrue(actual.Data.CanViewPledgesSection);
         }
 
-        [Test]
-        public async Task AndTheEmployerIsNonLevyThenCanViewApplySectionIsTrue()
-        {
-            _maService.Setup(o => o.GetIndex(AccountId)).ReturnsAsync(new GetIndexResponse
-            {
-                IsTransferSender = false
-            });
-
-            SetupTheAccountApiClient(false);
-
-            var actual = await _orchestrator.GetIndexViewModel(HashedAccountId);
-
-            Assert.IsTrue(actual.Data.CanViewApplySection);
-        }
-
-        [Test]
-        public async Task AndTheEmployerIsLevyAndNotSendingFundsThenCanViewApplySectionIsTrue()
-        {
-            _maService.Setup(o => o.GetIndex(AccountId)).ReturnsAsync(new GetIndexResponse
-            {
-                IsTransferSender = false
-            });
-
-            SetupTheAccountApiClient(true);
-
-            var actual = await _orchestrator.GetIndexViewModel(HashedAccountId);
-
-            Assert.IsTrue(actual.Data.CanViewApplySection);
-        }
-
-        [Test]
-        public async Task AndTheEmployerIsLevyAndSendingFundsThenCanViewApplySectionIsFalse()
-        {
-            _maService.Setup(o => o.GetIndex(AccountId)).ReturnsAsync(new GetIndexResponse
-            {
-                IsTransferSender = true
-            });
-
-            SetupTheAccountApiClient(true);
-
-            var actual = await _orchestrator.GetIndexViewModel(HashedAccountId);
-
-            Assert.IsFalse(actual.Data.CanViewApplySection);
-        }
-
         [TestCase(true, true)]
         [TestCase(false, false)]
         public async Task ThenChecksTheUserIsAuthorisedToCreateTransfers(bool isAuthorised, bool expected)

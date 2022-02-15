@@ -58,7 +58,6 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                 Data = new IndexViewModel
                 {
                     CanViewPledgesSection = !(indexTask.Result.IsTransferReceiver || employerType == ApprenticeshipEmployerType.NonLevy),
-                    CanViewApplySection = !(indexTask.Result.IsTransferSender && employerType == ApprenticeshipEmployerType.Levy),
                     PledgesCount = indexTask.Result.PledgesCount,
                     ApplicationsCount = indexTask.Result.ApplicationsCount,
                     RenderCreateTransfersPledgeButton = renderCreateTransfersPledgeButtonTask.Result,
