@@ -52,12 +52,11 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 
             Enum.TryParse(accountDetail.Result.ApprenticeshipEmployerType, true, out ApprenticeshipEmployerType employerType);
 
-
             return new OrchestratorResponse<IndexViewModel>
             {
                 Data = new IndexViewModel
                 {
-                    CanViewPledgesSection = !(indexTask.Result.IsTransferReceiver || employerType == ApprenticeshipEmployerType.NonLevy),
+                    CanViewPledgesSection = employerType == ApprenticeshipEmployerType.Levy,
                     PledgesCount = indexTask.Result.PledgesCount,
                     ApplicationsCount = indexTask.Result.ApplicationsCount,
                     RenderCreateTransfersPledgeButton = renderCreateTransfersPledgeButtonTask.Result,
