@@ -26,7 +26,11 @@
         "sharedServiceBusName": {
             "type": "string"
         },
-        "ipRangeFilter": {
+        "cosmosDbSubnetResourceIdList": {
+            "type": "array",
+            "defaultValue": []
+        },
+        "cosmosDbIpRangeFilter": {
             "type": "string",
             "defaultValue": ""
         },
@@ -62,7 +66,7 @@
         "apiCertificateName": {
             "type": "string"
         },
-        "keyVaultResourceGroupName": {
+        "sharedManagementResourceGroup": {
             "type": "string"
         },
         "keyVaultName": {
@@ -99,6 +103,9 @@
         },
         "tags": {
             "type": "object"
+        },
+        "logAnalyticsWorkspaceName": {
+            "type": "string"
         }
     },
     "variables": {
@@ -185,7 +192,7 @@
                         "value": "[parameters('keyVaultName')]"
                     },
                     "keyVaultResourceGroup": {
-                        "value": "[parameters('keyVaultResourceGroupName')]"
+                        "value": "[parameters('sharedManagementResourceGroup')]"
                     }
                 }
             }
@@ -284,7 +291,7 @@
                         "value": "[parameters('keyVaultName')]"
                     },
                     "keyVaultResourceGroup": {
-                        "value": "[parameters('keyVaultResourceGroupName')]"
+                        "value": "[parameters('sharedManagementResourceGroup')]"
                     }
                 }
             }
@@ -533,8 +540,17 @@
                     "defaultConsistencyLevel": {
                         "value": "Strong"
                     },
+                    "subnetResourceIdList": {
+                        "value": "[parameters('cosmosDbSubnetResourceIdList')]"
+                    },
                     "ipRangeFilter": {
-                        "value": "[parameters('ipRangeFilter')]"
+                        "value": "[parameters('cosmosDbIpRangeFilter')]"
+                    },
+                    "logAnalyticsWorkspaceName": {
+                        "value": "[parameters('logAnalyticsWorkspaceName')]"
+                    },
+                    "logAnalyticsWorkspaceResourceGroupName": {
+                        "value": "[parameters('sharedManagementResourceGroup')]"
                     }
                 }
             }
