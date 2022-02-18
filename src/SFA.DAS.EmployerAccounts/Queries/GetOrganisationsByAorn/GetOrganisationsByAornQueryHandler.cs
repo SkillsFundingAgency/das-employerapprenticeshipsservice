@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Queries.GetPensionRegulator;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationsByAorn

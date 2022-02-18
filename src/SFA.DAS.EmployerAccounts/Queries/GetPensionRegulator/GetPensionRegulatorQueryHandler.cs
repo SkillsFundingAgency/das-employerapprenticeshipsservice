@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.Validation;
