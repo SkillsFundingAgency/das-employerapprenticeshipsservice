@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetPensionRegulator
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var organisations = await _pensionRegulatorService.GetOrgansiationsByPayeRef(message.PayeRef);
+            var organisations = await _pensionRegulatorService.GetOrganisationsByPayeRef(message.PayeRef);
             return organisations == null
                 ? new GetPensionRegulatorResponse()
                 : new GetPensionRegulatorResponse {Organisations = organisations};
