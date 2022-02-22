@@ -26,10 +26,10 @@ namespace SFA.DAS.EmployerAccounts.Services
             );
         }
 
-        public async Task<Organisation> GetOrganisationById(string Id)
+        public async Task<Organisation> GetOrganisationById(string organisationId)
         {
             var baseUrl = GetBaseUrl();
-            var url = $"{baseUrl}api/pensionsregulator/{Id}";
+            var url = $"{baseUrl}api/pensionsregulator/{organisationId}";
 
             var json = await _httpService.GetAsync(url, false);
             return json == null ? null : JsonConvert.DeserializeObject<Organisation>(json);
