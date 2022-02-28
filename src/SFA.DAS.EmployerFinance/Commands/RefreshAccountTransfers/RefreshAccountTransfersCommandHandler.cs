@@ -1,13 +1,12 @@
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models.Transfers;
 using SFA.DAS.EmployerFinance.Services;
-using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers
 {
@@ -16,23 +15,17 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers
         private readonly IValidator<RefreshAccountTransfersCommand> _validator;
         private readonly IPaymentService _paymentService;
         private readonly ITransferRepository _transferRepository;
-        private readonly IAccountRepository _accountRepository;
-        private readonly IMessagePublisher _messagePublisher;
         private readonly ILog _logger;
 
         public RefreshAccountTransfersCommandHandler(
             IValidator<RefreshAccountTransfersCommand> validator,
             IPaymentService paymentService,
             ITransferRepository transferRepository,
-            IAccountRepository accountRepository,
-            IMessagePublisher messagePublisher,
             ILog logger)
         {
             _validator = validator;
             _paymentService = paymentService;
             _transferRepository = transferRepository;
-            _accountRepository = accountRepository;
-            _messagePublisher = messagePublisher;
             _logger = logger;
         }
 
@@ -71,7 +64,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers
                         };
                     }).ToArray();
 
-                _logger.Info($"Retrieved {transfers.Length} grouped account transferts from payment api for AccountId = '{message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
+                _logger.Info($"Retrieved {transfers.Length} grouped account transfers from payment api for AccountId = '{message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
 
                 await _transferRepository.CreateAccountTransfers(transfers);
             }
