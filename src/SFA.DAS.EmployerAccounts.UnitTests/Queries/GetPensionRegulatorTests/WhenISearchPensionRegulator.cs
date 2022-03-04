@@ -9,7 +9,7 @@ using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetPensionRegulatorTests
 {
-    public class WhenISearchPensionRegulator :QueryBaseTest<GetPensionRegulatorQueryHandler, GetPensionRegulatorRequest, GetPensionRegulatorResponse>
+    public class WhenISearchPensionRegulator : QueryBaseTest<GetPensionRegulatorQueryHandler, GetPensionRegulatorRequest, GetPensionRegulatorResponse>
     {
         private Mock<IPensionRegulatorService> _pensionRegulatorService;
         public override GetPensionRegulatorRequest Query { get; set; }
@@ -38,7 +38,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetPensionRegulatorTests
             await RequestHandler.Handle(new GetPensionRegulatorRequest {PayeRef = payeRef});
 
             //Assert
-            _pensionRegulatorService.Verify(x => x.GetOrgansiationsByPayeRef(payeRef), Times.Once);
+            _pensionRegulatorService.Verify(x => x.GetOrganisationsByPayeRef(payeRef), Times.Once);
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetPensionRegulatorTests
             //Arrange
             var expectedResponse = new List<Organisation>();
             var expectedPayeRef = "123/4567";
-            _pensionRegulatorService.Setup(x => x.GetOrgansiationsByPayeRef(expectedPayeRef)).ReturnsAsync(expectedResponse);
+            _pensionRegulatorService.Setup(x => x.GetOrganisationsByPayeRef(expectedPayeRef)).ReturnsAsync(expectedResponse);
 
             //Act
             var actual = await RequestHandler.Handle(new GetPensionRegulatorRequest() { PayeRef = expectedPayeRef });
