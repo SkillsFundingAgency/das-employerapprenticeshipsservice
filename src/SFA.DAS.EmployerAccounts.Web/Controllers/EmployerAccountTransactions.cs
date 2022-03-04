@@ -12,7 +12,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("balance")]
         public ActionResult Index(string hashedAccountId)
         {
-            return Redirect(Url.LegacyEasAccountAction("finance"));
+            return Redirect(Url.EmployerFinanceAction("finance"));
         }
     }
 }

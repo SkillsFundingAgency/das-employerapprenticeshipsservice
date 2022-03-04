@@ -79,8 +79,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
                 _validator.Object,
                 _paymentService.Object,
                 _transferRepository.Object,
-                _accountRepository.Object,
-                _messagePublisher.Object,
                 _logger.Object);
 
             _validator.Setup(x => x.Validate(It.IsAny<RefreshAccountTransfersCommand>()))

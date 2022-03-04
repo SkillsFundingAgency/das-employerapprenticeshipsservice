@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Threading;
@@ -19,6 +20,13 @@ namespace SFA.DAS.EmployerAccounts.Data
             : base(nameOrConnectionString)
         {
             Database.BeginTransaction();
+        }
+
+        public EmployerFinanceDbContext(DbConnection connection, DbTransaction transaction = null)
+            : base(connection, false)
+        {
+            if (transaction != null) Database.UseTransaction(transaction);
+            else Database.BeginTransaction();
         }
 
         protected EmployerFinanceDbContext()
@@ -50,6 +58,12 @@ namespace SFA.DAS.EmployerAccounts.Data
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.HasDefaultSchema("employer_financial");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            this.Database.Connection.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

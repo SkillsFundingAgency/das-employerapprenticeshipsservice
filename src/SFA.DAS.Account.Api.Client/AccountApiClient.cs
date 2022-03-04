@@ -72,9 +72,20 @@ namespace SFA.DAS.EAS.Account.Api.Client
         {
             var baseUrl = GetBaseUrl();
             var url = $"{baseUrl}api/accounts/{accountId}/legalentities";
+            
             var json = await _httpClient.GetAsync(url);
 
             return JsonConvert.DeserializeObject<List<ResourceViewModel>>(json);
+        }
+
+        public async Task<ICollection<LegalEntityViewModel>> GetLegalEntityDetailsConnectedToAccount(string accountId)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/accounts/{accountId}/legalentities?includeDetails=true";
+            
+            var json = await _httpClient.GetAsync(url);
+
+            return JsonConvert.DeserializeObject<List<LegalEntityViewModel>>(json);
         }
 
         public async Task<LegalEntityViewModel> GetLegalEntity(string accountId, long id)

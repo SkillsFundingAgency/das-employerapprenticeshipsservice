@@ -39,7 +39,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities
             if (membership == null)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "Caller is not a member of this account" } });
 
-            var accountSpecificLegalEntity = await _employerAgreementRepository.GetLegalEntitiesLinkedToAccount(membership.AccountId, message.SignedOnly);
+            var accountSpecificLegalEntity = await _employerAgreementRepository.GetLegalEntitiesLinkedToAccount(membership.AccountId, false);
 
             return new GetAccountLegalEntitiesResponse
             {

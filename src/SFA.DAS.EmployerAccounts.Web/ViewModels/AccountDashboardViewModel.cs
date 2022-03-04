@@ -48,5 +48,7 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
                 return false;
             }
         }
+
+        public string SingleAccountLegalEntityId { get; internal set; }
     }
 }

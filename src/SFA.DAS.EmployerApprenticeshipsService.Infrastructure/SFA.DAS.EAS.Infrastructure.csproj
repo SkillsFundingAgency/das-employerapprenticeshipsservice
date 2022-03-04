@@ -68,6 +68,7 @@
     <Compile Include="Data\MembershipRepository.cs" />
     <Compile Include="Data\UserRepository.cs" />
     <Compile Include="Extensions\EmployerFinancialDbContextExtensions.cs" />
+    <Compile Include="Extensions\SynchronizedStorageSessionExtensions.cs" />
     <Compile Include="Mapping\Profiles\ReferenceDataMappings.cs" />
     <Compile Include="Mapping\Profiles\TransactionMappings.cs" />
     <Compile Include="MarkerInterfaces\IAccountLegalEntityPublicHashingService.cs" />
@@ -182,9 +183,6 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.ReferenceData.Api.Client">
       <Version>1.1.82</Version>
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.Sql.Client">
-      <Version>1.0.0.32930</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Tasks.Api.Client">
       <Version>1.8.44</Version>
