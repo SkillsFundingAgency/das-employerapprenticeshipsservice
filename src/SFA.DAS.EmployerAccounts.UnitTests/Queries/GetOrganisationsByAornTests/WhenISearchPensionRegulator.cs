@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetOrganisationsByAornTests
         {
             //Arrange
             var expectedResponse = new List<Organisation>();
-            _pensionRegulatorService.Setup(x => x.GetOrgansiationsByAorn(_query.Aorn, _query.PayeRef)).ReturnsAsync(expectedResponse);
+            _pensionRegulatorService.Setup(x => x.GetOrganisationsByAorn(_query.Aorn, _query.PayeRef)).ReturnsAsync(expectedResponse);
 
             //Act
             var actual = await _requestHandler.Handle(_query);
