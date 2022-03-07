@@ -65,7 +65,6 @@
     <Compile Include="Services\ILevyTokenHttpClientFactory.cs" />
     <Compile Include="Services\LevySubmissionsRepository.cs" />
     <Compile Include="Services\LevyTokenHttpClientMaker.cs" />
-    <Compile Include="Settings\AccountApiConfiguration.cs" />
     <Compile Include="Settings\EmployerAccountsConfiguration.cs" />
     <Compile Include="Settings\HashingServiceConfig.cs" />
     <Compile Include="Settings\HmrcApiBaseUrlConfig.cs" />
