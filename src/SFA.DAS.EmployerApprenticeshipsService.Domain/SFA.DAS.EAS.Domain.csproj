@@ -197,7 +197,7 @@
       <Version>2.0.4</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">
-      <Version>5.2.6</Version>
+      <Version>5.2.9</Version>
     </PackageReference>
     <PackageReference Include="NServiceBus.Persistence.Sql">
       <Version>4.1.1</Version>
