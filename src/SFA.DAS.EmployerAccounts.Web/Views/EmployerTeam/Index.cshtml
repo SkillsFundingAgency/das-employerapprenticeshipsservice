@@ -12,7 +12,7 @@
     ViewBag.PageID = "page-company-homepage";
     ViewBag.GaData.Vpv = "/accounts/agreements/page-company-homepage";
     ViewBag.ZenDeskLabel = "eas-homepage";
-    Layout = "~/Views/Shared/_Layout_CDN.cshtml"; 
+    Layout = "~/Views/Shared/_Layout_CDN.cshtml";
 
     if (!string.IsNullOrEmpty(Model.Data.EmployerAccountType))
     {
@@ -43,17 +43,20 @@
     <dl class="das-definition-list das-definition-list--inline">
         <dt class="das-definition-list__title">Account ID</dt>
         <dd class="das-definition-list__definition">@Model.Data.Account.PublicHashedId</dd>
-        <dt class="das-definition-list__title">Agreement ID</dt>
-        <dd class="das-definition-list__definition">
-            @if (string.IsNullOrEmpty(Model.Data.SingleAccountLegalEntityId))
-            {
-                <a href="@Url.Action("Index", "EmployerAgreement")" class="govuk-link govuk-link--no-visited-state">View your agreement IDs</a>
-            }
-            else
-            {
-                <span>@Model.Data.SingleAccountLegalEntityId</span>
-            }
-        </dd>
+        @if (Model.Data.HasPayeScheme)
+        {
+            <dt class="das-definition-list__title">Agreement ID</dt>
+            <dd class="das-definition-list__definition">
+                @if (string.IsNullOrEmpty(Model.Data.SingleAccountLegalEntityId))
+                {
+                    <a href="@Url.Action("Index", "EmployerAgreement")" class="govuk-link govuk-link--no-visited-state">View your agreement IDs</a>
+                }
+                else
+                {
+                    <span>@Model.Data.SingleAccountLegalEntityId</span>
+                }
+            </dd>
+        }
     </dl>
 </div>
 
@@ -191,109 +194,109 @@ else
             </div>
         </div>
         <div class="govuk-grid-column-one-third">
-        @if (!Model.Data.HideTasksBar)
-        {
-            <div class="govuk-tabs" data-module="govuk-tabs">
-                <h2 class="govuk-tabs__title">
-                    Contents
-                </h2>
-                <ul class="govuk-tabs__list">
-                    <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
-                        <a class="govuk-tabs__tab" href="#tasks">
-                            Tasks
-                        </a>
-                    </li>
-                    @if (Html.IsAuthorized("EmployerFeature.Activities"))
-                    {
-                        <li class="govuk-tabs__list-item">
-                            <a class="govuk-tabs__tab" href="#activities">
-                                Activity
+            @if (!Model.Data.HideTasksBar)
+            {
+                <div class="govuk-tabs" data-module="govuk-tabs">
+                    <h2 class="govuk-tabs__title">
+                        Contents
+                    </h2>
+                    <ul class="govuk-tabs__list">
+                        <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+                            <a class="govuk-tabs__tab" href="#tasks">
+                                Tasks
                             </a>
                         </li>
-                    }
-                </ul>
-                <div class="govuk-tabs__panel" id="tasks">
-                    @if (Model.Data.Tasks.Count > 0)
-                    {
-                        <ul class="govuk-list">
-                            @{
-                                var priorityOrderTaskList = Model.Data.Tasks.OrderBy(AccountTaskHelper.GetTaskPriority).ToArray();
-                            }
+                        @if (Html.IsAuthorized("EmployerFeature.Activities"))
+                        {
+                            <li class="govuk-tabs__list-item">
+                                <a class="govuk-tabs__tab" href="#activities">
+                                    Activity
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                    <div class="govuk-tabs__panel" id="tasks">
+                        @if (Model.Data.Tasks.Count > 0)
+                        {
+                            <ul class="govuk-list">
+                                @{
+                                    var priorityOrderTaskList = Model.Data.Tasks.OrderBy(AccountTaskHelper.GetTaskPriority).ToArray();
+                                }
 
-                            @foreach (var task in priorityOrderTaskList)
-                            {
-                                <li>
-                                    @switch (task.Type)
-                                    {
-                                        case "LevyDeclarationDue":
-                                            <span>
-                                                Levy declaration due by 19 @DateTime.Now.ToString("MMMM")
-                                            </span>
-                                            <form action="@Url.Action("DismissTask", "Task")" method="POST">
-                                                <input type="hidden" name="taskType" value="@Enum.GetName(typeof(TasksEnum.TaskType), TasksEnum.TaskType.LevyDeclarationDue)" />
-                                                <button type="submit" class="das-button--inline-link">Dismiss this message</button>
-                                            </form>
-                                            break;
-                                        case "AgreementToSign":
-                                            <span>
-                                                @task.ItemsDueCount agreement@(task.ItemsDueCount > 1 ? "s" : "") to sign
-                                                <br /><a href="@Url.Action("ViewUnsignedAgreements", "EmployerAgreement")" class="govuk-link govuk-link govuk-link--no-visited-state">View agreement@(task.ItemsDueCount > 1 ? "s" : "")</a>
-                                            </span>
-                                            break;
-                                        case "AddApprentices":
-                                            <span>
-                                                <a href="@Url.EmployerCommitmentsV2Action("unapproved/Inform")" class="govuk-link govuk-link govuk-link--no-visited-state">Start adding apprentices now</a>
-                                            </span>
-                                            break;
-                                        case "ApprenticeChangesToReview":
-                                            <span>
-                                                @task.ItemsDueCount apprentice change@(task.ItemsDueCount > 1 ? "s" : "") to review 
-                                                <br /><a href="@Url.EmployerCommitmentsV2Action("apprentices")" class="govuk-link govuk-link govuk-link--no-visited-state">View<span class="govuk-visually-hidden">apprentice</span> change@(task.ItemsDueCount > 1 ? "s" : "")</a>
-                                            </span>
-                                            break;
-                                        case "CohortRequestReadyForApproval":
-                                            <span>
-                                                @task.ItemsDueCount cohort request@(task.ItemsDueCount > 1 ? "s" : "") ready for approval 
-                                                <br /><a href="@Url.EmployerCommitmentsV2Action("unapproved/review")" class="govuk-link govuk-link govuk-link--no-visited-state">View cohort<span class="govuk-visually-hidden"> request</span>@(task.ItemsDueCount > 1 ? "s" : "")</a>
-                                            </span>
-                                            break;
-                                        case "ReviewConnectionRequest":
-                                            <span>
-                                                @task.ItemsDueCount connection request@(task.ItemsDueCount > 1 ? "s" : "") to review 
-                                                <br /><a href="@Url.Action("Index", "Transfers")" class="govuk-link govuk-link govuk-link--no-visited-state">View details<span class="govuk-visually-hidden"> of connection request@(task.ItemsDueCount > 1 ? "s" : "")</span></a>
-                                            </span>
-                                            break;
-                                        case "TransferRequestReceived":
-                                            <span>
-                                                Transfer request received 
-                                                <br /><a href="@Url.Action("Index", "Transfers")" class="govuk-link">View details<span class="govuk-visually-hidden"> of the transfer request</span></a>
-                                            </span>
-                                            break;
-                                        case "PledgeApplicationForReview":
-                                            <span>
-                                                @task.ItemsDueCount transfer pledge application@(task.ItemsDueCount > 1 ? "s" : "") awaiting your approval 
-                                                <br /><a href="@Url.LevyTransfersMatchingAction("pledges")" class="govuk-link govuk-link--no-visited-state">View<span class="govuk-visually-hidden"> transfer pledge</span> application@(task.ItemsDueCount > 1 ? "s" : "")</a>
-                                            </span>
-                                            break;
-                                    }
-                                    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-                                </li>
-                            }
-                        </ul>
-                    }
-                    else
+                                @foreach (var task in priorityOrderTaskList)
+                                {
+                                    <li>
+                                        @switch (task.Type)
+                                        {
+                                            case "LevyDeclarationDue":
+                                                <span>
+                                                    Levy declaration due by 19 @DateTime.Now.ToString("MMMM")
+                                                </span>
+                                                <form action="@Url.Action("DismissTask", "Task")" method="POST">
+                                                    <input type="hidden" name="taskType" value="@Enum.GetName(typeof(TasksEnum.TaskType), TasksEnum.TaskType.LevyDeclarationDue)" />
+                                                    <button type="submit" class="das-button--inline-link">Dismiss this message</button>
+                                                </form>
+                                                break;
+                                            case "AgreementToSign":
+                                                <span>
+                                                    @task.ItemsDueCount agreement@(task.ItemsDueCount > 1 ? "s" : "") to sign
+                                                    <br /><a href="@Url.Action("ViewUnsignedAgreements", "EmployerAgreement")" class="govuk-link govuk-link govuk-link--no-visited-state">View agreement@(task.ItemsDueCount > 1 ? "s" : "")</a>
+                                                </span>
+                                                break;
+                                            case "AddApprentices":
+                                                <span>
+                                                    <a href="@Url.EmployerCommitmentsV2Action("unapproved/Inform")" class="govuk-link govuk-link govuk-link--no-visited-state">Start adding apprentices now</a>
+                                                </span>
+                                                break;
+                                            case "ApprenticeChangesToReview":
+                                                <span>
+                                                    @task.ItemsDueCount apprentice change@(task.ItemsDueCount > 1 ? "s" : "") to review
+                                                    <br /><a href="@Url.EmployerCommitmentsV2Action("apprentices")" class="govuk-link govuk-link govuk-link--no-visited-state">View<span class="govuk-visually-hidden">apprentice</span> change@(task.ItemsDueCount > 1 ? "s" : "")</a>
+                                                </span>
+                                                break;
+                                            case "CohortRequestReadyForApproval":
+                                                <span>
+                                                    @task.ItemsDueCount cohort request@(task.ItemsDueCount > 1 ? "s" : "") ready for approval
+                                                    <br /><a href="@Url.EmployerCommitmentsV2Action("unapproved/review")" class="govuk-link govuk-link govuk-link--no-visited-state">View cohort<span class="govuk-visually-hidden"> request</span>@(task.ItemsDueCount > 1 ? "s" : "")</a>
+                                                </span>
+                                                break;
+                                            case "ReviewConnectionRequest":
+                                                <span>
+                                                    @task.ItemsDueCount connection request@(task.ItemsDueCount > 1 ? "s" : "") to review
+                                                    <br /><a href="@Url.Action("Index", "Transfers")" class="govuk-link govuk-link govuk-link--no-visited-state">View details<span class="govuk-visually-hidden"> of connection request@(task.ItemsDueCount > 1 ? "s" : "")</span></a>
+                                                </span>
+                                                break;
+                                            case "TransferRequestReceived":
+                                                <span>
+                                                    Transfer request received
+                                                    <br /><a href="@Url.Action("Index", "Transfers")" class="govuk-link">View details<span class="govuk-visually-hidden"> of the transfer request</span></a>
+                                                </span>
+                                                break;
+                                            case "PledgeApplicationForReview":
+                                                <span>
+                                                    @task.ItemsDueCount transfer pledge application@(task.ItemsDueCount > 1 ? "s" : "") awaiting your approval
+                                                    <br /><a href="@Url.LevyTransfersMatchingAction("pledges")" class="govuk-link govuk-link--no-visited-state">View<span class="govuk-visually-hidden"> transfer pledge</span> application@(task.ItemsDueCount > 1 ? "s" : "")</a>
+                                                </span>
+                                                break;
+                                        }
+                                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p>You do not have any tasks</p>
+                        }
+                    </div>
+                    @if (Html.IsAuthorized("EmployerFeature.Activities"))
                     {
-                        <p>You do not have any tasks</p>
+                        <div class="govuk-tabs__panel" id="activities">
+                            @Html.Action("Latest", "Activities")
+                        </div>
                     }
                 </div>
-                @if (Html.IsAuthorized("EmployerFeature.Activities"))
-                {
-                    <div class="govuk-tabs__panel" id="activities">
-                        @Html.Action("Latest", "Activities")
-                    </div>
-                }
-            </div>
-        }
+            }
         </div>
     </div>
 }
