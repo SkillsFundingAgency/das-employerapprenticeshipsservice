@@ -79,7 +79,7 @@ namespace SFA.DAS.EmployerAccounts.Extensions
                 case CommonOrganisationType.CompaniesHouse: return "Companies House";
                 case CommonOrganisationType.Charities: return "Charity Commission";
                 case CommonOrganisationType.PublicBodies: return "Public Bodies";
-                case CommonOrganisationType.PensionsRegulator: return "Pensions Regulator";
+                case CommonOrganisationType.PensionsRegulator: return "The Pensions Regulator";
                 default: return "Other";
             }
         }
