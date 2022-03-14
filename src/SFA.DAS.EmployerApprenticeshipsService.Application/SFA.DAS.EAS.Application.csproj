@@ -182,7 +182,7 @@
       <Version>2.0.4</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Azure.Services.AppAuthentication">
-      <Version>1.6.2</Version>
+      <Version>1.0.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Caching.Memory">
       <Version>2.2.0</Version>
