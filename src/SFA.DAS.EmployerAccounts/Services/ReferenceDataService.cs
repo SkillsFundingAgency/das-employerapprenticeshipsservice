@@ -42,7 +42,6 @@ namespace SFA.DAS.EmployerAccounts.Services
             _mapper = mapper;
             _inProcessCache = inProcessCache;
             _identifiableOrganisationTypes = new Lazy<Task<CommonOrganisationType[]>>(InitialiseOrganisationTypes);
-            _logger = logger;
         }
 
         public async Task<Charity> GetCharity(int registrationNumber)
@@ -246,7 +245,7 @@ namespace SFA.DAS.EmployerAccounts.Services
             var cacheKey = $"SearchKey_{Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(searchTerm))}";
 
             var result = _inProcessCache.Get<List<OrganisationName>>(cacheKey);
-            if (result != null) return result;
+            if (result != null && result.Any()) return result;
 
             var orgs = await _client.SearchOrganisations(searchTerm);
 
