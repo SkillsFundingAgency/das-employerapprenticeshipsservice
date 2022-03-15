@@ -12,6 +12,7 @@ namespace SFA.DAS.EmployerAccounts.Mappings
                 .ForMember(s => s.Code, opts => opts.Ignore())
                 .ForMember(s => s.RegistrationDate, opts => opts.Ignore())
                 .ForMember(s => s.SubType, opts => opts.Ignore())
+                .ForMember(s => s.OrganisationStatus, opts => opts.Ignore())
                 .ForMember(s => s.Sector, opts => opts.Ignore());
         }
     }
