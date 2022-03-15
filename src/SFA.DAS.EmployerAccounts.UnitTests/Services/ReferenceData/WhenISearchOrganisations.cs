@@ -165,5 +165,71 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.ReferenceData
             // Assert
             result.Data.Count.Should().Be(0);
         }
+
+        [Test, MoqAutoData]
+        public async Task WhenResultsExistForSearchTerm_ThenShouldUpdateCache(
+           string searchTerm,
+           Organisation organisation,
+           [Frozen] Mock<IReferenceDataApiClient> refDataApiClientMock,
+           [Frozen] Mock<IInProcessCache> cacheMock,
+           [Greedy] ReferenceDataService referenceDataService)
+        {
+            // Arrange
+            var base64SearchTerm = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(searchTerm));
+            refDataApiClientMock.Setup(m => m.SearchOrganisations(searchTerm, It.IsAny<int>())).ReturnsAsync(new List<Organisation> { organisation });
+
+            // Act
+            var result = await referenceDataService.SearchOrganisations(searchTerm);
+
+            // Assert
+            cacheMock.Verify(m => m.Set(It.Is<string>(s => s.Contains(base64SearchTerm)), It.IsAny<object>(), It.IsAny<TimeSpan>()), Times.Once);
+        }
+
+        [Test]
+        [MoqInlineAutoData(Common.Domain.Types.OrganisationType.Other)]
+        [MoqInlineAutoData(Common.Domain.Types.OrganisationType.PublicBodies)]
+        public async Task WhenOrgTypeNoneOrPublicBodiesFilterSet_ThenShouldIncludeBothTypes(
+           Common.Domain.Types.OrganisationType organisationTypeFilter,
+           string searchTerm,
+           List<Organisation> organisations,
+           [Frozen] Mock<IReferenceDataApiClient> refDataApiClientMock,
+           [Greedy] ReferenceDataService referenceDataService)
+        {
+            // Arrange
+            organisations[0].Type = OrganisationType.PublicSector;
+            organisations[1].Type = OrganisationType.EducationOrganisation;
+            organisations[2].Type = OrganisationType.Company;
+            refDataApiClientMock.Setup(m => m.SearchOrganisations(searchTerm, It.IsAny<int>())).ReturnsAsync(organisations);
+
+            // Act
+            var result = await referenceDataService.SearchOrganisations(searchTerm, organisationType: organisationTypeFilter);
+
+            // Assert
+            result.Data.All(org => org.Type == Common.Domain.Types.OrganisationType.Other || org.Type == Common.Domain.Types.OrganisationType.PublicBodies).Should().BeTrue();
+        }
+
+        [Test]
+        [MoqInlineAutoData(OrganisationType.Company, Common.Domain.Types.OrganisationType.CompaniesHouse)]
+        [MoqInlineAutoData(OrganisationType.Charity, Common.Domain.Types.OrganisationType.Charities)]
+        public async Task WhenOrgTypeFilterSet_ThenShouldFilterToOnlyThoseOrgTypes(
+           OrganisationType refDataOrganisationType,
+           Common.Domain.Types.OrganisationType organisationTypeFilter,
+           string searchTerm,
+           List<Organisation> organisations,
+           [Frozen] Mock<IReferenceDataApiClient> refDataApiClientMock,
+           [Greedy] ReferenceDataService referenceDataService)
+        {
+            // Arrange
+            organisations[0].Type = OrganisationType.PublicSector;
+            organisations[1].Type = OrganisationType.EducationOrganisation;
+            organisations[2].Type = refDataOrganisationType;
+            refDataApiClientMock.Setup(m => m.SearchOrganisations(searchTerm, It.IsAny<int>())).ReturnsAsync(organisations);
+
+            // Act
+            var result = await referenceDataService.SearchOrganisations(searchTerm, organisationType: organisationTypeFilter);
+
+            // Assert
+            result.Data.All(org => org.Type == organisationTypeFilter).Should().BeTrue();
+        }
     }
 }
