@@ -25,7 +25,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
                 AgreementId = "123EDADS"
             };
 
-            _validator = new GetEmployerAgreementQueryValidator();
+            var membershipRepository = new Mock<IMembershipRepository>();
+            membershipRepository.Setup(x => x.GetCaller(_query.HashedAccountId, _query.ExternalUserId)).ReturnsAsync(() => new MembershipView());
+
+            _validator = new GetEmployerAgreementQueryValidator(membershipRepository.Object);
         }
 
         [Test]
