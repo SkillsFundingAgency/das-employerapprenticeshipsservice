@@ -55,17 +55,17 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("agreements")]
         public async Task<ActionResult> Index(string hashedAccountId, bool agreementSigned = false)
         {
-            var model = await _orchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+                var model = await _orchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
-            var flashMessage = GetFlashMessageViewModelFromCookie();
-            if (flashMessage != null)
-            {
-                model.FlashMessage = flashMessage;
-            }
+                var flashMessage = GetFlashMessageViewModelFromCookie();
+                if (flashMessage != null)
+                {
+                    model.FlashMessage = flashMessage;
+                }
 
-            ViewBag.ShowConfirmation = agreementSigned && model.Data.EmployerAgreementsData.HasPendingAgreements;
+                ViewBag.ShowConfirmation = agreementSigned && model.Data.EmployerAgreementsData.HasPendingAgreements;
 
-            return View(model);
+                return View(model);
         }
 
         [HttpGet]
@@ -87,9 +87,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> View(string agreementId, string hashedAccountId,
             FlashMessageViewModel flashMessage)
         {
-            var agreement = await GetSignedAgreementViewModel(new GetEmployerAgreementRequest { AgreementId = agreementId, HashedAccountId = hashedAccountId, ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName) });
+            try
+            {
+                var agreement = await GetSignedAgreementViewModel(new GetEmployerAgreementRequest { AgreementId = agreementId, HashedAccountId = hashedAccountId, ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName) });
 
-            return View(agreement);
+                return View(agreement);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return AccessDeniedView();
+            }
         }
 
         [HttpGet]
@@ -122,14 +129,33 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("agreements/{agreementId}/sign-your-agreement")]
         public async Task<ActionResult> SignAgreement(GetEmployerAgreementRequest request)
         {
-            request.ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+            try
+            {
+                request.ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
-            var viewModel = await GetSignedAgreementViewModel(request);
-            var entities = await _mediator.SendAsync(new GetAccountLegalEntitiesCountByHashedAccountIdRequest { HashedAccountId = request.HashedAccountId });
+                var viewModel = await GetSignedAgreementViewModel(request);
+                var entities = await _mediator.SendAsync(new GetAccountLegalEntitiesCountByHashedAccountIdRequest { HashedAccountId = request.HashedAccountId });
 
-            viewModel.LegalEntitiesCount = entities.LegalEntitiesCount;
+                viewModel.LegalEntitiesCount = entities.LegalEntitiesCount;
 
-            return View(viewModel);
+                return View(viewModel);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return AccessDeniedView();
+            }
+        }
+
+        private ActionResult AccessDeniedView()
+        {
+            var accountId = Request.Params[ControllerConstants.AccountHashedIdRouteKeyName];
+
+            if (accountId != null)
+            {
+                ViewBag.AccountId = accountId;
+            }
+
+            return base.View(ControllerConstants.AccessDeniedViewName);
         }
 
         [HttpPost]
