@@ -1,6 +1,6 @@
 "use strict";
 const gulp = require('gulp');
-const sass = require('gulp-sass');
+const sass = require('gulp-sass')(require('node-sass'));
 const concat = require('gulp-concat');
 const rename = require('gulp-rename');
 const uglify = require('gulp-uglify');
@@ -20,16 +20,15 @@ sassOptions = {
 };
 
 gulp.task('watch', () => {
-  gulp.watch(input, ['sass'])
+  gulp.watch(input, gulp.series('sass'))
     .on('change', (event) => {
       console.log(`File ${event.path} was ${event.type}, running tasks...`);
     });
 });
-
 gulp.task('sass', () => gulp
   .src(input)
   .pipe(sass(sassOptions))
   .pipe(gulp.dest(output)));
 
 
-gulp.task('default', ['sass', 'watch']);
+gulp.task('default', gulp.series('sass', 'watch'));

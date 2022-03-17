@@ -4535,6 +4535,11 @@ tr.total td {
 .current-funds {
   margin-bottom: 40px; }
 
+.finance-highlight {
+  background: #dee0e2;
+  padding: 20px;
+  display: inline-block; }
+
 .govuk-width-container {
   max-width: 960px;
   margin-right: 15px;
