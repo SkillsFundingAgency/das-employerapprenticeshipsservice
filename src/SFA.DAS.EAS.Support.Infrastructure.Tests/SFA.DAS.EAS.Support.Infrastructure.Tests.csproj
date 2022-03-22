@@ -121,10 +121,10 @@
       <Version>4.6.8</Version>
     </PackageReference>
     <PackageReference Include="NUnit">
-      <Version>3.10.1</Version>
+      <Version>3.13.2</Version>
     </PackageReference>
     <PackageReference Include="NUnit3TestAdapter">
-      <Version>3.10.0</Version>
+      <Version>4.2.1</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.EmployerAccounts.Api.Types">
       <Version>1.6.1254</Version>

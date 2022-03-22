@@ -9,6 +9,7 @@ using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.Authorization.Features.Services;
 using SFA.DAS.Authorization.EmployerFeatures.Models;
 using SFA.DAS.EAS.Account.Api.Client;
+using SFA.DAS.EmployerFinance.Extensions;
 
 namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 {
@@ -60,7 +61,9 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     PledgesCount = indexTask.Result.PledgesCount,
                     ApplicationsCount = indexTask.Result.ApplicationsCount,
                     RenderCreateTransfersPledgeButton = renderCreateTransfersPledgeButtonTask.Result,
-                    RenderApplicationListButton = renderApplicationListButton.IsEnabled
+                    RenderApplicationListButton = renderApplicationListButton.IsEnabled,
+                    StartingTransferAllowance = accountDetail.Result.StartingTransferAllowance,
+                    FinancialYearString = DateTime.UtcNow.ToFinancialYearString()
                 }
             };
         }
