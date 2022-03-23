@@ -20,10 +20,11 @@ using SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesCountByHashedAccountId;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
+using SFA.DAS.Authorization.EmployerUserRoles.Options;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
-    [DasAuthorize]
+    [DasAuthorize(EmployerUserRole.Any)]
     [RoutePrefix("accounts/{HashedAccountId}")]
     public class EmployerAgreementController : BaseController
     {
