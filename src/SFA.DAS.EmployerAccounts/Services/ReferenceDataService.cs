@@ -29,7 +29,6 @@ namespace SFA.DAS.EmployerAccounts.Services
         private readonly IReferenceDataApiClient _client;
         private readonly IMapper _mapper;
         private readonly IInProcessCache _inProcessCache;
-        private readonly ILog _logger;
 
         private readonly List<string> _termsToRemove = new List<string> { "ltd", "ltd.", "limited", "plc", "plc." };
 
@@ -43,7 +42,6 @@ namespace SFA.DAS.EmployerAccounts.Services
             _mapper = mapper;
             _inProcessCache = inProcessCache;
             _identifiableOrganisationTypes = new Lazy<Task<CommonOrganisationType[]>>(InitialiseOrganisationTypes);
-            _logger = logger;
         }
 
         public async Task<Charity> GetCharity(int registrationNumber)
@@ -125,7 +123,7 @@ namespace SFA.DAS.EmployerAccounts.Services
                         });
         }
 
-        private List<OrganisationName> SortOrganisations(List<OrganisationName> result, string searchTerm)
+        private List<OrganisationName> SortOrganisations(IEnumerable<OrganisationName> result, string searchTerm)
         {
             var outputList = new List<OrganisationName>();
 
@@ -172,7 +170,7 @@ namespace SFA.DAS.EmployerAccounts.Services
         /// <param name="rawOrganisations">The list of matching organisations</param>
         /// <param name="searchTerm">The search term used</param>
         /// <param name="outputList">The output list</param>
-        private void AddOrganisationsLooselyMatchingSearchByPosition(List<OrganisationName> rawOrganisations, string searchTerm, List<OrganisationName> outputList)
+        private void AddOrganisationsLooselyMatchingSearchByPosition(IEnumerable<OrganisationName> rawOrganisations, string searchTerm, List<OrganisationName> outputList)
         {
             var priorityRegEx = $"({searchTerm})";
 
@@ -202,7 +200,7 @@ namespace SFA.DAS.EmployerAccounts.Services
             }
         }
 
-        private static List<KeyValuePair<int, OrganisationName>> FindLocationAwareMatches(List<OrganisationName> result, Regex rgx)
+        private static List<KeyValuePair<int, OrganisationName>> FindLocationAwareMatches(IEnumerable<OrganisationName> result, Regex rgx)
         {
             var locationAwareMatches = new List<KeyValuePair<int, OrganisationName>>();
 
@@ -217,7 +215,7 @@ namespace SFA.DAS.EmployerAccounts.Services
             return locationAwareMatches;
         }
 
-        private static void AddResultsMatchingRegEx(List<OrganisationName> result, string priorityRegEx, List<OrganisationName> sortedList)
+        private static void AddResultsMatchingRegEx(IEnumerable<OrganisationName> result, string priorityRegEx, List<OrganisationName> sortedList)
         {
             var rgx = new Regex(priorityRegEx, RegexOptions.IgnoreCase);
 
@@ -247,18 +245,25 @@ namespace SFA.DAS.EmployerAccounts.Services
             var cacheKey = $"SearchKey_{Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(searchTerm))}";
 
             var result = _inProcessCache.Get<List<OrganisationName>>(cacheKey);
-            if (result != null) return result;
+            if (result != null && result.Any()) return result;
 
             var orgs = await _client.SearchOrganisations(searchTerm);
 
             if (orgs == null) return new List<OrganisationName>();
 
-            var convertedOrgs = orgs.Select(ConvertToOrganisation).ToList();
+            var convertedOrgs = orgs
+                .Select(ConvertToOrganisation)
+                .Where(FilterInactiveOrgs);
 
             result = SortOrganisations(convertedOrgs, searchTerm);
 
             _inProcessCache.Set(cacheKey, result, new TimeSpan(0, 15, 0));
             return result;
+        }
+
+        private bool FilterInactiveOrgs(OrganisationName organisation)
+        {
+            return organisation.OrganisationStatus == Models.Organisation.OrganisationStatus.None || organisation.OrganisationStatus == Models.Organisation.OrganisationStatus.Active;
         }
 
         private static PagedResponse<OrganisationName> CreatePagedOrganisationResponse(int pageNumber, int pageSize, List<OrganisationName> result)
@@ -289,24 +294,10 @@ namespace SFA.DAS.EmployerAccounts.Services
                 Code = source.Code,
                 RegistrationDate = source.RegistrationDate,
                 Sector = source.Sector,
-                SubType = ConvertToOrganisationSubType(source.SubType),
-                Type = source.Type.ToCommonOrganisationType()
+                SubType = (OrganisationSubType)source.SubType,
+                Type = source.Type.ToCommonOrganisationType(),
+                OrganisationStatus = (Models.Organisation.OrganisationStatus)source.OrganisationStatus
             };
-        }
-
-        private OrganisationSubType ConvertToOrganisationSubType(ReferenceData.Types.DTO.OrganisationSubType sourceSubType)
-        {
-            switch (sourceSubType)
-            {
-                case ReferenceData.Types.DTO.OrganisationSubType.Nhs:
-                    return OrganisationSubType.Nhs;
-                case ReferenceData.Types.DTO.OrganisationSubType.Ons:
-                    return OrganisationSubType.Ons;
-                case ReferenceData.Types.DTO.OrganisationSubType.Police:
-                    return OrganisationSubType.Police;
-                default:
-                    return 0;
-            }
         }
     }
 }
