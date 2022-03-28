@@ -1000,7 +1000,7 @@ table {
       table td {
         font-size: 19px;
         line-height: 1.31579; } }
-  table thead th {
+  table th {
     font-weight: 700; }
   table td:last-child,
   table th:last-child {
@@ -4835,6 +4835,49 @@ tr.total td {
   background: #dee0e2;
   padding: 20px;
   display: inline-block; }
+
+.finance-data {
+  margin: 10px 0; }
+  .finance-data dl {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 15px;
+    background: #dee0e2;
+    color: #0b0c0c; }
+    .finance-data dl dt {
+      font-family: "nta", Arial, sans-serif;
+      font-weight: 700;
+      text-transform: none;
+      font-size: 14px;
+      line-height: 1.14286;
+      margin-bottom: 5px; }
+      @media (min-width: 641px) {
+        .finance-data dl dt {
+          font-size: 16px;
+          line-height: 1.25; } }
+    .finance-data dl dd {
+      font-family: "nta", Arial, sans-serif;
+      font-weight: 700;
+      text-transform: none;
+      font-size: 32px;
+      line-height: 1.09375; }
+      @media (min-width: 641px) {
+        .finance-data dl dd {
+          font-size: 48px;
+          line-height: 1.04167; } }
+  @media (min-width: 641px) {
+    .finance-data {
+      padding: 0 15px;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      margin: 0 30px;
+      max-width: 340px; } }
+
+.finance-data--highlight dl {
+  background: #005ea5;
+  color: #fff; }
 
 .govuk-width-container {
   max-width: 960px;

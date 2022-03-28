@@ -41,3 +41,34 @@
     padding: 20px;
     display: inline-block;
 }
+
+
+.finance-data {
+    margin: 10px 0;
+    dl {
+        @include box-sizing(border-box);
+        padding: 15px; 
+        background: $grey-3;
+        color: $black;
+        dt {
+            @include bold-16;
+            margin-bottom: 5px
+        }
+        dd {
+            @include bold-48;
+        }
+    }
+    @include media(tablet) { 
+        padding: 0 $gutter-half;
+        @include box-sizing(border-box);
+        margin: 0 30px;
+        max-width: 340px;
+    }
+}
+
+.finance-data--highlight {
+    dl {
+        background: $govuk-blue;
+        color: $white;
+    }
+}

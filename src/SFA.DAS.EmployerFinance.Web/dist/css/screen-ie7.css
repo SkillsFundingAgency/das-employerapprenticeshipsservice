@@ -940,7 +940,7 @@ table {
     padding: 0.63158em 1.05263em 0.47368em 0;
     text-align: left;
     border-bottom: 1px solid #bfc1c3; }
-  table thead th {
+  table th {
     font-weight: 700; }
   table td:last-child,
   table th:last-child {
@@ -4564,6 +4564,43 @@ tr.total td {
   background: #dee0e2;
   padding: 20px;
   display: inline-block; }
+
+.finance-data {
+  margin: 10px 0;
+  padding: 0 15px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0 30px;
+  max-width: 340px; }
+  .finance-data dl {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 15px;
+    background: #dee0e2;
+    color: #0b0c0c; }
+    .finance-data dl dt {
+      font-family: "nta", Arial, sans-serif;
+      font-weight: 700;
+      text-transform: none;
+      font-size: 14px;
+      line-height: 1.14286;
+      font-size: 16px;
+      line-height: 1.25;
+      margin-bottom: 5px; }
+    .finance-data dl dd {
+      font-family: "nta", Arial, sans-serif;
+      font-weight: 700;
+      text-transform: none;
+      font-size: 32px;
+      line-height: 1.09375;
+      font-size: 48px;
+      line-height: 1.04167; }
+
+.finance-data--highlight dl {
+  background: #005ea5;
+  color: #fff; }
 
 .govuk-width-container {
   max-width: 960px;
