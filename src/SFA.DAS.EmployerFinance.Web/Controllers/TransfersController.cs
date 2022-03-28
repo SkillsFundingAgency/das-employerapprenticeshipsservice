@@ -23,5 +23,12 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 
             return View(viewModel);
         }
+
+        [HttpGet]
+        [Route("transfers/financial-breakdown")]
+        public ActionResult FinancialBreakdown(string hashedAccountId)
+        {
+            return View();
+        }
     }
 }
