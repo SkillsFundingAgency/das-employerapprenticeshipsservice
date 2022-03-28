@@ -939,21 +939,18 @@ table {
     line-height: 1.31579;
     padding: 0.63158em 1.05263em 0.47368em 0;
     text-align: left;
-    color: #0b0c0c;
     border-bottom: 1px solid #bfc1c3; }
-  table th {
+  table thead th {
     font-weight: 700; }
-    table th.numeric {
-      text-align: right; }
-  table td.numeric {
-    font-family: "ntatabularnumbers", "nta", Arial, sans-serif;
-    font-weight: 400;
-    text-transform: none;
-    font-size: 14px;
-    line-height: 1.14286;
-    font-size: 16px;
-    line-height: 1.25;
+  table td:last-child,
+  table th:last-child {
+    padding-right: 0; }
+  table .numeric {
     text-align: right; }
+  table td.numeric {
+    font-family: "ntatabularnumbers", "nta", Arial, sans-serif; }
+  table caption {
+    text-align: left; }
 
 .table-font-xsmall th {
   font-family: "nta", Arial, sans-serif;
@@ -985,16 +982,44 @@ details {
     color: #005ea5;
     cursor: pointer;
     position: relative;
-    margin-bottom: 0.26316em; }
+    margin-bottom: 0.26316em;
+    padding-left: 25px; }
+    details summary:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      margin: auto;
+      display: block;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-color: transparent;
+      -webkit-clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+      clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+      border-width: 7px 0 7px 12.124px;
+      border-left-color: inherit; }
     details summary:hover {
       color: #2b8cc4; }
     details summary:focus {
       outline: 3px solid #ffbf47; }
+    details summary::-webkit-details-marker {
+      display: none; }
+  details[open] > summary:before {
+    display: block;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-color: transparent;
+    -webkit-clip-path: polygon(0% 0%, 50% 100%, 100% 0%);
+    clip-path: polygon(0% 0%, 50% 100%, 100% 0%);
+    border-width: 12.124px 7px 0 7px;
+    border-top-color: inherit; }
   details .summary {
     text-decoration: underline; }
   details .arrow {
-    margin-right: .35em;
-    font-style: normal; }
+    display: none; }
 
 .panel {
   -webkit-box-sizing: border-box;
