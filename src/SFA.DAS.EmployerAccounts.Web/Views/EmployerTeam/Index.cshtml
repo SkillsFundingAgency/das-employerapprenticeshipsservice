@@ -275,6 +275,11 @@ else
                                                 <br /><a href="@Url.LevyTransfersMatchingAction("pledges")" class="govuk-link govuk-link--no-visited-state">View<span class="govuk-visually-hidden"> transfer pledge</span> application@(task.ItemsDueCount > 1 ? "s" : "")</a>
                                             </span>
                                             break;
+                                        case "PledgeApplicationForAcceptance":
+                                            <span>
+                                                <a href="@Url.LevyTransfersMatchingAction("applications")" class="govuk-link govuk-link--no-visited-state">@task.ItemsDueCount approved transfer application@(task.ItemsDueCount > 1 ? "s" : "")</a> awaiting your acceptance
+                                            </span>
+                                            break;
                                     }
                                     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
                                 </li>
@@ -282,15 +287,15 @@ else
                         </ul>
                     }
                     else
-                    {
+                                    {
                         <p>You do not have any tasks</p>
                     }
                 </div>
                 @if (Html.IsAuthorized("EmployerFeature.Activities"))
                 {
-                    <div class="govuk-tabs__panel" id="activities">
+                    @*<div class="govuk-tabs__panel" id="activities">
                         @Html.Action("Latest", "Activities")
-                    </div>
+                    </div>*@
                 }
             </div>
         }
