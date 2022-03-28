@@ -51,7 +51,7 @@
         background: $grey-3;
         color: $black;
         dt {
-            @include bold-16;
+            @include bold-14;
             margin-bottom: 5px
         }
         dd {
@@ -71,4 +71,33 @@
         background: $govuk-blue;
         color: $white;
     }
+}
+
+.finance-data--future {
+    dl {
+        background: $white;
+        color: $black;
+        padding: 0;
+        dt {
+            border-top: 1px solid $border-colour;
+            padding-top: 10px;
+        }
+        dd {
+            @include bold-24;
+        }
+    }
+    @include media(tablet) { 
+        margin: 0;
+        padding: 0 0 0 15px;
+        border-left: 3px solid $border-colour;
+        dl {
+            dt {
+                border-top: none;
+            }
+        }
+    }
+}
+
+.finance-notice {
+    margin-bottom: 30px;
 }

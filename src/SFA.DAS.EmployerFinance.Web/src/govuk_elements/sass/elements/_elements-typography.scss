@@ -72,6 +72,7 @@ main {
 .heading-xlarge {
   @include bold-48();
 
+  display: block;
   margin-top: em(15, 32);
   margin-bottom: em(30, 32);
 
@@ -92,6 +93,7 @@ main {
 .heading-large {
   @include bold-36();
 
+  display: block;
   margin-top: em(25, 24);
   margin-bottom: em(10, 24);
 
@@ -112,6 +114,7 @@ main {
 .heading-medium {
   @include bold-24();
 
+  display: block;
   margin-top: em(25, 20);
   margin-bottom: em(10, 20);
 
@@ -125,6 +128,7 @@ main {
 .heading-small {
   @include bold-19();
 
+  display: block;
   margin-top: em(10, 16);
   margin-bottom: em(5, 16);
 
@@ -135,7 +139,8 @@ main {
 }
 
 // Text
-p {
+p,
+.body-text {
   margin-top: em(5, 16);
   margin-bottom: em(20, 16);
 
@@ -144,6 +149,10 @@ p {
     margin-bottom: em(20);
   }
 
+}
+
+.body-text {
+  display: block;
 }
 
 // Lede, or intro text
@@ -196,9 +205,11 @@ p {
   &:link,
   &:visited,
   &:hover,
+  a#{&}:focus,
   &:active {
     color: $black;
   }
+
 
   text-decoration: none;
   border-bottom: 1px solid $black;
@@ -219,8 +230,16 @@ p {
     top: 50%;
     margin-top: -6px;
   }
-}
 
+  // Fallback
+  // IE8 doesn't support rgba and only supports the single colon syntax for :before
+  // IE7 doesn't support pseudo-elements, let's fallback to an image instead.
+  // Ref: http://caniuse.com/#search=%3Abefore, http://caniuse.com/#search=rgba
+  @include ie-lte(8) {
+    background: file-url("icon-arrow-left.png") no-repeat 0 4px;
+  }
+
+}
 // Code styles
 .code {
   color: $text-colour;
