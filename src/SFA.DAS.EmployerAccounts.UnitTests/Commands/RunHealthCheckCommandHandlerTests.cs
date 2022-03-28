@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Api.Client;
+using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerAccounts.Commands.RunHealthCheckCommand;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Models;
@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands
         [Test]
         public Task Handle_WhenHandlingARunHealthCheckCommand_ThenShouldRequestAnEmployerAccountsApiHealthCheckResponse()
         {
-            return RunAsync(f => f.Handle(), f => f.EmployerAccountsApiClient.Verify(c => c.Ping(f.CancellationToken), Times.Once));
+            return RunAsync(f => f.Handle(), f => f.AccountsApiClient.Verify(c => c.Ping(), Times.Once));
         }
     }
 
@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands
         public Mock<EmployerAccountsDbContext> Db { get; set; }
         public RunHealthCheckCommand RunHealthCheckCommand { get; set; }
         public IAsyncRequestHandler<RunHealthCheckCommand, Unit> Handler { get; set; }
-        public Mock<IEmployerAccountsApiClient> EmployerAccountsApiClient { get; set; }
+        public Mock<IAccountApiClient> AccountsApiClient { get; set; }
         public UnitOfWorkContext UnitOfWorkContext { get; set; }
         public CancellationToken CancellationToken { get; set; }
 
@@ -42,14 +42,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands
         {
             Db = new Mock<EmployerAccountsDbContext>();
             RunHealthCheckCommand = new RunHealthCheckCommand { UserRef = Guid.NewGuid() };
-            EmployerAccountsApiClient = new Mock<IEmployerAccountsApiClient>();
+            AccountsApiClient = new Mock<IAccountApiClient>();
             UnitOfWorkContext = new UnitOfWorkContext();
             CancellationToken = new CancellationToken();
 
             Db.Setup(d => d.HealthChecks.Add(It.IsAny<HealthCheck>()));
-            EmployerAccountsApiClient.Setup(c => c.Ping(CancellationToken)).Returns(Task.CompletedTask);
+            AccountsApiClient.Setup(c => c.Ping()).Returns(Task.CompletedTask);
 
-            Handler = new RunHealthCheckCommandHandler(new Lazy<EmployerAccountsDbContext>(() => Db.Object), EmployerAccountsApiClient.Object);
+            Handler = new RunHealthCheckCommandHandler(new Lazy<EmployerAccountsDbContext>(() => Db.Object), AccountsApiClient.Object);
         }
 
         public Task Handle()
