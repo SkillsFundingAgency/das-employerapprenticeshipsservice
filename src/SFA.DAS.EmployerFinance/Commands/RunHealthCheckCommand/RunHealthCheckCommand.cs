@@ -8,7 +8,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RunHealthCheckCommand
 {
     public class RunHealthCheckCommand : IAuthorizationContextModel, IAsyncRequest
     {
-        [IgnoreMap]
+        //[IgnoreMap]
         [Required]
         public Guid? UserRef { get; set; }
     }
