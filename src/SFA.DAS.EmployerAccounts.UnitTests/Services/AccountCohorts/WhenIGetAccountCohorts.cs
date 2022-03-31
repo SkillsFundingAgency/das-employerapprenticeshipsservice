@@ -1,20 +1,18 @@
-﻿using SFA.DAS.CommitmentsV2.Api.Client;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.CommitmentsV2.Api.Types.Requests;
-using System.Threading;
 using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.CommitmentsV2.Types;
 using SFA.DAS.CommitmentsV2.Types.Dtos;
-using System.Linq;
-using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
-using SFA.DAS.Encoding;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
+using SFA.DAS.EmployerAccounts.Services;
+using SFA.DAS.Encoding;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AccountCohorts
 {
