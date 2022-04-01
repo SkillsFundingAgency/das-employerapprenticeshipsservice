@@ -30,46 +30,54 @@
         <p>This is calculated every year on 6 April and shows in your account after 20 April.</p>
     </div>
 
-    @if (Model.Data.CanViewPledgesSection)
-    {
+
+     @if (Html.IsAuthorized("EmployerFeature.FinanceDetails"))
+     {
         <div class="column-two-thirds">
-            <h2 class="heading-medium">My pledges</h2>
-            <p>Create a public funding pledge which is shown online so that businesses can apply to you for a transfer of funds.</p>
-            <div class="panel panel-border-wide">
-                You have <strong>@Model.Data.PledgesCount</strong> transfer pledges.
+            <a href="/accounts/@Model.Data.HashedAccountID/transfers/financial-breakdown" class="button button-secondary">View my transfer finances</a>
+        </div>
+     }
+
+        @if (Model.Data.CanViewPledgesSection)
+        {
+            <div class="column-two-thirds">
+                <h2 class="heading-medium">My pledges</h2>
+                <p>Create a public funding pledge which is shown online so that businesses can apply to you for a transfer of funds.</p>
+                <div class="panel panel-border-wide">
+                    You have <strong>@Model.Data.PledgesCount</strong> transfer pledges.
+                </div>
+                @if (Model.Data.RenderCreateTransfersPledgeButton)
+                {
+                    <a class="button" href="@Url.LevyTransfersMatchingAccountAction("pledges/create/inform")" id="CreateTransfersPledgeButton">Create a transfers pledge</a>
+                }
+                <a href="@Url.LevyTransfersMatchingAccountAction("pledges")" class="button button-secondary">View my transfer pledges and applications</a>
             </div>
-            @if (Model.Data.RenderCreateTransfersPledgeButton)
-            {
-                <a class="button" href="@Url.LevyTransfersMatchingAccountAction("pledges/create/inform")" id="CreateTransfersPledgeButton">Create a transfers pledge</a>
-            }
-            <a href="@Url.LevyTransfersMatchingAccountAction("pledges")" class="button button-secondary">View my transfer pledges and applications</a>
+        }
+
+        <div class="column-two-thirds">
+            <h2 class="heading-medium">Apply for transfers funding</h2>
+            <p>Search transfers funding opportunities and apply for a transfer of funds.</p>
+            <div class="panel panel-border-wide">
+                You have <strong>@Model.Data.ApplicationsCount</strong> transfer applications.
+            </div>
+            <div class="button-group">
+                <a class="button" href="@Url.LevyTransfersMatchingAction("")" id="ApplyForTransfersButton">Apply for transfer opportunities</a>
+                @if (Model.Data.RenderApplicationListButton)
+                {
+                    <a href="@Url.LevyTransfersMatchingAccountAction("applications")" class="button button-secondary">View applications I've submitted</a>
+                }
+            </div>
+        </div>
+    </div>
+
+    @section breadcrumb {
+        <div class="breadcrumbs">
+            <ol role="navigation">
+                <li><a href="@Url.EmployerAccountsAction("teams")">Home</a></li>
+                <li>Your Transfers</li>
+            </ol>
         </div>
     }
 
-    <div class="column-two-thirds">
-        <h2 class="heading-medium">Apply for transfers funding</h2>
-        <p>Search transfers funding opportunities and apply for a transfer of funds.</p>
-        <div class="panel panel-border-wide">
-            You have <strong>@Model.Data.ApplicationsCount</strong> transfer applications.
-        </div>
-        <div class="button-group">
-            <a class="button" href="@Url.LevyTransfersMatchingAction("")" id="ApplyForTransfersButton">Apply for transfer opportunities</a>
-            @if (Model.Data.RenderApplicationListButton)
-            {
-                <a href="@Url.LevyTransfersMatchingAccountAction("applications")" class="button button-secondary">View applications I've submitted</a>
-            }
-        </div>
-    </div>
-</div>
-
-@section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.EmployerAccountsAction("teams")">Home</a></li>
-            <li>Your Transfers</li>
-        </ol>
-    </div>
-}
-
-@section pageSpecificJS {
-}
+    @section pageSpecificJS {
+    }

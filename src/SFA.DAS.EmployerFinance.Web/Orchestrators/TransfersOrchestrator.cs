@@ -63,7 +63,8 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     RenderCreateTransfersPledgeButton = renderCreateTransfersPledgeButtonTask.Result,
                     RenderApplicationListButton = renderApplicationListButton.IsEnabled,
                     StartingTransferAllowance = accountDetail.Result.StartingTransferAllowance,
-                    FinancialYearString = DateTime.UtcNow.ToFinancialYearString()
+                    FinancialYearString = DateTime.UtcNow.ToFinancialYearString(),
+                    HashedAccountID = hashedAccountId
                 }
             };
         }
