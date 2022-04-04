@@ -41,6 +41,11 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
+            if (validationResult.IsUnauthorized)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
             var agreementId = _hashingService.DecodeValue(message.AgreementId);
             var employerAgreement = await _database.Value.Agreements.ProjectTo<AgreementDto>(_configurationProvider)
                                                               .SingleOrDefaultAsync(x => x.Id.Equals(agreementId));

@@ -39,7 +39,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
         }
 
         [Test]
-        public async Task ThenIfAllFieldsArePopulatedAndTheMemberIsPartOfTheAccountThenTheRequestIsValid()
+        public async Task ThenIfAllFieldsArePopulatedThenTheRequestIsValid()
         {
             
             //Act
