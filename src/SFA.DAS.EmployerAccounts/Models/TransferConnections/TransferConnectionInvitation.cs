@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.Models.TransferConnections
             });
         }
 
-        protected TransferConnectionInvitation()
+        public TransferConnectionInvitation()
         {
         }
 

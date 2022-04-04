@@ -49,6 +49,7 @@
     <Compile Include="AccountApiClientTests\WhenGettingAccountUsers.cs" />
     <Compile Include="AccountApiClientTests\WhenGettingAccountUsersByInternalId.cs" />
     <Compile Include="AccountApiClientTests\WhenGettingAnEmployerAgreement.cs" />
+    <Compile Include="AccountApiClientTests\WhenGettingLegalEntityDetailsForAnAccount.cs" />
     <Compile Include="AccountApiClientTests\WhenPinging.cs" />
     <Compile Include="AccountApiClientTests\WhenGettingTransactions.cs" />
     <Compile Include="AccountApiClientTests\WhenGettingLevyDeclarations.cs" />
@@ -89,10 +90,10 @@
       <Version>11.0.1</Version>
     </PackageReference>
     <PackageReference Include="NUnit">
-      <Version>3.10.1</Version>
+      <Version>3.13.2</Version>
     </PackageReference>
     <PackageReference Include="NUnit3TestAdapter">
-      <Version>3.10.0</Version>
+      <Version>4.2.1</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.EmployerAccounts.Api.Types">
       <Version>1.6.1254</Version>

@@ -26,7 +26,11 @@
         "sharedServiceBusName": {
             "type": "string"
         },
-        "ipRangeFilter": {
+        "cosmosDbSubnetResourceIdList": {
+            "type": "array",
+            "defaultValue": []
+        },
+        "cosmosDbIpRangeFilter": {
             "type": "string",
             "defaultValue": ""
         },
@@ -62,7 +66,7 @@
         "apiCertificateName": {
             "type": "string"
         },
-        "keyVaultResourceGroupName": {
+        "sharedManagementResourceGroup": {
             "type": "string"
         },
         "keyVaultName": {
@@ -78,6 +82,9 @@
             "type": "array",
             "defaultValue": [
             ]
+        },
+        "sharedSQLServerName": {
+            "type": "string"
         },
         "sharedEnvVirtualNetworkName": {
             "type": "string"
@@ -96,6 +103,9 @@
         },
         "tags": {
             "type": "object"
+        },
+        "logAnalyticsWorkspaceName": {
+            "type": "string"
         }
     },
     "variables": {
@@ -182,7 +192,7 @@
                         "value": "[parameters('keyVaultName')]"
                     },
                     "keyVaultResourceGroup": {
-                        "value": "[parameters('keyVaultResourceGroupName')]"
+                        "value": "[parameters('sharedManagementResourceGroup')]"
                     }
                 }
             }
@@ -281,7 +291,7 @@
                         "value": "[parameters('keyVaultName')]"
                     },
                     "keyVaultResourceGroup": {
-                        "value": "[parameters('keyVaultResourceGroupName')]"
+                        "value": "[parameters('sharedManagementResourceGroup')]"
                     }
                 }
             }
@@ -358,7 +368,7 @@
         },
         {
             "apiVersion": "2020-06-01",
-            "name": "worker-subnet",
+            "name": "eas-accounts-worker-subnet",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "properties": {
@@ -382,6 +392,27 @@
                     },
                     "delegations": {
                         "value": "[parameters('subnetDelegations')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2021-04-01",
+            "name": "eas-accounts-worker-sql-firewall-rule",
+            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('deploymentUrlBase'), 'sql-server-firewall-rules.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "serverName": {
+                        "value": "[parameters('sharedSQLServerName')]"
+                    },
+                    "subnetResourceIdList": {
+                        "value": "[createArray(reference('eas-accounts-worker-subnet').outputs.SubnetResourceId.value)]"
                     }
                 }
             }
@@ -435,7 +466,7 @@
                         "value": "[variables('resourceGroupName')]"
                     },
                     "subnetResourceId": {
-                        "value": "[reference('worker-subnet').outputs.SubnetResourceId.value]"
+                        "value": "[reference('eas-accounts-worker-subnet').outputs.SubnetResourceId.value]"
                     },
                     "appServiceAppSettings": {
                         "value": {
@@ -509,8 +540,17 @@
                     "defaultConsistencyLevel": {
                         "value": "Strong"
                     },
+                    "subnetResourceIdList": {
+                        "value": "[parameters('cosmosDbSubnetResourceIdList')]"
+                    },
                     "ipRangeFilter": {
-                        "value": "[parameters('ipRangeFilter')]"
+                        "value": "[parameters('cosmosDbIpRangeFilter')]"
+                    },
+                    "logAnalyticsWorkspaceName": {
+                        "value": "[parameters('logAnalyticsWorkspaceName')]"
+                    },
+                    "logAnalyticsWorkspaceResourceGroupName": {
+                        "value": "[parameters('sharedManagementResourceGroup')]"
                     }
                 }
             }

@@ -59,5 +59,11 @@ namespace SFA.DAS.EmployerAccounts.Data
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.HasDefaultSchema("employer_financial");
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            this.Database.Connection.Dispose();
+            base.Dispose(disposing);
+        }
     }
 }

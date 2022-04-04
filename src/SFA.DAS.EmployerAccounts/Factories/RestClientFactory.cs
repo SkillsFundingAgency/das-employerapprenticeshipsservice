@@ -1,6 +1,6 @@
 ﻿using System;
 using RestSharp;
-using RestSharp.Deserializers;
+using RestSharp.Serialization.Json;
 using SFA.DAS.EmployerAccounts.Interfaces;
 
 namespace SFA.DAS.EmployerAccounts.Factories
@@ -10,7 +10,7 @@ namespace SFA.DAS.EmployerAccounts.Factories
         public IRestClient Create(Uri baseUrl)
         {
             var client = new RestClient { BaseUrl = baseUrl };
-            client.AddHandler("application/json", new JsonDeserializer());
+            client.AddHandler("application/json", () => new JsonSerializer());
 
             return client;
         }

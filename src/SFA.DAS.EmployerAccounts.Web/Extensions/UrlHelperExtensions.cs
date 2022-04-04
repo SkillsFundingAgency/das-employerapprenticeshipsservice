@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
             var baseUrl = configuration.EmployerCommitmentsV2BaseUrl;
 
-            return CommitmentAction(helper, baseUrl, path);
+            return NonAccountsAction(helper, baseUrl, path);
         }
         public static string LevyTransfersMatchingAction(this UrlHelper helper, string path)
         {
@@ -109,13 +109,22 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             return Action(baseUrl, accountPath);
         }
 
-        private static string CommitmentAction(UrlHelper helper, string baseUrl, string path)
+        // unlike the rest of the services within MA - commitments v2 does not have 'accounts/' in its urls
+        // Nor does Employer Feedback
+        private static string NonAccountsAction(UrlHelper helper, string baseUrl, string path)
         {
             var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
             var commitmentPath = hashedAccountId == null ? $"{path}" : $"{hashedAccountId}/{path}";
            
-            // unlike the rest of the services within MA - commitments v2 does not have 'accounts/' in its urls
             return Action(baseUrl, commitmentPath);
+        }
+
+        public static string EmployerFeedbackAction(this UrlHelper helper, string path)
+        {
+            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
+            var baseUrl = configuration.EmployerFeedbackBaseUrl;
+
+            return NonAccountsAction(helper, baseUrl, path);
         }
 
         private static string Action(string baseUrl, string path)

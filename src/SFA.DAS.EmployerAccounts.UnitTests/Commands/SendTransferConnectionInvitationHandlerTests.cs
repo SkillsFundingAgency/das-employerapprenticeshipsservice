@@ -12,6 +12,7 @@ using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.EmployerAccounts.UnitTests.Builders;
 using SFA.DAS.Testing;
+using SFA.DAS.UnitOfWork.Context;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands
 {
@@ -40,6 +41,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands
         public decimal SenderAccountTransferAllowance { get; set; }
         public User SenderUser { get; set; }
         public TransferConnectionInvitation TransferConnectionInvitation { get; set; }
+        public IUnitOfWorkContext UnitOfWorkContext { get; }
 
         public SendTransferConnectionInvitationHandlerTestsFixture()
         {
@@ -69,6 +71,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands
                 UserRef = SenderUser.Ref,
                 ReceiverAccountPublicHashedId = ReceiverAccount.PublicHashedId
             };
+
+            UnitOfWorkContext = new UnitOfWorkContext();
         }
 
         public SendTransferConnectionInvitationHandlerTestsFixture AddAccount(Account account)

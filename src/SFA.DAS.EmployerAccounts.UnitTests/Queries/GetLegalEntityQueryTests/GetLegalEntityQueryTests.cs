@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using FluentTestFixture = SFA.DAS.Testing.FluentTestFixture;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLegalEntityQueryTests
@@ -18,35 +19,21 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLegalEntityQueryTests
     [TestFixture]
     public class GetLegalEntityQueryTests : Testing.FluentTest<GetLegalEntityQueryTestsFixture>
     {
-        [Test]
-        public Task Handle_WhenGettingLegalEntity_ThenShouldReturnLegalEntity()
-        {
-            return RunAsync(f => f.Handle(false), (f, r) => r.Should().NotBeNull()
-                .And.Match<GetLegalEntityResponse>(r2 =>
-                    r2.LegalEntity.LegalEntityId == f.LegalEntity.Id &&
-                    r2.LegalEntity.Agreements.Count == 3 &&
-                    r2.LegalEntity.Agreements.Any(a => a.TemplateVersionNumber == 1 && a.Status == Api.Types.EmployerAgreementStatus.Signed) &&
-                    r2.LegalEntity.Agreements.Any(a => a.TemplateVersionNumber == 2 && a.Status == Api.Types.EmployerAgreementStatus.Signed) &&
-                    r2.LegalEntity.Agreements.Any(a => a.TemplateVersionNumber == 3 && a.Status == Api.Types.EmployerAgreementStatus.Pending) &&
-                    r2.LegalEntity.AgreementStatus == Api.Types.EmployerAgreementStatus.Pending &&
-                    r2.LegalEntity.Agreements.Any(a => a.AgreementType == f.LegalEntity.AccountLegalEntities.First().Agreements.First().Template.AgreementType)
-                ));
-        }
-
+        
         [Test]
         public Task Handle_WhenGettingLegalEntity_WithAllAgreements_ThenShouldReturnLegalEntity()
         {
-            return RunAsync(f => f.Handle(true), (f, r) => r.Should().NotBeNull()
+            return RunAsync(f => f.Handle(), (f, r) => r.Should().NotBeNull()
                 .And.Match<GetLegalEntityResponse>(r2 =>
                     r2.LegalEntity.LegalEntityId == f.LegalEntity.Id &&
                     r2.LegalEntity.Agreements.Count == 5 &&
-                    r2.LegalEntity.Agreements.Any(a => a.TemplateVersionNumber == 1 && a.Status == Api.Types.EmployerAgreementStatus.Removed) &&
-                    r2.LegalEntity.Agreements.Any(a => a.TemplateVersionNumber == 1 && a.Status == Api.Types.EmployerAgreementStatus.Signed) &&
-                    r2.LegalEntity.Agreements.Any(a => a.TemplateVersionNumber == 2 && a.Status == Api.Types.EmployerAgreementStatus.Signed) &&
-                    r2.LegalEntity.Agreements.Any(a => a.TemplateVersionNumber == 3 && a.Status == Api.Types.EmployerAgreementStatus.Pending) &&
-                    r2.LegalEntity.Agreements.Any(a => a.TemplateVersionNumber == 3 && a.Status == Api.Types.EmployerAgreementStatus.Expired) &&
-                    r2.LegalEntity.AgreementStatus == Api.Types.EmployerAgreementStatus.Pending &&
-                    r2.LegalEntity.Agreements.Any(a => a.AgreementType == f.LegalEntity.AccountLegalEntities.First().Agreements.First().Template.AgreementType)
+                    r2.LegalEntity.Agreements.Any(a => a.Template.VersionNumber == 1 && a.StatusId == EmployerAgreementStatus.Removed) &&
+                    r2.LegalEntity.Agreements.Any(a => a.Template.VersionNumber == 1 && a.StatusId == EmployerAgreementStatus.Signed) &&
+                    r2.LegalEntity.Agreements.Any(a => a.Template.VersionNumber == 2 && a.StatusId == EmployerAgreementStatus.Signed) &&
+                    r2.LegalEntity.Agreements.Any(a => a.Template.VersionNumber == 3 && a.StatusId == EmployerAgreementStatus.Pending) &&
+                    r2.LegalEntity.Agreements.Any(a => a.Template.VersionNumber == 3 && a.StatusId == EmployerAgreementStatus.Expired) &&
+                    //r2.LegalEntity.AgreementStatus == EmployerAgreementStatus.Pending &&
+                    r2.LegalEntity.Agreements.Any(a => a.Template.AgreementType == f.LegalEntity.AccountLegalEntities.First().Agreements.First().Template.AgreementType)
                 ));
         }
 
@@ -54,10 +41,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLegalEntityQueryTests
         public async Task Handle_WhenGettingLegalEntity_ThenShouldReturnTheCorrectEmailOfUserWhoSignedTheAgreement()
         {
             var f = new GetLegalEntityQueryTestsFixture();
-            var result = await f.Handle(false);
+            var result = await f.Handle();
 
-            result.LegalEntity.Agreements.First(a => a.TemplateVersionNumber == 1 && a.Status == Api.Types.EmployerAgreementStatus.Signed).SignedByEmail.Should().Be(f.UserB.Email);
-            result.LegalEntity.Agreements.First(a => a.TemplateVersionNumber == 2 && a.Status == Api.Types.EmployerAgreementStatus.Signed).SignedByEmail.Should().Be(f.UserA.Email);
+            result.LegalEntity.Agreements.First(a => a.Template.VersionNumber == 1 && a.StatusId == EmployerAgreementStatus.Signed).SignedByEmail.Should().Be(f.UserB.Email);
+            result.LegalEntity.Agreements.First(a => a.Template.VersionNumber == 2 && a.StatusId == EmployerAgreementStatus.Signed).SignedByEmail.Should().Be(f.UserA.Email);
         }
 
 
@@ -65,7 +52,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLegalEntityQueryTests
         public async Task Handle_WhenGettingLegalEntity_ThenShouldMapRequiredFields()
         {
             var f = new GetLegalEntityQueryTestsFixture();
-            var result = await f.Handle(false);
+            var result = await f.Handle();
 
             var actual = result.LegalEntity;
 
@@ -125,13 +112,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLegalEntityQueryTests
                 .EvaluateSignedAndPendingAgreementIdsForAllAccountLegalEntities();
         }
 
-        public Task<GetLegalEntityResponse> Handle(bool includeAllAgreements)
+        public Task<GetLegalEntityResponse> Handle()
         {
             return Handler.Handle(
                 new GetLegalEntityQuery(
                     Account.HashedId,
-                    LegalEntity.Id,
-                    includeAllAgreements
+                    LegalEntity.Id
                 ));
         }
 

@@ -6,8 +6,10 @@ using SFA.DAS.EmployerAccounts.Queries.GetLegalEntity;
 using SFA.DAS.Validation;
 using SFA.DAS.Validation.WebApi;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
+using SFA.DAS.EmployerAccounts.Api.Mappings;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers
 {
@@ -24,7 +26,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         [Route("", Name = "GetLegalEntities")]
         [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetLegalEntities(string hashedAccountId)
+        public async Task<IHttpActionResult> GetLegalEntities(string hashedAccountId, bool includeDetails = false)
         {
             GetAccountLegalEntitiesByHashedAccountIdResponse result;
 
@@ -46,21 +48,26 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
                 return NotFound();
             }
 
-            var resources = new List<Resource>();
-
-            foreach (var legalEntity in result.LegalEntities)
+            if (!includeDetails)
             {
-                resources
-                    .Add(
-                        new Resource
-                        {
-                            Id = legalEntity.Id.ToString(),
-                            Href = Url.Route("GetLegalEntity", new { hashedAccountId, legalEntityId = legalEntity.Id })
-                        });
+                var resources = new List<Resource>();
+
+                foreach (var legalEntity in result.LegalEntities)
+                {
+                    resources
+                        .Add(
+                            new Resource
+                            {
+                                Id = legalEntity.LegalEntityId.ToString(),
+                                Href = Url.Route("GetLegalEntity", new { hashedAccountId, legalEntityId = legalEntity.LegalEntityId })
+                            });
+                }
+
+                return Ok(new ResourceList(resources));
             }
 
-            return Ok(
-                new ResourceList(resources));
+            return Ok(result.LegalEntities.Select(c => LegalEntityMapping.MapFromAccountLegalEntity(c, null, false))
+                .ToList());
         }
 
         [Route("{legalEntityId}", Name = "GetLegalEntity")]
@@ -71,8 +78,11 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
             long legalEntityId,
             bool includeAllAgreements = false)
         {
-            var response = await _mediator.SendAsync(request: new GetLegalEntityQuery(hashedAccountId, legalEntityId, includeAllAgreements));
-            return Ok(response.LegalEntity);
+            var response = await _mediator.SendAsync(request: new GetLegalEntityQuery(hashedAccountId, legalEntityId));
+
+            var model = LegalEntityMapping.MapFromAccountLegalEntity(response.LegalEntity, response.LatestAgreement, includeAllAgreements);
+            
+            return Ok(model);
         }
     }
 }

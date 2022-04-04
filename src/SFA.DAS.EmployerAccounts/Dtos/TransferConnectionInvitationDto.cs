@@ -12,5 +12,6 @@ namespace SFA.DAS.EmployerAccounts.Dtos
         public AccountDto ReceiverAccount { get; set; }
         public AccountDto SenderAccount { get; set; }
         public TransferConnectionInvitationStatus Status { get; set; }
+        public TransferConnectionType Type { get; set; }
     }
 }

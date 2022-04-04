@@ -8,6 +8,7 @@ using MediatR;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.TransferConnections;
 using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetTransferRequests
@@ -54,7 +55,8 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetTransferRequests
                     SenderAccount = accounts[r.HashedSendingEmployerAccountId],
                     Status = r.Status,
                     TransferCost = r.TransferCost,
-                    TransferRequestHashedId = r.HashedTransferRequestId
+                    TransferRequestHashedId = r.HashedTransferRequestId,
+                    Type = message.AccountId == accounts[r.HashedSendingEmployerAccountId].Id ? TransferConnectionType.Sender : TransferConnectionType.Receiver
                 })
                 .OrderBy(r => r.ReceiverAccount.Id == message.AccountId ? r.SenderAccount.Name : r.ReceiverAccount.Name)
                 .ThenBy(r => r.CreatedDate)

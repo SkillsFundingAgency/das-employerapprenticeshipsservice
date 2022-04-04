@@ -73,6 +73,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             modelBuilder.Entity<AgreementTemplate>().ToTable("EmployerAgreementTemplate").HasMany(t => t.Agreements);
             modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.AccountLegalEntity);
             modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.Template);
+            modelBuilder.Entity<EmployerAgreement>().Ignore(c => c.SignedByEmail);
             modelBuilder.Entity<HealthCheck>().ToTable("HealthChecks", "dbo");
             modelBuilder.Entity<Membership>().HasKey(m => new { m.AccountId, m.UserId });
             modelBuilder.Entity<Paye>().Ignore(a => a.AccountId);

@@ -24,9 +24,18 @@ namespace SFA.DAS.EmployerAccounts.Services
                 configuration.PensionRegulatorApi.IdentifierUri,
                 configuration.PensionRegulatorApi.Tenant
             );
-        }  
+        }
 
-        public async Task<IEnumerable<Organisation>> GetOrgansiationsByPayeRef(string payeRef)
+        public async Task<Organisation> GetOrganisationById(string organisationId)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/pensionsregulator/{organisationId}";
+
+            var json = await _httpService.GetAsync(url, false);
+            return json == null ? null : JsonConvert.DeserializeObject<Organisation>(json);
+        }
+
+        public async Task<IEnumerable<Organisation>> GetOrganisationsByPayeRef(string payeRef)
         {
             var baseUrl = GetBaseUrl();
             var url = $"{baseUrl}api/pensionsregulator/organisations?payeRef={HttpUtility.UrlEncode(payeRef)}";
@@ -35,7 +44,7 @@ namespace SFA.DAS.EmployerAccounts.Services
             return json == null ? null : JsonConvert.DeserializeObject<IEnumerable<Organisation>>(json);
         }
 
-        public async Task<IEnumerable<Organisation>> GetOrgansiationsByAorn(string aorn, string payeRef)
+        public async Task<IEnumerable<Organisation>> GetOrganisationsByAorn(string aorn, string payeRef)
         {
             var baseUrl = GetBaseUrl();
             var url = $"{baseUrl}api/pensionsregulator/organisations/{HttpUtility.UrlEncode(aorn)}?payeRef={HttpUtility.UrlEncode(payeRef)}";

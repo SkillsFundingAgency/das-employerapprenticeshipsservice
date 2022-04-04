@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.Validation;
@@ -26,7 +25,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetPensionRegulator
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var organisations = await _pensionRegulatorService.GetOrgansiationsByPayeRef(message.PayeRef);
+            var organisations = await _pensionRegulatorService.GetOrganisationsByPayeRef(message.PayeRef);
             return organisations == null
                 ? new GetPensionRegulatorResponse()
                 : new GetPensionRegulatorResponse {Organisations = organisations};
