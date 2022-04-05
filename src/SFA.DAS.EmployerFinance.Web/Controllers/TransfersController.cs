@@ -5,7 +5,7 @@ using SFA.DAS.EmployerFinance.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerFinance.Web.Controllers
 {
-    [DasAuthorize("EmployerFeature.TransfersMatching", "EmployerFeature.FinanceDetails")]
+    [DasAuthorize("EmployerFeature.TransfersMatching")]
     [RoutePrefix("accounts/{HashedAccountId}")] 
     public class TransfersController : Controller
     {
