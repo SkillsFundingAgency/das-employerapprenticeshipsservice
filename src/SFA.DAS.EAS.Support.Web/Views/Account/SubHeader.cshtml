@@ -18,7 +18,11 @@
             {
                 <span class="heading-secondary"> Account ID @(Model?.PublicHashedAccountId), created @Model.DateRegistered.ToString("dd/MM/yyyy")</span>
             }
-            <span class="heading-secondary"> Levy Status  @Model.ApprenticeshipEmployerType</span>
+            <span class="heading-secondary">
+                Levy Status <strong class="govuk-tag govuk-tag--blue">
+                    @Model.ApprenticeshipEmployerType
+                </strong>
+            </span>
         </h1>
     </div>
 </div>
