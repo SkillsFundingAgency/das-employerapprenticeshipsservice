@@ -1886,13 +1886,6 @@ table.top-border {
 #global-header-bar {
   background: #6f777b; }
 
-.breadcrumbs li {
-  background-image: url("../images/separator.png"); }
-
-.breadcrumbs a {
-  font-size: 14px;
-  font-size: 16px; }
-
 .breadcrumbs .link-back {
   margin: 0; }
 
