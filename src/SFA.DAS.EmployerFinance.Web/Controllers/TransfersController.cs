@@ -5,6 +5,7 @@ using SFA.DAS.EmployerFinance.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerFinance.Web.Controllers
 {
+    [DasAuthorize("EmployerFeature.FinanceDetails")]
     [RoutePrefix("accounts/{HashedAccountId}")] 
     public class TransfersController : Controller
     {
@@ -24,7 +25,6 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             return View(viewModel);
         }
 
-        [DasAuthorize("EmployerFeature.FinanceDetails")]
         [HttpGet]
         [Route("transfers/financial-breakdown")]
         public ActionResult FinancialBreakdown(string hashedAccountId)
