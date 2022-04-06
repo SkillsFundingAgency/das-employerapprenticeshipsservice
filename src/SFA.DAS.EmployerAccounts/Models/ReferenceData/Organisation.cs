@@ -1,5 +1,6 @@
 ﻿using System;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerAccounts.Models.Organisation;
 
 namespace SFA.DAS.EmployerAccounts.Models.ReferenceData
 {
@@ -12,5 +13,6 @@ namespace SFA.DAS.EmployerAccounts.Models.ReferenceData
         public DateTime? RegistrationDate { get; set; }
         public SFA.DAS.EmployerAccounts.Models.Organisation.Address Address { get; set; }
         public string Sector { get; set; }
+        public OrganisationStatus OrganisationStatus { get; set; }
     }
 }

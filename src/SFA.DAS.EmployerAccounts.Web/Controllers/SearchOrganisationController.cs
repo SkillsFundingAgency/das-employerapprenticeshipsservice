@@ -91,7 +91,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             viewModel.NewSearch = true;
 
-            saveOrganisationDataIfItHasAValidName(viewModel);
+            SaveOrganisationDataIfItHasAValidName(viewModel);
 
             if (string.IsNullOrEmpty(hashedAccountId))
             {
@@ -103,7 +103,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return View(ControllerConstants.ConfirmOrganisationDetailsViewName, response);
         }
 
-        private void saveOrganisationDataIfItHasAValidName(OrganisationDetailsViewModel viewModel)
+        private void SaveOrganisationDataIfItHasAValidName(OrganisationDetailsViewModel viewModel)
         {
             if (viewModel?.Name != null)
             {
