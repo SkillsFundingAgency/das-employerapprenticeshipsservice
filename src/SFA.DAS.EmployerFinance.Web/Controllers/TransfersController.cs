@@ -1,11 +1,12 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.Authorization.EmployerUserRoles.Options;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerFinance.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerFinance.Web.Controllers
 {
-    [DasAuthorize("EmployerFeature.FinanceDetails")]
+    [DasAuthorize(EmployerUserRole.Any)]
     [RoutePrefix("accounts/{HashedAccountId}")] 
     public class TransfersController : Controller
     {
@@ -25,6 +26,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             return View(viewModel);
         }
 
+        [DasAuthorize("EmployerFeature.FinanceDetails")]
         [HttpGet]
         [Route("transfers/financial-breakdown")]
         public ActionResult FinancialBreakdown(string hashedAccountId)
