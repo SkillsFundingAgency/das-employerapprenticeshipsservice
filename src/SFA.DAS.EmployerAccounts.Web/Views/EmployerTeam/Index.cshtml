@@ -277,7 +277,7 @@ else
                                             break;
                                         case "PledgeApplicationForAcceptance":
                                             <span>
-                                                <a href="@Url.LevyTransfersMatchingAction("applications")" class="govuk-link govuk-link--no-visited-state">@task.ItemsDueCount approved transfer application@(task.ItemsDueCount > 1 ? "s" : "")</a> awaiting your acceptance
+                                                <a href="@Url.LevyTransfersMatchingAction("applications")" id="application-acceptance-task" class="govuk-link govuk-link--no-visited-state">@task.ItemsDueCount approved transfer application@(task.ItemsDueCount > 1 ? "s" : "")</a> awaiting your acceptance
                                             </span>
                                             break;
                                     }
