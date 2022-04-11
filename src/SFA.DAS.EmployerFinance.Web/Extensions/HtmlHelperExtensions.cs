@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Helpers;
 using SFA.DAS.EmployerFinance.Queries.GetContent;
@@ -138,6 +139,14 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
 
             var content = response;
             return MvcHtmlString.Create(content.Content);
+        }
+
+        public static bool IsAuthorized(this HtmlHelper htmlHelper, string featureType)
+        {
+            var authorisationService = DependencyResolver.Current.GetService<IAuthorizationService>();
+            var isAuthorized = authorisationService.IsAuthorized(featureType);
+
+            return isAuthorized;
         }
     }
 }   

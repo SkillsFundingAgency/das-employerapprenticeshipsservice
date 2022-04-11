@@ -647,6 +647,7 @@
     <Content Include="Views\Shared\_GoogleTagManagerNoScript.cshtml" />
     <Content Include="Views\Shared\_ZenDeskApiPush.cshtml" />
     <Content Include="Views\Transfers\Index.cshtml" />
+    <Content Include="Views\Transfers\FinancialBreakdown.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

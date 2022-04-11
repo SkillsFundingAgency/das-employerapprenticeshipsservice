@@ -9,5 +9,6 @@
         public int ApplicationsCount { get; set; }
         public decimal StartingTransferAllowance { get; set; }
         public string FinancialYearString { get; set; }
+        public string HashedAccountID { get; set; }
     }
 }
