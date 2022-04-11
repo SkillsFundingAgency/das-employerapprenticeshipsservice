@@ -1,27 +1,23 @@
-﻿using SFA.DAS.Authentication;
-using SFA.DAS.EmployerFinance.Queries.GetTransferTransactionDetails;
-using SFA.DAS.EmployerFinance.Web.Helpers;
-using SFA.DAS.EmployerFinance.Web.Orchestrators;
-using System;
-using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
+using SFA.DAS.Authentication;
 using SFA.DAS.Authorization.EmployerUserRoles.Options;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
+using SFA.DAS.EmployerFinance.Queries.GetTransferTransactionDetails;
+using SFA.DAS.EmployerFinance.Web.Helpers;
+using SFA.DAS.EmployerFinance.Web.Orchestrators;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
-using SFA.DAS.Validation.Mvc;
-using SFA.DAS.EmployerFinance.Models.Payments;
-using SFA.DAS.EmployerFinance.Models.Transaction;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.EmployerFinance.Web.Filters;
+using SFA.DAS.Validation.Mvc;
 
 namespace SFA.DAS.EmployerFinance.Web.Controllers
 {
-    [DasAuthorize]
     [RoutePrefix("accounts/{HashedAccountId}")]
+    [DasAuthorize(EmployerUserRole.Any)]
     public class EmployerAccountTransactionsController : BaseController
     {
         private readonly IMapper _mapper;
@@ -101,23 +97,6 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             }
 
             transactionViewResult.Data.Model.Data.HashedAccountId = hashedAccountId;
-
-            //TODO: Remove this code once we have finished investigations into CON-111
-            var payments = transactionViewResult.Data?.Model?.Data?.TransactionLines?.Where(t =>
-                t.TransactionType == TransactionItemType.Payment);
-
-            if (payments != null)
-            {
-                foreach (var payment in payments)
-                {
-                    if (!(payment is PaymentTransactionLine))
-                    {
-                        _logger.Warn(
-                            $"Invalid payment transaction detected. Account ID: {payment.AccountId}, Date created: {payment.DateCreated.ToLongTimeString()}, transaction date: {payment.TransactionDate}");
-                    }
-                }
-            }
-            // END OF CODE FOR CON-111
 
             return View(transactionViewResult);
         }
