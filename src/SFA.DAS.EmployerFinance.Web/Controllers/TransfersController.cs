@@ -7,7 +7,8 @@ using SFA.DAS.EmployerFinance.Web.Orchestrators;
 namespace SFA.DAS.EmployerFinance.Web.Controllers
 {
     [DasAuthorize(EmployerUserRole.Any)]
-    [RoutePrefix("accounts/{HashedAccountId}")] public class TransfersController : Controller
+    [RoutePrefix("accounts/{HashedAccountId}")] 
+    public class TransfersController : Controller
     {
         private readonly TransfersOrchestrator _transfersOrchestrator;
 
@@ -23,6 +24,14 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             var viewModel = await _transfersOrchestrator.GetIndexViewModel(hashedAccountId);
 
             return View(viewModel);
+        }
+
+        [DasAuthorize("EmployerFeature.FinanceDetails")]
+        [HttpGet]
+        [Route("transfers/financial-breakdown")]
+        public ActionResult FinancialBreakdown(string hashedAccountId)
+        {
+            return View();
         }
     }
 }
