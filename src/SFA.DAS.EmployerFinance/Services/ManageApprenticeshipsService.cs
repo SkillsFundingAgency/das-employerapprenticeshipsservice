@@ -19,5 +19,10 @@ namespace SFA.DAS.EmployerFinance.Services
         {
             return await _apiClient.Get<GetIndexResponse>(new GetIndexRequest(accountId));
         }
+
+        public async Task<GetFinancialBreakdownResponse> GetFinancialBreakdown(long accountId) 
+        {
+            return await _apiClient.Get<GetFinancialBreakdownResponse>(new GetIndexRequest(accountId));
+        }
     }
 }
