@@ -5,5 +5,6 @@
         public decimal StartingTransferAllowance { get; set; }
         public string FinancialYearString { get; set; }
         public string HashedAccountID { get; set; }
+        public long TransferConnections { get; set; }
     }
 }
