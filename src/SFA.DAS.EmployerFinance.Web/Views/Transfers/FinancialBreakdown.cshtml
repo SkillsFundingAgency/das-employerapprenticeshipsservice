@@ -1,4 +1,7 @@
 ﻿@using System.Globalization
+
+@model OrchestratorResponse<SFA.DAS.EmployerFinance.Web.ViewModels.Transfers.FinancialBreakdownViewModel>
+
 @{
     ViewBag.PageID = "transfers-breakdown";
     ViewBag.Section = "finance";
@@ -28,32 +31,28 @@
 <hr />
 
 <h2 class="heading-medium">
-    Transfer allowance for financial year 2021/22
+    Transfer allowance for financial year @Model.Data.FinancialYearString
 </h2>
 <div class="grid-row">
     <div class="column-one-half">
         <table>
             <tr>
                 <th scope="row">Your transfer allowance</th>
-                <td class="numeric">£20</td>
-            </tr>
-            <tr>
-                <th scope="row">Deduction for in-house apprenticeships</th>
-                <td class="numeric">£20</td>
+                <td class="numeric">@Model.Data.StartingTransferAllowance.ToString("C0", culture)</td>
             </tr>
         </table>
         <details>
             <summary><span class="summary">How is my available transfer allowance calculated?</span></summary>
             <div class="panel panel-border-narrow">
-                <p>Content</p>
+                <p>Your total available transfer allowance takes into account any deductions made for in-house apprenticeships, if you have any.</p>
             </div>
         </details>
     </div>
     <div class="column-one-half">
         <div class="finance-data">
             <dl>
-                <dt>Total available transfer allowance for 2021/22</dt>
-                <dd>£200,000</dd>
+                <dt>Total available transfer allowance for @Model.Data.FinancialYearString</dt>
+                <dd>@Model.Data.TotalAvailableTransferAllowance.ToString("C0", culture)</dd>
             </dl>
         </div>
     </div>

@@ -72,13 +72,20 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         public async Task<OrchestratorResponse<FinancialBreakdownViewModel>> GetFinancialBreakdownViewModel(string hashedAccountId) 
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
-            var financialBreakdownTask = await _manageApprenticeshipsService.GetFinancialBreakdown(accountId);
+            var financialBreakdownTask = _manageApprenticeshipsService.GetFinancialBreakdown(accountId);
+
+            var accountDetailTask = _accountApiClient.GetAccount(hashedAccountId);
+
+            await Task.WhenAll(financialBreakdownTask, accountDetailTask);
 
             return new OrchestratorResponse<FinancialBreakdownViewModel>
             {
                 Data = new FinancialBreakdownViewModel
                 {
-                    TransferConnections = financialBreakdownTask.TransferConnections,
+                    TransferConnections = financialBreakdownTask.Result.TransferConnections,
+                    StartingTransferAllowance = accountDetailTask.Result.StartingTransferAllowance,
+                    FinancialYearString = DateTime.UtcNow.ToFinancialYearString(),
+                    Commitments = financialBreakdownTask.Result.Commitments,
                     HashedAccountID = hashedAccountId
                 }
             };
