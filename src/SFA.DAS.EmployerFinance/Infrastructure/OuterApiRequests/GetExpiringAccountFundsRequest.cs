@@ -4,7 +4,7 @@ namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests
 {
     public class GetExpiringAccountFundsRequest : IGetApiRequest
     {
-        private long _accountId;
+        private readonly long _accountId;
         public string GetUrl => $"account/{_accountId}/expiring-funds";
 
 
