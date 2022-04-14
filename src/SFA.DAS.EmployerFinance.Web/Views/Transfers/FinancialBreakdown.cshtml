@@ -59,7 +59,7 @@
 <hr />
 
 <h2 class="heading-medium">
-    Committed funds for financial year 2021/22
+    Committed funds for financial year @Model.Data.FinancialYearString
 </h2>
 
 <div class="grid-row">
@@ -67,19 +67,19 @@
         <table>
             <tr>
                 <th scope="row">Approved applications: live</th>
-                <td class="numeric">@Model.Data.ApprovedPledgeApplications</td>
+                <td class="numeric">@Model.Data.ApprovedPledgeApplications.ToString("C0", culture)</td>
             </tr>
             <tr>
                 <th scope="row">Approved applications: not live yet</th>
-                <td class="numeric">@Model.Data.AcceptedPledgeApplications</td>
+                <td class="numeric">@Model.Data.AcceptedPledgeApplications.ToString("C0", culture)</td>
             </tr>
             <tr>
                 <th scope="row">Transfer connections</th>
-                <td class="numeric">@Model.Data.TransferConnections</td>
+                <td class="numeric">@Model.Data.TransferConnections.ToString("C0", culture)</td>
             </tr>
             <tr>
                 <th scope="row">Total estimated spend</th>
-                <td class="numeric"><strong>£20</strong></td>
+                <td class="numeric"><strong>@Model.Data.TotalEstimatedSpend.ToString("C0", culture)</strong></td>
             </tr>
         </table>
         <details>
@@ -92,8 +92,8 @@
     <div class="column-one-half">
         <div class="finance-data finance-data--highlight">
             <dl>
-                <dt>Estimated remaining allowance for 2021/22</dt>
-                <dd>£200,000</dd>
+                <dt>Estimated remaining allowance for @Model.Data.FinancialYearString</dt>
+                <dd>@Model.Data.EstimatedRemainingAllowance.ToString("C0", culture)</dd>
             </dl>
         </div>
     </div>

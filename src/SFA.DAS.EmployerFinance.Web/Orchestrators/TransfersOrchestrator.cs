@@ -72,23 +72,24 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         public async Task<OrchestratorResponse<FinancialBreakdownViewModel>> GetFinancialBreakdownViewModel(string hashedAccountId) 
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
-            var financialBreakdownTask = await _manageApprenticeshipsService.GetFinancialBreakdown(accountId);
-            var accountDetail = await _accountApiClient.GetAccount(hashedAccountId);
+            var financialBreakdownTask = _manageApprenticeshipsService.GetFinancialBreakdown(accountId);
+            var accountDetailTask = _accountApiClient.GetAccount(hashedAccountId);
+            await Task.WhenAll(financialBreakdownTask, accountDetailTask);
 
             return new OrchestratorResponse<FinancialBreakdownViewModel>
             {
                 Data = new FinancialBreakdownViewModel
                 {
-                    TransferConnections = financialBreakdownTask.TransferConnections,
+                    TransferConnections = financialBreakdownTask.Result.TransferConnections,
                     HashedAccountID = hashedAccountId,
-                    AcceptedPledgeApplications = financialBreakdownTask.AcceptedPledgeApplications,
-                    ApprovedPledgeApplications = financialBreakdownTask.ApprovedPledgeApplications,
-                    Commitments = financialBreakdownTask.Commitments,
-                    PledgeOriginatedCommitments = financialBreakdownTask.PledgeOriginatedCommitments,
-                    FundsIn = financialBreakdownTask.FundsIn,
-                    NumberOfMonths = financialBreakdownTask.NumberOfMonths,
-                    ProjectionStartDate = financialBreakdownTask.ProjectionStartDate,
-                    StartingTransferAllowance = accountDetail.StartingTransferAllowance,
+                    AcceptedPledgeApplications = financialBreakdownTask.Result.AcceptedPledgeApplications,
+                    ApprovedPledgeApplications = financialBreakdownTask.Result.ApprovedPledgeApplications,
+                    Commitments = financialBreakdownTask.Result.Commitments,
+                    PledgeOriginatedCommitments = financialBreakdownTask.Result.PledgeOriginatedCommitments,
+                    FundsIn = financialBreakdownTask.Result.FundsIn,
+                    NumberOfMonths = financialBreakdownTask.Result.NumberOfMonths,
+                    ProjectionStartDate = financialBreakdownTask.Result.ProjectionStartDate,
+                    StartingTransferAllowance = accountDetailTask.Result.StartingTransferAllowance,
                     FinancialYearString = DateTime.UtcNow.ToFinancialYearString(),
                 }
             };
