@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerFinance.Services
 
             try
             {
-                _logger.Info($"Getting expiring funds for account ID: {accountId}");
+                _logger.Info($"Getting forecasting projection summary for account ID: {accountId}");
 
                 var accountProjectionSummaryResponse = await _apiClient.Get<AccountProjectionSummaryResponseItem>(new GetAccountProjectionSummaryRequest(accountId));
 
@@ -38,7 +38,7 @@ namespace SFA.DAS.EmployerFinance.Services
             }
             catch(Exception ex)
             {
-                _logger.Error(ex, $"Could not find expired funds for account ID: {accountId} when calling forecast API");
+                _logger.Error(ex, $"Could not find forecasting projection summary for account ID: {accountId} when calling forecast API");
             }
 
             return accountProjectionSummary;
