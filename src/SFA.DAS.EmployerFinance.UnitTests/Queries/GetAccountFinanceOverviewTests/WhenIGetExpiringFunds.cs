@@ -31,6 +31,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         private GetAccountFinanceOverviewQuery _query;
         private ExpiringAccountFunds _expiringFunds;
         private ProjectedCalculation _projectedCalculation;
+        private AccountProjectionSummary _accountProjectionSummary;
 
         [SetUp]
         public void Setup()
@@ -43,32 +44,34 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
             _validator = new Mock<IValidator<GetAccountFinanceOverviewQuery>>();
 
             _query = new GetAccountFinanceOverviewQuery { AccountId = ExpectedAccountId };
-            _expiringFunds = new ExpiringAccountFunds
+
+            _accountProjectionSummary = new AccountProjectionSummary
             {
                 AccountId = ExpectedAccountId,
-                ExpiryAmounts = new List<ExpiringFunds>
+                ProjectionGenerationDate = DateTime.UtcNow,
+                ExpiringAccountFunds = new ExpiringAccountFunds
+                {
+                    ExpiryAmounts = new List<ExpiringFunds>
                 {
                     new ExpiringFunds { PayrollDate = _now.AddMonths(1), Amount = 3000 },
                     new ExpiringFunds { PayrollDate = _now.AddMonths(2), Amount = 4000 },
                     new ExpiringFunds { PayrollDate = _now, Amount = 2000 }
                 }
+                },
+                ProjectionCalulation = new ProjectedCalculation
+                {
+                    FundsIn = ExpectedFundsIn,
+                    FundsOut = ExpectedFundsOut,
+                    NumberOfMonths = 12
+                }
             };
 
-            _projectedCalculation = new ProjectedCalculation
-            {
-                AccountId = ExpectedAccountId,
-                FundsIn = ExpectedFundsIn,
-                FundsOut = ExpectedFundsOut,
-                NumberOfMonths = 12
-            };
-
-            _handler = new GetAccountFinanceOverviewQueryHandler(_currentDateTime.Object, _dasForecastingService.Object,_levyService.Object, _validator.Object, _logger.Object);
+            _handler = new GetAccountFinanceOverviewQueryHandler(_currentDateTime.Object, _dasForecastingService.Object, _levyService.Object, _validator.Object, _logger.Object);
             _currentDateTime.Setup(d => d.Now).Returns(_now);
-            _dasForecastingService.Setup(s => s.GetExpiringAccountFunds(ExpectedAccountId)).ReturnsAsync(_expiringFunds);
-            _dasForecastingService.Setup(s => s.GetProjectedCalculations(ExpectedAccountId)).ReturnsAsync(_projectedCalculation);
+            _dasForecastingService.Setup(s => s.GetAccountProjectionSummary(ExpectedAccountId)).ReturnsAsync(_accountProjectionSummary);
             _levyService.Setup(s => s.GetAccountBalance(ExpectedAccountId)).ReturnsAsync(ExpectedBalance);
             _validator.Setup(v => v.ValidateAsync(_query))
-                .ReturnsAsync(new ValidationResult{ValidationDictionary = new Dictionary<string, string>()});
+                .ReturnsAsync(new ValidationResult { ValidationDictionary = new Dictionary<string, string>() });
         }
 
         [Test]
@@ -99,7 +102,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         [Test]
         public async Task ThenIfNullIsReturnedTheAccountIdAndBalanceShouldStillBePopulated()
         {
-            _dasForecastingService.Setup(s => s.GetExpiringAccountFunds(ExpectedAccountId)).ReturnsAsync((ExpiringAccountFunds)null);
+            _dasForecastingService.Setup(s => s.GetAccountProjectionSummary(ExpectedAccountId)).ReturnsAsync((AccountProjectionSummary)null);
 
             var response = await _handler.Handle(_query);
 
@@ -109,7 +112,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         [Test]
         public async Task ThenIfNullIsReturnedTheExpiryDateShouldBeNull()
         {
-            _dasForecastingService.Setup(s => s.GetExpiringAccountFunds(ExpectedAccountId)).ReturnsAsync((ExpiringAccountFunds)null);
+            _dasForecastingService.Setup(s => s.GetAccountProjectionSummary(ExpectedAccountId)).ReturnsAsync((AccountProjectionSummary)null);
 
             var response = await _handler.Handle(_query);
 
@@ -119,7 +122,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         [Test]
         public async Task ThenIfNullIsReturnedTheAmountShouldBeNull()
         {
-            _dasForecastingService.Setup(s => s.GetExpiringAccountFunds(ExpectedAccountId)).ReturnsAsync((ExpiringAccountFunds)null);
+            _dasForecastingService.Setup(s => s.GetAccountProjectionSummary(ExpectedAccountId)).ReturnsAsync((AccountProjectionSummary)null);
 
             var response = await _handler.Handle(_query);
 

@@ -38,19 +38,19 @@ namespace SFA.DAS.EmployerFinance.Services
             _httpClient.AuthScheme = "Bearer";
         }
 
-        public async Task<ExpiringAccountFunds> GetExpiringAccountFunds(long accountId)
+        public async Task<AccountProjectionSummary> GetAccountProjectionSummary(long accountId)
         {
-            ExpiringAccountFunds expiringAccountFunds = null;
+            AccountProjectionSummary accountProjectionSummary = null;
 
             try
             {
                 _logger.Info($"Getting expiring funds for account ID: {accountId}");
 
-                var expiringAccountFundsResponse = await _apiClient.Get<ExpiringAccountFundsResponseItem>(new GetExpiringAccountFundsRequest(accountId));
+                var accountProjectionSummaryResponse = await _apiClient.Get<AccountProjectionSummaryResponseItem>(new GetAccountProjectionSummaryRequest(accountId));
 
-                if (expiringAccountFundsResponse != null)
+                if (accountProjectionSummaryResponse != null)
                 {
-                    expiringAccountFunds = MapFrom(expiringAccountFundsResponse);
+                    accountProjectionSummary = MapFrom(accountProjectionSummaryResponse);
                 }
             }
             catch(Exception ex)
@@ -58,112 +58,30 @@ namespace SFA.DAS.EmployerFinance.Services
                 _logger.Error(ex, $"Could not find expired funds for account ID: {accountId} when calling forecast API");
             }
 
-            return expiringAccountFunds;
+            return accountProjectionSummary;
         }
 
-        public async Task<ProjectedCalculation> GetProjectedCalculations(long accountId)
+        private static AccountProjectionSummary MapFrom(AccountProjectionSummaryResponseItem accountProjectionSummaryResponse)
         {
-            _logger.Info($"Getting projected calculations for account ID: {accountId}");
-
-            return await CallAuthService<ProjectedCalculation>(
-                accountId,
-                (ex) =>
+            return new AccountProjectionSummary
+            {
+                AccountId = accountProjectionSummaryResponse.AccountId,
+                ProjectionGenerationDate = accountProjectionSummaryResponse.ProjectionGenerationDate,
+                ProjectionCalulation = new ProjectedCalculation
                 {
-                    if (ex is ResourceNotFoundException)
+                    FundsIn = accountProjectionSummaryResponse.FundsIn,
+                    FundsOut = accountProjectionSummaryResponse.FundsOut,
+                    NumberOfMonths = accountProjectionSummaryResponse.NumberOfMonths
+                },
+                ExpiringAccountFunds = new ExpiringAccountFunds
+                {
+                    ExpiryAmounts = accountProjectionSummaryResponse.ExpiryAmounts.Select(x => new ExpiringFunds
                     {
-                        _logger.Error(ex, $"Could not find projected calculations for account ID: {accountId} when calling forecast API");
-                    }
+                        Amount = x.Amount,
+                        PayrollDate = x.PayrollDate
+                    }).ToList()
                 }
-                );
-        }
-
-        private static ExpiringAccountFunds MapFrom(ExpiringAccountFundsResponseItem expiringAccountFundsResponse)
-        {
-            return new ExpiringAccountFunds
-            {
-                AccountId = expiringAccountFundsResponse.AccountId,
-                ProjectionGenerationDate = expiringAccountFundsResponse.ProjectionGenerationDate,
-                ExpiryAmounts = expiringAccountFundsResponse.ExpiryAmounts.Select(x => new ExpiringFunds
-                {
-                    Amount = x.Amount,
-                    PayrollDate = x.PayrollDate
-                }).ToList()
             };
-        }
-
-        private async Task<T> CallAuthService<T>(long accountId, Action<Exception> OnError = null)
-        {
-            var accessToken = IsClientCredentialConfiguration(_apiClientConfiguration.ClientId, _apiClientConfiguration.ClientSecret, _apiClientConfiguration.Tenant)
-                ? await _azureAdAuthService.GetAuthenticationResult(
-                _apiClientConfiguration.ClientId,
-                _apiClientConfiguration.ClientSecret,
-                _apiClientConfiguration.IdentifierUri,
-                _apiClientConfiguration.Tenant)
-                : await GetManagedIdentityAuthenticationResult(_apiClientConfiguration.IdentifierUri);
-
-            try
-            {
-                return await _httpClient.Get<T>(accessToken, GetUrl(typeof(T), accountId));
-            }
-            catch (ResourceNotFoundException ex)
-            {
-                OnError?.Invoke(ex);
-                _logger.Error(ex, $"ResourceNotFoundException returned from forecast API for account ID: {accountId}");                
-                return default(T);
-            }
-            catch (HttpException ex)
-            {
-                OnError?.Invoke(ex);
-
-                switch (ex.StatusCode)
-                {
-                    case 400:
-                        _logger.Error(ex, $"Bad request sent to forecast API for account ID: {accountId}");
-                        break;
-                    case 408:
-                        _logger.Error(ex, $"Request sent to forecast API for account ID: {accountId} timed out");
-                        break;
-                    case 429:
-                        _logger.Error(ex, $"To many requests sent to forecast API for account ID: {accountId}");
-                        break;
-                    case 500:
-                        _logger.Error(ex, $"Forecast API reported internal Server error for account ID: {accountId}");
-                        break;
-                    case 503:
-                        _logger.Error(ex, "Forecast API is unavailable");
-                        break;
-
-                    default: throw;
-                }
-
-                return default(T);
-            }
-        }
-
-        private string GetUrl(Type type, long accountId)
-        {
-            string url = $"/api/accounts/{accountId}/AccountProjection/";
-            if (type.IsAssignableFrom(typeof(ProjectedCalculation)))
-            {
-                url = url + "projected-summary";
-            };
-            if (type.IsAssignableFrom(typeof(ExpiringAccountFunds)))
-            {
-                url = url + "expiring-funds";
-            };
-
-            return url;
-        }
-
-        private async Task<string> GetManagedIdentityAuthenticationResult(string resource)
-        {
-            var azureServiceTokenProvider = new AzureServiceTokenProvider();
-            return await azureServiceTokenProvider.GetAccessTokenAsync(resource);
-        }
-
-        private bool IsClientCredentialConfiguration(string clientId, string clientSecret, string tenant)
-        {
-            return !string.IsNullOrEmpty(clientId) && !string.IsNullOrEmpty(clientSecret) && !string.IsNullOrEmpty(tenant);
         }
     }
 }
