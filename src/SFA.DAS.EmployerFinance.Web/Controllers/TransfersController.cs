@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         public async Task<ActionResult> FinancialBreakdown(string hashedAccountId)
         {
             var viewModel = await _transfersOrchestrator.GetFinancialBreakdownViewModel(hashedAccountId);
-            return View();
+            return View(viewModel);
         }
     }
 }

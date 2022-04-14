@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
             var accountDetail = _accountApiClient.GetAccount(hashedAccountId);
 
             var renderCreateTransfersPledgeButtonTask = _authorizationService.IsAuthorizedAsync(EmployerUserRole.OwnerOrTransactor);
-            // var renderApplicationListButton = _featureTogglesService.GetFeatureToggle("ApplicationList");
+            var renderApplicationListButton = _featureTogglesService.GetFeatureToggle("ApplicationList");
 
             await Task.WhenAll(indexTask, renderCreateTransfersPledgeButtonTask, accountDetail);
 
@@ -61,7 +61,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     PledgesCount = indexTask.Result.PledgesCount,
                     ApplicationsCount = indexTask.Result.ApplicationsCount,
                     RenderCreateTransfersPledgeButton = renderCreateTransfersPledgeButtonTask.Result,
-                    RenderApplicationListButton = true,//renderApplicationListButton.IsEnabled,
+                    RenderApplicationListButton = renderApplicationListButton.IsEnabled,
                     StartingTransferAllowance = accountDetail.Result.StartingTransferAllowance,
                     FinancialYearString = DateTime.UtcNow.ToFinancialYearString(),
                     HashedAccountID = hashedAccountId
@@ -73,13 +73,22 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var financialBreakdownTask = await _manageApprenticeshipsService.GetFinancialBreakdown(accountId);
+            var accountDetail = await _accountApiClient.GetAccount(hashedAccountId);
 
             return new OrchestratorResponse<FinancialBreakdownViewModel>
             {
                 Data = new FinancialBreakdownViewModel
                 {
                     TransferConnections = financialBreakdownTask.TransferConnections,
-                    HashedAccountID = hashedAccountId
+                    HashedAccountID = hashedAccountId,
+                    AcceptedPledgeApplications = financialBreakdownTask.AcceptedPledgeApplications,
+                    ApprovedPledgeApplications = financialBreakdownTask.ApprovedPledgeApplications,
+                    Commitments = financialBreakdownTask.Commitments,
+                    PledgeOriginatedCommitments = financialBreakdownTask.PledgeOriginatedCommitments,
+                    FundsIn = financialBreakdownTask.FundsIn,
+                    NumberOfMonths = financialBreakdownTask.NumberOfMonths,
+                    ProjectionStartDate = financialBreakdownTask.ProjectionStartDate,
+                    StartingTransferAllowance = accountDetail.StartingTransferAllowance
                 }
             };
         }

@@ -13,5 +13,10 @@ namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses.Transfers
         public long AcceptedPledgeApplications { get; set; }
         public long PledgeOriginatedCommitments { get; set; }
         public long TransferConnections { get; set; }
+        public long FundsIn { get; set; }
+        public int NumberOfMonths { get; set; }
+        public DateTime ProjectionStartDate { get; set;}
+
+
     }
 }

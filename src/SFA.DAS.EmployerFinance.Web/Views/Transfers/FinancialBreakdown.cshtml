@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@model OrchestratorResponse<SFA.DAS.EmployerFinance.Web.ViewModels.Transfers.FinancialBreakdownViewModel>
 @{
     ViewBag.PageID = "transfers-breakdown";
     ViewBag.Section = "finance";
@@ -35,12 +36,8 @@
         <table>
             <tr>
                 <th scope="row">Your transfer allowance</th>
-                <td class="numeric">£20</td>
-            </tr>
-            <tr>
-                <th scope="row">Deduction for in-house apprenticeships</th>
-                <td class="numeric">£20</td>
-            </tr>
+                <td class="numeric">@Model.Data.StartingTransferAllowance.ToString("C0", culture)</td>
+            </tr>          
         </table>
         <details>
             <summary><span class="summary">How is my available transfer allowance calculated?</span></summary>
@@ -70,15 +67,15 @@
         <table>
             <tr>
                 <th scope="row">Approved applications: live</th>
-                <td class="numeric">£20</td>
+                <td class="numeric">@Model.Data.ApprovedPledgeApplications</td>
             </tr>
             <tr>
                 <th scope="row">Approved applications: not live yet</th>
-                <td class="numeric">£20</td>
+                <td class="numeric">@Model.Data.AcceptedPledgeApplications</td>
             </tr>
             <tr>
                 <th scope="row">Transfer connections</th>
-                <td class="numeric">£20</td>
+                <td class="numeric">@Model.Data.TransferConnections</td>
             </tr>
             <tr>
                 <th scope="row">Total estimated spend</th>
