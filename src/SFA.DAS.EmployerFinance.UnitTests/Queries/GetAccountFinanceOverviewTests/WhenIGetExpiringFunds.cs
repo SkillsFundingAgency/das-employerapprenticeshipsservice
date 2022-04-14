@@ -29,8 +29,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         private Mock<ILog> _logger;
         private Mock<IValidator<GetAccountFinanceOverviewQuery>> _validator;
         private GetAccountFinanceOverviewQuery _query;
-        private ExpiringAccountFunds _expiringFunds;
-        private ProjectedCalculation _projectedCalculation;
         private AccountProjectionSummary _accountProjectionSummary;
 
         [SetUp]
@@ -132,7 +130,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         [Test]
         public async Task ThenIfNoFundsExpiringTheAccountIdShouldStillBePopulated()
         {
-            _expiringFunds.ExpiryAmounts = new List<ExpiringFunds>();
+            _accountProjectionSummary.ExpiringAccountFunds.ExpiryAmounts = new List<ExpiringFunds>();
 
             var response = await _handler.Handle(_query);
 
@@ -142,7 +140,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         [Test]
         public async Task ThenIfNoFundsExpiringTheExpiryDateShouldBeNull()
         {
-            _expiringFunds.ExpiryAmounts = new List<ExpiringFunds>();
+            _accountProjectionSummary.ExpiringAccountFunds.ExpiryAmounts = new List<ExpiringFunds>();
 
             var response = await _handler.Handle(_query);
 
@@ -152,7 +150,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         [Test]
         public async Task ThenIfNoFundsExpiringTheAmountShouldBeNull()
         {
-            _expiringFunds.ExpiryAmounts = new List<ExpiringFunds>();
+            _accountProjectionSummary.ExpiringAccountFunds.ExpiryAmounts = new List<ExpiringFunds>();
 
             var response = await _handler.Handle(_query);
 
@@ -162,7 +160,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         [Test]
         public async Task ThenIfNoFundsExpiringInNext12MonthsTheExpiryDateShouldBeNull()
         {
-            _expiringFunds.ExpiryAmounts.ForEach(a => a.PayrollDate = a.PayrollDate.AddMonths(13));
+            _accountProjectionSummary.ExpiringAccountFunds.ExpiryAmounts.ForEach(a => a.PayrollDate = a.PayrollDate.AddMonths(13));
 
             var response = await _handler.Handle(_query);
 
@@ -172,7 +170,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         [Test]
         public async Task ThenIfNoFundsExpiringInNext12MonthsTheAmountShouldBeNull()
         {
-            _expiringFunds.ExpiryAmounts.ForEach(a => a.PayrollDate = a.PayrollDate.AddMonths(13));
+            _accountProjectionSummary.ExpiringAccountFunds.ExpiryAmounts.ForEach(a => a.PayrollDate = a.PayrollDate.AddMonths(13));
 
             var response = await _handler.Handle(_query);
 

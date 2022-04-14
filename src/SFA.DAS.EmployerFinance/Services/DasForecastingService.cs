@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Azure.Services.AppAuthentication;
-using SFA.DAS.ActiveDirectory;
-using SFA.DAS.EmployerFinance.Configuration;
-using SFA.DAS.EmployerFinance.Http;
 using SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests;
 using SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses;
 using SFA.DAS.EmployerFinance.Interfaces.OuterApi;
@@ -17,25 +13,12 @@ namespace SFA.DAS.EmployerFinance.Services
     public class DasForecastingService : IDasForecastingService
     {
         private readonly IApiClient _apiClient;
-        private readonly IHttpClientWrapper _httpClient;
-        private readonly IAzureAdAuthenticationService _azureAdAuthService;
-        private readonly ForecastingApiClientConfiguration _apiClientConfiguration;
         private readonly ILog _logger;
 
-        public DasForecastingService(IHttpClientWrapper httpClient,
-            IAzureAdAuthenticationService azureAdAuthService,
-            ForecastingApiClientConfiguration apiClientConfiguration, 
-            IApiClient apiClient,
-            ILog logger)
+        public DasForecastingService(IApiClient apiClient, ILog logger)
         {
-            _httpClient = httpClient;
-            _azureAdAuthService = azureAdAuthService;
-            _apiClientConfiguration = apiClientConfiguration;
             _apiClient = apiClient;
             _logger = logger;
-
-            _httpClient.BaseUrl = _apiClientConfiguration.ApiBaseUrl;
-            _httpClient.AuthScheme = "Bearer";
         }
 
         public async Task<AccountProjectionSummary> GetAccountProjectionSummary(long accountId)
