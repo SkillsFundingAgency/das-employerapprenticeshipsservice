@@ -8,6 +8,9 @@ using NUnit.Framework;
 using SFA.DAS.ActiveDirectory;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Http;
+using SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests;
+using SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses;
+using SFA.DAS.EmployerFinance.Interfaces.OuterApi;
 using SFA.DAS.EmployerFinance.Models.ExpiringFunds;
 using SFA.DAS.NLog.Logger;
 
@@ -20,16 +23,20 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasForecastingService
 
         private EmployerFinance.Services.DasForecastingService _service;
         private ForecastingApiClientConfiguration _apiClientConfiguration;
+        private Mock<IApiClient> _outerApiMock;
         private Mock<IHttpClientWrapper> _httpClient;
         private Mock<IAzureAdAuthenticationService> _azureAdAuthService;
         private Mock<ILog> _logger;
 
         private ExpiringAccountFunds _expectedAccountExpiringFunds;
+        private ExpiringAccountFundsResponseItem _expectedAccountExpiringFundsResponse;
 
+        private string ExpectedGetExpiringFundsUrl = $"account/{ExpectedAccountId}/expiring-funds";
 
         [SetUp]
         public void Setup()
         {
+            _outerApiMock = new Mock<IApiClient>();
             _httpClient = new Mock<IHttpClientWrapper>();
             _azureAdAuthService = new Mock<IAzureAdAuthenticationService>();
 
@@ -55,13 +62,36 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasForecastingService
                     }
                 }
             };
-            
+
+            _expectedAccountExpiringFundsResponse = new ExpiringAccountFundsResponseItem
+            {
+                AccountId = ExpectedAccountId,
+                ProjectionGenerationDate = DateTime.Now,
+                ExpiryAmounts = new List<ExpiringFundsReponseItem>
+                {
+                    new ExpiringFundsReponseItem
+                    {
+                        PayrollDate = DateTime.Now.AddMonths(2),
+                        Amount = 200
+                    }
+                }
+            };
+
             _logger = new Mock<ILog>();
 
-            _service = new EmployerFinance.Services.DasForecastingService(_httpClient.Object, _azureAdAuthService.Object, _apiClientConfiguration, _logger.Object);
+            _service = new EmployerFinance.Services.DasForecastingService(_httpClient.Object, _azureAdAuthService.Object, _apiClientConfiguration, _outerApiMock.Object, _logger.Object);
 
             _httpClient.Setup(c => c.Get<ExpiringAccountFunds>(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(_expectedAccountExpiringFunds);
+
+            _outerApiMock
+                .Setup(mock => mock.Get<ExpiringAccountFundsResponseItem>(It.Is<GetExpiringAccountFundsRequest>(x => x.GetUrl == ExpectedGetExpiringFundsUrl)))
+                .Callback((IGetApiRequest r) =>
+                {
+                    var a = r;
+                })
+                .ReturnsAsync(_expectedAccountExpiringFundsResponse)
+                .Verifiable();
 
             _azureAdAuthService.Setup(s => s.GetAuthenticationResult(
                 _apiClientConfiguration.ClientId,
@@ -71,13 +101,11 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasForecastingService
         }
 
         [Test]
-        public async Task ThenTheForecastApiShouldBeCalledWithTheCorrectCredentials()
+        public async Task ThenTheOuterApiShouldBeCalledOnTheCorrectEndpoint()
         {
             var result = await _service.GetExpiringAccountFunds(ExpectedAccountId);
 
-            _httpClient.Verify(c => c.Get<ExpiringAccountFunds>(
-                AccessToken,
-                $"/api/accounts/{ExpectedAccountId}/AccountProjection/expiring-funds"), Times.Once);
+            _outerApiMock.Verify();
         }
 
         [Test]
@@ -85,7 +113,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasForecastingService
         {
             var result = await _service.GetExpiringAccountFunds(ExpectedAccountId);
 
-            result.ProjectionGenerationDate.Should().Be(_expectedAccountExpiringFunds.ProjectionGenerationDate);
+            result.ProjectionGenerationDate.Should().Be(_expectedAccountExpiringFundsResponse.ProjectionGenerationDate);
         }
 
         [Test]
@@ -94,13 +122,13 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasForecastingService
             var result = await _service.GetExpiringAccountFunds(ExpectedAccountId);
 
             result.ExpiryAmounts.Count.Should().Be(1);
-            result.ExpiryAmounts.First().Should().Be(_expectedAccountExpiringFunds.ExpiryAmounts.First());
+            result.ExpiryAmounts.First().ShouldBeEquivalentTo(_expectedAccountExpiringFundsResponse.ExpiryAmounts.First());
         }
 
         [Test]
         public async Task ThenIShouldReturnNullIfAccountCannotBeFoundOnForecastApi()
         {
-            _httpClient.Setup(c => c.Get<ExpiringAccountFunds>(It.IsAny<string>(), It.IsAny<string>()))
+            _outerApiMock.Setup(c => c.Get<ExpiringAccountFundsResponseItem>(It.IsAny<GetExpiringAccountFundsRequest>()))
                 .Throws(new ResourceNotFoundException(""));
 
             var result = await _service.GetExpiringAccountFunds(ExpectedAccountId);
@@ -111,7 +139,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasForecastingService
         [Test]
         public async Task ThenIShouldReturnNullIfBadRequestSentToForecastApi()
         {
-            _httpClient.Setup(c => c.Get<ExpiringAccountFunds>(It.IsAny<string>(), It.IsAny<string>()))
+            _outerApiMock.Setup(c => c.Get<ExpiringAccountFundsResponseItem>(It.IsAny<GetExpiringAccountFundsRequest>()))
                 .Throws(new HttpException(400, "Bad request"));
 
             var result = await _service.GetExpiringAccountFunds(ExpectedAccountId);
@@ -119,11 +147,11 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasForecastingService
             result.Should().BeNull();
         }
 
-       
+
         [Test]
         public async Task ThenIShouldReturnNullIfRequestTimesOut()
         {
-            _httpClient.Setup(c => c.Get<ExpiringAccountFunds>(It.IsAny<string>(), It.IsAny<string>()))
+            _outerApiMock.Setup(c => c.Get<ExpiringAccountFundsResponseItem>(It.IsAny<GetExpiringAccountFundsRequest>()))
                 .Throws(new RequestTimeOutException());
 
             var result = await _service.GetExpiringAccountFunds(ExpectedAccountId);
@@ -134,7 +162,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasForecastingService
         [Test]
         public async Task ThenIShouldReturnNullIfTooManyRequests()
         {
-            _httpClient.Setup(c => c.Get<ExpiringAccountFunds>(It.IsAny<string>(), It.IsAny<string>()))
+            _outerApiMock.Setup(c => c.Get<ExpiringAccountFundsResponseItem>(It.IsAny<GetExpiringAccountFundsRequest>()))
                 .Throws(new TooManyRequestsException());
 
             var result = await _service.GetExpiringAccountFunds(ExpectedAccountId);
@@ -145,7 +173,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasForecastingService
         [Test]
         public async Task ThenIShouldReturnNullIfForecastApiHasInternalServerError()
         {
-            _httpClient.Setup(c => c.Get<ExpiringAccountFunds>(It.IsAny<string>(), It.IsAny<string>()))
+            _outerApiMock.Setup(c => c.Get<ExpiringAccountFundsResponseItem>(It.IsAny<GetExpiringAccountFundsRequest>()))
                 .Throws(new InternalServerErrorException());
 
             var result = await _service.GetExpiringAccountFunds(ExpectedAccountId);
@@ -156,30 +184,12 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasForecastingService
         [Test]
         public async Task ThenIShouldReturnNullIfServiceUnavailableException()
         {
-            _httpClient.Setup(c => c.Get<ExpiringAccountFunds>(It.IsAny<string>(), It.IsAny<string>()))
-                .Throws(new RequestTimeOutException());
+            _outerApiMock.Setup(c => c.Get<ExpiringAccountFundsResponseItem>(It.IsAny<GetExpiringAccountFundsRequest>()))
+                .Throws(new ServiceUnavailableException());
 
             var result = await _service.GetExpiringAccountFunds(ExpectedAccountId);
 
             result.Should().BeNull();
-        }
-        
-        [Test]
-        public async Task ThenIShouldThrowExceptionIfUnexpectedHttpStatusCode()
-        {
-            _httpClient.Setup(c => c.Get<ExpiringAccountFunds>(It.IsAny<string>(), It.IsAny<string>()))
-                .Throws(new HttpException(501, "Service not implemented"));
-
-            Assert.ThrowsAsync<HttpException>(() => _service.GetExpiringAccountFunds(ExpectedAccountId));
-        }
-
-        [Test]
-        public async Task ThenIShouldThrowExceptionIfUnexpected()
-        {
-            _httpClient.Setup(c => c.Get<ExpiringAccountFunds>(It.IsAny<string>(), It.IsAny<string>()))
-                .Throws(new Exception());
-
-            Assert.ThrowsAsync<Exception>(() => _service.GetExpiringAccountFunds(ExpectedAccountId));
         }
     }
 }

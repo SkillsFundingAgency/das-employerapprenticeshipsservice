@@ -6,6 +6,7 @@ using NUnit.Framework;
 using SFA.DAS.ActiveDirectory;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Http;
+using SFA.DAS.EmployerFinance.Interfaces.OuterApi;
 using SFA.DAS.EmployerFinance.Models.ProjectedCalculations;
 using SFA.DAS.NLog.Logger;
 
@@ -52,7 +53,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasForecastingService
             
             _logger = new Mock<ILog>();
 
-            _service = new EmployerFinance.Services.DasForecastingService(_httpClient.Object, _azureAdAuthService.Object, _apiClientConfiguration, _logger.Object);
+            _service = new EmployerFinance.Services.DasForecastingService(_httpClient.Object, _azureAdAuthService.Object, _apiClientConfiguration, Mock.Of<IApiClient>(), _logger.Object);
 
             _httpClient.Setup(c => c.Get<ProjectedCalculation>(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(_expectedProjectedCalculations);

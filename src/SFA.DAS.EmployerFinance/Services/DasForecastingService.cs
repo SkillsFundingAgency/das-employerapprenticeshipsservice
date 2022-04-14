@@ -1,16 +1,22 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Azure.Services.AppAuthentication;
 using SFA.DAS.ActiveDirectory;
 using SFA.DAS.EmployerFinance.Configuration;
-using SFA.DAS.EmployerFinance.Models.ExpiringFunds;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.EmployerFinance.Models.ProjectedCalculations;
-using System;
 using SFA.DAS.EmployerFinance.Http;
+using SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests;
+using SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses;
+using SFA.DAS.EmployerFinance.Interfaces.OuterApi;
+using SFA.DAS.EmployerFinance.Models.ExpiringFunds;
+using SFA.DAS.EmployerFinance.Models.ProjectedCalculations;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.Services
 {
     public class DasForecastingService : IDasForecastingService
     {
+        private readonly IApiClient _apiClient;
         private readonly IHttpClientWrapper _httpClient;
         private readonly IAzureAdAuthenticationService _azureAdAuthService;
         private readonly ForecastingApiClientConfiguration _apiClientConfiguration;
@@ -18,12 +24,14 @@ namespace SFA.DAS.EmployerFinance.Services
 
         public DasForecastingService(IHttpClientWrapper httpClient,
             IAzureAdAuthenticationService azureAdAuthService,
-            ForecastingApiClientConfiguration apiClientConfiguration,
+            ForecastingApiClientConfiguration apiClientConfiguration, 
+            IApiClient apiClient,
             ILog logger)
         {
             _httpClient = httpClient;
             _azureAdAuthService = azureAdAuthService;
             _apiClientConfiguration = apiClientConfiguration;
+            _apiClient = apiClient;
             _logger = logger;
 
             _httpClient.BaseUrl = _apiClientConfiguration.ApiBaseUrl;
@@ -32,18 +40,25 @@ namespace SFA.DAS.EmployerFinance.Services
 
         public async Task<ExpiringAccountFunds> GetExpiringAccountFunds(long accountId)
         {
-            _logger.Info($"Getting expiring funds for account ID: {accountId}");
+            ExpiringAccountFunds expiringAccountFunds = null;
 
-            return await CallAuthService<ExpiringAccountFunds>(
-                accountId,
-                (ex) =>
+            try
+            {
+                _logger.Info($"Getting expiring funds for account ID: {accountId}");
+
+                var expiringAccountFundsResponse = await _apiClient.Get<ExpiringAccountFundsResponseItem>(new GetExpiringAccountFundsRequest(accountId));
+
+                if (expiringAccountFundsResponse != null)
                 {
-                    if (ex is ResourceNotFoundException)
-                    {
-                        _logger.Error(ex, $"Could not find expired funds for account ID: {accountId} when calling forecast API");
-                    }
+                    expiringAccountFunds = MapFrom(expiringAccountFundsResponse);
                 }
-                );
+            }
+            catch(Exception ex)
+            {
+                _logger.Error(ex, $"Could not find expired funds for account ID: {accountId} when calling forecast API");
+            }
+
+            return expiringAccountFunds;
         }
 
         public async Task<ProjectedCalculation> GetProjectedCalculations(long accountId)
@@ -62,13 +77,29 @@ namespace SFA.DAS.EmployerFinance.Services
                 );
         }
 
+        private static ExpiringAccountFunds MapFrom(ExpiringAccountFundsResponseItem expiringAccountFundsResponse)
+        {
+            return new ExpiringAccountFunds
+            {
+                AccountId = expiringAccountFundsResponse.AccountId,
+                ProjectionGenerationDate = expiringAccountFundsResponse.ProjectionGenerationDate,
+                ExpiryAmounts = expiringAccountFundsResponse.ExpiryAmounts.Select(x => new ExpiringFunds
+                {
+                    Amount = x.Amount,
+                    PayrollDate = x.PayrollDate
+                }).ToList()
+            };
+        }
+
         private async Task<T> CallAuthService<T>(long accountId, Action<Exception> OnError = null)
         {
-            var accessToken = await _azureAdAuthService.GetAuthenticationResult(
+            var accessToken = IsClientCredentialConfiguration(_apiClientConfiguration.ClientId, _apiClientConfiguration.ClientSecret, _apiClientConfiguration.Tenant)
+                ? await _azureAdAuthService.GetAuthenticationResult(
                 _apiClientConfiguration.ClientId,
                 _apiClientConfiguration.ClientSecret,
                 _apiClientConfiguration.IdentifierUri,
-                _apiClientConfiguration.Tenant);
+                _apiClientConfiguration.Tenant)
+                : await GetManagedIdentityAuthenticationResult(_apiClientConfiguration.IdentifierUri);
 
             try
             {
@@ -122,6 +153,17 @@ namespace SFA.DAS.EmployerFinance.Services
             };
 
             return url;
+        }
+
+        private async Task<string> GetManagedIdentityAuthenticationResult(string resource)
+        {
+            var azureServiceTokenProvider = new AzureServiceTokenProvider();
+            return await azureServiceTokenProvider.GetAccessTokenAsync(resource);
+        }
+
+        private bool IsClientCredentialConfiguration(string clientId, string clientSecret, string tenant)
+        {
+            return !string.IsNullOrEmpty(clientId) && !string.IsNullOrEmpty(clientSecret) && !string.IsNullOrEmpty(tenant);
         }
     }
 }
