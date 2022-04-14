@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasForecastingService
 
         private AccountProjectionSummaryResponseItem _expectedAccountProjectionSummaryResponse;
 
-        private string ExpectedGetExpiringFundsUrl = $"account/{ExpectedAccountId}/account-projection";
+        private string ExpectedGetExpiringFundsUrl = $"Projections/{ExpectedAccountId}";
 
         [SetUp]
         public void Setup()
