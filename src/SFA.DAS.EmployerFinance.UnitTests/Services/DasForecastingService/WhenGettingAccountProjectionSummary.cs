@@ -31,9 +31,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasForecastingService
         private Mock<ILog> _logger;
 
         private ExpiringAccountFunds _expectedAccountExpiringFunds;
-        private AccountProjectionSummaryResponseItem _expectedAccountExpiringFundsResponse;
+        private AccountProjectionSummaryResponseItem _expectedAccountProjectionSummaryResponse;
 
-        private string ExpectedGetExpiringFundsUrl = $"account/{ExpectedAccountId}/expiring-funds";
+        private string ExpectedGetExpiringFundsUrl = $"account/{ExpectedAccountId}/account-projection";
 
         [SetUp]
         public void Setup()
@@ -63,7 +63,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasForecastingService
                 }
             };
 
-            _expectedAccountExpiringFundsResponse = new AccountProjectionSummaryResponseItem
+            _expectedAccountProjectionSummaryResponse = new AccountProjectionSummaryResponseItem
             {
                 AccountId = ExpectedAccountId,
                 ProjectionGenerationDate = DateTime.Now,
@@ -92,7 +92,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasForecastingService
                 {
                     var a = r;
                 })
-                .ReturnsAsync(_expectedAccountExpiringFundsResponse)
+                .ReturnsAsync(_expectedAccountProjectionSummaryResponse)
                 .Verifiable();
 
             _azureAdAuthService.Setup(s => s.GetAuthenticationResult(
@@ -111,11 +111,11 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasForecastingService
         }
 
         [Test]
-        public async Task ThenIShouldReturnTheCollectedExpiryDate()
+        public async Task ThenIShouldReturnTheCollectedProjectionGeneratedDate()
         {
             var result = await _service.GetAccountProjectionSummary(ExpectedAccountId);
 
-            result.ProjectionGenerationDate.Should().Be(_expectedAccountExpiringFundsResponse.ProjectionGenerationDate);
+            result.ProjectionGenerationDate.Should().Be(_expectedAccountProjectionSummaryResponse.ProjectionGenerationDate);
         }
 
         [Test]
@@ -124,7 +124,16 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasForecastingService
             var result = await _service.GetAccountProjectionSummary(ExpectedAccountId);
 
             result.ExpiringAccountFunds.ExpiryAmounts.Count.Should().Be(1);
-            result.ExpiringAccountFunds.ExpiryAmounts.First().ShouldBeEquivalentTo(_expectedAccountExpiringFundsResponse.ExpiryAmounts.First());
+            result.ExpiringAccountFunds.ExpiryAmounts.First().ShouldBeEquivalentTo(_expectedAccountProjectionSummaryResponse.ExpiryAmounts.First());
+        }
+
+        [Test]
+        public async Task ThenIShouldReturnTheProjectedCalculation()
+        {
+            var result = await _service.GetAccountProjectionSummary(ExpectedAccountId);
+
+            result.ProjectionCalulation.FundsIn.Should().Be(ExpectedFundsIn);
+            result.ProjectionCalulation.FundsOut.Should().Be(ExpectedFundsOut);
         }
 
         [Test]
