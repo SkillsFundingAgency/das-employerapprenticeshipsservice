@@ -5,13 +5,10 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.ActiveDirectory;
-using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Http;
 using SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests;
 using SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses;
 using SFA.DAS.EmployerFinance.Interfaces.OuterApi;
-using SFA.DAS.EmployerFinance.Models.ExpiringFunds;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasForecastingService
@@ -21,16 +18,11 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasForecastingService
         private const long ExpectedAccountId = 14;
         private const decimal ExpectedFundsIn = 112233.44M;
         private const decimal ExpectedFundsOut = 121212.12M;
-        private const string AccessToken = "sercure_token";
 
         private EmployerFinance.Services.DasForecastingService _service;
-        private ForecastingApiClientConfiguration _apiClientConfiguration;
         private Mock<IApiClient> _outerApiMock;
-        private Mock<IHttpClientWrapper> _httpClient;
-        private Mock<IAzureAdAuthenticationService> _azureAdAuthService;
         private Mock<ILog> _logger;
 
-        private ExpiringAccountFunds _expectedAccountExpiringFunds;
         private AccountProjectionSummaryResponseItem _expectedAccountProjectionSummaryResponse;
 
         private string ExpectedGetExpiringFundsUrl = $"account/{ExpectedAccountId}/account-projection";
@@ -39,29 +31,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasForecastingService
         public void Setup()
         {
             _outerApiMock = new Mock<IApiClient>();
-            _httpClient = new Mock<IHttpClientWrapper>();
-            _azureAdAuthService = new Mock<IAzureAdAuthenticationService>();
-
-            _apiClientConfiguration = new ForecastingApiClientConfiguration
-            {
-                ApiBaseUrl = "testUrl",
-                ClientId = "clientId",
-                ClientSecret = "secret",
-                IdentifierUri = "test",
-                Tenant = "tenant"
-            };
-
-            _expectedAccountExpiringFunds = new ExpiringAccountFunds
-            {
-                ExpiryAmounts = new List<ExpiringFunds>
-                {
-                    new ExpiringFunds
-                    {
-                        PayrollDate = DateTime.Now.AddMonths(2),
-                        Amount = 200
-                    }
-                }
-            };
 
             _expectedAccountProjectionSummaryResponse = new AccountProjectionSummaryResponseItem
             {
@@ -81,25 +50,12 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasForecastingService
 
             _logger = new Mock<ILog>();
 
-            _service = new EmployerFinance.Services.DasForecastingService(_httpClient.Object, _azureAdAuthService.Object, _apiClientConfiguration, _outerApiMock.Object, _logger.Object);
-
-            _httpClient.Setup(c => c.Get<ExpiringAccountFunds>(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(_expectedAccountExpiringFunds);
+            _service = new EmployerFinance.Services.DasForecastingService(_outerApiMock.Object, _logger.Object);
 
             _outerApiMock
                 .Setup(mock => mock.Get<AccountProjectionSummaryResponseItem>(It.Is<GetAccountProjectionSummaryRequest>(x => x.GetUrl == ExpectedGetExpiringFundsUrl)))
-                .Callback((IGetApiRequest r) =>
-                {
-                    var a = r;
-                })
                 .ReturnsAsync(_expectedAccountProjectionSummaryResponse)
                 .Verifiable();
-
-            _azureAdAuthService.Setup(s => s.GetAuthenticationResult(
-                _apiClientConfiguration.ClientId,
-                _apiClientConfiguration.ClientSecret,
-                _apiClientConfiguration.IdentifierUri,
-                _apiClientConfiguration.Tenant)).ReturnsAsync(AccessToken);
         }
 
         [Test]
