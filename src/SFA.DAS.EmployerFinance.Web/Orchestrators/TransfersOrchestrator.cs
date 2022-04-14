@@ -88,7 +88,8 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     FundsIn = financialBreakdownTask.FundsIn,
                     NumberOfMonths = financialBreakdownTask.NumberOfMonths,
                     ProjectionStartDate = financialBreakdownTask.ProjectionStartDate,
-                    StartingTransferAllowance = accountDetail.StartingTransferAllowance
+                    StartingTransferAllowance = accountDetail.StartingTransferAllowance,
+                    FinancialYearString = DateTime.UtcNow.ToFinancialYearString(),
                 }
             };
         }
