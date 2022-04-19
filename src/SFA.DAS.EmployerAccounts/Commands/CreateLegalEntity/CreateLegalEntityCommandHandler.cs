@@ -208,8 +208,6 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
 
         private async Task<bool> UserIsWhitelistedForEOIOrThereIsAlreadyAnEOIAgreementForThisAccount(MembershipView accountOwner)
         {
-            if (_authorizationService.IsAuthorized("EmployerFeature.ExpressionOfInterest")) return true;
-
             var existingAgreements = await _employerAgreementRepository.GetAccountAgreements(accountOwner.AccountId);
 
             return

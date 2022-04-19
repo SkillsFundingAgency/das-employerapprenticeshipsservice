@@ -13,8 +13,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
         public override void Arrange()
         {
             base.Arrange();
-
-            AuthorizationService.Setup(x => x.IsAuthorized("EmployerFeature.ExpressionOfInterest")).Returns(false);
         }
 
         [Test]
@@ -33,22 +31,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
             AccountRepository.Verify(x =>
                 x.CreateLegalEntityWithAgreement(It.Is<CreateLegalEntityWithAgreementParams>(y =>
                     y.AgreementType == AgreementType.Combined)));
-        }
-
-        [Test]
-        public async Task IfAnExpressionOfInterestAgreementAlreadyExistsThenAnExpressionOfInterestAgreementIsCreated()
-        {
-            EmployerAgreementRepository.Setup(x => x.GetAccountAgreements(AccountId)).ReturnsAsync(
-                new List<EmployerAgreement>
-                {
-                    new EmployerAgreement { Template = new AgreementTemplate { AgreementType = AgreementType.NonLevyExpressionOfInterest } }
-                });
-
-            await CommandHandler.Handle(Command);
-
-            AccountRepository.Verify(x =>
-                x.CreateLegalEntityWithAgreement(It.Is<CreateLegalEntityWithAgreementParams>(y =>
-                    y.AgreementType == AgreementType.NonLevyExpressionOfInterest)));
-        }
+        }       
     }
 }

@@ -87,24 +87,18 @@ else
                         </h3>
                         <p class="govuk-body govuk-!-font-size-16">Add apprentices, update details of existing apprentices, change training providers and authorise payments to training providers.</p>
                     </div>
-                    @if (Html.IsAuthorized("EmployerFeature.Recruitments"))
-                    {
-                        <div class="das-card">
+                    <div class="das-card">
                             <h3 class="govuk-heading-m das-card__heading">
                                 <a href="@Url.EmployerRecruitAction()" class="govuk-link govuk-link--no-visited-state">Your apprenticeship adverts</a>
                             </h3>
                             <p class="govuk-body govuk-!-font-size-16">Create adverts to post on find an apprenticeship, view applications, your previous adverts and adverts created by training providers.</p>
-                        </div>
-                    }
-                    @if (Html.IsAuthorized("EmployerFeature.ProviderRelationships"))
-                    {
-                        <div class="das-card">
-                            <h3 class="govuk-heading-m das-card__heading">
-                                <a href="@Url.ProviderRelationshipsAction("providers")" class="govuk-link govuk-link--no-visited-state">Your training providers</a>
-                            </h3>
-                            <p class="govuk-body govuk-!-font-size-16">Add training providers and manage permissions to choose what they can do on your behalf.</p>
-                        </div>
-                    }
+                        </div>                   
+                    <div class="das-card">
+                        <h3 class="govuk-heading-m das-card__heading">
+                            <a href="@Url.ProviderRelationshipsAction("providers")" class="govuk-link govuk-link--no-visited-state">Your training providers</a>
+                        </h3>
+                        <p class="govuk-body govuk-!-font-size-16">Add training providers and manage permissions to choose what they can do on your behalf.</p>
+                    </div>                   
                     <div class="das-card">
                         <h3 class="govuk-heading-m das-card__heading">
                             <a href="https://findapprenticeshiptraining.apprenticeships.education.gov.uk/Apprenticeship/Search" rel="external" target="_blank" class="govuk-link govuk-link--no-visited-state">Find apprenticeship training</a>
