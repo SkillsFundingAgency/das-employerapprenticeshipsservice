@@ -208,15 +208,7 @@ else
                             <a class="govuk-tabs__tab" href="#tasks">
                                 Tasks
                             </a>
-                        </li>
-                        @if (Html.IsAuthorized("EmployerFeature.Activities"))
-                        {
-                            <li class="govuk-tabs__list-item">
-                                <a class="govuk-tabs__tab" href="#activities">
-                                    Activity
-                                </a>
-                            </li>
-                        }
+                        </li>                        
                     </ul>
                     <div class="govuk-tabs__panel" id="tasks">
                         @if (Model.Data.Tasks.Count > 0)
@@ -291,13 +283,7 @@ else
                         {
                             <p>You do not have any tasks</p>
                         }
-                    </div>
-                    @if (Html.IsAuthorized("EmployerFeature.Activities"))
-                    {
-                        <div class="govuk-tabs__panel" id="activities">
-                            @Html.Action("Latest", "Activities")
-                        </div>
-                    }
+                    </div>                   
                 </div>
             }
         </div>

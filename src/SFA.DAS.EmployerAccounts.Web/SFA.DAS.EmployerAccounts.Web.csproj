@@ -195,7 +195,6 @@
     <Compile Include="Authorization\Tier2UserAccesNotGranted.cs" />
     <Compile Include="Binders\TrimStringModelBinder.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
-    <Compile Include="Controllers\ActivitiesController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CookieConsentController.cs" />
     <Compile Include="Controllers\EmployerAccountController.cs" />
