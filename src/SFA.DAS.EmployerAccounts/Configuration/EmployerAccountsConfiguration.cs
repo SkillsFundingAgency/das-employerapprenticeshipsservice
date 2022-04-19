@@ -24,6 +24,7 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string ReservationsBaseUrl { get; set; }
         public string EmployerFavouritesBaseUrl { get; set; }
         public string ProviderRelationshipsBaseUrl { get; set; }
+        public string EmployerFeedbackBaseUrl { get; set; }
         public EventsApiClientConfiguration EventsApi { get; set; }
         public string Hashstring { get; set; }
         public HmrcConfiguration Hmrc { get; set; }

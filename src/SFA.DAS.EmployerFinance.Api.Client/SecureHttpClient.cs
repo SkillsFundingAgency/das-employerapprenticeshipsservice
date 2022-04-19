@@ -1,5 +1,8 @@
 ﻿using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 
 namespace SFA.DAS.EmployerFinance.Api.Client
@@ -37,6 +40,6 @@ namespace SFA.DAS.EmployerFinance.Api.Client
             var result = await context.AcquireTokenAsync(resourceId, clientCredential).ConfigureAwait(false);
 
             return result;
-        }
+        }     
     }
 }

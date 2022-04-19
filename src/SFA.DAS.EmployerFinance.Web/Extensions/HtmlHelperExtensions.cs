@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Helpers;
 using SFA.DAS.EmployerFinance.Queries.GetContent;
