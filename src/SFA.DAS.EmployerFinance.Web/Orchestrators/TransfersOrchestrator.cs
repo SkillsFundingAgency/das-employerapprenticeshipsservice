@@ -30,14 +30,12 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
             IAuthorizationService authorizationService,
             IHashingService hashingService,
             IManageApprenticeshipsService manageApprenticeshipsService,
-            IAccountApiClient accountApiClient,
-            IFeatureTogglesService<EmployerFeatureToggle> featureTogglesService)
+            IAccountApiClient accountApiClient)
         {
             _authorizationService = authorizationService;
             _hashingService = hashingService;
             _manageApprenticeshipsService = manageApprenticeshipsService;
-            _accountApiClient = accountApiClient;
-            _featureTogglesService = featureTogglesService;
+            _accountApiClient = accountApiClient;            
         }
 
         public async Task<OrchestratorResponse<IndexViewModel>> GetIndexViewModel(string hashedAccountId)
@@ -46,8 +44,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
             var indexTask = _manageApprenticeshipsService.GetIndex(accountId);
             var accountDetail = _accountApiClient.GetAccount(hashedAccountId);
 
-            var renderCreateTransfersPledgeButtonTask = _authorizationService.IsAuthorizedAsync(EmployerUserRole.OwnerOrTransactor);
-            var renderApplicationListButton = _featureTogglesService.GetFeatureToggle("ApplicationList");
+            var renderCreateTransfersPledgeButtonTask = _authorizationService.IsAuthorizedAsync(EmployerUserRole.OwnerOrTransactor);            
 
             await Task.WhenAll(indexTask, renderCreateTransfersPledgeButtonTask, accountDetail);
 
@@ -60,8 +57,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     CanViewPledgesSection = employerType == ApprenticeshipEmployerType.Levy,
                     PledgesCount = indexTask.Result.PledgesCount,
                     ApplicationsCount = indexTask.Result.ApplicationsCount,
-                    RenderCreateTransfersPledgeButton = renderCreateTransfersPledgeButtonTask.Result,
-                    RenderApplicationListButton = renderApplicationListButton.IsEnabled,
+                    RenderCreateTransfersPledgeButton = renderCreateTransfersPledgeButtonTask.Result,                    
                     StartingTransferAllowance = accountDetail.Result.StartingTransferAllowance,
                     FinancialYearString = DateTime.UtcNow.ToFinancialYearString(),
                     HashedAccountID = hashedAccountId
