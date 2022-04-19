@@ -9,11 +9,11 @@ namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses.Transfers
     public class GetFinancialBreakdownResponse
     {
         public decimal Commitments { get; set; }
-        public long ApprovedPledgeApplications { get; set; }
-        public long AcceptedPledgeApplications { get; set; }
-        public long PledgeOriginatedCommitments { get; set; }
-        public long TransferConnections { get; set; }
-        public long FundsIn { get; set; }
+        public decimal ApprovedPledgeApplications { get; set; }
+        public decimal AcceptedPledgeApplications { get; set; }
+        public decimal PledgeOriginatedCommitments { get; set; }
+        public decimal TransferConnections { get; set; }
+        public decimal FundsIn { get; set; }
         public int NumberOfMonths { get; set; }
         public DateTime ProjectionStartDate { get; set;}
 
