@@ -151,26 +151,23 @@ else
                         </div>
                     }
 
-                    @if (Html.IsAuthorized("EmployerFeature.TransfersMatching"))
+                    @if (Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
                     {
-                        if (Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
-                        {
-                            <div class="das-card">
-                                <h3 class="govuk-heading-m das-card__heading">
-                                    <a href="@Url.EmployerFinanceAction("transfers")" class="govuk-link govuk-link--no-visited-state">Your transfers</a>
-                                </h3>
-                                <p class="govuk-body govuk-!-font-size-16">View your 25% transfers balance and manage your transfers, including finding a business to transfer your levy to.</p>
-                            </div>
-                        }
-                        else if (Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy)
-                        {
-                            <div class="das-card">
-                                <h3 class="govuk-heading-m das-card__heading">
-                                    <a href="@Url.EmployerFinanceAction("transfers")" class="govuk-link govuk-link--no-visited-state">Your transfers</a>
-                                </h3>
-                                <p class="govuk-body govuk-!-font-size-16">View your apprentices funded by a transfer. Find a large business to fund your apprenticeship training with a transfer.</p>
-                            </div>
-                        }
+                        <div class="das-card">
+                            <h3 class="govuk-heading-m das-card__heading">
+                                <a href="@Url.EmployerFinanceAction("transfers")" class="govuk-link govuk-link--no-visited-state">Your transfers</a>
+                            </h3>
+                            <p class="govuk-body govuk-!-font-size-16">View your 25% transfers balance and manage your transfers, including finding a business to transfer your levy to.</p>
+                        </div>
+                    }
+                    else if (Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy)
+                    {
+                        <div class="das-card">
+                            <h3 class="govuk-heading-m das-card__heading">
+                                <a href="@Url.EmployerFinanceAction("transfers")" class="govuk-link govuk-link--no-visited-state">Your transfers</a>
+                            </h3>
+                            <p class="govuk-body govuk-!-font-size-16">View your apprentices funded by a transfer. Find a large business to fund your apprenticeship training with a transfer.</p>
+                        </div>
                     }
                 </div>
             </section>
