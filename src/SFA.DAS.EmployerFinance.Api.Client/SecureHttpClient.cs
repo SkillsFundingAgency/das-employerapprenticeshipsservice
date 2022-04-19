@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerFinance.Api.Client
             return result;
         }
 
-       /* protected SecureHttpClient()
+        protected SecureHttpClient()
         {
             // so we can mock for testing
         }
@@ -82,6 +82,6 @@ namespace SFA.DAS.EmployerFinance.Api.Client
         private bool IsClientCredentialConfiguration(string clientId, string clientSecret, string tenant)
         {
             return !string.IsNullOrEmpty(clientId) && !string.IsNullOrEmpty(clientSecret) && !string.IsNullOrEmpty(tenant);
-        }*/
+        }
     }
 }

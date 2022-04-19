@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerFinance.Api.Client;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models;
@@ -11,8 +10,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RunHealthCheckCommand
     public class RunHealthCheckCommandHandler : AsyncRequestHandler<RunHealthCheckCommand>
     {
         private readonly Lazy<EmployerFinanceDbContext> _db;
-        private readonly IEmployerFinanceApiClient _employerFinanceApiClient;
-        //private readonly IAccountApiClient _employerFinanceApiClient;
+        private readonly IEmployerFinanceApiClient _employerFinanceApiClient;        
 
         public RunHealthCheckCommandHandler(Lazy<EmployerFinanceDbContext> db, IEmployerFinanceApiClient employerFinanceApiClient)
         {
@@ -22,7 +20,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RunHealthCheckCommand
 
         protected override async Task HandleCore(RunHealthCheckCommand message)
         {
-            var healthCheck = new HealthCheck(message.UserRef ?? Guid.NewGuid());
+            var healthCheck = new HealthCheck(message.UserRef.Value);
 
             await healthCheck.Run(_employerFinanceApiClient.HealthCheck);
 
