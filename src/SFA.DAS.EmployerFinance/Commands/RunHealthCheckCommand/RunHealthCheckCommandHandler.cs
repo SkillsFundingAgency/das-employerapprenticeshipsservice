@@ -10,7 +10,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RunHealthCheckCommand
     public class RunHealthCheckCommandHandler : AsyncRequestHandler<RunHealthCheckCommand>
     {
         private readonly Lazy<EmployerFinanceDbContext> _db;
-        private readonly IEmployerFinanceApiClient _employerFinanceApiClient;
+        private readonly IEmployerFinanceApiClient _employerFinanceApiClient;        
 
         public RunHealthCheckCommandHandler(Lazy<EmployerFinanceDbContext> db, IEmployerFinanceApiClient employerFinanceApiClient)
         {
