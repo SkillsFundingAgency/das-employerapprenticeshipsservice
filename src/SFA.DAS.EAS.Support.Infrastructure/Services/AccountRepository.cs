@@ -301,7 +301,8 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
                 HashedAccountId = accountDetailViewModel.HashedAccountId,
                 PublicHashedAccountId = accountDetailViewModel.PublicHashedAccountId,
                 DateRegistered = accountDetailViewModel.DateRegistered,
-                OwnerEmail = accountDetailViewModel.OwnerEmail
+                OwnerEmail = accountDetailViewModel.OwnerEmail,
+                ApprenticeshipEmployerType = accountDetailViewModel.ApprenticeshipEmployerType
             };
         }
 
