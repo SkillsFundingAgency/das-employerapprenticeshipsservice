@@ -66,12 +66,12 @@
     <div class="column-one-half">
         <table>
             <tr>
-                <th scope="row">Approved applications: live</th>
-                <td class="numeric">@Model.Data.ApprovedPledgeApplications.ToString("C0", culture)</td>
+                <th scope="row">Approved applications: accepted by applicant</th>
+                <td class="numeric">@Model.Data.AcceptedPledgeApplications.ToString("C0", culture)</td>
             </tr>
             <tr>
-                <th scope="row">Approved applications: not live yet</th>
-                <td class="numeric">@Model.Data.AcceptedPledgeApplications.ToString("C0", culture)</td>
+                <th scope="row">Approved applications: awaiting acceptance by applicant</th>
+                <td class="numeric">@Model.Data.ApprovedPledgeApplications.ToString("C0", culture)</td>
             </tr>
             <tr>
                 <th scope="row">Transfer connections</th>
@@ -85,7 +85,7 @@
         <details>
             <summary><span class="summary">How are my committed funds calculated?</span></summary>
             <div class="panel panel-border-narrow">
-                <p>Content</p>
+                <p>Your committed funds are calculated by subtracting your <b>total estimated spend</b> from your <b>@Model.Data.TotalAvailableTransferAllowance.ToString("C0", culture) total available transfer allowance</b>.</p>
             </div>
         </details>
     </div>
