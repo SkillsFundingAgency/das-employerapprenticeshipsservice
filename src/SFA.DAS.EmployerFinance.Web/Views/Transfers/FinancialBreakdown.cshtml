@@ -143,7 +143,7 @@
 <hr />
 
 <h2 class="heading-medium">
-    Pledged funds for financial year 2021/22
+    Pledged funds for financial year @Model.Data.FinancialYearString
 </h2>
 
 <div class="grid-row">
@@ -151,29 +151,29 @@
         <table>
             <tr>
                 <th scope="row">You have pledged</th>
-                <td class="numeric">£22</td>
+                <td class="numeric">@Model.Data.AmountPledged.ToString("C0", culture)</td>
             </tr>
             <tr>
                 <th scope="row">Transfer connections</th>
-                <td class="numeric">£20</td>
+                <td class="numeric">@Model.Data.TransferConnections.ToString("C0", culture)</td>
             </tr>
             <tr>
                 <th scope="row">Total pledged and transfer connections</th>
-                <td class="numeric"><strong>£20</strong></td>
+                <td class="numeric"><strong>@Model.Data.TotalPledgedAndTransferConnections.ToString("C0", culture)</strong></td>
             </tr>
         </table>
         <details>
             <summary><span class="summary">How are my pledged funds calculated?</span></summary>
             <div class="panel panel-border-narrow">
-                <p>Content</p>
+                <p>The amount you can pledge for financial year @Model.Data.FinancialYearString is calculated by subtracting your <strong>total pledged and transfer connections</strong> from your <strong>@Model.Data.TotalAvailableTransferAllowance.ToString("C0", culture) total available transfer allowance</strong>.</p>
             </div>
         </details>
     </div>
     <div class="column-one-half">
         <div class="finance-data finance-data--highlight">
             <dl>
-                <dt>How much more you can pledge for 2021/22</dt>
-                <dd>£200,000</dd>
+                <dt>How much more you can pledge for @Model.Data.FinancialYearString</dt>
+                <dd>@Model.Data.TotalAvailablePledgedFunds.ToString("C0", culture)</dd>
             </dl>
         </div>
     </div>

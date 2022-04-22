@@ -48,7 +48,8 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.TransfersControllerT
                     PledgeOriginatedCommitments = 2000,
                     ProjectionStartDate= DateTime.Now,
                     FundsIn = 100000,
-                    TransferConnections = 1000
+                    TransferConnections = 1000,
+                    AmountPledged = 3000
                 });
 
             _hashingService.Setup(h => h.DecodeValue(HashedAccountId)).Returns(AccountId);
@@ -81,15 +82,40 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.TransfersControllerT
         [Test]
         public async Task FinancialBreakdownPageShowsEstimatedRemainingAllowance()
         {
+            var viewModel = await GetViewModel();
+
+            var estimatedRemainingAllowance = viewModel.Data.TotalAvailableTransferAllowance - viewModel.Data.TotalEstimatedSpend;
+            Assert.AreEqual(estimatedRemainingAllowance, viewModel.Data.EstimatedRemainingAllowance);
+        }
+
+        [Test]
+        public async Task FinancialBreakdownPageShowsCorrectTotalAvailablePledgedFunds()
+        {
+            var viewModel = await GetViewModel();
+
+            var totalAvailablePledgedFunds = viewModel.Data.TotalAvailableTransferAllowance - viewModel.Data.TotalPledgedAndTransferConnections;
+            Assert.AreEqual(totalAvailablePledgedFunds, viewModel.Data.TotalAvailablePledgedFunds);
+        }
+
+        [Test]
+        public async Task FinancialBreakdownPageShowsCorrectTotalPledgedAndTransferConnections()
+        {
+            var viewModel = await GetViewModel();
+
+            var totalPledgedAndTransferConnections = viewModel.Data.AmountPledged + viewModel.Data.TransferConnections;
+            Assert.AreEqual(totalPledgedAndTransferConnections, viewModel.Data.TotalPledgedAndTransferConnections);
+        }
+
+        private async Task<OrchestratorResponse<FinancialBreakdownViewModel>> GetViewModel()
+        {
             var result = await _controller.FinancialBreakdown(HashedAccountId);
 
-            //Assert
             var view = result as ViewResult;
 
             var viewModel = view?.Model as OrchestratorResponse<FinancialBreakdownViewModel>;
             Assert.IsNotNull(viewModel);
-            var estimatedRemainingAllowance = viewModel.Data.TotalAvailableTransferAllowance - viewModel.Data.TotalEstimatedSpend;
-            Assert.AreEqual(estimatedRemainingAllowance, viewModel.Data.EstimatedRemainingAllowance);
+
+            return viewModel;
         }
     }
 }

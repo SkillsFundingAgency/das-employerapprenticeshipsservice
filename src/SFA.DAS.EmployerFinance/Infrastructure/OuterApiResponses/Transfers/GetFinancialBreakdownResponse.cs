@@ -16,6 +16,7 @@ namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses.Transfers
         public decimal FundsIn { get; set; }
         public int NumberOfMonths { get; set; }
         public DateTime ProjectionStartDate { get; set;}
+        public decimal AmountPledged { get; set; }
 
 
     }

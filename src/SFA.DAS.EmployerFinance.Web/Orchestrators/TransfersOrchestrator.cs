@@ -23,7 +23,6 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 
         protected TransfersOrchestrator()
         {
-
         }
 
         public TransfersOrchestrator(
@@ -91,6 +90,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     ProjectionStartDate = financialBreakdownTask.Result.ProjectionStartDate,
                     StartingTransferAllowance = accountDetailTask.Result.StartingTransferAllowance,
                     FinancialYearString = DateTime.UtcNow.ToFinancialYearString(),
+                    AmountPledged = financialBreakdownTask.Result.AmountPledged
                 }
             };
         }
