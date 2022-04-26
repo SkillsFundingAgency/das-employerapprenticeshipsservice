@@ -216,7 +216,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>19724</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost:44350/</IISUrl>
+          <IISUrl>https://localhost:44351/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
@@ -226,13 +226,13 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-<!--  <Target Name="CopyRoslynFiles" AfterTargets="AfterBuild" Condition="!$(Disable_CopyWebApplication) And '$(OutDir)' != '$(OutputPath)'">-->
-<!--    <ItemGroup>-->
-<!--      <RoslynFiles Include="$(CscToolPath)\*" />-->
-<!--    </ItemGroup>-->
-<!--    <MakeDir Directories="$(WebProjectOutputDir)\bin\roslyn" />-->
-<!--    <Copy SourceFiles="@(RoslynFiles)" DestinationFolder="$(WebProjectOutputDir)\bin\roslyn" SkipUnchangedFiles="true" Retries="$(CopyRetryCount)" RetryDelayMilliseconds="$(CopyRetryDelayMilliseconds)" />-->
-<!--  </Target>-->
+  <!--  <Target Name="CopyRoslynFiles" AfterTargets="AfterBuild" Condition="!$(Disable_CopyWebApplication) And '$(OutDir)' != '$(OutputPath)'">-->
+  <!--    <ItemGroup>-->
+  <!--      <RoslynFiles Include="$(CscToolPath)\*" />-->
+  <!--    </ItemGroup>-->
+  <!--    <MakeDir Directories="$(WebProjectOutputDir)\bin\roslyn" />-->
+  <!--    <Copy SourceFiles="@(RoslynFiles)" DestinationFolder="$(WebProjectOutputDir)\bin\roslyn" SkipUnchangedFiles="true" Retries="$(CopyRetryCount)" RetryDelayMilliseconds="$(CopyRetryDelayMilliseconds)" />-->
+  <!--  </Target>-->
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
