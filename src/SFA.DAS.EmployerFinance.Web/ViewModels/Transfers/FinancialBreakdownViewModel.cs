@@ -21,5 +21,6 @@ namespace SFA.DAS.EmployerFinance.Web.ViewModels.Transfers
         public decimal EstimatedRemainingAllowance { get { return TotalAvailableTransferAllowance - TotalEstimatedSpend; } }        
         public decimal TotalPledgedAndTransferConnections { get { return AmountPledged + TransferConnections; } }
         public decimal TotalAvailablePledgedFunds { get { return TotalAvailableTransferAllowance - TotalPledgedAndTransferConnections; } }
+        public decimal AvailablePledgedFunds { get { return AmountPledged - (ApprovedPledgeApplications + AcceptedPledgeApplications); } }
     }
 }

@@ -81,7 +81,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                 {
                     TransferConnections = financialBreakdownTask.Result.TransferConnections,
                     HashedAccountID = hashedAccountId,
-                    AcceptedPledgeApplications = financialBreakdownTask.Result.AcceptedPledgeApplications,
+                    AcceptedPledgeApplications = financialBreakdownTask.Result.AcceptedPledgeApplications + financialBreakdownTask.Result.PledgeOriginatedCommitments,
                     ApprovedPledgeApplications = financialBreakdownTask.Result.ApprovedPledgeApplications,
                     Commitments = financialBreakdownTask.Result.Commitments,
                     PledgeOriginatedCommitments = financialBreakdownTask.Result.PledgeOriginatedCommitments,

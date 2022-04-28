@@ -76,7 +76,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.TransfersControllerT
 
             var viewModel = view?.Model as OrchestratorResponse<FinancialBreakdownViewModel>;
             Assert.IsNotNull(viewModel);
-            Assert.AreEqual(2000, viewModel.Data.AcceptedPledgeApplications);
+            Assert.AreEqual(4000, viewModel.Data.AcceptedPledgeApplications);
         }
 
         [Test]
@@ -104,6 +104,15 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.TransfersControllerT
 
             var totalPledgedAndTransferConnections = viewModel.Data.AmountPledged + viewModel.Data.TransferConnections;
             Assert.AreEqual(totalPledgedAndTransferConnections, viewModel.Data.TotalPledgedAndTransferConnections);
+        }
+
+        [Test]
+        public async Task FinancialBreakdownPageShowsCorrectAvailablePledgedFunds()
+        {
+            var viewModel = await GetViewModel();
+
+            var availablePledgedFunds = viewModel.Data.AmountPledged - (viewModel.Data.ApprovedPledgeApplications + viewModel.Data.AcceptedPledgeApplications);
+            Assert.AreEqual(availablePledgedFunds, viewModel.Data.AvailablePledgedFunds);
         }
 
         private async Task<OrchestratorResponse<FinancialBreakdownViewModel>> GetViewModel()
