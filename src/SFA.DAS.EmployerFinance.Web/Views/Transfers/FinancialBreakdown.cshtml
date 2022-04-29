@@ -195,24 +195,24 @@
             <div class="column-one-third">
                 <div class="finance-data finance-data--future">
                     <dl>
-                        <dt>Estimated committed spend 2021/22</dt>
-                        <dd>£200,000</dd>
+                        <dt>Estimated committed spend @Model.Data.FinancialYearString</dt>
+                        <dd>@Model.Data.TotalEstimatedSpend.ToString("C0", culture)</dd>
                     </dl>
                 </div>
             </div>
             <div class="column-one-third">
                 <div class="finance-data finance-data--future">
                     <dl>
-                        <dt>Estimated committed spend 2022/23</dt>
-                        <dd>£200,000</dd>
+                        <dt>Estimated committed spend @Model.Data.NextFinancialYearString</dt>
+                        <dd>@Model.Data.TotalEstimatedSpend.ToString("C0", culture)</dd>
                     </dl>
                 </div>
             </div>
             <div class="column-one-third">
                 <div class="finance-data finance-data--future">
                     <dl>
-                        <dt>Estimated committed spend 2023/24</dt>
-                        <dd>£200,000</dd>
+                        <dt>Estimated committed spend @Model.Data.YearAfterNextFinancialYearString</dt>
+                        <dd>@Model.Data.TotalEstimatedSpend.ToString("C0", culture)</dd>
                     </dl>
                 </div>
             </div>

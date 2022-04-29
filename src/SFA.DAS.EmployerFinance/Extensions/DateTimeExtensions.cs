@@ -23,5 +23,31 @@ namespace SFA.DAS.EmployerFinance.Extensions
                 return $"{dateTime.Year}/{dateTime.AddYears(1).ToString("yy")}";
             }
         }
+
+        public static string ToNextFinancialYearString(this DateTime dateTime)
+        {
+            DateTime FinancialYearStartDate = new DateTime(DateTime.UtcNow.Year, FinancialYearStartMonth, FinancialYearStartDay);
+            if (dateTime < FinancialYearStartDate)
+            {
+                return $"{dateTime.Year}/{dateTime.AddYears(1).ToString("yy")}";
+            }
+            else
+            {
+                return $"{dateTime.AddYears(1).Year}/{dateTime.AddYears(2).ToString("yy")}";
+            }
+        }
+
+        public static string ToYearAfterNextFinancialYearString(this DateTime dateTime)
+        {
+            DateTime FinancialYearStartDate = new DateTime(DateTime.UtcNow.Year, FinancialYearStartMonth, FinancialYearStartDay);
+            if (dateTime < FinancialYearStartDate)
+            {
+                return $"{dateTime.AddYears(1).Year}/{dateTime.AddYears(2).ToString("yy")}";
+            }
+            else
+            {
+                return $"{dateTime.AddYears(2).Year}/{dateTime.AddYears(3).ToString("yy")}";
+            }
+        }
     }
 }

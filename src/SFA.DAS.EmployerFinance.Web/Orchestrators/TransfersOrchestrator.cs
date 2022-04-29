@@ -89,6 +89,8 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     ProjectionStartDate = financialBreakdownTask.Result.ProjectionStartDate,
                     StartingTransferAllowance = accountDetailTask.Result.StartingTransferAllowance,
                     FinancialYearString = DateTime.UtcNow.ToFinancialYearString(),
+                    NextFinancialYearString = DateTime.UtcNow.ToNextFinancialYearString(),
+                    YearAfterNextFinancialYearString = DateTime.UtcNow.ToYearAfterNextFinancialYearString(),
                 }
             };
         }
