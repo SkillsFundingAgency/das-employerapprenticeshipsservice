@@ -18,5 +18,6 @@ namespace SFA.DAS.EAS.Support.Core.Models
         public IEnumerable<PayeSchemeModel> PayeSchemes { get; set; }
         public ICollection<TeamMemberViewModel> TeamMembers { get; set; }
         public IEnumerable<TransactionViewModel> Transactions { get; set; }
+        public string ApprenticeshipEmployerType { get; set; }
     }
 }
