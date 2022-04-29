@@ -7,8 +7,7 @@ namespace SFA.DAS.EmployerFinance.Web.ViewModels.Transfers
         public decimal StartingTransferAllowance { get; set; }
         public string FinancialYearString { get; set; }
         public string HashedAccountID { get; set; }
-        public decimal TransferConnections { get; set; }
-        public decimal FundsIn { get; set; }
+        public decimal TransferConnections { get; set; }        
         public decimal Commitments { get; set; }
         public decimal ApprovedPledgeApplications { get; set; }
         public decimal AcceptedPledgeApplications { get; set; }

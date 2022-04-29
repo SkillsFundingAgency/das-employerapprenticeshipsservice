@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using AutoFixture;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authorization.EmployerFeatures.Models;
 using SFA.DAS.Authorization.Features.Services;
@@ -26,6 +27,8 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.TransfersControllerT
         private Mock<IManageApprenticeshipsService> _maService;
         private Mock<IAccountApiClient> _accountApiClient;
         private Mock<IFeatureTogglesService<EmployerFeatureToggle>> _featureTogglesService;
+        private GetFinancialBreakdownResponse _financialBreakdownResponse;
+        private AccountDetailViewModel _accountDetailViewModel;
 
         private const string HashedAccountId = "123ABC";
         private const long AccountId = 1234;
@@ -33,50 +36,38 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.TransfersControllerT
         [SetUp]
         public void Arrange()
         {
+            var fixture = new Fixture();
+
             _authorisationService = new Mock<IAuthorizationService>();
             _hashingService = new Mock<IHashingService>();
             _maService = new Mock<IManageApprenticeshipsService>();
             _accountApiClient = new Mock<IAccountApiClient>();
             _featureTogglesService = new Mock<IFeatureTogglesService<EmployerFeatureToggle>>();
+            _financialBreakdownResponse = fixture.Create<GetFinancialBreakdownResponse>();
 
-            _maService.Setup(m => m.GetFinancialBreakdown(AccountId)).ReturnsAsync(new GetFinancialBreakdownResponse
-                {  
-                    AcceptedPledgeApplications = 2000,
-                    ApprovedPledgeApplications = 2000,
-                    Commitments = 2000,
-                    NumberOfMonths = 12,
-                    PledgeOriginatedCommitments = 2000,
-                    ProjectionStartDate= DateTime.Now,
-                    FundsIn = 100000,
-                    TransferConnections = 1000,
-                    AmountPledged = 3000
-                });
+            _maService.Setup(m => m.GetFinancialBreakdown(AccountId)).ReturnsAsync(_financialBreakdownResponse);
 
             _hashingService.Setup(h => h.DecodeValue(HashedAccountId)).Returns(AccountId);
             _featureTogglesService.Setup(x => x.GetFeatureToggle(It.IsAny<string>())).Returns(new EmployerFeatureToggle { IsEnabled = true });
-
-            _accountApiClient.Setup(m => m.GetAccount(HashedAccountId)).ReturnsAsync(new AccountDetailViewModel
-            {
-                AccountId = AccountId,
-                StartingTransferAllowance = 20000
-            });
-
+            _accountDetailViewModel = fixture.Create<AccountDetailViewModel>();
+            _accountApiClient.Setup(m => m.GetAccount(HashedAccountId)).ReturnsAsync(_accountDetailViewModel);
             _orchestrator = new Mock<TransfersOrchestrator>(_authorisationService.Object, _hashingService.Object, _maService.Object, _accountApiClient.Object, _featureTogglesService.Object);
 
             _controller = new TransfersController(_orchestrator.Object);
         }
 
         [Test]
-        public async Task FinancialBreakdownReturnsAViewModel()
-        {
+        public async Task FinancialBreakdownReturnsAViewModelWithData()
+        {   
             var result = await _controller.FinancialBreakdown(HashedAccountId);
-                       
-            //Assert
             var view = result as ViewResult;
-
             var viewModel = view?.Model as OrchestratorResponse<FinancialBreakdownViewModel>;
-            Assert.IsNotNull(viewModel);
-            Assert.AreEqual(4000, viewModel.Data.AcceptedPledgeApplications);
+           
+            Assert.IsNotNull(viewModel.Data);
+            Assert.IsNotNull(viewModel.Data.AcceptedPledgeApplications);
+            Assert.IsNotNull(viewModel.Data.ApprovedPledgeApplications);
+            Assert.IsNotNull(viewModel.Data.Commitments);
+            Assert.IsNotNull(viewModel.Data.TransferConnections);
         }
 
         [Test]
@@ -120,8 +111,8 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.TransfersControllerT
             var result = await _controller.FinancialBreakdown(HashedAccountId);
 
             var view = result as ViewResult;
-
             var viewModel = view?.Model as OrchestratorResponse<FinancialBreakdownViewModel>;
+
             Assert.IsNotNull(viewModel);
 
             return viewModel;
