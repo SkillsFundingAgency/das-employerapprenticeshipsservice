@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@model OrchestratorResponse<SFA.DAS.EmployerFinance.Web.ViewModels.Transfers.FinancialBreakdownViewModel>
 @{
     ViewBag.PageID = "transfers-breakdown";
     ViewBag.Section = "finance";
@@ -28,32 +29,28 @@
 <hr />
 
 <h2 class="heading-medium">
-    Transfer allowance for financial year 2021/22
+    Transfer allowance for financial year @Model.Data.FinancialYearString
 </h2>
 <div class="grid-row">
     <div class="column-one-half">
         <table>
             <tr>
                 <th scope="row">Your transfer allowance</th>
-                <td class="numeric">£20</td>
-            </tr>
-            <tr>
-                <th scope="row">Deduction for in-house apprenticeships</th>
-                <td class="numeric">£20</td>
-            </tr>
+                <td class="numeric">@Model.Data.StartingTransferAllowance.ToString("C0", culture)</td>
+            </tr>          
         </table>
         <details>
             <summary><span class="summary">How is my available transfer allowance calculated?</span></summary>
             <div class="panel panel-border-narrow">
-                <p>Content</p>
+                <p>Your total available transfer allowance takes into account any deductions made for in-house apprenticeships, if you have any.</p>
             </div>
         </details>
     </div>
     <div class="column-one-half">
         <div class="finance-data">
             <dl>
-                <dt>Total available transfer allowance for 2021/22</dt>
-                <dd>£200,000</dd>
+                <dt>Total available transfer allowance for @Model.Data.FinancialYearString</dt>
+                <dd>@Model.Data.TotalAvailableTransferAllowance.ToString("C0", culture)</dd>
             </dl>
         </div>
     </div>
@@ -62,41 +59,41 @@
 <hr />
 
 <h2 class="heading-medium">
-    Committed funds for financial year 2021/22
+    Committed funds for financial year @Model.Data.FinancialYearString
 </h2>
 
 <div class="grid-row">
     <div class="column-one-half">
         <table>
             <tr>
-                <th scope="row">Approved applications: live</th>
-                <td class="numeric">£20</td>
+                <th scope="row">Approved applications: accepted by applicant</th>
+                <td class="numeric">@Model.Data.AcceptedPledgeApplications.ToString("C0", culture)</td>
             </tr>
             <tr>
-                <th scope="row">Approved applications: not live yet</th>
-                <td class="numeric">£20</td>
+                <th scope="row">Approved applications: awaiting acceptance by applicant</th>
+                <td class="numeric">@Model.Data.ApprovedPledgeApplications.ToString("C0", culture)</td>
             </tr>
             <tr>
                 <th scope="row">Transfer connections</th>
-                <td class="numeric">£20</td>
+                <td class="numeric">@Model.Data.TransferConnections.ToString("C0", culture)</td>
             </tr>
             <tr>
                 <th scope="row">Total estimated spend</th>
-                <td class="numeric"><strong>£20</strong></td>
+                <td class="numeric"><strong>@Model.Data.TotalEstimatedSpend.ToString("C0", culture)</strong></td>
             </tr>
         </table>
         <details>
             <summary><span class="summary">How are my committed funds calculated?</span></summary>
             <div class="panel panel-border-narrow">
-                <p>Content</p>
+                <p>Your committed funds are calculated by subtracting your <strong>total estimated spend</strong> from your <strong>@Model.Data.TotalAvailableTransferAllowance.ToString("C0", culture) total available transfer allowance</strong>.</p>
             </div>
         </details>
     </div>
     <div class="column-one-half">
         <div class="finance-data finance-data--highlight">
             <dl>
-                <dt>Estimated remaining allowance for 2021/22</dt>
-                <dd>£200,000</dd>
+                <dt>Estimated remaining allowance for @Model.Data.FinancialYearString</dt>
+                <dd>@Model.Data.EstimatedRemainingAllowance.ToString("C0", culture)</dd>
             </dl>
         </div>
     </div>
@@ -105,39 +102,37 @@
 <hr />
 
 <h2 class="heading-medium">
-    Available pledge funds for financial year 2021/22
+    Available pledge funds for financial year @Model.Data.FinancialYearString
 </h2>
 <div class="grid-row">
     <div class="column-one-half">
         <table>
             <tr>
                 <th scope="row">You have pledged</th>
-                <td class="numeric">£20</td>
+                <td class="numeric">@Model.Data.AmountPledged.ToString("C0", culture)</td>
             </tr>
             <tr>
-                <th scope="row">Approved applications: live</th>
-                <td class="numeric">£20</td>
+                <th scope="row">Approved applications: accepted by applicant</th>
+                <td class="numeric">@Model.Data.AcceptedPledgeApplications.ToString("C0", culture)</td>
             </tr>
             <tr>
-                <th scope="row">Approved applications: not yet live</th>
-                <td class="numeric">£20</td>
+                <th scope="row">Approved applications: awaiting acceptance by applicant</th>
+                <td class="numeric">@Model.Data.ApprovedPledgeApplications.ToString("C0", culture)</td>
             </tr>
+
         </table>
-        <p>
-            Of your <strong>£20 estimated remaining allowance</strong>, this is allocated to your available pledge funds.
-        </p>
         <details>
             <summary><span class="summary">How are my available pledge funds calculated?</span></summary>
             <div class="panel panel-border-narrow">
-                <p>Content</p>
+                <p>Your available pledge funds is calculated by subtracting your <strong>approved applications (accepted by applicant and awaiting acceptance by applicant)</strong> from the amount <strong>you have pledged</strong>.</p>
             </div>
         </details>
     </div>
     <div class="column-one-half">
         <div class="finance-data">
             <dl>
-                <dt>Available pledge funds for 2021/22</dt>
-                <dd>£200,000</dd>
+                <dt>Available pledge funds for @Model.Data.FinancialYearString</dt>
+                <dd>@Model.Data.AvailablePledgedFunds.ToString("C0", culture)</dd>
             </dl>
         </div>
     </div>
@@ -146,7 +141,7 @@
 <hr />
 
 <h2 class="heading-medium">
-    Pledged funds for financial year 2021/22
+    Pledged funds for financial year @Model.Data.FinancialYearString
 </h2>
 
 <div class="grid-row">
@@ -154,29 +149,29 @@
         <table>
             <tr>
                 <th scope="row">You have pledged</th>
-                <td class="numeric">£22</td>
+                <td class="numeric">@Model.Data.AmountPledged.ToString("C0", culture)</td>
             </tr>
             <tr>
                 <th scope="row">Transfer connections</th>
-                <td class="numeric">£20</td>
+                <td class="numeric">@Model.Data.TransferConnections.ToString("C0", culture)</td>
             </tr>
             <tr>
                 <th scope="row">Total pledged and transfer connections</th>
-                <td class="numeric"><strong>£20</strong></td>
+                <td class="numeric"><strong>@Model.Data.TotalPledgedAndTransferConnections.ToString("C0", culture)</strong></td>
             </tr>
         </table>
         <details>
             <summary><span class="summary">How are my pledged funds calculated?</span></summary>
             <div class="panel panel-border-narrow">
-                <p>Content</p>
+                <p>The amount you can pledge for financial year @Model.Data.FinancialYearString is calculated by subtracting your <strong>total pledged and transfer connections</strong> from your <strong>@Model.Data.TotalAvailableTransferAllowance.ToString("C0", culture) total available transfer allowance</strong>.</p>
             </div>
         </details>
     </div>
     <div class="column-one-half">
         <div class="finance-data finance-data--highlight">
             <dl>
-                <dt>How much more you can pledge for 2021/22</dt>
-                <dd>£200,000</dd>
+                <dt>How much more you can pledge for @Model.Data.FinancialYearString</dt>
+                <dd>@Model.Data.TotalAvailablePledgedFunds.ToString("C0", culture)</dd>
             </dl>
         </div>
     </div>

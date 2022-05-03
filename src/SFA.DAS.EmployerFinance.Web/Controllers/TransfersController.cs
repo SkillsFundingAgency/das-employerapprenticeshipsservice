@@ -29,9 +29,10 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         [DasAuthorize("EmployerFeature.FinanceDetails")]
         [HttpGet]
         [Route("transfers/financial-breakdown")]
-        public ActionResult FinancialBreakdown(string hashedAccountId)
+        public async Task<ActionResult> FinancialBreakdown(string hashedAccountId)
         {
-            return View();
+            var viewModel = await _transfersOrchestrator.GetFinancialBreakdownViewModel(hashedAccountId);
+            return View(viewModel);
         }
     }
 }

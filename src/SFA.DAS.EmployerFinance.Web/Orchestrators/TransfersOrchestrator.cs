@@ -23,7 +23,6 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 
         protected TransfersOrchestrator()
         {
-
         }
 
         public TransfersOrchestrator(
@@ -65,6 +64,31 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     StartingTransferAllowance = accountDetail.Result.StartingTransferAllowance,
                     FinancialYearString = DateTime.UtcNow.ToFinancialYearString(),
                     HashedAccountID = hashedAccountId
+                }
+            };
+        }
+
+        public async Task<OrchestratorResponse<FinancialBreakdownViewModel>> GetFinancialBreakdownViewModel(string hashedAccountId) 
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var financialBreakdownTask = _manageApprenticeshipsService.GetFinancialBreakdown(accountId);
+            var accountDetailTask = _accountApiClient.GetAccount(hashedAccountId);
+            await Task.WhenAll(financialBreakdownTask, accountDetailTask);
+
+            return new OrchestratorResponse<FinancialBreakdownViewModel>
+            {
+                Data = new FinancialBreakdownViewModel
+                {
+                    TransferConnections = financialBreakdownTask.Result.TransferConnections,
+                    HashedAccountID = hashedAccountId,
+                    AcceptedPledgeApplications = financialBreakdownTask.Result.AcceptedPledgeApplications + financialBreakdownTask.Result.PledgeOriginatedCommitments,
+                    ApprovedPledgeApplications = financialBreakdownTask.Result.ApprovedPledgeApplications,
+                    Commitments = financialBreakdownTask.Result.Commitments,
+                    PledgeOriginatedCommitments = financialBreakdownTask.Result.PledgeOriginatedCommitments,                    
+                    ProjectionStartDate = financialBreakdownTask.Result.ProjectionStartDate,
+                    StartingTransferAllowance = accountDetailTask.Result.StartingTransferAllowance,
+                    FinancialYearString = DateTime.UtcNow.ToFinancialYearString(),
+                    AmountPledged = financialBreakdownTask.Result.AmountPledged
                 }
             };
         }
