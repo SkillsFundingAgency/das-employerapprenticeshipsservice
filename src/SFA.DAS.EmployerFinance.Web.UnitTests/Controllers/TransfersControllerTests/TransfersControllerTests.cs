@@ -80,7 +80,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.TransfersControllerT
             var viewModel = view?.Model as OrchestratorResponse<FinancialBreakdownViewModel>;
             //Assert
             Assert.IsNotNull(viewModel);
-            var estimatedRemainingAllowance = viewModel.Data.TotalAvailableTransferAllowance - viewModel.Data.TotalEstimatedSpend;
+            var estimatedRemainingAllowance = viewModel.Data.TotalAvailableTransferAllowance - viewModel.Data.CurrentYearEstimatedSpend;
             Assert.AreEqual(estimatedRemainingAllowance, viewModel.Data.EstimatedRemainingAllowance);
         }
     }
