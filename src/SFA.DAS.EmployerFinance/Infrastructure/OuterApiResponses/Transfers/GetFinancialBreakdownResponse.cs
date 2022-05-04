@@ -13,5 +13,6 @@ namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses.Transfers
         public decimal NextYearEstimatedCommittedSpend { get; set; }
         public decimal YearAfterNextYearEstimatedCommittedSpend { get; set; }        
         public DateTime ProjectionStartDate { get; set;}
+        public decimal AmountPledged { get; set; }
     }
 }

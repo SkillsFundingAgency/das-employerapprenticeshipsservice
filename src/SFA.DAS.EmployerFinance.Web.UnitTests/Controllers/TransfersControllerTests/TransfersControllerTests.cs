@@ -59,11 +59,10 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.TransfersControllerT
         [Test]
         public async Task FinancialBreakdownReturnsAViewModelWithData()
         {   
-            //Act
             var result = await _controller.FinancialBreakdown(HashedAccountId);
             var view = result as ViewResult;
             var viewModel = view?.Model as OrchestratorResponse<FinancialBreakdownViewModel>;
-            //Assert
+           
             Assert.IsNotNull(viewModel.Data);
             Assert.IsNotNull(viewModel.Data.AcceptedPledgeApplications);
             Assert.IsNotNull(viewModel.Data.ApprovedPledgeApplications);
@@ -74,14 +73,49 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.TransfersControllerT
         [Test]
         public async Task FinancialBreakdownPageShowsEstimatedRemainingAllowance()
         {
-            //Act
-            var result = await _controller.FinancialBreakdown(HashedAccountId);
-            var view = result as ViewResult;
-            var viewModel = view?.Model as OrchestratorResponse<FinancialBreakdownViewModel>;
-            //Assert
-            Assert.IsNotNull(viewModel);
+            var viewModel = await GetViewModel();
+
             var estimatedRemainingAllowance = viewModel.Data.TotalAvailableTransferAllowance - viewModel.Data.CurrentYearEstimatedSpend;
             Assert.AreEqual(estimatedRemainingAllowance, viewModel.Data.EstimatedRemainingAllowance);
+        }
+
+        [Test]
+        public async Task FinancialBreakdownPageShowsCorrectTotalAvailablePledgedFunds()
+        {
+            var viewModel = await GetViewModel();
+
+            var totalAvailablePledgedFunds = viewModel.Data.TotalAvailableTransferAllowance - viewModel.Data.TotalPledgedAndTransferConnections;
+            Assert.AreEqual(totalAvailablePledgedFunds, viewModel.Data.TotalAvailablePledgedFunds);
+        }
+
+        [Test]
+        public async Task FinancialBreakdownPageShowsCorrectTotalPledgedAndTransferConnections()
+        {
+            var viewModel = await GetViewModel();
+
+            var totalPledgedAndTransferConnections = viewModel.Data.AmountPledged + viewModel.Data.TransferConnections;
+            Assert.AreEqual(totalPledgedAndTransferConnections, viewModel.Data.TotalPledgedAndTransferConnections);
+        }
+
+        [Test]
+        public async Task FinancialBreakdownPageShowsCorrectAvailablePledgedFunds()
+        {
+            var viewModel = await GetViewModel();
+
+            var availablePledgedFunds = viewModel.Data.AmountPledged - (viewModel.Data.ApprovedPledgeApplications + viewModel.Data.AcceptedPledgeApplications);
+            Assert.AreEqual(availablePledgedFunds, viewModel.Data.AvailablePledgedFunds);
+        }
+
+        private async Task<OrchestratorResponse<FinancialBreakdownViewModel>> GetViewModel()
+        {
+            var result = await _controller.FinancialBreakdown(HashedAccountId);
+
+            var view = result as ViewResult;
+            var viewModel = view?.Model as OrchestratorResponse<FinancialBreakdownViewModel>;
+
+            Assert.IsNotNull(viewModel);
+
+            return viewModel;
         }
     }
 }

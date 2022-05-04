@@ -23,7 +23,6 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 
         protected TransfersOrchestrator()
         {
-
         }
 
         public TransfersOrchestrator(
@@ -82,7 +81,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                 {
                     TransferConnections = financialBreakdownTask.Result.TransferConnections,
                     HashedAccountID = hashedAccountId,
-                    AcceptedPledgeApplications = financialBreakdownTask.Result.AcceptedPledgeApplications,
+                    AcceptedPledgeApplications = financialBreakdownTask.Result.AcceptedPledgeApplications + financialBreakdownTask.Result.PledgeOriginatedCommitments,
                     ApprovedPledgeApplications = financialBreakdownTask.Result.ApprovedPledgeApplications,
                     Commitments = financialBreakdownTask.Result.Commitments,
                     PledgeOriginatedCommitments = financialBreakdownTask.Result.PledgeOriginatedCommitments,                    
@@ -94,6 +93,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     FinancialYearString = DateTime.UtcNow.ToFinancialYearString(),
                     NextFinancialYearString = DateTime.UtcNow.ToNextFinancialYearString(),
                     YearAfterNextFinancialYearString = DateTime.UtcNow.ToYearAfterNextFinancialYearString(),
+                    AmountPledged = financialBreakdownTask.Result.AmountPledged
                 }
             };
         }
