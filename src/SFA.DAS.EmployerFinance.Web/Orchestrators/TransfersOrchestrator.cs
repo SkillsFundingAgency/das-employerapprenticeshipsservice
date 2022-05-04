@@ -18,8 +18,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         private readonly IAuthorizationService _authorizationService;
         private readonly IHashingService _hashingService;
         private readonly IManageApprenticeshipsService _manageApprenticeshipsService;
-        private readonly IAccountApiClient _accountApiClient;
-        private readonly IFeatureTogglesService<EmployerFeatureToggle> _featureTogglesService;
+        private readonly IAccountApiClient _accountApiClient;        
 
         protected TransfersOrchestrator()
         {
