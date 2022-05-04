@@ -166,7 +166,7 @@
         <p>Download your financial transactions within a specific date range. </p>
     </div>
 
-    @if (Model.Data.IsLevyEmployer && Html.IsAuthorized("EmployerFeature.Projections"))
+    @if (Model.Data.IsLevyEmployer)
     {
         <div class="column-half">
             <h2 class="heading-medium">

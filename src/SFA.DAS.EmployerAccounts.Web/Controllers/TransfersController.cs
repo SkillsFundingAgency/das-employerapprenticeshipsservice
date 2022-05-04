@@ -47,8 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return PartialView(model);
         }
 
-        [ChildActionOnly]
-        [DasAuthorize("EmployerFeature.Transfers")]
+        [ChildActionOnly]        
         public ActionResult TransferConnectionInvitationAuthorization(GetTransferConnectionInvitationAuthorizationQuery query)
         {
             var response = Task.Run(() => _mediator.SendAsync(query)).GetAwaiter().GetResult();
@@ -58,7 +57,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [ChildActionOnly]
-        [DasAuthorize("EmployerFeature.Transfers")]
         public ActionResult TransferConnectionInvitations(GetTransferConnectionInvitationsQuery query)
         {
             var response = Task.Run(() => _mediator.SendAsync(query)).GetAwaiter().GetResult();
@@ -68,7 +66,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [ChildActionOnly]
-        [DasAuthorize("EmployerFeature.Transfers")]
         public ActionResult TransferRequests(GetTransferRequestsQuery query)
         {
             try

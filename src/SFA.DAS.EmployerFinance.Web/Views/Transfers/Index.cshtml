@@ -62,11 +62,8 @@
                 You have <strong>@Model.Data.ApplicationsCount</strong> transfer applications.
             </div>
             <div class="button-group">
-                <a class="button" href="@Url.LevyTransfersMatchingAction("")" id="ApplyForTransfersButton">Apply for transfer opportunities</a>
-                @if (Model.Data.RenderApplicationListButton)
-                {
-                    <a href="@Url.LevyTransfersMatchingAccountAction("applications")" class="button button-secondary">View applications I've submitted</a>
-                }
+                <a class="button" href="@Url.LevyTransfersMatchingAction("")" id="ApplyForTransfersButton">Apply for transfer opportunities</a>                
+                <a href="@Url.LevyTransfersMatchingAccountAction("applications")" class="button button-secondary">View applications I've submitted</a>                
             </div>
         </div>
     </div>

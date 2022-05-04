@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
                 AccountId = AccountId
             });
 
-            _orchestrator = new TransfersOrchestrator(_authorisationService.Object, _hashingService.Object, _maService.Object, _accountApiClient.Object, _featureTogglesService.Object);
+            _orchestrator = new TransfersOrchestrator(_authorisationService.Object, _hashingService.Object, _maService.Object, _accountApiClient.Object);
         }
         [Test]
         public async Task CheckFinancialBreakdownViewModel()
