@@ -14,29 +14,25 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Extensions
         public void ToFinancialYearStringReturnsCorrectString(int year, int month, int day, string expected)
         {
             var dateTime = new DateTime(year, month, day);
-            var result = dateTime.ToFinancialYearString(DateTime.UtcNow);
+            var result = dateTime.ToFinancialYearString();
             Assert.AreEqual(expected, result);
         }
 
-        [TestCase(2022, 2, 1, "2022/23")]
-        [TestCase(2022, 4, 1, "2022/23")]
         [TestCase(2022, 4, 20, "2023/24")]
         [TestCase(2022, 5, 1, "2023/24")]
         public void ToNextFinancialYearStringReturnsCorrectString(int year, int month, int day, string expected)
         {
             var dateTime = new DateTime(year, month, day);
-            var result = dateTime.ToFinancialYearString(DateTime.UtcNow.AddYears(1));
+            var result = dateTime.AddYears(1).ToFinancialYearString();
             Assert.AreEqual(expected, result);
         }
 
-        [TestCase(2022, 2, 1, "2023/24")]
-        [TestCase(2022, 4, 1, "2023/24")]
         [TestCase(2022, 4, 20, "2024/25")]
         [TestCase(2022, 5, 1, "2024/25")]
         public void ToYearAfterNextFinancialYearStringReturnsCorrectString(int year, int month, int day, string expected)
         {
             var dateTime = new DateTime(year, month, day);
-            var result = dateTime.ToFinancialYearString(DateTime.UtcNow.AddYears(2));
+            var result = dateTime.AddYears(2).ToFinancialYearString();
             Assert.AreEqual(expected, result);
         }
     }
