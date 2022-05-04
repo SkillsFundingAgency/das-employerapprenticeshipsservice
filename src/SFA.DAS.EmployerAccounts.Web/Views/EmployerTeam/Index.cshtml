@@ -262,7 +262,7 @@ else
                                                 </span>
                                                 break;
                                             case "PledgeApplicationForReview":
-                                                <span>
+                                                <span id="application-approval-task">
                                                     @task.ItemsDueCount transfer pledge application@(task.ItemsDueCount > 1 ? "s" : "") awaiting your approval
                                                     <br /><a href="@Url.LevyTransfersMatchingAction("pledges")" class="govuk-link govuk-link--no-visited-state">View<span class="govuk-visually-hidden"> transfer pledge</span> application@(task.ItemsDueCount > 1 ? "s" : "")</a>
                                                 </span>
