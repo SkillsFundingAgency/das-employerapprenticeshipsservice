@@ -14,8 +14,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Extensions
         public void ToFinancialYearStringReturnsCorrectString(int year, int month, int day, string expected)
         {
             var dateTime = new DateTime(year, month, day);
-            var result = dateTime.ToFinancialYearString();
-
+            var result = dateTime.ToFinancialYearString(DateTime.UtcNow);
             Assert.AreEqual(expected, result);
         }
 
@@ -26,8 +25,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Extensions
         public void ToNextFinancialYearStringReturnsCorrectString(int year, int month, int day, string expected)
         {
             var dateTime = new DateTime(year, month, day);
-            var result = dateTime.ToNextFinancialYearString();
-
+            var result = dateTime.ToFinancialYearString(DateTime.UtcNow.AddYears(1));
             Assert.AreEqual(expected, result);
         }
 
@@ -38,8 +36,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Extensions
         public void ToYearAfterNextFinancialYearStringReturnsCorrectString(int year, int month, int day, string expected)
         {
             var dateTime = new DateTime(year, month, day);
-            var result = dateTime.ToYearAfterNextFinancialYearString();
-
+            var result = dateTime.ToFinancialYearString(DateTime.UtcNow.AddYears(2));
             Assert.AreEqual(expected, result);
         }
     }

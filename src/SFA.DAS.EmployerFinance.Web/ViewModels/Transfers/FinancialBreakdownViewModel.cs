@@ -14,8 +14,7 @@ namespace SFA.DAS.EmployerFinance.Web.ViewModels.Transfers
         public decimal ApprovedPledgeApplications { get; set; }
         public decimal AcceptedPledgeApplications { get; set; }
         public decimal PledgeOriginatedCommitments { get; set; }
-        public DateTime ProjectionStartDate { get; set; }
-        public int NumberOfMonths { get; set; }
+        public DateTime ProjectionStartDate { get; set; }        
         public decimal AmountPledged { get; set; }
         public decimal TotalAvailableTransferAllowance { get { return StartingTransferAllowance - Commitments; } }
         public decimal CurrentYearEstimatedSpend { get; set; }

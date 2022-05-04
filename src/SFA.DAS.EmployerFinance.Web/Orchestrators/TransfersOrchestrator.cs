@@ -57,7 +57,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     ApplicationsCount = indexTask.Result.ApplicationsCount,
                     RenderCreateTransfersPledgeButton = renderCreateTransfersPledgeButtonTask.Result,                    
                     StartingTransferAllowance = accountDetail.Result.StartingTransferAllowance,
-                    FinancialYearString = DateTime.UtcNow.ToFinancialYearString(),
+                    FinancialYearString = DateTime.UtcNow.ToFinancialYearString(DateTime.UtcNow),
                     HashedAccountID = hashedAccountId
                 }
             };
@@ -69,6 +69,8 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
             var financialBreakdownTask = _manageApprenticeshipsService.GetFinancialBreakdown(accountId);
             var accountDetailTask = _accountApiClient.GetAccount(hashedAccountId);
             await Task.WhenAll(financialBreakdownTask, accountDetailTask);
+
+            var getDate1 = DateTime.UtcNow.ToFinancialYearString(DateTime.UtcNow);
 
             return new OrchestratorResponse<FinancialBreakdownViewModel>
             {
@@ -85,9 +87,9 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     NextYearEstimatedSpend = financialBreakdownTask.Result.NextYearEstimatedCommittedSpend,
                     YearAfterNextYearEstimatedSpend = financialBreakdownTask.Result.YearAfterNextYearEstimatedCommittedSpend,
                     StartingTransferAllowance = accountDetailTask.Result.StartingTransferAllowance,
-                    FinancialYearString = DateTime.UtcNow.ToFinancialYearString(),
-                    NextFinancialYearString = DateTime.UtcNow.ToNextFinancialYearString(),
-                    YearAfterNextFinancialYearString = DateTime.UtcNow.ToYearAfterNextFinancialYearString(),
+                    FinancialYearString = DateTime.UtcNow.ToFinancialYearString(DateTime.UtcNow),
+                    NextFinancialYearString = DateTime.UtcNow.ToFinancialYearString(DateTime.UtcNow.AddYears(1)),
+                    YearAfterNextFinancialYearString = DateTime.UtcNow.ToFinancialYearString(DateTime.UtcNow.AddYears(2)),
                     AmountPledged = financialBreakdownTask.Result.AmountPledged
                 }
             };
