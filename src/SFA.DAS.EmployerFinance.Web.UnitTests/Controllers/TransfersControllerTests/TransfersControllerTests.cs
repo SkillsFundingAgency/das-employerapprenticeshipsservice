@@ -68,14 +68,17 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.TransfersControllerT
             Assert.IsNotNull(viewModel.Data.ApprovedPledgeApplications);
             Assert.IsNotNull(viewModel.Data.Commitments);
             Assert.IsNotNull(viewModel.Data.TransferConnections);
-        }
+            Assert.IsNotNull(viewModel.Data.CurrentYearEstimatedSpend);
+            Assert.IsNotNull(viewModel.Data.NextYearEstimatedSpend);
+            Assert.IsNotNull(viewModel.Data.YearAfterNextYearEstimatedSpend);
+        }        
 
         [Test]
         public async Task FinancialBreakdownPageShowsEstimatedRemainingAllowance()
         {
             var viewModel = await GetViewModel();
 
-            var estimatedRemainingAllowance = viewModel.Data.TotalAvailableTransferAllowance - viewModel.Data.TotalEstimatedSpend;
+            var estimatedRemainingAllowance = viewModel.Data.TotalAvailableTransferAllowance - viewModel.Data.CurrentYearEstimatedSpend;
             Assert.AreEqual(estimatedRemainingAllowance, viewModel.Data.EstimatedRemainingAllowance);
         }
 

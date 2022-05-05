@@ -81,8 +81,13 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     Commitments = financialBreakdownTask.Result.Commitments,
                     PledgeOriginatedCommitments = financialBreakdownTask.Result.PledgeOriginatedCommitments,                    
                     ProjectionStartDate = financialBreakdownTask.Result.ProjectionStartDate,
+                    CurrentYearEstimatedSpend = financialBreakdownTask.Result.CurrentYearEstimatedCommittedSpend,
+                    NextYearEstimatedSpend = financialBreakdownTask.Result.NextYearEstimatedCommittedSpend,
+                    YearAfterNextYearEstimatedSpend = financialBreakdownTask.Result.YearAfterNextYearEstimatedCommittedSpend,
                     StartingTransferAllowance = accountDetailTask.Result.StartingTransferAllowance,
                     FinancialYearString = DateTime.UtcNow.ToFinancialYearString(),
+                    NextFinancialYearString = DateTime.UtcNow.AddYears(1).ToFinancialYearString(),
+                    YearAfterNextFinancialYearString = DateTime.UtcNow.AddYears(2).ToFinancialYearString(),
                     AmountPledged = financialBreakdownTask.Result.AmountPledged
                 }
             };

@@ -79,7 +79,7 @@
             </tr>
             <tr>
                 <th scope="row">Total estimated spend</th>
-                <td class="numeric"><strong>@Model.Data.TotalEstimatedSpend.ToString("C0", culture)</strong></td>
+                <td class="numeric"><strong>@Model.Data.CurrentYearEstimatedSpend.ToString("C0", culture)</strong></td>
             </tr>
         </table>
         <details>
@@ -184,33 +184,33 @@
         <h2 class="heading-medium">
             Your transfer connections in future financial years
         </h2>
-        <p>These finances show approved application for your pledge and for transfers where you have connected directly with an employer.</p>
-        <p>This uses an estimated total cost of training, based on the funding band maxiumum for this apprenticeship.</p>
-        <p>The yearly estimate costs are based on the planned start date of training and the 20% completion payment. It uses the financial year starting April. </p>
-        <p>This estimate is based on the information provided in the transfer funding application. As details such as start and end dates, final agreed costs, and breaks in learning may change, it can only be used as a a guide.</p>
+        <p>These finances show approved applications for your pledges and for transfers where you have connected directly with an employer.</p>
+        <p>This uses a forecasted total cost of training, based on the funding band maxiumum for this apprenticeship.</p>
+        <p>The yearly forecasted costs are based on the planned start date of training and the 20% completion payment. It uses the financial year starting April. </p>
+        <p>This forecast is based on the information provided in the transfer funding application. As details such as start and end dates, final agreed costs, and breaks in learning may change, it can only be used as a a guide.</p>
 
         <div class="grid-row">
             <div class="column-one-third">
                 <div class="finance-data finance-data--future">
                     <dl>
-                        <dt>Estimated committed spend 2021/22</dt>
-                        <dd>£200,000</dd>
+                        <dt>Forecasted committed spend @Model.Data.FinancialYearString</dt>
+                        <dd>@Model.Data.CurrentYearEstimatedSpend.ToString("C0", culture)</dd>
                     </dl>
                 </div>
             </div>
             <div class="column-one-third">
                 <div class="finance-data finance-data--future">
                     <dl>
-                        <dt>Estimated committed spend 2022/23</dt>
-                        <dd>£200,000</dd>
+                        <dt>Forecasted committed spend @Model.Data.NextFinancialYearString</dt>
+                        <dd>@Model.Data.NextYearEstimatedSpend.ToString("C0", culture)</dd>
                     </dl>
                 </div>
             </div>
             <div class="column-one-third">
                 <div class="finance-data finance-data--future">
                     <dl>
-                        <dt>Estimated committed spend 2023/24</dt>
-                        <dd>£200,000</dd>
+                        <dt>Forecasted committed spend @Model.Data.YearAfterNextFinancialYearString</dt>
+                        <dd>@Model.Data.YearAfterNextYearEstimatedSpend.ToString("C0", culture)</dd>
                     </dl>
                 </div>
             </div>
@@ -222,7 +222,7 @@
 
 <hr />
 
-<div class="grid-row">
+@*TODO: <div class="grid-row">
     <div class="column-two-thirds">
         <h2 class="heading-medium">
             Download transfers finance data
@@ -249,7 +249,7 @@
         </p>
 
     </div>
-</div>
+</div>*@
 
 @section breadcrumb {
     <div class="breadcrumbs">

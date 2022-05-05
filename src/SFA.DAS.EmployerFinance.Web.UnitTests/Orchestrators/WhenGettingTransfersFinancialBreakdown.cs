@@ -60,7 +60,8 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
             Assert.AreEqual(_financialBreakdownResponse.AcceptedPledgeApplications + _financialBreakdownResponse.PledgeOriginatedCommitments, actual.Data.AcceptedPledgeApplications);
             Assert.AreEqual(_financialBreakdownResponse.ApprovedPledgeApplications, actual.Data.ApprovedPledgeApplications);
             Assert.AreEqual(_financialBreakdownResponse.Commitments, actual.Data.Commitments);
-            Assert.AreEqual(_financialBreakdownResponse.TransferConnections, actual.Data.TransferConnections);            
+            Assert.AreEqual(_financialBreakdownResponse.TransferConnections, actual.Data.TransferConnections);
+            Assert.AreEqual(_financialBreakdownResponse.PledgeOriginatedCommitments, actual.Data.PledgeOriginatedCommitments);
         }
     }
 }
