@@ -6,7 +6,7 @@
 
 <p>Employers who pay the apprenticeship levy can connect with other employers and transfer up to @Model.TransferAllowancePercentage.ToString("N0")% of their previous year's annual funds.</p>
 
-if (Model.AuthorizationResult.IsAuthorized)
+@if (Model.AuthorizationResult.IsAuthorized)
 {
     <p>Before starting a connection, both the sending and receiving employers need to read and understand the <a href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018" class="govuk-link" rel="nofollow">rules for sending and receiving transfers</a>.</p>
     <div class="govuk-inset-text">
