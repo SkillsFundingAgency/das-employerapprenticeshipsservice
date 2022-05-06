@@ -14,7 +14,6 @@ namespace SFA.DAS.EAS.Support.Web
         {
             var ioc = DependencyResolver.Current;
             var logger = ioc.GetService<ILog>();
-
             var siteValidatorSettings = ioc.GetService<ISiteValidatorSettings>();
 
             logger.Info($"SiteValidator Configuration Tenant : {siteValidatorSettings.Tenant} and Audience : {siteValidatorSettings.Audience} ");
