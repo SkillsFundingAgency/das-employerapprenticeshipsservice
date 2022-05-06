@@ -8,8 +8,6 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Microsoft.ApplicationInsights.Extensibility;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.Support.Shared.Authentication;
-using SFA.DAS.Support.Shared.SiteConnection;
 using SFA.DAS.Web.Policy;
 
 namespace SFA.DAS.EAS.Support.Web
@@ -20,9 +18,8 @@ namespace SFA.DAS.EAS.Support.Web
         private void Application_Start(object sender, EventArgs e)
         {
             MvcHandler.DisableMvcResponseHeader = true;
-            //var ioc = DependencyResolver.Current;
-            //var logger = ioc.GetService<ILog>();
-            //logger.Info("Starting Web Role");
+            var logger = DependencyResolver.Current.GetService<ILog>();
+            logger.Info("Starting Web Role");
 
             SetupApplicationInsights();
 
@@ -30,12 +27,9 @@ namespace SFA.DAS.EAS.Support.Web
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
-            //var siteConnectorSettings = ioc.GetService<ISiteValidatorSettings>();
-            //GlobalConfiguration.Configuration.MessageHandlers.Add(new TokenValidationHandler(siteConnectorSettings, logger));
-            //GlobalFilters.Filters.Add(new TokenValidationFilter(siteConnectorSettings, logger));
-            
-            //logger.Info("Web role started");
+            logger.Info("Web role started");
         }
+
         protected void Application_PreSendRequestHeaders(object sender, EventArgs e)
         {
             if (HttpContext.Current == null) return;

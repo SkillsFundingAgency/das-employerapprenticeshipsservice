@@ -14,20 +14,20 @@ namespace SFA.DAS.EAS.Support.Web
         {
             var ioc = DependencyResolver.Current;
             var logger = ioc.GetService<ILog>();
-            logger.Info("Starting Web Role");
-            var siteConnectorSettings = ioc.GetService<ISiteValidatorSettings>();
+
+            var siteValidatorSettings = ioc.GetService<ISiteValidatorSettings>();
+
+            logger.Info($"SiteValidator Configuration Tenant : {siteValidatorSettings.Tenant} and Audience : {siteValidatorSettings.Audience} ");
 
             app.UseWindowsAzureActiveDirectoryBearerAuthentication(new WindowsAzureActiveDirectoryBearerAuthenticationOptions
             {
-                Tenant = siteConnectorSettings.Tenant,
+                Tenant = siteValidatorSettings.Tenant,
                 TokenValidationParameters = new System.IdentityModel.Tokens.TokenValidationParameters
                 {
                     RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role",
-                    ValidAudiences = siteConnectorSettings.Audience.Split(',')
+                    ValidAudiences = siteValidatorSettings.Audience.Split(',')
                 }
-            });
-
-            logger.Info("Web role started");
+            });            
         }
     }
 }
