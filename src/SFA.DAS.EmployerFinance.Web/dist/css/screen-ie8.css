@@ -365,6 +365,7 @@ main, .header-inner {
   line-height: 1.09375;
   font-size: 48px;
   line-height: 1.04167;
+  display: block;
   margin-top: 0.46875em;
   margin-bottom: 0.9375em;
   margin-top: 0.625em;
@@ -393,6 +394,7 @@ main, .header-inner {
   line-height: 1.04167;
   font-size: 36px;
   line-height: 1.11111;
+  display: block;
   margin-top: 1.04167em;
   margin-bottom: 0.41667em;
   margin-top: 1.25em;
@@ -421,6 +423,7 @@ main, .header-inner {
   line-height: 1.2;
   font-size: 24px;
   line-height: 1.25;
+  display: block;
   margin-top: 1.25em;
   margin-bottom: 0.5em;
   margin-top: 1.875em;
@@ -434,15 +437,20 @@ main, .header-inner {
   line-height: 1.25;
   font-size: 19px;
   line-height: 1.31579;
+  display: block;
   margin-top: 0.625em;
   margin-bottom: 0.3125em;
   margin-top: 1.05263em; }
 
-p {
+p,
+.body-text {
   margin-top: 0.3125em;
   margin-bottom: 1.25em;
   margin-top: 0.26316em;
   margin-bottom: 1.05263em; }
+
+.body-text {
+  display: block; }
 
 .lede {
   font-family: "nta", Arial, sans-serif;
@@ -488,8 +496,10 @@ p {
   padding-left: 14px;
   color: #0b0c0c;
   text-decoration: none;
-  border-bottom: 1px solid #0b0c0c; }
-  .link-back:link, .link-back:visited, .link-back:hover, .link-back:active {
+  border-bottom: 1px solid #0b0c0c;
+  background: url("/dist/images/icon-arrow-left.png") no-repeat 0 4px; }
+  .link-back:link, .link-back:visited, .link-back:hover,
+  .link-back a.link-back:focus, .link-back:active {
     color: #0b0c0c; }
   .link-back::before {
     content: '';
@@ -916,21 +926,18 @@ table {
     line-height: 1.31579;
     padding: 0.63158em 1.05263em 0.47368em 0;
     text-align: left;
-    color: #0b0c0c;
     border-bottom: 1px solid #bfc1c3; }
   table th {
     font-weight: 700; }
-    table th.numeric {
-      text-align: right; }
-  table td.numeric {
-    font-family: "ntatabularnumbers", "nta", Arial, sans-serif;
-    font-weight: 400;
-    text-transform: none;
-    font-size: 14px;
-    line-height: 1.14286;
-    font-size: 16px;
-    line-height: 1.25;
+  table td:last-child,
+  table th:last-child {
+    padding-right: 0; }
+  table .numeric {
     text-align: right; }
+  table td.numeric {
+    font-family: "ntatabularnumbers", "nta", Arial, sans-serif; }
+  table caption {
+    text-align: left; }
 
 .table-font-xsmall th {
   font-family: "nta", Arial, sans-serif;
@@ -962,16 +969,44 @@ details {
     color: #005ea5;
     cursor: pointer;
     position: relative;
-    margin-bottom: 0.26316em; }
+    margin-bottom: 0.26316em;
+    padding-left: 25px; }
+    details summary:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      margin: auto;
+      display: block;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-color: transparent;
+      -webkit-clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+      clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+      border-width: 7px 0 7px 12.124px;
+      border-left-color: inherit; }
     details summary:hover {
       color: #2b8cc4; }
     details summary:focus {
       outline: 3px solid #ffbf47; }
+    details summary::-webkit-details-marker {
+      display: none; }
+  details[open] > summary:before {
+    display: block;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-color: transparent;
+    -webkit-clip-path: polygon(0% 0%, 50% 100%, 100% 0%);
+    clip-path: polygon(0% 0%, 50% 100%, 100% 0%);
+    border-width: 12.124px 7px 0 7px;
+    border-top-color: inherit; }
   details .summary {
     text-decoration: underline; }
   details .arrow {
-    margin-right: .35em;
-    font-style: normal; }
+    display: none; }
 
 .panel {
   -webkit-box-sizing: border-box;
@@ -1816,13 +1851,6 @@ table.top-border {
 
 #global-header-bar {
   background: #6f777b; }
-
-.breadcrumbs li {
-  background-image: url("/dist/images/separator.png"); }
-
-.breadcrumbs a {
-  font-size: 14px;
-  font-size: 16px; }
 
 .breadcrumbs .link-back {
   margin: 0; }
@@ -4498,6 +4526,73 @@ tr.total td {
 
 .current-funds {
   margin-bottom: 40px; }
+
+.finance-highlight {
+  background: #dee0e2;
+  padding: 20px;
+  display: inline-block; }
+
+.finance-data {
+  margin: 10px 0;
+  padding: 0 15px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0 30px;
+  max-width: 340px; }
+  .finance-data dl {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 15px;
+    background: #dee0e2;
+    color: #0b0c0c; }
+    .finance-data dl dt {
+      font-family: "nta", Arial, sans-serif;
+      font-weight: 700;
+      text-transform: none;
+      font-size: 12px;
+      line-height: 1.25;
+      font-size: 14px;
+      line-height: 1.42857;
+      margin-bottom: 5px; }
+    .finance-data dl dd {
+      font-family: "nta", Arial, sans-serif;
+      font-weight: 700;
+      text-transform: none;
+      font-size: 32px;
+      line-height: 1.09375;
+      font-size: 48px;
+      line-height: 1.04167; }
+
+.finance-data--highlight dl {
+  background: #005ea5;
+  color: #fff; }
+
+.finance-data--future {
+  margin: 0;
+  padding: 0 0 0 15px;
+  border-left: 3px solid #bfc1c3; }
+  .finance-data--future dl {
+    background: #fff;
+    color: #0b0c0c;
+    padding: 0; }
+    .finance-data--future dl dt {
+      border-top: 1px solid #bfc1c3;
+      padding-top: 10px; }
+    .finance-data--future dl dd {
+      font-family: "nta", Arial, sans-serif;
+      font-weight: 700;
+      text-transform: none;
+      font-size: 18px;
+      line-height: 1.2;
+      font-size: 24px;
+      line-height: 1.25; }
+  .finance-data--future dl dt {
+    border-top: none; }
+
+.finance-notice {
+  margin-bottom: 30px; }
 
 .govuk-width-container {
   max-width: 960px;

@@ -37,8 +37,6 @@ namespace SFA.DAS.EAS.Support.Web.DependencyResolution
 
             For<IAccountApiClient>().Use<AccountApiClient>();
 
-            For<IAccountApiClient>().Use<AccountApiClient>();
-
             For<ILevyTokenHttpClientFactory>().Use<LevyTokenHttpClientMaker>();
 
             For<IHmrcApiBaseUrlConfig>().Use(string.Empty, (ctx) =>

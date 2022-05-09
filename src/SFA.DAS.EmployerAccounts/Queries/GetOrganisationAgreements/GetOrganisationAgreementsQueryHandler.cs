@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using System.Linq;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Interfaces;
@@ -68,7 +69,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements
                             e.HashedAccountId = _hashingService.HashValue(accountLegalEntity.AccountId);
                             e.HashedAgreementId = _hashingService.HashValue(e.Id);
                             e.HashedLegalEntityId = _hashingService.HashValue(accountLegalEntity.Id);
-                            e.OrganisationLookupPossible = organisationLookupByIdPossible;
+                            e.OrganisationLookupPossible = organisationLookupByIdPossible || accountLegalEntity.LegalEntity.Source == OrganisationType.PensionsRegulator;
                         });
                     });
                 });

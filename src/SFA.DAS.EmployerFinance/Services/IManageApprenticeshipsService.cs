@@ -6,5 +6,6 @@ namespace SFA.DAS.EmployerFinance.Services
     public interface IManageApprenticeshipsService
     {
         Task<GetIndexResponse> GetIndex(long accountId);
+        Task<GetFinancialBreakdownResponse> GetFinancialBreakdown(long accountId);
     }
 }

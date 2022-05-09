@@ -1,12 +1,14 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.Authorization.EmployerUserRoles.Options;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerFinance.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerFinance.Web.Controllers
 {
-    [DasAuthorize("EmployerFeature.TransfersMatching")]
-    [RoutePrefix("accounts/{HashedAccountId}")] public class TransfersController : Controller
+    [DasAuthorize(EmployerUserRole.Any)]
+    [RoutePrefix("accounts/{HashedAccountId}")] 
+    public class TransfersController : Controller
     {
         private readonly TransfersOrchestrator _transfersOrchestrator;
 
@@ -21,6 +23,15 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         {
             var viewModel = await _transfersOrchestrator.GetIndexViewModel(hashedAccountId);
 
+            return View(viewModel);
+        }
+
+        [DasAuthorize("EmployerFeature.FinanceDetails")]
+        [HttpGet]
+        [Route("transfers/financial-breakdown")]
+        public async Task<ActionResult> FinancialBreakdown(string hashedAccountId)
+        {
+            var viewModel = await _transfersOrchestrator.GetFinancialBreakdownViewModel(hashedAccountId);
             return View(viewModel);
         }
     }

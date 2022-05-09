@@ -119,12 +119,6 @@
     <PackageReference Include="SFA.DAS.Caches">
       <Version>1.1.4</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.CommitmentsV2.Api.Client">
-      <Version>4.1.1063</Version>
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.CommitmentsV2.Messages">
-      <Version>2.1.1395</Version>
-    </PackageReference>
     <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.283" />
     <PackageReference Include="SFA.DAS.EmployerAccounts.ReadStore">
       <Version>1.6.2978</Version>
@@ -195,7 +189,6 @@
     <Compile Include="Authorization\Tier2UserAccesNotGranted.cs" />
     <Compile Include="Binders\TrimStringModelBinder.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
-    <Compile Include="Controllers\ActivitiesController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CookieConsentController.cs" />
     <Compile Include="Controllers\EmployerAccountController.cs" />

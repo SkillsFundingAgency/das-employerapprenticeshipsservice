@@ -12,7 +12,7 @@
     ViewBag.PageID = "page-company-homepage";
     ViewBag.GaData.Vpv = "/accounts/agreements/page-company-homepage";
     ViewBag.ZenDeskLabel = "eas-homepage";
-    Layout = "~/Views/Shared/_Layout_CDN.cshtml"; 
+    Layout = "~/Views/Shared/_Layout_CDN.cshtml";
 
     if (!string.IsNullOrEmpty(Model.Data.EmployerAccountType))
     {
@@ -43,17 +43,20 @@
     <dl class="das-definition-list das-definition-list--inline">
         <dt class="das-definition-list__title">Account ID</dt>
         <dd class="das-definition-list__definition">@Model.Data.Account.PublicHashedId</dd>
-        <dt class="das-definition-list__title">Agreement ID</dt>
-        <dd class="das-definition-list__definition">
-            @if (string.IsNullOrEmpty(Model.Data.SingleAccountLegalEntityId))
-            {
-                <a href="@Url.Action("Index", "EmployerAgreement")" class="govuk-link govuk-link--no-visited-state">View your agreement IDs</a>
-            }
-            else
-            {
-                <span>@Model.Data.SingleAccountLegalEntityId</span>
-            }
-        </dd>
+        @if (Model.Data.HasPayeScheme)
+        {
+            <dt class="das-definition-list__title">Agreement ID</dt>
+            <dd class="das-definition-list__definition">
+                @if (string.IsNullOrEmpty(Model.Data.SingleAccountLegalEntityId))
+                {
+                    <a href="@Url.Action("Index", "EmployerAgreement")" class="govuk-link govuk-link--no-visited-state">View your agreement IDs</a>
+                }
+                else
+                {
+                    <span>@Model.Data.SingleAccountLegalEntityId</span>
+                }
+            </dd>
+        }
     </dl>
 </div>
 
@@ -84,29 +87,29 @@ else
                         </h3>
                         <p class="govuk-body govuk-!-font-size-16">Add apprentices, update details of existing apprentices, change training providers and authorise payments to training providers.</p>
                     </div>
-                    @if (Html.IsAuthorized("EmployerFeature.Recruitments"))
-                    {
-                        <div class="das-card">
+                    <div class="das-card">
                             <h3 class="govuk-heading-m das-card__heading">
                                 <a href="@Url.EmployerRecruitAction()" class="govuk-link govuk-link--no-visited-state">Your apprenticeship adverts</a>
                             </h3>
                             <p class="govuk-body govuk-!-font-size-16">Create adverts to post on find an apprenticeship, view applications, your previous adverts and adverts created by training providers.</p>
-                        </div>
-                    }
-                    @if (Html.IsAuthorized("EmployerFeature.ProviderRelationships"))
-                    {
-                        <div class="das-card">
-                            <h3 class="govuk-heading-m das-card__heading">
-                                <a href="@Url.ProviderRelationshipsAction("providers")" class="govuk-link govuk-link--no-visited-state">Your training providers</a>
-                            </h3>
-                            <p class="govuk-body govuk-!-font-size-16">Add training providers and manage permissions to choose what they can do on your behalf.</p>
-                        </div>
-                    }
+                        </div>                   
+                    <div class="das-card">
+                        <h3 class="govuk-heading-m das-card__heading">
+                            <a href="@Url.ProviderRelationshipsAction("providers")" class="govuk-link govuk-link--no-visited-state">Your training providers</a>
+                        </h3>
+                        <p class="govuk-body govuk-!-font-size-16">Add training providers and manage permissions to choose what they can do on your behalf.</p>
+                    </div>                   
                     <div class="das-card">
                         <h3 class="govuk-heading-m das-card__heading">
                             <a href="https://findapprenticeshiptraining.apprenticeships.education.gov.uk/Apprenticeship/Search" rel="external" target="_blank" class="govuk-link govuk-link--no-visited-state">Find apprenticeship training</a>
                         </h3>
                         <p class="govuk-body govuk-!-font-size-16">Search for apprenticeships and see details of approved providers who can deliver the training.</p>
+                    </div>
+                    <div class="das-card">
+                        <h3 class="govuk-heading-m das-card__heading">
+                            <a href="@Url.EmployerFeedbackAction("providers")" class="govuk-link govuk-link--no-visited-state">Feedback on training providers</a>
+                        </h3>
+                        <p class="govuk-body govuk-!-font-size-16">Give feedback on your training providers.</p>
                     </div>
                 </div>
             </section>
@@ -142,26 +145,23 @@ else
                         </div>
                     }
 
-                    @if (Html.IsAuthorized("EmployerFeature.TransfersMatching"))
+                    @if (Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
                     {
-                        if (Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
-                        {
-                            <div class="das-card">
-                                <h3 class="govuk-heading-m das-card__heading">
-                                    <a href="@Url.EmployerFinanceAction("transfers")" class="govuk-link govuk-link--no-visited-state">Your transfers</a>
-                                </h3>
-                                <p class="govuk-body govuk-!-font-size-16">View your 25% transfers balance and manage your transfers, including finding a business to transfer your levy to.</p>
-                            </div>
-                        }
-                        else if (Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy)
-                        {
-                            <div class="das-card">
-                                <h3 class="govuk-heading-m das-card__heading">
-                                    <a href="@Url.EmployerFinanceAction("transfers")" class="govuk-link govuk-link--no-visited-state">Your transfers</a>
-                                </h3>
-                                <p class="govuk-body govuk-!-font-size-16">View your apprentices funded by a transfer. Find a large business to fund your apprenticeship training with a transfer.</p>
-                            </div>
-                        }
+                        <div class="das-card">
+                            <h3 class="govuk-heading-m das-card__heading">
+                                <a href="@Url.EmployerFinanceAction("transfers")" class="govuk-link govuk-link--no-visited-state">Your transfers</a>
+                            </h3>
+                            <p class="govuk-body govuk-!-font-size-16">View your 25% transfers balance and manage your transfers, including finding a business to transfer your levy to.</p>
+                        </div>
+                    }
+                    else if (Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy)
+                    {
+                        <div class="das-card">
+                            <h3 class="govuk-heading-m das-card__heading">
+                                <a href="@Url.EmployerFinanceAction("transfers")" class="govuk-link govuk-link--no-visited-state">Your transfers</a>
+                            </h3>
+                            <p class="govuk-body govuk-!-font-size-16">View your apprentices funded by a transfer. Find a large business to fund your apprenticeship training with a transfer.</p>
+                        </div>
                     }
                 </div>
             </section>
@@ -191,34 +191,26 @@ else
             </div>
         </div>
         <div class="govuk-grid-column-one-third">
-        @if (!Model.Data.HideTasksBar)
-        {
-            <div class="govuk-tabs" data-module="govuk-tabs">
-                <h2 class="govuk-tabs__title">
-                    Contents
-                </h2>
-                <ul class="govuk-tabs__list">
-                    <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
-                        <a class="govuk-tabs__tab" href="#tasks">
-                            Tasks
-                        </a>
-                    </li>
-                    @if (Html.IsAuthorized("EmployerFeature.Activities"))
-                    {
-                        <li class="govuk-tabs__list-item">
-                            <a class="govuk-tabs__tab" href="#activities">
-                                Activity
+            @if (!Model.Data.HideTasksBar)
+            {
+                <div class="govuk-tabs" data-module="govuk-tabs">
+                    <h2 class="govuk-tabs__title">
+                        Contents
+                    </h2>
+                    <ul class="govuk-tabs__list">
+                        <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+                            <a class="govuk-tabs__tab" href="#tasks">
+                                Tasks
                             </a>
-                        </li>
-                    }
-                </ul>
-                <div class="govuk-tabs__panel" id="tasks">
-                    @if (Model.Data.Tasks.Count > 0)
-                    {
-                        <ul class="govuk-list">
-                            @{
-                                var priorityOrderTaskList = Model.Data.Tasks.OrderBy(AccountTaskHelper.GetTaskPriority).ToArray();
-                            }
+                        </li>                        
+                    </ul>
+                    <div class="govuk-tabs__panel" id="tasks">
+                        @if (Model.Data.Tasks.Count > 0)
+                        {
+                            <ul class="govuk-list">
+                                @{
+                                    var priorityOrderTaskList = Model.Data.Tasks.OrderBy(AccountTaskHelper.GetTaskPriority).ToArray();
+                                }
 
                             @foreach (var task in priorityOrderTaskList)
                             {

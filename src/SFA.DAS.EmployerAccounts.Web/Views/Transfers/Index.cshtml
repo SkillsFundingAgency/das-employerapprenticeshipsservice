@@ -29,20 +29,10 @@
         }
 
         @Html.Action("TransferConnectionInvitationAuthorization")
-
-        @if (Html.IsAuthorized("EmployerFeature.Transfers"))
-        {
-            @Html.Action("TransferConnectionInvitations")
-            @Html.Action("TransferRequests")
-        }
-        else
-        {
-            <p>Before connecting to another employer, both employers will need to:</p>
-            <ul class="govuk-list govuk-list--bullet">
-                <li>read and understand the <a href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018" class="govuk-link" rel="nofollow">rules for sending and receiving transfers</a></li>
-                <li>accept the updated ESFA organisation agreement once it's available. View <a href="https://www.gov.uk/government/publications/apprenticeship-funding-legal-agreement-to-enable-spending/guidance-note-on-the-employer-agreement" class="govuk-link" rel="nofollow">guidance on the updated agreement</a> to find out what's changed.</li>
-            </ul>
-        }
+        
+        @Html.Action("TransferConnectionInvitations")
+        @Html.Action("TransferRequests")
+        
     </div>
 </div>
 

@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Queries.GetPensionRegulator;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationsByAorn
@@ -26,7 +25,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationsByAorn
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var organisations = await _pensionRegulatorService.GetOrgansiationsByAorn(message.Aorn, message.PayeRef);
+            var organisations = await _pensionRegulatorService.GetOrganisationsByAorn(message.Aorn, message.PayeRef);
             return new GetOrganisationsByAornResponse { Organisations = organisations };
         }
     }
