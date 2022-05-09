@@ -283,12 +283,6 @@ else
                         <p>You do not have any tasks</p>
                     }
                 </div>
-                @if (Html.IsAuthorized("EmployerFeature.Activities"))
-                {
-                    <div class="govuk-tabs__panel" id="activities">
-                        @Html.Action("Latest", "Activities")
-                    </div>
-                }
             </div>
         }
         </div>
