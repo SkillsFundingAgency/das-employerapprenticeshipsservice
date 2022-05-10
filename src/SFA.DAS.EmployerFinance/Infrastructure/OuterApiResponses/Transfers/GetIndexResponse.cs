@@ -4,6 +4,6 @@
     {
         public int PledgesCount { get; set; }
         public int ApplicationsCount { get; set; }
-        public int ActivePledgesTotalAmount { get; set; }
+        public decimal ActivePledgesTotalAmount { get; set; }
     }
 }
