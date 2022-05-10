@@ -60,7 +60,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     FinancialYearString = DateTime.UtcNow.ToFinancialYearString(),
                     ActivePledgesTotalAmount = indexTask.Result.ActivePledgesTotalAmount,
                     PledgesAndTransferConnections = (accountDetail.Result.StartingTransferAllowance - indexTask.Result.ActivePledgesTotalAmount),
-                    RemainingTransferAllowance = accountDetail.Result.RemainingTransferAllowance
+                    RemainingTransferAllowance = accountDetail.Result.RemainingTransferAllowance,
                     HashedAccountID = hashedAccountId
                 }
             };
