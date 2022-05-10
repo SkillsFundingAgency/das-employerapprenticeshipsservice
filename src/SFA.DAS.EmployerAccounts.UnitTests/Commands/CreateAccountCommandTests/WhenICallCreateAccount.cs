@@ -87,7 +87,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             _accountEventFactory = new Mock<IAccountEventFactory>();
 
             _mockAuthorizationService = new Mock<IAuthorizationService>();
-            _mockAuthorizationService.Setup(x => x.IsAuthorized("EmployerFeature.ExpressionOfInterest")).Returns(false);
 
             _mockMembershipRepository = new Mock<IMembershipRepository>();
             _mockMembershipRepository.Setup(r => r.GetCaller(It.IsAny<long>(), It.IsAny<string>()))
@@ -181,10 +180,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             //Assert
             _validator.Verify(x => x.ValidateAsync(command), Times.Once);
         }
-
-        [TestCase(true, AgreementType.NonLevyExpressionOfInterest)]
-        [TestCase(false, AgreementType.Combined)]
-        public async Task WillCreateNewAccountWithCorrectAgreementType(bool eoiWhitelisted, AgreementType agreementType)
+        
+        [TestCase(AgreementType.Combined)]
+        public async Task WillCreateNewAccountWithCorrectAgreementType(AgreementType agreementType)
         {
             const int accountId = 23;
 
@@ -201,9 +199,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
                 RefreshToken = Guid.NewGuid().ToString(),
                 OrganisationStatus = "active",
                 EmployerRefName = "Paye Scheme 1"
-            };
-
-            _mockAuthorizationService.Setup(x => x.IsAuthorized("EmployerFeature.ExpressionOfInterest")).Returns(eoiWhitelisted);
+            };           
 
             _accountRepository.Setup(x => x.CreateAccount(It.IsAny<CreateAccountParams>())).ReturnsAsync(new CreateAccountResult { AccountId = accountId, LegalEntityId = 0L, EmployerAgreementId = 0L });
 

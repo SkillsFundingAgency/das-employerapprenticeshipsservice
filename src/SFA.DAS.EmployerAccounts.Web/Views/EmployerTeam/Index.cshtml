@@ -87,24 +87,18 @@ else
                         </h3>
                         <p class="govuk-body govuk-!-font-size-16">Add apprentices, update details of existing apprentices, change training providers and authorise payments to training providers.</p>
                     </div>
-                    @if (Html.IsAuthorized("EmployerFeature.Recruitments"))
-                    {
-                        <div class="das-card">
+                    <div class="das-card">
                             <h3 class="govuk-heading-m das-card__heading">
                                 <a href="@Url.EmployerRecruitAction()" class="govuk-link govuk-link--no-visited-state">Your apprenticeship adverts</a>
                             </h3>
                             <p class="govuk-body govuk-!-font-size-16">Create adverts to post on find an apprenticeship, view applications, your previous adverts and adverts created by training providers.</p>
-                        </div>
-                    }
-                    @if (Html.IsAuthorized("EmployerFeature.ProviderRelationships"))
-                    {
-                        <div class="das-card">
-                            <h3 class="govuk-heading-m das-card__heading">
-                                <a href="@Url.ProviderRelationshipsAction("providers")" class="govuk-link govuk-link--no-visited-state">Your training providers</a>
-                            </h3>
-                            <p class="govuk-body govuk-!-font-size-16">Add training providers and manage permissions to choose what they can do on your behalf.</p>
-                        </div>
-                    }
+                        </div>                   
+                    <div class="das-card">
+                        <h3 class="govuk-heading-m das-card__heading">
+                            <a href="@Url.ProviderRelationshipsAction("providers")" class="govuk-link govuk-link--no-visited-state">Your training providers</a>
+                        </h3>
+                        <p class="govuk-body govuk-!-font-size-16">Add training providers and manage permissions to choose what they can do on your behalf.</p>
+                    </div>                   
                     <div class="das-card">
                         <h3 class="govuk-heading-m das-card__heading">
                             <a href="https://findapprenticeshiptraining.apprenticeships.education.gov.uk/Apprenticeship/Search" rel="external" target="_blank" class="govuk-link govuk-link--no-visited-state">Find apprenticeship training</a>
@@ -151,26 +145,23 @@ else
                         </div>
                     }
 
-                    @if (Html.IsAuthorized("EmployerFeature.TransfersMatching"))
+                    @if (Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
                     {
-                        if (Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
-                        {
-                            <div class="das-card">
-                                <h3 class="govuk-heading-m das-card__heading">
-                                    <a href="@Url.EmployerFinanceAction("transfers")" class="govuk-link govuk-link--no-visited-state">Your transfers</a>
-                                </h3>
-                                <p class="govuk-body govuk-!-font-size-16">View your 25% transfers balance and manage your transfers, including finding a business to transfer your levy to.</p>
-                            </div>
-                        }
-                        else if (Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy)
-                        {
-                            <div class="das-card">
-                                <h3 class="govuk-heading-m das-card__heading">
-                                    <a href="@Url.EmployerFinanceAction("transfers")" class="govuk-link govuk-link--no-visited-state">Your transfers</a>
-                                </h3>
-                                <p class="govuk-body govuk-!-font-size-16">View your apprentices funded by a transfer. Find a large business to fund your apprenticeship training with a transfer.</p>
-                            </div>
-                        }
+                        <div class="das-card">
+                            <h3 class="govuk-heading-m das-card__heading">
+                                <a href="@Url.EmployerFinanceAction("transfers")" class="govuk-link govuk-link--no-visited-state">Your transfers</a>
+                            </h3>
+                            <p class="govuk-body govuk-!-font-size-16">View your 25% transfers balance and manage your transfers, including finding a business to transfer your levy to.</p>
+                        </div>
+                    }
+                    else if (Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy)
+                    {
+                        <div class="das-card">
+                            <h3 class="govuk-heading-m das-card__heading">
+                                <a href="@Url.EmployerFinanceAction("transfers")" class="govuk-link govuk-link--no-visited-state">Your transfers</a>
+                            </h3>
+                            <p class="govuk-body govuk-!-font-size-16">View your apprentices funded by a transfer. Find a large business to fund your apprenticeship training with a transfer.</p>
+                        </div>
                     }
                 </div>
             </section>
@@ -211,15 +202,7 @@ else
                             <a class="govuk-tabs__tab" href="#tasks">
                                 Tasks
                             </a>
-                        </li>
-                        @if (Html.IsAuthorized("EmployerFeature.Activities"))
-                        {
-                            <li class="govuk-tabs__list-item">
-                                <a class="govuk-tabs__tab" href="#activities">
-                                    Activity
-                                </a>
-                            </li>
-                        }
+                        </li>                        
                     </ul>
                     <div class="govuk-tabs__panel" id="tasks">
                         @if (Model.Data.Tasks.Count > 0)
@@ -294,13 +277,7 @@ else
                         {
                             <p>You do not have any tasks</p>
                         }
-                    </div>
-                    @if (Html.IsAuthorized("EmployerFeature.Activities"))
-                    {
-                        <div class="govuk-tabs__panel" id="activities">
-                            @Html.Action("Latest", "Activities")
-                        </div>
-                    }
+                    </div>                   
                 </div>
             }
         </div>

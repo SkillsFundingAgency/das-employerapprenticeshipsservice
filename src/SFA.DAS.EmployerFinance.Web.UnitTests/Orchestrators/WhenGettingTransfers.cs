@@ -33,13 +33,11 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
             _authorisationService = new Mock<IAuthorizationService>();
             _hashingService = new Mock<IHashingService>();
             _maService = new Mock<IManageApprenticeshipsService>();
-            _accountApiClient = new Mock<IAccountApiClient>();
-            _featureTogglesService = new Mock<IFeatureTogglesService<EmployerFeatureToggle>>();
+            _accountApiClient = new Mock<IAccountApiClient>();            
 
-            _hashingService.Setup(h => h.DecodeValue(HashedAccountId)).Returns(AccountId);
-            _featureTogglesService.Setup(x => x.GetFeatureToggle(It.IsAny<string>())).Returns(new EmployerFeatureToggle { IsEnabled = true });
+            _hashingService.Setup(h => h.DecodeValue(HashedAccountId)).Returns(AccountId);            
 
-            _orchestrator = new TransfersOrchestrator(_authorisationService.Object, _hashingService.Object, _maService.Object, _accountApiClient.Object, _featureTogglesService.Object);
+            _orchestrator = new TransfersOrchestrator(_authorisationService.Object, _hashingService.Object, _maService.Object, _accountApiClient.Object);
         }
 
         [TestCase(true, true)]

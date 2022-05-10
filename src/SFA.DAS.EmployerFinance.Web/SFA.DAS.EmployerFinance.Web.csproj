@@ -211,6 +211,7 @@
     <Compile Include="ViewModels\TransactionLineViewModel.cs" />
     <Compile Include="ViewModels\TransactionViewModel.cs" />
     <Compile Include="ViewModels\TransactionViewResultViewModel.cs" />
+    <Compile Include="ViewModels\Transfers\FinancialBreakdownViewModel.cs" />
     <Compile Include="ViewModels\Transfers\IndexViewModel.cs" />
     <Compile Include="ViewModels\TransferTransactionDetailsViewModel.cs" />
   </ItemGroup>
@@ -647,6 +648,7 @@
     <Content Include="Views\Shared\_GoogleTagManagerNoScript.cshtml" />
     <Content Include="Views\Shared\_ZenDeskApiPush.cshtml" />
     <Content Include="Views\Transfers\Index.cshtml" />
+    <Content Include="Views\Transfers\FinancialBreakdown.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

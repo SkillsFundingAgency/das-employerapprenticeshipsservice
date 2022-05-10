@@ -42,8 +42,9 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
             }
            
             var currentBalance = await GetAccountBalance(query.AccountId);
-            var earliestFundsToExpireTask = GetExpiringFunds(query.AccountId);
-            var projectedCalculations = await _dasForecastingService.GetProjectedCalculations(query.AccountId);
+            var accountProjectionSummary = await _dasForecastingService.GetAccountProjectionSummary(query.AccountId);
+            var earliestFundsToExpire = GetExpiringFunds(accountProjectionSummary?.ExpiringAccountFunds);
+            var projectedCalculations = accountProjectionSummary?.ProjectionCalulation;
             var totalSpendForLastYear = await GetTotalSpendForLastYear(query.AccountId);
 
             var response = new GetAccountFinanceOverviewResponse
@@ -55,7 +56,6 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
                 TotalSpendForLastYear = totalSpendForLastYear
             };
 
-            var earliestFundsToExpire = await earliestFundsToExpireTask;
             if (earliestFundsToExpire != null)
             {
                 response.ExpiringFundsExpiryDate = earliestFundsToExpire.PayrollDate;
@@ -65,13 +65,10 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
             return response;
         }
 
-        private async Task<ExpiringFunds> GetExpiringFunds(long accountId)
-        {
-            _logger.Info($"Getting expiring funds for account ID: {accountId}");
-            
+        private ExpiringFunds GetExpiringFunds(ExpiringAccountFunds expiringFunds)
+        {            
             var today = _currentDateTime.Now.Date;
             var nextYear = today.AddDays(1 - today.Day).AddMonths(13);
-            var expiringFunds = await _dasForecastingService.GetExpiringAccountFunds(accountId);
             var earliestFundsToExpire = expiringFunds?.ExpiryAmounts?.Where(a => a.PayrollDate < nextYear).OrderBy(a => a.PayrollDate).FirstOrDefault();
             
             return earliestFundsToExpire;
