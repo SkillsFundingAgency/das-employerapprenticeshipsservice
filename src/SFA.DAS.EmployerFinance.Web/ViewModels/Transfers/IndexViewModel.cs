@@ -8,8 +8,8 @@
         public int ApplicationsCount { get; set; }
         public decimal StartingTransferAllowance { get; set; }
         public string FinancialYearString { get; set; }
-        public int ActivePledgesTotalAmount { get; set; }
-        public int PledgesAndTransferConnections { get; set; }
+        public decimal ActivePledgesTotalAmount { get; set; }
+        public decimal PledgesAndTransferConnections { get; set; }
         public decimal RemainingTransferAllowance { get; set; }
         public string HashedAccountID { get; set; }
     }
