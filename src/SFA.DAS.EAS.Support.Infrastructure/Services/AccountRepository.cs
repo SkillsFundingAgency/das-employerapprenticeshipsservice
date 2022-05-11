@@ -124,7 +124,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
             var accountDetailTasks = accounts.Select(account => _accountApiClient.GetAccount(account.AccountHashId));
             var accountDetails = await Task.WhenAll(accountDetailTasks);
 
-            foreach (var account  in accountDetails)
+            foreach (var account in accountDetails)
             {
                 _logger.Info($"GetAdditionalFields for account ID {account.HashedAccountId}");
                 var accountWithDetails = await GetAdditionalFields(account, AccountFieldsSelection.PayeSchemes);
@@ -195,19 +195,28 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
 
         private async Task<IEnumerable<PayeSchemeViewModel>> GetPayeSchemes(AccountDetailViewModel response)
         {
-            var payeTasks = response.PayeSchemes.Select(payeScheme =>
-             {
-                 var obscured = _payeSchemeObfuscator.ObscurePayeScheme(payeScheme.Id).Replace("/", "%252f");
-                 var paye = payeScheme.Id.Replace("/", "%252f");
-                 _logger.Debug(
-                     $"IAccountApiClient.GetResource<PayeSchemeViewModel>(\"{payeScheme.Href.Replace(paye, obscured)}\");");
-                 return _accountApiClient.GetResource<PayeSchemeViewModel>(payeScheme.Href);
-             });
+            var payes = new List<PayeSchemeViewModel>();
+            var payesBatches = response.PayeSchemes
+                    .Select((item, inx) => new { item, inx })
+                    .GroupBy(x => x.inx / 50)
+                    .Select(g => g.Select(x => x.item));
 
-            var payes = await Task.WhenAll(payeTasks);
+            foreach (var payeBatch in payesBatches)
+            {
+                var payeTasks = response.PayeSchemes.Select(payeScheme =>
+                {
+                    var obscured = _payeSchemeObfuscator.ObscurePayeScheme(payeScheme.Id).Replace("/", "%252f");
+                    var paye = payeScheme.Id.Replace("/", "%252f");
+                    _logger.Debug(
+                        $"IAccountApiClient.GetResource<PayeSchemeViewModel>(\"{payeScheme.Href.Replace(paye, obscured)}\");");
+                    return _accountApiClient.GetResource<PayeSchemeViewModel>(payeScheme.Href);
+                });
 
-            var result = new List<PayeSchemeViewModel>();
-            foreach (var payeSchemeViewModel in payes)
+                payes.AddRange(await Task.WhenAll(payeTasks));
+            }
+
+
+            return payes.Select(payeSchemeViewModel =>
             {
                 if (IsValidPayeScheme(payeSchemeViewModel))
                 {
@@ -219,11 +228,14 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
                         RemovedDate = payeSchemeViewModel.RemovedDate,
                         Name = payeSchemeViewModel.Name
                     };
-                    result.Add(item);
-                }
-            }
 
-            return result.OrderBy(x => x.Ref);
+                    return item;
+                }
+
+                    return null;
+             })
+             .Where(x => x != null)
+             .OrderBy(x => x.Ref);
         }
 
         private bool IsValidPayeScheme(PayeSchemeViewModel result)
