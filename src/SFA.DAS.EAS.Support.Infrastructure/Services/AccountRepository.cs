@@ -121,18 +121,15 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
         {
             var accountsWithDetails = new List<Core.Models.Account>();
 
-            foreach (var account in accounts)
-                try
-                {
-                    var accountViewModel = await _accountApiClient.GetAccount(account.AccountHashId);
-                    _logger.Info($"GetAdditionalFields for account ID {account.AccountHashId}");
-                    var accountWithDetails = await GetAdditionalFields(accountViewModel, AccountFieldsSelection.PayeSchemes);
-                    accountsWithDetails.Add(accountWithDetails);
-                }
-                catch (Exception e)
-                {
-                    _logger.Error(e, $"Exception while retrieving details for account ID {account.AccountHashId}");
-                }
+            var accountDetailTasks = accounts.Select(account => _accountApiClient.GetAccount(account.AccountHashId));
+            var accountDetails = await Task.WhenAll(accountDetailTasks);
+
+            foreach (var account  in accountDetails)
+            {
+                _logger.Info($"GetAdditionalFields for account ID {account.HashedAccountId}");
+                var accountWithDetails = await GetAdditionalFields(account, AccountFieldsSelection.PayeSchemes);
+                accountsWithDetails.Add(accountWithDetails);
+            }
 
             return accountsWithDetails;
         }
@@ -198,34 +195,20 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
 
         private async Task<IEnumerable<PayeSchemeViewModel>> GetPayeSchemes(AccountDetailViewModel response)
         {
-            var payeTasks = new List<Task<PayeSchemeViewModel>>();
-            foreach (var payeScheme in response.PayeSchemes ?? new ResourceList(new List<ResourceViewModel>()))
-            {
-                async Task<PayeSchemeViewModel> GetPayeSchemeResource()
-                {
-                    var obscured = _payeSchemeObfuscator.ObscurePayeScheme(payeScheme.Id).Replace("/", "%252f");
-                    var paye = payeScheme.Id.Replace("/", "%252f");
-                    _logger.Debug(
-                        $"IAccountApiClient.GetResource<PayeSchemeViewModel>(\"{payeScheme.Href.Replace(paye, obscured)}\");");
-                    try
-                    {
-                        return await _accountApiClient.GetResource<PayeSchemeViewModel>(payeScheme.Href);
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.Error(ex, $"Exception occured in Account API type of {nameof(PayeSchemeViewModel)} at {payeScheme.Href} id {payeScheme.Id}");
-                        return new PayeSchemeViewModel();
-                    }
-                }
+            var payeTasks = response.PayeSchemes.Select(payeScheme =>
+             {
+                 var obscured = _payeSchemeObfuscator.ObscurePayeScheme(payeScheme.Id).Replace("/", "%252f");
+                 var paye = payeScheme.Id.Replace("/", "%252f");
+                 _logger.Debug(
+                     $"IAccountApiClient.GetResource<PayeSchemeViewModel>(\"{payeScheme.Href.Replace(paye, obscured)}\");");
+                 return _accountApiClient.GetResource<PayeSchemeViewModel>(payeScheme.Href);
+             });
 
-                payeTasks.Add(GetPayeSchemeResource());
-            }
-            await Task.WhenAll(payeTasks);
-            
+            var payes = await Task.WhenAll(payeTasks);
+
             var result = new List<PayeSchemeViewModel>();
-            foreach (var payeTask in payeTasks)
+            foreach (var payeSchemeViewModel in payes)
             {
-                var payeSchemeViewModel = payeTask.Result;
                 if (IsValidPayeScheme(payeSchemeViewModel))
                 {
                     var item = new PayeSchemeViewModel
@@ -308,7 +291,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
 
         private async Task<IEnumerable<PayeSchemeModel>> MapToDomainPayeSchemeAsync(AccountDetailViewModel response)
         {
-            var mainPayeSchemes = await GetPayeSchemes(response);            
+            var mainPayeSchemes = await GetPayeSchemes(response);
 
             return mainPayeSchemes?.Select(payeScheme => new PayeSchemeModel
             {
