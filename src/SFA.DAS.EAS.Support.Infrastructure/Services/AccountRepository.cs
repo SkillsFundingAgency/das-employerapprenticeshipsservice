@@ -126,9 +126,17 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
 
             foreach (var account in accountDetails)
             {
-                _logger.Info($"GetAdditionalFields for account ID {account.HashedAccountId}");
-                var accountWithDetails = await GetAdditionalFields(account, AccountFieldsSelection.PayeSchemes);
-                accountsWithDetails.Add(accountWithDetails);
+                try
+                {
+                    _logger.Info($"GetAdditionalFields for account ID {account.HashedAccountId}");
+                    var accountWithDetails = await GetAdditionalFields(account, AccountFieldsSelection.PayeSchemes);
+                    accountsWithDetails.Add(accountWithDetails);
+                }
+                catch (Exception e)
+                {
+                    _logger.Error(e, $"Exception while retrieving details for account ID {account.HashedAccountId}");
+                }
+
             }
 
             return accountsWithDetails;
@@ -209,7 +217,16 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
                     var paye = payeScheme.Id.Replace("/", "%252f");
                     _logger.Debug(
                         $"IAccountApiClient.GetResource<PayeSchemeViewModel>(\"{payeScheme.Href.Replace(paye, obscured)}\");");
-                    return _accountApiClient.GetResource<PayeSchemeViewModel>(payeScheme.Href);
+
+                    try
+                    {
+                        return _accountApiClient.GetResource<PayeSchemeViewModel>(payeScheme.Href);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Error(ex, $"Exception occured in Account API type of {nameof(PayeSchemeViewModel)} at {payeScheme.Href} id {payeScheme.Id}");
+                        return Task.FromResult(new PayeSchemeViewModel());
+                    }
                 });
 
                 payes.AddRange(await Task.WhenAll(payeTasks));
