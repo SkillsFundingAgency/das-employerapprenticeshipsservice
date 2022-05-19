@@ -50,7 +50,7 @@
         <div class="finance-data">
             <dl>
                 <dt>Total available transfer allowance for @Model.Data.FinancialYearString</dt>
-                <dd>@Model.Data.TotalAvailableTransferAllowance.ToString("C0", culture)</dd>
+                <dd>@Model.Data.RemainingTransferAllowance.ToString("C0", culture)</dd>
             </dl>
         </div>
     </div>
@@ -85,7 +85,7 @@
         <details>
             <summary><span class="summary">How are my committed funds calculated?</span></summary>
             <div class="panel panel-border-narrow">
-                <p>Your committed funds are calculated by subtracting your <strong>total estimated spend</strong> from your <strong>@Model.Data.TotalAvailableTransferAllowance.ToString("C0", culture) total available transfer allowance</strong>.</p>
+                <p>Your committed funds are calculated by subtracting your <strong>total estimated spend</strong> from your <strong>@Model.Data.RemainingTransferAllowance.ToString("C0", culture) total available transfer allowance</strong>.</p>
             </div>
         </details>
     </div>
@@ -163,7 +163,7 @@
         <details>
             <summary><span class="summary">How are my pledged funds calculated?</span></summary>
             <div class="panel panel-border-narrow">
-                <p>The amount you can pledge for financial year @Model.Data.FinancialYearString is calculated by subtracting your <strong>total pledged and transfer connections</strong> from your <strong>@Model.Data.TotalAvailableTransferAllowance.ToString("C0", culture) total available transfer allowance</strong>.</p>
+                <p>The amount you can pledge for financial year @Model.Data.FinancialYearString is calculated by subtracting your <strong>total pledged and transfer connections</strong> from your <strong>@Model.Data.RemainingTransferAllowance.ToString("C0", culture) total available transfer allowance</strong>.</p>
             </div>
         </details>
     </div>

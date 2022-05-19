@@ -6,8 +6,6 @@ using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.HashingService;
 using SFA.DAS.EmployerFinance.Web.ViewModels.Transfers;
 using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.Authorization.Features.Services;
-using SFA.DAS.Authorization.EmployerFeatures.Models;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerFinance.Extensions;
 
@@ -88,7 +86,8 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     FinancialYearString = DateTime.UtcNow.ToFinancialYearString(),
                     NextFinancialYearString = DateTime.UtcNow.AddYears(1).ToFinancialYearString(),
                     YearAfterNextFinancialYearString = DateTime.UtcNow.AddYears(2).ToFinancialYearString(),
-                    AmountPledged = financialBreakdownTask.Result.AmountPledged
+                    AmountPledged = financialBreakdownTask.Result.AmountPledged,
+                    RemainingTransferAllowance = accountDetailTask.Result.RemainingTransferAllowance
                 }
             };
         }

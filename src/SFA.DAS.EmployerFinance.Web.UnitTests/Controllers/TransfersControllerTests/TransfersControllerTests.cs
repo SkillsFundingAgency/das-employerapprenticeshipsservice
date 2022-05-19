@@ -78,7 +78,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.TransfersControllerT
         {
             var viewModel = await GetViewModel();
 
-            var estimatedRemainingAllowance = viewModel.Data.TotalAvailableTransferAllowance - viewModel.Data.CurrentYearEstimatedSpend;
+            var estimatedRemainingAllowance = viewModel.Data.RemainingTransferAllowance - viewModel.Data.CurrentYearEstimatedSpend;
             Assert.AreEqual(estimatedRemainingAllowance, viewModel.Data.EstimatedRemainingAllowance);
         }
 
@@ -87,7 +87,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.TransfersControllerT
         {
             var viewModel = await GetViewModel();
 
-            var totalAvailablePledgedFunds = viewModel.Data.TotalAvailableTransferAllowance - viewModel.Data.TotalPledgedAndTransferConnections;
+            var totalAvailablePledgedFunds = viewModel.Data.RemainingTransferAllowance - viewModel.Data.TotalPledgedAndTransferConnections;
             Assert.AreEqual(totalAvailablePledgedFunds, viewModel.Data.TotalAvailablePledgedFunds);
         }
 

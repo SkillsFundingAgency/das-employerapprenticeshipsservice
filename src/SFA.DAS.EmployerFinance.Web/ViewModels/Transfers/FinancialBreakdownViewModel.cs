@@ -16,13 +16,13 @@ namespace SFA.DAS.EmployerFinance.Web.ViewModels.Transfers
         public decimal PledgeOriginatedCommitments { get; set; }
         public DateTime ProjectionStartDate { get; set; }        
         public decimal AmountPledged { get; set; }
-        public decimal TotalAvailableTransferAllowance { get { return StartingTransferAllowance - Commitments; } }
+        public decimal RemainingTransferAllowance { get; set; }
         public decimal CurrentYearEstimatedSpend { get; set; }
         public decimal NextYearEstimatedSpend { get; set; }
         public decimal YearAfterNextYearEstimatedSpend { get; set; }
-        public decimal EstimatedRemainingAllowance { get { return TotalAvailableTransferAllowance - CurrentYearEstimatedSpend; } }
+        public decimal EstimatedRemainingAllowance { get { return RemainingTransferAllowance - CurrentYearEstimatedSpend; } }
         public decimal TotalPledgedAndTransferConnections { get { return AmountPledged + TransferConnections; } }
-        public decimal TotalAvailablePledgedFunds { get { return TotalAvailableTransferAllowance - TotalPledgedAndTransferConnections; } }
+        public decimal TotalAvailablePledgedFunds { get { return RemainingTransferAllowance - TotalPledgedAndTransferConnections; } }
         public decimal AvailablePledgedFunds { get { return AmountPledged - (ApprovedPledgeApplications + AcceptedPledgeApplications); } }
     }
 }
