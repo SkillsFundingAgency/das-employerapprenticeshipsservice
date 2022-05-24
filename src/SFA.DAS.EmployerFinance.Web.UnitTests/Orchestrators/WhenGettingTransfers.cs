@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
 
         [TestCase(true, true)]
         [TestCase(false, false)]
-        public async Task Only_Levy_Payer_Can_View_Pledges_Section(bool isLevyPayer, bool expectCanViewPledgesSection)
+        public async Task Only_Levy_Payer_Can_View_Pledges_Section(bool isLevyPayer, bool expectIsLevyEmployer)
         {
             _maService.Setup(o => o.GetIndex(AccountId)).ReturnsAsync(new GetIndexResponse());
 
@@ -50,7 +50,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
             
             var actual = await _orchestrator.GetIndexViewModel(HashedAccountId);
 
-            Assert.AreEqual(expectCanViewPledgesSection, actual.Data.CanViewPledgesSection);
+            Assert.AreEqual(expectIsLevyEmployer, actual.Data.IsLevyEmployer);
         }
 
         [TestCase(true, true)]
