@@ -8,7 +8,7 @@ using SFA.DAS.NLog.Logger;
 namespace SFA.DAS.EmployerAccounts.Queries.GetProviderInvitation
 {
     public class GetProviderInvitationQueryHandler : IAsyncRequestHandler<GetProviderInvitationQuery, GetProviderInvitationResponse>
-    {   
+    {
         private readonly IProviderRegistrationApiClient _providerRegistrationApiClient;
         private readonly ILog _logger;
 
