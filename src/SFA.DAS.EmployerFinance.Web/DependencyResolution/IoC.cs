@@ -2,6 +2,7 @@ using SFA.DAS.Authorization.DependencyResolution.StructureMap;
 using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.StructureMap;
 using SFA.DAS.Authorization.EmployerUserRoles.DependencyResolution.StructureMap;
 using SFA.DAS.EmployerFinance.Api.Client;
+using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.DependencyResolution;
 using SFA.DAS.UnitOfWork.EntityFramework.StructureMap;
@@ -23,7 +24,7 @@ namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DateTimeRegistry>();
                 c.AddRegistry<DataRegistry>();
-                c.AddRegistry<EmployerFinanceApiClientRegistry>();
+                c.AddRegistry(new EmployerFinanceApiClientRegistry(context => context.GetInstance<EmployerFinanceConfiguration>().EmployerFinanceApi));
                 c.AddRegistry<EntityFrameworkUnitOfWorkRegistry<EmployerFinanceDbContext>>();
                 c.AddRegistry<HashingRegistry>();
                 c.AddRegistry<LoggerRegistry>();
