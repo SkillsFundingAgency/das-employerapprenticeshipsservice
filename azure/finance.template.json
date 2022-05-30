@@ -98,7 +98,7 @@
         "idaTenant": {
             "type": "string"
         },
-        "financeApiIdentifierUri": {
+        "financeApiIdaAudience": {
             "type": "string"
         }
     },
@@ -380,8 +380,8 @@
                                     "value": "[parameters('idaTenant')]"
                                 },
                                 {
-                                    "name": "FinanceApiIdentifierUri",
-                                    "value": "[parameters('financeApiIdentifierUri')]"
+                                    "name": "FinanceApiIdaAudience",
+                                    "value": "[parameters('financeApiIdaAudience')]"
                                 }
                             ]
                         }
