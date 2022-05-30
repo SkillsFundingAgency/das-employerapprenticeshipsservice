@@ -36,10 +36,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Recruit
         {
             _hashedAccountId = Guid.NewGuid().ToString();
             _apiBaseUrl = $"http://{Guid.NewGuid().ToString()}";
-            _clientId = string.Empty; //Guid.NewGuid().ToString();
-            _clientSecret = string.Empty; //Guid.NewGuid().ToString();
+            _clientId = string.Empty;
+            _clientSecret = string.Empty;
             _identifierUri = Guid.NewGuid().ToString();
-            _tenent = string.Empty; //Guid.NewGuid().ToString();
+            _tenent = string.Empty;
             _vacancies = new List<VacancySummary> { new VacancySummary { } };
             _serviceJson = JsonConvert.SerializeObject(new VacanciesSummary { Vacancies = _vacancies });
             _mockHttpService = new Mock<IHttpService>();
@@ -48,11 +48,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Recruit
             {
                 RecruitApi = new RecruitClientApiConfiguration
                 {
-                    ApiBaseUrl = _apiBaseUrl,
-                    //ClientId = _clientId,
-                    //ClientSecret = _clientSecret,
-                    IdentifierUri = _identifierUri,
-                    //Tenant = _tenent
+                    ApiBaseUrl = _apiBaseUrl,                                  
+                    IdentifierUri = _identifierUri,                    
                 }
             };
 
