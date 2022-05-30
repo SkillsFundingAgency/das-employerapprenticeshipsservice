@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Moq;
+using Moq.Protected;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Configuration;
@@ -18,7 +23,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Recruit
         private Mock<IHttpService> _mockHttpService;
         private Mock<IHttpServiceFactory> _mockHttpServiceFactory;
         private EmployerAccountsConfiguration _employerAccountsConfiguration;
+        private RecruitClientApiConfiguration _recruitClientApiConfiguration;
         private Mock<IMapper> _mockMapper;
+        Mock<HttpMessageHandler> _mockHttpMessageHandler;
+        private string _testData;
 
         private string _hashedAccountId;
         private string _apiBaseUrl;
@@ -34,6 +42,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Recruit
         [SetUp]
         public void Arrange()
         {
+            ConfigurationManager.AppSettings["EnvironmentName"] = "LOCAL";
             _hashedAccountId = Guid.NewGuid().ToString();
             _apiBaseUrl = $"http://{Guid.NewGuid().ToString()}";
             _clientId = Guid.NewGuid().ToString();
@@ -49,11 +58,17 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Recruit
                 RecruitApi = new RecruitClientApiConfiguration
                 {
                     ApiBaseUrl = _apiBaseUrl,
-                    ClientId = _clientId,
-                    ClientSecret = _clientSecret,
-                    IdentifierUri = _identifierUri,
-                    Tenant = _tenent
+                    //ClientId = _clientId,
+                    //ClientSecret = _clientSecret,
+                    IdentifierUri = _identifierUri
+                    //Tenant = _tenent
                 }
+            };
+
+            _recruitClientApiConfiguration = new RecruitClientApiConfiguration
+            {
+                ApiBaseUrl = _apiBaseUrl,
+                IdentifierUri = _identifierUri
             };
 
             _mockMapper = new Mock<IMapper>();
@@ -70,7 +85,26 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Recruit
                 .Setup(m => m.Map<IEnumerable<VacancySummary>, IEnumerable<Vacancy>>(It.IsAny<List<VacancySummary>>()))
                 .Returns(new List<Vacancy>());
 
-            _sut = new RecruitService(_mockHttpServiceFactory.Object, _employerAccountsConfiguration, _mockMapper.Object);
+
+            _mockHttpMessageHandler = new Mock<HttpMessageHandler>();
+
+            _testData = _serviceJson;
+
+            _mockHttpMessageHandler
+                  .Protected()
+                  .Setup<Task<HttpResponseMessage>>("SendAsync",
+                      ItExpr.IsAny<HttpRequestMessage>(),
+                      ItExpr.IsAny<CancellationToken>())
+                  .ReturnsAsync(new HttpResponseMessage
+                  {
+                      Content = new StringContent(_testData),
+                      StatusCode = HttpStatusCode.OK
+                  }
+                  ).Verifiable("");
+
+            var httpClient = new HttpClient(_mockHttpMessageHandler.Object);
+
+            _sut = new RecruitService(httpClient, _recruitClientApiConfiguration, _mockMapper.Object);
         }
 
         [Test]

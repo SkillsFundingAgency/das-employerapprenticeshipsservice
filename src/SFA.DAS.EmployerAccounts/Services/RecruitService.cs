@@ -6,36 +6,45 @@ using SFA.DAS.EmployerAccounts.Models.Recruit;
 using SFA.DAS.EmployerAccounts.Dtos;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SFA.DAS.Authentication.Extensions.Legacy;
+using System.Net.Http;
+using System.Configuration;
+using Microsoft.Azure.Services.AppAuthentication;
+using System.Net.Http.Headers;
+using System.Threading;
 
 namespace SFA.DAS.EmployerAccounts.Services
 {
-    public class RecruitService : IRecruitService
-    {
-        private readonly EmployerAccountsConfiguration _configuration;
-        private readonly IHttpService _httpService;
+    public class RecruitService : ApiClientBase, IRecruitService
+    {   
         private readonly IMapper _mapper;
+        private readonly HttpClient _client;
+        private readonly string _apiBaseUrl;
+        private readonly string _identifierUri;
 
         public RecruitService(
-            IHttpServiceFactory httpServiceFactory,
-            EmployerAccountsConfiguration configuration,
-            IMapper mapper)
+            HttpClient client,            
+            IRecruitClientApiConfiguration configuration,
+            IMapper mapper) : base(client)
         {
-            _configuration = configuration;
-            _httpService = httpServiceFactory.Create(
-                configuration.RecruitApi.ClientId,
-                configuration.RecruitApi.ClientSecret,
-                configuration.RecruitApi.IdentifierUri,
-                configuration.RecruitApi.Tenant
-            );
+            _apiBaseUrl = configuration.ApiBaseUrl.EndsWith("/")
+              ? configuration.ApiBaseUrl
+              : configuration.ApiBaseUrl + "/";
+
+            _identifierUri = configuration.IdentifierUri;
+            _client = client;
             _mapper = mapper;
         }
 
         public async Task<IEnumerable<Vacancy>> GetVacancies(string hashedAccountId, int maxVacanciesToGet = int.MaxValue)
         {
-            var baseUrl = GetBaseUrl();
-            var url = $"{baseUrl}api/vacancies?employerAccountId={hashedAccountId}&pageSize={maxVacanciesToGet}";
+            //var baseUrl = GetBaseUrl();
 
-            var json = await _httpService.GetAsync(url, false);
+            await AddAuthenticationHeader();
+
+            var url = $"{_apiBaseUrl}api/vacancies?employerAccountId={hashedAccountId}&pageSize={maxVacanciesToGet}";
+
+            var json = await _client.GetAsync(url);
             if(json == null)
             {
                 return new List<Vacancy>();
@@ -43,17 +52,27 @@ namespace SFA.DAS.EmployerAccounts.Services
 
             var vacanciesSummary = JsonConvert.DeserializeObject<VacanciesSummary>(json);
 
-
             return _mapper.Map<IEnumerable<VacancySummary>, IEnumerable<Vacancy>>(vacanciesSummary.Vacancies);
         }
 
-        private string GetBaseUrl()
+        private async Task AddAuthenticationHeader()
         {
-            var baseUrl = _configuration.RecruitApi.ApiBaseUrl.EndsWith("/")
-                ? _configuration.RecruitApi.ApiBaseUrl
-                : _configuration.RecruitApi.ApiBaseUrl + "/";
+            if (ConfigurationManager.AppSettings["EnvironmentName"].ToUpper() != "LOCAL")
+            {
+                var azureServiceTokenProvider = new AzureServiceTokenProvider();
+                var accessToken = await azureServiceTokenProvider.GetAccessTokenAsync(_identifierUri);
 
-            return baseUrl;
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            }
         }
+
+        //private string GetBaseUrl()
+        //{
+        //    var baseUrl = _configuration.RecruitApi.ApiBaseUrl.EndsWith("/")
+        //        ? _configuration.RecruitApi.ApiBaseUrl
+        //        : _configuration.RecruitApi.ApiBaseUrl + "/";
+
+        //    return baseUrl;
+        //}
     }
 }
