@@ -14,8 +14,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
         {
             For<RecruitClientApiConfiguration>().Use(c => c.GetInstance<EmployerAccountsConfiguration>().RecruitApi);
             For<IRecruitClientApiConfiguration>().Use(c => c.GetInstance<RecruitClientApiConfiguration>());
-            For<IRecruitService>().Use<RecruitService>().Ctor<HttpClient>().Is(c => CreateClient(c));
-            For<IRecruitService>().Use<RecruitService>();
+            For<IRecruitService>().Use<RecruitService>().Ctor<HttpClient>().Is(c => CreateClient(c));            
             For<IRecruitService>().DecorateAllWith<RecruitServiceWithTimeout>();
         }
 
