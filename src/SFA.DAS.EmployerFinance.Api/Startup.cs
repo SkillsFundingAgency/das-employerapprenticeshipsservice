@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerFinance.Api
                 TokenValidationParameters = new System.IdentityModel.Tokens.TokenValidationParameters
                 {
                     RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role",
-                    ValidAudiences = ConfigurationManager.AppSettings["FinanceApiIdentifierUri"].ToString().Split(',')
+                    ValidAudiences = ConfigurationManager.AppSettings["FinanceApiIdaAudience"].ToString().Split(',')
                 }
             });
         }
