@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Newtonsoft.Json;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Recruit;
 using SFA.DAS.EmployerAccounts.Dtos;
@@ -11,7 +10,6 @@ using System.Net.Http;
 using System.Configuration;
 using Microsoft.Azure.Services.AppAuthentication;
 using System.Net.Http.Headers;
-using System.Threading;
 
 namespace SFA.DAS.EmployerAccounts.Services
 {
@@ -38,8 +36,6 @@ namespace SFA.DAS.EmployerAccounts.Services
 
         public async Task<IEnumerable<Vacancy>> GetVacancies(string hashedAccountId, int maxVacanciesToGet = int.MaxValue)
         {
-            //var baseUrl = GetBaseUrl();
-
             await AddAuthenticationHeader();
 
             var url = $"{_apiBaseUrl}api/vacancies?employerAccountId={hashedAccountId}&pageSize={maxVacanciesToGet}";
@@ -49,8 +45,9 @@ namespace SFA.DAS.EmployerAccounts.Services
             {
                 return new List<Vacancy>();
             }
+            string jsonString = json.Content.ReadAsStringAsync().Result;           
 
-            var vacanciesSummary = JsonConvert.DeserializeObject<VacanciesSummary>(json);
+            var vacanciesSummary = JsonConvert.DeserializeObject<VacanciesSummary>(jsonString);
 
             return _mapper.Map<IEnumerable<VacancySummary>, IEnumerable<Vacancy>>(vacanciesSummary.Vacancies);
         }
@@ -65,14 +62,5 @@ namespace SFA.DAS.EmployerAccounts.Services
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             }
         }
-
-        //private string GetBaseUrl()
-        //{
-        //    var baseUrl = _configuration.RecruitApi.ApiBaseUrl.EndsWith("/")
-        //        ? _configuration.RecruitApi.ApiBaseUrl
-        //        : _configuration.RecruitApi.ApiBaseUrl + "/";
-
-        //    return baseUrl;
-        //}
     }
 }

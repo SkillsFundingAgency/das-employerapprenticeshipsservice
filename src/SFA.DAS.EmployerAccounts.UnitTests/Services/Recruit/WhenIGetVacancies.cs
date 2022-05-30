@@ -19,10 +19,7 @@ using SFA.DAS.EmployerAccounts.Services;
 namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Recruit
 {
     public class GetVacancies
-    {   
-        private Mock<IHttpService> _mockHttpService;
-        private Mock<IHttpServiceFactory> _mockHttpServiceFactory;
-        private EmployerAccountsConfiguration _employerAccountsConfiguration;
+    {  
         private RecruitClientApiConfiguration _recruitClientApiConfiguration;
         private Mock<IMapper> _mockMapper;
         Mock<HttpMessageHandler> _mockHttpMessageHandler;
@@ -50,20 +47,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Recruit
             _identifierUri = Guid.NewGuid().ToString();
             _tenent = Guid.NewGuid().ToString();
             _vacancies = new List<VacancySummary> { new VacancySummary { } };
-            _serviceJson = JsonConvert.SerializeObject(new VacanciesSummary { Vacancies = _vacancies });
-            _mockHttpService = new Mock<IHttpService>();
-            _mockHttpServiceFactory = new Mock<IHttpServiceFactory>();
-            _employerAccountsConfiguration = new EmployerAccountsConfiguration
-            {
-                RecruitApi = new RecruitClientApiConfiguration
-                {
-                    ApiBaseUrl = _apiBaseUrl,
-                    //ClientId = _clientId,
-                    //ClientSecret = _clientSecret,
-                    IdentifierUri = _identifierUri
-                    //Tenant = _tenent
-                }
-            };
+            _serviceJson = JsonConvert.SerializeObject(new VacanciesSummary { Vacancies = _vacancies });          
 
             _recruitClientApiConfiguration = new RecruitClientApiConfiguration
             {
@@ -72,15 +56,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Recruit
             };
 
             _mockMapper = new Mock<IMapper>();
-
-            _mockHttpServiceFactory
-                .Setup(m => m.Create(_clientId, _clientSecret, _identifierUri, _tenent))
-                .Returns(_mockHttpService.Object);
-
-            _mockHttpService
-              .Setup(m => m.GetAsync(It.IsAny<string>(), It.IsAny<bool>()))
-              .ReturnsAsync(_serviceJson);
-
+            
             _mockMapper
                 .Setup(m => m.Map<IEnumerable<VacancySummary>, IEnumerable<Vacancy>>(It.IsAny<List<VacancySummary>>()))
                 .Returns(new List<Vacancy>());
@@ -117,7 +93,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Recruit
             await _sut.GetVacancies(_hashedAccountId);
 
             //Assert
-            _mockHttpService.Verify(x => x.GetAsync(expectedUrl, false), Times.Once);
+            _mockHttpMessageHandler
+               .Protected()
+               .Verify("SendAsync", Times.Once(),
+                   ItExpr.Is<HttpRequestMessage>(r => r.Method == HttpMethod.Get
+                                                      && r.RequestUri.AbsoluteUri == $"{expectedUrl}"),
+               ItExpr.IsAny<CancellationToken>());
         }
 
         [Test]
