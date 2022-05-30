@@ -22,10 +22,10 @@ namespace SFA.DAS.EmployerAccounts.Services
         {
             _configuration = configuration;
             _httpService = httpServiceFactory.Create(
-                configuration.RecruitApi.ClientId,
-                configuration.RecruitApi.ClientSecret,
+                string.Empty,
+                string.Empty,
                 configuration.RecruitApi.IdentifierUri,
-                configuration.RecruitApi.Tenant
+                string.Empty
             );
             _mapper = mapper;
         }
