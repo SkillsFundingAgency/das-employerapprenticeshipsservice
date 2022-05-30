@@ -58,7 +58,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.ProviderRegistration
         }
 
         [Test]
-        public async Task Verify_ProviderRegistrationApiToGetInvitationIsCalled()
+        public async Task Then_Verify_ProviderRegistrationApi_ToGetInvitationIsCalled()
         {
             //act
             await _sut.GetInvitations(_correlationId);
@@ -73,7 +73,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.ProviderRegistration
         }
 
         [Test]
-        public async Task Verify_ProviderRegistrationApiToUnsubscribeIsCalled()
+        public async Task WhenUnsubscribeProviderEmail_Then_Verify_ProviderRegistrationApiToUnsubscribeIsCalled()
         {
             //act
             await _sut.Unsubscribe(_correlationId);
