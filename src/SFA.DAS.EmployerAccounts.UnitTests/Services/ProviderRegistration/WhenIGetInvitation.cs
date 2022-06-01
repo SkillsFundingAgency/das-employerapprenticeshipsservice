@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Protected;
 using NUnit.Framework;
@@ -22,6 +23,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.ProviderRegistration
         private string _apiBaseUrl;
         private string _identifierUri;           
         Mock<HttpMessageHandler> _mockHttpMessageHandler;
+        Mock<ILogger<ProviderRegistrationApiClient>> _logger;
 
         [SetUp]
         public void Arrange()
@@ -31,6 +33,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.ProviderRegistration
             _identifierUri = Guid.NewGuid().ToString();
             _correlationId = Guid.NewGuid().ToString();
             _testData = "Employer details";
+
+            _logger = new Mock<ILogger<ProviderRegistrationApiClient>>();
 
             _configuration = new ProviderRegistrationClientApiConfiguration
             {
@@ -54,7 +58,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.ProviderRegistration
 
             var httpClient = new HttpClient(_mockHttpMessageHandler.Object);
 
-            _sut = new ProviderRegistrationApiClient(httpClient, _configuration);
+            _sut = new ProviderRegistrationApiClient(httpClient, _configuration, _logger.Object);
         }
 
         [Test]

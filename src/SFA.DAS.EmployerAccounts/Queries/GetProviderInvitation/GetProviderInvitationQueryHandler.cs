@@ -20,8 +20,9 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetProviderInvitation
 
         public async Task<GetProviderInvitationResponse> Handle(GetProviderInvitationQuery message)
         {
-            var json = await _providerRegistrationApiClient.GetInvitations(message.CorrelationId.ToString());
             _logger.Info($"Get Invitations for {message.CorrelationId}");
+            var json = await _providerRegistrationApiClient.GetInvitations(message.CorrelationId.ToString());
+            _logger.Info($"Request sent Get Invitations for {message.CorrelationId} {json}");
             return new GetProviderInvitationResponse
             {
                 Result = json == null ? null : JsonConvert.DeserializeObject<ProviderInvitation>(json)

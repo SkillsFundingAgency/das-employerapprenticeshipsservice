@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Azure.Services.AppAuthentication;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.Authentication.Extensions.Legacy;
 using SFA.DAS.EmployerAccounts.Interfaces;
 
@@ -13,8 +14,9 @@ namespace SFA.DAS.EmployerAccounts.Services
         private readonly string _apiBaseUrl;
         private readonly string _identifierUri;
         private readonly HttpClient _client;
+        private readonly ILogger<ProviderRegistrationApiClient> _logger;
 
-        public ProviderRegistrationApiClient(HttpClient client, IProviderRegistrationClientApiConfiguration configuration) : base(client)
+        public ProviderRegistrationApiClient(HttpClient client, IProviderRegistrationClientApiConfiguration configuration, ILogger<ProviderRegistrationApiClient> logger) : base(client)
         {
             _apiBaseUrl = configuration.BaseUrl.EndsWith("/")
                 ? configuration.BaseUrl
@@ -22,13 +24,15 @@ namespace SFA.DAS.EmployerAccounts.Services
 
             _identifierUri = configuration.IdentifierUri;
             _client = client;
+            _logger = logger;
         }
 
         public async Task Unsubscribe(string CorrelationId)
         {
-            await AddAuthenticationHeader();
-            
+            await AddAuthenticationHeader();           
+
             var url = $"{_apiBaseUrl}api/unsubscribe/{CorrelationId}";
+            _logger.LogInformation($"Getting Unsubscribe {url}");
             await _client.GetAsync(url);
         }
 
@@ -37,6 +41,7 @@ namespace SFA.DAS.EmployerAccounts.Services
             await AddAuthenticationHeader();
             
             var url = $"{_apiBaseUrl}api/invitations/{CorrelationId}";
+            _logger.LogInformation($"Getting Invitations {url}");
             var response = await _client.GetAsync(url);
             response.EnsureSuccessStatusCode();
 
