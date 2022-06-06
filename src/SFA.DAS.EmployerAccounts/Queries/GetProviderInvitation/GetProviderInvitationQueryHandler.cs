@@ -18,9 +18,9 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetProviderInvitation
         {
             _configuration = configuration;         
             _httpService = httpServiceFactory.Create(
-                configuration.ProviderRegistrationsApi.ClientId,
-                configuration.ProviderRegistrationsApi.ClientSecret,
                 configuration.ProviderRegistrationsApi.IdentifierUri,
+                configuration.ProviderRegistrationsApi.ClientId,
+                configuration.ProviderRegistrationsApi.ClientSecret,                
                 configuration.ProviderRegistrationsApi.Tenant
             );
         }
