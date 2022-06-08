@@ -15,45 +15,45 @@
 <h1 class="heading-xlarge">Manage transfers</h1>
 
 <div class="grid-row">
-    <div class="column-two-thirds">
-        <h2 class="heading-medium">My transfer finances</h2>
-        <p>This is a financial snapshot of what is available.</p>
-        <div class="finance-highlight">
-            <span class="bold-small">
-                Your transfer allowance
-                <span class="visually-hidden">for</span>
-                <abbr title="financial year">FY</abbr> @Model.Data.FinancialYearString
-            </span>
-            <span class="data-item bold-xlarge">@Model.Data.StartingTransferAllowance.ToString("C0", culture)</span>
-        </div>
-        <h2 class="heading-medium">Transfers allowance information</h2>
-        <p><strong>Your transfer allowance for this financial year (FY)</strong></p>
-        <p>This is calculated every year on 6 April and shows in your account after 20 April.</p>
-    </div>
 
-
-     @if (Html.IsAuthorized("EmployerFeature.FinanceDetails"))
-     {
+    @if (Model.Data.IsLevyEmployer)
+    {
         <div class="column-two-thirds">
-            <a href="/accounts/@Model.Data.HashedAccountID/transfers/financial-breakdown" class="button button-secondary">View my transfer finances</a>
-        </div>
-     }
-
-        @if (Model.Data.CanViewPledgesSection)
-        {
-            <div class="column-two-thirds">
-                <h2 class="heading-medium">My pledges</h2>
-                <p>Create a public funding pledge which is shown online so that businesses can apply to you for a transfer of funds.</p>
-                <div class="panel panel-border-wide">
-                    You have <strong>@Model.Data.PledgesCount</strong> transfer pledges.
-                </div>
-                @if (Model.Data.RenderCreateTransfersPledgeButton)
-                {
-                    <a class="button" href="@Url.LevyTransfersMatchingAccountAction("pledges/create/inform")" id="CreateTransfersPledgeButton">Create a transfers pledge</a>
-                }
-                <a href="@Url.LevyTransfersMatchingAccountAction("pledges")" class="button button-secondary">View my transfer pledges and applications</a>
+            <h2 class="heading-medium">My transfer finances</h2>
+            <p>This is a financial snapshot of what is available.</p>
+            <div class="finance-highlight">
+                <span class="bold-small">
+                    Your transfer allowance
+                    <span class="visually-hidden">for</span>
+                    <abbr title="financial year">FY</abbr> @Model.Data.FinancialYearString
+                </span>
+                <span class="data-item bold-xlarge">@Model.Data.StartingTransferAllowance.ToString("C0", culture)</span>
             </div>
-        }
+            <h2 class="heading-medium">Transfers allowance information</h2>
+            <p><strong>Your transfer allowance for this financial year (FY)</strong></p>
+            <p>This is calculated every year on 6 April and shows in your account after 20 April.</p>
+        </div>
+
+         if (Html.IsAuthorized("EmployerFeature.FinanceDetails"))
+         {
+            <div class="column-two-thirds">
+                <a href="/accounts/@Model.Data.HashedAccountID/transfers/financial-breakdown" class="button button-secondary">View my transfer finances</a>
+            </div>
+         }
+
+        <div class="column-two-thirds">
+            <h2 class="heading-medium">My pledges</h2>
+            <p>Create a public funding pledge which is shown online so that businesses can apply to you for a transfer of funds.</p>
+            <div class="panel panel-border-wide">
+                You have <strong>@Model.Data.PledgesCount</strong> transfer pledges.
+            </div>
+            @if (Model.Data.RenderCreateTransfersPledgeButton)
+            {
+                <a class="button" href="@Url.LevyTransfersMatchingAccountAction("pledges/create/inform")" id="CreateTransfersPledgeButton">Create a transfers pledge</a>
+            }
+            <a href="@Url.LevyTransfersMatchingAccountAction("pledges")" class="button button-secondary">View my transfer pledges and applications</a>
+        </div>
+    }
 
         <div class="column-two-thirds">
             <h2 class="heading-medium">Apply for transfers funding</h2>

@@ -121,18 +121,23 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
         {
             var accountsWithDetails = new List<Core.Models.Account>();
 
-            foreach (var account in accounts)
+            var accountDetailTasks = accounts.Select(account => _accountApiClient.GetAccount(account.AccountHashId));
+            var accountDetails = await Task.WhenAll(accountDetailTasks);
+
+            foreach (var account in accountDetails)
+            {
                 try
                 {
-                    var accountViewModel = await _accountApiClient.GetAccount(account.AccountHashId);
-                    _logger.Info($"GetAdditionalFields for account ID {account.AccountHashId}");
-                    var accountWithDetails = await GetAdditionalFields(accountViewModel, AccountFieldsSelection.PayeSchemes);
+                    _logger.Info($"GetAdditionalFields for account ID {account.HashedAccountId}");
+                    var accountWithDetails = await GetAdditionalFields(account, AccountFieldsSelection.PayeSchemes);
                     accountsWithDetails.Add(accountWithDetails);
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(e, $"Exception while retrieving details for account ID {account.AccountHashId}");
+                    _logger.Error(e, $"Exception while retrieving details for account ID {account.HashedAccountId}");
                 }
+
+            }
 
             return accountsWithDetails;
         }
@@ -198,34 +203,38 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
 
         private async Task<IEnumerable<PayeSchemeViewModel>> GetPayeSchemes(AccountDetailViewModel response)
         {
-            var payeTasks = new List<Task<PayeSchemeViewModel>>();
-            foreach (var payeScheme in response.PayeSchemes ?? new ResourceList(new List<ResourceViewModel>()))
+            var payes = new List<PayeSchemeViewModel>();
+            var payesBatches = response.PayeSchemes
+                    .Select((item, inx) => new { item, inx })
+                    .GroupBy(x => x.inx / 50)
+                    .Select(g => g.Select(x => x.item));
+
+            foreach (var payeBatch in payesBatches)
             {
-                async Task<PayeSchemeViewModel> GetPayeSchemeResource()
+                var payeTasks = response.PayeSchemes.Select(payeScheme =>
                 {
                     var obscured = _payeSchemeObfuscator.ObscurePayeScheme(payeScheme.Id).Replace("/", "%252f");
                     var paye = payeScheme.Id.Replace("/", "%252f");
                     _logger.Debug(
                         $"IAccountApiClient.GetResource<PayeSchemeViewModel>(\"{payeScheme.Href.Replace(paye, obscured)}\");");
+
                     try
                     {
-                        return await _accountApiClient.GetResource<PayeSchemeViewModel>(payeScheme.Href);
+                        return _accountApiClient.GetResource<PayeSchemeViewModel>(payeScheme.Href);
                     }
                     catch (Exception ex)
                     {
                         _logger.Error(ex, $"Exception occured in Account API type of {nameof(PayeSchemeViewModel)} at {payeScheme.Href} id {payeScheme.Id}");
-                        return new PayeSchemeViewModel();
+                        return Task.FromResult(new PayeSchemeViewModel());
                     }
-                }
+                });
 
-                payeTasks.Add(GetPayeSchemeResource());
+                payes.AddRange(await Task.WhenAll(payeTasks));
             }
-            await Task.WhenAll(payeTasks);
-            
-            var result = new List<PayeSchemeViewModel>();
-            foreach (var payeTask in payeTasks)
+
+
+            return payes.Select(payeSchemeViewModel =>
             {
-                var payeSchemeViewModel = payeTask.Result;
                 if (IsValidPayeScheme(payeSchemeViewModel))
                 {
                     var item = new PayeSchemeViewModel
@@ -236,11 +245,14 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
                         RemovedDate = payeSchemeViewModel.RemovedDate,
                         Name = payeSchemeViewModel.Name
                     };
-                    result.Add(item);
-                }
-            }
 
-            return result.OrderBy(x => x.Ref);
+                    return item;
+                }
+
+                    return null;
+             })
+             .Where(x => x != null)
+             .OrderBy(x => x.Ref);
         }
 
         private bool IsValidPayeScheme(PayeSchemeViewModel result)
@@ -308,7 +320,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
 
         private async Task<IEnumerable<PayeSchemeModel>> MapToDomainPayeSchemeAsync(AccountDetailViewModel response)
         {
-            var mainPayeSchemes = await GetPayeSchemes(response);            
+            var mainPayeSchemes = await GetPayeSchemes(response);
 
             return mainPayeSchemes?.Select(payeScheme => new PayeSchemeModel
             {
