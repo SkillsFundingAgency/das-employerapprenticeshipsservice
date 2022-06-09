@@ -20,7 +20,7 @@ resources:
   - repository: das-platform-building-blocks
     type: github
     name: SkillsFundingAgency/das-platform-building-blocks
-    ref: refs/tags/0.4.34
+    ref: refs/tags/0.4.58
     endpoint: SkillsFundingAgency
 
 steps:
@@ -54,6 +54,7 @@ steps:
   inputs:
     solution: 'src/SFA.DAS.EAS.sln'
     vsVersion: 16.0
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
     platform: 'any cpu'
     configuration: 'release'
 
@@ -64,150 +65,6 @@ steps:
     packagesToPack: 'src/SFA.DAS.Account.Api.Client/SFA.DAS.EAS.Account.Api.Client.csproj;src/SFA.DAS.EAS.Account.Api.Types/SFA.DAS.EAS.Account.Api.Types.csproj;src/SFA.DAS.EmployerAccounts.Api.Client/SFA.DAS.EmployerAccounts.Api.Client.csproj;src/SFA.DAS.EmployerFinance.Api.Client/SFA.DAS.EmployerFinance.Api.Client.csproj;src/SFA.DAS.EmployerAccounts.Messages/SFA.DAS.EmployerAccounts.Messages.csproj;src/SFA.DAS.EmployerAccounts.Api.Client/SFA.DAS.EmployerAccounts.Api.Client.csproj;src/SFA.DAS.EmployerFinance.Messages/SFA.DAS.EmployerFinance.Messages.csproj;src/SFA.DAS.EmployerAccounts.ReadStore/SFA.DAS.EmployerAccounts.ReadStore/SFA.DAS.EmployerAccounts.ReadStore.csproj;src/SFA.DAS.EmployerAccounts.Types/SFA.DAS.EmployerAccounts.Types.csproj;src/SFA.DAS.EmployerAccounts.Api.Types/SFA.DAS.EmployerAccounts.Api.Types.csproj'
     packDirectory: '$(build.artifactstagingdirectory)/publish'
     versioningScheme: byBuildNumber
-
-- task: VSBuild@1
-  displayName: 'Publish SFA.DAS.EmployerAccounts.Api'
-  inputs:
-    solution: 'src/SFA.DAS.EmployerAccounts.Api/SFA.DAS.EmployerAccounts.Api.csproj'
-    vsVersion: 16.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/SFA.DAS.EmployerAccounts.Api"'
-    platform: 'anycpu'
-    configuration: 'release'
-    clean: true
-
-- task: ArchiveFiles@2
-  displayName: 'Archive SFA.DAS.Account.Api'
-  inputs:
-    rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EmployerAccounts.Api'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EmployerAccounts.Api.zip'
-
-- task: VSBuild@1
-  displayName: 'Publish SFA.DAS.EmployerAccounts.Web'
-  inputs:
-    solution: 'src/SFA.DAS.EmployerAccounts.Web/SFA.DAS.EmployerAccounts.Web.csproj'
-    vsVersion: 16.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/SFA.DAS.EmployerAccounts.Web"'
-    platform: 'anycpu'
-    configuration: 'release'
-    clean: true
-
-- task: ArchiveFiles@2
-  displayName: 'Archive SFA.DAS.EmployerAccounts.Web'
-  inputs:
-    rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EmployerAccounts.Web'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EmployerAccounts.Web.zip'
-
-- task: VSBuild@1
-  displayName: 'Publish SFA.DAS.EmployerAccounts.Host'
-  inputs:
-    solution: 'src/SFA.DAS.EmployerAccounts.Host/SFA.DAS.EmployerAccounts.Host.csproj'
-    vsVersion: 16.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/SFA.DAS.EmployerAccounts.Host"'
-    platform: 'anycpu'
-    configuration: 'release'
-    clean: true
-
-- task: ArchiveFiles@2
-  displayName: 'Archive SFA.DAS.EmployerAccounts.Host'
-  inputs:
-    rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EmployerAccounts.Host'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EmployerAccounts.Host.zip'
-
-- task: VSBuild@1
-  displayName: 'Publish SFA.DAS.EmployerFinance.Api'
-  inputs:
-    solution: 'src/SFA.DAS.EmployerFinance.Api/SFA.DAS.EmployerFinance.Api.csproj'
-    vsVersion: 16.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/SFA.DAS.EmployerFinance.Api"'
-    platform: 'anycpu'
-    configuration: 'release'
-    clean: true
-
-- task: ArchiveFiles@2
-  displayName: 'Archive SFA.DAS.EmployerFinance.Api'
-  inputs:
-    rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EmployerFinance.Api'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EmployerFinance.Api.zip'
-
-- task: VSBuild@1
-  displayName: 'Publish SFA.DAS.EmployerFinance.Web'
-  inputs:
-    solution: 'src/SFA.DAS.EmployerFinance.Web/SFA.DAS.EmployerFinance.Web.csproj'
-    vsVersion: 16.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/SFA.DAS.EmployerFinance.Web"'
-    platform: 'anycpu'
-    configuration: 'release'
-    clean: true
-
-- task: ArchiveFiles@2
-  displayName: 'Archive SFA.DAS.EmployerFinance.Web'
-  inputs:
-    rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EmployerFinance.Web'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EmployerFinance.Web.zip'
-
-- task: VSBuild@1
-  displayName: 'Publish SFA.DAS.EmployerFinance.Host'
-  inputs:
-    solution: 'src/SFA.DAS.EmployerFinance.Host/SFA.DAS.EmployerFinance.Host.csproj'
-    vsVersion: 16.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/SFA.DAS.EmployerFinance.Host"'
-    platform: 'anycpu'
-    configuration: 'release'
-    clean: true
-
-- task: ArchiveFiles@2
-  displayName: 'Archive SFA.DAS.EmployerFinance.Host'
-  inputs:
-    rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EmployerFinance.Host'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EmployerFinance.Host.zip'
-
-- task: VSBuild@1
-  displayName: 'Publish SFA.DAS.EAS.Account.Api'
-  inputs:
-    solution: 'src/SFA.DAS.EAS.Api/SFA.DAS.EAS.Account.Api.csproj'
-    vsVersion: 16.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/SFA.DAS.EAS.Account.Api"'
-    platform: 'anycpu'
-    configuration: 'release'
-    clean: true
-
-- task: ArchiveFiles@2
-  displayName: 'Archive SFA.DAS.EAS.Account.Api'
-  inputs:
-    rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EAS.Account.Api'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EAS.Account.Api.zip'
-
-- task: VSBuild@1
-  displayName: 'Publish SFA.DAS.EAS.Web'
-  inputs:
-    solution: 'src/SFA.DAS.EAS.Web/SFA.DAS.EAS.Web.csproj'
-    vsVersion: 16.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/SFA.DAS.EAS.Web"'
-    platform: 'anycpu'
-    configuration: 'release'
-    clean: true
-
-- task: ArchiveFiles@2
-  displayName: 'Archive SFA.DAS.EAS.Web'
-  inputs:
-    rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EAS.Web'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EAS.Web.zip'
-
-- task: VSBuild@1
-  displayName: 'Publish SFA.DAS.EAS.Support.Web'
-  inputs:
-    solution: 'src/SFA.DAS.EAS.Support.Web/SFA.DAS.EAS.Support.Web.csproj'
-    vsVersion: 16.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/SFA.DAS.EAS.Support.Web"'
-    platform: 'anycpu'
-    configuration: 'release'
-    clean: true
-
-- task: ArchiveFiles@2
-  displayName: 'Archive SFA.DAS.EAS.Support.Web'
-  inputs:
-    rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EAS.Support.Web'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EAS.Support.Web.zip'
 
 - task: VSTest@2
   displayName: 'VsTest - testAssemblies'
