@@ -23,9 +23,7 @@
             <p>This is a financial snapshot of what is available.</p>
             <div class="finance-highlight">
                 <span class="bold-small">
-                    Your transfer allowance
-                    <span class="visually-hidden">for</span>
-                    <abbr title="financial year">FY</abbr> @Model.Data.FinancialYearString
+                    Transfer allowance for @Model.Data.FinancialYearString
                 </span>
                 <span class="data-item bold-xlarge">@Model.Data.StartingTransferAllowance.ToString("C0", culture)</span>
             </div>

@@ -12,7 +12,6 @@ using SFA.DAS.EmployerFinance.Web.Controllers;
 using SFA.DAS.EmployerFinance.Web.Orchestrators;
 using SFA.DAS.EmployerFinance.Web.ViewModels.Transfers;
 using SFA.DAS.HashingService;
-using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -78,7 +77,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.TransfersControllerT
         {
             var viewModel = await GetViewModel();
 
-            var estimatedRemainingAllowance = viewModel.Data.TotalAvailableTransferAllowance - viewModel.Data.CurrentYearEstimatedSpend;
+            var estimatedRemainingAllowance = viewModel.Data.StartingTransferAllowance - viewModel.Data.CurrentYearEstimatedSpend;
             Assert.AreEqual(estimatedRemainingAllowance, viewModel.Data.EstimatedRemainingAllowance);
         }
 
