@@ -16,9 +16,9 @@ namespace SFA.DAS.EmployerAccounts.Commands.UnsubscribeProviderEmail
         {
             _configuration = configuration;         
             _httpService = httpServiceFactory.Create(
-                configuration.ProviderRegistrationsApi.ClientId,
-                configuration.ProviderRegistrationsApi.ClientSecret,
                 configuration.ProviderRegistrationsApi.IdentifierUri,
+                configuration.ProviderRegistrationsApi.ClientId,
+                configuration.ProviderRegistrationsApi.ClientSecret,                
                 configuration.ProviderRegistrationsApi.Tenant
             );
         }

@@ -22,10 +22,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Recruit
 
         private string _hashedAccountId;
         private string _apiBaseUrl;
-        private string _clientId;
-        private string _clientSecret;
-        private string _identifierUri;
-        private string _tenent;
+        private string _identifierUri;        
         private string _serviceJson;
         private List<VacancySummary> _vacancies;
 
@@ -36,10 +33,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Recruit
         {
             _hashedAccountId = Guid.NewGuid().ToString();
             _apiBaseUrl = $"http://{Guid.NewGuid().ToString()}";
-            _clientId = Guid.NewGuid().ToString();
-            _clientSecret = Guid.NewGuid().ToString();
-            _identifierUri = Guid.NewGuid().ToString();
-            _tenent = Guid.NewGuid().ToString();
+            _identifierUri = Guid.NewGuid().ToString();            
             _vacancies = new List<VacancySummary> { new VacancySummary { } };
             _serviceJson = JsonConvert.SerializeObject(new VacanciesSummary { Vacancies = _vacancies });
             _mockHttpService = new Mock<IHttpService>();
@@ -48,18 +42,15 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Recruit
             {
                 RecruitApi = new RecruitClientApiConfiguration
                 {
-                    ApiBaseUrl = _apiBaseUrl,
-                    ClientId = _clientId,
-                    ClientSecret = _clientSecret,
-                    IdentifierUri = _identifierUri,
-                    Tenant = _tenent
+                    ApiBaseUrl = _apiBaseUrl,                                  
+                    IdentifierUri = _identifierUri,                    
                 }
             };
 
             _mockMapper = new Mock<IMapper>();
 
             _mockHttpServiceFactory
-                .Setup(m => m.Create(_clientId, _clientSecret, _identifierUri, _tenent))
+                .Setup(m => m.Create(_identifierUri, string.Empty, string.Empty, string.Empty))
                 .Returns(_mockHttpService.Object);
 
             _mockHttpService
