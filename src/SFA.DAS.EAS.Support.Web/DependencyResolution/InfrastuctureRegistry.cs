@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Web;
-using SFA.DAS.EAS.Account.Api.Client;
+﻿using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Support.Infrastructure.DependencyResolution;
 using SFA.DAS.EAS.Support.Infrastructure.Services;
 using SFA.DAS.EAS.Support.Infrastructure.Settings;
@@ -9,7 +7,8 @@ using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.TokenService.Api.Client;
 using StructureMap;
-using StructureMap.Configuration.DSL;
+using System.Diagnostics.CodeAnalysis;
+using System.Web;
 
 namespace SFA.DAS.EAS.Support.Web.DependencyResolution
 {
@@ -39,16 +38,15 @@ namespace SFA.DAS.EAS.Support.Web.DependencyResolution
 
             For<ILevyTokenHttpClientFactory>().Use<LevyTokenHttpClientMaker>();
 
-            For<IHmrcApiBaseUrlConfig>().Use(string.Empty, (ctx) =>
+            For<IHmrcApiClientConfiguration>().Use(string.Empty, (ctx) =>
             {
-                return ctx.GetInstance<IWebConfiguration>().LevySubmission.HmrcApiBaseUrlSetting;
+                return ctx.GetInstance<IWebConfiguration>().LevySubmission.HmrcApi;
             });
 
             For<ITokenServiceApiClientConfiguration>().Use(string.Empty, (ctx) =>
             {
-                return ctx.GetInstance<IWebConfiguration>().LevySubmission.LevySubmissionsApiConfig;
+                return ctx.GetInstance<IWebConfiguration>().LevySubmission.TokenServiceApi;
             });
-
 
             For<IHashingService>().Use(string.Empty, (ctx) =>
             {
@@ -57,8 +55,5 @@ namespace SFA.DAS.EAS.Support.Web.DependencyResolution
             });
             
         }
-
-       
-
     }
 }

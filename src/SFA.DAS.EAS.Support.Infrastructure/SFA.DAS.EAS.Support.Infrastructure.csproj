@@ -67,8 +67,8 @@
     <Compile Include="Services\LevyTokenHttpClientMaker.cs" />
     <Compile Include="Settings\EmployerAccountsConfiguration.cs" />
     <Compile Include="Settings\HashingServiceConfig.cs" />
-    <Compile Include="Settings\HmrcApiBaseUrlConfig.cs" />
-    <Compile Include="Settings\IHmrcApiBaseUrlConfig.cs" />
+    <Compile Include="Settings\HmrcApiClientConfiguration.cs" />
+    <Compile Include="Settings\IHmrcApiClientConfiguration.cs" />
     <Compile Include="Settings\ILevySubmissionsSettings.cs" />
     <Compile Include="Settings\LevySubmissionsApiConfiguration.cs" />
     <Compile Include="Settings\LevySubmissionsSettings.cs" />
@@ -114,7 +114,7 @@
       <Version>1.2.1</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.TokenService.Api.Client">
-      <Version>2.1.1</Version>
+      <Version>2.3.0</Version>
     </PackageReference>
     <PackageReference Include="StructureMap">
       <Version>4.7.1</Version>

@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SFA.DAS.TokenService.Api.Client;
 
 namespace SFA.DAS.EAS.Support.Infrastructure.Settings
 {
     public interface ILevySubmissionsSettings
     {
-        LevySubmissionsApiConfiguration LevySubmissionsApiConfig { get; set; }
+        TokenServiceApiClientConfiguration TokenServiceApi { get; set; }
 
-        HmrcApiBaseUrlConfig HmrcApiBaseUrlSetting { get; set; }
+        HmrcApiClientConfiguration HmrcApi { get; set; }
 
     }
 
