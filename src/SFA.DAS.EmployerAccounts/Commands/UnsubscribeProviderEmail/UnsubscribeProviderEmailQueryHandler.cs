@@ -1,42 +1,25 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Commands.UnsubscribeProviderEmail
 {
     public class UnsubscribeProviderEmailQueryHandler : AsyncRequestHandler<UnsubscribeProviderEmailQuery>
     {
-        private readonly EmployerAccountsConfiguration _configuration;
-        private readonly IHttpService _httpService;
+        private readonly IProviderRegistrationApiClient _providerRegistrationApiClient;
+        private readonly ILog _logger;
 
-        public UnsubscribeProviderEmailQueryHandler(
-            IHttpServiceFactory httpServiceFactory,
-            EmployerAccountsConfiguration configuration)
+        public UnsubscribeProviderEmailQueryHandler(IProviderRegistrationApiClient providerRegistrationApiClient, ILog logger)
         {
-            _configuration = configuration;         
-            _httpService = httpServiceFactory.Create(
-                configuration.ProviderRegistrationsApi.IdentifierUri,
-                configuration.ProviderRegistrationsApi.ClientId,
-                configuration.ProviderRegistrationsApi.ClientSecret,                
-                configuration.ProviderRegistrationsApi.Tenant
-            );
+            _providerRegistrationApiClient = providerRegistrationApiClient;
+            _logger = logger;
         }
 
         protected override async Task HandleCore(UnsubscribeProviderEmailQuery message)
         {
-            var baseUrl = GetBaseUrl();
-            var url = $"{baseUrl}api/unsubscribe/{message.CorrelationId.ToString()}";
-            await _httpService.GetAsync(url, false);
-        }
-
-        private string GetBaseUrl()
-        {
-            var baseUrl = _configuration.ProviderRegistrationsApi.BaseUrl.EndsWith("/")
-                ? _configuration.ProviderRegistrationsApi.BaseUrl
-                : _configuration.ProviderRegistrationsApi.BaseUrl + "/";
-
-            return baseUrl;
-        }
+            await _providerRegistrationApiClient.Unsubscribe(message.CorrelationId.ToString());
+            _logger.Info($"Sent ProviderEmail to Unsubscribe {message.CorrelationId}");
+        }        
     }
 }

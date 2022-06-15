@@ -1,49 +1,32 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models;
 using Newtonsoft.Json;
+using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetProviderInvitation
 {
     public class GetProviderInvitationQueryHandler : IAsyncRequestHandler<GetProviderInvitationQuery, GetProviderInvitationResponse>
     {
-        private readonly EmployerAccountsConfiguration _configuration;
-        private readonly IHttpService _httpService;
+        private readonly IProviderRegistrationApiClient _providerRegistrationApiClient;
+        private readonly ILog _logger;
 
-        public GetProviderInvitationQueryHandler(
-            IHttpServiceFactory httpServiceFactory,
-            EmployerAccountsConfiguration configuration)
+        public GetProviderInvitationQueryHandler(IProviderRegistrationApiClient providerRegistrationApiClient, ILog logger)
         {
-            _configuration = configuration;         
-            _httpService = httpServiceFactory.Create(
-                configuration.ProviderRegistrationsApi.IdentifierUri,
-                configuration.ProviderRegistrationsApi.ClientId,
-                configuration.ProviderRegistrationsApi.ClientSecret,                
-                configuration.ProviderRegistrationsApi.Tenant
-            );
+            _providerRegistrationApiClient = providerRegistrationApiClient;
+            _logger = logger;
         }
 
         public async Task<GetProviderInvitationResponse> Handle(GetProviderInvitationQuery message)
         {
-            var baseUrl = GetBaseUrl();
-            var url = $"{baseUrl}api/invitations/{message.CorrelationId.ToString()}";
-            var json = await _httpService.GetAsync(url, false);
-
+            _logger.Info($"Get Invitations for {message.CorrelationId}");
+            var json = await _providerRegistrationApiClient.GetInvitations(message.CorrelationId.ToString());
+            _logger.Info($"Request sent Get Invitations for {message.CorrelationId} {json}");
             return new GetProviderInvitationResponse
             {
                 Result = json == null ? null : JsonConvert.DeserializeObject<ProviderInvitation>(json)
             };
-        }
-
-        private string GetBaseUrl()
-        {
-            var baseUrl = _configuration.ProviderRegistrationsApi.BaseUrl.EndsWith("/")
-                ? _configuration.ProviderRegistrationsApi.BaseUrl
-                : _configuration.ProviderRegistrationsApi.BaseUrl + "/";
-
-            return baseUrl;
         }
     }
 }
