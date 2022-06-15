@@ -3,7 +3,7 @@
 @{
     ViewBag.PageID = "transfers-breakdown";
     ViewBag.Section = "finance";
-    ViewBag.Title = "FinancialBreakdown";
+    ViewBag.Title = "View my transfer finances";
     ViewBag.AnalyticsData.Vpv = $"/finance/transfers/breakdown";
     ViewBag.ZenDeskLabel = "eas-finance";
     var culture = new CultureInfo("en-GB");
@@ -11,66 +11,46 @@
 
 <h1 class="heading-xlarge">View my transfer finances</h1>
 <div class="grid-row">
-    <div class="column-one-half">
-        <h2 class="heading-medium">
-            My transfer finances
-        </h2>
-        <p>This is a financial snapshot of what is available. </p>
-        <details>
-            <summary><span class="summary">Your transfer allowance for this financial year</span></summary>
-            <div class="panel panel-border-narrow">
-                <p>This is calculated every year on 6 April and shows in your account after 20 April.</p>
-                <p>Transfer payments will leave your account before payments for your own apprenticeships.</p>
-            </div>
-        </details>
+    <div class="govuk-grid-column-two-thirds">
+        <h2 class="heading-medium">Transfer allowance for financial year @Model.Data.FinancialYearString</h2>
     </div>
-</div>
+    <br/>
 
-<hr />
-
-<h2 class="heading-medium">
-    Transfer allowance for financial year @Model.Data.FinancialYearString
-</h2>
-<div class="grid-row">
     <div class="column-one-half">
-        <table>
-            <tr>
-                <th scope="row">Your transfer allowance</th>
-                <td class="numeric">@Model.Data.StartingTransferAllowance.ToString("C0", culture)</td>
-            </tr>          
-        </table>
-        <details>
-            <summary><span class="summary">How is my available transfer allowance calculated?</span></summary>
-            <div class="panel panel-border-narrow">
-                <p>Your total available transfer allowance takes into account any deductions made for in-house apprenticeships, if you have any.</p>
-            </div>
-        </details>
+        <p>This is calculated every year on 6 April and shows in your account after 20 April.</p>
+        <p>
+            This is the maximum amount of levy funds that you can transfer this financial year using pledges and <a href="https://www.gov.uk/guidance/transferring-your-apprenticeship-levy-to-another-business#how-can-i-transfer-levy-funds" target="_blank" rel="noopener" class="govuk-link govuk-link--no-visited-state">transfer connections</a>.
+            Read more about <a href="https://help.apprenticeships.education.gov.uk/hc/en-gb/articles/360011900419-Transfers" target="_blank" rel="noopener" class="govuk-link govuk-link--no-visited-state">how transfers work</a>.
+        </p>
     </div>
+
     <div class="column-one-half">
         <div class="finance-data">
             <dl>
-                <dt>Total available transfer allowance for @Model.Data.FinancialYearString</dt>
-                <dd>@Model.Data.TotalAvailableTransferAllowance.ToString("C0", culture)</dd>
+                <dt>Transfer allowance for @Model.Data.FinancialYearString</dt>
+                <dd>@Model.Data.StartingTransferAllowance.ToString("C0", culture)</dd>
             </dl>
         </div>
     </div>
+
 </div>
 
 <hr />
 
+
 <h2 class="heading-medium">
-    Committed funds for financial year @Model.Data.FinancialYearString
+    Projected funds for financial year @Model.Data.FinancialYearString
 </h2>
 
 <div class="grid-row">
     <div class="column-one-half">
         <table>
             <tr>
-                <th scope="row">Approved applications: accepted by applicant</th>
+                <th scope="row">Approved applications to my transfer funds: accepted by applicant</th>
                 <td class="numeric">@Model.Data.AcceptedPledgeApplications.ToString("C0", culture)</td>
             </tr>
             <tr>
-                <th scope="row">Approved applications: awaiting acceptance by applicant</th>
+                <th scope="row">Approved applications to my transfer funds: awaiting acceptance by applicant</th>
                 <td class="numeric">@Model.Data.ApprovedPledgeApplications.ToString("C0", culture)</td>
             </tr>
             <tr>
@@ -83,13 +63,22 @@
             </tr>
         </table>
         <details>
-            <summary><span class="summary">How are my committed funds calculated?</span></summary>
+            <summary><span class="summary">How are my projected funds calculated?</span></summary>
             <div class="panel panel-border-narrow">
-                <p>Your committed funds are calculated by subtracting your <strong>total estimated spend</strong> from your <strong>@Model.Data.TotalAvailableTransferAllowance.ToString("C0", culture) total available transfer allowance</strong>.</p>
+                <p>Your projected funds are calculated by subtracting your <strong>total estimated spend</strong> from your <strong>@Model.Data.StartingTransferAllowance.ToString("C0", culture) transfer allowance</strong>.</p>
             </div>
         </details>
     </div>
     <div class="column-one-half">
+        
+        <div class="finance-data finance-data">
+            <dl>
+                <dt>Total estimated spend for @Model.Data.FinancialYearString</dt>
+                <dd>@Model.Data.CurrentYearEstimatedSpend.ToString("C0", culture)</dd>
+            </dl>
+        </div>
+        <br/>
+
         <div class="finance-data finance-data--highlight">
             <dl>
                 <dt>Estimated remaining allowance for @Model.Data.FinancialYearString</dt>
@@ -101,99 +90,23 @@
 
 <hr />
 
-<h2 class="heading-medium">
-    Available pledge funds for financial year @Model.Data.FinancialYearString
-</h2>
-<div class="grid-row">
-    <div class="column-one-half">
-        <table>
-            <tr>
-                <th scope="row">You have pledged</th>
-                <td class="numeric">@Model.Data.AmountPledged.ToString("C0", culture)</td>
-            </tr>
-            <tr>
-                <th scope="row">Approved applications: accepted by applicant</th>
-                <td class="numeric">@Model.Data.AcceptedPledgeApplications.ToString("C0", culture)</td>
-            </tr>
-            <tr>
-                <th scope="row">Approved applications: awaiting acceptance by applicant</th>
-                <td class="numeric">@Model.Data.ApprovedPledgeApplications.ToString("C0", culture)</td>
-            </tr>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
 
-        </table>
-        <details>
-            <summary><span class="summary">How are my available pledge funds calculated?</span></summary>
-            <div class="panel panel-border-narrow">
-                <p>Your available pledge funds is calculated by subtracting your <strong>approved applications (accepted by applicant and awaiting acceptance by applicant)</strong> from the amount <strong>you have pledged</strong>.</p>
-            </div>
-        </details>
-    </div>
-    <div class="column-one-half">
-        <div class="finance-data">
-            <dl>
-                <dt>Available pledge funds for @Model.Data.FinancialYearString</dt>
-                <dd>@Model.Data.AvailablePledgedFunds.ToString("C0", culture)</dd>
-            </dl>
-        </div>
-    </div>
-</div>
-
-<hr />
-
-<h2 class="heading-medium">
-    Pledged funds for financial year @Model.Data.FinancialYearString
-</h2>
-
-<div class="grid-row">
-    <div class="column-one-half">
-        <table>
-            <tr>
-                <th scope="row">You have pledged</th>
-                <td class="numeric">@Model.Data.AmountPledged.ToString("C0", culture)</td>
-            </tr>
-            <tr>
-                <th scope="row">Transfer connections</th>
-                <td class="numeric">@Model.Data.TransferConnections.ToString("C0", culture)</td>
-            </tr>
-            <tr>
-                <th scope="row">Total pledged and transfer connections</th>
-                <td class="numeric"><strong>@Model.Data.TotalPledgedAndTransferConnections.ToString("C0", culture)</strong></td>
-            </tr>
-        </table>
-        <details>
-            <summary><span class="summary">How are my pledged funds calculated?</span></summary>
-            <div class="panel panel-border-narrow">
-                <p>The amount you can pledge for financial year @Model.Data.FinancialYearString is calculated by subtracting your <strong>total pledged and transfer connections</strong> from your <strong>@Model.Data.TotalAvailableTransferAllowance.ToString("C0", culture) total available transfer allowance</strong>.</p>
-            </div>
-        </details>
-    </div>
-    <div class="column-one-half">
-        <div class="finance-data finance-data--highlight">
-            <dl>
-                <dt>How much more you can pledge for @Model.Data.FinancialYearString</dt>
-                <dd>@Model.Data.TotalAvailablePledgedFunds.ToString("C0", culture)</dd>
-            </dl>
-        </div>
-    </div>
-</div>
-
-<hr />
-
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h2 class="heading-medium">
-            Your transfer connections in future financial years
-        </h2>
+        <h2 class="heading-small">Approved applications and transfer connections in future financial years</h2>
         <p>These finances show approved applications for your pledges and for transfers where you have connected directly with an employer.</p>
-        <p>This uses a forecasted total cost of training, based on the funding band maxiumum for this apprenticeship.</p>
-        <p>The yearly forecasted costs are based on the planned start date of training and the 20% completion payment. It uses the financial year starting April. </p>
-        <p>This forecast is based on the information provided in the transfer funding application. As details such as start and end dates, final agreed costs, and breaks in learning may change, it can only be used as a a guide.</p>
+        <p>This uses an estimated total cost of training, based on the funding band maximum for these apprenticeships.</p>
+        <p>The yearly estimate costs are based on the planned start date of training and the 20% completion payment. It uses the financial year starting April. For our forecast we assume the completion payment will be made in the month after the planned end date.</p>
+
+        <h2 class="heading-small">How is my transfer allowance calculated?</h2>
+        <p>The transfer allowance is an estimate because it is based on information that can change in the financial year.</p>
+        <p>These factors in your transfer funding application can vary: start and end dates, final agreed costs, and breaks in learning. Therefore this estimate can only be used as a guide.</p>
 
         <div class="grid-row">
             <div class="column-one-third">
                 <div class="finance-data finance-data--future">
                     <dl>
-                        <dt>Forecasted committed spend @Model.Data.FinancialYearString</dt>
+                        <dt>Estimated spend @Model.Data.FinancialYearString</dt>
                         <dd>@Model.Data.CurrentYearEstimatedSpend.ToString("C0", culture)</dd>
                     </dl>
                 </div>
@@ -201,7 +114,7 @@
             <div class="column-one-third">
                 <div class="finance-data finance-data--future">
                     <dl>
-                        <dt>Forecasted committed spend @Model.Data.NextFinancialYearString</dt>
+                        <dt>Estimated spend @Model.Data.NextFinancialYearString</dt>
                         <dd>@Model.Data.NextYearEstimatedSpend.ToString("C0", culture)</dd>
                     </dl>
                 </div>
@@ -209,18 +122,17 @@
             <div class="column-one-third">
                 <div class="finance-data finance-data--future">
                     <dl>
-                        <dt>Forecasted committed spend @Model.Data.YearAfterNextFinancialYearString</dt>
+                        <dt>Estimated spend @Model.Data.YearAfterNextFinancialYearString</dt>
                         <dd>@Model.Data.YearAfterNextYearEstimatedSpend.ToString("C0", culture)</dd>
                     </dl>
                 </div>
             </div>
         </div>
-
-
     </div>
 </div>
 
-<hr />
+
+
 
 @*TODO: <div class="grid-row">
     <div class="column-two-thirds">
