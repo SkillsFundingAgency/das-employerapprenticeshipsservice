@@ -78,6 +78,7 @@ steps:
 - task: ArchiveFiles@2
   displayName: 'Archive SFA.DAS.Account.Api'
   inputs:
+    includeRootFolder: false
     rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EmployerAccounts.Api'
     archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EmployerAccounts.Api.zip'
 
@@ -94,6 +95,7 @@ steps:
 - task: ArchiveFiles@2
   displayName: 'Archive SFA.DAS.EmployerAccounts.Web'
   inputs:
+    includeRootFolder: false
     rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EmployerAccounts.Web'
     archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EmployerAccounts.Web.zip'
 
@@ -110,6 +112,7 @@ steps:
 - task: ArchiveFiles@2
   displayName: 'Archive SFA.DAS.EmployerAccounts.Host'
   inputs:
+    includeRootFolder: false
     rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EmployerAccounts.Host'
     archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EmployerAccounts.Host.zip'
 
@@ -126,6 +129,7 @@ steps:
 - task: ArchiveFiles@2
   displayName: 'Archive SFA.DAS.EmployerFinance.Api'
   inputs:
+    includeRootFolder: false
     rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EmployerFinance.Api'
     archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EmployerFinance.Api.zip'
 
@@ -142,6 +146,7 @@ steps:
 - task: ArchiveFiles@2
   displayName: 'Archive SFA.DAS.EmployerFinance.Web'
   inputs:
+    includeRootFolder: false
     rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EmployerFinance.Web'
     archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EmployerFinance.Web.zip'
 
@@ -158,6 +163,7 @@ steps:
 - task: ArchiveFiles@2
   displayName: 'Archive SFA.DAS.EmployerFinance.Host'
   inputs:
+    includeRootFolder: false
     rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EmployerFinance.Host'
     archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EmployerFinance.Host.zip'
 
@@ -174,6 +180,7 @@ steps:
 - task: ArchiveFiles@2
   displayName: 'Archive SFA.DAS.EAS.Account.Api'
   inputs:
+    includeRootFolder: false
     rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EAS.Account.Api'
     archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EAS.Account.Api.zip'
 
@@ -190,6 +197,7 @@ steps:
 - task: ArchiveFiles@2
   displayName: 'Archive SFA.DAS.EAS.Web'
   inputs:
+    includeRootFolder: false
     rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EAS.Web'
     archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EAS.Web.zip'
 
@@ -206,6 +214,7 @@ steps:
 - task: ArchiveFiles@2
   displayName: 'Archive SFA.DAS.EAS.Support.Web'
   inputs:
+    includeRootFolder: false
     rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EAS.Support.Web'
     archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EAS.Support.Web.zip'
 

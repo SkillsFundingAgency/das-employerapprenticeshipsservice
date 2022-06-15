@@ -2,6 +2,6 @@
 {
     public interface IHttpServiceFactory
     {
-        IHttpService Create(string clientId, string clientSecret, string identifierUri, string tenant);
+        IHttpService Create(string identifierUri, string clientId = "", string clientSecret = "", string tenant = "");
     }
 }

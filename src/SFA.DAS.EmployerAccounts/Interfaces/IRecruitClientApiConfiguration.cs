@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.Interfaces
 {
-    public interface IRecruitClientApiConfiguration : IAzureActiveDirectoryClientConfiguration
+    public interface IRecruitClientApiConfiguration : IManagedIdentityClientConfiguration
     {
     }
 }

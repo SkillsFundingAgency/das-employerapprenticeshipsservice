@@ -21,12 +21,7 @@ namespace SFA.DAS.EmployerAccounts.Services
             IMapper mapper)
         {
             _configuration = configuration;
-            _httpService = httpServiceFactory.Create(
-                configuration.RecruitApi.ClientId,
-                configuration.RecruitApi.ClientSecret,
-                configuration.RecruitApi.IdentifierUri,
-                configuration.RecruitApi.Tenant
-            );
+            _httpService = httpServiceFactory.Create(configuration.RecruitApi.IdentifierUri);
             _mapper = mapper;
         }
 

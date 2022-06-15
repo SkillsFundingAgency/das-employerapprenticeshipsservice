@@ -70,9 +70,11 @@
         "sharedApimName": {
             "type": "string"
         },
-        "appServiceAllowedIPs": {
-            "type": "array",
-            "defaultValue": []
+        "backEndAccessRestrictions": {
+            "type": "array"
+        },
+        "frontEndAccessRestrictions": {
+            "type": "array"
         },
         "sharedSQLServerName": {
             "type": "string"
@@ -275,7 +277,7 @@
                         "value": "[if(greater(length(parameters('uiCustomHostname')), 0), reference('ui-app-service-certificate', '2018-11-01').outputs.certificateThumbprint.value, '')]"
                     },
                     "ipSecurityRestrictions": {
-                        "value": "[parameters('appServiceAllowedIPs')]"
+                        "value": "[parameters('frontEndAccessRestrictions')]"
                     }
                 }
             }
@@ -393,7 +395,7 @@
                         "value": "[if(greater(length(parameters('apiCustomHostname')), 0), reference('api-app-service-certificate', '2018-11-01').outputs.certificateThumbprint.value, '')]"
                     },
                     "ipSecurityRestrictions": {
-                        "value": "[parameters('appServiceAllowedIPs')]"
+                        "value": "[parameters('backEndAccessRestrictions')]"
                     }
                 }
             }
