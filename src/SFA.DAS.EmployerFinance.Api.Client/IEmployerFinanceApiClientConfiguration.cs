@@ -3,9 +3,6 @@
     public interface IEmployerFinanceApiClientConfiguration
     {
         string ApiBaseUrl { get; }
-        string ClientId { get; }
-        string ClientSecret { get; }
         string IdentifierUri { get; }
-        string Tenant { get; }
     }
 }

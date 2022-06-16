@@ -96,6 +96,12 @@
         },
         "tags": {
             "type": "object"
+        },
+        "idaTenant": {
+            "type": "string"
+        },
+        "financeApiIdaAudience": {
+            "type": "string"
         }
     },
     "variables": {
@@ -370,6 +376,14 @@
                                 {
                                     "name": "InstrumentationKey",
                                     "value": "[reference('ApiAppInsights').outputs.InstrumentationKey.value]"
+                                },
+                                {
+                                    "name": "IdaTenant",
+                                    "value": "[parameters('idaTenant')]"
+                                },
+                                {
+                                    "name": "FinanceApiIdaAudience",
+                                    "value": "[parameters('financeApiIdaAudience')]"
                                 }
                             ]
                         }

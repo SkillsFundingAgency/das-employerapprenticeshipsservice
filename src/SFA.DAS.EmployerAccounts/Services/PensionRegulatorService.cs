@@ -19,9 +19,9 @@ namespace SFA.DAS.EmployerAccounts.Services
         {           
             _configuration = configuration;         
             _httpService = httpServiceFactory.Create(
-                configuration.PensionRegulatorApi.ClientId,
-                configuration.PensionRegulatorApi.ClientSecret,
                 configuration.PensionRegulatorApi.IdentifierUri,
+                configuration.PensionRegulatorApi.ClientId,
+                configuration.PensionRegulatorApi.ClientSecret,                
                 configuration.PensionRegulatorApi.Tenant
             );
         }

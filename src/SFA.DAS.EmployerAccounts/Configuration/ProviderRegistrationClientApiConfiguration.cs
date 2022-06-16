@@ -2,10 +2,9 @@
 
 namespace SFA.DAS.EmployerAccounts.Configuration
 {
-    public class RecruitClientApiConfiguration : IRecruitClientApiConfiguration
+    public class ProviderRegistrationClientApiConfiguration : IProviderRegistrationClientApiConfiguration
     {
-        public string ApiBaseUrl { get; set; }       
+        public string BaseUrl { get; set; }
         public string IdentifierUri { get; set; }
-
     }
 }
