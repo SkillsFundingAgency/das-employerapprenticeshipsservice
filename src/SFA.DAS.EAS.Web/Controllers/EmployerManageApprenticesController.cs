@@ -1,9 +1,7 @@
-﻿using System.Configuration;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Web.Attributes;
-using SFA.DAS.EAS.Web.Helpers;
+using SFA.DAS.EAS.Infrastructure.Attributes;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.Controllers

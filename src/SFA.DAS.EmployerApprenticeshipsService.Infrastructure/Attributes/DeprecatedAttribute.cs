@@ -2,7 +2,7 @@
 using System;
 using System.Web.Mvc;
 
-namespace SFA.DAS.EAS.Web.Attributes
+namespace SFA.DAS.EAS.Infrastructure.Attributes
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class DeprecatedAttribute : ActionFilterAttribute
@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Web.Attributes
             var controllerName = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName;
             var actionName = filterContext.ActionDescriptor.ActionName;
 
-            Logger.Info($"To track Apprentice V1 details landing on EAS.Web: UrlReferrer Request: {referrer} Request to Page: {rawUrl} Handled At: {controllerName}.{actionName}");
+            Logger.Info($"To track Apprentice V1 details landing on EAS: UrlReferrer Request: {referrer} Request to Page: {rawUrl} Handled At: {controllerName}.{actionName}");
             base.OnActionExecuting(filterContext);
         }
     }

@@ -1,7 +1,7 @@
 ﻿using System.Web.Mvc;
 using SFA.DAS.Authorization.Mvc.Attributes;
+using SFA.DAS.EAS.Infrastructure.Attributes;
 using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Web.Attributes;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
