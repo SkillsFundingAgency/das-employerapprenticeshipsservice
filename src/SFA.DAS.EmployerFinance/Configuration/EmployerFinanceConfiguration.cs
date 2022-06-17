@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.Authentication;
 using SFA.DAS.EAS.Account.Api.Client;
+using SFA.DAS.EmployerFinance.Api.Client;
 using SFA.DAS.Hmrc.Configuration;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
 using SFA.DAS.TokenService.Api.Client;
@@ -44,5 +45,6 @@ namespace SFA.DAS.EmployerFinance.Configuration
         public string ZenDeskSnippetKey { get; set; }
         public string ZenDeskSectionId { get; set; }
         public string ZenDeskCobrowsingSnippetKey { get; set; }
+        public EmployerFinanceApiClientConfiguration EmployerFinanceApi { get; set; }
     }
 }
