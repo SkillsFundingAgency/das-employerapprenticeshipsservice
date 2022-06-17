@@ -19,7 +19,6 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DataRegistry>();
                 c.AddRegistry<EventsRegistry>();
-                c.AddRegistry<ExecutionPoliciesRegistry>();
                 c.AddRegistry<HashingRegistry>();
                 c.AddRegistry<LoggerRegistry>();
                 c.AddRegistry<MapperRegistry>();
@@ -29,7 +28,6 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 c.AddRegistry<ReferenceDataRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
                 c.AddRegistry<TasksRegistry>();
-                c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<ValidationRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });

@@ -47,7 +47,6 @@ namespace SFA.DAS.EmployerAccounts.Api
                 c.AddRegistry<NServiceBusClientUnitOfWorkRegistry>();
                 c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
-                c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
         }

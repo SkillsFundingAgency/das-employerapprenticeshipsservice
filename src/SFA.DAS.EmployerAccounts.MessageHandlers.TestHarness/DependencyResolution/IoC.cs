@@ -26,7 +26,6 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness.DependencyResolut
                 c.AddRegistry<NotificationsRegistry>();
                 c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
-                c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
         }

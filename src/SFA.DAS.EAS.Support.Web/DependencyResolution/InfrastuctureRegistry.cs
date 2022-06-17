@@ -43,6 +43,7 @@ namespace SFA.DAS.EAS.Support.Web.DependencyResolution
                 return ctx.GetInstance<IWebConfiguration>().LevySubmission.HmrcApi;
             });
 
+            For<ITokenServiceApiClient>().Use<TokenServiceApiClient>();
             For<ITokenServiceApiClientConfiguration>().Use(string.Empty, (ctx) =>
             {
                 return ctx.GetInstance<IWebConfiguration>().LevySubmission.TokenServiceApi;
@@ -53,7 +54,6 @@ namespace SFA.DAS.EAS.Support.Web.DependencyResolution
                 var hashServiceconfig = ctx.GetInstance<IWebConfiguration>().HashingService;
                 return new HashingService.HashingService(hashServiceconfig.AllowedCharacters, hashServiceconfig.Hashstring);
             });
-            
         }
     }
 }

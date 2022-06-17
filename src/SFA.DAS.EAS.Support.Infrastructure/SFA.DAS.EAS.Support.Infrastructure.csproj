@@ -70,7 +70,6 @@
     <Compile Include="Settings\HmrcApiClientConfiguration.cs" />
     <Compile Include="Settings\IHmrcApiClientConfiguration.cs" />
     <Compile Include="Settings\ILevySubmissionsSettings.cs" />
-    <Compile Include="Settings\LevySubmissionsApiConfiguration.cs" />
     <Compile Include="Settings\LevySubmissionsSettings.cs" />
   </ItemGroup>
   <ItemGroup>
