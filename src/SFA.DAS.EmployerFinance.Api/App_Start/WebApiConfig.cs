@@ -47,7 +47,6 @@ namespace SFA.DAS.EmployerFinance.Api
                 c.AddRegistry<NotificationsRegistry>();
                 c.AddRegistry<NServiceBusClientUnitOfWorkRegistry>();
                 c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
-                c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<StartupRegistry>();
                 c.AddRegistry<DefaultRegistry>();
                 c.AddRegistry<CommitmentsV2ApiClientRegistry>();
