@@ -4,7 +4,6 @@
     {
         public const string EmployerAccounts = "SFA.DAS.EmployerAccounts";
         public const string Features = "SFA.DAS.EmployerApprenticeshipsService.FeaturesV2";
-        public const string TokenServiceApiClient = "SFA.DAS.TokenServiceApiClient";
         public const string TasksApi = "SFA.DAS.Tasks.Api";
         public const string ReferenceDataApiClient = "SFA.DAS.ReferenceDataApiClient";
         public const string NotificationsApiClient = "SFA.DAS.EmployerAccounts.Notifications";

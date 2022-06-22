@@ -27,7 +27,6 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution
                 c.AddRegistry<NotificationsRegistry>();
                 c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
-                c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<ReadStoreDataRegistry>();
                 c.AddRegistry<ReadStoreMediatorRegistry>();
                 c.AddRegistry<DefaultRegistry>();

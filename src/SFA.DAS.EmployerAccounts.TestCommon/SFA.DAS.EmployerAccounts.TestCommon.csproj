@@ -177,7 +177,7 @@
       <Version>1.0.183</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Hmrc">
-      <Version>1.0.16</Version>
+      <Version>1.0.30</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Messaging">
       <Version>3.0.0.63765</Version>

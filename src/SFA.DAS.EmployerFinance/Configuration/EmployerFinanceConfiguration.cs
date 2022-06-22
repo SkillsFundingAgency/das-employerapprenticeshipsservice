@@ -3,6 +3,7 @@ using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerFinance.Api.Client;
 using SFA.DAS.Hmrc.Configuration;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
+using SFA.DAS.TokenService.Api.Client;
 
 namespace SFA.DAS.EmployerFinance.Configuration
 {
@@ -36,10 +37,9 @@ namespace SFA.DAS.EmployerFinance.Configuration
         public string RedisConnectionString { get; set; }
         public virtual int FundsExpiryPeriod { get; set; }
         public AccountApiConfiguration AccountApi { get; set; }
-
+        public TokenServiceApiClientConfiguration TokenServiceApi { get; set; }
         public CommitmentsApiV2ClientConfiguration CommitmentsApi { get; set; }
         public PaymentsApiClientConfiguration PaymentsEventsApi { get; set; } 
-
         public string ReservationsBaseUrl { get; set; }
         public string ZenDeskHelpCentreUrl { get; set; }
         public string ZenDeskSnippetKey { get; set; }

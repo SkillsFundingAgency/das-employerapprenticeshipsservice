@@ -2,6 +2,7 @@
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.Hmrc.Configuration;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
+using SFA.DAS.TokenService.Api.Client;
 using System;
 
 namespace SFA.DAS.EmployerAccounts.Configuration
@@ -14,7 +15,7 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string DatabaseConnectionString { get; set; }
         public string EmployerAccountsBaseUrl { get; set; }
         public string EmployerCommitmentsBaseUrl { get; set; }
-        public string EmployerCommitmentsV2BaseUrl { get; set; }        
+        public string EmployerCommitmentsV2BaseUrl { get; set; }
         public string EmployerFinanceBaseUrl { get; set; }
         public string EmployerIncentivesBaseUrl { get; set; }
         public string EmployerPortalBaseUrl { get; set; }
@@ -42,6 +43,7 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string RedisConnectionString { get; set; }
         public bool CanSkipRegistrationSteps { get; set; }
         public AccountApiConfiguration AccountApi { get; set; }
+        public TokenServiceApiClientConfiguration TokenServiceApi { get; set; }
         public UserAornPayeLockConfiguration UserAornPayeLock { get; set; }
         public string ZenDeskHelpCentreUrl { get; set; }
         public string ReportTrainingProviderEmailAddress { get; set; }
