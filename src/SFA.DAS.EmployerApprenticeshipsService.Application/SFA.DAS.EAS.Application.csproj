@@ -71,7 +71,6 @@
     <Compile Include="DependencyResolution\ConfigurationRegistry.cs" />
     <Compile Include="DependencyResolution\DataRegistry.cs" />
     <Compile Include="DependencyResolution\EventsRegistry.cs" />
-    <Compile Include="DependencyResolution\ExecutionPoliciesRegistry.cs" />
     <Compile Include="DependencyResolution\HashingRegistry.cs" />
     <Compile Include="DependencyResolution\LoggerRegistry.cs" />
     <Compile Include="DependencyResolution\MapperRegistry.cs" />
@@ -82,7 +81,6 @@
     <Compile Include="DependencyResolution\ReferenceDataRegistry.cs" />
     <Compile Include="DependencyResolution\RepositoriesRegistry.cs" />
     <Compile Include="DependencyResolution\TasksRegistry.cs" />
-    <Compile Include="DependencyResolution\TokenServiceRegistry.cs" />
     <Compile Include="DependencyResolution\ValidationRegistry.cs" />
     <Compile Include="Queries\GetFinancialStatistics\GetFinancialStatisticsQueryHandler.cs" />
     <Compile Include="Queries\GetFinancialStatistics\GetFinancialStatisticsQuery.cs" />
@@ -234,9 +232,6 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.HashingService">
       <Version>1.0.183</Version>
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.Hmrc">
-      <Version>1.0.16</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Messaging">
       <Version>3.0.0.63765</Version>

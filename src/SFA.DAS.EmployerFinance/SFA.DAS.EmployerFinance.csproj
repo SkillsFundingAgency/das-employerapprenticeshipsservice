@@ -37,7 +37,7 @@
     <PackageReference Include="SFA.DAS.Events.Api.Client" Version="1.20.0.26497" />
     <PackageReference Include="SFA.DAS.Events.Api.Types" Version="2.0.0.36524" />
     <PackageReference Include="sfa.das.HashingService" Version="1.0.183" />
-    <PackageReference Include="SFA.DAS.Hmrc" Version="1.0.16" />
+    <PackageReference Include="SFA.DAS.Hmrc" Version="1.0.30" />
     <PackageReference Include="SFA.DAS.Http" Version="3.2.28" />
     <PackageReference Include="SFA.DAS.Messaging" Version="3.0.0.63765" />
     <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus" Version="3.0.0.53181" />
@@ -49,7 +49,7 @@
     <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="15.0.25" />
     <PackageReference Include="SFA.DAS.Provider.Events.Api.Client" Version="2.1.97" />
     <PackageReference Include="SFA.DAS.Sql.Client" Version="1.0.0.32930" />
-    <PackageReference Include="SFA.DAS.TokenService.Api.Client" Version="2.1.1" />
+    <PackageReference Include="SFA.DAS.TokenService.Api.Client" Version="2.3.0" />
     <PackageReference Include="SFA.DAS.UnitOfWork" Version="9.0.13" />
     <PackageReference Include="StructureMap" Version="4.7.1" />
     <PackageReference Include="SFA.DAS.Validation" Version="5.1.167" />

@@ -5,6 +5,7 @@ using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Support.Infrastructure.Settings;
 using SFA.DAS.EAS.Support.Web.Configuration;
 using SFA.DAS.Support.Shared.SiteConnection;
+using SFA.DAS.TokenService.Api.Client;
 using System;
 using System.IO;
 
@@ -35,18 +36,15 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Configuration
                 },
                 LevySubmission = new LevySubmissionsSettings
                 {
-                   HmrcApiBaseUrlSetting  = new HmrcApiBaseUrlConfig
-                   {
-                       HmrcApiBaseUrl ="--- configuration value goes here ---"
-                   },
-                    LevySubmissionsApiConfig = new LevySubmissionsApiConfiguration
+                    HmrcApi = new HmrcApiClientConfiguration
+                    {
+                        ApiBaseUrl = "--- configuration value goes here ---"
+                    },
+                    TokenServiceApi = new TokenServiceApiClientConfiguration
                     {
                         ApiBaseUrl = "",
-                        ClientId = "",
-                        ClientSecret = "",
-                        IdentifierUri = "",
-                        Tenant = ""
-                     }
+                        ClientSecret = ""
+                    }
                 },
                 HashingService = new HashingServiceConfig
                 {
