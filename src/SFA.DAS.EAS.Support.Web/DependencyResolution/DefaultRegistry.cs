@@ -36,13 +36,12 @@ namespace SFA.DAS.EAS.Support.Web.DependencyResolution
 
         public DefaultRegistry()
         {
-            Scan(
-                scan =>
-                {
-                    scan.TheCallingAssembly();
-                    scan.WithDefaultConventions();
-					scan.With(new ControllerConvention());
-                });
+            Scan(s =>
+            {
+                s.TheCallingAssembly();
+                s.WithDefaultConventions();
+                s.With(new ControllerConvention());
+            });
 
             WebConfiguration configuration = GetConfiguration();
 

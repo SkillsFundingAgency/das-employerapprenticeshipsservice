@@ -14,14 +14,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             return AccountAction(helper, baseUrl, path);
         }
 
-        public static string EmployerCommitmentsAction(this UrlHelper helper, string path)
-        {
-            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
-            var baseUrl = configuration.EmployerCommitmentsBaseUrl;
-            
-            return AccountAction(helper, baseUrl, path);
-        }
-
         public static string EmployerCommitmentsV2Action(this UrlHelper helper, string path)
         {
             var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();

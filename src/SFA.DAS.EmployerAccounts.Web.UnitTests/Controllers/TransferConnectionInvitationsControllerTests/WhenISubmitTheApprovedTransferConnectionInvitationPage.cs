@@ -39,7 +39,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.TransferConnectionI
             var result = _controller.Approved(_viewModel) as RedirectResult;
 
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Url, Is.EqualTo($"/accounts/{AccountHashedId}/apprentices/home"));
+            Assert.That(result.Url, Is.EqualTo($"/{AccountHashedId}"));
         }
 
         [Test]

@@ -19,14 +19,6 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
             var baseUrl = configuration.EmployerAccountsBaseUrl;
 
             return includedAccountId ? Action(baseUrl, PathWithHashedAccountId(helper, controller, path)) : Action(baseUrl, $"{controller}/{path}");
-        }        
-
-        public static string EmployerCommitmentsAction(this UrlHelper helper, string path)
-        {
-            var configuration = DependencyResolver.Current.GetService<EmployerFinanceConfiguration>();
-            var baseUrl = configuration.EmployerCommitmentsBaseUrl;
-
-            return AccountAction(helper, baseUrl, path);
         }
 
         public static string LevyTransfersMatchingAccountAction(this UrlHelper helper, string path)
