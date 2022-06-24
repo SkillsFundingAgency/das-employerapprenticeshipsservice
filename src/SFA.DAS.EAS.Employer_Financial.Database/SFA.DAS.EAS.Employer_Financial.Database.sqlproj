@@ -199,6 +199,9 @@
     <Build Include="StoredProcedures\CreateDraftExpiredFunds.sql" />
     <Build Include="StoredProcedures\GetDraftExpiredFunds.sql" />
     <Build Include="StoredProcedures\CreateAccountTransfersV1.sql" />
+    <Build Include="Tables\TransferConnectionInvitation.sql" />
+    <Build Include="Tables\TransferConnectionInvitationChange.sql" />
+    <Build Include="Tables\User.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
