@@ -58,6 +58,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\DeprecatedAttribute.cs" />
     <Compile Include="Data\AccountIdUserTableParam.cs" />
     <Compile Include="Data\SqlAzureDbConfiguration.cs" />
     <Compile Include="Data\EmployerFinanceDbContext.cs" />
