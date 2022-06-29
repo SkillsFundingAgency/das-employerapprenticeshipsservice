@@ -1,24 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IdentityModel.Tokens;
-using System.Linq;
-using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
-using System.Web.Mvc;
+﻿using MediatR;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using NLog;
 using Owin;
 using SFA.DAS.Authentication;
+using SFA.DAS.EmployerFinance.Commands.UpsertRegisteredUser;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Web;
 using SFA.DAS.EmployerFinance.Web.App_Start;
 using SFA.DAS.EmployerFinance.Web.Authentication;
-using SFA.DAS.EmployerFinance.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.OidcMiddleware;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.IdentityModel.Tokens;
+using System.Linq;
+using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 [assembly: OwinStartup(typeof(Startup))]
 
@@ -60,7 +62,7 @@ namespace SFA.DAS.EmployerFinance.Web
                 TokenValidationMethod = config.Identity.UseCertificate ? TokenValidationMethod.SigningKey : TokenValidationMethod.BinarySecret,
                 AuthenticatedCallback = identity =>
                 {
-                    PostAuthentiationAction(identity, constants);
+                    PostAuthentiationAction(identity, constants).GetAwaiter().GetResult();
                 }
             });
 
@@ -100,18 +102,34 @@ namespace SFA.DAS.EmployerFinance.Web
             };
         }
 
-        private static void PostAuthentiationAction(ClaimsIdentity identity, Constants constants)
+        private async static Task PostAuthentiationAction(ClaimsIdentity identity, Constants constants)
         {
+            var mediator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<IMediator>();
+
             Logger.Info("Retrieving claims from OIDC server.");
 
             var userRef = identity.Claims.FirstOrDefault(claim => claim.Type == constants.Id())?.Value;
 
             Logger.Info($"Retrieved claims from OIDC server for user with external ID '{userRef}'.");
 
-            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, identity.Claims.First(c => c.Type == constants.Id()).Value));
-            identity.AddClaim(new Claim(ClaimTypes.Name, identity.Claims.First(c => c.Type == constants.DisplayName()).Value));
-            identity.AddClaim(new Claim("sub", identity.Claims.First(c => c.Type == constants.Id()).Value));
-            identity.AddClaim(new Claim("email", identity.Claims.First(c => c.Type == constants.Email()).Value));
+            var id = identity.Claims.First(c => c.Type == constants.Id()).Value;
+            var email = identity.Claims.First(c => c.Type == constants.Email()).Value;
+            var lastName = identity.Claims.First(c => c.Type == constants.FamilyName()).Value;
+            var firstName = identity.Claims.First(c => c.Type == constants.GivenName()).Value;
+            var displayName = identity.Claims.First(c => c.Type == constants.DisplayName()).Value;
+
+            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, id));
+            identity.AddClaim(new Claim(ClaimTypes.Name, displayName));
+            identity.AddClaim(new Claim("sub", id));
+            identity.AddClaim(new Claim("email", email));
+
+            await mediator.SendAsync(new UpsertRegisteredUserCommand
+            {
+                EmailAddress = email,
+                UserRef = userRef,
+                LastName = lastName,
+                FirstName = firstName
+            });
         }
     }
 
