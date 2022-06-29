@@ -180,6 +180,7 @@
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Extensions\TimeSpanExtensions.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
+    <Compile Include="Filters\UpsertUserFilter.cs" />
     <Compile Include="Filters\LevyEmployerTypeOnly.cs" />
     <Compile Include="Filters\AnalyticsFilter.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
