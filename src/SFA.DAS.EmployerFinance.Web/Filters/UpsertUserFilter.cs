@@ -1,6 +1,4 @@
-﻿using MediatR;
-using Microsoft.Extensions.Logging;
-using SFA.DAS.EmployerFinance.Commands.UpsertRegisteredUser;
+﻿using NLog;
 using SFA.DAS.EmployerFinance.Configuration;
 using System;
 using System.Linq;
@@ -12,58 +10,68 @@ namespace SFA.DAS.EmployerFinance.Web.Filters
 {
     public class UpsertUserFilter : ActionFilterAttribute
     {
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var logger = DependencyResolver.Current.GetService<ILogger>();
             try
             {
-                logger.LogInformation("UpsertUserFilter: getting session");
+                Logger.Info("UpsertUserFilter: getting session");
 
                 HttpSessionStateBase session = filterContext.HttpContext.Session;
                 if (session == null)
                 {
-                    logger.LogInformation("UpsertUserFilter: Session is null");
+                    Logger.Info("UpsertUserFilter: Session is null");
                 }
                 else if (session.IsNewSession)
                 {
-                    logger.LogInformation("UpsertUserFilter: A new session");
+                    Logger.Info("UpsertUserFilter: A new session");
 
                     //var mediator = DependencyResolver.Current.GetService<IMediator>();
 
                     var config = DependencyResolver.Current.GetService<EmployerFinanceConfiguration>();
-                    var constants = new Constants(config.Identity);
-
-                    ClaimsIdentity identity = HttpContext.Current.User.Identity as ClaimsIdentity;
-                    if (identity.Claims.Any())
+                    if (config != null)
                     {
-                        var email = identity.Claims.FirstOrDefault(c => c.Type == constants.Email()).Value;
-                        var userRef = identity.Claims.FirstOrDefault(claim => claim.Type == constants.Id())?.Value;
-                        var lastName = identity.Claims.FirstOrDefault(c => c.Type == constants.FamilyName()).Value;
-                        var firstName = identity.Claims.FirstOrDefault(c => c.Type == constants.GivenName()).Value;
 
-                        /*mediator.SendAsync(new UpsertRegisteredUserCommand
+
+                        var constants = new Constants(config.Identity);
+
+                        ClaimsIdentity identity = HttpContext.Current.User.Identity as ClaimsIdentity;
+                        if (identity?.Claims?.Any() ?? false)
                         {
-                            EmailAddress = email,
-                            UserRef = userRef,
-                            LastName = lastName,
-                            FirstName = firstName
-                        }).Wait();*/
+                            var email = identity.Claims.FirstOrDefault(c => c.Type == constants.Email()).Value;
+                            var userRef = identity.Claims.FirstOrDefault(claim => claim.Type == constants.Id())?.Value;
+                            var lastName = identity.Claims.FirstOrDefault(c => c.Type == constants.FamilyName()).Value;
+                            var firstName = identity.Claims.FirstOrDefault(c => c.Type == constants.GivenName()).Value;
 
-                        logger.LogInformation($"UpsertUserFilter: claims {email}, {userRef}, {lastName}, {firstName}");
+                            /*mediator.SendAsync(new UpsertRegisteredUserCommand
+                            {
+                                EmailAddress = email,
+                                UserRef = userRef,
+                                LastName = lastName,
+                                FirstName = firstName
+                            }).Wait();*/
+
+                            Logger.Info($"UpsertUserFilter: claims {email}, {userRef}, {lastName}, {firstName}");
+                        }
+                        else
+                        {
+                            Logger.Info("UpsertUserFilter: No claims");
+                        }
                     }
                     else
                     {
-                        logger.LogInformation("UpsertUserFilter: No claims");
+                        Logger.Info("UpsertUserFilter: No config");
                     }
                 }
                 else
                 {
-                    logger.LogInformation("UpsertUserFilter: Not a new session");
+                    Logger.Info("UpsertUserFilter: Not a new session");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                logger.LogError(ex, "UpsertUserFilter: error");
+                Logger.Error(ex, "UpsertUserFilter: error");
             }
 
             base.OnActionExecuting(filterContext);
