@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerFinance.Commands.UpsertRegisteredUser;
 using SFA.DAS.EmployerFinance.Configuration;
 using System.Linq;
@@ -12,26 +13,44 @@ namespace SFA.DAS.EmployerFinance.Web.Filters
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var mediator = DependencyResolver.Current.GetService<IMediator>();
+            var logger = DependencyResolver.Current.GetService<ILogger>();
 
-            var config = DependencyResolver.Current.GetService <EmployerFinanceConfiguration>();
-            var constants = new Constants(config.Identity);
-
-            ClaimsIdentity identity = HttpContext.Current.User.Identity as ClaimsIdentity;
-            if (identity.Claims.Any())
+            HttpSessionStateBase session = filterContext.HttpContext.Session;
+            if (session.IsNewSession)
             {
-                var email = identity.Claims.First(c => c.Type == constants.Email()).Value;
-                var userRef = identity.Claims.FirstOrDefault(claim => claim.Type == constants.Id())?.Value;
-                var lastName = identity.Claims.First(c => c.Type == constants.FamilyName()).Value;
-                var firstName = identity.Claims.First(c => c.Type == constants.GivenName()).Value;
+                logger.LogInformation("UpsertUserFilter: A new session");
 
-                mediator.SendAsync(new UpsertRegisteredUserCommand
+                //var mediator = DependencyResolver.Current.GetService<IMediator>();
+
+                var config = DependencyResolver.Current.GetService<EmployerFinanceConfiguration>();
+                var constants = new Constants(config.Identity);
+
+                ClaimsIdentity identity = HttpContext.Current.User.Identity as ClaimsIdentity;
+                if (identity.Claims.Any())
                 {
-                    EmailAddress = email,
-                    UserRef = userRef,
-                    LastName = lastName,
-                    FirstName = firstName
-                }).Wait();
+                    var email = identity.Claims.FirstOrDefault(c => c.Type == constants.Email()).Value;
+                    var userRef = identity.Claims.FirstOrDefault(claim => claim.Type == constants.Id())?.Value;
+                    var lastName = identity.Claims.FirstOrDefault(c => c.Type == constants.FamilyName()).Value;
+                    var firstName = identity.Claims.FirstOrDefault(c => c.Type == constants.GivenName()).Value;
+
+                    /*mediator.SendAsync(new UpsertRegisteredUserCommand
+                    {
+                        EmailAddress = email,
+                        UserRef = userRef,
+                        LastName = lastName,
+                        FirstName = firstName
+                    }).Wait();*/
+
+                    logger.LogInformation($"UpsertUserFilter: claims {email}, {userRef}, {lastName}, {firstName}");
+                }
+                else
+                {
+                    logger.LogInformation("UpsertUserFilter: No claims");
+                }
+            }
+            else
+            {
+                logger.LogInformation("UpsertUserFilter: Not a new session");
             }
 
             base.OnActionExecuting(filterContext);
