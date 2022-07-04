@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerFinance.Data
             _db = db;
         }
 
-        public Task Upsert(User user)
+        public void Upsert(User user)
         {
             var parameters = new DynamicParameters();
 
@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerFinance.Data
             parameters.Add("@lastName", user.LastName, DbType.String);
             parameters.Add("@correlationId", user.CorrelationId, DbType.String);
 
-            return _db.Value.Database.Connection.ExecuteAsync(
+            _db.Value.Database.Connection.Execute(
                 sql: "[employer_financial].[UpsertUser] @userRef, @email, @firstName, @lastName, @correlationId",
                 param: parameters,
                 _db.Value.Database.CurrentTransaction.UnderlyingTransaction,

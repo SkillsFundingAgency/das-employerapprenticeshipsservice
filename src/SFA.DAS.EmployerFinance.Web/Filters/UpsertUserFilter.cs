@@ -39,13 +39,13 @@ namespace SFA.DAS.EmployerFinance.Web.Filters
                             Logger.Info($"UpsertUserFilter: Retrieved claims for new user session email={email}, userRef={userRef}, lastName={lastName}, firstName={firstName}");
 
                             var mediator = DependencyResolver.Current.GetService<IMediator>();
-                            mediator.SendAsync(new UpsertRegisteredUserCommand
+                            mediator.Send(new UpsertRegisteredUserCommand
                             {
                                 EmailAddress = email,
                                 UserRef = userRef,
                                 LastName = lastName,
                                 FirstName = firstName
-                            }).Wait();
+                            });
                         }
                         else
                         {

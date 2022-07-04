@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Commands.UpsertRegisteredUser
 {
-    public class UpsertRegisteredUserCommandHandler : AsyncRequestHandler<UpsertRegisteredUserCommand>
+    public class UpsertRegisteredUserCommandHandler : RequestHandler<UpsertRegisteredUserCommand>
     {
         private readonly IValidator<UpsertRegisteredUserCommand> _validator;
         private readonly IUserAccountRepository _userRepository;
@@ -20,13 +20,13 @@ namespace SFA.DAS.EmployerFinance.Commands.UpsertRegisteredUser
             _userRepository = userRepository;
         }
 
-        protected override async Task HandleCore(UpsertRegisteredUserCommand message)
+        protected override void HandleCore(UpsertRegisteredUserCommand message)
         {
             var validationResult = _validator.Validate(message);
 
             if (!validationResult.IsValid()) throw new InvalidRequestException(validationResult.ValidationDictionary);
 
-            await _userRepository.Upsert(new User
+            _userRepository.Upsert(new User
             {
                 Ref = new Guid(message.UserRef),
                 Email = message.EmailAddress,
