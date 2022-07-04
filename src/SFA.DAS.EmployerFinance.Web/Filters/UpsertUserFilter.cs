@@ -1,4 +1,6 @@
-﻿using NLog;
+﻿using MediatR;
+using NLog;
+using SFA.DAS.EmployerFinance.Commands.UpsertRegisteredUser;
 using SFA.DAS.EmployerFinance.Configuration;
 using System;
 using System.Linq;
@@ -16,24 +18,14 @@ namespace SFA.DAS.EmployerFinance.Web.Filters
         {
             try
             {
-                Logger.Info("UpsertUserFilter: getting session");
-
                 HttpSessionStateBase session = filterContext.HttpContext.Session;
-                if (session == null)
+                if (session?.IsNewSession ?? false)
                 {
-                    Logger.Info("UpsertUserFilter: Session is null");
-                }
-                else if (session.IsNewSession)
-                {
-                    Logger.Info("UpsertUserFilter: A new session");
-
-                    //var mediator = DependencyResolver.Current.GetService<IMediator>();
+                    Logger.Info("UpsertUserFilter: Retrieving claims for new user session");
 
                     var config = DependencyResolver.Current.GetService<EmployerFinanceConfiguration>();
                     if (config != null)
                     {
-
-
                         var constants = new Constants(config.Identity);
 
                         ClaimsIdentity identity = HttpContext.Current.User.Identity as ClaimsIdentity;
@@ -44,34 +36,31 @@ namespace SFA.DAS.EmployerFinance.Web.Filters
                             var lastName = identity.Claims.FirstOrDefault(c => c.Type == constants.FamilyName()).Value;
                             var firstName = identity.Claims.FirstOrDefault(c => c.Type == constants.GivenName()).Value;
 
-                            /*mediator.SendAsync(new UpsertRegisteredUserCommand
+                            Logger.Info($"UpsertUserFilter: Retrieved claims for new user session email={email}, userRef={userRef}, lastName={lastName}, firstName={firstName}");
+
+                            var mediator = DependencyResolver.Current.GetService<IMediator>();
+                            mediator.SendAsync(new UpsertRegisteredUserCommand
                             {
                                 EmailAddress = email,
                                 UserRef = userRef,
                                 LastName = lastName,
                                 FirstName = firstName
-                            }).Wait();*/
-
-                            Logger.Info($"UpsertUserFilter: claims {email}, {userRef}, {lastName}, {firstName}");
+                            }).Wait();
                         }
                         else
                         {
-                            Logger.Info("UpsertUserFilter: No claims");
+                            Logger.Info("UpsertUserFilter: Unable to retrieve claims for new user session");
                         }
-                    }
-                    else
-                    {
-                        Logger.Info("UpsertUserFilter: No config");
                     }
                 }
                 else
                 {
-                    Logger.Info("UpsertUserFilter: Not a new session");
+                    Logger.Info("UpsertUserFilter: Not retrieving claims for existing session");
                 }
             }
             catch (Exception ex)
             {
-                Logger.Error(ex, "UpsertUserFilter: error");
+                Logger.Error(ex, "UpsertUserFilter: Error unable synchronize user with claims for session");
             }
 
             base.OnActionExecuting(filterContext);
