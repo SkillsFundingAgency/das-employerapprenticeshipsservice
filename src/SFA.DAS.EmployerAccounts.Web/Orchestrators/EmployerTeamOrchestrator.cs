@@ -626,9 +626,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         public void GetCallToActionViewName(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
-            var rules = new Dictionary<int, EvalutateCallToActionRuleDelegate>
+            var rules = new Dictionary<int, EvaluateCallToActionRuleDelegate>
             {
-                { 100, EvalutateSignAgreementCallToActionRule },
+                { 100, EvaluateSignAgreementCallToActionRule },
                 { 101, vm => viewModel.Data.CallToActionViewModel == null }
             };
 
@@ -639,14 +639,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 rules.Add(122, EvaluateSingleApprenticeshipsWithTrainingProviderStatusCallToActionRule);
                 rules.Add(123, EvaluateSingleApprenticeshipsWithReadyToReviewStatusCallToActionRule);
                 rules.Add(124, EvaluateContinueSetupForSingleApprenticeshipByProviderCallToActionRule);
-                rules.Add(200, EvalutateSingleReservationCallToActionRule);
-                rules.Add(201, EvalutateHasReservationsCallToActionRule);
+                rules.Add(200, EvaluateSingleReservationCallToActionRule);
+                rules.Add(201, EvaluateHasReservationsCallToActionRule);
                 
-                rules.Add(150, EvalutateDraftVacancyCallToActionRule);
-                rules.Add(151, EvalutatePendingReviewVacancyCallToActionRule);
-                rules.Add(152, EvalutateLiveVacancyCallToActionRule);
-                rules.Add(153, EvalutateRejectedVacancyCallToActionRule);
-                rules.Add(154, EvalutateClosedVacancyCallToActionRule);
+                rules.Add(150, EvaluateDraftVacancyCallToActionRule);
+                rules.Add(151, EvaluatePendingReviewVacancyCallToActionRule);
+                rules.Add(152, EvaluateLiveVacancyCallToActionRule);
+                rules.Add(153, EvaluateRejectedVacancyCallToActionRule);
+                rules.Add(154, EvaluateClosedVacancyCallToActionRule);
             }
 
             foreach (var callToActionRuleFunc in rules.OrderBy(r => r.Key))
@@ -656,9 +656,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
         }
 
-        private delegate bool EvalutateCallToActionRuleDelegate(PanelViewModel<AccountDashboardViewModel> viewModel);
+        private delegate bool EvaluateCallToActionRuleDelegate(PanelViewModel<AccountDashboardViewModel> viewModel);
 
-        private bool EvalutateDraftVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvaluateDraftVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
                 viewModel.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
@@ -677,7 +677,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return false;
         }
 
-        private bool EvalutatePendingReviewVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvaluatePendingReviewVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
                 viewModel.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
@@ -696,7 +696,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return false;
         }
 
-        private bool EvalutateLiveVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvaluateLiveVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
                 viewModel.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
@@ -714,7 +714,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
             return false;
         }
-        private bool EvalutateClosedVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvaluateClosedVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
                 viewModel.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
@@ -733,7 +733,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return false;
         }
 
-        private bool EvalutateRejectedVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvaluateRejectedVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
                 viewModel.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
@@ -752,7 +752,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return false;
         }
 
-        private bool EvalutateSignAgreementCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvaluateSignAgreementCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.PendingAgreements?.Count() > 0)
             {
@@ -763,7 +763,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return false;
         }
 
-        private bool EvalutateSingleReservationCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvaluateSingleReservationCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.ReservationsCount == 1
                 && viewModel.Data.CallToActionViewModel.PendingReservationsCount == 1)
@@ -777,9 +777,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return false;
         }
 
-        private bool EvalutateHasReservationsCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvaluateHasReservationsCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
-            if (!viewModel.Data.CallToActionViewModel.HasReservations)
+            if (!viewModel.Data.CallToActionViewModel.HasReservations 
+                && viewModel.Data.CallToActionViewModel.CohortsCount == 0
+                && viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount == 0)
             {
                 viewModel.ViewName = "CheckFunding";
                 viewModel.PanelType = PanelType.Action;
