@@ -106,5 +106,21 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             //Assert
             panelViewModel.ViewName.Should().Be("SignAgreement");
         }
+
+        [Test, RecursiveMoqAutoData]
+        public void WhenNoData_ThenDoNotSetCallToActionViewName(
+            [NonLevyPanelView] PanelViewModel<AccountDashboardViewModel> panelViewModel,
+            EmployerTeamOrchestrator sut)
+        {
+            // Arrange
+            panelViewModel.Data.CallToActionViewModel = null;
+            panelViewModel.Data.PendingAgreements.Clear();
+
+            // Act
+            sut.GetCallToActionViewName(panelViewModel);
+
+            //Assert
+            panelViewModel.ViewName.Should().BeNullOrEmpty();
+        }
     }
 }
