@@ -90,5 +90,21 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             //Assert
             panelViewModel.ViewName.Should().BeNullOrEmpty();
         }
+
+        [Test, RecursiveMoqAutoData]
+        public void WhenPendingAgreementExists_ThenShouldGetSignAgreementCallToAction(
+           PendingAgreementsViewModel pendingAgreement,
+           [NonLevyPanelView] PanelViewModel<AccountDashboardViewModel> panelViewModel,
+           EmployerTeamOrchestrator sut)
+        {
+            // Arrange
+            panelViewModel.Data.PendingAgreements = new List<PendingAgreementsViewModel> { pendingAgreement };
+
+            // Act
+            sut.GetCallToActionViewName(panelViewModel);
+
+            //Assert
+            panelViewModel.ViewName.Should().Be("SignAgreement");
+        }
     }
 }
