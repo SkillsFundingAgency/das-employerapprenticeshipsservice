@@ -12,6 +12,7 @@ namespace SFA.DAS.EmployerFinance.Web.Filters
 {
     public class UpsertUserFilter : ActionFilterAttribute
     {
+        public const string UpsertUserRequired = nameof(UpsertUserRequired);
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -19,9 +20,9 @@ namespace SFA.DAS.EmployerFinance.Web.Filters
             try
             {
                 HttpSessionStateBase session = filterContext.HttpContext.Session;
-                if (session?.IsNewSession ?? false)
+                if (session?[UpsertUserRequired] as bool? ?? false)
                 {
-                    Logger.Info("UpsertUserFilter: Retrieving claims for new user session");
+                    Logger.Info("UpsertUserFilter: Retrieving claims after authentication");
 
                     var config = DependencyResolver.Current.GetService<EmployerFinanceConfiguration>();
                     if (config != null)
@@ -36,7 +37,7 @@ namespace SFA.DAS.EmployerFinance.Web.Filters
                             var lastName = identity.Claims.FirstOrDefault(c => c.Type == constants.FamilyName()).Value;
                             var firstName = identity.Claims.FirstOrDefault(c => c.Type == constants.GivenName()).Value;
 
-                            Logger.Info($"UpsertUserFilter: Retrieved claims for new user session email={email}, userRef={userRef}, lastName={lastName}, firstName={firstName}");
+                            Logger.Info($"UpsertUserFilter: Retrieved claims after authentication email={email}, userRef={userRef}, lastName={lastName}, firstName={firstName}");
 
                             var mediator = DependencyResolver.Current.GetService<IMediator>();
                             mediator.Send(new UpsertRegisteredUserCommand
@@ -46,21 +47,24 @@ namespace SFA.DAS.EmployerFinance.Web.Filters
                                 LastName = lastName,
                                 FirstName = firstName
                             });
+
+                            Logger.Info($"UpsertUserFilter: Upserted user with claims after authentication email={email}, userRef={userRef}, lastName={lastName}, firstName={firstName}");
+                            session[UpsertUserRequired] = false;
                         }
                         else
                         {
-                            Logger.Info("UpsertUserFilter: Unable to retrieve claims for new user session");
+                            Logger.Info("UpsertUserFilter: Unable to retrieve claims after authentication");
                         }
                     }
                 }
                 else
                 {
-                    Logger.Info("UpsertUserFilter: Not retrieving claims for existing session");
+                    Logger.Info("UpsertUserFilter: Upsert user is not required");
                 }
             }
             catch (Exception ex)
             {
-                Logger.Error(ex, "UpsertUserFilter: Error unable synchronize user with claims for session");
+                Logger.Error(ex, "UpsertUserFilter: Error unable to upsert user with identity claims");
             }
 
             base.OnActionExecuting(filterContext);

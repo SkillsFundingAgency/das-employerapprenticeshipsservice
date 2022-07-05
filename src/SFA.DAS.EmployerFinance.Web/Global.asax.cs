@@ -121,12 +121,5 @@ namespace SFA.DAS.EmployerFinance.Web
             Logger.Error(exception, message, properties);
             telemetryClient.TrackException(exception);
         }
-
-        protected void Session_Start(Object sender, EventArgs e)
-        {
-            // placeholder handler is require to ensure HttpContext.Session.IsNewSession will
-            // return false correctly when a new session has already been started but nothing
-            // has been written to the session yet
-        }
     }
 }

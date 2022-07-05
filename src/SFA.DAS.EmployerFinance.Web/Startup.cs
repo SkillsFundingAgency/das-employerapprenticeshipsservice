@@ -10,6 +10,7 @@ using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Web;
 using SFA.DAS.EmployerFinance.Web.App_Start;
 using SFA.DAS.EmployerFinance.Web.Authentication;
+using SFA.DAS.EmployerFinance.Web.Filters;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.OidcMiddleware;
 using System;
@@ -20,6 +21,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 
 [assembly: OwinStartup(typeof(Startup))]
@@ -114,6 +116,8 @@ namespace SFA.DAS.EmployerFinance.Web
             identity.AddClaim(new Claim(ClaimTypes.Name, identity.Claims.First(c => c.Type == constants.DisplayName()).Value));
             identity.AddClaim(new Claim("sub", identity.Claims.First(c => c.Type == constants.Id()).Value));
             identity.AddClaim(new Claim("email", identity.Claims.First(c => c.Type == constants.Email()).Value));
+
+            HttpContext.Current.Session[UpsertUserFilter.UpsertUserRequired] = true;
         }
     }
 
