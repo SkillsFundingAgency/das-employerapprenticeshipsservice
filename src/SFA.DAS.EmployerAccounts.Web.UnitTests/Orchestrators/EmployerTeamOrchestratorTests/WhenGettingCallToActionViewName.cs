@@ -138,5 +138,24 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             //Assert
             panelViewModel.ViewName.Should().BeNullOrEmpty();
         }
+
+        [Test, RecursiveMoqAutoData]
+        public void WhenNoSetup_ThenShouldGetCheckFundingViewName(
+            [NonLevyPanelView] PanelViewModel<AccountDashboardViewModel> panelViewModel,
+            EmployerTeamOrchestrator sut)
+        {
+            // Arrange
+            panelViewModel.Data.CallToActionViewModel.Cohorts = new List<CohortViewModel>();
+            panelViewModel.Data.CallToActionViewModel.Apprenticeships = new List<ApprenticeshipViewModel>();
+            panelViewModel.Data.CallToActionViewModel.Reservations = new List<Reservation>();
+            panelViewModel.Data.CallToActionViewModel.VacanciesViewModel = new VacanciesViewModel();
+            panelViewModel.Data.PendingAgreements.Clear();
+
+            // Act
+            sut.GetCallToActionViewName(panelViewModel);
+
+            //Assert
+            panelViewModel.ViewName.Should().Be("CheckFunding");
+        }
     }
 }
