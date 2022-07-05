@@ -116,8 +116,6 @@ namespace SFA.DAS.EmployerFinance.Web
             identity.AddClaim(new Claim(ClaimTypes.Name, identity.Claims.First(c => c.Type == constants.DisplayName()).Value));
             identity.AddClaim(new Claim("sub", identity.Claims.First(c => c.Type == constants.Id()).Value));
             identity.AddClaim(new Claim("email", identity.Claims.First(c => c.Type == constants.Email()).Value));
-
-            HttpContext.Current.Session[UpsertUserFilter.UpsertUserRequired] = true;
         }
     }
 

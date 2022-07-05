@@ -19,52 +19,42 @@ namespace SFA.DAS.EmployerFinance.Web.Filters
         {
             try
             {
-                HttpSessionStateBase session = filterContext.HttpContext.Session;
-                if (session?[UpsertUserRequired] as bool? ?? false)
-                {
-                    Logger.Info("UpsertUserFilter: Retrieving claims after authentication");
+                Logger.Info("UpsertUserFilter: Retrieving claims");
 
-                    var config = DependencyResolver.Current.GetService<EmployerFinanceConfiguration>();
-                    if (config != null)
+                var config = DependencyResolver.Current.GetService<EmployerFinanceConfiguration>();
+                if (config != null)
+                {
+                    ClaimsIdentity identity = HttpContext.Current.User.Identity as ClaimsIdentity;
+                    if (identity?.Claims?.Any() ?? false)
                     {
                         var constants = new Constants(config.Identity);
+                        var email = identity.Claims.FirstOrDefault(c => c.Type == constants.Email()).Value;
+                        var userRef = identity.Claims.FirstOrDefault(claim => claim.Type == constants.Id())?.Value;
+                        var lastName = identity.Claims.FirstOrDefault(c => c.Type == constants.FamilyName()).Value;
+                        var firstName = identity.Claims.FirstOrDefault(c => c.Type == constants.GivenName()).Value;
 
-                        ClaimsIdentity identity = HttpContext.Current.User.Identity as ClaimsIdentity;
-                        if (identity?.Claims?.Any() ?? false)
+                        Logger.Info($"UpsertUserFilter: Retrieved claims email={email}, userRef={userRef}, lastName={lastName}, firstName={firstName}");
+
+                        var mediator = DependencyResolver.Current.GetService<IMediator>();
+                        mediator.Send(new UpsertRegisteredUserCommand
                         {
-                            var email = identity.Claims.FirstOrDefault(c => c.Type == constants.Email()).Value;
-                            var userRef = identity.Claims.FirstOrDefault(claim => claim.Type == constants.Id())?.Value;
-                            var lastName = identity.Claims.FirstOrDefault(c => c.Type == constants.FamilyName()).Value;
-                            var firstName = identity.Claims.FirstOrDefault(c => c.Type == constants.GivenName()).Value;
+                            EmailAddress = email,
+                            UserRef = userRef,
+                            LastName = lastName,
+                            FirstName = firstName
+                        });
 
-                            Logger.Info($"UpsertUserFilter: Retrieved claims after authentication email={email}, userRef={userRef}, lastName={lastName}, firstName={firstName}");
-
-                            var mediator = DependencyResolver.Current.GetService<IMediator>();
-                            mediator.Send(new UpsertRegisteredUserCommand
-                            {
-                                EmailAddress = email,
-                                UserRef = userRef,
-                                LastName = lastName,
-                                FirstName = firstName
-                            });
-
-                            Logger.Info($"UpsertUserFilter: Upserted user with claims after authentication email={email}, userRef={userRef}, lastName={lastName}, firstName={firstName}");
-                            session[UpsertUserRequired] = false;
-                        }
-                        else
-                        {
-                            Logger.Info("UpsertUserFilter: Unable to retrieve claims after authentication");
-                        }
+                        Logger.Info($"UpsertUserFilter: Upserted user with claims email={email}, userRef={userRef}, lastName={lastName}, firstName={firstName}");
                     }
-                }
-                else
-                {
-                    Logger.Info("UpsertUserFilter: Upsert user is not required");
+                    else
+                    {
+                        Logger.Info("UpsertUserFilter: Unable to retrieve claims");
+                    }
                 }
             }
             catch (Exception ex)
             {
-                Logger.Error(ex, "UpsertUserFilter: Error unable to upsert user with identity claims");
+                Logger.Error(ex, "UpsertUserFilter: Unable to upsert user with claims");
             }
 
             base.OnActionExecuting(filterContext);
