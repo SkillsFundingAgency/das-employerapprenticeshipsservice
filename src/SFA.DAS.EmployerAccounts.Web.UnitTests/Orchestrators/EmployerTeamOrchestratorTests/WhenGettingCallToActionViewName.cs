@@ -204,5 +204,31 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             //Assert
             panelViewModel.ViewName.Should().Be("SingleApprenticeshipContinueSetup");
         }
+
+        [Test, RecursiveMoqAutoData]
+        public void WhenSingleReservationAndApprenticeship_ThenShouldGetSingleApprenticeshipWithTrainingProviderViewName(
+            CohortViewModel singleCohort,
+            Reservation singleReservation,
+            ApprenticeshipViewModel singleApprenticeship,
+            [NonLevyPanelView] PanelViewModel<AccountDashboardViewModel> panelViewModel,
+            EmployerTeamOrchestrator sut)
+        {
+            // Arrange
+            singleCohort.Apprenticeships = new List<ApprenticeshipViewModel> { singleApprenticeship };
+            singleCohort.CohortStatus = CohortStatus.WithTrainingProvider;
+            singleApprenticeship.ApprenticeshipStatus = ApprenticeshipStatus.Draft;
+            singleApprenticeship.NumberOfDraftApprentices = 1;
+            panelViewModel.Data.CallToActionViewModel.Cohorts = new List<CohortViewModel> { singleCohort };
+            panelViewModel.Data.CallToActionViewModel.Apprenticeships = new List<ApprenticeshipViewModel>();
+            panelViewModel.Data.CallToActionViewModel.Reservations = new List<Reservation> { singleReservation };
+            panelViewModel.Data.CallToActionViewModel.VacanciesViewModel = new VacanciesViewModel();
+            panelViewModel.Data.PendingAgreements.Clear(); // todo remove this and add to customization
+
+            // Act
+            sut.GetCallToActionViewName(panelViewModel);
+
+            //Assert
+            panelViewModel.ViewName.Should().Be("SingleApprenticeshipWithTrainingProvider");
+        }
     }
 }
