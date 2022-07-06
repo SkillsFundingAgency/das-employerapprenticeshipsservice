@@ -20,7 +20,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             panelViewModel.Data.CallToActionViewModel.Cohorts = new List<CohortViewModel>();
             panelViewModel.Data.CallToActionViewModel.Apprenticeships = new List<ApprenticeshipViewModel>();
             panelViewModel.Data.CallToActionViewModel.VacanciesViewModel = new VacanciesViewModel();
-            panelViewModel.Data.PendingAgreements.Clear();
 
             // Act
             sut.GetCallToActionViewName(panelViewModel);
@@ -38,7 +37,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             panelViewModel.Data.CallToActionViewModel.Apprenticeships = new List<ApprenticeshipViewModel>();
             panelViewModel.Data.CallToActionViewModel.Reservations = new List<Reservation>();
             panelViewModel.Data.CallToActionViewModel.VacanciesViewModel = new VacanciesViewModel();
-            panelViewModel.Data.PendingAgreements.Clear();
 
             // Act
             sut.GetCallToActionViewName(panelViewModel);
@@ -65,7 +63,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             panelViewModel.Data.CallToActionViewModel.Apprenticeships = apprenticeships;
             panelViewModel.Data.CallToActionViewModel.Reservations = new List<Reservation>();
             panelViewModel.Data.CallToActionViewModel.VacanciesViewModel = new VacanciesViewModel();
-            panelViewModel.Data.PendingAgreements.Clear();
 
             // Act
             sut.GetCallToActionViewName(panelViewModel);
@@ -83,7 +80,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             panelViewModel.Data.CallToActionViewModel.Cohorts = new List<CohortViewModel>();
             panelViewModel.Data.CallToActionViewModel.Apprenticeships = new List<ApprenticeshipViewModel>();
             panelViewModel.Data.CallToActionViewModel.Reservations = new List<Reservation>();
-            panelViewModel.Data.PendingAgreements.Clear();
 
             // Act
             sut.GetCallToActionViewName(panelViewModel);
@@ -115,7 +111,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         {
             // Arrange
             panelViewModel.Data.CallToActionViewModel = null;
-            panelViewModel.Data.PendingAgreements.Clear();
 
             // Act
             sut.GetCallToActionViewName(panelViewModel);
@@ -130,8 +125,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             EmployerTeamOrchestrator sut)
         {
             // Arrange
-            panelViewModel.Data.CallToActionViewModel = null;
-            panelViewModel.Data.PendingAgreements.Clear();
+            panelViewModel.Data.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.Levy;
 
             // Act
             sut.GetCallToActionViewName(panelViewModel);
@@ -150,7 +144,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             panelViewModel.Data.CallToActionViewModel.Apprenticeships = new List<ApprenticeshipViewModel>();
             panelViewModel.Data.CallToActionViewModel.Reservations = new List<Reservation>();
             panelViewModel.Data.CallToActionViewModel.VacanciesViewModel = new VacanciesViewModel();
-            panelViewModel.Data.PendingAgreements.Clear();
 
             // Act
             sut.GetCallToActionViewName(panelViewModel);
@@ -170,7 +163,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             panelViewModel.Data.CallToActionViewModel.Apprenticeships = new List<ApprenticeshipViewModel>();
             panelViewModel.Data.CallToActionViewModel.Reservations = new List<Reservation> { singleReservation };
             panelViewModel.Data.CallToActionViewModel.VacanciesViewModel = new VacanciesViewModel();
-            panelViewModel.Data.PendingAgreements.Clear();
 
             // Act
             sut.GetCallToActionViewName(panelViewModel);
@@ -196,7 +188,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             panelViewModel.Data.CallToActionViewModel.Apprenticeships = new List<ApprenticeshipViewModel>();
             panelViewModel.Data.CallToActionViewModel.Reservations = new List<Reservation> { singleReservation };
             panelViewModel.Data.CallToActionViewModel.VacanciesViewModel = new VacanciesViewModel();
-            panelViewModel.Data.PendingAgreements.Clear(); // todo remove this and add to customization
 
             // Act
             sut.GetCallToActionViewName(panelViewModel);
@@ -222,7 +213,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             panelViewModel.Data.CallToActionViewModel.Apprenticeships = new List<ApprenticeshipViewModel>();
             panelViewModel.Data.CallToActionViewModel.Reservations = new List<Reservation> { singleReservation };
             panelViewModel.Data.CallToActionViewModel.VacanciesViewModel = new VacanciesViewModel();
-            panelViewModel.Data.PendingAgreements.Clear(); // todo remove this and add to customization
 
             // Act
             sut.GetCallToActionViewName(panelViewModel);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using AutoFixture;
 using AutoFixture.NUnit3;
@@ -30,9 +31,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests
     {
         public void Customize(IFixture fixture)
         {
-            fixture.Customize<PanelViewModel<AccountDashboardViewModel>>(composer => composer.With(panel => panel.ViewName, string.Empty));
+            fixture.Customize<PanelViewModel<AccountDashboardViewModel>>(composer => composer
+                .With(panel => panel.ViewName, string.Empty));
             fixture.Customize<AccountDashboardViewModel>(composer => composer
-                .With(dash => dash.ApprenticeshipEmployerType, ApprenticeshipEmployerType.NonLevy));
+                .With(dash => dash.ApprenticeshipEmployerType, ApprenticeshipEmployerType.NonLevy)
+                .With(dash => dash.PendingAgreements, new List<PendingAgreementsViewModel>()));
         }
     }
 }
