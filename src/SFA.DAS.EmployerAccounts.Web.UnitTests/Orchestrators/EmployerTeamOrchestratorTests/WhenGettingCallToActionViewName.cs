@@ -12,6 +12,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
 {
     public class WhenGettingCallToActionViewName
     {
+        const string EmptyViewName = "Empty";
+
         [Test, RecursiveMoqAutoData]
         public void WhenMultipleReservation_ThenShouldGetCheckFundingViewNameNotDisplayCallToAction(
             [NonLevyPanelView] PanelViewModel<AccountDashboardViewModel> panelViewModel,
@@ -26,7 +28,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().BeNullOrEmpty();
+            panelViewModel.ViewName.Should().Be(EmptyViewName);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -43,7 +45,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().BeNullOrEmpty();
+            panelViewModel.ViewName.Should().Be(EmptyViewName);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -69,7 +71,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().BeNullOrEmpty();
+            panelViewModel.ViewName.Should().Be(EmptyViewName);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -86,7 +88,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().BeNullOrEmpty();
+            panelViewModel.ViewName.Should().Be(EmptyViewName);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -117,7 +119,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().BeNullOrEmpty();
+            panelViewModel.ViewName.Should().Be(EmptyViewName);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -132,7 +134,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().BeNullOrEmpty();
+            panelViewModel.ViewName.Should().Be(EmptyViewName);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -245,6 +247,31 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
 
             //Assert
             panelViewModel.ViewName.Should().Be("SingleApprenticeshipReadyForReview");
+        }
+
+        [Test, RecursiveMoqAutoData]
+        public void WhenNoReservationAndCohortWithMultipleDraftApprenticeships_ThenShouldNotSetViewName(
+           CohortViewModel singleCohort,
+           Reservation singleReservation,
+           List<ApprenticeshipViewModel> apprenticeships,
+           [NonLevyPanelView] PanelViewModel<AccountDashboardViewModel> panelViewModel,
+           EmployerTeamOrchestrator sut)
+        {
+            // Arrange
+            singleCohort.Apprenticeships = new List<ApprenticeshipViewModel>();
+            singleCohort.CohortStatus = CohortStatus.WithTrainingProvider;
+            apprenticeships.ForEach(app => app.ApprenticeshipStatus = ApprenticeshipStatus.Draft);
+            singleCohort.NumberOfDraftApprentices = 2;
+            panelViewModel.Data.CallToActionViewModel.Cohorts = new List<CohortViewModel> { singleCohort };
+            panelViewModel.Data.CallToActionViewModel.Apprenticeships = new List<ApprenticeshipViewModel>();
+            panelViewModel.Data.CallToActionViewModel.Reservations = new List<Reservation>();
+            panelViewModel.Data.CallToActionViewModel.VacanciesViewModel = new VacanciesViewModel();
+
+            // Act
+            sut.GetCallToActionViewName(panelViewModel);
+
+            //Assert
+            panelViewModel.ViewName.Should().Be(EmptyViewName);
         }
 
         [Test, RecursiveMoqAutoData]
