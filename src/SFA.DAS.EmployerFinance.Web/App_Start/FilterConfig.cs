@@ -13,7 +13,6 @@ namespace SFA.DAS.EmployerFinance.Web
             filters.AddAuthorizationFilter();
             filters.AddUnauthorizedAccessExceptionFilter();
             filters.Add(new AnalyticsFilter());
-            filters.Add(new UpsertUserFilter());
         }
     }
 }

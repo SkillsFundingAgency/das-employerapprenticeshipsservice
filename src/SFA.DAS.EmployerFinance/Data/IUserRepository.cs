@@ -1,9 +1,10 @@
 ﻿using SFA.DAS.EmployerFinance.Models.UserProfile;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Data
 {
-    public interface IUserAccountRepository
+    public interface IUserRepository
     {
-        void Upsert(User user);
+        Task Upsert(User user);
     }
 }

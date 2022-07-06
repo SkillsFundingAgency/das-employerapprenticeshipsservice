@@ -9,17 +9,17 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Data
 {
-    public class UserAccountRepository : BaseRepository, IUserAccountRepository
+    public class UserRepository : BaseRepository, IUserRepository
     {
         private readonly Lazy<EmployerFinanceDbContext> _db;
 
-        public UserAccountRepository(EmployerFinanceConfiguration configuration, ILog logger, Lazy<EmployerFinanceDbContext> db)
+        public UserRepository(EmployerFinanceConfiguration configuration, ILog logger, Lazy<EmployerFinanceDbContext> db)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _db = db;
         }
 
-        public void Upsert(User user)
+        public async Task Upsert(User user)
         {
             var parameters = new DynamicParameters();
 
@@ -29,10 +29,10 @@ namespace SFA.DAS.EmployerFinance.Data
             parameters.Add("@lastName", user.LastName, DbType.String);
             parameters.Add("@correlationId", user.CorrelationId, DbType.String);
 
-            _db.Value.Database.Connection.Execute(
+            await _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_financial].[UpsertUser] @userRef, @email, @firstName, @lastName, @correlationId",
                 param: parameters,
-                _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);
         }
     }

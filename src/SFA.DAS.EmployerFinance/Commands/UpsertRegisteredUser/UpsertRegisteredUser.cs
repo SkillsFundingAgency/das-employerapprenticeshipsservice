@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerFinance.Commands.UpsertRegisteredUser
 {
-    public class UpsertRegisteredUserCommand : IRequest
+    public class UpsertRegisteredUserCommand : IAsyncRequest
     {
         public string UserRef { get; set; }
         public string FirstName { get; set; }

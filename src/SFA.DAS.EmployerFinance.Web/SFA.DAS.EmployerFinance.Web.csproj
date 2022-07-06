@@ -180,7 +180,6 @@
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Extensions\TimeSpanExtensions.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
-    <Compile Include="Filters\UpsertUserFilter.cs" />
     <Compile Include="Filters\LevyEmployerTypeOnly.cs" />
     <Compile Include="Filters\AnalyticsFilter.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
@@ -195,6 +194,7 @@
     <Compile Include="Mappings\TransferMappings.cs" />
     <Compile Include="NServiceBusStartup.cs" />
     <Compile Include="OrchestratorResponse.cs" />
+    <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountTransactionsOrchestrator.cs" />
     <Compile Include="Orchestrators\TransfersOrchestrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
