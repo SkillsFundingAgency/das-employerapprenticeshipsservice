@@ -296,7 +296,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().Be("SingleApprenticeshipContinueWithProvider");
+            panelViewModel.ViewName.Should().Be("ContinueSetupForSingleReservation");
         }
 
         [Test, RecursiveMoqAutoData]
