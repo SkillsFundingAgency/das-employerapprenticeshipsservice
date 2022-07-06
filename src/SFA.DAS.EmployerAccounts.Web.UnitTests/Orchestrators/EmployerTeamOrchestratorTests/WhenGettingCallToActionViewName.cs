@@ -371,7 +371,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             EmployerTeamOrchestrator sut)
         {
             // Arrange
-            singleVacancy.Status = VacancyStatus.Rejected;
+            singleVacancy.Status = VacancyStatus.Referred;
 
             panelViewModel.Data.CallToActionViewModel.Cohorts = new List<CohortViewModel>();
             panelViewModel.Data.CallToActionViewModel.Apprenticeships = new List<ApprenticeshipViewModel>();
