@@ -163,7 +163,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                         Reservations = reservationsResponse.Reservations?.ToList(),
                         VacanciesViewModel = new VacanciesViewModel
                         {
-                            VacancyCount = vacanciesResponse.Vacancies.Count(),
                             Vacancies = _mapper.Map<IEnumerable<Vacancy>, IEnumerable<VacancyViewModel>>(vacanciesResponse.Vacancies)
                         },
                         Apprenticeships = _mapper.Map<IEnumerable<Apprenticeship>, IEnumerable<ApprenticeshipViewModel>>(apprenticeshipsResponse?.Apprenticeships),

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
@@ -10,9 +9,9 @@ using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests.WhenCallToActionToggleIsEnabled
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests
 {
-    public class WhenIChooseIIfIKnowApprenticeshipIsForExistingEmployee
+    public class WhenIChooseIIfIKnowWhichCourseTheApprenticeWillTake
     {
         private EmployerTeamController _controller;
 
@@ -39,18 +38,21 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         [Test]
         public void IfIChooseYesIContinueTheJourney()
         {
-            // Arrange
-            var model = new AccountDashboardViewModel
-            {
-                PayeSchemeCount = 1,
-                PendingAgreements = new List<PendingAgreementsViewModel> { new PendingAgreementsViewModel() }
-            };
-
             //Act
-            var result = _controller.TriageApprenticeForExistingEmployee(new TriageViewModel { TriageOption = TriageOptions.No }) as ViewResult;
+            var result = _controller.TriageWhichCourseYourApprenticeWillTake(new TriageViewModel { TriageOption = TriageOptions.Yes }) as RedirectToRouteResult;
 
             //Assert
-            Assert.AreEqual(ControllerConstants.TriageSetupApprenticeshipNewEmployeeViewName, result.ViewName);
+            Assert.AreEqual(ControllerConstants.TriageHaveYouChosenATrainingProviderActionName, result.RouteValues["Action"]);
+        }
+
+        [Test]
+        public void IfIChooseNoICannotSetupAnApprentice()
+        {
+            //Act
+            var result = _controller.TriageWhichCourseYourApprenticeWillTake(new TriageViewModel { TriageOption = TriageOptions.No }) as RedirectToRouteResult;
+
+            //Assert
+            Assert.AreEqual(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetCourseProviderActionName, result.RouteValues["Action"]);
         }
     }
 }

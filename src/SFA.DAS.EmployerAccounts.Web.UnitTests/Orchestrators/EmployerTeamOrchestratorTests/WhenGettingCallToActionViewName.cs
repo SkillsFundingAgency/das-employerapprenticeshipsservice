@@ -2,6 +2,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
+using SFA.DAS.EmployerAccounts.Models.Recruit;
 using SFA.DAS.EmployerAccounts.Models.Reservations;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
@@ -294,6 +295,116 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
 
             //Assert
             panelViewModel.ViewName.Should().Be("SingleApprenticeshipApproved");
+        }
+
+        [Test, RecursiveMoqAutoData]
+        public void WhenSingleAdvert_ThenShouldGetVacancyDraftName(
+            VacancyViewModel singleVacancy,
+            Reservation singleReservation,
+            [NonLevyPanelView] PanelViewModel<AccountDashboardViewModel> panelViewModel,
+            EmployerTeamOrchestrator sut)
+        {
+            // Arrange
+            singleVacancy.Status = VacancyStatus.Draft;
+
+            panelViewModel.Data.CallToActionViewModel.Cohorts = new List<CohortViewModel>();
+            panelViewModel.Data.CallToActionViewModel.Apprenticeships = new List<ApprenticeshipViewModel>();
+            panelViewModel.Data.CallToActionViewModel.Reservations = new List<Reservation> { singleReservation };
+            panelViewModel.Data.CallToActionViewModel.VacanciesViewModel = new VacanciesViewModel {  Vacancies = new List<VacancyViewModel> { singleVacancy } };
+
+            // Act
+            sut.GetCallToActionViewName(panelViewModel);
+
+            //Assert
+            panelViewModel.ViewName.Should().Be("VacancyDraft");
+        }
+
+        [Test, RecursiveMoqAutoData]
+        public void WhenSingleAdvert_ThenShouldGetVacancyPendingReviewName(
+            VacancyViewModel singleVacancy,
+            Reservation singleReservation,
+            [NonLevyPanelView] PanelViewModel<AccountDashboardViewModel> panelViewModel,
+            EmployerTeamOrchestrator sut)
+        {
+            // Arrange
+            singleVacancy.Status = VacancyStatus.Submitted;
+
+            panelViewModel.Data.CallToActionViewModel.Cohorts = new List<CohortViewModel>();
+            panelViewModel.Data.CallToActionViewModel.Apprenticeships = new List<ApprenticeshipViewModel>();
+            panelViewModel.Data.CallToActionViewModel.Reservations = new List<Reservation> { singleReservation };
+            panelViewModel.Data.CallToActionViewModel.VacanciesViewModel = new VacanciesViewModel { Vacancies = new List<VacancyViewModel> { singleVacancy } };
+
+            // Act
+            sut.GetCallToActionViewName(panelViewModel);
+
+            //Assert
+            panelViewModel.ViewName.Should().Be("VacancyPendingReview");
+        }
+
+        [Test, RecursiveMoqAutoData]
+        public void WhenSingleAdvert_ThenShouldGetVacancyLiveName(
+            VacancyViewModel singleVacancy,
+            Reservation singleReservation,
+            [NonLevyPanelView] PanelViewModel<AccountDashboardViewModel> panelViewModel,
+            EmployerTeamOrchestrator sut)
+        {
+            // Arrange
+            singleVacancy.Status = VacancyStatus.Live;
+
+            panelViewModel.Data.CallToActionViewModel.Cohorts = new List<CohortViewModel>();
+            panelViewModel.Data.CallToActionViewModel.Apprenticeships = new List<ApprenticeshipViewModel>();
+            panelViewModel.Data.CallToActionViewModel.Reservations = new List<Reservation> { singleReservation };
+            panelViewModel.Data.CallToActionViewModel.VacanciesViewModel = new VacanciesViewModel { Vacancies = new List<VacancyViewModel> { singleVacancy } };
+
+            // Act
+            sut.GetCallToActionViewName(panelViewModel);
+
+            //Assert
+            panelViewModel.ViewName.Should().Be("VacancyLive");
+        }
+
+        [Test, RecursiveMoqAutoData]
+        public void WhenSingleAdvert_ThenShouldGetVacancyRejectedName(
+            VacancyViewModel singleVacancy,
+            Reservation singleReservation,
+            [NonLevyPanelView] PanelViewModel<AccountDashboardViewModel> panelViewModel,
+            EmployerTeamOrchestrator sut)
+        {
+            // Arrange
+            singleVacancy.Status = VacancyStatus.Rejected;
+
+            panelViewModel.Data.CallToActionViewModel.Cohorts = new List<CohortViewModel>();
+            panelViewModel.Data.CallToActionViewModel.Apprenticeships = new List<ApprenticeshipViewModel>();
+            panelViewModel.Data.CallToActionViewModel.Reservations = new List<Reservation> { singleReservation };
+            panelViewModel.Data.CallToActionViewModel.VacanciesViewModel = new VacanciesViewModel { Vacancies = new List<VacancyViewModel> { singleVacancy } };
+
+            // Act
+            sut.GetCallToActionViewName(panelViewModel);
+
+            //Assert
+            panelViewModel.ViewName.Should().Be("VacancyRejected");
+        }
+
+        [Test, RecursiveMoqAutoData]
+        public void WhenSingleAdvert_ThenShouldGetVacancyClosedName(
+            VacancyViewModel singleVacancy,
+            Reservation singleReservation,
+            [NonLevyPanelView] PanelViewModel<AccountDashboardViewModel> panelViewModel,
+            EmployerTeamOrchestrator sut)
+        {
+            // Arrange
+            singleVacancy.Status = VacancyStatus.Closed;
+
+            panelViewModel.Data.CallToActionViewModel.Cohorts = new List<CohortViewModel>();
+            panelViewModel.Data.CallToActionViewModel.Apprenticeships = new List<ApprenticeshipViewModel>();
+            panelViewModel.Data.CallToActionViewModel.Reservations = new List<Reservation> { singleReservation };
+            panelViewModel.Data.CallToActionViewModel.VacanciesViewModel = new VacanciesViewModel { Vacancies = new List<VacancyViewModel> { singleVacancy } };
+
+            // Act
+            sut.GetCallToActionViewName(panelViewModel);
+
+            //Assert
+            panelViewModel.ViewName.Should().Be("VacancyClosed");
         }
     }
 }
