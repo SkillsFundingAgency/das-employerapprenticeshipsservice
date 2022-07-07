@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerFinance.Data
             await _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_financial].[UpsertUser] @userRef, @email, @firstName, @lastName, @correlationId",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.Text);
         }
     }
