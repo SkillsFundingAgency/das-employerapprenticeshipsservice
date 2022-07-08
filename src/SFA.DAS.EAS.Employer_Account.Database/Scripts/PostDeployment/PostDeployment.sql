@@ -10,7 +10,7 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
-:r .\MAC-63_Remove_transfer_connections.sql
+:r .\MAC-95_Remove_transfer_connections.sql
 :r .\CreateAgreementTemplates.sql
 :r .\AML-3762-EOI-API.sql
 :r .\UpdateAgreementTemplateV3.sql
