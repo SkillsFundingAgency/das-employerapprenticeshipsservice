@@ -1,5 +1,5 @@
-﻿using SFA.DAS.EmployerFinance.Models.UserProfile;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using SFA.DAS.EmployerFinance.Models.UserProfile;
 
 namespace SFA.DAS.EmployerFinance.Data
 {

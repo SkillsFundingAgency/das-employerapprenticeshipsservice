@@ -1,8 +1,7 @@
-﻿using MediatR;
-using SFA.DAS.EmployerFinance.Commands.UpsertRegisteredUser;
-using SFA.DAS.NLog.Logger;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using MediatR;
+using SFA.DAS.EmployerFinance.Commands.UpsertRegisteredUser;
 
 namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 {

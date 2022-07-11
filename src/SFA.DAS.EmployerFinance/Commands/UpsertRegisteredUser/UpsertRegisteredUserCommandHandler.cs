@@ -1,10 +1,10 @@
+using System;
+using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models.UserProfile;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
-using System;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Commands.UpsertRegisteredUser
 {
