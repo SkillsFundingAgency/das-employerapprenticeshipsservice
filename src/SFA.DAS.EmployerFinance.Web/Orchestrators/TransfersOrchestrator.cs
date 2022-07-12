@@ -17,7 +17,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
     {
         private readonly IAuthorizationService _authorizationService;
         private readonly IHashingService _hashingService;
-        private readonly IManageApprenticeshipsService _manageApprenticeshipsService;
+        private readonly ITransfersService _transfersService;
         private readonly IAccountApiClient _accountApiClient;        
 
         protected TransfersOrchestrator()
@@ -27,19 +27,19 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         public TransfersOrchestrator(
             IAuthorizationService authorizationService,
             IHashingService hashingService,
-            IManageApprenticeshipsService manageApprenticeshipsService,
+            ITransfersService transfersService,
             IAccountApiClient accountApiClient)
         {
             _authorizationService = authorizationService;
             _hashingService = hashingService;
-            _manageApprenticeshipsService = manageApprenticeshipsService;
+            _transfersService = transfersService;
             _accountApiClient = accountApiClient;            
         }
 
         public async Task<OrchestratorResponse<IndexViewModel>> GetIndexViewModel(string hashedAccountId)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
-            var indexTask = _manageApprenticeshipsService.GetIndex(accountId);
+            var indexTask = _transfersService.GetCounts(accountId);
             var accountDetail = _accountApiClient.GetAccount(hashedAccountId);
 
             var renderCreateTransfersPledgeButtonTask = _authorizationService.IsAuthorizedAsync(EmployerUserRole.OwnerOrTransactor);            
@@ -66,7 +66,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         public async Task<OrchestratorResponse<FinancialBreakdownViewModel>> GetFinancialBreakdownViewModel(string hashedAccountId) 
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
-            var financialBreakdownTask = _manageApprenticeshipsService.GetFinancialBreakdown(accountId);
+            var financialBreakdownTask = _transfersService.GetFinancialBreakdown(accountId);
             var accountDetailTask = _accountApiClient.GetAccount(hashedAccountId);
             await Task.WhenAll(financialBreakdownTask, accountDetailTask);
 

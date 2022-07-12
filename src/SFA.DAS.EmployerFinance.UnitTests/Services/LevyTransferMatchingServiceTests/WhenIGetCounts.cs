@@ -8,17 +8,17 @@ using SFA.DAS.EmployerFinance.Services;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Services.LevyTransferMatchingServiceTests
 {
-    public class WhenIGetAPledgesCount
+    public class WhenIGetCounts
     {
-        private Mock<IApiClient> _mockApiClient;
-        private ManageApprenticeshipsService _levyTransferMatchingService;
+        private Mock<IOuterApiClient> _mockApiClient;
+        private TransfersService _transfersService;
 
         [SetUp]
         public void Arrange()
         {
-            _mockApiClient = new Mock<IApiClient>();
+            _mockApiClient = new Mock<IOuterApiClient>();
 
-            _levyTransferMatchingService = new ManageApprenticeshipsService(_mockApiClient.Object);
+            _transfersService = new TransfersService(_mockApiClient.Object);
         }
 
         [Test]
@@ -29,13 +29,13 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.LevyTransferMatchingService
             var accountId = 123;
 
             _mockApiClient
-                .Setup(x => x.Get<GetIndexResponse>(It.Is<GetIndexRequest>(y => y.GetUrl.EndsWith(accountId.ToString()))))
-                .ReturnsAsync(new GetIndexResponse()
+                .Setup(x => x.Get<GetCountsResponse>(It.Is<GetCountsRequest>(y => y.GetUrl.EndsWith($"{accountId}/counts"))))
+                .ReturnsAsync(new GetCountsResponse()
                 {
                     PledgesCount = expectedResult,
                 });
 
-            var actualResult = await _levyTransferMatchingService.GetIndex(accountId);
+            var actualResult = await _transfersService.GetCounts(accountId);
 
             Assert.AreEqual(expectedResult, actualResult.PledgesCount);
         }

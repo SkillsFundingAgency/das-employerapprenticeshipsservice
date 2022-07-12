@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Interfaces.OuterApi
 {
-    public interface IApiClient
+    public interface IOuterApiClient
     {
         Task<TResponse> Get<TResponse>(IGetApiRequest request);
     }

@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.Caches;
-using SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests;
-using SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses;
+using SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests.TrainingCourses;
+using SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses.TrainingCourses;
 using SFA.DAS.EmployerFinance.Interfaces.OuterApi;
 using SFA.DAS.EmployerFinance.Models.ApprenticeshipCourse;
-using SFA.DAS.EmployerFinance.Models.ApprenticeshipProvider;
 
 namespace SFA.DAS.EmployerFinance.Services
 {
@@ -17,19 +16,19 @@ namespace SFA.DAS.EmployerFinance.Services
         private const string FrameworksKey = "Frameworks";
 
         private readonly IInProcessCache _cache;
-        private readonly IApiClient _apiClient;
+        private readonly IOuterApiClient _outerApiClient;
 
-        public ApprenticeshipInfoServiceWrapper(IInProcessCache cache, IApiClient apiClient)
+        public ApprenticeshipInfoServiceWrapper(IInProcessCache cache, IOuterApiClient apiClient)
         {
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
-            _apiClient = apiClient;
+            _outerApiClient = apiClient;
         }
 
         public async Task<StandardsView> GetStandardsAsync(bool refreshCache = false)
         {
             if (!_cache.Exists(StandardsKey) || refreshCache)
             {
-                var response = await _apiClient.Get<GetStandardsResponse>(new GetStandardsRequest());
+                var response = await _outerApiClient.Get<GetStandardsResponse>(new GetStandardsRequest());
 
                 _cache.Set(StandardsKey, MapFrom(response.Standards));
             }
@@ -41,7 +40,7 @@ namespace SFA.DAS.EmployerFinance.Services
         {
             if (!_cache.Exists(FrameworksKey) || refreshCache)
             {
-                var response = await _apiClient.Get<GetFrameworksResponse>(new GetFrameworksRequest());
+                var response = await _outerApiClient.Get<GetFrameworksResponse>(new GetFrameworksRequest());
 
                 _cache.Set(FrameworksKey, MapFrom(response.Frameworks));
             }
@@ -49,7 +48,7 @@ namespace SFA.DAS.EmployerFinance.Services
             return _cache.Get<FrameworksView>(FrameworksKey);
         }       
 
-        private static FrameworksView MapFrom(List<FrameworkResponseItem> frameworks)
+        private static FrameworksView MapFrom(List<FrameworkResponse> frameworks)
         {
             return new FrameworksView
             {
@@ -70,23 +69,7 @@ namespace SFA.DAS.EmployerFinance.Services
             };
         }
 
-        private static ProvidersView MapFrom(ProviderResponseItem provider)
-        {
-            return new ProvidersView
-            {
-                CreatedDate = DateTime.UtcNow,
-                Provider = new Models.ApprenticeshipProvider.Provider()
-                {
-                    Ukprn = provider.Ukprn,
-                    Name = provider.Name,
-                    Email = provider.Email,
-                    Phone = provider.Phone,
-                    NationalProvider = false // Obsolete - no longer valid at this level
-                }
-            };
-        }
-
-        private static StandardsView MapFrom(List<StandardResponseItem> standards)
+        private static StandardsView MapFrom(List<StandardResponse> standards)
         {
             return new StandardsView
             {
