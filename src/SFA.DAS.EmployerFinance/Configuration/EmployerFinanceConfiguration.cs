@@ -16,6 +16,7 @@ namespace SFA.DAS.EmployerFinance.Configuration
         public string DashboardUrl { get; set; }
         public string DatabaseConnectionString { get; set; }
         public int DefaultCacheExpirationInMinutes { get; set; }
+        public decimal TransferAllowancePercentage { get; set; }
         public string EmployerAccountsBaseUrl { get; set; }
         public string EmployerCommitmentsBaseUrl { get; set; }
         public string EmployerCommitmentsV2BaseUrl { get; set; }

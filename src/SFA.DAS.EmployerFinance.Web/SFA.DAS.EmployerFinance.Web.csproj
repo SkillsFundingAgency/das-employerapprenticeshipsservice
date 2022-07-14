@@ -167,6 +167,7 @@
     <Compile Include="Binders\TrimStringModelBinder.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\TransferConnectionInvitationsController.cs" />
     <Compile Include="Controllers\EmployerAccountTransactionsController.cs" />
     <Compile Include="Controllers\EmployerTeamController.cs" />
     <Compile Include="Controllers\HealthCheckController.cs" />
@@ -213,6 +214,8 @@
     <Compile Include="ViewModels\TransactionViewResultViewModel.cs" />
     <Compile Include="ViewModels\Transfers\FinancialBreakdownViewModel.cs" />
     <Compile Include="ViewModels\Transfers\IndexViewModel.cs" />
+    <Compile Include="ViewModels\Transfers\SendTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\Transfers\StartTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\TransferTransactionDetailsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -649,6 +652,8 @@
     <Content Include="Views\Shared\_ZenDeskApiPush.cshtml" />
     <Content Include="Views\Transfers\Index.cshtml" />
     <Content Include="Views\Transfers\FinancialBreakdown.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Start.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Send.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

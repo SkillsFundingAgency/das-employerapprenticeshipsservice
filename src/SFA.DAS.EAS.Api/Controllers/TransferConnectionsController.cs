@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
         [Route]
         public async Task<IHttpActionResult> GetTransferConnections(string hashedAccountId)
         {
-            return Ok(await _apiService.Redirect($"/api/accounts/{hashedAccountId}/transfers/connections"));
+            return Ok(await _apiService.Redirect($"/api/finance/{hashedAccountId}/transfers/connections"));
         }
     }
 }

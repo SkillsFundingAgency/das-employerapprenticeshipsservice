@@ -1,14 +1,13 @@
-﻿using Dapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.Threading.Tasks;
+using Dapper;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Sql.Client;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Data
 {

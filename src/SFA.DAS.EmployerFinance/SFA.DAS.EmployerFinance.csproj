@@ -62,6 +62,7 @@
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj" />
     <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerFinance.Api.Client\SFA.DAS.EmployerFinance.Api.Client.csproj" />
+    <ProjectReference Include="..\SFA.DAS.EmployerFinance.Api.Types\SFA.DAS.EmployerFinance.Api.Types.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerFinance.Messages\SFA.DAS.EmployerFinance.Messages.csproj" />
   </ItemGroup>
 

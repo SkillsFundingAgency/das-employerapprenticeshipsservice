@@ -28,24 +28,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             _mediator = mediator;
         }
 
-        public virtual async Task<SignInUserViewModel> GetUsers()
-        {
-            var actual = await _mediator.SendAsync(new GetUsersQuery());
-
-            return new SignInUserViewModel
-            {
-                AvailableUsers = actual.Users.Select(x =>
-                    new UserViewModel
-                    {
-                        Id = x.Id,
-                        UserRef = x.UserRef,
-                        Email = x.Email,
-                        FirstName = x.FirstName,
-                        LastName = x.LastName,
-                    }).ToList()
-            };
-        }
-
         public virtual async Task<OrchestratorResponse<UserAccountsViewModel>> GetUserAccounts(string userId, DateTime? LastTermsAndConditionsUpdate = null)
         {
             var getUserAccountsQueryResponse = await _mediator.SendAsync(new GetUserAccountsQuery
