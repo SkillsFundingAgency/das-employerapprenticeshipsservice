@@ -3,14 +3,16 @@ using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
+using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
+using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests
 {
-    public class WhenAgreementToSign
+    public class WhenIChooseIIfIKnowApprenticeshipIsForExistingEmployee
     {
         private EmployerTeamController _controller;
 
@@ -35,21 +37,20 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         }
 
         [Test]
-        public void ThenTheSignAgreementViewIsReturnedAtRow1Panel1()
+        public void IfIChooseYesIContinueTheJourney()
         {
             // Arrange
             var model = new AccountDashboardViewModel
             {
                 PayeSchemeCount = 1,
-                PendingAgreements = new List<PendingAgreementsViewModel> { new PendingAgreementsViewModel()}
+                PendingAgreements = new List<PendingAgreementsViewModel> { new PendingAgreementsViewModel() }
             };
 
             //Act
-            var result = _controller.Row1Panel1(model) as PartialViewResult;
+            var result = _controller.TriageApprenticeForExistingEmployee(new TriageViewModel { TriageOption = TriageOptions.No }) as ViewResult;
 
             //Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual("SignAgreement", (result.Model as dynamic).ViewName);
+            Assert.AreEqual(ControllerConstants.TriageSetupApprenticeshipNewEmployeeViewName, result.ViewName);
         }
     }
 }
