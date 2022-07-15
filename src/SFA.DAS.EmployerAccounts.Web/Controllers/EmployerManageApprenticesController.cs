@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using SFA.DAS.Authorization.Mvc.Attributes;
+using SFA.DAS.EAS.Infrastructure.Attributes;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.NLog.Logger;
 
@@ -21,6 +22,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [Route("all")]
         [OutputCache(CacheProfile = "NoCache")]
+        [Deprecated]
         public ActionResult ListAll(string hashedAccountId)
         {
             return RedirectPermanentCommitmentsUrl();
@@ -31,6 +33,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("{hashedApprenticeshipId}/details", Name = "OnProgrammeApprenticeshipDetails")]
         [Route("{hashedApprenticeshipId}/details/statuschange", Name = "ChangeStatusSelectOption")]
         [Route("{hashedApprenticeshipId}/edit", Name = "EditApprenticeship")]
+        [Deprecated]
         public ActionResult Details(string hashedAccountId, string hashedApprenticeshipId)
         {            
             _logger.Info($"To track Apprentice V1 details UrlReferrer Request: {HttpContext.Request.UrlReferrer}");
@@ -41,6 +44,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [Route("{hashedApprenticeshipId}/details/statuschange/{changeType}/whentoapply", Name = "WhenToApplyChange")]
         [OutputCache(CacheProfile = "NoCache")]
+        [Deprecated]
         public ActionResult WhenToApplyChange(string hashedAccountId, string hashedApprenticeshipId)
         {
             return RedirectPermanentCommitmentsUrl();
@@ -49,6 +53,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [Route("{hashedApprenticeshipId}/details/statuschange/{changeType}/confirm", Name = "StatusChangeConfirmation")]
         [OutputCache(CacheProfile = "NoCache")]
+        [Deprecated]
         public ActionResult StatusChangeConfirmation(string hashedAccountId, string hashedApprenticeshipId)
         {
             return RedirectPermanentCommitmentsUrl();
@@ -60,6 +65,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("{hashedApprenticeshipId}/changes/review", Name = "ReviewChanges")]
         [Route("{hashedApprenticeshipId}/datalock/restart", Name = "RequestRestart")]
         [Route("{hashedApprenticeshipId}/datalock/changes", Name = "RequestChanges")]
+        [Deprecated]
         public ActionResult ConfirmChanges(string hashedAccountId, string hashedApprenticeshipId)
         {
             return RedirectPermanentCommitmentsUrl();
@@ -67,6 +73,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("paymentorder", Name = "PaymentOrder")]
+        [Deprecated]
         public ActionResult PaymentOrder(string hashedAccountId)
         {
             return RedirectPermanentCommitmentsUrl();

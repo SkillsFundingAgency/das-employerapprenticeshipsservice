@@ -1,25 +1,23 @@
-﻿using AutoMapper;
-using MediatR;
-using SFA.DAS.Authorization.Services;
-using SFA.DAS.EAS.Account.Api.Client;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
-using SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
-using SFA.DAS.EmployerAccounts.Queries.GetApprenticeship;
-using SFA.DAS.EmployerAccounts.Queries.GetReservations;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
-using SFA.DAS.EmployerAccounts.Models.Recruit;
-using ResourceNotFoundException = SFA.DAS.EmployerAccounts.Web.Exceptions.ResourceNotFoundException;
+using AutoMapper;
+using MediatR;
 using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.EmployerAccounts.Web.Models;
-using SFA.DAS.NLog.Logger;
+using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
+using SFA.DAS.EmployerAccounts.Models.Recruit;
+using SFA.DAS.EmployerAccounts.Queries.GetApprenticeship;
+using SFA.DAS.EmployerAccounts.Queries.GetReservations;
+using SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
+using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
+using SFA.DAS.EmployerAccounts.Web.Models;
+using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
@@ -40,7 +38,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             IMapper mapper,
             ICookieStorageService<AccountContext> accountContext,
             ILog logger,
-            EmployerAccountsConfiguration configuration) 
+            EmployerAccountsConfiguration configuration)
             : base(mediator, currentDateTime, accountApiClient, mapper, configuration)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
@@ -163,14 +161,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                         Reservations = reservationsResponse.Reservations?.ToList(),
                         VacanciesViewModel = new VacanciesViewModel
                         {
-                            VacancyCount = vacanciesResponse.Vacancies.Count(),
                             Vacancies = _mapper.Map<IEnumerable<Vacancy>, IEnumerable<VacancyViewModel>>(vacanciesResponse.Vacancies)
                         },
                         Apprenticeships = _mapper.Map<IEnumerable<Apprenticeship>, IEnumerable<ApprenticeshipViewModel>>(apprenticeshipsResponse?.Apprenticeships),
-                        Cohorts = new List<CohortViewModel>
-                        {
-                            _mapper.Map<Cohort, CohortViewModel>(accountCohortResponse.Cohort)
-                        }
+                        Cohorts = accountCohortResponse.Cohort != null
+                            ? new List<CohortViewModel> { _mapper.Map<Cohort, CohortViewModel>(accountCohortResponse.Cohort) }
+                            : new List<CohortViewModel>()
                     };
                 }
 

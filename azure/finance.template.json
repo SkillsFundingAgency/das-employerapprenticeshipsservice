@@ -91,6 +91,9 @@
         "subnetDelegations": {
             "type": "array"
         },
+        "workerAccessRestrictions": {
+            "type": "array"
+        },
         "resourceGroupLocation": {
             "type": "string"
         },
@@ -548,6 +551,9 @@
                     },
                     "deployStagingSlot": {
                         "value": false
+                    },
+                    "ipSecurityRestrictions": {
+                        "value": "[parameters('workerAccessRestrictions')]"
                     }
                 }
             },
