@@ -62,7 +62,7 @@
     <PackageReference Include="SFA.DAS.NServiceBus" Version="15.0.25" />
     <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="15.0.25" />
     <PackageReference Include="SFA.DAS.Sql.Client" Version="1.0.0.32930" />
-    <PackageReference Include="SFA.DAS.Tasks.Api.Client" Version="1.8.44" />
+    <PackageReference Include="SFA.DAS.Tasks.Api.Client" Version="1.8.160-prerelease-9" />
     <PackageReference Include="SFA.DAS.Tasks.API.Types" Version="1.8.44" />
     <PackageReference Include="SFA.DAS.TokenService.Api.Client" Version="2.3.0" />    
     <PackageReference Include="SFA.DAS.UnitOfWork" Version="9.0.13" />
