@@ -80,7 +80,6 @@
     <Compile Include="DependencyResolution\PaymentsRegistry.cs" />
     <Compile Include="DependencyResolution\ReferenceDataRegistry.cs" />
     <Compile Include="DependencyResolution\RepositoriesRegistry.cs" />
-    <Compile Include="DependencyResolution\TasksRegistry.cs" />
     <Compile Include="DependencyResolution\ValidationRegistry.cs" />
     <Compile Include="Queries\GetFinancialStatistics\GetFinancialStatisticsQueryHandler.cs" />
     <Compile Include="Queries\GetFinancialStatistics\GetFinancialStatisticsQuery.cs" />
