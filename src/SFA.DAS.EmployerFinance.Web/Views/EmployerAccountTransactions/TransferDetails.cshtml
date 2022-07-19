@@ -53,7 +53,7 @@
                     @if (Model.IsCurrentAccountSender)
                     {
                         <td class="numeric no-wrap">
-                            -@transferDetail.PaymentTotal.ToString("C2", culture)
+                            @(transferDetail.PaymentTotal * -1).ToString("C2", culture)
                         </td>
                     }
                     else
