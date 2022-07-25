@@ -250,5 +250,20 @@ namespace SFA.DAS.EmployerFinance.Data
 
             return result.FirstOrDefault();
         }
+
+        public async Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(long accountId)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountId", accountId, DbType.Int64);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<LevyDeclarationView>(
+                sql: "[employer_financial].[GetLevyDeclarations_ByAccountId]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
+            return result.ToList();
+        }
     }
 }

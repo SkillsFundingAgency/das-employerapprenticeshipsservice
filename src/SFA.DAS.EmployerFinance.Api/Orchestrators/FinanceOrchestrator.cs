@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
-using SFA.DAS.EAS.Application.Queries.GetLevyDeclaration;
 using SFA.DAS.EAS.Finance.Api.Types;
-using SFA.DAS.EmployerFinance.Models;
+using SFA.DAS.EmployerFinance.Queries.GetLevyDeclaration;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using System;
@@ -20,7 +19,7 @@ namespace SFA.DAS.EmployerFinance.Api.Orchestrators
         private readonly ILog _logger;
         private readonly IMapper _mapper;
         private readonly IHashingService _hashingService;
-        //private readonly IEmployerAccountsApiService _employerAccountsApiService;
+        //private readonly IEmployerAccountsApiService _employerAccountsApiService; //TODO : replace with IEmployerFinanceApiService
 
         public FinanceOrchestrator(
             IMediator mediator,

@@ -1,4 +1,4 @@
-﻿//using SFA.DAS.EmployerFinance.Api.Attributes; //TODO
+﻿using SFA.DAS.EmployerFinance.Api.Attributes;
 using SFA.DAS.EmployerFinance.Api.Orchestrators;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerFinance.Api.Controllers
         }
 
         [Route("", Name = "GetLevy")]
-        //[ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")] //TODO
+        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
         public async Task<IHttpActionResult> Index(string hashedAccountId)
         {

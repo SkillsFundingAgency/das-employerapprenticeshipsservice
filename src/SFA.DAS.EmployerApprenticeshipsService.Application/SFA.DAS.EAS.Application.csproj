@@ -126,6 +126,8 @@
     <Compile Include="Services\EmployerAccountsApi\Http\EmployerAccountsApiHttpClientFactory.cs" />
     <Compile Include="Services\EmployerAccountsApi\Http\IEmployerAccountsApiHttpClientFactory.cs" />
     <Compile Include="Services\EmployerAccountsApi\IEmployerAccountsApiService.cs" />
+    <Compile Include="Services\EmployerFinanceApi\EmployerFinanceApiService.cs" />
+    <Compile Include="Services\EmployerFinanceApi\IEmployerFinanceApiService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj">
