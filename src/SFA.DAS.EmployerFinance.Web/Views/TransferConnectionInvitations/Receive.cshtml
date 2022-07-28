@@ -1,0 +1,66 @@
+﻿@using SFA.DAS.Validation.Mvc
+@model SFA.DAS.EmployerFinance.Web.ViewModels.ReceiveTransferConnectionInvitationViewModel
+
+@{
+    ViewBag.Title = "Receive transfer connection request";
+    ViewBag.Section = "finance";
+    ViewBag.PageID = "page-transfer-connection-requests-receive";
+    ViewBag.GaData.Vpv = "/accounts/transfers/connections/requests/receive";
+}
+
+@Html.Partial("_ValidationSummary", ViewData.ModelState)
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Connection request details</h1>
+        <p>@Model.TransferConnectionInvitation.SenderAccount.Name wants to connect with you. Once you approve the connection request you'll be able to request transfer funds from this employer.</p>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.TransferConnectionInvitationId)
+            <div class="form-group">
+                <table>
+                    <tbody>
+                        @{
+                            var pendingChange = Model.TransferConnectionInvitation.GetPendingChange();
+                        }
+                        <tr>
+                            <td>Sending employer</td>
+                            <td>@Model.TransferConnectionInvitation.SenderAccount.Name</td>
+                        </tr>
+                        <tr>
+                            <td>Sent by</td>
+                            <td>@pendingChange.User.FullName</td>
+                        </tr>
+                        <tr>
+                            <td>Sent on</td>
+                            <td>@pendingChange.CreatedDate.ToString("d MMMM yyyy")</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-group @(Html.IsValid(m => m.Choice) ? "" : "error")">
+                <fieldset>
+                    <legend>
+                        <span class="form-label-bold">Do you wish to connect to this employer?</span>
+                        @Html.ValidationMessageFor(m => m.Choice)
+                    </legend>
+                    <label class="block-label selection-button-radio">
+                        @Html.RadioButtonFor(m => m.Choice, "Approve")
+                        Yes, I want to approve the connection request
+                    </label>
+                    <label class="block-label selection-button-radio">
+                        @Html.RadioButtonFor(m => m.Choice, "Reject")
+                        No, I want to reject this request
+                    </label>
+                </fieldset>
+            </div>
+            <button class="button" type="submit">Continue</button>
+        }
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs" id="js-breadcrumbs">
+        <a aria-label="Back" class="link-back" href="@Url.Action("Index", "Transfers")">Back</a>
+    </div>
+}

@@ -1,14 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
 using SFA.DAS.Authorization.EmployerUserRoles.Options;
 using SFA.DAS.Authorization.Mvc.Attributes;
+using SFA.DAS.EmployerFinance.Commands.ApproveTransferConnectionInvitation;
+using SFA.DAS.EmployerFinance.Commands.DeleteSentTransferConnectionInvitation;
+using SFA.DAS.EmployerFinance.Commands.RejectTransferConnectionInvitation;
+using SFA.DAS.EmployerFinance.Commands.SendTransferConnectionInvitation;
+using SFA.DAS.EmployerFinance.Queries.GetApprovedTransferConnectionInvitation;
+using SFA.DAS.EmployerFinance.Queries.GetLatestPendingReceivedTransferConnectionInvitation;
+using SFA.DAS.EmployerFinance.Queries.GetReceivedTransferConnectionInvitation;
+using SFA.DAS.EmployerFinance.Queries.GetRejectedTransferConnectionInvitation;
+using SFA.DAS.EmployerFinance.Queries.GetSentTransferConnectionInvitation;
+using SFA.DAS.EmployerFinance.Queries.GetTransferConnectionInvitation;
 using SFA.DAS.EmployerFinance.Queries.SendTransferConnectionInvitation;
+using SFA.DAS.EmployerFinance.Web.Extensions;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
 using SFA.DAS.Validation.Mvc;
 
@@ -110,7 +118,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
                 case "GoToTransfersPage":
                     return RedirectToAction("Index", "Transfers");
                 case "GoToHomepage":
-                    return RedirectToAction("Index", "EmployerTeam");
+                    return Redirect(Url.EmployerAccountsAction("teams"));
                 default:
                     throw new ArgumentOutOfRangeException(nameof(model.Choice));
             }
@@ -168,7 +176,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
                 case "GoToApprenticesPage":
                     return Redirect(Url.EmployerCommitmentsV2Action(string.Empty));
                 case "GoToHomepage":
-                    return RedirectToAction("Index", "EmployerTeam");
+                    return Redirect(Url.EmployerAccountsAction("teams"));
                 default:
                     throw new ArgumentOutOfRangeException(nameof(model.Choice));
             }
@@ -261,7 +269,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
                 case "GoToTransfersPage":
                     return RedirectToAction("Index", "Transfers");
                 case "GoToHomepage":
-                    return RedirectToAction("Index", "EmployerTeam");
+                    return Redirect(Url.EmployerAccountsAction("teams"));
                 default:
                     throw new ArgumentOutOfRangeException(nameof(model.Choice));
             }

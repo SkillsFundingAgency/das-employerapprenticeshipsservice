@@ -6,7 +6,8 @@ namespace SFA.DAS.EmployerFinance.Data
 {
     public interface IEmployerAccountRepository
     {
-        Task<Account> GetAccountById(long id);
-        Task<List<Account>> GetAllAccounts();
+        Task<Account> Get(long id);
+        Task<Account> Get(string publicHashedId);
+        Task<List<Account>> GetAll();
     }
 }

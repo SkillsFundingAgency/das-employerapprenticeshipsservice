@@ -1,8 +1,5 @@
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.MarkerInterfaces;
-using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.MarkerInterfaces;
 using SFA.DAS.EmployerFinance.Services;
@@ -34,9 +31,9 @@ namespace SFA.DAS.EmployerFinance.Commands.SendTransferConnectionInvitation
         public async Task<long> Handle(SendTransferConnectionInvitationCommand message)
         {
             var receiverAccountId = _publicHashingService.DecodeValue(message.ReceiverAccountPublicHashedId);
-            var senderAccount = await _employerAccountRepository.GetAccountById(message.AccountId);
-            var receiverAccount = await _employerAccountRepository.GetAccountById(receiverAccountId);
-            var senderUser = await _userRepository.GetUserByRef(message.UserRef);
+            var senderAccount = await _employerAccountRepository.Get(message.AccountId);
+            var receiverAccount = await _employerAccountRepository.Get(receiverAccountId);
+            var senderUser = await _userRepository.Get(message.UserRef);
             var senderAccountTransferAllowance = await _transferAllowanceService.GetTransferAllowance(message.AccountId);
             var transferConnectionInvitation = senderAccount.SendTransferConnectionInvitation(receiverAccount, senderUser, senderAccountTransferAllowance.RemainingTransferAllowance ?? 0);
 

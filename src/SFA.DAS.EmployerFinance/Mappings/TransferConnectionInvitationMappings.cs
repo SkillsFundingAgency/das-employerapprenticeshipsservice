@@ -10,10 +10,7 @@ namespace SFA.DAS.EmployerFinance.Mappings
     {
         public TransferConnectionInvitationMappings()
         {
-            long accountId = 0;
-
             CreateMap<TransferConnectionInvitation, TransferConnectionInvitationDto>()
-                .ForMember(m => m.Type, o => o.MapFrom(i => i.SenderAccountId == accountId ? TransferConnectionType.Sender : TransferConnectionType.Receiver))
                 .ForMember(m => m.Changes, o => o.MapFrom(i => i.Changes.OrderBy(c => c.CreatedDate)));
 
             CreateMap<TransferConnectionInvitationChange, TransferConnectionInvitationChangeDto>();

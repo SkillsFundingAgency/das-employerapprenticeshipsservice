@@ -36,6 +36,8 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers
 
         public async Task Handle(RejectedTransferConnectionRequestEvent message, IMessageHandlerContext context)
         {
+            // TO DO: replace with call to outer API which gets the users from Employer Account
+            // to which a notification can be sent
             var users = await _db.Value.Users.WhereReceiveNotifications(message.SenderAccountId).ToListAsync();
 
             if (!users.Any())

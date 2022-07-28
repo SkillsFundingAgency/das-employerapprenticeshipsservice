@@ -207,6 +207,11 @@
     <Compile Include="ViewModels\HealthCheckViewModel.cs" />
     <Compile Include="ViewModels\PaymentTransactionViewModel.cs" />
     <Compile Include="ViewModels\ProviderPaymentsSummaryViewModel.cs" />
+    <Compile Include="ViewModels\Transfers\ApprovedTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\Transfers\DeletedTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\Transfers\ReceiveTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\Transfers\RejectedTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\Transfers\SentTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\SystemDetailsViewModel.cs" />
     <Compile Include="ViewModels\TransactionDownloadViewModel.cs" />
     <Compile Include="ViewModels\TransactionLineViewModel.cs" />
@@ -216,6 +221,7 @@
     <Compile Include="ViewModels\Transfers\IndexViewModel.cs" />
     <Compile Include="ViewModels\Transfers\SendTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\Transfers\StartTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\Transfers\TransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\TransferTransactionDetailsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -654,6 +660,13 @@
     <Content Include="Views\Transfers\FinancialBreakdown.cshtml" />
     <Content Include="Views\TransferConnectionInvitations\Start.cshtml" />
     <Content Include="Views\TransferConnectionInvitations\Send.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Index.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Sent.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Receive.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Rejected.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Details.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Deleted.cshtml" />
+    <Content Include="Views\TransferConnectionInvitations\Approved.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

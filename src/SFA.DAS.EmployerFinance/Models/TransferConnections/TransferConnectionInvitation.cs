@@ -8,8 +8,6 @@ namespace SFA.DAS.EmployerFinance.Models.TransferConnections
 {
     public class TransferConnectionInvitation : Entity
     {
-        private readonly IHashingService _hashingService;
-
         public virtual int Id { get; protected set; }
         public virtual ICollection<TransferConnectionInvitationChange> Changes { get; protected set; } = new List<TransferConnectionInvitationChange>();
         public virtual DateTime CreatedDate { get; protected set; }
@@ -21,10 +19,8 @@ namespace SFA.DAS.EmployerFinance.Models.TransferConnections
         public virtual long SenderAccountId { get; protected set; }
         public virtual TransferConnectionInvitationStatus Status { get; protected set; }
 
-        public TransferConnectionInvitation(IHashingService hashingService, Account.Account senderAccount, Account.Account receiverAccount, User senderUser) : this()
+        public TransferConnectionInvitation(Account.Account senderAccount, Account.Account receiverAccount, User senderUser) : this()
         {
-            _hashingService = hashingService;
-            
             var now = DateTime.UtcNow;
 
             SenderAccount = senderAccount;

@@ -1,0 +1,69 @@
+﻿@using SFA.DAS.Validation.Mvc
+@model SFA.DAS.EmployerFinance.Web.ViewModels.ApprovedTransferConnectionInvitationViewModel
+
+@{
+    ViewBag.Title = "Approved transfer connection request";
+    ViewBag.Section = "finance";
+    ViewBag.PageID = "page-transfer-connection-requests-approved";
+    ViewBag.GaData.Vpv = "/accounts/transfers/connection/requests/approved";
+}
+
+@Html.Partial("_ValidationSummary", ViewData.ModelState)
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <div class="success-summary">
+            <h1 class="bold-large">Connection confirmed</h1>
+            <p><i class="icon-green-tick"></i> You can now request transfer funds from @Model.TransferConnectionInvitation.SenderAccount.Name.</p>
+        </div>
+        <div class="flash-card">
+            <header>
+                <h2 class="heading-medium">How do I request transfer funds?</h2>
+            </header>
+            <ul class="how-to-renew" data-id="how-to-renew-uk">
+                <li>
+                    <span class="circle circle-step circle-white">1</span>
+                    <p>Agree the apprentices, training and costs that the transfer will cover</p>
+                </li>
+                <li>
+                    <span class="circle circle-step circle-white">2</span>
+                    <p>Add apprentices, training and cost details in the apprenticeship service</p>
+                </li>
+                <li>
+                    <span class="circle circle-step circle-white">3</span>
+                    <p>Confirm details with your training provider</p>
+                </li>
+            </ul>
+            <p>Once you and your training provider approve the apprenticeship details, a transfer request is automatically sent to the sending employer to review.</p>
+        </div>
+        <h2 class="heading-xlarge">What next?</h2>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group @(Html.IsValid(m => m.Choice) ? "" : "error")">
+                <fieldset>
+                    <legend>
+                        <span class="visuallyhidden">What next?</span>
+                        @Html.ValidationMessageFor(m => m.Choice)
+                    </legend>
+                    <label class="block-label selection-button-radio">
+                        @Html.RadioButtonFor(m => m.Choice, "GoToApprenticesPage")
+                        Start adding apprentices
+                    </label>
+                    <label class="block-label selection-button-radio">
+                        @Html.RadioButtonFor(m => m.Choice, "GoToHomepage")
+                        Go back to the homepage
+                    </label>
+                </fieldset>
+            </div>
+            <button class="button" type="submit">Continue</button>
+        }
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a class="link-back" href="@Url.Action("Index", "Transfers")">Back</a></li>
+        </ol>
+    </div>
+}

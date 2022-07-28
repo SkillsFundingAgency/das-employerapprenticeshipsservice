@@ -62,7 +62,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.UnitTests.ScheduledJobs
                 .Build<Account>().Without(acc => acc.AccountLegalEntities)
                 .CreateMany(numberOfAccounts);
 
-            EmployerAccountRepository.Setup(x => x.GetAllAccounts()).ReturnsAsync(accounts.ToList());
+            EmployerAccountRepository.Setup(x => x.GetAll()).ReturnsAsync(accounts.ToList());
         }
     }
 }

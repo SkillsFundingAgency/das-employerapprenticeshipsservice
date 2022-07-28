@@ -88,7 +88,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.UnitTests.ScheduledJobs
                 .Build<Account>().Without(acc => acc.AccountLegalEntities)
                 .CreateMany(numberOfAccounts);
 
-            _employerAccountRepository.Setup(x => x.GetAllAccounts()).ReturnsAsync(Accounts.ToList());
+            _employerAccountRepository.Setup(x => x.GetAll()).ReturnsAsync(Accounts.ToList());
         }
 
         internal void SetupPaye(int numberOfPayeSchemes)
