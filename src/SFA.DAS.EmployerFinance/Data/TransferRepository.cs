@@ -66,6 +66,22 @@ namespace SFA.DAS.EmployerFinance.Data
                 commandType: CommandType.StoredProcedure);
         }
 
+        public async Task<TransferAllowance> GetTransferAllowance(long accountId, decimal transferAllowancePercentage)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountId", accountId, DbType.Int64);
+            parameters.Add("@allowancePercentage", transferAllowancePercentage, DbType.Decimal);
+            
+            var transferAllowance = await _db.Value.Database.Connection.QueryAsync<TransferAllowance>(
+                sql: "[employer_financial].[GetAccountTransferAllowance]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
+            return transferAllowance.SingleOrDefault() ?? new TransferAllowance();
+        }
+
         private static DataTable CreateTransferDataTable(IEnumerable<AccountTransfer> transfers)
         {
             var table = new DataTable();

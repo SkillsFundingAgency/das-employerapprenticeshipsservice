@@ -18,16 +18,16 @@ namespace SFA.DAS.EmployerFinance.Queries.SendTransferConnectionInvitation
     {
         private readonly IEmployerAccountRepository _employerAccountRepository;
         private readonly ITransferConnectionInvitationRepository _transferConnectionInvitationRepository;
-        private readonly IPublicHashingService _publicHashingService;
+        private readonly IMapper _mapper;
 
         public SendTransferConnectionInvitationQueryHandler(
             IEmployerAccountRepository employerAccountRepository,
             ITransferConnectionInvitationRepository transferConnectionInvitationRepository,
-            IPublicHashingService publicHashingService)
+            IMapper mapper)
         {
             _employerAccountRepository = employerAccountRepository;
             _transferConnectionInvitationRepository = transferConnectionInvitationRepository;
-            _publicHashingService = publicHashingService;
+            _mapper = mapper;
         }
 
         public async Task<SendTransferConnectionInvitationResponse> Handle(SendTransferConnectionInvitationQuery message)
@@ -54,8 +54,8 @@ namespace SFA.DAS.EmployerFinance.Queries.SendTransferConnectionInvitation
 
             return new SendTransferConnectionInvitationResponse
             {
-                ReceiverAccount = Mapper.Map<AccountDto>(receiverAccount),
-                SenderAccount = Mapper.Map<AccountDto>(senderAccount),
+                ReceiverAccount = _mapper.Map<AccountDto>(receiverAccount),
+                SenderAccount = _mapper.Map<AccountDto>(senderAccount),
             };
         }
 

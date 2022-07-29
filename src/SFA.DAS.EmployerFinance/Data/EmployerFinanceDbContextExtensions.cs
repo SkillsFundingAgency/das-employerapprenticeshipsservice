@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerFinance.Models.Transfers;
 
@@ -16,16 +15,6 @@ namespace SFA.DAS.EmployerFinance.Data
                 periodEnd).ConfigureAwait(false);
 
             return transfers;
-        }
-
-        public static async Task<TransferAllowance> GetTransferAllowance(this EmployerFinanceDbContext db, long accountId, decimal transferAllowancePercentage)
-        {
-            var transferAllowance = await db.SqlQueryAsync<TransferAllowance>(
-                "[employer_financial].[GetAccountTransferAllowance] @accountId = {0}, @allowancePercentage = {1}",
-                accountId,
-                transferAllowancePercentage).ConfigureAwait(false);
-
-            return transferAllowance.SingleOrDefault() ?? new TransferAllowance();
         }
     }
 }

@@ -167,6 +167,7 @@
     <Compile Include="Binders\TrimStringModelBinder.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\TransferConnectionsController.cs" />
     <Compile Include="Controllers\TransferConnectionInvitationsController.cs" />
     <Compile Include="Controllers\EmployerAccountTransactionsController.cs" />
     <Compile Include="Controllers\EmployerTeamController.cs" />
@@ -221,7 +222,11 @@
     <Compile Include="ViewModels\Transfers\IndexViewModel.cs" />
     <Compile Include="ViewModels\Transfers\SendTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\Transfers\StartTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\Transfers\TransferAllowanceViewModel.cs" />
+    <Compile Include="ViewModels\Transfers\TransferConnectionInvitationAuthorizationViewModel.cs" />
+    <Compile Include="ViewModels\Transfers\TransferConnectionInvitationsViewModel.cs" />
     <Compile Include="ViewModels\Transfers\TransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\Transfers\TransferRequestsViewModel.cs" />
     <Compile Include="ViewModels\TransferTransactionDetailsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -667,6 +672,11 @@
     <Content Include="Views\TransferConnectionInvitations\Details.cshtml" />
     <Content Include="Views\TransferConnectionInvitations\Deleted.cshtml" />
     <Content Include="Views\TransferConnectionInvitations\Approved.cshtml" />
+    <Content Include="Views\TransferConnections\Index.cshtml" />
+    <Content Include="Views\TransferConnections\TransferAllowance.cshtml" />
+    <Content Include="Views\TransferConnections\TransferConnectionInvitationAuthorization.cshtml" />
+    <Content Include="Views\TransferConnections\TransferConnectionInvitations.cshtml" />
+    <Content Include="Views\TransferConnections\TransferRequests.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

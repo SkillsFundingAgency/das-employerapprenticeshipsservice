@@ -39,6 +39,20 @@ namespace SFA.DAS.EmployerFinance.Services
             return JsonConvert.DeserializeObject<GetApprenticeshipResponse>(json);
         }
 
+        public async Task<GetTransferRequestSummaryResponse> GetTransferRequests(long accountId)
+        {
+            var url = $"{BaseUrl()}api/accounts/{accountId}/transfers";
+            _logger.Info($"Getting GetTransferRequests {url}");
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
+            await AddAuthenticationHeader(requestMessage);
+
+            var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            return JsonConvert.DeserializeObject<GetTransferRequestSummaryResponse>(json);
+        }
+
         private string BaseUrl()
         {
             if (_config.ApiBaseUrl.EndsWith("/"))

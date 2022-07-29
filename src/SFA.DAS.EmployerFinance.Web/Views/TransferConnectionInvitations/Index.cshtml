@@ -31,7 +31,7 @@
                     <p>You won't be able to complete the next step until you have the receiving employer's account ID.</p>
                     <div class="form-block">
                         <a class="button button-white" href="@Url.Action("Start", "TransferConnectionInvitations")">Continue</a>
-                        <a class="button-link" href="@Url.Action("Index", "Transfers")">Cancel</a>
+                        <a class="button-link" href="@Url.Action("Index", "TransferConnectionsController")">Cancel</a>
                     </div>
                 </div>
             </div>
@@ -42,7 +42,7 @@
 @section breadcrumb {
     <div class="breadcrumbs" id="js-breadcrumbs">
         <ol role="navigation">
-            <li><a class="link-back" href="@Url.Action("Index", "Transfers")">Back</a></li>
+            <li><a class="link-back" href="@Url.Action("Index", "TransferConnectionsController")">Back</a></li>
         </ol>
     </div>
 }

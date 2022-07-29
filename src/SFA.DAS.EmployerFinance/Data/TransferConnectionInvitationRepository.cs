@@ -54,10 +54,22 @@ namespace SFA.DAS.EmployerFinance.Data
                 .SingleOrDefaultAsync();
         }
 
+        public async Task<List<TransferConnectionInvitation>> GetByReceiver(long recieverAccountId, TransferConnectionInvitationStatus status)
+        {
+            return await _db.Value.TransferConnectionInvitations
+                .Where(
+                    i => i.ReceiverAccount.Id == recieverAccountId && 
+                    i.Status == TransferConnectionInvitationStatus.Approved)
+                .OrderBy(i => i.SenderAccount.Name)
+                .ToListAsync();
+        }
+
         public async Task<TransferConnectionInvitation> GetLatestByReceiver(long receiverAccountId, TransferConnectionInvitationStatus status)
         {
             return await _db.Value.TransferConnectionInvitations
-                .Where(i => i.ReceiverAccountId == receiverAccountId && i.Status ==  status)
+                .Where(
+                    i => i.ReceiverAccountId == receiverAccountId && 
+                    i.Status ==  status)
                 .OrderByDescending(i => i.CreatedDate)
                 .FirstOrDefaultAsync();
         }
@@ -72,11 +84,14 @@ namespace SFA.DAS.EmployerFinance.Data
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<List<TransferConnectionInvitation>> GetByReceiver(long recieverAccountId, TransferConnectionInvitationStatus status)
+        public async Task<List<TransferConnectionInvitation>> GetBySenderOrReceiver(long accountId)
         {
             return await _db.Value.TransferConnectionInvitations
-                .Where(i => i.ReceiverAccount.Id == recieverAccountId && i.Status == TransferConnectionInvitationStatus.Approved)
-                .OrderBy(i => i.SenderAccount.Name)
+                .Where(
+                    i => i.SenderAccount.Id == accountId && !i.DeletedBySender || 
+                    i.ReceiverAccount.Id == accountId && !i.DeletedByReceiver)
+                .OrderBy(i => i.ReceiverAccount.Id == accountId ? i.SenderAccount.Name : i.ReceiverAccount.Name)
+                .ThenBy(i => i.CreatedDate)
                 .ToListAsync();
         }
 

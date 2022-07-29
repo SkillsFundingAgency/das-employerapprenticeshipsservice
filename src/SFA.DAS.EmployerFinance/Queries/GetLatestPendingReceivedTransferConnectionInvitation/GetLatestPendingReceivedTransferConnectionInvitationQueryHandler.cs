@@ -10,10 +10,12 @@ namespace SFA.DAS.EmployerFinance.Queries.GetLatestPendingReceivedTransferConnec
     public class GetLatestPendingReceivedTransferConnectionInvitationQueryHandler : IAsyncRequestHandler<GetLatestPendingReceivedTransferConnectionInvitationQuery, GetLatestPendingReceivedTransferConnectionInvitationResponse>
     {
         private readonly ITransferConnectionInvitationRepository _transferConnectionInvitationRepository;
+        private readonly IMapper _mapper;
 
-        public GetLatestPendingReceivedTransferConnectionInvitationQueryHandler(ITransferConnectionInvitationRepository transferConnectionInvitationRepository)
+        public GetLatestPendingReceivedTransferConnectionInvitationQueryHandler(ITransferConnectionInvitationRepository transferConnectionInvitationRepository, IMapper mapper)
         {
             _transferConnectionInvitationRepository = transferConnectionInvitationRepository;
+            _mapper = mapper;
         }
 
         public async Task<GetLatestPendingReceivedTransferConnectionInvitationResponse> Handle(GetLatestPendingReceivedTransferConnectionInvitationQuery message)
@@ -24,7 +26,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetLatestPendingReceivedTransferConnec
 
             return new GetLatestPendingReceivedTransferConnectionInvitationResponse
             {
-                TransferConnectionInvitation = Mapper.Map<TransferConnectionInvitationDto>(transferConnectionInvitation)
+                TransferConnectionInvitation = _mapper.Map<TransferConnectionInvitationDto>(transferConnectionInvitation)
             };
         }
     }

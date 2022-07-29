@@ -13,10 +13,12 @@ namespace SFA.DAS.EmployerFinance.Queries.GetSentTransferConnectionInvitation
     public class GetSentTransferConnectionInvitationQueryHandler : IAsyncRequestHandler<GetSentTransferConnectionInvitationQuery, GetSentTransferConnectionInvitationResponse>
     {
         private readonly ITransferConnectionInvitationRepository _transferConnectionInvitationRepository;
+        private readonly IMapper _mapper;
 
-        public GetSentTransferConnectionInvitationQueryHandler(ITransferConnectionInvitationRepository transferConnectionInvitationRepository)
+        public GetSentTransferConnectionInvitationQueryHandler(ITransferConnectionInvitationRepository transferConnectionInvitationRepository, IMapper mapper)
         {
             _transferConnectionInvitationRepository = transferConnectionInvitationRepository;
+            _mapper = mapper;
         }
 
         public async Task<GetSentTransferConnectionInvitationResponse> Handle(GetSentTransferConnectionInvitationQuery message)
@@ -28,7 +30,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetSentTransferConnectionInvitation
 
             return new GetSentTransferConnectionInvitationResponse
             {
-                TransferConnectionInvitation = Mapper.Map<TransferConnectionInvitationDto>(transferConnectionInvitation)
+                TransferConnectionInvitation = _mapper.Map<TransferConnectionInvitationDto>(transferConnectionInvitation)
             };
         }
     }
