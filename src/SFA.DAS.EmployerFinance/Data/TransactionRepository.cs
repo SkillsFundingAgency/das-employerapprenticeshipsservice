@@ -268,6 +268,21 @@ namespace SFA.DAS.EmployerFinance.Data
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
+        }       
+
+        public async Task<List<TransactionSummary>> GetAccountTransactionSummary(long accountId)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@AccountId", accountId, DbType.Int64);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<TransactionSummary>(
+                sql: "[employer_financial].[GetTransactionSummary_ByAccountId]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
+            return result.ToList();
         }
     }
 }

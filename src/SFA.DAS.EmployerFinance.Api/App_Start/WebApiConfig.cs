@@ -14,6 +14,8 @@ using SFA.DAS.UnitOfWork.WebApi.Extensions;
 using SFA.DAS.Validation.WebApi;
 using WebApi.StructureMap;
 using SFA.DAS.EAS.Application.DependencyResolution;
+using SFA.DAS.EmployerFinance.Api.Client;
+using SFA.DAS.EmployerFinance.Configuration;
 
 namespace SFA.DAS.EmployerFinance.Api
 {
@@ -52,6 +54,7 @@ namespace SFA.DAS.EmployerFinance.Api
                 c.AddRegistry<StartupRegistry>();
                 c.AddRegistry<DefaultRegistry>();
                 c.AddRegistry<CommitmentsV2ApiClientRegistry>();
+                c.AddRegistry(new EmployerFinanceApiClientRegistry(context => context.GetInstance<EmployerFinanceConfiguration>().EmployerFinanceApi));
             });
         }
     }

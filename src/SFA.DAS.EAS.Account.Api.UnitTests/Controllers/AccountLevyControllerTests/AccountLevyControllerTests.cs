@@ -12,6 +12,7 @@ using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.HashingService;
+using SFA.DAS.EmployerFinance.Services;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTests
 {
@@ -23,6 +24,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
         protected IMapper Mapper;
         protected Mock<IHashingService> HashingService;
         protected Mock<IEmployerAccountsApiService> ApiService;
+        protected Mock<IEmployerFinanceApiService> FinanceApiService;
 
         [SetUp]
         public void Arrange()
@@ -31,8 +33,9 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
             Logger = new Mock<ILog>();
             HashingService = new Mock<IHashingService>();
             ApiService = new Mock<IEmployerAccountsApiService>();
+            FinanceApiService = new Mock<IEmployerFinanceApiService>();
             Mapper = ConfigureMapper();
-            var orchestrator = new AccountsOrchestrator(Mediator.Object, Logger.Object, Mapper, HashingService.Object, ApiService.Object);
+            var orchestrator = new AccountsOrchestrator(Mediator.Object, Logger.Object, Mapper, HashingService.Object, ApiService.Object, FinanceApiService.Object);
             Controller = new AccountLevyController(orchestrator);
         }
 
@@ -52,3 +55,4 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
         }
     }
 }
+

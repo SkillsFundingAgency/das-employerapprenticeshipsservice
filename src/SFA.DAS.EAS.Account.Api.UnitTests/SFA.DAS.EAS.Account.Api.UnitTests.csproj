@@ -80,6 +80,10 @@
       <Project>{40190475-1220-4cf8-8a60-223facafeda1}</Project>
       <Name>SFA.DAS.EAS.Account.Api</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EAS.Finance.Api.Types\SFA.DAS.EAS.Finance.Api.Types.csproj">
+      <Project>{2AF6F3F4-7D2E-495D-B914-18E2A0FDEF2C}</Project>
+      <Name>SFA.DAS.EAS.Finance.Api.Types</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Events\SFA.DAS.EmployerAccounts.Events.csproj">
       <Project>{0e46510c-0d06-4b63-8e17-b9037db7c7ed}</Project>
       <Name>SFA.DAS.EmployerAccounts.Events</Name>
@@ -100,6 +104,10 @@
       <Project>{05D7C094-E2C9-4CCD-B0D7-85D263254B26}</Project>
       <Name>SFA.DAS.EAS.TestCommon</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj">
+      <Project>{C5880F73-59D6-4C59-A1A2-DBA38D13E8DC}</Project>
+      <Name>SFA.DAS.EmployerFinance</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
@@ -108,6 +116,9 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AutoFixture">
+      <Version>4.5.1</Version>
+    </PackageReference>
     <PackageReference Include="AutoMapper">
       <Version>5.1.1</Version>
     </PackageReference>

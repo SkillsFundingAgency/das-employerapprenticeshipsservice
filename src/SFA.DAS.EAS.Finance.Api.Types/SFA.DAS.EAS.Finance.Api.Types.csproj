@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SFA.DAS.Common.Domain, Version=1.4.283.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Common.Domain.1.4.283\lib\net462\SFA.DAS.Common.Domain.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,9 +44,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountAgreementType.cs" />
+    <Compile Include="AccountDetailViewModel.cs" />
     <Compile Include="AccountResourceList.cs" />
+    <Compile Include="AccountWithBalanceViewModel.cs" />
     <Compile Include="LevyDeclarationViewModel.cs" />
+    <Compile Include="PagedApiResponseViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResourceList.cs" />
+    <Compile Include="ResourceViewModel.cs" />
+    <Compile Include="Statistics.cs" />
+    <Compile Include="FinanceStatisticsViewModel.cs" />
+    <Compile Include="TransactionItemType.cs" />
+    <Compile Include="TransactionSummaryViewModel.cs" />
+    <Compile Include="TransactionsViewModel.cs" />
+    <Compile Include="TransactionViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -29,5 +29,20 @@ namespace SFA.DAS.EmployerFinance.Api.Controllers
 
             return Ok(result.Data);
         }
+
+        [Route("{payrollYear}/{payrollMonth}", Name = "GetLevyForPeriod")]
+        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetLevy(string hashedAccountId, string payrollYear, short payrollMonth)
+        {
+            var result = await _orchestrator.GetLevy(hashedAccountId, payrollYear, payrollMonth);
+
+            if (result.Data == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result.Data);
+        }
     }
 }

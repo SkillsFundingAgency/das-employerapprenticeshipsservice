@@ -7,6 +7,8 @@ using SFA.DAS.EAS.Account.Api.ExceptionLoggers;
 using SFA.DAS.EAS.Application.DependencyResolution;
 using WebApi.StructureMap;
 using SFA.DAS.Authorization.WebApi.Extensions;
+using SFA.DAS.EmployerFinance.Api.Client;
+using SFA.DAS.EmployerFinance.Configuration;
 
 namespace SFA.DAS.EAS.Account.Api
 {
@@ -23,7 +25,7 @@ namespace SFA.DAS.EAS.Account.Api
 
 
             config.UseStructureMap(c =>
-            {
+            {   
                 c.AddRegistry<AuditRegistry>();
                 c.AddRegistry<AuthorizationRegistry>();
                 c.AddRegistry<CachesRegistry>();
@@ -42,6 +44,7 @@ namespace SFA.DAS.EAS.Account.Api
                 c.AddRegistry<ValidationRegistry>();
                 c.AddRegistry<EmployerAccountsApiServiceRegistry>();
                 c.AddRegistry<DefaultRegistry>();
+                //c.AddRegistry(new EmployerFinanceApiClientRegistry(context => context.GetInstance<EmployerFinanceConfiguration>().EmployerFinanceApi));                
             });
         }
     }

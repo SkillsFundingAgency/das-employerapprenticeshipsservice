@@ -127,12 +127,18 @@
     <Compile Include="Services\EmployerAccountsApi\Http\IEmployerAccountsApiHttpClientFactory.cs" />
     <Compile Include="Services\EmployerAccountsApi\IEmployerAccountsApiService.cs" />
     <Compile Include="Services\EmployerFinanceApi\EmployerFinanceApiService.cs" />
+    <Compile Include="Services\EmployerFinanceApi\Http\EmployerFinanceApiHttpClientFactory.cs" />
+    <Compile Include="Services\EmployerFinanceApi\Http\IEmployerFinanceApiHttpClientFactory.cs" />
     <Compile Include="Services\EmployerFinanceApi\IEmployerFinanceApiService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj">
       <Project>{8afb0bbe-1e53-488c-a971-d236df9eaa77}</Project>
       <Name>SFA.DAS.EAS.Account.Api.Types</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EAS.Finance.Api.Types\SFA.DAS.EAS.Finance.Api.Types.csproj">
+      <Project>{2af6f3f4-7d2e-495d-b914-18e2a0fdef2c}</Project>
+      <Name>SFA.DAS.EAS.Finance.Api.Types</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Types\SFA.DAS.EmployerAccounts.Api.Types.csproj">
       <Project>{8057e87b-5893-45d0-93a1-6278ea8ba328}</Project>
@@ -145,6 +151,14 @@
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EAS.Infrastructure.csproj">
       <Project>{01ac2bc2-ac01-400f-ab8f-548dd5c0ee74}</Project>
       <Name>SFA.DAS.EAS.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerFinance.Api.Client\SFA.DAS.EmployerFinance.Api.Client.csproj">
+      <Project>{aa299f18-d0ca-43a2-ae4d-54cb6c48ea70}</Project>
+      <Name>SFA.DAS.EmployerFinance.Api.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj">
+      <Project>{C5880F73-59D6-4C59-A1A2-DBA38D13E8DC}</Project>
+      <Name>SFA.DAS.EmployerFinance</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

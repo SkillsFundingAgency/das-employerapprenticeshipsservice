@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.HashingService;
+using SFA.DAS.EmployerFinance.Services;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControllerTests
 {
@@ -23,6 +24,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
         protected Mock<IMapper> Mapper;
         protected Mock<IHashingService> HashingService;
         protected Mock<IEmployerAccountsApiService> ApiService;
+        protected Mock<IEmployerFinanceApiService> FinanceApiService;
 
         [SetUp]
         public void Arrange()
@@ -32,8 +34,9 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             Mapper = new Mock<IMapper>();
             HashingService = new Mock<IHashingService>();
             ApiService = new Mock<IEmployerAccountsApiService>();
+            FinanceApiService = new Mock<IEmployerFinanceApiService>();
           
-            var orchestrator = new AccountsOrchestrator(Mediator.Object, Logger.Object, Mapper.Object, HashingService.Object, ApiService.Object);
+            var orchestrator = new AccountsOrchestrator(Mediator.Object, Logger.Object, Mapper.Object, HashingService.Object, ApiService.Object, FinanceApiService.Object);
             Controller = new EmployerAccountsController(orchestrator, ApiService.Object);
 
             UrlHelper = new Mock<UrlHelper>();

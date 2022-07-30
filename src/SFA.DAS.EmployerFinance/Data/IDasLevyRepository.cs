@@ -23,5 +23,7 @@ namespace SFA.DAS.EmployerFinance.Data
         Task<string> FindHistoricalProviderName(long ukprn);
 
         Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(long accountId);
+
+        Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(long accountId, string payrollYear, short payrollMonth);
     }
 }

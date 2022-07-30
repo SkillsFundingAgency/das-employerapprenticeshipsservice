@@ -15,6 +15,7 @@ using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EmployerFinance.Services;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTests
 {
@@ -25,6 +26,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
         private Mock<ILog> _log;
         private Mock<IHashingService> _hashingService;
         private Mock<IEmployerAccountsApiService> _apiService;
+        private Mock<IEmployerFinanceApiService> _financeApiService;
         private Mock<IMapper> _mapper;
         private AccountWithBalanceViewModel _expectedAccount;
         private AccountBalance _expectedAccountBalance;
@@ -37,7 +39,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
             _log = new Mock<ILog>();
             _hashingService = new Mock<IHashingService>();
             _apiService = new Mock<IEmployerAccountsApiService>();
-            _orchestrator = new AccountsOrchestrator(_mediator.Object, _log.Object, _mapper.Object, _hashingService.Object, _apiService.Object);
+            _financeApiService = new Mock<IEmployerFinanceApiService>();
+            _orchestrator = new AccountsOrchestrator(_mediator.Object, _log.Object, _mapper.Object, _hashingService.Object, _apiService.Object, _financeApiService.Object);
 
             _expectedAccount = new AccountWithBalanceViewModel {  AccountId = 124343 };
             _expectedAccountBalance = new AccountBalance { AccountId = _expectedAccount.AccountId };

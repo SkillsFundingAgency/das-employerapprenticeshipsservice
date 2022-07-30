@@ -95,6 +95,10 @@
       <Project>{8afb0bbe-1e53-488c-a971-d236df9eaa77}</Project>
       <Name>SFA.DAS.EAS.Account.Api.Types</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EAS.Finance.Api.Types\SFA.DAS.EAS.Finance.Api.Types.csproj">
+      <Project>{2AF6F3F4-7D2E-495D-B914-18E2A0FDEF2C}</Project>
+      <Name>SFA.DAS.EAS.Finance.Api.Types</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
       <Project>{0226F97A-704E-49B0-A100-B75FEEC9C8AD}</Project>
       <Name>SFA.DAS.EAS.Application</Name>
@@ -106,6 +110,14 @@
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EAS.Infrastructure.csproj">
       <Project>{01ac2bc2-ac01-400f-ab8f-548dd5c0ee74}</Project>
       <Name>SFA.DAS.EAS.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerFinance.Api.Client\SFA.DAS.EmployerFinance.Api.Client.csproj">
+      <Project>{AA299F18-D0CA-43A2-AE4D-54CB6C48EA70}</Project>
+      <Name>SFA.DAS.EmployerFinance.Api.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj">
+      <Project>{c5880f73-59d6-4c59-a1a2-dba38d13e8dc}</Project>
+      <Name>SFA.DAS.EmployerFinance</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

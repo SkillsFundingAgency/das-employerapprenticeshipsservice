@@ -19,6 +19,7 @@ using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Domain.Models.Transfers;
+using SFA.DAS.EmployerFinance.Services;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTests
 {
@@ -29,6 +30,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
         private Mock<ILog> _log;
         private Mock<IHashingService> _hashingService;
         private Mock<IEmployerAccountsApiService> _apiService;
+        private Mock<IEmployerFinanceApiService> _financeApiService;
         private IMapper _mapper;
         private TransferAllowance _transferAllowance;
 
@@ -48,7 +50,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
             _log = new Mock<ILog>();
             _hashingService = new Mock<IHashingService>();
             _apiService = new Mock<IEmployerAccountsApiService>();
-            _orchestrator = new AccountsOrchestrator(_mediator.Object, _log.Object, _mapper, _hashingService.Object, _apiService.Object);
+            _financeApiService = new Mock<IEmployerFinanceApiService>();
+            _orchestrator = new AccountsOrchestrator(_mediator.Object, _log.Object, _mapper, _hashingService.Object, _apiService.Object, _financeApiService.Object);
         
             _accountDetailViewModel = new AccountDetailViewModel { AccountId = 1, ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy.ToString() };
 

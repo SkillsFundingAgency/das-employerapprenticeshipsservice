@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.StatisticsControllerTest
         [SetUp]
         public void Setup()
         {
-            _orchestrator = new Mock<StatisticsOrchestrator>(null, null);
+            _orchestrator = new Mock<StatisticsOrchestrator>(null, null, null);
 
             _statisticsViewModel = new StatisticsViewModel
             {

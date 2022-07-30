@@ -33,8 +33,10 @@ namespace SFA.DAS.EmployerFinance.Queries.GetLevyDeclaration
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
+            //TODO : inlcude this later
             //var accountId = _hashingService.DecodeValue(message.HashedAccountId);
-
+            //accountId = 103960
+            //var declarations = await _repository.GetAccountLevyDeclarations(accountId);
             var declarations = await _repository.GetAccountLevyDeclarations(103960);
 
             return new GetLevyDeclarationResponse { Declarations = declarations };
