@@ -8,6 +8,6 @@ namespace SFA.DAS.EmployerAccounts.Data
     {
         Task<List<TeamMember>> GetAccountTeamMembersForUserId(string hashedAccountId, string externalUserId);
         Task<TeamMember> GetMember(string hashedAccountId, string email, bool onlyIfMemberIsActive);
-        Task<ICollection<TeamMember>> GetAccountTeamMembers(string hashedAccountId);
+        Task<List<TeamMember>> GetAccountTeamMembers(string hashedAccountId);
     }
 }

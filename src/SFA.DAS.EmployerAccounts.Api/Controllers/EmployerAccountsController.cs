@@ -60,6 +60,16 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
             return Ok(result);
         }
 
+        [Route("internal/{accountId}/users/which-receive-notifications", Name = "GetAccountUsersByInteralIdWhichReceiveNotifications")]
+        [ApiAuthorize(Roles = "ReadAllAccountUsers")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAccountUsersWhichReceiveNotifications(long accountId)
+        {
+            var result = await _orchestrator.GetAccountTeamMembersWhichReceiveNotifications(accountId);
+            return Ok(result);
+        }
+
+
         private void CreateGetLegalEntityLink(string hashedAccountId, Resource legalEntity)
         {
             legalEntity.Href = Url.Route("GetLegalEntity", new { hashedAccountId, legalEntityId = legalEntity.Id });
