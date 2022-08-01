@@ -42,26 +42,10 @@ namespace SFA.DAS.EmployerFinance.Services
             return await _employerFinanceApiClient.GetTransactions(accountId, year, month);
         }
 
-        public Task<AccountDetailViewModel> GetAccount(string hashedAccountId, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<PagedApiResponseViewModel<AccountWithBalanceViewModel>> GetAccounts(string toDate, int pageSize, int pageNumber, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<ICollection<TransactionSummaryViewModel>> GetTransactionSummary(string accountId)
         {
             return await _employerFinanceApiClient.GetTransactionSummary(accountId);
         }
 
-
-        public Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-       
     }
 }

@@ -18,10 +18,6 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
         Task<TransactionsViewModel> GetTransactions(string accountId, int year, int month);
 
         Task<Statistics> GetStatistics(CancellationToken cancellationToken = default(CancellationToken));
-        Task<PagedApiResponseViewModel<AccountWithBalanceViewModel>> GetAccounts(string toDate, int pageSize, int pageNumber, CancellationToken cancellationToken = default(CancellationToken));
-        Task<AccountDetailViewModel> GetAccount(string hashedAccountId, CancellationToken cancellationToken = default(CancellationToken));
-        Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default(CancellationToken));
-
 
     }
 }

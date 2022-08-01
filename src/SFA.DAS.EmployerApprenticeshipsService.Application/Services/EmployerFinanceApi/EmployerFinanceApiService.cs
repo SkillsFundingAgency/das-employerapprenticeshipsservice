@@ -20,17 +20,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
             _log = log;
             _httpClient = new SecureHttpClient(configuration);
         }
-
-        public Task<Finance.Api.Types.AccountDetailViewModel> GetAccount(string hashedAccountId, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Finance.Api.Types.PagedApiResponseViewModel<Finance.Api.Types.AccountWithBalanceViewModel>> GetAccounts(string toDate, int pageSize, int pageNumber, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
+     
         public async Task<ICollection<Finance.Api.Types.LevyDeclarationViewModel>> GetLevyDeclarations(string hashedAccountId)
         {
             var baseUrl = GetBaseUrl();
@@ -74,12 +64,6 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
             var json = await _httpClient.GetAsync(url);
 
             return JsonConvert.DeserializeObject<ICollection<Finance.Api.Types.TransactionSummaryViewModel>>(json);
-        }
-
-
-        public Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
         }
 
         private string GetBaseUrl()
