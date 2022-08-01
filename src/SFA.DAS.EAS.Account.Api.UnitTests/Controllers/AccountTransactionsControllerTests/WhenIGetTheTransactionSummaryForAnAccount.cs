@@ -17,6 +17,9 @@ using SFA.DAS.NLog.Logger;
 using SFA.DAS.EmployerFinance.Services;
 using AutoMapper;
 using AutoFixture;
+using System;
+using System.Reflection;
+using Castle.Core.Internal;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsControllerTests
 {
@@ -29,6 +32,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
         private Mock<ILog> _logger;
         private Mock<UrlHelper> _urlHelper;
         private  Mock<IEmployerFinanceApiService> _financeApiService;
+        protected IMapper Mapper;
 
         [SetUp]
         public void Arrange()
@@ -38,7 +42,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             _urlHelper = new Mock<UrlHelper>();
             _mapper = new Mock<IMapper>();
             _financeApiService = new Mock<IEmployerFinanceApiService>();
-            var orchestrator = new AccountTransactionsOrchestrator(_mediator.Object, _mapper.Object, _logger.Object, _financeApiService.Object);
+            Mapper = ConfigureMapper();
+            var orchestrator = new AccountTransactionsOrchestrator(_mediator.Object, Mapper, _logger.Object, _financeApiService.Object);
             _controller = new AccountTransactionsController(orchestrator);
             _controller.Url = _urlHelper.Object;
         }
@@ -49,18 +54,18 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
         {
             //Arrange
             var hashedAccountId = "ABC123";
-            var transactionSummaryResponse = new GetAccountTransactionSummaryResponse
-            {
-                Data = new List<TransactionSummary> { new TransactionSummary { Month = 1, Year = 2017 }, new TransactionSummary { Month = 2, Year = 2017 } }
-            };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetAccountTransactionSummaryRequest>(q => q.HashedAccountId == hashedAccountId))).ReturnsAsync(transactionSummaryResponse);
+            //var transactionSummaryResponse = new GetAccountTransactionSummaryResponse
+            //{
+            //    Data = new List<TransactionSummary> { new TransactionSummary { Month = 1, Year = 2017 }, new TransactionSummary { Month = 2, Year = 2017 } }
+            //};
+            //_mediator.Setup(x => x.SendAsync(It.Is<GetAccountTransactionSummaryRequest>(q => q.HashedAccountId == hashedAccountId))).ReturnsAsync(transactionSummaryResponse);
 
 
             var fixture = new Fixture();
             ICollection<SFA.DAS.EAS.Finance.Api.Types.TransactionSummaryViewModel> apiResponse = new List<SFA.DAS.EAS.Finance.Api.Types.TransactionSummaryViewModel>()
             {
                  fixture.Create<SFA.DAS.EAS.Finance.Api.Types.TransactionSummaryViewModel>(),
-                fixture.Create<SFA.DAS.EAS.Finance.Api.Types.TransactionSummaryViewModel>()
+                 fixture.Create<SFA.DAS.EAS.Finance.Api.Types.TransactionSummaryViewModel>()
             };
 
             _financeApiService.Setup(x => x.GetTransactionSummary(hashedAccountId)).ReturnsAsync(apiResponse);
@@ -91,6 +96,21 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             model?.Content.ShouldAllBeEquivalentTo(apiResponse, x => x.Excluding(y => y.Href));
             model?.Content.First().Href.Should().Be(firstExpectedUri);
             model?.Content.Last().Href.Should().Be(secondExpectedUri);
+        }
+
+        private IMapper ConfigureMapper()
+        {
+            var profiles = Assembly.Load($"SFA.DAS.EAS.Account.Api")
+                .GetTypes()
+                .Where(t => typeof(Profile).IsAssignableFrom(t))
+                .Select(t => (Profile)Activator.CreateInstance(t));
+
+            var config = new MapperConfiguration(c =>
+            {
+                profiles.ForEach(c.AddProfile);
+            });
+
+            return config.CreateMapper();
         }
     }
 }

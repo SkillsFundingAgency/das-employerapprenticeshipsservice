@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
     [TestFixture]
     public class WhenIGetLevyForAnAccount : AccountLevyControllerTests
     {
-        //TODO : change the Return Type to Account.Api.Types
+        
         [Test]
         public async Task ThenTheLevyIsReturned()
         {
@@ -58,5 +58,5 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
             Assert.IsNotNull(response);
             Assert.IsInstanceOf<NotFoundResult>(response);
         }
-    }
+    }   
 }

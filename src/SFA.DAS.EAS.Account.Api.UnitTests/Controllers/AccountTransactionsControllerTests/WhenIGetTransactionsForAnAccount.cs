@@ -18,6 +18,9 @@ using SFA.DAS.NLog.Logger;
 using SFA.DAS.EmployerFinance.Services;
 using AutoMapper;
 using AutoFixture;
+using System.Reflection;
+using System.Linq;
+using Castle.Core.Internal;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsControllerTests
 {
@@ -30,6 +33,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
         private Mock<UrlHelper> _urlHelper;
         private Mock<IMapper> _mapper;
         private Mock<IEmployerFinanceApiService> _financeApiService;
+        protected IMapper Mapper;
 
         [SetUp]
         public void Arrange()
@@ -40,9 +44,11 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             _urlHelper.Setup(x => x.Route(It.IsAny<string>(), It.IsAny<object>())).Returns("dummyurl");
             _mapper = new Mock<IMapper>();
             _financeApiService = new Mock<IEmployerFinanceApiService>();
-            var orchestrator = new AccountTransactionsOrchestrator(_mediator.Object, _mapper.Object, _logger.Object, _financeApiService.Object);
+            Mapper = ConfigureMapper();
+            var orchestrator = new AccountTransactionsOrchestrator(_mediator.Object, Mapper, _logger.Object, _financeApiService.Object);
             _controller = new AccountTransactionsController(orchestrator);
             _controller.Url = _urlHelper.Object;
+            
         }
 
         [Test]
@@ -353,6 +359,21 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
 
             model?.Content.Should().NotBeNull();
             //model?.Content.ShouldAllBeEquivalentTo(transactionsResponse.Data.TransactionLines, options => options.Excluding(x => x.ResourceUri));
+        }
+
+        private IMapper ConfigureMapper()
+        {
+            var profiles = Assembly.Load($"SFA.DAS.EAS.Account.Api")
+                .GetTypes()
+                .Where(t => typeof(Profile).IsAssignableFrom(t))
+                .Select(t => (Profile)Activator.CreateInstance(t));
+
+            var config = new MapperConfiguration(c =>
+            {
+                profiles.ForEach(c.AddProfile);
+            });
+
+            return config.CreateMapper();
         }
     }
 }
