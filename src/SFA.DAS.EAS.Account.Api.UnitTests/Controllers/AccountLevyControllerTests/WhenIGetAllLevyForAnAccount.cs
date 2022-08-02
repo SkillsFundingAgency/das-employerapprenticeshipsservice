@@ -13,34 +13,33 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
 {
     [TestFixture]
     public class WhenIGetLevyForAnAccount : AccountLevyControllerTests
-    {
-        
+    {        
         [Test]
         public async Task ThenTheLevyIsReturned()
         {
+            //Arrange
             var hashedAccountId = "ABC123";
             var levyResponse = new GetLevyDeclarationResponse { Declarations = LevyDeclarationViewsObjectMother.Create(12334, "abc123") };
             Mediator.Setup(x => x.SendAsync(It.Is<GetLevyDeclarationRequest>(q => q.HashedAccountId == hashedAccountId))).ReturnsAsync(levyResponse);
-            //FinanceApiService.Setup(x => x.GetLevyDeclarations(hashedAccountId)).ReturnsAsync(ICollection<LevyDeclarationViewModel>);           
-
             var fixture = new Fixture();
-            ICollection<SFA.DAS.EAS.Finance.Api.Types.LevyDeclarationViewModel> apiResponse = new List<SFA.DAS.EAS.Finance.Api.Types.LevyDeclarationViewModel>()
+            ICollection<Finance.Api.Types.LevyDeclarationViewModel> apiResponse = new List<Finance.Api.Types.LevyDeclarationViewModel>()
             {
-                 fixture.Create<SFA.DAS.EAS.Finance.Api.Types.LevyDeclarationViewModel>(),
-                fixture.Create<SFA.DAS.EAS.Finance.Api.Types.LevyDeclarationViewModel>()
+                fixture.Create<Finance.Api.Types.LevyDeclarationViewModel>(),
+                fixture.Create<Finance.Api.Types.LevyDeclarationViewModel>()
             };
             FinanceApiService.Setup(x => x.GetLevyDeclarations(hashedAccountId)).ReturnsAsync(apiResponse);
 
-            //FinanceApiService.Setup(x => x.GetLevyDeclarations(hashedAccountId)).ReturnsAsync((ICollection<Finance.Api.Types.LevyDeclarationViewModel>)It.IsAny<ICollection<LevyDeclarationViewModel>>());
-
+            //Act
             var response = await Controller.Index(hashedAccountId);
 
+            //Assert
             Assert.IsNotNull(response);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<AccountResourceList<SFA.DAS.EAS.Account.Api.Types.LevyDeclarationViewModel>>>(response);
-            var model = response as OkNegotiatedContentResult<AccountResourceList<SFA.DAS.EAS.Account.Api.Types.LevyDeclarationViewModel>>;
+            Assert.IsInstanceOf<OkNegotiatedContentResult<AccountResourceList<LevyDeclarationViewModel>>>(response);
+            var model = response as OkNegotiatedContentResult<AccountResourceList<LevyDeclarationViewModel>>;
 
             model?.Content.Should().NotBeNull();
             Assert.IsTrue(model?.Content.TrueForAll(x => x.HashedAccountId == hashedAccountId));
+            //TODO : check
             //model?.Content.ShouldAllBeEquivalentTo(levyResponse.Declarations, options => options.Excluding(x => x.HashedAccountId).Excluding(x => x.PayeSchemeReference));
             //Assert.IsTrue(model?.Content[0].PayeSchemeReference == levyResponse.Declarations[0].EmpRef);
         }

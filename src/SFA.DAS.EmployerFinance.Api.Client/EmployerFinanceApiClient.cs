@@ -70,12 +70,9 @@ namespace SFA.DAS.EmployerFinance.Api.Client
             return JsonConvert.DeserializeObject<FinanceStatisticsViewModel>(json);
         }
 
-
         private string GetBaseUrl()
         {
-            return _configuration.ApiBaseUrl.Trim('/');  //https://localhost:44366/api/accounts/103960/levy
-        }
-
-      
+            return _configuration.ApiBaseUrl.Trim('/');
+        }        
     }
 }

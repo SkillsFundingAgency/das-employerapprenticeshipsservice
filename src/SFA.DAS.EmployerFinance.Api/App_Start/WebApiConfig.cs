@@ -44,8 +44,7 @@ namespace SFA.DAS.EmployerFinance.Api
                 c.AddRegistry<ExecutionPoliciesRegistry>();
                 c.AddRegistry<EmployerFinance.DependencyResolution.HashingRegistry>();
                 c.AddRegistry<EAS.Application.DependencyResolution.LoggerRegistry>();
-                c.AddRegistry<EmployerFinance.DependencyResolution.MapperRegistry>();
-                //c.AddRegistry<EAS.Application.DependencyResolution.MediatorRegistry>();
+                c.AddRegistry<EmployerFinance.DependencyResolution.MapperRegistry>();                
                 c.AddRegistry<EmployerFinance.DependencyResolution.MediatorRegistry>();
                 c.AddRegistry<EmployerFinance.DependencyResolution.MessagePublisherRegistry>();
                 c.AddRegistry<EmployerFinance.DependencyResolution.NotificationsRegistry>();

@@ -65,32 +65,17 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(q => q.HashedAccountId == hashedAccountId && q.Year == year && q.Month == month))).ReturnsAsync(transactionsResponse);
 
-
-            //var fixture = new Fixture();
-            //var apiResponse = new SFA.DAS.EAS.Finance.Api.Types.TransactionsViewModel()
-            //{
-            //    Year = fixture.Create<int>(),
-            //    Month = fixture.Create<int>(),
-            //    HasPreviousTransactions = fixture.Create<bool>(),
-            //    PreviousMonthUri = fixture.Create<string>()
-            //};
-
-            //ICollection<SFA.DAS.EAS.Finance.Api.Types.TransactionsViewModel> apiResponse = new List<SFA.DAS.EAS.Finance.Api.Types.TransactionsViewModel>()
-            //{
-            //     fixture.Create<SFA.DAS.EAS.Finance.Api.Types.TransactionsViewModel>(),
-            //    fixture.Create<SFA.DAS.EAS.Finance.Api.Types.TransactionsViewModel>()
-            //};
             var isNotZero = 100m;
             var isTxDateCreated = DateTime.Today;
             var transactionsViewModel = new SFA.DAS.EAS.Finance.Api.Types.TransactionsViewModel
             {
-                new SFA.DAS.EAS.Finance.Api.Types.TransactionViewModel
+                new Finance.Api.Types.TransactionViewModel
                 {
                     Description = "Is Not Null",
                     Amount = isNotZero,
                     DateCreated = isTxDateCreated
                 },
-                new SFA.DAS.EAS.Finance.Api.Types.TransactionViewModel
+                new Finance.Api.Types.TransactionViewModel
                 {
                     Description = "Is Not Null 2",
                     Amount = isNotZero,
@@ -104,10 +89,11 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
                         
             //Assert
             Assert.IsNotNull(response);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<SFA.DAS.EAS.Account.Api.Types.TransactionsViewModel>>(response);
-            var model = response as OkNegotiatedContentResult<SFA.DAS.EAS.Account.Api.Types.TransactionsViewModel>;
+            Assert.IsInstanceOf<OkNegotiatedContentResult<TransactionsViewModel>>(response);
+            var model = response as OkNegotiatedContentResult<TransactionsViewModel>;
 
             model?.Content.Should().NotBeNull();
+            //TODO : check
             //model?.Content.ShouldAllBeEquivalentTo(transactionsResponse.Data.TransactionLines, options => options.Excluding(x => x.ResourceUri));
         }
 
@@ -126,15 +112,15 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             _mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(q => q.HashedAccountId == hashedAccountId && q.Year == year && q.Month == month))).ReturnsAsync(transactionsResponse);
             var isNotZero = 100m;
             var isTxDateCreated = DateTime.Today;
-            var transactionsViewModel = new SFA.DAS.EAS.Finance.Api.Types.TransactionsViewModel
+            var transactionsViewModel = new Finance.Api.Types.TransactionsViewModel
             {
-                new SFA.DAS.EAS.Finance.Api.Types.TransactionViewModel
+                new Finance.Api.Types.TransactionViewModel
                 {
                     Description = "Is Not Null",
                     Amount = isNotZero,
                     DateCreated = isTxDateCreated
                 },
-                new SFA.DAS.EAS.Finance.Api.Types.TransactionViewModel
+                new Finance.Api.Types.TransactionViewModel
                 {
                     Description = "Is Not Null 2",
                     Amount = isNotZero,
@@ -142,11 +128,9 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
                 }
             };
             _financeApiService.Setup(x => x.GetTransactions(hashedAccountId, year, month)).ReturnsAsync(transactionsViewModel);
-
             
             //Act
             var response = await _controller.GetTransactions(hashedAccountId, year, month);
-
             
             //Assert
             Assert.IsNotNull(response);
@@ -174,18 +158,17 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(q => q.HashedAccountId == hashedAccountId && q.Year == year && q.Month == month))).ReturnsAsync(transactionsResponse);
 
-
             var isNotZero = 100m;
             var isTxDateCreated = DateTime.Today;
             var transactionsViewModel = new SFA.DAS.EAS.Finance.Api.Types.TransactionsViewModel
             {             
-                new SFA.DAS.EAS.Finance.Api.Types.TransactionViewModel
+                new Finance.Api.Types.TransactionViewModel
                 {
                     Description = "Is Not Null",
                     Amount = isNotZero,
                     DateCreated = isTxDateCreated
                 },
-                new SFA.DAS.EAS.Finance.Api.Types.TransactionViewModel
+                new Finance.Api.Types.TransactionViewModel
                 {
                     Description = "Is Not Null 2",
                     Amount = isNotZero,
@@ -204,7 +187,6 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             //Act
             var response = await _controller.GetTransactions(hashedAccountId, year, month);
             var model = response as OkNegotiatedContentResult<TransactionsViewModel>;
-
             
             //Assert
             model?.Content.PreviousMonthUri.Should().Be(expectedUri);
@@ -213,6 +195,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
         [Test]
         public async Task AndNoMonthIsProvidedThenTheCurrentMonthIsUsed()
         {
+            //Arrange
             var hashedAccountId = "ABC123";
             var year = 2017;
             var transactionsResponse = new GetEmployerAccountTransactionsResponse
@@ -222,18 +205,17 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(q => q.HashedAccountId == hashedAccountId && q.Year == year && q.Month == DateTime.Now.Month))).ReturnsAsync(transactionsResponse);
 
-
             var isNotZero = 100m;
             var isTxDateCreated = DateTime.Today;
-            var transactionsViewModel = new SFA.DAS.EAS.Finance.Api.Types.TransactionsViewModel
+            var transactionsViewModel = new Finance.Api.Types.TransactionsViewModel
             {
-                new SFA.DAS.EAS.Finance.Api.Types.TransactionViewModel
+                new Finance.Api.Types.TransactionViewModel
                 {
                     Description = "Is Not Null",
                     Amount = isNotZero,
                     DateCreated = isTxDateCreated
                 },
-                new SFA.DAS.EAS.Finance.Api.Types.TransactionViewModel
+                new Finance.Api.Types.TransactionViewModel
                 {
                     Description = "Is Not Null 2",
                     Amount = isNotZero,
@@ -280,14 +262,14 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             var isTxDateCreated = DateTime.Today;
             var transactionsViewModel = new SFA.DAS.EAS.Finance.Api.Types.TransactionsViewModel
             {
-                new SFA.DAS.EAS.Finance.Api.Types.TransactionViewModel
+                new Finance.Api.Types.TransactionViewModel
                 {
                     Description = "Is Not Null",
                     Amount = isNotZero,
                     DateCreated = isTxDateCreated,
                     ResourceUri = "someuri"
                 },
-                new SFA.DAS.EAS.Finance.Api.Types.TransactionViewModel
+                new Finance.Api.Types.TransactionViewModel
                 {
                     Description = "Is Not Null 2",
                     Amount = isNotZero,
@@ -331,14 +313,14 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             var isTxDateCreated = DateTime.Today;
             var transactionsViewModel = new SFA.DAS.EAS.Finance.Api.Types.TransactionsViewModel
             {
-                new SFA.DAS.EAS.Finance.Api.Types.TransactionViewModel
+                new Finance.Api.Types.TransactionViewModel
                 {
                     Description = "Is Not Null",
                     Amount = isNotZero,
                     DateCreated = isTxDateCreated,
                     ResourceUri = "someuri"
                 },
-                new SFA.DAS.EAS.Finance.Api.Types.TransactionViewModel
+                new Finance.Api.Types.TransactionViewModel
                 {
                     Description = "Is Not Null 2",
                     Amount = isNotZero,
@@ -358,9 +340,11 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             var model = response as OkNegotiatedContentResult<TransactionsViewModel>;
 
             model?.Content.Should().NotBeNull();
+            //TODO : chekc
             //model?.Content.ShouldAllBeEquivalentTo(transactionsResponse.Data.TransactionLines, options => options.Excluding(x => x.ResourceUri));
         }
 
+        //TODO : move to base class
         private IMapper ConfigureMapper()
         {
             var profiles = Assembly.Load($"SFA.DAS.EAS.Account.Api")

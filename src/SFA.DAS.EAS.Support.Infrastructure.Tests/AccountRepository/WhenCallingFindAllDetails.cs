@@ -9,7 +9,6 @@ using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Support.Core.Services;
 using SFA.DAS.EmployerAccounts.Api.Types;
 
-//TODO: not sure why this is failing..need to sort out
 namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
 {
     [TestFixture]
@@ -109,7 +108,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
 
             AccountApiClient.Verify(x => x.GetPageOfAccounts(It.IsAny<int>(), It.IsAny<int>(), null), Times.AtLeastOnce);
             AccountApiClient.Verify(x => x.GetAccount(It.IsAny<string>()), Times.AtLeastOnce);
-           // Logger.Verify(x => x.Error(e, $"Exception while retrieving details for account ID {_accountWithBalanceViewModels.First().AccountHashId}"));
+            Logger.Verify(x => x.Error(e, $"Exception while retrieving details for account ID {_accountWithBalanceViewModels.First().AccountHashId}"));
             Assert.IsNotNull(actual);
             CollectionAssert.IsEmpty(actual.ToList());
         }

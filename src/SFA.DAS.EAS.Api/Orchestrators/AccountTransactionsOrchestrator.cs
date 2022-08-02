@@ -24,11 +24,12 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             _employerFinanceApiService = employerFinanceApiService;
         }
 
-        public async Task<OrchestratorResponse<SFA.DAS.EAS.Account.Api.Types.TransactionsViewModel>> GetAccountTransactions(string hashedAccountId, int year, int month, UrlHelper urlHelper)
+        public async Task<OrchestratorResponse<TransactionsViewModel>> GetAccountTransactions(string hashedAccountId, int year, int month, UrlHelper urlHelper)
         {
+            //TODO : add logs
             var data = await _employerFinanceApiService.GetTransactions(hashedAccountId, year, month);
 
-            var transactionLists = data.Select(x => _mapper.Map<SFA.DAS.EAS.Account.Api.Types.TransactionViewModel>(x)).ToList();
+            var transactionLists = data.Select(x => _mapper.Map<TransactionViewModel>(x)).ToList();
             var transactionsViewModel = new TransactionsViewModel()
             {
                 HasPreviousTransactions = data.HasPreviousTransactions, 
@@ -38,7 +39,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             };
             transactionsViewModel.AddRange(transactionLists);
 
-            var response = new OrchestratorResponse<SFA.DAS.EAS.Account.Api.Types.TransactionsViewModel>
+            var response = new OrchestratorResponse<TransactionsViewModel>
             {
                 Data = transactionsViewModel
             };
@@ -46,16 +47,16 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             return response;
         }
 
-        public async Task<OrchestratorResponse<AccountResourceList<SFA.DAS.EAS.Account.Api.Types.TransactionSummaryViewModel>>> GetAccountTransactionSummary(string hashedAccountId)
-        {   
-
+        public async Task<OrchestratorResponse<AccountResourceList<TransactionSummaryViewModel>>> GetAccountTransactionSummary(string hashedAccountId)
+        {
+            //TODO : add logs
             var data = await _employerFinanceApiService.GetTransactionSummary(hashedAccountId);            
             
-            var transactionSummaryViewModel = data.Select(x => _mapper.Map<SFA.DAS.EAS.Account.Api.Types.TransactionSummaryViewModel>(x)).ToList();
+            var transactionSummaryViewModel = data.Select(x => _mapper.Map<TransactionSummaryViewModel>(x)).ToList();
             
-            var response = new OrchestratorResponse<AccountResourceList<SFA.DAS.EAS.Account.Api.Types.TransactionSummaryViewModel>>
+            var response = new OrchestratorResponse<AccountResourceList<TransactionSummaryViewModel>>
             {
-                Data = new AccountResourceList<SFA.DAS.EAS.Account.Api.Types.TransactionSummaryViewModel>(transactionSummaryViewModel)
+                Data = new AccountResourceList<TransactionSummaryViewModel>(transactionSummaryViewModel)
             };
             
             return response;

@@ -10,8 +10,6 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Account.Api.Controllers;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionSummary;
-using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.TestCommon.Extensions;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.EmployerFinance.Services;
@@ -48,24 +46,16 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             _controller.Url = _urlHelper.Object;
         }
 
-        //TODO : change the Return Type to Account.Api.Types
         [Test]
         public async Task ThenTheTransactionSummaryIsReturned()
         {
             //Arrange
-            var hashedAccountId = "ABC123";
-            //var transactionSummaryResponse = new GetAccountTransactionSummaryResponse
-            //{
-            //    Data = new List<TransactionSummary> { new TransactionSummary { Month = 1, Year = 2017 }, new TransactionSummary { Month = 2, Year = 2017 } }
-            //};
-            //_mediator.Setup(x => x.SendAsync(It.Is<GetAccountTransactionSummaryRequest>(q => q.HashedAccountId == hashedAccountId))).ReturnsAsync(transactionSummaryResponse);
-
-
+            var hashedAccountId = "ABC123";           
             var fixture = new Fixture();
-            ICollection<SFA.DAS.EAS.Finance.Api.Types.TransactionSummaryViewModel> apiResponse = new List<SFA.DAS.EAS.Finance.Api.Types.TransactionSummaryViewModel>()
+            ICollection<Finance.Api.Types.TransactionSummaryViewModel> apiResponse = new List<Finance.Api.Types.TransactionSummaryViewModel>()
             {
-                 fixture.Create<SFA.DAS.EAS.Finance.Api.Types.TransactionSummaryViewModel>(),
-                 fixture.Create<SFA.DAS.EAS.Finance.Api.Types.TransactionSummaryViewModel>()
+                 fixture.Create<Finance.Api.Types.TransactionSummaryViewModel>(),
+                 fixture.Create<Finance.Api.Types.TransactionSummaryViewModel>()
             };
 
             _financeApiService.Setup(x => x.GetTransactionSummary(hashedAccountId)).ReturnsAsync(apiResponse);
@@ -89,8 +79,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             
             //Assert            
             Assert.IsNotNull(response);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<AccountResourceList<SFA.DAS.EAS.Account.Api.Types.TransactionSummaryViewModel>>>(response);
-            var model = response as OkNegotiatedContentResult<AccountResourceList<SFA.DAS.EAS.Account.Api.Types.TransactionSummaryViewModel>>;
+            Assert.IsInstanceOf<OkNegotiatedContentResult<AccountResourceList<TransactionSummaryViewModel>>>(response);
+            var model = response as OkNegotiatedContentResult<AccountResourceList<TransactionSummaryViewModel>>;
 
             model?.Content.Should().NotBeNull();
             model?.Content.ShouldAllBeEquivalentTo(apiResponse, x => x.Excluding(y => y.Href));

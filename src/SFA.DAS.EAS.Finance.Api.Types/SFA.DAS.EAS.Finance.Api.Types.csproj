@@ -47,7 +47,6 @@
     <Compile Include="AccountAgreementType.cs" />
     <Compile Include="AccountDetailViewModel.cs" />
     <Compile Include="AccountResourceList.cs" />
-    <Compile Include="AccountWithBalanceViewModel.cs" />
     <Compile Include="LevyDeclarationViewModel.cs" />
     <Compile Include="PagedApiResponseViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

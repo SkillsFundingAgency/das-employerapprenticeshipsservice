@@ -1,5 +1,4 @@
 ﻿using SFA.DAS.EmployerFinance.Models.Transaction;
-using System.Collections.Generic;
 
 namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions
 {
@@ -10,11 +9,4 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions
         public int Year { get; set; }
         public int Month { get; set; }
     }
-
-    //public class AggregationData
-    //{
-    //    public long AccountId { get; set; }
-    //    public string HashedAccountId { get; set; }
-    //    public ICollection<TransactionLine> TransactionLines { get; set; }
-    //}
 }

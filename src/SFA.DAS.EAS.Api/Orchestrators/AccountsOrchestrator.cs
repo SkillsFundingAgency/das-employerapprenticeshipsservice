@@ -16,7 +16,6 @@ using System.Net;
 using System.Threading.Tasks;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
-//using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
 using SFA.DAS.EmployerFinance.Services;
 
 namespace SFA.DAS.EAS.Account.Api.Orchestrators
@@ -149,88 +148,30 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             return new OrchestratorResponse<AccountDetailViewModel> { Data = accountResult };
         }
 
-        public async Task<OrchestratorResponse<AccountResourceList<SFA.DAS.EAS.Account.Api.Types.LevyDeclarationViewModel>>> GetLevy(string hashedAccountId)
+        public async Task<OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>> GetLevy(string hashedAccountId)
         {
             _logger.Info($"Requesting levy declaration for account {hashedAccountId}");
 
-            //var levyDeclarations = await _mediator.SendAsync(new GetLevyDeclarationRequest { HashedAccountId = hashedAccountId });
             var levyDeclarations = await _employerFinanceApiService.GetLevyDeclarations(hashedAccountId);            
             if (levyDeclarations == null)
             {
-                return new OrchestratorResponse<AccountResourceList<SFA.DAS.EAS.Account.Api.Types.LevyDeclarationViewModel>> { Data = null };
+                return new OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>> { Data = null };
             }
-/*
-            List<LevyDeclarationViewModel> lists = new List<LevyDeclarationViewModel>();
-
-            foreach(var test in levyDeclarations)
-            {
-                lists.Add(new LevyDeclarationViewModel
-                {
-                    CreatedDate = test.CreatedDate,
-                    DateCeased = test.DateCeased,
-                    EndOfYearAdjustment = test.EndOfYearAdjustment,
-                    EndOfYearAdjustmentAmount = test.EndOfYearAdjustmentAmount,
-                    EnglishFraction = test.EnglishFraction,
-                    HashedAccountId = test.HashedAccountId,
-                    HmrcSubmissionId = test.HmrcSubmissionId,
-                    InactiveFrom = test.InactiveFrom,
-                    InactiveTo = test.InactiveTo,
-                    Id = test.Id,
-                    LevyAllowanceForYear = test.LevyAllowanceForYear,
-                    LevyDeclaredInMonth = test.LevyDeclaredInMonth,
-                    LevyDueYtd = test.LevyDueYtd,
-                    PayeSchemeReference = test.PayeSchemeReference,
-                    PayrollMonth = test.PayrollMonth,
-                    PayrollYear = test.PayrollYear,
-                    SubmissionDate = test.SubmissionDate,
-                    SubmissionId = test.SubmissionId,
-                    TopUp = test.TopUp,
-                    TopUpPercentage = test.TopUpPercentage,
-                    TotalAmount = test.TotalAmount
-                });
-            };
-
-            lists.ForEach(x => x.HashedAccountId = hashedAccountId);
-            var levyViewModels = levyDeclarations.Select(x => _mapper.Map<SFA.DAS.EAS.Finance.Api.Types.LevyDeclarationViewModel, SFA.DAS.EAS.Account.Api.Types.LevyDeclarationViewModel>(x)).ToList();*/
             
-            var levyViewModels = levyDeclarations.Select(x => _mapper.Map<SFA.DAS.EAS.Account.Api.Types.LevyDeclarationViewModel>(x)).ToList();
+            var levyViewModels = levyDeclarations.Select(x => _mapper.Map<LevyDeclarationViewModel>(x)).ToList();
             levyViewModels.ForEach(x => x.HashedAccountId = hashedAccountId);
 
-            return new OrchestratorResponse<AccountResourceList<SFA.DAS.EAS.Account.Api.Types.LevyDeclarationViewModel>>
+            return new OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>
             {
-                Data = new AccountResourceList<SFA.DAS.EAS.Account.Api.Types.LevyDeclarationViewModel>(levyViewModels),
+                Data = new AccountResourceList<LevyDeclarationViewModel>(levyViewModels),
                 Status = HttpStatusCode.OK
             };
         }
 
-        public async Task<OrchestratorResponse<AccountResourceList<SFA.DAS.EAS.Account.Api.Types.LevyDeclarationViewModel>>> GetLevy(string hashedAccountId, string payrollYear, short payrollMonth)
-        {
-            _logger.Info($"Requesting levy declaration for account {hashedAccountId}, year {payrollYear} and month {payrollMonth}");
-
-            //var levyDeclarations = await _mediator.SendAsync(new GetLevyDeclarationsByAccountAndPeriodRequest { HashedAccountId = hashedAccountId, PayrollYear = payrollYear, PayrollMonth = payrollMonth });
-            var levyDeclarations = await _employerFinanceApiService.GetLevyForPeriod(hashedAccountId, payrollYear, payrollMonth);
-            if (levyDeclarations == null)
-            {
-                return new OrchestratorResponse<AccountResourceList<SFA.DAS.EAS.Account.Api.Types.LevyDeclarationViewModel>> { Data = null };
-            }
-
-            var levyViewModels = levyDeclarations.Select(x => _mapper.Map<SFA.DAS.EAS.Account.Api.Types.LevyDeclarationViewModel>(x)).ToList();
-            levyViewModels.ForEach(x => x.HashedAccountId = hashedAccountId);
-
-            return new OrchestratorResponse<AccountResourceList<SFA.DAS.EAS.Account.Api.Types.LevyDeclarationViewModel>>
-            {
-                Data = new AccountResourceList<SFA.DAS.EAS.Account.Api.Types.LevyDeclarationViewModel>(levyViewModels),
-                Status = HttpStatusCode.OK
-            };
-        }
-
-
-       /* TODO: code which return account.api.types and throws an exception with Unit Test AutoMapper
         public async Task<OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>> GetLevy(string hashedAccountId, string payrollYear, short payrollMonth)
         {
             _logger.Info($"Requesting levy declaration for account {hashedAccountId}, year {payrollYear} and month {payrollMonth}");
 
-            //var levyDeclarations = await _mediator.SendAsync(new GetLevyDeclarationsByAccountAndPeriodRequest { HashedAccountId = hashedAccountId, PayrollYear = payrollYear, PayrollMonth = payrollMonth });
             var levyDeclarations = await _employerFinanceApiService.GetLevyForPeriod(hashedAccountId, payrollYear, payrollMonth);
             if (levyDeclarations == null)
             {
@@ -245,7 +186,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
                 Data = new AccountResourceList<LevyDeclarationViewModel>(levyViewModels),
                 Status = HttpStatusCode.OK
             };
-        }*/
+        }
 
         private async Task<AccountBalance> GetAccountBalance(long accountId)
         {

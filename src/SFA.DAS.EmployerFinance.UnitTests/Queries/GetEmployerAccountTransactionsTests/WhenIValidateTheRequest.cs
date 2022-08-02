@@ -19,8 +19,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
         [SetUp]
         public void Arrange()
         {
-            //_authorizationService = new Mock<IAuthorizationService>();
-
+            //_authorizationService = new Mock<IAuthorizationService>(); //TODO : check  _authorizationService to IMembershipRepository
             _membershipRepository = new Mock<IMembershipRepository>();
             
             _validator = new GetEmployerAccountTransactionsValidator(_membershipRepository.Object);

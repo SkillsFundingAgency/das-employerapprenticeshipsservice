@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Account.Api.DependencyResolution
             });
 
             var environmentName = ConfigurationManager.AppSettings["EnvironmentName"];
-            environmentName = "AT";
+            environmentName = "AT"; //TODO : remove later
 
             For<DbConnection>().Use($"Build DbConnection", c =>
             {
@@ -51,7 +51,7 @@ namespace SFA.DAS.EAS.Account.Api.DependencyResolution
         private EmployerFinanceDbContext GetFinanceDbContext(IContext context)
         {
             var environmentName = ConfigurationManager.AppSettings["EnvironmentName"];
-            environmentName = "AT";
+            environmentName = "AT"; //TODO : remove later
 
             var azureServiceTokenProvider = new AzureServiceTokenProvider();
 

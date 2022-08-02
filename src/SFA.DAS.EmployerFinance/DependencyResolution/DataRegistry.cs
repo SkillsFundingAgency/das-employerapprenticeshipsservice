@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
         public DataRegistry()
         {
             var environmentName = ConfigurationManager.AppSettings["EnvironmentName"];
-            environmentName = "AT";
+            environmentName = "AT"; //TODO : remove later
 
             For<DbConnection>().Use($"Build DbConnection", c =>
             {
@@ -46,16 +46,11 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
             var sqlSession = clientSession?.GetSqlSession() ?? serverSession.GetSqlSession();
 
             return new EmployerFinanceDbContext(sqlSession.Connection, sqlSession.Transaction);
-
-            //return new EmployerFinanceDbContext(sqlSession.Connection);
         }
 
         private string GetConnectionString(IContext context)
         {
             return context.GetInstance<EmployerFinanceConfiguration>().DatabaseConnectionString;
-
-            //return "Server=tcp:das-at-shared-sql.database.windows.net,1433;Initial Catalog=das-at-eas-fin-db;Persist Security Info=False;MultipleActiveResultSets=True;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30";
-        
         }
     }
 }

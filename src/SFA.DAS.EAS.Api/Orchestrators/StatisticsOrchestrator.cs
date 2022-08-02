@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Application.Queries.GetFinancialStatistics;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EmployerFinance.Services;
 
@@ -23,7 +22,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
         public virtual async Task<StatisticsViewModel> Get()
         {
             var getAccountStatisticsTask = _employerAccountsApiService.GetStatistics();
-            var financialStatisticsQueryTask = _employerFinanceApiService.GetStatistics(); //_mediator.SendAsync(new GetFinancialStatisticsQuery());
+            var financialStatisticsQueryTask = _employerFinanceApiService.GetStatistics();
 
             var accountStatistics = await getAccountStatisticsTask;
             return new StatisticsViewModel

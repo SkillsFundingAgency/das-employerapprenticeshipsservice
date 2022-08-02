@@ -54,23 +54,7 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
             return Ok(result.Data);
         }
 
-        //private async Task<OrchestratorResponse<SFA.DAS.EAS.Finance.Api.Types.TransactionsViewModel>> GetAccountTransactions(string hashedAccountId, int year, int month)
-        //{
-        //    if (year == 0)
-        //    {
-        //        year = DateTime.Now.Year;
-        //    }
-
-        //    if (month == 0)
-        //    {
-        //        month = DateTime.Now.Month;
-        //    }
-
-        //    var result = await _orchestrator.GetAccountTransactions(hashedAccountId, year, month, Url);
-        //    return result;
-        //}
-
-        private async Task<OrchestratorResponse<SFA.DAS.EAS.Account.Api.Types.TransactionsViewModel>> GetAccountTransactions(string hashedAccountId, int year, int month)
+        private async Task<OrchestratorResponse<TransactionsViewModel>> GetAccountTransactions(string hashedAccountId, int year, int month)
         {
             if (year == 0)
             {
