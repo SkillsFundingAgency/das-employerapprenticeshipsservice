@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using NServiceBus;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerFinance.Configuration;
-using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests.Projections;
+using SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses.Accounts;
+using SFA.DAS.EmployerFinance.Interfaces.OuterApi;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Types;
@@ -15,30 +16,29 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers
 {
     public class SentTransferConnectionRequestEventNotificationHandler : IHandleMessages<SentTransferConnectionRequestEvent>
     {
-        public const string UrlFormat = "/accounts/{0}/transfers";
+        public const string UrlFormat = "/accounts/{0}/transfers/connections";
 
         private readonly EmployerFinanceConfiguration _config;
+        private readonly IOuterApiClient _outerApiClient;
         private readonly ILog _logger;
         private readonly INotificationsApi _notificationsApi;
-        private readonly Lazy<EmployerFinanceDbContext> _db;
 
         public SentTransferConnectionRequestEventNotificationHandler(
             EmployerFinanceConfiguration config,
             ILog logger,
-            INotificationsApi notificationsApi,
-            Lazy<EmployerFinanceDbContext> db)
+            IOuterApiClient outerApiClient,
+            INotificationsApi notificationsApi)
         {
             _config = config;
+            _outerApiClient = outerApiClient;
             _logger = logger;
             _notificationsApi = notificationsApi;
-            _db = db;
         }
 
         public async Task Handle(SentTransferConnectionRequestEvent message, IMessageHandlerContext context)
         {
-            // TO DO: replace with call to outer API which gets the users from Employer Account
-            // to which a notification can be sent
-            var users = await _db.Value.Users.WhereReceiveNotifications(message.ReceiverAccountId).ToListAsync();
+            var users = await _outerApiClient.Get<GetAccountTeamMembersWhichReceiveNotificationsResponse>(
+                new GetAccountTeamMembersWhichReceiveNotifications(message.ReceiverAccountId));
 
             if (!users.Any())
             {
@@ -62,7 +62,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers
                             { "account_name", message.SenderAccountName },
                             {
                                 "link_notification_page",
-                                $"{_config.DashboardUrl}{string.Format(UrlFormat, message.ReceiverAccountHashedId)}"
+                                $"{_config.EmployerFinanceBaseUrl}{string.Format(UrlFormat, message.ReceiverAccountHashedId)}"
                             }
                         }
                     };
@@ -71,7 +71,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error(ex, $"Unable to send sent transfer request notification to UserId '{user.Id}' for ReceiverAccountId '{message.ReceiverAccountId}'");
+                    _logger.Error(ex, $"Unable to send sent transfer request notification to UserRef '{user.UserRef}' for ReceiverAccountId '{message.ReceiverAccountId}'");
                 }
             }
         }

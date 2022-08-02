@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 
@@ -39,7 +40,10 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetTeamMembersWhichReceiveNotificatio
             return new GetTeamMembersWhichReceiveNotificationsQueryResponse
             {
                 TeamMembersWhichReceiveNotifications = teamMembers
-                    .Where(p => p.CanReceiveNotifications && p.Role == Models.Role.Owner)
+                    .Where(p => 
+                        p.Status == InvitationStatus.Accepted && 
+                        p.CanReceiveNotifications && 
+                        p.Role == Models.Role.Owner)
                     .ToList()
             };
         }
