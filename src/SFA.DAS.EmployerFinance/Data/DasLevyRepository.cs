@@ -7,6 +7,7 @@ using Dapper;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Extensions;
 using SFA.DAS.EmployerFinance.Interfaces;
+using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.NLog.Logger;
@@ -277,6 +278,21 @@ namespace SFA.DAS.EmployerFinance.Data
             var result = await _db.Value.Database.Connection.QueryAsync<LevyDeclarationView>(
                 sql: "[employer_financial].[GetLevyDeclarations_ByAccountPayrollMonthPayrollYear]",
                 param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
+            return result.ToList();
+        }
+
+        public async Task<List<AccountBalance>> GetAccountBalances(List<long> accountIds)
+        {
+            var accountParametersTable = new AccountIdUserTableParam(accountIds);
+
+            accountParametersTable.Add("@allowancePercentage", _configuration.TransferAllowancePercentage, DbType.Decimal);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<AccountBalance>(
+                sql: "[employer_financial].[GetAccountBalance_ByAccountIds]",
+                param: accountParametersTable,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
 

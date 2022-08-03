@@ -4,7 +4,7 @@ using System.Web.Http.Routing;
 using AutoMapper;
 using MediatR;
 using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EmployerFinance.Services;
+using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Account.Api.Orchestrators

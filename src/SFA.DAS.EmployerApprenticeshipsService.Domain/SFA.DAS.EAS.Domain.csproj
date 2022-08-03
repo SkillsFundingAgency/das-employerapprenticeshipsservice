@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\ConfigurationKeys.cs" />
+    <Compile Include="Configuration\EmployerFinanceApiConfiguration.cs" />
     <Compile Include="Configuration\EmployerAccountsApiConfiguration.cs" />
     <Compile Include="Configuration\IdProcessorConfiguration.cs" />
     <Compile Include="Configuration\ApprenticeshipInfoServiceConfiguration.cs" />
@@ -168,16 +169,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EmployerFinance.Api.Client\SFA.DAS.EmployerFinance.Api.Client.csproj">
-      <Project>{AA299F18-D0CA-43A2-AE4D-54CB6C48EA70}</Project>
-      <Name>SFA.DAS.EmployerFinance.Api.Client</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EmployerFinance.Messages\SFA.DAS.EmployerFinance.Messages.csproj">
-      <Project>{c15dec5c-666d-4cb2-968e-a273eb60d15e}</Project>
-      <Name>SFA.DAS.EmployerFinance.Messages</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="SFA.DAS.ReferenceData.Types">

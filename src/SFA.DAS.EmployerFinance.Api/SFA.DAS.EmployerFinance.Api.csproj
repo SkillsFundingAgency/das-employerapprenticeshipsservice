@@ -120,6 +120,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Attributes\ApiAuthorizeAttribute.cs" />
     <Compile Include="Controllers\AccountTransactionsController.cs" />
+    <Compile Include="Controllers\EmployerAccountsController.cs" />
     <Compile Include="Controllers\FinanceLevyController.cs" />
     <Compile Include="Controllers\HealthCheckController.cs" />
     <Compile Include="Controllers\StatisticsController.cs" />

@@ -111,14 +111,6 @@
       <Project>{01ac2bc2-ac01-400f-ab8f-548dd5c0ee74}</Project>
       <Name>SFA.DAS.EAS.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EmployerFinance.Api.Client\SFA.DAS.EmployerFinance.Api.Client.csproj">
-      <Project>{AA299F18-D0CA-43A2-AE4D-54CB6C48EA70}</Project>
-      <Name>SFA.DAS.EmployerFinance.Api.Client</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj">
-      <Project>{c5880f73-59d6-4c59-a1a2-dba38d13e8dc}</Project>
-      <Name>SFA.DAS.EmployerFinance</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="ApplicationInsights.config">

@@ -17,8 +17,8 @@ namespace SFA.DAS.EAS.Account.Api.Mappings
             CreateMap<LevyDeclarationView, LevyDeclarationViewModel>()
                 .ForMember(target => target.PayeSchemeReference, opt => opt.MapFrom(src => src.EmpRef));
 
-            CreateMap<SFA.DAS.EmployerFinance.Models.Levy.LevyDeclarationView, SFA.DAS.EAS.Finance.Api.Types.LevyDeclarationViewModel>()
-                .ForMember(target => target.PayeSchemeReference, opt => opt.MapFrom(src => src.EmpRef));
+            CreateMap<SFA.DAS.EAS.Finance.Api.Types.LevyDeclarationView, SFA.DAS.EAS.Finance.Api.Types.LevyDeclarationViewModel>()
+                .ForMember(target => target.PayeSchemeReference, opt => opt.MapFrom(src => src.EmpRef));            
 
             CreateMap<Domain.Models.EmployerAgreement.EmployerAgreementView, EmployerAgreementView>();
 

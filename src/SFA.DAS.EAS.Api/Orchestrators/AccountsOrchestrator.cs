@@ -3,8 +3,6 @@ using AutoMapper;
 using MediatR;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
-using SFA.DAS.EAS.Application.Queries.GetLevyDeclaration;
-using SFA.DAS.EAS.Application.Queries.GetLevyDeclarationsByAccountAndPeriod;
 using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Transfers;
@@ -16,7 +14,7 @@ using System.Net;
 using System.Threading.Tasks;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
-using SFA.DAS.EmployerFinance.Services;
+using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
 
 namespace SFA.DAS.EAS.Account.Api.Orchestrators
 {
@@ -55,7 +53,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             {
                 AccountIds = accountsResult.Data.Select(account => account.AccountId).ToList()
             });
-       
+
             var accountBalanceHash = BuildAccountBalanceHash(transactionResult.Accounts);
 
             accountsResult.Data.ForEach(account =>

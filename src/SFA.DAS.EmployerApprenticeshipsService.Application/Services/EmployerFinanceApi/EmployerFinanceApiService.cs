@@ -1,74 +1,103 @@
-﻿using SFA.DAS.EmployerFinance.Api.Client;
-using SFA.DAS.NLog.Logger;
-using System;
+﻿using SFA.DAS.NLog.Logger;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using SFA.DAS.EAS.Application.Services.EmployerFinanceApi.Http;
+using System.Net.Http;
+using SFA.DAS.EAS.Application.Http;
+using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 
 namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
 {
     public class EmployerFinanceApiService : IEmployerFinanceApiService
     {
         private readonly ILog _log;
-        private readonly IEmployerFinanceApiClientConfiguration _configuration;
-        private readonly SecureHttpClient _httpClient;
+        private readonly HttpClient _httpClient;
 
-        public EmployerFinanceApiService(IEmployerFinanceApiClientConfiguration configuration, ILog log)
+        public EmployerFinanceApiService(IEmployerFinanceApiHttpClientFactory employerFinanceApiHttpClientFactory, ILog log)
         {
-            _configuration = configuration;
-            _log = log;
-            _httpClient = new SecureHttpClient(configuration);
+            _httpClient = employerFinanceApiHttpClientFactory.CreateHttpClient();
+            _log = log;            
         }
-     
-        public async Task<ICollection<Finance.Api.Types.LevyDeclarationViewModel>> GetLevyDeclarations(string hashedAccountId)
-        {
-            var baseUrl = GetBaseUrl();
-            var url = $"{baseUrl}api/accounts/{hashedAccountId}/levy";
-            var json = await _httpClient.GetAsync(url);
 
-            return JsonConvert.DeserializeObject<List<Finance.Api.Types.LevyDeclarationViewModel>>(json);
+        public async Task<ICollection<Finance.Api.Types.LevyDeclarationViewModel>> GetLevyDeclarations(string hashedAccountId)
+        {            
+            var url = $"api/accounts/{hashedAccountId}/levy";
+            var response = await _httpClient.GetAsync(url);
+
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (!response.IsSuccessStatusCode)
+                throw new RestHttpClientException(response, content);
+
+            return JsonConvert.DeserializeObject<List<Finance.Api.Types.LevyDeclarationViewModel>>(content);
         }
 
         public async Task<ICollection<Finance.Api.Types.LevyDeclarationViewModel>> GetLevyForPeriod(string hashedAccountId, string payrollYear, short payrollMonth)
-        {
-            var baseUrl = GetBaseUrl();
-            var url = $"{baseUrl}api/accounts/{hashedAccountId}/levy/GetLevyForPeriod";
-            var json = await _httpClient.GetAsync(url);
+        {   
+            var url = $"api/accounts/{hashedAccountId}/levy/GetLevyForPeriod";
+            var response = await _httpClient.GetAsync(url);
 
-            return JsonConvert.DeserializeObject<List<Finance.Api.Types.LevyDeclarationViewModel>>(json);
-        }
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-        public async Task<Finance.Api.Types.Statistics> GetStatistics(CancellationToken cancellationToken = default)
-        {
-            _log.Info($"Getting statistics");
+            if (!response.IsSuccessStatusCode)
+                throw new RestHttpClientException(response, content);
 
-            var response = await _httpClient.GetAsync("/api/statistics", cancellationToken).ConfigureAwait(false);
-           
-            return JsonConvert.DeserializeObject<Finance.Api.Types.Statistics>(response);
+            return JsonConvert.DeserializeObject<List<Finance.Api.Types.LevyDeclarationViewModel>>(content);
         }
 
         public async Task<Finance.Api.Types.TransactionsViewModel> GetTransactions(string accountId, int year, int month)
-        {
-            var baseUrl = GetBaseUrl();
-            var url = $"{baseUrl}api/accounts/{accountId}/transactions/{year}/{month}";
-            var json = await _httpClient.GetAsync(url);
+        {            
+            var url = $"api/accounts/{accountId}/transactions/{year}/{month}";
+            var response = await _httpClient.GetAsync(url);
 
-            return JsonConvert.DeserializeObject<Finance.Api.Types.TransactionsViewModel>(json);
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (!response.IsSuccessStatusCode)
+                throw new RestHttpClientException(response, content);
+
+            return JsonConvert.DeserializeObject<Finance.Api.Types.TransactionsViewModel>(content);
         }
 
         public async Task<ICollection<Finance.Api.Types.TransactionSummaryViewModel>> GetTransactionSummary(string accountId)
-        {
-            var baseUrl = GetBaseUrl();
-            var url = $"{baseUrl}api/accounts/{accountId}/transactions";
-            var json = await _httpClient.GetAsync(url);
+        {   
+            var url = $"api/accounts/{accountId}/transactions";
+            var response = await _httpClient.GetAsync(url);
 
-            return JsonConvert.DeserializeObject<ICollection<Finance.Api.Types.TransactionSummaryViewModel>>(json);
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (!response.IsSuccessStatusCode)
+                throw new RestHttpClientException(response, content);
+
+            return JsonConvert.DeserializeObject<ICollection<Finance.Api.Types.TransactionSummaryViewModel>>(content);
         }
 
-        private string GetBaseUrl()
+        public async Task<Finance.Api.Types.FinanceStatisticsViewModel> GetStatistics(CancellationToken cancellationToken = default)
         {
-            return _configuration.ApiBaseUrl.Trim('/');
+            _log.Info($"Getting statistics");
+
+            var response = await _httpClient.GetAsync("/api/financestatistics", cancellationToken).ConfigureAwait(false);
+
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (!response.IsSuccessStatusCode)
+                throw new RestHttpClientException(response, content);
+
+            return JsonConvert.DeserializeObject<Finance.Api.Types.FinanceStatisticsViewModel>(content);
+        }
+
+        public async Task<GetAccountBalancesResponse> GetAccountBalances(List<long> accountIds)
+        {
+            var url = $"api/accounts/balances?accountIds={accountIds}";
+            var response = await _httpClient.GetAsync(url);
+
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (!response.IsSuccessStatusCode)
+                throw new RestHttpClientException(response, content);
+
+            return JsonConvert.DeserializeObject<GetAccountBalancesResponse>(content);
         }
     }
 }

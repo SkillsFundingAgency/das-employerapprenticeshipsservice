@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Models.Payments;
 
@@ -25,5 +26,7 @@ namespace SFA.DAS.EmployerFinance.Data
         Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(long accountId);
 
         Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(long accountId, string payrollYear, short payrollMonth);
+
+        Task<List<AccountBalance>> GetAccountBalances(List<long> accountIds);
     }
 }

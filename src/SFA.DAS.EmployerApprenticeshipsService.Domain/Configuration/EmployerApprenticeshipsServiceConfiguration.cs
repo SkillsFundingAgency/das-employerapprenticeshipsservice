@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using SFA.DAS.EmployerFinance.Api.Client;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
-using SFA.DAS.TokenService.Api.Client;
 
 namespace SFA.DAS.EAS.Domain.Configuration
 {
@@ -31,6 +29,6 @@ namespace SFA.DAS.EAS.Domain.Configuration
         public string ServiceBusConnectionString { get; set; }
         public Dictionary<string, string> ServiceBusConnectionStrings { get; set; }
         public EmployerAccountsApiConfiguration EmployerAccountsApi { get; set; }   
-        public EmployerFinanceApiClientConfiguration EmployerFinanceApi { get; set; }
+        public EmployerFinanceApiConfiguration EmployerFinanceApi { get; set; }
     }
 }

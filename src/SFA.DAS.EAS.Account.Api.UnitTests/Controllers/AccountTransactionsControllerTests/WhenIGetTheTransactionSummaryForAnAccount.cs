@@ -12,12 +12,12 @@ using SFA.DAS.EAS.Account.Api.Controllers;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.TestCommon.Extensions;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.EmployerFinance.Services;
 using AutoMapper;
 using AutoFixture;
 using System;
 using System.Reflection;
 using Castle.Core.Internal;
+using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsControllerTests
 {

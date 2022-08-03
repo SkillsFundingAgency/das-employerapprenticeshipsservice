@@ -38,9 +38,9 @@ namespace SFA.DAS.EmployerFinance.Api.UnitTests.Controllers.AccountLevyControlle
     }
     public static class LevyDeclarationViewsObjectMother
     {
-        public static List<LevyDeclarationView> Create(long accountId = 1234588, string empref = "123/abc123")
+        public static List<SFA.DAS.EmployerFinance.Models.Levy.LevyDeclarationView> Create(long accountId = 1234588, string empref = "123/abc123")
         {
-            var item = new LevyDeclarationView
+            var item = new SFA.DAS.EmployerFinance.Models.Levy.LevyDeclarationView
             {
                 Id = 95875,
                 AccountId = accountId,
@@ -66,7 +66,7 @@ namespace SFA.DAS.EmployerFinance.Api.UnitTests.Controllers.AccountLevyControlle
                 LevyDeclaredInMonth = 34857
             };
 
-            return new List<LevyDeclarationView> { item };
+            return new List<SFA.DAS.EmployerFinance.Models.Levy.LevyDeclarationView> { item };
         }
     }
 }

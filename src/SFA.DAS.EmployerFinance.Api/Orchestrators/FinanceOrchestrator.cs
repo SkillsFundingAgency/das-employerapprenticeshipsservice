@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using MediatR;
 using SFA.DAS.EAS.Finance.Api.Types;
+using SFA.DAS.EmployerFinance.Queries.GetAccountBalances;
 using SFA.DAS.EmployerFinance.Queries.GetLevyDeclaration;
 using SFA.DAS.EmployerFinance.Queries.GetLevyDeclarationsByAccountAndPeriod;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -68,6 +70,16 @@ namespace SFA.DAS.EmployerFinance.Api.Orchestrators
                 Data = new AccountResourceList<LevyDeclarationViewModel>(levyViewModels),
                 Status = HttpStatusCode.OK
             };
+        }
+
+        public async Task<GetAccountBalancesResponse> GetAccountBalances(List<long> accountIds)
+        {
+            var transactionResult = await _mediator.SendAsync(new GetAccountBalancesRequest
+            {   
+                AccountIds = accountIds
+            });
+
+            return transactionResult;
         }
     }
 }

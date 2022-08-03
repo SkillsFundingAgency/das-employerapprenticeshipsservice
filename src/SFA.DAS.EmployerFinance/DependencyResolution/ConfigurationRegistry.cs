@@ -18,10 +18,6 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
             
             For<EmployerFeaturesConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<EmployerFeaturesConfiguration>(ConfigurationKeys.Features)).Singleton();
             For<IHmrcConfiguration>().Use(c => c.GetInstance<EmployerFinanceConfiguration>().Hmrc).Singleton();
-            
-            For<IEmployerFinanceApiClient>().Use<EmployerFinanceApiClient>();
-            For<IEmployerFinanceApiClientConfiguration>().Use(c => c.GetInstance<EmployerFinanceConfiguration>().EmployerFinanceApi).Singleton();
-            For<IEmployerFinanceApiService>().Use<EmployerFinanceApiService>().Singleton();
         }
     }
 }

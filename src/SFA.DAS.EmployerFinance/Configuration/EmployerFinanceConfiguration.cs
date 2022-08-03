@@ -46,5 +46,6 @@ namespace SFA.DAS.EmployerFinance.Configuration
         public string ZenDeskSectionId { get; set; }
         public string ZenDeskCobrowsingSnippetKey { get; set; }
         public EmployerFinanceApiClientConfiguration EmployerFinanceApi { get; set; }
+        public decimal TransferAllowancePercentage { get; set; }
     }
 }
