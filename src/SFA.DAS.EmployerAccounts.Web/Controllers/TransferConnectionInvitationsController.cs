@@ -22,7 +22,7 @@ using SFA.DAS.Validation.Mvc;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
-    [DasAuthorize("EmployerFeature.TransferConnectionRequests", EmployerUserRole.Any)]
+    [DasAuthorize("EmployerFeature.TransferConnectionRequestsPreMigration", EmployerUserRole.Any)]
     [RoutePrefix("accounts/{HashedAccountId}/transfers/connections/requests")]
     public class TransferConnectionInvitationsController : Controller
     {
