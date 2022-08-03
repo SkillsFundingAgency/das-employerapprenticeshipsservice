@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerFinance.Data
             return _db.Value.Database.Connection.ExecuteAsync(
                 "[employer_financial].[CreateAccountLegalEntity]",
                 parameters,
-                _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
 
@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerFinance.Data
             return _db.Value.Database.Connection.ExecuteAsync(
                 "[employer_financial].[SignAccountLegalEntityAgreement]",
                 parameters,
-                _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
 
@@ -62,7 +62,7 @@ namespace SFA.DAS.EmployerFinance.Data
             return _db.Value.Database.Connection.ExecuteAsync(
                 "[employer_financial].[RemoveAccountLegalEntity]",
                 parameters,
-                _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
     }

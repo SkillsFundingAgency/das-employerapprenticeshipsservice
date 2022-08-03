@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerFinance.Data
             return _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_financial].[CreateAccountTransfersV1]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure,
                 commandTimeout: 300);
         }
@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerFinance.Data
             return _db.Value.Database.Connection.QueryAsync<AccountTransfer>(
                 sql: "[employer_financial].[GetAccountTransfersByPeriodEnd]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
 
@@ -62,7 +62,7 @@ namespace SFA.DAS.EmployerFinance.Data
             return _db.Value.Database.Connection.QuerySingleOrDefaultAsync<AccountTransferDetails>(
                 sql: "[employer_financial].[GetTransferPaymentDetails]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
 

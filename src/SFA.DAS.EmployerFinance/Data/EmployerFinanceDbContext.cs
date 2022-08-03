@@ -36,8 +36,8 @@ namespace SFA.DAS.EmployerFinance.Data
         public EmployerFinanceDbContext(DbConnection connection, DbTransaction transaction = null)
             : base(connection, false)
         {
-            if (transaction == null) Database.BeginTransaction();
-            else Database.UseTransaction(transaction);
+            if (transaction != null) 
+                Database.UseTransaction(transaction);
         }
 
         protected EmployerFinanceDbContext()
