@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoFixture;
+using AutoFixture.AutoMoq;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NServiceBus;
@@ -84,6 +85,8 @@ namespace SFA.DAS.EmployerFinance.Jobs.UnitTests.ScheduledJobs
 
         internal void SetupAccounts(int numberOfAccounts)
         {
+            Fixture.Customize(new AutoMoqCustomization());
+
             Accounts = Fixture
                 .Build<Account>().Without(acc => acc.AccountLegalEntities)
                 .CreateMany(numberOfAccounts);
