@@ -326,7 +326,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
                         PropertyUpdate.FromString("Ref", message.PayeReference),
                         PropertyUpdate.FromString("AccessToken", message.AccessToken),
                         PropertyUpdate.FromString("RefreshToken", message.RefreshToken),
-                        PropertyUpdate.FromString("Name", message.EmployerRefName)
+                        PropertyUpdate.FromString("Name", message.EmployerRefName),
+                        PropertyUpdate.FromString("Aorn", message.Aorn)
                     },
                     RelatedEntities = new List<Entity> { new Entity { Id = returnValue.AccountId.ToString(), Type = "Account" } },
                     AffectedEntity = new Entity { Type = "Paye", Id = message.PayeReference }
