@@ -96,17 +96,10 @@ steps:
   inputs:
     solution: 'src/SFA.DAS.EmployerAccounts.Host/SFA.DAS.EmployerAccounts.Host.csproj'
     vsVersion: 16.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/SFA.DAS.EmployerAccounts.Host"'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
     platform: 'anycpu'
     configuration: 'release'
     clean: true
-
-- task: ArchiveFiles@2
-  displayName: 'Archive SFA.DAS.EmployerAccounts.Host'
-  inputs:
-    includeRootFolder: false
-    rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EmployerAccounts.Host'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EmployerAccounts.Host.zip'
 
 - task: VSBuild@1
   displayName: 'Publish SFA.DAS.EmployerFinance.Api'
@@ -147,17 +140,10 @@ steps:
   inputs:
     solution: 'src/SFA.DAS.EmployerFinance.Host/SFA.DAS.EmployerFinance.Host.csproj'
     vsVersion: 16.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/SFA.DAS.EmployerFinance.Host"'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
     platform: 'anycpu'
     configuration: 'release'
     clean: true
-
-- task: ArchiveFiles@2
-  displayName: 'Archive SFA.DAS.EmployerFinance.Host'
-  inputs:
-    includeRootFolder: false
-    rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EmployerFinance.Host'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EmployerFinance.Host.zip'
 
 - task: VSBuild@1
   displayName: 'Publish SFA.DAS.EAS.Account.Api'
