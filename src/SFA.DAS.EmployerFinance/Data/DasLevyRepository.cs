@@ -10,6 +10,7 @@ using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Models.Payments;
+using SFA.DAS.EmployerFinance.Queries.GetLevyDeclaration;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Sql.Client;
 
@@ -252,13 +253,13 @@ namespace SFA.DAS.EmployerFinance.Data
             return result.FirstOrDefault();
         }
 
-        public async Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(long accountId)
+        public async Task<List<LevyDeclarationItem>> GetAccountLevyDeclarations(long accountId)
         {
             var parameters = new DynamicParameters();
 
             parameters.Add("@accountId", accountId, DbType.Int64);
 
-            var result = await _db.Value.Database.Connection.QueryAsync<LevyDeclarationView>(
+            var result = await _db.Value.Database.Connection.QueryAsync<LevyDeclarationItem>(
                 sql: "[employer_financial].[GetLevyDeclarations_ByAccountId]",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
@@ -267,7 +268,7 @@ namespace SFA.DAS.EmployerFinance.Data
             return result.ToList();
         }
 
-        public async Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(long accountId, string payrollYear, short payrollMonth)
+        public async Task<List<LevyDeclarationItem>> GetAccountLevyDeclarations(long accountId, string payrollYear, short payrollMonth)
         {
             var parameters = new DynamicParameters();
 
@@ -275,7 +276,7 @@ namespace SFA.DAS.EmployerFinance.Data
             parameters.Add("@payrollYear", payrollYear, DbType.String);
             parameters.Add("@payrollMonth", payrollMonth, DbType.Int16);
 
-            var result = await _db.Value.Database.Connection.QueryAsync<LevyDeclarationView>(
+            var result = await _db.Value.Database.Connection.QueryAsync<LevyDeclarationItem>(
                 sql: "[employer_financial].[GetLevyDeclarations_ByAccountPayrollMonthPayrollYear]",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,

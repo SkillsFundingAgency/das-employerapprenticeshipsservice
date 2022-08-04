@@ -52,10 +52,10 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             //Arrange
             var hashedAccountId = "ABC123";           
             var fixture = new Fixture();
-            ICollection<Finance.Api.Types.TransactionSummaryViewModel> apiResponse = new List<Finance.Api.Types.TransactionSummaryViewModel>()
+            var apiResponse = new List<TransactionSummaryViewModel>()
             {
-                 fixture.Create<Finance.Api.Types.TransactionSummaryViewModel>(),
-                 fixture.Create<Finance.Api.Types.TransactionSummaryViewModel>()
+                 fixture.Create<TransactionSummaryViewModel>(),
+                 fixture.Create<TransactionSummaryViewModel>()
             };
 
             _financeApiService.Setup(x => x.GetTransactionSummary(hashedAccountId)).ReturnsAsync(apiResponse);

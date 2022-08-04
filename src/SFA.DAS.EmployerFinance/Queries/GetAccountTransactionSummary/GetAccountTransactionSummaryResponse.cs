@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EmployerFinance.Models.Transaction;
+﻿using SFA.DAS.EAS.Finance.Api.Types;
 using System.Collections.Generic;
 
 namespace SFA.DAS.EmployerFinance.Queries.GetAccountTransactionSummary

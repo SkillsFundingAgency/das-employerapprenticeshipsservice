@@ -23,14 +23,14 @@ namespace SFA.DAS.EmployerFinance.Api.Controllers
         {
             var result = await _orchestrator.GetAccountTransactionSummary(hashedAccountId);
 
-            if (result.Data == null)
+            if (result == null)
             {
                 return NotFound();
             }
 
-            result.Data.ForEach(x => x.Href = Url.Route("GetTransactions", new { hashedAccountId, year = x.Year, month = x.Month }));
+            result.ForEach(x => x.Href = Url.Route("GetTransactions", new { hashedAccountId, year = x.Year, month = x.Month }));
 
-            return Ok(result.Data);
+            return Ok(result);
         }
 
         [Route("{year?}/{month?}", Name = "GetTransactions")]

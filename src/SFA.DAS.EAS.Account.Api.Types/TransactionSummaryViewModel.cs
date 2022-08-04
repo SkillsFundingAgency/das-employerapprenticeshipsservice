@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EAS.Account.Api.Types
+﻿using System.Collections.Generic;
+
+namespace SFA.DAS.EAS.Account.Api.Types
 {
     public class TransactionSummaryViewModel
     {

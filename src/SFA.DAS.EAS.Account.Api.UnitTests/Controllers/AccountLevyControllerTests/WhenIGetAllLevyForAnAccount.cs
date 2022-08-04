@@ -19,14 +19,17 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
         {
             //Arrange
             var hashedAccountId = "ABC123";
-            var levyResponse = new GetLevyDeclarationResponse { Declarations = LevyDeclarationViewsObjectMother.Create(12334, "abc123") };
-            Mediator.Setup(x => x.SendAsync(It.Is<GetLevyDeclarationRequest>(q => q.HashedAccountId == hashedAccountId))).ReturnsAsync(levyResponse);
+            //var levyResponse = new GetLevyDeclarationResponse { Declarations = LevyDeclarationViewsObjectMother.Create(12334, "abc123") };
+            //Mediator.Setup(x => x.SendAsync(It.Is<GetLevyDeclarationRequest>(q => q.HashedAccountId == hashedAccountId))).ReturnsAsync(levyResponse);
             var fixture = new Fixture();
-            ICollection<Finance.Api.Types.LevyDeclarationViewModel> apiResponse = new List<Finance.Api.Types.LevyDeclarationViewModel>()
+            var apiResponse = new List<LevyDeclarationViewModel>()
             {
-                fixture.Create<Finance.Api.Types.LevyDeclarationViewModel>(),
-                fixture.Create<Finance.Api.Types.LevyDeclarationViewModel>()
+                fixture.Create<LevyDeclarationViewModel>(),
+                fixture.Create<LevyDeclarationViewModel>()
             };
+            apiResponse[0].HashedAccountId = hashedAccountId;
+            //apiResponse[0].PayeSchemeReference = "123/abc123";
+            apiResponse[1].HashedAccountId = hashedAccountId;
             FinanceApiService.Setup(x => x.GetLevyDeclarations(hashedAccountId)).ReturnsAsync(apiResponse);
 
             //Act
@@ -38,9 +41,9 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
             var model = response as OkNegotiatedContentResult<AccountResourceList<LevyDeclarationViewModel>>;
 
             model?.Content.Should().NotBeNull();
-            Assert.IsTrue(model?.Content.TrueForAll(x => x.HashedAccountId == hashedAccountId));
+            Assert.IsTrue(model?.Content.TrueForAll(x => x.HashedAccountId == hashedAccountId));            
+            model?.Content.ShouldAllBeEquivalentTo(apiResponse, options => options.Excluding(x => x.HashedAccountId).Excluding(x => x.PayeSchemeReference));
             //TODO : check
-            //model?.Content.ShouldAllBeEquivalentTo(levyResponse.Declarations, options => options.Excluding(x => x.HashedAccountId).Excluding(x => x.PayeSchemeReference));
             //Assert.IsTrue(model?.Content[0].PayeSchemeReference == levyResponse.Declarations[0].EmpRef);
         }
 

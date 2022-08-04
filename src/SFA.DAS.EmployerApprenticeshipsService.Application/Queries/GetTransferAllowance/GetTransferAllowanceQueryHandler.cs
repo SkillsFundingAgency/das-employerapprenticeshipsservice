@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿ using MediatR;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.Extensions;

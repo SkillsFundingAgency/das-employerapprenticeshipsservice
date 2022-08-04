@@ -66,15 +66,15 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
 
             var isNotZero = 100m;
             var isTxDateCreated = DateTime.Today;
-            var transactionsViewModel = new SFA.DAS.EAS.Finance.Api.Types.TransactionsViewModel
+            var transactionsViewModel = new TransactionsViewModel
             {
-                new Finance.Api.Types.TransactionViewModel
+                new TransactionViewModel
                 {
                     Description = "Is Not Null",
                     Amount = isNotZero,
                     DateCreated = isTxDateCreated
                 },
-                new Finance.Api.Types.TransactionViewModel
+                new TransactionViewModel
                 {
                     Description = "Is Not Null 2",
                     Amount = isNotZero,
@@ -111,15 +111,15 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             _mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(q => q.HashedAccountId == hashedAccountId && q.Year == year && q.Month == month))).ReturnsAsync(transactionsResponse);
             var isNotZero = 100m;
             var isTxDateCreated = DateTime.Today;
-            var transactionsViewModel = new Finance.Api.Types.TransactionsViewModel
+            var transactionsViewModel = new TransactionsViewModel
             {
-                new Finance.Api.Types.TransactionViewModel
+                new TransactionViewModel
                 {
                     Description = "Is Not Null",
                     Amount = isNotZero,
                     DateCreated = isTxDateCreated
                 },
-                new Finance.Api.Types.TransactionViewModel
+                new TransactionViewModel
                 {
                     Description = "Is Not Null 2",
                     Amount = isNotZero,
@@ -159,15 +159,15 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
 
             var isNotZero = 100m;
             var isTxDateCreated = DateTime.Today;
-            var transactionsViewModel = new SFA.DAS.EAS.Finance.Api.Types.TransactionsViewModel
+            var transactionsViewModel = new TransactionsViewModel
             {             
-                new Finance.Api.Types.TransactionViewModel
+                new TransactionViewModel
                 {
                     Description = "Is Not Null",
                     Amount = isNotZero,
                     DateCreated = isTxDateCreated
                 },
-                new Finance.Api.Types.TransactionViewModel
+                new TransactionViewModel
                 {
                     Description = "Is Not Null 2",
                     Amount = isNotZero,
@@ -206,15 +206,15 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
 
             var isNotZero = 100m;
             var isTxDateCreated = DateTime.Today;
-            var transactionsViewModel = new Finance.Api.Types.TransactionsViewModel
+            var transactionsViewModel = new TransactionsViewModel
             {
-                new Finance.Api.Types.TransactionViewModel
+                new TransactionViewModel
                 {
                     Description = "Is Not Null",
                     Amount = isNotZero,
                     DateCreated = isTxDateCreated
                 },
-                new Finance.Api.Types.TransactionViewModel
+                new TransactionViewModel
                 {
                     Description = "Is Not Null 2",
                     Amount = isNotZero,
@@ -259,16 +259,16 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
 
             var isNotZero = 100m;
             var isTxDateCreated = DateTime.Today;
-            var transactionsViewModel = new SFA.DAS.EAS.Finance.Api.Types.TransactionsViewModel
+            var transactionsViewModel = new TransactionsViewModel
             {
-                new Finance.Api.Types.TransactionViewModel
+                new TransactionViewModel
                 {
                     Description = "Is Not Null",
                     Amount = isNotZero,
                     DateCreated = isTxDateCreated,
                     ResourceUri = "someuri"
                 },
-                new Finance.Api.Types.TransactionViewModel
+                new TransactionViewModel
                 {
                     Description = "Is Not Null 2",
                     Amount = isNotZero,
@@ -310,16 +310,16 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
 
             var isNotZero = 100m;
             var isTxDateCreated = DateTime.Today;
-            var transactionsViewModel = new SFA.DAS.EAS.Finance.Api.Types.TransactionsViewModel
+            var transactionsViewModel = new TransactionsViewModel
             {
-                new Finance.Api.Types.TransactionViewModel
+                new TransactionViewModel
                 {
                     Description = "Is Not Null",
                     Amount = isNotZero,
                     DateCreated = isTxDateCreated,
                     ResourceUri = "someuri"
                 },
-                new Finance.Api.Types.TransactionViewModel
+                new TransactionViewModel
                 {
                     Description = "Is Not Null 2",
                     Amount = isNotZero,

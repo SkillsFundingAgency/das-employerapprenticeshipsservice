@@ -66,8 +66,8 @@ namespace SFA.DAS.EmployerFinance.Api.UnitTests.Controllers.AccountTransactionsC
 
             //Assert            
             Assert.IsNotNull(response);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<AccountResourceList<SFA.DAS.EAS.Finance.Api.Types.TransactionSummaryViewModel>>>(response);
-            var model = response as OkNegotiatedContentResult<AccountResourceList<SFA.DAS.EAS.Finance.Api.Types.TransactionSummaryViewModel>>;
+            Assert.IsInstanceOf<OkNegotiatedContentResult<List<TransactionSummary>>>(response);
+            var model = response as OkNegotiatedContentResult<List<TransactionSummary>>;
 
             model?.Content.Should().NotBeNull();
             model?.Content.ShouldAllBeEquivalentTo(transactionSummaryResponse.Data, x => x.Excluding(y => y.Href));

@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EAS.Finance.Api.Types
 {
-    public class LevyDeclarationViewModel
+    public class LevyDeclaration
     {
         public string HashedAccountId { get; set; }
         public long Id { get; set; }

@@ -5,6 +5,6 @@ namespace SFA.DAS.EmployerFinance.Queries.GetLevyDeclarationsByAccountAndPeriod
 {
     public class GetLevyDeclarationsByAccountAndPeriodResponse
     {
-        public List<LevyDeclarationView> Declarations { get; set; }
+        public List<LevyDeclarationItem> Declarations { get; set; }
     }
 }

@@ -25,22 +25,22 @@ namespace SFA.DAS.EmployerFinance.Api.Client
             return _httpClient.GetAsync(url);
         }
 
-        public async Task<ICollection<LevyDeclarationViewModel>> GetLevyDeclarations(string hashedAccountId)
+        public async Task<List<LevyDeclaration>> GetLevyDeclarations(string hashedAccountId)
         {
             var baseUrl = GetBaseUrl();
             var url = $"{baseUrl}/api/accounts/{hashedAccountId}/levy";
             var json = await _httpClient.GetAsync(url);
 
-            return JsonConvert.DeserializeObject<List<LevyDeclarationViewModel>>(json);
+            return JsonConvert.DeserializeObject<List<LevyDeclaration>>(json);
         }
        
-        public async Task<ICollection<LevyDeclarationViewModel>> GetLevyForPeriod(string hashedAccountId, string payrollYear, short payrollMonth)
+        public async Task<List<LevyDeclaration>> GetLevyForPeriod(string hashedAccountId, string payrollYear, short payrollMonth)
         {
             var baseUrl = GetBaseUrl();
             var url = $"{baseUrl}/api/accounts/{hashedAccountId}/levy/GetLevyForPeriod";
             var json = await _httpClient.GetAsync(url);
 
-            return JsonConvert.DeserializeObject<List<LevyDeclarationViewModel>>(json);
+            return JsonConvert.DeserializeObject<List<LevyDeclaration>>(json);
         }
 
         public async Task<TransactionsViewModel> GetTransactions(string accountId, int year, int month)
@@ -52,13 +52,13 @@ namespace SFA.DAS.EmployerFinance.Api.Client
             return JsonConvert.DeserializeObject<TransactionsViewModel>(json);
         }
 
-        public async Task<ICollection<TransactionSummaryViewModel>> GetTransactionSummary(string accountId)
+        public async Task<List<TransactionSummary>> GetTransactionSummary(string accountId)
         {
             var baseUrl = GetBaseUrl();
             var url = $"{baseUrl}/api/accounts/{accountId}/transactions";
             var json = await _httpClient.GetAsync(url);
 
-            return JsonConvert.DeserializeObject<ICollection<TransactionSummaryViewModel>>(json);
+            return JsonConvert.DeserializeObject<List<TransactionSummary>>(json);
         }
 
         public async Task<FinanceStatisticsViewModel> GetFinanceStatistics()

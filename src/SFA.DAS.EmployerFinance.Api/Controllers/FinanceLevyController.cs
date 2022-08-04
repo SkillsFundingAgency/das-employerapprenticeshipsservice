@@ -22,12 +22,12 @@ namespace SFA.DAS.EmployerFinance.Api.Controllers
         {
             var result = await _orchestrator.GetLevy(hashedAccountId);
 
-            if (result.Data == null)
+            if (result == null)
             {
                 return NotFound();
             }
 
-            return Ok(result.Data);
+            return Ok(result);
         }
 
         [Route("{payrollYear}/{payrollMonth}", Name = "GetLevyForPeriod")]
@@ -37,12 +37,12 @@ namespace SFA.DAS.EmployerFinance.Api.Controllers
         {
             var result = await _orchestrator.GetLevy(hashedAccountId, payrollYear, payrollMonth);
 
-            if (result.Data == null)
+            if (result == null)
             {
                 return NotFound();
             }
 
-            return Ok(result.Data);
+            return Ok(result);
         }
     }
 }

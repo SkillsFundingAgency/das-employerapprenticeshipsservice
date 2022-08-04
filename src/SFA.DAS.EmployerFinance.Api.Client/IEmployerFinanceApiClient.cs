@@ -9,13 +9,13 @@ namespace SFA.DAS.EmployerFinance.Api.Client
     {
         Task HealthCheck();
 
-        Task<ICollection<LevyDeclarationViewModel>> GetLevyDeclarations(string hashedAccountId);
+        Task<List<LevyDeclaration>> GetLevyDeclarations(string hashedAccountId);
 
-        Task<ICollection<LevyDeclarationViewModel>> GetLevyForPeriod(string hashedAccountId, string payrollYear, short payrollMonth);
+        Task<List<LevyDeclaration>> GetLevyForPeriod(string hashedAccountId, string payrollYear, short payrollMonth);
 
         Task<TransactionsViewModel> GetTransactions(string accountId, int year, int month);
 
-        Task<ICollection<TransactionSummaryViewModel>> GetTransactionSummary(string accountId);
+        Task<List<TransactionSummary>> GetTransactionSummary(string accountId);
 
         Task<FinanceStatisticsViewModel> GetFinanceStatistics();
     }

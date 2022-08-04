@@ -27,8 +27,8 @@ namespace SFA.DAS.EmployerFinance.Api.UnitTests.Controllers.AccountLevyControlle
 
             //Assert
             Assert.IsNotNull(response);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<AccountResourceList<LevyDeclarationViewModel>>>(response);
-            var model = response as OkNegotiatedContentResult<AccountResourceList<LevyDeclarationViewModel>>;
+            Assert.IsInstanceOf<OkNegotiatedContentResult<List<LevyDeclaration>>>(response);
+            var model = response as OkNegotiatedContentResult<List<LevyDeclaration>>;
 
             model?.Content.Should().NotBeNull();
             Assert.IsTrue(model?.Content.TrueForAll(x => x.HashedAccountId == hashedAccountId));
@@ -38,9 +38,9 @@ namespace SFA.DAS.EmployerFinance.Api.UnitTests.Controllers.AccountLevyControlle
     }
     public static class LevyDeclarationViewsObjectMother
     {
-        public static List<SFA.DAS.EmployerFinance.Models.Levy.LevyDeclarationView> Create(long accountId = 1234588, string empref = "123/abc123")
+        public static List<LevyDeclarationItem> Create(long accountId = 1234588, string empref = "123/abc123")
         {
-            var item = new SFA.DAS.EmployerFinance.Models.Levy.LevyDeclarationView
+            var item = new LevyDeclarationItem
             {
                 Id = 95875,
                 AccountId = accountId,
@@ -66,7 +66,7 @@ namespace SFA.DAS.EmployerFinance.Api.UnitTests.Controllers.AccountLevyControlle
                 LevyDeclaredInMonth = 34857
             };
 
-            return new List<SFA.DAS.EmployerFinance.Models.Levy.LevyDeclarationView> { item };
+            return new List<LevyDeclarationItem> { item };
         }
     }
 }

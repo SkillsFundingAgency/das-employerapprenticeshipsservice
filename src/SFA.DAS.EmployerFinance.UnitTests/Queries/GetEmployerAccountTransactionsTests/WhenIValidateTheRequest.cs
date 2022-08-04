@@ -6,23 +6,20 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using SFA.DAS.Authorization.EmployerUserRoles.Options;
 using SFA.DAS.Authorization.Services;
-using SFA.DAS.EAS.Domain.Data.Repositories;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactionsTests
 {
     public class WhenIValidateTheRequest
     {
         private GetEmployerAccountTransactionsValidator _validator;
-        //private Mock<IAuthorizationService> _authorizationService; //TODO : check  _authorizationService to IMembershipRepository
-        private Mock<IMembershipRepository> _membershipRepository;
+        private Mock<IAuthorizationService> _authorizationService;
 
         [SetUp]
         public void Arrange()
         {
-            //_authorizationService = new Mock<IAuthorizationService>(); //TODO : check  _authorizationService to IMembershipRepository
-            _membershipRepository = new Mock<IMembershipRepository>();
+            _authorizationService = new Mock<IAuthorizationService>();
             
-            _validator = new GetEmployerAccountTransactionsValidator(_membershipRepository.Object);
+            _validator = new GetEmployerAccountTransactionsValidator(_authorizationService.Object);
         }
 
         [Test]
@@ -34,20 +31,19 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
             //Assert
             Assert.IsTrue(result.IsValid());
         }
+        
+        [Test]
+        public async Task ThenTheResultIsMarkedAsUnauthorizedIfTheUserIsNotAMemberOfTheAccount()
+        {
+            //Arrange
+            _authorizationService.Setup(x => x.IsAuthorized(EmployerUserRole.Any)).Returns(false);
 
-        //TODO : check this test in Accounts side
-        //[Test]
-        //public async Task ThenTheResultIsMarkedAsUnauthorizedIfTheUserIsNotAMemberOfTheAccount()
-        //{
-        //    //Arrange
-        //    _authorizationService.Setup(x => x.IsAuthorized(EmployerUserRole.Any)).Returns(false);
+            //Act
+            var result = await _validator.ValidateAsync(new GetEmployerAccountTransactionsQuery { ExternalUserId = "123", HashedAccountId = "AD1" });
 
-        //    //Act
-        //    var result = await _validator.ValidateAsync(new GetEmployerAccountTransactionsQuery { ExternalUserId = "123", HashedAccountId = "AD1" });
-
-        //    //Assert
-        //    Assert.IsTrue(result.IsUnauthorized);
-        //}
+            //Assert
+            Assert.IsTrue(result.IsUnauthorized);
+        }
 
         [Test]
         public async Task ThenTheResultIsMarkedAsAuthorizedIfNoUserHasBeenProvided()

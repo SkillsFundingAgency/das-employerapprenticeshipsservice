@@ -4,10 +4,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.TestCommon.Extensions;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http.Results;
@@ -21,6 +18,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
         [Test]
         public async Task ThenAccountsAreReturnedWithTheirBalanceAndAUriToGetAccountDetails()
         {
+            //Arrange
             var accountsResponse = new PagedApiResponseViewModel<AccountWithBalanceViewModel>()
             {
                 Page = 123,
@@ -33,10 +31,23 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             };
 
             ApiService.Setup(s => s.GetAccounts(null, 1000, 1, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(accountsResponse);
+                .ReturnsAsync(accountsResponse);         
 
+            var response = new GetAccountBalancesResponse
+            {
+                Accounts = new List<AccountBalance>
+                {
+                    new AccountBalance { AccountId = 123, Balance =10000 },
+                    new AccountBalance { AccountId = 987, Balance =10000 },
+                }
+            };
+
+            FinanceApiService.Setup(x => x.GetAccountBalances(It.IsAny<BulkAccountsRequest>())).ReturnsAsync(response);
+
+            //Act
             var result = await Controller.GetAccounts();
-
+            
+            //Assert
             result.Should().NotBeNull();
             result.Should().BeOfType<OkNegotiatedContentResult<PagedApiResponseViewModel<AccountWithBalanceViewModel>>>();
 

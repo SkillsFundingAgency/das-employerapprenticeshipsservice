@@ -4,6 +4,7 @@ using SFA.DAS.EmployerFinance.Models.Transaction;
 using SFA.DAS.EmployerFinance.Queries.GetAccountTransactionSummary;
 using SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.NLog.Logger;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http.Routing;
@@ -46,28 +47,17 @@ namespace SFA.DAS.EmployerFinance.Api.Orchestrators
             return response;
         }       
 
-        public async Task<OrchestratorResponse<AccountResourceList<TransactionSummaryViewModel>>> GetAccountTransactionSummary(string hashedAccountId)
-        {
-            var data = await _mediator.SendAsync(new GetAccountTransactionSummaryRequest { HashedAccountId = hashedAccountId });
-
-            var response = new OrchestratorResponse<AccountResourceList<TransactionSummaryViewModel>>
+        public async Task<List<TransactionSummary>> GetAccountTransactionSummary(string hashedAccountId)
+        {            
+            var response = await _mediator.SendAsync(new GetAccountTransactionSummaryRequest { HashedAccountId = hashedAccountId });
+            if (response.Data == null)
             {
-                Data = new AccountResourceList<TransactionSummaryViewModel>(data.Data.Select(ConvertToTransactionSummaryViewModel))
-            };
+                return null;
+            }          
 
-            return response;
+            return response.Data;
         }
-
-
-        private TransactionSummaryViewModel ConvertToTransactionSummaryViewModel(TransactionSummary transactionSummary)
-        {
-            return new TransactionSummaryViewModel
-            {
-                Amount = transactionSummary.Amount,
-                Year = transactionSummary.Year,
-                Month = transactionSummary.Month
-            };
-        }
+     
 
         private TransactionViewModel ConvertToTransactionViewModel(string hashedAccountId, Models.Transaction.TransactionLine transactionLine, UrlHelper urlHelper)
         {

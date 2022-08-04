@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using SFA.DAS.EAS.Finance.Api.Types;
+using SFA.DAS.EmployerFinance.Models.Levy;
+using SFA.DAS.EmployerFinance.Queries.GetLevyDeclaration;
 
 namespace SFA.DAS.EmployerFinance.Api.Mappings
 {
@@ -7,7 +9,7 @@ namespace SFA.DAS.EmployerFinance.Api.Mappings
     {
         public AccountMappings()
         {            
-            CreateMap<DAS.EmployerFinance.Models.Levy.LevyDeclarationView, LevyDeclarationViewModel>()
+            CreateMap<LevyDeclarationItem, LevyDeclaration>()
                .ForMember(target => target.PayeSchemeReference, opt => opt.MapFrom(src => src.EmpRef));
         }
     }

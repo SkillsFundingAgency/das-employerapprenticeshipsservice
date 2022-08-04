@@ -32,48 +32,42 @@ namespace SFA.DAS.EmployerFinance.Api.Orchestrators
             _hashingService = hashingService;
         }
 
-        public async Task<OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>> GetLevy(string hashedAccountId)
+        public async Task<List<LevyDeclaration>> GetLevy(string hashedAccountId)
         {
             _logger.Info($"Requesting levy declaration for account {hashedAccountId}");
 
-            var levyDeclarations = await _mediator.SendAsync(new GetLevyDeclarationRequest { HashedAccountId = hashedAccountId });
-            if (levyDeclarations.Declarations == null)
+            var response = await _mediator.SendAsync(new GetLevyDeclarationRequest { HashedAccountId = hashedAccountId });
+            if (response.Declarations == null)
             {
-                return new OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>> { Data = null };
+                return null;
             }
 
-            var levyViewModels = levyDeclarations.Declarations.Select(x => _mapper.Map<LevyDeclarationViewModel>(x)).ToList();
-            levyViewModels.ForEach(x => x.HashedAccountId = hashedAccountId);
+            var levyDeclarations = response.Declarations.Select(x => _mapper.Map<LevyDeclaration>(x)).ToList();
+            levyDeclarations.ForEach(x => x.HashedAccountId = hashedAccountId);
 
-            return new OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>
-            {
-                Data = new AccountResourceList<LevyDeclarationViewModel>(levyViewModels),
-                Status = HttpStatusCode.OK
-            };
+            return levyDeclarations;
         }
 
-        public async Task<OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>> GetLevy(string hashedAccountId, string payrollYear, short payrollMonth)
+        public async Task<List<LevyDeclaration>> GetLevy(string hashedAccountId, string payrollYear, short payrollMonth)
         {
             _logger.Info($"Requesting levy declaration for account {hashedAccountId}, year {payrollYear} and month {payrollMonth}");
 
-            var levyDeclarations = await _mediator.SendAsync(new GetLevyDeclarationsByAccountAndPeriodRequest { HashedAccountId = hashedAccountId, PayrollYear = payrollYear, PayrollMonth = payrollMonth });
-            if (levyDeclarations.Declarations == null)
+            var response = await _mediator.SendAsync(new GetLevyDeclarationsByAccountAndPeriodRequest { HashedAccountId = hashedAccountId, PayrollYear = payrollYear, PayrollMonth = payrollMonth });
+            if (response.Declarations == null)
             {
-                return new OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>> { Data = null };
+                return null;
             }
 
-            var levyViewModels = levyDeclarations.Declarations.Select(x => _mapper.Map<LevyDeclarationViewModel>(x)).ToList();
-            levyViewModels.ForEach(x => x.HashedAccountId = hashedAccountId);
+            var levyDeclarations = response.Declarations.Select(x => _mapper.Map<LevyDeclaration>(x)).ToList();
+            levyDeclarations.ForEach(x => x.HashedAccountId = hashedAccountId);
 
-            return new OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>
-            {
-                Data = new AccountResourceList<LevyDeclarationViewModel>(levyViewModels),
-                Status = HttpStatusCode.OK
-            };
+            return levyDeclarations;
         }
 
         public async Task<GetAccountBalancesResponse> GetAccountBalances(List<long> accountIds)
         {
+            _logger.Info($"Requesting GetAccountBalances for the accounts");
+
             var transactionResult = await _mediator.SendAsync(new GetAccountBalancesRequest
             {   
                 AccountIds = accountIds

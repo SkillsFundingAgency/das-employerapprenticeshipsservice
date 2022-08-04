@@ -27,10 +27,10 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
                 .ReturnsAsync(levyResponse);
             
             var fixture = new Fixture();
-            ICollection<Finance.Api.Types.LevyDeclarationViewModel> apiResponse = new List<Finance.Api.Types.LevyDeclarationViewModel>()
+            var apiResponse = new List<LevyDeclarationViewModel>()
             {
-                fixture.Create<Finance.Api.Types.LevyDeclarationViewModel>(),
-                fixture.Create<Finance.Api.Types.LevyDeclarationViewModel>()
+                fixture.Create<LevyDeclarationViewModel>(),
+                fixture.Create<LevyDeclarationViewModel>()
             };
             FinanceApiService.Setup(x => x.GetLevyForPeriod(hashedAccountId, payrollYear, payrollMonth)).ReturnsAsync(apiResponse);
 

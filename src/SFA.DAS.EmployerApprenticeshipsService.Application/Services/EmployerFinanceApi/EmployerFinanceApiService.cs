@@ -7,6 +7,9 @@ using SFA.DAS.EAS.Application.Services.EmployerFinanceApi.Http;
 using System.Net.Http;
 using SFA.DAS.EAS.Application.Http;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
+using SFA.DAS.EAS.Account.Api.Types;
+using System.Text;
+using SFA.DAS.EAS.Domain.Models.Account;
 
 namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
 {
@@ -18,11 +21,11 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
         public EmployerFinanceApiService(IEmployerFinanceApiHttpClientFactory employerFinanceApiHttpClientFactory, ILog log)
         {
             _httpClient = employerFinanceApiHttpClientFactory.CreateHttpClient();
-            _log = log;            
+            _log = log;
         }
 
-        public async Task<ICollection<Finance.Api.Types.LevyDeclarationViewModel>> GetLevyDeclarations(string hashedAccountId)
-        {            
+        public async Task<List<LevyDeclarationViewModel>> GetLevyDeclarations(string hashedAccountId)
+        {
             var url = $"api/accounts/{hashedAccountId}/levy";
             var response = await _httpClient.GetAsync(url);
 
@@ -31,11 +34,11 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
             if (!response.IsSuccessStatusCode)
                 throw new RestHttpClientException(response, content);
 
-            return JsonConvert.DeserializeObject<List<Finance.Api.Types.LevyDeclarationViewModel>>(content);
+            return JsonConvert.DeserializeObject<List<LevyDeclarationViewModel>>(content);
         }
 
-        public async Task<ICollection<Finance.Api.Types.LevyDeclarationViewModel>> GetLevyForPeriod(string hashedAccountId, string payrollYear, short payrollMonth)
-        {   
+        public async Task<List<LevyDeclarationViewModel>> GetLevyForPeriod(string hashedAccountId, string payrollYear, short payrollMonth)
+        {
             var url = $"api/accounts/{hashedAccountId}/levy/GetLevyForPeriod";
             var response = await _httpClient.GetAsync(url);
 
@@ -44,11 +47,11 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
             if (!response.IsSuccessStatusCode)
                 throw new RestHttpClientException(response, content);
 
-            return JsonConvert.DeserializeObject<List<Finance.Api.Types.LevyDeclarationViewModel>>(content);
+            return JsonConvert.DeserializeObject<List<LevyDeclarationViewModel>>(content);
         }
 
-        public async Task<Finance.Api.Types.TransactionsViewModel> GetTransactions(string accountId, int year, int month)
-        {            
+        public async Task<TransactionsViewModel> GetTransactions(string accountId, int year, int month)
+        {
             var url = $"api/accounts/{accountId}/transactions/{year}/{month}";
             var response = await _httpClient.GetAsync(url);
 
@@ -57,11 +60,11 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
             if (!response.IsSuccessStatusCode)
                 throw new RestHttpClientException(response, content);
 
-            return JsonConvert.DeserializeObject<Finance.Api.Types.TransactionsViewModel>(content);
+            return JsonConvert.DeserializeObject<TransactionsViewModel>(content);
         }
 
-        public async Task<ICollection<Finance.Api.Types.TransactionSummaryViewModel>> GetTransactionSummary(string accountId)
-        {   
+        public async Task<List<TransactionSummaryViewModel>> GetTransactionSummary(string accountId)
+        {
             var url = $"api/accounts/{accountId}/transactions";
             var response = await _httpClient.GetAsync(url);
 
@@ -70,10 +73,10 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
             if (!response.IsSuccessStatusCode)
                 throw new RestHttpClientException(response, content);
 
-            return JsonConvert.DeserializeObject<ICollection<Finance.Api.Types.TransactionSummaryViewModel>>(content);
+            return JsonConvert.DeserializeObject<List<TransactionSummaryViewModel>>(content);
         }
 
-        public async Task<Finance.Api.Types.FinanceStatisticsViewModel> GetStatistics(CancellationToken cancellationToken = default)
+        public async Task<FinanceStatisticsViewModel> GetStatistics(CancellationToken cancellationToken = default)
         {
             _log.Info($"Getting statistics");
 
@@ -84,13 +87,18 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
             if (!response.IsSuccessStatusCode)
                 throw new RestHttpClientException(response, content);
 
-            return JsonConvert.DeserializeObject<Finance.Api.Types.FinanceStatisticsViewModel>(content);
+            return JsonConvert.DeserializeObject<FinanceStatisticsViewModel>(content);
         }
 
-        public async Task<GetAccountBalancesResponse> GetAccountBalances(List<long> accountIds)
+        public async Task<GetAccountBalancesResponse> GetAccountBalances(BulkAccountsRequest accountIds)
         {
-            var url = $"api/accounts/balances?accountIds={accountIds}";
-            var response = await _httpClient.GetAsync(url);
+            var url = $"api/accounts/balances";
+            var data = JsonConvert.SerializeObject(accountIds);
+            var buffer = System.Text.Encoding.UTF8.GetBytes(data);
+            var byteContent = new ByteArrayContent(buffer);
+            var stringContent = new StringContent(data, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync(url, stringContent);
 
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
@@ -98,6 +106,6 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
                 throw new RestHttpClientException(response, content);
 
             return JsonConvert.DeserializeObject<GetAccountBalancesResponse>(content);
-        }
+        }       
     }
 }

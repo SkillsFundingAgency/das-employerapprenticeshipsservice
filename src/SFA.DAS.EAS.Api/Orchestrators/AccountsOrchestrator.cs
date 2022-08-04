@@ -49,11 +49,19 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             
             var accountsResult = await _employerAccountsApiService.GetAccounts(toDate, pageSize, pageNumber);
 
-            var transactionResult = await _mediator.SendAsync(new GetAccountBalancesRequest
+            //var transactionResult = await _mediator.SendAsync(new GetAccountBalancesRequest
+            //{
+            //    AccountIds = accountsResult.Data.Select(account => account.AccountId).ToList()
+            //});
+
+            //var accountBalanceHash = BuildAccountBalanceHash(transactionResult.Accounts);
+
+            var bulkAccountsRequest = new BulkAccountsRequest
             {
                 AccountIds = accountsResult.Data.Select(account => account.AccountId).ToList()
-            });
+            };
 
+            var transactionResult = await _employerFinanceApiService.GetAccountBalances(bulkAccountsRequest);
             var accountBalanceHash = BuildAccountBalanceHash(transactionResult.Accounts);
 
             accountsResult.Data.ForEach(account =>
@@ -155,13 +163,10 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             {
                 return new OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>> { Data = null };
             }
-            
-            var levyViewModels = levyDeclarations.Select(x => _mapper.Map<LevyDeclarationViewModel>(x)).ToList();
-            levyViewModels.ForEach(x => x.HashedAccountId = hashedAccountId);
 
             return new OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>
             {
-                Data = new AccountResourceList<LevyDeclarationViewModel>(levyViewModels),
+                Data = new AccountResourceList<LevyDeclarationViewModel>(levyDeclarations),
                 Status = HttpStatusCode.OK
             };
         }
