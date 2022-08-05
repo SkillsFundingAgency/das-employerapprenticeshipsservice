@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MediatR;
 using SFA.DAS.Authorization.Context;
 using SFA.DAS.Authorization.EmployerFeatures.Context;
 using SFA.DAS.Authorization.EmployerFeatures.Models;
@@ -9,22 +8,24 @@ using SFA.DAS.Authorization.Features.Services;
 using SFA.DAS.Authorization.Handlers;
 using SFA.DAS.Authorization.Options;
 using SFA.DAS.Authorization.Results;
-using SFA.DAS.EmployerAccounts.Authorisation;
-using SFA.DAS.EmployerAccounts.Queries.GetMinimumSignedAgreementVersion;
+using SFA.DAS.EmployerFinance.Authorisation;
+using SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests.Projections;
+using SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses.Accounts;
+using SFA.DAS.EmployerFinance.Interfaces.OuterApi;
 
-namespace SFA.DAS.EmployerAccounts.AuthorisationExtensions
+namespace SFA.DAS.EmployerFinance.AuthorisationExtensions
 {
     public class EmployerFeatureAuthorizationHandler : IAuthorizationHandler
     {
         public string Prefix => "EmployerFeature.";
 
         private readonly IFeatureTogglesService<EmployerFeatureToggle> _featureTogglesService;
-        private readonly IMediator _mediator;
+        private readonly IOuterApiClient _outerApiClient;
 
-        public EmployerFeatureAuthorizationHandler(IFeatureTogglesService<EmployerFeatureToggle> featureTogglesService, IMediator mediator)
+        public EmployerFeatureAuthorizationHandler(IFeatureTogglesService<EmployerFeatureToggle> featureTogglesService, IOuterApiClient outerApiClient)
         {
             _featureTogglesService = featureTogglesService;
-            _mediator = mediator;
+            _outerApiClient = outerApiClient;
         }
 
         public async Task<AuthorizationResult> GetAuthorizationResult(IReadOnlyCollection<string> options, IAuthorizationContext authorizationContext)
@@ -42,7 +43,7 @@ namespace SFA.DAS.EmployerAccounts.AuthorisationExtensions
                 if (featureToggle.EnabledByAgreementVersion.GetValueOrDefault(0) > 0)
                 {
                     var (accountId, _) = authorizationContext.GetEmployerFeatureValues();
-                    var response = await _mediator.SendAsync(new GetMinimumSignedAgreementVersionQuery { AccountId = accountId.GetValueOrDefault(0) }).ConfigureAwait(false);
+                    var response = await _outerApiClient.Get<GetMinimumSignedAgreementVersionResponse>(new GetMinimumSignedAgreementVersionRequest(accountId.GetValueOrDefault(0)));
 
                     if (response.MinimumSignedAgreementVersion < featureToggle.EnabledByAgreementVersion)
                     {

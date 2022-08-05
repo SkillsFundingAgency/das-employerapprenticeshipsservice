@@ -11,6 +11,7 @@ namespace SFA.DAS.EmployerFinance.Configuration
     {
         public string ApplicationId { get; set; }
         public string AllowedHashstringCharacters { get; set; }
+        public string CdnBaseUrl { get; set; }
         public EmployerFinanceOuterApiConfiguration EmployerFinanceOuterApiConfiguration { get; set; }
         public ContentClientApiConfiguration ContentApi { get; set; }
         public string DashboardUrl { get; set; }

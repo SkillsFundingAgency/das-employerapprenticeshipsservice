@@ -38,7 +38,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers
         public async Task Handle(SentTransferConnectionRequestEvent message, IMessageHandlerContext context)
         {
             var users = await _outerApiClient.Get<GetAccountTeamMembersWhichReceiveNotificationsResponse>(
-                new GetAccountTeamMembersWhichReceiveNotifications(message.ReceiverAccountId));
+                new GetAccountTeamMembersWhichReceiveNotificationsRequest(message.ReceiverAccountId));
 
             if (!users.Any())
             {

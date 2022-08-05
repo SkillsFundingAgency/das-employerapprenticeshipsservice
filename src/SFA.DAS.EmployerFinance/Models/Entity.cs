@@ -22,13 +22,11 @@ namespace SFA.DAS.EmployerFinance.Models
             });
         }
 
-        [SetterProperty]
         public IHashingService HashingService
         {
             set { _hashingService = value; }
         }
 
-        [SetterProperty]
         public IPublicHashingService PublicHashingService
         {
             set { _publicHashingService = value; }

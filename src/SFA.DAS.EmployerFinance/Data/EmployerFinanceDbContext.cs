@@ -10,12 +10,19 @@ using System.Threading.Tasks;
 using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.EmployerFinance.Models.TransferConnections;
 using SFA.DAS.EmployerFinance.Models.UserProfile;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Core.Objects;
+using SFA.DAS.HashingService;
+using SFA.DAS.EmployerFinance.MarkerInterfaces;
 
 namespace SFA.DAS.EmployerFinance.Data
 {
     [DbConfigurationType(typeof(SqlAzureDbConfiguration))]
     public class EmployerFinanceDbContext : DbContext
     {
+        private readonly IHashingService _hashingService;
+        private readonly IPublicHashingService _publicHashingService;
+
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<HealthCheck> HealthChecks { get; set; }
         public virtual DbSet<PeriodEnd> PeriodEnds { get; set; }
@@ -33,9 +40,16 @@ namespace SFA.DAS.EmployerFinance.Data
         {
         }
 
-        public EmployerFinanceDbContext(DbConnection connection, DbTransaction transaction = null)
+        public EmployerFinanceDbContext(DbConnection connection, IHashingService hashingService, 
+            IPublicHashingService publicHashingService, DbTransaction transaction = null)
             : base(connection, false)
         {
+            _hashingService = hashingService;
+            _publicHashingService = publicHashingService;
+
+            ((IObjectContextAdapter)this).ObjectContext
+                .ObjectMaterialized += OnObjectMaterialized;
+
             if (transaction != null) 
                 Database.UseTransaction(transaction);
         }
@@ -53,12 +67,25 @@ namespace SFA.DAS.EmployerFinance.Data
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.HasDefaultSchema("employer_financial");
+            modelBuilder.Entity<Account>().HasMany(a => a.ReceivedTransferConnectionInvitations).WithRequired(i => i.ReceiverAccount);
+            modelBuilder.Entity<Account>().HasMany(a => a.SentTransferConnectionInvitations).WithRequired(i => i.SenderAccount);
+            modelBuilder.Entity<Account>().Ignore(a => a.HashedId).Ignore(a => a.PublicHashedId);
             modelBuilder.Entity<HealthCheck>().ToTable("HealthChecks", "dbo");
             modelBuilder.Entity<TransactionLineEntity>().ToTable("TransactionLine");
             modelBuilder.Entity<TransactionLineEntity>().HasKey(t => t.Id);
             modelBuilder.Entity<TransferConnectionInvitation>().HasRequired(i => i.ReceiverAccount);
             modelBuilder.Entity<TransferConnectionInvitation>().HasRequired(i => i.SenderAccount);
             modelBuilder.Entity<User>().Ignore(u => u.FullName).Ignore(u => u.UserRef).Property(u => u.Ref).HasColumnName(nameof(User.UserRef));
+        }
+
+        private void OnObjectMaterialized(object sender, ObjectMaterializedEventArgs e)
+        {
+            var entity = e.Entity as Entity;
+            if (entity != null)
+            {
+                entity.HashingService = _hashingService;
+                entity.PublicHashingService = _publicHashingService;
+            }
         }
     }
 }

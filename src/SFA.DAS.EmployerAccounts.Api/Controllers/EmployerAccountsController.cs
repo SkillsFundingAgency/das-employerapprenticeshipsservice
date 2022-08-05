@@ -69,6 +69,14 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
             return Ok(result);
         }
 
+        [Route("internal/{accountId}/minimum-signed-agreement-version", Name = "GetMinimumSignedAgreemmentVersion")]
+        [ApiAuthorize(Roles = "ReadAllAccountUsers")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetMinimumSignedAgreemmentVersion(long accountId)
+        {
+            var result = await _orchestrator.GetMinimumSignedAgreemmentVersion(accountId);
+            return Ok(result);
+        }
 
         private void CreateGetLegalEntityLink(string hashedAccountId, Resource legalEntity)
         {

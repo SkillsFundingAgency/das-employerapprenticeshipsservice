@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.Authorization.Results;
 
-namespace SFA.DAS.EmployerAccounts.Web.ViewModels
+namespace SFA.DAS.EmployerFinance.Web.ViewModels
 {
     public class TransferConnectionInvitationAuthorizationViewModel
     {

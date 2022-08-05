@@ -6,13 +6,17 @@ using SFA.DAS.EmployerFinance.Models.UserProfile;
 
 namespace SFA.DAS.EmployerFinance.Models.Account
 {
-    public class Account
+    public class Account : Entity
     {
         public virtual long Id { get; set; }
         
         public virtual ICollection<AccountLegalEntity> AccountLegalEntities { get; set; } = new List<AccountLegalEntity>();
         
         public virtual string Name { get; set; }
+
+        public string HashedId => _hashingService.HashValue(Id);
+
+        public string PublicHashedId => _publicHashingService.HashValue(Id);
         
         public virtual ICollection<TransferConnectionInvitation> ReceivedTransferConnectionInvitations { get; set; } = new List<TransferConnectionInvitation>();
         

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.EmployerFinance.Commands.ApproveTransferConnectionInvitation;
 using SFA.DAS.EmployerFinance.Commands.DeleteSentTransferConnectionInvitation;
 using SFA.DAS.EmployerFinance.Commands.RejectTransferConnectionInvitation;

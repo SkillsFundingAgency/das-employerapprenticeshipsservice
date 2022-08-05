@@ -3,6 +3,7 @@ using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Helpers;
 using SFA.DAS.EmployerFinance.Queries.GetContent;
+using SFA.DAS.EmployerFinance.Web.App_Start;
 using SFA.DAS.MA.Shared.UI.Configuration;
 using SFA.DAS.MA.Shared.UI.Models;
 using SFA.DAS.MA.Shared.UI.Models.Links;
@@ -14,6 +15,14 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
 {
     public static class HtmlHelperExtensions
     {
+        public static MvcHtmlString CdnLink(this HtmlHelper html, string folderName, string fileName)
+        {
+            var cdnLocation = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<EmployerFinanceConfiguration>().CdnBaseUrl;
+
+            var trimCharacters = new char[] { '/' };
+            return new MvcHtmlString($"{cdnLocation.Trim(trimCharacters)}/{folderName.Trim(trimCharacters)}/{fileName.Trim(trimCharacters)}");
+        }
+
         public static MvcHtmlString SetZenDeskLabels(this HtmlHelper html, params string[] labels)
         {
             var keywords = string.Join(",", labels

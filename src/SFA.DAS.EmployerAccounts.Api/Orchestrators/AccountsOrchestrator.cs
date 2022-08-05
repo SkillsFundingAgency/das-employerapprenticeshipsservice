@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +9,7 @@ using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountDetail;
+using SFA.DAS.EmployerAccounts.Queries.GetMinimumSignedAgreementVersion;
 using SFA.DAS.EmployerAccounts.Queries.GetPagedEmployerAccounts;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamMembers;
@@ -117,6 +117,14 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
             return await GetAccountTeamMembersWhichReceiveNotifications(hashedAccountId);
         }
 
+        public async Task<int> GetMinimumSignedAgreemmentVersion(long accountId)
+        {
+            _logger.Info($"Requesting minimum signed agreement version for account {accountId}");
+
+            var response = await _mediator.SendAsync(new GetMinimumSignedAgreementVersionQuery { AccountId = accountId });
+            return response.MinimumSignedAgreementVersion;
+        }
+        
         public async Task<IEnumerable<PayeView>> GetPayeSchemesForAccount(string hashedAccountId)
         {
             try

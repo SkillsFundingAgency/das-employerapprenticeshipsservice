@@ -6,9 +6,9 @@ using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.DependencyResolution
 {
-    public class AuthorisationRegistry : Registry
+    public class EmployerAccountsAuthorizationRegistry : Registry
     {
-        public AuthorisationRegistry()
+        public EmployerAccountsAuthorizationRegistry()
         {
             For<IAuthorizationHandler>().Add<EmployerFeatureAuthorizationHandler>();
             For<IAuthorisationResourceRepository>().Use<AuthorisationResourceRepository>();

@@ -86,12 +86,16 @@ namespace SFA.DAS.EmployerFinance.Data
 
         public async Task<List<TransferConnectionInvitation>> GetBySenderOrReceiver(long accountId)
         {
-            return await _db.Value.TransferConnectionInvitations
+            var query = _db.Value.TransferConnectionInvitations
+                .Include(i => i.ReceiverAccount)
+                .Include(i => i.SenderAccount)
                 .Where(
-                    i => i.SenderAccount.Id == accountId && !i.DeletedBySender || 
+                    i => i.SenderAccount.Id == accountId && !i.DeletedBySender ||
                     i.ReceiverAccount.Id == accountId && !i.DeletedByReceiver)
                 .OrderBy(i => i.ReceiverAccount.Id == accountId ? i.SenderAccount.Name : i.ReceiverAccount.Name)
-                .ThenBy(i => i.CreatedDate)
+                .ThenBy(i => i.CreatedDate);
+
+            return await query
                 .ToListAsync();
         }
 
