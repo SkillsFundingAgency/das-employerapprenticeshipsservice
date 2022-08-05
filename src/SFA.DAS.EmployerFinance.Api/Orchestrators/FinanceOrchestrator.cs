@@ -4,6 +4,7 @@ using SFA.DAS.EAS.Finance.Api.Types;
 using SFA.DAS.EmployerFinance.Queries.GetAccountBalances;
 using SFA.DAS.EmployerFinance.Queries.GetLevyDeclaration;
 using SFA.DAS.EmployerFinance.Queries.GetLevyDeclarationsByAccountAndPeriod;
+using SFA.DAS.EmployerFinance.Queries.GetTransferAllowance;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using System.Collections.Generic;
@@ -74,6 +75,18 @@ namespace SFA.DAS.EmployerFinance.Api.Orchestrators
             });
 
             return transactionResult;
+        }
+
+        public async Task<GetTransferAllowanceResponse> GetTransferAllowance(long accountId)
+        {
+            _logger.Info($"Requesting GetTransferAllowance for the accountId {accountId} ");
+
+            var transferAllowance = await _mediator.SendAsync(new GetTransferAllowanceQuery
+            {
+                AccountId = accountId
+            });
+
+            return transferAllowance;
         }
     }
 }

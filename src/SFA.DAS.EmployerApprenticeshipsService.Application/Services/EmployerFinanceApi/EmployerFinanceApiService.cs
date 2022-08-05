@@ -10,6 +10,7 @@ using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Account.Api.Types;
 using System.Text;
 using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
 
 namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
 {
@@ -90,7 +91,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
             return JsonConvert.DeserializeObject<FinanceStatisticsViewModel>(content);
         }
 
-        public async Task<GetAccountBalancesResponse> GetAccountBalances(BulkAccountsRequest accountIds)
+        public async Task<GetAccountBalancesResponse> GetAccountBalances(BulkAccountsRequest accountIds) // TODO : change to hashedAccountIds
         {
             var url = $"api/accounts/balances";
             var data = JsonConvert.SerializeObject(accountIds);
@@ -106,6 +107,19 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
                 throw new RestHttpClientException(response, content);
 
             return JsonConvert.DeserializeObject<GetAccountBalancesResponse>(content);
-        }       
+        }
+
+        public async Task<GetTransferAllowanceResponse> GetTransferAllowance(long accountId) //TODO : change to hashedAccountId
+        {
+            var url = $"api/accounts/balances/{accountId}/transferAllowance";
+            var response = await _httpClient.GetAsync(url);
+
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (!response.IsSuccessStatusCode)
+                throw new RestHttpClientException(response, content);
+
+            return JsonConvert.DeserializeObject<GetTransferAllowanceResponse>(content);
+        }
     }
 }

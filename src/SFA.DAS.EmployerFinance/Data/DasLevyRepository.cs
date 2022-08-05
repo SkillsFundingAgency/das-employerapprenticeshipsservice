@@ -10,6 +10,7 @@ using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Models.Payments;
+using SFA.DAS.EmployerFinance.Models.Transfers;
 using SFA.DAS.EmployerFinance.Queries.GetLevyDeclaration;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Sql.Client;
@@ -298,6 +299,23 @@ namespace SFA.DAS.EmployerFinance.Data
                 commandType: CommandType.StoredProcedure);
 
             return result.ToList();
+        }
+
+        public async Task<TransferAllowance> GetTransferAllowance(long accountId)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountId", accountId, DbType.Int64);
+            parameters.Add("@allowancePercentage", _configuration.TransferAllowancePercentage, DbType.Decimal);
+
+            var transferAllowance = await _db.Value.Database.Connection.QueryAsync<TransferAllowance>(
+                sql: "[employer_financial].[GetAccountTransferAllowance]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
+            return transferAllowance.SingleOrDefault() ?? new TransferAllowance();
+            
         }
     }
 }

@@ -136,20 +136,28 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             if (accountResult.AccountId == 0)
             {
                 return new OrchestratorResponse<AccountDetailViewModel> { Data = null };
-            }
+            }            
+            
+            var bulkAccountsRequest = new BulkAccountsRequest
+            {
+                AccountIds = new List<long> { accountResult.AccountId }
+            };
+            var accountBalanceTask = _employerFinanceApiService.GetAccountBalances(bulkAccountsRequest);
+            //var accountBalanceTask = GetAccountBalance(accountResult.AccountId);
 
-            var accountBalanceTask = GetAccountBalance(accountResult.AccountId);
-            var transferBalanceTask = GetTransferAllowanceForAccount(accountResult.AccountId);
+            var transferBalanceTask = _employerFinanceApiService.GetTransferAllowance(accountResult.AccountId);
+            //var transferBalanceTask = GetTransferAllowanceForAccount(accountResult.AccountId);
 
             await Task.WhenAll(accountBalanceTask, transferBalanceTask).ConfigureAwait(false);
+            
 
-            accountResult.Balance = accountBalanceTask.Result?.Balance ?? 0;
-            accountResult.RemainingTransferAllowance = transferBalanceTask.Result.RemainingTransferAllowance ?? 0;
-            accountResult.StartingTransferAllowance = transferBalanceTask.Result.StartingTransferAllowance ?? 0;
+            accountResult.Balance = accountBalanceTask.Result?.Accounts.FirstOrDefault().Balance ?? 0;
+            accountResult.RemainingTransferAllowance = transferBalanceTask.Result.TransferAllowance.RemainingTransferAllowance ?? 0;
+            accountResult.StartingTransferAllowance = transferBalanceTask.Result.TransferAllowance.StartingTransferAllowance ?? 0;
             accountResult.IsAllowedPaymentOnService = IsAccountAllowedPaymentOnService(
                 accountResult.AccountAgreementType,
                 (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), accountResult.ApprenticeshipEmployerType), 
-                accountBalanceTask.Result.LevyOverride);
+                accountBalanceTask.Result.Accounts.FirstOrDefault().LevyOverride);
 
             return new OrchestratorResponse<AccountDetailViewModel> { Data = accountResult };
         }

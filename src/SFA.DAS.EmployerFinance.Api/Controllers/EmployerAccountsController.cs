@@ -16,9 +16,22 @@ namespace SFA.DAS.EmployerFinance.Api.Controllers
         }
 
         [Route("")]        
-        public async Task<IHttpActionResult> Index(BulkAccountsRequest accountIds)
+        public async Task<IHttpActionResult> Index(BulkAccountsRequest accountIds) //TODO : change to hashedAccountIds
         {
             var result = await _financeOrchestrator.GetAccountBalances(accountIds.AccountIds);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
+        [Route("{accountId}/transferAllowance")]
+        public async Task<IHttpActionResult> GetTransferAllowance(long accountId) //TODO : change to hashedAccountId
+        {
+            var result = await _financeOrchestrator.GetTransferAllowance(accountId);
 
             if (result == null)
             {

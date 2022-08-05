@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Models.Payments;
+using SFA.DAS.EmployerFinance.Models.Transfers;
 
 namespace SFA.DAS.EmployerFinance.Data
 {
@@ -28,5 +29,7 @@ namespace SFA.DAS.EmployerFinance.Data
         Task<List<LevyDeclarationItem>> GetAccountLevyDeclarations(long accountId, string payrollYear, short payrollMonth);
 
         Task<List<AccountBalance>> GetAccountBalances(List<long> accountIds);
+
+        Task<TransferAllowance> GetTransferAllowance(long accountId);
     }
 }
