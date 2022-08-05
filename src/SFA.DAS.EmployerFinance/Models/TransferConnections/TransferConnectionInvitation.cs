@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.EmployerFinance.Models.UserProfile;
-using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EmployerFinance.Models.TransferConnections
 {
@@ -42,10 +41,10 @@ namespace SFA.DAS.EmployerFinance.Models.TransferConnections
             Publish<SentTransferConnectionRequestEvent>(e =>
             {
                 e.Created = now;
-                e.ReceiverAccountHashedId = _hashingService.HashValue(ReceiverAccount.Id);
+                e.ReceiverAccountHashedId = ReceiverAccount.HashedId;
                 e.ReceiverAccountId = ReceiverAccount.Id;
                 e.ReceiverAccountName = ReceiverAccount.Name;
-                e.SenderAccountHashedId = _hashingService.HashValue(SenderAccount.Id);
+                e.SenderAccountHashedId = SenderAccount.HashedId;
                 e.SenderAccountId = SenderAccount.Id;
                 e.SenderAccountName = SenderAccount.Name;
                 e.SentByUserId = senderUser.Id;
@@ -81,10 +80,10 @@ namespace SFA.DAS.EmployerFinance.Models.TransferConnections
                 e.ApprovedByUserName = approverUser.FullName;
                 e.ApprovedByUserRef = approverUser.Ref;
                 e.Created = now;
-                e.ReceiverAccountHashedId = _hashingService.HashValue(ReceiverAccount.Id);
+                e.ReceiverAccountHashedId = ReceiverAccount.HashedId;
                 e.ReceiverAccountId = ReceiverAccount.Id;
                 e.ReceiverAccountName = ReceiverAccount.Name;
-                e.SenderAccountHashedId = _hashingService.HashValue(SenderAccount.Id);
+                e.SenderAccountHashedId = SenderAccount.HashedId;
                 e.SenderAccountId = SenderAccount.Id;
                 e.SenderAccountName = SenderAccount.Name;
                 e.TransferConnectionRequestId = Id;
@@ -131,10 +130,10 @@ namespace SFA.DAS.EmployerFinance.Models.TransferConnections
                 e.DeletedByUserId = deleterUser.Id;
                 e.DeletedByUserName = deleterUser.FullName;
                 e.DeletedByUserRef = deleterUser.Ref;
-                e.ReceiverAccountHashedId = _hashingService.HashValue(ReceiverAccount.Id);
+                e.ReceiverAccountHashedId = ReceiverAccount.HashedId;
                 e.ReceiverAccountId = ReceiverAccount.Id;
                 e.ReceiverAccountName = ReceiverAccount.Name;
-                e.SenderAccountHashedId = _hashingService.HashValue(SenderAccount.Id);
+                e.SenderAccountHashedId = SenderAccount.HashedId;
                 e.SenderAccountId = SenderAccount.Id;
                 e.SenderAccountName = SenderAccount.Name;
                 e.TransferConnectionRequestId = Id;
@@ -160,13 +159,13 @@ namespace SFA.DAS.EmployerFinance.Models.TransferConnections
             Publish<RejectedTransferConnectionRequestEvent>(e =>
             {
                 e.Created = now;
-                e.ReceiverAccountHashedId = _hashingService.HashValue(ReceiverAccount.Id);
+                e.ReceiverAccountHashedId = ReceiverAccount.HashedId;
                 e.ReceiverAccountId = ReceiverAccount.Id;
                 e.ReceiverAccountName = ReceiverAccount.Name;
                 e.RejectorUserId = rejectorUser.Id;
                 e.RejectorUserName = rejectorUser.FullName;
                 e.RejectorUserRef = rejectorUser.Ref;
-                e.SenderAccountHashedId = _hashingService.HashValue(SenderAccount.Id);
+                e.SenderAccountHashedId = SenderAccount.HashedId;
                 e.SenderAccountId = SenderAccount.Id;
                 e.SenderAccountName = SenderAccount.Name;
                 e.TransferConnectionRequestId = Id;

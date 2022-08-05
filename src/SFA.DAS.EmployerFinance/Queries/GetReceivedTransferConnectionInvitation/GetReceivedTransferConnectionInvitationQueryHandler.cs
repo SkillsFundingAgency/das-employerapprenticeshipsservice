@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetReceivedTransferConnectionInvitatio
 
         public async Task<GetReceivedTransferConnectionInvitationResponse> Handle(GetReceivedTransferConnectionInvitationQuery message)
         {
-            var transferConnectionInvitation = await _transferConnectionInvitationRepository.GetBySender(
+            var transferConnectionInvitation = await _transferConnectionInvitationRepository.GetByReceiver(
                 message.TransferConnectionInvitationId.Value,
                 message.AccountId,
                 TransferConnectionInvitationStatus.Pending);

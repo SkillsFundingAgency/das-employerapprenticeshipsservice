@@ -45,8 +45,8 @@ namespace SFA.DAS.EmployerFinance.Web.Mappings
                 .ForMember(m => m.Choice, o => o.Ignore());
 
             CreateMap<GetTransferAllowanceResponse, TransferAllowanceViewModel>()
-                .ForMember(m => m.RemainingTransferAllowance, opt => opt.MapFrom(src => src.TransferAllowance.RemainingTransferAllowance))
-                .ForMember(m => m.StartingTransferAllowance, opt => opt.MapFrom(src => src.TransferAllowance.StartingTransferAllowance));
+                .ForMember(m => m.RemainingTransferAllowance, o => o.MapFrom(r => r.TransferAllowance.RemainingTransferAllowance))
+                .ForMember(m => m.StartingTransferAllowance, o => o.MapFrom(r => r.TransferAllowance.StartingTransferAllowance));
             
             CreateMap<GetTransferConnectionInvitationAuthorizationResponse, TransferConnectionInvitationAuthorizationViewModel>();
             
@@ -59,10 +59,11 @@ namespace SFA.DAS.EmployerFinance.Web.Mappings
             CreateMap<GetTransferConnectionInvitationsResponse, TransferConnectionInvitationsViewModel>();
 
             CreateMap<GetTransferRequestsResponse, TransferRequestsViewModel>();
-            
+
             CreateMap<SendTransferConnectionInvitationResponse, SendTransferConnectionInvitationViewModel>()
                 .ForMember(m => m.Choice, o => o.Ignore())
-                .ForMember(m => m.ReceiverAccountPublicHashedId, o => o.ResolveUsing<PublicHashedResolver, long>(i => i.ReceiverAccount.Id));
+                .ForMember(m => m.ReceiverAccountPublicHashedId, o => o.MapFrom(r => r.ReceiverAccount.PublicHashedId));
+                
         }
     }
 }

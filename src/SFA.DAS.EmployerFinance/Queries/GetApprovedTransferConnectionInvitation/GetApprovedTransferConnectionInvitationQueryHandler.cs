@@ -23,7 +23,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetApprovedTransferConnectionInvitatio
             var transferConnectionInvitation = await _transferConnectionInvitationRepository.GetByReceiver(
                 message.TransferConnectionInvitationId.Value,
                 message.AccountId,
-                TransferConnectionInvitationStatus.Pending);
+                TransferConnectionInvitationStatus.Approved);
 
             return new GetApprovedTransferConnectionInvitationResponse
             {

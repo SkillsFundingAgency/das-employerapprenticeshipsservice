@@ -116,7 +116,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             switch (model.Choice)
             {
                 case "GoToTransfersPage":
-                    return RedirectToAction("Index", "TransferConnectionsController");
+                    return RedirectToAction("Index", "TransferConnections");
                 case "GoToHomepage":
                     return Redirect(Url.EmployerAccountsAction("teams"));
                 default:
@@ -210,7 +210,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
                     });
                     return RedirectToAction("Deleted");
                 case "GoToTransfersPage":
-                    return RedirectToAction("Index", "TransferConnectionsController");
+                    return RedirectToAction("Index", "TransferConnections");
                 default:
                     throw new ArgumentOutOfRangeException(nameof(model.Choice));
             }
@@ -243,7 +243,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
                     });
                     return RedirectToAction("Deleted");
                 case "GoToTransfersPage":
-                    return RedirectToAction("Index", "TransferConnectionsController");
+                    return RedirectToAction("Index", "TransferConnections");
                 default:
                     throw new ArgumentOutOfRangeException(nameof(model.Choice));
             }
@@ -267,7 +267,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             switch (model.Choice)
             {
                 case "GoToTransfersPage":
-                    return RedirectToAction("Index", "TransferConnectionsController");
+                    return RedirectToAction("Index", "TransferConnections");
                 case "GoToHomepage":
                     return Redirect(Url.EmployerAccountsAction("teams"));
                 default:
@@ -282,7 +282,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             var response = await _mediator.SendAsync(query);
 
             return response.TransferConnectionInvitation == null
-                ? RedirectToAction("Index", "TransferConnectionsController")
+                ? RedirectToAction("Index", "TransferConnections")
                 : RedirectToAction("Receive", new { transferConnectionInvitationId = response.TransferConnectionInvitation.Id });
         }
     }

@@ -36,21 +36,25 @@ namespace SFA.DAS.EmployerFinance.Data
 
         public async Task<TransferConnectionInvitation> GetBySender(int id, long senderAccountId, TransferConnectionInvitationStatus status)
         {
-            return await _db.Value.TransferConnectionInvitations
+            var query = _db.Value.TransferConnectionInvitations
                 .Where(i =>
                     i.Id == id &&
                     i.SenderAccount.Id == senderAccountId &&
-                    i.Status == status)
+                    i.Status == status);
+
+            return await query
                 .SingleOrDefaultAsync();
         }
 
         public async Task<TransferConnectionInvitation> GetByReceiver(int id, long receiverAccountId, TransferConnectionInvitationStatus status)
         {
-            return await _db.Value.TransferConnectionInvitations
+            var query = _db.Value.TransferConnectionInvitations
                 .Where(i =>
                     i.Id == id &&
                     i.ReceiverAccount.Id == receiverAccountId &&
-                    i.Status == status)
+                    i.Status == status);
+
+            return await query
                 .SingleOrDefaultAsync();
         }
 
