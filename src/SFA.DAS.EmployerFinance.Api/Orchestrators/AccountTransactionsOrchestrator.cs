@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using SFA.DAS.EAS.Finance.Api.Types;
+using SFA.DAS.EmployerFinance.Api.Types;
 using SFA.DAS.EmployerFinance.Models.Transaction;
 using SFA.DAS.EmployerFinance.Queries.GetAccountTransactionSummary;
 using SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions;
@@ -66,7 +66,7 @@ namespace SFA.DAS.EmployerFinance.Api.Orchestrators
                 Amount = transactionLine.Amount,
                 Balance = transactionLine.Balance,
                 Description = transactionLine.Description,
-                TransactionType = (EAS.Finance.Api.Types.TransactionItemType)transactionLine.TransactionType,
+                TransactionType = (EmployerFinance.Api.Types.TransactionItemType)transactionLine.TransactionType,
                 DateCreated = transactionLine.DateCreated,
                 SubTransactions = transactionLine.SubTransactions?.Select(x => ConvertToTransactionViewModel(hashedAccountId, x, urlHelper)).ToList(),
                 TransactionDate = transactionLine.TransactionDate

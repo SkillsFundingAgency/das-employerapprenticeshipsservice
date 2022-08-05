@@ -19,6 +19,6 @@ namespace SFA.DAS.EmployerFinance.Data
         Task<TransactionDownloadLine[]> GetAllTransactionDetailsForAccountByDate(long accountId, DateTime fromDate, DateTime toDate);
         Task<decimal> GetTotalSpendForLastYear(long accountId);
 
-        Task<List<SFA.DAS.EAS.Finance.Api.Types.TransactionSummary>> GetAccountTransactionSummary(long accountId);
+        Task<List<SFA.DAS.EmployerFinance.Api.Types.TransactionSummary>> GetAccountTransactionSummary(long accountId);
     }
 }

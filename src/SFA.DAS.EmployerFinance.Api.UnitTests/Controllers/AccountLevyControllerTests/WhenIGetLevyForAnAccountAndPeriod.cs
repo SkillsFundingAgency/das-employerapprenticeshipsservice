@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Finance.Api.Types;
+using SFA.DAS.EmployerFinance.Api.Types;
 using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Queries.GetLevyDeclarationsByAccountAndPeriod;
 using System;

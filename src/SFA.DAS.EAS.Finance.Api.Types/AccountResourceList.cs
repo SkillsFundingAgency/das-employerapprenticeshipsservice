@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SFA.DAS.EAS.Finance.Api.Types
+namespace SFA.DAS.EmployerFinance.Api.Types
 {
     public class AccountResourceList<T> : List<T>
     {

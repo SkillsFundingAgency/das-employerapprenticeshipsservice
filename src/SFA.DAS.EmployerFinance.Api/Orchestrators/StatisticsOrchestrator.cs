@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using SFA.DAS.EAS.Finance.Api.Types;
+using SFA.DAS.EmployerFinance.Api.Types;
 using SFA.DAS.EmployerFinance.Queries.GetFinancialStatistics;
 using System.Threading.Tasks;
 

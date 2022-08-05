@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EAS.Finance.Api.Types;
+﻿using SFA.DAS.EmployerFinance.Api.Types;
 using SFA.DAS.EmployerFinance.Api.Attributes;
 using SFA.DAS.EmployerFinance.Api.Orchestrators;
 using System;

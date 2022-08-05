@@ -80,9 +80,9 @@
       <Project>{40190475-1220-4cf8-8a60-223facafeda1}</Project>
       <Name>SFA.DAS.EAS.Account.Api</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EAS.Finance.Api.Types\SFA.DAS.EAS.Finance.Api.Types.csproj">
+    <ProjectReference Include="..\SFA.DAS.EAS.Finance.Api.Types\SFA.DAS.EmployerFinance.Api.Types.csproj">
       <Project>{2AF6F3F4-7D2E-495D-B914-18E2A0FDEF2C}</Project>
-      <Name>SFA.DAS.EAS.Finance.Api.Types</Name>
+      <Name>SFA.DAS.EmployerFinance.Api.Types</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Events\SFA.DAS.EmployerAccounts.Events.csproj">
       <Project>{0e46510c-0d06-4b63-8e17-b9037db7c7ed}</Project>

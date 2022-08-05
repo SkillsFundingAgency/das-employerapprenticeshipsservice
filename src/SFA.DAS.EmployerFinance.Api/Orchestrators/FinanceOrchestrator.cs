@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using SFA.DAS.EAS.Finance.Api.Types;
+using SFA.DAS.EmployerFinance.Api.Types;
 using SFA.DAS.EmployerFinance.Queries.GetAccountBalances;
 using SFA.DAS.EmployerFinance.Queries.GetLevyDeclaration;
 using SFA.DAS.EmployerFinance.Queries.GetLevyDeclarationsByAccountAndPeriod;

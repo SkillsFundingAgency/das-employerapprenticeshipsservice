@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EAS.Finance.Api.Types;
+﻿using SFA.DAS.EmployerFinance.Api.Types;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;

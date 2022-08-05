@@ -2,7 +2,7 @@
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Finance.Api.Types;
+using SFA.DAS.EmployerFinance.Api.Types;
 using SFA.DAS.EAS.TestCommon.Extensions;
 using SFA.DAS.EmployerFinance.Api.Controllers;
 using SFA.DAS.EmployerFinance.Api.Orchestrators;
@@ -56,8 +56,8 @@ namespace SFA.DAS.EmployerFinance.Api.UnitTests.Controllers.AccountTransactionsC
 
             //Assert
             Assert.IsNotNull(response);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<SFA.DAS.EAS.Finance.Api.Types.TransactionsViewModel>>(response);
-            var model = response as OkNegotiatedContentResult<SFA.DAS.EAS.Finance.Api.Types.TransactionsViewModel>;
+            Assert.IsInstanceOf<OkNegotiatedContentResult<SFA.DAS.EmployerFinance.Api.Types.TransactionsViewModel>>(response);
+            var model = response as OkNegotiatedContentResult<SFA.DAS.EmployerFinance.Api.Types.TransactionsViewModel>;
             model?.Content.Should().NotBeNull();
             model?.Content.ShouldAllBeEquivalentTo(transactionsResponse.Data.TransactionLines, options => options.Excluding(x => x.ResourceUri));
         }

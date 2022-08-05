@@ -25,13 +25,13 @@ namespace SFA.DAS.EAS.Account.Api.Mappings
             //    .ForMember(target => target.Month, opt => opt.MapFrom(src => src.Month))
             //    .ForMember(target => target.Year, opt => opt.MapFrom(src => src.Year)); 
 
-            CreateMap<SFA.DAS.EAS.Finance.Api.Types.TransactionsViewModel, SFA.DAS.EAS.Account.Api.Types.TransactionsViewModel>()
+            CreateMap<SFA.DAS.EmployerFinance.Api.Types.TransactionsViewModel, SFA.DAS.EAS.Account.Api.Types.TransactionsViewModel>()
                 .ForMember(target => target.HasPreviousTransactions, opt => opt.MapFrom(src => src.HasPreviousTransactions))
                 .ForMember(target => target.PreviousMonthUri, opt => opt.MapFrom(src => src.PreviousMonthUri))
                 .ForMember(target => target.Month, opt => opt.MapFrom(src => src.Month))
                 .ForMember(target => target.Year, opt => opt.MapFrom(src => src.Year));
 
-            CreateMap<SFA.DAS.EAS.Finance.Api.Types.TransactionViewModel, SFA.DAS.EAS.Account.Api.Types.TransactionViewModel>()
+            CreateMap<SFA.DAS.EmployerFinance.Api.Types.TransactionViewModel, SFA.DAS.EAS.Account.Api.Types.TransactionViewModel>()
                 .ForMember(target => target.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(target => target.TransactionType, opt => opt.MapFrom(src => src.TransactionType))
                 .ForMember(target => target.TransactionDate, opt => opt.MapFrom(src => src.TransactionDate))
@@ -49,13 +49,13 @@ namespace SFA.DAS.EAS.Account.Api.Mappings
             //  .ForMember(target => target.Month, opt => opt.MapFrom(src => src.Month))
             //  .ForMember(target => target.Year, opt => opt.MapFrom(src => src.Year));
 
-            CreateMap<SFA.DAS.EAS.Account.Api.Types.TransactionsViewModel, SFA.DAS.EAS.Finance.Api.Types.TransactionsViewModel>()
+            CreateMap<SFA.DAS.EAS.Account.Api.Types.TransactionsViewModel, SFA.DAS.EmployerFinance.Api.Types.TransactionsViewModel>()
              .ForMember(target => target.HasPreviousTransactions, opt => opt.MapFrom(src => src.HasPreviousTransactions))
              .ForMember(target => target.PreviousMonthUri, opt => opt.MapFrom(src => src.PreviousMonthUri))
              .ForMember(target => target.Month, opt => opt.MapFrom(src => src.Month))
              .ForMember(target => target.Year, opt => opt.MapFrom(src => src.Year));
 
-            CreateMap<SFA.DAS.EAS.Account.Api.Types.TransactionViewModel, SFA.DAS.EAS.Finance.Api.Types.TransactionViewModel>()
+            CreateMap<SFA.DAS.EAS.Account.Api.Types.TransactionViewModel, SFA.DAS.EmployerFinance.Api.Types.TransactionViewModel>()
                 .ForMember(target => target.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(target => target.TransactionType, opt => opt.MapFrom(src => src.TransactionType))
                 .ForMember(target => target.TransactionDate, opt => opt.MapFrom(src => src.TransactionDate))

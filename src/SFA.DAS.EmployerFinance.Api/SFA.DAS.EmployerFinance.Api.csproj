@@ -152,9 +152,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EAS.Finance.Api.Types\SFA.DAS.EAS.Finance.Api.Types.csproj">
+    <ProjectReference Include="..\SFA.DAS.EAS.Finance.Api.Types\SFA.DAS.EmployerFinance.Api.Types.csproj">
       <Project>{2af6f3f4-7d2e-495d-b914-18e2a0fdef2c}</Project>
-      <Name>SFA.DAS.EAS.Finance.Api.Types</Name>
+      <Name>SFA.DAS.EmployerFinance.Api.Types</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
       <Project>{0226f97a-704e-49b0-a100-b75feec9c8ad}</Project>

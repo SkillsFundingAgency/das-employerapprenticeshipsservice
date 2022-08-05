@@ -270,13 +270,13 @@ namespace SFA.DAS.EmployerFinance.Data
                 commandType: CommandType.StoredProcedure);
         }       
 
-        public async Task<List<SFA.DAS.EAS.Finance.Api.Types.TransactionSummary>> GetAccountTransactionSummary(long accountId)
+        public async Task<List<SFA.DAS.EmployerFinance.Api.Types.TransactionSummary>> GetAccountTransactionSummary(long accountId)
         {
             var parameters = new DynamicParameters();
 
             parameters.Add("@AccountId", accountId, DbType.Int64);
 
-            var result = await _db.Value.Database.Connection.QueryAsync<SFA.DAS.EAS.Finance.Api.Types.TransactionSummary>(
+            var result = await _db.Value.Database.Connection.QueryAsync<SFA.DAS.EmployerFinance.Api.Types.TransactionSummary>(
                 sql: "[employer_financial].[GetTransactionSummary_ByAccountId]",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
