@@ -20,6 +20,7 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
         public DataRegistry()
         {
             var environmentName = ConfigurationManager.AppSettings["EnvironmentName"];
+            environmentName = "AT"; //TODO :  keep this to run locally for now then remove later
 
             For<DbConnection>().Use($"Build DbConnection", c =>
             {
