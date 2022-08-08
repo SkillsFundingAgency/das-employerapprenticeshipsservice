@@ -38,7 +38,6 @@ namespace SFA.DAS.EAS.Account.Api
                 c.AddRegistry<NotificationsRegistry>();
                 c.AddRegistry<ReferenceDataRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
-                c.AddRegistry<TasksRegistry>();
                 c.AddRegistry<ValidationRegistry>();
                 c.AddRegistry<EmployerAccountsApiServiceRegistry>();
                 c.AddRegistry<DefaultRegistry>();
