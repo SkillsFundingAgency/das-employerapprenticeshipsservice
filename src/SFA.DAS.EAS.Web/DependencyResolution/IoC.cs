@@ -27,7 +27,6 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 c.AddRegistry<NotificationsRegistry>();
                 c.AddRegistry<ReferenceDataRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
-                c.AddRegistry<TasksRegistry>();
                 c.AddRegistry<ValidationRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });

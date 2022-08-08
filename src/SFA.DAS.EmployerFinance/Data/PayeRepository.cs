@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerFinance.Data
             var result = await _db.Value.Database.Connection.QueryAsync<Paye>(
                 sql: "[employer_financial].[GetPaye_ByRef]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
 
             return result.SingleOrDefault();
@@ -45,7 +45,7 @@ namespace SFA.DAS.EmployerFinance.Data
             return _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_financial].[UpdatePayeName_ByRef]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
 
@@ -59,7 +59,7 @@ namespace SFA.DAS.EmployerFinance.Data
             var result = await _db.Value.Database.Connection.QueryAsync<PayeSchemeView>(
                 sql: "[employer_financial].[GetPayeForAccount_ByRef]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
 
             return result.SingleOrDefault();
@@ -95,7 +95,7 @@ namespace SFA.DAS.EmployerFinance.Data
             await _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_financial].[CreateAccountPaye]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
 
@@ -109,7 +109,7 @@ namespace SFA.DAS.EmployerFinance.Data
             await _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_financial].[RemoveAccountPaye]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
     }

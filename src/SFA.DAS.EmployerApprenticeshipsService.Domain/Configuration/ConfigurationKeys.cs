@@ -5,7 +5,6 @@
         public const string LevyDeclarationProvider = "SFA.DAS.LevyAggregationProvider";
         public const string PaymentProvider = "SFA.DAS.PaymentProvider";
         public const string EmployerApprenticeshipsService = "SFA.DAS.EmployerApprenticeshipsService";
-        public const string TaskApi = "SFA.DAS.Tasks.Api";
         public const string ReferenceDataApi = "SFA.DAS.ReferenceDataApiClient";
         public const string PaymentsApiClient = "SFA.DAS.PaymentsAPI";
         public const string NotificationsApiClient = "SFA.DAS.EmployerApprenticeshipsService.Notifications";

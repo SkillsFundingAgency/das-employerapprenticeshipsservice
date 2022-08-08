@@ -97,7 +97,7 @@
       <Version>1.0.5</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.MA.Shared.UI">
-      <Version>1.1.79</Version>
+      <Version>1.2.7</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
@@ -194,6 +194,7 @@
     <Compile Include="Mappings\TransferMappings.cs" />
     <Compile Include="NServiceBusStartup.cs" />
     <Compile Include="OrchestratorResponse.cs" />
+    <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountTransactionsOrchestrator.cs" />
     <Compile Include="Orchestrators\TransfersOrchestrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
