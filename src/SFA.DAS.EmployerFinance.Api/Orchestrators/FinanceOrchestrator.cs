@@ -77,13 +77,25 @@ namespace SFA.DAS.EmployerFinance.Api.Orchestrators
             return transactionResult;
         }
 
-        public async Task<GetTransferAllowanceResponse> GetTransferAllowance(long accountId)
+        public async Task<GetAccountBalancesResponse> GetAccountBalances(List<string> accountIds)
         {
-            _logger.Info($"Requesting GetTransferAllowance for the accountId {accountId} ");
+            _logger.Info($"Requesting GetAccountBalances for the accounts");
+          
+            var transactionResult = await _mediator.SendAsync(new GetAccountBalancesRequest
+            {
+                AccountIds = accountIds.Select(x => _hashingService.DecodeValue(x)).ToList()
+            });
+
+            return transactionResult;
+        }
+
+        public async Task<GetTransferAllowanceResponse> GetTransferAllowance(string hashedAccountId)
+        {
+            _logger.Info($"Requesting GetTransferAllowance for the hashedAccountId {hashedAccountId} ");
 
             var transferAllowance = await _mediator.SendAsync(new GetTransferAllowanceQuery
             {
-                AccountId = accountId
+                AccountId = _hashingService.DecodeValue(hashedAccountId)
             });
 
             return transferAllowance;

@@ -22,6 +22,8 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
         
         Task<GetAccountBalancesResponse> GetAccountBalances(BulkAccountsRequest accountIds); //TODO : change to hashedAccountIds
 
-        Task<GetTransferAllowanceResponse> GetTransferAllowance(long accountId); //TODO : change to hashedAccountId
+        Task<GetAccountBalancesResponse> GetAccountBalances(AccountBalanceRequest accountIds);
+
+        Task<GetTransferAllowanceResponse> GetTransferAllowance(string hashedAccountId);
     }
 }

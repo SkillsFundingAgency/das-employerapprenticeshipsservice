@@ -69,7 +69,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
             {
                 TransferAllowance = _transferAllowance
             };
-            _financeApiService.Setup(x => x.GetTransferAllowance(It.IsAny<long>())).ReturnsAsync(transferAllowanceResponse);
+            _financeApiService.Setup(x => x.GetTransferAllowance(It.IsAny<string>())).ReturnsAsync(transferAllowanceResponse);
 
             _accountBalanceResult = new AccountBalance { Balance = AccountBalance };
 
@@ -85,7 +85,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
             {
                 Accounts = new List<AccountBalance> { _accountBalanceResult }
             };
-            _financeApiService.Setup(x => x.GetAccountBalances(It.IsAny<BulkAccountsRequest>())).ReturnsAsync(accountBalancesResponse);
+            _financeApiService.Setup(x => x.GetAccountBalances(It.IsAny<AccountBalanceRequest>())).ReturnsAsync(accountBalancesResponse);
         }
 
         [Test]
@@ -94,8 +94,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
             //Act
             await _orchestrator.GetAccount(HashedAgreementId);
 
-            //Assert
-            //_mediator.VerifyAll();
+            //Assert            
             _apiService.VerifyAll();
             _financeApiService.VerifyAll();
         }

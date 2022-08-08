@@ -48,20 +48,12 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             _logger.Info("Getting all account balances.");
             
             var accountsResult = await _employerAccountsApiService.GetAccounts(toDate, pageSize, pageNumber);
-
-            //var transactionResult = await _mediator.SendAsync(new GetAccountBalancesRequest
-            //{
-            //    AccountIds = accountsResult.Data.Select(account => account.AccountId).ToList()
-            //});
-
-            //var accountBalanceHash = BuildAccountBalanceHash(transactionResult.Accounts);
-
-            var bulkAccountsRequest = new BulkAccountsRequest
+           
+            var accountBalanceRequest = new AccountBalanceRequest
             {
-                AccountIds = accountsResult.Data.Select(account => account.AccountId).ToList()
+                HashedAccountIds = accountsResult.Data.Select(account => account.AccountHashId).ToList()
             };
-
-            var transactionResult = await _employerFinanceApiService.GetAccountBalances(bulkAccountsRequest);
+            var transactionResult = await _employerFinanceApiService.GetAccountBalances(accountBalanceRequest);
             var accountBalanceHash = BuildAccountBalanceHash(transactionResult.Accounts);
 
             accountsResult.Data.ForEach(account =>
@@ -136,20 +128,17 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             if (accountResult.AccountId == 0)
             {
                 return new OrchestratorResponse<AccountDetailViewModel> { Data = null };
-            }            
-            
-            var bulkAccountsRequest = new BulkAccountsRequest
+            }
+           
+            var accountBalanceRequest = new AccountBalanceRequest
             {
-                AccountIds = new List<long> { accountResult.AccountId }
+                HashedAccountIds = new List<string> { accountResult.HashedAccountId }
             };
-            var accountBalanceTask = _employerFinanceApiService.GetAccountBalances(bulkAccountsRequest);
-            //var accountBalanceTask = GetAccountBalance(accountResult.AccountId);
-
-            var transferBalanceTask = _employerFinanceApiService.GetTransferAllowance(accountResult.AccountId);
-            //var transferBalanceTask = GetTransferAllowanceForAccount(accountResult.AccountId);
-
-            await Task.WhenAll(accountBalanceTask, transferBalanceTask).ConfigureAwait(false);
+            var accountBalanceTask = _employerFinanceApiService.GetAccountBalances(accountBalanceRequest);
             
+            var transferBalanceTask = _employerFinanceApiService.GetTransferAllowance(accountResult.HashedAccountId);
+
+            await Task.WhenAll(accountBalanceTask, transferBalanceTask).ConfigureAwait(false);            
 
             accountResult.Balance = accountBalanceTask.Result?.Accounts.FirstOrDefault().Balance ?? 0;
             accountResult.RemainingTransferAllowance = transferBalanceTask.Result.TransferAllowance.RemainingTransferAllowance ?? 0;

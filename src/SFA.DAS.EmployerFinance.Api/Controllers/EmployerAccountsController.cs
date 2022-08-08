@@ -5,7 +5,7 @@ using System.Web.Http;
 
 namespace SFA.DAS.EmployerFinance.Api.Controllers
 {
-    [RoutePrefix("api/accounts/balances")]
+    [RoutePrefix("api/accounts")]
     public class EmployerAccountsController : ApiController
     {
         private readonly FinanceOrchestrator _financeOrchestrator;
@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerFinance.Api.Controllers
         }
 
         [Route("")]        
-        public async Task<IHttpActionResult> Index(BulkAccountsRequest accountIds) //TODO : change to hashedAccountIds
+        public async Task<IHttpActionResult> Index(BulkAccountsRequest accountIds)
         {
             var result = await _financeOrchestrator.GetAccountBalances(accountIds.AccountIds);
 
@@ -28,10 +28,24 @@ namespace SFA.DAS.EmployerFinance.Api.Controllers
             return Ok(result);
         }
 
-        [Route("{accountId}/transferAllowance")]
-        public async Task<IHttpActionResult> GetTransferAllowance(long accountId) //TODO : change to hashedAccountId
+        [Route("balances")]
+        [HttpPost]
+        public async Task<IHttpActionResult> GetAccountBalances(AccountBalanceRequest accountIds)
         {
-            var result = await _financeOrchestrator.GetTransferAllowance(accountId);
+            var result = await _financeOrchestrator.GetAccountBalances(accountIds.HashedAccountIds);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
+        [Route("{hashedAccountId}/transferAllowance")]
+        public async Task<IHttpActionResult> GetTransferAllowance(string hashedAccountId)
+        {
+            var result = await _financeOrchestrator.GetTransferAllowance(hashedAccountId);
 
             if (result == null)
             {

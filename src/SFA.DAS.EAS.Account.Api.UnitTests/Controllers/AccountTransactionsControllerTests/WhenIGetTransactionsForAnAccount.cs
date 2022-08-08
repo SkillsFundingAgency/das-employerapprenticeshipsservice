@@ -57,13 +57,6 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             var hashedAccountId = "ABC123";
             var year = 2017;
             var month = 3;
-            var transactionsResponse = new GetEmployerAccountTransactionsResponse
-            {
-                Data = new AggregationData { TransactionLines = new List<TransactionLine> { TransactionLineObjectMother.Create() } },
-                AccountHasPreviousTransactions = false
-            };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(q => q.HashedAccountId == hashedAccountId && q.Year == year && q.Month == month))).ReturnsAsync(transactionsResponse);
-
             var isNotZero = 100m;
             var isTxDateCreated = DateTime.Today;
             var transactionsViewModel = new TransactionsViewModel
@@ -90,10 +83,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             Assert.IsNotNull(response);
             Assert.IsInstanceOf<OkNegotiatedContentResult<TransactionsViewModel>>(response);
             var model = response as OkNegotiatedContentResult<TransactionsViewModel>;
-
             model?.Content.Should().NotBeNull();
-            //TODO : check
-            //model?.Content.ShouldAllBeEquivalentTo(transactionsResponse.Data.TransactionLines, options => options.Excluding(x => x.ResourceUri));
         }
 
         [Test]
@@ -234,8 +224,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             Assert.IsInstanceOf<OkNegotiatedContentResult<TransactionsViewModel>>(response);
             var model = response as OkNegotiatedContentResult<TransactionsViewModel>;
 
-            model?.Content.Should().NotBeNull();
-            //model?.Content.ShouldAllBeEquivalentTo(transactionsResponse.Data.TransactionLines, options => options.Excluding(x => x.ResourceUri));
+            model?.Content.Should().NotBeNull();            
             model?.Content.PreviousMonthUri.Should().BeNullOrEmpty();
             _urlHelper.Verify(x => x.Route("GetTransactions", It.IsAny<object>()), Times.Never);
         }
@@ -331,7 +320,6 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
 
             //Act
             var response = await _controller.GetTransactions(hashedAccountId);
-
             
             //Assert
             Assert.IsNotNull(response);
@@ -339,8 +327,6 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             var model = response as OkNegotiatedContentResult<TransactionsViewModel>;
 
             model?.Content.Should().NotBeNull();
-            //TODO : chekc
-            //model?.Content.ShouldAllBeEquivalentTo(transactionsResponse.Data.TransactionLines, options => options.Excluding(x => x.ResourceUri));
         }
 
         //TODO : move to base class

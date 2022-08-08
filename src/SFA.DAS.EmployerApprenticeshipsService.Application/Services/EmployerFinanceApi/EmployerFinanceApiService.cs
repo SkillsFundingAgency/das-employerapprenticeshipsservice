@@ -93,7 +93,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
 
         public async Task<GetAccountBalancesResponse> GetAccountBalances(BulkAccountsRequest accountIds) // TODO : change to hashedAccountIds
         {
-            var url = $"api/accounts/balances";
+            var url = $"api/accounts";
             var data = JsonConvert.SerializeObject(accountIds);
             var buffer = System.Text.Encoding.UTF8.GetBytes(data);
             var byteContent = new ByteArrayContent(buffer);
@@ -109,9 +109,26 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
             return JsonConvert.DeserializeObject<GetAccountBalancesResponse>(content);
         }
 
-        public async Task<GetTransferAllowanceResponse> GetTransferAllowance(long accountId) //TODO : change to hashedAccountId
+        public async Task<GetAccountBalancesResponse> GetAccountBalances(AccountBalanceRequest accountIds)
         {
-            var url = $"api/accounts/balances/{accountId}/transferAllowance";
+            var url = $"api/accounts/balances";
+            var data = JsonConvert.SerializeObject(accountIds);           
+            var stringContent = new StringContent(data, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync(url, stringContent);
+
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (!response.IsSuccessStatusCode)
+                throw new RestHttpClientException(response, content);
+
+            return JsonConvert.DeserializeObject<GetAccountBalancesResponse>(content);
+        }
+
+
+        public async Task<GetTransferAllowanceResponse> GetTransferAllowance(string hashedAccountId)
+        {
+            var url = $"api/accounts/{hashedAccountId}/transferAllowance";
             var response = await _httpClient.GetAsync(url);
 
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -120,6 +137,6 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
                 throw new RestHttpClientException(response, content);
 
             return JsonConvert.DeserializeObject<GetTransferAllowanceResponse>(content);
-        }
+        }       
     }
 }

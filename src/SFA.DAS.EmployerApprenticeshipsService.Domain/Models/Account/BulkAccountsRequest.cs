@@ -7,4 +7,9 @@ namespace SFA.DAS.EAS.Domain.Models.Account
         public List<long> AccountIds { get; set; }
     }
 
+    public class AccountBalanceRequest
+    {
+        public List<string> HashedAccountIds { get; set; }
+    }
+
 }
