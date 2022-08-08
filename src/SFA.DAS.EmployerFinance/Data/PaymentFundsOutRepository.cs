@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerFinance.Data
             return await _db.Value.Database.Connection.QueryAsync<PaymentFundsOut>(
                 "[employer_financial].[GetPaymentFundsOut]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure
             );
         }

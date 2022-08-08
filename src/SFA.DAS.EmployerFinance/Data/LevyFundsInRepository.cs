@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerFinance.Data
             return await _db.Value.Database.Connection.QueryAsync<LevyFundsIn>(
                 "[employer_financial].[GetLevyFundsIn]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure
             );
         }

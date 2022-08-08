@@ -42,9 +42,20 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
             var unitOfWorkContext = context.GetInstance<IUnitOfWorkContext>();
             var clientSession = unitOfWorkContext.Find<IClientOutboxTransaction>();
             var serverSession = unitOfWorkContext.Find<SynchronizedStorageSession>();
-            var sqlSession = clientSession?.GetSqlSession() ?? serverSession.GetSqlSession();
+            var sqlSession = clientSession?.GetSqlSession() ?? serverSession?.GetSqlSession();
 
-            return new EmployerFinanceDbContext(sqlSession.Connection, sqlSession.Transaction);
+            if(sqlSession != null)
+            {
+                return new EmployerFinanceDbContext(sqlSession.Connection, sqlSession.Transaction);
+            }
+            else
+            {
+                // during the owin setup the NServiceBus storage session is not available so
+                // the context cannot be constructed using the unit of work, this would mean
+                // that a message cannot be published atomically with a database update
+                var dbConnection = context.GetInstance<DbConnection>();
+                return new EmployerFinanceDbContext(dbConnection);
+            }
         }
 
         private string GetConnectionString(IContext context)

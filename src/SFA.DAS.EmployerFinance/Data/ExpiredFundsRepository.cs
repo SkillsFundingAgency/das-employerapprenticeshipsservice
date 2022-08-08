@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerFinance.Data
             await _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_financial].[CreateDraftExpiredFunds]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
 
@@ -51,7 +51,7 @@ namespace SFA.DAS.EmployerFinance.Data
             await _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_financial].[CreateExpiredFunds]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
 
@@ -64,7 +64,7 @@ namespace SFA.DAS.EmployerFinance.Data
             return await _db.Value.Database.Connection.QueryAsync<ExpiredFund>(
                 "[employer_financial].[GetExpiredFunds]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure
             );
         }
@@ -78,7 +78,7 @@ namespace SFA.DAS.EmployerFinance.Data
             return await _db.Value.Database.Connection.QueryAsync<ExpiredFund>(
                 "[employer_financial].[GetDraftExpiredFunds]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure
             );
         }

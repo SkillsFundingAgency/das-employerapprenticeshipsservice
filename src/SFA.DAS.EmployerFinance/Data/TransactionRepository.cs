@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerFinance.Data
             await _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_financial].[CreateAccountTransferTransactions]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
 
@@ -56,7 +56,7 @@ namespace SFA.DAS.EmployerFinance.Data
                 return await _db.Value.Database.Connection.ExecuteScalarAsync<int>(
                     sql: "[employer_financial].[GetPreviousTransactionsCount]",
                     param: parameters,
-                    transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                    transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                     commandType: CommandType.StoredProcedure);
 
             }
@@ -75,7 +75,7 @@ namespace SFA.DAS.EmployerFinance.Data
             return _db.Value.Database.Connection.QuerySingleAsync<decimal>(
                 sql: "SELECT ISNULL(SUM(Amount),0) FROM [employer_financial].[TransactionLine] WHERE AccountId = @accountId AND TransactionType in (1, 2, 3, 4, 5)",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.Text);
         }
     
@@ -90,7 +90,7 @@ namespace SFA.DAS.EmployerFinance.Data
             var result = await _db.Value.Database.Connection.QueryAsync<TransactionEntity>(
                 sql: "[employer_financial].[GetTransactionLines_ByAccountId]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
 
             return MapTransactions(result);
@@ -144,7 +144,7 @@ namespace SFA.DAS.EmployerFinance.Data
             var result = await _db.Value.Database.Connection.QueryAsync<TransactionEntity>(
                 sql: "[employer_financial].[GetPaymentDetail_ByAccountProviderAndDateRange]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
 
             return MapTransactions(result);
@@ -192,7 +192,7 @@ namespace SFA.DAS.EmployerFinance.Data
             var result = await _db.Value.Database.Connection.QueryAsync<TransactionEntity>(
                 sql: "[employer_financial].[GetPaymentDetail_ByAccountProviderCourseAndDateRange]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
 
             return MapTransactions(result);
@@ -208,7 +208,7 @@ namespace SFA.DAS.EmployerFinance.Data
             var result = await _db.Value.Database.Connection.QueryAsync<TransactionEntity>(
                 sql: "[employer_financial].[GetLevyDetail_ByAccountIdAndDateRange]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
 
             return MapTransactions(result);
@@ -226,7 +226,7 @@ namespace SFA.DAS.EmployerFinance.Data
             return await _db.Value.Database.Connection.ExecuteScalarAsync<string>(
                 sql: "[employer_financial].[GetProviderName]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
             
         }
@@ -241,7 +241,7 @@ namespace SFA.DAS.EmployerFinance.Data
             var result = await _db.Value.Database.Connection.QueryAsync<TransactionDownloadLine>(
                 sql: "[employer_financial].[GetAllTransactionDetailsForAccountByDate]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
 
             var hmrcDateService = new HmrcDateService();
@@ -266,7 +266,7 @@ namespace SFA.DAS.EmployerFinance.Data
             return await _db.Value.Database.Connection.ExecuteScalarAsync<decimal>(
                 sql: "[employer_financial].[GetTotalSpendForLastYearByAccountId]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
     }
