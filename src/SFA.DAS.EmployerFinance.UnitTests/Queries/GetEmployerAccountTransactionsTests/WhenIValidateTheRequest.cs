@@ -12,14 +12,14 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
     public class WhenIValidateTheRequest
     {
         private GetEmployerAccountTransactionsValidator _validator;
-        private Mock<IAuthorizationService> _authorizationService;
+        //private Mock<IAuthorizationService> _authorizationService;
 
         [SetUp]
         public void Arrange()
         {
-            _authorizationService = new Mock<IAuthorizationService>();
-            
-            _validator = new GetEmployerAccountTransactionsValidator(_authorizationService.Object);
+            //_authorizationService = new Mock<IAuthorizationService>();
+
+            _validator = new GetEmployerAccountTransactionsValidator();
         }
 
         [Test]
@@ -31,19 +31,19 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
             //Assert
             Assert.IsTrue(result.IsValid());
         }
-        
-        [Test]
-        public async Task ThenTheResultIsMarkedAsUnauthorizedIfTheUserIsNotAMemberOfTheAccount()
-        {
-            //Arrange
-            _authorizationService.Setup(x => x.IsAuthorized(EmployerUserRole.Any)).Returns(false);
 
-            //Act
-            var result = await _validator.ValidateAsync(new GetEmployerAccountTransactionsQuery { ExternalUserId = "123", HashedAccountId = "AD1" });
+        //[Test]
+        //public async Task ThenTheResultIsMarkedAsUnauthorizedIfTheUserIsNotAMemberOfTheAccount()
+        //{
+        //    //Arrange
+        //    _authorizationService.Setup(x => x.IsAuthorized(EmployerUserRole.Any)).Returns(false);
 
-            //Assert
-            Assert.IsTrue(result.IsUnauthorized);
-        }
+        //    //Act
+        //    var result = await _validator.ValidateAsync(new GetEmployerAccountTransactionsQuery { ExternalUserId = "123", HashedAccountId = "AD1" });
+
+        //    //Assert
+        //    Assert.IsTrue(result.IsUnauthorized);
+        //}
 
         [Test]
         public async Task ThenTheResultIsMarkedAsAuthorizedIfNoUserHasBeenProvided()

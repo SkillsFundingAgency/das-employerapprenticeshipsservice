@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
 
         public async Task<List<LevyDeclarationViewModel>> GetLevyForPeriod(string hashedAccountId, string payrollYear, short payrollMonth)
         {
-            var url = $"api/accounts/{hashedAccountId}/levy/GetLevyForPeriod";
+            var url = $"api/accounts/{hashedAccountId}/levy/{payrollYear}/{payrollMonth}";
             var response = await _httpClient.GetAsync(url);
 
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
