@@ -51,7 +51,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourceList.cs" />
     <Compile Include="ResourceViewModel.cs" />
-    <Compile Include="FinanceStatisticsViewModel.cs" />
+    <Compile Include="TotalPaymentsModel.cs" />
     <Compile Include="TransactionItemType.cs" />
     <Compile Include="TransactionSummaryViewModel.cs" />
     <Compile Include="TransactionsViewModel.cs" />

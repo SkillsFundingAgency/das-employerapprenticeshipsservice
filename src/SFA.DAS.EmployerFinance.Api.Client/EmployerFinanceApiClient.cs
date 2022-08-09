@@ -61,18 +61,18 @@ namespace SFA.DAS.EmployerFinance.Api.Client
             return JsonConvert.DeserializeObject<List<TransactionSummary>>(json);
         }
 
-        public async Task<FinanceStatisticsViewModel> GetFinanceStatistics()
+        public async Task<TotalPaymentsModel> GetFinanceStatistics()
         {
             var baseUrl = GetBaseUrl();
             var url = $"{baseUrl}/api/financestatistics";
             var json = await _httpClient.GetAsync(url);
 
-            return JsonConvert.DeserializeObject<FinanceStatisticsViewModel>(json);
+            return JsonConvert.DeserializeObject<TotalPaymentsModel>(json);
         }
 
         private string GetBaseUrl()
         {
             return _configuration.ApiBaseUrl.Trim('/');
-        }        
+        }
     }
 }

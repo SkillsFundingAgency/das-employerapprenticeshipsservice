@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EAS.Account.Api.Types
 {
-    public class FinanceStatisticsViewModel
+    public class TotalPaymentsModel
     {
         public long TotalPayments { get; set; }
     }

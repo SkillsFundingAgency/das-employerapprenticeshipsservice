@@ -57,6 +57,7 @@
     <Compile Include="Controllers\AccountLevyControllerTests\AccountLevyControllerTests.cs" />
     <Compile Include="Controllers\AccountLevyControllerTests\WhenIGetAllLevyForAnAccount.cs" />
     <Compile Include="Controllers\AccountLevyControllerTests\WhenIGetLevyForAnAccountAndPeriod.cs" />
+    <Compile Include="Controllers\AccountTransactionsControllerTests\AccountTransactionsControllerTests.cs" />
     <Compile Include="Controllers\AccountTransactionsControllerTests\WhenIGetTheTransactionSummaryForAnAccount.cs" />
     <Compile Include="Controllers\AccountTransactionsControllerTests\WhenIGetTransactionsForAnAccount.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\EmployerAccountsControllerTests.cs" />

@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             };
 
             ApiService.Setup(s => s.GetAccounts(null, 1000, 1, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(accountsResponse);         
+                .ReturnsAsync(accountsResponse); 
 
             var response = new GetAccountBalancesResponse
             {

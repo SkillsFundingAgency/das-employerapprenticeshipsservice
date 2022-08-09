@@ -7,24 +7,19 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Queries.GetLevyDeclaration;
-using SFA.DAS.EAS.TestCommon.ObjectMothers;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTests
 {
     [TestFixture]
     public class WhenIGetLevyForAnAccount : AccountLevyControllerTests
-    {        
+    {
         [Test]
         public async Task ThenTheLevyIsReturned()
         {
             //Arrange
             var hashedAccountId = "ABC123";
             var fixture = new Fixture();
-            var apiResponse = new List<LevyDeclarationViewModel>()
-            {
-                fixture.Create<LevyDeclarationViewModel>(),
-                fixture.Create<LevyDeclarationViewModel>()
-            };
+            var apiResponse = new List<LevyDeclarationViewModel>()  { fixture.Create<LevyDeclarationViewModel>(),  fixture.Create<LevyDeclarationViewModel>()  };
             apiResponse[0].HashedAccountId = hashedAccountId;
             apiResponse[1].HashedAccountId = hashedAccountId;
             FinanceApiService.Setup(x => x.GetLevyDeclarations(hashedAccountId)).ReturnsAsync(apiResponse);
@@ -55,5 +50,5 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
             Assert.IsNotNull(response);
             Assert.IsInstanceOf<NotFoundResult>(response);
         }
-    }   
+    }
 }

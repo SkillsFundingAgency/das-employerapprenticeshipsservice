@@ -16,23 +16,20 @@ using SFA.DAS.EAS.TestCommon.Extensions;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
 using SFA.DAS.NLog.Logger;
 using AutoMapper;
-using System.Reflection;
-using System.Linq;
-using Castle.Core.Internal;
 using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsControllerTests
 {
     [TestFixture]
-    public class WhenIGetTransactionsForAnAccount
+    public class WhenIGetTransactionsForAnAccount : AccountTransactionsControllerTests
     {
         private AccountTransactionsController _controller;
         private Mock<IMediator> _mediator;
         private Mock<ILog> _logger;
-        private Mock<UrlHelper> _urlHelper;
-        private Mock<IMapper> _mapper;
+        private Mock<UrlHelper> _urlHelper;        
         private Mock<IEmployerFinanceApiService> _financeApiService;
-        protected IMapper Mapper;
+        protected IMapper _mapper;
+        private TransactionsViewModel transactionsViewModel;
 
         [SetUp]
         public void Arrange()
@@ -40,14 +37,28 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             _mediator = new Mock<IMediator>();
             _logger = new Mock<ILog>();
             _urlHelper = new Mock<UrlHelper>();
-            _urlHelper.Setup(x => x.Route(It.IsAny<string>(), It.IsAny<object>())).Returns("dummyurl");
-            _mapper = new Mock<IMapper>();
+            _urlHelper.Setup(x => x.Route(It.IsAny<string>(), It.IsAny<object>())).Returns("dummyurl");            
             _financeApiService = new Mock<IEmployerFinanceApiService>();
-            Mapper = ConfigureMapper();
-            var orchestrator = new AccountTransactionsOrchestrator(_mediator.Object, Mapper, _logger.Object, _financeApiService.Object);
+            _mapper = ConfigureMapper();
+            var orchestrator = new AccountTransactionsOrchestrator(_mediator.Object, _mapper, _logger.Object, _financeApiService.Object);
             _controller = new AccountTransactionsController(orchestrator);
             _controller.Url = _urlHelper.Object;
-            
+            transactionsViewModel = new TransactionsViewModel
+            {
+                new TransactionViewModel
+                {
+                    Description = "Is Not Null",
+                    Amount = 100m,
+                    DateCreated = DateTime.Today
+                },
+                new TransactionViewModel
+                {
+                    Description = "Is Not Null 2",
+                    Amount = 100m,
+                    DateCreated = DateTime.Today
+                }
+            };
+
         }
 
         [Test]
@@ -56,24 +67,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             //Arrange
             var hashedAccountId = "ABC123";
             var year = 2017;
-            var month = 3;
-            var isNotZero = 100m;
-            var isTxDateCreated = DateTime.Today;
-            var transactionsViewModel = new TransactionsViewModel
-            {
-                new TransactionViewModel
-                {
-                    Description = "Is Not Null",
-                    Amount = isNotZero,
-                    DateCreated = isTxDateCreated
-                },
-                new TransactionViewModel
-                {
-                    Description = "Is Not Null 2",
-                    Amount = isNotZero,
-                    DateCreated = isTxDateCreated
-                }
-            };
+            var month = 3;            
             _financeApiService.Setup(x => x.GetTransactions(hashedAccountId, year, month)).ReturnsAsync(transactionsViewModel);
 
             //Act
@@ -98,24 +92,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
                 Data = new AggregationData { TransactionLines = new List<TransactionLine> { TransactionLineObjectMother.Create() } },
                 AccountHasPreviousTransactions = false
             };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(q => q.HashedAccountId == hashedAccountId && q.Year == year && q.Month == month))).ReturnsAsync(transactionsResponse);
-            var isNotZero = 100m;
-            var isTxDateCreated = DateTime.Today;
-            var transactionsViewModel = new TransactionsViewModel
-            {
-                new TransactionViewModel
-                {
-                    Description = "Is Not Null",
-                    Amount = isNotZero,
-                    DateCreated = isTxDateCreated
-                },
-                new TransactionViewModel
-                {
-                    Description = "Is Not Null 2",
-                    Amount = isNotZero,
-                    DateCreated = isTxDateCreated
-                }
-            };
+            _mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(q => q.HashedAccountId == hashedAccountId && q.Year == year && q.Month == month))).ReturnsAsync(transactionsResponse);           
             _financeApiService.Setup(x => x.GetTransactions(hashedAccountId, year, month)).ReturnsAsync(transactionsViewModel);
             
             //Act
@@ -146,24 +123,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
                 Month = month
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(q => q.HashedAccountId == hashedAccountId && q.Year == year && q.Month == month))).ReturnsAsync(transactionsResponse);
-
-            var isNotZero = 100m;
-            var isTxDateCreated = DateTime.Today;
-            var transactionsViewModel = new TransactionsViewModel
-            {             
-                new TransactionViewModel
-                {
-                    Description = "Is Not Null",
-                    Amount = isNotZero,
-                    DateCreated = isTxDateCreated
-                },
-                new TransactionViewModel
-                {
-                    Description = "Is Not Null 2",
-                    Amount = isNotZero,
-                    DateCreated = isTxDateCreated
-                }                
-            };
+           
             transactionsViewModel.HasPreviousTransactions = true;
             transactionsViewModel.Year = year;
             transactionsViewModel.Month = month;
@@ -193,24 +153,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
                 AccountHasPreviousTransactions = false
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(q => q.HashedAccountId == hashedAccountId && q.Year == year && q.Month == DateTime.Now.Month))).ReturnsAsync(transactionsResponse);
-
-            var isNotZero = 100m;
-            var isTxDateCreated = DateTime.Today;
-            var transactionsViewModel = new TransactionsViewModel
-            {
-                new TransactionViewModel
-                {
-                    Description = "Is Not Null",
-                    Amount = isNotZero,
-                    DateCreated = isTxDateCreated
-                },
-                new TransactionViewModel
-                {
-                    Description = "Is Not Null 2",
-                    Amount = isNotZero,
-                    DateCreated = isTxDateCreated
-                }
-            };
+            
             transactionsViewModel.HasPreviousTransactions = false;
             transactionsViewModel.Year = year;            
 
@@ -327,22 +270,6 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             var model = response as OkNegotiatedContentResult<TransactionsViewModel>;
 
             model?.Content.Should().NotBeNull();
-        }
-
-        //TODO : move to base class
-        private IMapper ConfigureMapper()
-        {
-            var profiles = Assembly.Load($"SFA.DAS.EAS.Account.Api")
-                .GetTypes()
-                .Where(t => typeof(Profile).IsAssignableFrom(t))
-                .Select(t => (Profile)Activator.CreateInstance(t));
-
-            var config = new MapperConfiguration(c =>
-            {
-                profiles.ForEach(c.AddProfile);
-            });
-
-            return config.CreateMapper();
         }
     }
 }

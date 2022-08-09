@@ -40,21 +40,21 @@ namespace SFA.DAS.EmployerFinance.Api.Controllers
         {
             var result = await GetAccountTransactions(hashedAccountId, year, month);
 
-            if (result.Data == null)
+            if (result == null)
             {
                 return NotFound();
             }
 
-            if (result.Data.HasPreviousTransactions)
+            if (result.HasPreviousTransactions)
             {
-                var previousMonth = new DateTime(result.Data.Year, result.Data.Month, 1).AddMonths(-1);
-                result.Data.PreviousMonthUri = Url.Route("GetTransactions", new { hashedAccountId, year = previousMonth.Year, month = previousMonth.Month });
+                var previousMonth = new DateTime(result.Year, result.Month, 1).AddMonths(-1);
+                result.PreviousMonthUri = Url.Route("GetTransactions", new { hashedAccountId, year = previousMonth.Year, month = previousMonth.Month });
             }
 
-            return Ok(result.Data);
+            return Ok(result);
         }
 
-        private async Task<OrchestratorResponse<TransactionsViewModel>> GetAccountTransactions(string hashedAccountId, int year, int month)
+        private async Task<TransactionsViewModel> GetAccountTransactions(string hashedAccountId, int year, int month)
         {
             if (year == 0)
             {

@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
 
         public async Task<OrchestratorResponse<TransactionsViewModel>> GetAccountTransactions(string hashedAccountId, int year, int month, UrlHelper urlHelper)
         {
-            _logger.Info($"Requesting GetAccountTransactions for account {hashedAccountId}");
+            _logger.Info($"Requesting GetAccountTransactions for account {hashedAccountId} from employerFinanceApiService");
 
             var data = await _employerFinanceApiService.GetTransactions(hashedAccountId, year, month);
 
@@ -50,7 +50,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
 
         public async Task<OrchestratorResponse<AccountResourceList<TransactionSummaryViewModel>>> GetAccountTransactionSummary(string hashedAccountId)
         {
-            _logger.Info($"Requesting AccountTransactionSummary for account {hashedAccountId}");
+            _logger.Info($"Requesting AccountTransactionSummary for account {hashedAccountId} from employerFinanceApiService");
 
             var data = await _employerFinanceApiService.GetTransactionSummary(hashedAccountId);
 

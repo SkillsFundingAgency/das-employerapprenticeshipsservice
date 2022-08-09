@@ -133,7 +133,6 @@
     <Compile Include="NServiceBusStartup.cs" />
     <Compile Include="Orchestrators\AccountTransactionsOrchestrator.cs" />
     <Compile Include="Orchestrators\FinanceOrchestrator.cs" />
-    <Compile Include="Orchestrators\OrchestratorResponse.cs" />
     <Compile Include="Orchestrators\StatisticsOrchestrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />

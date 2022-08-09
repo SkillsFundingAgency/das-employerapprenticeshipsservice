@@ -1,11 +1,8 @@
-﻿using SFA.DAS.Http.Configuration;
-
-namespace SFA.DAS.EAS.Domain.Configuration
+﻿namespace SFA.DAS.EAS.Domain.Configuration
 {
-    public class EmployerFinanceApiConfiguration //: IManagedIdentityClientConfiguration
+    public class EmployerFinanceApiConfiguration
     {   
-        public string IdentifierUri { get; set; }     
-        //public string TimeoutTimeSpan { get; set; }
+        public string IdentifierUri { get; set; }        
         public string ApiBaseUrl { get; set; }
     }
 }

@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
 
         Task<TransactionsViewModel> GetTransactions(string accountId, int year, int month);
 
-        Task<FinanceStatisticsViewModel> GetStatistics(CancellationToken cancellationToken = default(CancellationToken));
+        Task<TotalPaymentsModel> GetStatistics(CancellationToken cancellationToken = default(CancellationToken));
         
         Task<GetAccountBalancesResponse> GetAccountBalances(BulkAccountsRequest accountIds); //TODO : change to hashedAccountIds
 

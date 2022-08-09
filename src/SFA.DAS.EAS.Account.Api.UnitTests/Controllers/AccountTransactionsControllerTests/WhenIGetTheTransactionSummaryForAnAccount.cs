@@ -14,36 +14,31 @@ using SFA.DAS.EAS.TestCommon.Extensions;
 using SFA.DAS.NLog.Logger;
 using AutoMapper;
 using AutoFixture;
-using System;
-using System.Reflection;
-using Castle.Core.Internal;
 using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsControllerTests
 {
     [TestFixture]
-    public class WhenIGetTheTransactionSummaryForAnAccount
+    public class WhenIGetTheTransactionSummaryForAnAccount : AccountTransactionsControllerTests
     {
         private AccountTransactionsController _controller;
-        private Mock<IMediator> _mediator;
-        private Mock<IMapper> _mapper;
+        private Mock<IMediator> _mediator;        
         private Mock<ILog> _logger;
         private Mock<UrlHelper> _urlHelper;
         private  Mock<IEmployerFinanceApiService> _financeApiService;
-        protected IMapper Mapper;
+        protected IMapper _mapper;        
 
         [SetUp]
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
             _logger = new Mock<ILog>();
-            _urlHelper = new Mock<UrlHelper>();
-            _mapper = new Mock<IMapper>();
+            _urlHelper = new Mock<UrlHelper>();            
             _financeApiService = new Mock<IEmployerFinanceApiService>();
-            Mapper = ConfigureMapper();
-            var orchestrator = new AccountTransactionsOrchestrator(_mediator.Object, Mapper, _logger.Object, _financeApiService.Object);
+            _mapper = ConfigureMapper();
+            var orchestrator = new AccountTransactionsOrchestrator(_mediator.Object, _mapper, _logger.Object, _financeApiService.Object);
             _controller = new AccountTransactionsController(orchestrator);
-            _controller.Url = _urlHelper.Object;
+            _controller.Url = _urlHelper.Object;          
         }
 
         [Test]
@@ -86,21 +81,6 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             model?.Content.ShouldAllBeEquivalentTo(apiResponse, x => x.Excluding(y => y.Href));
             model?.Content.First().Href.Should().Be(firstExpectedUri);
             model?.Content.Last().Href.Should().Be(secondExpectedUri);
-        }
-
-        private IMapper ConfigureMapper()
-        {
-            var profiles = Assembly.Load($"SFA.DAS.EAS.Account.Api")
-                .GetTypes()
-                .Where(t => typeof(Profile).IsAssignableFrom(t))
-                .Select(t => (Profile)Activator.CreateInstance(t));
-
-            var config = new MapperConfiguration(c =>
-            {
-                profiles.ForEach(c.AddProfile);
-            });
-
-            return config.CreateMapper();
-        }
+        }       
     }
 }

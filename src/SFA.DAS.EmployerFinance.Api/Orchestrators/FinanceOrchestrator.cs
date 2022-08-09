@@ -45,6 +45,7 @@ namespace SFA.DAS.EmployerFinance.Api.Orchestrators
 
             var levyDeclarations = response.Declarations.Select(x => _mapper.Map<LevyDeclaration>(x)).ToList();
             levyDeclarations.ForEach(x => x.HashedAccountId = hashedAccountId);
+            _logger.Info($"Received response for levy declaration for account {hashedAccountId}");
 
             return levyDeclarations;
         }
@@ -61,7 +62,7 @@ namespace SFA.DAS.EmployerFinance.Api.Orchestrators
 
             var levyDeclarations = response.Declarations.Select(x => _mapper.Map<LevyDeclaration>(x)).ToList();
             levyDeclarations.ForEach(x => x.HashedAccountId = hashedAccountId);
-
+            _logger.Info($"Received response for levy declaration for account  {hashedAccountId}, year {payrollYear} and month {payrollMonth}");
             return levyDeclarations;
         }
 

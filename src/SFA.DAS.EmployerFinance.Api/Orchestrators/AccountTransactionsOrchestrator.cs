@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using SFA.DAS.EmployerFinance.Api.Types;
-using SFA.DAS.EmployerFinance.Models.Transaction;
 using SFA.DAS.EmployerFinance.Queries.GetAccountTransactionSummary;
 using SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.NLog.Logger;
@@ -22,42 +21,40 @@ namespace SFA.DAS.EmployerFinance.Api.Orchestrators
             _logger = logger;
         }
       
-        public async Task<OrchestratorResponse<TransactionsViewModel>> GetAccountTransactions(string hashedAccountId, int year, int month, UrlHelper urlHelper)
+        public async Task<TransactionsViewModel> GetAccountTransactions(string hashedAccountId, int year, int month, UrlHelper urlHelper)
         {
-            var data =
-                await
-                    _mediator.SendAsync(new GetEmployerAccountTransactionsQuery
-                    {
+            _logger.Info($"Requesting account transactions for account {hashedAccountId}, year {year} and month {month}");
+
+            var data = await _mediator.SendAsync(new GetEmployerAccountTransactionsQuery {
                         Year = year,
                         Month = month,
                         HashedAccountId = hashedAccountId
                     });
 
-            var response = new OrchestratorResponse<TransactionsViewModel>
+            var response = new TransactionsViewModel
             {
-                Data = new TransactionsViewModel
-                {
-                    HasPreviousTransactions = data.AccountHasPreviousTransactions,
-                    Year = data.Year,
-                    Month = data.Month
-                }
+                HasPreviousTransactions = data.AccountHasPreviousTransactions,
+                Year = year,
+                Month = month
             };
-
-            response.Data.AddRange(data.Data.TransactionLines.Select(x => ConvertToTransactionViewModel(hashedAccountId, x, urlHelper)));
+            response.AddRange(data.Data.TransactionLines.Select(x => ConvertToTransactionViewModel(hashedAccountId, x, urlHelper)));
+            
+            _logger.Info($"Received account transactions response for account {hashedAccountId}, year {year} and month {month}");
             return response;
-        }       
+        }
 
         public async Task<List<TransactionSummary>> GetAccountTransactionSummary(string hashedAccountId)
-        {            
+        {
+            _logger.Info($"Requesting account transaction summary for account {hashedAccountId}");
+
             var response = await _mediator.SendAsync(new GetAccountTransactionSummaryRequest { HashedAccountId = hashedAccountId });
             if (response.Data == null)
             {
                 return null;
-            }          
-
+            }
+            _logger.Info($"Received account transaction summary response for account {hashedAccountId}");
             return response.Data;
-        }
-     
+        }     
 
         private TransactionViewModel ConvertToTransactionViewModel(string hashedAccountId, Models.Transaction.TransactionLine transactionLine, UrlHelper urlHelper)
         {
@@ -66,13 +63,13 @@ namespace SFA.DAS.EmployerFinance.Api.Orchestrators
                 Amount = transactionLine.Amount,
                 Balance = transactionLine.Balance,
                 Description = transactionLine.Description,
-                TransactionType = (EmployerFinance.Api.Types.TransactionItemType)transactionLine.TransactionType,
+                TransactionType = (TransactionItemType)transactionLine.TransactionType,
                 DateCreated = transactionLine.DateCreated,
                 SubTransactions = transactionLine.SubTransactions?.Select(x => ConvertToTransactionViewModel(hashedAccountId, x, urlHelper)).ToList(),
                 TransactionDate = transactionLine.TransactionDate
             };
 
-            if (transactionLine.TransactionType == SFA.DAS.EmployerFinance.Models.Transaction.TransactionItemType.Declaration)
+            if (transactionLine.TransactionType == Models.Transaction.TransactionItemType.Declaration)
             {
                 viewModel.ResourceUri = urlHelper.Route("GetLevyForPeriod", new { hashedAccountId, payrollYear = transactionLine.PayrollYear, payrollMonth = transactionLine.PayrollMonth });
             }

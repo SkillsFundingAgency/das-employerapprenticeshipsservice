@@ -77,7 +77,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
             return JsonConvert.DeserializeObject<List<TransactionSummaryViewModel>>(content);
         }
 
-        public async Task<FinanceStatisticsViewModel> GetStatistics(CancellationToken cancellationToken = default)
+        public async Task<TotalPaymentsModel> GetStatistics(CancellationToken cancellationToken = default)
         {
             _log.Info($"Getting statistics");
 
@@ -88,7 +88,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
             if (!response.IsSuccessStatusCode)
                 throw new RestHttpClientException(response, content);
 
-            return JsonConvert.DeserializeObject<FinanceStatisticsViewModel>(content);
+            return JsonConvert.DeserializeObject<TotalPaymentsModel>(content);
         }
 
         public async Task<GetAccountBalancesResponse> GetAccountBalances(BulkAccountsRequest accountIds) // TODO : change to hashedAccountIds

@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerFinance.Api.DependencyResolution
             });
 
             var environmentName = ConfigurationManager.AppSettings["EnvironmentName"];
-            environmentName = "AT"; //TODO :  keep this to run locally for now then remove later
+            //environmentName = "AT"; //TODO :  keep this to run locally for now then remove later
 
             For<DbConnection>().Use($"Build DbConnection", c =>
             {

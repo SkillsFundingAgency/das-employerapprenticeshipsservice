@@ -22,18 +22,13 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
             var payrollYear = "2017-18";
             short payrollMonth = 5;         
             var fixture = new Fixture();
-            var apiResponse = new List<LevyDeclarationViewModel>()
-            {
-                fixture.Create<LevyDeclarationViewModel>(),
-                fixture.Create<LevyDeclarationViewModel>()
-            };
+            var apiResponse = new List<LevyDeclarationViewModel>() { fixture.Create<LevyDeclarationViewModel>(),  fixture.Create<LevyDeclarationViewModel>() };
             apiResponse[0].HashedAccountId = hashedAccountId;
             apiResponse[1].HashedAccountId = hashedAccountId;
             FinanceApiService.Setup(x => x.GetLevyForPeriod(hashedAccountId, payrollYear, payrollMonth)).ReturnsAsync(apiResponse);
 
             //Act
             var response = await Controller.GetLevy(hashedAccountId, payrollYear, payrollMonth);
-
             
             //Assert
             Assert.IsNotNull(response);

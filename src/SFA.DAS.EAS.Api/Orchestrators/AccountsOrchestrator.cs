@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             _logger.Info("Getting all account balances.");
             
             var accountsResult = await _employerAccountsApiService.GetAccounts(toDate, pageSize, pageNumber);
-           
+            
             var accountBalanceRequest = new AccountBalanceRequest
             {
                 HashedAccountIds = accountsResult.Data.Select(account => account.AccountHashId).ToList()
@@ -153,13 +153,15 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
 
         public async Task<OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>> GetLevy(string hashedAccountId)
         {
-            _logger.Info($"Requesting levy declaration for account {hashedAccountId}");
+            _logger.Info($"Requesting levy declaration for account {hashedAccountId} from employerFinanceApiService");
 
             var levyDeclarations = await _employerFinanceApiService.GetLevyDeclarations(hashedAccountId);            
             if (levyDeclarations == null)
             {
                 return new OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>> { Data = null };
             }
+
+            _logger.Info($"Received response for levy declaration for account {hashedAccountId} from employerFinanceApiService");
 
             return new OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>
             {
@@ -170,7 +172,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
 
         public async Task<OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>> GetLevy(string hashedAccountId, string payrollYear, short payrollMonth)
         {
-            _logger.Info($"Requesting levy declaration for account {hashedAccountId}, year {payrollYear} and month {payrollMonth}");
+            _logger.Info($"Requesting levy declaration for account {hashedAccountId}, year {payrollYear} and month {payrollMonth} from employerFinanceApiService");
 
             var levyDeclarations = await _employerFinanceApiService.GetLevyForPeriod(hashedAccountId, payrollYear, payrollMonth);
             if (levyDeclarations == null)
@@ -180,6 +182,8 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
 
             var levyViewModels = levyDeclarations.Select(x => _mapper.Map<LevyDeclarationViewModel>(x)).ToList();
             levyViewModels.ForEach(x => x.HashedAccountId = hashedAccountId);
+
+            _logger.Info($"Received response for levy declaration for account {hashedAccountId}, year {payrollYear} and month {payrollMonth} from employerFinanceApiService");
 
             return new OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>
             {
