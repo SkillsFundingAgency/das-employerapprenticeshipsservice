@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.StatisticsControllerTest
         [SetUp]
         public void Setup()
         {
-            _orchestrator = new Mock<StatisticsOrchestrator>(null, null, null);
+            _orchestrator = new Mock<StatisticsOrchestrator>(null, null);
 
             _statisticsViewModel = new StatisticsViewModel
             {
@@ -38,8 +38,10 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.StatisticsControllerTest
         [Test]
         public async Task ThenShouldReturnOkNegotiatedContentResultWithStatistics()
         {
+            //Act
             var result = await _controller.GetStatistics();
 
+            //Assert
             result.Should().NotBeNull();
             result.Should().BeOfType<OkNegotiatedContentResult<StatisticsViewModel>>();
 

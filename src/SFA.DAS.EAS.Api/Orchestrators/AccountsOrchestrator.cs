@@ -126,7 +126,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
                 return new OrchestratorResponse<AccountDetailViewModel> { Data = null };
             }
            
-            var accountBalanceTask = _employerFinanceApiService.GetAccountBalances(new List<string> { accountResult.HashedAccountId }); //(accountBalanceRequest);
+            var accountBalanceTask = _employerFinanceApiService.GetAccountBalances(new List<string> { accountResult.HashedAccountId });
             
             var transferBalanceTask = _employerFinanceApiService.GetTransferAllowance(accountResult.HashedAccountId);
 
@@ -182,27 +182,6 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
                 Data = new AccountResourceList<LevyDeclarationViewModel>(levyViewModels),
                 Status = HttpStatusCode.OK
             };
-        }
-
-        private async Task<AccountBalance> GetAccountBalance(long accountId)
-        {
-            var balanceResult = await _mediator.SendAsync(new GetAccountBalancesRequest
-            {
-                AccountIds = new List<long> { accountId }
-            });
-
-            var account = balanceResult?.Accounts?.SingleOrDefault();
-            return account;
-        }
-
-        private async Task<TransferAllowance> GetTransferAllowanceForAccount(long accountId)
-        {
-            var transferAllowanceResult = await _mediator.SendAsync(new GetTransferAllowanceQuery
-            {
-                AccountId = accountId
-            });
-
-            return transferAllowanceResult.TransferAllowance;
         }
     }
 }

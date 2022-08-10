@@ -21,8 +21,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
     [TestFixture]
     public class WhenIGetTheTransactionSummaryForAnAccount : AccountTransactionsControllerTests
     {
-        private AccountTransactionsController _controller;
-        private Mock<IMediator> _mediator;        
+        private AccountTransactionsController _controller;             
         private Mock<ILog> _logger;
         private Mock<UrlHelper> _urlHelper;
         private  Mock<IEmployerFinanceApiService> _financeApiService;
@@ -31,14 +30,13 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
         [SetUp]
         public void Arrange()
         {
-            _mediator = new Mock<IMediator>();
             _logger = new Mock<ILog>();
             _urlHelper = new Mock<UrlHelper>();            
             _financeApiService = new Mock<IEmployerFinanceApiService>();
             _mapper = ConfigureMapper();
-            var orchestrator = new AccountTransactionsOrchestrator(_mediator.Object, _mapper, _logger.Object, _financeApiService.Object);
+            var orchestrator = new AccountTransactionsOrchestrator(_mapper, _logger.Object, _financeApiService.Object);
             _controller = new AccountTransactionsController(orchestrator);
-            _controller.Url = _urlHelper.Object;          
+            _controller.Url = _urlHelper.Object; 
         }
 
         [Test]
@@ -81,6 +79,6 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             model?.Content.ShouldAllBeEquivalentTo(apiResponse, x => x.Excluding(y => y.Href));
             model?.Content.First().Href.Should().Be(firstExpectedUri);
             model?.Content.Last().Href.Should().Be(secondExpectedUri);
-        }       
+        }
     }
 }
