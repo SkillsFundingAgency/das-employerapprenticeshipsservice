@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerFinance.Api.Controllers
             return Ok(result);
         }
 
-        private async Task<TransactionsViewModel> GetAccountTransactions(string hashedAccountId, int year, int month)
+        private async Task<Transactions> GetAccountTransactions(string hashedAccountId, int year, int month)
         {
             if (year == 0)
             {

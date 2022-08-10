@@ -13,7 +13,7 @@ namespace SFA.DAS.EmployerFinance.Api.Client
 
         Task<List<LevyDeclaration>> GetLevyForPeriod(string hashedAccountId, string payrollYear, short payrollMonth);
 
-        Task<TransactionsViewModel> GetTransactions(string accountId, int year, int month);
+        Task<Transactions> GetTransactions(string accountId, int year, int month);
 
         Task<List<TransactionSummary>> GetTransactionSummary(string accountId);
 

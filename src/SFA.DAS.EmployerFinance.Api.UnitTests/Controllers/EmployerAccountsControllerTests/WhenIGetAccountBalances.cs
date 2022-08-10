@@ -2,7 +2,6 @@
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EmployerFinance.Api.Controllers;
 using SFA.DAS.EmployerFinance.Api.Orchestrators;
 using SFA.DAS.EmployerFinance.Queries.GetAccountBalances;
@@ -36,40 +35,17 @@ namespace SFA.DAS.EmployerFinance.Api.UnitTests.Controllers.EmployerAccountsCont
         }
 
         [Test]
-        public async Task ThenReturnTheAccountBalances()
-        {
-            //Arrange            
-            var accountIds = new List<long> { 1, 2 };
-            var request = new BulkAccountsRequest{
-                AccountIds = accountIds
-            };
-            var accountBalancesResponse = new GetAccountBalancesResponse
-            {
-                Accounts = new List<Models.Account.AccountBalance> { new Models.Account.AccountBalance { AccountId = 1, Balance = 10000 }, new Models.Account.AccountBalance {AccountId =2, Balance = 20000 } }
-            };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetAccountBalancesRequest>(q => q.AccountIds == accountIds))).ReturnsAsync(accountBalancesResponse);
-
-            //Act
-            var response = await _employerAccountsController.Index(request);
-
-            //Assert
-            Assert.IsNotNull(response);
-        }
-
-
-        [Test]
         public async Task ThenReturnTheAccountBalance()
         {
             //Arrange            
             var hashedAccountIds = new List<string> { "ABC123", "XYZ456" };
-            var request = new AccountBalanceRequest  { HashedAccountIds = hashedAccountIds };
             var accountBalancesResponse = new GetAccountBalancesResponse {
                 Accounts = new List<Models.Account.AccountBalance> { new Models.Account.AccountBalance { AccountId = 1, Balance = 10000 }, new Models.Account.AccountBalance { AccountId = 2, Balance = 20000 } }
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetAccountBalancesRequest>(q => q.AccountIds == It.IsAny<List<long>>()))).ReturnsAsync(accountBalancesResponse);
 
             //Act
-            var response = await _employerAccountsController.GetAccountBalances(request);
+            var response = await _employerAccountsController.GetAccountBalances(hashedAccountIds);
 
             //Assert
             Assert.IsNotNull(response);

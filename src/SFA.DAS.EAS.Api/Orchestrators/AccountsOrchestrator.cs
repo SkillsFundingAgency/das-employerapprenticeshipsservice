@@ -47,13 +47,9 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
         {
             _logger.Info("Getting all account balances.");
             
-            var accountsResult = await _employerAccountsApiService.GetAccounts(toDate, pageSize, pageNumber);
-            
-            var accountBalanceRequest = new AccountBalanceRequest
-            {
-                HashedAccountIds = accountsResult.Data.Select(account => account.AccountHashId).ToList()
-            };
-            var transactionResult = await _employerFinanceApiService.GetAccountBalances(accountBalanceRequest);
+            var accountsResult = await _employerAccountsApiService.GetAccounts(toDate, pageSize, pageNumber);            
+           
+            var transactionResult = await _employerFinanceApiService.GetAccountBalances(accountsResult.Data.Select(account => account.AccountHashId).ToList());
             var accountBalanceHash = BuildAccountBalanceHash(transactionResult.Accounts);
 
             accountsResult.Data.ForEach(account =>
@@ -130,11 +126,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
                 return new OrchestratorResponse<AccountDetailViewModel> { Data = null };
             }
            
-            var accountBalanceRequest = new AccountBalanceRequest
-            {
-                HashedAccountIds = new List<string> { accountResult.HashedAccountId }
-            };
-            var accountBalanceTask = _employerFinanceApiService.GetAccountBalances(accountBalanceRequest);
+            var accountBalanceTask = _employerFinanceApiService.GetAccountBalances(new List<string> { accountResult.HashedAccountId }); //(accountBalanceRequest);
             
             var transferBalanceTask = _employerFinanceApiService.GetTransferAllowance(accountResult.HashedAccountId);
 

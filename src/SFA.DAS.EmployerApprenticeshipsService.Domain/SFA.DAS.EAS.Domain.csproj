@@ -62,7 +62,6 @@
     <Compile Include="Configuration\ITopicMessageSubscriberConfiguration.cs" />
     <Compile Include="Models\Account\AccountHistory.cs" />
     <Compile Include="Models\Account\AccountLegalEntity.cs" />
-    <Compile Include="Models\Account\BulkAccountsRequest.cs" />
     <Compile Include="Models\Account\CreateLegalEntityWithAgreementParams.cs" />
     <Compile Include="Models\Account\AccountSpecificLegalEntity.cs" />
     <Compile Include="Models\Account\AgreementTemplate.cs" />

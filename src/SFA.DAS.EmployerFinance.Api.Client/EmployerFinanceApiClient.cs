@@ -43,13 +43,13 @@ namespace SFA.DAS.EmployerFinance.Api.Client
             return JsonConvert.DeserializeObject<List<LevyDeclaration>>(json);
         }
 
-        public async Task<TransactionsViewModel> GetTransactions(string accountId, int year, int month)
+        public async Task<Transactions> GetTransactions(string accountId, int year, int month)
         {
             var baseUrl = GetBaseUrl();
             var url = $"{baseUrl}/api/accounts/{accountId}/transactions/{year}/{month}";
             var json = await _httpClient.GetAsync(url);
 
-            return JsonConvert.DeserializeObject<TransactionsViewModel>(json);
+            return JsonConvert.DeserializeObject<Transactions>(json);
         }
 
         public async Task<List<TransactionSummary>> GetTransactionSummary(string accountId)

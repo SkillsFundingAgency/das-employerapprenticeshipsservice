@@ -9,7 +9,6 @@ using SFA.DAS.EAS.Application.Http;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Account.Api.Types;
 using System.Text;
-using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
 
 namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
@@ -89,27 +88,9 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
                 throw new RestHttpClientException(response, content);
 
             return JsonConvert.DeserializeObject<TotalPaymentsModel>(content);
-        }
+        }     
 
-        public async Task<GetAccountBalancesResponse> GetAccountBalances(BulkAccountsRequest accountIds) // TODO : change to hashedAccountIds
-        {
-            var url = $"api/accounts";
-            var data = JsonConvert.SerializeObject(accountIds);
-            var buffer = System.Text.Encoding.UTF8.GetBytes(data);
-            var byteContent = new ByteArrayContent(buffer);
-            var stringContent = new StringContent(data, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PostAsync(url, stringContent);
-
-            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-            if (!response.IsSuccessStatusCode)
-                throw new RestHttpClientException(response, content);
-
-            return JsonConvert.DeserializeObject<GetAccountBalancesResponse>(content);
-        }
-
-        public async Task<GetAccountBalancesResponse> GetAccountBalances(AccountBalanceRequest accountIds)
+        public async Task<GetAccountBalancesResponse> GetAccountBalances(List<string> accountIds)//(AccountBalanceRequest accountIds)
         {
             var url = $"api/accounts/balances";
             var data = JsonConvert.SerializeObject(accountIds);           
@@ -124,7 +105,6 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
 
             return JsonConvert.DeserializeObject<GetAccountBalancesResponse>(content);
         }
-
 
         public async Task<GetTransferAllowanceResponse> GetTransferAllowance(string hashedAccountId)
         {

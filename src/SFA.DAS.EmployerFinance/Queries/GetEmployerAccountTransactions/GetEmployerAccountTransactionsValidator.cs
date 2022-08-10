@@ -1,9 +1,5 @@
-﻿using SFA.DAS.EmployerFinance.Data;
-using SFA.DAS.Validation;
+﻿using SFA.DAS.Validation;
 using System.Threading.Tasks;
-using SFA.DAS.Authorization.EmployerUserRoles.Options;
-using SFA.DAS.Authorization.Services;
-using SFA.DAS.EAS.Domain.Data.Repositories;
 
 namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions
 {

@@ -58,7 +58,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
                     Accounts = new List<AccountBalance> { _expectedAccountBalance }
                 });
 
-            _financeApiService.Setup(x => x.GetAccountBalances(It.IsAny<AccountBalanceRequest>()))
+            _financeApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>()))
                  .ReturnsAsync(new GetAccountBalancesResponse
                  {
                      Accounts = new List<AccountBalance> { _expectedAccountBalance }

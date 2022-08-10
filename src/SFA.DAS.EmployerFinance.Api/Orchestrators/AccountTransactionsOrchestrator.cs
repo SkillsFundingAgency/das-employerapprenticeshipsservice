@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerFinance.Api.Orchestrators
             _logger = logger;
         }
       
-        public async Task<TransactionsViewModel> GetAccountTransactions(string hashedAccountId, int year, int month, UrlHelper urlHelper)
+        public async Task<Transactions> GetAccountTransactions(string hashedAccountId, int year, int month, UrlHelper urlHelper)
         {
             _logger.Info($"Requesting account transactions for account {hashedAccountId}, year {year} and month {month}");
 
@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerFinance.Api.Orchestrators
                         HashedAccountId = hashedAccountId
                     });
 
-            var response = new TransactionsViewModel
+            var response = new Transactions
             {
                 HasPreviousTransactions = data.AccountHasPreviousTransactions,
                 Year = year,
@@ -56,9 +56,9 @@ namespace SFA.DAS.EmployerFinance.Api.Orchestrators
             return response.Data;
         }     
 
-        private TransactionViewModel ConvertToTransactionViewModel(string hashedAccountId, Models.Transaction.TransactionLine transactionLine, UrlHelper urlHelper)
+        private Transaction ConvertToTransactionViewModel(string hashedAccountId, Models.Transaction.TransactionLine transactionLine, UrlHelper urlHelper)
         {
-            var viewModel = new TransactionViewModel
+            var viewModel = new Transaction
             {
                 Amount = transactionLine.Amount,
                 Balance = transactionLine.Balance,

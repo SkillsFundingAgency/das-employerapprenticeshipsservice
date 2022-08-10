@@ -41,7 +41,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             {
                 Accounts = new List<AccountBalance> { new AccountBalance { AccountId =  account.AccountId, Balance = 123.45m } }
             };
-            FinanceApiService.Setup(x => x.GetAccountBalances(It.IsAny<AccountBalanceRequest>())).ReturnsAsync(accountBalancesResponse);
+            FinanceApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>())).ReturnsAsync(accountBalancesResponse);
 
             var transferAllowanceResponse = new GetTransferAllowanceResponse
             {
@@ -91,7 +91,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             
             HashingService.Setup(x => x.HashValue(accountId)).Returns(hashedAccountId);
             ApiService.Setup(x => x.GetAccount(hashedAccountId, It.IsAny<CancellationToken>())).ReturnsAsync(new AccountDetailViewModel { AccountId = accountId, ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy.ToString(), LegalEntities = new ResourceList(new List<ResourceViewModel>()), PayeSchemes = new ResourceList(new List<ResourceViewModel>()) });
-            FinanceApiService.Setup(x => x.GetAccountBalances(It.IsAny<AccountBalanceRequest>())).ReturnsAsync(new GetAccountBalancesResponse { Accounts = new List<AccountBalance> { new AccountBalance() } });
+            FinanceApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>())).ReturnsAsync(new GetAccountBalancesResponse { Accounts = new List<AccountBalance> { new AccountBalance() } });
             FinanceApiService.Setup(x => x.GetTransferAllowance(It.IsAny<string>())).ReturnsAsync(new GetTransferAllowanceResponse { TransferAllowance = new TransferAllowance() });
             
             //Act

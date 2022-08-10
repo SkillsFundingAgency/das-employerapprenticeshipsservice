@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerFinance.Api.Types
 {
-    public class TransactionsViewModel : List<TransactionViewModel>
+    public class Transactions : List<Transaction>
     {
         public int Year { get; set; }
         public int Month { get; set; }

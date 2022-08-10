@@ -1,5 +1,5 @@
-﻿using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EmployerFinance.Api.Orchestrators;
+﻿using SFA.DAS.EmployerFinance.Api.Orchestrators;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -13,26 +13,13 @@ namespace SFA.DAS.EmployerFinance.Api.Controllers
         public EmployerAccountsController(FinanceOrchestrator financeOrchestrator)
         {
             _financeOrchestrator = financeOrchestrator;
-        }
-
-        [Route("")]        
-        public async Task<IHttpActionResult> Index(BulkAccountsRequest accountIds)
-        {
-            var result = await _financeOrchestrator.GetAccountBalances(accountIds.AccountIds);
-
-            if (result == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(result);
-        }
+        }      
 
         [Route("balances")]
         [HttpPost]
-        public async Task<IHttpActionResult> GetAccountBalances(AccountBalanceRequest accountIds)
+        public async Task<IHttpActionResult> GetAccountBalances(List<string> accountIds)
         {
-            var result = await _financeOrchestrator.GetAccountBalances(accountIds.HashedAccountIds);
+            var result = await _financeOrchestrator.GetAccountBalances(accountIds);
 
             if (result == null)
             {

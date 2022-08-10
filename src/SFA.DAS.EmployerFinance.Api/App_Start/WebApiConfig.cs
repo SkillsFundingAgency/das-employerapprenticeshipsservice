@@ -13,7 +13,6 @@ using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.
 using SFA.DAS.UnitOfWork.WebApi.Extensions;
 using SFA.DAS.Validation.WebApi;
 using WebApi.StructureMap;
-using SFA.DAS.EAS.Application.DependencyResolution;
 using SFA.DAS.EmployerFinance.Api.Client;
 using SFA.DAS.EmployerFinance.Configuration;
 
@@ -35,19 +34,19 @@ namespace SFA.DAS.EmployerFinance.Api
             config.UseStructureMap(c =>
             {
                 c.AddRegistry<AuthorizationRegistry>();
-                c.AddRegistry<EmployerFinance.DependencyResolution.CachesRegistry>();                
-                c.AddRegistry<EAS.Application.DependencyResolution.ConfigurationRegistry>();
-                c.AddRegistry<EmployerFinance.DependencyResolution.DataRegistry>();
+                c.AddRegistry<CachesRegistry>();                
+                c.AddRegistry<ConfigurationRegistry>();
+                c.AddRegistry<DataRegistry>();
                 c.AddRegistry<DateTimeRegistry>();
                 c.AddRegistry<EntityFrameworkUnitOfWorkRegistry<EmployerFinanceDbContext>>();
-                c.AddRegistry<EmployerFinance.DependencyResolution.EventsRegistry>();
+                c.AddRegistry<EventsRegistry>();
                 c.AddRegistry<ExecutionPoliciesRegistry>();
-                c.AddRegistry<EmployerFinance.DependencyResolution.HashingRegistry>();
-                c.AddRegistry<EAS.Application.DependencyResolution.LoggerRegistry>();
-                c.AddRegistry<EmployerFinance.DependencyResolution.MapperRegistry>();    
-                c.AddRegistry<EmployerFinance.DependencyResolution.MediatorRegistry>();
-                c.AddRegistry<EmployerFinance.DependencyResolution.MessagePublisherRegistry>();
-                c.AddRegistry<EmployerFinance.DependencyResolution.NotificationsRegistry>();
+                c.AddRegistry<HashingRegistry>();
+                c.AddRegistry<LoggerRegistry>();
+                c.AddRegistry<MapperRegistry>();    
+                c.AddRegistry<MediatorRegistry>();
+                c.AddRegistry<MessagePublisherRegistry>();
+                c.AddRegistry<NotificationsRegistry>();
                 c.AddRegistry<NServiceBusClientUnitOfWorkRegistry>();
                 c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
                 c.AddRegistry<StartupRegistry>();

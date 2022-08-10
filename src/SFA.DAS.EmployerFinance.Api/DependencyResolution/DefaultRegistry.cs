@@ -3,8 +3,8 @@ using System.Configuration;
 using System.Data.Common;
 using System.Data.SqlClient;
 using Microsoft.Azure.Services.AppAuthentication;
-using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.EmployerFinance.Configuration;
+using SFA.DAS.EmployerFinance.Data;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Api.DependencyResolution
@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerFinance.Api.DependencyResolution
 
         private string GetEmployerFinanceConnectionString(IContext context)
         {
-            return context.GetInstance<LevyDeclarationProviderConfiguration>().DatabaseConnectionString;
+            return context.GetInstance<EmployerFinanceConfiguration>().DatabaseConnectionString;
         }
     }
 }

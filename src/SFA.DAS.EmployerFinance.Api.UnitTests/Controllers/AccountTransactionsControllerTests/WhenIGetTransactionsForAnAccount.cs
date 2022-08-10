@@ -56,8 +56,8 @@ namespace SFA.DAS.EmployerFinance.Api.UnitTests.Controllers.AccountTransactionsC
 
             //Assert
             Assert.IsNotNull(response);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<SFA.DAS.EmployerFinance.Api.Types.TransactionsViewModel>>(response);
-            var model = response as OkNegotiatedContentResult<SFA.DAS.EmployerFinance.Api.Types.TransactionsViewModel>;
+            Assert.IsInstanceOf<OkNegotiatedContentResult<Transactions>>(response);
+            var model = response as OkNegotiatedContentResult<Transactions>;
             model?.Content.Should().NotBeNull();
             model?.Content.ShouldAllBeEquivalentTo(transactionsResponse.Data.TransactionLines, options => options.Excluding(x => x.ResourceUri));
         }
@@ -81,8 +81,8 @@ namespace SFA.DAS.EmployerFinance.Api.UnitTests.Controllers.AccountTransactionsC
             
             //Assert
             Assert.IsNotNull(response);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<TransactionsViewModel>>(response);
-            var model = response as OkNegotiatedContentResult<TransactionsViewModel>;
+            Assert.IsInstanceOf<OkNegotiatedContentResult<Transactions>>(response);
+            var model = response as OkNegotiatedContentResult<Transactions>;
 
             model?.Content.Should().NotBeNull();
             model?.Content.PreviousMonthUri.Should().BeNullOrEmpty();
@@ -111,7 +111,7 @@ namespace SFA.DAS.EmployerFinance.Api.UnitTests.Controllers.AccountTransactionsC
 
             //Assert
             var response = await _controller.GetTransactions(hashedAccountId, year, month);
-            var model = response as OkNegotiatedContentResult<TransactionsViewModel>;
+            var model = response as OkNegotiatedContentResult<Transactions>;
 
             model?.Content.PreviousMonthUri.Should().Be(expectedUri);
         }
@@ -134,8 +134,8 @@ namespace SFA.DAS.EmployerFinance.Api.UnitTests.Controllers.AccountTransactionsC
 
             //Assert
             Assert.IsNotNull(response);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<TransactionsViewModel>>(response);
-            var model = response as OkNegotiatedContentResult<TransactionsViewModel>;
+            Assert.IsInstanceOf<OkNegotiatedContentResult<Transactions>>(response);
+            var model = response as OkNegotiatedContentResult<Transactions>;
 
             model?.Content.Should().NotBeNull();
             model?.Content.ShouldAllBeEquivalentTo(transactionsResponse.Data.TransactionLines, options => options.Excluding(x => x.ResourceUri));
@@ -170,7 +170,7 @@ namespace SFA.DAS.EmployerFinance.Api.UnitTests.Controllers.AccountTransactionsC
 
             //Act
             var response = await _controller.GetTransactions(hashedAccountId, year, month);
-            var model = response as OkNegotiatedContentResult<TransactionsViewModel>;
+            var model = response as OkNegotiatedContentResult<Transactions>;
 
             //Assert            
             model?.Content[0].ResourceUri.Should().Be(expectedUri);
@@ -194,8 +194,8 @@ namespace SFA.DAS.EmployerFinance.Api.UnitTests.Controllers.AccountTransactionsC
 
             //Assert            
             Assert.IsNotNull(response);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<TransactionsViewModel>>(response);
-            var model = response as OkNegotiatedContentResult<TransactionsViewModel>;
+            Assert.IsInstanceOf<OkNegotiatedContentResult<Transactions>>(response);
+            var model = response as OkNegotiatedContentResult<Transactions>;
 
             model?.Content.Should().NotBeNull();
             model?.Content.ShouldAllBeEquivalentTo(transactionsResponse.Data.TransactionLines, options => options.Excluding(x => x.ResourceUri));

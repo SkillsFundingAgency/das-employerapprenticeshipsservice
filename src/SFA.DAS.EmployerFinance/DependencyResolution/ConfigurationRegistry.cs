@@ -1,9 +1,7 @@
 ﻿using SFA.DAS.Authorization.EmployerFeatures.Configuration;
 using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EAS.Account.Api.Client;
-using SFA.DAS.EmployerFinance.Api.Client;
 using SFA.DAS.EmployerFinance.Configuration;
-using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.Hmrc.Configuration;
 using StructureMap;
 
