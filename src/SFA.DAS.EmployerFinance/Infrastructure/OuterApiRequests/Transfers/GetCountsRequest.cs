@@ -2,15 +2,15 @@
 
 namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests.Transfers
 {
-    public class GetIndexRequest : IGetApiRequest
+    public class GetCountsRequest : IGetApiRequest
     {
         private readonly long _accountId;
 
-        public GetIndexRequest(long accountId)
+        public GetCountsRequest(long accountId)
         {
             _accountId = accountId;
         }
 
-        public string GetUrl => $"Transfers/{_accountId}";
+        public string GetUrl => $"transfers/{_accountId}/counts";
     }
 }

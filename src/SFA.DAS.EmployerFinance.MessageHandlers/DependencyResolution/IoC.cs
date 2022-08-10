@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution
                 c.AddRegistry<NotificationsRegistry>();
                 c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
                 c.AddRegistry<PaymentsRegistry>();
-                c.AddRegistry<ManageApprenticeshipsOuterApiRegistry>();
+                c.AddRegistry<EmployerFinanceOuterApiRegistry>();
                 c.AddRegistry<ProvidersRegistry>();                
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<StartupRegistry>();

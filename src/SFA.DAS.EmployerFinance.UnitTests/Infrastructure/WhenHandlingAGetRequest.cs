@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Infrastructure
             var key = "123-abc-567";
             var getTestRequest = new GetTestRequest();
             var testObject = new List<string>();
-            var config = new ManageApprenticeshipsOuterApiConfiguration {BaseUrl = "http://valid-url/", Key = key};
+            var config = new EmployerFinanceOuterApiConfiguration {BaseUrl = "http://valid-url/", Key = key};
 
             var response = new HttpResponseMessage
             {
@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Infrastructure
             };
             var httpMessageHandler = MessageHandler.SetupMessageHandlerMock(response, $"{config.BaseUrl}{getTestRequest.GetUrl}", config.Key);
             var client = new HttpClient(httpMessageHandler.Object);
-            var apiClient = new ApiClient(client, config);
+            var apiClient = new OuterApiClient(client, config);
 
             //Act
             var actual = await apiClient.Get<List<string>>(getTestRequest);
@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Infrastructure
             //Arrange
             var key = "123-abc-567";
             var getTestRequest = new GetTestRequest();
-            var config = new ManageApprenticeshipsOuterApiConfiguration {BaseUrl = "http://valid-url/", Key = key };
+            var config = new EmployerFinanceOuterApiConfiguration {BaseUrl = "http://valid-url/", Key = key };
             var response = new HttpResponseMessage
             {
                 Content = new StringContent(""),
@@ -57,7 +57,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Infrastructure
             
             var httpMessageHandler = MessageHandler.SetupMessageHandlerMock(response, $"{config.BaseUrl}{getTestRequest.GetUrl}", config.Key);
             var client = new HttpClient(httpMessageHandler.Object);
-            var apiClient = new ApiClient(client, config);
+            var apiClient = new OuterApiClient(client, config);
             
             //Act Assert
             Assert.ThrowsAsync<HttpRequestException>(() => apiClient.Get<List<string>>(getTestRequest));

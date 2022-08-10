@@ -1,15 +1,12 @@
-using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses
+namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses.Providers
 {
-    public class GetProvidersResponse
+    public class GetProviderResponse : ProviderResponse
     {
-        [JsonProperty("providers")]
-        public List<ProviderResponseItem> Providers { get; set; }
     }
 
-    public class ProviderResponseItem
+    public class ProviderResponse
     {
         [JsonProperty("ukprn")]
         public int Ukprn { get; set; }
