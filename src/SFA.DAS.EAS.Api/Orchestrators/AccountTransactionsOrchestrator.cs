@@ -10,15 +10,13 @@ using SFA.DAS.NLog.Logger;
 namespace SFA.DAS.EAS.Account.Api.Orchestrators
 {
     public class AccountTransactionsOrchestrator
-    {
-        private readonly IMediator _mediator;
+    {        
         private readonly IMapper _mapper;
         private readonly ILog _logger;
         private readonly IEmployerFinanceApiService _employerFinanceApiService;
 
-        public AccountTransactionsOrchestrator(IMediator mediator, IMapper mapper, ILog logger, IEmployerFinanceApiService employerFinanceApiService)
-        {
-            _mediator = mediator;
+        public AccountTransactionsOrchestrator(IMapper mapper, ILog logger, IEmployerFinanceApiService employerFinanceApiService)
+        {            
             _mapper = mapper;
             _logger = logger;
             _employerFinanceApiService = employerFinanceApiService;

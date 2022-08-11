@@ -45,12 +45,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions
             if (!result.IsValid())
             {
                 throw new InvalidRequestException(result.ValidationDictionary);
-            }
-
-            //if (result.IsUnauthorized)
-            //{
-            //    throw new UnauthorizedAccessException();
-            //}
+            }          
 
             var toDate = CalculateToDate(message);
             var fromDate = new DateTime(toDate.Year, toDate.Month, 1);

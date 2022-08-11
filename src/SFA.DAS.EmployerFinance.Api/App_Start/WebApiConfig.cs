@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerFinance.Api
                 c.AddRegistry<ExecutionPoliciesRegistry>();
                 c.AddRegistry<HashingRegistry>();
                 c.AddRegistry<LoggerRegistry>();
-                c.AddRegistry<MapperRegistry>();    
+                c.AddRegistry<MapperRegistry>(); 
                 c.AddRegistry<MediatorRegistry>();
                 c.AddRegistry<MessagePublisherRegistry>();
                 c.AddRegistry<NotificationsRegistry>();

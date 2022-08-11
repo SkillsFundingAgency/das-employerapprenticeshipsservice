@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http.Results;
 using System.Web.Http.Routing;
 using FluentAssertions;
-using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Account.Api.Controllers;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
-using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
-using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.TestCommon.Extensions;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
 using SFA.DAS.NLog.Logger;
@@ -23,8 +19,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
     [TestFixture]
     public class WhenIGetTransactionsForAnAccount : AccountTransactionsControllerTests
     {
-        private AccountTransactionsController _controller;
-        private Mock<IMediator> _mediator;
+        private AccountTransactionsController _controller;        
         private Mock<ILog> _logger;
         private Mock<UrlHelper> _urlHelper;        
         private Mock<IEmployerFinanceApiService> _financeApiService;
@@ -33,32 +28,20 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
 
         [SetUp]
         public void Arrange()
-        {
-            _mediator = new Mock<IMediator>();
+        {           
             _logger = new Mock<ILog>();
             _urlHelper = new Mock<UrlHelper>();
             _urlHelper.Setup(x => x.Route(It.IsAny<string>(), It.IsAny<object>())).Returns("dummyurl");            
             _financeApiService = new Mock<IEmployerFinanceApiService>();
             _mapper = ConfigureMapper();
-            var orchestrator = new AccountTransactionsOrchestrator(_mediator.Object, _mapper, _logger.Object, _financeApiService.Object);
+            var orchestrator = new AccountTransactionsOrchestrator(_mapper, _logger.Object, _financeApiService.Object);
             _controller = new AccountTransactionsController(orchestrator);
             _controller.Url = _urlHelper.Object;
             transactionsViewModel = new TransactionsViewModel
             {
-                new TransactionViewModel
-                {
-                    Description = "Is Not Null",
-                    Amount = 100m,
-                    DateCreated = DateTime.Today
-                },
-                new TransactionViewModel
-                {
-                    Description = "Is Not Null 2",
-                    Amount = 100m,
-                    DateCreated = DateTime.Today
-                }
+                new TransactionViewModel  { Description = "Is Not Null", Amount = 100m, DateCreated = DateTime.Today },
+                new TransactionViewModel  { Description = "Is Not Null 2", Amount = 100m, DateCreated = DateTime.Today }
             };
-
         }
 
         [Test]
@@ -86,13 +69,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             //Arrange
             var hashedAccountId = "ABC123";
             var year = 2017;
-            var month = 3;
-            var transactionsResponse = new GetEmployerAccountTransactionsResponse
-            {
-                Data = new AggregationData { TransactionLines = new List<TransactionLine> { TransactionLineObjectMother.Create() } },
-                AccountHasPreviousTransactions = false
-            };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(q => q.HashedAccountId == hashedAccountId && q.Year == year && q.Month == month))).ReturnsAsync(transactionsResponse);           
+            var month = 3;          
             _financeApiService.Setup(x => x.GetTransactions(hashedAccountId, year, month)).ReturnsAsync(transactionsViewModel);
             
             //Act
@@ -114,16 +91,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             //Arrange
             var hashedAccountId = "ABC123";
             var year = 2017;
-            var month = 1;
-            var transactionsResponse = new GetEmployerAccountTransactionsResponse
-            {
-                Data = new AggregationData { TransactionLines = new List<TransactionLine> { TransactionLineObjectMother.Create() } },
-                AccountHasPreviousTransactions = true,
-                Year = year,
-                Month = month
-            };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(q => q.HashedAccountId == hashedAccountId && q.Year == year && q.Month == month))).ReturnsAsync(transactionsResponse);
-           
+            var month = 1;                
             transactionsViewModel.HasPreviousTransactions = true;
             transactionsViewModel.Year = year;
             transactionsViewModel.Month = month;
@@ -146,14 +114,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
         {
             //Arrange
             var hashedAccountId = "ABC123";
-            var year = 2017;
-            var transactionsResponse = new GetEmployerAccountTransactionsResponse
-            {
-                Data = new AggregationData { TransactionLines = new List<TransactionLine> { TransactionLineObjectMother.Create() } },
-                AccountHasPreviousTransactions = false
-            };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(q => q.HashedAccountId == hashedAccountId && q.Year == year && q.Month == DateTime.Now.Month))).ReturnsAsync(transactionsResponse);
-            
+            var year = 2017;                    
             transactionsViewModel.HasPreviousTransactions = false;
             transactionsViewModel.Year = year;            
 
@@ -180,32 +141,10 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             var year = 2017;
             var month = 1;
             var levyTransaction = TransactionLineObjectMother.Create();
-            var transactionsResponse = new GetEmployerAccountTransactionsResponse
-            {
-                Data = new AggregationData { TransactionLines = new List<TransactionLine> { levyTransaction } },
-                AccountHasPreviousTransactions = false,
-                Year = year,
-                Month = month
-            };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(q => q.HashedAccountId == hashedAccountId && q.Year == year && q.Month == month))).ReturnsAsync(transactionsResponse);
-
-            var isNotZero = 100m;
-            var isTxDateCreated = DateTime.Today;
             var transactionsViewModel = new TransactionsViewModel
             {
-                new TransactionViewModel
-                {
-                    Description = "Is Not Null",
-                    Amount = isNotZero,
-                    DateCreated = isTxDateCreated,
-                    ResourceUri = "someuri"
-                },
-                new TransactionViewModel
-                {
-                    Description = "Is Not Null 2",
-                    Amount = isNotZero,
-                    DateCreated = isTxDateCreated
-                }
+                new TransactionViewModel  { Description = "Is Not Null", Amount = 100m, DateCreated =  DateTime.Today, ResourceUri = "someuri" },
+                new TransactionViewModel  { Description = "Is Not Null 2", Amount = 100m, DateCreated =  DateTime.Today  }
             };
             transactionsViewModel.HasPreviousTransactions = true;
             transactionsViewModel.Year = year;
@@ -232,33 +171,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
         [Test]
         public async Task AndNoYearIsProvidedThenTheCurrentYearIsUsed()
         {
-            var hashedAccountId = "ABC123";
-            var transactionsResponse = new GetEmployerAccountTransactionsResponse
-            {
-                Data = new AggregationData { TransactionLines = new List<TransactionLine> { TransactionLineObjectMother.Create() } },
-                AccountHasPreviousTransactions = false
-            };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(q => q.HashedAccountId == hashedAccountId && q.Year == DateTime.Now.Year && q.Month == DateTime.Now.Month))).ReturnsAsync(transactionsResponse);
-
-            var isNotZero = 100m;
-            var isTxDateCreated = DateTime.Today;
-            var transactionsViewModel = new TransactionsViewModel
-            {
-                new TransactionViewModel
-                {
-                    Description = "Is Not Null",
-                    Amount = isNotZero,
-                    DateCreated = isTxDateCreated,
-                    ResourceUri = "someuri"
-                },
-                new TransactionViewModel
-                {
-                    Description = "Is Not Null 2",
-                    Amount = isNotZero,
-                    DateCreated = isTxDateCreated
-                }
-            };
-
+            var hashedAccountId = "ABC123";          
             _financeApiService.Setup(x => x.GetTransactions(hashedAccountId, DateTime.Now.Year, DateTime.Now.Month)).ReturnsAsync(transactionsViewModel);
 
             //Act

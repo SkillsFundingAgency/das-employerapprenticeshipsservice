@@ -25,12 +25,12 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
                 TotalPages = 123,
                 Data = new List<AccountWithBalanceViewModel>
                 {
-                    new AccountWithBalanceViewModel { AccountHashId = "ABC123", AccountId = 123, AccountName = "Test 1", IsLevyPayer = true },
-                    new AccountWithBalanceViewModel { AccountHashId = "ABC999", AccountId = 987, AccountName = "Test 2", IsLevyPayer = true }
+                    new AccountWithBalanceViewModel { AccountHashId = "ABC123", AccountId = 123, AccountName = "Test 1", IsAllowedPaymentOnService = true },
+                    new AccountWithBalanceViewModel { AccountHashId = "ABC999", AccountId = 987, AccountName = "Test 2", IsAllowedPaymentOnService = true }
                 }
             };
 
-            ApiService.Setup(s => s.GetAccounts(null, 1000, 1, It.IsAny<CancellationToken>()))
+            _employerAccountsApiService.Setup(s => s.GetAccounts(null, 1000, 1, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(accountsResponse); 
 
             var response = new GetAccountBalancesResponse
@@ -42,10 +42,10 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
                 }
             };
 
-            FinanceApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>())).ReturnsAsync(response);
+            _employerFinanceApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>())).ReturnsAsync(response);
 
             //Act
-            var result = await Controller.GetAccounts();
+            var result = await _controller.GetAccounts();
             
             //Assert
             result.Should().NotBeNull();

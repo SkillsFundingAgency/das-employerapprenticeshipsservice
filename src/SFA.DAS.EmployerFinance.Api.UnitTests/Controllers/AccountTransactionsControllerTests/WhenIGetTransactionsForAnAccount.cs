@@ -6,15 +6,12 @@ using SFA.DAS.EmployerFinance.Api.Types;
 using SFA.DAS.EAS.TestCommon.Extensions;
 using SFA.DAS.EmployerFinance.Api.Controllers;
 using SFA.DAS.EmployerFinance.Api.Orchestrators;
-using SFA.DAS.EmployerFinance.Models.Transaction;
 using SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.NLog.Logger;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http.Results;
 using System.Web.Http.Routing;
-using TransactionItemType = SFA.DAS.EmployerFinance.Models.Transaction.TransactionItemType;
 
 namespace SFA.DAS.EmployerFinance.Api.UnitTests.Controllers.AccountTransactionsControllerTests
 {
@@ -200,31 +197,5 @@ namespace SFA.DAS.EmployerFinance.Api.UnitTests.Controllers.AccountTransactionsC
             model?.Content.Should().NotBeNull();
             model?.Content.ShouldAllBeEquivalentTo(transactionsResponse.Data.TransactionLines, options => options.Excluding(x => x.ResourceUri));
         }
-    }
-
-    public static class TransactionLineObjectMother
-    {
-        public static AggregationData Create()
-        {           
-            return new AggregationData
-            {
-                TransactionLines =  (new TransactionLine[]
-                {
-                    new TransactionLine
-                    {
-                        AccountId = 123,
-                        Balance = 500.43m,
-                        Description = "Line",
-                        PayrollYear = "17-18",
-                        PayrollMonth = 3,
-                        Amount = 100.11m,
-                        DateCreated = DateTime.Now.AddDays(-1),
-                        PayrollDate = DateTime.Now.AddDays(-4),
-                        TransactionDate = DateTime.Now,
-                        TransactionType = TransactionItemType.Declaration,
-                        SubTransactions = new List<TransactionLine>()
-                }   })
-            };
-        }        
-    }
+    }    
 }

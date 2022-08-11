@@ -90,7 +90,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
             return JsonConvert.DeserializeObject<TotalPaymentsModel>(content);
         }     
 
-        public async Task<GetAccountBalancesResponse> GetAccountBalances(List<string> accountIds)//(AccountBalanceRequest accountIds)
+        public async Task<GetAccountBalancesResponse> GetAccountBalances(List<string> accountIds)
         {
             var url = $"api/accounts/balances";
             var data = JsonConvert.SerializeObject(accountIds);           
