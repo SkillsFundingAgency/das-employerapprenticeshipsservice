@@ -1,11 +1,7 @@
 ﻿using System;
 using AutoMapper;
-using MediatR;
 using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
-using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
 using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using System.Collections.Generic;
@@ -19,23 +15,20 @@ using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
 namespace SFA.DAS.EAS.Account.Api.Orchestrators
 {
     public class AccountsOrchestrator
-    {
-        private readonly IMediator _mediator;
+    {   
         private readonly ILog _logger;
         private readonly IMapper _mapper;
         private readonly IHashingService _hashingService;
         private readonly IEmployerAccountsApiService _employerAccountsApiService;
         private readonly IEmployerFinanceApiService _employerFinanceApiService;
 
-        public AccountsOrchestrator(
-            IMediator mediator, 
+        public AccountsOrchestrator(            
             ILog logger, 
             IMapper mapper, 
             IHashingService hashingService,
             IEmployerAccountsApiService employerAccountsApiService,
             IEmployerFinanceApiService employerFinanceApiService)
-        {    
-            _mediator = mediator;
+        {   
             _logger = logger;
             _mapper = mapper;
             _hashingService = hashingService;
@@ -50,7 +43,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             var accountsResult = await _employerAccountsApiService.GetAccounts(toDate, pageSize, pageNumber);            
            
             var transactionResult = await _employerFinanceApiService.GetAccountBalances(accountsResult.Data.Select(account => account.AccountHashId).ToList());
-            var accountBalanceHash = BuildAccountBalanceHash(transactionResult.Accounts);
+            var accountBalanceHash = BuildAccountBalanceHash(transactionResult);
 
             accountsResult.Data.ForEach(account =>
             {
@@ -132,13 +125,13 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
 
             await Task.WhenAll(accountBalanceTask, transferBalanceTask).ConfigureAwait(false);            
 
-            accountResult.Balance = accountBalanceTask.Result?.Accounts.FirstOrDefault().Balance ?? 0;
-            accountResult.RemainingTransferAllowance = transferBalanceTask.Result.TransferAllowance.RemainingTransferAllowance ?? 0;
-            accountResult.StartingTransferAllowance = transferBalanceTask.Result.TransferAllowance.StartingTransferAllowance ?? 0;
+            accountResult.Balance = accountBalanceTask.Result?.FirstOrDefault().Balance ?? 0;
+            accountResult.RemainingTransferAllowance = transferBalanceTask.Result.RemainingTransferAllowance ?? 0;
+            accountResult.StartingTransferAllowance = transferBalanceTask.Result.StartingTransferAllowance ?? 0;
             accountResult.IsAllowedPaymentOnService = IsAccountAllowedPaymentOnService(
                 accountResult.AccountAgreementType,
                 (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), accountResult.ApprenticeshipEmployerType), 
-                accountBalanceTask.Result.Accounts.FirstOrDefault().LevyOverride);
+                accountBalanceTask.Result.FirstOrDefault().LevyOverride);
 
             return new OrchestratorResponse<AccountDetailViewModel> { Data = accountResult };
         }

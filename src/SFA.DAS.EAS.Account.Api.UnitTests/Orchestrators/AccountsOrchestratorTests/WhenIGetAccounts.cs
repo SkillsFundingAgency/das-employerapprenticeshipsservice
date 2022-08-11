@@ -12,7 +12,6 @@ using SFA.DAS.NLog.Logger;
 using System.Threading.Tasks;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
@@ -21,8 +20,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
 {
     internal class WhenIGetAccounts
     {
-        private AccountsOrchestrator _orchestrator;
-        private Mock<IMediator> _mediator;
+        private AccountsOrchestrator _orchestrator;        
         private Mock<ILog> _log;
         private Mock<IHashingService> _hashingService;
         private Mock<IEmployerAccountsApiService> _apiService;
@@ -33,14 +31,13 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
 
         [SetUp]
         public void Arrange()
-        {
-            _mediator = new Mock<IMediator>();
+        {            
             _mapper = new Mock<IMapper>();
             _log = new Mock<ILog>();
             _hashingService = new Mock<IHashingService>();
             _apiService = new Mock<IEmployerAccountsApiService>();
             _financeApiService = new Mock<IEmployerFinanceApiService>();
-            _orchestrator = new AccountsOrchestrator(_mediator.Object, _log.Object, _mapper.Object, _hashingService.Object, _apiService.Object, _financeApiService.Object);
+            _orchestrator = new AccountsOrchestrator(_log.Object, _mapper.Object, _hashingService.Object, _apiService.Object, _financeApiService.Object);
 
             _expectedAccount = new AccountWithBalanceViewModel {  AccountId = 124343 };
             _expectedAccountBalance = new AccountBalance { AccountId = _expectedAccount.AccountId };
@@ -51,18 +48,9 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
                 {
                     Data = new List<AccountWithBalanceViewModel> { _expectedAccount }
                 });
-
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>()))
-                .ReturnsAsync(new GetAccountBalancesResponse
-                {
-                    Accounts = new List<AccountBalance> { _expectedAccountBalance }
-                });
-
+          
             _financeApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>()))
-                 .ReturnsAsync(new GetAccountBalancesResponse
-                 {
-                     Accounts = new List<AccountBalance> { _expectedAccountBalance }
-                 });
+                 .ReturnsAsync( new List<AccountBalance> { _expectedAccountBalance });
 
         }
 

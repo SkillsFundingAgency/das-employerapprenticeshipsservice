@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
 using Castle.Core.Internal;
-using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
-using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
@@ -25,8 +22,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
 {
     internal class WhenIGetAnAccount
     {
-        private AccountsOrchestrator _orchestrator;
-        private Mock<IMediator> _mediator;
+        private AccountsOrchestrator _orchestrator;        
         private Mock<ILog> _log;
         private Mock<IHashingService> _hashingService;
         private Mock<IEmployerAccountsApiService> _apiService;
@@ -44,47 +40,26 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
         [SetUp]
         public void Arrange()
         {
-            _transferAllowance = new TransferAllowance { RemainingTransferAllowance = 123.45M, StartingTransferAllowance = 234.56M };
-            _mediator = new Mock<IMediator>();
+            _transferAllowance = new TransferAllowance { RemainingTransferAllowance = 123.45M, StartingTransferAllowance = 234.56M };            
             _mapper = ConfigureMapper();
             _log = new Mock<ILog>();
             _hashingService = new Mock<IHashingService>();
             _apiService = new Mock<IEmployerAccountsApiService>();
             _financeApiService = new Mock<IEmployerFinanceApiService>();
-            _orchestrator = new AccountsOrchestrator(_mediator.Object, _log.Object, _mapper, _hashingService.Object, _apiService.Object, _financeApiService.Object);
+            _orchestrator = new AccountsOrchestrator(_log.Object, _mapper, _hashingService.Object, _apiService.Object, _financeApiService.Object);
         
             _accountDetailViewModel = new AccountDetailViewModel { AccountId = 1, ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy.ToString() };
 
             _apiService
                 .Setup(x => x.GetAccount("ABC123", It.IsAny<CancellationToken>()))
                 .ReturnsAsync(_accountDetailViewModel)
-                .Verifiable("Get account was not called"); 
+                .Verifiable("Get account was not called");
 
-            _mediator
-                .Setup(x => x.SendAsync(It.IsAny<GetTransferAllowanceQuery>()))
-                .ReturnsAsync(new GetTransferAllowanceResponse { TransferAllowance = _transferAllowance })
-                .Verifiable("Get transfer balance was not called");
-
-            var transferAllowanceResponse = new GetTransferAllowanceResponse
-            {
-                TransferAllowance = _transferAllowance
-            };
+            var transferAllowanceResponse = _transferAllowance;            
             _financeApiService.Setup(x => x.GetTransferAllowance(It.IsAny<string>())).ReturnsAsync(transferAllowanceResponse);
 
             _accountBalanceResult = new AccountBalance { Balance = AccountBalance };
-
-            _mediator
-                .Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>()))
-                .ReturnsAsync(new GetAccountBalancesResponse
-                {
-                    Accounts = new List<AccountBalance> { _accountBalanceResult }
-                })
-                .Verifiable("Get account balance was not called");
-
-            var accountBalancesResponse = new GetAccountBalancesResponse
-            {
-                Accounts = new List<AccountBalance> { _accountBalanceResult }
-            };
+            var accountBalancesResponse = new List<AccountBalance> { _accountBalanceResult };
             _financeApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>())).ReturnsAsync(accountBalancesResponse);
         }
 

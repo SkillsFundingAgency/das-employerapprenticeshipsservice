@@ -1,49 +1,49 @@
-﻿using System.Collections.Generic;
-using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
+﻿//using System.Collections.Generic;
+//using NUnit.Framework;
+//using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountBalancesTests
-{
-    public class WhenIValidateTheRequest
-    {
-        private GetAccountBalancesValidator _validator;
+//namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountBalancesTests
+//{
+//    public class WhenIValidateTheRequest
+//    {
+//        private GetAccountBalancesValidator _validator;
 
-        [SetUp]
-        public void Arrange()
-        {
-            _validator = new GetAccountBalancesValidator();
+//        [SetUp]
+//        public void Arrange()
+//        {
+//            _validator = new GetAccountBalancesValidator();
             
-        }
+//        }
 
-        [Test]
-        public void ThenTheRequestIsInvalidIfTheFieldsAreNotPopulated()
-        {
-            //Act
-            var actual = _validator.Validate(new GetAccountBalancesRequest {AccountIds = new List<long>()});
+//        [Test]
+//        public void ThenTheRequestIsInvalidIfTheFieldsAreNotPopulated()
+//        {
+//            //Act
+//            var actual = _validator.Validate(new GetAccountBalancesRequest {AccountIds = new List<long>()});
 
-            //Assert
-            Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string,string>("AccountIds", "AccountIds has not been supplied"),actual.ValidationDictionary );
-        }
+//            //Assert
+//            Assert.IsFalse(actual.IsValid());
+//            Assert.Contains(new KeyValuePair<string,string>("AccountIds", "AccountIds has not been supplied"),actual.ValidationDictionary );
+//        }
 
-        [Test]
-        public void ThenTheRequestIsInvalidIfTheFieldIsNull()
-        {
-            //Act
-            var actual = _validator.Validate(new GetAccountBalancesRequest {  });
+//        [Test]
+//        public void ThenTheRequestIsInvalidIfTheFieldIsNull()
+//        {
+//            //Act
+//            var actual = _validator.Validate(new GetAccountBalancesRequest {  });
 
-            //Assert
-            Assert.IsFalse(actual.IsValid());
-        }
+//            //Assert
+//            Assert.IsFalse(actual.IsValid());
+//        }
 
-        [Test]
-        public void ThenTheRequestIsValidIfTheFieldsArePopulated()
-        {
-            //Act
-            var actual = _validator.Validate(new GetAccountBalancesRequest {AccountIds = new List<long> {123} });
+//        [Test]
+//        public void ThenTheRequestIsValidIfTheFieldsArePopulated()
+//        {
+//            //Act
+//            var actual = _validator.Validate(new GetAccountBalancesRequest {AccountIds = new List<long> {123} });
 
-            //Assert
-            Assert.IsTrue(actual.IsValid());
-        }
-    }
-}
+//            //Assert
+//            Assert.IsTrue(actual.IsValid());
+//        }
+//    }
+//}

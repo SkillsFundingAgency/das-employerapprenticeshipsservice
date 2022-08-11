@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using SFA.DAS.EAS.Domain.Models.Transaction;
+﻿//using System.Collections.Generic;
+//using SFA.DAS.EAS.Domain.Models.Transaction;
 
-namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionSummary
-{
-    public class GetAccountTransactionSummaryResponse
-    {
-        public List<TransactionSummary> Data { get; set; }
-    }
-}
+//namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionSummary
+//{
+//    public class GetAccountTransactionSummaryResponse
+//    {
+//        public List<TransactionSummary> Data { get; set; }
+//    }
+//}

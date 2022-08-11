@@ -1,14 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Web.Http.Routing;
+﻿using System.Web.Http.Routing;
 using AutoMapper;
-using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Controllers;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
-using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.HashingService;
 using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
@@ -18,7 +14,6 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
     public abstract class EmployerAccountsControllerTests
     {
         protected EmployerAccountsController _controller;
-        protected Mock<IMediator> _mediator;
         protected Mock<ILog> Logger;
         protected Mock<UrlHelper> _urlHelper;
         protected Mock<IMapper> _mapper;
@@ -29,21 +24,17 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
         [SetUp]
         public void Arrange()
         {
-            _mediator = new Mock<IMediator>();
             Logger = new Mock<ILog>();
             _mapper = new Mock<IMapper>();
             _hashingService = new Mock<IHashingService>();
             _employerAccountsApiService = new Mock<IEmployerAccountsApiService>();
             _employerFinanceApiService = new Mock<IEmployerFinanceApiService>();
           
-            var orchestrator = new AccountsOrchestrator(_mediator.Object, Logger.Object, _mapper.Object, _hashingService.Object, _employerAccountsApiService.Object, _employerFinanceApiService.Object);
+            var orchestrator = new AccountsOrchestrator(Logger.Object, _mapper.Object, _hashingService.Object, _employerAccountsApiService.Object, _employerFinanceApiService.Object);
             _controller = new EmployerAccountsController(orchestrator, _employerAccountsApiService.Object);
 
             _urlHelper = new Mock<UrlHelper>();
             _controller.Url = _urlHelper.Object;
-
-            var balancesResponse = new GetAccountBalancesResponse { Accounts = new List<AccountBalance>() };
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>())).ReturnsAsync(balancesResponse);
         }
     }
 }

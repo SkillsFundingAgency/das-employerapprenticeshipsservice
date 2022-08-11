@@ -6,10 +6,10 @@ using Newtonsoft.Json;
 using SFA.DAS.EAS.Application.Services.EmployerFinanceApi.Http;
 using System.Net.Http;
 using SFA.DAS.EAS.Application.Http;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Account.Api.Types;
 using System.Text;
-using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
+using SFA.DAS.EAS.Domain.Models.Transfers;
+using SFA.DAS.EAS.Domain.Models.Account;
 
 namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
 {
@@ -90,7 +90,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
             return JsonConvert.DeserializeObject<TotalPaymentsModel>(content);
         }     
 
-        public async Task<GetAccountBalancesResponse> GetAccountBalances(List<string> accountIds)
+        public async Task<List<AccountBalance>> GetAccountBalances(List<string> accountIds)
         {
             var url = $"api/accounts/balances";
             var data = JsonConvert.SerializeObject(accountIds);           
@@ -103,10 +103,10 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
             if (!response.IsSuccessStatusCode)
                 throw new RestHttpClientException(response, content);
 
-            return JsonConvert.DeserializeObject<GetAccountBalancesResponse>(content);
+            return JsonConvert.DeserializeObject<List<AccountBalance>>(content);
         }
 
-        public async Task<GetTransferAllowanceResponse> GetTransferAllowance(string hashedAccountId)
+        public async Task<TransferAllowance> GetTransferAllowance(string hashedAccountId)
         {
             var url = $"api/accounts/{hashedAccountId}/transferAllowance";
             var response = await _httpClient.GetAsync(url);
@@ -116,7 +116,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
             if (!response.IsSuccessStatusCode)
                 throw new RestHttpClientException(response, content);
 
-            return JsonConvert.DeserializeObject<GetTransferAllowanceResponse>(content);
+            return JsonConvert.DeserializeObject<TransferAllowance>(content);
         }       
     }
 }
