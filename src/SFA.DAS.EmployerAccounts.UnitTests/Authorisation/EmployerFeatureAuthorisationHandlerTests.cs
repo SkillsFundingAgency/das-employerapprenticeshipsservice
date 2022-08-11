@@ -17,6 +17,7 @@ using SFA.DAS.Testing;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementsByAccountId;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Queries.GetMinimumSignedAgreementVersion;
 
 namespace SFA.DAS.Authorization.Features.UnitTests.Handlers
 {
@@ -137,23 +138,12 @@ namespace SFA.DAS.Authorization.Features.UnitTests.Handlers
 
         public EmployerFeatureAuthorisationHandlerTestsFixture SetMediatorResponse(int agreementVersion = AgreementVersion, EmployerAgreementStatus agreementStatus = EmployerAgreementStatus.Pending)
         {
-            var response = new GetEmployerAgreementsByAccountIdResponse
-            {
-                EmployerAgreements = new List<EmployerAgreement>
+            Mediator
+                .Setup(s => s.SendAsync(It.Is<GetMinimumSignedAgreementVersionQuery>(q => q.AccountId == AccountId)))
+                .ReturnsAsync(new GetMinimumSignedAgreementVersionResponse
                 {
-                    new EmployerAgreement
-                    {
-                        StatusId = agreementStatus,
-                        AccountLegalEntity = new AccountLegalEntity
-                        {
-                            SignedAgreementVersion = agreementStatus == EmployerAgreementStatus.Signed ? (int?)agreementVersion : null,
-                            PendingAgreementVersion = agreementStatus == EmployerAgreementStatus.Pending ? (int?)agreementVersion : null
-                        }
-                    }
-                }
-            };
-
-            Mediator.Setup(s => s.SendAsync(It.Is<GetEmployerAgreementsByAccountIdRequest>(q => q.AccountId == AccountId))).ReturnsAsync(response);
+                    MinimumSignedAgreementVersion = (agreementStatus == EmployerAgreementStatus.Signed ? agreementVersion : 0)
+                });
 
             return this;
         }
