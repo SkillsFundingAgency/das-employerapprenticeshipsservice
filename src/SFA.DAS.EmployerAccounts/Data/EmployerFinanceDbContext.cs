@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerAccounts.Data
 {
-    [DbConfigurationType(typeof(EntityFramework.SqlAzureDbConfiguration))]
+    //[DbConfigurationType(typeof(EntityFramework.SqlAzureDbConfiguration))]
+    [DbConfigurationType(typeof(SqlAzureDbConfiguration))]
     public class EmployerFinanceDbContext : DbContext
     {
         static EmployerFinanceDbContext()

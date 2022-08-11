@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
-using SFA.DAS.TokenService.Api.Client;
 
 namespace SFA.DAS.EAS.Domain.Configuration
 {

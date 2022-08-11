@@ -7,8 +7,11 @@ using Dapper;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Extensions;
 using SFA.DAS.EmployerFinance.Interfaces;
+using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Models.Payments;
+using SFA.DAS.EmployerFinance.Models.Transfers;
+using SFA.DAS.EmployerFinance.Queries.GetLevyDeclaration;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Sql.Client;
 
@@ -249,6 +252,70 @@ namespace SFA.DAS.EmployerFinance.Data
                 commandType: CommandType.StoredProcedure);
 
             return result.FirstOrDefault();
+        }
+
+        public async Task<List<LevyDeclarationItem>> GetAccountLevyDeclarations(long accountId)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountId", accountId, DbType.Int64);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<LevyDeclarationItem>(
+                sql: "[employer_financial].[GetLevyDeclarations_ByAccountId]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
+            return result.ToList();
+        }
+
+        public async Task<List<LevyDeclarationItem>> GetAccountLevyDeclarations(long accountId, string payrollYear, short payrollMonth)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountId", accountId, DbType.Int64);
+            parameters.Add("@payrollYear", payrollYear, DbType.String);
+            parameters.Add("@payrollMonth", payrollMonth, DbType.Int16);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<LevyDeclarationItem>(
+                sql: "[employer_financial].[GetLevyDeclarations_ByAccountPayrollMonthPayrollYear]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
+            return result.ToList();
+        }
+
+        public async Task<List<AccountBalance>> GetAccountBalances(List<long> accountIds)
+        {
+            var accountParametersTable = new AccountIdUserTableParam(accountIds);
+
+            accountParametersTable.Add("@allowancePercentage", _configuration.TransferAllowancePercentage, DbType.Decimal);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<AccountBalance>(
+                sql: "[employer_financial].[GetAccountBalance_ByAccountIds]",
+                param: accountParametersTable,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
+            return result.ToList();
+        }
+
+        public async Task<TransferAllowance> GetTransferAllowance(long accountId)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountId", accountId, DbType.Int64);
+            parameters.Add("@allowancePercentage", _configuration.TransferAllowancePercentage, DbType.Decimal);
+
+            var transferAllowance = await _db.Value.Database.Connection.QueryAsync<TransferAllowance>(
+                sql: "[employer_financial].[GetAccountTransferAllowance]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
+            return transferAllowance.SingleOrDefault() ?? new TransferAllowance();
+            
         }
     }
 }

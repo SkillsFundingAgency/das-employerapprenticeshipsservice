@@ -9,5 +9,7 @@
         public const string CommitmentsApiClient = "SFA.DAS.CommitmentsAPI";
         public const string NotificationsApiClient = "SFA.DAS.Notifications";
         public const string PaymentsApiClient = "SFA.DAS.PaymentsAPI";
+        public const string LevyDeclarationProvider = "SFA.DAS.LevyAggregationProvider";
+        public const string EmployerApprenticeshipsService = "SFA.DAS.EmployerApprenticeshipsService";
     }
 }

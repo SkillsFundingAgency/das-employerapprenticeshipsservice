@@ -16,4 +16,8 @@
     <PackageReference Include="StructureMap" Version="4.7.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EmployerFinance.Api.Types\SFA.DAS.EmployerFinance.Api.Types.csproj" />
+  </ItemGroup>
+
 </Project>

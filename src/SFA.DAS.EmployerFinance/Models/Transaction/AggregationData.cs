@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace SFA.DAS.EmployerFinance.Models.Transaction
+﻿namespace SFA.DAS.EmployerFinance.Models.Transaction
 {
     public class AggregationData
     {

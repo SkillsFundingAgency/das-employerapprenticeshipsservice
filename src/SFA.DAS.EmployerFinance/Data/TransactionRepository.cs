@@ -13,6 +13,8 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerFinance.Services;
+using SFA.DAS.EmployerFinance.Api.Types;
+using TransactionItemType = SFA.DAS.EmployerFinance.Models.Transaction.TransactionItemType;
 
 namespace SFA.DAS.EmployerFinance.Data
 {
@@ -268,6 +270,21 @@ namespace SFA.DAS.EmployerFinance.Data
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
+        }       
+
+        public async Task<List<TransactionSummary>> GetAccountTransactionSummary(long accountId)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@AccountId", accountId, DbType.Int64);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<TransactionSummary>(
+                sql: "[employer_financial].[GetTransactionSummary_ByAccountId]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
+            return result.ToList();
         }
     }
 }

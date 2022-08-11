@@ -66,16 +66,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
         }
 
         [Test]
-        public void ThenIfTheUserIsNotAuthorisedAnExceptionIsThrown()
-        {
-            //Arrange
-            RequestValidator.Setup(x => x.ValidateAsync(_request)).ReturnsAsync(new ValidationResult { IsUnauthorized = true });
-
-            //Act
-            Assert.ThrowsAsync<UnauthorizedAccessException>(() => RequestHandler.Handle(_request));
-        }
-
-        [Test]
         public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
             //Arrange

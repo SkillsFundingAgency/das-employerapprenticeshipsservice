@@ -11,36 +11,39 @@ using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.HashingService;
+using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControllerTests
 {
     public abstract class EmployerAccountsControllerTests
     {
-        protected EmployerAccountsController Controller;
-        protected Mock<IMediator> Mediator;
+        protected EmployerAccountsController _controller;
+        protected Mock<IMediator> _mediator;
         protected Mock<ILog> Logger;
-        protected Mock<UrlHelper> UrlHelper;
-        protected Mock<IMapper> Mapper;
-        protected Mock<IHashingService> HashingService;
-        protected Mock<IEmployerAccountsApiService> ApiService;
+        protected Mock<UrlHelper> _urlHelper;
+        protected Mock<IMapper> _mapper;
+        protected Mock<IHashingService> _hashingService;
+        protected Mock<IEmployerAccountsApiService> _employerAccountsApiService;
+        protected Mock<IEmployerFinanceApiService> _employerFinanceApiService;
 
         [SetUp]
         public void Arrange()
         {
-            Mediator = new Mock<IMediator>();
+            _mediator = new Mock<IMediator>();
             Logger = new Mock<ILog>();
-            Mapper = new Mock<IMapper>();
-            HashingService = new Mock<IHashingService>();
-            ApiService = new Mock<IEmployerAccountsApiService>();
+            _mapper = new Mock<IMapper>();
+            _hashingService = new Mock<IHashingService>();
+            _employerAccountsApiService = new Mock<IEmployerAccountsApiService>();
+            _employerFinanceApiService = new Mock<IEmployerFinanceApiService>();
           
-            var orchestrator = new AccountsOrchestrator(Mediator.Object, Logger.Object, Mapper.Object, HashingService.Object, ApiService.Object);
-            Controller = new EmployerAccountsController(orchestrator, ApiService.Object);
+            var orchestrator = new AccountsOrchestrator(_mediator.Object, Logger.Object, _mapper.Object, _hashingService.Object, _employerAccountsApiService.Object, _employerFinanceApiService.Object);
+            _controller = new EmployerAccountsController(orchestrator, _employerAccountsApiService.Object);
 
-            UrlHelper = new Mock<UrlHelper>();
-            Controller.Url = UrlHelper.Object;
+            _urlHelper = new Mock<UrlHelper>();
+            _controller.Url = _urlHelper.Object;
 
             var balancesResponse = new GetAccountBalancesResponse { Accounts = new List<AccountBalance>() };
-            Mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>())).ReturnsAsync(balancesResponse);
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>())).ReturnsAsync(balancesResponse);
         }
     }
 }
