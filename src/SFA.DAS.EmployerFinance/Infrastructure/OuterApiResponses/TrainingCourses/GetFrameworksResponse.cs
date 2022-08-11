@@ -1,15 +1,15 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses
+namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses.TrainingCourses
 {
     public class GetFrameworksResponse
     {
         [JsonProperty("frameworks")]
-        public List<FrameworkResponseItem> Frameworks { get; set; }
+        public List<FrameworkResponse> Frameworks { get; set; }
     }
 
-    public class FrameworkResponseItem
+    public class FrameworkResponse
     {
         [JsonProperty("id")]
         public string Id { get; set; }

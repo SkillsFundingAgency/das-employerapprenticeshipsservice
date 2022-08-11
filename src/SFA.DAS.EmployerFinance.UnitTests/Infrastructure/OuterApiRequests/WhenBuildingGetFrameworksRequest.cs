@@ -1,6 +1,6 @@
 using FluentAssertions;
 using NUnit.Framework;
-using SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests;
+using SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests.TrainingCourses;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Infrastructure.OuterApiRequests
 {
@@ -13,7 +13,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Infrastructure.OuterApiRequests
             var actual = new GetFrameworksRequest();
             
             //Act
-            actual.GetUrl.Should().Be("TrainingCourses/frameworks");
+            actual.GetUrl.Should().Be("trainingCourses/frameworks");
         }
     }
 }

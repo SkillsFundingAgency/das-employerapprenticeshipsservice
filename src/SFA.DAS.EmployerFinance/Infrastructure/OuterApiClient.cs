@@ -7,14 +7,14 @@ using SFA.DAS.EmployerFinance.Interfaces.OuterApi;
 
 namespace SFA.DAS.EmployerFinance.Infrastructure
 {
-    public class ApiClient : IApiClient
+    public class OuterApiClient : IOuterApiClient
     {
         private readonly HttpClient _httpClient;
-        private readonly ManageApprenticeshipsOuterApiConfiguration _config;
+        private readonly EmployerFinanceOuterApiConfiguration _config;
 
-        public ApiClient(
+        public OuterApiClient(
             HttpClient httpClient,
-            ManageApprenticeshipsOuterApiConfiguration options)
+            EmployerFinanceOuterApiConfiguration options)
         {
             _httpClient = httpClient;
             _config = options;

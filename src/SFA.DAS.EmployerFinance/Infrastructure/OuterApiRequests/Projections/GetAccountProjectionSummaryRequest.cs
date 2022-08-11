@@ -1,11 +1,11 @@
 ﻿using SFA.DAS.EmployerFinance.Interfaces.OuterApi;
 
-namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests
+namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests.Projections
 {
     public class GetAccountProjectionSummaryRequest : IGetApiRequest
     {
         private readonly long _accountId;
-        public string GetUrl => $"Projections/{_accountId}";
+        public string GetUrl => $"projections/{_accountId}";
 
         public GetAccountProjectionSummaryRequest(long accountId)
         {
