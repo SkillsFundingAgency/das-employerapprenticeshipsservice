@@ -36,7 +36,6 @@ namespace SFA.DAS.EmployerFinance.Data
         {
             if (transaction != null) 
                 Database.UseTransaction(transaction);
-            else Database.BeginTransaction();
         }
 
         protected EmployerFinanceDbContext()
@@ -58,12 +57,6 @@ namespace SFA.DAS.EmployerFinance.Data
             modelBuilder.Entity<Payment>().Ignore(a => a.StandardCode).Ignore(a => a.FrameworkCode).Ignore(a => a.ProgrammeType).Ignore(a => a.PathwayCode).Ignore(a => a.PathwayName);
             modelBuilder.Entity<Payment>().Property(a => a.EmployerAccountId).HasColumnName("AccountId");
             modelBuilder.Ignore<PaymentDetails>();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            this.Database.Connection.Dispose();
-            base.Dispose(disposing);
-        }
+        }       
     }
 }

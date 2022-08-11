@@ -95,10 +95,6 @@
       <Project>{8afb0bbe-1e53-488c-a971-d236df9eaa77}</Project>
       <Name>SFA.DAS.EAS.Account.Api.Types</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EAS.Finance.Api.Types\SFA.DAS.EmployerFinance.Api.Types.csproj">
-      <Project>{2AF6F3F4-7D2E-495D-B914-18E2A0FDEF2C}</Project>
-      <Name>SFA.DAS.EmployerFinance.Api.Types</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
       <Project>{0226F97A-704E-49B0-A100-B75FEEC9C8AD}</Project>
       <Name>SFA.DAS.EAS.Application</Name>

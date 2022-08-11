@@ -18,5 +18,9 @@ namespace SFA.DAS.EmployerFinance.Api.Client
         Task<List<TransactionSummary>> GetTransactionSummary(string accountId);
 
         Task<TotalPaymentsModel> GetFinanceStatistics();
+
+        Task<List<AccountBalance>> GetAccountBalances(List<string> accountIds);
+
+        Task<TransferAllowance> GetTransferAllowance(string hashedAccountId);
     }
 }

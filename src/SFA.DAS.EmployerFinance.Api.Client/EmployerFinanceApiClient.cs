@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SFA.DAS.EmployerFinance.Api.Types;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Api.Client
@@ -68,6 +67,24 @@ namespace SFA.DAS.EmployerFinance.Api.Client
             var json = await _httpClient.GetAsync(url);
 
             return JsonConvert.DeserializeObject<TotalPaymentsModel>(json);
+        }
+
+        public async Task<List<AccountBalance>> GetAccountBalances(List<string> accountIds)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}/api/accounts/balances";
+            var json = await _httpClient.GetAsync(url);
+
+            return JsonConvert.DeserializeObject<List<AccountBalance>>(json);
+        }
+
+        public async Task<TransferAllowance> GetTransferAllowance(string hashedAccountId)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}/api/accounts/{hashedAccountId}/transferAllowance";
+            var json = await _httpClient.GetAsync(url);
+
+            return JsonConvert.DeserializeObject<TransferAllowance>(json);
         }
 
         private string GetBaseUrl()

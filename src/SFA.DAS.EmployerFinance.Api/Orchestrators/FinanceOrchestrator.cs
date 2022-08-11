@@ -9,7 +9,6 @@ using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Api.Orchestrators
@@ -65,18 +64,7 @@ namespace SFA.DAS.EmployerFinance.Api.Orchestrators
             _logger.Info($"Received response for levy declaration for account  {hashedAccountId}, year {payrollYear} and month {payrollMonth}");
             return levyDeclarations;
         }
-
-        public async Task<GetAccountBalancesResponse> GetAccountBalances(List<long> accountIds)
-        {
-            _logger.Info($"Requesting GetAccountBalances for the accounts");
-
-            var transactionResult = await _mediator.SendAsync(new GetAccountBalancesRequest
-            {   
-                AccountIds = accountIds
-            });
-
-            return transactionResult;
-        }
+      
 
         public async Task<GetAccountBalancesResponse> GetAccountBalances(List<string> accountIds)
         {

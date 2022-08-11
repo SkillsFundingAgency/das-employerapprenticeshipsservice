@@ -151,13 +151,13 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EAS.Finance.Api.Types\SFA.DAS.EmployerFinance.Api.Types.csproj">
-      <Project>{2af6f3f4-7d2e-495d-b914-18e2a0fdef2c}</Project>
-      <Name>SFA.DAS.EmployerFinance.Api.Types</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerFinance.Api.Client\SFA.DAS.EmployerFinance.Api.Client.csproj">
       <Project>{aa299f18-d0ca-43a2-ae4d-54cb6c48ea70}</Project>
       <Name>SFA.DAS.EmployerFinance.Api.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerFinance.Api.Types\SFA.DAS.EmployerFinance.Api.Types.csproj">
+      <Project>{2af6f3f4-7d2e-495d-b914-18e2a0fdef2c}</Project>
+      <Name>SFA.DAS.EmployerFinance.Api.Types</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj">
       <Project>{c5880f73-59d6-4c59-a1a2-dba38d13e8dc}</Project>

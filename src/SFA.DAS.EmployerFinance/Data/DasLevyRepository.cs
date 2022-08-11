@@ -263,7 +263,7 @@ namespace SFA.DAS.EmployerFinance.Data
             var result = await _db.Value.Database.Connection.QueryAsync<LevyDeclarationItem>(
                 sql: "[employer_financial].[GetLevyDeclarations_ByAccountId]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
 
             return result.ToList();
@@ -280,7 +280,7 @@ namespace SFA.DAS.EmployerFinance.Data
             var result = await _db.Value.Database.Connection.QueryAsync<LevyDeclarationItem>(
                 sql: "[employer_financial].[GetLevyDeclarations_ByAccountPayrollMonthPayrollYear]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
 
             return result.ToList();
@@ -295,7 +295,7 @@ namespace SFA.DAS.EmployerFinance.Data
             var result = await _db.Value.Database.Connection.QueryAsync<AccountBalance>(
                 sql: "[employer_financial].[GetAccountBalance_ByAccountIds]",
                 param: accountParametersTable,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
 
             return result.ToList();
@@ -311,7 +311,7 @@ namespace SFA.DAS.EmployerFinance.Data
             var transferAllowance = await _db.Value.Database.Connection.QueryAsync<TransferAllowance>(
                 sql: "[employer_financial].[GetAccountTransferAllowance]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
 
             return transferAllowance.SingleOrDefault() ?? new TransferAllowance();
