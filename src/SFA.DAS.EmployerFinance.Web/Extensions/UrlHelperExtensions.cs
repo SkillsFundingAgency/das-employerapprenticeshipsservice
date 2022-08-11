@@ -105,7 +105,7 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
 
         private static string Action(string baseUrl, string path)
         {
-            var trimmedBaseUrl = baseUrl.TrimEnd('/');
+            var trimmedBaseUrl = baseUrl?.TrimEnd('/') ?? string.Empty;
 
             return $"{trimmedBaseUrl}/{path}".TrimEnd('/');
         }

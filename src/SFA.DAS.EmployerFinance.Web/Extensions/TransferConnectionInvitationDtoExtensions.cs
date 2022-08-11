@@ -11,13 +11,6 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
             return transferConnectionInvitation.Changes.Single(c => c.Status == TransferConnectionInvitationStatus.Approved);
         }
 
-        public static AccountDto GetPeerAccount(this TransferConnectionInvitationDto transferConnectionInvitation, long accountId)
-        {
-            return transferConnectionInvitation.SenderAccount.Id == accountId
-                ? transferConnectionInvitation.ReceiverAccount
-                : transferConnectionInvitation.SenderAccount;
-        }
-
         public static TransferConnectionInvitationChangeDto GetPendingChange(this TransferConnectionInvitationDto transferConnectionInvitation)
         {
             return transferConnectionInvitation.Changes.Single(c => c.Status == TransferConnectionInvitationStatus.Pending);

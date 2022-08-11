@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NServiceBus;
-using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests.Projections;
 using SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses.Accounts;
 using SFA.DAS.EmployerFinance.Interfaces.OuterApi;
+using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Types;
@@ -25,8 +25,8 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers
 
         public SentTransferConnectionRequestEventNotificationHandler(
             EmployerFinanceConfiguration config,
-            ILog logger,
             IOuterApiClient outerApiClient,
+            ILog logger,
             INotificationsApi notificationsApi)
         {
             _config = config;
