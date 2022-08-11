@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
 
         [SetUp]
         public void Arrange()
-        {            
+        {
             _mapper = new Mock<IMapper>();
             _log = new Mock<ILog>();
             _hashingService = new Mock<IHashingService>();
@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
                 {
                     Data = new List<AccountWithBalanceViewModel> { _expectedAccount }
                 });
-          
+
             _financeApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>()))
                  .ReturnsAsync( new List<AccountBalance> { _expectedAccountBalance });
 

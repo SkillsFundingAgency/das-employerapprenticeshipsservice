@@ -11,7 +11,6 @@ using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.EmployerFinance.Models.Transfers;
-using SFA.DAS.EmployerFinance.Queries.GetLevyDeclaration;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Sql.Client;
 

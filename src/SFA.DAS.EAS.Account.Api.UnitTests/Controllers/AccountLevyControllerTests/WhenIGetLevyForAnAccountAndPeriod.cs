@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
         {
             //Arrange
             var hashedAccountId = "ABC123";
-         
+            
             //Act
             var response = await Controller.GetLevy(hashedAccountId, "2017-18", 6);
 

@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
         [SetUp]
         public void Arrange()
         {
-            Logger = new Mock<ILog>();
+             Logger = new Mock<ILog>();
             _mapper = new Mock<IMapper>();
             _hashingService = new Mock<IHashingService>();
             _employerAccountsApiService = new Mock<IEmployerAccountsApiService>();
