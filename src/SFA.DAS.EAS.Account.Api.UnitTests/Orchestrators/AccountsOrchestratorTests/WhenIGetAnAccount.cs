@@ -25,8 +25,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
 {
     internal class WhenIGetAnAccount
     {
-        private AccountsOrchestrator _orchestrator;
-        private Mock<IMediator> _mediator;
+        private AccountsOrchestrator _orchestrator;        
         private Mock<ILog> _log;
         private Mock<IHashingService> _hashingService;
         private Mock<IEmployerAccountsApiService> _apiService;
@@ -44,14 +43,13 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
         [SetUp]
         public void Arrange()
         {
-            _transferAllowance = new TransferAllowance { RemainingTransferAllowance = 123.45M, StartingTransferAllowance = 234.56M };
-            _mediator = new Mock<IMediator>();
+            _transferAllowance = new TransferAllowance { RemainingTransferAllowance = 123.45M, StartingTransferAllowance = 234.56M };            
             _mapper = ConfigureMapper();
             _log = new Mock<ILog>();
             _hashingService = new Mock<IHashingService>();
             _apiService = new Mock<IEmployerAccountsApiService>();
             _financeApiService = new Mock<IEmployerFinanceApiService>();
-            _orchestrator = new AccountsOrchestrator(_mediator.Object, _log.Object, _mapper, _hashingService.Object, _apiService.Object, _financeApiService.Object);
+            _orchestrator = new AccountsOrchestrator(_log.Object, _mapper, _hashingService.Object, _apiService.Object, _financeApiService.Object);
         
             _accountDetailViewModel = new AccountDetailViewModel { AccountId = 1, ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy.ToString() };
 
@@ -60,11 +58,6 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
                 .ReturnsAsync(_accountDetailViewModel)
                 .Verifiable("Get account was not called"); 
 
-            _mediator
-                .Setup(x => x.SendAsync(It.IsAny<GetTransferAllowanceQuery>()))
-                .ReturnsAsync(new GetTransferAllowanceResponse { TransferAllowance = _transferAllowance })
-                .Verifiable("Get transfer balance was not called");
-
             var transferAllowanceResponse = new GetTransferAllowanceResponse
             {
                 TransferAllowance = _transferAllowance
@@ -72,15 +65,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
             _financeApiService.Setup(x => x.GetTransferAllowance(It.IsAny<string>())).ReturnsAsync(transferAllowanceResponse);
 
             _accountBalanceResult = new AccountBalance { Balance = AccountBalance };
-
-            _mediator
-                .Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>()))
-                .ReturnsAsync(new GetAccountBalancesResponse
-                {
-                    Accounts = new List<AccountBalance> { _accountBalanceResult }
-                })
-                .Verifiable("Get account balance was not called");
-
+           
             var accountBalancesResponse = new GetAccountBalancesResponse
             {
                 Accounts = new List<AccountBalance> { _accountBalanceResult }

@@ -40,13 +40,13 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
         [Test]
         public async Task AndTheAccountDoesNotExistThenItIsNotReturned()
         {
-            var hashedAccountId = "ABC123";
-            var levyResponse = new GetLevyDeclarationResponse { Declarations = null };
+            //Arrange
+            var hashedAccountId = "ABC123";                        
 
-            Mediator.Setup(x => x.SendAsync(It.Is<GetLevyDeclarationRequest>(q => q.HashedAccountId == hashedAccountId))).ReturnsAsync(levyResponse);
-
+            //Act
             var response = await Controller.Index(hashedAccountId);
 
+            //Assert
             Assert.IsNotNull(response);
             Assert.IsInstanceOf<NotFoundResult>(response);
         }

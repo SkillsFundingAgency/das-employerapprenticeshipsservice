@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using System.Web.Http.Routing;
 using AutoMapper;
-using MediatR;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
 using SFA.DAS.NLog.Logger;
