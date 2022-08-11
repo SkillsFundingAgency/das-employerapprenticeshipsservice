@@ -27,8 +27,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions
             {
                 result.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
             }
-
-            //Resolved Code Review suggestion
+            
             if (result.IsValid() && !string.IsNullOrEmpty(item.ExternalUserId))
             {
                 result.IsUnauthorized = !_authorizationService.IsAuthorized(EmployerUserRole.Any);
