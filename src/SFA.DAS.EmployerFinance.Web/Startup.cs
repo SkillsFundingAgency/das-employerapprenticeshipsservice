@@ -31,7 +31,6 @@ namespace SFA.DAS.EmployerFinance.Web
 
         public void Configuration(IAppBuilder app)
         {
-            var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestrator>();
             var config = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<EmployerFinanceConfiguration>();
             var constants = new Constants(config.Identity);
             var urlHelper = new UrlHelper();
@@ -62,6 +61,7 @@ namespace SFA.DAS.EmployerFinance.Web
                 TokenValidationMethod = config.Identity.UseCertificate ? TokenValidationMethod.SigningKey : TokenValidationMethod.BinarySecret,
                 AuthenticatedCallback = identity =>
                 {
+                    var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestrator>();
                     PostAuthentiationAction(identity, authenticationOrchestrator, constants);
                 }
             });
