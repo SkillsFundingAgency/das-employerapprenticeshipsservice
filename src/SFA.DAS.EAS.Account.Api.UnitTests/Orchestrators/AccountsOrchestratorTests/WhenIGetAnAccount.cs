@@ -1,25 +1,24 @@
-﻿using AutoMapper;
-using Castle.Core.Internal;
-using MediatR;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Orchestrators;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
-using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
-using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.HashingService;
-using SFA.DAS.NLog.Logger;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
+using MediatR;
+using Moq;
+using NUnit.Framework;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
+using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
-using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
+using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Domain.Models.Transfers;
+using SFA.DAS.HashingService;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTests
 {
@@ -164,7 +163,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
             var profiles = Assembly.Load("SFA.DAS.EAS.Account.Api")
                 .GetTypes()
                 .Where(t => typeof(Profile).IsAssignableFrom(t))
-                .Select(t => (Profile) Activator.CreateInstance(t));
+                .Select(t => (Profile)Activator.CreateInstance(t))
+                .ToList();
 
             var config = new MapperConfiguration(c =>
             {

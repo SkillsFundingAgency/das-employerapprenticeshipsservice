@@ -78,8 +78,6 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
             AccountApiClient.Verify(x => x.GetPageOfAccounts(It.IsAny<int>(), It.IsAny<int>(), null), Times.AtLeastOnce);
             AccountApiClient.Verify(x => x.GetAccount(It.IsAny<string>()), Times.AtLeastOnce);
 
-            Logger.Verify(x => x.Error(e, $"Exception while retrieving details for account ID {_accountWithBalanceViewModels.First().AccountHashId}"));
-
             Assert.IsNotNull(actual);
             var list = actual.ToList();
             CollectionAssert.IsEmpty(list);
@@ -108,7 +106,6 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
 
             AccountApiClient.Verify(x => x.GetPageOfAccounts(It.IsAny<int>(), It.IsAny<int>(), null), Times.AtLeastOnce);
             AccountApiClient.Verify(x => x.GetAccount(It.IsAny<string>()), Times.AtLeastOnce);
-            Logger.Verify(x => x.Error(e, $"Exception while retrieving details for account ID {_accountWithBalanceViewModels.First().AccountHashId}"));
             Assert.IsNotNull(actual);
             CollectionAssert.IsEmpty(actual.ToList());
         }
@@ -121,7 +118,18 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
 
             AccountApiClient
                 .Setup(x => x.GetAccount(It.IsAny<string>()))
-                .ReturnsAsync(new AccountDetailViewModel());
+                .ReturnsAsync(new AccountDetailViewModel() 
+                {
+                    PayeSchemes = new ResourceList(new[] { new ResourceViewModel { Id = "1", Href = "/api/payeschemes/test1" } })
+                });
+
+            AccountApiClient
+                .Setup(s => s.GetResource<PayeSchemeViewModel>(It.IsAny<string>()))
+                .ReturnsAsync(new PayeSchemeViewModel { Name = "Test", Ref = "123" });
+
+            var obscuredPayePayeScheme = "123/123456";
+            PayeSchemeObfuscator.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
+                .Returns(obscuredPayePayeScheme);
 
             _sut = new Services.AccountRepository(
                             AccountApiClient.Object,
@@ -181,7 +189,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
         }
 
         [Test]
-        public async Task ItShouldThrowsAnExceptionWhenAccountHasNoResourceForPayeScheme()
+        public async Task ItShouldReturnAnEmptyListWhenAccountHasNoResourceForPayeScheme()
         {
             //Arrange
             AccountApiClient.Setup(x => x.GetPageOfAccounts(It.IsAny<int>(), 10, null))
@@ -212,14 +220,13 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
             //Act
             var actual = await _sut.FindAllDetails(10, 1);
 
-            //Assert            
+            //Assert
             AccountApiClient.Verify(x => x.GetPageOfAccounts(It.IsAny<int>(), It.IsAny<int>(), null), Times.Once);
             AccountApiClient.Verify(x => x.GetAccount(It.IsAny<string>()), Times.Exactly(2));
-            Logger.Verify(x => x.Error(e, $"Exception occured in Account API type of {nameof(PayeSchemeViewModel)} at /api/payeschemes/test1 id 1"));
+
             Assert.IsNotNull(actual);
-            var list = actual.ToList();
-            CollectionAssert.IsNotEmpty(list);
-            Assert.AreEqual(2, list.Count());
+            Assert.IsNotNull(actual);
+            CollectionAssert.IsEmpty(actual.ToList());
         }
     }
 }

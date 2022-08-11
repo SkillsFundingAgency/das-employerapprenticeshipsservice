@@ -1,5 +1,7 @@
-﻿using AutoMapper;
-using Castle.Core.Internal;
+﻿using System;
+using System.Linq;
+using System.Reflection;
+using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -7,9 +9,6 @@ using SFA.DAS.EmployerFinance.Api.Controllers;
 using SFA.DAS.EmployerFinance.Api.Orchestrators;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
-using System;
-using System.Linq;
-using System.Reflection;
 
 namespace SFA.DAS.EmployerFinance.Api.UnitTests.Controllers.AccountLevyControllerTests
 {
@@ -38,7 +37,8 @@ namespace SFA.DAS.EmployerFinance.Api.UnitTests.Controllers.AccountLevyControlle
             var profiles = Assembly.Load($"SFA.DAS.EmployerFinance.Api")
                 .GetTypes()
                 .Where(t => typeof(Profile).IsAssignableFrom(t))
-                .Select(t => (Profile)Activator.CreateInstance(t));
+                .Select(t => (Profile)Activator.CreateInstance(t))
+                .ToList();
 
             var config = new MapperConfiguration(c =>
             {
