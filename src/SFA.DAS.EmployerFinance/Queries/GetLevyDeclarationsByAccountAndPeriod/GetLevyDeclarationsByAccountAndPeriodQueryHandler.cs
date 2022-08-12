@@ -1,10 +1,6 @@
 ﻿using MediatR;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.HashingService;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Queries.GetLevyDeclarationsByAccountAndPeriod

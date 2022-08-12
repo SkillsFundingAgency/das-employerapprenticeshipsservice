@@ -17,8 +17,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
 {
     public abstract class EmployerAccountsControllerTests
     {
-        protected EmployerAccountsController _controller;
-        protected Mock<IMediator> _mediator;
+        protected EmployerAccountsController _controller;        
         protected Mock<ILog> Logger;
         protected Mock<UrlHelper> _urlHelper;
         protected Mock<IMapper> _mapper;
@@ -28,22 +27,18 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
 
         [SetUp]
         public void Arrange()
-        {
-            _mediator = new Mock<IMediator>();
+        {   
             Logger = new Mock<ILog>();
             _mapper = new Mock<IMapper>();
             _hashingService = new Mock<IHashingService>();
             _employerAccountsApiService = new Mock<IEmployerAccountsApiService>();
             _employerFinanceApiService = new Mock<IEmployerFinanceApiService>();
           
-            var orchestrator = new AccountsOrchestrator(_mediator.Object, Logger.Object, _mapper.Object, _hashingService.Object, _employerAccountsApiService.Object, _employerFinanceApiService.Object);
+            var orchestrator = new AccountsOrchestrator(Logger.Object, _mapper.Object, _hashingService.Object, _employerAccountsApiService.Object, _employerFinanceApiService.Object);
             _controller = new EmployerAccountsController(orchestrator, _employerAccountsApiService.Object);
 
             _urlHelper = new Mock<UrlHelper>();
             _controller.Url = _urlHelper.Object;
-
-            var balancesResponse = new GetAccountBalancesResponse { Accounts = new List<AccountBalance>() };
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>())).ReturnsAsync(balancesResponse);
         }
     }
 }

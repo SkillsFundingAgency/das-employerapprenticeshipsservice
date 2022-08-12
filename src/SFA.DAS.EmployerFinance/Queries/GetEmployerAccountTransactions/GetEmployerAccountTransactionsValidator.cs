@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using SFA.DAS.Authorization.EmployerUserRoles.Options;
 using SFA.DAS.Authorization.Services;
 
-
 namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions
 {
     public class GetEmployerAccountTransactionsValidator : IValidator<GetEmployerAccountTransactionsQuery>
@@ -28,7 +27,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions
             {
                 result.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
             }
-
+            
             if (result.IsValid() && !string.IsNullOrEmpty(item.ExternalUserId))
             {
                 result.IsUnauthorized = !_authorizationService.IsAuthorized(EmployerUserRole.Any);
