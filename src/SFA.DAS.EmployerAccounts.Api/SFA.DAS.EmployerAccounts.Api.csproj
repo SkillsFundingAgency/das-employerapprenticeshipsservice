@@ -139,7 +139,6 @@
     <Compile Include="Controllers\LegalEntitiesController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\StatisticsController.cs" />
-    <Compile Include="Controllers\TransferConnectionsController.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="ExceptionLoggers\ErrorLogger.cs" />
     <Compile Include="Global.asax.cs">
