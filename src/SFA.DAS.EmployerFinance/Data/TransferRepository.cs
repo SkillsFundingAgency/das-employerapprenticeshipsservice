@@ -76,7 +76,7 @@ namespace SFA.DAS.EmployerFinance.Data
             var transferAllowance = await _db.Value.Database.Connection.QueryAsync<TransferAllowance>(
                 sql: "[employer_financial].[GetAccountTransferAllowance]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
 
             return transferAllowance.SingleOrDefault() ?? new TransferAllowance();
