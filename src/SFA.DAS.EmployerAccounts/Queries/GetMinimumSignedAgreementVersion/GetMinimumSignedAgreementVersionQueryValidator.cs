@@ -21,9 +21,9 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetMinimumSignedAgreementVersion
             return validationResult;
         }
 
-        public Task<ValidationResult> ValidateAsync(GetMinimumSignedAgreementVersionQuery item)
+        public async Task<ValidationResult> ValidateAsync(GetMinimumSignedAgreementVersionQuery item)
         {
-            throw new System.NotImplementedException();
+            return await Task.FromResult(Validate(item));
         }
     }
 }
