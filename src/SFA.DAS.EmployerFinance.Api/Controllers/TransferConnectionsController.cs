@@ -8,7 +8,7 @@ using SFA.DAS.HashingService;
 namespace SFA.DAS.EmployerFinance.Api.Controllers
 {
     [ApiAuthorize(Roles = "ReadUserAccounts")]
-    [RoutePrefix("api/finance")]
+    [RoutePrefix("api/accounts")]
     public class TransferConnectionsController : ApiController
     {
         private readonly IMediator _mediator;
