@@ -9,6 +9,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementById;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Orchestrators.AgreementOrchestratorTests
 {
@@ -16,6 +17,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Orchestrators.AgreementOrchestr
     {
         private AgreementOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
+        private Mock<ILog> _logger;
         private IMapper _mapper;
         private Models.EmployerAgreement.EmployerAgreementView _agreement;
 
@@ -23,6 +25,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Orchestrators.AgreementOrchestr
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
+            _logger = new Mock<ILog>();
             _mapper = ConfigureMapper();
             _agreement = new Models.EmployerAgreement.EmployerAgreementView();
 
@@ -31,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Orchestrators.AgreementOrchestr
                 EmployerAgreement = _agreement
             };
 
-            _orchestrator = new AgreementOrchestrator(_mediator.Object, _mapper);
+            _orchestrator = new AgreementOrchestrator(_mediator.Object, _logger.Object, _mapper);
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAgreementByIdRequest>()))
                 .ReturnsAsync(response);
