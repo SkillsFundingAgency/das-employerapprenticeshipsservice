@@ -101,10 +101,6 @@
       <Project>{05D7C094-E2C9-4CCD-B0D7-85D263254B26}</Project>
       <Name>SFA.DAS.EAS.TestCommon</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj">
-      <Project>{C5880F73-59D6-4C59-A1A2-DBA38D13E8DC}</Project>
-      <Name>SFA.DAS.EmployerFinance</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

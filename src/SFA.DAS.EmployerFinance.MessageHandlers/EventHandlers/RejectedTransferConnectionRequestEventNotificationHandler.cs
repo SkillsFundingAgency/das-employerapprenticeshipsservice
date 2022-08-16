@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.Configuration;
-using SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests.Projections;
+using SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests.Accounts;
 using SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses.Accounts;
 using SFA.DAS.EmployerFinance.Interfaces.OuterApi;
 using SFA.DAS.EmployerFinance.Messages.Events;
@@ -40,6 +40,11 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers
         {
             var users = await _outerApiClient.Get<GetAccountTeamMembersWhichReceiveNotificationsResponse>(
                 new GetAccountTeamMembersWhichReceiveNotificationsRequest(message.SenderAccountId));
+
+            if (users == null)
+            {
+                throw new Exception($"Unable to send rejected transfer request notifications for SenderAccountId '{message.SenderAccountId}'");
+            }
 
             if (!users.Any())
             {

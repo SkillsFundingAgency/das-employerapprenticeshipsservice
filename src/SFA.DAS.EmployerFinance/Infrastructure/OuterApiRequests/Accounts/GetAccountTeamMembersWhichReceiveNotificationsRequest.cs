@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.EmployerFinance.Interfaces.OuterApi;
 
-namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests.Projections
+namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests.Accounts
 {
     public class GetAccountTeamMembersWhichReceiveNotificationsRequest : IGetApiRequest
     {
