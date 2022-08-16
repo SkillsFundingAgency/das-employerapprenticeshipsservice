@@ -1,6 +1,6 @@
 ﻿using Moq;
 using SFA.DAS.EmployerFinance.Configuration;
-using SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests.Projections;
+using SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests.Accounts;
 using SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses.Accounts;
 using SFA.DAS.EmployerFinance.Interfaces.OuterApi;
 using SFA.DAS.EmployerFinance.Models.Account;

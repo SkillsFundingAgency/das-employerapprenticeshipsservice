@@ -9,7 +9,7 @@ using SFA.DAS.Authorization.Handlers;
 using SFA.DAS.Authorization.Options;
 using SFA.DAS.Authorization.Results;
 using SFA.DAS.EmployerFinance.Authorisation;
-using SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests.Projections;
+using SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests.Accounts;
 using SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses.Accounts;
 using SFA.DAS.EmployerFinance.Interfaces.OuterApi;
 
@@ -43,7 +43,9 @@ namespace SFA.DAS.EmployerFinance.AuthorisationExtensions
                 if (featureToggle.EnabledByAgreementVersion.GetValueOrDefault(0) > 0)
                 {
                     var (accountId, _) = authorizationContext.GetEmployerFeatureValues();
-                    var response = await _outerApiClient.Get<GetMinimumSignedAgreementVersionResponse>(new GetMinimumSignedAgreementVersionRequest(accountId.GetValueOrDefault(0)));
+                    var response = await _outerApiClient
+                        .Get<GetMinimumSignedAgreementVersionResponse>(new GetMinimumSignedAgreementVersionRequest(accountId.GetValueOrDefault(0)))
+                        .ConfigureAwait(false);
 
                     if (response.MinimumSignedAgreementVersion < featureToggle.EnabledByAgreementVersion)
                     {
