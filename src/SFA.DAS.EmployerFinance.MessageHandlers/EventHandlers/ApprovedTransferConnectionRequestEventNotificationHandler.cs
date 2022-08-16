@@ -40,6 +40,11 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers
             var users = await _outerApiClient.Get<GetAccountTeamMembersWhichReceiveNotificationsResponse>(
                 new GetAccountTeamMembersWhichReceiveNotificationsRequest(message.SenderAccountId));
 
+            if(users == null)
+            {
+                throw new Exception($"Unable to send approved transfer request notifications for SenderAccountId '{message.SenderAccountId}'");
+            }
+
             if (!users.Any())
             {
                 _logger.Info($"There are no users that receive notifications for SenderAccountId '{message.SenderAccountId}'");
