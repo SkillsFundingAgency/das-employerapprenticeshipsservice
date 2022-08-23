@@ -25,11 +25,11 @@ namespace SFA.DAS.EmployerFinance.UnitTests.DependencyResolution
             _mockDasLevyRepository = new Mock<IDasLevyRepository>();
             _mockLog = new Mock<ILog>();
             _mockInProcessCache = new Mock<IInProcessCache>();
-            var config = new EmployerFinanceConfiguration{ManageApprenticeshipsOuterApiConfiguration = new ManageApprenticeshipsOuterApiConfiguration { BaseUrl = "http://BaseUrl.education.gov.uk" , Key="123" }};
+            var config = new EmployerFinanceConfiguration{EmployerFinanceOuterApiConfiguration = new EmployerFinanceOuterApiConfiguration { BaseUrl = "http://BaseUrl.education.gov.uk" , Key="123" }};
 
             _container = new Container(c =>
             {
-                c.AddRegistry<ManageApprenticeshipsOuterApiRegistry>();
+                c.AddRegistry<EmployerFinanceOuterApiRegistry>();
                 c.AddRegistry<ProvidersRegistry>();
                 c.For<IDasLevyRepository>().Use(_mockDasLevyRepository.Object);
                 c.For<EmployerFinanceConfiguration>().Use(config);

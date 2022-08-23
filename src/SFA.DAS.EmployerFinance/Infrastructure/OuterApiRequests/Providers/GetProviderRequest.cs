@@ -1,6 +1,6 @@
 using SFA.DAS.EmployerFinance.Interfaces.OuterApi;
 
-namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests
+namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests.Providers
 {
     public class GetProviderRequest : IGetApiRequest
     {
@@ -10,6 +10,7 @@ namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests
         {
             _id = id;
         }
+
         public string GetUrl => $"providers/{_id}";
     }
 }

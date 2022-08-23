@@ -11,6 +11,6 @@ namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests.Transfers
             _accountId = accountId;
         }
 
-        public string GetUrl => $"Transfers/{_accountId}/transfers/financial-breakdown";
+        public string GetUrl => $"transfers/{_accountId}/financial-breakdown";
     }
 }

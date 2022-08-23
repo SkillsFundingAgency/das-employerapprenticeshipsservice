@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         private TransfersOrchestrator _orchestrator;
         private Mock<IAuthorizationService> _authorisationService;
         private Mock<IHashingService> _hashingService;
-        private Mock<IManageApprenticeshipsService> _maService;
+        private Mock<ITransfersService> _transfersService;
         private Mock<IAccountApiClient> _accountApiClient;
         private Mock<IFeatureTogglesService<EmployerFeatureToggle>> _featureTogglesService;
         private GetFinancialBreakdownResponse _financialBreakdownResponse;
@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
 
             _authorisationService = new Mock<IAuthorizationService>();
             _hashingService = new Mock<IHashingService>();
-            _maService = new Mock<IManageApprenticeshipsService>();
+            _transfersService = new Mock<ITransfersService>();
             _accountApiClient = new Mock<IAccountApiClient>();
             _featureTogglesService = new Mock<IFeatureTogglesService<EmployerFeatureToggle>>();
             _financialBreakdownResponse = fixture.Create<GetFinancialBreakdownResponse>();
@@ -48,12 +48,12 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
                 AccountId = AccountId
             });
 
-            _orchestrator = new TransfersOrchestrator(_authorisationService.Object, _hashingService.Object, _maService.Object, _accountApiClient.Object);
+            _orchestrator = new TransfersOrchestrator(_authorisationService.Object, _hashingService.Object, _transfersService.Object, _accountApiClient.Object);
         }
         [Test]
         public async Task CheckFinancialBreakdownViewModel()
         {
-            _maService.Setup(o => o.GetFinancialBreakdown(AccountId)).ReturnsAsync(_financialBreakdownResponse);
+            _transfersService.Setup(o => o.GetFinancialBreakdown(AccountId)).ReturnsAsync(_financialBreakdownResponse);
 
             var actual = await _orchestrator.GetFinancialBreakdownViewModel(HashedAccountId);
 

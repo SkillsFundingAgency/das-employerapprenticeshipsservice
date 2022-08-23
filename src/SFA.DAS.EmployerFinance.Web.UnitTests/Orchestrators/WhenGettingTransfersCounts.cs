@@ -15,12 +15,12 @@ using SFA.DAS.HashingService;
 namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
 {
     [TestFixture]
-    public class WhenGettingTransfers
+    public class WhenGettingTransfersCounts
     {
         private TransfersOrchestrator _orchestrator;
         private Mock<IAuthorizationService> _authorisationService;
         private Mock<IHashingService> _hashingService;
-        private Mock<IManageApprenticeshipsService> _maService;
+        private Mock<ITransfersService> _transfersService;
         private Mock<IAccountApiClient> _accountApiClient;
         private Mock<IFeatureTogglesService<EmployerFeatureToggle>> _featureTogglesService;
 
@@ -32,19 +32,19 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         {
             _authorisationService = new Mock<IAuthorizationService>();
             _hashingService = new Mock<IHashingService>();
-            _maService = new Mock<IManageApprenticeshipsService>();
+            _transfersService = new Mock<ITransfersService>();
             _accountApiClient = new Mock<IAccountApiClient>();            
 
             _hashingService.Setup(h => h.DecodeValue(HashedAccountId)).Returns(AccountId);            
 
-            _orchestrator = new TransfersOrchestrator(_authorisationService.Object, _hashingService.Object, _maService.Object, _accountApiClient.Object);
+            _orchestrator = new TransfersOrchestrator(_authorisationService.Object, _hashingService.Object, _transfersService.Object, _accountApiClient.Object);
         }
 
         [TestCase(true, true)]
         [TestCase(false, false)]
         public async Task Only_Levy_Payer_Can_View_Pledges_Section(bool isLevyPayer, bool expectIsLevyEmployer)
         {
-            _maService.Setup(o => o.GetIndex(AccountId)).ReturnsAsync(new GetIndexResponse());
+            _transfersService.Setup(o => o.GetCounts(AccountId)).ReturnsAsync(new GetCountsResponse());
 
             SetupTheAccountApiClient(isLevyPayer);
             
@@ -57,7 +57,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         [TestCase(false, false)]
         public async Task ThenChecksTheUserIsAuthorisedToCreateTransfers(bool isAuthorised, bool expected)
         {
-            _maService.Setup(o => o.GetIndex(AccountId)).ReturnsAsync(new GetIndexResponse());
+            _transfersService.Setup(o => o.GetCounts(AccountId)).ReturnsAsync(new GetCountsResponse());
 
             SetupTheAccountApiClient(true);
 

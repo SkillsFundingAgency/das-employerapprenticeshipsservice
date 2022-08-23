@@ -194,6 +194,7 @@
     <Compile Include="Mappings\TransferMappings.cs" />
     <Compile Include="NServiceBusStartup.cs" />
     <Compile Include="OrchestratorResponse.cs" />
+    <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountTransactionsOrchestrator.cs" />
     <Compile Include="Orchestrators\TransfersOrchestrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

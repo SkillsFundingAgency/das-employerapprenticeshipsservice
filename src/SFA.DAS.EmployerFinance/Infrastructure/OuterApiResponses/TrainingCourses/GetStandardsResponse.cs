@@ -1,15 +1,15 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses
+namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses.TrainingCourses
 {
     public class GetStandardsResponse
     {
         [JsonProperty("standards")]
-        public List<StandardResponseItem> Standards { get; set; }
+        public List<StandardResponse> Standards { get; set; }
     }
 
-    public class StandardResponseItem
+    public class StandardResponse
     {
         [JsonProperty("id")]
         public int Id { get; set; }

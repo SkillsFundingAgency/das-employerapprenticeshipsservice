@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Services
 {
-    public interface IManageApprenticeshipsService
+    public interface ITransfersService
     {
-        Task<GetIndexResponse> GetIndex(long accountId);
+        Task<GetCountsResponse> GetCounts(long accountId);
         Task<GetFinancialBreakdownResponse> GetFinancialBreakdown(long accountId);
     }
 }
