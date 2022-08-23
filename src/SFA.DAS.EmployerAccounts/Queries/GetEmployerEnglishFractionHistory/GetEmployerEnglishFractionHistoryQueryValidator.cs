@@ -5,21 +5,21 @@ using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerEnglishFractionHistory
 {
-    public class GetEmployerEnglishFractionValidator : IValidator<GetEmployerEnglishFractionQuery>
+    public class GetEmployerEnglishFractionHistoryQueryValidator : IValidator<GetEmployerEnglishFractionHistoryQuery>
     {
         private readonly IMembershipRepository _membershipRepository;
 
-        public GetEmployerEnglishFractionValidator(IMembershipRepository membershipRepository)
+        public GetEmployerEnglishFractionHistoryQueryValidator(IMembershipRepository membershipRepository)
         {
             _membershipRepository = membershipRepository;
         }
 
-        public ValidationResult Validate(GetEmployerEnglishFractionQuery item)
+        public ValidationResult Validate(GetEmployerEnglishFractionHistoryQuery item)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ValidationResult> ValidateAsync(GetEmployerEnglishFractionQuery item)
+        public async Task<ValidationResult> ValidateAsync(GetEmployerEnglishFractionHistoryQuery item)
         {
             var validationResult = new ValidationResult();
 

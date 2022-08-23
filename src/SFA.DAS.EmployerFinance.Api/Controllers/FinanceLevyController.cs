@@ -44,5 +44,35 @@ namespace SFA.DAS.EmployerFinance.Api.Controllers
 
             return Ok(result);
         }
+
+        [Route("english-fraction-history", Name = "GetEnglishFractionHistory")]
+        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetEnglishFractionHistory(string hashedAccountId, string empRef)
+        {
+            var result = await _orchestrator.GetEnglishFractionHistory(hashedAccountId, empRef);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
+        [Route("english-fraction-current", Name = "GetEnglishFractionCurrent")]
+        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetEnglishFractionCurrent([FromUri] string[] empRefs, string hashedAccountId)
+        {
+            var result = await _orchestrator.GetEnglishFractionCurrent(hashedAccountId, empRefs);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
     }
 }
