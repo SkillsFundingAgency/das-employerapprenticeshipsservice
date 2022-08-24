@@ -75,6 +75,8 @@ namespace SFA.DAS.EmployerFinance.Api.Orchestrators
                 AccountIds = accountIds.Select(x => _hashingService.DecodeValue(x)).ToList()
             });
 
+            _logger.Info($"Received response - GetAccountBalances for the accounts { transactionResult.Accounts.Count()}");
+
             return transactionResult;
         }
 
@@ -86,6 +88,8 @@ namespace SFA.DAS.EmployerFinance.Api.Orchestrators
             {
                 AccountId = _hashingService.DecodeValue(hashedAccountId)
             });
+
+            _logger.Info($"Received response - GetTransferAllowance for the hashedAccountId {hashedAccountId} ");
 
             return transferAllowance;
         }
