@@ -75,7 +75,7 @@ namespace SFA.DAS.EmployerFinance.Api.Orchestrators
                 AccountIds = accountIds.Select(x => _hashingService.DecodeValue(x)).ToList()
             });
 
-            _logger.Info($"Received response - GetAccountBalances for the accounts { transactionResult.Accounts.Count()}");
+            _logger.Info($"Received response - GetAccountBalances for the accounts { transactionResult?.Accounts.Count()}");
 
             return transactionResult;
         }
