@@ -70,23 +70,22 @@ namespace SFA.DAS.EmployerFinance.Api.Orchestrators
         {
             _logger.Info($"Requesting GetAccountBalances for the accounts");
 
-            var accountIdsList = new List<long>();
+            var decodedAccountIds = new List<long>();
             foreach (var id in accountIds)
             {
                 try
                 {
-                    accountIdsList.Add(_hashingService.DecodeValue(id));
+                    decodedAccountIds.Add(_hashingService.DecodeValue(id));
                 }
                 catch
                 {
                     _logger.Info($"Exception thrown while decode hashedAccountId : { id}");
-                }
-                
+                }                
             }
-          
+            
             var transactionResult = await _mediator.SendAsync(new GetAccountBalancesRequest
             {
-                AccountIds = accountIdsList //accountIds.Select(x => _hashingService.DecodeValue(x)).ToList()
+                AccountIds = decodedAccountIds
             });
 
             _logger.Info($"Received response - GetAccountBalances for the accounts { transactionResult?.Accounts.Count()}");
