@@ -62,5 +62,6 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
         {
             return context.GetInstance<EmployerFinanceConfiguration>().DatabaseConnectionString;
         }
+
     }
 }

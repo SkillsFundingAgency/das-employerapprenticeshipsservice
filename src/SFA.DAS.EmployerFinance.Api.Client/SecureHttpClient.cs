@@ -6,7 +6,7 @@ using Microsoft.Azure.Services.AppAuthentication;
 
 namespace SFA.DAS.EmployerFinance.Api.Client
 {
-    internal class SecureHttpClient
+    public class SecureHttpClient
     {
         private readonly IEmployerFinanceApiClientConfiguration _configuration;
 

@@ -40,6 +40,7 @@ namespace SFA.DAS.EAS.Account.Api
                 c.AddRegistry<RepositoriesRegistry>();
                 c.AddRegistry<ValidationRegistry>();
                 c.AddRegistry<EmployerAccountsApiServiceRegistry>();
+                c.AddRegistry<EmployerFinanceApiServiceRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
         }

@@ -22,6 +22,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
         [Test]
         public async Task ThenTheAccountWithBalanceIsReturned()
         {
+            //Arrange
             var hashedAccountId = "ABC123";
             var account = new AccountDetailViewModel
             {
@@ -34,18 +35,24 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
                 LegalEntities = new ResourceList(new List<ResourceViewModel> { new ResourceViewModel { Href = "/api/123", Id = "123" } }),
                 PayeSchemes = new ResourceList(new List<ResourceViewModel> { new ResourceViewModel { Href = "/api/XXX", Id = "XXX" } })
             };
+            _employerAccountsApiService.Setup(x => x.GetAccount(hashedAccountId, It.IsAny<CancellationToken>())).ReturnsAsync(account);
 
-            var accountBalanceResponse = new GetAccountBalancesResponse
+            var accountBalancesResponse = new GetAccountBalancesResponse
             {
-                Accounts = new List<AccountBalance> { new AccountBalance { AccountId = account.AccountId, Balance = 123.45m } }
+                Accounts = new List<AccountBalance> { new AccountBalance { AccountId =  account.AccountId, Balance = 123.45m } }
             };
+            _employerFinanceApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>())).ReturnsAsync(accountBalancesResponse);
 
-            ApiService.Setup(x => x.GetAccount(hashedAccountId, It.IsAny<CancellationToken>())).ReturnsAsync(account);
-            Mediator.Setup(x => x.SendAsync(It.Is<GetAccountBalancesRequest>(q => q.AccountIds.Single() == account.AccountId))).ReturnsAsync(accountBalanceResponse);
-            Mediator.Setup(x => x.SendAsync(It.IsAny<GetTransferAllowanceQuery>())).ReturnsAsync(new GetTransferAllowanceResponse { TransferAllowance = new TransferAllowance() });
-         
-            var response = await Controller.GetAccount(hashedAccountId);
+            var transferAllowanceResponse = new GetTransferAllowanceResponse
+            {
+                TransferAllowance = new TransferAllowance() { StartingTransferAllowance = 10, RemainingTransferAllowance = 15 }
+            };
+            _employerFinanceApiService.Setup(x => x.GetTransferAllowance(It.IsAny<string>())).ReturnsAsync(transferAllowanceResponse);
 
+            //Act
+            var response = await _controller.GetAccount(hashedAccountId);
+
+            //Assert
             Assert.IsNotNull(response);
             Assert.IsInstanceOf<OkNegotiatedContentResult<AccountDetailViewModel>>(response);
             var model = response as OkNegotiatedContentResult<AccountDetailViewModel>;
@@ -57,17 +64,20 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             model?.Content?.DasAccountName.Should().Be(account.DasAccountName);
             model?.Content?.DateRegistered.Should().Be(account.DateRegistered);
             model?.Content?.OwnerEmail.Should().Be(account.OwnerEmail);          
-            model?.Content?.Balance.Should().Be(accountBalanceResponse.Accounts.Single().Balance);
+            model?.Content?.Balance.Should().Be(accountBalancesResponse.Accounts.Single().Balance);
         }
 
         [Test]
         public async Task AndTheAccountDoesNotExistThenItIsNotReturned()
         {
+            //Arrange
             var hashedAccountId = "ABC123";
            
-            ApiService.Setup(x => x.GetAccount(hashedAccountId, It.IsAny<CancellationToken>())).ReturnsAsync(new AccountDetailViewModel { AccountId = 0 });
-            var response = await Controller.GetAccount(hashedAccountId);
+            //Act
+            _employerAccountsApiService.Setup(x => x.GetAccount(hashedAccountId, It.IsAny<CancellationToken>())).ReturnsAsync(new AccountDetailViewModel { AccountId = 0 });
+            var response = await _controller.GetAccount(hashedAccountId);
 
+            //Assert
             Assert.IsNotNull(response);
             Assert.IsInstanceOf<NotFoundResult>(response);
         }
@@ -79,13 +89,13 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             var accountId = 1923701937;
             var hashedAccountId = "ABC123";
             
-            HashingService.Setup(x => x.HashValue(accountId)).Returns(hashedAccountId);
-            ApiService.Setup(x => x.GetAccount(hashedAccountId, It.IsAny<CancellationToken>())).ReturnsAsync(new AccountDetailViewModel { AccountId = accountId, ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy.ToString(), LegalEntities = new ResourceList(new List<ResourceViewModel>()), PayeSchemes = new ResourceList(new List<ResourceViewModel>()) });
-            Mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>())).ReturnsAsync(new GetAccountBalancesResponse { Accounts = new List<AccountBalance> { new AccountBalance() } });
-            Mediator.Setup(x => x.SendAsync(It.IsAny<GetTransferAllowanceQuery>())).ReturnsAsync(new GetTransferAllowanceResponse { TransferAllowance = new TransferAllowance() });
+            _hashingService.Setup(x => x.HashValue(accountId)).Returns(hashedAccountId);
+            _employerAccountsApiService.Setup(x => x.GetAccount(hashedAccountId, It.IsAny<CancellationToken>())).ReturnsAsync(new AccountDetailViewModel { AccountId = accountId, ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy.ToString(), LegalEntities = new ResourceList(new List<ResourceViewModel>()), PayeSchemes = new ResourceList(new List<ResourceViewModel>()) });
+            _employerFinanceApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>())).ReturnsAsync(new GetAccountBalancesResponse { Accounts = new List<AccountBalance> { new AccountBalance() } });
+            _employerFinanceApiService.Setup(x => x.GetTransferAllowance(It.IsAny<string>())).ReturnsAsync(new GetTransferAllowanceResponse { TransferAllowance = new TransferAllowance() });
 
             //Act
-            var response = await Controller.GetAccount(accountId);
+            var response = await _controller.GetAccount(accountId);
 
             //Assert
             Assert.IsNotNull(response);
