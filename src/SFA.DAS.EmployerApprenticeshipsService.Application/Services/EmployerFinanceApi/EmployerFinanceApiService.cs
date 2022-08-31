@@ -27,8 +27,12 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
 
         public async Task<List<LevyDeclarationViewModel>> GetLevyDeclarations(string hashedAccountId)
         {
+            _log.Info($"Getting  EmployerFinanceApiService: GetLevyDeclarations {hashedAccountId}");
+
             var url = $"api/accounts/{hashedAccountId}/levy";
             var response = await _httpClient.GetAsync(url);
+
+            _log.Info($"Getting EmployerFinanceApiService : GetLevyDeclarations url : {url}");
 
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
@@ -40,8 +44,12 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
 
         public async Task<List<LevyDeclarationViewModel>> GetLevyForPeriod(string hashedAccountId, string payrollYear, short payrollMonth)
         {
+            _log.Info($"Getting  EmployerFinanceApiService: GetLevyForPeriod {hashedAccountId} year: {payrollYear} month: {payrollMonth}");
+
             var url = $"api/accounts/{hashedAccountId}/levy/{payrollYear}/{payrollMonth}";
             var response = await _httpClient.GetAsync(url);
+
+            _log.Info($"Getting EmployerFinanceApiService : GetLevyForPeriod url : {url}");
 
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
@@ -53,8 +61,12 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
 
         public async Task<TransactionsViewModel> GetTransactions(string accountId, int year, int month)
         {
+            _log.Info($"Getting  EmployerFinanceApiService: GetTransactions {accountId} year : {year} month : {month}");
+
             var url = $"api/accounts/{accountId}/transactions/{year}/{month}";
             var response = await _httpClient.GetAsync(url);
+
+            _log.Info($"Getting EmployerFinanceApiService : GetTransactions url : {url}");
 
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
@@ -66,8 +78,12 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
 
         public async Task<List<TransactionSummaryViewModel>> GetTransactionSummary(string accountId)
         {
+            _log.Info($"Getting  EmployerFinanceApiService: GetTransactionSummary {accountId}");
+
             var url = $"api/accounts/{accountId}/transactions";
             var response = await _httpClient.GetAsync(url);
+
+            _log.Info($"Getting EmployerFinanceApiService : GetTransactionSummary url : {url}");
 
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
@@ -79,7 +95,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
 
         public async Task<TotalPaymentsModel> GetStatistics(CancellationToken cancellationToken = default)
         {
-            _log.Info($"Getting statistics");
+            _log.Info($"Getting EmployerFinanceApiService : statistics");
 
             var response = await _httpClient.GetAsync("/api/financestatistics", cancellationToken).ConfigureAwait(false);
 
@@ -93,9 +109,14 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
 
         public async Task<GetAccountBalancesResponse> GetAccountBalances(List<string> accountIds)
         {
+            _log.Info($"Getting EmployerFinanceApiService : GetAccountBalances");
+
             var url = $"api/accounts/balances";
             var data = JsonConvert.SerializeObject(accountIds);           
             var stringContent = new StringContent(data, Encoding.UTF8, "application/json");
+
+            _log.Info($"Getting EmployerFinanceApiService : GetAccountBalances url : {url}");
+            _log.Info($"stringContent {stringContent}");
 
             var response = await _httpClient.PostAsync(url, stringContent);
 
@@ -109,8 +130,12 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
 
         public async Task<GetTransferAllowanceResponse> GetTransferAllowance(string hashedAccountId)
         {
+            _log.Info($"Getting EmployerFinanceApiService : GetTransferAllowance {hashedAccountId}");
+
             var url = $"api/accounts/{hashedAccountId}/transferAllowance";
             var response = await _httpClient.GetAsync(url);
+
+            _log.Info($"Getting EmployerFinanceApiService : GetTransferAllowance url : {url}");
 
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 

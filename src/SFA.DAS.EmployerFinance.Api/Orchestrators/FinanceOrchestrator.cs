@@ -100,11 +100,26 @@ namespace SFA.DAS.EmployerFinance.Api.Orchestrators
         public async Task<GetAccountBalancesResponse> GetAccountBalances(List<string> accountIds)
         {
             _logger.Info($"Requesting GetAccountBalances for the accounts");
-          
+
+            var decodedAccountIds = new List<long>();
+            foreach (var id in accountIds)
+            {
+                try
+                {
+                    decodedAccountIds.Add(_hashingService.DecodeValue(id));
+                }
+                catch
+                {
+                    _logger.Info($"Exception thrown while decode hashedAccountId : { id}");
+                }                
+            }
+            
             var transactionResult = await _mediator.SendAsync(new GetAccountBalancesRequest
             {
-                AccountIds = accountIds.Select(x => _hashingService.DecodeValue(x)).ToList()
+                AccountIds = decodedAccountIds
             });
+
+            _logger.Info($"Received response - GetAccountBalances for the accounts { transactionResult?.Accounts.Count()}");
 
             return transactionResult;
         }
@@ -117,6 +132,8 @@ namespace SFA.DAS.EmployerFinance.Api.Orchestrators
             {
                 AccountId = _hashingService.DecodeValue(hashedAccountId)
             });
+
+            _logger.Info($"Received response - GetTransferAllowance for the hashedAccountId {hashedAccountId} ");
 
             return transferAllowance;
         }
