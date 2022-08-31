@@ -65,7 +65,7 @@
     <PackageReference Include="Microsoft.Owin.Security.ActiveDirectory">
       <Version>3.0.1</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.Owin.Security.Cookies" Version="3.0.1" />
+    <PackageReference Include="Microsoft.Owin.Security.Cookies" Version="4.2.2" />
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
     <PackageReference Include="SFA.DAS.Authentication">
       <Version>1.1.2</Version>
