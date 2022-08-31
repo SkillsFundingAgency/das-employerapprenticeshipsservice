@@ -40,10 +40,12 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
         {
             _logger.Info("Getting all account balances.");
             
-            var accountsResult = await _employerAccountsApiService.GetAccounts(toDate, pageSize, pageNumber);            
-           
+            var accountsResult = await _employerAccountsApiService.GetAccounts(toDate, pageSize, pageNumber);
+
+            _logger.Info("calling finance api service to GetAccountBalances");
             var transactionResult = await _employerFinanceApiService.GetAccountBalances(accountsResult.Data.Select(account => account.AccountHashId).ToList());
             var accountBalanceHash = BuildAccountBalanceHash(transactionResult.Accounts);
+            _logger.Info($"received response from finance api service to GetAccountBalances {transactionResult.Accounts.Count()} ");
 
             accountsResult.Data.ForEach(account =>
             {
