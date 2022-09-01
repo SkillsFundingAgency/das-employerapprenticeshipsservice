@@ -66,7 +66,6 @@
     <Compile Include="Authentication\IdentityServerConfigurationFactory.cs" />
     <Compile Include="Authentication\OwinAuthenticationService.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
-    <Compile Include="Controllers\EmployerManageApprenticesController.cs" />
     <Compile Include="Controllers\SearchOrganisationController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TransfersController.cs" />
