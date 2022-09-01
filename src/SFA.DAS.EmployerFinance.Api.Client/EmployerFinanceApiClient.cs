@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
+using SFA.DAS.EmployerFinance.Api.Types;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Api.Client
 {
@@ -19,6 +22,69 @@ namespace SFA.DAS.EmployerFinance.Api.Client
             var url = $"{baseUrl}/api/healthcheck";
 
             return _httpClient.GetAsync(url);
+        }
+
+        public async Task<List<LevyDeclaration>> GetLevyDeclarations(string hashedAccountId)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}/api/accounts/{hashedAccountId}/levy";
+            var json = await _httpClient.GetAsync(url);
+
+            return JsonConvert.DeserializeObject<List<LevyDeclaration>>(json);
+        }
+       
+        public async Task<List<LevyDeclaration>> GetLevyForPeriod(string hashedAccountId, string payrollYear, short payrollMonth)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}/api/accounts/{hashedAccountId}/levy/GetLevyForPeriod";
+            var json = await _httpClient.GetAsync(url);
+
+            return JsonConvert.DeserializeObject<List<LevyDeclaration>>(json);
+        }
+
+        public async Task<Transactions> GetTransactions(string accountId, int year, int month)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}/api/accounts/{accountId}/transactions/{year}/{month}";
+            var json = await _httpClient.GetAsync(url);
+
+            return JsonConvert.DeserializeObject<Transactions>(json);
+        }
+
+        public async Task<List<TransactionSummary>> GetTransactionSummary(string accountId)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}/api/accounts/{accountId}/transactions";
+            var json = await _httpClient.GetAsync(url);
+
+            return JsonConvert.DeserializeObject<List<TransactionSummary>>(json);
+        }
+
+        public async Task<TotalPaymentsModel> GetFinanceStatistics()
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}/api/financestatistics";
+            var json = await _httpClient.GetAsync(url);
+
+            return JsonConvert.DeserializeObject<TotalPaymentsModel>(json);
+        }
+
+        public async Task<List<AccountBalance>> GetAccountBalances(List<string> accountIds)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}/api/accounts/balances";
+            var json = await _httpClient.GetAsync(url);
+
+            return JsonConvert.DeserializeObject<List<AccountBalance>>(json);
+        }
+
+        public async Task<TransferAllowance> GetTransferAllowance(string hashedAccountId)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}/api/accounts/{hashedAccountId}/transferAllowance";
+            var json = await _httpClient.GetAsync(url);
+
+            return JsonConvert.DeserializeObject<TransferAllowance>(json);
         }
 
         private string GetBaseUrl()

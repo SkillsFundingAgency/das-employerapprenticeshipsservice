@@ -10,63 +10,73 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Account.Api.Controllers;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionSummary;
-using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.TestCommon.Extensions;
 using SFA.DAS.NLog.Logger;
+using AutoMapper;
+using AutoFixture;
+using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsControllerTests
 {
     [TestFixture]
-    public class WhenIGetTheTransactionSummaryForAnAccount
+    public class WhenIGetTheTransactionSummaryForAnAccount : AccountTransactionsControllerTests
     {
-        private AccountTransactionsController _controller;
-        private Mock<IMediator> _mediator;
+        private AccountTransactionsController _controller;             
         private Mock<ILog> _logger;
         private Mock<UrlHelper> _urlHelper;
+        private  Mock<IEmployerFinanceApiService> _financeApiService;
+        protected IMapper _mapper;        
 
         [SetUp]
         public void Arrange()
         {
-            _mediator = new Mock<IMediator>();
             _logger = new Mock<ILog>();
-            _urlHelper = new Mock<UrlHelper>();
-            var orchestrator = new AccountTransactionsOrchestrator(_mediator.Object, _logger.Object);
+            _urlHelper = new Mock<UrlHelper>();            
+            _financeApiService = new Mock<IEmployerFinanceApiService>();
+            _mapper = ConfigureMapper();
+            var orchestrator = new AccountTransactionsOrchestrator(_mapper, _logger.Object, _financeApiService.Object);
             _controller = new AccountTransactionsController(orchestrator);
-            _controller.Url = _urlHelper.Object;
+            _controller.Url = _urlHelper.Object; 
         }
-        
+
         [Test]
         public async Task ThenTheTransactionSummaryIsReturned()
         {
-            var hashedAccountId = "ABC123";
-            var transactionSummaryResponse = new GetAccountTransactionSummaryResponse
+            //Arrange
+            var hashedAccountId = "ABC123";           
+            var fixture = new Fixture();
+            var apiResponse = new List<TransactionSummaryViewModel>()
             {
-                Data = new List<TransactionSummary> { new TransactionSummary { Month = 1, Year = 2017 }, new TransactionSummary { Month = 2, Year = 2017 } }
+                 fixture.Create<TransactionSummaryViewModel>(),
+                 fixture.Create<TransactionSummaryViewModel>()
             };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetAccountTransactionSummaryRequest>(q => q.HashedAccountId == hashedAccountId))).ReturnsAsync(transactionSummaryResponse);
+
+            _financeApiService.Setup(x => x.GetTransactionSummary(hashedAccountId)).ReturnsAsync(apiResponse);
 
             var firstExpectedUri = "someuri";
             _urlHelper.Setup(
                     x =>
                         x.Route("GetTransactions",
-                            It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId, year = transactionSummaryResponse.Data.First().Year, month = transactionSummaryResponse.Data.First().Month }))))
+                            It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId, year = apiResponse.First().Year, month = apiResponse.First().Month }))))
                 .Returns(firstExpectedUri);
             var secondExpectedUri = "someotheruri";
             _urlHelper.Setup(
                     x =>
                         x.Route("GetTransactions",
-                            It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId, year = transactionSummaryResponse.Data.Last().Year, month = transactionSummaryResponse.Data.Last().Month }))))
+                            It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId, year = apiResponse.Last().Year, month = apiResponse.Last().Month }))))
                 .Returns(secondExpectedUri);
 
+            //Act
             var response = await _controller.Index(hashedAccountId);
 
+            
+            //Assert            
             Assert.IsNotNull(response);
             Assert.IsInstanceOf<OkNegotiatedContentResult<AccountResourceList<TransactionSummaryViewModel>>>(response);
             var model = response as OkNegotiatedContentResult<AccountResourceList<TransactionSummaryViewModel>>;
 
             model?.Content.Should().NotBeNull();
-            model?.Content.ShouldAllBeEquivalentTo(transactionSummaryResponse.Data, x => x.Excluding(y => y.Href));
+            model?.Content.ShouldAllBeEquivalentTo(apiResponse, x => x.Excluding(y => y.Href));
             model?.Content.First().Href.Should().Be(firstExpectedUri);
             model?.Content.Last().Href.Should().Be(secondExpectedUri);
         }

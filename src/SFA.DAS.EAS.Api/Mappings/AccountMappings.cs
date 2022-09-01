@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Domain.Models.Levy;
 
@@ -17,6 +16,7 @@ namespace SFA.DAS.EAS.Account.Api.Mappings
                 .ForMember(target => target.DasAccountName, opt => opt.MapFrom(src => src.Name));
             CreateMap<LevyDeclarationView, LevyDeclarationViewModel>()
                 .ForMember(target => target.PayeSchemeReference, opt => opt.MapFrom(src => src.EmpRef));
+
             CreateMap<Domain.Models.EmployerAgreement.EmployerAgreementView, EmployerAgreementView>();
         }
     }

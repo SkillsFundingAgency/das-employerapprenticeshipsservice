@@ -45,7 +45,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions
             if (!result.IsValid())
             {
                 throw new InvalidRequestException(result.ValidationDictionary);
-            }
+            }            
 
             if (result.IsUnauthorized)
             {

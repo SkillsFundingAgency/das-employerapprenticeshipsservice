@@ -13,6 +13,8 @@ using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.
 using SFA.DAS.UnitOfWork.WebApi.Extensions;
 using SFA.DAS.Validation.WebApi;
 using WebApi.StructureMap;
+using SFA.DAS.EmployerFinance.Api.Client;
+using SFA.DAS.EmployerFinance.Configuration;
 
 namespace SFA.DAS.EmployerFinance.Api
 {
@@ -41,7 +43,7 @@ namespace SFA.DAS.EmployerFinance.Api
                 c.AddRegistry<ExecutionPoliciesRegistry>();
                 c.AddRegistry<HashingRegistry>();
                 c.AddRegistry<LoggerRegistry>();
-                c.AddRegistry<MapperRegistry>();
+                c.AddRegistry<MapperRegistry>(); 
                 c.AddRegistry<MediatorRegistry>();
                 c.AddRegistry<MessagePublisherRegistry>();
                 c.AddRegistry<NotificationsRegistry>();
@@ -50,6 +52,7 @@ namespace SFA.DAS.EmployerFinance.Api
                 c.AddRegistry<StartupRegistry>();
                 c.AddRegistry<DefaultRegistry>();
                 c.AddRegistry<CommitmentsV2ApiClientRegistry>();
+                c.AddRegistry(new EmployerFinanceApiClientRegistry(context => context.GetInstance<EmployerFinanceConfiguration>().EmployerFinanceApi));
             });
         }
     }
