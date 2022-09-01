@@ -195,7 +195,6 @@
     <Compile Include="Controllers\EmployerAccountPayeController.cs" />
     <Compile Include="Controllers\EmployerAccountTransactions.cs" />
     <Compile Include="Controllers\EmployerAgreementController.cs" />
-    <Compile Include="Controllers\EmployerManageApprenticesController.cs" />
     <Compile Include="Controllers\EmployerTeamController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HealthCheckController.cs" />
