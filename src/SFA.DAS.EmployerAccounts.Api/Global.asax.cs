@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerAccounts.Api
             GlobalConfiguration.Configure(WebApiConfig.Register);
             
             GlobalConfiguration.Configuration
-             .EnableSwagger(c => c.SingleApiVersion("v1", "First WEB API Demo"))
+             .EnableSwagger(c => c.SingleApiVersion("v1", "Employer Accounts Api"))
              .EnableSwaggerUi();
             
             TelemetryConfiguration.Active.InstrumentationKey = ConfigurationManager.AppSettings["InstrumentationKey"];
