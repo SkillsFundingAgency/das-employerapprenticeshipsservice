@@ -45,6 +45,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="App_Start\AuthorizationHeaderParameterOperationFilter.cs" />
     <Compile Include="Controllers\AccountLegalEntitiesController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\StatisticsController.cs" />
@@ -121,7 +122,7 @@
       <Version>5.2.6</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.AspNet.WebApi.Client">
-      <Version>5.2.6</Version>
+      <Version>5.2.9</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
       <Version>1.0.8</Version>
@@ -157,6 +158,9 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.Logging">
       <Version>1.0.5</Version>
+    </PackageReference>
+    <PackageReference Include="Swagger-Net">
+      <Version>8.3.10.4</Version>
     </PackageReference>
     <PackageReference Include="System.Buffers">
       <Version>4.4.0</Version>
