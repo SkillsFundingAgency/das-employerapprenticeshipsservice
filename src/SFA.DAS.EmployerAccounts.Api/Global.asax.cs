@@ -4,7 +4,6 @@ using System.Web.Http;
 using Microsoft.ApplicationInsights.Extensibility;
 using NServiceBus;
 using StructureMap;
-using Swashbuckle.Application;
 using WebApi.StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Api
@@ -17,10 +16,6 @@ namespace SFA.DAS.EmployerAccounts.Api
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
-            
-            GlobalConfiguration.Configuration
-             .EnableSwagger(c => c.SingleApiVersion("v1", "Employer Accounts Api"))
-             .EnableSwaggerUi();
             
             TelemetryConfiguration.Active.InstrumentationKey = ConfigurationManager.AppSettings["InstrumentationKey"];
 
