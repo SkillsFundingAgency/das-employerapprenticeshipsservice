@@ -40,7 +40,8 @@ namespace SFA.DAS.EmployerFinance.Api.UnitTests.Controllers.EmployerAccountsCont
             //Arrange            
             var hashedAccountIds = new List<string> { "ABC123", "XYZ456" };
             var accountBalancesResponse = new GetAccountBalancesResponse {
-                Accounts = new List<Models.Account.AccountBalance> { new Models.Account.AccountBalance { AccountId = 1, Balance = 10000 }, new Models.Account.AccountBalance { AccountId = 2, Balance = 20000 } }
+                Accounts = new List<Models.Account.AccountBalance> { new Models.Account.AccountBalance { AccountId = 1, Balance = 10000 }, 
+                    new Models.Account.AccountBalance { AccountId = 2, Balance = 20000 } }
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetAccountBalancesRequest>(q => q.AccountIds == It.IsAny<List<long>>()))).ReturnsAsync(accountBalancesResponse);
 
