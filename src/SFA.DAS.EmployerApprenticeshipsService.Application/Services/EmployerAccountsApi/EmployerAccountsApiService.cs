@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerAccountsApi
             IEmployerAccountsApiHttpClientFactory employerAccountsApiHttpClientFactory, 
             ILog log)
         {
-            _log = log;       
+            _log = log;
 
             //todo: using RestHttpClient would be better, but would need to upgrade the api, which might be a bit much for this story!?
             _httpClient = employerAccountsApiHttpClientFactory.CreateHttpClient();
