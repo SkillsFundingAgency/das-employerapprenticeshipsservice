@@ -66,7 +66,7 @@ namespace SFA.DAS.EmployerFinance.Api.Orchestrators
         }
       
 
-        public async Task<GetAccountBalancesResponse> GetAccountBalances(List<string> accountIds)
+        public async Task<List<AccountBalance>> GetAccountBalances(List<string> accountIds)
         {
             _logger.Info($"Requesting GetAccountBalances for the accounts");
 
@@ -87,10 +87,10 @@ namespace SFA.DAS.EmployerFinance.Api.Orchestrators
             {
                 AccountIds = decodedAccountIds
             });
-
+            var mapTransactionResult = transactionResult?.Accounts.Select(x => _mapper.Map<AccountBalance>(x)).ToList();
             _logger.Info($"Received response - GetAccountBalances for the accounts { transactionResult?.Accounts.Count()}");
-
-            return transactionResult;
+            
+            return mapTransactionResult;
         }
 
         public async Task<GetTransferAllowanceResponse> GetTransferAllowance(string hashedAccountId)

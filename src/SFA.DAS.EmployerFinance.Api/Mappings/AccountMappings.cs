@@ -10,6 +10,8 @@ namespace SFA.DAS.EmployerFinance.Api.Mappings
         {            
             CreateMap<LevyDeclarationItem, LevyDeclaration>()
                .ForMember(target => target.PayeSchemeReference, opt => opt.MapFrom(src => src.EmpRef));
+
+            CreateMap<Models.Account.AccountBalance, AccountBalance>();               
         }
     }
 }
