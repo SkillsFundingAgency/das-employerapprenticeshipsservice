@@ -22,6 +22,7 @@ namespace SFA.DAS.EAS.Account.Api.DependencyResolution
             });
 
             var environmentName = ConfigurationManager.AppSettings["EnvironmentName"];
+            environmentName = "TEST";
 
             For<DbConnection>().Use($"Build DbConnection", c =>
             {
@@ -38,7 +39,6 @@ namespace SFA.DAS.EAS.Account.Api.DependencyResolution
 
            
             For<EmployerAccountsDbContext>().Use(c => GetAcccountsDbContext(c));
-            For<EmployerFinanceDbContext>().Use(c => GetFinanceDbContext(c));
         }
 
         private EmployerAccountsDbContext GetAcccountsDbContext(IContext context)
@@ -47,31 +47,9 @@ namespace SFA.DAS.EAS.Account.Api.DependencyResolution
             return db;
         }
 
-        private EmployerFinanceDbContext GetFinanceDbContext(IContext context)
-        {
-            var environmentName = ConfigurationManager.AppSettings["EnvironmentName"];
-
-            var azureServiceTokenProvider = new AzureServiceTokenProvider();
-
-            var connection = environmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase)
-                ? new SqlConnection(GetEmployerFinanceConnectionString(context))
-                : new SqlConnection
-                {
-                    ConnectionString = GetEmployerFinanceConnectionString(context),
-                    AccessToken = azureServiceTokenProvider.GetAccessTokenAsync(AzureResource).Result
-                };
-
-            return new EmployerFinanceDbContext(connection);
-        }
-
         private string GetEmployerAccountsConnectionString(IContext context)
         {
             return context.GetInstance<EmployerApprenticeshipsServiceConfiguration>().DatabaseConnectionString;
-        }
-
-        private string GetEmployerFinanceConnectionString(IContext context)
-        {
-            return context.GetInstance<LevyDeclarationProviderConfiguration>().DatabaseConnectionString;
         }
     }
 }

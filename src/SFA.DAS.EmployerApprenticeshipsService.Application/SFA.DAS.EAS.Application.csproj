@@ -82,9 +82,6 @@
     <Compile Include="DependencyResolution\ReferenceDataRegistry.cs" />
     <Compile Include="DependencyResolution\RepositoriesRegistry.cs" />
     <Compile Include="DependencyResolution\ValidationRegistry.cs" />
-    <Compile Include="Queries\GetFinancialStatistics\GetFinancialStatisticsQueryHandler.cs" />
-    <Compile Include="Queries\GetFinancialStatistics\GetFinancialStatisticsQuery.cs" />
-    <Compile Include="Queries\GetFinancialStatistics\GetFinancialStatisticsResponse.cs" />
     <Compile Include="Logging\LoggingContext.cs" />
     <Compile Include="Mappings\LegalEntityMappings.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommand.cs" />
