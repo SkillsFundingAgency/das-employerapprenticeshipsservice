@@ -1,10 +1,9 @@
 ﻿using System;
 using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EmployerAccounts.Messages.Events
 {
-    public class SignedAgreementEvent : Event
+    public class SignedAgreementEvent
     {
         public long AccountId { get; set; }
         public string UserName { get; set; }
@@ -17,5 +16,6 @@ namespace SFA.DAS.EmployerAccounts.Messages.Events
         public AgreementType AgreementType { get; set; }
         public int SignedAgreementVersion { get; set; }
         public string CorrelationId { get; set; }
+        public DateTime Created { get; set; }
     }
 }
