@@ -1,9 +1,8 @@
 ﻿using System;
-using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EmployerAccounts.Messages.Events
 {
-    public class ApprovedTransferConnectionRequestEvent : Event
+    public class ApprovedTransferConnectionRequestEvent 
     {
         public long ApprovedByUserId { get; set; }
         public string ApprovedByUserName { get; set; }
@@ -15,5 +14,6 @@ namespace SFA.DAS.EmployerAccounts.Messages.Events
         public long SenderAccountId { get; set; }
         public string SenderAccountName { get; set; }
         public int TransferConnectionRequestId { get; set; }
+        public DateTime Created { get; set; }
     }
 }
