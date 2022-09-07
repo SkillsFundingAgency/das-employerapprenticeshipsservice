@@ -21,8 +21,7 @@ namespace SFA.DAS.EAS.Account.Api.DependencyResolution
                 s.RegisterConcreteTypesAgainstTheFirstInterface();
             });
 
-            var environmentName = ConfigurationManager.AppSettings["EnvironmentName"];
-            environmentName = "TEST";
+            var environmentName = ConfigurationManager.AppSettings["EnvironmentName"];            
 
             For<DbConnection>().Use($"Build DbConnection", c =>
             {
