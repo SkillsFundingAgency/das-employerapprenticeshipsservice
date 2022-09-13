@@ -11,7 +11,7 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
         public EmployerFinanceOuterApiRegistry ()
         {
             For<EmployerFinanceOuterApiConfiguration>().Use(c => c.GetInstance<EmployerFinanceConfiguration>().EmployerFinanceOuterApiConfiguration).Singleton();
-            For<IOuterApiClient>().Use<OuterApiClient>().Ctor<HttpClient>().Is(new HttpClient()).Singleton();
+            For<IOuterApiClient>().Use<OuterApiClient>().Ctor<HttpClient>().Is(new HttpClient());
         }
     }
 }
