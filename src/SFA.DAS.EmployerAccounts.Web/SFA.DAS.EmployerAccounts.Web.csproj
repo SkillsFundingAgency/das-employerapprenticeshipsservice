@@ -872,6 +872,7 @@
     <Content Include="Views\EmployerAgreement\_AwaitingAcceptance.cshtml" />
     <Content Include="Views\EmployerAgreement\_AcceptedAgreement.cshtml" />
     <Content Include="Views\Home\TermsAndConditionsOverview.cshtml" />
+    <Content Include="Views\Shared\_Agreement_v8.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
