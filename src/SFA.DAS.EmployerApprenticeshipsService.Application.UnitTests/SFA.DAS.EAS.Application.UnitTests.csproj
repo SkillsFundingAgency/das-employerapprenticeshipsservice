@@ -187,9 +187,6 @@
     <PackageReference Include="SFA.DAS.Activities.Client">
       <Version>1.2.71</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Audit.Client">
-      <Version>1.0.0.20553</Version>
-    </PackageReference>
     <PackageReference Include="SFA.DAS.Commitments.Api.Client">
       <Version>4.1.355</Version>
     </PackageReference>

@@ -128,12 +128,6 @@
     <PackageReference Include="SFA.DAS.ActiveDirectory">
       <Version>1.0.3</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Audit.Client">
-      <Version>1.0.0.20553</Version>
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.Audit.Client.Web">
-      <Version>1.0.0.20510</Version>
-    </PackageReference>
     <PackageReference Include="SFA.DAS.Authentication">
       <Version>1.1.2</Version>
     </PackageReference>

@@ -66,7 +66,6 @@
     <Compile Include="Http\RestHttpClientException.cs" />
     <Compile Include="Mappings\AgreementMappings.cs" />
     <Compile Include="MarkerInterfaces\IPublicHashingService.cs" />
-    <Compile Include="DependencyResolution\AuditRegistry.cs" />
     <Compile Include="DependencyResolution\CachesRegistry.cs" />
     <Compile Include="DependencyResolution\CommitmentsRegistry.cs" />
     <Compile Include="DependencyResolution\ConfigurationRegistry.cs" />
@@ -200,9 +199,6 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.Activities.Client">
       <Version>1.2.71</Version>
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.Audit.Client">
-      <Version>1.0.0.20553</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authentication">
       <Version>1.1.2</Version>

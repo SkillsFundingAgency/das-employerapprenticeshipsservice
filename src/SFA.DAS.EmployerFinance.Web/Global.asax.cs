@@ -1,11 +1,6 @@
-﻿using Microsoft.ApplicationInsights;
-using NLog;
-using SFA.DAS.EmployerFinance.Web.Logging;
-using SFA.DAS.EmployerFinance.Web.ViewModels;
-using SFA.DAS.Logging;
-using SFA.DAS.Web.Policy;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Net;
 using System.Reflection;
 using System.Security.Claims;
@@ -14,15 +9,16 @@ using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
-using System.Configuration;
-using SFA.DAS.Audit.Client.Web;
-using SFA.DAS.EmployerUsers.WebClientComponents;
-using SFA.DAS.Audit.Client;
-using SFA.DAS.Audit.Types;
+using NLog;
 using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerFinance.Startup;
 using SFA.DAS.EmployerFinance.Web.App_Start;
+using SFA.DAS.EmployerFinance.Web.Logging;
+using SFA.DAS.EmployerFinance.Web.ViewModels;
+using SFA.DAS.Logging;
+using SFA.DAS.Web.Policy;
 
 namespace SFA.DAS.EmployerFinance.Web
 {
@@ -41,19 +37,6 @@ namespace SFA.DAS.EmployerFinance.Web
             LoggingConfig.ConfigureLogging();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             TelemetryConfiguration.Active.InstrumentationKey = ConfigurationManager.AppSettings["InstrumentationKey"];
-            WebMessageBuilders.Register();
-            WebMessageBuilders.UserIdClaim = DasClaimTypes.Id;
-            WebMessageBuilders.UserEmailClaim = DasClaimTypes.Email;
-
-            AuditMessageFactory.RegisterBuilder(m =>
-            {
-                m.Source = new Source
-                {
-                    Component = "EmployerFinance-Web",
-                    System = "EmployerFinance",
-                    Version = typeof(MvcApplication).Assembly.GetName().Version.ToString()
-                };
-            });
 
             var container = StructuremapMvc.StructureMapDependencyScope.Container;
 

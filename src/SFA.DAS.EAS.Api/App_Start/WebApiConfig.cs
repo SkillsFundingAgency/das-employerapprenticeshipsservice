@@ -2,11 +2,11 @@
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
 using SFA.DAS.Authorization.DependencyResolution.StructureMap;
+using SFA.DAS.Authorization.WebApi.Extensions;
 using SFA.DAS.EAS.Account.Api.DependencyResolution;
 using SFA.DAS.EAS.Account.Api.ExceptionLoggers;
 using SFA.DAS.EAS.Application.DependencyResolution;
 using WebApi.StructureMap;
-using SFA.DAS.Authorization.WebApi.Extensions;
 
 namespace SFA.DAS.EAS.Account.Api
 {
@@ -24,7 +24,6 @@ namespace SFA.DAS.EAS.Account.Api
 
             config.UseStructureMap(c =>
             {
-                c.AddRegistry<AuditRegistry>();
                 c.AddRegistry<AuthorizationRegistry>();
                 c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<CommitmentsRegistry>();

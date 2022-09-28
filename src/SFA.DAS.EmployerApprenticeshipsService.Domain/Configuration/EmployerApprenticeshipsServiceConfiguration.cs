@@ -28,7 +28,7 @@ namespace SFA.DAS.EAS.Domain.Configuration
         public string PublicHashstring { get; set; }
         public string ServiceBusConnectionString { get; set; }
         public Dictionary<string, string> ServiceBusConnectionStrings { get; set; }
-        public EmployerAccountsApiConfiguration EmployerAccountsApi { get; set; }   
+        public EmployerAccountsApiConfiguration EmployerAccountsApi { get; set; }
         public EmployerFinanceApiConfiguration EmployerFinanceApi { get; set; }
     }
 }

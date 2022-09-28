@@ -1,7 +1,7 @@
 using SFA.DAS.Activities.Client;
+using SFA.DAS.Authorization.DependencyResolution.StructureMap;
 using SFA.DAS.EAS.Application.DependencyResolution;
 using StructureMap;
-using SFA.DAS.Authorization.DependencyResolution.StructureMap;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution
 {
@@ -12,7 +12,6 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             return new Container(c =>
             {
                 c.AddRegistry<ActivitiesClientRegistry>();
-                c.AddRegistry<AuditRegistry>();
                 c.AddRegistry<AuthorizationRegistry>();
                 c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<CommitmentsRegistry>();

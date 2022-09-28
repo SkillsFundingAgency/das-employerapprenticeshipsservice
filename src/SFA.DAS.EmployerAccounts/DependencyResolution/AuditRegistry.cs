@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
             For<IAuditApiClient>().Use<AuditApiClientForSupportUser>()
                .Ctor<IAuditApiClient>().Is(auditClient);
 
-            For<IAuditApiConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<AuditApiClientConfiguration>(ConfigurationKeys.AuditApi)).Singleton();
+            For<IAuditApiConfiguration>().Use(c => c.GetInstance<EmployerAccountsConfiguration>().AuditApi).Singleton();
 
             For<IAuditMessageFactory>().Use<AuditMessageFactory>().Singleton();
         }

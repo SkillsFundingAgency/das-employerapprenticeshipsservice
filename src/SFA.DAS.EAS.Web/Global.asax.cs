@@ -1,15 +1,6 @@
-﻿using FluentValidation.Mvc;
-using NLog;
-using NServiceBus;
-using SFA.DAS.Audit.Client.Web;
-using SFA.DAS.Audit.Types;
-using SFA.DAS.EAS.Infrastructure.Logging;
-using SFA.DAS.EAS.Web.ViewModels;
-using SFA.DAS.EmployerUsers.WebClientComponents;
-using SFA.DAS.Web.Policy;
-using System;
-using System.Configuration;
+﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Common;
 using System.Net;
 using System.Reflection;
@@ -19,20 +10,25 @@ using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using FluentValidation.Mvc;
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
+using NLog;
+using NServiceBus;
+using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.Logging;
 using SFA.DAS.EAS.Infrastructure.NServiceBus;
 using SFA.DAS.EAS.Web.App_Start;
+using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.Logging;
-using SFA.DAS.Audit.Client;
-using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.ApplicationInsights;
-using SFA.DAS.AutoConfiguration;
+using SFA.DAS.NServiceBus.Configuration;
 using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.Configuration.NLog;
-using SFA.DAS.NServiceBus.SqlServer.Configuration;
 using SFA.DAS.NServiceBus.Configuration.StructureMap;
+using SFA.DAS.NServiceBus.SqlServer.Configuration;
+using SFA.DAS.Web.Policy;
 using StructureMap;
-using SFA.DAS.NServiceBus.Configuration;
 
 namespace SFA.DAS.EAS.Web
 {
@@ -53,19 +49,6 @@ namespace SFA.DAS.EAS.Web
             LoggingConfig.ConfigureLogging();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             TelemetryConfiguration.Active.InstrumentationKey = ConfigurationManager.AppSettings["APPINSIGHTS_INSTRUMENTATIONKEY"];
-            WebMessageBuilders.Register();
-            WebMessageBuilders.UserIdClaim = DasClaimTypes.Id;
-            WebMessageBuilders.UserEmailClaim = DasClaimTypes.Email;
-
-            AuditMessageFactory.RegisterBuilder(m =>
-            {
-                m.Source = new Source
-                {
-                    Component = "EAS-Web",
-                    System = "EAS",
-                    Version = typeof(MvcApplication).Assembly.GetName().Version.ToString()
-                };
-            });
 
             var container = StructuremapMvc.StructureMapDependencyScope.Container;
 

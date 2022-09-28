@@ -147,7 +147,7 @@
       <Version>2.0.22</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Audit.Client">
-      <Version>1.0.0.20553</Version>
+      <Version>1.1.61</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authentication">
       <Version>1.1.2</Version>

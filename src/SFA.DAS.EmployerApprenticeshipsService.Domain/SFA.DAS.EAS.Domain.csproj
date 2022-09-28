@@ -98,7 +98,6 @@
     <Compile Include="Models\Settings\UserNotificationSetting.cs" />
     <Compile Include="Models\ReferenceData\Organisation.cs" />
     <Compile Include="Models\Transaction\AggregationData.cs" />
-    <Compile Include="Configuration\AuditApiClientConfiguration.cs" />
     <Compile Include="Configuration\ClaimIdentifierConfiguration.cs" />
     <Compile Include="Configuration\CompaniesHouseConfiguration.cs" />
     <Compile Include="Configuration\EmployerApprenticeshipsServiceConfiguration.cs" />
@@ -121,7 +120,6 @@
     <Compile Include="Interfaces\IDasLevyService.cs" />
     <Compile Include="Models\AccountTeam\InvitationStatus.cs" />
     <Compile Include="Models\Levy\LevyDeclarationView.cs" />
-    <Compile Include="Models\Audit\EasAuditMessage.cs" />
     <Compile Include="Models\Levy\LevyDeclarationTransactionLine.cs" />
     <Compile Include="Models\ReferenceData\Charity.cs" />
     <Compile Include="Models\ReferenceData\PagedResponse.cs" />
@@ -198,9 +196,6 @@
     </PackageReference>
     <PackageReference Include="NServiceBus.Persistence.Sql">
       <Version>4.1.1</Version>
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.Audit.Client">
-      <Version>1.0.0.20553</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Commitments.Api.Client">
       <Version>4.1.355</Version>

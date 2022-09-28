@@ -1,10 +1,11 @@
-﻿using SFA.DAS.Authentication;
+﻿using System;
+using SFA.DAS.Audit.Client;
+using SFA.DAS.Authentication;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.Hmrc.Configuration;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
 using SFA.DAS.Tasks.API.Client;
 using SFA.DAS.TokenService.Api.Client;
-using System;
 
 namespace SFA.DAS.EmployerAccounts.Configuration
 {
@@ -46,6 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public AccountApiConfiguration AccountApi { get; set; }
         public TokenServiceApiClientConfiguration TokenServiceApi { get; set; }
         public UserAornPayeLockConfiguration UserAornPayeLock { get; set; }
+        public AuditApiConfiguration AuditApi { get; set; }
         public string ZenDeskHelpCentreUrl { get; set; }
         public string ReportTrainingProviderEmailAddress { get; set; }
         public string AdfsMetadata { get; set; }
