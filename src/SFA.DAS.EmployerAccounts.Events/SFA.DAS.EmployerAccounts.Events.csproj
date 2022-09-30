@@ -77,6 +77,11 @@
     <PackageReference Include="NLog">
       <Version>4.6.8</Version>
     </PackageReference>
+    <PackageReference Include="NuGet.Build.Tasks.Pack">
+      <Version>6.3.0</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="SFA.DAS.Messaging">
       <Version>3.0.0.63765</Version>
     </PackageReference>
