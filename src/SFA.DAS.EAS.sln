@@ -164,6 +164,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerFinance.Mes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerFinance.Api.Types", "SFA.DAS.EmployerFinance.Api.Types\SFA.DAS.EmployerFinance.Api.Types.csproj", "{2AF6F3F4-7D2E-495D-B914-18E2A0FDEF2C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerFinance.Types", "SFA.DAS.EmployerFinance.Types\SFA.DAS.EmployerFinance.Types.csproj", "{2C0C3811-8BA8-4730-B97A-C6D1B66DA5D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -429,6 +431,10 @@ Global
 		{2AF6F3F4-7D2E-495D-B914-18E2A0FDEF2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AF6F3F4-7D2E-495D-B914-18E2A0FDEF2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AF6F3F4-7D2E-495D-B914-18E2A0FDEF2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C0C3811-8BA8-4730-B97A-C6D1B66DA5D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C0C3811-8BA8-4730-B97A-C6D1B66DA5D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C0C3811-8BA8-4730-B97A-C6D1B66DA5D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C0C3811-8BA8-4730-B97A-C6D1B66DA5D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

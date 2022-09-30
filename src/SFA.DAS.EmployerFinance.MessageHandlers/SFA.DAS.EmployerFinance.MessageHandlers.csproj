@@ -19,7 +19,6 @@
     <PackageReference Include="NServiceBus.Testing" Version="7.0.0" />
     <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
     <PackageReference Include="SFA.DAS.Authentication" Version="1.1.2" />
-    <PackageReference Include="SFA.DAS.EmployerFinance.Types" Version="0.2.37" />
     <PackageReference Include="SFA.DAS.EmployerAccounts.Messages" Version="1.6.890" />
     <PackageReference Include="SFA.DAS.Messaging" Version="3.0.0.63765" />
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
@@ -38,6 +37,7 @@
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Messages\SFA.DAS.EmployerAccounts.Messages.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EAS.Infrastructure.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerFinance.Messages\SFA.DAS.EmployerFinance.Messages.csproj" />
+    <ProjectReference Include="..\SFA.DAS.EmployerFinance.Types\SFA.DAS.EmployerFinance.Types.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj" />
   </ItemGroup>
 
