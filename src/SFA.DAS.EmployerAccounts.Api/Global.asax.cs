@@ -16,6 +16,7 @@ namespace SFA.DAS.EmployerAccounts.Api
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
+            
             TelemetryConfiguration.Active.InstrumentationKey = ConfigurationManager.AppSettings["InstrumentationKey"];
 
             _serviceBusEndpointManager = 
