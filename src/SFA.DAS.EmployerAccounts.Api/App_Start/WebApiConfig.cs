@@ -12,6 +12,7 @@ using SFA.DAS.UnitOfWork.NServiceBus.DependencyResolution.StructureMap;
 using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.StructureMap;
 using SFA.DAS.UnitOfWork.WebApi.Extensions;
 using SFA.DAS.Validation.WebApi;
+using Swagger.Net.Application;
 using WebApi.StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Api
@@ -20,6 +21,13 @@ namespace SFA.DAS.EmployerAccounts.Api
     {
         public static void Register(HttpConfiguration config)
         {
+            config.EnableSwagger(c =>
+            {
+                c.SingleApiVersion("v1", "Employer Accounts API");
+                c.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
+            })
+               .EnableSwaggerUi();
+
             config.Filters.AddUnitOfWorkFilter();
             config.Filters.Add(new ValidateModelStateFilter());
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
