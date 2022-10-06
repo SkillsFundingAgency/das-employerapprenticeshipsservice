@@ -47,7 +47,7 @@
     <PackageReference Include="SFA.DAS.Notifications.Api.Types" Version="2.2.37" />
     <PackageReference Include="SFA.DAS.NServiceBus" Version="15.0.25" />
     <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="15.0.25" />
-    <PackageReference Include="SFA.DAS.Provider.Events.Api.Client" Version="2.1.97" />
+    <PackageReference Include="SFA.DAS.Provider.Events.Api.Client" Version="3.0.1-prerelease-5" />
     <PackageReference Include="SFA.DAS.Sql.Client" Version="1.0.0.32930" />
     <PackageReference Include="SFA.DAS.TokenService.Api.Client" Version="2.3.0" />
     <PackageReference Include="SFA.DAS.UnitOfWork" Version="9.0.13" />

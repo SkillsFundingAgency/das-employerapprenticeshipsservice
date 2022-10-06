@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
-using FluentAssertions;
 using MediatR;
 using Moq;
 using NServiceBus.Testing;
@@ -29,7 +28,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
         private Mock<IMediator> _mediatorMock;
         private Mock<ILog> _loggerMock;
         private TestableMessageHandlerContext _messageHandlerContext;
-        private PaymentsApiClientConfiguration _configuration;
+        private PaymentsEventsApiClientLocalConfiguration _configuration;
         private IFixture Fixture = new Fixture();
         private ImportPaymentsCommand _importPaymentsCommand;
 
@@ -56,7 +55,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             _mediatorMock.Setup(mock => mock.SendAsync(It.IsAny<GetAllEmployerAccountsRequest>()))
                 .ReturnsAsync(new GetAllEmployerAccountsResponse { Accounts = new List<Account> { Fixture.Create<Account>() } });
 
-            _configuration = new PaymentsApiClientConfiguration { PaymentsDisabled = false };
+            _configuration = new PaymentsEventsApiClientLocalConfiguration { PaymentsDisabled = false };
 
             _sut = new ImportPaymentsCommandHandler(_paymentsEventsApiClientMock.Object, _mediatorMock.Object, _loggerMock.Object, _configuration);
         }

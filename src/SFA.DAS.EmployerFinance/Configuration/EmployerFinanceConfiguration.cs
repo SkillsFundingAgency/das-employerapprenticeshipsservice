@@ -39,7 +39,7 @@ namespace SFA.DAS.EmployerFinance.Configuration
         public AccountApiConfiguration AccountApi { get; set; }
         public TokenServiceApiClientConfiguration TokenServiceApi { get; set; }
         public CommitmentsApiV2ClientConfiguration CommitmentsApi { get; set; }
-        public PaymentsApiClientConfiguration PaymentsEventsApi { get; set; } 
+        public PaymentsEventsApiClientLocalConfiguration PaymentsEventsApi { get; set; } 
         public string ReservationsBaseUrl { get; set; }
         public string ZenDeskHelpCentreUrl { get; set; }
         public string ZenDeskSnippetKey { get; set; }

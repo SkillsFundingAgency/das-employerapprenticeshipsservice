@@ -17,13 +17,13 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
         private readonly IPaymentsEventsApiClient _paymentsEventsApiClient;
         private readonly IMediator _mediator;
         private readonly ILog _logger;
-        private readonly PaymentsApiClientConfiguration _configuration;
+        private readonly PaymentsEventsApiClientLocalConfiguration _configuration;
 
         public ImportPaymentsCommandHandler(
             IPaymentsEventsApiClient paymentsEventsApiClient,
             IMediator mediator,
             ILog logger,
-            PaymentsApiClientConfiguration configuration)
+            PaymentsEventsApiClientLocalConfiguration configuration)
         {
             _paymentsEventsApiClient = paymentsEventsApiClient;
             _mediator = mediator;

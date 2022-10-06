@@ -105,7 +105,6 @@
     <Compile Include="Configuration\IdentityServerConfiguration.cs" />
     <Compile Include="Configuration\LevyDeclarationProviderConfiguration.cs" />
     <Compile Include="Configuration\PaymentProviderConfiguration.cs" />
-    <Compile Include="Configuration\PaymentsApiClientConfiguration.cs" />
     <Compile Include="Configuration\EventsApiClientConfiguration.cs" />
     <Compile Include="Configuration\ReferenceDataApiClientConfiguration.cs" />
     <Compile Include="Data\Repositories\IDasLevyRepository.cs" />
@@ -171,6 +170,9 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="SFA.DAS.Provider.Events.Api.Client">
+      <Version>3.0.1-prerelease-5</Version>
+    </PackageReference>
     <PackageReference Include="SFA.DAS.ReferenceData.Types">
       <Version>1.1.90</Version>
     </PackageReference>
@@ -243,9 +245,6 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.NServiceBus">
       <Version>15.0.25</Version>
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.Provider.Events.Api.Client">
-      <Version>2.1.97</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.ReferenceData.Api.Client">
       <Version>1.1.90</Version>
