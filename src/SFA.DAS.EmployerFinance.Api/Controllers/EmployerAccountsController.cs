@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EmployerFinance.Api.Orchestrators;
+﻿using SFA.DAS.EmployerFinance.Api.Attributes;
+using SFA.DAS.EmployerFinance.Api.Orchestrators;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -16,6 +17,7 @@ namespace SFA.DAS.EmployerFinance.Api.Controllers
         }      
 
         [Route("balances")]
+        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpPost]
         public async Task<IHttpActionResult> GetAccountBalances(List<string> accountIds)
         {
@@ -30,6 +32,7 @@ namespace SFA.DAS.EmployerFinance.Api.Controllers
         }
 
         [Route("{hashedAccountId}/transferAllowance")]
+        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
         public async Task<IHttpActionResult> GetTransferAllowance(string hashedAccountId)
         {
             var result = await _financeOrchestrator.GetTransferAllowance(hashedAccountId);

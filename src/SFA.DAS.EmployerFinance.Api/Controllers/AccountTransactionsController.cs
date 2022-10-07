@@ -18,6 +18,7 @@ namespace SFA.DAS.EmployerFinance.Api.Controllers
         }
 
         [Route("", Name = "GetTransactionSummary")]
+        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
         public async Task<IHttpActionResult> Index(string hashedAccountId)
         {
