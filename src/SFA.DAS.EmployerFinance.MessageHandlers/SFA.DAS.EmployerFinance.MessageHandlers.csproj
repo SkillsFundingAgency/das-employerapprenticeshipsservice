@@ -21,7 +21,7 @@
     <PackageReference Include="SFA.DAS.Authentication" Version="1.1.2" />
     <PackageReference Include="SFA.DAS.EmployerFinance.Types" Version="0.2.37" />
     <PackageReference Include="SFA.DAS.EmployerAccounts.Messages" Version="1.6.890" />
-    <PackageReference Include="SFA.DAS.Messaging" Version="3.0.0.63765" />
+    <PackageReference Include="SFA.DAS.Messaging" Version="3.1.133" />
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
     <PackageReference Include="SFA.DAS.NServiceBus" Version="15.0.25" />

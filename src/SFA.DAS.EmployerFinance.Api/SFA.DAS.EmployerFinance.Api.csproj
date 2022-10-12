@@ -93,6 +93,9 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.Web.Policy" Version="1.1.0.44309" />
     <PackageReference Include="StructureMap" Version="4.7.1" />
+    <PackageReference Include="Swagger-Net">
+      <Version>8.3.10.4</Version>
+    </PackageReference>
     <PackageReference Include="WebApi.StructureMap" Version="1.0.23" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
@@ -117,6 +120,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\AuthorizationHeaderParameterOperationFilter.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Attributes\ApiAuthorizeAttribute.cs" />
     <Compile Include="Controllers\AccountTransactionsController.cs" />
