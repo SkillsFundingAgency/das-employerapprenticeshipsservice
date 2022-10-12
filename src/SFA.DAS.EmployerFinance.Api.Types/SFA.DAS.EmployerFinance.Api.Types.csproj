@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Das</Authors>
+    <Company>Das</Company>
+    <Product>Das</Product>
+    <Description>Types returned by the Employer Finance API</Description>
+    <Copyright>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice/blob/master/LICENSE</Copyright>
+    <RepositoryUrl>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice</RepositoryUrl>
+    <PackageLicense>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice/tree/master/src/SFA.DAS.EmployerFinance.Api.Types</PackageLicense>
   </PropertyGroup>
 
 </Project>

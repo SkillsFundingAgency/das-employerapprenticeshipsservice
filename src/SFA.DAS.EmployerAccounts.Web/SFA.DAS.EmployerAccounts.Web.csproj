@@ -195,8 +195,6 @@
     <Compile Include="Controllers\EmployerAccountPayeController.cs" />
     <Compile Include="Controllers\EmployerAccountTransactions.cs" />
     <Compile Include="Controllers\EmployerAgreementController.cs" />
-    <Compile Include="Controllers\EmployerCommitmentsController.cs" />
-    <Compile Include="Controllers\EmployerManageApprenticesController.cs" />
     <Compile Include="Controllers\EmployerTeamController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HealthCheckController.cs" />
@@ -843,6 +841,7 @@
     <Content Include="Views\EmployerAgreement\_AwaitingAcceptance.cshtml" />
     <Content Include="Views\EmployerAgreement\_AcceptedAgreement.cshtml" />
     <Content Include="Views\Home\TermsAndConditionsOverview.cshtml" />
+    <Content Include="Views\Shared\_Agreement_v8.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
