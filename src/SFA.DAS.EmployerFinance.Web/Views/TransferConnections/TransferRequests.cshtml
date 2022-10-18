@@ -6,6 +6,7 @@
 
 @{
     var culture = new CultureInfo("en-GB");
+    var transferConnectionRequestsAuthorized = Html.IsAuthorized("EmployerFeature.TransferConnectionRequests");
 }
 
 <h3 class="govuk-heading-m">
@@ -32,7 +33,7 @@
                     <td data-label="Status" class="govuk-table__cell">@transferRequest.Status.ToString()</td>
                     <td data-label="Total cost" class="govuk-table__cell">@transferRequest.TransferCost.ToString("C0", culture)</td>
                     <td class="govuk-table__cell govuk-table__cell--numeric">
-                        @if (Html.IsAuthorized("EmployerFeature.TransferConnectionRequests"))
+                        @if (transferConnectionRequestsAuthorized)
                         {
                             <a href="@Url.EmployerCommitmentsV2Action($"sender/transfers/{transferRequest.TransferRequestHashedId}")" class="govuk-link">
                                 Details<span class="govuk-visually-hidden"> about the @transferRequest.ReceiverAccount.Name request</span>
@@ -63,30 +64,30 @@
     </thead>
     <tbody>
         @if (Model.TransferReceiverRequests.Any())
-        {
-            foreach (var transferRequest in Model.TransferReceiverRequests)
+            {
+                foreach (var transferRequest in Model.TransferReceiverRequests)
+                {
+                    <tr class="govuk-table__row">
+                        <td data-label="Employer" class="govuk-table__cell">@transferRequest.SenderAccount.Name</td>
+                        <td data-label="Status" class="govuk-table__cell">@transferRequest.Status.ToString()</td>
+                        <td data-label="Total cost" class="govuk-table__cell">@transferRequest.TransferCost.ToString("C0", culture)</td>
+                        <td class="govuk-table__cell govuk-table__cell--numeric">
+                            @if (transferConnectionRequestsAuthorized)
+                            {
+                                <a href="@Url.EmployerCommitmentsV2Action($"receiver/transfers/{transferRequest.TransferRequestHashedId}")" class="govuk-link">
+                                    Details<span class="govuk-visually-hidden"> about the @transferRequest.SenderAccount.Name request</span>
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
             {
                 <tr class="govuk-table__row">
-                    <td data-label="Employer" class="govuk-table__cell">@transferRequest.SenderAccount.Name</td>
-                    <td data-label="Status" class="govuk-table__cell">@transferRequest.Status.ToString()</td>
-                    <td data-label="Total cost" class="govuk-table__cell">@transferRequest.TransferCost.ToString("C0", culture)</td>
-                    <td class="govuk-table__cell govuk-table__cell--numeric">
-                        @if (Html.IsAuthorized("EmployerFeature.TransferConnectionRequests"))
-                        {
-                            <a href="@Url.EmployerCommitmentsV2Action($"receiver/transfers/{transferRequest.TransferRequestHashedId}")" class="govuk-link">
-                                Details<span class="govuk-visually-hidden"> about the @transferRequest.SenderAccount.Name request</span>
-                            </a>
-                        }
-                    </td>
+                    <td colspan="4" class="govuk-table__cell">You have no pending or approved requests</td>
                 </tr>
             }
-        }
-        else
-        {
-            <tr class="govuk-table__row">
-                <td colspan="4" class="govuk-table__cell">You have no pending or approved requests</td>
-            </tr>
-        }
     </tbody>
 </table>
 

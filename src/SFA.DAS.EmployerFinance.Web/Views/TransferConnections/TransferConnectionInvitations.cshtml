@@ -4,6 +4,10 @@
 
 @model SFA.DAS.EmployerFinance.Web.ViewModels.TransferConnectionInvitationsViewModel
 
+@{
+    var transferConnectionRequestsAuthorized = Html.IsAuthorized("EmployerFeature.TransferConnectionRequests");
+}
+
 <h3 class="govuk-heading-m">
     Connection requests
 </h3>
@@ -26,11 +30,11 @@
                     <td data-label="Employer" class="govuk-table__cell">@transferConnectionInvitation.ReceiverAccount.Name</td>
                     <td data-label="Status" class="govuk-table__cell">@transferConnectionInvitation.Status.ToString()</td>
                     <td class="govuk-table__cell govuk-table__cell--numeric">
-                        @if (Html.IsAuthorized("EmployerFeature.TransferConnectionRequests"))
+                        @if (transferConnectionRequestsAuthorized)
                         {
                             <a href="@Url.Action("Details", "TransferConnectionInvitations", new { transferConnectionInvitationId = transferConnectionInvitation.Id })" class="govuk-link">
                                 Details<span class="govuk-visually-hidden"> about the @transferConnectionInvitation.ReceiverAccount.Name request</span>
-                            </a>   
+                            </a>
                         }
                     </td>
                 </tr>
@@ -63,7 +67,7 @@
                     <td data-label="Employer" class="govuk-table__cell">@transferConnectionInvitation.SenderAccount.Name</td>
                     <td data-label="Status" class="govuk-table__cell">@transferConnectionInvitation.Status.ToString()</td>
                     <td class="govuk-table__cell govuk-table__cell--numeric">
-                        @if (Html.IsAuthorized("EmployerFeature.TransferConnectionRequests"))
+                        @if (transferConnectionRequestsAuthorized)
                         {
                             if (transferConnectionInvitation.Status == TransferConnectionInvitationStatus.Pending)
                             {
