@@ -20,7 +20,7 @@
 else if (Model.AuthorizationResult.HasError<EmployerFeatureAgreementNotSigned>())
 {
     <p>Before starting a connection both the sending and receiving employers need to read and understand the <a href="https://www.gov.uk/guidance/apprenticeship-funding-rules" class="govuk-link" rel="nofollow">rules for sending and receiving transfers</a> and accept the updated organisation agreement with DfE.</p>
-    <a class="govuk-button" href="@Url.Action("Index", "EmployerAgreement" )">Accept agreement</a>
+    <a class="govuk-button" href="@Url.EmployerAccountsAction("agreements")">Accept agreement</a>
 }
 else
 {
