@@ -58,6 +58,6 @@ IF (NOT EXISTS (SELECT 1 FROM [employer_account].[EmployerAgreementTemplate] WHE
 BEGIN 
 	SET IDENTITY_INSERT [employer_account].[EmployerAgreementTemplate] ON
 	INSERT INTO [employer_account].[EmployerAgreementTemplate] (Id, PartialViewName, VersionNumber, AgreementType, CreatedDate, PublishedDate)
-	VALUES (9, '_Agreement_V8', 8, 2, GETDATE(), Convert(DateTime,'2022-10-05')) 
+	VALUES (9, '_Agreement_V8', 8, 2, GETDATE(), Convert(DateTime,'2022-10-26')) 
 	SET IDENTITY_INSERT [employer_account].[EmployerAgreementTemplate] OFF
 END
