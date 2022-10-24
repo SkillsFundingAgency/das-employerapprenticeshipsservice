@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf
 
             var legalAgreement = await _employerAgreementRepository.GetEmployerAgreement(legalAgreementId);
 
-            if (legalAgreement.Status != EmployerAgreementStatus.Signed || !legalAgreement.SignedDate.HasValue)
+            if (legalAgreement.Status == EmployerAgreementStatus.Pending || legalAgreement.Status == EmployerAgreementStatus.Removed || !legalAgreement.SignedDate.HasValue)
             {
                 throw new InvalidRequestException(new Dictionary<string, string> { { nameof(legalAgreement.Status), "The agreement has not been signed." } });
             }
