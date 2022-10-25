@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
     {
         public ReservationsApiClientRegistry()
         {
-            For<ReservationsClientApiConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<ReservationsClientApiConfiguration>(ConfigurationKeys.ReservationsClientApiConfiguration)).Singleton();
+            For<ReservationsClientApiConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<EmployerAccountsConfiguration>().ReservationsApi);
             For<IReservationsClientApiConfiguration>().Use(c => c.GetInstance<ReservationsClientApiConfiguration>());
             For<IReservationsApiClient>().Use<ReservationsApiClient>().Ctor<HttpClient>().Is(c => CreateClient(c));
         }
@@ -33,7 +33,6 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
             else
             {                
                 httpClient = new HttpClientBuilder()
-               .WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(config))
                .WithHandler(new RequestIdMessageRequestHandler())
                .WithHandler(new SessionIdMessageRequestHandler())
                .WithDefaultHeaders()

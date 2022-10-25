@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.Interfaces
 {
-    public interface IReservationsClientApiConfiguration : IAzureActiveDirectoryClientConfiguration
+    public interface IReservationsClientApiConfiguration : IManagedIdentityClientConfiguration
     {
         bool UseStub { get; set; }
     }
