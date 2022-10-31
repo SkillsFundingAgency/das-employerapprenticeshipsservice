@@ -13,7 +13,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Infrastructure.OuterApiRequests
 
             var actual = new GetReservationsRequest(accountId);
 
-            actual.GetUrl.Should().Be($"reservation/1");
+            actual.GetUrl.Should().Be($"reservation/{accountId}");
         }
     }
 }
