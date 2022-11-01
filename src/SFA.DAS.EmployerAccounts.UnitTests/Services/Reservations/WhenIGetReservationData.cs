@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Reservations
 
             _mockOuterApiClient = new Mock<IOuterApiClient>();
             _mockOuterApiClient
-                .Setup(m => m.Get<GetReservationsResponse>(It.IsAny<GetReservationsRequest>()))
+                .Setup(m => m.Get<GetReservationsResponse>(It.Is<GetReservationsRequest>(k=>k.AccountId == _accountId)))
                 .ReturnsAsync(_testData);
 
             _reservationsService = new ReservationsService(_mockOuterApiClient.Object, Mock.Of<ILog>());

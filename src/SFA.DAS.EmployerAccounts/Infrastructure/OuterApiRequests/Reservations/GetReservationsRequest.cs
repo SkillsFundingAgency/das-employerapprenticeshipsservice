@@ -4,11 +4,11 @@ namespace SFA.DAS.EmployerAccounts.Infrastructure.OuterApiRequests.Reservations
 {
     public class GetReservationsRequest : IGetApiRequest
     {
-        private readonly long _accountId;
-        public string GetUrl => $"reservation/{_accountId}";
+        public long AccountId;
+        public string GetUrl => $"reservation/{AccountId}";
         public GetReservationsRequest(long accountId)
         {
-            _accountId = accountId;
+            AccountId = accountId;
         }
     }
 }
