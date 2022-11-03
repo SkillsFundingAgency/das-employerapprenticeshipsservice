@@ -2,7 +2,6 @@
 
 @model TransferConnectionInvitationAuthorizationViewModel
 
-
 <p>Employers who pay the apprenticeship levy can connect with other employers and transfer up to @Model.TransferAllowancePercentage.ToString("N0")% of their previous year's annual funds.</p>
 
 @if (Model.AuthorizationResult.IsAuthorized)
@@ -14,7 +13,7 @@
 
     if (Model.IsValidSender)
     {
-        <a class="govuk-button" href="@Url.Action("Index", "TransferConnectionInvitations" )">Connect to a receiving employer</a>
+        <a class="govuk-button" href="@Url.Action("Index", "TransferConnectionInvitations")">Connect to a receiving employer</a>
     }
 }
 else if (Model.AuthorizationResult.HasError<EmployerFeatureAgreementNotSigned>())
@@ -24,5 +23,5 @@ else if (Model.AuthorizationResult.HasError<EmployerFeatureAgreementNotSigned>()
 }
 else
 {
-    throw new ArgumentOutOfRangeException();
+    throw new ApplicationException($"Transfer connections feature not authorized because {Model.AuthorizationResult.ToString()}");
 }

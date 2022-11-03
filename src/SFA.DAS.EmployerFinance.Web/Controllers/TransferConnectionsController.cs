@@ -3,13 +3,16 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
+using SFA.DAS.Authorization.EmployerFeatures.Models;
 using SFA.DAS.Authorization.EmployerUserRoles.Options;
+using SFA.DAS.Authorization.Features.Services;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerFinance.Queries.GetEmployerAccountDetail;
 using SFA.DAS.EmployerFinance.Queries.GetTransferAllowance;
 using SFA.DAS.EmployerFinance.Queries.GetTransferConnectionInvitationAuthorization;
 using SFA.DAS.EmployerFinance.Queries.GetTransferConnectionInvitations;
 using SFA.DAS.EmployerFinance.Queries.GetTransferRequests;
+using SFA.DAS.EmployerFinance.Web.Helpers;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
 
@@ -22,17 +25,28 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         private readonly ILog _logger;
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
+        private readonly IFeatureTogglesService<EmployerFeatureToggle> _featureTogglesService;
 
-        public TransferConnectionsController(ILog logger, IMapper mapper, IMediator mediator)
+        public TransferConnectionsController(ILog logger, IMapper mapper, IMediator mediator, IFeatureTogglesService<EmployerFeatureToggle> featureTogglesService)
         {
             _logger = logger;
             _mapper = mapper;
             _mediator = mediator;
+            _featureTogglesService = featureTogglesService;
         }
 
         [Route]
         public async Task<ActionResult> Index(GetEmployerAccountDetailByHashedIdQuery query)
         {
+            // redirecting to access denied only when the feature toggle is not enabled, this is not checking
+            // whether the feature is authorized, as the view is always displayed when the feature is enabled
+            // and the content is different when the feature is not authorized
+            var featureToggle = _featureTogglesService.GetFeatureToggle("TransferConnectionRequests");
+            if(!featureToggle.IsEnabled)
+            {
+                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.AccessDeniedControllerName);
+            }
+
             var response = await _mediator.SendAsync(query);
             ViewBag.ApprenticeshipEmployerType = response.AccountDetail.ApprenticeshipEmployerType;
             return View();
