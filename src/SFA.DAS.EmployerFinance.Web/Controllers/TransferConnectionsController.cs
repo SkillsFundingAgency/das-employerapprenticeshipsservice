@@ -42,9 +42,10 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             // whether the feature is authorized, as the view is always displayed when the feature is enabled
             // and the content is different when the feature is not authorized
             var featureToggle = _featureTogglesService.GetFeatureToggle("TransferConnectionRequests");
-            if(!featureToggle.IsEnabled)
+            if (!featureToggle.IsEnabled)
             {
-                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.AccessDeniedControllerName);
+                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.AccessDeniedControllerName, 
+                    new { hashedAccountId = query.HashedAccountId });
             }
 
             var response = await _mediator.SendAsync(query);
