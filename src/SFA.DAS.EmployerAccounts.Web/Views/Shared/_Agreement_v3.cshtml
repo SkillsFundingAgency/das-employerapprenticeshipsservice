@@ -1203,60 +1203,6 @@
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
         <p class="govuk-body"><a href="@Url.Action("GetPdfAgreement","EmployerAgreement")" class="govuk-link" target="_blank">Download the agreement</a> (<abbr>PDF</abbr>, 304<abbr>KB</abbr>)</p>
-
-        @if (Model.EmployerAgreement.Status != EmployerAgreementStatus.Signed)
-        {
-            <div class="govuk-warning-text">
-                <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-                <strong class="govuk-warning-text__text">
-                    <span class="govuk-warning-text__assistive">Warning</span>
-                    The agreement is legally binding. If @Model.EmployerAgreement.LegalEntityName breaches the terms, we could stop them hiring apprentices, claim back funding or close their account.
-                </strong>
-            </div>
-
-            <form method="post" action="@Url.Action("Sign", "EmployerAgreement")">
-                @Html.AntiForgeryToken()
-
-                <div>
-                    <div class="@("govuk-form-group " + (!ViewData.ModelState.IsValid ? "govuk-form-group--error" : string.Empty))">
-                        <fieldset class="govuk-fieldset" aria-describedby="accept-hint no-choice-selected">
-
-                            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                                <h1 class="govuk-fieldset__heading">
-                                    Do you accept the employer agreement on behalf of @Model.EmployerAgreement.LegalEntityName?
-                                </h1>
-                            </legend>
-
-                            <span id="accept-hint" class="govuk-hint">
-                                By accepting, you confirm that @Model.EmployerAgreement.LegalEntityName agrees to the terms and conditions and is entering into a legally binding agreement with <abbr>ESFA</abbr>.
-                            </span>
-
-                            @if (!ViewData.ModelState.IsValid)
-                            {
-                                <span class="govuk-error-message" aria-hidden="false" id="no-choice-selected">
-                                    @ViewData.ModelState[nameof(Model.Choice)].Errors[0].ErrorMessage
-                                </span>
-                            }
-
-                            <div class="govuk-radios">
-                                <div class="govuk-radios__item">
-                                    <input class="govuk-radios__input" id="want-to-sign" name="choice" type="radio" value="@SignEmployerAgreementViewModel.SignAgreementNow">
-                                    <label class="govuk-label govuk-radios__label" for="want-to-sign">
-                                        Yes, I accept the agreement
-                                    </label>
-                                </div>
-                                <div class="govuk-radios__item">
-                                    <input class="govuk-radios__input" id="do-not-want-to-sign" name="choice" type="radio" value="@SignEmployerAgreementViewModel.ReviewAgreementLater">
-                                    <label class="govuk-label govuk-radios__label" for="do-not-want-to-sign">
-                                        Not yet
-                                    </label>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </div>
-                    <input class="govuk-button govuk-!-margin-top-6" type="submit" value="Continue" />
-                </div>
-            </form>
-        }
+        
     </div>
 </div>
