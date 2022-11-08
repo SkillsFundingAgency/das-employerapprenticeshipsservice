@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Support.Core.Services;
 using SFA.DAS.EmployerAccounts.Api.Types;
 
 namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
@@ -78,6 +77,8 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
             AccountApiClient.Verify(x => x.GetPageOfAccounts(It.IsAny<int>(), It.IsAny<int>(), null), Times.AtLeastOnce);
             AccountApiClient.Verify(x => x.GetAccount(It.IsAny<string>()), Times.AtLeastOnce);
 
+            Logger.Verify(x => x.Error(e, $"A general exception has been thrown while requesting employer account details"));
+
             Assert.IsNotNull(actual);
             var list = actual.ToList();
             CollectionAssert.IsEmpty(list);
@@ -106,6 +107,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
 
             AccountApiClient.Verify(x => x.GetPageOfAccounts(It.IsAny<int>(), It.IsAny<int>(), null), Times.AtLeastOnce);
             AccountApiClient.Verify(x => x.GetAccount(It.IsAny<string>()), Times.AtLeastOnce);
+            Logger.Verify(x => x.Warn(It.Is<string>(s => s.Contains("The Account API Http request threw an exception while fetching Page 1"))), Times.Once);
             Assert.IsNotNull(actual);
             CollectionAssert.IsEmpty(actual.ToList());
         }
@@ -118,18 +120,10 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
 
             AccountApiClient
                 .Setup(x => x.GetAccount(It.IsAny<string>()))
-                .ReturnsAsync(new AccountDetailViewModel() 
+                .ReturnsAsync(new AccountDetailViewModel
                 {
-                    PayeSchemes = new ResourceList(new[] { new ResourceViewModel { Id = "1", Href = "/api/payeschemes/test1" } })
+                    PayeSchemes = new ResourceList(new List<ResourceViewModel>())
                 });
-
-            AccountApiClient
-                .Setup(s => s.GetResource<PayeSchemeViewModel>(It.IsAny<string>()))
-                .ReturnsAsync(new PayeSchemeViewModel { Name = "Test", Ref = "123" });
-
-            var obscuredPayePayeScheme = "123/123456";
-            PayeSchemeObfuscator.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
-                .Returns(obscuredPayePayeScheme);
 
             _sut = new Services.AccountRepository(
                             AccountApiClient.Object,
@@ -189,7 +183,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
         }
 
         [Test]
-        public async Task ItShouldReturnAnEmptyListWhenAccountHasNoResourceForPayeScheme()
+        public async Task ItShouldThrowsAnExceptionWhenAccountHasNoResourceForPayeScheme()
         {
             //Arrange
             AccountApiClient.Setup(x => x.GetPageOfAccounts(It.IsAny<int>(), 10, null))
@@ -220,13 +214,14 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
             //Act
             var actual = await _sut.FindAllDetails(10, 1);
 
-            //Assert
+            //Assert            
             AccountApiClient.Verify(x => x.GetPageOfAccounts(It.IsAny<int>(), It.IsAny<int>(), null), Times.Once);
             AccountApiClient.Verify(x => x.GetAccount(It.IsAny<string>()), Times.Exactly(2));
 
             Assert.IsNotNull(actual);
-            Assert.IsNotNull(actual);
-            CollectionAssert.IsEmpty(actual.ToList());
+            var list = actual.ToList();
+            CollectionAssert.IsNotEmpty(list);
+            Assert.AreEqual(2, list.Count());
         }
     }
 }
