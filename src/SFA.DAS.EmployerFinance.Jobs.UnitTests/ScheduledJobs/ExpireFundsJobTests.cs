@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
+using AutoFixture.AutoMoq;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NServiceBus;
@@ -58,11 +59,13 @@ namespace SFA.DAS.EmployerFinance.Jobs.UnitTests.ScheduledJobs
 
         internal void SetupAccounts(int numberOfAccounts)
         {
+            Fixture.Customize(new AutoMoqCustomization());
+
             var accounts = Fixture
                 .Build<Account>().Without(acc => acc.AccountLegalEntities)
                 .CreateMany(numberOfAccounts);
 
-            EmployerAccountRepository.Setup(x => x.GetAllAccounts()).ReturnsAsync(accounts.ToList());
+            EmployerAccountRepository.Setup(x => x.GetAll()).ReturnsAsync(accounts.ToList());
         }
     }
 }

@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net48</TargetFrameworks>
+    <Authors>DAS</Authors>
+    <Description>Events raised by SFA.DAS.EmployerFinance</Description>
+    <PackageLicense>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice/blob/master/LICENSE</PackageLicense>
+    <PackageProjectUrl>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice</PackageProjectUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="SFA.DAS.Messaging" Version="3.1.133" />
+  </ItemGroup>
+</Project>

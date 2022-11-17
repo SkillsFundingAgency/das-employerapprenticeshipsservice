@@ -93,7 +93,8 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 
             if (transactionViewResult.Data.Account == null)
             {
-                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.AccessDeniedControllerName);
+                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.AccessDeniedControllerName, 
+                    new { hashedAccountId = hashedAccountId});
             }
 
             transactionViewResult.Data.Model.Data.HashedAccountId = hashedAccountId;

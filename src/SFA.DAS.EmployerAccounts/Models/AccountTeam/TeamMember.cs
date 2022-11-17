@@ -10,6 +10,8 @@ namespace SFA.DAS.EmployerAccounts.Models.AccountTeam
         public long AccountId { get; set; }
         public string HashedAccountId { get; set; }
         public string Email { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string Name { get; set; }
         public Guid UserRef { get; set; }
         public Role Role { get; set; }

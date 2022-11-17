@@ -2,12 +2,13 @@
 	AS 
 
 select 1 AS IsUser,
-	a.Id as 'AccountId', 
+	a.Id as 'AccountId',
 	a.HashedId,
-	u.Id ,CONCAT(u.FirstName, ' ', u.LastName) as Name,  
+	u.FirstName, u.LastName,
+	u.Id ,CONCAT(u.FirstName, ' ', u.LastName) as Name,
 	u.Email,
-	u.UserRef, 
-	m.[Role] as 'Role', 
+	u.UserRef,
+	m.[Role] as 'Role',
 	2 as 'Status',
 	NULL AS ExpiryDate
 from [employer_account].[User] u
@@ -19,8 +20,8 @@ SELECT
 	0,
 	i.AccountId,
 	a.HashedId,
-	i.Id,
-	i.Name,
+	'' as FirstName, '' as LastName,
+	i.Id, i.Name,
 	i.Email,
 	NULL,
 	i.[Role],

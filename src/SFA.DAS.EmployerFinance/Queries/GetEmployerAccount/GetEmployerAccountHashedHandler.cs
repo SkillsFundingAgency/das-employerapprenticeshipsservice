@@ -38,7 +38,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccount
             }
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
-            var employerAccount = await _employerAccountRepository.GetAccountById(accountId);
+            var employerAccount = await _employerAccountRepository.Get(accountId);
 
             return new GetEmployerAccountResponse
             {

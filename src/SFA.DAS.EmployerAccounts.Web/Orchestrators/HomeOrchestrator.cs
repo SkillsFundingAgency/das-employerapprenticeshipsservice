@@ -1,16 +1,13 @@
 using System;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using System.Linq;
 using System.Threading.Tasks;
+using MediatR;
 using SFA.DAS.EmployerAccounts.Commands.UnsubscribeProviderEmail;
+using SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser;
 using SFA.DAS.EmployerAccounts.Queries.GetProviderInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
-using SFA.DAS.EmployerAccounts.Queries.GetUserInvitations;
-using SFA.DAS.EmployerAccounts.Queries.GetUsers;
-using SFA.DAS.EmployerAccounts.Queries.GetUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
+using SFA.DAS.EmployerAccounts.Queries.GetUserInvitations;
+using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
@@ -26,24 +23,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         public HomeOrchestrator(IMediator mediator)
         {
             _mediator = mediator;
-        }
-
-        public virtual async Task<SignInUserViewModel> GetUsers()
-        {
-            var actual = await _mediator.SendAsync(new GetUsersQuery());
-
-            return new SignInUserViewModel
-            {
-                AvailableUsers = actual.Users.Select(x =>
-                    new UserViewModel
-                    {
-                        Id = x.Id,
-                        UserRef = x.UserRef,
-                        Email = x.Email,
-                        FirstName = x.FirstName,
-                        LastName = x.LastName,
-                    }).ToList()
-            };
         }
 
         public virtual async Task<OrchestratorResponse<UserAccountsViewModel>> GetUserAccounts(string userId, DateTime? LastTermsAndConditionsUpdate = null)

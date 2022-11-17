@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTests
             ExpectedAccount = new Account();
 
             _employerAccountRepository = new Mock<IEmployerAccountRepository>();
-            _employerAccountRepository.Setup(x => x.GetAccountById(ExpectedAccountId)).ReturnsAsync(ExpectedAccount);
+            _employerAccountRepository.Setup(x => x.Get(ExpectedAccountId)).ReturnsAsync(ExpectedAccount);
             
             RequestHandler = new GetEmployerAccountHashedHandler(_employerAccountRepository.Object, RequestValidator.Object, _hashingService.Object);
             Query = new GetEmployerAccountHashedQuery { HashedAccountId = ExpectedHashedId, UserId = ExpectedUserId };
@@ -51,7 +51,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTests
             });
 
             //Assert
-            _employerAccountRepository.Verify(x => x.GetAccountById(ExpectedAccountId));
+            _employerAccountRepository.Verify(x => x.Get(ExpectedAccountId));
         }
 
         [Test]

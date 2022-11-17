@@ -56,16 +56,6 @@ namespace SFA.DAS.EmployerAccounts.Data
             };
         }
 
-        public async Task<List<Account>> GetAllAccounts()
-        {
-            var result = await _db.Value.Database.Connection.QueryAsync<Account>(
-                sql: "select * from [employer_account].[Account]",
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
-                commandType: CommandType.Text);
-
-            return result.AsList();
-        }
-
         public async Task<Account> GetAccountByHashedId(string hashedAccountId)
         {
             var parameters = new DynamicParameters();

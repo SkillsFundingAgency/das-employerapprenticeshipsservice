@@ -7,9 +7,10 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
         
     <Authors>DAS</Authors>
-    <Description>Messages for SFA.DAS.EmployerFinance</Description>
-    <PackageLicense>https://github.com/SkillsFundingAgency/das-servicebus-tools/blob/master/LICENSE</PackageLicense>
-    <PackageProjectUrl>https://github.com/SkillsFundingAgency/das-servicebus-tools</PackageProjectUrl>
+    <Description>NServiceBus messages published by SFA.DAS.EmployerFinance</Description>
+
+    <PackageLicense>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice/blob/master/LICENSE</PackageLicense>
+    <PackageProjectUrl>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice</PackageProjectUrl>
 
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <EmbedUntrackedSources>false</EmbedUntrackedSources>

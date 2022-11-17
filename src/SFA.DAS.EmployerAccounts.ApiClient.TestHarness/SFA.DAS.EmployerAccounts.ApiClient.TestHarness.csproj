@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Moq" Version="4.10.0" />
+    <PackageReference Include="Moq" Version="4.10.1" />
     <PackageReference Include="SFA.DAS.CosmosDb" Version="1.0.47" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />
     <PackageReference Include="StructureMap" Version="4.7.1" />
