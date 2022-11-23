@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
         {
             var now = _currentDateTime.Now;
             logger.LogInformation($"Starting {nameof(ImportLevyDeclarationsJob)}");
-            var employerAccounts = await _accountRepository.GetAllAccounts();
+            var employerAccounts = await _accountRepository.GetAll();
 
             logger.LogInformation($"Updating {employerAccounts.Count} levy accounts");
 

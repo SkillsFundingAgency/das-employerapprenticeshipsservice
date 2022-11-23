@@ -8,7 +8,6 @@ namespace SFA.DAS.EmployerAccounts.Data
     public interface IEmployerAccountRepository
     {
         Task<Account> GetAccountById(long id);
-        Task<List<Account>> GetAllAccounts();
         Task<Accounts<Account>> GetAccounts(string toDate, int pageNumber, int pageSize);
         Task<Account> GetAccountByHashedId(string hashedAccountId);
         Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId);

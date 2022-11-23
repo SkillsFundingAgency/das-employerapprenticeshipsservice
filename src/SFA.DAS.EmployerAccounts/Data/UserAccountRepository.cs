@@ -88,23 +88,6 @@ namespace SFA.DAS.EmployerAccounts.Data
             };
         }
 
-        public async Task<Users> GetAllUsers()
-        {
-            var parameters = new DynamicParameters();
-
-            var result = await _db.Value.Database.Connection.QueryAsync<User>(
-                sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName, CorrelationId FROM [employer_account].[User];",
-                param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
-                commandType: CommandType.Text);
-
-            return new Users
-            {
-                UserList = result.ToList()
-            };
-        }
-
-
         public async Task<User> GetByEmailAddress(string emailAddress)
         {
             var parameters = new DynamicParameters();

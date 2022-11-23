@@ -13,7 +13,6 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
             For<PaymentProviderConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<PaymentProviderConfiguration>(ConfigurationKeys.PaymentProvider)).Singleton();
             For<EmployerAccountsApiConfiguration>().Use(c => c.GetInstance<EmployerApprenticeshipsServiceConfiguration>().EmployerAccountsApi).Singleton();
             For<EmployerFinanceApiConfiguration>().Use(c => c.GetInstance<EmployerApprenticeshipsServiceConfiguration>().EmployerFinanceApi).Singleton();
-
         }
     }
 }

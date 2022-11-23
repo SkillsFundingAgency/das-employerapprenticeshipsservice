@@ -1,0 +1,48 @@
+﻿@{
+    ViewBag.Title = "Transfer connection requests";
+    ViewBag.Section = "finance";
+    ViewBag.PageID = "page-transfer-connection-requests";
+    ViewBag.GaData.Vpv = "/accounts/transfers/connections/requests";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <div class="flash-card">
+            <header>
+                <h2 class="heading-medium">Connect with a receiving employer</h2>
+            </header>
+            <div class="grid-row">
+                <div class="column-full">
+                    <p>To connect with a receiving employer you want to transfer funds to, you'll need to:</p>
+                    <ul class="how-to-renew" data-id="how-to-renew-uk">
+                        <li>
+                            <span class="circle circle-step circle-white">1</span>
+                            <p>agree the apprentices, training and costs that the transfer funds will cover</p>
+                        </li>
+                        <li>
+                            <span class="circle circle-step circle-white">2</span>
+                            <p>ensure the receiving employer has registered on the apprenticeship service</p>
+                        </li>
+                        <li>
+                            <span class="circle circle-step circle-white">3</span>
+                            <p>request the receiving employer's apprenticeship account ID. This can be found under the account name on the apprenticeship service homepage.</p>
+                        </li>
+                    </ul>
+                    <p>You won't be able to complete the next step until you have the receiving employer's account ID.</p>
+                    <div class="form-block">
+                        <a class="button button-white" href="@Url.Action("Start", "TransferConnectionInvitations")">Continue</a>
+                        <a class="button-link" href="@Url.Action("Index", "TransferConnections")">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs" id="js-breadcrumbs">
+        <ol role="navigation">
+            <li><a class="link-back" href="@Url.Action("Index", "TransferConnections")">Back</a></li>
+        </ol>
+    </div>
+}

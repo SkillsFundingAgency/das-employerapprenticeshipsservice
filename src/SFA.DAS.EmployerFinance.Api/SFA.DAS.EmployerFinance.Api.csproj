@@ -127,6 +127,7 @@
     <Compile Include="Controllers\EmployerAccountsController.cs" />
     <Compile Include="Controllers\FinanceLevyController.cs" />
     <Compile Include="Controllers\HealthCheckController.cs" />
+    <Compile Include="Controllers\TransferConnectionsController.cs" />
     <Compile Include="Controllers\StatisticsController.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="ExceptionLoggers\ErrorLogger.cs" />
@@ -160,7 +161,7 @@
       <Name>SFA.DAS.EmployerFinance.Api.Client</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerFinance.Api.Types\SFA.DAS.EmployerFinance.Api.Types.csproj">
-      <Project>{2af6f3f4-7d2e-495d-b914-18e2a0fdef2c}</Project>
+      <Project>{7C0B08BB-8C28-45F5-B547-25F006615B84}</Project>
       <Name>SFA.DAS.EmployerFinance.Api.Types</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj">

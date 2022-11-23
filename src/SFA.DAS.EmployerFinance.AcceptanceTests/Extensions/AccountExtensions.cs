@@ -12,7 +12,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
         public static Account SetupAuthorizedUser(this Account account, IObjectContainer objectContainer)
         {
             objectContainer.Resolve<Mock<IEmployerAccountRepository>>()
-                .Setup(x => x.GetAccountById(It.IsAny<long>()))
+                .Setup(x => x.Get(It.IsAny<long>()))
                 .ReturnsAsync(account);
 
             return account;

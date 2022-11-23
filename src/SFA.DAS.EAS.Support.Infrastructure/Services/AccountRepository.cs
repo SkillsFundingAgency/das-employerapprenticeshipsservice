@@ -136,7 +136,6 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
                 {
                     _logger.Error(e, $"Exception while retrieving details for account ID {account.HashedAccountId}");
                 }
-
             }
 
             return accountsWithDetails;
@@ -218,15 +217,18 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
                     _logger.Debug(
                         $"IAccountApiClient.GetResource<PayeSchemeViewModel>(\"{payeScheme.Href.Replace(paye, obscured)}\");");
 
-                    try
+                    return _accountApiClient.GetResource<PayeSchemeViewModel>(payeScheme.Href).ContinueWith(payeTask =>
                     {
-                        return _accountApiClient.GetResource<PayeSchemeViewModel>(payeScheme.Href);
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.Error(ex, $"Exception occured in Account API type of {nameof(PayeSchemeViewModel)} at {payeScheme.Href} id {payeScheme.Id}");
-                        return Task.FromResult(new PayeSchemeViewModel());
-                    }
+                        if (!payeTask.IsFaulted)
+                        {
+                            return payeTask.Result;
+                        }
+                        else
+                        {
+                            _logger.Error(payeTask.Exception, $"Exception occured in Account API type of {nameof(PayeSchemeViewModel)} at {payeScheme.Href} id {payeScheme.Id}");
+                            return new PayeSchemeViewModel();
+                        }
+                    });
                 });
 
                 payes.AddRange(await Task.WhenAll(payeTasks));
@@ -249,8 +251,8 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
                     return item;
                 }
 
-                    return null;
-             })
+                return null;
+            })
              .Where(x => x != null)
              .OrderBy(x => x.Ref);
         }

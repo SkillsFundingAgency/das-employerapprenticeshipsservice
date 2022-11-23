@@ -14,7 +14,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
       
         public EmployerAccountsController(AccountsOrchestrator orchestrator)
         {
-            _orchestrator = orchestrator;          
+            _orchestrator = orchestrator;
         }
 
         [Route("", Name = "AccountsIndex")]
@@ -57,6 +57,15 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         public async Task<IHttpActionResult> GetAccountUsers(long accountId)
         {
             var result = await _orchestrator.GetAccountTeamMembers(accountId);
+            return Ok(result);
+        }
+
+        [Route("internal/{accountId}/users/which-receive-notifications", Name = "GetAccountUsersByInteralIdWhichReceiveNotifications")]
+        [ApiAuthorize(Roles = "ReadAllAccountUsers")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAccountUsersWhichReceiveNotifications(long accountId)
+        {
+            var result = await _orchestrator.GetAccountTeamMembersWhichReceiveNotifications(accountId);
             return Ok(result);
         }
 
