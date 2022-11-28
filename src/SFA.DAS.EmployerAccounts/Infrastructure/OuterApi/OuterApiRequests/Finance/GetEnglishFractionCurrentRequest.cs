@@ -8,15 +8,12 @@ namespace SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.OuterApiRequests.Fina
         private readonly string _hashedAccountId;
         private readonly UriBuilder _baseUri;
 
-        public string GetUrl => _baseUri.Uri.PathAndQuery;
+        public string GetUrl => $"accounts/{_hashedAccountId}/levy/english-fraction-current{_baseUri.Uri.Query}";
 
         public GetEnglishFractionCurrentRequest(string hashedAccountId, string[] empRefs)
         {
             _hashedAccountId = hashedAccountId;
-            _baseUri = new UriBuilder
-            {
-                Path = $"accounts/{_hashedAccountId}/levy/english-fraction-current"
-            };
+            _baseUri = new UriBuilder();
 
             foreach (string empRef in empRefs)
             {
