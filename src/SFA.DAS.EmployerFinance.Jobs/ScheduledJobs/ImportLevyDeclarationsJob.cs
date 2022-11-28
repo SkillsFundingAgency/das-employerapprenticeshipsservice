@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
         }
 
         public async  Task Run(
-            [TimerTrigger("0 0 15 26 * *")] TimerInfo timer, 
+            [TimerTrigger("0 0 15 23 * *")] TimerInfo timer, 
             ILogger logger)
         {
             var now = _currentDateTime.Now;

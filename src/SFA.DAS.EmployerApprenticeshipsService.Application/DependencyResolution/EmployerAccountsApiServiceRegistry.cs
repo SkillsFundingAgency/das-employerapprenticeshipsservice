@@ -8,7 +8,7 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
     {
         public EmployerAccountsApiServiceRegistry()
         {
-            For<IEmployerAccountsApiService>().Use<EmployerAccountsApiService>().Singleton();
+            For<IEmployerAccountsApiService>().Use<EmployerAccountsApiService>();
             For<IEmployerAccountsApiHttpClientFactory>().Use<EmployerAccountsApiHttpClientFactory>();
         }
     }
