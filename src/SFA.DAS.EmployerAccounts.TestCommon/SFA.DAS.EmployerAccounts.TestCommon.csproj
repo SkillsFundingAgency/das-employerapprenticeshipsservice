@@ -56,8 +56,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Builders\AccountBuilder.cs" />
-    <Compile Include="Builders\TransferConnectionInvitationBuilder.cs" />
     <Compile Include="Builders\UserBuilder.cs" />
     <Compile Include="DbAsyncEnumerableStub.cs" />
     <Compile Include="DbAsyncEnumeratorStub.cs" />
