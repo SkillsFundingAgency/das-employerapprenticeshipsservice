@@ -46,8 +46,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
             };
 
             _mediator
-                .Setup(x => x.SendAsync(It.IsAny<GetEmployerEnglishFractionQuery>()))
-                .ReturnsAsync(new GetEmployerEnglishFractionResponse { Fractions = new List<DasEnglishFraction>() });
+                .Setup(x => x.SendAsync(It.IsAny<GetEmployerEnglishFractionHistoryQuery>()))
+                .ReturnsAsync(new GetEmployerEnglishFractionHistoryResponse { Fractions = new List<DasEnglishFraction>() });
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetPayeSchemeByRefQuery>()))
                 .ReturnsAsync(new GetPayeSchemeByRefResponse

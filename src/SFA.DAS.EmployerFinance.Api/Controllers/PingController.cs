@@ -1,9 +1,9 @@
 ﻿using System.Web.Http;
 
-namespace SFA.DAS.EmployerFinance.Api.Controllers
+namespace SFA.DAS.EmployerAccounts.Api.Controllers
 {
-    [RoutePrefix("api/healthcheck")]
-    public class HealthCheckController : ApiController
+    [RoutePrefix("ping")]
+    public class PingController : ApiController
     {
         [Route]
         public IHttpActionResult Get()
