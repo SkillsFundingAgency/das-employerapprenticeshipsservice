@@ -220,7 +220,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             var response = new OrchestratorResponse<PayeSchemeDetailViewModel>();
             try
             {
-                var englishFractionResult = await Mediator.SendAsync(new GetEmployerEnglishFractionQuery
+                var englishFractionResult = await Mediator.SendAsync(new GetEmployerEnglishFractionHistoryQuery
                 {
                     HashedAccountId = hashedAccountId,
                     EmpRef = empRef,

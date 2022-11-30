@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAllEmployerAccounts
 
         public async Task<GetAllEmployerAccountsResponse> Handle(GetAllEmployerAccountsRequest message)
         {
-            var result = await _employerAccountRepository.GetAllAccounts();
+            var result = await _employerAccountRepository.GetAll();
 
             return new GetAllEmployerAccountsResponse {Accounts = result };
         }

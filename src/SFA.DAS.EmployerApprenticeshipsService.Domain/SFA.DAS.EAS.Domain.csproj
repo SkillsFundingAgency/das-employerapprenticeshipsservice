@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\EmployerFinanceApiConfiguration.cs" />
     <Compile Include="Configuration\ConfigurationKeys.cs" />
     <Compile Include="Configuration\EmployerFinanceApiConfiguration.cs" />
     <Compile Include="Configuration\EmployerAccountsApiConfiguration.cs" />

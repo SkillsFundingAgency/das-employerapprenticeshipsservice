@@ -314,7 +314,43 @@ namespace SFA.DAS.EmployerFinance.Data
                 commandType: CommandType.StoredProcedure);
 
             return transferAllowance.SingleOrDefault() ?? new TransferAllowance();
-            
+        }
+
+        public Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(long accountId, string empRef)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountId", accountId, DbType.Int64);
+            parameters.Add("@empRef", empRef, DbType.String);
+
+            return _db.Value.Database.Connection.QueryAsync<DasEnglishFraction>(
+                sql: "[employer_financial].[GetEnglishFraction_ByEmpRef]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+        }
+
+        public async Task<List<DasEnglishFraction>> GetEnglishFractionCurrent(long accountId, string[] empRefs)
+        {
+            var currentFractions = new List<DasEnglishFraction>();
+
+            foreach (var empRef in empRefs)
+            {
+                var parameters = new DynamicParameters();
+
+                parameters.Add("@accountId", accountId, DbType.Int64);
+                parameters.Add("@empRef", empRef, DbType.String);
+
+                var currentFraction = await _db.Value.Database.Connection.QueryAsync<DasEnglishFraction>(
+                    sql: "[employer_financial].[GetCurrentFractionForScheme]",
+                    param: parameters,
+                    transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
+                    commandType: CommandType.StoredProcedure);
+
+                currentFractions.Add(currentFraction.FirstOrDefault());
+            }
+
+            return currentFractions;
         }
     }
 }

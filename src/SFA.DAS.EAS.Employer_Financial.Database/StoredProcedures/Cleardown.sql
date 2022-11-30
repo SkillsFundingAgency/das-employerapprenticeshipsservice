@@ -1,6 +1,8 @@
 ﻿CREATE PROCEDURE [employer_financial].[Cleardown]
 	@INCLUDETOPUPTABLE TINYINT = 0
 AS
+	DELETE FROM [employer_financial].[TransferConnectionInvitationChange]
+	DELETE FROM [employer_financial].[TransferConnectionInvitation]
 	DELETE FROM [employer_financial].[EnglishFraction]
 	DELETE FROM [employer_financial].[LevyDeclaration]
 	

@@ -93,6 +93,9 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.Web.Policy" Version="1.1.0.44309" />
     <PackageReference Include="StructureMap" Version="4.7.1" />
+    <PackageReference Include="Swagger-Net">
+      <Version>8.3.10.4</Version>
+    </PackageReference>
     <PackageReference Include="WebApi.StructureMap" Version="1.0.23" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
@@ -117,12 +120,14 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\AuthorizationHeaderParameterOperationFilter.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Attributes\ApiAuthorizeAttribute.cs" />
     <Compile Include="Controllers\AccountTransactionsController.cs" />
     <Compile Include="Controllers\EmployerAccountsController.cs" />
     <Compile Include="Controllers\FinanceLevyController.cs" />
-    <Compile Include="Controllers\HealthCheckController.cs" />
+    <Compile Include="Controllers\PingController.cs" />
+    <Compile Include="Controllers\TransferConnectionsController.cs" />
     <Compile Include="Controllers\StatisticsController.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="ExceptionLoggers\ErrorLogger.cs" />
@@ -130,6 +135,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Mappings\AccountMappings.cs" />
+    <Compile Include="Mappings\LevyMappings.cs" />
     <Compile Include="NServiceBusStartup.cs" />
     <Compile Include="Orchestrators\AccountTransactionsOrchestrator.cs" />
     <Compile Include="Orchestrators\FinanceOrchestrator.cs" />
@@ -156,7 +162,7 @@
       <Name>SFA.DAS.EmployerFinance.Api.Client</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerFinance.Api.Types\SFA.DAS.EmployerFinance.Api.Types.csproj">
-      <Project>{2af6f3f4-7d2e-495d-b914-18e2a0fdef2c}</Project>
+      <Project>{7C0B08BB-8C28-45F5-B547-25F006615B84}</Project>
       <Name>SFA.DAS.EmployerFinance.Api.Types</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj">

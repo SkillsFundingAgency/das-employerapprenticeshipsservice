@@ -11,11 +11,13 @@ namespace SFA.DAS.EmployerFinance.Configuration
     {
         public string ApplicationId { get; set; }
         public string AllowedHashstringCharacters { get; set; }
+        public string CdnBaseUrl { get; set; }
         public EmployerFinanceOuterApiConfiguration EmployerFinanceOuterApiConfiguration { get; set; }
         public ContentClientApiConfiguration ContentApi { get; set; }
         public string DashboardUrl { get; set; }
         public string DatabaseConnectionString { get; set; }
         public int DefaultCacheExpirationInMinutes { get; set; }
+        public decimal TransferAllowancePercentage { get; set; }
         public string EmployerAccountsBaseUrl { get; set; }
         public string EmployerCommitmentsBaseUrl { get; set; }
         public string EmployerCommitmentsV2BaseUrl { get; set; }
@@ -46,6 +48,5 @@ namespace SFA.DAS.EmployerFinance.Configuration
         public string ZenDeskSectionId { get; set; }
         public string ZenDeskCobrowsingSnippetKey { get; set; }
         public EmployerFinanceApiClientConfiguration EmployerFinanceApi { get; set; }
-        public decimal TransferAllowancePercentage { get; set; }
     }
 }

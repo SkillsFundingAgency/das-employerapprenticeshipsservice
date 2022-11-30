@@ -121,6 +121,10 @@
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationResponse.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationValidator.cs" />
     <Compile Include="Services\DasLevyService.cs" />
+    <Compile Include="Services\EmployerFinanceApi\EmployerFinanceApiService.cs" />
+    <Compile Include="Services\EmployerFinanceApi\Http\EmployerFinanceApiHttpClientFactory.cs" />
+    <Compile Include="Services\EmployerFinanceApi\Http\IEmployerFinanceApiHttpClientFactory.cs" />
+    <Compile Include="Services\EmployerFinanceApi\IEmployerFinanceApiService.cs" />
     <Compile Include="Services\EmployerAccountsApi\EmployerAccountsApiService.cs" />
     <Compile Include="Services\EmployerAccountsApi\Http\EmployerAccountsApiHttpClientFactory.cs" />
     <Compile Include="Services\EmployerAccountsApi\Http\IEmployerAccountsApiHttpClientFactory.cs" />

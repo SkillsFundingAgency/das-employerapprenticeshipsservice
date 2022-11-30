@@ -9,6 +9,6 @@ namespace SFA.DAS.EmployerFinance.Queries.GetTransferAllowance
     {
         [IgnoreMap]
         [Required]
-        public long? AccountId { get; set; }
+        public long AccountId { get; set; }
     }
 }

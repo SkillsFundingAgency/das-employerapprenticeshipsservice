@@ -55,7 +55,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemes
 
             _payeSchemesService
                 .Setup(
-                    m => m.GetPayeSchemsWithEnglishFractionForHashedAccountId(_hashedAccountId)
+                    m => m.GetPayeSchemes(_hashedAccountId)
                 )
                 .ReturnsAsync(new List<PayeView> {_payeView});
 
@@ -72,7 +72,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemes
             await RequestHandler.Handle(Query);
 
             //Assert
-            _payeSchemesService.Verify(x => x.GetPayeSchemsWithEnglishFractionForHashedAccountId(_hashedAccountId), Times.Once);
+            _payeSchemesService.Verify(x => x.GetPayeSchemes(_hashedAccountId), Times.Once);
         }
 
         [Test]

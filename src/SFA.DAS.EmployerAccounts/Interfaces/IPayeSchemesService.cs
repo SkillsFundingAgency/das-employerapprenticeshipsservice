@@ -6,6 +6,6 @@ namespace SFA.DAS.EmployerAccounts.Interfaces
 {
     public interface IPayeSchemesService
     {
-        Task<IEnumerable<PayeView>> GetPayeSchemsWithEnglishFractionForHashedAccountId(string hashedAccountId);
+        Task<IEnumerable<PayeView>> GetPayeSchemes(string hashedAccountId);
     }
 }

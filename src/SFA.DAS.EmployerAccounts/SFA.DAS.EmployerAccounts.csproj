@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Commitments\**" />
+    <EmbeddedResource Remove="Models\Commitments\**" />
+    <None Remove="Models\Commitments\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Interfaces\IDistributedLockProvider.cs" />
     <Compile Remove="Services\AzureDistributedLockProvider.cs" />
   </ItemGroup>
@@ -96,7 +102,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Commitments\" />
     <Folder Include="Models\Portal\" />
     <Folder Include="Queries\GetAccountLegalEntitiesByHashedAccountId\" />
     <Folder Include="Queries\GetEmployerAgreementById\" />

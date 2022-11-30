@@ -12,7 +12,7 @@
     ViewBag.Section = "finance";
     ViewBag.Title = "Your transactions";
     ViewBag.ZenDeskLabel = "eas-your-transactions";
-    ViewBag.AnalyticsData.Vpv = $"/finance/{ViewBag.PageID}";
+    ViewBag.GaData.Vpv = $"/finance/{ViewBag.PageID}";
     var displayingMonthDate = new DateTime(Model.Data.Year, Model.Data.Month, 1);
     var previousMonthDate = displayingMonthDate.AddMonths(-1);
     var nextMonthDate = displayingMonthDate.AddMonths(1);

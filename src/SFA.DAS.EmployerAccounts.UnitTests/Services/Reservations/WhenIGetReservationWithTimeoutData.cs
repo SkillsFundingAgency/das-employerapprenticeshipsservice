@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Polly;
 using Polly.Registry;
 using Polly.Timeout;
+using SFA.DAS.EmployerAccounts.Infrastructure.OuterApiResponses.Reservations;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Reservations;
 using SFA.DAS.EmployerAccounts.Services;
@@ -15,7 +16,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Reservations
 {
     public class WhenIGetReservationWithTimeoutData
     {
-        private Mock<IReservationsApiClient> _mockReservationsApiClient;
         private ReservationsServiceWithTimeout _reservationsServiceWithTimeout;
         private Mock<IReservationsService> _reservationsService;
         private string _testData;
@@ -30,10 +30,21 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Reservations
             _testData = JsonConvert.SerializeObject(new List<Reservation> { new Reservation { AccountId = _accountId } });
             _reservations = JsonConvert.DeserializeObject<IEnumerable<Reservation>>(_testData);
 
-            _mockReservationsApiClient = new Mock<IReservationsApiClient>();
-            _mockReservationsApiClient
-                .Setup(m => m.Get(_accountId))
-                .ReturnsAsync(_testData);
+            var apiResponse = new GetReservationsResponse
+            {
+                Reservations = new List<ReservationsResponse>
+                {
+                    new ReservationsResponse()
+                    {
+                        Id = new Guid(),
+                        Course = new ReservationCourse()
+                        {
+                            CourseId = "1"
+                        }
+
+                    }
+                }
+            };
 
             _policy = Policy.NoOpAsync();
             var registryPolicy = new PolicyRegistry();

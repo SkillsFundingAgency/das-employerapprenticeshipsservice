@@ -16,21 +16,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     [RoutePrefix("accounts")]
     public class EmployerAccountPayeController : BaseController
     {
-        private const int AddPayeUsingGovernmentGateway = 1;
-        private const int AddPayeUsingAorn = 2;
-
         private readonly EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
-        private readonly IMediator _mediatr;
 
         public EmployerAccountPayeController(
             IAuthenticationService owinWrapper,
             EmployerAccountPayeOrchestrator employerAccountPayeOrchestrator,
             IMultiVariantTestingService multiVariantTestingService,
-            ICookieStorageService<FlashMessageViewModel> flashMessage,
-            IMediator mediatr) : base(owinWrapper, multiVariantTestingService, flashMessage)
+            ICookieStorageService<FlashMessageViewModel> flashMessage) : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerAccountPayeOrchestrator = employerAccountPayeOrchestrator;
-            _mediatr = mediatr;
         }
 
         [HttpGet]

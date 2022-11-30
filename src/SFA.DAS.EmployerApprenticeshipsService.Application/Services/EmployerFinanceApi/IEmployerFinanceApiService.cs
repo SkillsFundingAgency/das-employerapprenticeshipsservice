@@ -22,5 +22,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
         Task<GetAccountBalancesResponse> GetAccountBalances(List<string> accountIds);
 
         Task<GetTransferAllowanceResponse> GetTransferAllowance(string hashedAccountId);
+    
+        Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
