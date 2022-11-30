@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EmployerAccounts.Interfaces;
+﻿using SFA.DAS.EmployerAccounts.Interfaces.OuterApi;
 
 namespace SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.OuterApiRequests.HealthCheck
 {

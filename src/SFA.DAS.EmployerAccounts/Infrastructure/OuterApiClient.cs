@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces.OuterApi;
 
-namespace SFA.DAS.EmployerAccounts.Infrastructure.OuterApi
+namespace SFA.DAS.EmployerAccounts.Infrastructure
 {
     public class OuterApiClient : IOuterApiClient
     {

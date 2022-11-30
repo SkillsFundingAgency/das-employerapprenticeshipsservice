@@ -1,27 +1,23 @@
-﻿using Dapper;
-using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Sql.Client;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.Authorization;
+using Dapper;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Models;
+using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Data
 {
-    public class EmployerAccountRepository : BaseRepository, IEmployerAccountRepository
+    public class EmployerAccountRepository : IEmployerAccountRepository
     {
         private readonly Lazy<EmployerAccountsDbContext> _db;
 
         public EmployerAccountRepository(EmployerAccountsConfiguration configuration, ILog logger, Lazy<EmployerAccountsDbContext> db)
-            : base(configuration.DatabaseConnectionString, logger)
         {
             _db = db;
         }

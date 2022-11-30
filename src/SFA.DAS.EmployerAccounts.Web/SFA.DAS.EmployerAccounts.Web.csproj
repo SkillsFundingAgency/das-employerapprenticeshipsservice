@@ -244,6 +244,7 @@
     <Compile Include="Models\AccountContext.cs" />
     <Compile Include="Models\ReturnUrlModel.cs" />
     <Compile Include="Models\HashedAccountIdModel.cs" />
+    <Compile Include="Orchestrators\EmployerTeamOrchestrator.cs" />
     <Compile Include="ViewModels\OrganisationAgreementsViewModel.cs" />
     <Compile Include="ViewModels\TermsAndConditionsNewViewModel.cs" />
     <Compile Include="ViewModels\TriageViewModel.cs" />
@@ -252,7 +253,6 @@
     <Compile Include="Orchestrators\EmployerAgreementOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestratorWithCallToAction.cs" />
-    <Compile Include="Orchestrators\EmployerTeamOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerVerificationOrchestratorBase.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
     <Compile Include="Orchestrators\InvitationOrchestrator.cs" />
