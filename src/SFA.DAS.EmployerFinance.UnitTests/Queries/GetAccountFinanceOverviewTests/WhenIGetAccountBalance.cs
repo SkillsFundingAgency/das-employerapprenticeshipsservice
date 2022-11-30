@@ -9,7 +9,6 @@ using SFA.DAS.EmployerFinance.Models.ExpiringFunds;
 using SFA.DAS.EmployerFinance.Models.ProjectedCalculations;
 using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
 using SFA.DAS.EmployerFinance.Services;
-using SFA.DAS.Http;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 
@@ -30,8 +29,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         private Mock<IDasLevyService> _levyService;
         private Mock<IValidator<GetAccountFinanceOverviewQuery>> _validator;
         private GetAccountFinanceOverviewQuery _query;
-        private ExpiringAccountFunds _expiringFunds;
-        private ProjectedCalculation _projectedCalculation;
         private AccountProjectionSummary _accountProjectionSummary;
 
         [SetUp]

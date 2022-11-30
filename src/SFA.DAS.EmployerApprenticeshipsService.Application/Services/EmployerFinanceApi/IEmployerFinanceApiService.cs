@@ -20,7 +20,9 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
         Task<TotalPaymentsModel> GetStatistics(CancellationToken cancellationToken = default(CancellationToken));
 
         Task<List<AccountBalance>> GetAccountBalances(List<string> accountIds);
-
+   
         Task<TransferAllowance> GetTransferAllowance(string hashedAccountId);
+
+        Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

@@ -1,15 +1,16 @@
-﻿using SFA.DAS.NLog.Logger;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Helpers;
 using Newtonsoft.Json;
-using SFA.DAS.EAS.Application.Services.EmployerFinanceApi.Http;
-using System.Net.Http;
-using SFA.DAS.EAS.Application.Http;
 using SFA.DAS.EAS.Account.Api.Types;
-using System.Text;
-using SFA.DAS.EAS.Domain.Models.Transfers;
+using SFA.DAS.EAS.Application.Http;
+using SFA.DAS.EAS.Application.Services.EmployerFinanceApi.Http;
 using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Domain.Models.Transfers;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
 {
@@ -143,5 +144,17 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
 
             return JsonConvert.DeserializeObject<TransferAllowance>(content);
         }       
+    
+        public async Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var response = await _httpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (!response.IsSuccessStatusCode)
+                throw new RestHttpClientException(response, content);
+
+            var x = Json.Decode(content);
+            return x;
+        }
     }
 }

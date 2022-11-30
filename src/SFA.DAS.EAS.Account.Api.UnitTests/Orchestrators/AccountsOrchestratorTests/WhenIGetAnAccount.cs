@@ -1,28 +1,27 @@
-﻿using AutoMapper;
-using Castle.Core.Internal;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Orchestrators;
-using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.HashingService;
-using SFA.DAS.NLog.Logger;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
+using Moq;
+using NUnit.Framework;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
-using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
+using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Domain.Models.Transfers;
+using SFA.DAS.HashingService;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTests
 {
     internal class WhenIGetAnAccount
     {
-        private AccountsOrchestrator _orchestrator;        
+        private AccountsOrchestrator _orchestrator;
         private Mock<ILog> _log;
         private Mock<IHashingService> _hashingService;
         private Mock<IEmployerAccountsApiService> _apiService;
@@ -55,12 +54,12 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
                 .ReturnsAsync(_accountDetailViewModel)
                 .Verifiable("Get account was not called");
 
-            var transferAllowanceResponse = _transferAllowance;            
-            _financeApiService.Setup(x => x.GetTransferAllowance(It.IsAny<string>())).ReturnsAsync(transferAllowanceResponse);
+            var transferAllowance = _transferAllowance;            
+            _financeApiService.Setup(x => x.GetTransferAllowance(It.IsAny<string>())).ReturnsAsync(transferAllowance);
 
             _accountBalanceResult = new AccountBalance { Balance = AccountBalance };
-            var accountBalancesResponse = new List<AccountBalance> { _accountBalanceResult };
-            _financeApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>())).ReturnsAsync(accountBalancesResponse);
+            var accountBalances = new List<AccountBalance> { _accountBalanceResult };
+            _financeApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>())).ReturnsAsync(accountBalances);
         }
 
         [Test]
@@ -139,7 +138,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
             var profiles = Assembly.Load("SFA.DAS.EAS.Account.Api")
                 .GetTypes()
                 .Where(t => typeof(Profile).IsAssignableFrom(t))
-                .Select(t => (Profile) Activator.CreateInstance(t));
+                .Select(t => (Profile)Activator.CreateInstance(t))
+                .ToList();
 
             var config = new MapperConfiguration(c =>
             {

@@ -1,16 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <LangVersion>latest</LangVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
-    
-    <Description>NServiceBus messages published by SFA.DAS.EmployerAccounts</Description>
+    <IsPackable>true</IsPackable>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+
     <Authors>DAS</Authors>
+    <Description>NServiceBus messages published by SFA.DAS.EmployerAccounts</Description>
+    
     <PackageLicense>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice/blob/master/LICENSE</PackageLicense>
     <PackageProjectUrl>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice</PackageProjectUrl>
 
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>false</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <EmbedUntrackedSources>false</EmbedUntrackedSources>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

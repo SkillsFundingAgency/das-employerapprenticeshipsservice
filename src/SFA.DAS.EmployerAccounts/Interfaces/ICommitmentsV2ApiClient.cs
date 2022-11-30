@@ -6,8 +6,6 @@ namespace SFA.DAS.EmployerAccounts.Interfaces
 {
     public interface ICommitmentsV2ApiClient
     {
-        Task<GetTransferRequestSummaryResponse> GetTransferRequests(long accountId);
-
         Task<GetApprenticeshipStatusSummaryResponse> GetEmployerAccountSummary(long employerAccountId);
 
         Task<GetCohortsResponse> GetCohorts(GetCohortsRequest request);
