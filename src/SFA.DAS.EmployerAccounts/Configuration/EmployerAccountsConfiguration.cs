@@ -13,6 +13,7 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string AllowedHashstringCharacters { get; set; }
         public string CdnBaseUrl { get; set; }
         public string DashboardUrl { get; set; }
+        public EmployerAccountsOuterApiConfiguration EmployerAccountsOuterApiConfiguration { get; set; }
         public string DatabaseConnectionString { get; set; }
         public string EmployerAccountsBaseUrl { get; set; }
         public string EmployerCommitmentsBaseUrl { get; set; }

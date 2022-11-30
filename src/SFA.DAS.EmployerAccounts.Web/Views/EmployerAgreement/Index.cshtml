@@ -32,8 +32,7 @@
             <span>
                 @{
                     var authorizationResult = Html.GetAuthorizationResult("EmployerFeature.TransferConnectionRequests");
-                    var authorizationResultTransferMigration = Html.GetAuthorizationResult("EmployerFeature.TransferConnectionRequestsPreMigration");
-                    if (authorizationResult.IsAuthorized && authorizationResultTransferMigration.IsAuthorized)
+                    if (authorizationResult.IsAuthorized)
                     {
                         @:enabled.
                     }

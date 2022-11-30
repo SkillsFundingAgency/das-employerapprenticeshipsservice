@@ -126,7 +126,7 @@
     <Compile Include="Controllers\AccountTransactionsController.cs" />
     <Compile Include="Controllers\EmployerAccountsController.cs" />
     <Compile Include="Controllers\FinanceLevyController.cs" />
-    <Compile Include="Controllers\HealthCheckController.cs" />
+    <Compile Include="Controllers\PingController.cs" />
     <Compile Include="Controllers\TransferConnectionsController.cs" />
     <Compile Include="Controllers\StatisticsController.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
@@ -135,6 +135,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Mappings\AccountMappings.cs" />
+    <Compile Include="Mappings\LevyMappings.cs" />
     <Compile Include="NServiceBusStartup.cs" />
     <Compile Include="Orchestrators\AccountTransactionsOrchestrator.cs" />
     <Compile Include="Orchestrators\FinanceOrchestrator.cs" />
