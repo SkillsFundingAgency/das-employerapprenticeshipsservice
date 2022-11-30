@@ -22,9 +22,9 @@ namespace SFA.DAS.EmployerFinance.Models.UserProfile
         public virtual string Email { get; set; }
         public virtual string FirstName { get; set; }
         public virtual string LastName { get; set; }
-
-        public virtual string FullName => $"{FirstName} {LastName}";
-
+        public virtual string CorrelationId { get; set; }
+        public string FullName => $"{FirstName} {LastName}";
+        
         private Guid? _ref;
         private string _userRef;
     }

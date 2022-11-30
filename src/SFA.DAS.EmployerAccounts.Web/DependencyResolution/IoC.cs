@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
                 c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DataRegistry>();
-                c.AddRegistry<DateTimeRegistry>();                
+                c.AddRegistry<DateTimeRegistry>();
                 c.AddRegistry<EmployerAccountsApiClientRegistry>();
                 c.AddRegistry<AccountApiClientRegistry>();
                 c.AddRegistry<EntityFrameworkUnitOfWorkRegistry<EmployerAccountsDbContext>>();
@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
                 c.AddRegistry<NServiceBusClientUnitOfWorkRegistry>();
                 c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
                 c.AddRegistry<ReferenceDataRegistry>();
-                c.AddRegistry<RepositoriesRegistry>();                
+                c.AddRegistry<RepositoriesRegistry>();
                 c.AddRegistry<ServicesRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<TasksRegistry>();
@@ -52,7 +52,8 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
                 c.AddRegistry<ReservationsApiClientRegistry>();
                 c.AddRegistry<DefaultRegistry>();
                 c.AddRegistry<EmployerFeaturesAuthorizationRegistry>();
-                c.AddRegistry<AuthorisationRegistry>();                
+                c.AddRegistry<EmployerAccountsAuthorizationRegistry>();
+                c.AddRegistry<EmployerAccountsOuterApiRegistry>();
                 c.AddRegistry<EncodingRegistry>();
                 c.AddRegistry<CommitmentsV2ApiClientRegistry>();
                 c.AddRegistry<PollyPolicyRegistry>();

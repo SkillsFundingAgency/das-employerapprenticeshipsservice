@@ -69,7 +69,10 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
         {            
             var today = _currentDateTime.Now.Date;
             var nextYear = today.AddDays(1 - today.Day).AddMonths(13);
-            var earliestFundsToExpire = expiringFunds?.ExpiryAmounts?.Where(a => a.PayrollDate < nextYear).OrderBy(a => a.PayrollDate).FirstOrDefault();
+            var earliestFundsToExpire = expiringFunds?.ExpiryAmounts?
+                .Where(a => a.PayrollDate < nextYear && a.PayrollDate > today)
+                .OrderBy(a => a.PayrollDate)
+                .FirstOrDefault();
             
             return earliestFundsToExpire;
         }

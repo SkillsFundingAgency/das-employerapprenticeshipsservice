@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerFinance.Data
             var result = await _db.Value.Database.Connection.QueryAsync<string>(
                 sql: "SELECT Name FROM [employer_financial].[Account] WHERE Id = @accountId",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.Text);
 
             return result.SingleOrDefault();
@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerFinance.Data
             var result = await _db.Value.Database.Connection.QueryAsync<AccountNameItem>(
                 sql: "SELECT Id, Name FROM [employer_financial].[Account] WHERE Id IN @accountIds",
                 param: new { accountIds = accountIds },
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction);
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction);
 
             return result.ToDictionary(d => d.Id, d => d.Name);
         }
@@ -55,7 +55,7 @@ namespace SFA.DAS.EmployerFinance.Data
             await _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_financial].[CreateAccount]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
 
@@ -69,7 +69,7 @@ namespace SFA.DAS.EmployerFinance.Data
             await _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_financial].[RenameAccount]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
 

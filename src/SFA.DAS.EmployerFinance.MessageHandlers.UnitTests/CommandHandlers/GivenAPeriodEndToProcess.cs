@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
+using AutoFixture.AutoMoq;
 using FluentAssertions;
 using MediatR;
 using Moq;
@@ -32,6 +33,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             _loggerMock = new Mock<ILog>();
 
             Fixture.Customize<Account>(x => x.Without(s => s.AccountLegalEntities));
+            Fixture.Customize(new AutoMoqCustomization());
 
             _mediatorMock.Setup(mock => mock.SendAsync(It.IsAny<GetAllEmployerAccountsRequest>()))
                 .ReturnsAsync(new GetAllEmployerAccountsResponse { Accounts = new List<Account> { Fixture.Create<Account>() } });

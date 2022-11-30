@@ -1,0 +1,49 @@
+﻿@using SFA.DAS.Validation.Mvc
+@model SFA.DAS.EmployerFinance.Web.ViewModels.DeletedTransferConnectionInvitationViewModel
+
+@{
+    ViewBag.Title = "Deleted transfer connection request";
+    ViewBag.Section = "finance";
+    ViewBag.PageID = "page-transfer-connection-requests-deleted";
+    ViewBag.GaData.Vpv = "/accounts/transfers/connection/requests/deleted";
+}
+
+@Html.Partial("_ValidationSummary", ViewData.ModelState)
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <div class="success-summary">
+            <h1 class="bold-large">Connection request deleted</h1>
+            <p><i class="icon-green-tick"></i> You've successfully deleted this connection request</p>
+        </div>
+        <h2 class="heading-xlarge">What next?</h2>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group @(Html.IsValid(m => m.Choice) ? "" : "error")">
+                <fieldset>
+                    <legend>
+                        <span class="visuallyhidden">What next?</span>
+                        @Html.ValidationMessageFor(m => m.Choice)
+                    </legend>
+                    <label class="block-label selection-button-radio">
+                        @Html.RadioButtonFor(m => m.Choice, "GoToTransfersPage")
+                        Go to transfers
+                    </label>
+                    <label class="block-label selection-button-radio">
+                        @Html.RadioButtonFor(m => m.Choice, "GoToHomepage")
+                        Go back to the homepage
+                    </label>
+                </fieldset>
+            </div>
+            <button class="button" type="submit">Continue</button>
+        }
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a class="link-back" href="@Url.Action("Index", "TransferConnections")">Back</a></li>
+        </ol>
+    </div>
+}

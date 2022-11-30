@@ -2,7 +2,7 @@
 {
     public class EmployerFinanceApiClientConfiguration : IEmployerFinanceApiClientConfiguration
     {
-        public string ApiBaseUrl { get; }
+        public string ApiBaseUrl { get; set; }
         public string IdentifierUri { get; set; }
     }
 }

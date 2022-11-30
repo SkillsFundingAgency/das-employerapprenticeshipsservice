@@ -23,6 +23,8 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
         {
             try
             {
+                _logger.Info($"Account Paye scheme created via {(string.IsNullOrEmpty(message.Aorn) ? "Gov gateway" : "Aorn")} - Account Id: {message.AccountId}; Emp Ref: {message.EmpRef};");
+
                 var payeScheme = new Paye(message.EmpRef, message.AccountId, message.Name, message.Aorn);
                 await _payeRepository.CreatePayeScheme(payeScheme);
 

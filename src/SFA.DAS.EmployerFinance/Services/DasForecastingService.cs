@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests;
-using SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses;
+using SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests.Projections;
+using SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses.Projections;
 using SFA.DAS.EmployerFinance.Interfaces.OuterApi;
 using SFA.DAS.EmployerFinance.Models.ExpiringFunds;
 using SFA.DAS.EmployerFinance.Models.ProjectedCalculations;
@@ -12,12 +12,12 @@ namespace SFA.DAS.EmployerFinance.Services
 {
     public class DasForecastingService : IDasForecastingService
     {
-        private readonly IApiClient _apiClient;
+        private readonly IOuterApiClient _outerApiClient;
         private readonly ILog _logger;
 
-        public DasForecastingService(IApiClient apiClient, ILog logger)
+        public DasForecastingService(IOuterApiClient apiClient, ILog logger)
         {
-            _apiClient = apiClient;
+            _outerApiClient = apiClient;
             _logger = logger;
         }
 
@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerFinance.Services
             {
                 _logger.Info($"Getting forecasting projection summary for account ID: {accountId}");
 
-                var accountProjectionSummaryResponse = await _apiClient.Get<AccountProjectionSummaryResponseItem>(new GetAccountProjectionSummaryRequest(accountId));
+                var accountProjectionSummaryResponse = await _outerApiClient.Get<GetAccountProjectionSummaryResponse>(new GetAccountProjectionSummaryRequest(accountId));
 
                 if (accountProjectionSummaryResponse != null)
                 {
@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerFinance.Services
             return accountProjectionSummary;
         }
 
-        private static AccountProjectionSummary MapFrom(AccountProjectionSummaryResponseItem accountProjectionSummaryResponse)
+        private static AccountProjectionSummary MapFrom(GetAccountProjectionSummaryResponse accountProjectionSummaryResponse)
         {
             return new AccountProjectionSummary
             {

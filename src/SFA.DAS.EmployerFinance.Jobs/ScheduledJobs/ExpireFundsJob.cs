@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
             logger.LogInformation($"Starting {nameof(ExpireFundsJob)}");
 
             var now = _currentDateTime.Now;
-            var accounts = await _accountRepository.GetAllAccounts();
+            var accounts = await _accountRepository.GetAll();
 
             logger.LogInformation($"Queueing {nameof(ExpireAccountFundsCommand)} messages for {accounts.Count} accounts.");
 

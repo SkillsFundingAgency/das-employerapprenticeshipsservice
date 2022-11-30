@@ -5,8 +5,8 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Caches;
-using SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests;
-using SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses;
+using SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests.TrainingCourses;
+using SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses.TrainingCourses;
 using SFA.DAS.EmployerFinance.Interfaces.OuterApi;
 using SFA.DAS.EmployerFinance.Models.ApprenticeshipCourse;
 using SFA.DAS.EmployerFinance.Services;
@@ -16,14 +16,14 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ApprenticeshipInfoServiceWr
 {
     public class WhenGettingApprenticeshipInfo
     {
-        private Mock<IApiClient> _apiClient;
+        private Mock<IOuterApiClient> _apiClient;
         private Mock<IInProcessCache> _cache;
         private ApprenticeshipInfoServiceWrapper _service;
 
         [SetUp]
         public void Arrange()
         {
-            _apiClient = new Mock<IApiClient>();
+            _apiClient = new Mock<IOuterApiClient>();
             _cache = new Mock<IInProcessCache>();
             
             _service = new ApprenticeshipInfoServiceWrapper(_cache.Object, _apiClient.Object);
@@ -36,9 +36,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ApprenticeshipInfoServiceWr
             StandardsView returnData = null;
             var apiResponse = new GetStandardsResponse
             {
-                Standards = new List<StandardResponseItem>
+                Standards = new List<StandardResponse>
                 {
-                    new StandardResponseItem
+                    new StandardResponse
                     {
                         Id = 1
                     }
@@ -97,9 +97,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ApprenticeshipInfoServiceWr
             //Arrange
             var apiResponse = new GetFrameworksResponse
             {
-                Frameworks = new List<FrameworkResponseItem>
+                Frameworks = new List<FrameworkResponse>
                 {
-                    new FrameworkResponseItem
+                    new FrameworkResponse
                     {
                         Id = "123",
                         FrameworkName = "test",

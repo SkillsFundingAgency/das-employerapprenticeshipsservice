@@ -2,6 +2,7 @@
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.Hmrc.Configuration;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
+using SFA.DAS.Tasks.API.Client;
 using SFA.DAS.TokenService.Api.Client;
 using System;
 
@@ -12,6 +13,7 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string AllowedHashstringCharacters { get; set; }
         public string CdnBaseUrl { get; set; }
         public string DashboardUrl { get; set; }
+        public EmployerAccountsOuterApiConfiguration EmployerAccountsOuterApiConfiguration { get; set; }
         public string DatabaseConnectionString { get; set; }
         public string EmployerAccountsBaseUrl { get; set; }
         public string EmployerCommitmentsBaseUrl { get; set; }
@@ -59,5 +61,6 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public int DefaultCacheExpirationInMinutes { get; set; }
         public string SupportConsoleUsers { get; set; }
         public DateTime? LastTermsAndConditionsUpdate { get; set; }
+        public TaskApiConfiguration TasksApi { get; set; }
     }
 }

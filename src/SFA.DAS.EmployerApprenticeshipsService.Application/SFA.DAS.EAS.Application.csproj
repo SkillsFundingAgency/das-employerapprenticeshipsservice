@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DependencyResolution\EmployerFinanceApiServiceRegistry.cs" />
     <Compile Include="DependencyResolution\EmployerAccountsApiServiceRegistry.cs" />
     <Compile Include="Http\RestHttpClientException.cs" />
     <Compile Include="Mappings\AgreementMappings.cs" />
@@ -80,7 +81,6 @@
     <Compile Include="DependencyResolution\PaymentsRegistry.cs" />
     <Compile Include="DependencyResolution\ReferenceDataRegistry.cs" />
     <Compile Include="DependencyResolution\RepositoriesRegistry.cs" />
-    <Compile Include="DependencyResolution\TasksRegistry.cs" />
     <Compile Include="DependencyResolution\ValidationRegistry.cs" />
     <Compile Include="Queries\GetFinancialStatistics\GetFinancialStatisticsQueryHandler.cs" />
     <Compile Include="Queries\GetFinancialStatistics\GetFinancialStatisticsQuery.cs" />
@@ -122,10 +122,18 @@
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationResponse.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationValidator.cs" />
     <Compile Include="Services\DasLevyService.cs" />
+    <Compile Include="Services\EmployerFinanceApi\EmployerFinanceApiService.cs" />
+    <Compile Include="Services\EmployerFinanceApi\Http\EmployerFinanceApiHttpClientFactory.cs" />
+    <Compile Include="Services\EmployerFinanceApi\Http\IEmployerFinanceApiHttpClientFactory.cs" />
+    <Compile Include="Services\EmployerFinanceApi\IEmployerFinanceApiService.cs" />
     <Compile Include="Services\EmployerAccountsApi\EmployerAccountsApiService.cs" />
     <Compile Include="Services\EmployerAccountsApi\Http\EmployerAccountsApiHttpClientFactory.cs" />
     <Compile Include="Services\EmployerAccountsApi\Http\IEmployerAccountsApiHttpClientFactory.cs" />
     <Compile Include="Services\EmployerAccountsApi\IEmployerAccountsApiService.cs" />
+    <Compile Include="Services\EmployerFinanceApi\EmployerFinanceApiService.cs" />
+    <Compile Include="Services\EmployerFinanceApi\Http\EmployerFinanceApiHttpClientFactory.cs" />
+    <Compile Include="Services\EmployerFinanceApi\Http\IEmployerFinanceApiHttpClientFactory.cs" />
+    <Compile Include="Services\EmployerFinanceApi\IEmployerFinanceApiService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj">
@@ -264,7 +272,7 @@
       <Version>1.1.90</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Tasks.Api.Client">
-      <Version>1.8.44</Version>
+      <Version>1.8.163</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Tasks.Api.Types">
       <Version>1.8.44</Version>
