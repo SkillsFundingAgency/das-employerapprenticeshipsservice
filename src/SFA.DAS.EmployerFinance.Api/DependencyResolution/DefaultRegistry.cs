@@ -5,6 +5,8 @@ using System.Data.SqlClient;
 using Microsoft.Azure.Services.AppAuthentication;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.EmployerFinance.MarkerInterfaces;
+using SFA.DAS.HashingService;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Api.DependencyResolution
@@ -41,7 +43,10 @@ namespace SFA.DAS.EmployerFinance.Api.DependencyResolution
 
         private EmployerFinanceDbContext GetFinanceDbContext(IContext context)
         {
-            var db = new EmployerFinanceDbContext(context.GetInstance<DbConnection>());
+            var hashingService = context.GetInstance<IHashingService>();
+            var publicHashingService = context.GetInstance<IPublicHashingService>();
+
+            var db = new EmployerFinanceDbContext(context.GetInstance<DbConnection>(), hashingService, publicHashingService);
             return db;
         }
 

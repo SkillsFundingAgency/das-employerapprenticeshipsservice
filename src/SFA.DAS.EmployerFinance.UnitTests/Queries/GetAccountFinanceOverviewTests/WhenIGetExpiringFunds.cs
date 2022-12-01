@@ -98,6 +98,23 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         }
 
         [Test]
+        public async Task WhenExpiriesExistBeforeToday_ThenTheExpiringFundsShouldHaveTheCorrectExpiryDate()
+        {
+            var expiryAmountsBeforeToday = new List<ExpiringFunds>
+            {
+                new ExpiringFunds { PayrollDate = _now.AddMonths(-4), Amount = 3000 },
+                    new ExpiringFunds { PayrollDate = _now.AddMonths(-5), Amount = 4000 },
+                    new ExpiringFunds { PayrollDate = _now.AddMonths(-6), Amount = 2000 }
+            };
+
+            _accountProjectionSummary.ExpiringAccountFunds.ExpiryAmounts.AddRange(expiryAmountsBeforeToday);
+
+            var response = await _handler.Handle(_query);
+
+            response.ExpiringFundsExpiryDate.Should().BeSameDateAs(_now);
+        }
+
+        [Test]
         public async Task ThenIfNullIsReturnedTheAccountIdAndBalanceShouldStillBePopulated()
         {
             _dasForecastingService.Setup(s => s.GetAccountProjectionSummary(ExpectedAccountId)).ReturnsAsync((AccountProjectionSummary)null);

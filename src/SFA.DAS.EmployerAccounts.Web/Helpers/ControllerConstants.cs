@@ -87,7 +87,6 @@
         public const string TriageYouCannotSetupAnApprenticeshipYetProviderActionName = "TriageYouCannotSetupAnApprenticeshipYetProvider";
         public const string TriageYouCannotSetupAnApprenticeshipYetStartDateActionName = "TriageYouCannotSetupAnApprenticeshipYetStartDate";
         public const string TriageYouCannotSetupAnApprenticeshipYetApproximateStartDateActionName = "TriageYouCannotSetupAnApprenticeshipYetApproximateStartDate";
-        public const string TransfersControllerName = "Transfers";
         public const string UserRefClaimKeyName = "sub";
         public const string WhenDoYouWantToView = "WhenDoYouWantToView";
         public const string SearchUsingAornViewName = "SearchPensionRegulatorByAorn";

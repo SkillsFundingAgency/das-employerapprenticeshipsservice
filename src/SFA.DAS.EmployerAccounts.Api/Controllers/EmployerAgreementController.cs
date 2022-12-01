@@ -5,7 +5,7 @@ using SFA.DAS.EmployerAccounts.Api.Orchestrators;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers
 {
-    [RoutePrefix("api/accounts/{hashedAccountId}/legalEntities/{hashedlegalEntityId}/agreements")]
+    [RoutePrefix("api/accounts")]
     public class EmployerAgreementController : ApiController
     {
         private readonly AgreementOrchestrator _orchestrator;
@@ -15,9 +15,9 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
             _orchestrator = orchestrator;
         }
 
-        [Route("{agreementId}", Name = "AgreementById")]
+        [Route("{hashedAccountId}/legalEntities/{hashedlegalEntityId}/agreements/{agreementId}", Name = "AgreementById")]
         [ApiAuthorize(Roles = "ReadAllEmployerAgreements")]
-        [HttpGet]   
+        [HttpGet]
         public async Task<IHttpActionResult> GetAgreement(string agreementId)
         {
             var response = await _orchestrator.GetAgreement(agreementId);
@@ -28,6 +28,15 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
             }
 
             return Ok(response);
+        }
+
+        [Route("internal/{accountId}/minimum-signed-agreement-version", Name = "GetMinimumSignedAgreemmentVersion")]
+        [ApiAuthorize(Roles = "ReadAllEmployerAgreements")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetMinimumSignedAgreemmentVersion(long accountId)
+        {
+            var result = await _orchestrator.GetMinimumSignedAgreemmentVersion(accountId);
+            return Ok(result);
         }
     }
 }

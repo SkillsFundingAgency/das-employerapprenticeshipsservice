@@ -114,7 +114,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
             //Arrange
             _cacheProvider.SetupSequence(
                 x => x.Get<StandardsView>(nameof(StandardsView)))
-                .Returns(null)
+                .Returns((StandardsView)null)
                 .Returns(new StandardsView { Standards = new List<Standard>() });
 
 
@@ -150,7 +150,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
                      .Returns(() => _frameworkPayment);
             _cacheProvider.SetupSequence(
                 x => x.Get<FrameworksView>(nameof(FrameworksView)))
-                .Returns(null)
+                .Returns((FrameworksView)null)
                 .Returns(new FrameworksView { Frameworks = new List<Framework>() });
 
             //Act

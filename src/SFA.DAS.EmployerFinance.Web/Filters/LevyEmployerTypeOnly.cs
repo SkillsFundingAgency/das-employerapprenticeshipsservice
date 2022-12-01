@@ -49,10 +49,11 @@ namespace SFA.DAS.EmployerFinance.Web.Filters
                             {
                                 controller = ControllerConstants.AccessDeniedControllerName,
                                 action = "Index",
+                                hashedAccountId = hashedAccountId
                             }));
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 filterContext.Result = new ViewResult { ViewName = ControllerConstants.BadRequestViewName };
             }

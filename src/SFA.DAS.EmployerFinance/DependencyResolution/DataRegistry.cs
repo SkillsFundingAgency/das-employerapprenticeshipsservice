@@ -7,6 +7,8 @@ using NServiceBus.Persistence;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Extensions;
+using SFA.DAS.EmployerFinance.MarkerInterfaces;
+using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus.Features.ClientOutbox.Data;
 using SFA.DAS.UnitOfWork.Context;
 using StructureMap;
@@ -44,9 +46,12 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
             var serverSession = unitOfWorkContext.Find<SynchronizedStorageSession>();
             var sqlSession = clientSession?.GetSqlSession() ?? serverSession?.GetSqlSession();
 
+            var hashingService = context.GetInstance<IHashingService>();
+            var publicHashingService = context.GetInstance<IPublicHashingService>();
+
             if(sqlSession != null)
             {
-                return new EmployerFinanceDbContext(sqlSession.Connection, sqlSession.Transaction);
+                return new EmployerFinanceDbContext(sqlSession.Connection, hashingService, publicHashingService, sqlSession.Transaction);
             }
             else
             {
@@ -54,7 +59,7 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
                 // the context cannot be constructed using the unit of work, this would mean
                 // that a message cannot be published atomically with a database update
                 var dbConnection = context.GetInstance<DbConnection>();
-                return new EmployerFinanceDbContext(dbConnection);
+                return new EmployerFinanceDbContext(dbConnection, hashingService, publicHashingService);
             }
         }
 

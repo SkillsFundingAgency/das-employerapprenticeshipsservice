@@ -56,18 +56,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Builders\AccountBuilder.cs" />
-    <Compile Include="Builders\TransferConnectionInvitationBuilder.cs" />
     <Compile Include="Builders\UserBuilder.cs" />
     <Compile Include="DbAsyncEnumerableStub.cs" />
     <Compile Include="DbAsyncEnumeratorStub.cs" />
     <Compile Include="DbAsyncQueryProviderStub.cs" />
     <Compile Include="DbCleanup\CleanDatabase.cs" />
-    <Compile Include="DbCleanup\CleanTransactionsDatabase.cs" />
     <Compile Include="DbCleanup\ICleanDatabase.cs" />
-    <Compile Include="DbCleanup\ICleanTransactionsDatabase.cs" />
-    <Compile Include="DbCleanup\IUpdateTransactionLine.cs" />
-    <Compile Include="DbCleanup\UpdateTransactionLine.cs" />
     <Compile Include="DbSetStub.cs" />
     <Compile Include="EmployerAgreementBuilder.cs" />
     <Compile Include="Extensions\DateTimeExtention.cs" />
@@ -129,7 +123,7 @@
       <Version>2.0.4</Version>
     </PackageReference>
     <PackageReference Include="Moq">
-      <Version>4.5.28</Version>
+      <Version>4.10.1</Version>
     </PackageReference>
     <PackageReference Include="NEST">
       <Version>5.6.1</Version>

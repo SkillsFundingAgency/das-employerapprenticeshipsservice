@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi.Http
         public HttpClient CreateHttpClient()
         {
             var azureServiceTokenProvider = new AzureServiceTokenProvider();
-            var accessToken =  azureServiceTokenProvider.GetAccessTokenAsync(_employerFinanceApiConfig.IdentifierUri).Result;
+            var accessToken = azureServiceTokenProvider.GetAccessTokenAsync(_employerFinanceApiConfig.IdentifierUri).Result;
 
             var httpClient = new HttpClientBuilder()
                 .WithDefaultHeaders()

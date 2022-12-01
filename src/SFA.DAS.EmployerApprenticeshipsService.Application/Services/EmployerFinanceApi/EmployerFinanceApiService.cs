@@ -10,6 +10,7 @@ using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Account.Api.Types;
 using System.Text;
 using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
+using System.Web.Helpers;
 
 namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
 {
@@ -143,5 +144,17 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
 
             return JsonConvert.DeserializeObject<GetTransferAllowanceResponse>(content);
         }       
+    
+        public async Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var response = await _httpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (!response.IsSuccessStatusCode)
+                throw new RestHttpClientException(response, content);
+
+            var x = Json.Decode(content);
+            return x;
+        }
     }
 }

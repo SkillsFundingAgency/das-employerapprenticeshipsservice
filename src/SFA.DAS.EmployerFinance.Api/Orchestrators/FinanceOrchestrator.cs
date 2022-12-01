@@ -2,6 +2,8 @@
 using MediatR;
 using SFA.DAS.EmployerFinance.Api.Types;
 using SFA.DAS.EmployerFinance.Queries.GetAccountBalances;
+using SFA.DAS.EmployerFinance.Queries.GetEnglishFractionCurrent;
+using SFA.DAS.EmployerFinance.Queries.GetEnglishFrationHistory;
 using SFA.DAS.EmployerFinance.Queries.GetLevyDeclaration;
 using SFA.DAS.EmployerFinance.Queries.GetLevyDeclarationsByAccountAndPeriod;
 using SFA.DAS.EmployerFinance.Queries.GetTransferAllowance;
@@ -64,7 +66,36 @@ namespace SFA.DAS.EmployerFinance.Api.Orchestrators
             _logger.Info($"Received response for levy declaration for account  {hashedAccountId}, year {payrollYear} and month {payrollMonth}");
             return levyDeclarations;
         }
-      
+
+        public async Task<List<DasEnglishFraction>> GetEnglishFractionHistory(string hashedAccountId, string empRef)
+        {
+            _logger.Info($"Requesting english fraction history for account {hashedAccountId}, empRef {empRef}");
+
+            var response = await _mediator.SendAsync(new GetEnglishFractionHistoryQuery { HashedAccountId = hashedAccountId, EmpRef = empRef });
+            if (response.FractionDetail == null)
+            {
+                return null;
+            }
+
+            var dasEnglishFractions = response.FractionDetail.Select(x => _mapper.Map<DasEnglishFraction>(x)).ToList();
+            _logger.Info($"Received response for english fraction history for account  {hashedAccountId}, empRef {empRef}");
+            return dasEnglishFractions;
+        }
+
+        public async Task<List<DasEnglishFraction>> GetEnglishFractionCurrent(string hashedAccountId, string[] empRefs)
+        {
+            _logger.Info($"Requesting current english fractions for account {hashedAccountId}, empRefs {string.Join(", ", empRefs)}");
+
+            var response = await _mediator.SendAsync(new GetEnglishFractionCurrentQuery { HashedAccountId = hashedAccountId, EmpRefs = empRefs });
+            if (response.Fractions == null)
+            {
+                return null;
+            }
+
+            var dasEnglishFractions = response.Fractions.Select(x => _mapper.Map<DasEnglishFraction>(x)).ToList();
+            _logger.Info($"Received response for current english fractions for account  {hashedAccountId}, empRefs {string.Join(", ", empRefs)}");
+            return dasEnglishFractions;
+        }
 
         public async Task<GetAccountBalancesResponse> GetAccountBalances(List<string> accountIds)
         {

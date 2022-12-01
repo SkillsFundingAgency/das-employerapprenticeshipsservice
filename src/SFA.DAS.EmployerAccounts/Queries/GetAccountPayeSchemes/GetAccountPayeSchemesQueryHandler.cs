@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes
@@ -34,7 +30,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes
 
             var payeSchemes =
                 (await _payeSchemesService
-                    .GetPayeSchemsWithEnglishFractionForHashedAccountId(message.HashedAccountId))
+                    .GetPayeSchemes(message.HashedAccountId))
                 .ToList();
 
             return new GetAccountPayeSchemesResponse

@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerFinance.Web.Filters
                 hashedAccountId = filterContext.Controller.ControllerContext.RouteData.Values["hashedAccountId"] as string;
             }
 
-            filterContext.Controller.ViewBag.AnalyticsData = new AnalyticsData
+            filterContext.Controller.ViewBag.GaData = new GaData
             {
                 UserId = userId,
                 Acc = hashedAccountId,
@@ -43,8 +43,12 @@ namespace SFA.DAS.EmployerFinance.Web.Filters
 
         public string DataLoaded { get; set; }
 
-        public class AnalyticsData
+        public class GaData
         {
+            public GaData()
+            {
+            }
+
             public string DataLoaded { get; set; } = "dataLoaded";
             public string UserId { get; set; }
             public string UserEmail { get; set; }
