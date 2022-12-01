@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Commitments\**" />
+    <EmbeddedResource Remove="Models\Commitments\**" />
+    <None Remove="Models\Commitments\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Interfaces\IDistributedLockProvider.cs" />
     <Compile Remove="Services\AzureDistributedLockProvider.cs" />
   </ItemGroup>
@@ -62,7 +68,7 @@
     <PackageReference Include="SFA.DAS.NServiceBus" Version="15.0.25" />
     <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="15.0.25" />
     <PackageReference Include="SFA.DAS.Sql.Client" Version="1.0.0.32930" />
-    <PackageReference Include="SFA.DAS.Tasks.Api.Client" Version="1.8.44" />
+    <PackageReference Include="SFA.DAS.Tasks.Api.Client" Version="1.8.163" />
     <PackageReference Include="SFA.DAS.Tasks.API.Types" Version="1.8.44" />
     <PackageReference Include="SFA.DAS.TokenService.Api.Client" Version="2.3.0" />    
     <PackageReference Include="SFA.DAS.UnitOfWork" Version="9.0.13" />
@@ -96,7 +102,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Commitments\" />
     <Folder Include="Models\Portal\" />
     <Folder Include="Queries\GetAccountLegalEntitiesByHashedAccountId\" />
     <Folder Include="Queries\GetEmployerAgreementById\" />

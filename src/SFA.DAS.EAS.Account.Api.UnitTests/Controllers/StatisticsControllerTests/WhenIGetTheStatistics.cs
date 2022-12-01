@@ -38,8 +38,10 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.StatisticsControllerTest
         [Test]
         public async Task ThenShouldReturnOkNegotiatedContentResultWithStatistics()
         {
+            //Act
             var result = await _controller.GetStatistics();
 
+            //Assert
             result.Should().NotBeNull();
             result.Should().BeOfType<OkNegotiatedContentResult<StatisticsViewModel>>();
 

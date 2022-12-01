@@ -2,11 +2,13 @@
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
 using SFA.DAS.Authorization.DependencyResolution.StructureMap;
+using SFA.DAS.Authorization.WebApi.Extensions;
+using SFA.DAS.EAS.Account.Api.App_Start;
 using SFA.DAS.EAS.Account.Api.DependencyResolution;
 using SFA.DAS.EAS.Account.Api.ExceptionLoggers;
 using SFA.DAS.EAS.Application.DependencyResolution;
+using Swagger.Net.Application;
 using WebApi.StructureMap;
-using SFA.DAS.Authorization.WebApi.Extensions;
 
 namespace SFA.DAS.EAS.Account.Api
 {
@@ -14,6 +16,13 @@ namespace SFA.DAS.EAS.Account.Api
     {
         public static void Register(HttpConfiguration config)
         {
+            config.EnableSwagger(c =>
+                {
+                    c.SingleApiVersion("v1", "EAS Account API");
+                    c.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
+                })
+                .EnableSwaggerUi();
+
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
             config.MapHttpAttributeRoutes();
             config.Services.Add(typeof(IExceptionLogger), new ErrorLogger());
@@ -38,9 +47,9 @@ namespace SFA.DAS.EAS.Account.Api
                 c.AddRegistry<NotificationsRegistry>();
                 c.AddRegistry<ReferenceDataRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
-                c.AddRegistry<TasksRegistry>();
                 c.AddRegistry<ValidationRegistry>();
                 c.AddRegistry<EmployerAccountsApiServiceRegistry>();
+                c.AddRegistry<EmployerFinanceApiServiceRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
         }

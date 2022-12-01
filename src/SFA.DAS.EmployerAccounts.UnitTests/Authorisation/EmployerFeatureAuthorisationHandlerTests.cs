@@ -7,16 +7,15 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authorization.Context;
+using SFA.DAS.Authorization.EmployerFeatures.Context;
 using SFA.DAS.Authorization.EmployerFeatures.Models;
 using SFA.DAS.Authorization.Features.Services;
 using SFA.DAS.Authorization.Handlers;
 using SFA.DAS.Authorization.Results;
 using SFA.DAS.EmployerAccounts.AuthorisationExtensions;
-using SFA.DAS.Authorization.EmployerFeatures.Context;
-using SFA.DAS.Testing;
-using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementsByAccountId;
-using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Queries.GetMinimumSignedAgreementVersion;
+using SFA.DAS.Testing;
 
 namespace SFA.DAS.Authorization.Features.UnitTests.Handlers
 {
@@ -137,23 +136,12 @@ namespace SFA.DAS.Authorization.Features.UnitTests.Handlers
 
         public EmployerFeatureAuthorisationHandlerTestsFixture SetMediatorResponse(int agreementVersion = AgreementVersion, EmployerAgreementStatus agreementStatus = EmployerAgreementStatus.Pending)
         {
-            var response = new GetEmployerAgreementsByAccountIdResponse
-            {
-                EmployerAgreements = new List<EmployerAgreement>
-                {
-                    new EmployerAgreement
-                    {
-                        StatusId = agreementStatus,
-                        AccountLegalEntity = new AccountLegalEntity
-                        {
-                            SignedAgreementVersion = agreementStatus == EmployerAgreementStatus.Signed ? (int?)agreementVersion : null,
-                            PendingAgreementVersion = agreementStatus == EmployerAgreementStatus.Pending ? (int?)agreementVersion : null
-                        }
-                    }
-                }
-            };
-
-            Mediator.Setup(s => s.SendAsync(It.Is<GetEmployerAgreementsByAccountIdRequest>(q => q.AccountId == AccountId))).ReturnsAsync(response);
+            Mediator
+                .Setup(s => s.SendAsync(It.Is<GetMinimumSignedAgreementVersionQuery>(q => q.AccountId == AccountId)))
+                .ReturnsAsync(new GetMinimumSignedAgreementVersionResponse 
+                { 
+                    MinimumSignedAgreementVersion = (agreementStatus == EmployerAgreementStatus.Signed ? agreementVersion : 0) 
+                });
 
             return this;
         }

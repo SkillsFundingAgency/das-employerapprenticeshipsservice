@@ -119,18 +119,15 @@
     <Build Include="StoredProcedures\GetAccountStats.sql" />
     <Build Include="StoredProcedures\UpdateShowWizard.sql" />
     <Build Include="StoredProcedures\GetTeamMember.sql" />
-    <Build Include="Tables\TransferConnectionInvitation.sql" />
     <Build Include="StoredProcedures\GetAccountsMissingPublicHashedId.sql" />
     <Build Include="StoredProcedures\UpdateAccountHashedIds.sql" />
     <Build Include="StoredProcedures\UpdateAccountPublicHashedIds.sql" />
     <Build Include="UserDefinedTypes\AccountPublicHashedIdsTable.sql" />
     <Build Include="StoredProcedures\GetLegalEntities_WithoutSpecificAgreement.sql" />
     <Build Include="StoredProcedures\GetAccountsLinkedToLegalEntity.sql" />
-    <Build Include="Tables\TransferConnectionInvitationChange.sql" />
     <PostDeploy Include="Scripts\PostDeployment\PostDeployment.sql" />
     <PreDeploy Include="Scripts\PreDeployment\PreDeployment.sql" />
     <None Include="Scripts\PostDeployment\SeedDevData.sql" />
-    <Build Include="Tables\TransferRequest.sql" />
     <None Include="Scripts\PreDeployment\AML-2381-DeleteDuplicateUserAccountSettings.sql" />
     <Build Include="Tables\ClientOutboxData.sql" />
     <Build Include="Tables\OutboxData.sql" />
@@ -156,6 +153,7 @@
     <None Include="Scripts\Manual\CON-2796 Migrate And Add v5 Legal Agreement.sql" />
     <None Include="Scripts\Manual\CON-3367 Migrate And Add v6 Legal Agreement.sql" />
     <None Include="Scripts\Manual\CON-3968 Migrate And Add v7 Legal Agreement.sql" />
+    <None Include="Scripts\Manual\MAC-127-ExpireLegalAgreements.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EmployerApprenticeshipsService.Database.refactorlog" />

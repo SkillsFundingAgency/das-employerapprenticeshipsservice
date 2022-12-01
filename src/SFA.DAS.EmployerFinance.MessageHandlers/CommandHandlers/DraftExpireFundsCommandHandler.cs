@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
         public async Task Handle(DraftExpireFundsCommand message, IMessageHandlerContext context)
         {
             var now = _currentDateTime.Now;
-            var accounts = await _accountRepository.GetAllAccounts();
+            var accounts = await _accountRepository.GetAll();
             var commands = accounts.Select(a => new DraftExpireAccountFundsCommand { AccountId = a.Id, DateTo = message.DateTo});
 
             var tasks = commands.Select(c =>

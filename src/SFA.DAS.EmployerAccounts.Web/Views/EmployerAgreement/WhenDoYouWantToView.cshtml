@@ -41,12 +41,12 @@
 
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
                     <h1 class="govuk-fieldset__heading">
-                        When do you want to view the employer agreement?
+                        @ViewBag.Title
                     </h1>
                 </legend>
 
                 <p id="intro-hint" class="govuk-body govuk-!-margin-top-4">
-                    The employer agreement is between @Model.EmployerAgreement.LegalEntityName and the Education and Skills Funding Agency (<abbr>ESFA</abbr>).
+                    The employer agreement is between @Model.EmployerAgreement.LegalEntityName and the Department for Education (<abbr>DfE</abbr>).
                 </p>
 
                 <div class="govuk-form-group @errorClassFormGroup">
@@ -105,106 +105,3 @@
       });
     </script>
 }
-
-
-
-@*<div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-
-            <div class="error-summary @hiddenClass" aria-hidden="true">
-                <p><span class="bold">There is a problem</span></p>
-                <ul class="error-summary-list">
-                    <li>
-                        <a class="danger" href="#do-you-want-to-add-paye-scheme-form">Select whether you want to view the employer agreement now or later</a>
-                    </li>
-                </ul>
-            </div>
-
-            <h1 class="govuk-heading-xl">
-                When do you want to view the employer agreement?
-            </h1>
-
-            <p class="govuk-body">This agreement is between @Model.EmployerAgreement.LegalEntityName and the Education and Skills Funding Agency (<abbr>ESFA</abbr>).</p>
-
-            <form method="POST" action="@Url.Action(ControllerConstants.WhenDoYouWantToView)">
-                @Html.AntiForgeryToken()
-
-                <div class="govuk-form-group">
-                    <fieldset class="govuk-fieldset">
-
-                        <span class="error-message @errorClass" aria-hidden="true" id="select-option">
-                            Select whether you want to view the employer agreement now or later
-                        </span>
-
-                        <div class="govuk-radios" id="agreementCheck">
-                            <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" type="radio" name="choice" id="view-it-now" value="1">
-                                <label class="govuk-label govuk-radios__label" for="view-it-now">
-                                    I'll view it now
-                                </label>
-                            </div>
-                            <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" type="radio" name="choice" id="view-it-later" value="2" aria-describedby="skip-hint">
-                                <label class="govuk-label govuk-radios__label" for="view-it-later">
-                                    I'll view it later, after I've created an account
-                                </label>
-
-                                <span id="skip-hint" class="govuk-hint govuk-radios__hint">
-                                    You can skip the agreement and view it when @Model.EmployerAgreement.LegalEntityName is ready to get or reserve apprenticeship funding.
-                                </span>
-                            </div>
-                        </div>
-
-                    </fieldset>
-                </div>
-
-                <button class="govuk-button" type="submit" id="submit-when-do-you-want-to-view-button">
-                    Continue
-                </button>
-
-            </form>
-        </div>
-    </div>*@
-
-
-@*<div class="grid-row header-index">
-        <div class="column-two-thirds">
-            <div class="error-summary @hiddenClass" aria-hidden="true">
-                <p><span class="bold">There is a problem</span></p>
-                <ul class="error-summary-list">
-                    <li>
-                        <a class="danger" href="#do-you-want-to-add-paye-scheme-form">Select whether you want to view the employer agreement now or later</a>
-                    </li>
-                </ul>
-            </div>
-            <h1 class="heading-xlarge">
-                When do you want to view the employer agreement?
-            </h1>
-
-            <p>This agreement is between <span class="bold">@Model.EmployerAgreement.LegalEntityName</span> and the <span class="bold">Education and Skills Funding Agency (ESFA)</span></p>
-
-            <form method="POST" action="@Url.Action(ControllerConstants.WhenDoYouWantToView)">
-                @Html.AntiForgeryToken()
-                <div class="form-group @errorClass" id="do-you-want-to-add-paye-scheme-form">
-
-                    <fieldset>
-                        <span class="error-message @hiddenClass" aria-hidden="true" id="select-option">
-                            Select whether you want to view the employer agreement now or later
-                        </span>
-                        <label for="view-it-now" class="block-label">
-                            <input type="radio" name="choice" id="view-it-now" value="1" />
-                            I'll view it now
-                        </label>
-                        <label for="view-it-later" class="block-label">
-                            <input type="radio" name="choice" id="view-it-later" value="2" />
-                            I'll view it later, after I have created an account
-                        </label>
-                    </fieldset>
-
-                    <p></p>
-                    <p><button class="button" type="submit" id="submit-when-do-you-want-to-view-button">Continue</button></p>
-
-                </div>
-            </form>
-        </div>
-    </div>*@

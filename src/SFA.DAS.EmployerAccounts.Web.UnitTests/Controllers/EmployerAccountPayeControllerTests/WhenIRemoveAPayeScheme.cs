@@ -20,7 +20,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountPaye
         private EmployerAccountPayeController _controller;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
-        private Mock<IMediator> _mediator;
 
         [SetUp]
         public void Arrange()
@@ -31,14 +30,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountPaye
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("123abc");
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-            _mediator = new Mock<IMediator>();
 
             _controller = new EmployerAccountPayeController(
                 _owinWrapper.Object, 
                 _employerAccountPayeOrchestrator.Object,
                 _userViewTestingService.Object, 
-                _flashMessage.Object,
-                _mediator.Object);
+                _flashMessage.Object);
         }
 
         [Test]

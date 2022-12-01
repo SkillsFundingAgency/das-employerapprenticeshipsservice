@@ -135,7 +135,7 @@
       <Version>1.0.30</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.MA.Shared.UI">
-      <Version>1.1.79</Version>
+      <Version>1.2.7</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
@@ -195,8 +195,6 @@
     <Compile Include="Controllers\EmployerAccountPayeController.cs" />
     <Compile Include="Controllers\EmployerAccountTransactions.cs" />
     <Compile Include="Controllers\EmployerAgreementController.cs" />
-    <Compile Include="Controllers\EmployerCommitmentsController.cs" />
-    <Compile Include="Controllers\EmployerManageApprenticesController.cs" />
     <Compile Include="Controllers\EmployerTeamController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HealthCheckController.cs" />
@@ -209,8 +207,6 @@
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\SupportErrorController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
-    <Compile Include="Controllers\TransferConnectionInvitationsController.cs" />
-    <Compile Include="Controllers\TransfersController.cs" />
     <Compile Include="DependencyResolution\ControllerConvention.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
@@ -227,9 +223,7 @@
     <Compile Include="Extensions\SecurityExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TimeSpanExtensions.cs" />
-    <Compile Include="Extensions\TransferConnectionInvitationDtoExtensions.cs" />
     <Compile Include="Extensions\AccountDashboardViewModelExtensions.cs" />
-    <Compile Include="Extensions\TransferRequestDtoExtensions.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
     <Compile Include="Filters\AnalyticsFilter.cs" />
     <Compile Include="Global.asax.cs">
@@ -246,11 +240,11 @@
     <Compile Include="Mappings\CohortMapping.cs" />
     <Compile Include="Mappings\HealthCheckMappings.cs" />
     <Compile Include="Mappings\OrganisationMappings.cs" />
-    <Compile Include="Mappings\TransferMappings.cs" />
     <Compile Include="Mappings\VacancyMappings.cs" />
     <Compile Include="Models\AccountContext.cs" />
     <Compile Include="Models\ReturnUrlModel.cs" />
     <Compile Include="Models\HashedAccountIdModel.cs" />
+    <Compile Include="Orchestrators\EmployerTeamOrchestrator.cs" />
     <Compile Include="ViewModels\OrganisationAgreementsViewModel.cs" />
     <Compile Include="ViewModels\TermsAndConditionsNewViewModel.cs" />
     <Compile Include="ViewModels\TriageViewModel.cs" />
@@ -259,7 +253,6 @@
     <Compile Include="Orchestrators\EmployerAgreementOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestratorWithCallToAction.cs" />
-    <Compile Include="Orchestrators\EmployerTeamOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerVerificationOrchestratorBase.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
     <Compile Include="Orchestrators\InvitationOrchestrator.cs" />
@@ -297,10 +290,8 @@
     <Compile Include="ViewModels\AddNewPayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\AddOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\AddressViewModel.cs" />
-    <Compile Include="ViewModels\ApprovedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="Models\CreateAccountModel.cs" />
     <Compile Include="ViewModels\CreateNewLegalEntityViewModel.cs" />
-    <Compile Include="ViewModels\DeletedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\DismissTaskViewModel.cs" />
     <Compile Include="ViewModels\EmployerAccountPayeListViewModel.cs" />
     <Compile Include="ViewModels\EmployerAccountViewModel.cs" />
@@ -326,8 +317,6 @@
     <Compile Include="ViewModels\OrganisationDetailsViewModel.cs" />
     <Compile Include="ViewModels\OrganisationUpdatedNextStepsViewModel.cs" />
     <Compile Include="ViewModels\ProviderInvitationViewModel.cs" />
-    <Compile Include="ViewModels\ReceiveTransferConnectionInvitationViewModel.cs" />
-    <Compile Include="ViewModels\RejectedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\RemovePayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\RenameEmployerAccountViewModel.cs" />
     <Compile Include="ViewModels\ReservationViewModel.cs" />
@@ -335,24 +324,16 @@
     <Compile Include="ViewModels\SearchPensionRegulatorResultsViewModel.cs" />
     <Compile Include="ViewModels\SearchOrganisationResultsViewModel.cs" />
     <Compile Include="ViewModels\SearchOrganisationViewModel.cs" />
-    <Compile Include="ViewModels\SendTransferConnectionInvitationViewModel.cs" />
-    <Compile Include="ViewModels\SentTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\SignAgreementViewModel.cs" />
     <Compile Include="ViewModels\AccessDeniedViewModel.cs" />
     <Compile Include="ViewModels\SupportUserBannerViewModel.cs" />
     <Compile Include="ViewModels\SignInViewModel.cs" />
-    <Compile Include="ViewModels\StartTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\SummaryUnsubscribeViewModel.cs" />
     <Compile Include="ViewModels\SummaryViewModel.cs" />
     <Compile Include="ViewModels\SupportUserHeaderViewModel.cs" />
     <Compile Include="ViewModels\SystemDetailsViewModel.cs" />
     <Compile Include="Models\TrainingDateModel.cs" />
     <Compile Include="ViewModels\TrainingProviderViewModel.cs" />
-    <Compile Include="ViewModels\TransferAllowanceViewModel.cs" />
-    <Compile Include="ViewModels\TransferConnectionInvitationAuthorizationViewModel.cs" />
-    <Compile Include="ViewModels\TransferConnectionInvitationsViewModel.cs" />
-    <Compile Include="ViewModels\TransferConnectionInvitationViewModel.cs" />
-    <Compile Include="ViewModels\TransferRequestsViewModel.cs" />
     <Compile Include="ViewModels\UpdateOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\UserAccountsViewModel.cs" />
     <Compile Include="ViewModels\UserInvitationsViewModel.cs" />
@@ -766,20 +747,6 @@
     <Content Include="Views\Activities\Index.cshtml" />
     <Content Include="Views\Activities\Latest.cshtml" />
     <Content Include="Views\HealthCheck\Index.cshtml" />
-    <Content Include="Views\TransferConnectionInvitations\Approved.cshtml" />
-    <Content Include="Views\TransferConnectionInvitations\Deleted.cshtml" />
-    <Content Include="Views\TransferConnectionInvitations\Details.cshtml" />
-    <Content Include="Views\TransferConnectionInvitations\Index.cshtml" />
-    <Content Include="Views\TransferConnectionInvitations\Receive.cshtml" />
-    <Content Include="Views\TransferConnectionInvitations\Rejected.cshtml" />
-    <Content Include="Views\TransferConnectionInvitations\Send.cshtml" />
-    <Content Include="Views\TransferConnectionInvitations\Sent.cshtml" />
-    <Content Include="Views\TransferConnectionInvitations\Start.cshtml" />
-    <Content Include="Views\Transfers\Index.cshtml" />
-    <Content Include="Views\Transfers\TransferAllowance.cshtml" />
-    <Content Include="Views\Transfers\TransferConnectionInvitationAuthorization.cshtml" />
-    <Content Include="Views\Transfers\TransferConnectionInvitations.cshtml" />
-    <Content Include="Views\Transfers\TransferRequests.cshtml" />
     <Content Include="Views\Shared\_ValidationSummary.cshtml" />
     <Content Include="Views\EmployerAccount\RenameAccount.cshtml" />
     <Content Include="Views\SearchOrganisation\SearchForOrganisation.cshtml" />
@@ -874,6 +841,7 @@
     <Content Include="Views\EmployerAgreement\_AwaitingAcceptance.cshtml" />
     <Content Include="Views\EmployerAgreement\_AcceptedAgreement.cshtml" />
     <Content Include="Views\Home\TermsAndConditionsOverview.cshtml" />
+    <Content Include="Views\Shared\_Agreement_v8.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Models.Payments;
+using SFA.DAS.EmployerFinance.Models.Transfers;
 
 namespace SFA.DAS.EmployerFinance.Data
 {
@@ -21,5 +23,11 @@ namespace SFA.DAS.EmployerFinance.Data
         Task<decimal> ProcessDeclarations(long accountId, string empRef);
         Task ProcessPaymentData(long accountId);
         Task<string> FindHistoricalProviderName(long ukprn);
+        Task<List<LevyDeclarationItem>> GetAccountLevyDeclarations(long accountId);
+        Task<List<DasEnglishFraction>> GetEnglishFractionCurrent(long accountId, string[] empRefs);
+        Task<List<LevyDeclarationItem>> GetAccountLevyDeclarations(long accountId, string payrollYear, short payrollMonth);
+        Task<List<AccountBalance>> GetAccountBalances(List<long> accountIds);
+        Task<TransferAllowance> GetTransferAllowance(long accountId);
+        Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(long accountId, string empRef);
     }
 }

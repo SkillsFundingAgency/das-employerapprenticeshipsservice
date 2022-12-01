@@ -13,7 +13,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution
             return new Container(c =>
             {
                 c.AddRegistry<ApprenticeshipLevyRegistry>();
-                c.AddRegistry<CachesRegistry>();                
+                c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DataRegistry>();
                 c.AddRegistry<DateTimeRegistry>();
@@ -28,8 +28,8 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution
                 c.AddRegistry<NotificationsRegistry>();
                 c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
                 c.AddRegistry<PaymentsRegistry>();
-                c.AddRegistry<ManageApprenticeshipsOuterApiRegistry>();
-                c.AddRegistry<ProvidersRegistry>();                
+                c.AddRegistry<EmployerFinanceOuterApiRegistry>();
+                c.AddRegistry<ProvidersRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<StartupRegistry>();
                 c.AddRegistry<DefaultRegistry>();

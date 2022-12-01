@@ -23,7 +23,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.TransfersControllerT
         private Mock<TransfersOrchestrator> _orchestrator;
         private Mock<IHashingService> _hashingService;
         private Mock<IAuthorizationService> _authorisationService;
-        private Mock<IManageApprenticeshipsService> _maService;
+        private Mock<ITransfersService> _transfersService;
         private Mock<IAccountApiClient> _accountApiClient;
         private Mock<IFeatureTogglesService<EmployerFeatureToggle>> _featureTogglesService;
         private GetFinancialBreakdownResponse _financialBreakdownResponse;
@@ -39,18 +39,18 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.TransfersControllerT
 
             _authorisationService = new Mock<IAuthorizationService>();
             _hashingService = new Mock<IHashingService>();
-            _maService = new Mock<IManageApprenticeshipsService>();
+            _transfersService = new Mock<ITransfersService>();
             _accountApiClient = new Mock<IAccountApiClient>();
             _featureTogglesService = new Mock<IFeatureTogglesService<EmployerFeatureToggle>>();
             _financialBreakdownResponse = fixture.Create<GetFinancialBreakdownResponse>();
 
-            _maService.Setup(m => m.GetFinancialBreakdown(AccountId)).ReturnsAsync(_financialBreakdownResponse);
+            _transfersService.Setup(m => m.GetFinancialBreakdown(AccountId)).ReturnsAsync(_financialBreakdownResponse);
 
             _hashingService.Setup(h => h.DecodeValue(HashedAccountId)).Returns(AccountId);
             _featureTogglesService.Setup(x => x.GetFeatureToggle(It.IsAny<string>())).Returns(new EmployerFeatureToggle { IsEnabled = true });
             _accountDetailViewModel = fixture.Create<AccountDetailViewModel>();
             _accountApiClient.Setup(m => m.GetAccount(HashedAccountId)).ReturnsAsync(_accountDetailViewModel);
-            _orchestrator = new Mock<TransfersOrchestrator>(_authorisationService.Object, _hashingService.Object, _maService.Object, _accountApiClient.Object);
+            _orchestrator = new Mock<TransfersOrchestrator>(_authorisationService.Object, _hashingService.Object, _transfersService.Object, _accountApiClient.Object);
 
             _controller = new TransfersController(_orchestrator.Object);
         }

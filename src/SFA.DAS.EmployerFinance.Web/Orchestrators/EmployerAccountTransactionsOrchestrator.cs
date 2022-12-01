@@ -20,6 +20,7 @@ using SFA.DAS.EmployerFinance.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
+using AggregationData = SFA.DAS.EmployerFinance.Models.Transaction.AggregationData;
 using TransactionItemType = SFA.DAS.EmployerFinance.Models.Transaction.TransactionItemType;
 using TransactionViewModel = SFA.DAS.EmployerFinance.Web.ViewModels.TransactionViewModel;
 
@@ -340,6 +341,9 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                         Month = month,
                         HashedAccountId = hashedId
                     });
+
+
+            
 
             var viewModel = BuildTransactionViewModel(aggregratedTransactions.Data, year, month);
 

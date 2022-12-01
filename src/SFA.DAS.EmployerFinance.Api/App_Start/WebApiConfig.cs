@@ -13,6 +13,9 @@ using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.
 using SFA.DAS.UnitOfWork.WebApi.Extensions;
 using SFA.DAS.Validation.WebApi;
 using WebApi.StructureMap;
+using Swagger.Net.Application;
+using SFA.DAS.EmployerFinance.Api.Client;
+using SFA.DAS.EmployerFinance.Configuration;
 
 namespace SFA.DAS.EmployerFinance.Api
 {
@@ -20,6 +23,13 @@ namespace SFA.DAS.EmployerFinance.Api
     {
         public static void Register(HttpConfiguration config)
         {
+            config.EnableSwagger(c =>
+            {
+                c.SingleApiVersion("v1", "Employer Finance API");
+                c.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
+            })
+            .EnableSwaggerUi();
+
             config.Filters.AddUnitOfWorkFilter();
             config.Filters.Add(new ValidateModelStateFilter());
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
@@ -41,7 +51,7 @@ namespace SFA.DAS.EmployerFinance.Api
                 c.AddRegistry<ExecutionPoliciesRegistry>();
                 c.AddRegistry<HashingRegistry>();
                 c.AddRegistry<LoggerRegistry>();
-                c.AddRegistry<MapperRegistry>();
+                c.AddRegistry<MapperRegistry>(); 
                 c.AddRegistry<MediatorRegistry>();
                 c.AddRegistry<MessagePublisherRegistry>();
                 c.AddRegistry<NotificationsRegistry>();
@@ -50,6 +60,7 @@ namespace SFA.DAS.EmployerFinance.Api
                 c.AddRegistry<StartupRegistry>();
                 c.AddRegistry<DefaultRegistry>();
                 c.AddRegistry<CommitmentsV2ApiClientRegistry>();
+                c.AddRegistry(new EmployerFinanceApiClientRegistry(context => context.GetInstance<EmployerFinanceConfiguration>().EmployerFinanceApi));
             });
         }
     }

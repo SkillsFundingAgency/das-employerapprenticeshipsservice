@@ -11,7 +11,6 @@ namespace SFA.DAS.EmployerAccounts.Data
         Task<User> Get(string email);
         Task<User> Get(long id);
         Task<User> GetUserByRef(Guid @ref);
-        Task<Users> GetAllUsers();
         Task Upsert(User user);
         Task<Accounts<Account>> GetAccounts();
     }

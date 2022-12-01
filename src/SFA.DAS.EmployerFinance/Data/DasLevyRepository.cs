@@ -7,8 +7,10 @@ using Dapper;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Extensions;
 using SFA.DAS.EmployerFinance.Interfaces;
+using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Models.Payments;
+using SFA.DAS.EmployerFinance.Models.Transfers;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Sql.Client;
 
@@ -67,7 +69,7 @@ namespace SFA.DAS.EmployerFinance.Data
                 await _db.Value.Database.Connection.ExecuteAsync(
                     sql: "[employer_financial].[CreateDeclaration]",
                     param: parameters,
-                    transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                    transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                     commandType: CommandType.StoredProcedure);
             }
         }
@@ -87,7 +89,7 @@ namespace SFA.DAS.EmployerFinance.Data
             return _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_financial].[CreatePeriodEnd]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
 
@@ -104,7 +106,7 @@ namespace SFA.DAS.EmployerFinance.Data
                 await _db.Value.Database.Connection.ExecuteAsync(
                     sql: "[employer_financial].[CreatePayments]",
                     param: parameters,
-                    transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                    transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                     commandType: CommandType.StoredProcedure);
             }
         }
@@ -118,7 +120,7 @@ namespace SFA.DAS.EmployerFinance.Data
             var result = await _db.Value.Database.Connection.QueryAsync<Guid>(
                 sql: "[employer_financial].[GetAccountPaymentIds]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
 
             return new HashSet<Guid>(result);
@@ -133,7 +135,7 @@ namespace SFA.DAS.EmployerFinance.Data
             return _db.Value.Database.Connection.QueryAsync<long>(
                 sql: "[employer_financial].[GetLevyDeclarationSubmissionIdsByEmpRef]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
 
@@ -146,7 +148,7 @@ namespace SFA.DAS.EmployerFinance.Data
             var result = await _db.Value.Database.Connection.QueryAsync<DasDeclaration>(
                 sql: "[employer_financial].[GetLastLevyDeclarations_ByEmpRef]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
 
             return result.SingleOrDefault();
@@ -157,7 +159,7 @@ namespace SFA.DAS.EmployerFinance.Data
             var result = await _db.Value.Database.Connection.QueryAsync<PeriodEnd>(
                 sql: "[employer_financial].[GetLatestPeriodEnd]",
                 param: null,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
 
             return result.SingleOrDefault();
@@ -168,7 +170,7 @@ namespace SFA.DAS.EmployerFinance.Data
             return await _db.Value.Database.Connection.QueryAsync<PeriodEnd>(
                 sql: "[employer_financial].[GetAllPeriodEnds]",
                 param: null,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
 
@@ -183,7 +185,7 @@ namespace SFA.DAS.EmployerFinance.Data
             var result = await _db.Value.Database.Connection.QueryAsync<DasDeclaration>(
                 sql: "[employer_financial].[GetLevyDeclaration_ByEmpRefPayrollMonthPayrollYear]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
 
             return result.SingleOrDefault();
@@ -200,7 +202,7 @@ namespace SFA.DAS.EmployerFinance.Data
             var result = await _db.Value.Database.Connection.QueryAsync<DasDeclaration>(
                 sql: "[employer_financial].[GetEffectivePeriod12Declaration]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
 
             return result.SingleOrDefault();
@@ -219,7 +221,7 @@ namespace SFA.DAS.EmployerFinance.Data
                 sql: "[employer_financial].[ProcessDeclarationsTransactions]",
                 param: parameters,
                 commandTimeout: 120,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
 
@@ -232,7 +234,7 @@ namespace SFA.DAS.EmployerFinance.Data
             return _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_financial].[ProcessPaymentDataTransactions]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
 
@@ -245,10 +247,110 @@ namespace SFA.DAS.EmployerFinance.Data
             var result = await _db.Value.Database.Connection.QueryAsync<string>(
                 sql: "[employer_financial].[GetLastKnownProviderNameForUkprn]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
 
             return result.FirstOrDefault();
+        }
+
+        public async Task<List<LevyDeclarationItem>> GetAccountLevyDeclarations(long accountId)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountId", accountId, DbType.Int64);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<LevyDeclarationItem>(
+                sql: "[employer_financial].[GetLevyDeclarations_ByAccountId]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
+            return result.ToList();
+        }
+
+        public async Task<List<LevyDeclarationItem>> GetAccountLevyDeclarations(long accountId, string payrollYear, short payrollMonth)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountId", accountId, DbType.Int64);
+            parameters.Add("@payrollYear", payrollYear, DbType.String);
+            parameters.Add("@payrollMonth", payrollMonth, DbType.Int16);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<LevyDeclarationItem>(
+                sql: "[employer_financial].[GetLevyDeclarations_ByAccountPayrollMonthPayrollYear]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
+            return result.ToList();
+        }
+
+        public async Task<List<AccountBalance>> GetAccountBalances(List<long> accountIds)
+        {
+            var accountParametersTable = new AccountIdUserTableParam(accountIds);
+
+            accountParametersTable.Add("@allowancePercentage", _configuration.TransferAllowancePercentage, DbType.Decimal);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<AccountBalance>(
+                sql: "[employer_financial].[GetAccountBalance_ByAccountIds]",
+                param: accountParametersTable,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
+            return result.ToList();
+        }
+
+        public async Task<TransferAllowance> GetTransferAllowance(long accountId)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountId", accountId, DbType.Int64);
+            parameters.Add("@allowancePercentage", _configuration.TransferAllowancePercentage, DbType.Decimal);
+
+            var transferAllowance = await _db.Value.Database.Connection.QueryAsync<TransferAllowance>(
+                sql: "[employer_financial].[GetAccountTransferAllowance]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
+            return transferAllowance.SingleOrDefault() ?? new TransferAllowance();
+        }
+
+        public Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(long accountId, string empRef)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountId", accountId, DbType.Int64);
+            parameters.Add("@empRef", empRef, DbType.String);
+
+            return _db.Value.Database.Connection.QueryAsync<DasEnglishFraction>(
+                sql: "[employer_financial].[GetEnglishFraction_ByEmpRef]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+        }
+
+        public async Task<List<DasEnglishFraction>> GetEnglishFractionCurrent(long accountId, string[] empRefs)
+        {
+            var currentFractions = new List<DasEnglishFraction>();
+
+            foreach (var empRef in empRefs)
+            {
+                var parameters = new DynamicParameters();
+
+                parameters.Add("@accountId", accountId, DbType.Int64);
+                parameters.Add("@empRef", empRef, DbType.String);
+
+                var currentFraction = await _db.Value.Database.Connection.QueryAsync<DasEnglishFraction>(
+                    sql: "[employer_financial].[GetCurrentFractionForScheme]",
+                    param: parameters,
+                    transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
+                    commandType: CommandType.StoredProcedure);
+
+                currentFractions.Add(currentFraction.FirstOrDefault());
+            }
+
+            return currentFractions;
         }
     }
 }

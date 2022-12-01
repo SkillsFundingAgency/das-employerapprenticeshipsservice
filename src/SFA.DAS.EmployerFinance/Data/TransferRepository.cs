@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerFinance.Data
             return _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_financial].[CreateAccountTransfersV1]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure,
                 commandTimeout: 300);
         }
@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerFinance.Data
             return _db.Value.Database.Connection.QueryAsync<AccountTransfer>(
                 sql: "[employer_financial].[GetAccountTransfersByPeriodEnd]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
 
@@ -62,8 +62,24 @@ namespace SFA.DAS.EmployerFinance.Data
             return _db.Value.Database.Connection.QuerySingleOrDefaultAsync<AccountTransferDetails>(
                 sql: "[employer_financial].[GetTransferPaymentDetails]",
                 param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
+        }
+
+        public async Task<TransferAllowance> GetTransferAllowance(long accountId, decimal transferAllowancePercentage)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountId", accountId, DbType.Int64);
+            parameters.Add("@allowancePercentage", transferAllowancePercentage, DbType.Decimal);
+            
+            var transferAllowance = await _db.Value.Database.Connection.QueryAsync<TransferAllowance>(
+                sql: "[employer_financial].[GetAccountTransferAllowance]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction?.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
+            return transferAllowance.SingleOrDefault() ?? new TransferAllowance();
         }
 
         private static DataTable CreateTransferDataTable(IEnumerable<AccountTransfer> transfers)

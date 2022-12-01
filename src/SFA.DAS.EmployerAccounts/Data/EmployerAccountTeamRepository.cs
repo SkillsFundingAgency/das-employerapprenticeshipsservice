@@ -63,7 +63,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             return result.SingleOrDefault();
         }
 
-        public async Task<ICollection<TeamMember>> GetAccountTeamMembers(string hashedAccountId)
+        public async Task<List<TeamMember>> GetAccountTeamMembers(string hashedAccountId)
         {
             var parameters = new DynamicParameters();
 

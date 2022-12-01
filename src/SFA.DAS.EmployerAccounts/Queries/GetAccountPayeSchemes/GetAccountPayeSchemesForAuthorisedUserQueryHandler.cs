@@ -9,11 +9,11 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes
 {
     public class GetAccountPayeSchemesForAuthorisedUserQueryHandler : IAsyncRequestHandler<GetAccountPayeSchemesForAuthorisedUserQuery, GetAccountPayeSchemesResponse>
     {
-        private readonly IPayeSchemesService _payeSchemesService;
+        private readonly IPayeSchemesWithEnglishFractionService _payeSchemesService;
         private readonly IValidator<GetAccountPayeSchemesForAuthorisedUserQuery> _validator;
 
         public GetAccountPayeSchemesForAuthorisedUserQueryHandler(
-            IPayeSchemesService payeSchemesService,
+            IPayeSchemesWithEnglishFractionService payeSchemesService,
             IValidator<GetAccountPayeSchemesForAuthorisedUserQuery> validator)
         {
             _payeSchemesService = payeSchemesService;
@@ -36,7 +36,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes
 
             var payeSchemes =
                 (await _payeSchemesService
-                    .GetPayeSchemsWithEnglishFractionForHashedAccountId(message.HashedAccountId))
+                    .GetPayeSchemes(message.HashedAccountId))
                 .ToList();
 
             return new GetAccountPayeSchemesResponse
