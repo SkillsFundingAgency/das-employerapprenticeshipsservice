@@ -5,7 +5,7 @@
     <Authors>Das</Authors>
     <Company>Das</Company>
     <Product>Das</Product>
-    <Description>Types returned by the Employer Accounts API</Description>
+    <Description>Types for SFA.DAS.EmployerAccounts.Api</Description>
     <Copyright>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice/blob/master/LICENSE</Copyright>
     <RepositoryUrl>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice</RepositoryUrl>
     <PackageLicense>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice/tree/master/src/SFA.DAS.EmployerAccounts.Api.Types</PackageLicense>

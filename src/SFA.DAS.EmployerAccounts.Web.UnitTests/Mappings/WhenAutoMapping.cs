@@ -18,11 +18,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Mappings
             {
                 c.AddProfiles(typeof(HealthCheckMappings));
                 c.AddProfile<ActivityMappings>();
-                c.AddProfile<TransferMappings>();
                 c.AddProfile<OrganisationMappings>();
                 c.AddProfile<AgreementMappings>();
                 c.AddProfile<VacancyMappings>();
-                c.AddProfile<CohortMapping>();                
+                c.AddProfile<CohortMapping>();
             });
 
             config.AssertConfigurationIsValid();

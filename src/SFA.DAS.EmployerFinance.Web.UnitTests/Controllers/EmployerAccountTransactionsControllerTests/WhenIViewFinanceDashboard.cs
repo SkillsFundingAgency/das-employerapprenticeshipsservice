@@ -15,23 +15,25 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.EmployerAccountTrans
 {
     public class WhenIViewFinanceDashboard
     {
+        private const long ExpectedAccountId = 23175;
         private const string ExpectedHashedAccountId = "ABC123";
         private const decimal ExpectedCurrentFunds = 123.45M;
-        
+
         private EmployerAccountTransactionsController _controller;
         private Mock<EmployerAccountTransactionsOrchestrator> _orchestrator;
         private GetAccountFinanceOverviewQuery _query;
-        
+
         [SetUp]
         public void Arrange()
         {
             _query = new GetAccountFinanceOverviewQuery
             {
+                AccountId = ExpectedAccountId,
                 AccountHashedId = ExpectedHashedAccountId
             };
 
             _orchestrator = new Mock<EmployerAccountTransactionsOrchestrator>();
-            _orchestrator.Setup(o => o.Index(It.IsAny<GetAccountFinanceOverviewQuery>()))
+            _orchestrator.Setup(o => o.Index(It.Is<GetAccountFinanceOverviewQuery>(q => q.AccountId == ExpectedAccountId && q.AccountHashedId == ExpectedHashedAccountId)))
                 .ReturnsAsync(new OrchestratorResponse<FinanceDashboardViewModel>
                 {
                     Data = new FinanceDashboardViewModel

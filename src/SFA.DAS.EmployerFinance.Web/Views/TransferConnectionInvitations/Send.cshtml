@@ -1,0 +1,64 @@
+﻿@using SFA.DAS.Validation.Mvc
+@model SFA.DAS.EmployerFinance.Web.ViewModels.SendTransferConnectionInvitationViewModel
+
+@{
+    ViewBag.Title = "Send transfer connection request";
+    ViewBag.Section = "finance";
+    ViewBag.PageID = "page-transfer-connection-requests-send";
+    ViewBag.GaData.Vpv = "/accounts/transfers/connections/requests/send";
+}
+
+@Html.Partial("_ValidationSummary", ViewData.ModelState)
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Confirm details</h1>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.ReceiverAccountPublicHashedId)
+            <div class="form-group">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th scope="row" class="no-wrap">Sending employer</th>
+                            <td>@Model.SenderAccount.Name</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="no-wrap">Receiving employer</th>
+                            <td>@Model.ReceiverAccount.Name</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="no-wrap">Receiving account ID</th>
+                            <td>@Model.ReceiverAccountPublicHashedId</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-group @(Html.IsValid(m => m.Choice) ? "" : "error")">
+                <fieldset>
+                    <legend>
+                        <span class="form-label-bold">Do you want to connect with this receiving employer?</span>
+                        @Html.ValidationMessageFor(m => m.Choice)
+                    </legend>
+                    <label class="block-label selection-button-radio">
+                        @Html.RadioButtonFor(m => m.Choice, "Confirm")
+                        Yes, I want to send a request to connect
+                    </label>
+                    <label class="block-label selection-button-radio">
+                        @Html.RadioButtonFor(m => m.Choice, "ReEnterAccountId")
+                        No, I want to re-enter the account ID
+                    </label>
+                </fieldset>
+            </div>
+            <button class="button" type="submit">Continue</button>
+        }
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs" id="js-breadcrumbs">
+        <ol role="navigation">
+            <li><a class="link-back" href="@Url.Action("Start", "TransferConnectionInvitations")">Back</a></li>
+        </ol>
+    </div>
+}

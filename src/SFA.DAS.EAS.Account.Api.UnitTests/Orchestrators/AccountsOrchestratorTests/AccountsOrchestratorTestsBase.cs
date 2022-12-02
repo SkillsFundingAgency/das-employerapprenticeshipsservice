@@ -1,11 +1,7 @@
-﻿using AutoMapper;
-using Castle.Core.Internal;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using AutoMapper;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTests
 {
@@ -16,7 +12,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
             var profiles = Assembly.Load("SFA.DAS.EAS.Account.Api")
                 .GetTypes()
                 .Where(t => typeof(Profile).IsAssignableFrom(t))
-                .Select(t => (Profile)Activator.CreateInstance(t));
+                .Select(t => (Profile)Activator.CreateInstance(t))
+                .ToList();
 
             var config = new MapperConfiguration(c =>
             {

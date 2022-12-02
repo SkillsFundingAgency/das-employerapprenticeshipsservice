@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using MediatR;
 using SFA.DAS.Authorization.Context;
 using SFA.DAS.Authorization.EmployerFeatures.Context;
 using SFA.DAS.Authorization.EmployerFeatures.Models;
@@ -7,10 +10,7 @@ using SFA.DAS.Authorization.Handlers;
 using SFA.DAS.Authorization.Options;
 using SFA.DAS.Authorization.Results;
 using SFA.DAS.EmployerAccounts.Authorisation;
-using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementsByAccountId;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using SFA.DAS.EmployerAccounts.Queries.GetMinimumSignedAgreementVersion;
 
 namespace SFA.DAS.EmployerAccounts.AuthorisationExtensions
 {
@@ -42,11 +42,9 @@ namespace SFA.DAS.EmployerAccounts.AuthorisationExtensions
                 if (featureToggle.EnabledByAgreementVersion.GetValueOrDefault(0) > 0)
                 {
                     var (accountId, _) = authorizationContext.GetEmployerFeatureValues();
+                    var response = await _mediator.SendAsync(new GetMinimumSignedAgreementVersionQuery { AccountId = accountId.GetValueOrDefault(0) }).ConfigureAwait(false);
 
-                    var agreements = await _mediator.SendAsync(new GetEmployerAgreementsByAccountIdRequest { AccountId = accountId.GetValueOrDefault(0) }).ConfigureAwait(false);
-                    var minAgreementVersion = agreements.EmployerAgreements.Select(ea => ea.AccountLegalEntity.SignedAgreementVersion.GetValueOrDefault(0)).Min();
-
-                    if (minAgreementVersion < featureToggle.EnabledByAgreementVersion)
+                    if (response.MinimumSignedAgreementVersion < featureToggle.EnabledByAgreementVersion)
                     {
                         authorizationResult.AddError(new EmployerFeatureAgreementNotSigned());
                     }

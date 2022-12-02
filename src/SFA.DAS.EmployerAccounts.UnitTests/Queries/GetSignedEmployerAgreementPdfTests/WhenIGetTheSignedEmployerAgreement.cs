@@ -29,6 +29,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSignedEmployerAgreementP
         private const string ExpectedLegalEntityName = "Test Entity";
         private const string ExpectedLegalEntityAddress = "Test Address";
         private readonly DateTime _expectedSignedDate = new DateTime(2016, 01, 01);
+        private EmployerAgreementView _employerAgreementView;
 
         [SetUp]
         public void Arrange()
@@ -44,16 +45,19 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSignedEmployerAgreementP
             _hashingService.Setup(x => x.DecodeValue(ExpectedHashedLegalAgreementId)).Returns(ExpectedLegalAgreementId);
 
             _employerAgreementRepository = new Mock<IEmployerAgreementRepository>();
+
+            _employerAgreementView = new EmployerAgreementView
+            {
+                Status = EmployerAgreementStatus.Signed,
+                TemplatePartialViewName = ExpectedLegalAgreementTemplateName,
+                SignedByName = ExpectedSignedByName,
+                SignedDate = _expectedSignedDate,
+                LegalEntityName = ExpectedLegalEntityName,
+                LegalEntityAddress = ExpectedLegalEntityAddress
+            };
+
             _employerAgreementRepository.Setup(x => x.GetEmployerAgreement(ExpectedLegalAgreementId))
-                .ReturnsAsync(new EmployerAgreementView
-                {
-                    Status = EmployerAgreementStatus.Signed,
-                    TemplatePartialViewName = ExpectedLegalAgreementTemplateName,
-                    SignedByName = ExpectedSignedByName,
-                    SignedDate = _expectedSignedDate,
-                    LegalEntityName = ExpectedLegalEntityName,
-                    LegalEntityAddress = ExpectedLegalEntityAddress
-                });
+                .ReturnsAsync(_employerAgreementView);
 
             Query = new GetSignedEmployerAgreementPdfRequest
             {
@@ -126,23 +130,43 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSignedEmployerAgreementP
         }
 
         [TestCase(EmployerAgreementStatus.Pending)]
-        [TestCase(EmployerAgreementStatus.Expired)]
-        [TestCase(EmployerAgreementStatus.Superseded)]
+        [TestCase(EmployerAgreementStatus.Removed)]
         public void ThenIfTheAgreementIsNotSignedThenAnErrorIsReturned(EmployerAgreementStatus status)
         {
             //Arrange
-            _employerAgreementRepository.Setup(x => x.GetEmployerAgreement(ExpectedLegalAgreementId))
-                .ReturnsAsync(new EmployerAgreementView { Status = status });
+            _employerAgreementView.Status = status;
 
             //Act Assert
             Assert.ThrowsAsync<InvalidRequestException>(async () => await RequestHandler.Handle(Query));
+        }
 
-            
+        [Test]
+        public void ThenIfAgreementSignedDateIsNotSet_ErrorReturned()
+        {
+            // Arrange
+            _employerAgreementView.SignedDate = null;
+
+            //Act Assert
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await RequestHandler.Handle(Query));
         }
 
         [Test]
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
+            //Act
+            var actual = await RequestHandler.Handle(Query);
+
+            //Assert
+            Assert.IsNotNull(actual.FileStream);
+        }
+
+        [TestCase(EmployerAgreementStatus.Superseded)]
+        [TestCase(EmployerAgreementStatus.Expired)]
+        public async Task ThenIfAgreementIsValidStatus_TheValueIsReturnedInTheResponse(EmployerAgreementStatus status)
+        {
+            // Arrange
+            _employerAgreementView.Status = status;
+
             //Act
             var actual = await RequestHandler.Handle(Query);
 

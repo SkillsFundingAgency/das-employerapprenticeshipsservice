@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
         private Mock<IEmployerAccountTeamRepository> _mockEmployerAccountTeamRepository;
         private TeamMember _teamMember;
         private ClaimsIdentity _claimsIdentity;
-        public virtual ICollection<TeamMember> TeamMembers { get; set; }
+        public virtual List<TeamMember> TeamMembers { get; set; }
         private EmployerAccountsConfiguration _configuration;
         private Mock<IAuthenticationService> _mockAuthenticationService;
         private readonly string SupportConsoleUsers = "Tier1User,Tier2User";

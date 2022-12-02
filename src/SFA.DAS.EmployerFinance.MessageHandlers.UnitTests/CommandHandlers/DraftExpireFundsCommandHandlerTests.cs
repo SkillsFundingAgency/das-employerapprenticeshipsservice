@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             currentDateTime.Setup(x => x.Now).Returns(expectedRunDate);
             command.DateTo = expectedDate;
             var accounts = new List<Models.Account.Account> {accountOne, accountTwo};
-            repository.Setup(x => x.GetAllAccounts()).ReturnsAsync(accounts);
+            repository.Setup(x => x.GetAll()).ReturnsAsync(accounts);
 
             await handler.Handle(command, context.Object);
 

@@ -17,7 +17,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountPaye
         private Mock<EmployerAccountPayeOrchestrator> _employerAccountPayeOrchestrator;
         private Mock<IAuthenticationService> _owinWrapper;
         private EmployerAccountPayeController _controller;
-        private Mock<IMediator> _mediator;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
         private const string ExpectedAccountId = "AFD123";
@@ -32,14 +31,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountPaye
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-            _mediator = new Mock<IMediator>();
 
             _controller = new EmployerAccountPayeController(
                 _owinWrapper.Object, 
                 _employerAccountPayeOrchestrator.Object, 
                 _userViewTestingService.Object, 
-                _flashMessage.Object,
-                _mediator.Object);
+                _flashMessage.Object);
         }
 
         [Test]

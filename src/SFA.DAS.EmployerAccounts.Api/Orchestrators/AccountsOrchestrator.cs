@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,6 +12,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountDetail;
 using SFA.DAS.EmployerAccounts.Queries.GetPagedEmployerAccounts;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamMembers;
+using SFA.DAS.EmployerAccounts.Queries.GetTeamMembersWhichReceiveNotifications;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
@@ -102,6 +102,20 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
             return await GetAccountTeamMembers(hashedAccountId);
         }
 
+        public async Task<List<TeamMember>> GetAccountTeamMembersWhichReceiveNotifications(string hashedAccountId)
+        {
+            _logger.Info($"Requesting team members which receive notifications for account {hashedAccountId}");
+
+            var teamMembers = await _mediator.SendAsync(new GetTeamMembersWhichReceiveNotificationsQuery { HashedAccountId = hashedAccountId });
+            return teamMembers.TeamMembersWhichReceiveNotifications.Select(x => _mapper.Map<TeamMember>(x)).ToList();
+        }
+
+        public async Task<List<TeamMember>> GetAccountTeamMembersWhichReceiveNotifications(long accountId)
+        {
+            var hashedAccountId = _hashingService.HashValue(accountId);
+            return await GetAccountTeamMembersWhichReceiveNotifications(hashedAccountId);
+        }
+        
         public async Task<IEnumerable<PayeView>> GetPayeSchemesForAccount(string hashedAccountId)
         {
             try

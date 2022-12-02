@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
 
             var authorizationContextProvider = For<IAuthorizationContextProvider>().Use<AuthorizationContextProvider>();
             For<IAuthorizationContextProvider>().Use<ImpersonationAuthorizationContext>()
-           .Ctor<IAuthorizationContextProvider>().Is(authorizationContextProvider);
+                .Ctor<IAuthorizationContextProvider>().Is(authorizationContextProvider);
             For<IDefaultAuthorizationHandler>().Use<Authorization.DefaultAuthorizationHandler>();
 
             For<EmployerTeamOrchestrator>().DecorateAllWith<EmployerTeamOrchestratorWithCallToAction>();
