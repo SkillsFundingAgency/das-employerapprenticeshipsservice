@@ -11,6 +11,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.DependencyResolution
             {
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<EmployerFinanceOuterApiRegistry>();
+                c.AddRegistry<HashingRegistry>();
                 c.AddRegistry<DataRegistry>();
                 c.AddRegistry<DateTimeRegistry>();
                 c.AddRegistry<LoggerRegistry>();
