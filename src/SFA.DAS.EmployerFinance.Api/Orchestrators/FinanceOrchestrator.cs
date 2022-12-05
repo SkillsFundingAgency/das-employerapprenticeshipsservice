@@ -1,4 +1,7 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using SFA.DAS.EmployerFinance.Api.Types;
 using SFA.DAS.EmployerFinance.Queries.GetAccountBalances;
@@ -9,9 +12,6 @@ using SFA.DAS.EmployerFinance.Queries.GetLevyDeclarationsByAccountAndPeriod;
 using SFA.DAS.EmployerFinance.Queries.GetTransferAllowance;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Api.Orchestrators
 {
@@ -114,28 +114,32 @@ namespace SFA.DAS.EmployerFinance.Api.Orchestrators
                 }                
             }
             
-            var transactionResult = await _mediator.SendAsync(new GetAccountBalancesRequest
+            var response = await _mediator.SendAsync(new GetAccountBalancesRequest
             {
                 AccountIds = decodedAccountIds
             });
-            var mapTransactionResult = transactionResult?.Accounts.Select(x => _mapper.Map<AccountBalance>(x)).ToList();
-            _logger.Info($"Received response - GetAccountBalances for the accounts { transactionResult?.Accounts.Count()}");
+
+            var result = response?.Accounts.Select(x => _mapper.Map<AccountBalance>(x)).ToList();
             
-            return mapTransactionResult;
+            _logger.Info($"Received response - GetAccountBalances for the accounts { response?.Accounts.Count()}");
+            
+            return result;
         }
 
-        public async Task<GetTransferAllowanceResponse> GetTransferAllowance(string hashedAccountId)
+        public async Task<TransferAllowance> GetTransferAllowance(string hashedAccountId)
         {
             _logger.Info($"Requesting GetTransferAllowance for the hashedAccountId {hashedAccountId} ");
 
-            var transferAllowance = await _mediator.SendAsync(new GetTransferAllowanceQuery
+            var response = await _mediator.SendAsync(new GetTransferAllowanceQuery
             {
                 AccountId = _hashingService.DecodeValue(hashedAccountId)
             });
 
+            var result = _mapper.Map<TransferAllowance>(response.TransferAllowance);
+
             _logger.Info($"Received response - GetTransferAllowance for the hashedAccountId {hashedAccountId} ");
 
-            return transferAllowance;
+            return result;
         }
     }
 }

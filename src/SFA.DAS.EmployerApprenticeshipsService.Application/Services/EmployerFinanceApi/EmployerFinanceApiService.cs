@@ -112,7 +112,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
             _log.Info($"Getting EmployerFinanceApiService : GetAccountBalances");
 
             var url = $"api/accounts/balances";
-            var data = JsonConvert.SerializeObject(accountIds);           
+            var data = JsonConvert.SerializeObject(accountIds);
             var stringContent = new StringContent(data, Encoding.UTF8, "application/json");
 
             _log.Info($"Getting EmployerFinanceApiService : GetAccountBalances url : {url}");
@@ -143,7 +143,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
                 throw new RestHttpClientException(response, content);
 
             return JsonConvert.DeserializeObject<TransferAllowance>(content);
-        }       
+        }
     
         public async Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default(CancellationToken))
         {

@@ -88,15 +88,6 @@
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandValidator.cs" />
     <Compile Include="Mappings\TransferConnectionInvitationMappings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsQueryHandler.cs" />
-    <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsRequest.cs" />
-    <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsResponse.cs" />
-    <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsValidator.cs" />
-    <Compile Include="Queries\AccountTransactions\GetPreviousTransactionsCount\GetPreviousTransactionsCountRequest.cs" />
-    <Compile Include="Queries\AccountTransactions\GetPreviousTransactionsCount\GetPreviousTransactionsCountRequestHandler.cs" />
-    <Compile Include="Queries\AccountTransactions\GetPreviousTransactionsCount\GetPreviousTransactionsCountRequestValidator.cs" />
-    <Compile Include="Queries\AccountTransactions\GetPreviousTransactionsCount\GetPreviousTransactionsCountResponse.cs" />
-    <Compile Include="Services\DasLevyService.cs" />
     <Compile Include="Services\EmployerFinanceApi\EmployerFinanceApiService.cs" />
     <Compile Include="Services\EmployerFinanceApi\Http\EmployerFinanceApiHttpClientFactory.cs" />
     <Compile Include="Services\EmployerFinanceApi\Http\IEmployerFinanceApiHttpClientFactory.cs" />
@@ -105,10 +96,6 @@
     <Compile Include="Services\EmployerAccountsApi\Http\EmployerAccountsApiHttpClientFactory.cs" />
     <Compile Include="Services\EmployerAccountsApi\Http\IEmployerAccountsApiHttpClientFactory.cs" />
     <Compile Include="Services\EmployerAccountsApi\IEmployerAccountsApiService.cs" />
-    <Compile Include="Services\EmployerFinanceApi\EmployerFinanceApiService.cs" />
-    <Compile Include="Services\EmployerFinanceApi\Http\EmployerFinanceApiHttpClientFactory.cs" />
-    <Compile Include="Services\EmployerFinanceApi\Http\IEmployerFinanceApiHttpClientFactory.cs" />
-    <Compile Include="Services\EmployerFinanceApi\IEmployerFinanceApiService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj">
