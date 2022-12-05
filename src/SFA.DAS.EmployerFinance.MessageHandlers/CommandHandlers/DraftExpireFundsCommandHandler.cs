@@ -4,6 +4,7 @@ using NServiceBus;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Messages.Commands;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
 {
@@ -11,11 +12,13 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
     {
         private readonly ICurrentDateTime _currentDateTime;
         private readonly IEmployerAccountRepository _accountRepository;
+        private readonly ILog _logger;
 
-        public DraftExpireFundsCommandHandler(ICurrentDateTime currentDateTime, IEmployerAccountRepository accountRepository)
+        public DraftExpireFundsCommandHandler(ICurrentDateTime currentDateTime, IEmployerAccountRepository accountRepository, ILog logger)
         {
             _currentDateTime = currentDateTime;
             _accountRepository = accountRepository;
+            _logger = logger;
         }
         public async Task Handle(DraftExpireFundsCommand message, IMessageHandlerContext context)
         {
@@ -24,6 +27,8 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
             
             var messageTasks = new List<Task>();
             var sendCounter = 0;
+
+            _logger.Info($"Queueing {nameof(ExpireAccountFundsCommand)} messages for {accounts.Count} accounts.");
 
             foreach (var account in accounts)
             {
@@ -36,6 +41,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
                 if (sendCounter % 1000 == 0)
                 {
                     await Task.WhenAll(messageTasks);
+                    _logger.Info($"Queued {sendCounter} of {accounts.Count} messages.");
                     messageTasks.Clear();
                     await Task.Delay(500);
                 }
@@ -43,6 +49,9 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
 
             // await final tasks not % 1000
             await Task.WhenAll(messageTasks);
+
+            _logger.Info($"{nameof(DraftExpireFundsCommandHandler)} completed.");
+
         }
     }
 }
