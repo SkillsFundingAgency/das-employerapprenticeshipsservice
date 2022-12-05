@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.Data;
@@ -21,19 +21,28 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
         {
             var now = _currentDateTime.Now;
             var accounts = await _accountRepository.GetAll();
-            var commands = accounts.Select(a => new DraftExpireAccountFundsCommand { AccountId = a.Id, DateTo = message.DateTo});
+            
+            var messageTasks = new List<Task>();
+            var sendCounter = 0;
 
-            var tasks = commands.Select(c =>
+            foreach (var account in accounts)
             {
                 var sendOptions = new SendOptions();
-
-                sendOptions.RequireImmediateDispatch();
                 sendOptions.RouteToThisEndpoint();
 
-                return context.Send(c, sendOptions);
-            });
+                messageTasks.Add(context.Send(new DraftExpireAccountFundsCommand { AccountId = account.Id, DateTo = message.DateTo }, sendOptions));
+                sendCounter++;
 
-            await Task.WhenAll(tasks);
+                if (sendCounter % 1000 == 0)
+                {
+                    await Task.WhenAll(messageTasks);
+                    messageTasks.Clear();
+                    await Task.Delay(500);
+                }
+            }
+
+            // await final tasks not % 1000
+            await Task.WhenAll(messageTasks);
         }
     }
 }
