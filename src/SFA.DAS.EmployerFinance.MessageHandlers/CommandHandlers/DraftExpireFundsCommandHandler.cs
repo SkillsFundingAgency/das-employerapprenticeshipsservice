@@ -37,7 +37,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
                 {
                     var sendOptions = new SendOptions();
                     sendOptions.RouteToThisEndpoint();
-                    sendOptions.RequiredImmediateDispatch();
+                    sendOptions.RequireImmediateDispatch();
 
                     messageTasks.Add(context.Send(new DraftExpireAccountFundsCommand { AccountId = account.Id, DateTo = message.DateTo }, sendOptions));
                     sendCounter++;
