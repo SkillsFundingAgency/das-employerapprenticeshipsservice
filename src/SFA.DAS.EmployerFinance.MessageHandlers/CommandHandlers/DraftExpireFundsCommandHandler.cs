@@ -53,12 +53,14 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
 
                 // await final tasks not % 1000
                 await Task.WhenAll(messageTasks).ConfigureAwait(false);
+                _logger.Info($"Queued {sendCounter} of {accounts.Count} messages.");
 
                 _logger.Info($"{nameof(DraftExpireFundsCommandHandler)} completed.");
             }
             catch(Exception ex)
             {
                 _logger.Error(ex, $"{nameof(DraftExpireFundsCommandHandler)} failed");
+                throw;
             }
         }
     }
