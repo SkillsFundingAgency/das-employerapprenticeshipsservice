@@ -2,7 +2,6 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Domain.Models.Account;
 using System.Collections.Generic;
 using System.Threading;
@@ -31,16 +30,14 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             };
 
             _employerAccountsApiService.Setup(s => s.GetAccounts(null, 1000, 1, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(accountsResponse); 
+                .ReturnsAsync(accountsResponse);
 
-            var response = new GetAccountBalancesResponse
-            {
-                Accounts = new List<AccountBalance>
+            var response = new List<AccountBalance>
                 {
                     new AccountBalance { AccountId = 123, Balance =10000 },
                     new AccountBalance { AccountId = 987, Balance =10000 },
-                }
-            };
+                };
+           
 
             _employerFinanceApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>())).ReturnsAsync(response);
 

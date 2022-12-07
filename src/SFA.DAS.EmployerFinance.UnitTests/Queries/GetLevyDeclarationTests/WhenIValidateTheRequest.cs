@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetLevyDeclaration;
+﻿using NUnit.Framework;
+using SFA.DAS.EmployerFinance.Queries.GetLevyDeclaration;
+using System.Collections.Generic;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLevyDeclarationTests
+namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetLevyDeclarationTests
 {
     public class WhenIValidateTheRequest
     {
@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLevyDeclarationTests
         public void ThenTrueIsReturnedWhenAllFieldsArePopulated()
         {
             //Act
-            var actual = _validator.Validate(new GetLevyDeclarationRequest {HashedAccountId = "12587"});
+            var actual = _validator.Validate(new GetLevyDeclarationRequest { HashedAccountId = "12587" });
 
             //Assert
             Assert.IsTrue(actual.IsValid());
@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLevyDeclarationTests
 
             //Assert
             Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string,string>("HashedAccountId", "HashedAccountId has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("HashedAccountId", "HashedAccountId has not been supplied"), actual.ValidationDictionary);
         }
     }
 }
