@@ -6,7 +6,6 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Application.Queries.GetLevyDeclaration;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTests
 {
@@ -19,7 +18,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
             //Arrange
             var hashedAccountId = "ABC123";
             var fixture = new Fixture();
-            var apiResponse = new List<LevyDeclarationViewModel>()  { fixture.Create<LevyDeclarationViewModel>(),  fixture.Create<LevyDeclarationViewModel>()  };
+            var apiResponse = new List<LevyDeclarationViewModel>() { fixture.Create<LevyDeclarationViewModel>(), fixture.Create<LevyDeclarationViewModel>() };
             apiResponse[0].HashedAccountId = hashedAccountId;
             apiResponse[1].HashedAccountId = hashedAccountId;
             FinanceApiService.Setup(x => x.GetLevyDeclarations(hashedAccountId)).ReturnsAsync(apiResponse);
@@ -33,7 +32,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
             var model = response as OkNegotiatedContentResult<AccountResourceList<LevyDeclarationViewModel>>;
 
             model?.Content.Should().NotBeNull();
-            Assert.IsTrue(model?.Content.TrueForAll(x => x.HashedAccountId == hashedAccountId));            
+            Assert.IsTrue(model?.Content.TrueForAll(x => x.HashedAccountId == hashedAccountId));
             model?.Content.ShouldAllBeEquivalentTo(apiResponse, options => options.Excluding(x => x.HashedAccountId).Excluding(x => x.PayeSchemeReference));
         }
 
@@ -41,7 +40,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
         public async Task AndTheAccountDoesNotExistThenItIsNotReturned()
         {
             //Arrange
-            var hashedAccountId = "ABC123";                        
+            var hashedAccountId = "ABC123";          
 
             //Act
             var response = await Controller.Index(hashedAccountId);

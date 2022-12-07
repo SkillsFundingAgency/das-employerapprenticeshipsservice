@@ -1,14 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Web.Http.Routing;
+﻿using System.Web.Http.Routing;
 using AutoMapper;
-using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Controllers;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
-using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.HashingService;
 using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
@@ -17,7 +13,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
 {
     public abstract class EmployerAccountsControllerTests
     {
-        protected EmployerAccountsController _controller;        
+        protected EmployerAccountsController _controller;
         protected Mock<ILog> Logger;
         protected Mock<UrlHelper> _urlHelper;
         protected Mock<IMapper> _mapper;
@@ -27,8 +23,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
 
         [SetUp]
         public void Arrange()
-        {   
-            Logger = new Mock<ILog>();
+        {
+             Logger = new Mock<ILog>();
             _mapper = new Mock<IMapper>();
             _hashingService = new Mock<IHashingService>();
             _employerAccountsApiService = new Mock<IEmployerAccountsApiService>();
