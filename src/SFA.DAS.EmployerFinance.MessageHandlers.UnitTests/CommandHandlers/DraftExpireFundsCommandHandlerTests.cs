@@ -40,14 +40,13 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
                     x.Send(
                         It.Is<DraftExpireAccountFundsCommand>(c =>
                             c.AccountId.Equals(accountOne.Id) && c.DateTo.Equals(command.DateTo)),
-                        It.Is<SendOptions>(o => o.RequiredImmediateDispatch() && o.IsRoutingToThisEndpoint())),
+                        It.Is<SendOptions>(o => o.IsRoutingToThisEndpoint())),
                 Times.Once());
             context.Verify(x =>
                     x.Send(
                         It.Is<DraftExpireAccountFundsCommand>(c =>
                             c.AccountId.Equals(accountTwo.Id) && c.DateTo.Equals(command.DateTo)),
-                        It.Is<SendOptions>(o => o.RequiredImmediateDispatch()
-                                                && o.IsRoutingToThisEndpoint())),
+                        It.Is<SendOptions>(o => o.IsRoutingToThisEndpoint())),
                 Times.Once());
         }
     }
