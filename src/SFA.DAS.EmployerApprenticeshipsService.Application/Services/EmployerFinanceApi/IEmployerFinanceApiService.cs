@@ -2,8 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
-using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
+using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Domain.Models.Transfers;
 
 namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
 {
@@ -19,10 +19,10 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
 
         Task<TotalPaymentsModel> GetStatistics(CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<GetAccountBalancesResponse> GetAccountBalances(List<string> accountIds);
+        Task<List<AccountBalance>> GetAccountBalances(List<string> accountIds);
+   
+        Task<TransferAllowance> GetTransferAllowance(string hashedAccountId);
 
-        Task<GetTransferAllowanceResponse> GetTransferAllowance(string hashedAccountId);
-    
         Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

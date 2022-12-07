@@ -12,7 +12,6 @@ using SFA.DAS.NLog.Logger;
 using System.Threading.Tasks;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
@@ -32,7 +31,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
 
         [SetUp]
         public void Arrange()
-        {   
+        {
             _mapper = new Mock<IMapper>();
             _log = new Mock<ILog>();
             _hashingService = new Mock<IHashingService>();
@@ -51,10 +50,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
                 });
 
             _financeApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>()))
-                 .ReturnsAsync(new GetAccountBalancesResponse
-                 {
-                     Accounts = new List<AccountBalance> { _expectedAccountBalance }
-                 });
+                 .ReturnsAsync( new List<AccountBalance> { _expectedAccountBalance });
 
         }
 

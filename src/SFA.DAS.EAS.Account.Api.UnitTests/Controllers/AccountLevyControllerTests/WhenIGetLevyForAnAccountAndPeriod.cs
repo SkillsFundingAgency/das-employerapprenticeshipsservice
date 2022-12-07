@@ -6,8 +6,6 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Application.Queries.GetLevyDeclarationsByAccountAndPeriod;
-using SFA.DAS.EAS.TestCommon.ObjectMothers;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTests
 {
@@ -44,8 +42,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
         public async Task AndTheAccountDoesNotExistThenItIsNotReturned()
         {
             //Arrange
-            var hashedAccountId = "ABC123";            
-
+            var hashedAccountId = "ABC123";
+            
             //Act
             var response = await Controller.GetLevy(hashedAccountId, "2017-18", 6);
 

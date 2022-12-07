@@ -188,6 +188,7 @@
     <Reference Include="SFA.DAS.Authorization.WebApi">
       <HintPath>..\..\..\..\..\Users\paul\.nuget\packages\sfa.das.authorization.webapi\6.0.52\lib\net462\SFA.DAS.Authorization.WebApi.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <PropertyGroup>

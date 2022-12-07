@@ -26,6 +26,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
         [SetUp]
         public void Arrange()
         {   
+
             Logger = new Mock<ILog>();
             HashingService = new Mock<IHashingService>();
             ApiService = new Mock<IEmployerAccountsApiService>();
