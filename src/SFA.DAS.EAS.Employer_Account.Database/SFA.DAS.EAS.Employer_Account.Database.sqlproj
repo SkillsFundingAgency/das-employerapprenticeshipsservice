@@ -168,6 +168,7 @@
     <None Include="Scripts\Manual\AML-3655_GenerateFinanceDataInserts.sql" />
     <None Include="Scripts\PostDeployment\UpdateAgreementTemplateV3.sql" />
     <None Include="Scripts\Manual\CON-3921-DataFixForTermAndConditionsAcceptedOn.sql" />
+    <None Include="Scripts\PostDeployment\MAC-95_Remove_transfer_connections.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Invitation.sql" />

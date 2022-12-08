@@ -1,16 +1,16 @@
-﻿using SFA.DAS.NLog.Logger;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using SFA.DAS.EAS.Application.Services.EmployerFinanceApi.Http;
-using System.Net.Http;
-using SFA.DAS.EAS.Application.Http;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
-using SFA.DAS.EAS.Account.Api.Types;
-using System.Text;
-using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
 using System.Web.Helpers;
+using Newtonsoft.Json;
+using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EAS.Application.Http;
+using SFA.DAS.EAS.Application.Services.EmployerFinanceApi.Http;
+using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Domain.Models.Transfers;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
 {
@@ -107,12 +107,12 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
             return JsonConvert.DeserializeObject<TotalPaymentsModel>(content);
         }     
 
-        public async Task<GetAccountBalancesResponse> GetAccountBalances(List<string> accountIds)
+        public async Task<List<AccountBalance>> GetAccountBalances(List<string> accountIds)
         {
             _log.Info($"Getting EmployerFinanceApiService : GetAccountBalances");
 
             var url = $"api/accounts/balances";
-            var data = JsonConvert.SerializeObject(accountIds);           
+            var data = JsonConvert.SerializeObject(accountIds);
             var stringContent = new StringContent(data, Encoding.UTF8, "application/json");
 
             _log.Info($"Getting EmployerFinanceApiService : GetAccountBalances url : {url}");
@@ -125,10 +125,10 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
             if (!response.IsSuccessStatusCode)
                 throw new RestHttpClientException(response, content);
 
-            return JsonConvert.DeserializeObject<GetAccountBalancesResponse>(content);
+            return JsonConvert.DeserializeObject<List<AccountBalance>>(content);
         }
 
-        public async Task<GetTransferAllowanceResponse> GetTransferAllowance(string hashedAccountId)
+        public async Task<TransferAllowance> GetTransferAllowance(string hashedAccountId)
         {
             _log.Info($"Getting EmployerFinanceApiService : GetTransferAllowance {hashedAccountId}");
 
@@ -142,8 +142,8 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
             if (!response.IsSuccessStatusCode)
                 throw new RestHttpClientException(response, content);
 
-            return JsonConvert.DeserializeObject<GetTransferAllowanceResponse>(content);
-        }       
+            return JsonConvert.DeserializeObject<TransferAllowance>(content);
+        }
     
         public async Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default(CancellationToken))
         {
