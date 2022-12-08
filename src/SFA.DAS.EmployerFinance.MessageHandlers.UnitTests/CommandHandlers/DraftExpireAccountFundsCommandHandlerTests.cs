@@ -131,6 +131,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
         {
             //Arrange
             currentDateTime.Setup(x => x.Now).Returns(DateTime.Now);
+            expiredFundsRepository.Setup(x => x.Get(message.AccountId)).ReturnsAsync(new List<ExpiredFund>());
             expiredFundsRepository.Setup(x => x.GetDraft(message.AccountId)).ReturnsAsync(new List<ExpiredFund>());
             configuration.Setup(x => x.FundsExpiryPeriod).Returns(expiredFundsPeriod);
             message.DateTo = DateTime.Now.AddMonths(-1);
