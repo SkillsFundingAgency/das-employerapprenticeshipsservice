@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NServiceBus;
@@ -45,13 +44,15 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
         {
             _logger.Info($"DRAFT: Expiring funds for account ID '{message.AccountId}' with expiry period '{_configuration.FundsExpiryPeriod}'");
 
-           
-
             var now = message.DateTo.HasValue ? new DateTime(message.DateTo.Value.Year, message.DateTo.Value.Month, 28) : _currentDateTime.Now;
             var fundsIn = await _levyFundsInRepository.GetLevyFundsIn(message.AccountId);
             var fundsOut = (await _paymentFundsOutRepository.GetPaymentFundsOut(message.AccountId)).ToList();
             var existingExpiredFunds = await _expiredFundsRepository.Get(message.AccountId);
-            existingExpiredFunds = existingExpiredFunds.Any() ? existingExpiredFunds : await _expiredFundsRepository.GetDraft(message.AccountId);
+
+            if (!existingExpiredFunds.Any())
+            {
+                existingExpiredFunds = await _expiredFundsRepository.GetDraft(message.AccountId);
+            }
 
             if(message.DateTo != null && fundsOut.Count>0)
             {
@@ -71,6 +72,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
             {
                 message.DateTo = DateTime.UtcNow;
             }
+
             var currentCalendarPeriod = new CalendarPeriod(message.DateTo.Value.Year, message.DateTo.Value.Month);
             if(!expiredFunds.ContainsKey(currentCalendarPeriod))
             {
