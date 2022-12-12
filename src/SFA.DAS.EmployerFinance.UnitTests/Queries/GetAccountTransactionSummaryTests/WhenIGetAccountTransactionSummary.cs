@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionSummary;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models.Transaction;
+using SFA.DAS.EmployerFinance.Api.Types;
+using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.EmployerFinance.Queries.GetAccountTransactionSummary;
 using SFA.DAS.HashingService;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionSummaryTests
+namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountTransactionSummaryTests
 {
     public class WhenIGetAccountTransactionSummary
     {
@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionSummary
         private Mock<IHashingService> _hashingService;
         private GetAccountTransactionSummaryRequest _query;
         private GetAccountTransactionSummaryQueryHandler _requestHandler;
-        
+
         [SetUp]
         public void Arrange()
         {

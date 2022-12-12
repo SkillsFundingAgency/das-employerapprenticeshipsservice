@@ -1,9 +1,7 @@
 ﻿using System;
 using SFA.DAS.EmployerFinance.MarkerInterfaces;
 using SFA.DAS.HashingService;
-using SFA.DAS.NServiceBus;
 using SFA.DAS.UnitOfWork.Context;
-using StructureMap.Attributes;
 
 namespace SFA.DAS.EmployerFinance.Models
 {
@@ -12,7 +10,7 @@ namespace SFA.DAS.EmployerFinance.Models
         protected IHashingService _hashingService;
         protected IPublicHashingService _publicHashingService;
 
-        protected void Publish<T>(Action<T> action) where T : Event, new()
+        protected void Publish<T>(Action<T> action) where T : new()
         {
             UnitOfWorkContext.AddEvent<object>(() =>
             {
