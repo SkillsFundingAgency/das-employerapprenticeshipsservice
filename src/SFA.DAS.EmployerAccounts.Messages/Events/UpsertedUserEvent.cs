@@ -1,11 +1,13 @@
-﻿using SFA.DAS.NServiceBus;
+﻿
+using System;
 
 namespace SFA.DAS.EmployerAccounts.Messages.Events
 {
-    public class UpsertedUserEvent : Event
+    public class UpsertedUserEvent 
     {
         public string UserRef { get; set; }
 
         public string CorrelationId { get; set; }
+        public DateTime Created { get; set; }
     }
 }

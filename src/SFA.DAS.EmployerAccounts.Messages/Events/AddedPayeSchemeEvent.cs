@@ -1,9 +1,8 @@
 ﻿using System;
-using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EmployerAccounts.Messages.Events
 {
-    public class AddedPayeSchemeEvent : Event
+    public class AddedPayeSchemeEvent
     {
         public long AccountId { get; set; }
         public string UserName { get; set; }
@@ -12,5 +11,6 @@ namespace SFA.DAS.EmployerAccounts.Messages.Events
         public string Aorn { get; set; }
         public string SchemeName { get; set; }
         public string CorrelationId { get; set; }
+        public DateTime Created { get; set; }
     }
 }

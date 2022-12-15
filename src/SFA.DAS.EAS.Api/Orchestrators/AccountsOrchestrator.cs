@@ -6,7 +6,6 @@ using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
@@ -44,8 +43,8 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
 
             _logger.Info("calling finance api service to GetAccountBalances");
             var transactionResult = await _employerFinanceApiService.GetAccountBalances(accountsResult.Data.Select(account => account.AccountHashId).ToList());
-            var accountBalanceHash = BuildAccountBalanceHash(transactionResult.Accounts);
-            _logger.Info($"received response from finance api service to GetAccountBalances {transactionResult.Accounts.Count()} ");
+            var accountBalanceHash = BuildAccountBalanceHash(transactionResult);
+            _logger.Info($"received response from finance api service to GetAccountBalances {transactionResult.Count()} ");
 
             accountsResult.Data.ForEach(account =>
             {
@@ -127,13 +126,13 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
 
             await Task.WhenAll(accountBalanceTask, transferBalanceTask).ConfigureAwait(false);            
 
-            accountResult.Balance = accountBalanceTask.Result?.Accounts.FirstOrDefault().Balance ?? 0;
-            accountResult.RemainingTransferAllowance = transferBalanceTask.Result.TransferAllowance.RemainingTransferAllowance ?? 0;
-            accountResult.StartingTransferAllowance = transferBalanceTask.Result.TransferAllowance.StartingTransferAllowance ?? 0;
+            accountResult.Balance = accountBalanceTask.Result?.FirstOrDefault().Balance ?? 0;
+            accountResult.RemainingTransferAllowance = transferBalanceTask.Result.RemainingTransferAllowance ?? 0;
+            accountResult.StartingTransferAllowance = transferBalanceTask.Result.StartingTransferAllowance ?? 0;
             accountResult.IsAllowedPaymentOnService = IsAccountAllowedPaymentOnService(
                 accountResult.AccountAgreementType,
                 (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), accountResult.ApprenticeshipEmployerType), 
-                accountBalanceTask.Result.Accounts.FirstOrDefault().LevyOverride);
+                accountBalanceTask.Result.FirstOrDefault().LevyOverride);
 
             return new OrchestratorResponse<AccountDetailViewModel> { Data = accountResult };
         }
@@ -153,7 +152,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             return new OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>
             {
                 Data = new AccountResourceList<LevyDeclarationViewModel>(levyDeclarations),
-                Status = HttpStatusCode.OK
+                Status = System.Net.HttpStatusCode.OK
             };
         }
 
@@ -175,7 +174,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             return new OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>
             {
                 Data = new AccountResourceList<LevyDeclarationViewModel>(levyViewModels),
-                Status = HttpStatusCode.OK
+                Status = System.Net.HttpStatusCode.OK
             };
         }
     }
