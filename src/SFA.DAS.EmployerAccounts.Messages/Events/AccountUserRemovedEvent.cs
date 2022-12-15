@@ -1,12 +1,13 @@
 ﻿using System;
-using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EmployerAccounts.Messages.Events
 {
-    public class AccountUserRemovedEvent : Event
+    public class AccountUserRemovedEvent
     {
         public long AccountId { get; }
         public Guid UserRef { get; }
+
+        public DateTime Created { get; set; }
 
         public AccountUserRemovedEvent(long accountId, Guid userRef, DateTime created)
         {

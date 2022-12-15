@@ -5,14 +5,11 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
-using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
 using SFA.DAS.EAS.Domain.Models.Account;
@@ -24,7 +21,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
 {
     internal class WhenIGetAnAccount
     {
-        private AccountsOrchestrator _orchestrator;        
+        private AccountsOrchestrator _orchestrator;
         private Mock<ILog> _log;
         private Mock<IHashingService> _hashingService;
         private Mock<IEmployerAccountsApiService> _apiService;
@@ -55,21 +52,14 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
             _apiService
                 .Setup(x => x.GetAccount("ABC123", It.IsAny<CancellationToken>()))
                 .ReturnsAsync(_accountDetailViewModel)
-                .Verifiable("Get account was not called"); 
+                .Verifiable("Get account was not called");
 
-            var transferAllowanceResponse = new GetTransferAllowanceResponse
-            {
-                TransferAllowance = _transferAllowance
-            };
-            _financeApiService.Setup(x => x.GetTransferAllowance(It.IsAny<string>())).ReturnsAsync(transferAllowanceResponse);
+            var transferAllowance = _transferAllowance;            
+            _financeApiService.Setup(x => x.GetTransferAllowance(It.IsAny<string>())).ReturnsAsync(transferAllowance);
 
             _accountBalanceResult = new AccountBalance { Balance = AccountBalance };
-           
-            var accountBalancesResponse = new GetAccountBalancesResponse
-            {
-                Accounts = new List<AccountBalance> { _accountBalanceResult }
-            };
-            _financeApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>())).ReturnsAsync(accountBalancesResponse);
+            var accountBalances = new List<AccountBalance> { _accountBalanceResult };
+            _financeApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>())).ReturnsAsync(accountBalances);
         }
 
         [Test]

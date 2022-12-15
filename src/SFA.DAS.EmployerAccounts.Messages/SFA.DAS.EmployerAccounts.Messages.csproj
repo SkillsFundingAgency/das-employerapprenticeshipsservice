@@ -20,7 +20,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
     <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.283" />
-    <PackageReference Include="SFA.DAS.NServiceBus" Version="15.0.25" />
   </ItemGroup>
 
   <ItemGroup>

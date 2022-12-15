@@ -2,8 +2,6 @@
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
-using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Transfers;
 using System.Collections.Generic;
@@ -37,16 +35,11 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             };
             _employerAccountsApiService.Setup(x => x.GetAccount(hashedAccountId, It.IsAny<CancellationToken>())).ReturnsAsync(account);
 
-            var accountBalancesResponse = new GetAccountBalancesResponse
-            {
-                Accounts = new List<AccountBalance> { new AccountBalance { AccountId =  account.AccountId, Balance = 123.45m } }
-            };
+
+            var accountBalancesResponse = new List<AccountBalance> { new AccountBalance { AccountId = account.AccountId, Balance = 123.45m } };
             _employerFinanceApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>())).ReturnsAsync(accountBalancesResponse);
 
-            var transferAllowanceResponse = new GetTransferAllowanceResponse
-            {
-                TransferAllowance = new TransferAllowance() { StartingTransferAllowance = 10, RemainingTransferAllowance = 15 }
-            };
+            var transferAllowanceResponse = new TransferAllowance() { StartingTransferAllowance = 10, RemainingTransferAllowance = 15 };            
             _employerFinanceApiService.Setup(x => x.GetTransferAllowance(It.IsAny<string>())).ReturnsAsync(transferAllowanceResponse);
 
             //Act
@@ -64,7 +57,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             model?.Content?.DasAccountName.Should().Be(account.DasAccountName);
             model?.Content?.DateRegistered.Should().Be(account.DateRegistered);
             model?.Content?.OwnerEmail.Should().Be(account.OwnerEmail);          
-            model?.Content?.Balance.Should().Be(accountBalancesResponse.Accounts.Single().Balance);
+            model?.Content?.Balance.Should().Be(accountBalancesResponse.Single().Balance);
         }
 
         [Test]
@@ -91,8 +84,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             
             _hashingService.Setup(x => x.HashValue(accountId)).Returns(hashedAccountId);
             _employerAccountsApiService.Setup(x => x.GetAccount(hashedAccountId, It.IsAny<CancellationToken>())).ReturnsAsync(new AccountDetailViewModel { AccountId = accountId, ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy.ToString(), LegalEntities = new ResourceList(new List<ResourceViewModel>()), PayeSchemes = new ResourceList(new List<ResourceViewModel>()) });
-            _employerFinanceApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>())).ReturnsAsync(new GetAccountBalancesResponse { Accounts = new List<AccountBalance> { new AccountBalance() } });
-            _employerFinanceApiService.Setup(x => x.GetTransferAllowance(It.IsAny<string>())).ReturnsAsync(new GetTransferAllowanceResponse { TransferAllowance = new TransferAllowance() });
+            _employerFinanceApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>())).ReturnsAsync( new List<AccountBalance> { new AccountBalance() });
+            _employerFinanceApiService.Setup(x => x.GetTransferAllowance(It.IsAny<string>())).ReturnsAsync( new TransferAllowance());
 
             //Act
             var response = await _controller.GetAccount(accountId);

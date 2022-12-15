@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetLevyDeclarationsByAccountAndPeriod;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.EmployerFinance.Models.Levy;
+using SFA.DAS.EmployerFinance.Queries.GetLevyDeclarationsByAccountAndPeriod;
 using SFA.DAS.HashingService;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLevyDeclarationsByAccountAndPeriodTests
+namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetLevyDeclarationsByAccountAndPeriodTests
 {
     public class WhenIGetLevyDeclarations
     {
@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLevyDeclarationsByAccount
             var accountId = 123;
             var query = new GetLevyDeclarationsByAccountAndPeriodRequest { HashedAccountId = "ABC123", PayrollMonth = 3, PayrollYear = "2017-18" };
             _hashingService.Setup(x => x.DecodeValue(query.HashedAccountId)).Returns(accountId);
-            var expectedDeclarations = new List<LevyDeclarationView>();
+            var expectedDeclarations = new List<LevyDeclarationItem>();
             _repository.Setup(x => x.GetAccountLevyDeclarations(accountId, query.PayrollYear, query.PayrollMonth)).ReturnsAsync(expectedDeclarations);
 
             var response = await _handler.Handle(query);

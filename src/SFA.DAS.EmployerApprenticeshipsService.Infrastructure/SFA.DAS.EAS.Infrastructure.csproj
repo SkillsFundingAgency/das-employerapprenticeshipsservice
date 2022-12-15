@@ -61,20 +61,16 @@
     <Compile Include="Attributes\DeprecatedAttribute.cs" />
     <Compile Include="Data\AccountIdUserTableParam.cs" />
     <Compile Include="Data\SqlAzureDbConfiguration.cs" />
-    <Compile Include="Data\EmployerFinanceDbContext.cs" />
     <Compile Include="Data\EmployerAccountsDbContext.cs" />
-    <Compile Include="Data\DasLevyRepository.cs" />
     <Compile Include="Data\FileSystemRepository.cs" />
     <Compile Include="Data\FileSystemUserRepository.cs" />
     <Compile Include="Data\MembershipRepository.cs" />
     <Compile Include="Data\UserRepository.cs" />
-    <Compile Include="Extensions\EmployerFinancialDbContextExtensions.cs" />
     <Compile Include="Extensions\SynchronizedStorageSessionExtensions.cs" />
     <Compile Include="Mapping\Profiles\ReferenceDataMappings.cs" />
     <Compile Include="Mapping\Profiles\TransactionMappings.cs" />
     <Compile Include="MarkerInterfaces\IAccountLegalEntityPublicHashingService.cs" />
     <Compile Include="Logging\LoggingConfig.cs" />
-    <Compile Include="Data\TransactionRepository.cs" />
     <Compile Include="NServiceBus\EndpointConfigurationExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
