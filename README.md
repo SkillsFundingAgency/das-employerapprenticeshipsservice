@@ -93,8 +93,8 @@ The configuration is loaded from azure table storage.
 * SFA.DAS.EmployerApprenticeshipsService._1.0
 * SFA.DAS.EmployerFinance_1.0
 * SFA.DAS.EmployerAccounts_1.0
-* SFA.DAS.EmployerApprenticeshipsService.FeaturesV2
-* SFA.DAS.EmployerApprenticeshipsService.MultiVariantTesting
+* SFA.DAS.EmployerApprenticeshipsService.FeaturesV2_1.0
+* SFA.DAS.EmployerApprenticeshipsService.MultiVariantTesting_1.0
 
 ##### Set up enivronment variables
 
