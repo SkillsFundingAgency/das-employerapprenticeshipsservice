@@ -1,8 +1,9 @@
 ﻿using System;
+using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EmployerFinance.Messages.Events
 {
-    public class RejectedTransferConnectionRequestEvent 
+    public class RejectedTransferConnectionRequestEvent : Event 
     {
         public string ReceiverAccountHashedId { get; set; }
         public long ReceiverAccountId { get; set; }
@@ -14,6 +15,5 @@ namespace SFA.DAS.EmployerFinance.Messages.Events
         public long SenderAccountId { get; set; }
         public string SenderAccountName { get; set; }
         public int TransferConnectionRequestId { get; set; }
-        public DateTime Created { get; set; }
     }
 }

@@ -1,8 +1,9 @@
 ﻿using System;
+using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EmployerFinance.Messages.Events
 {
-    public class DeletedTransferConnectionRequestEvent
+    public class DeletedTransferConnectionRequestEvent : Event
     {
         public long DeletedByAccountId { get; set; }
         public long DeletedByUserId { get; set; }
@@ -15,6 +16,5 @@ namespace SFA.DAS.EmployerFinance.Messages.Events
         public long SenderAccountId { get; set; }
         public string SenderAccountName { get; set; }
         public int TransferConnectionRequestId { get; set; }
-        public DateTime Created { get; set; }
     }
 }
