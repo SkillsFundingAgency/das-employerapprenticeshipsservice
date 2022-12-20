@@ -1,8 +1,9 @@
 ﻿using System;
+using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EmployerFinance.Messages.Events
 {
-    public class ApprovedTransferConnectionRequestEvent 
+    public class ApprovedTransferConnectionRequestEvent : Event
     {
         public long ApprovedByUserId { get; set; }
         public string ApprovedByUserName { get; set; }
