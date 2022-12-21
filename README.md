@@ -92,8 +92,9 @@ The configuration is loaded from azure table storage.
 - Create a table called Configuration and copy across these 4 rows from the employer config setup above changing the PartitionKey to "Development" from "LOCAL":
 * SFA.DAS.EmployerApprenticeshipsService._1.0
 * SFA.DAS.EmployerFinance_1.0
-* SFA.DAS.EmployerFinanceV2_1.0
 * SFA.DAS.EmployerAccounts_1.0
+* SFA.DAS.EmployerApprenticeshipsService.FeaturesV2_1.0
+* SFA.DAS.EmployerApprenticeshipsService.MultiVariantTesting_1.0
 
 ##### Set up enivronment variables
 
