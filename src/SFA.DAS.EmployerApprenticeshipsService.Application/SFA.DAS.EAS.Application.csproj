@@ -77,7 +77,6 @@
     <Compile Include="DependencyResolution\MediatorRegistry.cs" />
     <Compile Include="DependencyResolution\MessagePublisherRegistry.cs" />
     <Compile Include="DependencyResolution\NotificationsRegistry.cs" />
-    <Compile Include="DependencyResolution\PaymentsRegistry.cs" />
     <Compile Include="DependencyResolution\ReferenceDataRegistry.cs" />
     <Compile Include="DependencyResolution\RepositoriesRegistry.cs" />
     <Compile Include="DependencyResolution\ValidationRegistry.cs" />
@@ -223,9 +222,6 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.NServiceBus.SqlServer">
       <Version>15.0.25</Version>
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.Provider.Events.Api.Client">
-      <Version>2.1.97</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.ReferenceData.Api.Client">
       <Version>1.1.90</Version>

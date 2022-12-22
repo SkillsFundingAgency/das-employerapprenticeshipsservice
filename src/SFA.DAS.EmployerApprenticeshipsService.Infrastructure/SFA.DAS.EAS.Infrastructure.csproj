@@ -178,9 +178,6 @@
     <PackageReference Include="SFA.DAS.NServiceBus">
       <Version>15.0.25</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Provider.Events.Api.Client">
-      <Version>2.1.97</Version>
-    </PackageReference>
     <PackageReference Include="SFA.DAS.ReferenceData.Api.Client">
       <Version>1.1.90</Version>
     </PackageReference>
