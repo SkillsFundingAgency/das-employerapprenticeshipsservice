@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
         }
 
         [Route("accounts", Name = "Accounts")]
-        // [ApiAuthorize(Roles = "ReadUserAccounts")]
+        [ApiAuthorize(Roles = "ReadUserAccounts")]
         [HttpGet]
         public async Task<IHttpActionResult> GetUserAccounts(string userRef)
         {
