@@ -12,8 +12,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.GivenEmployerAccountsApi
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
-    public class WhenGetAccountUsersWithKnownIds
-     : GivenEmployerAccountsApi
+    public class WhenGetAccountUsersWithKnownIds : GivenEmployerAccountsApi
     {
         private Guid _userRef;
 

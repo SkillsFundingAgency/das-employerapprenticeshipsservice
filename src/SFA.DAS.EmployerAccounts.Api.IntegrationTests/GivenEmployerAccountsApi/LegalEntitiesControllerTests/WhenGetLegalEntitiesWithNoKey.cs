@@ -8,8 +8,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.GivenEmployerAccountsApi
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
-    public class WhenGetLegalEntitiesWithNoKey
-    :GivenEmployerAccountsApi
+    public class WhenGetLegalEntitiesWithNoKey : GivenEmployerAccountsApi
     {
         [SetUp]
         public void Setup()

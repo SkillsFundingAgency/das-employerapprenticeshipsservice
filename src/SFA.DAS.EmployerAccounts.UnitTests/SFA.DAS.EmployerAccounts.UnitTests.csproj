@@ -11,8 +11,8 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
     <PackageReference Include="Moq" Version="4.10.1" />
     <PackageReference Include="NLog" Version="4.6.8" />
-    <PackageReference Include="NUnit" Version="3.13.2" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
+    <PackageReference Include="NUnit" Version="3.13.3" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.3.1" />
     <PackageReference Include="SFA.DAS.Commitments.Events" Version="2.1.1073" />
     <PackageReference Include="SFA.DAS.Testing" Version="1.0.14" />
     <PackageReference Include="SFA.DAS.NServiceBus.Testing" Version="15.0.25" />

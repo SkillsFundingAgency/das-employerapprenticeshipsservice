@@ -3,8 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using FluentAssertions.Common;
-using NServiceBus;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess;
 using StructureMap;
@@ -30,12 +28,9 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.GivenEmployerAccountsApi
 
             _container = config.DependencyResolver.GetService(typeof(IContainer)) as IContainer;
 
-            _serviceBusEndpointManager
-                = 
-                new ServiceBusEndPointConfigureAndRun(_container);
+            _serviceBusEndpointManager = new ServiceBusEndPointConfigureAndRun(_container);
 
-            _serviceBusEndpointManager
-                .ConfigureAndStartServiceBusEndpoint();
+            _serviceBusEndpointManager.ConfigureAndStartServiceBusEndpoint();
 
             _server = new HttpServer(config);
         }
@@ -51,7 +46,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.GivenEmployerAccountsApi
         protected async Task InitialiseEmployerAccountData(Func<EmployerAccountsDbBuilder, Task> initialiseAction)
         {
             var builder = new EmployerAccountsDbBuilder(_container.GetNestedContainer());
-
+            
             builder.BeginTransaction();
             try
             {
@@ -68,8 +63,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.GivenEmployerAccountsApi
         [TearDown]
         public void Cleanup()
         {
-            _serviceBusEndpointManager?
-                .StopServiceBusEndpoint();
+            _serviceBusEndpointManager?.StopServiceBusEndpoint();
         }
     }
 }

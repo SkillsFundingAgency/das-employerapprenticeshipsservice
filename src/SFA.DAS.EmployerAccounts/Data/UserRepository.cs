@@ -124,6 +124,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             return _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_account].[UpsertUser] @userRef, @email, @firstName, @lastName, @correlationId",
                 param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);
         }
 
