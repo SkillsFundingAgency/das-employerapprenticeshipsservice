@@ -5,7 +5,7 @@
         public const string EmployerAccounts = "SFA.DAS.EmployerAccounts";
         public const string EmployerAccountsReadStore = "SFA.DAS.EmployerAccounts.ReadStore";
         public const string NotificationsApiClient = "SFA.DAS.EmployerAccounts.Notifications";
-        public const string Features = "SFA.DAS.EmployerApprenticeshipsService.FeaturesV2";
+        public const string Features = "SFA.DAS.EmployerAccounts.Features";
         public const string AuditApi = "SFA.DAS.AuditApiClient";
         public const string ReferenceDataApiClient = "SFA.DAS.ReferenceDataApiClient";
         public const string EncodingConfig = "SFA.DAS.Encoding";
