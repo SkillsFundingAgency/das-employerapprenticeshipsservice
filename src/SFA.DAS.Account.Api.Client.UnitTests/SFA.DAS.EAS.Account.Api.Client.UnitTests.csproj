@@ -46,20 +46,9 @@
   <ItemGroup>
     <Compile Include="AccountApiClientTests\ApiClientTestBase.cs" />
     <Compile Include="AccountApiClientTests\WhenGettingAccountDetailsByInternalId.cs" />
-    <Compile Include="AccountApiClientTests\WhenGettingAccountUsers.cs" />
-    <Compile Include="AccountApiClientTests\WhenGettingAccountUsersByInternalId.cs" />
     <Compile Include="AccountApiClientTests\WhenGettingAnEmployerAgreement.cs" />
-    <Compile Include="AccountApiClientTests\WhenGettingLegalEntityDetailsForAnAccount.cs" />
     <Compile Include="AccountApiClientTests\WhenPinging.cs" />
-    <Compile Include="AccountApiClientTests\WhenGettingTransactions.cs" />
-    <Compile Include="AccountApiClientTests\WhenGettingLevyDeclarations.cs" />
-    <Compile Include="AccountApiClientTests\WhenGettingAPayeScheme.cs" />
-    <Compile Include="AccountApiClientTests\WhenGettingALegalEntity.cs" />
     <Compile Include="AccountApiClientTests\WhenGettingAUsersAccounts.cs" />
-    <Compile Include="AccountApiClientTests\WhenGettingPayeSchemesForAnAccount.cs" />
-    <Compile Include="AccountApiClientTests\WhenGettingLegalEntitiesForAnAccount.cs" />
-    <Compile Include="AccountApiClientTests\WhenGettingAccountDetails.cs" />
-    <Compile Include="AccountApiClientTests\WhenGettingAPageOfAccounts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
