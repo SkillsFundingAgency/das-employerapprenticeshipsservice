@@ -8,7 +8,6 @@ namespace SFA.DAS.EAS.Account.Api.Types
         public long Id { get; set; }
         public long AccountId { get; set; }
         public string HashedAccountId { get; set; }
-        public EmployerAgreementStatus Status { get; set; }
         public string SignedByName { get; set; }
         public DateTime? SignedDate { get; set; }
         public DateTime? ExpiredDate { get; set; }
