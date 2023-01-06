@@ -847,14 +847,6 @@
     <Content Include="Views\Shared\_Agreement_v8.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
-      <Project>{0f0122d6-36f6-4d6c-856e-3daae1b13464}</Project>
-      <Name>SFA.DAS.EAS.Account.Api.Client</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj">
-      <Project>{8AFB0BBE-1E53-488C-A971-D236DF9EAA77}</Project>
-      <Name>SFA.DAS.EAS.Account.Api.Types</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj">
       <Project>{98714180-addf-4ff9-b928-3e9a557ca4d5}</Project>
       <Name>SFA.DAS.EmployerAccounts.Api.Client</Name>
