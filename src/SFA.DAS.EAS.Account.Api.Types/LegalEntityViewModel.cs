@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
 
 namespace SFA.DAS.EAS.Account.Api.Types
 {
     public class LegalEntityViewModel
     {
-        public List<AgreementViewModel> Agreements { get; set; }
         public string Code { get; set; }
         public string DasAccountId { get; set; }
         public DateTime? DateOfInception { get; set; }
