@@ -12,6 +12,7 @@ jobs:
   variables:
   - group: BUILD Management Resources
   steps:
+  - template: azure-pipelines-templates/build/step/gitversion.yml@das-platform-building-blocks
 
   - task: SonarCloudPrepare@1
     displayName: Prepare SonarCloud analysis configuration
