@@ -1,0 +1,161 @@
+parameters:
+  BuildConfiguration:
+
+jobs:
+- job: CodeBuild
+  pool:
+    name: 'DAS - Continuous Integration'
+    demands:
+      - Agent.OS -equals Windows_NT
+    workspace:
+      clean: all
+  variables:
+  - group: BUILD Management Resources
+  steps:
+
+  - task: SonarCloudPrepare@1
+    displayName: Prepare SonarCloud analysis configuration
+    condition: and(succeeded(), or(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/main'), eq(variables['Build.Reason'], 'PullRequest')))
+    inputs:
+      SonarCloud: ESFA - SonarCloud
+      organization: $(SonarCloudOrganisationKey)
+      scannerMode: MSBuild
+      projectName: "$(Build.DefinitionName)"
+      projectKey: SkillsFundingAgency_das-employer-accounts
+      extraProperties: |
+        sonar.cs.opencover.reportsPaths=$(Agent.TempDirectory)/CoverageResults/coverage.opencover.xml
+
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet restore all'
+    inputs:
+      command: restore
+      projects: "src/**/*.csproj"
+      noCache: true
+
+  - task: VSBuild@1
+    displayName: 'Build solution EAS'
+    inputs:
+      solution: 'src/SFA.DAS.EmployerAccounts.sln'
+      vsVersion: 16.0
+      platform: 'any cpu'
+      configuration: 'release'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet pack'
+    inputs:
+      command: pack
+      packagesToPack: 'src/SFA.DAS.Account.Api.Client/SFA.DAS.EAS.Account.Api.Client.csproj;src/SFA.DAS.EAS.Account.Api.Types/SFA.DAS.EAS.Account.Api.Types.csproj;src/SFA.DAS.EmployerAccounts.Api.Client/SFA.DAS.EmployerAccounts.Api.Client.csproj;src/SFA.DAS.EmployerAccounts.Api.Types/SFA.DAS.EmployerAccounts.Api.Types.csproj;src/SFA.DAS.EmployerAccounts.Events/SFA.DAS.EmployerAccounts.Events.csproj;src/SFA.DAS.EmployerAccounts.Messages/SFA.DAS.EmployerAccounts.Messages.csproj;src/SFA.DAS.EmployerAccounts.ReadStore/SFA.DAS.EmployerAccounts.ReadStore/SFA.DAS.EmployerAccounts.ReadStore.csproj;src/SFA.DAS.EmployerAccounts.Types/SFA.DAS.EmployerAccounts.Types.csproj'
+      packDirectory: '$(build.artifactstagingdirectory)/publish'
+      versioningScheme: byBuildNumber
+
+  - task: VSBuild@1
+    displayName: 'Publish SFA.DAS.EmployerAccounts.Api'
+    inputs:
+      solution: 'src/SFA.DAS.EmployerAccounts.Api/SFA.DAS.EmployerAccounts.Api.csproj'
+      vsVersion: 16.0
+      msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/SFA.DAS.EmployerAccounts.Api"'
+      platform: 'anycpu'
+      configuration: 'release'
+      clean: true
+
+  - task: ArchiveFiles@2
+    displayName: 'Archive SFA.DAS.Account.Api'
+    inputs:
+      includeRootFolder: false
+      rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EmployerAccounts.Api'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EmployerAccounts.Api.zip'
+
+  - task: VSBuild@1
+    displayName: 'Publish SFA.DAS.EmployerAccounts.Web'
+    inputs:
+      solution: 'src/SFA.DAS.EmployerAccounts.Web/SFA.DAS.EmployerAccounts.Web.csproj'
+      vsVersion: 16.0
+      msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/SFA.DAS.EmployerAccounts.Web"'
+      platform: 'anycpu'
+      configuration: 'release'
+      clean: true
+
+  - task: ArchiveFiles@2
+    displayName: 'Archive SFA.DAS.EmployerAccounts.Web'
+    inputs:
+      includeRootFolder: false
+      rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EmployerAccounts.Web'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EmployerAccounts.Web.zip'
+
+  - task: VSBuild@1
+    displayName: 'Publish SFA.DAS.EmployerAccounts.Host'
+    inputs:
+      solution: 'src/SFA.DAS.EmployerAccounts.Host/SFA.DAS.EmployerAccounts.Host.csproj'
+      vsVersion: 16.0
+      msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
+      platform: 'anycpu'
+      configuration: 'release'
+      clean: true
+
+  - task: VSBuild@1
+    displayName: 'Publish SFA.DAS.EmployerFinance.Api'
+    inputs:
+      solution: 'src/SFA.DAS.EmployerFinance.Api/SFA.DAS.EmployerFinance.Api.csproj'
+      vsVersion: 16.0
+      msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/SFA.DAS.EmployerFinance.Api"'
+      platform: 'anycpu'
+      configuration: 'release'
+      clean: true
+
+  - task: VSBuild@1
+    displayName: 'Publish SFA.DAS.EAS.Account.Api'
+    inputs:
+      solution: 'src/SFA.DAS.EAS.Api/SFA.DAS.EAS.Account.Api.csproj'
+      vsVersion: 16.0
+      msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/SFA.DAS.EAS.Account.Api"'
+      platform: 'anycpu'
+      configuration: 'release'
+      clean: true
+
+  - task: ArchiveFiles@2
+    displayName: 'Archive SFA.DAS.EAS.Account.Api'
+    inputs:
+      includeRootFolder: false
+      rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EAS.Account.Api'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EAS.Account.Api.zip'
+
+  - task: VSTest@2
+    displayName: 'VsTest - testAssemblies'
+    inputs:
+      testAssemblyVer2: '**/bin/**/*UnitTests.dll'
+      platform: 'any cpu'
+      configuration: 'release'
+
+  - task: SonarCloudAnalyze@1
+    displayName: 'Run SonarCloud analysis'
+    condition: and(succeeded(), or(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/main'), eq(variables['Build.Reason'], 'PullRequest')))
+
+  - task: SonarCloudPublish@1
+    displayName: 'Publish results on build summary'
+    condition: and(succeeded(), or(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/main'), eq(variables['Build.Reason'], 'PullRequest')))
+    inputs:
+      pollingTimeoutSec: '300'
+
+  - task: DotNetCoreCLI@2
+    displayName: Publish - dotnet publish ${{ parameters.SolutionBaseName }}
+    inputs:
+      command: publish
+      publishWebProjects: false #set to false as this setting (which defaults to true) will parse the entire repo for web projects
+      projects: src/${{ parameters.SolutionBaseName }}/${{ parameters.SolutionBaseName }}.csproj
+      arguments: -o $(build.artifactstagingdirectory)/publish -c ${{ parameters.BuildConfiguration }} --no-build
+      modifyOutputPath: true
+      zipAfterPublish: true
+
+  - task: CopyFiles@2
+    displayName: Copy Files to $(build.artifactstagingdirectory)/publish
+    inputs:
+      Contents: |
+        azure/**
+      TargetFolder: $(build.artifactstagingdirectory)/publish
+      OverWrite: true
+
+  - task: PublishPipelineArtifact@1
+    displayName: Publish Build Artifact
+    inputs:
+      targetPath: $(build.artifactstagingdirectory)/publish
+      artifactName: ${{ parameters.SolutionBaseName }}
