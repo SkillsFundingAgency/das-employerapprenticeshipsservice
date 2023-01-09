@@ -93,23 +93,6 @@ jobs:
       configuration: 'release'
       clean: true
 
-  - task: VSBuild@1
-    displayName: 'Publish SFA.DAS.EAS.Account.Api'
-    inputs:
-      solution: 'src/SFA.DAS.EAS.Api/SFA.DAS.EAS.Account.Api.csproj'
-      vsVersion: 16.0
-      msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/SFA.DAS.EAS.Account.Api"'
-      platform: 'anycpu'
-      configuration: 'release'
-      clean: true
-
-  - task: ArchiveFiles@2
-    displayName: 'Archive SFA.DAS.EAS.Account.Api'
-    inputs:
-      includeRootFolder: false
-      rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EAS.Account.Api'
-      archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EAS.Account.Api.zip'
-
   - task: VSTest@2
     displayName: 'VsTest - testAssemblies'
     inputs:
