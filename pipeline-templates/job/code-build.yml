@@ -94,16 +94,6 @@ jobs:
       clean: true
 
   - task: VSBuild@1
-    displayName: 'Publish SFA.DAS.EmployerFinance.Api'
-    inputs:
-      solution: 'src/SFA.DAS.EmployerFinance.Api/SFA.DAS.EmployerFinance.Api.csproj'
-      vsVersion: 16.0
-      msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/SFA.DAS.EmployerFinance.Api"'
-      platform: 'anycpu'
-      configuration: 'release'
-      clean: true
-
-  - task: VSBuild@1
     displayName: 'Publish SFA.DAS.EAS.Account.Api'
     inputs:
       solution: 'src/SFA.DAS.EAS.Api/SFA.DAS.EAS.Account.Api.csproj'
