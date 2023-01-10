@@ -8,7 +8,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
 {
     [ApiAuthorize(Roles = "ReadUserAccounts")]
     [RoutePrefix("api/user")]
-    public class UserController : ApiController
+    public class UserController : Microsoft.AspNetCore.Mvc.ControllerBase
     {
         private readonly IMediator _mediator;
 

@@ -8,7 +8,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
 {
     [ApiAuthorize(Roles = "ReadUserAccounts")]
     [RoutePrefix("api/statistics")]
-    public class StatisticsController : ApiController
+    public class StatisticsController : Microsoft.AspNetCore.Mvc.ControllerBase
     {
         private readonly IMediator _mediator;
 

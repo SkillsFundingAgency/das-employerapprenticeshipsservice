@@ -6,7 +6,7 @@ using SFA.DAS.EmployerAccounts.Api.Orchestrators;
 namespace SFA.DAS.EmployerAccounts.Api.Controllers
 {
     [RoutePrefix("api/accounts")]
-    public class EmployerAgreementController : ApiController
+    public class EmployerAgreementController : Microsoft.AspNetCore.Mvc.ControllerBase
     {
         private readonly AgreementOrchestrator _orchestrator;
         

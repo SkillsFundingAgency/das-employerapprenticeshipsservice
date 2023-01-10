@@ -6,7 +6,7 @@ using SFA.DAS.EmployerAccounts.Api.Orchestrators;
 namespace SFA.DAS.EmployerAccounts.Api.Controllers
 {
     [RoutePrefix("api/user/{userRef}")]
-    public class EmployerUserController : ApiController
+    public class EmployerUserController : Microsoft.AspNetCore.Mvc.ControllerBase
     {
         private readonly UsersOrchestrator _orchestrator;
 

@@ -9,7 +9,7 @@ using SFA.DAS.EmployerAccounts.Api.Types;
 namespace SFA.DAS.EmployerAccounts.Api.Controllers
 {
     [RoutePrefix("api/accounts/{hashedAccountId}/payeschemes")]
-    public class AccountPayeSchemesController : ApiController
+    public class AccountPayeSchemesController : Microsoft.AspNetCore.Mvc.ControllerBase
     {
         private readonly AccountsOrchestrator _orchestrator;
 

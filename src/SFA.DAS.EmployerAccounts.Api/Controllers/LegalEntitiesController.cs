@@ -14,7 +14,7 @@ using SFA.DAS.EmployerAccounts.Api.Mappings;
 namespace SFA.DAS.EmployerAccounts.Api.Controllers
 {
     [RoutePrefix("api/accounts/{hashedAccountId}/legalentities")]
-    public class LegalEntitiesController : ApiController
+    public class LegalEntitiesController : Microsoft.AspNetCore.Mvc.ControllerBase
     {
         private readonly IMediator _mediator;
 

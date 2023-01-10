@@ -8,7 +8,7 @@ using SFA.DAS.EmployerAccounts.Api.Types;
 namespace SFA.DAS.EmployerAccounts.Api.Controllers
 {
     [RoutePrefix("api/accounts")]
-    public class EmployerAccountsController : ApiController
+    public class EmployerAccountsController : Microsoft.AspNetCore.Mvc.ControllerBase
     {
         private readonly AccountsOrchestrator _orchestrator;
       
