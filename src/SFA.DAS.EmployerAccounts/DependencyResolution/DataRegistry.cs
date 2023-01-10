@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Data.Common;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Services.AppAuthentication;
 using NServiceBus.Persistence;
