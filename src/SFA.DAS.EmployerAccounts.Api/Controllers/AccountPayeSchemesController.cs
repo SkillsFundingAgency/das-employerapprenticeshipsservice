@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using SFA.DAS.EmployerAccounts.Api.Attributes;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
 using SFA.DAS.EmployerAccounts.Api.Types;
 
@@ -19,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         }
 
         [Route("{payeschemeref}", Name = "GetPayeScheme")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
+        [Authorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
         public async Task<IHttpActionResult> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
         {
@@ -34,7 +33,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         }
 
         [Route("", Name = "GetPayeSchemes")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
+        [Authorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
         public async Task<IHttpActionResult> GetPayeSchemes(string hashedAccountId)
         {

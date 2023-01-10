@@ -1,12 +1,11 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http;
 using MediatR;
-using SFA.DAS.EmployerAccounts.Api.Attributes;
 using SFA.DAS.EmployerAccounts.Queries.GetStatistics;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers
 {
-    [ApiAuthorize(Roles = "ReadUserAccounts")]
+    [Authorize(Roles = "ReadUserAccounts")]
     [RoutePrefix("api/statistics")]
     public class StatisticsController : Microsoft.AspNetCore.Mvc.ControllerBase
     {

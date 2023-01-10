@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         }
 
         [Route("{hashedAccountId}/legalEntities/{hashedlegalEntityId}/agreements/{agreementId}", Name = "AgreementById")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAgreements")]
+        [Authorize(Roles = "ReadAllEmployerAgreements")]
         [HttpGet]
         public async Task<IHttpActionResult> GetAgreement(string agreementId)
         {
@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         }
 
         [Route("internal/{accountId}/minimum-signed-agreement-version", Name = "GetMinimumSignedAgreemmentVersion")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAgreements")]
+        [Authorize(Roles = "ReadAllEmployerAgreements")]
         [HttpGet]
         public async Task<IHttpActionResult> GetMinimumSignedAgreemmentVersion(long accountId)
         {

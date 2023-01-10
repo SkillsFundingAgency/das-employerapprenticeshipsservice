@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http;
-using SFA.DAS.EmployerAccounts.Api.Attributes;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers
@@ -16,7 +15,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         }
 
         [Route("accounts", Name = "Accounts")]
-        [ApiAuthorize(Roles = "ReadUserAccounts")]
+        [Authorize(Roles = "ReadUserAccounts")]
         [HttpGet]
         public async Task<IHttpActionResult> GetUserAccounts(string userRef)
         {

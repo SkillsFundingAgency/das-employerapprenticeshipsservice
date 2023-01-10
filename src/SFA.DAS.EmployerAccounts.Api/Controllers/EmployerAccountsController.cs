@@ -1,5 +1,4 @@
-﻿using SFA.DAS.EmployerAccounts.Api.Attributes;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
@@ -18,7 +17,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         }
 
         [Route("", Name = "AccountsIndex")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
+        [Authorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
         public async Task<IHttpActionResult> GetAccounts(string toDate = null, int pageSize = 1000, int pageNumber = 1)
         {
@@ -29,7 +28,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         }
 
         [Route("{hashedAccountId}", Name = "GetAccount")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
+        [Authorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
         public async Task<IHttpActionResult> GetAccount(string hashedAccountId)
         {
@@ -43,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         }
 
         [Route("{hashedAccountId}/users", Name = "GetAccountUsers")]
-        [ApiAuthorize(Roles = "ReadAllAccountUsers")]
+        [Authorize(Roles = "ReadAllAccountUsers")]
         [HttpGet]
         public async Task<IHttpActionResult> GetAccountUsers(string hashedAccountId)
         {
@@ -52,7 +51,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         }
 
         [Route("internal/{accountId}/users", Name = "GetAccountUsersByInternalAccountId")]
-        [ApiAuthorize(Roles = "ReadAllAccountUsers")]
+        [Authorize(Roles = "ReadAllAccountUsers")]
         [HttpGet]
         public async Task<IHttpActionResult> GetAccountUsers(long accountId)
         {
@@ -61,7 +60,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         }
 
         [Route("internal/{accountId}/users/which-receive-notifications", Name = "GetAccountUsersByInteralIdWhichReceiveNotifications")]
-        [ApiAuthorize(Roles = "ReadAllAccountUsers")]
+        [Authorize(Roles = "ReadAllAccountUsers")]
         [HttpGet]
         public async Task<IHttpActionResult> GetAccountUsersWhichReceiveNotifications(long accountId)
         {

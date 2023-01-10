@@ -1,15 +1,15 @@
-﻿using MediatR;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Http;
+using MediatR;
 using SFA.DAS.EmployerAccounts.Api.Attributes;
+using SFA.DAS.EmployerAccounts.Api.Mappings;
 using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesByHashedAccountId;
 using SFA.DAS.EmployerAccounts.Queries.GetLegalEntity;
 using SFA.DAS.Validation;
 using SFA.DAS.Validation.WebApi;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web.Http;
-using SFA.DAS.EmployerAccounts.Api.Mappings;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers
 {
@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         }
 
         [Route("", Name = "GetLegalEntities")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
+        [Authorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
         public async Task<IHttpActionResult> GetLegalEntities(string hashedAccountId, bool includeDetails = false)
         {
@@ -71,7 +71,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         }
 
         [Route("{legalEntityId}", Name = "GetLegalEntity")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
+        [Authorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpNotFoundForNullModel]
         public async Task<IHttpActionResult> GetLegalEntity(
             string hashedAccountId,
