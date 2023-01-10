@@ -206,7 +206,7 @@ namespace SFA.DAS.EmployerAccounts.IntegrationTests.Data
 
         private EmployerAccountsDbContext CreateDbContext()
         {
-            return new EmployerAccountsDbContext(EmployerAccountsConfiguration.DatabaseConnectionString);
+            return new EmployerAccountsDbContext(EmployerAccountsConfiguration.SqlConnectionString);
         }
     }
 }

@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.Helpers
 
         public async Task<Statistics> GetStatistics()
         {
-            using (var connection = new SqlConnection(_configuration.DatabaseConnectionString))
+            using (var connection = new SqlConnection(_configuration.SqlConnectionString))
             {
                 return await connection.QuerySingleAsync<Statistics>(GetStatisticsSql);
             }
@@ -56,7 +56,7 @@ select (
         {
             var fixture = new Fixture();
 
-            var accountDbContext = new EmployerAccountsDbContext(_configuration.DatabaseConnectionString);
+            var accountDbContext = new EmployerAccountsDbContext(_configuration.SqlConnectionString);
             var lazyDb = new Lazy<EmployerAccountsDbContext>(() => accountDbContext);
             var userRepo = new UserRepository(_configuration, Mock.Of<ILog>(), lazyDb);
             var userToCreate = fixture

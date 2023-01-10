@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             EmployerAccountsConfiguration configuration, 
             ILog logger, Lazy<EmployerAccountsDbContext> db, 
             IAccountLegalEntityPublicHashingService accountLegalEntityHashingService)
-            : base(configuration.DatabaseConnectionString, logger)
+            : base(configuration.SqlConnectionString, logger)
         {
             _db = db;
             _accountLegalEntityHashingService = accountLegalEntityHashingService;       

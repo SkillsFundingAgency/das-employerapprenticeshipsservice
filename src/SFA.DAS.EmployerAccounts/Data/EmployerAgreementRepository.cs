@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerAccounts.Data
         private readonly Lazy<EmployerAccountsDbContext> _db;
 
         public EmployerAgreementRepository(EmployerAccountsConfiguration configuration, ILog logger, Lazy<EmployerAccountsDbContext> db) 
-            : base(configuration.DatabaseConnectionString, logger)
+            : base(configuration.SqlConnectionString, logger)
         {
             _db = db;
         }
