@@ -2,6 +2,7 @@
 global using System.Net;
 global using System.Threading.Tasks;
 global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.AspNetCore.Http;
 
 global using AutoMapper;
 global using MediatR;
