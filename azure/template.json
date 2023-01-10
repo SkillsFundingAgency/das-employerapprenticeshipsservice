@@ -131,9 +131,6 @@
             "type": "string",
             "defaultValue": "Standard"
         },
-        "cosmosDbName": {
-            "type": "string"
-        },
         "logAnalyticsSubscriptionId": {
             "type": "string",
             "defaultValue": "[subscription().subscriptionId]"
@@ -150,7 +147,8 @@
         "apiAppServiceName": "[concat(variables('resourceNamePrefix'), 'api-as')]",
         "workerAppServiceName": "[concat(variables('resourceNamePrefix'), 'wkr-as')]",
         "workerAppServicePlanName": "[concat(variables('resourceNamePrefix'), 'wkr-asp')]",
-        "resourceGroupName": "[concat(variables('resourceNamePrefix'), '-rg')]"
+        "resourceGroupName": "[concat(variables('resourceNamePrefix'), '-rg')]",
+        "cosmosDbName": "[concat(variables('resourceNamePrefix'), '-cdb')]"
     },
     "resources": [
         {
@@ -600,7 +598,7 @@
                 },
                 "parameters": {
                     "cosmosDbName": {
-                        "value": "[parameters('cosmosDbName')]"
+                        "value": "[variables('cosmosDbName')]"
                     },
                     "cosmosDbType": {
                         "value": "GlobalDocumentDB"
