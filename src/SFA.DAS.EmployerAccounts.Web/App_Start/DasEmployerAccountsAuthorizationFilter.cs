@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Net;
-using System.Security.Claims;
-using System.Web.Mvc;
-using System.Web.Routing;
+﻿using System.Linq;
 using SFA.DAS.Authorization.Mvc.Filters;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Configuration;
