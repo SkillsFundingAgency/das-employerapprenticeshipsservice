@@ -1,5 +1,6 @@
-﻿using SFA.DAS.NLog.Logger;
-using System.Web;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.Logging
 {
@@ -11,13 +12,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Logging
         public string UrlReferrer { get; set; }
         public string ServerMachineName { get; set; }
 
-        public LoggingContext(HttpContextBase context)
+        public LoggingContext(HttpContext context)
         {
-            HttpMethod = context?.Request.HttpMethod;
-            IsAuthenticated = context?.Request.IsAuthenticated;
-            Url = context?.Request.Url?.PathAndQuery;
-            UrlReferrer = context?.Request.UrlReferrer?.PathAndQuery;
-            ServerMachineName = context?.Server.MachineName;
+            HttpMethod = context?.Request.Method;
+            IsAuthenticated = context?.Request.HttpContext.User.Identity?.IsAuthenticated;
+            Url = context?.Request.GetEncodedPathAndQuery();
+            UrlReferrer = context?.Request.GetTypedHeaders().Referer?.PathAndQuery;
+            ServerMachineName = string.Empty; //context?.Server.MachineName; // TODO Fix this, although not sure if applicable.
         }
     }
 }

@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using SFA.DAS.Authorization.Context;
 using SFA.DAS.Authorization.Handlers;
 using SFA.DAS.EmployerAccounts.Interfaces;
@@ -22,8 +21,9 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
                 s.With(new ControllerConvention());
             });
 
-            For<ILoggingContext>().Use(c => HttpContextHelper.Current == null ? null : new LoggingContext(new HttpContextWrapper(HttpContextHelper.Current)));
-            For<HttpContext>().Use(() => new HttpContextWrapper(HttpContextHelper.Current));
+            //For<ILoggingContext>().Use(c => HttpContextHelper.Current == null ? null : new LoggingContext(HttpContext));
+            For<ILoggingContext>().Use<LoggingContext>();
+            //For<HttpContext>().Use(() => new HttpContextWrapper(HttpContextHelper.Current));
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
 
