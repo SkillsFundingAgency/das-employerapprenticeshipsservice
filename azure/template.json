@@ -131,6 +131,9 @@
             "type": "string",
             "defaultValue": "Standard"
         },
+        "cosmosDbName": {
+            "type": "string"
+        },
         "logAnalyticsSubscriptionId": {
             "type": "string",
             "defaultValue": "[subscription().subscriptionId]"
@@ -147,8 +150,7 @@
         "apiAppServiceName": "[concat(variables('resourceNamePrefix'), 'api-as')]",
         "workerAppServiceName": "[concat(variables('resourceNamePrefix'), 'wkr-as')]",
         "workerAppServicePlanName": "[concat(variables('resourceNamePrefix'), 'wkr-asp')]",
-        "resourceGroupName": "[concat(variables('resourceNamePrefix'), '-rg')]",
-        "cosmosDbName": "[concat(variables('resourceNamePrefix'), '-cdb')]"
+        "resourceGroupName": "[concat(variables('resourceNamePrefix'), '-rg')]"
     },
     "resources": [
         {
@@ -179,7 +181,10 @@
                         "value": "[variables('uiAppServiceName')]"
                     }
                 }
-            }
+            },
+            "dependsOn": [
+                "[variables('resourceGroupName')]"
+            ]
         },
         {
             "apiVersion": "2020-06-01",
@@ -226,6 +231,7 @@
                 }
             },
             "dependsOn": [
+                "[variables('resourceGroupName')]"
             ]
         },
         {
@@ -498,7 +504,10 @@
                         "value": "Standard"
                     }
                 }
-            }
+            },
+            "dependsOn": [
+                "[variables('resourceGroupName')]"
+            ]
         },
         {
             "apiVersion": "2020-06-01",
@@ -591,7 +600,7 @@
                 },
                 "parameters": {
                     "cosmosDbName": {
-                        "value": "[variables('cosmosDbName')]"
+                        "value": "[parameters('cosmosDbName')]"
                     },
                     "cosmosDbType": {
                         "value": "GlobalDocumentDB"
@@ -612,7 +621,10 @@
                         "value": "[parameters('sharedManagementResourceGroup')]"
                     }
                 }
-            }
+            },
+            "dependsOn": [
+                "[variables('resourceGroupName')]"
+            ]
         },
         {
             "apiVersion": "2020-06-01",
@@ -698,10 +710,6 @@
         "WorkerAppServiceName": {
             "type": "string",
             "value": "[variables('workerAppServiceName')]"
-        },
-        "CosmosDbName": {
-            "type": "string",
-            "value": "[variables('cosmosDbName')]"
         }
     }
 }
