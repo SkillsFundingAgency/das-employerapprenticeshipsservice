@@ -49,7 +49,7 @@
         "sharedStorageAccountConnectionString": {
             "type": "securestring"
         },
-        "tokenCertificateThumbprint": {
+        "employerUsersTokenSigningCertificateThumbprint": {
             "type": "string"
         },
         "uiCustomHostname": {
@@ -306,11 +306,11 @@
                                 },
                                 {
                                     "name": "WEBSITE_LOAD_CERTIFICATES",
-                                    "value": "[parameters('tokenCertificateThumbprint')]"
+                                    "value": "[parameters('employerUsersTokenSigningCertificateThumbprint')]"
                                 },
                                 {
                                     "name": "TokenCertificateThumbprint",
-                                    "value": "[parameters('tokenCertificateThumbprint')]"
+                                    "value": "[parameters('employerUsersTokenSigningCertificateThumbprint')]"
                                 }
                             ]
                         }
