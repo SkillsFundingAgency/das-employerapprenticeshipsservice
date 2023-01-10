@@ -78,7 +78,7 @@
         "sharedApimName": {
             "type": "string"
         },
-        "idaTenant": {
+        "tenant": {
             "type": "string"
         },
         "accountsApiIdentifierUri": {
@@ -401,7 +401,7 @@
                                 },
                                 {
                                     "name": "IdaTenant",
-                                    "value": "[parameters('idaTenant')]"
+                                    "value": "[parameters('tenant')]"
                                 },
                                 {
                                     "name": "AccountsApiIdentifierUri",
