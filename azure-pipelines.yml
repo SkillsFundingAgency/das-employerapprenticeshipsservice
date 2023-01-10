@@ -5,6 +5,8 @@ trigger:
       - "main"
 
 variables:
+- name: SolutionBaseName
+  value: SFA.DAS.EmployerAccounts
 - name: BuildConfiguration
   value: release
 - name: BuildPlatform
@@ -39,4 +41,19 @@ stages:
   - template: pipeline-templates/job/code-build.yml
     parameters:
       BuildConfiguration: $(BuildConfiguration)
+
+- stage: Deploy_AT
+  dependsOn: Build
+  displayName: Deploy to AT
+  condition: and(succeeded(), eq(variables.Deploy, 'true'))
+  variables:
+  - group: DevTest Management Resources
+  - group: AT DevTest Shared Resources
+  - group: AT das-employer-accounts
+  jobs:
+  - template: pipeline-templates/job/deploy.yml
+    parameters:
+      Environment: AT
+      SolutionBaseName: $(SolutionBaseName)
+      ServiceConnection: SFA-DAS-DevTest-ARM
 

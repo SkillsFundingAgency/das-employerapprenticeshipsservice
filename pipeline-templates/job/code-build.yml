@@ -115,8 +115,8 @@ jobs:
     inputs:
       Contents: |
         azure/**
+        src/**/bin/**/*.dacpac
       TargetFolder: $(build.artifactstagingdirectory)/publish
-      OverWrite: true
 
   - task: PublishPipelineArtifact@1
     displayName: Publish Build Artifact
