@@ -1,42 +1,37 @@
-﻿using SFA.DAS.CookieService;
+﻿using Microsoft.AspNetCore.Http;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerAccounts.Services
 {
     public class CookieStorageService<T> : ICookieStorageService<T>
     {
         private readonly ICookieService<T> _cookieService;
-        private readonly HttpContextBase _httpContextBase;
+        private readonly HttpContext _httpContext;
 
-        public CookieStorageService(ICookieService<T> cookieService, HttpContextBase httpContextBase)
+        public CookieStorageService(ICookieService<T> cookieService, HttpContext httpContext)
         {
             _cookieService = cookieService;
-            _httpContextBase = httpContextBase;
+            _httpContext = httpContext;
         }
 
         public void Create(T item, string cookieName, int expiryDays = 1)
         {
-            _cookieService.Create(_httpContextBase, cookieName, item, expiryDays);
+            _cookieService.Create(_httpContext, cookieName, item, expiryDays);
         }
 
         public T Get(string cookieName)
         {
-            return _cookieService.Get(_httpContextBase, cookieName);
+            return _cookieService.Get(_httpContext, cookieName);
         }
 
         public void Delete(string cookieName)
         {
-            _cookieService.Delete(_httpContextBase, cookieName);
+            _cookieService.Delete(_httpContext, cookieName);
         }
 
         public void Update(string cookieName, T item)
         {
-            _cookieService.Update(_httpContextBase, cookieName, item);
+            _cookieService.Update(_httpContext, cookieName, item);
         }
     }
 }

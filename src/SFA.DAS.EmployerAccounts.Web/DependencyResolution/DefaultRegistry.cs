@@ -1,15 +1,13 @@
-using SFA.DAS.CookieService;
+using Microsoft.AspNetCore.Http;
+using SFA.DAS.Authorization.Context;
+using SFA.DAS.Authorization.Handlers;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Services;
+using SFA.DAS.EmployerAccounts.Web.Authorization;
 using SFA.DAS.EmployerAccounts.Web.Logging;
+using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.NLog.Logger;
 using StructureMap;
-using System.Web;
-using SFA.DAS.Authorization.Context;
-using SFA.DAS.EmployerAccounts.Web.Authorization;
-using SFA.DAS.Authorization.Handlers;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web;
 
 namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
 {
@@ -25,7 +23,7 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
             });
 
             For<ILoggingContext>().Use(c => HttpContextHelper.Current == null ? null : new LoggingContext(new HttpContextWrapper(HttpContextHelper.Current)));
-            For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContextHelper.Current));
+            For<HttpContext>().Use(() => new HttpContextWrapper(HttpContextHelper.Current));
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
 

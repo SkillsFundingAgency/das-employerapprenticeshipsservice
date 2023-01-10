@@ -16,6 +16,7 @@
     <PackageReference Include="AutoMapper" Version="5.1.1" />
     <PackageReference Include="Dapper" Version="1.50.2" />
     <PackageReference Include="MediatR" Version="2.1.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.3.0" />
     <PackageReference Include="RestSharp" Version="106.12.0" />
     <PackageReference Include="SFA.DAS.Account.Api.Client" Version="1.6.3195" />
     <PackageReference Include="SFA.DAS.Audit.Client" Version="1.0.0.20553" />
@@ -39,7 +40,6 @@
     <PackageReference Include="SFA.DAS.TimeProvider" version="1.0.0.3956" />
     <PackageReference Include="SFA.DAS.Activities.Client" Version="1.2.71" />
     <PackageReference Include="SFA.DAS.Configuration.FileStorage" Version="1.0.0.49931" />
-    <PackageReference Include="SFA.DAS.CookieService" Version="1.0.3" />
     <PackageReference Include="SFA.DAS.Events.Api.Client" Version="1.20.0.26497" />
     <PackageReference Include="SFA.DAS.Messaging" Version="3.0.0.63765" />
     <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus" Version="3.0.0.53181" />
