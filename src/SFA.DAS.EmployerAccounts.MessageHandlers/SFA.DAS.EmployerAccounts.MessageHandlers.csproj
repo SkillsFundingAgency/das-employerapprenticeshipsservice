@@ -9,6 +9,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="4.17.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.1" />
+    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.3.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="3.1.66" />
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
