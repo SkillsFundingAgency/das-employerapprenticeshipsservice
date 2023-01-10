@@ -1,44 +1,36 @@
-﻿using System.Threading.Tasks;
-using System.Web.Mvc;
-using AutoMapper;
-using MediatR;
-using SFA.DAS.Authorization.Mvc.Attributes;
+﻿using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerAccounts.Commands.RunHealthCheckCommand;
 using SFA.DAS.EmployerAccounts.Queries.GetHealthCheck;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
-namespace SFA.DAS.EmployerAccounts.Web.Controllers
+namespace SFA.DAS.EmployerAccounts.Web.Controllers;
+
+[DasAuthorize]
+[Route("healthcheck")]
+public class HealthCheckController : Controller
 {
-    [DasAuthorize]
-    [RoutePrefix("healthcheck")]
-    public class HealthCheckController : Microsoft.AspNetCore.Mvc.Controller
+    private readonly IMediator _mediator;
+    private readonly IMapper _mapper;
+
+    public HealthCheckController(IMediator mediator, IMapper mapper)
     {
-        private readonly IMediator _mediator;
-        private readonly IMapper _mapper;
+        _mediator = mediator;
+        _mapper = mapper;
+    }
 
-        public HealthCheckController(IMediator mediator, IMapper mapper)
-        {
-            _mediator = mediator;
-            _mapper = mapper;
-        }
+    public async Task<IActionResult> Index(GetHealthCheckQuery query)
+    {
+        var response = await _mediator.SendAsync(query);
+        var model = _mapper.Map<HealthCheckViewModel>(response);
 
-        [Route]
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Index(GetHealthCheckQuery query)
-        {
-            var response = await _mediator.SendAsync(query);
-            var model = _mapper.Map<HealthCheckViewModel>(response);
+        return View(model);
+    }
 
-            return View(model);
-        }
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Index(RunHealthCheckCommand command)
+    {
+        await _mediator.SendAsync(command);
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route]
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Index(RunHealthCheckCommand command)
-        {
-            await _mediator.SendAsync(command);
-
-            return RedirectToAction("Index");
-        }
+        return RedirectToAction("Index");
     }
 }
