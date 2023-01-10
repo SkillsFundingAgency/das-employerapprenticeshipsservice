@@ -1,4 +1,6 @@
-﻿using SFA.DAS.EmployerAccounts.Events.PayeScheme;
+﻿using System.Net;
+
+using SFA.DAS.EmployerAccounts.Events.PayeScheme;
 
 namespace SFA.DAS.EmployerAccounts.Factories
 {
@@ -24,7 +26,7 @@ namespace SFA.DAS.EmployerAccounts.Factories
         {
             // This is deliberately double encoded to minic the response the accounts web 
             // api returns when encoding the URI to json as part of the GetAccounts method.
-            var schemeUrlString = HttpUtility.UrlEncode(HttpUtility.UrlEncode(payeSchemeRef));
+            var schemeUrlString = WebUtility.UrlEncode(WebUtility.UrlEncode(payeSchemeRef));
 
             var resourceUri = $"api/accounts/{hashedAccountId}/payeschemes/{schemeUrlString}";
 
