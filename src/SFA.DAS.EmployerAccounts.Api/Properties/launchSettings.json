@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "SFA.DAS.EmployerAccounts.Api": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:63168;http://localhost:63169"
+    }
+  }
+}
