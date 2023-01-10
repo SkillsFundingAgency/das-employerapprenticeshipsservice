@@ -46,7 +46,7 @@
         "loggingRedisKey": {
             "type": "string"
         },
-        "storageConnectionString": {
+        "sharedStorageAccountConnectionString": {
             "type": "securestring"
         },
         "tokenCertificateThumbprint": {
@@ -298,7 +298,7 @@
                                 },
                                 {
                                     "name": "StorageConnectionString",
-                                    "value": "[parameters('storageConnectionString')]"
+                                    "value": "[parameters('sharedStorageAccountConnectionString')]"
                                 },
                                 {
                                     "name": "InstrumentationKey",
@@ -545,7 +545,7 @@
                                 },
                                 {
                                     "name": "StorageConnectionString",
-                                    "value": "[parameters('storageConnectionString')]"
+                                    "value": "[parameters('sharedStorageAccountConnectionString')]"
                                 }
                             ]
                         }
@@ -555,12 +555,12 @@
                             "array": [
                                 {
                                     "name": "AzureWebJobsDashboard",
-                                    "connectionString": "[parameters('storageConnectionString')]",
+                                    "connectionString": "[parameters('sharedStorageAccountConnectionString')]",
                                     "type": "Custom"
                                 },
                                 {
                                     "name": "AzureWebJobsStorage",
-                                    "connectionString": "[parameters('storageConnectionString')]",
+                                    "connectionString": "[parameters('sharedStorageAccountConnectionString')]",
                                     "type": "Custom"
                                 }
                             ]
