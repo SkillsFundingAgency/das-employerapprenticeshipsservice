@@ -14,6 +14,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="5.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="MediatR" Version="2.1.0" />
     <PackageReference Include="microsoft.data.sqlclient" Version="5.0.1" />
