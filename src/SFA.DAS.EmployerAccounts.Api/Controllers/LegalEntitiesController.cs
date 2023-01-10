@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Http;
 using MediatR;
-using SFA.DAS.EmployerAccounts.Api.Attributes;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EmployerAccounts.Api.Mappings;
 using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesByHashedAccountId;
@@ -13,8 +13,8 @@ using SFA.DAS.Validation.WebApi;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers
 {
-    [RoutePrefix("api/accounts/{hashedAccountId}/legalentities")]
-    public class LegalEntitiesController : Microsoft.AspNetCore.Mvc.ControllerBase
+    [Route("api/accounts/{hashedAccountId}/legalentities")]
+    public class LegalEntitiesController : ControllerBase
     {
         private readonly IMediator _mediator;
 
@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         [Route("", Name = "GetLegalEntities")]
         [Authorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetLegalEntities(string hashedAccountId, bool includeDetails = false)
+        public async Task<IActionResult> GetLegalEntities(string hashedAccountId, bool includeDetails = false)
         {
             GetAccountLegalEntitiesByHashedAccountIdResponse result;
 
@@ -59,7 +59,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
                             new Resource
                             {
                                 Id = legalEntity.LegalEntityId.ToString(),
-                                Href = Url.Route("GetLegalEntity", new { hashedAccountId, legalEntityId = legalEntity.LegalEntityId })
+                                Href = Url.RouteUrl("GetLegalEntity", new { hashedAccountId, legalEntityId = legalEntity.LegalEntityId })
                             });
                 }
 
@@ -73,15 +73,12 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         [Route("{legalEntityId}", Name = "GetLegalEntity")]
         [Authorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpNotFoundForNullModel]
-        public async Task<IHttpActionResult> GetLegalEntity(
-            string hashedAccountId,
-            long legalEntityId,
-            bool includeAllAgreements = false)
+        public async Task<IActionResult> GetLegalEntity(string hashedAccountId, long legalEntityId, bool includeAllAgreements = false)
         {
             var response = await _mediator.SendAsync(request: new GetLegalEntityQuery(hashedAccountId, legalEntityId));
 
             var model = LegalEntityMapping.MapFromAccountLegalEntity(response.LegalEntity, response.LatestAgreement, includeAllAgreements);
-            
+
             return Ok(model);
         }
     }

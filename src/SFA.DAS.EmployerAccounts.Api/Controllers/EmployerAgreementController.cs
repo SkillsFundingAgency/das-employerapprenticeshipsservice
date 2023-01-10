@@ -1,12 +1,12 @@
 ﻿using System.Threading.Tasks;
-using System.Web.Http;
-using SFA.DAS.EmployerAccounts.Api.Attributes;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers
 {
-    [RoutePrefix("api/accounts")]
-    public class EmployerAgreementController : Microsoft.AspNetCore.Mvc.ControllerBase
+    [Route("api/accounts")]
+    public class EmployerAgreementController : ControllerBase
     {
         private readonly AgreementOrchestrator _orchestrator;
         
@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         [Route("{hashedAccountId}/legalEntities/{hashedlegalEntityId}/agreements/{agreementId}", Name = "AgreementById")]
         [Authorize(Roles = "ReadAllEmployerAgreements")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetAgreement(string agreementId)
+        public async Task<IActionResult> GetAgreement(string agreementId)
         {
             var response = await _orchestrator.GetAgreement(agreementId);
 
@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         [Route("internal/{accountId}/minimum-signed-agreement-version", Name = "GetMinimumSignedAgreemmentVersion")]
         [Authorize(Roles = "ReadAllEmployerAgreements")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetMinimumSignedAgreemmentVersion(long accountId)
+        public async Task<IActionResult> GetMinimumSignedAgreemmentVersion(long accountId)
         {
             var result = await _orchestrator.GetMinimumSignedAgreemmentVersion(accountId);
             return Ok(result);

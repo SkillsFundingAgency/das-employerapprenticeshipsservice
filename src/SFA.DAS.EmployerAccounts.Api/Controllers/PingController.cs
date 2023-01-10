@@ -1,12 +1,12 @@
-﻿using System.Web.Http;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers
 {
-    [RoutePrefix("ping")]
-    public class PingController : Microsoft.AspNetCore.Mvc.ControllerBase
+    [Route("ping")]
+    public class PingController : ControllerBase
     {
-        [Route]
-        public IHttpActionResult Get()
+        [HttpGet]
+        public IActionResult Get()
         {
             return Ok();
         }

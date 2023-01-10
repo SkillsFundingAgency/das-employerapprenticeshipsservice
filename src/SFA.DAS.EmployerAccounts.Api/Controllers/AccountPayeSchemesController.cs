@@ -1,14 +1,14 @@
 ﻿using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.Http;
+using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
 using SFA.DAS.EmployerAccounts.Api.Types;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers
 {
-    [RoutePrefix("api/accounts/{hashedAccountId}/payeschemes")]
-    public class AccountPayeSchemesController : Microsoft.AspNetCore.Mvc.ControllerBase
+    [Microsoft.AspNetCore.Components.Route("api/accounts/{hashedAccountId}/payeschemes")]
+    public class AccountPayeSchemesController : ControllerBase
     {
         private readonly AccountsOrchestrator _orchestrator;
 
@@ -18,11 +18,11 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         }
 
         [Route("{payeschemeref}", Name = "GetPayeScheme")]
-        [Authorize(Roles = "ReadAllEmployerAccountBalances")]
+        [Microsoft.AspNetCore.Authorization.Authorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
+        public async Task<IActionResult> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
         {
-            var result = await _orchestrator.GetPayeScheme(hashedAccountId, HttpUtility.UrlDecode(payeSchemeRef));
+            var result = await _orchestrator.GetPayeScheme(hashedAccountId, WebUtility.UrlDecode(payeSchemeRef));
 
             if (result == null)
             {
@@ -33,9 +33,9 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         }
 
         [Route("", Name = "GetPayeSchemes")]
-        [Authorize(Roles = "ReadAllEmployerAccountBalances")]
+        [Microsoft.AspNetCore.Authorization.Authorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetPayeSchemes(string hashedAccountId)
+        public async Task<IActionResult> GetPayeSchemes(string hashedAccountId)
         {
             var result = await _orchestrator.GetPayeSchemesForAccount(hashedAccountId);
 
@@ -52,12 +52,12 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
                             pv => new Resource
                             {
                                 Id = pv.Ref,
-                                Href = Url.Route(
+                                Href = Url.RouteUrl(
                                     "GetPayeScheme",
                                     new
                                     {
                                         hashedAccountId,
-                                        payeSchemeRef = HttpUtility.UrlEncode(pv.Ref)
+                                        payeSchemeRef = WebUtility.UrlEncode(pv.Ref)
                                     })
                             }))
             );

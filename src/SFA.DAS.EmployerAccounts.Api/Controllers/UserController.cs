@@ -1,12 +1,13 @@
 ﻿using System.Threading.Tasks;
-using System.Web.Http;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByEmail;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers
 {
     [Authorize(Roles = "ReadUserAccounts")]
-    [RoutePrefix("api/user")]
+    [Route("api/user")]
     public class UserController : Microsoft.AspNetCore.Mvc.ControllerBase
     {
         private readonly IMediator _mediator;
@@ -17,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         }
 
         [Route("")]
-        public async Task<IHttpActionResult> Get(string email)
+        public async Task<IActionResult> Get(string email)
         {
             var response = await _mediator.SendAsync(new GetUserByEmailQuery{Email = email});
 

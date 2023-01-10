@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks;
-using System.Web.Http;
 using MediatR;
-using SFA.DAS.EmployerAccounts.Api.Attributes;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities.Api;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers
 {
-    [ApiAuthorize(Roles = "ReadUserAccounts")]
-    [RoutePrefix("api/accountlegalentities")]
+    [Authorize(Roles = "ReadUserAccounts")]
+    [Route("api/accountlegalentities")]
     public class AccountLegalEntitiesController : Microsoft.AspNetCore.Mvc.ControllerBase
     {
         private readonly IMediator _mediator;
@@ -17,8 +17,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
             _mediator = mediator;
         }
 
-        [Route]
-        public async Task<IHttpActionResult> Get([FromUri] GetAccountLegalEntitiesQuery query)
+        public async Task<IActionResult> Get([FromQuery] GetAccountLegalEntitiesQuery query)
         {
             var response = await _mediator.SendAsync(query);
             return Ok(response.AccountLegalEntities);
