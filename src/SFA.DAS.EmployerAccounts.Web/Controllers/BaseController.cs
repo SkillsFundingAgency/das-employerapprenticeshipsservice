@@ -1,12 +1,11 @@
-﻿using SFA.DAS.Authentication;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Web.Helpers;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using System;
+﻿using System;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
-using System.Web.Mvc;
+using SFA.DAS.Authentication;
+using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Web.Helpers;
+using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers

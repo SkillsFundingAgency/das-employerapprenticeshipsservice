@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
-    public class AccessDeniedController : Microsoft.AspNetCore.Mvc.Controller
+    public class AccessDeniedController : Controller
     {
         public Microsoft.AspNetCore.Mvc.ActionResult Index()
         {

@@ -1,26 +1,26 @@
 ﻿using System;
-using SFA.DAS.Authentication;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Web.Helpers;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.NLog.Logger;
 using System.Net;
 using System.Threading.Tasks;
-using System.Web.Mvc;
 using MediatR;
-using Microsoft.Ajax.Utilities;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SFA.DAS.Authentication;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
+using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Models;
-using SFA.DAS.EmployerAccounts.Web;
+using SFA.DAS.EmployerAccounts.Web.Orchestrators;
+using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
-    [RoutePrefix("accounts")]
+    [Route("accounts")]
     [DasAuthorize]
     public class EmployerAccountController : BaseController
     {
@@ -28,13 +28,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private readonly ILog _logger;
         private readonly IMediator _mediatr;
         private ICookieStorageService<HashedAccountIdModel> _accountCookieStorage;
+        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly ICookieStorageService<ReturnUrlModel> _returnUrlCookieStorageService;
+        private readonly string _hashedAccountIdCookieName;
+
         private const int AddPayeLater = 1;
         private const int AddPayeNow = 2;
         private const int AddPayeNowAorn = 3;
-        private readonly ICookieStorageService<ReturnUrlModel> _returnUrlCookieStorageService;
-        private readonly string _hashedAccountIdCookieName;
         private const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
-
+        
         public EmployerAccountController(IAuthenticationService owinWrapper,
             EmployerAccountOrchestrator employerAccountOrchestrator,
             IMultiVariantTestingService multiVariantTestingService,
@@ -42,7 +44,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             IMediator mediatr,
             ICookieStorageService<ReturnUrlModel> returnUrlCookieStorageService,
-            ICookieStorageService<HashedAccountIdModel> accountCookieStorage)
+            ICookieStorageService<HashedAccountIdModel> accountCookieStorage,
+            IHttpContextAccessor contextAccessor)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerAccountOrchestrator = employerAccountOrchestrator;
@@ -50,21 +53,22 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr));
             _returnUrlCookieStorageService = returnUrlCookieStorageService;
             _accountCookieStorage = accountCookieStorage;
+            _contextAccessor = contextAccessor;
             _hashedAccountIdCookieName = typeof(HashedAccountIdModel).FullName;
         }
 
         [HttpGet]
         [Route("{HashedAccountId}/gatewayInform", Order = 0)]
         [Route("gatewayInform", Order = 1)]
-        public Microsoft.AspNetCore.Mvc.ActionResult GatewayInform(string hashedAccountId)
+        public IActionResult GatewayInform(string hashedAccountId)
         {
             if (!string.IsNullOrWhiteSpace(hashedAccountId))
             {
                 _accountCookieStorage.Delete(_hashedAccountIdCookieName);
-                
-                    _accountCookieStorage.Create(
-                        new HashedAccountIdModel { Value = hashedAccountId },
-                        _hashedAccountIdCookieName);
+
+                _accountCookieStorage.Create(
+                    new HashedAccountIdModel { Value = hashedAccountId },
+                    _hashedAccountIdCookieName);
             }
 
             var gatewayInformViewModel = new OrchestratorResponse<GatewayInformViewModel>
@@ -88,31 +92,33 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("gateway")]
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Gateway()
+        public async Task<IActionResult> Gateway()
         {
             var url = await _employerAccountOrchestrator.GetGatewayUrl(
                 Url.Action(ControllerConstants.GateWayResponseActionName,
-                    ControllerConstants.EmployerAccountControllerName, 
-                    null, 
-                    HttpContext.Request.Url?.Scheme));
+                    ControllerConstants.EmployerAccountControllerName,
+                    null,
+                    HttpContext.Request.Scheme));
 
             return Redirect(url);
         }
 
         [Route("gatewayResponse")]
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> GateWayResponse()
+        public async Task<IActionResult> GateWayResponse()
         {
             try
             {
                 _logger.Info("Starting processing gateway response");
 
-                if (Request.Url == null)
+                if (string.IsNullOrEmpty(Request.GetDisplayUrl()))
+                {
                     return RedirectToAction(ControllerConstants.SearchPensionRegulatorActionName, ControllerConstants.SearchPensionRegulatorControllerName);
+                }
 
                 var response = await _employerAccountOrchestrator.GetGatewayTokenResponse(
-                    Request.Params[ControllerConstants.CodeKeyName],
-                    Url.Action(ControllerConstants.GateWayResponseActionName, ControllerConstants.EmployerAccountControllerName, null, Request.Url.Scheme),
-                    HttpContextHelper.Current?.Request.QueryString);
+                    Request.Query[ControllerConstants.CodeKeyName],
+                    Url.Action(ControllerConstants.GateWayResponseActionName, ControllerConstants.EmployerAccountControllerName, null, Request.Scheme),
+                    Request.Query);
 
                 if (response.Status != HttpStatusCode.OK)
                 {
@@ -139,7 +145,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     RefreshToken = response.Data.RefreshToken,
                     EmpRefNotFound = empref.EmprefNotFound,
                 }));
-                
+
                 _logger.Info("Finished processing gateway response");
 
                 if (string.IsNullOrEmpty(empref.Empref) || empref.EmprefNotFound)
@@ -163,7 +169,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [Route("{HashedAccountId}/getApprenticeshipFunding", Order = 0)]
         [Route("getApprenticeshipFunding", Order = 1)]
-        public Microsoft.AspNetCore.Mvc.ActionResult GetApprenticeshipFunding()
+        public IActionResult GetApprenticeshipFunding()
         {
             PopulateViewBagWithExternalUserId();
             var model = new
@@ -178,7 +184,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ValidateAntiForgeryToken]
         [Route("{HashedAccountId}/getApprenticeshipFunding", Order = 0)]
         [Route("getApprenticeshipFunding", Order = 1)]
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> GetApprenticeshipFunding(int? choice)
+        public async Task<IActionResult> GetApprenticeshipFunding(int? choice)
         {
             switch (choice ?? 0)
             {
@@ -186,21 +192,21 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 case AddPayeNow: return RedirectToAction(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName);
                 case AddPayeNowAorn: return RedirectToAction(ControllerConstants.SearchUsingAornActionName, ControllerConstants.SearchPensionRegulatorControllerName);
                 default:
-                {
-                    var model = new
                     {
-                        HideHeaderSignInLink = true,
-                        InError = true
-                    };
+                        var model = new
+                        {
+                            HideHeaderSignInLink = true,
+                            InError = true
+                        };
 
-                    return View(model);
-                }
+                        return View(model);
+                    }
             }
         }
 
         [HttpGet]
         [Route("skipRegistration")]
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> SkipRegistration()
+        public async Task<IActionResult> SkipRegistration()
         {
             var request = new CreateUserAccountViewModel
             {
@@ -208,10 +214,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 OrganisationName = "MY ACCOUNT"
             };
 
-            var response = await _employerAccountOrchestrator.CreateMinimalUserAccountForSkipJourney(request, HttpContext);
+            var response = await _employerAccountOrchestrator.CreateMinimalUserAccountForSkipJourney(request, _contextAccessor.HttpContext);
             var returnUrlCookie = _returnUrlCookieStorageService.Get(ReturnUrlCookieName);
             _returnUrlCookieStorageService.Delete(ReturnUrlCookieName);
-            if (returnUrlCookie != null && !returnUrlCookie.Value.IsNullOrWhiteSpace())
+            if (returnUrlCookie != null && !string.IsNullOrWhiteSpace(returnUrlCookie.Value))
                 return Redirect(returnUrlCookie.Value);
 
             return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId = response.Data.HashedId });
@@ -235,7 +241,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("create")]
-        public Microsoft.AspNetCore.Mvc.ActionResult Create()
+        public IActionResult Create()
         {
             return RedirectToAction(ControllerConstants.SummaryActionName);
         }
@@ -243,7 +249,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("create")]
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> CreateAccount()
+        public async Task<IActionResult> CreateAccount()
         {
             var enteredData = _employerAccountOrchestrator.GetCookieData();
 
@@ -282,7 +288,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 response.FlashMessage = new FlashMessageViewModel { Headline = "There was a problem creating your account" };
                 return RedirectToAction(ControllerConstants.SummaryActionName);
             }
-            
+
             _employerAccountOrchestrator.DeleteCookieData();
 
             var returnUrlCookie = _returnUrlCookieStorageService.Get(ReturnUrlCookieName);
@@ -290,7 +296,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             _returnUrlCookieStorageService.Delete(ReturnUrlCookieName);
 
-            if (returnUrlCookie != null && !returnUrlCookie.Value.IsNullOrWhiteSpace())
+            if (returnUrlCookie != null && !string.IsNullOrWhiteSpace(returnUrlCookie.Value))
                 return Redirect(returnUrlCookie.Value);
 
             return RedirectToAction(ControllerConstants.WhenDoYouWantToView, ControllerConstants.EmployerAgreementControllerName, new { hashedAccountId = response.Data.EmployerAgreement.HashedAccountId, agreementId = response.Data.EmployerAgreement.HashedAgreementId });
@@ -298,7 +304,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("{HashedAccountId}/rename")]
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> RenameAccount(string hashedAccountId)
+        public async Task<IActionResult> RenameAccount(string hashedAccountId)
         {
             var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             var vm = await _employerAccountOrchestrator.GetRenameEmployerAccountViewModel(hashedAccountId, userIdClaim);
@@ -308,7 +314,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{HashedAccountId}/rename")]
-        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> RenameAccount(RenameEmployerAccountViewModel vm)
+        public async Task<IActionResult> RenameAccount(RenameEmployerAccountViewModel vm)
         {
             var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             var response = await _employerAccountOrchestrator.RenameEmployerAccount(vm, userIdClaim);
@@ -343,7 +349,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("amendOrganisation")]
-        public Microsoft.AspNetCore.Mvc.ActionResult AmendOrganisation()
+        public IActionResult AmendOrganisation()
         {
             var employerAccountData = _employerAccountOrchestrator.GetCookieData();
 

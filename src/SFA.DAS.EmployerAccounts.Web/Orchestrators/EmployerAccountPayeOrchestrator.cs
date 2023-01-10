@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
@@ -50,9 +51,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             };
         }
 
-        public async Task<OrchestratorResponse<AddNewPayeSchemeViewModel>> GetPayeConfirmModel(string hashedId, string code, string redirectUrl, NameValueCollection nameValueCollection)
+        public async Task<OrchestratorResponse<AddNewPayeSchemeViewModel>> GetPayeConfirmModel(string hashedId, string code, string redirectUrl, IQueryCollection queryCollection)
         {
-            var response = await GetGatewayTokenResponse(code, redirectUrl, nameValueCollection);
+            var response = await GetGatewayTokenResponse(code, redirectUrl, queryCollection);
             if (response.Status != HttpStatusCode.OK)
             {
                 response.FlashMessage.ErrorMessages.Clear();

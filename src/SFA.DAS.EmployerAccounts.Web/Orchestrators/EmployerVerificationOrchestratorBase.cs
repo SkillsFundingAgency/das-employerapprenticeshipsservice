@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Data;
 using System.Net;
+using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
-using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetGatewayInformation;
 using SFA.DAS.EmployerAccounts.Queries.GetGatewayToken;
 using SFA.DAS.EmployerAccounts.Queries.GetHmrcEmployerInformation;
+using SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Hmrc.Models;
 using SFA.DAS.Validation;
@@ -55,12 +55,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return response.Url;
         }
 
-        public async Task<OrchestratorResponse<HmrcTokenResponse>> GetGatewayTokenResponse(string accessCode, string returnUrl, NameValueCollection nameValueCollection)
+        public async Task<OrchestratorResponse<HmrcTokenResponse>> GetGatewayTokenResponse(string accessCode, string returnUrl, IQueryCollection queryCollection)
         {
-            var errorResponse = nameValueCollection?["error"];
-            if (errorResponse != null)
+            var errorResponse = queryCollection?["error"].ToString();
+            if (!string.IsNullOrEmpty(errorResponse))
             {
-                if (nameValueCollection["error_Code"] == "USER_DENIED_AUTHORIZATION")
+                if (queryCollection["error_Code"] == "USER_DENIED_AUTHORIZATION")
                 {
                     return new OrchestratorResponse<HmrcTokenResponse>
                     {
@@ -82,7 +82,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     {
                         Severity = FlashMessageSeverityLevel.Danger,
                         Message = "Unexpected response from HMRC Government Gateway:",
-                        SubMessage = nameValueCollection["error_description"]
+                        SubMessage = queryCollection["error_description"]
                     }
                 };
             }
