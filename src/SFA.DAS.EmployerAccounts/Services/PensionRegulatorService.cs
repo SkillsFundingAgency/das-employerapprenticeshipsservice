@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SFA.DAS.EmployerAccounts.Configuration;
@@ -37,7 +38,7 @@ namespace SFA.DAS.EmployerAccounts.Services
         public async Task<IEnumerable<Organisation>> GetOrganisationsByPayeRef(string payeRef)
         {
             var baseUrl = GetBaseUrl();
-            var url = $"{baseUrl}api/pensionsregulator/organisations?payeRef={HttpUtility.UrlEncode(payeRef)}";
+            var url = $"{baseUrl}api/pensionsregulator/organisations?payeRef={WebUtility.UrlEncode(payeRef)}";
 
             var json = await _httpService.GetAsync(url, false);
             return json == null ? null : JsonConvert.DeserializeObject<IEnumerable<Organisation>>(json);
@@ -46,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Services
         public async Task<IEnumerable<Organisation>> GetOrganisationsByAorn(string aorn, string payeRef)
         {
             var baseUrl = GetBaseUrl();
-            var url = $"{baseUrl}api/pensionsregulator/organisations/{HttpUtility.UrlEncode(aorn)}?payeRef={HttpUtility.UrlEncode(payeRef)}";
+            var url = $"{baseUrl}api/pensionsregulator/organisations/{WebUtility.UrlEncode(aorn)}?payeRef={WebUtility.UrlEncode(payeRef)}";
 
             var json = await _httpService.GetAsync(url, false);
             return json == null ? null : JsonConvert.DeserializeObject<IEnumerable<Organisation>>(json);
