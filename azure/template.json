@@ -148,7 +148,7 @@
         "workerAppServiceName": "[concat(variables('resourceNamePrefix'), 'wkr-as')]",
         "workerAppServicePlanName": "[concat(variables('resourceNamePrefix'), 'wkr-asp')]",
         "resourceGroupName": "[concat(variables('resourceNamePrefix'), '-rg')]",
-        "cosmosDbName": "[concat(variables('resourceNamePrefix'), '-cdb')]",
+        "cosmosDbName": "[concat(variables('resourceNamePrefix'), '-cdb')]"
     },
     "resources": [
         {
