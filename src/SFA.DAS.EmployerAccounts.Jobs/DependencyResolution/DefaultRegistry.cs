@@ -1,13 +1,13 @@
 ﻿using System;
+using System.Configuration;
+using Microsoft.Azure.Services.AppAuthentication;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
-using StructureMap;
-using Microsoft.Extensions.Logging;
-using System.Configuration;
-using System.Data.SqlClient;
-using Microsoft.Azure.Services.AppAuthentication;
-using NLog.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
+using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.DependencyResolution
 {
@@ -23,13 +23,13 @@ namespace SFA.DAS.EmployerAccounts.Jobs.DependencyResolution
                 s.RegisterConcreteTypesAgainstTheFirstInterface();
             });
 
-            For<ILoggerFactory>().Use(() => new LoggerFactory().AddApplicationInsights(ConfigurationManager.AppSettings["APPINSIGHTS_INSTRUMENTATIONKEY"], null).AddNLog()).Singleton();
+            For<ILoggerFactory>().Use(() => new LoggerFactory().AddNLog()).Singleton();
             For<ILogger>().Use(c => c.GetInstance<ILoggerFactory>().CreateLogger(c.ParentType));
             For<EmployerAccountsDbContext>().Use(c => GetDbContext(c));
             For<IRunOnceJobsService>().Use<RunOnceJobsService>();
         }
 
-        private EmployerAccountsDbContext GetDbContext(IContext context)
+        private static EmployerAccountsDbContext GetDbContext(IContext context)
         {
             var environmentName = ConfigurationManager.AppSettings["EnvironmentName"];
 
@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.DependencyResolution
             return new EmployerAccountsDbContext(connection);
         }
 
-        private string GetConnectionString(IContext context)
+        private static string GetConnectionString(IContext context)
         {
             return context.GetInstance<EmployerAccountsConfiguration>().DatabaseConnectionString;
         }
