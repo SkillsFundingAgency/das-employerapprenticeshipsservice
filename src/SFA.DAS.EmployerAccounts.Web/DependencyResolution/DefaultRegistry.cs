@@ -3,6 +3,7 @@ using SFA.DAS.Authorization.Handlers;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
+using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Logging;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.NLog.Logger;
@@ -26,6 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
             //For<HttpContext>().Use(() => new HttpContextWrapper(HttpContextHelper.Current));
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
+            For(typeof(IUrlActionHelper)).Use(typeof(UrlActionHelper));
 
             var authorizationContextProvider = For<IAuthorizationContextProvider>().Use<AuthorizationContextProvider>();
             For<IAuthorizationContextProvider>().Use<ImpersonationAuthorizationContext>()

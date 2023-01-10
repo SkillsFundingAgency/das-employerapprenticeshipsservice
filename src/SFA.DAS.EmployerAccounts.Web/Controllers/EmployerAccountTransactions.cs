@@ -1,18 +1,24 @@
-﻿using System.Web.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.Authorization.Mvc.Attributes;
-using SFA.DAS.EmployerAccounts.Web.Extensions;
+using SFA.DAS.EmployerAccounts.Interfaces;
 
-namespace SFA.DAS.EmployerAccounts.Web.Controllers
+namespace SFA.DAS.EmployerAccounts.Web.Controllers;
+
+[DasAuthorize]
+[Route("accounts/{HashedAccountId}")]
+public class EmployerAccountTransactionsController : Controller
 {
-    [DasAuthorize]
-    [RoutePrefix("accounts/{HashedAccountId}")]
-    public class EmployerAccountTransactionsController : Microsoft.AspNetCore.Mvc.Controller
+    private readonly IUrlActionHelper _urlHelper;
+
+    public EmployerAccountTransactionsController(IUrlActionHelper urlHelper)
     {
-        [Route("finance")]
-        [Route("balance")]
-        public Microsoft.AspNetCore.Mvc.ActionResult Index(string hashedAccountId)
-        {
-            return Redirect(Url.EmployerFinanceAction("finance"));
-        }
+        _urlHelper = urlHelper;
+    }
+
+    [Route("finance")]
+    [Route("balance")]
+    public IActionResult Index(string hashedAccountId)
+    {
+        return Redirect(_urlHelper.EmployerFinanceAction(RouteData,"finance"));
     }
 }
