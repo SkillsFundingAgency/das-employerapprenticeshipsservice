@@ -1,4 +1,5 @@
-﻿@using Microsoft.ApplicationInsights.Extensibility
+@using SFA.DAS.EmployerAccounts.Web
+@using Microsoft.ApplicationInsights.Extensibility
 @using SFA.DAS.Authorization
 @using SFA.DAS.Authorization.Mvc
 @using SFA.DAS.EmployerAccounts.Web.Helpers
@@ -158,7 +159,7 @@
         @RenderSection("breadcrumb", required: false)
 
         <main class="govuk-main-wrapper" id="main-content" role="main">
-            @if (HttpContext.Current.User.Identity.IsAuthenticated)
+            @if (HttpContextHelper.Current.User.Identity.IsAuthenticated)
             {
                 @Html.GetContentByType("banner")
 

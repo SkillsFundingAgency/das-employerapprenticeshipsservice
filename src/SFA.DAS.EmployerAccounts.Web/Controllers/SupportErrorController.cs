@@ -21,14 +21,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [DasAuthorize]
         [Route("error/accessdenied/{HashedAccountId}")]
-        public ActionResult AccessDenied(string hashedAccountId)
+        public Microsoft.AspNetCore.Mvc.ActionResult AccessDenied(string hashedAccountId)
         {
             AccessDeniedViewModel model = new AccessDeniedViewModel { HashedAccountId = hashedAccountId };
             return View(model);
         }
 
         [ChildActionOnly]
-        public override ActionResult SupportUserBanner(IAccountIdentifier model = null)
+        public override Microsoft.AspNetCore.Mvc.ActionResult SupportUserBanner(IAccountIdentifier model = null)
         {
             EmployerAccounts.Models.Account.Account account = null;
 

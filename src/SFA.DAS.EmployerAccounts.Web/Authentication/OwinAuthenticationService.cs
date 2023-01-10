@@ -7,6 +7,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
+using SFA.DAS.EmployerAccounts.Web;
 
 namespace SFA.DAS.EmployerAccounts.Web.Authentication
 {
@@ -39,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Authentication
 
         public void SignOutUser()
         {
-            var owinContext = HttpContext.Current.GetOwinContext();
+            var owinContext = HttpContextHelper.Current.GetOwinContext();
             var authenticationManager = owinContext.Authentication;
 
             authenticationManager.SignOut("Cookies");
@@ -62,7 +63,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Authentication
             var accessToken = GetClaimValue("access_token");
             var userInfoClient = new UserInfoClient(new Uri(userInfoEndpoint), accessToken);
             var userInfo = await userInfoClient.GetAsync();
-            var identity = (ClaimsIdentity)HttpContext.Current.User.Identity;
+            var identity = (ClaimsIdentity)HttpContextHelper.Current.User.Identity;
 
             foreach (var claim in userInfo.Claims.ToList())
             {

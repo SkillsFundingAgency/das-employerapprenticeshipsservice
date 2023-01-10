@@ -9,6 +9,7 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.EmployerAccounts.Web;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -29,7 +30,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("{HashedAccountId}/schemes")]
-        public async Task<ActionResult> Index(string hashedAccountId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Index(string hashedAccountId)
         {
             var model = await _employerAccountPayeOrchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
@@ -44,7 +45,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("{HashedAccountId}/schemes/next")]
-        public async Task<ActionResult> NextSteps(string hashedAccountId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> NextSteps(string hashedAccountId)
         {
             var model = await _employerAccountPayeOrchestrator.GetNextStepsViewModel(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName), hashedAccountId);
 
@@ -56,7 +57,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{HashedAccountId}/schemes/next")]
-        public ActionResult NextSteps(int? choice)
+        public Microsoft.AspNetCore.Mvc.ActionResult NextSteps(int? choice)
         {
             switch (choice ?? 0)
             {
@@ -75,7 +76,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("{HashedAccountId}/schemes/{empRef}/details")]
-        public async Task<ActionResult> Details(string hashedAccountId, string empRef)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Details(string hashedAccountId, string empRef)
         {
             empRef = empRef.FormatPayeFromUrl();
 
@@ -86,7 +87,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("{HashedAccountId}/schemes/gatewayInform")]
-        public async Task<ActionResult> GatewayInform(string hashedAccountId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> GatewayInform(string hashedAccountId)
         {
             var response = await _employerAccountPayeOrchestrator.CheckUserIsOwner(
                 hashedAccountId,
@@ -99,7 +100,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("{HashedAccountId}/schemes/gateway")]
-        public async Task<ActionResult> GetGateway(string hashedAccountId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> GetGateway(string hashedAccountId)
         {
             var url = await _employerAccountPayeOrchestrator.GetGatewayUrl(
                 Url.Action(
@@ -113,13 +114,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("{HashedAccountId}/schemes/confirm")]
-        public async Task<ActionResult> ConfirmPayeScheme(string hashedAccountId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> ConfirmPayeScheme(string hashedAccountId)
         {
             var gatewayResponseModel = await _employerAccountPayeOrchestrator.GetPayeConfirmModel(
                 hashedAccountId, 
                 Request.Params[ControllerConstants.CodeKeyName], 
                 Url.Action(ControllerConstants.ConfirmPayeSchemeActionName, ControllerConstants.EmployerAccountPayeControllerName, new { hashedAccountId }, Request.Url?.Scheme), 
-                System.Web.HttpContext.Current?.Request.QueryString);
+                HttpContextHelper.Current?.Request.QueryString);
 
             if (gatewayResponseModel.Status == HttpStatusCode.NotAcceptable)
             {
@@ -137,7 +138,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{HashedAccountId}/schemes/confirm")]
-        public async Task<ActionResult> ConfirmPayeScheme(string hashedAccountId, AddNewPayeSchemeViewModel model)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> ConfirmPayeScheme(string hashedAccountId, AddNewPayeSchemeViewModel model)
         {
             var result = await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(model, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
@@ -161,7 +162,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("{HashedAccountId}/schemes/{empRef}/remove")]
-        public async Task<ActionResult> Remove(string hashedAccountId, string empRef)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Remove(string hashedAccountId, string empRef)
         {
             var model = await _employerAccountPayeOrchestrator.GetRemovePayeSchemeModel(new RemovePayeSchemeViewModel
             {
@@ -176,7 +177,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{HashedAccountId}/schemes/remove")]
-        public async Task<ActionResult> RemovePaye(string hashedAccountId, RemovePayeSchemeViewModel model)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> RemovePaye(string hashedAccountId, RemovePayeSchemeViewModel model)
         {
             model.UserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 

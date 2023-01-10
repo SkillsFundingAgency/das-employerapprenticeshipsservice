@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("notifications")]
-        public async Task<ActionResult> NotificationSettings()
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> NotificationSettings()
         {
             var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             var vm = await _userSettingsOrchestrator.GetNotificationSettingsViewModel(userIdClaim);
@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpPost]
         [Route("notifications")]
-        public async Task<ActionResult> NotificationSettings(NotificationSettingsViewModel vm)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> NotificationSettings(NotificationSettingsViewModel vm)
         {
             var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
@@ -60,7 +60,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("notifications/unsubscribe/{hashedAccountId}")]
-        public async Task<ActionResult> NotificationUnsubscribe(string hashedAccountId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> NotificationUnsubscribe(string hashedAccountId)
         {
             var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 

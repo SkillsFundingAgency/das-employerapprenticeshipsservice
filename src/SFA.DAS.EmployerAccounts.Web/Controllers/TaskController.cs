@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [DasAuthorize]
         [Route("dismissTask", Name = "DismissTask")]
-        public async Task<ActionResult> DismissTask(DismissTaskViewModel viewModel)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> DismissTask(DismissTaskViewModel viewModel)
         {
             if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)))
             {

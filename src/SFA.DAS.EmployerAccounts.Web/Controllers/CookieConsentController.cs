@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [Route("accounts/{HashedAccountId}/cookieConsent", Order = 0)]
         [Route("cookieConsent", Order = 1)]        
-        public ActionResult Settings()
+        public Microsoft.AspNetCore.Mvc.ActionResult Settings()
         {
             return View();
         }
@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [Route("accounts/{HashedAccountId}/cookieConsent/details", Order = 0)]
         [Route("cookieConsent/details", Order = 1)]
-        public ActionResult Details()
+        public Microsoft.AspNetCore.Mvc.ActionResult Details()
         {
             return View();
         }

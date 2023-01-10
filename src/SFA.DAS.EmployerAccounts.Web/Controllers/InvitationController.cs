@@ -9,6 +9,7 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.EmployerAccounts.Web;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -33,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [Route("invite")]
-        public ActionResult Invite()
+        public Microsoft.AspNetCore.Mvc.ActionResult Invite()
         {
             if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)))
             {
@@ -46,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [DasAuthorize]
         [Route]
-        public async Task<ActionResult> All()
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> All()
         {
             if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)))
             {
@@ -61,7 +62,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [DasAuthorize]
         [Route("view")]
-        public async Task<ActionResult> Details(string invitationId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Details(string invitationId)
         {
             if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)))
             {
@@ -77,7 +78,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [DasAuthorize]
         [ValidateAntiForgeryToken]
         [Route("accept")]
-        public async Task<ActionResult> Accept(long invitation, UserInvitationsViewModel model)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Accept(long invitation, UserInvitationsViewModel model)
         {
             if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)))
             {
@@ -109,7 +110,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [DasAuthorize]
         [ValidateAntiForgeryToken]
         [Route("create")]
-        public async Task<ActionResult> Create(InviteTeamMemberViewModel model)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Create(InviteTeamMemberViewModel model)
         {
             if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)))
             {
@@ -123,18 +124,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("register-and-accept")]
-        public ActionResult AcceptInvitationNewUser()
+        public Microsoft.AspNetCore.Mvc.ActionResult AcceptInvitationNewUser()
         {
-            var schema = System.Web.HttpContext.Current.Request.Url.Scheme;
-            var authority = System.Web.HttpContext.Current.Request.Url.Authority;
+            var schema = HttpContextHelper.Current.Request.Url.Scheme;
+            var authority = HttpContextHelper.Current.Request.Url.Authority;
             var c = new Constants(_configuration.Identity);
-            return new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/invitations");
+            return new Microsoft.AspNetCore.Mvc.RedirectResult($"{c.RegisterLink()}{schema}://{authority}/invitations");
         }
 
 
         [HttpGet]
         [Route("accept")]
-        public ActionResult AcceptInvitationExistingUser()
+        public Microsoft.AspNetCore.Mvc.ActionResult AcceptInvitationExistingUser()
         {
             return RedirectToAction("All");
         }

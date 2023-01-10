@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [Route("{HashedAccountId}/pensionregulator", Order = 0)]
         [Route("pensionregulator", Order = 1)]
-        public async Task<ActionResult> SearchPensionRegulator(string hashedAccountId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> SearchPensionRegulator(string hashedAccountId)
         {
             var payeRef = _searchPensionRegulatorOrchestrator.GetCookieData().EmployerAccountPayeRefData.PayeReference;
 
@@ -82,7 +82,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ValidateAntiForgeryToken]
         [Route("{HashedAccountId}/pensionregulator", Order = 0)]
         [Route("pensionregulator", Order = 1)]
-        public async Task<ActionResult> SearchPensionRegulator(string hashedAccountId, SearchPensionRegulatorResultsViewModel viewModel)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> SearchPensionRegulator(string hashedAccountId, SearchPensionRegulatorResultsViewModel viewModel)
         {
             if (!viewModel.SelectedOrganisation.HasValue)
             {
@@ -106,7 +106,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [Route("{HashedAccountId}/pensionregulator/aorn", Order = 0)]
         [Route("pensionregulator/aorn", Order = 1)]
-        public async Task<ActionResult> SearchPensionRegulatorByAorn(string payeRef, string aorn, string hashedAccountId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> SearchPensionRegulatorByAorn(string payeRef, string aorn, string hashedAccountId)
         {
             if (!string.IsNullOrWhiteSpace(hashedAccountId))
             {
@@ -149,7 +149,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ValidateAntiForgeryToken]
         [Route("{HashedAccountId}/pensionregulator/aorn", Order = 0)]
         [Route("pensionregulator/aorn", Order = 1)]
-        public async Task<ActionResult> SearchPensionRegulatorByAorn(SearchPensionRegulatorByAornViewModel viewModel)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> SearchPensionRegulatorByAorn(SearchPensionRegulatorByAornViewModel viewModel)
         {
             ValidateAndFormatSearchPensionRegulatorByAornViewModel(viewModel);
 
@@ -161,7 +161,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return await PerformSearchPensionRegulatorByAorn(viewModel);
         }
 
-        private async Task<ActionResult> PerformSearchPensionRegulatorByAorn(SearchPensionRegulatorByAornViewModel viewModel)
+        private async Task<Microsoft.AspNetCore.Mvc.ActionResult> PerformSearchPensionRegulatorByAorn(SearchPensionRegulatorByAornViewModel viewModel)
         {
             var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             var model = await _searchPensionRegulatorOrchestrator.GetOrganisationsByAorn(viewModel.Aorn, viewModel.PayeRef);

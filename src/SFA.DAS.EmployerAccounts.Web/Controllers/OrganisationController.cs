@@ -39,7 +39,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("nextStep")]
-        public async Task<ActionResult> OrganisationAddedNextSteps(string organisationName, string hashedAccountId, string hashedAgreementId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> OrganisationAddedNextSteps(string organisationName, string hashedAccountId, string hashedAgreementId)
         {
             var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
@@ -52,7 +52,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("nextStepSearch")]
-        public async Task<ActionResult> OrganisationAddedNextStepsSearch(string organisationName, string hashedAccountId, string hashedAgreementId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> OrganisationAddedNextStepsSearch(string organisationName, string hashedAccountId, string hashedAgreementId)
         {
             var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
@@ -66,7 +66,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("confirm")]
-        public async Task<ActionResult> Confirm(
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Confirm(
             string hashedAccountId, string name, string code, string address, DateTime? incorporated,
             string legalEntityStatus, OrganisationType organisationType, byte? publicSectorDataSource, string sector, bool newSearch)
         {
@@ -110,7 +110,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpPost]
         [Route("nextStep")]
-        public async Task<ActionResult> GoToNextStep(string nextStep, string hashedAccountId, string organisationName, string hashedAgreementId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> GoToNextStep(string nextStep, string hashedAccountId, string organisationName, string hashedAgreementId)
         {
             var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
@@ -144,7 +144,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("review")]
-        public async Task<ActionResult> Review(string hashedAccountId, string accountLegalEntityPublicHashedId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Review(string hashedAccountId, string accountLegalEntityPublicHashedId)
         {
             var viewModel = await _orchestrator.GetRefreshedOrganisationDetails(accountLegalEntityPublicHashedId);
 
@@ -158,7 +158,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpPost]
         [Route("review")]
-        public async Task<ActionResult> ProcessReviewSelection(
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> ProcessReviewSelection(
             string updateChoice,
             string hashedAccountId,
             string accountLegalEntityPublicHashedId,
@@ -188,7 +188,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpPost]
         [Route("PostUpdateSelection")]
-        public ActionResult GoToPostUpdateSelection(string nextStep, string hashedAccountId)
+        public Microsoft.AspNetCore.Mvc.ActionResult GoToPostUpdateSelection(string nextStep, string hashedAccountId)
         {
             switch (nextStep)
             {

@@ -37,7 +37,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             if (filterContext.Exception is UnauthorizedAccessException)
             {
                 
-                if (((HttpStatusCodeResult)filterContext.Result).StatusCode.Equals((int)HttpStatusCode.Forbidden) &&
+                if (((Microsoft.AspNetCore.Mvc.StatusCodeResult)filterContext.Result).StatusCode.Equals((int)HttpStatusCode.Forbidden) &&
                     _userContext.IsSupportConsoleUser())
                 {   
                     if (filterContext.HttpContext.Request.RequestContext.RouteData.Values.TryGetValue(RouteValueKeys.AccountHashedId, out var accountHashedId))

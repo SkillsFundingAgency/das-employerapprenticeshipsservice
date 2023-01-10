@@ -31,6 +31,7 @@ using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.NServiceBus.Configuration;
 using SFA.DAS.UnitOfWork.NServiceBus.Configuration;
+using SFA.DAS.EmployerAccounts.Web;
 
 namespace SFA.DAS.EmployerAccounts.Web
 {
@@ -90,7 +91,7 @@ namespace SFA.DAS.EmployerAccounts.Web
         protected void Application_PreSendRequestHeaders(object sender, EventArgs e)
         {
             new HttpContextPolicyProvider(new List<IHttpContextPolicy> { new ResponseHeaderRestrictionPolicy() })
-                .Apply(new HttpContextWrapper(HttpContext.Current), PolicyConcern.HttpResponse);
+                .Apply(new HttpContextWrapper(HttpContextHelper.Current), PolicyConcern.HttpResponse);
         }
 
         protected void Application_End()

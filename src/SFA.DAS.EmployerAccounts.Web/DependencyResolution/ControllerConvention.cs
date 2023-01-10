@@ -12,7 +12,7 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
     {
         public void ScanTypes(TypeSet types, Registry registry)
         {
-            foreach (var type in types.FindTypes(TypeClassification.Concretes | TypeClassification.Closed).Where(t => t.CanBeCastTo<Controller>()))
+            foreach (var type in types.FindTypes(TypeClassification.Concretes | TypeClassification.Closed).Where(t => t.CanBeCastTo<Microsoft.AspNetCore.Mvc.Controller>()))
             {
                 registry.For(type).LifecycleIs(new UniquePerRequestLifecycle());
             }

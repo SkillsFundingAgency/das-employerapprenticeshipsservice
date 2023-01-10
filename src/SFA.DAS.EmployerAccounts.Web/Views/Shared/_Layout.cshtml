@@ -1,4 +1,5 @@
-﻿@using Microsoft.ApplicationInsights.Extensibility
+@using SFA.DAS.EmployerAccounts.Web
+@using Microsoft.ApplicationInsights.Extensibility
 @using SFA.DAS.Authorization
 @using SFA.DAS.Authorization.Mvc
 @using SFA.DAS.EmployerAccounts.Web.Helpers
@@ -125,7 +126,7 @@
         @RenderSection("breadcrumb", required: false)
 
 
-        @if (HttpContext.Current.User.Identity.IsAuthenticated)
+        @if (HttpContextHelper.Current.User.Identity.IsAuthenticated)
         {
             @Html.GetContentByType("banner", useLegacyStyles: true)
             if (Html.IsAuthorized("EmployerFeature.V3AgreementBanner"))

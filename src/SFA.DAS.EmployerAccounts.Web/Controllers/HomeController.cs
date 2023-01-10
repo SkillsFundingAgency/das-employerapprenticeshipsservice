@@ -13,6 +13,7 @@ using System.Web.Mvc;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerAccounts.Web.Models;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.EmployerAccounts.Web;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -44,7 +45,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("~/")]
         [Route]
         [Route("Index")]
-        public async Task<ActionResult> Index()
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Index()
         {
             var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
@@ -112,7 +113,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("termsAndConditions/overview")]
-        public ActionResult TermsAndConditionsOverview()
+        public Microsoft.AspNetCore.Mvc.ActionResult TermsAndConditionsOverview()
         {
             return View();
         }
@@ -121,7 +122,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [DasAuthorize]
         [Route("termsAndConditions")]
-        public ActionResult TermsAndConditions(string returnUrl, string hashedAccountId)
+        public Microsoft.AspNetCore.Mvc.ActionResult TermsAndConditions(string returnUrl, string hashedAccountId)
         {
             var termsAndConditionsNewViewModel = new TermsAndConditionsNewViewModel { ReturnUrl = returnUrl, HashedAccountId = hashedAccountId };
             return View(termsAndConditionsNewViewModel);
@@ -130,7 +131,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [DasAuthorize]
         [Route("termsAndConditions")]
-        public async Task<ActionResult> TermsAndConditions(TermsAndConditionsNewViewModel termsAndConditionViewModel)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> TermsAndConditions(TermsAndConditionsNewViewModel termsAndConditionViewModel)
         {
             var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             await _homeOrchestrator.UpdateTermAndConditionsAcceptedOn(userRef);
@@ -144,7 +145,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [DasAuthorize]
         [Route("SaveAndSearch")]
-        public async Task<ActionResult> SaveAndSearch(string returnUrl)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> SaveAndSearch(string returnUrl)
         {
             var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             if (string.IsNullOrWhiteSpace(userId))
@@ -170,7 +171,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [DasAuthorize]
         [HttpGet]
         [Route("accounts")]
-        public async Task<ActionResult> ViewAccounts()
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> ViewAccounts()
         {
             var accounts = await _homeOrchestrator.GetUserAccounts(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
             return View(ControllerConstants.IndexActionName, accounts);
@@ -179,7 +180,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [DasAuthorize]
         [HttpGet]
         [Route("register/new/{correlationId?}")]
-        public async Task<ActionResult> HandleNewRegistration(string correlationId = null)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> HandleNewRegistration(string correlationId = null)
         {
             await OwinWrapper.UpdateClaims();
 
@@ -199,25 +200,25 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [Route("register")]
         [Route("register/{correlationId}")]
-        public async Task<ActionResult> RegisterUser(Guid? correlationId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> RegisterUser(Guid? correlationId)
         {
-            var schema = System.Web.HttpContext.Current.Request.Url.Scheme;
-            var authority = System.Web.HttpContext.Current.Request.Url.Authority;
+            var schema = HttpContextHelper.Current.Request.Url.Scheme;
+            var authority = HttpContextHelper.Current.Request.Url.Authority;
             var c = new Constants(_configuration.Identity);
 
-            if (!correlationId.HasValue) return new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new");
+            if (!correlationId.HasValue) return new Microsoft.AspNetCore.Mvc.RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new");
 
             var invitation = await _homeOrchestrator.GetProviderInvitation(correlationId.Value);
 
             return invitation.Data != null
-                ? new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new/{correlationId}&firstname={Url.Encode(invitation.Data.EmployerFirstName)}&lastname={Url.Encode(invitation.Data.EmployerLastName)}&email={Url.Encode(invitation.Data.EmployerEmail)}")
-                : new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new");
+                ? new Microsoft.AspNetCore.Mvc.RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new/{correlationId}&firstname={Url.Encode(invitation.Data.EmployerFirstName)}&lastname={Url.Encode(invitation.Data.EmployerLastName)}&email={Url.Encode(invitation.Data.EmployerEmail)}")
+                : new Microsoft.AspNetCore.Mvc.RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new");
         }
 
         [DasAuthorize]
         [HttpGet]
         [Route("password/change")]
-        public ActionResult HandlePasswordChanged(bool userCancelled = false)
+        public Microsoft.AspNetCore.Mvc.ActionResult HandlePasswordChanged(bool userCancelled = false)
         {
             if (!userCancelled)
             {
@@ -235,7 +236,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [DasAuthorize]
         [HttpGet]
         [Route("email/change")]
-        public async Task<ActionResult> HandleEmailChanged(bool userCancelled = false)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> HandleEmailChanged(bool userCancelled = false)
         {
             if (!userCancelled)
             {
@@ -261,13 +262,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [DasAuthorize]
         [Route("signIn")]
-        public ActionResult SignIn()
+        public Microsoft.AspNetCore.Mvc.ActionResult SignIn()
         {
             return RedirectToAction(ControllerConstants.IndexActionName);
         }
 
         [Route("signOut")]
-        public ActionResult SignOut()
+        public Microsoft.AspNetCore.Mvc.ActionResult SignOut()
         {
             OwinWrapper.SignOutUser();
 
@@ -276,7 +277,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             var idToken = authenticationManager.User.FindFirst("id_token")?.Value;
             var constants = new Constants(_configuration.Identity);
 
-            return new RedirectResult(string.Format(constants.LogoutEndpoint(), idToken));
+            return new Microsoft.AspNetCore.Mvc.RedirectResult(string.Format(constants.LogoutEndpoint(), idToken));
         }
 
         [Route("SignOutCleanup")]
@@ -288,21 +289,21 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [Route("{HashedAccountId}/privacy", Order = 0)]
         [Route("privacy", Order = 1)]
-        public ActionResult Privacy()
+        public Microsoft.AspNetCore.Mvc.ActionResult Privacy()
         {
             return View();
         }
 
         [HttpGet]
         [Route("help")]
-        public ActionResult Help()
+        public Microsoft.AspNetCore.Mvc.ActionResult Help()
         {
             return RedirectPermanent(_configuration.ZenDeskHelpCentreUrl);
         }
 
         [HttpGet]
         [Route("start")]
-        public ActionResult ServiceStartPage()
+        public Microsoft.AspNetCore.Mvc.ActionResult ServiceStartPage()
         {
             var model = new
             {
@@ -314,7 +315,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("unsubscribe/{correlationId}")]
-        public ActionResult Unsubscribe()
+        public Microsoft.AspNetCore.Mvc.ActionResult Unsubscribe()
         {
             return View();
         }
@@ -322,7 +323,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [Route("unsubscribe/{correlationId}")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Unsubscribe(bool? unsubscribe, string correlationId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Unsubscribe(bool? unsubscribe, string correlationId)
         {
             if (unsubscribe == null || unsubscribe == false)
             {
@@ -341,7 +342,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
 #if DEBUG
         [Route("CreateLegalAgreement/{showSubFields}")]
-        public ActionResult ShowLegalAgreement(bool showSubFields) //call this  with false
+        public Microsoft.AspNetCore.Mvc.ActionResult ShowLegalAgreement(bool showSubFields) //call this  with false
         {
             return View(ControllerConstants.LegalAgreementViewName, showSubFields);
         }

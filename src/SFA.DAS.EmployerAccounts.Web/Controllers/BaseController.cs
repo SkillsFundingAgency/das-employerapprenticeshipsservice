@@ -11,7 +11,7 @@ using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
-    public class BaseController : Controller
+    public class BaseController : Microsoft.AspNetCore.Mvc.Controller
     {
         public IAuthenticationService OwinWrapper;
 
@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             OwinWrapper = owinWrapper;
         }
 
-        protected override ViewResult View(string viewName, string masterName, object model)
+        protected override Microsoft.AspNetCore.Mvc.ViewResult View(string viewName, string masterName, object model)
         {
             if (!(model is OrchestratorResponse orchestratorResponse))
             {
@@ -84,7 +84,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             throw new Exception($"Orchestrator response of type '{model.GetType()}' could not be handled.");
         }
 
-        private ViewResult ReturnViewResult(string viewName, string masterName, OrchestratorResponse orchestratorResponse)
+        private Microsoft.AspNetCore.Mvc.ViewResult ReturnViewResult(string viewName, string masterName, OrchestratorResponse orchestratorResponse)
         {
 
             var userViews = _multiVariantTestingService.GetMultiVariantViews();
@@ -96,7 +96,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             var controllerName = ControllerContext.RouteData.Values[ControllerConstants.ControllerKeyName].ToString();
             var actionName = ControllerContext.RouteData.Values[ControllerConstants.ActionKeyName].ToString();
-            var userView = userViews.Data.SingleOrDefault(c => c.Controller.Equals(controllerName, StringComparison.CurrentCultureIgnoreCase)
+            var userView = userViews.Data.SingleOrDefault(c => Microsoft.AspNetCore.Mvc.Controller.Equals(controllerName, StringComparison.CurrentCultureIgnoreCase)
                             && c.Action.Equals(actionName, StringComparison.CurrentCultureIgnoreCase));
 
             if (userView != null)
@@ -151,7 +151,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         /// <summary>
         /// Default implementation for the SupportUserBanner.  Can be overridden to render based on the available IAccountIdentifier model.
         /// </summary>
-        public virtual ActionResult SupportUserBanner(IAccountIdentifier model = null)
+        public virtual Microsoft.AspNetCore.Mvc.ActionResult SupportUserBanner(IAccountIdentifier model = null)
         {
             return PartialView("_SupportUserBanner", new SupportUserBannerViewModel());
         }

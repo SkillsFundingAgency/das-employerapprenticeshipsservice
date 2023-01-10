@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [DasAuthorize(EmployerUserRole.Any)]
         [Route("agreements")]
-        public async Task<ActionResult> Index(string hashedAccountId, bool agreementSigned = false)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Index(string hashedAccountId, bool agreementSigned = false)
         {
             var model = await _orchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
@@ -72,7 +72,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [DasAuthorize(EmployerUserRole.Any)]
         [Route("agreements/{agreementId}/details")]
-        public async Task<ActionResult> Details(string agreementId, string hashedAccountId,
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Details(string agreementId, string hashedAccountId,
             FlashMessageViewModel flashMessage)
         {
             var agreement = await _orchestrator.GetById(
@@ -87,7 +87,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [DasAuthorize(EmployerUserRole.Any)]
         [Route("agreements/{agreementId}/view")]
-        public async Task<ActionResult> View(string agreementId, string hashedAccountId,
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> View(string agreementId, string hashedAccountId,
             FlashMessageViewModel flashMessage)
         {
             var agreement = await GetSignedAgreementViewModel(new GetEmployerAgreementRequest { AgreementId = agreementId, HashedAccountId = hashedAccountId, ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName) });
@@ -97,7 +97,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [DasAuthorize(EmployerUserRole.Any)]
         [Route("agreements/unsigned/view")]
-        public async Task<ActionResult> ViewUnsignedAgreements(string hashedAccountId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> ViewUnsignedAgreements(string hashedAccountId)
         {
             var unsignedAgreementResponse = await _mediator.SendAsync(new GetNextUnsignedEmployerAgreementRequest { HashedAccountId = hashedAccountId, ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName) });
 
@@ -109,7 +109,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [DasAuthorize(EmployerUserRole.Any)]
         [Route("agreements/{agreementId}/about-your-agreement")]
-        public async Task<ActionResult> AboutYourAgreement(string agreementId, string hashedAccountId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> AboutYourAgreement(string agreementId, string hashedAccountId)
         {
             var agreement = await _orchestrator.GetById(
                 agreementId,
@@ -125,7 +125,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [DasAuthorize(EmployerUserRole.Any)]
         [Route("agreements/{agreementId}/sign-your-agreement")]
-        public async Task<ActionResult> SignAgreement(GetEmployerAgreementRequest request)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> SignAgreement(GetEmployerAgreementRequest request)
         {
             request.ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
@@ -141,7 +141,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [DasAuthorize(EmployerUserRole.Any)]
         [Route("agreements/{agreementId}/sign")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Sign(string agreementId, string hashedAccountId, int? choice)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Sign(string agreementId, string hashedAccountId, int? choice)
         {
             var userInfo = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
@@ -195,7 +195,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [DasAuthorize(EmployerUserRole.Any)]
         [Route("agreements/{agreementId}/agreement-pdf")]
-        public async Task<ActionResult> GetPdfAgreement(string agreementId, string hashedAccountId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> GetPdfAgreement(string agreementId, string hashedAccountId)
         {
             var stream = await _orchestrator.GetPdfEmployerAgreement(hashedAccountId, agreementId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
@@ -211,7 +211,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [DasAuthorize(EmployerUserRole.Any)]
         [Route("agreements/{agreementId}/signed-agreement-pdf")]
-        public async Task<ActionResult> GetSignedPdfAgreement(string agreementId, string hashedAccountId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> GetSignedPdfAgreement(string agreementId, string hashedAccountId)
         {
             var stream = await _orchestrator.GetSignedPdfEmployerAgreement(hashedAccountId, agreementId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
@@ -227,7 +227,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [DasAuthorize(EmployerUserRole.Any)]
         [Route("agreements/{accountLegalEntityHashedId}/remove")]
-        public async Task<ActionResult> ConfirmRemoveOrganisation(string accountLegalEntityHashedId, string hashedAccountId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> ConfirmRemoveOrganisation(string accountLegalEntityHashedId, string hashedAccountId)
         {
             var model = await _orchestrator.GetConfirmRemoveOrganisationViewModel(accountLegalEntityHashedId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
@@ -238,7 +238,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [DasAuthorize(EmployerUserRole.Any)]
         [Route("agreements/{accountLegalEntityHashedId}/remove")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> RemoveOrganisation(ConfirmOrganisationToRemoveViewModel model)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> RemoveOrganisation(ConfirmOrganisationToRemoveViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -271,7 +271,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("agreements/{agreementId}/whenDoYouWantToView")]
-        public async Task<ActionResult> WhenDoYouWantToView(string agreementId, string hashedAccountId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> WhenDoYouWantToView(string agreementId, string hashedAccountId)
         {
             var userInfo = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, userInfo);
@@ -282,7 +282,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("agreements/{agreementId}/whenDoYouWantToView")]
-        public async Task<ActionResult> WhenDoYouWantToView(int? choice, string agreementId, string hashedAccountId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> WhenDoYouWantToView(int? choice, string agreementId, string hashedAccountId)
         {
             switch (choice ?? 0)
             {
@@ -300,7 +300,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [DasAuthorize(EmployerUserRole.Any)]
         [Route("organisations/{accountLegalEntityHashedId}/agreements")]
-        public async Task<ActionResult> ViewAllAgreements(string hashedAccountId, string accountLegalEntityHashedId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> ViewAllAgreements(string hashedAccountId, string accountLegalEntityHashedId)
         {
             var model = await _orchestrator.GetOrganisationAgreements(accountLegalEntityHashedId);
             return View(model.Data);

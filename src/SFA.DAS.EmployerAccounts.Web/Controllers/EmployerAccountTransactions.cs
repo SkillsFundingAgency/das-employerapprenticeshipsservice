@@ -6,11 +6,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
     [DasAuthorize]
     [RoutePrefix("accounts/{HashedAccountId}")]
-    public class EmployerAccountTransactionsController : Controller
+    public class EmployerAccountTransactionsController : Microsoft.AspNetCore.Mvc.Controller
     {
         [Route("finance")]
         [Route("balance")]
-        public ActionResult Index(string hashedAccountId)
+        public Microsoft.AspNetCore.Mvc.ActionResult Index(string hashedAccountId)
         {
             return Redirect(Url.EmployerFinanceAction("finance"));
         }

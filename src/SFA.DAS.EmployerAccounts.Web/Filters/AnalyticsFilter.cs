@@ -5,9 +5,9 @@ using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.Filters
 {
-    public class AnalyticsFilter : ActionFilterAttribute
+    public class AnalyticsFilter : Microsoft.AspNetCore.Mvc.Filters.ActionFilterAttribute
     {
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        public override void OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext filterContext)
         {
             string userId = null;
             string hashedAccountId = null;
@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Filters
                 agreementId = filterContext.ActionParameters["agreementId"] as string;
             }
 
-            filterContext.Controller.ViewBag.GaData = new GaData
+            Microsoft.AspNetCore.Mvc.Controller.ViewBag.GaData = new GaData
             {
                 UserId = userId,
                 Acc = hashedAccountId,
@@ -45,7 +45,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Filters
             base.OnActionExecuting(filterContext);
         }
 
-        public override void OnActionExecuted(ActionExecutedContext filterContext)
+        public override void OnActionExecuted(Microsoft.AspNetCore.Mvc.Filters.ActionExecutedContext filterContext)
         {
             if (!(filterContext?.Controller?.ViewBag?.GaData is GaData))
             {
@@ -53,7 +53,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Filters
                 return;
             }
 
-            (filterContext.Controller.ViewBag.GaData as GaData).LevyFlag 
+            (Microsoft.AspNetCore.Mvc.Controller.ViewBag.GaData as GaData).LevyFlag 
                 = (filterContext.Controller.ViewData.Model as OrchestratorResponse<AccountDashboardViewModel>)?.Data?.ApprenticeshipEmployerType.ToString();
 
             base.OnActionExecuted(filterContext);

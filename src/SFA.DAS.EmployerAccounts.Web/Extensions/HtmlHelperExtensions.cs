@@ -16,28 +16,28 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
     public static class HtmlHelperExtensions
     {
-        public static MvcHtmlString CdnLink(this HtmlHelper html, string folderName, string fileName)
+        public static Microsoft.AspNetCore.Html.HtmlString CdnLink(this HtmlHelper html, string folderName, string fileName)
         {
             var cdnLocation = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<EmployerAccountsConfiguration>().CdnBaseUrl;
 
             var trimCharacters = new char[] { '/' };
-            return new MvcHtmlString($"{cdnLocation.Trim(trimCharacters)}/{folderName.Trim(trimCharacters)}/{fileName.Trim(trimCharacters)}");
+            return new Microsoft.AspNetCore.Html.HtmlString($"{cdnLocation.Trim(trimCharacters)}/{folderName.Trim(trimCharacters)}/{fileName.Trim(trimCharacters)}");
         }
 
-        public static MvcHtmlString CommaSeperatedAddressToHtml(this HtmlHelper htmlHelper, string commaSeperatedAddress)
+        public static Microsoft.AspNetCore.Html.HtmlString CommaSeperatedAddressToHtml(this HtmlHelper htmlHelper, string commaSeperatedAddress)
         {
             var htmlAddress = commaSeperatedAddress.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(line => $"{line.Trim()}<br/>")
                 .Aggregate(string.Empty, (x, y) => x + y);
 
-            return new MvcHtmlString(htmlAddress);
+            return new Microsoft.AspNetCore.Html.HtmlString(htmlAddress);
         }
 
         public static bool IsSupportUser(this HtmlHelper htmlHelper)
         {
             var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
             var requiredRoles = configuration.SupportConsoleUsers.Split(',');
-            if (!(htmlHelper.ViewContext.Controller.ControllerContext.HttpContext.User.Identity is ClaimsIdentity claimsIdentity) || !claimsIdentity.IsAuthenticated)
+            if (!(Microsoft.AspNetCore.Mvc.Controller.ControllerContext.HttpContext.User.Identity is ClaimsIdentity claimsIdentity) || !claimsIdentity.IsAuthenticated)
             {
                 return false;
             }
@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
                 claimsIdentity.Claims.Any(c => c.Type == claimsIdentity.RoleClaimType && c.Value.Equals(role)));
         }
 
-        public static MvcHtmlString SetZenDeskLabels(this HtmlHelper html, params string[] labels)
+        public static Microsoft.AspNetCore.Html.HtmlString SetZenDeskLabels(this HtmlHelper html, params string[] labels)
         {
             var keywords = string.Join(",", labels
                 .Where(label => !string.IsNullOrEmpty(label))

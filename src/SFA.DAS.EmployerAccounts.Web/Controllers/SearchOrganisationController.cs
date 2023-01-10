@@ -45,7 +45,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [Route("{HashedAccountId}/organisations/search", Order = 0)]
         [Route("organisations/search", Order = 1)]
-        public ActionResult SearchForOrganisation(string hashedAccountId)
+        public Microsoft.AspNetCore.Mvc.ActionResult SearchForOrganisation(string hashedAccountId)
         {
             var model = new OrchestratorResponse<SearchOrganisationViewModel> { Data = new SearchOrganisationViewModel { IsExistingAccount = !string.IsNullOrEmpty(hashedAccountId) } };
             return View(ControllerConstants.SearchForOrganisationViewName, model);
@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [Route("{HashedAccountId}/organisations/search", Order = 0)]
         [Route("organisations/search", Order = 1)]
-        public ActionResult SearchForOrganisation(string hashedAccountId, string searchTerm)
+        public Microsoft.AspNetCore.Mvc.ActionResult SearchForOrganisation(string hashedAccountId, string searchTerm)
         {
             if (string.IsNullOrEmpty(searchTerm))
             {
@@ -67,7 +67,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [Route("{HashedAccountId}/organisations/search/results", Order = 0)]
         [Route("organisations/search/results", Order = 1)]
-        public async Task<ActionResult> SearchForOrganisationResults(string hashedAccountId, string searchTerm, int pageNumber = 1, OrganisationType? organisationType = null)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> SearchForOrganisationResults(string hashedAccountId, string searchTerm, int pageNumber = 1, OrganisationType? organisationType = null)
         {
             OrchestratorResponse<SearchOrganisationResultsViewModel> model;
             if (string.IsNullOrEmpty(searchTerm))
@@ -87,7 +87,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [Route("{HashedAccountId}/organisations/search/confirm", Order = 0)]
         [Route("organisations/search/confirm", Order = 1)]
-        public ActionResult Confirm(string hashedAccountId, OrganisationDetailsViewModel viewModel)
+        public Microsoft.AspNetCore.Mvc.ActionResult Confirm(string hashedAccountId, OrganisationDetailsViewModel viewModel)
         {
             viewModel.NewSearch = true;
 

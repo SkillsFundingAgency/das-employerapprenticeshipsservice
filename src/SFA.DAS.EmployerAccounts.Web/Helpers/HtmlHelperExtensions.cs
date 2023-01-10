@@ -127,7 +127,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
 
         public static bool ViewExists(this HtmlHelper html, string viewName)
         {
-            var controllerContext = html.ViewContext.Controller.ControllerContext;
+            var controllerContext = Microsoft.AspNetCore.Mvc.Controller.ControllerContext;
             var result = ViewEngines.Engines.FindView(controllerContext, viewName, null);
 
             return result.View != null;

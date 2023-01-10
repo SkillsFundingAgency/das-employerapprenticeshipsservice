@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route]
-        public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Index(string hashedAccountId, string reservationId)
         {
             PopulateViewBagWithExternalUserId();            
             var response = await GetAccountInformation(hashedAccountId);
@@ -64,7 +64,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("view")]
-        public async Task<ActionResult> ViewTeam(string hashedAccountId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> ViewTeam(string hashedAccountId)
         {
             var response = await _employerTeamOrchestrator.GetTeamMembers(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
@@ -79,7 +79,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("AddedProvider/{providerName}")]
-        public async Task<ActionResult> AddedProvider(string providerName)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> AddedProvider(string providerName)
         {
             AddFlashMessageToCookie(new FlashMessageViewModel
             {
@@ -93,7 +93,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("invite")]
-        public async Task<ActionResult> Invite(string hashedAccountId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Invite(string hashedAccountId)
         {
             var response = await _employerTeamOrchestrator.GetNewInvitation(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
@@ -103,7 +103,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("invite")]
-        public async Task<ActionResult> Invite(InviteTeamMemberViewModel model)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Invite(InviteTeamMemberViewModel model)
         {
             var response = await _employerTeamOrchestrator.InviteTeamMember(model, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
@@ -134,7 +134,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("invite/next")]
-        public async Task<ActionResult> NextSteps(string hashedAccountId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> NextSteps(string hashedAccountId)
         {
             var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
@@ -156,7 +156,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("invite/next")]
-        public async Task<ActionResult> NextSteps(int? choice, string hashedAccountId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> NextSteps(int? choice, string hashedAccountId)
         {
             var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
@@ -183,7 +183,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("{invitationId}/cancel")]
-        public async Task<ActionResult> Cancel(string email, string invitationId, string hashedAccountId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Cancel(string email, string invitationId, string hashedAccountId)
         {
             var invitation = await _employerTeamOrchestrator.GetInvitation(invitationId);
             invitation.Data.HashedAccountId = hashedAccountId;
@@ -194,7 +194,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{invitationId}/cancel")]
-        public async Task<ActionResult> Cancel(string invitationId, string email, string hashedAccountId, int cancel)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Cancel(string invitationId, string email, string hashedAccountId, int cancel)
         {
             if (cancel != 1)
                 return RedirectToAction(ControllerConstants.ViewTeamViewName, new { HashedAccountId = hashedAccountId });
@@ -207,7 +207,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("resend")]
-        public async Task<ActionResult> Resend(string hashedAccountId, string email, string name)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Resend(string hashedAccountId, string email, string name)
         {
             var response = await _employerTeamOrchestrator.Resend(email, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName), name);
 
@@ -216,7 +216,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("{email}/remove")]
-        public async Task<ActionResult> Remove(string hashedAccountId, string email)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Remove(string hashedAccountId, string email)
         {
             var response = await _employerTeamOrchestrator.Review(hashedAccountId, email);
 
@@ -226,7 +226,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{email}/remove")]
-        public async Task<ActionResult> Remove(long userId, string hashedAccountId, string email, int remove)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Remove(long userId, string hashedAccountId, string email, int remove)
         {
             Exception exception;
             HttpStatusCode httpStatusCode;
@@ -260,7 +260,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("{email}/role/change")]
-        public async Task<ActionResult> ChangeRole(string hashedAccountId, string email)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> ChangeRole(string hashedAccountId, string email)
         {
             var teamMember = await _employerTeamOrchestrator.GetTeamMemberWhetherActiveOrNot(hashedAccountId, email, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
@@ -270,7 +270,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{email}/role/change")]
-        public async Task<ActionResult> ChangeRole(string hashedAccountId, string email, Role role)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> ChangeRole(string hashedAccountId, string email, Role role)
         {
             var response = await _employerTeamOrchestrator.ChangeRole(hashedAccountId, email, role, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
@@ -290,7 +290,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("{email}/review")]
-        public async Task<ActionResult> Review(string hashedAccountId, string email)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Review(string hashedAccountId, string email)
         {
             var invitation = await _employerTeamOrchestrator.GetTeamMemberWhetherActiveOrNot(hashedAccountId, email, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
@@ -299,7 +299,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("hideWizard")]
-        public async Task<ActionResult> HideWizard(string hashedAccountId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> HideWizard(string hashedAccountId)
         {
             var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
@@ -310,7 +310,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("continuesetupcreateadvert")]
-        public ActionResult ContinueSetupCreateAdvert(string hashedAccountId)
+        public Microsoft.AspNetCore.Mvc.ActionResult ContinueSetupCreateAdvert(string hashedAccountId)
         {
             return View();
         }
@@ -318,7 +318,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("continuesetupcreateadvert")]
-        public ActionResult ContinueSetupCreateAdvert(string hashedAccountId, bool? requiresAdvert)
+        public Microsoft.AspNetCore.Mvc.ActionResult ContinueSetupCreateAdvert(string hashedAccountId, bool? requiresAdvert)
         {
             if (!requiresAdvert.HasValue)
             {
@@ -334,31 +334,31 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [ChildActionOnly]
-        public ActionResult SingleApprenticeshipContinueSetup(AccountDashboardViewModel model)
+        public Microsoft.AspNetCore.Mvc.ActionResult SingleApprenticeshipContinueSetup(AccountDashboardViewModel model)
         {
             return PartialView(model.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single());
         }
 
         [ChildActionOnly]
-        public ActionResult SingleApprenticeshipWithTrainingProvider(AccountDashboardViewModel model)
+        public Microsoft.AspNetCore.Mvc.ActionResult SingleApprenticeshipWithTrainingProvider(AccountDashboardViewModel model)
         {
             return PartialView(model.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single());
         }
 
         [ChildActionOnly]
-        public ActionResult SingleApprenticeshipReadyForReview(AccountDashboardViewModel model)
+        public Microsoft.AspNetCore.Mvc.ActionResult SingleApprenticeshipReadyForReview(AccountDashboardViewModel model)
         {
             return PartialView(model.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single());
         }
 
         [ChildActionOnly]
-        public ActionResult SingleApprenticeshipApproved(AccountDashboardViewModel model)
+        public Microsoft.AspNetCore.Mvc.ActionResult SingleApprenticeshipApproved(AccountDashboardViewModel model)
         {
             return PartialView(model.CallToActionViewModel.Apprenticeships.First());
         }
 
         [ChildActionOnly]
-        public ActionResult SingleApprenticeshipContinueWithProvider(AccountDashboardViewModel model)
+        public Microsoft.AspNetCore.Mvc.ActionResult SingleApprenticeshipContinueWithProvider(AccountDashboardViewModel model)
         {
             model.CallToActionViewModel.Cohorts.Single().Apprenticeships = new List<ApprenticeshipViewModel>()
             {
@@ -373,7 +373,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [ChildActionOnly]
-        public override ActionResult SupportUserBanner(IAccountIdentifier model = null)
+        public override Microsoft.AspNetCore.Mvc.ActionResult SupportUserBanner(IAccountIdentifier model = null)
         {
             EmployerAccounts.Models.Account.Account account = null;
 
@@ -394,7 +394,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [ChildActionOnly]
-        public ActionResult Row1Panel1(AccountDashboardViewModel model)
+        public Microsoft.AspNetCore.Mvc.ActionResult Row1Panel1(AccountDashboardViewModel model)
         {
             var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "Empty", Data = model };
 
@@ -411,31 +411,31 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [ChildActionOnly]
-        public ActionResult AddPAYE(AccountDashboardViewModel model)
+        public Microsoft.AspNetCore.Mvc.ActionResult AddPAYE(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
 
         [ChildActionOnly]
-        public ActionResult SignAgreement(AccountDashboardViewModel model)
+        public Microsoft.AspNetCore.Mvc.ActionResult SignAgreement(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }        
 
         [ChildActionOnly]
-        public ActionResult Empty(AccountDashboardViewModel model)
+        public Microsoft.AspNetCore.Mvc.ActionResult Empty(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
 
         [ChildActionOnly]
-        public ActionResult CheckFunding(AccountDashboardViewModel model)
+        public Microsoft.AspNetCore.Mvc.ActionResult CheckFunding(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
 
         [ChildActionOnly]
-        public ActionResult ContinueSetupForSingleReservation(AccountDashboardViewModel model)
+        public Microsoft.AspNetCore.Mvc.ActionResult ContinueSetupForSingleReservation(AccountDashboardViewModel model)
         {
             var reservation = model.CallToActionViewModel.Reservations?.FirstOrDefault();
             var viewModel = new ReservationViewModel(reservation);
@@ -443,38 +443,38 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [ChildActionOnly]
-        public ActionResult VacancyDraft(AccountDashboardViewModel model)
+        public Microsoft.AspNetCore.Mvc.ActionResult VacancyDraft(AccountDashboardViewModel model)
         {   
             return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Draft));
         }
 
         [ChildActionOnly]
-        public ActionResult VacancyPendingReview(AccountDashboardViewModel model)
+        public Microsoft.AspNetCore.Mvc.ActionResult VacancyPendingReview(AccountDashboardViewModel model)
         {
             return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Submitted));
         }
 
         [ChildActionOnly]
-        public ActionResult VacancyRejected(AccountDashboardViewModel model)
+        public Microsoft.AspNetCore.Mvc.ActionResult VacancyRejected(AccountDashboardViewModel model)
         {
             return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Referred));
         }
 
         [ChildActionOnly]
-        public ActionResult VacancyLive(AccountDashboardViewModel model)
+        public Microsoft.AspNetCore.Mvc.ActionResult VacancyLive(AccountDashboardViewModel model)
         {
             return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Live));
         }
 
         [ChildActionOnly]
-        public ActionResult VacancyClosed(AccountDashboardViewModel model)
+        public Microsoft.AspNetCore.Mvc.ActionResult VacancyClosed(AccountDashboardViewModel model)
         {
             return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Closed));
         }
 
         [HttpGet]
         [Route("triagewhichcourseyourapprenticewilltake")]
-        public ActionResult TriageWhichCourseYourApprenticeWillTake()
+        public Microsoft.AspNetCore.Mvc.ActionResult TriageWhichCourseYourApprenticeWillTake()
         {
             return View();
         }
@@ -482,7 +482,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [Route("triagewhichcourseyourapprenticewilltake")]
         [ValidateAntiForgeryToken]
-        public ActionResult TriageWhichCourseYourApprenticeWillTake(TriageViewModel model)
+        public Microsoft.AspNetCore.Mvc.ActionResult TriageWhichCourseYourApprenticeWillTake(TriageViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -510,14 +510,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("triageyoucannotsetupanapprenticeshipyetcourseprovider")]
-        public ActionResult TriageYouCannotSetupAnApprenticeshipYetCourseProvider()
+        public Microsoft.AspNetCore.Mvc.ActionResult TriageYouCannotSetupAnApprenticeshipYetCourseProvider()
         {
             return View();
         }
 
         [HttpGet]
         [Route("triagehaveyouchosenatrainingprovider")]
-        public ActionResult TriageHaveYouChosenATrainingProvider()
+        public Microsoft.AspNetCore.Mvc.ActionResult TriageHaveYouChosenATrainingProvider()
         {
             return View();
         }
@@ -525,7 +525,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [Route("triagehaveyouchosenatrainingprovider")]
         [ValidateAntiForgeryToken]
-        public ActionResult TriageHaveYouChosenATrainingProvider(TriageViewModel model)
+        public Microsoft.AspNetCore.Mvc.ActionResult TriageHaveYouChosenATrainingProvider(TriageViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -553,14 +553,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("triageyoucannotsetupanapprenticeshipyetprovider")]
-        public ActionResult TriageYouCannotSetupAnApprenticeshipYetProvider()
+        public Microsoft.AspNetCore.Mvc.ActionResult TriageYouCannotSetupAnApprenticeshipYetProvider()
         {
             return View();
         }
 
         [HttpGet]
         [Route("triagewillapprenticeshiptrainingstart")]
-        public ActionResult TriageWillApprenticeshipTrainingStart()
+        public Microsoft.AspNetCore.Mvc.ActionResult TriageWillApprenticeshipTrainingStart()
         {
             return View();
         }
@@ -568,7 +568,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [Route("triagewillapprenticeshiptrainingstart")]
         [ValidateAntiForgeryToken]
-        public ActionResult TriageWillApprenticeshipTrainingStart(TriageViewModel model)
+        public Microsoft.AspNetCore.Mvc.ActionResult TriageWillApprenticeshipTrainingStart(TriageViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -601,21 +601,21 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("triageyoucannotsetupanapprenticeshipyetstartdate")]
-        public ActionResult TriageYouCannotSetupAnApprenticeshipYetStartDate()
+        public Microsoft.AspNetCore.Mvc.ActionResult TriageYouCannotSetupAnApprenticeshipYetStartDate()
         {
             return View();
         }
 
         [HttpGet]
         [Route("triageyoucannotsetupanapprenticeshipyetapproximatestartdate")]
-        public ActionResult TriageYouCannotSetupAnApprenticeshipYetApproximateStartDate()
+        public Microsoft.AspNetCore.Mvc.ActionResult TriageYouCannotSetupAnApprenticeshipYetApproximateStartDate()
         {
             return View();
         }
 
         [HttpGet]
         [Route("triageapprenticeforexistingemployee")]
-        public ActionResult TriageApprenticeForExistingEmployee()
+        public Microsoft.AspNetCore.Mvc.ActionResult TriageApprenticeForExistingEmployee()
         {
             return View();
         }
@@ -623,7 +623,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [Route("triageapprenticeforexistingemployee")]
         [ValidateAntiForgeryToken]
-        public ActionResult TriageApprenticeForExistingEmployee(TriageViewModel model)
+        public Microsoft.AspNetCore.Mvc.ActionResult TriageApprenticeForExistingEmployee(TriageViewModel model)
         {
             if (!ModelState.IsValid)
             {

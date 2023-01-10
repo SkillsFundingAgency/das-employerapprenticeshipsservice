@@ -19,13 +19,13 @@ namespace SFA.DAS.EmployerAccounts.Web
             _config = config;
         }
         
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        public override void OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
 
             if (filterContext.Result is HttpStatusCodeResult)
             {
-                if (((HttpStatusCodeResult)filterContext.Result).StatusCode.Equals((int)HttpStatusCode.Forbidden) &&
+                if (((Microsoft.AspNetCore.Mvc.StatusCodeResult)filterContext.Result).StatusCode.Equals((int)HttpStatusCode.Forbidden) &&
                     IsSupportConsoleUser(filterContext))
                 {
                     if (filterContext.HttpContext.Request.RequestContext.RouteData.Values.TryGetValue(RouteValueKeys.AccountHashedId, out var accountHashedId))
@@ -36,7 +36,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             }
         }
 
-        private bool IsSupportConsoleUser(ActionExecutingContext filterContext)
+        private bool IsSupportConsoleUser(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext filterContext)
         {
             var requiredRoles = _config.SupportConsoleUsers.Split(',');
             return requiredRoles.Any(role => filterContext.HttpContext.User.IsInRole(role));

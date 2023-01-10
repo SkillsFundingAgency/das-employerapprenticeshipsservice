@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("trainingprovider/{correlationId}")]
-        public async Task<ActionResult> TrainingProvider(string correlationId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> TrainingProvider(string correlationId)
         {
             if (Guid.TryParse(correlationId, out var correlationGuid))
             {
