@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.Data
         private readonly Lazy<EmployerAccountsDbContext> _db;
 
         public UserAccountRepository(EmployerAccountsConfiguration configuration, ILog logger, Lazy<EmployerAccountsDbContext> db)
-            : base(configuration.SqlConnectionString, logger)
+            : base(configuration.DatabaseConnectionString, logger)
         {
             _db = db;
         }

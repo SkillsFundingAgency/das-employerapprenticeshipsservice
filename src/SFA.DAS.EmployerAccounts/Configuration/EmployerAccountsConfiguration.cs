@@ -11,10 +11,10 @@ namespace SFA.DAS.EmployerAccounts.Configuration
     public class EmployerAccountsConfiguration : ITopicMessagePublisherConfiguration
     {
         public string AllowedHashstringCharacters { get; set; }
-        public string CdnUrl { get; set; }
+        public string CdnBaseUrl { get; set; }
         public string DashboardUrl { get; set; }
         public EmployerAccountsOuterApiConfiguration EmployerAccountsOuterApiConfiguration { get; set; }
-        public string SqlConnectionString { get; set; }
+        public string DatabaseConnectionString { get; set; }
         public string EmployerAccountsBaseUrl { get; set; }
         public string EmployerCommitmentsBaseUrl { get; set; }
         public string EmployerCommitmentsV2BaseUrl { get; set; }

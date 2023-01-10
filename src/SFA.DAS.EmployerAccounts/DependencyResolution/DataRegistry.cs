@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
 
         private string GetEmployerAccountsConnectionString(IContext context)
         {
-            return context.GetInstance<EmployerAccountsConfiguration>().SqlConnectionString;
+            return context.GetInstance<EmployerAccountsConfiguration>().DatabaseConnectionString;
         }
     }
 }

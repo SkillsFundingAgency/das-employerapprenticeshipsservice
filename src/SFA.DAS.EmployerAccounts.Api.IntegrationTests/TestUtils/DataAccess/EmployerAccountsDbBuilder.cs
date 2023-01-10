@@ -38,7 +38,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
             _hashingService = _container.GetInstance<IHashingService>();
             _publicHashingService = _container.GetInstance<IPublicHashingService>();
 
-            _dbContext = new EmployerAccountsDbContext(_configuration.SqlConnectionString);
+            _dbContext = new EmployerAccountsDbContext(_configuration.DatabaseConnectionString);
 
             _lazyAccountRepository = new  Lazy<IAccountRepository>(buildAccountRepository);
             _lazyUserRepository = new Lazy<IUserRepository>(buildUserRepository);
