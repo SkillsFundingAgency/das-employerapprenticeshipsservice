@@ -1,10 +1,10 @@
-﻿using SFA.DAS.Audit.Client;
-using SFA.DAS.Audit.Types;
+﻿using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using SFA.DAS.Audit.Client;
+using SFA.DAS.Audit.Types;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerUsers.WebClientComponents;
-using System.IdentityModel.Claims;
-using System.Collections.Generic;
 
 namespace SFA.DAS.EmployerAccounts.Services
 {
