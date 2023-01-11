@@ -1,6 +1,5 @@
 ﻿using SFA.DAS.EmployerAccounts.Commands.ReportTrainingProvider;
 using SFA.DAS.EmployerAccounts.Commands.UnsubscribeProviderEmail;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 

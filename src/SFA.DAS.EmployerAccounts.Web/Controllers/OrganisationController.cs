@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using SFA.DAS.Authorization.Mvc.Attributes;
+﻿using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;

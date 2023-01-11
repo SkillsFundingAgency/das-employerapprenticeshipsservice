@@ -1,10 +1,5 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Http;
-using SFA.DAS.Authorization.Mvc.Attributes;
-using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Web.Models;
+﻿using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerUsers.WebClientComponents;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 

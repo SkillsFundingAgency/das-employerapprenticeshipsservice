@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using SFA.DAS.Authorization.Mvc.Attributes;
-using SFA.DAS.EmployerAccounts.Configuration;
+﻿using SFA.DAS.Authorization.Mvc.Attributes;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 

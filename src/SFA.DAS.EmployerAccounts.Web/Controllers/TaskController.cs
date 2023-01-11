@@ -1,5 +1,4 @@
 ﻿using SFA.DAS.Authorization.Mvc.Attributes;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 

@@ -1,12 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Extensions;
+﻿using Microsoft.AspNetCore.Http.Extensions;
 using Newtonsoft.Json;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
-using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.EmployerAccounts.Web.Models;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
@@ -17,7 +13,7 @@ public class EmployerAccountController : BaseController
     private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
     private readonly ILog _logger;
     private readonly IMediator _mediatr;
-    private ICookieStorageService<HashedAccountIdModel> _accountCookieStorage;
+    private readonly ICookieStorageService<HashedAccountIdModel> _accountCookieStorage;
     private readonly IHttpContextAccessor _contextAccessor;
     private readonly ICookieStorageService<ReturnUrlModel> _returnUrlCookieStorageService;
     private readonly string _hashedAccountIdCookieName;
