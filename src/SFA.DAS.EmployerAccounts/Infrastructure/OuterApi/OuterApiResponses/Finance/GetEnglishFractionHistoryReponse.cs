@@ -1,6 +1,5 @@
-﻿namespace SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.OuterApiResponses.Finance
+﻿namespace SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.OuterApiResponses.Finance;
+
+public class GetEnglishFractionHistoryResponse : GetEnglishFractionResponse
 {
-    public class GetEnglishFractionHistoryResponse : GetEnglishFractionResponse
-    {
-    }
 }

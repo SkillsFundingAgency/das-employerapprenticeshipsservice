@@ -1,6 +1,4 @@
-using System;
 using System.Net.Http;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces.OuterApi;
