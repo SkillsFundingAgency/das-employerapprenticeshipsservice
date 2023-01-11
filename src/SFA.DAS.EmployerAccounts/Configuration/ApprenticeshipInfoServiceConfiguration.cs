@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Configuration
+﻿namespace SFA.DAS.EmployerAccounts.Configuration;
+
+public class ApprenticeshipInfoServiceConfiguration
 {
-    public class ApprenticeshipInfoServiceConfiguration
-    {
-        public string BaseUrl { get; set; }
-    }
+    public string BaseUrl { get; set; }
 }
