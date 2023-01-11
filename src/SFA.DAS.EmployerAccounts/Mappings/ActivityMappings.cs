@@ -3,14 +3,13 @@ using SFA.DAS.EmployerAccounts.Models.Activities;
 using SFA.DAS.EmployerAccounts.Queries.GetActivities;
 using SFA.DAS.EmployerAccounts.Queries.GetLatestActivities;
 
-namespace SFA.DAS.EmployerAccounts.Mappings
+namespace SFA.DAS.EmployerAccounts.Mappings;
+
+public class ActivityMappings : Profile
 {
-    public class ActivityMappings : Profile
+    public ActivityMappings()
     {
-        public ActivityMappings()
-        {
-            CreateMap<GetActivitiesResponse, ActivitiesViewModel>();
-            CreateMap<GetLatestActivitiesResponse, LatestActivitiesViewModel>();
-        }
+        CreateMap<GetActivitiesResponse, ActivitiesViewModel>();
+        CreateMap<GetLatestActivitiesResponse, LatestActivitiesViewModel>();
     }
 }

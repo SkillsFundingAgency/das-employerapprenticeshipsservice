@@ -1,14 +1,12 @@
 ﻿using AutoMapper;
 using SFA.DAS.EmployerAccounts.Dtos;
-using SFA.DAS.EmployerAccounts.Models.UserProfile;
 
-namespace SFA.DAS.EmployerAccounts.Mappings
+namespace SFA.DAS.EmployerAccounts.Mappings;
+
+public class UserMappings : Profile
 {
-    public class UserMappings : Profile
+    public UserMappings()
     {
-        public UserMappings()
-        {
-            CreateMap<User, UserDto>();
-        }
+        CreateMap<User, UserDto>();
     }
 }
