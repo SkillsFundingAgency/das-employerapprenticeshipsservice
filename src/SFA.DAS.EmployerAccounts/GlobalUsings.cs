@@ -11,4 +11,5 @@ global using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 global using SFA.DAS.EmployerAccounts.Messages.Events;
 global using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 global using SFA.DAS.EmployerAccounts.Models.UserProfile;
+global using SFA.DAS.EmployerAccounts.Services;
 global using StructureMap;

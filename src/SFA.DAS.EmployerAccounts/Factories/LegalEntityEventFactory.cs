@@ -1,15 +1,14 @@
 ﻿using SFA.DAS.EmployerAccounts.Events.LegalEntity;
 
-namespace SFA.DAS.EmployerAccounts.Factories
+namespace SFA.DAS.EmployerAccounts.Factories;
+
+public class LegalEntityEventFactory : ILegalEntityEventFactory
 {
-    public class LegalEntityEventFactory : ILegalEntityEventFactory
+    public LegalEntityCreatedEvent CreateLegalEntityCreatedEvent(string hashedAccountId, long legalEntityId)
     {
-        public LegalEntityCreatedEvent CreateLegalEntityCreatedEvent(string hashedAccountId, long legalEntityId)
+        return new LegalEntityCreatedEvent
         {
-            return new LegalEntityCreatedEvent
-            {
-                ResourceUri = $"api/accounts/{hashedAccountId}/legalentities/{legalEntityId}"
-            };
-        }
+            ResourceUri = $"api/accounts/{hashedAccountId}/legalentities/{legalEntityId}"
+        };
     }
 }

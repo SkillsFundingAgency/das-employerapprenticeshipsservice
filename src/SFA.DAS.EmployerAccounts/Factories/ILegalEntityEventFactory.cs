@@ -1,9 +1,8 @@
 ﻿using SFA.DAS.EmployerAccounts.Events.LegalEntity;
 
-namespace SFA.DAS.EmployerAccounts.Factories
+namespace SFA.DAS.EmployerAccounts.Factories;
+
+public interface ILegalEntityEventFactory
 {
-    public interface ILegalEntityEventFactory
-    {
-        LegalEntityCreatedEvent CreateLegalEntityCreatedEvent(string hashedAccountId, long legalEntityId);
-    }
+    LegalEntityCreatedEvent CreateLegalEntityCreatedEvent(string hashedAccountId, long legalEntityId);
 }
