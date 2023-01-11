@@ -63,12 +63,11 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddConfigurationOptions(_configuration);
             services.AddFluentValidation();
             services.AddOrchestrators();
-
             services.AddAutoMapper(typeof(Startup).Assembly);
-
             services.AddDatabaseRegistration(employerAccountsConfiguration, _configuration["Environment"]);
-
-
+            services.AddApplicationServices(employerAccountsConfiguration);
+            
+            
             services.AddHttpContextAccessor();
 
             services.AddControllersWithViews(ConfigureMvcOptions)
