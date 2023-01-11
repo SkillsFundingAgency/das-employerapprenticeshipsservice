@@ -1,6 +1,5 @@
-﻿namespace SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.OuterApiResponses.HealthCheck
+﻿namespace SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.OuterApiResponses.HealthCheck;
+
+public class PingResponse
 {
-    public class PingResponse
-    {
-    }
 }
