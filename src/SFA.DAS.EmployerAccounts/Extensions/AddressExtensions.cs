@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using SFA.DAS.ReferenceData.Types.DTO;
+using Address = SFA.DAS.ReferenceData.Types.DTO.Address;
 
 namespace SFA.DAS.EmployerAccounts.Extensions
 {

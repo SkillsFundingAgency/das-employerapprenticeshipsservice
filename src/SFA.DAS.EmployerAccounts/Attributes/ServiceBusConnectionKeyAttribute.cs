@@ -1,12 +1,9 @@
-﻿using System;
+﻿namespace SFA.DAS.EmployerAccounts.Attributes;
 
-namespace SFA.DAS.EmployerAccounts.Attributes
+public class ServiceBusConnectionKeyAttribute : Attribute
 {
-    public class ServiceBusConnectionKeyAttribute : Attribute
+    public ServiceBusConnectionKeyAttribute(string connectionKey)
     {
-        public ServiceBusConnectionKeyAttribute(string connectionKey)
-        {
                 
-        }
     }
 }

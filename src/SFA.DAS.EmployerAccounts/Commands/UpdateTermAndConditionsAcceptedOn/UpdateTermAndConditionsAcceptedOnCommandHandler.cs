@@ -1,21 +1,16 @@
-using MediatR;
-using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Interfaces;
+namespace SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser;
 
-namespace SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser
+public class UpdateTermAndConditionsAcceptedOnCommandHandler : AsyncRequestHandler<UpdateTermAndConditionsAcceptedOnCommand>
 {
-    public class UpdateTermAndConditionsAcceptedOnCommandHandler : AsyncRequestHandler<UpdateTermAndConditionsAcceptedOnCommand>
+    private readonly IUserRepository _userRepository;
+    public UpdateTermAndConditionsAcceptedOnCommandHandler(
+        IUserRepository userRepository)
     {
-        private readonly IUserRepository _userRepository;
-        public UpdateTermAndConditionsAcceptedOnCommandHandler(
-            IUserRepository userRepository)
-        {
-            _userRepository = userRepository;
-        }
+        _userRepository = userRepository;
+    }
 
-        protected override async Task HandleCore(UpdateTermAndConditionsAcceptedOnCommand message)
-        {
-            await _userRepository.UpdateTermAndConditionsAcceptedOn(message.UserRef);
-        }
+    protected override async Task HandleCore(UpdateTermAndConditionsAcceptedOnCommand message)
+    {
+        await _userRepository.UpdateTermAndConditionsAcceptedOn(message.UserRef);
     }
 }

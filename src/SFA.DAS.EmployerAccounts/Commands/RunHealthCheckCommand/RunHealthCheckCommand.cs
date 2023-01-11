@@ -1,14 +1,11 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using AutoMapper;
-using MediatR;
 
-namespace SFA.DAS.EmployerAccounts.Commands.RunHealthCheckCommand
+namespace SFA.DAS.EmployerAccounts.Commands.RunHealthCheckCommand;
+
+public class RunHealthCheckCommand : IAsyncRequest
 {
-    public class RunHealthCheckCommand : IAsyncRequest
-    {
-        [IgnoreMap]
-        [Required]
-        public Guid? UserRef { get; set; }
-    }
+    [IgnoreMap]
+    [Required]
+    public Guid? UserRef { get; set; }
 }

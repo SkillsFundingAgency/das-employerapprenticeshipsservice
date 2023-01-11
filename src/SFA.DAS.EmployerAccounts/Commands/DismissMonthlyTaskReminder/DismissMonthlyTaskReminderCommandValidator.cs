@@ -1,37 +1,34 @@
-﻿using System;
-using System.Threading.Tasks;
-using SFA.DAS.Tasks.API.Types.Enums;
+﻿using SFA.DAS.Tasks.API.Types.Enums;
 using SFA.DAS.Validation;
 
-namespace SFA.DAS.EmployerAccounts.Commands.DismissMonthlyTaskReminder
+namespace SFA.DAS.EmployerAccounts.Commands.DismissMonthlyTaskReminder;
+
+public class DismissMonthlyTaskReminderCommandValidator : IValidator<DismissMonthlyTaskReminderCommand>
 {
-    public class DismissMonthlyTaskReminderCommandValidator : IValidator<DismissMonthlyTaskReminderCommand>
+    public ValidationResult Validate(DismissMonthlyTaskReminderCommand command)
     {
-        public ValidationResult Validate(DismissMonthlyTaskReminderCommand command)
+        var validationResult = new ValidationResult();
+
+        if (string.IsNullOrEmpty(command.HashedAccountId))
         {
-            var validationResult = new ValidationResult();
-
-            if (string.IsNullOrEmpty(command.HashedAccountId))
-            {
-                validationResult.AddError(nameof(command.HashedAccountId), "Hashed account Id cannot be null or empty");
-            }
-
-            if (string.IsNullOrEmpty(command.ExternalUserId))
-            {
-                validationResult.AddError(nameof(command.ExternalUserId), "Hashed user Id cannot be null or empty");
-            }
-
-            if (command.TaskType == TaskType.None)
-            {
-                validationResult.AddError(nameof(command.TaskType), "Task type must be set");
-            }
-
-            return validationResult;
+            validationResult.AddError(nameof(command.HashedAccountId), "Hashed account Id cannot be null or empty");
         }
 
-        public Task<ValidationResult> ValidateAsync(DismissMonthlyTaskReminderCommand command)
+        if (string.IsNullOrEmpty(command.ExternalUserId))
         {
-            throw new NotImplementedException();
+            validationResult.AddError(nameof(command.ExternalUserId), "Hashed user Id cannot be null or empty");
         }
+
+        if (command.TaskType == TaskType.None)
+        {
+            validationResult.AddError(nameof(command.TaskType), "Task type must be set");
+        }
+
+        return validationResult;
+    }
+
+    public Task<ValidationResult> ValidateAsync(DismissMonthlyTaskReminderCommand command)
+    {
+        throw new NotImplementedException();
     }
 }
