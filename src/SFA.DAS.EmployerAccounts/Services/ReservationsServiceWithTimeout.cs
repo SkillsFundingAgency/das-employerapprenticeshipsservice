@@ -1,35 +1,31 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Polly;
+﻿using Polly;
 using Polly.Registry;
 using Polly.Timeout;
 using SFA.DAS.EmployerAccounts.Exceptions;
-using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Reservations;
 
-namespace SFA.DAS.EmployerAccounts.Services
+namespace SFA.DAS.EmployerAccounts.Services;
+
+public class ReservationsServiceWithTimeout : IReservationsService
 {
-    public class ReservationsServiceWithTimeout : IReservationsService
+    private readonly IReservationsService _service;
+    private readonly IAsyncPolicy _pollyPolicy;
+
+    public ReservationsServiceWithTimeout(IReservationsService service, IReadOnlyPolicyRegistry<string> pollyRegistry)
     {
-        private readonly IReservationsService _service;
-        private readonly IAsyncPolicy _pollyPolicy;
+        _service = service;
+        _pollyPolicy = pollyRegistry.Get<IAsyncPolicy>(Constants.DefaultServiceTimeout);
+    }
 
-        public ReservationsServiceWithTimeout(IReservationsService service, IReadOnlyPolicyRegistry<string> pollyRegistry)
+    public async Task<IEnumerable<Reservation>> Get(long accountId)
+    {
+        try
         {
-            _service = service;
-            _pollyPolicy = pollyRegistry.Get<IAsyncPolicy>(Constants.DefaultServiceTimeout);
+            return await _pollyPolicy.ExecuteAsync(() => _service.Get(accountId));
         }
-
-        public async Task<IEnumerable<Reservation>> Get(long accountId)
+        catch (TimeoutRejectedException ex)
         {
-            try
-            {
-                return await _pollyPolicy.ExecuteAsync(() => _service.Get(accountId));
-            }
-            catch (TimeoutRejectedException ex)
-            {
-                throw new ServiceTimeoutException("Call to Reservation Service timed out", ex);
-            }
+            throw new ServiceTimeoutException("Call to Reservation Service timed out", ex);
         }
     }
 }
