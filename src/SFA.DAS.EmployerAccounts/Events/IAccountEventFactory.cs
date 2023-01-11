@@ -1,10 +1,9 @@
 ﻿using SFA.DAS.EmployerAccounts.Events.Account;
 
-namespace SFA.DAS.EmployerAccounts.Events
+namespace SFA.DAS.EmployerAccounts.Events;
+
+public interface IAccountEventFactory
 {
-    public interface IAccountEventFactory
-    {
-        AccountCreatedEvent CreateAccountCreatedEvent(string hashedAccountId);
-        AccountRenamedEvent CreateAccountRenamedEvent(string hashedAccountId);
-    }
+    AccountCreatedEvent CreateAccountCreatedEvent(string hashedAccountId);
+    AccountRenamedEvent CreateAccountRenamedEvent(string hashedAccountId);
 }

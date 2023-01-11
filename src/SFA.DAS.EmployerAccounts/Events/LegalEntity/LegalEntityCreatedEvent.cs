@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Events.LegalEntity
+﻿namespace SFA.DAS.EmployerAccounts.Events.LegalEntity;
+
+public class LegalEntityCreatedEvent
 {
-    public class LegalEntityCreatedEvent
-    {
-        public string ResourceUri { get; set; }
-    }
+    public string ResourceUri { get; set; }
 }
