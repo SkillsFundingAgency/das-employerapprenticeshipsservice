@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
+﻿using AutoMapper;
+using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
 
 namespace SFA.DAS.EmployerAccounts.Web.Mappings;
 

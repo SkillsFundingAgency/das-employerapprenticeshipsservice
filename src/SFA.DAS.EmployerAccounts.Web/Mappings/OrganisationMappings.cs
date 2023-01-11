@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EmployerAccounts.Commands.CreateOrganisationAddress;
+﻿using AutoMapper;
+using SFA.DAS.EmployerAccounts.Commands.CreateOrganisationAddress;
 
 namespace SFA.DAS.EmployerAccounts.Web.Mappings;
 

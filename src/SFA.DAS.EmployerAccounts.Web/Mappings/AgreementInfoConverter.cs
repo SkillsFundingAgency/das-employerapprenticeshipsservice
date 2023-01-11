@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EAS.Account.Api.Types;
+﻿using AutoMapper;
+using SFA.DAS.EAS.Account.Api.Types;
 
 namespace SFA.DAS.EmployerAccounts.Web.Mappings;
 

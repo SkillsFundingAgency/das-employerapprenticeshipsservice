@@ -26,7 +26,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerAccounts.Web
 {
-    public class Startup
+    public class Startup_old
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private const string AccountDataCookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";        

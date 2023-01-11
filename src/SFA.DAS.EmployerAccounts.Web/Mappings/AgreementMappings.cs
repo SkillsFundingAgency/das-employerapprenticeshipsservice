@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EAS.Account.Api.Types;
+﻿using AutoMapper;
+using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerAccounts.Dtos;
 using AccountLegalEntityViewModel = SFA.DAS.EmployerAccounts.Web.ViewModels.AccountLegalEntityViewModel;
 

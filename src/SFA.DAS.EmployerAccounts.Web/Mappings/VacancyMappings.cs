@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EmployerAccounts.Models.Recruit;
+﻿using AutoMapper;
+using SFA.DAS.EmployerAccounts.Models.Recruit;
 
 namespace SFA.DAS.EmployerAccounts.Web.Mappings;
 

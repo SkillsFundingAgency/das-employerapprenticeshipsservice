@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EmployerAccounts.Queries.GetHealthCheck;
+﻿using AutoMapper;
+using SFA.DAS.EmployerAccounts.Queries.GetHealthCheck;
 
 namespace SFA.DAS.EmployerAccounts.Web.Mappings;
 

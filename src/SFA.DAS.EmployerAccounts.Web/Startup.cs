@@ -1,29 +1,74 @@
-﻿// This Startup file is based on ASP.NET Core new project templates and is included
-// as a starting point for DI registration and HTTP request processing pipeline configuration.
-// This file will need updated according to the specific scenario of the application being upgraded.
-// For more information on ASP.NET Core startup files, see https://docs.microsoft.com/aspnet/core/fundamentals/startup
-
+﻿using System.IO;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace SFA.DAS.EmployerAccounts.Web
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _environment;
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
-            Configuration = configuration;
+            _environment = environment;
+            
+            var config = new ConfigurationBuilder()
+                .AddConfiguration(configuration)
+                .SetBasePath(Directory.GetCurrentDirectory());
+
+#if DEBUG
+            if (!configuration.IsDev())
+            {
+                config.AddJsonFile("appsettings.json", false)
+                    .AddJsonFile("appsettings.Development.json", true);
+            }
+#endif
+
+            config.AddEnvironmentVariables();
+            if (!configuration.IsDev())
+            {
+                config.AddAzureTableStorage(options =>
+                    {
+                        options.ConfigurationKeys = configuration["ConfigNames"].Split(",");
+                        options.StorageConnectionString = configuration["ConfigurationStorageConnectionString"];
+                        options.EnvironmentName = configuration["Environment"];
+                        options.PreFixConfigurationKeys = false;
+                    }
+                );
+            }
+
+            _configuration = config.Build();
         }
 
-        public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var employerAccountsConfiguration = _configuration
+                .GetSection(nameof(EmployerAccountsConfiguration))
+                .Get<EmployerAccountsConfiguration>();
+
+            var identityServerConfiguration = _configuration
+                .GetSection(nameof(IdentityServerConfiguration))
+                .Get<IdentityServerConfiguration>();
+
+            services.AddConfigurationOptions(_configuration);
+            services.AddFluentValidation();
+            services.AddOrchestrators();
+
+            services.AddAutoMapper(typeof(Startup).Assembly);
+
+            services.AddDatabaseRegistration(employerAccountsConfiguration, _configuration["Environment"]);
+
+
             services.AddHttpContextAccessor();
 
             services.AddControllersWithViews(ConfigureMvcOptions)
