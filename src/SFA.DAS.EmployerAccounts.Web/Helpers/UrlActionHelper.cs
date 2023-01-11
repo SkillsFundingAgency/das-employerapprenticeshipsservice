@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Routing;
-using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Interfaces;
 
 namespace SFA.DAS.EmployerAccounts.Web.Helpers;
 
