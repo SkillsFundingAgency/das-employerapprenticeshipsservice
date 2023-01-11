@@ -1,13 +1,12 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.SqlServer;
 
-namespace SFA.DAS.EmployerAccounts.Data
+namespace SFA.DAS.EmployerAccounts.Data;
+
+public class SqlAzureDbConfiguration : DbConfiguration
 {
-    public class SqlAzureDbConfiguration : DbConfiguration
+    public SqlAzureDbConfiguration()
     {
-        public SqlAzureDbConfiguration()
-        {
-            SetExecutionStrategy("System.Data.SqlClient", () => new SqlAzureExecutionStrategy());
-        }
+        SetExecutionStrategy("System.Data.SqlClient", () => new SqlAzureExecutionStrategy());
     }
 }

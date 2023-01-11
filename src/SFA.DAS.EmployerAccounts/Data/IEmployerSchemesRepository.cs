@@ -1,10 +1,8 @@
-﻿using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Models.PAYE;
+﻿using SFA.DAS.EmployerAccounts.Models.PAYE;
 
-namespace SFA.DAS.EmployerAccounts.Data
+namespace SFA.DAS.EmployerAccounts.Data;
+
+public interface IEmployerSchemesRepository
 {
-    public interface IEmployerSchemesRepository
-    {
-        Task<PayeScheme> GetSchemeByRef(string empref);
-    }
+    Task<PayeScheme> GetSchemeByRef(string empref);
 }
