@@ -1,15 +1,11 @@
-﻿using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Services;
-using StructureMap;
+﻿using SFA.DAS.EmployerAccounts.Services;
 
-namespace SFA.DAS.EmployerAccounts.DependencyResolution
+namespace SFA.DAS.EmployerAccounts.DependencyResolution;
+
+public class PensionsRegulatorRegistry : Registry
 {
-    public class PensionsRegulatorRegistry : Registry
+    public PensionsRegulatorRegistry()
     {
-        public PensionsRegulatorRegistry()
-        {
-            For<IPensionRegulatorService>().Use<PensionRegulatorService>();
-        }
+        For<IPensionRegulatorService>().Use<PensionRegulatorService>();
     }
 }

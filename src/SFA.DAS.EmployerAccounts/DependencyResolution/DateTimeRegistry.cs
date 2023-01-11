@@ -1,12 +1,9 @@
-﻿using StructureMap;
+﻿namespace SFA.DAS.EmployerAccounts.DependencyResolution;
 
-namespace SFA.DAS.EmployerAccounts.DependencyResolution
+public class DateTimeRegistry : Registry
 {
-    public class DateTimeRegistry : Registry
+    public DateTimeRegistry()
     {
-        public DateTimeRegistry()
-        {
-            Policies.Add<CurrentDatePolicy>();
-        }
+        Policies.Add<CurrentDatePolicy>();
     }
 }

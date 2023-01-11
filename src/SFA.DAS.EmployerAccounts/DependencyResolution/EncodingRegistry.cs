@@ -1,13 +1,11 @@
 ﻿using SFA.DAS.Encoding;
-using StructureMap;
 
-namespace SFA.DAS.EmployerAccounts.DependencyResolution
+namespace SFA.DAS.EmployerAccounts.DependencyResolution;
+
+public class EncodingRegistry : Registry
 {
-    public class EncodingRegistry : Registry
+    public EncodingRegistry()
     {
-        public EncodingRegistry()
-        {
-            For<IEncodingService>().Use<EncodingService>().Singleton();
-        }
+        For<IEncodingService>().Use<EncodingService>().Singleton();
     }
 }

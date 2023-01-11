@@ -1,13 +1,9 @@
-﻿using SFA.DAS.EmployerAccounts.Data;
-using StructureMap;
+﻿namespace SFA.DAS.EmployerAccounts.DependencyResolution;
 
-namespace SFA.DAS.EmployerAccounts.DependencyResolution
+public class RepositoriesRegistry : Registry
 {
-    public class RepositoriesRegistry : Registry
+    public RepositoriesRegistry()
     {
-        public RepositoriesRegistry()
-        {
-            For<IUserAccountRepository>().Use<UserAccountRepository>();
-        }
+        For<IUserAccountRepository>().Use<UserAccountRepository>();
     }
 }

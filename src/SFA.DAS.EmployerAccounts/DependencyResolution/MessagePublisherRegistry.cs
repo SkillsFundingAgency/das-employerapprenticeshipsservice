@@ -2,15 +2,13 @@
 using SFA.DAS.Messaging.AzureServiceBus;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
 using SFA.DAS.NLog.Logger;
-using StructureMap;
 
-namespace SFA.DAS.EmployerAccounts.DependencyResolution
+namespace SFA.DAS.EmployerAccounts.DependencyResolution;
+
+public class MessagePublisherRegistry : Registry
 {
-    public class MessagePublisherRegistry : Registry
+    public MessagePublisherRegistry()
     {
-        public MessagePublisherRegistry()
-        {
-            Policies.Add(new TopicMessagePublisherPolicy<EmployerAccountsConfiguration>("SFA.DAS.EmployerAccounts", "1.0", new NLogLogger(typeof(TopicMessagePublisher))));
-        }
+        Policies.Add(new TopicMessagePublisherPolicy<EmployerAccountsConfiguration>("SFA.DAS.EmployerAccounts", "1.0", new NLogLogger(typeof(TopicMessagePublisher))));
     }
 }

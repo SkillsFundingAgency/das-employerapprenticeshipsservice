@@ -1,14 +1,12 @@
 ﻿using SFA.DAS.Hmrc.ExecutionPolicy;
-using StructureMap;
 
-namespace SFA.DAS.EmployerAccounts.DependencyResolution
+namespace SFA.DAS.EmployerAccounts.DependencyResolution;
+
+public class ExecutionPoliciesRegistry : Registry
 {
-    public class ExecutionPoliciesRegistry : Registry
+    public ExecutionPoliciesRegistry()
     {
-        public ExecutionPoliciesRegistry()
-        {
-            For<ExecutionPolicy>().Use<HmrcExecutionPolicy>().Named(HmrcExecutionPolicy.Name).SelectConstructor(() => new HmrcExecutionPolicy(null));
-            Policies.Add(new ExecutionPolicyPolicy());
-        }
+        For<ExecutionPolicy>().Use<HmrcExecutionPolicy>().Named(HmrcExecutionPolicy.Name).SelectConstructor(() => new HmrcExecutionPolicy(null));
+        Policies.Add(new ExecutionPolicyPolicy());
     }
 }

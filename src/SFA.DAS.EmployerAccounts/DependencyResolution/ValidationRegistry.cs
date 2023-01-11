@@ -1,17 +1,15 @@
 ﻿using SFA.DAS.Validation;
-using StructureMap;
 
-namespace SFA.DAS.EmployerAccounts.DependencyResolution
+namespace SFA.DAS.EmployerAccounts.DependencyResolution;
+
+public class ValidationRegistry : Registry
 {
-    public class ValidationRegistry : Registry
+    public ValidationRegistry()
     {
-        public ValidationRegistry()
+        Scan(s =>
         {
-            Scan(s =>
-            {
-                s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(Constants.ServiceNamespace));
-                s.ConnectImplementationsToTypesClosing(typeof(IValidator<>));
-            });
-        }
+            s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(Constants.ServiceNamespace));
+            s.ConnectImplementationsToTypesClosing(typeof(IValidator<>));
+        });
     }
 }

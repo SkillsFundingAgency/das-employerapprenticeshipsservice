@@ -1,15 +1,12 @@
-﻿using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Services;
-using StructureMap;
+﻿using SFA.DAS.EmployerAccounts.Services;
 
-namespace SFA.DAS.EmployerAccounts.DependencyResolution
+namespace SFA.DAS.EmployerAccounts.DependencyResolution;
+
+public class RecruitRegistry : Registry
 {
-    public class RecruitRegistry : Registry
+    public RecruitRegistry()
     {
-        public RecruitRegistry()
-        {
-            For<IRecruitService>().Use<RecruitService>();
-            For<IRecruitService>().DecorateAllWith<RecruitServiceWithTimeout>();
-        }
+        For<IRecruitService>().Use<RecruitService>();
+        For<IRecruitService>().DecorateAllWith<RecruitServiceWithTimeout>();
     }
 }

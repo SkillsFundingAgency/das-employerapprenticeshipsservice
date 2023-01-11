@@ -1,15 +1,13 @@
 ﻿using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.TokenService.Api.Client;
-using StructureMap;
 
-namespace SFA.DAS.EmployerAccounts.DependencyResolution
+namespace SFA.DAS.EmployerAccounts.DependencyResolution;
+
+public class TokenServiceRegistry : Registry
 {
-    public class TokenServiceRegistry : Registry
+    public TokenServiceRegistry()
     {
-        public TokenServiceRegistry()
-        {
-            For<ITokenServiceApiClientConfiguration>().Use(c => c.GetInstance<TokenServiceApiClientConfiguration>());
-            For<TokenServiceApiClientConfiguration>().Use(c => c.GetInstance<EmployerAccountsConfiguration>().TokenServiceApi).Singleton();
-        }
+        For<ITokenServiceApiClientConfiguration>().Use(c => c.GetInstance<TokenServiceApiClientConfiguration>());
+        For<TokenServiceApiClientConfiguration>().Use(c => c.GetInstance<EmployerAccountsConfiguration>().TokenServiceApi).Singleton();
     }
 }
