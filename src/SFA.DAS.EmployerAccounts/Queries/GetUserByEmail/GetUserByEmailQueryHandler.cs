@@ -1,33 +1,29 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.Validation;
+﻿using SFA.DAS.Validation;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetUserByEmail
+namespace SFA.DAS.EmployerAccounts.Queries.GetUserByEmail;
+
+public class GetUserByEmailQueryHandler : IAsyncRequestHandler<GetUserByEmailQuery, GetUserByEmailResponse>
 {
-    public class GetUserByEmailQueryHandler : IAsyncRequestHandler<GetUserByEmailQuery, GetUserByEmailResponse>
+    private readonly IUserAccountRepository _repository;
+    private readonly IValidator<GetUserByEmailQuery> _validator;
+
+    public GetUserByEmailQueryHandler(IUserAccountRepository repository, IValidator<GetUserByEmailQuery> validator)
     {
-        private readonly IUserAccountRepository _repository;
-        private readonly IValidator<GetUserByEmailQuery> _validator;
+        _repository = repository;
+        _validator = validator;
+    }
 
-        public GetUserByEmailQueryHandler(IUserAccountRepository repository, IValidator<GetUserByEmailQuery> validator)
+    public async  Task<GetUserByEmailResponse> Handle(GetUserByEmailQuery message)
+    {
+        var result = _validator.Validate(message);
+
+        if (!result.IsValid())
         {
-            _repository = repository;
-            _validator = validator;
+            throw new InvalidRequestException(result.ValidationDictionary);
         }
 
-        public async  Task<GetUserByEmailResponse> Handle(GetUserByEmailQuery message)
-        {
-            var result = _validator.Validate(message);
+        var user = await _repository.Get(message.Email);
 
-            if (!result.IsValid())
-            {
-                throw new InvalidRequestException(result.ValidationDictionary);
-            }
-
-            var user = await _repository.Get(message.Email);
-
-            return new GetUserByEmailResponse {User = user};
-        }
+        return new GetUserByEmailResponse {User = user};
     }
 }

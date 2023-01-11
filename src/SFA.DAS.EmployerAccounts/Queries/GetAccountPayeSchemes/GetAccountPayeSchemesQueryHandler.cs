@@ -1,42 +1,37 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.Validation;
+﻿using SFA.DAS.Validation;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
+
+public class GetAccountPayeSchemesQueryHandler : IAsyncRequestHandler<GetAccountPayeSchemesQuery, GetAccountPayeSchemesResponse>
 {
-    public class GetAccountPayeSchemesQueryHandler : IAsyncRequestHandler<GetAccountPayeSchemesQuery, GetAccountPayeSchemesResponse>
+    private readonly IValidator<GetAccountPayeSchemesQuery> _validator;
+    private IPayeSchemesService _payeSchemesService;
+
+    public GetAccountPayeSchemesQueryHandler(
+        IPayeSchemesService payeSchemesService,
+        IValidator<GetAccountPayeSchemesQuery> validator )
     {
-        private readonly IValidator<GetAccountPayeSchemesQuery> _validator;
-        private IPayeSchemesService _payeSchemesService;
+        _validator = validator;
+        _payeSchemesService = payeSchemesService;
+    }
 
-        public GetAccountPayeSchemesQueryHandler(
-            IPayeSchemesService payeSchemesService,
-            IValidator<GetAccountPayeSchemesQuery> validator )
+    public async Task<GetAccountPayeSchemesResponse> Handle(GetAccountPayeSchemesQuery message)
+    {
+        var validationResult = await _validator.ValidateAsync(message);
+
+        if (!validationResult.IsValid())
         {
-            _validator = validator;
-            _payeSchemesService = payeSchemesService;
+            throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        public async Task<GetAccountPayeSchemesResponse> Handle(GetAccountPayeSchemesQuery message)
+        var payeSchemes =
+            (await _payeSchemesService
+                .GetPayeSchemes(message.HashedAccountId))
+            .ToList();
+
+        return new GetAccountPayeSchemesResponse
         {
-            var validationResult = await _validator.ValidateAsync(message);
-
-            if (!validationResult.IsValid())
-            {
-                throw new InvalidRequestException(validationResult.ValidationDictionary);
-            }
-
-            var payeSchemes =
-                (await _payeSchemesService
-                    .GetPayeSchemes(message.HashedAccountId))
-                .ToList();
-
-            return new GetAccountPayeSchemesResponse
-            {
-                PayeSchemes = payeSchemes
-            };
-        }
+            PayeSchemes = payeSchemes
+        };
     }
 }

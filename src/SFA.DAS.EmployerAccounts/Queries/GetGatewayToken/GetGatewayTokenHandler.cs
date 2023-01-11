@@ -1,26 +1,23 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.Hmrc;
+﻿using SFA.DAS.Hmrc;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetGatewayToken
+namespace SFA.DAS.EmployerAccounts.Queries.GetGatewayToken;
+
+public class GetGatewayTokenHandler : IAsyncRequestHandler<GetGatewayTokenQuery, GetGatewayTokenQueryResponse>
 {
-    public class GetGatewayTokenHandler : IAsyncRequestHandler<GetGatewayTokenQuery, GetGatewayTokenQueryResponse>
+    private readonly IHmrcService _hmrcService;
+
+    public GetGatewayTokenHandler(IHmrcService hmrcService)
     {
-        private readonly IHmrcService _hmrcService;
+        _hmrcService = hmrcService;
+    }
 
-        public GetGatewayTokenHandler(IHmrcService hmrcService)
+    public async Task<GetGatewayTokenQueryResponse> Handle(GetGatewayTokenQuery message)
+    {
+        var response = await _hmrcService.GetAuthenticationToken(message.RedirectUrl, message.AccessCode);
+
+        return new GetGatewayTokenQueryResponse
         {
-            _hmrcService = hmrcService;
-        }
-
-        public async Task<GetGatewayTokenQueryResponse> Handle(GetGatewayTokenQuery message)
-        {
-            var response = await _hmrcService.GetAuthenticationToken(message.RedirectUrl, message.AccessCode);
-
-            return new GetGatewayTokenQueryResponse
-            {
-                HmrcTokenResponse = response
-            };
-        }
+            HmrcTokenResponse = response
+        };
     }
 }

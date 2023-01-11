@@ -1,9 +1,8 @@
 ﻿using SFA.DAS.EmployerAccounts.Models.ReferenceData;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetCharity
+namespace SFA.DAS.EmployerAccounts.Queries.GetCharity;
+
+public class GetCharityQueryResponse
 {
-    public class GetCharityQueryResponse
-    {
-        public Charity Charity { get; set; }
-    }
+    public Charity Charity { get; set; }
 }

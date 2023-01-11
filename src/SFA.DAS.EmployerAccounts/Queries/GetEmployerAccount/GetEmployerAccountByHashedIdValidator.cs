@@ -1,47 +1,43 @@
-using System;
-using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.Validation;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount
+namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
+
+public class GetEmployerAccountByHashedIdValidator : IValidator<GetEmployerAccountByHashedIdQuery>
 {
-    public class GetEmployerAccountByHashedIdValidator : IValidator<GetEmployerAccountByHashedIdQuery>
+    private readonly IMembershipRepository _membershipRepository;
+
+    public GetEmployerAccountByHashedIdValidator(IMembershipRepository membershipRepository)
     {
-        private readonly IMembershipRepository _membershipRepository;
+        _membershipRepository = membershipRepository;
+    }
 
-        public GetEmployerAccountByHashedIdValidator(IMembershipRepository membershipRepository)
+    public ValidationResult Validate(GetEmployerAccountByHashedIdQuery item)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<ValidationResult> ValidateAsync(GetEmployerAccountByHashedIdQuery item)
+    {
+        var result = new ValidationResult();
+
+        if (string.IsNullOrEmpty(item.UserId))
         {
-            _membershipRepository = membershipRepository;
+            result.AddError(nameof(item.UserId), "UserId has not been supplied");
         }
 
-        public ValidationResult Validate(GetEmployerAccountByHashedIdQuery item)
+        if (string.IsNullOrEmpty(item.HashedAccountId))
         {
-            throw new NotImplementedException();
+            result.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
         }
 
-        public async Task<ValidationResult> ValidateAsync(GetEmployerAccountByHashedIdQuery item)
+        if (result.IsValid())
         {
-            var result = new ValidationResult();
+            var membership = await _membershipRepository.GetCaller(item.HashedAccountId, item.UserId);
 
-            if (string.IsNullOrEmpty(item.UserId))
-            {
-                result.AddError(nameof(item.UserId), "UserId has not been supplied");
-            }
-
-            if (string.IsNullOrEmpty(item.HashedAccountId))
-            {
-                result.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
-            }
-
-            if (result.IsValid())
-            {
-                var membership = await _membershipRepository.GetCaller(item.HashedAccountId, item.UserId);
-
-                if (membership == null)
-                    result.IsUnauthorized = true;
-            }
-
-            return result;
+            if (membership == null)
+                result.IsUnauthorized = true;
         }
+
+        return result;
     }
 }

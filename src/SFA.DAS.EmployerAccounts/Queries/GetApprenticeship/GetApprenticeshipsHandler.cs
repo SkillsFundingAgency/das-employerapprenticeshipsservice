@@ -1,59 +1,53 @@
-﻿using System;
-using MediatR;
-using System.Threading.Tasks;
-using SFA.DAS.NLog.Logger;
+﻿using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
-using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.HashingService;
-using System;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetApprenticeship
+namespace SFA.DAS.EmployerAccounts.Queries.GetApprenticeship;
+
+public class GetApprenticeshipsHandler : IAsyncRequestHandler<GetApprenticeshipsRequest, GetApprenticeshipsResponse>
 {
-    public class GetApprenticeshipsHandler : IAsyncRequestHandler<GetApprenticeshipsRequest, GetApprenticeshipsResponse>
-    {
-        private readonly IValidator<GetApprenticeshipsRequest> _validator;
-        private readonly ILog _logger;
-        private readonly ICommitmentV2Service _commitmentV2Service;
-        private readonly IHashingService _hashingService;
+    private readonly IValidator<GetApprenticeshipsRequest> _validator;
+    private readonly ILog _logger;
+    private readonly ICommitmentV2Service _commitmentV2Service;
+    private readonly IHashingService _hashingService;
 
-        public GetApprenticeshipsHandler(
-            IValidator<GetApprenticeshipsRequest> validator,
-            ILog logger,
-            ICommitmentV2Service commitmentV2Service,
-            IHashingService hashingService)
+    public GetApprenticeshipsHandler(
+        IValidator<GetApprenticeshipsRequest> validator,
+        ILog logger,
+        ICommitmentV2Service commitmentV2Service,
+        IHashingService hashingService)
+    {
+        _validator = validator;
+        _logger = logger;
+        _commitmentV2Service = commitmentV2Service;
+        _hashingService = hashingService;
+    }
+
+    public async Task<GetApprenticeshipsResponse> Handle(GetApprenticeshipsRequest message)
+    {
+        var validationResult = _validator.Validate(message);
+
+        if (!validationResult.IsValid())
         {
-            _validator = validator;
-            _logger = logger;
-            _commitmentV2Service = commitmentV2Service;
-            _hashingService = hashingService;
+            throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        public async Task<GetApprenticeshipsResponse> Handle(GetApprenticeshipsRequest message)
+        long accountId = _hashingService.DecodeValue(message.HashedAccountId);
+
+        try
         {
-            var validationResult = _validator.Validate(message);
-
-            if (!validationResult.IsValid())
+            return new GetApprenticeshipsResponse
             {
-                throw new InvalidRequestException(validationResult.ValidationDictionary);
-            }
-
-            long accountId = _hashingService.DecodeValue(message.HashedAccountId);
-
-            try
+                Apprenticeships = await _commitmentV2Service.GetApprenticeships(accountId)
+            };
+        }
+        catch(Exception ex)
+        {
+            _logger.Error(ex, $"Failed to get Cohorts for {message.HashedAccountId}");
+            return new GetApprenticeshipsResponse
             {
-                return new GetApprenticeshipsResponse
-                {
-                    Apprenticeships = await _commitmentV2Service.GetApprenticeships(accountId)
-                };
-            }
-            catch(Exception ex)
-            {
-                _logger.Error(ex, $"Failed to get Cohorts for {message.HashedAccountId}");
-                return new GetApprenticeshipsResponse
-                {
-                    HasFailed = true
-                };
-            }
+                HasFailed = true
+            };
         }
     }
 }

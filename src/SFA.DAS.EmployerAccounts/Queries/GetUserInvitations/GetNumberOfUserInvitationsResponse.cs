@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Queries.GetUserInvitations
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetUserInvitations;
+
+public class GetNumberOfUserInvitationsResponse
 {
-    public class GetNumberOfUserInvitationsResponse
-    {
-        public int NumberOfInvites { get; set; }
-    }
+    public int NumberOfInvites { get; set; }
 }

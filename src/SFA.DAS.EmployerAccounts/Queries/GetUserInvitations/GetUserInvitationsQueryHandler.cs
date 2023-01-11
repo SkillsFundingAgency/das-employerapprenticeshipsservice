@@ -1,34 +1,30 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.HashingService;
+﻿using SFA.DAS.HashingService;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetUserInvitations
+namespace SFA.DAS.EmployerAccounts.Queries.GetUserInvitations;
+
+public class GetUserInvitationsQueryHandler : IAsyncRequestHandler<GetUserInvitationsRequest, GetUserInvitationsResponse>
 {
-    public class GetUserInvitationsQueryHandler : IAsyncRequestHandler<GetUserInvitationsRequest, GetUserInvitationsResponse>
+    private readonly IInvitationRepository _invitationRepository;
+    private readonly IHashingService _hashingService;
+
+    public GetUserInvitationsQueryHandler(IInvitationRepository invitationRepository, IHashingService hashingService)
     {
-        private readonly IInvitationRepository _invitationRepository;
-        private readonly IHashingService _hashingService;
+        _invitationRepository = invitationRepository;
+        _hashingService = hashingService;
+    }
 
-        public GetUserInvitationsQueryHandler(IInvitationRepository invitationRepository, IHashingService hashingService)
+    public async Task<GetUserInvitationsResponse> Handle(GetUserInvitationsRequest message)
+    {
+        var invitations = await _invitationRepository.Get(message.UserId);
+
+        foreach (var invitation in invitations)
         {
-            _invitationRepository = invitationRepository;
-            _hashingService = hashingService;
+            invitation.HashedAccountId = _hashingService.HashValue(invitation.Id);
         }
 
-        public async Task<GetUserInvitationsResponse> Handle(GetUserInvitationsRequest message)
+        return new GetUserInvitationsResponse
         {
-            var invitations = await _invitationRepository.Get(message.UserId);
-
-            foreach (var invitation in invitations)
-            {
-                invitation.HashedAccountId = _hashingService.HashValue(invitation.Id);
-            }
-
-            return new GetUserInvitationsResponse
-            {
-                Invitations = invitations
-            };
-        }
+            Invitations = invitations
+        };
     }
 }

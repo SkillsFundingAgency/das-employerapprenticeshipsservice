@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using SFA.DAS.EmployerAccounts.Models.PAYE;
+﻿using SFA.DAS.EmployerAccounts.Models.PAYE;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
+
+public class GetAccountPayeSchemesResponse
 {
-    public class GetAccountPayeSchemesResponse
-    {
-        public List<PayeView> PayeSchemes { get; set; }
-    }
+    public List<PayeView> PayeSchemes { get; set; }
 }

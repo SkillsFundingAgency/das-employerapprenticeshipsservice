@@ -1,10 +1,7 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount
+public class GetEmployerAccountByHashedIdQuery : IAsyncRequest<GetEmployerAccountByHashedIdResponse>
 {
-    public class GetEmployerAccountByHashedIdQuery : IAsyncRequest<GetEmployerAccountByHashedIdResponse>
-    {
-        public string HashedAccountId { get; set; }
-        public string UserId { get; set; }
-    }
+    public string HashedAccountId { get; set; }
+    public string UserId { get; set; }
 }

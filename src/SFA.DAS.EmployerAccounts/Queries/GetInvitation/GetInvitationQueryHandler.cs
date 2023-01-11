@@ -1,33 +1,28 @@
-﻿using System;
-using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.HashingService;
+﻿using SFA.DAS.HashingService;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetInvitation
+namespace SFA.DAS.EmployerAccounts.Queries.GetInvitation;
+
+//TODO tests and validator
+public class GetInvitationQueryHandler : IAsyncRequestHandler<GetInvitationRequest, GetInvitationResponse>
 {
-    //TODO tests and validator
-    public class GetInvitationQueryHandler : IAsyncRequestHandler<GetInvitationRequest, GetInvitationResponse>
+    private readonly IInvitationRepository _invitationRepository;
+    private readonly IHashingService _hashingService;
+
+    public GetInvitationQueryHandler(IInvitationRepository invitationRepository, IHashingService hashingService)
     {
-        private readonly IInvitationRepository _invitationRepository;
-        private readonly IHashingService _hashingService;
+        if (invitationRepository == null)
+            throw new ArgumentNullException(nameof(invitationRepository));
+        _invitationRepository = invitationRepository;
+        _hashingService = hashingService;
+    }
 
-        public GetInvitationQueryHandler(IInvitationRepository invitationRepository, IHashingService hashingService)
+    public async Task<GetInvitationResponse> Handle(GetInvitationRequest message)
+    {
+        var invitation = await _invitationRepository.GetView(_hashingService.DecodeValue(message.Id));
+
+        return new GetInvitationResponse
         {
-            if (invitationRepository == null)
-                throw new ArgumentNullException(nameof(invitationRepository));
-            _invitationRepository = invitationRepository;
-            _hashingService = hashingService;
-        }
-
-        public async Task<GetInvitationResponse> Handle(GetInvitationRequest message)
-        {
-            var invitation = await _invitationRepository.GetView(_hashingService.DecodeValue(message.Id));
-
-            return new GetInvitationResponse
-            {
-                Invitation = invitation
-            };
-        }
+            Invitation = invitation
+        };
     }
 }

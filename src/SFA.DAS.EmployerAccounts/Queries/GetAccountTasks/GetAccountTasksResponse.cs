@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using SFA.DAS.EmployerAccounts.Models.Account;
+﻿using SFA.DAS.EmployerAccounts.Models.Account;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountTasks
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountTasks;
+
+public class GetAccountTasksResponse
 {
-    public class GetAccountTasksResponse
-    {
-        public ICollection<AccountTask> Tasks { get; set; } 
-    }
+    public ICollection<AccountTask> Tasks { get; set; } 
 }

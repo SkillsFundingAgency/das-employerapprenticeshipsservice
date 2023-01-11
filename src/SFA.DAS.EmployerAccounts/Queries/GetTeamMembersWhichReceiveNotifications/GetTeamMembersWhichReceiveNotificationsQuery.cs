@@ -1,9 +1,6 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetTeamMembersWhichReceiveNotifications;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetTeamMembersWhichReceiveNotifications
+public class GetTeamMembersWhichReceiveNotificationsQuery : IAsyncRequest<GetTeamMembersWhichReceiveNotificationsQueryResponse>
 {
-    public class GetTeamMembersWhichReceiveNotificationsQuery : IAsyncRequest<GetTeamMembersWhichReceiveNotificationsQueryResponse>
-    {
-        public string HashedAccountId { get; set; }
-    }
+    public string HashedAccountId { get; set; }
 }

@@ -1,21 +1,16 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Interfaces;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.UpdateUserAornLock;
 
-namespace SFA.DAS.EmployerAccounts.Queries.UpdateUserAornLock
+public class UpdateUserAornLockQueryHandler : AsyncRequestHandler<UpdateUserAornLockRequest>
 {
-    public class UpdateUserAornLockQueryHandler : AsyncRequestHandler<UpdateUserAornLockRequest>
+    private readonly IUserAornPayeLockService _userAornPayeLockService;
+
+    public UpdateUserAornLockQueryHandler(IUserAornPayeLockService userAornPayeLockService)
     {
-        private readonly IUserAornPayeLockService _userAornPayeLockService;
+        _userAornPayeLockService = userAornPayeLockService;
+    }
 
-        public UpdateUserAornLockQueryHandler(IUserAornPayeLockService userAornPayeLockService)
-        {
-            _userAornPayeLockService = userAornPayeLockService;
-        }
-
-        protected override async Task HandleCore(UpdateUserAornLockRequest message)
-        {
-            await _userAornPayeLockService.UpdateUserAornPayeAttempt(message.UserRef, message.Success);
-        }
+    protected override async Task HandleCore(UpdateUserAornLockRequest message)
+    {
+        await _userAornPayeLockService.UpdateUserAornPayeAttempt(message.UserRef, message.Success);
     }
 }

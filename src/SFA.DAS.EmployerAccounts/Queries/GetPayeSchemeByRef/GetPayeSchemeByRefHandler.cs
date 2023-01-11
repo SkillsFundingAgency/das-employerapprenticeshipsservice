@@ -1,33 +1,29 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.Validation;
+﻿using SFA.DAS.Validation;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef
+namespace SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
+
+public class GetPayeSchemeByRefHandler : IAsyncRequestHandler<GetPayeSchemeByRefQuery, GetPayeSchemeByRefResponse>
 {
-    public class GetPayeSchemeByRefHandler : IAsyncRequestHandler<GetPayeSchemeByRefQuery, GetPayeSchemeByRefResponse>
+    private readonly IValidator<GetPayeSchemeByRefQuery> _validator;
+    private readonly IPayeRepository _payeRepository;
+
+    public GetPayeSchemeByRefHandler(IValidator<GetPayeSchemeByRefQuery> validator, IPayeRepository payeRepository)
     {
-        private readonly IValidator<GetPayeSchemeByRefQuery> _validator;
-        private readonly IPayeRepository _payeRepository;
+        _validator = validator;
+        _payeRepository = payeRepository;
+    }
 
-        public GetPayeSchemeByRefHandler(IValidator<GetPayeSchemeByRefQuery> validator, IPayeRepository payeRepository)
+    public async Task<GetPayeSchemeByRefResponse> Handle(GetPayeSchemeByRefQuery message)
+    {
+        var validationResult = _validator.Validate(message);
+
+        if (!validationResult.IsValid())
         {
-            _validator = validator;
-            _payeRepository = payeRepository;
+            throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        public async Task<GetPayeSchemeByRefResponse> Handle(GetPayeSchemeByRefQuery message)
-        {
-            var validationResult = _validator.Validate(message);
+        var payeScheme = await _payeRepository.GetPayeForAccountByRef(message.HashedAccountId, message.Ref);
 
-            if (!validationResult.IsValid())
-            {
-                throw new InvalidRequestException(validationResult.ValidationDictionary);
-            }
-
-            var payeScheme = await _payeRepository.GetPayeForAccountByRef(message.HashedAccountId, message.Ref);
-
-            return new GetPayeSchemeByRefResponse { PayeScheme = payeScheme};
-        }
+        return new GetPayeSchemeByRefResponse { PayeScheme = payeScheme};
     }
 }

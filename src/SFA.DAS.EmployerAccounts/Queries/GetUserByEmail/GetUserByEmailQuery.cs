@@ -1,9 +1,6 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetUserByEmail;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetUserByEmail
+public class GetUserByEmailQuery : IAsyncRequest<GetUserByEmailResponse>
 {
-    public class GetUserByEmailQuery : IAsyncRequest<GetUserByEmailResponse>
-    {
-        public string Email { get; set; }
-    }
+    public string Email { get; set; }
 }

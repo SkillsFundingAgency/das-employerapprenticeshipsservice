@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using SFA.DAS.EmployerAccounts.Dtos;
+﻿using SFA.DAS.EmployerAccounts.Dtos;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements
+namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements;
+
+public class GetOrganisationAgreementsResponse
 {
-    public class GetOrganisationAgreementsResponse
-    {
-        public virtual ICollection<EmployerAgreementDto> Agreements { get; set; } = new List<EmployerAgreementDto>();
-    }
+    public virtual ICollection<EmployerAgreementDto> Agreements { get; set; } = new List<EmployerAgreementDto>();
 }

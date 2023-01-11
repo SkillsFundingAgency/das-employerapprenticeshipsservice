@@ -1,9 +1,6 @@
-﻿using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetTeamUser
+public class GetTeamMemberResponse
 {
-    public class GetTeamMemberResponse
-    {
-        public MembershipView User { get; set; }
-    }
+    public MembershipView User { get; set; }
 }

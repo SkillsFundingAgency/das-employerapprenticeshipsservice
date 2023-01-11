@@ -1,9 +1,8 @@
 ﻿using SFA.DAS.Activities.Client;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetLatestActivities
+namespace SFA.DAS.EmployerAccounts.Queries.GetLatestActivities;
+
+public class GetLatestActivitiesResponse
 {
-    public class GetLatestActivitiesResponse
-    {
-        public AggregatedActivitiesResult Result { get; set; }
-    }
+    public AggregatedActivitiesResult Result { get; set; }
 }

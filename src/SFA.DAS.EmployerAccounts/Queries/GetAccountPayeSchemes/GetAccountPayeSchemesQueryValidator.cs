@@ -1,25 +1,23 @@
-﻿using System.Threading.Tasks;
-using SFA.DAS.Validation;
+﻿using SFA.DAS.Validation;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
+
+public class GetAccountPayeSchemesQueryValidator : IValidator<GetAccountPayeSchemesQuery>
 {
-    public class GetAccountPayeSchemesQueryValidator : IValidator<GetAccountPayeSchemesQuery>
+    public ValidationResult Validate(GetAccountPayeSchemesQuery item)
     {
-        public ValidationResult Validate(GetAccountPayeSchemesQuery item)
+        throw new System.NotImplementedException();
+    }
+
+    public async Task<ValidationResult> ValidateAsync(GetAccountPayeSchemesQuery query)
+    {
+        var validationResult = new ValidationResult();
+
+        if (string.IsNullOrEmpty(query.HashedAccountId))
         {
-            throw new System.NotImplementedException();
+            validationResult.ValidationDictionary.Add(nameof(query.HashedAccountId), "Hashed account ID has not been supplied");
         }
 
-        public async Task<ValidationResult> ValidateAsync(GetAccountPayeSchemesQuery query)
-        {
-            var validationResult = new ValidationResult();
-
-            if (string.IsNullOrEmpty(query.HashedAccountId))
-            {
-                validationResult.ValidationDictionary.Add(nameof(query.HashedAccountId), "Hashed account ID has not been supplied");
-            }
-
-            return validationResult;
-        }
+        return validationResult;
     }
 }
