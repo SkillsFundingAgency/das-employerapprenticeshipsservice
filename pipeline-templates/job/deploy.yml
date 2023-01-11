@@ -50,6 +50,7 @@ jobs:
             TargetFileName: '*.schema.json'
             TableName: Configuration
             ConfigurationSecrets:
+              CompaniesHouseKey: $(CompaniesHouseKey)
               EASMessageServiceBusString: $(EASMessageServiceBusString)
               EmployerSharedServiceBusString: $(EmployerSharedServiceBusString)
               EventsApiToken: $(EventsApiToken)
