@@ -1,8 +1,7 @@
-﻿namespace SFA.DAS.EmployerAccounts.Models.CommitmentsV2
+﻿namespace SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
+
+public class TrainingProvider
 {
-    public class TrainingProvider
-    {
-        public long Id { get; set; }
-        public string Name { get; set; }
-    }
+    public long Id { get; set; }
+    public string Name { get; set; }
 }

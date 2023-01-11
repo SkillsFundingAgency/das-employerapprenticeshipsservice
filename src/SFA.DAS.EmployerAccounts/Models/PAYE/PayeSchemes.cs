@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
+﻿namespace SFA.DAS.EmployerAccounts.Models.PAYE;
 
-namespace SFA.DAS.EmployerAccounts.Models.PAYE
+public class PayeSchemes
 {
-    public class PayeSchemes
-    {
-        public List<PayeScheme> SchemesList { get; set; }
+    public List<PayeScheme> SchemesList { get; set; }
 
-    }
 }
