@@ -36,7 +36,7 @@
 
 <div class="govuk-grid-row">
     <section class="govuk-grid-column-one-third">
-        <form id="filter" action="@Url.Action("SearchForOrganisationResults")?searchTerm=@(HttpUtility.UrlEncode(Model.Data.SearchTerm))" method="POST">
+        <form id="filter" action="@Url.Action("SearchForOrganisationResults")?searchTerm=@(WebUtility.UrlEncode(Model.Data.SearchTerm))" method="POST">
             <div class="das-filter">
                 <div class="das-filter__header">
                     <h2 class="govuk-heading-m das-filter__heading">Filter results</h2>
