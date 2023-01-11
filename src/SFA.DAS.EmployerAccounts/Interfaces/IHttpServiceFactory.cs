@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Interfaces
+﻿namespace SFA.DAS.EmployerAccounts.Interfaces;
+
+public interface IHttpServiceFactory
 {
-    public interface IHttpServiceFactory
-    {
-        IHttpService Create(string identifierUri, string clientId = "", string clientSecret = "", string tenant = "");
-    }
+    IHttpService Create(string identifierUri, string clientId = "", string clientSecret = "", string tenant = "");
 }

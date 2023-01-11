@@ -1,8 +1,7 @@
-﻿namespace SFA.DAS.EmployerAccounts.Interfaces
+﻿namespace SFA.DAS.EmployerAccounts.Interfaces;
+
+public interface IManagedIdentityClientConfiguration
 {
-    public interface IManagedIdentityClientConfiguration
-    {
-        string ApiBaseUrl { get; }
-        string IdentifierUri { get; }
-    }
+    string ApiBaseUrl { get; }
+    string IdentifierUri { get; }
 }

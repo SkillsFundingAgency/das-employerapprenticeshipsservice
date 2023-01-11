@@ -1,7 +1,6 @@
-namespace SFA.DAS.EmployerAccounts.Interfaces.OuterApi
+namespace SFA.DAS.EmployerAccounts.Interfaces.OuterApi;
+
+public interface IGetApiRequest
 {
-    public interface IGetApiRequest
-    {
-        string GetUrl { get; }
-    }
+    string GetUrl { get; }
 }

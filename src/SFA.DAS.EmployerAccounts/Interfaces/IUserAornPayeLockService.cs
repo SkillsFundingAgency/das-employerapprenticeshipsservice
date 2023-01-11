@@ -1,12 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Models.UserProfile;
+﻿namespace SFA.DAS.EmployerAccounts.Interfaces;
 
-namespace SFA.DAS.EmployerAccounts.Interfaces
+public interface IUserAornPayeLockService
 {
-    public interface IUserAornPayeLockService
-    {
-        Task<bool> UpdateUserAornPayeAttempt(string userRef, bool success);
-        Task<UserAornPayeStatus> UserAornPayeStatus(string userRef);
-    }
+    Task<bool> UpdateUserAornPayeAttempt(string userRef, bool success);
+    Task<UserAornPayeStatus> UserAornPayeStatus(string userRef);
 }

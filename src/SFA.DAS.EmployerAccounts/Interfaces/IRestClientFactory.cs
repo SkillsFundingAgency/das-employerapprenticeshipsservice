@@ -1,10 +1,8 @@
-﻿using System;
-using RestSharp;
+﻿using RestSharp;
 
-namespace SFA.DAS.EmployerAccounts.Interfaces
+namespace SFA.DAS.EmployerAccounts.Interfaces;
+
+public interface IRestClientFactory
 {
-    public interface IRestClientFactory
-    {
-        IRestClient Create(Uri baseUrl);
-    }
+    IRestClient Create(Uri baseUrl);
 }

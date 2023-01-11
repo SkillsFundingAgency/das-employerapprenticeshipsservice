@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Interfaces
+﻿namespace SFA.DAS.EmployerAccounts.Interfaces;
+
+public interface IRestServiceFactory
 {
-    public interface IRestServiceFactory
-    {
-        IRestService Create(string baseUrl);
-    }
+    IRestService Create(string baseUrl);
 }

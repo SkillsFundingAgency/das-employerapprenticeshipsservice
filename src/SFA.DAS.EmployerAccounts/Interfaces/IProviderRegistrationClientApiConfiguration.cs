@@ -1,9 +1,8 @@
 ﻿
-namespace SFA.DAS.EmployerAccounts.Interfaces
+namespace SFA.DAS.EmployerAccounts.Interfaces;
+
+public interface  IProviderRegistrationClientApiConfiguration
 {
-    public interface  IProviderRegistrationClientApiConfiguration
-    {
-        string BaseUrl { get; }
-        string IdentifierUri { get; }
-    }
+    string BaseUrl { get; }
+    string IdentifierUri { get; }
 }
