@@ -52,6 +52,7 @@ jobs:
             ConfigurationSecrets:
               CompaniesHouseKey: $(CompaniesHouseKey)
               EASMessageServiceBusString: $(EASMessageServiceBusString)
+              EmployerAccountsApimSubscriptionKey: $(EmployerAccountsApimSubscriptionKey)
               EmployerSharedServiceBusString: $(EmployerSharedServiceBusString)
               EventsApiToken: $(EventsApiToken)
               Hashstring: $(Hashstring)
