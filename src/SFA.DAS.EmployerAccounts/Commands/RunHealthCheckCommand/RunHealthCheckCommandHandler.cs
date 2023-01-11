@@ -2,6 +2,7 @@
 using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.OuterApiRequests.HealthCheck;
 using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.OuterApiResponses.HealthCheck;
 using SFA.DAS.EmployerAccounts.Interfaces.OuterApi;
+using SFA.DAS.EmployerAccounts.Models;
 
 namespace SFA.DAS.EmployerAccounts.Commands.RunHealthCheckCommand;
 
