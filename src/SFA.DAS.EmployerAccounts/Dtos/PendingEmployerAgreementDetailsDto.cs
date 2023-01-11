@@ -1,6 +1,5 @@
-﻿namespace SFA.DAS.EmployerAccounts.Dtos
+﻿namespace SFA.DAS.EmployerAccounts.Dtos;
+
+public class PendingEmployerAgreementDetailsDto : EmployerAgreementDetailsDto
 {
-    public class PendingEmployerAgreementDetailsDto : EmployerAgreementDetailsDto
-    {
-    }
 }
