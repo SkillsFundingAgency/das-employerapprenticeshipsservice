@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Http.Results;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -122,7 +121,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
 
         private void SetupUrlHelperForAccountLegalEntityOne()
         {
-            UrlHelper.Setup(
+            Microsoft.AspNetCore.Mvc.Routing.UrlHelper.Setup(
                     x => x.Route(
                         "GetLegalEntity",
                         It.Is<object>(
@@ -133,7 +132,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
 
         private void SetupUrlHelperForAccountLegalEntityTwo()
         {
-            UrlHelper.Setup(
+            Microsoft.AspNetCore.Mvc.Routing.UrlHelper.Setup(
                     x => x.Route(
                         "GetLegalEntity",
                         It.Is<object>(

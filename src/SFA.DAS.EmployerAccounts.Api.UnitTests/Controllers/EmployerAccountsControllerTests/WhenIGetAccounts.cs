@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Http.Results;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -32,10 +31,10 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.EmployerAccountsCon
                 }
             };
             Mediator.Setup(x => x.SendAsync(It.Is<GetPagedEmployerAccountsQuery>(q => q.PageNumber == pageNumber && q.PageSize == pageSize && q.ToDate == toDate)))
-                .ReturnsAsync(accountsResponse);        
+                .ReturnsAsync(accountsResponse);
 
-            UrlHelper.Setup(x => x.Route("GetAccount", It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId = accountsResponse.Accounts[0].HashedId })))).Returns($"/api/accounts/{accountsResponse.Accounts[0].HashedId}");
-            UrlHelper.Setup(x => x.Route("GetAccount", It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId = accountsResponse.Accounts[1].HashedId })))).Returns($"/api/accounts/{accountsResponse.Accounts[1].HashedId}");
+            Microsoft.AspNetCore.Mvc.Routing.UrlHelper.Setup(x => x.Route("GetAccount", It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId = accountsResponse.Accounts[0].HashedId })))).Returns($"/api/accounts/{accountsResponse.Accounts[0].HashedId}");
+            Microsoft.AspNetCore.Mvc.Routing.UrlHelper.Setup(x => x.Route("GetAccount", It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId = accountsResponse.Accounts[1].HashedId })))).Returns($"/api/accounts/{accountsResponse.Accounts[1].HashedId}");
 
             var response = await Controller.GetAccounts(toDate, pageSize, pageNumber);
 

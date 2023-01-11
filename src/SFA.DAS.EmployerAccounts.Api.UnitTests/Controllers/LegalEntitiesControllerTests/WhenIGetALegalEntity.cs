@@ -4,7 +4,6 @@ using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Controllers;
 using SFA.DAS.EmployerAccounts.Queries.GetLegalEntity;
 using System.Threading.Tasks;
-using System.Web.Http.Results;
 using AutoFixture.NUnit3;
 using FluentAssertions;
 using SFA.DAS.EmployerAccounts.Api.Mappings;

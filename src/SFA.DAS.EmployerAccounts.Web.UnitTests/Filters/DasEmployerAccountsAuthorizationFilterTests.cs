@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Net;
 using System.Security.Claims;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
@@ -74,7 +73,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
             AuthorizationFilter.OnActionExecuting(ActionExecutingContext);
 
             //Assert
-            var httpStatusCodeResult = ActionExecutingContext.Result as HttpStatusCodeResult;
+            var httpStatusCodeResult = ActionExecutingContext.Result as StatusCodeResult;
             Assert.That(httpStatusCodeResult, Is.Not.Null);
             Assert.AreEqual(httpStatusCodeResult.StatusCode, (int)HttpStatusCode.Forbidden);
         }

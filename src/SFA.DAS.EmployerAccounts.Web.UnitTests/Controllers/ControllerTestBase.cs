@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Moq;
 using SFA.DAS.NLog.Logger;
 using System;
@@ -9,9 +11,6 @@ using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
 {

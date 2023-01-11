@@ -1,6 +1,4 @@
-﻿using System.Web.Http;
-using System.Web.Http.Results;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Controllers;
 using SFA.DAS.Testing;

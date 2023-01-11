@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Configuration;
@@ -12,6 +11,7 @@ using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Web.Models;
 using SFA.DAS.NLog.Logger;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
 {

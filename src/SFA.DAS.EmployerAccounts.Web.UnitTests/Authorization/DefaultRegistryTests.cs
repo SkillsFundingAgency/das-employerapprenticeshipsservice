@@ -8,7 +8,6 @@ using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
 using SFA.DAS.HashingService;
 using StructureMap;
-using System.Web;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
 {

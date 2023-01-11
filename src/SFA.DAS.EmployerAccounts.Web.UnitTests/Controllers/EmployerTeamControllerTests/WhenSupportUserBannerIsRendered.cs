@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Security.Principal;
-using System.Web;
-using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
@@ -13,6 +11,7 @@ using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.EmployerAccounts.Models.Account;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests
 {

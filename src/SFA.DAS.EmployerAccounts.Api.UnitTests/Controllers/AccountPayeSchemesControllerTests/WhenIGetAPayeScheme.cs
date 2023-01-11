@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Http.Results;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -44,8 +43,8 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountPayeSchemesC
 
             Mediator.Setup(x => x.SendAsync(It.Is<GetAccountPayeSchemesQuery>(q => q.HashedAccountId == _hashedAccountId))).ReturnsAsync(_accountResponse);
 
-            UrlHelper.Setup(x => x.Route("GetPayeScheme", It.Is<object>(o => IsAccountPayeSchemeOne(o)))).Returns($"/api/accounts/{_hashedAccountId}/payeschemes/{_accountResponse.PayeSchemes[0].Ref.Replace(@"/", "%2f")}");
-            UrlHelper.Setup(x => x.Route("GetPayeScheme", It.Is<object>(o => IsAccountPayeSchemeTwo(o)))).Returns($"/api/accounts/{_hashedAccountId}/payeschemes/{_accountResponse.PayeSchemes[1].Ref.Replace(@"/", "%2f")}");
+            Microsoft.AspNetCore.Mvc.Routing.UrlHelper.Setup(x => x.Route("GetPayeScheme", It.Is<object>(o => IsAccountPayeSchemeOne(o)))).Returns($"/api/accounts/{_hashedAccountId}/payeschemes/{_accountResponse.PayeSchemes[0].Ref.Replace(@"/", "%2f")}");
+            Microsoft.AspNetCore.Mvc.Routing.UrlHelper.Setup(x => x.Route("GetPayeScheme", It.Is<object>(o => IsAccountPayeSchemeTwo(o)))).Returns($"/api/accounts/{_hashedAccountId}/payeschemes/{_accountResponse.PayeSchemes[1].Ref.Replace(@"/", "%2f")}");
 
 
             var response = await Controller.GetPayeSchemes(_hashedAccountId);

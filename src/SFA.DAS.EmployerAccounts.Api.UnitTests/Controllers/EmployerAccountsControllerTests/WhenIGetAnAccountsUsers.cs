@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Web.Http.Results;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamMembers;

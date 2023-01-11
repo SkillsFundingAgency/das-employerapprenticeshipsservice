@@ -1,5 +1,4 @@
-﻿using System.Web.Mvc;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Configuration;

@@ -1,6 +1,4 @@
-﻿using Microsoft.Owin.Security.Cookies;
-using Microsoft.Owin.Security.WsFederation;
-using Moq;
+﻿using Moq;
 using NLog;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Web.Extensions;

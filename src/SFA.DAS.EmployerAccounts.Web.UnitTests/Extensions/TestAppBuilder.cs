@@ -1,5 +1,4 @@
-﻿using Owin;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions

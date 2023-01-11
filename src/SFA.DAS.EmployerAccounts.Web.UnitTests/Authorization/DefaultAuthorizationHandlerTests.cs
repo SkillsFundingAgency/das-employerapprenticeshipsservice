@@ -4,8 +4,6 @@ using SFA.DAS.Authorization.Context;
 using System.Collections.Generic;
 using FluentAssertions;
 using System.Threading.Tasks;
-using System.Web.Routing;
-using System.Web;
 using System.Security.Claims;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
 using AuthorizationContext = SFA.DAS.Authorization.Context.AuthorizationContext;

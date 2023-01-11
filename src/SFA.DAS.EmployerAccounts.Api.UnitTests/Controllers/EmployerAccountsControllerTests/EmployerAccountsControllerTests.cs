@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Web.Http.Routing;
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Controllers;
@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.EmployerAccountsCon
         protected Mock<IMediator> Mediator;
         protected Mock<ILog> Logger;
         protected Mock<IHashingService> HashingService;
-        protected Mock<UrlHelper> UrlHelper;
+        protected Mock<IUrlHelper> UrlHelper;
         protected Mock<IMapper> Mapper;
 
         [SetUp]
@@ -33,8 +33,8 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.EmployerAccountsCon
             var orchestrator = new AccountsOrchestrator(Mediator.Object, Logger.Object, Mapper.Object, HashingService.Object);
             Controller = new EmployerAccountsController(orchestrator);
 
-            UrlHelper = new Mock<UrlHelper>();
-            Controller.Url = UrlHelper.Object;
+            Microsoft.AspNetCore.Mvc.IUrlHelper = new Mock<IUrlHelper>();
+            Controller.Url = Microsoft.AspNetCore.Mvc.Routing.UrlHelper.Object;
 
             var accountsResponse = new GetPagedEmployerAccountsResponse
             {

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -19,6 +17,8 @@ using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using Claim = System.Security.Claims.Claim;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
 {
@@ -37,8 +37,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
         private bool _isAuthenticated = true;
         private List<Claim> _claims;
         private string _userId;
-        private HtmlHelper _sut;
-        private HtmlHelper htmlHelper;
+        private IHtmlHelper _sut;
+        private IHtmlHelper htmlHelper;
         private Mock<IViewDataContainer> _viewDataContainerMock;
         private ViewContext _viewContext;
         private Mock<IMediator> _mockMediator;

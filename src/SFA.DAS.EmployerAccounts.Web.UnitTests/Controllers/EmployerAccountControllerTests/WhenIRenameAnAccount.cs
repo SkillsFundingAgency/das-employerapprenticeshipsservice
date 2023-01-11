@@ -8,11 +8,10 @@ using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
 using System.Net;
 using System.Threading.Tasks;
-using System.Web.Mvc;
-using System.Web.Routing;
 using MediatR;
 using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Web.Models;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests
 {
