@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels
+﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels;
+
+public class NavigationViewModel : ViewModelBase
 {
-    public class NavigationViewModel : ViewModelBase
-    {
-        public bool HideBreadcrumb { get; set; }
-    }
+    public bool HideBreadcrumb { get; set; }
 }

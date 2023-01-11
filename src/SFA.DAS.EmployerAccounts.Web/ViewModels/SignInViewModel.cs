@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
+﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels;
 
-namespace SFA.DAS.EmployerAccounts.Web.ViewModels
+public class SignInUserViewModel
 {
-    public class SignInUserViewModel
-    {
-        public List<UserViewModel> AvailableUsers { get; set; }
-    }
+    public List<UserViewModel> AvailableUsers { get; set; }
 }

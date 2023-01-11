@@ -1,11 +1,10 @@
-﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels
-{
-    public class GatewayInformViewModel
-    {
-        public string ConfirmUrl { get; set; }
+﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels;
 
-        public string BreadcrumbUrl { get; set; }
-        public string BreadcrumbDescription { get; set; }
-        public bool ValidationFailed { get; set; }
-    }
+public class GatewayInformViewModel
+{
+    public string ConfirmUrl { get; set; }
+
+    public string BreadcrumbUrl { get; set; }
+    public string BreadcrumbDescription { get; set; }
+    public bool ValidationFailed { get; set; }
 }

@@ -1,14 +1,11 @@
-﻿using AutoMapper;
-using SFA.DAS.EmployerAccounts.Queries.GetHealthCheck;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
+﻿using SFA.DAS.EmployerAccounts.Queries.GetHealthCheck;
 
-namespace SFA.DAS.EmployerAccounts.Web.Mappings
+namespace SFA.DAS.EmployerAccounts.Web.Mappings;
+
+public class HealthCheckMappings : Profile
 {
-    public class HealthCheckMappings : Profile
+    public HealthCheckMappings()
     {
-        public HealthCheckMappings()
-        {
-            CreateMap<GetHealthCheckQueryResponse, HealthCheckViewModel>();
-        }
+        CreateMap<GetHealthCheckQueryResponse, HealthCheckViewModel>();
     }
 }

@@ -1,25 +1,22 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Collections.ObjectModel;
 
-namespace SFA.DAS.EmployerAccounts.Web.ViewModels
+namespace SFA.DAS.EmployerAccounts.Web.ViewModels;
+
+public class OrganisationAgreementsViewModel
 {
-    public class OrganisationAgreementsViewModel
+    public OrganisationAgreementsViewModel()
     {
-        public OrganisationAgreementsViewModel()
-        {
-            Agreements = new Collection<OrganisationAgreementViewModel>();
-        }
-
-        public ICollection<OrganisationAgreementViewModel> Agreements { get; set; }
-
-        public string AgreementId { get; set; }
-
-        public bool HasSignedAgreements => Agreements.Any(agreement => agreement.SignedDate != null);
-        public bool HasUnsignedAgreement => Agreements.Any(agreement => agreement.SignedDate == null);
-
-        public OrganisationAgreementViewModel UnsignedAgreement => Agreements.Single(agreement => agreement.SignedDate == null);
-
-        public IEnumerable<OrganisationAgreementViewModel> SignedAgreements => Agreements.Where(agreement => agreement.SignedDate != null);
+        Agreements = new Collection<OrganisationAgreementViewModel>();
     }
+
+    public ICollection<OrganisationAgreementViewModel> Agreements { get; set; }
+
+    public string AgreementId { get; set; }
+
+    public bool HasSignedAgreements => Agreements.Any(agreement => agreement.SignedDate != null);
+    public bool HasUnsignedAgreement => Agreements.Any(agreement => agreement.SignedDate == null);
+
+    public OrganisationAgreementViewModel UnsignedAgreement => Agreements.Single(agreement => agreement.SignedDate == null);
+
+    public IEnumerable<OrganisationAgreementViewModel> SignedAgreements => Agreements.Where(agreement => agreement.SignedDate != null);
 }

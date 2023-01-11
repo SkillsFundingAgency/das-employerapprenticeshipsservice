@@ -1,8 +1,7 @@
-﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels
+﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels;
+
+public class TrainingProviderViewModel
 {
-    public class TrainingProviderViewModel
-    {
-        public long Id { get; set; }
-        public string Name { get; set; }
-    }
+    public long Id { get; set; }
+    public string Name { get; set; }
 }

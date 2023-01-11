@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels
+﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels;
+
+public class PendingAgreementsViewModel
 {
-    public class PendingAgreementsViewModel
-    {
-        public string HashedAgreementId { get; set; }
-    }
-}   
+    public string HashedAgreementId { get; set; }
+}

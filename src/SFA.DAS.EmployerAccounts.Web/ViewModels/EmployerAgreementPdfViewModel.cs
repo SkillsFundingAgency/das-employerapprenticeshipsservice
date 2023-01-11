@@ -1,9 +1,8 @@
 ﻿using System.IO;
 
-namespace SFA.DAS.EmployerAccounts.Web.ViewModels
+namespace SFA.DAS.EmployerAccounts.Web.ViewModels;
+
+public class EmployerAgreementPdfViewModel : ViewModelBase
 {
-    public class EmployerAgreementPdfViewModel : ViewModelBase
-    {
-        public Stream PdfStream { get; set; }
-    }
+    public Stream PdfStream { get; set; }
 }

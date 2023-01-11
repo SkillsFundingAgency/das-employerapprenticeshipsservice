@@ -1,11 +1,10 @@
-﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels
+﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels;
+
+public class LegalEntitySignedAgreementViewModel
 {
-    public class LegalEntitySignedAgreementViewModel
-    {
-        public string HashedAccountId { get; set; }
-        public string LegalEntityCode { get; set; }
-        public string CohortRef { get; set; }
-        public bool HasSignedAgreement { get; set; }
-        public string LegalEntityName { get; set; }
-    }
+    public string HashedAccountId { get; set; }
+    public string LegalEntityCode { get; set; }
+    public string CohortRef { get; set; }
+    public bool HasSignedAgreement { get; set; }
+    public string LegalEntityName { get; set; }
 }

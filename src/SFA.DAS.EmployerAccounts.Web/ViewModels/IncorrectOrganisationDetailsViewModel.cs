@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels
+﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels;
+
+public class IncorrectOrganisationDetailsViewModel
 {
-    public class IncorrectOrganisationDetailsViewModel
-    {
-        public string DataSourceFriendlyName { get; set; }
-    }
+    public string DataSourceFriendlyName { get; set; }
 }
