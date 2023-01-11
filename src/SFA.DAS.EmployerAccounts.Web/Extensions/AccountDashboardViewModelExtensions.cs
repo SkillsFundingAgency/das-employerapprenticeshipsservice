@@ -1,18 +1,16 @@
 ﻿using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
-namespace SFA.DAS.EmployerAccounts.Web.Extensions
+namespace SFA.DAS.EmployerAccounts.Web.Extensions;
+
+public static class AccountDashboardViewModelExtensions
 {
-    public static class AccountDashboardViewModelExtensions
+    public static bool ShowYourFundingReservationsLink(this AccountDashboardViewModel model)
     {
-        public static bool ShowYourFundingReservationsLink(this AccountDashboardViewModel model)
+        if(model.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy)
         {
-            if(model.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy)
-            {
-                return true;
-            }
-
-            return false;
+            return true;
         }
+
+        return false;
     }
 }
