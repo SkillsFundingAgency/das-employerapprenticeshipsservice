@@ -9,6 +9,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.IdentityModel" />
+    <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.1" />
+    <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.52781" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
+    <PackageReference Include="System.Memory" Version="4.5.4"/>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <Reference Include="System.IO.Compression, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
     <Reference Include="System.Security" />
     <Reference Include="System.Transactions" />

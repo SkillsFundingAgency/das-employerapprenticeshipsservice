@@ -1,48 +1,49 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <OutputType>Library</OutputType>
-    <RuntimeIdentifier>win</RuntimeIdentifier>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.Transactions" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Moq">
-      <Version>4.10.1</Version>
-    </PackageReference>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.1</Version>
-    </PackageReference>
-    <PackageReference Include="NUnit">
-      <Version>3.13.3</Version>
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.Testing">
-      <Version>3.0.121</Version>
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.Testing.AzureStorageEmulator">
-      <Version>3.0.169</Version>
-    </PackageReference>
-    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <PackageReference Include="System.Threading.Tasks.Extensions">
-      <Version>4.5.4</Version>
-    </PackageReference>
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
-    <PackageReference Include="System.ServiceModel.Duplex" Version="4.8.1" />
-    <PackageReference Include="System.ServiceModel.NetTcp" Version="4.8.1" />
-    <PackageReference Include="System.ServiceModel.Federation" Version="4.8.1" />
-    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.355802">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="appsettings.json" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<OutputType>Library</OutputType>
+		<RuntimeIdentifier>win</RuntimeIdentifier>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	</PropertyGroup>
+	<ItemGroup>
+		<Reference Include="System.IO.Compression" />
+		<Reference Include="System.Transactions" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+		<PackageReference Include="Moq">
+			<Version>4.10.1</Version>
+		</PackageReference>
+		<PackageReference Include="Newtonsoft.Json">
+			<Version>12.0.1</Version>
+		</PackageReference>
+		<PackageReference Include="NUnit">
+			<Version>3.13.3</Version>
+		</PackageReference>
+		<PackageReference Include="SFA.DAS.Testing">
+			<Version>3.0.121</Version>
+		</PackageReference>
+		<PackageReference Include="SFA.DAS.Testing.AzureStorageEmulator">
+			<Version>3.0.169</Version>
+		</PackageReference>
+		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+		<PackageReference Include="System.Threading.Tasks.Extensions">
+			<Version>4.5.4</Version>
+		</PackageReference>
+		<PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
+		<PackageReference Include="System.ServiceModel.Duplex" Version="4.8.1" />
+		<PackageReference Include="System.ServiceModel.NetTcp" Version="4.8.1" />
+		<PackageReference Include="System.ServiceModel.Federation" Version="4.8.1" />
+		<PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.355802">
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup>
+		<Content Include="appsettings.json" />
+	</ItemGroup>
 </Project>
