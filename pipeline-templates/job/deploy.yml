@@ -3,6 +3,7 @@ parameters:
   SolutionBaseName:
   Environment:
   OverrideBlockOnPossibleDataLoss:
+  AppRoleAssignmentsServiceConnection:
 
 jobs:
 - deployment: DeployWebApp
@@ -64,6 +65,12 @@ jobs:
               PublicAllowedAccountLegalEntityHashstringSalt: $(PublicAllowedAccountLegalEntityHashstringSalt)
               PublicHashstring: $(PublicHashstring)
               ReadStoreAuthKey: $(ReadStoreAuthKey)
+        - template: azure-pipelines-templates/deploy/step/app-role-assignments.yml@das-platform-building-blocks
+          parameters:
+            ServiceConnection: ${{ parameters.AppRoleAssignmentsServiceConnection }}
+            ResourceName: $(UiAppServiceName)
+            Tenant: $(Tenant)
+            IsMultiRepoCheckout: true
         - template: azure-pipelines-templates/deploy/step/sql-dacpac-deploy.yml@das-platform-building-blocks
           parameters:
             AzureSubscription: ${{ parameters.ServiceConnection }}
@@ -79,3 +86,13 @@ jobs:
             ServiceConnection: ${{ parameters.ServiceConnection }}
             AppServiceName: $(UiAppServiceName)
             DeploymentPackagePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/${{ parameters.SolutionBaseName }}.Web.zip
+        - template: azure-pipelines-templates/deploy/step/app-deploy.yml@das-platform-building-blocks
+          parameters:
+            ServiceConnection: ${{ parameters.ServiceConnection }}
+            AppServiceName: $(ApiAppServiceName)
+            DeploymentPackagePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/${{ parameters.SolutionBaseName }}.Api.zip
+        - template: azure-pipelines-templates/deploy/step/app-deploy.yml@das-platform-building-blocks
+          parameters:
+            ServiceConnection: ${{ parameters.ServiceConnection }}
+            AppServiceName: $(WorkerAppServiceName)
+            DeploymentPackagePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/${{ parameters.SolutionBaseName }}.Host.zip
