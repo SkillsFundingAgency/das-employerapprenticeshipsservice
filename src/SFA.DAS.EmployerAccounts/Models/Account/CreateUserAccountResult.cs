@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Models.Account
+﻿namespace SFA.DAS.EmployerAccounts.Models.Account;
+
+public class CreateUserAccountResult
 {
-    public class CreateUserAccountResult
-    {
-        public long AccountId { get; set; }
-    }
+    public long AccountId { get; set; }
 }
