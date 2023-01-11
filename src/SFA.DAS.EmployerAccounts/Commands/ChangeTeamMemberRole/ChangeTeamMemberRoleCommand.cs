@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole;
+﻿using SFA.DAS.EmployerAccounts.Models;
+
+namespace SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole;
 
 public class ChangeTeamMemberRoleCommand : IAsyncRequest
 {

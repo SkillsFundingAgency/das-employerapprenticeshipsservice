@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Commands.UpdateUserNotificationSettings;
+﻿using SFA.DAS.EmployerAccounts.Models;
+
+namespace SFA.DAS.EmployerAccounts.Commands.UpdateUserNotificationSettings;
 
 public class UpdateUserNotificationSettingsCommand: IAsyncRequest
 {

@@ -2,6 +2,7 @@
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.SendNotification;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.TimeProvider;

@@ -1,6 +1,7 @@
 ﻿using SFA.DAS.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.Validation;

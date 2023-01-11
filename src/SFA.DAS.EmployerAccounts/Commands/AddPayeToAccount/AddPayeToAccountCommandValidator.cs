@@ -1,3 +1,4 @@
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount;

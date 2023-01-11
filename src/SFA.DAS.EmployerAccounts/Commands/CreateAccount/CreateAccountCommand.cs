@@ -1,9 +1,11 @@
-﻿namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount;
+﻿using SFA.DAS.Common.Domain.Types;
+
+namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount;
 
 public class CreateAccountCommand : IAsyncRequest<CreateAccountCommandResponse>
 {
     public string ExternalUserId { get; set; }
-    public Types.Models.OrganisationType OrganisationType { get; set; }
+    public OrganisationType OrganisationType { get; set; }
     public short? PublicSectorDataSource { get; set; }
     public string OrganisationName { get; set; }
     public string OrganisationReferenceNumber { get; set; }

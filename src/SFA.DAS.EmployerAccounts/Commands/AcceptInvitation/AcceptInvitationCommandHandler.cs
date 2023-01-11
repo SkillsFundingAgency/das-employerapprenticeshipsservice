@@ -1,4 +1,6 @@
 using SFA.DAS.Audit.Types;
+using SFA.DAS.EmployerAccounts.Models;
+using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.NServiceBus.Services;

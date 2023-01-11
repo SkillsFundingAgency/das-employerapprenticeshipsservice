@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Commands.CreateInvitation;
+﻿using SFA.DAS.EmployerAccounts.Models;
+
+namespace SFA.DAS.EmployerAccounts.Commands.CreateInvitation;
 
 public class CreateInvitationCommand : IAsyncRequest
 {
