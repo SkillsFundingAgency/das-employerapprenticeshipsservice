@@ -21,13 +21,13 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
             {
                 c.AddRegistry<ActivitiesClientRegistry>();
                 c.AddRegistry<ApprenticeshipLevyRegistry>();
-                c.AddRegistry<AuditRegistry>();
+               // c.AddRegistry<AuditRegistry>();
                 c.AddRegistry<AuthorizationRegistry>();
                 c.AddRegistry<EmployerUserRolesAuthorizationRegistry>();
-                c.AddRegistry<CachesRegistry>();
-                c.AddRegistry<ConfigurationRegistry>();
-                c.AddRegistry<DataRegistry>();
-                c.AddRegistry<DateTimeRegistry>();
+               // c.AddRegistry<CachesRegistry>();
+               // c.AddRegistry<ConfigurationRegistry>();
+               // c.AddRegistry<DataRegistry>();
+               // c.AddRegistry<DateTimeRegistry>();
                 c.AddRegistry<EmployerAccountsApiClientRegistry>();
                 c.AddRegistry<AccountApiClientRegistry>();
                 c.AddRegistry<EntityFrameworkUnitOfWorkRegistry<EmployerAccountsDbContext>>();

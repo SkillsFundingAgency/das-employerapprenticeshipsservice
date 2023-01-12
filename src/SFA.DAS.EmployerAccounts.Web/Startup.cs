@@ -66,6 +66,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddHashingServices(employerAccountsConfiguration);
             services.AddAuditServices();
             services.AddCachesRegistrations();
+            services.AddDateTimeServices(_configuration);
 
 
 
