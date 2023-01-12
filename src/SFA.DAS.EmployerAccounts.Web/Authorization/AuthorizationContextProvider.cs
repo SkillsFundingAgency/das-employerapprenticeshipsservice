@@ -1,6 +1,4 @@
-﻿using System;
-using System.Web;
-using SFA.DAS.Authentication;
+﻿using Microsoft.AspNetCore.Mvc.Infrastructure;
 using SFA.DAS.Authorization.Context;
 using SFA.DAS.Authorization.EmployerFeatures.Context;
 using SFA.DAS.Authorization.EmployerUserRoles.Context;
@@ -12,17 +10,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
 {
     public class AuthorizationContextProvider : IAuthorizationContextProvider
     {
-        private readonly HttpContextBase _httpContext;
         private readonly IHashingService _hashingService;
         private readonly IAuthenticationService _authenticationService;
+        private readonly IActionContextAccessor _actionContextAccessor;
 
-        public AuthorizationContextProvider(HttpContextBase httpContext, 
+        public AuthorizationContextProvider(HttpContext httpContext, 
                                             IHashingService hashingService,
-                                            IAuthenticationService authenticationService)
+                                            IAuthenticationService authenticationService,
+                                            IActionContextAccessor actionContextAccessor)
         {
-            _httpContext = httpContext;
             _hashingService = hashingService;
             _authenticationService = authenticationService;
+            _actionContextAccessor = actionContextAccessor;
         }
 
         public IAuthorizationContext GetAuthorizationContext()
@@ -43,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
 
         private (string HashedId, long? Id) GetAccountValues()
         {
-            if (!_httpContext.Request.RequestContext.RouteData.Values.TryGetValue(RouteValueKeys.AccountHashedId, out var accountHashedId))
+            if (!_actionContextAccessor.ActionContext.RouteData.Values.TryGetValue(RouteValueKeys.AccountHashedId, out var accountHashedId))
             {
                 return (null, null);
             }
