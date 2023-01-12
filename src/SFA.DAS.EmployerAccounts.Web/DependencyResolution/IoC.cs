@@ -5,7 +5,6 @@ using SFA.DAS.Authorization.EmployerUserRoles.DependencyResolution.StructureMap;
 using SFA.DAS.EmployerAccounts.Api.Client;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.DependencyResolution;
-using SFA.DAS.UnitOfWork.EntityFramework.StructureMap;
 using SFA.DAS.UnitOfWork.NServiceBus.DependencyResolution.StructureMap;
 using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.StructureMap;
 using StructureMap;
@@ -46,7 +45,7 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
                 // c.AddRegistry<ServicesRegistry>();
                 //c.AddRegistry<TokenServiceRegistry>();
                 //c.AddRegistry<TasksRegistry>();
-                c.AddRegistry<ValidationRegistry>();
+                //c.AddRegistry<ValidationRegistry>();
                 c.AddRegistry<PensionsRegulatorRegistry>();
                 c.AddRegistry<RecruitRegistry>();
                 c.AddRegistry<DefaultRegistry>();
