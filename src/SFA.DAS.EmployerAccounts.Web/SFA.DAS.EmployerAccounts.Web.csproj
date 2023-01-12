@@ -43,9 +43,6 @@
     <PackageReference Include="SFA.DAS.Authorization.Mvc">
       <Version>6.0.52</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.AutoConfiguration">
-      <Version>2.0.1</Version>
-    </PackageReference>
     <PackageReference Include="SFA.DAS.Authentication">
       <Version>1.1.2</Version>
     </PackageReference>

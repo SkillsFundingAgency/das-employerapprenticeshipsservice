@@ -1,4 +1,6 @@
-﻿using SFA.DAS.Audit.Client;
+﻿using System.Net.Http;
+using HMRC.ESFA.Levy.Api.Client;
+using Microsoft.Extensions.Options;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Services;
@@ -19,6 +21,23 @@ public static class ApplicationRegistrationExtensions
         services.AddTransient<ICommitmentV2Service, CommitmentsV2Service>();
         services.Decorate<ICommitmentV2Service, CommitmentsV2ServiceWithTimeout>();
 
+        services.AddScoped<IAccountApiClient, AccountApiClient>();
+
+        services.AddTransient<IApprenticeshipLevyApiClient>(s =>
+        {
+            var settings = s.GetService<IOptions<EmployerAccountsConfiguration>>().Value;
+            var httpClient = new HttpClient();
+
+            if (!settings.Hmrc.BaseUrl.EndsWith("/"))
+            {
+                settings.Hmrc.BaseUrl += "/";
+            }
+            httpClient.BaseAddress = new Uri(settings.Hmrc.BaseUrl);
+
+            return new ApprenticeshipLevyApiClient(httpClient);
+        });
+
+        
         services.AddTransient<IHashingService>(_ => new HashingService.HashingService(configuration.AllowedHashstringCharacters, configuration.Hashstring));
 
     }
