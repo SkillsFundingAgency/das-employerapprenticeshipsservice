@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using SFA.DAS.Audit.Client;
 using SFA.DAS.Authorization.EmployerFeatures.Configuration;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerAccounts.ReadStore.Configuration;
@@ -11,20 +12,37 @@ public static class ConfigurationRegistrationExtensions
     public static void AddConfigurationOptions(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddOptions();
+        
         services.Configure<EmployerAccountsConfiguration>(configuration.GetSection(nameof(EmployerAccountsConfiguration)));
-        services.Configure<EmployerAccountsReadStoreConfiguration>(configuration.GetSection(nameof(EmployerAccountsReadStoreConfiguration)));
-        services.Configure<ReferenceDataApiClientConfiguration>(configuration.GetSection(nameof(ReferenceDataApiClientConfiguration)));
-        services.Configure<EmployerFeaturesConfiguration>(configuration.GetSection(nameof(EmployerFeaturesConfiguration)));
         services.AddSingleton(cfg => cfg.GetService<IOptions<EmployerAccountsConfiguration>>().Value);
 
-        services.Configure<AccountApiConfiguration>(configuration.GetSection(nameof(AccountApiConfiguration)));
-        services.Configure<IdentityServerConfiguration>(configuration.GetSection(nameof(IdentityServerConfiguration)));
+        services.Configure<EmployerAccountsReadStoreConfiguration>(configuration.GetSection(nameof(EmployerAccountsReadStoreConfiguration)));
+        services.AddSingleton(cfg => cfg.GetService<IOptions<EmployerAccountsReadStoreConfiguration>>().Value);
 
+        services.Configure<ReferenceDataApiClientConfiguration>(configuration.GetSection(nameof(ReferenceDataApiClientConfiguration)));
+        services.AddSingleton(cfg => cfg.GetService<IOptions<ReferenceDataApiClientConfiguration>>().Value);
+
+        services.Configure<EmployerFeaturesConfiguration>(configuration.GetSection(nameof(EmployerFeaturesConfiguration)));
+        services.AddSingleton(cfg => cfg.GetService<IOptions<EmployerFeaturesConfiguration>>().Value);
+
+        services.Configure<AccountApiConfiguration>(configuration.GetSection(nameof(AccountApiConfiguration)));
+        services.AddSingleton(cfg => cfg.GetService<IOptions<AccountApiConfiguration>>().Value);
+
+        services.Configure<IdentityServerConfiguration>(configuration.GetSection(nameof(IdentityServerConfiguration)));
+        services.AddSingleton(cfg => cfg.GetService<IOptions<IdentityServerConfiguration>>().Value);
+
+        services.Configure<IAuditApiConfiguration>(configuration.GetSection(nameof(AuditApiClientConfiguration)));
+        services.AddSingleton(cfg => cfg.GetService<IOptions<IAuditApiConfiguration>>().Value);
+
+        services.Configure<IAccountApiConfiguration>(configuration.GetSection(nameof(AccountApiConfiguration)));
         services.AddSingleton<IAccountApiConfiguration, AccountApiConfiguration>();
 
         var config = configuration.GetSection(nameof(EmployerAccountsConfiguration)) as EmployerAccountsConfiguration;
-
         services.AddSingleton<IHmrcConfiguration>(_ => config.Hmrc);
+
+
+        
+        //For<IAuditApiConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<AuditApiClientConfiguration>(ConfigurationKeys.AuditApi)).Singleton();
 
         // IncludeRegistry<AutoConfigurationRegistry>();
         //For<EmployerAccountsConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<EmployerAccountsConfiguration>(ConfigurationKeys.EmployerAccounts)).Singleton();
