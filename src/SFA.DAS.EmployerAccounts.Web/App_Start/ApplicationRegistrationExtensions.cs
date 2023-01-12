@@ -24,7 +24,8 @@ public static class ApplicationRegistrationExtensions
 
         services.AddScoped<IAccountApiClient, AccountApiClient>();
         services.AddSingleton<IReferenceDataService, ReferenceDataService>();
-        
+        services.AddTransient<ITaskService, TaskService>();
+
         services.AddTransient<IApprenticeshipLevyApiClient>(s =>
         {
             var settings = s.GetService<IOptions<EmployerAccountsConfiguration>>().Value;

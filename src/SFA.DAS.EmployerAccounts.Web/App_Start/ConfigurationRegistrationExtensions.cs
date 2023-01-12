@@ -6,6 +6,8 @@ using SFA.DAS.EmployerAccounts.ReadStore.Configuration;
 using SFA.DAS.Hmrc.Configuration;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.ReferenceData.Api.Client;
+using SFA.DAS.Tasks.API.Client;
+using SFA.DAS.TokenService.Api.Client;
 
 namespace SFA.DAS.EmployerAccounts.Web;
 
@@ -39,13 +41,19 @@ public static class ConfigurationRegistrationExtensions
         services.Configure<IAccountApiConfiguration>(configuration.GetSection(nameof(AccountApiConfiguration)));
         services.AddSingleton<IAccountApiConfiguration, AccountApiConfiguration>();
 
-        var config = configuration.GetSection(nameof(EmployerAccountsConfiguration)) as EmployerAccountsConfiguration;
-        services.AddSingleton<IHmrcConfiguration>(_ => config.Hmrc);
-
         services.Configure<INotificationsApiClientConfiguration>(configuration.GetSection(nameof(NotificationsApiClientConfiguration)));
         services.AddSingleton(cfg => cfg.GetService<IOptions<NotificationsApiClientConfiguration>>().Value);
 
         services.Configure<IReferenceDataApiConfiguration>(configuration.GetSection(nameof(ReferenceDataApiClientConfiguration)));
         services.AddSingleton(cfg => cfg.GetService<IOptions<ReferenceDataApiClientConfiguration>>().Value);
+
+        services.Configure<ITokenServiceApiClientConfiguration>(configuration.GetSection(nameof(TokenServiceApiClientConfiguration)));
+
+        var employerAccountsConfiguration = configuration.GetSection(nameof(EmployerAccountsConfiguration)) as EmployerAccountsConfiguration;
+
+        services.AddSingleton<IHmrcConfiguration>(_ => employerAccountsConfiguration.Hmrc);
+        services.AddSingleton(_ => employerAccountsConfiguration.TokenServiceApi);
+        services.AddSingleton(_ => employerAccountsConfiguration.TasksApi);
+
     }
 }
