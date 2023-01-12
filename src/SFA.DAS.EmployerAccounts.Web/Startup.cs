@@ -2,9 +2,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
@@ -67,6 +64,8 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddDatabaseRegistration(employerAccountsConfiguration, _configuration["Environment"]);
             services.AddApplicationServices(employerAccountsConfiguration);
             services.AddHashingServices(employerAccountsConfiguration);
+            services.AddAuditServices();
+            services.AddCachesRegistrations();
 
 
 
