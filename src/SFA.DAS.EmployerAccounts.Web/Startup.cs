@@ -69,6 +69,9 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddDateTimeServices(_configuration);
             services.AddEventsApi();
 
+            services.AddMediatR(typeof(Startup).Assembly);
+
+            services.AddLogging();
 
 
             services.AddHttpContextAccessor();
