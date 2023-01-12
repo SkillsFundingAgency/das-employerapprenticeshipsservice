@@ -41,7 +41,7 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
                 //c.AddRegistry<NotificationsRegistry>();
                 c.AddRegistry<NServiceBusClientUnitOfWorkRegistry>();
                 c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
-                c.AddRegistry<ReferenceDataRegistry>();
+                //c.AddRegistry<ReferenceDataRegistry>();
                 //c.AddRegistry<RepositoriesRegistry>();
                 // c.AddRegistry<ServicesRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();

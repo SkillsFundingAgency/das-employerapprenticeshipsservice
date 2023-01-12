@@ -23,7 +23,8 @@ public static class ApplicationRegistrationExtensions
         services.Decorate<ICommitmentV2Service, CommitmentsV2ServiceWithTimeout>();
 
         services.AddScoped<IAccountApiClient, AccountApiClient>();
-
+        services.AddSingleton<IReferenceDataService, ReferenceDataService>();
+        
         services.AddTransient<IApprenticeshipLevyApiClient>(s =>
         {
             var settings = s.GetService<IOptions<EmployerAccountsConfiguration>>().Value;

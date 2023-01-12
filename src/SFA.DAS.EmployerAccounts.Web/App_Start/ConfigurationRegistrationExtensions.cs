@@ -5,6 +5,7 @@ using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerAccounts.ReadStore.Configuration;
 using SFA.DAS.Hmrc.Configuration;
 using SFA.DAS.Notifications.Api.Client.Configuration;
+using SFA.DAS.ReferenceData.Api.Client;
 
 namespace SFA.DAS.EmployerAccounts.Web;
 
@@ -13,7 +14,7 @@ public static class ConfigurationRegistrationExtensions
     public static void AddConfigurationOptions(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddOptions();
-        
+
         services.Configure<EmployerAccountsConfiguration>(configuration.GetSection(nameof(EmployerAccountsConfiguration)));
         services.AddSingleton(cfg => cfg.GetService<IOptions<EmployerAccountsConfiguration>>().Value);
 
@@ -43,5 +44,8 @@ public static class ConfigurationRegistrationExtensions
 
         services.Configure<INotificationsApiClientConfiguration>(configuration.GetSection(nameof(NotificationsApiClientConfiguration)));
         services.AddSingleton(cfg => cfg.GetService<IOptions<NotificationsApiClientConfiguration>>().Value);
+
+        services.Configure<IReferenceDataApiConfiguration>(configuration.GetSection(nameof(ReferenceDataApiClientConfiguration)));
+        services.AddSingleton(cfg => cfg.GetService<IOptions<ReferenceDataApiClientConfiguration>>().Value);
     }
 }
