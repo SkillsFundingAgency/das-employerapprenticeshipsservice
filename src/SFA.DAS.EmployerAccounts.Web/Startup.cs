@@ -90,6 +90,8 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             services.AddHttpContextAccessor();
 
+            services.AddAdvancedDependencyInjection();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -109,6 +111,8 @@ namespace SFA.DAS.EmployerAccounts.Web
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            app.UseAdvancedDependencyInjection();
         }
 
         private void ConfigureMvcOptions(MvcOptions mvcOptions)
