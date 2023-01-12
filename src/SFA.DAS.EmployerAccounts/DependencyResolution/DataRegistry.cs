@@ -23,18 +23,26 @@ public class DataRegistry : Registry
         For<IDocumentClient>().Use(c => c.GetInstance<IDocumentClientFactory>().CreateDocumentClient()).Singleton();
         For<IDocumentClientFactory>().Use<DocumentClientFactory>();
 
-        For<DbConnection>().Use($"Build DbConnection", c =>
-        {
-            var azureServiceTokenProvider = new AzureServiceTokenProvider();
-
-            return environmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase)
-                ? new SqlConnection(GetEmployerAccountsConnectionString(c))
-                : new SqlConnection
+            For<DbConnection>().Use($"Build DbConnection", c =>
+            {
+                var connectionString = GetEmployerAccountsConnectionString(c);
+                var connectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
+                bool useManagedIdentity = !connectionStringBuilder.IntegratedSecurity && string.IsNullOrEmpty(connectionStringBuilder.UserID);
+                if (useManagedIdentity)
                 {
-                    ConnectionString = GetEmployerAccountsConnectionString(c),
-                    AccessToken = azureServiceTokenProvider.GetAccessTokenAsync(AzureResource).Result
-                };
-        });
+                    var azureServiceTokenProvider = new AzureServiceTokenProvider();
+                    var accessToken = azureServiceTokenProvider.GetAccessTokenAsync(AzureResource).Result;
+                    return new SqlConnection
+                    {
+                        ConnectionString = connectionString,
+                        AccessToken = accessToken,
+                    };
+                }
+                else
+                {
+                    return new SqlConnection(connectionString);
+                }
+            });
 
         For<EmployerAccountsDbContext>().Use(c => GetEmployerAccountsDbContext(c));
     }

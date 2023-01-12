@@ -33,17 +33,26 @@ namespace SFA.DAS.EmployerAccounts.Jobs.DependencyResolution
         {
             var environmentName = ConfigurationManager.AppSettings["EnvironmentName"];
 
-            var azureServiceTokenProvider = new AzureServiceTokenProvider();
-
-            var connection = environmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase)
-                ? new SqlConnection(GetConnectionString(context))
-                : new SqlConnection
+            var connectionString = GetConnectionString(context);
+            var connectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
+            bool useManagedIdentity = !connectionStringBuilder.IntegratedSecurity && string.IsNullOrEmpty(connectionStringBuilder.UserID);
+            SqlConnection sqlConnection;
+            if (useManagedIdentity)
+            {
+                var azureServiceTokenProvider = new AzureServiceTokenProvider();
+                var accessToken = azureServiceTokenProvider.GetAccessTokenAsync(AzureResource).Result;
+                sqlConnection = new SqlConnection
                 {
-                    ConnectionString = GetConnectionString(context),
-                    AccessToken = azureServiceTokenProvider.GetAccessTokenAsync(AzureResource).Result
+                    ConnectionString = connectionString,
+                    AccessToken = accessToken,
                 };
+            }
+            else
+            {
+                sqlConnection = new SqlConnection(connectionString);
+            }
 
-            return new EmployerAccountsDbContext(connection);
+            return new EmployerAccountsDbContext(sqlConnection);
         }
 
         private static string GetConnectionString(IContext context)
