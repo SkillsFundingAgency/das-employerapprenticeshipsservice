@@ -2,6 +2,7 @@
 using HMRC.ESFA.Levy.Api.Client;
 using Microsoft.Extensions.Options;
 using SFA.DAS.EAS.Account.Api.Client;
+using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.HashingService;
@@ -37,8 +38,10 @@ public static class ApplicationRegistrationExtensions
             return new ApprenticeshipLevyApiClient(httpClient);
         });
 
-        
+
         services.AddTransient<IHashingService>(_ => new HashingService.HashingService(configuration.AllowedHashstringCharacters, configuration.Hashstring));
+
+        services.AddTransient<IUserAccountRepository, UserAccountRepository>();
 
     }
 }
