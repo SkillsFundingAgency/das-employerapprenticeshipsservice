@@ -9,7 +9,7 @@ public static class CachesRegistrationExtensions
     {
         services.AddSingleton<IInProcessCache, InProcessCache>();
 
-        services.AddSingleton<IDistributedCache>(s =>
+        services.AddSingleton(s =>
         {
             var environment = s.GetService<IEnvironmentService>();
             var config = s.GetService<EmployerAccountsConfiguration>();
