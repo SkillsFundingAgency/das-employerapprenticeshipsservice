@@ -25,7 +25,7 @@ public static class ApplicationRegistrationExtensions
 
         services.AddTransient<IRecruitService, RecruitService>();
         services.Decorate<IRecruitService, RecruitServiceWithTimeout>();
-        
+
         services.AddScoped<IAccountApiClient, AccountApiClient>();
         services.AddSingleton<IReferenceDataService, ReferenceDataService>();
         services.AddTransient<ITaskService, TaskService>();
@@ -49,6 +49,9 @@ public static class ApplicationRegistrationExtensions
         services.AddTransient<IHashingService>(_ => new HashingService.HashingService(configuration.AllowedHashstringCharacters, configuration.Hashstring));
 
         services.AddTransient<IUserAccountRepository, UserAccountRepository>();
-
+        
+        services.AddScoped(typeof(ICookieService<>),typeof(HttpCookieService<>));
+        services.AddScoped(typeof(ICookieStorageService<>),typeof(CookieStorageService<>));
+        services.AddScoped<IUrlActionHelper,UrlActionHelper>();
     }
 }
