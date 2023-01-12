@@ -17,15 +17,20 @@ public static class ApplicationRegistrationExtensions
         services.AddTransient<IRestServiceFactory, RestServiceFactory>();
         services.AddTransient<IHttpServiceFactory, HttpServiceFactory>();
         services.AddTransient<IUserAornPayeLockService, UserAornPayeLockService>();
+        
         services.AddTransient<IReservationsService, ReservationsService>();
         services.Decorate<IReservationsService, ReservationsServiceWithTimeout>();
         services.AddTransient<ICommitmentV2Service, CommitmentsV2Service>();
         services.Decorate<ICommitmentV2Service, CommitmentsV2ServiceWithTimeout>();
 
+        services.AddTransient<IRecruitService, RecruitService>();
+        services.Decorate<IRecruitService, RecruitServiceWithTimeout>();
+        
         services.AddScoped<IAccountApiClient, AccountApiClient>();
         services.AddSingleton<IReferenceDataService, ReferenceDataService>();
         services.AddTransient<ITaskService, TaskService>();
-
+        services.AddTransient<IPensionRegulatorService, PensionRegulatorService>();
+        
         services.AddTransient<IApprenticeshipLevyApiClient>(s =>
         {
             var settings = s.GetService<IOptions<EmployerAccountsConfiguration>>().Value;
