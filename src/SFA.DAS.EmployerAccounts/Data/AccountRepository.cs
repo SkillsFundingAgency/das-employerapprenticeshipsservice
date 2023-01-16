@@ -298,7 +298,7 @@ public class AccountRepository : BaseRepository, IAccountRepository
 
     public Task UpdateAccountLegalEntityPublicHashedId(long accountLegalEntityId)
     {
-        return UpdateAccountLegalEntityPublicHashedIdInternal(_db.Value.Database.Connection, _db.Value.Database.CurrentTransaction.UnderlyingTransaction, accountLegalEntityId);
+        return UpdateAccountLegalEntityPublicHashedIdInternal(_db.Value.Database.GetDbConnection(), accountLegalEntityId);
     }
 
     public async Task<long[]> GetAccountLegalEntitiesWithoutPublicHashId(long firstId, int count)
