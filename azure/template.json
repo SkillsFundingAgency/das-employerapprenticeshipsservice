@@ -708,6 +708,10 @@
         "WorkerAppServiceName": {
             "type": "string",
             "value": "[variables('workerAppServiceName')]"
+        },
+        "CosmosDbName": {
+            "type": "string",
+            "value": "[variables('cosmosDbName')]"
         }
     }
 }
