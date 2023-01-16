@@ -1,12 +1,11 @@
 ﻿using System.Data;
 using System.Data.Entity;
 using Dapper;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Data;
 
@@ -14,7 +13,7 @@ public class EmployerAccountRepository : IEmployerAccountRepository
 {
     private readonly Lazy<EmployerAccountsDbContext> _db;
 
-    public EmployerAccountRepository(EmployerAccountsConfiguration configuration, ILog logger, Lazy<EmployerAccountsDbContext> db)
+    public EmployerAccountRepository(Lazy<EmployerAccountsDbContext> db)
     {
         _db = db;
     }
@@ -26,18 +25,12 @@ public class EmployerAccountRepository : IEmployerAccountRepository
 
     public async Task<Accounts<Account>> GetAccounts(string toDate, int pageNumber, int pageSize)
     {
-        var parameters = new DynamicParameters();
-
-        parameters.Add("@toDate", toDate);
-
         var offset = pageSize * (pageNumber - 1);
 
-        var countResult = await _db.Value.Database.Connection.QueryAsync<int>(
-            sql: $"select count(*) from [employer_account].[Account] a;",
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction);
-
-        var result = _db.Value.Accounts
-            .Include(x => x.AccountLegalEntities.Select(y => y.Agreements))
+        var countResult = await _db.Value.Database.GetDbConnection().QueryAsync<int>(
+            sql: $"select count(*) from [employer_account].[Account] a;");
+        
+        var result = QueryableExtensions.Include(_db.Value.Accounts, x => x.AccountLegalEntities.Select(y => y.Agreements))
             .OrderBy(x => x.Id)
             .Skip(offset)
             .Take(pageSize);
@@ -55,10 +48,9 @@ public class EmployerAccountRepository : IEmployerAccountRepository
 
         parameters.Add("@HashedAccountId", hashedAccountId, DbType.String);
 
-        var result = await _db.Value.Database.Connection.QueryAsync<Account>(
+        var result = await _db.Value.Database.GetDbConnection().QueryAsync<Account>(
             sql: "select a.* from [employer_account].[Account] a where a.HashedId = @HashedAccountId;",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.Text);
 
         return result.SingleOrDefault();
@@ -66,9 +58,8 @@ public class EmployerAccountRepository : IEmployerAccountRepository
 
     public async Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId)
     {
-        var account = await _db.Value.Accounts
-            .Include(x => x.AccountLegalEntities.Select(y => y.Agreements))
-            .SingleOrDefaultAsync(x => x.HashedId == hashedAccountId);
+        var account = await QueryableExtensions.Include(_db.Value.Accounts, x => x.AccountLegalEntities.Select(y => y.Agreements))
+            .SingleOrDefaultAsync<Account>(x => x.HashedId == hashedAccountId);
 
         if (account == null)
         {
@@ -133,10 +124,9 @@ public class EmployerAccountRepository : IEmployerAccountRepository
 
         parameters.Add("@accountId", accountId, DbType.Int64);
 
-        var result = await _db.Value.Database.Connection.QueryAsync<AccountStats>(
+        var result = await _db.Value.Database.GetDbConnection().QueryAsync<AccountStats>(
             sql: "[employer_account].[GetAccountStats]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.StoredProcedure);
 
         return result.SingleOrDefault();
@@ -149,10 +139,9 @@ public class EmployerAccountRepository : IEmployerAccountRepository
         parameters.Add("@accountId", accountId, DbType.Int64);
         parameters.Add("@accountName", name, DbType.String);
 
-        return _db.Value.Database.Connection.ExecuteAsync(
+        return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[UpdateAccount_SetAccountName]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.StoredProcedure);
     }
 
@@ -163,10 +152,9 @@ public class EmployerAccountRepository : IEmployerAccountRepository
         parameters.Add("@accountId", accountId, DbType.Int64);
         parameters.Add("@apprenticeshipEmployerType", apprenticeshipEmployerType, DbType.Int16);
 
-        return _db.Value.Database.Connection.ExecuteAsync(
+        return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[UpdateAccount_SetAccountApprenticeshipEmployerType]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.StoredProcedure);
     }
 }
