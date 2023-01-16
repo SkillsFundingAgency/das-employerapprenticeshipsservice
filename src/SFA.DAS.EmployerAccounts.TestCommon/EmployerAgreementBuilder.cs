@@ -164,12 +164,12 @@ namespace SFA.DAS.EmployerAccounts.TestCommon
 
         public EmployerAgreementBuilder SetupMockDbContext()
         {
-            DbSetStub<Account> accountsDbSet = new DbSetStub<Account>(Accounts);
-            DbSetStub<EmployerAgreement> agreementsDbSet = new DbSetStub<EmployerAgreement>(EmployerAgreements);
-            DbSetStub<AccountLegalEntity> accountLegalEntityDbSet = new DbSetStub<AccountLegalEntity>(AccountLegalEntities);
-            DbSetStub<AgreementTemplate> agreementTemplateEntityDbSet = new DbSetStub<AgreementTemplate>(AgreementTemplates);
-            DbSetStub<User> userEntityDbSet = new DbSetStub<User>(Users);
-            DbSetStub<Membership> membershipEntityDbSet = new DbSetStub<Membership>(Memberships);
+            var accountsDbSet = new DbSetStub<Account>(Accounts);
+            var agreementsDbSet = new DbSetStub<EmployerAgreement>(EmployerAgreements);
+            var accountLegalEntityDbSet = new DbSetStub<AccountLegalEntity>(AccountLegalEntities);
+            var agreementTemplateEntityDbSet = new DbSetStub<AgreementTemplate>(AgreementTemplates);
+            var userEntityDbSet = new DbSetStub<User>(Users);
+            var membershipEntityDbSet = new DbSetStub<Membership>(Memberships);
 
             EmployerAccountDbContextMock
                 .Setup(db => db.Accounts)

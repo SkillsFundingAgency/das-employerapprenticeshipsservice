@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authorization;
 using SFA.DAS.CosmosDb.Testing;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
@@ -83,6 +82,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
 
             UsersToMigrate = new List<Membership> { UserOwnerRole, UserTranasactorRole, UserNoRole };
             _usersDbSet = new DbSetStub<Membership>(UsersToMigrate);
+            
 
             EmployerAccountsDbContext = new Mock<EmployerAccountsDbContext>();
             EmployerAccountsDbContext.Setup(x => x.Memberships).Returns(_usersDbSet);

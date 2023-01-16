@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using AutoMapper;
 using SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity;
 using SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Dtos;
