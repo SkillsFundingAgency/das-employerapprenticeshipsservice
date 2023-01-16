@@ -10,6 +10,7 @@ using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Sql.Client;
 using SFA.DAS.Testing.Helpers;
@@ -65,7 +66,7 @@ namespace SFA.DAS.EmployerAccounts.IntegrationTests.Data
         }
     }
 
-    class EmployerAccountTeamRepositoryTestFixtures
+    internal class EmployerAccountTeamRepositoryTestFixtures
     {
         public EmployerAccountTeamRepositoryTestFixtures()
         {
@@ -86,17 +87,21 @@ namespace SFA.DAS.EmployerAccounts.IntegrationTests.Data
                 var account = CreateAccount(db);
                 hashedId = account.HashedId;
 
-                var user = db.Users.Create();
-                user.FirstName = email;
-                user.LastName = "User created for unit test";
-                user.Email = email;
-                user.Ref = Guid.NewGuid();
+                var user = new User
+                {
+                    FirstName = email,
+                    LastName = "User created for unit test",
+                    Email = email,
+                    Ref = Guid.NewGuid()
+                };
 
-                var membership = db.Memberships.Create();
-                membership.Account = account;
-                membership.User = user;
-                membership.Role = role;
-                membership.CreatedDate = DateTime.Now;
+                var membership = new Membership
+                {
+                    Account = account,
+                    User = user,
+                    Role = role,
+                    CreatedDate = DateTime.Now
+                };
 
                 db.Users.Add(user);
                 db.Memberships.Add(membership);
@@ -153,38 +158,40 @@ namespace SFA.DAS.EmployerAccounts.IntegrationTests.Data
             Func<EmployerAccountsDbContext, TRepository> repositoryCreator,
             Func<TRepository, Task> action) where TRepository : BaseRepository
         {
-            using (var db = CreateDbContext())
+            await using (var db = CreateDbContext())
             {
-                db.Database.BeginTransaction();
+                await db.Database.BeginTransactionAsync();
 
                 try
                 {
                     var repo = repositoryCreator(db);
                     await action(repo);
 
-                    db.Database.CurrentTransaction.Commit();
+                    await db.Database.CurrentTransaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    db.Database.CurrentTransaction.Rollback();
+                    await db.Database.CurrentTransaction.RollbackAsync();
                     throw;
                 }
             }
         }
 
-        private Account CreateAccount(EmployerAccountsDbContext db)
+        private static Account CreateAccount(EmployerAccountsDbContext db)
         {
             var hashedId = GetNextHashedIdForTests(db);
-            var account = db.Accounts.Create();
-            account.CreatedDate = DateTime.Now;
-            account.HashedId = hashedId;
-            account.Name = $"Account created for unit test {hashedId}";
+            var account = new Account
+            {
+                CreatedDate = DateTime.Now,
+                HashedId = hashedId,
+                Name = $"Account created for unit test {hashedId}"
+            };
             db.Accounts.Add(account);
 
             return account;
         }
 
-        private string GetNextHashedIdForTests(EmployerAccountsDbContext dbContext)
+        private static string GetNextHashedIdForTests(EmployerAccountsDbContext dbContext)
         {
             var regex = new Regex("ZZ[0-9]{4}");
 
@@ -198,11 +205,9 @@ namespace SFA.DAS.EmployerAccounts.IntegrationTests.Data
             {
                 return "ZZ0001";
             }
-            else
-            {
-                var intPart = int.Parse(maxHashedId.Substring(2, 4)) + 1;
-                return $"ZZ{intPart:D4}";
-            }
+
+            var intPart = int.Parse(maxHashedId.Substring(2, 4)) + 1;
+            return $"ZZ{intPart:D4}";
         }
 
         private EmployerAccountsDbContext CreateDbContext()
