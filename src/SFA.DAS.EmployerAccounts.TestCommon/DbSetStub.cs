@@ -7,14 +7,17 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
 
+using Microsoft.EntityFrameworkCore.Metadata;
+
 namespace SFA.DAS.EmployerAccounts.TestCommon
 {
     public class DbSetStub<T> : DbSet<T>, IDbAsyncEnumerable<T>, IQueryable<T> where T : class
     {
         public Expression Expression => _data.Expression;
         public Type ElementType => _data.ElementType;
-        public override ObservableCollection<T> Local => _local ?? (_local = new ObservableCollection<T>(_data));
+        public override IEntityType EntityType { get; }
         public IQueryProvider Provider => new DbAsyncQueryProviderStub<T>(_data.Provider);
+        public override ObservableCollection<T> Local => _local ?? (_local = new ObservableCollection<T>(_data));
 
         private readonly IQueryable<T> _data;
         private ObservableCollection<T> _local;
