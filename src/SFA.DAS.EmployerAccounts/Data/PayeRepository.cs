@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using Dapper;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 
@@ -20,10 +21,9 @@ public class PayeRepository : IPayeRepository
 
         parameters.Add("@accountId", accountId, DbType.Int64);
 
-        var result = await _db.Value.Database.Connection.QueryAsync<PayeView>(
+        var result = await _db.Value.Database.GetDbConnection().QueryAsync<PayeView>(
             sql: "[employer_account].[GetPayeSchemes_ByAccountId]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.StoredProcedure);
 
         return result.ToList();
@@ -41,10 +41,9 @@ public class PayeRepository : IPayeRepository
         parameters.Add("@employerRefName", payeScheme.RefName, DbType.String);
         parameters.Add("@aorn", payeScheme.Aorn, DbType.String);
 
-        return _db.Value.Database.Connection.ExecuteAsync(
+        return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[AddPayeToAccount]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.StoredProcedure);
     }
 
@@ -56,10 +55,9 @@ public class PayeRepository : IPayeRepository
         parameters.Add("@PayeRef", payeRef, DbType.String);
         parameters.Add("@RemovedDate", DateTime.UtcNow, DbType.DateTime);
 
-        return _db.Value.Database.Connection.ExecuteAsync(
+        return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[UpdateAccountHistory]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.StoredProcedure);
     }
 
@@ -70,10 +68,9 @@ public class PayeRepository : IPayeRepository
         parameters.Add("@HashedAccountId", hashedAccountId, DbType.String);
         parameters.Add("@Ref", reference, DbType.String);
 
-        var result = await _db.Value.Database.Connection.QueryAsync<PayeSchemeView>(
+        var result = await _db.Value.Database.GetDbConnection().QueryAsync<PayeSchemeView>(
             sql: "[employer_account].[GetPayeForAccount_ByRef]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.StoredProcedure);
 
         return result.SingleOrDefault();

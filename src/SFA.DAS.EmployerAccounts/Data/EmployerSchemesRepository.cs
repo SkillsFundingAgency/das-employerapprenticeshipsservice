@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using Dapper;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.NLog.Logger;
@@ -23,10 +24,9 @@ public class EmployerSchemesRepository : BaseRepository, IEmployerSchemesReposit
 
         parameters.Add("@accountId", employerId, DbType.Int64);
 
-        var result = await _db.Value.Database.Connection.QueryAsync<PayeScheme>(
+        var result = await _db.Value.Database.GetDbConnection().QueryAsync<PayeScheme>(
             sql: "[employer_account].[GetPayeSchemes_ByAccountId]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.StoredProcedure);
 
         return new PayeSchemes
@@ -41,10 +41,9 @@ public class EmployerSchemesRepository : BaseRepository, IEmployerSchemesReposit
 
         parameters.Add("@payeRef", empref, DbType.String);
 
-        var result = await _db.Value.Database.Connection.QueryAsync<PayeScheme>(
+        var result = await _db.Value.Database.GetDbConnection().QueryAsync<PayeScheme>(
             sql: "[employer_account].[GetPayeSchemesInUse]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.StoredProcedure);
 
         return result.SingleOrDefault();

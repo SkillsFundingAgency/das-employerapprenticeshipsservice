@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using Dapper;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.NLog.Logger;
@@ -24,10 +25,9 @@ public class MembershipRepository : BaseRepository, IMembershipRepository
         parameters.Add("@accountId", accountId, DbType.Int64);
         parameters.Add("@email", email, DbType.String);
 
-        var result = await _db.Value.Database.Connection.QueryAsync<TeamMember>(
+        var result = await _db.Value.Database.GetDbConnection().QueryAsync<TeamMember>(
             sql: "SELECT * FROM [employer_account].[GetTeamMembers] WHERE AccountId = @accountId AND Email = @email;",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.Text);
 
         return result.SingleOrDefault();
@@ -40,10 +40,9 @@ public class MembershipRepository : BaseRepository, IMembershipRepository
         parameters.Add("@accountId", accountId, DbType.Int64);
         parameters.Add("@userId", userId, DbType.Int64);
 
-        var result = await _db.Value.Database.Connection.QueryAsync<TeamMember>(
-            sql: "SELECT * FROM [employer_account].[GetTeamMembers] WHERE AccountId = @accountId AND Id = @userId",               
+        var result = await _db.Value.Database.GetDbConnection().QueryAsync<TeamMember>(
+            sql: "SELECT * FROM [employer_account].[GetTeamMembers] WHERE AccountId = @accountId AND Id = @userId",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.Text);
 
         return result.SingleOrDefault();
@@ -56,10 +55,9 @@ public class MembershipRepository : BaseRepository, IMembershipRepository
         parameters.Add("@UserId", userId, DbType.Int64);
         parameters.Add("@AccountId", accountId, DbType.Int64);
 
-        return _db.Value.Database.Connection.ExecuteAsync(
+        return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[RemoveMembership]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.StoredProcedure);
     }
 
@@ -71,10 +69,9 @@ public class MembershipRepository : BaseRepository, IMembershipRepository
         parameters.Add("@accountId", accountId, DbType.Int64);
         parameters.Add("@role", role, DbType.Int16);
 
-        return _db.Value.Database.Connection.ExecuteAsync(
+        return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "UPDATE [employer_account].[Membership] SET Role = @role WHERE AccountId = @accountId AND UserId = @userId;",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.Text);
     }
 
@@ -85,10 +82,9 @@ public class MembershipRepository : BaseRepository, IMembershipRepository
         parameters.Add("@AccountId", accountId, DbType.Int64);
         parameters.Add("@externalUserId", Guid.Parse(externalUserId), DbType.Guid);
 
-        var result = await _db.Value.Database.Connection.QueryAsync<MembershipView>(
+        var result = await _db.Value.Database.GetDbConnection().QueryAsync<MembershipView>(
             sql: "SELECT * FROM [employer_account].[MembershipView] m WHERE m.AccountId = @AccountId AND UserRef = @externalUserId;",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.Text);
 
         return result.SingleOrDefault();
@@ -101,10 +97,9 @@ public class MembershipRepository : BaseRepository, IMembershipRepository
         parameters.Add("@hashedAccountId", hashedAccountId, DbType.String);
         parameters.Add("@externalUserId", Guid.Parse(externalUserId), DbType.Guid);
 
-        var result = await _db.Value.Database.Connection.QueryAsync<MembershipView>(
+        var result = await _db.Value.Database.GetDbConnection().QueryAsync<MembershipView>(
             sql: "[employer_account].[GetTeamMember]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.StoredProcedure);
 
         return result.SingleOrDefault();
@@ -119,10 +114,9 @@ public class MembershipRepository : BaseRepository, IMembershipRepository
         parameters.Add("@role", role, DbType.Int16);
         parameters.Add("@createdDate", DateTime.UtcNow, DbType.DateTime);
 
-        return _db.Value.Database.Connection.ExecuteAsync(
+        return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "INSERT INTO [employer_account].[Membership] ([AccountId], [UserId], [Role], [CreatedDate]) VALUES(@accountId, @userId, @role, @createdDate); ",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.Text);
     }
 
@@ -134,11 +128,9 @@ public class MembershipRepository : BaseRepository, IMembershipRepository
         parameters.Add("@hashedAccountId", hashedAccountId, DbType.String);
         parameters.Add("@showWizard", showWizard, DbType.Boolean);
 
-        return _db.Value.Database.Connection.ExecuteAsync(
+        return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[UpdateShowWizard]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.StoredProcedure);
     }
-
 }

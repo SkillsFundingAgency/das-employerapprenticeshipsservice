@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using Dapper;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.NLog.Logger;
@@ -23,10 +24,9 @@ public class InvitationRepository : BaseRepository, IInvitationRepository
 
         parameters.Add("@userId", Guid.Parse(userId), DbType.Guid);
 
-        var result = await _db.Value.Database.Connection.QueryAsync<InvitationView>(
+        var result = await _db.Value.Database.GetDbConnection().QueryAsync<InvitationView>(
             sql: "SELECT * FROM [employer_account].[GetInvitations] WHERE ExternalUserId = @userId AND Status = 1;",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.Text);
 
         return result.ToList();
@@ -38,10 +38,9 @@ public class InvitationRepository : BaseRepository, IInvitationRepository
 
         parameters.Add("@id", id, DbType.Int64);
 
-        var result = await _db.Value.Database.Connection.QueryAsync<InvitationView>(
+        var result = await _db.Value.Database.GetDbConnection().QueryAsync<InvitationView>(
             sql: "SELECT * FROM [employer_account].[GetInvitations] WHERE Id = @id;",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.Text);
 
         return result.SingleOrDefault();
@@ -60,10 +59,9 @@ public class InvitationRepository : BaseRepository, IInvitationRepository
         parameters.Add("@role", invitation.Role, DbType.Int16);
         parameters.Add("@invitationId", invitationId, DbType.Int64, ParameterDirection.Output);
 
-        await _db.Value.Database.Connection.ExecuteAsync(
+        await _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[CreateInvitation]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.StoredProcedure);
 
         return parameters.Get<long>("@invitationId");
@@ -75,10 +73,9 @@ public class InvitationRepository : BaseRepository, IInvitationRepository
 
         parameters.Add("@id", id, DbType.Int64);
 
-        var result = await _db.Value.Database.Connection.QueryAsync<Invitation>(
+        var result = await _db.Value.Database.GetDbConnection().QueryAsync<Invitation>(
             sql: "SELECT * FROM [employer_account].[Invitation] WHERE Id = @id;",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.Text);
 
         return result.SingleOrDefault();
@@ -91,10 +88,9 @@ public class InvitationRepository : BaseRepository, IInvitationRepository
         parameters.Add("@accountId", accountId, DbType.Int64);
         parameters.Add("@email", email, DbType.String);
 
-        var result = await _db.Value.Database.Connection.QueryAsync<Invitation>(
+        var result = await _db.Value.Database.GetDbConnection().QueryAsync<Invitation>(
             sql: "SELECT * FROM [employer_account].[Invitation] WHERE AccountId = @accountId AND Email = @email;",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.Text);
 
         return result.SingleOrDefault();
@@ -107,10 +103,9 @@ public class InvitationRepository : BaseRepository, IInvitationRepository
         parameters.Add("@id", invitation.Id, DbType.Int64);
         parameters.Add("@statusId", invitation.Status, DbType.Int16);
 
-        return _db.Value.Database.Connection.ExecuteAsync(
+        return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "UPDATE [employer_account].[Invitation] SET Status = CASE WHEN @statusId = 1 AND ExpiryDate < GETDATE() THEN 3 ELSE @statusId END WHERE Id = @id;",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.Text);
     }
 
@@ -124,10 +119,9 @@ public class InvitationRepository : BaseRepository, IInvitationRepository
         parameters.Add("@statusId", invitation.Status, DbType.Int16);
         parameters.Add("@expiryDate", invitation.ExpiryDate, DbType.DateTime);
 
-        return _db.Value.Database.Connection.ExecuteAsync(
+        return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "UPDATE [employer_account].[Invitation] SET Name = @name, Role = @role, Status = @statusId, ExpiryDate = @expiryDate WHERE Id = @id;",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.Text);
     }
 
@@ -139,10 +133,9 @@ public class InvitationRepository : BaseRepository, IInvitationRepository
         parameters.Add("@accountId", accountId, DbType.Int64);
         parameters.Add("@role", role, DbType.Int16);
 
-        return _db.Value.Database.Connection.ExecuteAsync(
+        return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[AcceptInvitation]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.StoredProcedure);
     }
 
@@ -152,10 +145,9 @@ public class InvitationRepository : BaseRepository, IInvitationRepository
 
         parameters.Add("@ref", Guid.Parse(userId), DbType.Guid);
 
-        var result = await _db.Value.Database.Connection.QueryAsync<int>(
+        var result = await _db.Value.Database.GetDbConnection().QueryAsync<int>(
             sql: "[employer_account].[GetNumberOfInvitations_ByUserRef]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.StoredProcedure);
 
         return result.SingleOrDefault();
