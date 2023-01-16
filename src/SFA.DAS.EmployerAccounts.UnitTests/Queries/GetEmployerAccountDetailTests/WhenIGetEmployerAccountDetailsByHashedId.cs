@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -37,7 +38,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountDetailTes
             await RequestHandler.Handle(new GetEmployerAccountDetailByHashedIdQuery
             {
                 HashedAccountId = ExpectedHashedAccountId
-            });
+            }, CancellationToken.None);
 
             //Assert
             _employerAccountRepository.Verify(x => x.GetAccountDetailByHashedId(ExpectedHashedAccountId));
@@ -50,7 +51,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountDetailTes
             var result = await RequestHandler.Handle(new GetEmployerAccountDetailByHashedIdQuery
             {
                 HashedAccountId = ExpectedHashedAccountId
-            });
+            }, CancellationToken.None);
 
             //Assert
             Assert.IsNotNull(result);

@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.EmployerFinance
                 string.Empty,
                 string.Empty));
 
-            await _mediator.SendAsync(new AccountLevyStatusCommand
+            await _mediator.Send(new AccountLevyStatusCommand
             {
                 AccountId = message.AccountId,
                 ApprenticeshipEmployerType = message.LevyTransactionValue == decimal.Zero ? ApprenticeshipEmployerType.NonLevy : ApprenticeshipEmployerType.Levy

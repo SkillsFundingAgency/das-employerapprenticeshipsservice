@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -48,7 +49,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetVacancies
         public async Task ThenIfTheMessageIsValidTheServiceIsCalled()
         {
             //Act
-            await RequestHandler.Handle(Query);
+            await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             _recruitService.Verify(x => x.GetVacancies(_hashedAccountId, int.MaxValue), Times.Once);
@@ -59,7 +60,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetVacancies
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Act
-            var response = await RequestHandler.Handle(Query);
+            var response = await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             Assert.Contains(_vacancy, (ICollection) response.Vacancies);

@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands
     {
         public Mock<EmployerAccountsDbContext> Db { get; set; }
         public RunHealthCheckCommand RunHealthCheckCommand { get; set; }
-        public IAsyncRequestHandler<RunHealthCheckCommand, Unit> Handler { get; set; }
+        public IRequestHandler<RunHealthCheckCommand, Unit> Handler { get; set; }
         public Mock<IAccountApiClient> AccountsApiClient { get; set; }
         public Mock<IOuterApiClient> OuterApiClient { get; set; }
         public UnitOfWorkContext UnitOfWorkContext { get; set; }
@@ -65,7 +65,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands
 
         public Task Handle()
         {
-            return Handler.Handle(RunHealthCheckCommand);
+            return Handler.Handle(RunHealthCheckCommand, CancellationToken.None);
         }
     }
 }

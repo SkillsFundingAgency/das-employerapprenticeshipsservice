@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -55,7 +56,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementsByAcco
         public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
             //Act
-            await RequestHandler.Handle(Query);
+            await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             _employerAgreementRepository.Verify(x => x.GetAccountAgreements(AccountId), Times.Once);
@@ -65,7 +66,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementsByAcco
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Act
-            var response = await RequestHandler.Handle(Query);
+            var response = await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             Assert.AreEqual(_agreements, response.EmployerAgreements);
@@ -80,7 +81,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementsByAcco
             var query = new GetEmployerAgreementsByAccountIdRequest();
 
             //Assert
-            Assert.ThrowsAsync<InvalidRequestException>(() => handler.Handle(query));
+            Assert.ThrowsAsync<InvalidRequestException>(() => handler.Handle(query, CancellationToken.None));
         }
     }
 }

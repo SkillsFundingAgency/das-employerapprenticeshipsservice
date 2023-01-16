@@ -12,6 +12,7 @@ using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using System.Security.Claims;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
+using System.Threading;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTeamMembersQuery
 {
@@ -78,7 +79,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTeamMembersQuery
             {
                 HashedAccountId = ExpectedHashedAccountId,
                 ExternalUserId = ExpectedExternalUserId
-            });
+            }, CancellationToken.None);
 
             //Assert
             _employerAccountTeamRepository.Verify(x => x.GetAccountTeamMembersForUserId(ExpectedHashedAccountId, ExpectedExternalUserId), Times.Once);
@@ -92,7 +93,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTeamMembersQuery
             {
                 HashedAccountId = ExpectedHashedAccountId,
                 ExternalUserId = ExpectedExternalUserId
-            });
+            }, CancellationToken.None);
 
             //Assert
             Assert.IsNotNull(result);
@@ -113,7 +114,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTeamMembersQuery
             {
                 HashedAccountId = ExpectedHashedAccountId,
                 ExternalUserId = ExpectedExternalUserId
-            });
+            }, CancellationToken.None);
 
             //Assert
             _membershipRepository.Verify(x => x.GetCaller(ExpectedHashedAccountId, ExpectedExternalUserId), Times.Once);
@@ -133,13 +134,13 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTeamMembersQuery
             {
                 HashedAccountId = ExpectedHashedAccountId,
                 ExternalUserId = ExpectedExternalUserId
-            });
+            }, CancellationToken.None);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c => 
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c => 
             c.EasAuditMessage.Category.Equals("VIEW") &&
             c.EasAuditMessage.Description.Equals($"Account {AccountId} team members viewed")
-            )), Times.Once);
+            ), CancellationToken.None), Times.Once);
         }
 
         [Test]
@@ -150,13 +151,13 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTeamMembersQuery
             {
                 HashedAccountId = ExpectedHashedAccountId,
                 ExternalUserId = ExpectedExternalUserId
-            });
+            }, CancellationToken.None);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
             c.EasAuditMessage.Category.Equals("VIEW") &&
             c.EasAuditMessage.Description.Equals($"Account {AccountId} team members viewed")
-            )), Times.Never);
+            ), CancellationToken.None), Times.Never);
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -50,7 +51,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetPagedEmployerAccounts
             RequestValidator.Setup(x => x.Validate(It.IsAny<GetPagedEmployerAccountsQuery>())).Returns(new ValidationResult {ValidationDictionary = new Dictionary<string, string>()});
 
             //Act
-            await RequestHandler.Handle(Query);
+            await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             _employeeAccountRepository.Verify(x => x.GetAccounts(Query.ToDate, Query.PageNumber, Query.PageSize), Times.Once);
@@ -63,7 +64,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetPagedEmployerAccounts
             RequestValidator.Setup(x => x.Validate(It.IsAny<GetPagedEmployerAccountsQuery>())).Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string>() });
 
             //Act
-            var actual = await RequestHandler.Handle(Query);
+            var actual = await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             Assert.AreSame(_expectedAccounts.AccountList, actual.Accounts);

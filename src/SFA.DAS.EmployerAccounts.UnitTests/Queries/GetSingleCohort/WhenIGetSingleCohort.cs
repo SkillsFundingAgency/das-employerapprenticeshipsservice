@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.NLog.Logger;
+using System.Threading;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
 {
@@ -53,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Act
-            var response = await RequestHandler.Handle(Query);
+            var response = await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert            
             Assert.IsNotNull(response.Cohort);
@@ -66,7 +67,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
         public async Task ThenIfTheMessageIsValidTheServiceIsCalled()
         {
             //Act
-            await RequestHandler.Handle(Query);
+            await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             _commitmentV2Service.Verify(x => x.GetCohorts(_accountId), Times.Once);

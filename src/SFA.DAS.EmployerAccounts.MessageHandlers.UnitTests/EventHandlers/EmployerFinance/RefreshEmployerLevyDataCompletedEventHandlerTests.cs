@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -27,13 +28,13 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Emplo
             const string periodYear = "2018";
 
             return TestAsync(f => f.Handle(new RefreshEmployerLevyDataCompletedEvent
-                {
-                    AccountId = accountId,
-                    LevyImported = levyImported,
-                    PeriodMonth = periodMonth,
-                    PeriodYear = periodYear,
-                    Created = timestamp
-                })
+            {
+                AccountId = accountId,
+                LevyImported = levyImported,
+                PeriodMonth = periodMonth,
+                PeriodYear = periodYear,
+                Created = timestamp
+            })
                 , (f) =>
                 {
                     f.VerifyRefreshEmployerLevyDataCompletedMessageIsPublished(accountId, levyImported, periodMonth, periodYear, timestamp);
@@ -51,14 +52,14 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Emplo
             const string periodYear = "2018";
 
             return TestAsync(f => f.Handle(new RefreshEmployerLevyDataCompletedEvent
-                {
-                    AccountId = accountId,
-                    LevyImported = levyImported,
-                    PeriodMonth = periodMonth,
-                    PeriodYear = periodYear,
-                    LevyTransactionValue = levyValue,
-                    Created = timestamp
-                })
+            {
+                AccountId = accountId,
+                LevyImported = levyImported,
+                PeriodMonth = periodMonth,
+                PeriodYear = periodYear,
+                LevyTransactionValue = levyValue,
+                Created = timestamp
+            })
                 , (f) =>
                 {
                     f.VerifyAccountLevyStatusCommandIsSent(accountId, apprenticeshipEmployerType);
@@ -98,9 +99,9 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Emplo
 
         public void VerifyAccountLevyStatusCommandIsSent(long accountId, ApprenticeshipEmployerType apprenticeshipEmployerType)
         {
-            _mediator.Verify(e => e.SendAsync(It.Is<AccountLevyStatusCommand>(m =>
+            _mediator.Verify(e => e.Send(It.Is<AccountLevyStatusCommand>(m =>
                 m.AccountId.Equals(accountId) &&
-                m.ApprenticeshipEmployerType.Equals(apprenticeshipEmployerType))),
+                m.ApprenticeshipEmployerType.Equals(apprenticeshipEmployerType)), CancellationToken.None),
                 Times.Once);
         }
     }

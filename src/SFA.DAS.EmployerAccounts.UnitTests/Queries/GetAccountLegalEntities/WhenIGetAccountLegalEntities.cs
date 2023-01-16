@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -56,7 +57,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntities
         public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
             //Act
-            await RequestHandler.Handle(Query);
+            await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             _employerAgreementRepository.Verify(x => x.GetLegalEntitiesLinkedToAccount(ExpectedAccountId, false), Times.Once);
@@ -66,7 +67,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntities
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Act
-            var response = await RequestHandler.Handle(Query);
+            var response = await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             Assert.That(response.LegalEntities.Count, Is.EqualTo(2));

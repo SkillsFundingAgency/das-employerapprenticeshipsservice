@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Interfaces;
@@ -42,7 +43,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUserByRefTests
             //Act
             Assert.ThrowsAsync<InvalidRequestException>(async () =>
             {
-                await RequestHandler.Handle(Query);
+                await RequestHandler.Handle(Query, CancellationToken.None);
             });
         }
 
@@ -50,7 +51,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUserByRefTests
         public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
             //Act
-            await RequestHandler.Handle(Query);
+            await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             _repository.Verify(x => x.GetUserByRef(Query.UserRef), Times.Once);
@@ -60,7 +61,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUserByRefTests
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Act
-            var result = await RequestHandler.Handle(Query);
+            var result = await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             Assert.IsNotNull(result);

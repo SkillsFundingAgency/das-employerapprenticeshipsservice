@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -59,7 +60,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetReservations
         public async Task ThenIfTheMessageIsValidTheServiceIsCalled()
         {
             //Act
-            await RequestHandler.Handle(Query);
+            await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             _reservationsService.Verify(x => x.Get(_accountId), Times.Once);
@@ -69,7 +70,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetReservations
         public async Task ThenIfTheMessageIsValidTheHashingServiceIsCalled()
         {
             //Act
-            await RequestHandler.Handle(Query);
+            await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             _hashingService.Verify(x => x.DecodeValue(_hashedAccountId), Times.Once);
@@ -79,7 +80,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetReservations
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Act
-            var response = await RequestHandler.Handle(Query);
+            var response = await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             Assert.Contains(_reservation, (ICollection) response.Reservations);

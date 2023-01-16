@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
 using SFA.DAS.HashingService;
+using System.Threading;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetApprenticeship
 {
@@ -57,7 +58,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetApprenticeship
         public async Task ThenIfTheMessageIsValidTheServiceIsCalled()
         {
             //Act
-            await RequestHandler.Handle(Query);
+            await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             _commitmentV2Service.Verify(x => x.GetApprenticeships(_accountId), Times.Once);
@@ -67,7 +68,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetApprenticeship
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Act
-            var response = await RequestHandler.Handle(Query);
+            var response = await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert            
             Assert.IsNotNull(response.Apprenticeships);

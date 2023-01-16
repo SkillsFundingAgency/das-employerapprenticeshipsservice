@@ -1,12 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
 using SFA.DAS.HashingService;
 using SFA.DAS.Testing.EntityFramework;
@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementPdfTest
         {
 
             //Act
-            await RequestHandler.Handle(Query);
+            await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             _pdfService.Verify(x=>x.SubsituteValuesForPdf($"{ExpectedAgreementFileName}.pdf"));
@@ -67,14 +67,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementPdfTest
             RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<GetEmployerAgreementPdfRequest>())).ReturnsAsync(new ValidationResult {IsUnauthorized = true});
 
             //Act Assert
-            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await RequestHandler.Handle(Query));
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await RequestHandler.Handle(Query, CancellationToken.None));
         }
 
         [Test]
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Act
-            var actual = await RequestHandler.Handle(Query);
+            var actual = await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             Assert.IsAssignableFrom<GetEmployerAgreementPdfResponse>(actual);

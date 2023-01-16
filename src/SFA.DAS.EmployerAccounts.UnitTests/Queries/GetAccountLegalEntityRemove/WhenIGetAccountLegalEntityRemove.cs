@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -90,14 +91,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntityRemove
             RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<GetAccountLegalEntityRemoveRequest>())).ReturnsAsync(new ValidationResult { IsUnauthorized = true });
 
             //Act Assert
-            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await RequestHandler.Handle(new GetAccountLegalEntityRemoveRequest()));
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await RequestHandler.Handle(new GetAccountLegalEntityRemoveRequest(), CancellationToken.None));
         }
 
         [Test]
         public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
             //Act
-            await RequestHandler.Handle(Query);
+            await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             _repository.Verify(x => x.GetAccountLegalEntityAgreements(ExpectedAccountLegalEntityId), Times.Once);
@@ -107,7 +108,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntityRemove
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Act
-            var actual = await RequestHandler.Handle(Query);
+            var actual = await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             Assert.IsNotNull(actual);

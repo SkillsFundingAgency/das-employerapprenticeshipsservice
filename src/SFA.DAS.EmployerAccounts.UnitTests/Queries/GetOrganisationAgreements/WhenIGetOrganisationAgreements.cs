@@ -1,19 +1,20 @@
-﻿using SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.HashingService;
-using SFA.DAS.Validation;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using AutoMapper;
-using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.EmployerAccounts.Dtos;
+using Moq;
+using NUnit.Framework;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Dtos;
+using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.MarkerInterfaces;
+using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements;
+using SFA.DAS.HashingService;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetOrganisationAgreements
 {
@@ -72,7 +73,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetOrganisationAgreements
         public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
             //Act
-            await RequestHandler.Handle(Query);
+            await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             _mockEmployerAgreementRepository.Verify(x => x.GetOrganisationsAgreements(It.IsAny<long>()), Times.Once);
@@ -82,7 +83,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetOrganisationAgreements
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Act
-            var response = await RequestHandler.Handle(Query);
+            var response = await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             Assert.IsNotNull(response.Agreements);
