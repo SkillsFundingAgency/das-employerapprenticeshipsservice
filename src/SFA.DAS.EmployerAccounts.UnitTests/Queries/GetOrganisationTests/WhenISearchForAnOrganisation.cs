@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -36,7 +37,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetOrganisationTests
             var expectedSearchTerm = "My Company";
 
             //Act
-            await RequestHandler.Handle(new GetOrganisationsRequest {SearchTerm = expectedSearchTerm, PageNumber = 3, OrganisationType = OrganisationType.Charities });
+            await RequestHandler.Handle(new GetOrganisationsRequest {SearchTerm = expectedSearchTerm, PageNumber = 3, OrganisationType = OrganisationType.Charities }, CancellationToken.None);
 
             //Assert
             _referenceDataService.Verify(x => x.SearchOrganisations(expectedSearchTerm, 3, 20, OrganisationType.Charities), Times.Once);
@@ -51,7 +52,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetOrganisationTests
             _referenceDataService.Setup(x => x.SearchOrganisations(expectedSearchTerm, 2, 20, null)).ReturnsAsync(expectedResponse);
 
             //Act
-            var actual = await RequestHandler.Handle(new GetOrganisationsRequest { SearchTerm = expectedSearchTerm, PageNumber = 2 });
+            var actual = await RequestHandler.Handle(new GetOrganisationsRequest { SearchTerm = expectedSearchTerm, PageNumber = 2 }, CancellationToken.None);
 
             //Assert
             Assert.AreSame(expectedResponse, actual.Organisations);

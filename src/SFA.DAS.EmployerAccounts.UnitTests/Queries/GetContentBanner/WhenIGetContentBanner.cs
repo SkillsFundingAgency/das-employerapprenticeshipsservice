@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Configuration;
@@ -53,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
         [Test]
         public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
-            await RequestHandler.Handle(Query);
+            await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             _contentBannerService.Verify(x => x.Get(_contentType, _clientId), Times.Once);
@@ -63,7 +64,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Act
-            var response = await RequestHandler.Handle(Query);
+            var response = await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             Assert.AreEqual(ContentBanner, response.Content);
@@ -95,7 +96,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
             requestHandler1 = new GetContentRequestHandler(requestValidator1.Object, logger.Object, MockContentService.Object, EmployerAccountsConfiguration);
 
             //Act
-            var result = await requestHandler1.Handle(query1);
+            var result = await requestHandler1.Handle(query1, CancellationToken.None);
 
             //assert
             Assert.AreEqual(result.Content, contentBanner1);

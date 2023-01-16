@@ -7,6 +7,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementById;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
+using System.Threading;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementByIdTests
 {
@@ -55,7 +56,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementByIdTes
         public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
             //Act
-            await RequestHandler.Handle(Query);
+            await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             _employerAgreementRepository.Verify(x => x.GetEmployerAgreement(AgreementId), Times.Once);
@@ -66,7 +67,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementByIdTes
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Act
-            var response = await RequestHandler.Handle(Query);
+            var response = await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             Assert.AreEqual(_agreement, response.EmployerAgreement);
@@ -76,7 +77,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementByIdTes
         public async Task ThenIfTheMessageIsValidTheAgreementIdIsHashed()
         {
             //Act
-            var response = await RequestHandler.Handle(Query);
+            var response = await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             Assert.AreEqual(Query.HashedAgreementId, response.EmployerAgreement.HashedAgreementId);
@@ -90,14 +91,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementByIdTes
                 .ReturnsAsync(() => null);
 
             //Assert
-            Assert.ThrowsAsync<InvalidRequestException>(() => RequestHandler.Handle(Query));
+            Assert.ThrowsAsync<InvalidRequestException>(() => RequestHandler.Handle(Query, CancellationToken.None));
         }
 
         [Test]
         public async Task ThenIfTheMessageIsValidTheAgreementTypeIsSet()
         {
             //Act
-            var response = await RequestHandler.Handle(Query);
+            var response = await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             Assert.AreEqual(_agreement.AgreementType, response.EmployerAgreement.AgreementType);
