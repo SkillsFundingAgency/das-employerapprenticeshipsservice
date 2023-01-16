@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using Dapper;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Sql.Client;
@@ -28,10 +29,9 @@ public class EmployerAccountTeamRepository : BaseRepository, IEmployerAccountTea
                 join [employer_account].[User] u on u.Id = m.UserId
                 where u.UserRef = @externalUserId and tm.hashedId = @hashedAccountId";
 
-        var result = await _db.Value.Database.Connection.QueryAsync<TeamMember>(
+        var result = await _db.Value.Database.GetDbConnection().QueryAsync<TeamMember>(
             sql: sql,
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.Text);
 
         return result.ToList();
@@ -45,14 +45,13 @@ public class EmployerAccountTeamRepository : BaseRepository, IEmployerAccountTea
         parameters.Add("@email", email, DbType.String);
         parameters.Add("@onlyIfMemberIsActive", onlyIfMemberIsActive, DbType.Boolean);
 
-        var result = await _db.Value.Database.Connection.QueryAsync<TeamMember>(
+        var result = await _db.Value.Database.GetDbConnection().QueryAsync<TeamMember>(
             sql: @"SELECT TOP 1 * FROM [employer_account].[GetTeamMembers] " +
                  "WHERE HashedId = @hashedAccountId " +
                  "AND Email = @email " +
                  "AND (@onlyIfMemberIsActive = 0 OR IsUser = 1) " +
                  "ORDER BY IsUser DESC;",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.Text);
 
         return result.SingleOrDefault();
@@ -64,10 +63,9 @@ public class EmployerAccountTeamRepository : BaseRepository, IEmployerAccountTea
 
         parameters.Add("@hashedAccountId", hashedAccountId, DbType.String);
 
-        var result = await _db.Value.Database.Connection.QueryAsync<TeamMember>(
+        var result = await _db.Value.Database.GetDbConnection().QueryAsync<TeamMember>(
             sql: "[employer_account].[GetEmployerAccountMembers]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.StoredProcedure);
 
         return result.ToList();
