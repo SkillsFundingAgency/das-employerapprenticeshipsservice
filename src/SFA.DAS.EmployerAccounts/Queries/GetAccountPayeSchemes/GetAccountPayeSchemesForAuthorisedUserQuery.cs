@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
 
-public class GetAccountPayeSchemesForAuthorisedUserQuery : IAsyncRequest<GetAccountPayeSchemesResponse>
+public class GetAccountPayeSchemesForAuthorisedUserQuery : IRequest<GetAccountPayeSchemesResponse>
 {
     public string HashedAccountId { get; set; }
     public string ExternalUserId { get; set; }

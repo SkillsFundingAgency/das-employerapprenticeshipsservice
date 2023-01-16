@@ -1,8 +1,9 @@
+using System.Threading;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeInUse;
 
-public class GetPayeSchemeInUseHandler : IAsyncRequestHandler<GetPayeSchemeInUseQuery,GetPayeSchemeInUseResponse>
+public class GetPayeSchemeInUseHandler : IRequestHandler<GetPayeSchemeInUseQuery,GetPayeSchemeInUseResponse>
 {
     private readonly IValidator<GetPayeSchemeInUseQuery> _validator;
     private readonly IEmployerSchemesRepository _employerSchemesRepository;
@@ -13,9 +14,9 @@ public class GetPayeSchemeInUseHandler : IAsyncRequestHandler<GetPayeSchemeInUse
         _employerSchemesRepository = employerSchemesRepository;
     }
 
-    public async Task<GetPayeSchemeInUseResponse> Handle(GetPayeSchemeInUseQuery message)
+    public async Task<GetPayeSchemeInUseResponse> Handle(GetPayeSchemeInUseQuery message, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(message);
+        var result = await _validator.ValidateAsync(message);
 
         if (!result.IsValid())
         {

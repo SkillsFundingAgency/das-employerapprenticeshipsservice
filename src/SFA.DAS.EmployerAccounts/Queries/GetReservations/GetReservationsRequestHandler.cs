@@ -1,10 +1,11 @@
-﻿using SFA.DAS.HashingService;
+﻿using System.Threading;
+using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetReservations;
 
-public class GetReservationsRequestHandler : IAsyncRequestHandler<GetReservationsRequest, GetReservationsResponse>
+public class GetReservationsRequestHandler : IRequestHandler<GetReservationsRequest, GetReservationsResponse>
 {
     private readonly IValidator<GetReservationsRequest> _validator;
     private readonly ILog _logger;
@@ -23,9 +24,9 @@ public class GetReservationsRequestHandler : IAsyncRequestHandler<GetReservation
         _hashingService = hashingService;
     }
 
-    public async Task<GetReservationsResponse> Handle(GetReservationsRequest message)
+    public async Task<GetReservationsResponse> Handle(GetReservationsRequest message, CancellationToken cancellationToken)
     {
-        var validationResult = _validator.Validate(message);
+        var validationResult = await _validator.ValidateAsync(message);
 
         if (!validationResult.IsValid())
         {

@@ -1,8 +1,9 @@
-﻿using SFA.DAS.Validation;
+﻿using System.Threading;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
 
-public class GetAccountPayeSchemesForAuthorisedUserQueryHandler : IAsyncRequestHandler<GetAccountPayeSchemesForAuthorisedUserQuery, GetAccountPayeSchemesResponse>
+public class GetAccountPayeSchemesForAuthorisedUserQueryHandler : IRequestHandler<GetAccountPayeSchemesForAuthorisedUserQuery, GetAccountPayeSchemesResponse>
 {
     private readonly IPayeSchemesWithEnglishFractionService _payeSchemesService;
     private readonly IValidator<GetAccountPayeSchemesForAuthorisedUserQuery> _validator;
@@ -15,7 +16,7 @@ public class GetAccountPayeSchemesForAuthorisedUserQueryHandler : IAsyncRequestH
         _validator = validator;
     }
 
-    public async Task<GetAccountPayeSchemesResponse> Handle(GetAccountPayeSchemesForAuthorisedUserQuery message)
+    public async Task<GetAccountPayeSchemesResponse> Handle(GetAccountPayeSchemesForAuthorisedUserQuery message, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(message);
 

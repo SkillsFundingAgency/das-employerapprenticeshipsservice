@@ -4,7 +4,7 @@ using SFA.DAS.Authorization.ModelBinding;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetLatestActivities;
 
-public class GetLatestActivitiesQuery : IAuthorizationContextModel, IAsyncRequest<GetLatestActivitiesResponse>
+public class GetLatestActivitiesQuery : IAuthorizationContextModel, IRequest<GetLatestActivitiesResponse>
 {
     [IgnoreMap]
     [Required]

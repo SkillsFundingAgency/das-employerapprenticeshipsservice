@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Threading;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using SFA.DAS.EmployerAccounts.Dtos;
@@ -8,8 +9,7 @@ using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 
-public class GetAccountEmployerAgreementsQueryHandler : IAsyncRequestHandler<GetAccountEmployerAgreementsRequest,
-    GetAccountEmployerAgreementsResponse>
+public class GetAccountEmployerAgreementsQueryHandler : IRequestHandler<GetAccountEmployerAgreementsRequest, GetAccountEmployerAgreementsResponse>
 {
     private readonly Lazy<EmployerAccountsDbContext> _db;
     private readonly IHashingService _hashingService;
@@ -30,7 +30,7 @@ public class GetAccountEmployerAgreementsQueryHandler : IAsyncRequestHandler<Get
         _configurationProvider = configurationProvider;
     }
 
-    public async Task<GetAccountEmployerAgreementsResponse> Handle(GetAccountEmployerAgreementsRequest message)
+    public async Task<GetAccountEmployerAgreementsResponse> Handle(GetAccountEmployerAgreementsRequest message, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(message);
 

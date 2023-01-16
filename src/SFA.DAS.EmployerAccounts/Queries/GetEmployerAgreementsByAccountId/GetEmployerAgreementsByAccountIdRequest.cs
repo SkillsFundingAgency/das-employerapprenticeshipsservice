@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementsByAccountId;
 
-public class GetEmployerAgreementsByAccountIdRequest : IAsyncRequest<GetEmployerAgreementsByAccountIdResponse>
+public class GetEmployerAgreementsByAccountIdRequest : IRequest<GetEmployerAgreementsByAccountIdResponse>
 {
     public long AccountId { get; set; }
 }

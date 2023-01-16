@@ -1,8 +1,9 @@
-﻿using SFA.DAS.Validation;
+﻿using System.Threading;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationsByAorn;
 
-public class GetOrganisationsByAornQueryHandler : IAsyncRequestHandler<GetOrganisationsByAornRequest, GetOrganisationsByAornResponse>
+public class GetOrganisationsByAornQueryHandler : IRequestHandler<GetOrganisationsByAornRequest, GetOrganisationsByAornResponse>
 {
     private readonly IValidator<GetOrganisationsByAornRequest> _validator;
     private readonly IPensionRegulatorService _pensionRegulatorService;
@@ -13,9 +14,9 @@ public class GetOrganisationsByAornQueryHandler : IAsyncRequestHandler<GetOrgani
         _pensionRegulatorService = pensionRegulatorService;
     }
 
-    public async Task<GetOrganisationsByAornResponse> Handle(GetOrganisationsByAornRequest message)
+    public async Task<GetOrganisationsByAornResponse> Handle(GetOrganisationsByAornRequest message, CancellationToken cancellationToken)
     {
-        var validationResult = _validator.Validate(message);
+        var validationResult = await _validator.ValidateAsync(message);
 
         if (!validationResult.IsValid())
         {

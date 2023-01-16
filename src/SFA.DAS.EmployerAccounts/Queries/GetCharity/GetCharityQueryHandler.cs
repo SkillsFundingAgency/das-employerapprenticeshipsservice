@@ -1,8 +1,9 @@
-﻿using SFA.DAS.Validation;
+﻿using System.Threading;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetCharity;
 
-public class GetCharityQueryHandler : IAsyncRequestHandler<GetCharityQueryRequest, GetCharityQueryResponse>
+public class GetCharityQueryHandler : IRequestHandler<GetCharityQueryRequest, GetCharityQueryResponse>
 {
     private readonly IReferenceDataService _referenceDataService;
     private readonly IValidator<GetCharityQueryRequest> _validator;
@@ -13,10 +14,10 @@ public class GetCharityQueryHandler : IAsyncRequestHandler<GetCharityQueryReques
         _validator = validator;
     }
 
-    public async Task<GetCharityQueryResponse> Handle(GetCharityQueryRequest message)
+    public async Task<GetCharityQueryResponse> Handle(GetCharityQueryRequest message, CancellationToken cancellationToken)
     {
 
-        var validationResult = _validator.Validate(message);
+        var validationResult = await _validator.ValidateAsync(message);
         if (!validationResult.IsValid())
         {
             throw new InvalidRequestException(validationResult.ValidationDictionary);
@@ -29,5 +30,4 @@ public class GetCharityQueryHandler : IAsyncRequestHandler<GetCharityQueryReques
             Charity = charity
         };
     }
-
 }

@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Audit.Types;
+﻿using System.Threading;
+using SFA.DAS.Audit.Types;
 using SFA.DAS.EmployerAccounts.Attributes;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
@@ -10,7 +11,7 @@ using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Queries.RemovePayeFromAccount;
 
-public class RemovePayeFromAccountCommandHandler : AsyncRequestHandler<RemovePayeFromAccountCommand>
+public class RemovePayeFromAccountCommandHandler : IRequestHandler<RemovePayeFromAccountCommand>
 {
     private readonly IMediator _mediator;
     private readonly IValidator<RemovePayeFromAccountCommand> _validator;
@@ -42,7 +43,7 @@ public class RemovePayeFromAccountCommandHandler : AsyncRequestHandler<RemovePay
         _membershipRepository = membershipRepository;
     }
 
-    protected override async Task HandleCore(RemovePayeFromAccountCommand message)
+    public async Task<Unit> Handle(RemovePayeFromAccountCommand message, CancellationToken cancellationToken)
     {
         await ValidateMessage(message);
 
@@ -57,6 +58,8 @@ public class RemovePayeFromAccountCommandHandler : AsyncRequestHandler<RemovePay
         await QueuePayeRemovedMessage(message.PayeRef, accountId, message.CompanyName, loggedInPerson.FullName(), loggedInPerson.UserRef);
 
         await NotifyPayeSchemeRemoved(message.HashedAccountId, message.PayeRef);
+
+        return default;
     }
 
     private async Task ValidateMessage(RemovePayeFromAccountCommand message)
@@ -80,7 +83,7 @@ public class RemovePayeFromAccountCommandHandler : AsyncRequestHandler<RemovePay
 
         var genericEvent = _genericEventFactory.Create(payeEvent);
 
-        await _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
+        await _mediator.Send(new PublishGenericEventCommand { Event = genericEvent });
     }
 
 
@@ -99,7 +102,7 @@ public class RemovePayeFromAccountCommandHandler : AsyncRequestHandler<RemovePay
 
     private async Task AddAuditEntry(string userId, string payeRef, string accountId)
     {
-        await _mediator.SendAsync(new CreateAuditCommand
+        await _mediator.Send(new CreateAuditCommand
         {
             EasAuditMessage = new EasAuditMessage
             {

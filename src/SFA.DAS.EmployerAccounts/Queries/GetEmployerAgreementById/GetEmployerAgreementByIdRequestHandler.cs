@@ -1,9 +1,10 @@
-﻿using SFA.DAS.HashingService;
+﻿using System.Threading;
+using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementById;
 
-public class GetEmployerAgreementByIdRequestHandler : IAsyncRequestHandler<GetEmployerAgreementByIdRequest, GetEmployerAgreementByIdResponse>
+public class GetEmployerAgreementByIdRequestHandler : IRequestHandler<GetEmployerAgreementByIdRequest, GetEmployerAgreementByIdResponse>
 {
     private readonly IEmployerAgreementRepository _employerAgreementRepository;
     private readonly IHashingService _hashingService;
@@ -19,9 +20,9 @@ public class GetEmployerAgreementByIdRequestHandler : IAsyncRequestHandler<GetEm
         _validator = validator;
     }
 
-    public async Task<GetEmployerAgreementByIdResponse> Handle(GetEmployerAgreementByIdRequest message)
+    public async Task<GetEmployerAgreementByIdResponse> Handle(GetEmployerAgreementByIdRequest message, CancellationToken cancellationToken)
     {
-        var validationResult = _validator.Validate(message);
+        var validationResult = await _validator.ValidateAsync(message);
         if (!validationResult.IsValid())
         {
             throw new InvalidRequestException(validationResult.ValidationDictionary);

@@ -1,21 +1,20 @@
-﻿using SFA.DAS.HashingService;
+﻿using System.Threading;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetMember;
 
-public class GetMemberQueryHandler : IAsyncRequestHandler<GetMemberRequest, GetMemberResponse>
+public class GetMemberQueryHandler : IRequestHandler<GetMemberRequest, GetMemberResponse>
 {
     private readonly IEmployerAccountTeamRepository _accountTeamRepository;
     private readonly IHashingService _hashingService;
 
     public GetMemberQueryHandler(IEmployerAccountTeamRepository accountTeamRepository, IHashingService hashingService)
     {
-        if (accountTeamRepository == null)
-            throw new ArgumentNullException(nameof(accountTeamRepository));
-        _accountTeamRepository = accountTeamRepository;
+        _accountTeamRepository = accountTeamRepository ?? throw new ArgumentNullException(nameof(accountTeamRepository));
         _hashingService = hashingService;
     }
 
-    public async Task<GetMemberResponse> Handle(GetMemberRequest message)
+    public async Task<GetMemberResponse> Handle(GetMemberRequest message, CancellationToken cancellationToken)
     {
         var member = await _accountTeamRepository.GetMember(message.HashedAccountId, message.Email, message.OnlyIfMemberIsActive) ?? new TeamMember();
         member.HashedInvitationId = _hashingService.HashValue(member.Id);

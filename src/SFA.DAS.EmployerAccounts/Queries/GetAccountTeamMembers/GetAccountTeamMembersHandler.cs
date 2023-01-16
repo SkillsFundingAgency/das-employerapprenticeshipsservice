@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Validation;
+﻿using System.Threading;
+using SFA.DAS.Validation;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Models;
 using Entity = SFA.DAS.Audit.Types.Entity;
@@ -6,7 +7,7 @@ using SFA.DAS.EmployerAccounts.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers;
 
-public class GetAccountTeamMembersHandler : IAsyncRequestHandler<GetAccountTeamMembersQuery, GetAccountTeamMembersResponse>
+public class GetAccountTeamMembersHandler : IRequestHandler<GetAccountTeamMembersQuery, GetAccountTeamMembersResponse>
 {
     private readonly IValidator<GetAccountTeamMembersQuery> _validator;
     private readonly IEmployerAccountTeamRepository _repository;
@@ -27,7 +28,7 @@ public class GetAccountTeamMembersHandler : IAsyncRequestHandler<GetAccountTeamM
         _userContext = userContext;
     }
 
-    public async Task<GetAccountTeamMembersResponse> Handle(GetAccountTeamMembersQuery message)
+    public async Task<GetAccountTeamMembersResponse> Handle(GetAccountTeamMembersQuery message, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(message);
 
@@ -55,7 +56,7 @@ public class GetAccountTeamMembersHandler : IAsyncRequestHandler<GetAccountTeamM
     {
         var caller = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
 
-        await _mediator.SendAsync(new CreateAuditCommand
+        await _mediator.Send(new CreateAuditCommand
         {
             EasAuditMessage = new EasAuditMessage
             {

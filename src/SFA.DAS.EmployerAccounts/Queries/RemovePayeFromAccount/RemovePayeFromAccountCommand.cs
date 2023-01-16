@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerAccounts.Queries.RemovePayeFromAccount;
 
-public class RemovePayeFromAccountCommand : IAsyncRequest
+public class RemovePayeFromAccountCommand : IRequest
 {
     public RemovePayeFromAccountCommand(string hashedAccountId, string payeRef, string userId, bool removeScheme,string companyName)
     {

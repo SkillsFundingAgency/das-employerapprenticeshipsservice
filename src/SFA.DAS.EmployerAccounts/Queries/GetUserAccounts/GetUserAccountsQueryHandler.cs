@@ -1,8 +1,9 @@
-﻿using SFA.DAS.EmployerAccounts.Models.Account;
+﻿using System.Threading;
+using SFA.DAS.EmployerAccounts.Models.Account;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
 
-public class GetUserAccountsQueryHandler : IAsyncRequestHandler<GetUserAccountsQuery, GetUserAccountsQueryResponse>
+public class GetUserAccountsQueryHandler : IRequestHandler<GetUserAccountsQuery, GetUserAccountsQueryResponse>
 {
     private readonly IUserAccountRepository _userAccountsRepository;
 
@@ -11,7 +12,7 @@ public class GetUserAccountsQueryHandler : IAsyncRequestHandler<GetUserAccountsQ
         _userAccountsRepository = userAcountRepository;
     }
 
-    public async Task<GetUserAccountsQueryResponse> Handle(GetUserAccountsQuery message)
+    public async Task<GetUserAccountsQueryResponse> Handle(GetUserAccountsQuery message, CancellationToken cancellationToken)
     {
         //TODO add validator.
         var userRef = message.UserRef;

@@ -1,10 +1,11 @@
-﻿using SFA.DAS.EmployerAccounts.Models;
+﻿using System.Threading;
 using Newtonsoft.Json;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetProviderInvitation;
 
-public class GetProviderInvitationQueryHandler : IAsyncRequestHandler<GetProviderInvitationQuery, GetProviderInvitationResponse>
+public class GetProviderInvitationQueryHandler : IRequestHandler<GetProviderInvitationQuery, GetProviderInvitationResponse>
 {
     private readonly IProviderRegistrationApiClient _providerRegistrationApiClient;
     private readonly ILog _logger;
@@ -15,7 +16,7 @@ public class GetProviderInvitationQueryHandler : IAsyncRequestHandler<GetProvide
         _logger = logger;
     }
 
-    public async Task<GetProviderInvitationResponse> Handle(GetProviderInvitationQuery message)
+    public async Task<GetProviderInvitationResponse> Handle(GetProviderInvitationQuery message, CancellationToken cancellationToken)
     {
         _logger.Info($"Get Invitations for {message.CorrelationId}");
         var json = await _providerRegistrationApiClient.GetInvitations(message.CorrelationId.ToString());

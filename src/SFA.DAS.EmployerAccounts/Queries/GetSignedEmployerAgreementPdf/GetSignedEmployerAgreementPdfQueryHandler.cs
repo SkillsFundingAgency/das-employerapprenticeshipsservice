@@ -1,10 +1,11 @@
-﻿using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+﻿using System.Threading;
+using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf;
 
-public class GetSignedEmployerAgreementPdfQueryHandler : IAsyncRequestHandler<GetSignedEmployerAgreementPdfRequest, GetSignedEmployerAgreementPdfResponse>
+public class GetSignedEmployerAgreementPdfQueryHandler : IRequestHandler<GetSignedEmployerAgreementPdfRequest, GetSignedEmployerAgreementPdfResponse>
 {
 
     private readonly IValidator<GetSignedEmployerAgreementPdfRequest> _validator;
@@ -21,7 +22,7 @@ public class GetSignedEmployerAgreementPdfQueryHandler : IAsyncRequestHandler<Ge
     }
 
 
-    public async Task<GetSignedEmployerAgreementPdfResponse> Handle(GetSignedEmployerAgreementPdfRequest message)
+    public async Task<GetSignedEmployerAgreementPdfResponse> Handle(GetSignedEmployerAgreementPdfRequest message, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(message);
 

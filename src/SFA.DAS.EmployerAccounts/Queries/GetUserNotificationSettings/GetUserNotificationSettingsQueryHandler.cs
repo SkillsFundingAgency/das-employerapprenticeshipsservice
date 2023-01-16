@@ -1,8 +1,9 @@
-﻿using SFA.DAS.Validation;
+﻿using System.Threading;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetUserNotificationSettings;
 
-public class GetUserNotificationSettingsQueryHandler: IAsyncRequestHandler<GetUserNotificationSettingsQuery,GetUserNotificationSettingsQueryResponse>
+public class GetUserNotificationSettingsQueryHandler: IRequestHandler<GetUserNotificationSettingsQuery,GetUserNotificationSettingsQueryResponse>
 {
     private readonly IValidator<GetUserNotificationSettingsQuery> _validator;
     private readonly IAccountRepository _accountRepository;
@@ -13,9 +14,9 @@ public class GetUserNotificationSettingsQueryHandler: IAsyncRequestHandler<GetUs
         _validator = validator;
     }
 
-    public async Task<GetUserNotificationSettingsQueryResponse> Handle(GetUserNotificationSettingsQuery message)
+    public async Task<GetUserNotificationSettingsQueryResponse> Handle(GetUserNotificationSettingsQuery message, CancellationToken cancellationToken)
     {
-        var validationResult = _validator.Validate(message);
+        var validationResult = await _validator.ValidateAsync(message);
 
         if (!validationResult.IsValid())
         {

@@ -1,11 +1,12 @@
 ﻿using System.Data.Entity;
+using System.Threading;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using SFA.DAS.EmployerAccounts.Dtos;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetHealthCheck;
 
-public class GetHealthCheckQueryHandler : IAsyncRequestHandler<GetHealthCheckQuery, GetHealthCheckQueryResponse>
+public class GetHealthCheckQueryHandler : IRequestHandler<GetHealthCheckQuery, GetHealthCheckQueryResponse>
 {
     private readonly Lazy<EmployerAccountsDbContext> _db;
     private readonly IConfigurationProvider _configurationProvider;
@@ -16,12 +17,12 @@ public class GetHealthCheckQueryHandler : IAsyncRequestHandler<GetHealthCheckQue
         _configurationProvider = configurationProvider;
     }
 
-    public async Task<GetHealthCheckQueryResponse> Handle(GetHealthCheckQuery message)
+    public async Task<GetHealthCheckQueryResponse> Handle(GetHealthCheckQuery message, CancellationToken cancellationToken)
     {
         var healthCheck = await _db.Value.HealthChecks
             .OrderByDescending(h => h.Id)
             .ProjectTo<HealthCheckDto>(_configurationProvider)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(cancellationToken);
 
         return new GetHealthCheckQueryResponse
         {

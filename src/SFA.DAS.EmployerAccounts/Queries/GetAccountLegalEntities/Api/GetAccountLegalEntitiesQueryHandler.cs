@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Threading;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.EmployerAccounts.Extensions;
@@ -7,7 +8,7 @@ using Z.EntityFramework.Plus;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities.Api;
 
-public class GetAccountLegalEntitiesQueryHandler : IAsyncRequestHandler<GetAccountLegalEntitiesQuery, GetAccountLegalEntitiesResponse>
+public class GetAccountLegalEntitiesQueryHandler : IRequestHandler<GetAccountLegalEntitiesQuery, GetAccountLegalEntitiesResponse>
 {
     private readonly IConfigurationProvider _configurationProvider;
     private readonly Lazy<EmployerAccountsDbContext> _db;
@@ -18,7 +19,7 @@ public class GetAccountLegalEntitiesQueryHandler : IAsyncRequestHandler<GetAccou
         _db = db;
     }
 
-    public async Task<GetAccountLegalEntitiesResponse> Handle(GetAccountLegalEntitiesQuery message)
+    public async Task<GetAccountLegalEntitiesResponse> Handle(GetAccountLegalEntitiesQuery message, CancellationToken cancellationToken)
     {
         var accountLegalEntitiesCountQuery = _db.Value.AccountLegalEntities.Where(ale => ale.Deleted == null).FutureCount();
 

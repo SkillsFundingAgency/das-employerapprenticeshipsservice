@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Threading;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeInUse;
 using SFA.DAS.Hmrc;
 using SFA.DAS.NLog.Logger;
@@ -6,12 +7,13 @@ using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetHmrcEmployerInformation;
 
-public class GetHmrcEmployerInformationHandler : IAsyncRequestHandler<GetHmrcEmployerInformationQuery, GetHmrcEmployerInformationResponse>
+public class GetHmrcEmployerInformationHandler : IRequestHandler<GetHmrcEmployerInformationQuery, GetHmrcEmployerInformationResponse>
 {
     private readonly IValidator<GetHmrcEmployerInformationQuery> _validator;
     private readonly IHmrcService _hmrcService;
     private readonly IMediator _mediator;
     private readonly ILog _logger;
+
 
     public GetHmrcEmployerInformationHandler(IValidator<GetHmrcEmployerInformationQuery> validator, IHmrcService hmrcService, IMediator mediator, ILog logger)
     {
@@ -21,9 +23,9 @@ public class GetHmrcEmployerInformationHandler : IAsyncRequestHandler<GetHmrcEmp
         _logger = logger;
     }
 
-    public async Task<GetHmrcEmployerInformationResponse> Handle(GetHmrcEmployerInformationQuery message)
+    public async Task<GetHmrcEmployerInformationResponse> Handle(GetHmrcEmployerInformationQuery message, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(message);
+        var result = await _validator.ValidateAsync(message);
 
         if (!result.IsValid())
         {
@@ -39,7 +41,7 @@ public class GetHmrcEmployerInformationHandler : IAsyncRequestHandler<GetHmrcEmp
 
         var emprefInformation = await _hmrcService.GetEmprefInformation(message.AuthToken, empref);
 
-        var schemeCheck = await _mediator.SendAsync(new GetPayeSchemeInUseQuery { Empref = empref });
+        var schemeCheck = await _mediator.Send(new GetPayeSchemeInUseQuery { Empref = empref }, cancellationToken);
 
         if (schemeCheck.PayeScheme != null)
         {

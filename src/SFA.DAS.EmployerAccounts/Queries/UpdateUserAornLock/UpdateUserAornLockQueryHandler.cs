@@ -1,6 +1,8 @@
-﻿namespace SFA.DAS.EmployerAccounts.Queries.UpdateUserAornLock;
+﻿using System.Threading;
 
-public class UpdateUserAornLockQueryHandler : AsyncRequestHandler<UpdateUserAornLockRequest>
+namespace SFA.DAS.EmployerAccounts.Queries.UpdateUserAornLock;
+
+public class UpdateUserAornLockQueryHandler : IRequestHandler<UpdateUserAornLockRequest>
 {
     private readonly IUserAornPayeLockService _userAornPayeLockService;
 
@@ -9,8 +11,10 @@ public class UpdateUserAornLockQueryHandler : AsyncRequestHandler<UpdateUserAorn
         _userAornPayeLockService = userAornPayeLockService;
     }
 
-    protected override async Task HandleCore(UpdateUserAornLockRequest message)
+    public async Task<Unit> Handle(UpdateUserAornLockRequest request, CancellationToken cancellationToken)
     {
-        await _userAornPayeLockService.UpdateUserAornPayeAttempt(message.UserRef, message.Success);
+        await _userAornPayeLockService.UpdateUserAornPayeAttempt(request.UserRef, request.Success);
+
+        return default;
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerAccounts.Queries.GetGatewayInformation;
 
-public class GetGatewayInformationQuery : IAsyncRequest<GetGatewayInformationResponse>
+public class GetGatewayInformationQuery : IRequest<GetGatewayInformationResponse>
 {
     public string ReturnUrl { get; set; }
 }

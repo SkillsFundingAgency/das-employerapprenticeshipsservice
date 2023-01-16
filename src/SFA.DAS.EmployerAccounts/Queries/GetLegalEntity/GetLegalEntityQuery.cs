@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerAccounts.Queries.GetLegalEntity;
 
-public class GetLegalEntityQuery : IAsyncRequest<GetLegalEntityResponse>
+public class GetLegalEntityQuery : IRequest<GetLegalEntityResponse>
 {
     public GetLegalEntityQuery(string accountHashedId, long legalEntityId)
     {

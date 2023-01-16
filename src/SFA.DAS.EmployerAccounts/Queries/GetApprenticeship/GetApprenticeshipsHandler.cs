@@ -1,10 +1,11 @@
-﻿using SFA.DAS.NLog.Logger;
+﻿using System.Threading;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetApprenticeship;
 
-public class GetApprenticeshipsHandler : IAsyncRequestHandler<GetApprenticeshipsRequest, GetApprenticeshipsResponse>
+public class GetApprenticeshipsHandler : IRequestHandler<GetApprenticeshipsRequest, GetApprenticeshipsResponse>
 {
     private readonly IValidator<GetApprenticeshipsRequest> _validator;
     private readonly ILog _logger;
@@ -23,16 +24,16 @@ public class GetApprenticeshipsHandler : IAsyncRequestHandler<GetApprenticeships
         _hashingService = hashingService;
     }
 
-    public async Task<GetApprenticeshipsResponse> Handle(GetApprenticeshipsRequest message)
+    public async Task<GetApprenticeshipsResponse> Handle(GetApprenticeshipsRequest message, CancellationToken cancellationToken)
     {
-        var validationResult = _validator.Validate(message);
+        var validationResult = await _validator.ValidateAsync(message);
 
         if (!validationResult.IsValid())
         {
             throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        long accountId = _hashingService.DecodeValue(message.HashedAccountId);
+        var accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
         try
         {

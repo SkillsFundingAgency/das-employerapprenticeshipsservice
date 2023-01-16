@@ -1,9 +1,10 @@
-﻿using SFA.DAS.EmployerAccounts.Models;
+﻿using System.Threading;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
 
-public class GetUserAccountRoleHandler: IAsyncRequestHandler<GetUserAccountRoleQuery, GetUserAccountRoleResponse>
+public class GetUserAccountRoleHandler: IRequestHandler<GetUserAccountRoleQuery, GetUserAccountRoleResponse>
 {
     private readonly IMembershipRepository _membershipRepository;
     private readonly IValidator<GetUserAccountRoleQuery> _validator;
@@ -14,9 +15,9 @@ public class GetUserAccountRoleHandler: IAsyncRequestHandler<GetUserAccountRoleQ
         _validator = validator;
     }
 
-    public async Task<GetUserAccountRoleResponse> Handle(GetUserAccountRoleQuery message)
+    public async Task<GetUserAccountRoleResponse> Handle(GetUserAccountRoleQuery message, CancellationToken cancellationToken)
     {
-        var validationResult = _validator.Validate(message);
+        var validationResult = await _validator.ValidateAsync(message);
 
         if (!validationResult.IsValid())
         {

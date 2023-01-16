@@ -1,8 +1,9 @@
-﻿using SFA.DAS.Validation;
+﻿using System.Threading;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetUserInvitations;
 
-public class GetNumberOfUserInvitationsHandler : IAsyncRequestHandler<GetNumberOfUserInvitationsQuery, GetNumberOfUserInvitationsResponse>
+public class GetNumberOfUserInvitationsHandler : IRequestHandler<GetNumberOfUserInvitationsQuery, GetNumberOfUserInvitationsResponse>
 {
     private readonly IValidator<GetNumberOfUserInvitationsQuery> _validator;
     private readonly IInvitationRepository _invitationRepository;
@@ -13,9 +14,9 @@ public class GetNumberOfUserInvitationsHandler : IAsyncRequestHandler<GetNumberO
         _invitationRepository = invitationRepository;
     }
 
-    public async Task<GetNumberOfUserInvitationsResponse> Handle(GetNumberOfUserInvitationsQuery message)
+    public async Task<GetNumberOfUserInvitationsResponse> Handle(GetNumberOfUserInvitationsQuery message, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(message);
+        var result = await _validator.ValidateAsync(message);
 
         if (!result.IsValid())
         {

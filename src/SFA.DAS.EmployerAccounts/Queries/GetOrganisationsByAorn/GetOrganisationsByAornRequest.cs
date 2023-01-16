@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationsByAorn;
 
-public class GetOrganisationsByAornRequest : IAsyncRequest<GetOrganisationsByAornResponse>
+public class GetOrganisationsByAornRequest : IRequest<GetOrganisationsByAornResponse>
 {
     public GetOrganisationsByAornRequest(string aorn, string payeRef)
     {

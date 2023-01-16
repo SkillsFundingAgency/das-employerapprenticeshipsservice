@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities.Api;
 
-public class GetAccountLegalEntitiesQuery : IAsyncRequest<GetAccountLegalEntitiesResponse>
+public class GetAccountLegalEntitiesQuery : IRequest<GetAccountLegalEntitiesResponse>
 {
     [Required]
     [Range(1, int.MaxValue)]

@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisations;
 
-public class GetOrganisationsRequest : IAsyncRequest<GetOrganisationsResponse>
+public class GetOrganisationsRequest : IRequest<GetOrganisationsResponse>
 {
     public string SearchTerm { get; set; }
     public int PageNumber { get; set; }

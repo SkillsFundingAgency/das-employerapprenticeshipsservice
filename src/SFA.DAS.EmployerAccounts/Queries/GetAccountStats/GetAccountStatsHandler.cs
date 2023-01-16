@@ -1,9 +1,10 @@
-﻿using SFA.DAS.HashingService;
+﻿using System.Threading;
+using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountStats;
 
-public class GetAccountStatsHandler : IAsyncRequestHandler<GetAccountStatsQuery, GetAccountStatsResponse>
+public class GetAccountStatsHandler : IRequestHandler<GetAccountStatsQuery, GetAccountStatsResponse>
 {
     private readonly IEmployerAccountRepository _repository;
     private readonly IHashingService _hashingService;
@@ -16,7 +17,7 @@ public class GetAccountStatsHandler : IAsyncRequestHandler<GetAccountStatsQuery,
         _validator = validator;
     }
 
-    public async Task<GetAccountStatsResponse> Handle(GetAccountStatsQuery message)
+    public async Task<GetAccountStatsResponse> Handle(GetAccountStatsQuery message, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(message);
 

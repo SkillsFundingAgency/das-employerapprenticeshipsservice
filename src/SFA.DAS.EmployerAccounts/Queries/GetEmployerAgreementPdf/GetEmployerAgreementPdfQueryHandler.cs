@@ -1,10 +1,11 @@
 ﻿using System.Data.Entity;
+using System.Threading;
 using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
 
-public class GetEmployerAgreementPdfQueryHandler : IAsyncRequestHandler<GetEmployerAgreementPdfRequest, GetEmployerAgreementPdfResponse>
+public class GetEmployerAgreementPdfQueryHandler : IRequestHandler<GetEmployerAgreementPdfRequest, GetEmployerAgreementPdfResponse>
 {
     private readonly IValidator<GetEmployerAgreementPdfRequest> _validator;
     private readonly IPdfService _pdfService;
@@ -19,7 +20,7 @@ public class GetEmployerAgreementPdfQueryHandler : IAsyncRequestHandler<GetEmplo
         _db = db;
     }
 
-    public async Task<GetEmployerAgreementPdfResponse> Handle(GetEmployerAgreementPdfRequest message)
+    public async Task<GetEmployerAgreementPdfResponse> Handle(GetEmployerAgreementPdfRequest message, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(message);
 
@@ -35,7 +36,10 @@ public class GetEmployerAgreementPdfQueryHandler : IAsyncRequestHandler<GetEmplo
 
         var employerAgreementId = _hashingService.DecodeValue(message.HashedLegalAgreementId);
 
-        var templatePartialViewName = await _db.Value.Agreements.Where(x => x.Id == employerAgreementId).Select(x => x.Template.PartialViewName).SingleAsync();
+        var templatePartialViewName = await _db.Value.Agreements
+            .Where(x => x.Id == employerAgreementId)
+            .Select(x => x.Template.PartialViewName)
+            .SingleAsync(cancellationToken);
 
         var file = await _pdfService.SubsituteValuesForPdf($"{templatePartialViewName}.pdf");
 

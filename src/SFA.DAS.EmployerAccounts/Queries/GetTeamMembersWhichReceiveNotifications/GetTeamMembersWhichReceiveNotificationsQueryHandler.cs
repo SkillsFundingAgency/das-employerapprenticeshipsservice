@@ -1,9 +1,10 @@
-﻿using SFA.DAS.NLog.Logger;
+﻿using System.Threading;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetTeamMembersWhichReceiveNotifications;
 
-public class GetTeamMembersWhichReceiveNotificationsQueryHandler : IAsyncRequestHandler<GetTeamMembersWhichReceiveNotificationsQuery, GetTeamMembersWhichReceiveNotificationsQueryResponse>
+public class GetTeamMembersWhichReceiveNotificationsQueryHandler : IRequestHandler<GetTeamMembersWhichReceiveNotificationsQuery, GetTeamMembersWhichReceiveNotificationsQueryResponse>
 {
     private readonly IEmployerAccountTeamRepository _repository;
     private readonly IValidator<GetTeamMembersWhichReceiveNotificationsQuery> _validator;
@@ -19,9 +20,9 @@ public class GetTeamMembersWhichReceiveNotificationsQueryHandler : IAsyncRequest
         _logger = logger;
     }
 
-    public async Task<GetTeamMembersWhichReceiveNotificationsQueryResponse> Handle(GetTeamMembersWhichReceiveNotificationsQuery message)
+    public async Task<GetTeamMembersWhichReceiveNotificationsQueryResponse> Handle(GetTeamMembersWhichReceiveNotificationsQuery message, CancellationToken cancellationToken)
     {
-        var validationResult = _validator.Validate(message);
+        var validationResult = await _validator.ValidateAsync(message);
 
         if (!validationResult.IsValid())
         {

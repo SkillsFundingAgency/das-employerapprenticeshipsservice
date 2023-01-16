@@ -1,11 +1,12 @@
-﻿using AutoMapper;
+﻿using System.Threading;
+using AutoMapper;
 using SFA.DAS.ReferenceData.Types.DTO;
 using SFA.DAS.Validation;
 using OrganisationType = SFA.DAS.Common.Domain.Types.OrganisationType;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationById;
 
-public class GetOrganisationByIdQueryHandler : IAsyncRequestHandler<GetOrganisationByIdRequest, GetOrganisationByIdResponse>
+public class GetOrganisationByIdQueryHandler : IRequestHandler<GetOrganisationByIdRequest, GetOrganisationByIdResponse>
 {
     private readonly IValidator<GetOrganisationByIdRequest> _validator;
     private readonly IReferenceDataService _referenceDataService;
@@ -24,9 +25,9 @@ public class GetOrganisationByIdQueryHandler : IAsyncRequestHandler<GetOrganisat
         _mapper = mapper;
     }
 
-    public async Task<GetOrganisationByIdResponse> Handle(GetOrganisationByIdRequest message)
+    public async Task<GetOrganisationByIdResponse> Handle(GetOrganisationByIdRequest message, CancellationToken cancellationToken)
     {
-        var valdiationResult = _validator.Validate(message);
+        var valdiationResult = await _validator.ValidateAsync(message);
 
         if (!valdiationResult.IsValid())
         {

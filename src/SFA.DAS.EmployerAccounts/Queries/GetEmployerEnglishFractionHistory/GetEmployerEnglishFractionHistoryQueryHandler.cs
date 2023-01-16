@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Threading;
+using AutoMapper;
 using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.OuterApiRequests.Finance;
 using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.OuterApiResponses.Finance;
 using SFA.DAS.EmployerAccounts.Interfaces.OuterApi;
@@ -8,7 +9,7 @@ using DasEnglishFraction = SFA.DAS.EmployerAccounts.Models.Levy.DasEnglishFracti
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerEnglishFractionHistory;
 
-public class GetEmployerEnglishFractionHistoryQueryHandler : IAsyncRequestHandler<GetEmployerEnglishFractionHistoryQuery, GetEmployerEnglishFractionHistoryResponse>
+public class GetEmployerEnglishFractionHistoryQueryHandler : IRequestHandler<GetEmployerEnglishFractionHistoryQuery, GetEmployerEnglishFractionHistoryResponse>
 {
     private readonly IValidator<GetEmployerEnglishFractionHistoryQuery> _validator;
     private readonly IOuterApiClient _outerApiClient;
@@ -23,7 +24,7 @@ public class GetEmployerEnglishFractionHistoryQueryHandler : IAsyncRequestHandle
         _mapper = mapper;
     }
 
-    public async Task<GetEmployerEnglishFractionHistoryResponse> Handle(GetEmployerEnglishFractionHistoryQuery message)
+    public async Task<GetEmployerEnglishFractionHistoryResponse> Handle(GetEmployerEnglishFractionHistoryQuery message, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(message);
 
@@ -38,7 +39,7 @@ public class GetEmployerEnglishFractionHistoryQueryHandler : IAsyncRequestHandle
         }
 
         var englishFractionHistory = await _outerApiClient.Get<GetEnglishFractionHistoryResponse>(new GetEnglishFractionHistoryRequest(message.HashedAccountId, message.EmpRef));
-        var schemeInformation = await _mediator.SendAsync(new GetPayeSchemeInUseQuery {Empref = message.EmpRef});
+        var schemeInformation = await _mediator.Send(new GetPayeSchemeInUseQuery {Empref = message.EmpRef}, cancellationToken);
 
         return new GetEmployerEnglishFractionHistoryResponse 
         {

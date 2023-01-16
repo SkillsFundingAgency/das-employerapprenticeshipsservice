@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerAccounts.Queries.GetUserByEmail;
 
-public class GetUserByEmailQuery : IAsyncRequest<GetUserByEmailResponse>
+public class GetUserByEmailQuery : IRequest<GetUserByEmailResponse>
 {
     public string Email { get; set; }
 }

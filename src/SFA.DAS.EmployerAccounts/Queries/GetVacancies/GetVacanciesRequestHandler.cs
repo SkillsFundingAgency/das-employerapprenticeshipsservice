@@ -1,9 +1,10 @@
-﻿using SFA.DAS.NLog.Logger;
+﻿using System.Threading;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetVacancies;
 
-public class GetVacanciesRequestHandler : IAsyncRequestHandler<GetVacanciesRequest, GetVacanciesResponse>
+public class GetVacanciesRequestHandler : IRequestHandler<GetVacanciesRequest, GetVacanciesResponse>
 {
     private readonly IValidator<GetVacanciesRequest> _validator;
     private readonly ILog _logger;
@@ -19,9 +20,9 @@ public class GetVacanciesRequestHandler : IAsyncRequestHandler<GetVacanciesReque
         _service = service;
     }
 
-    public async Task<GetVacanciesResponse> Handle(GetVacanciesRequest message)
+    public async Task<GetVacanciesResponse> Handle(GetVacanciesRequest message, CancellationToken cancellationToken)
     {
-        var validationResult = _validator.Validate(message);
+        var validationResult = await _validator.ValidateAsync(message);
 
         if (!validationResult.IsValid())
         {

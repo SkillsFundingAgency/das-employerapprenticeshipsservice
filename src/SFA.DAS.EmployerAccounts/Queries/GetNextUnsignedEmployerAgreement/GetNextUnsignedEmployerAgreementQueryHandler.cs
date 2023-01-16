@@ -1,10 +1,11 @@
 ﻿using System.Data.Entity;
+using System.Threading;
 using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
 
-public class GetNextUnsignedEmployerAgreementQueryHandler : IAsyncRequestHandler<GetNextUnsignedEmployerAgreementRequest, GetNextUnsignedEmployerAgreementResponse>
+public class GetNextUnsignedEmployerAgreementQueryHandler : IRequestHandler<GetNextUnsignedEmployerAgreementRequest, GetNextUnsignedEmployerAgreementResponse>
 {
     private readonly Lazy<EmployerAccountsDbContext> _db;
     private readonly IHashingService _hashingService;
@@ -21,7 +22,7 @@ public class GetNextUnsignedEmployerAgreementQueryHandler : IAsyncRequestHandler
         _validator = validator;
     }
 
-    public async Task<GetNextUnsignedEmployerAgreementResponse> Handle(GetNextUnsignedEmployerAgreementRequest message)
+    public async Task<GetNextUnsignedEmployerAgreementResponse> Handle(GetNextUnsignedEmployerAgreementRequest message, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(message);
 
@@ -39,7 +40,7 @@ public class GetNextUnsignedEmployerAgreementQueryHandler : IAsyncRequestHandler
 
         var pendingAgreementId = await _db.Value.AccountLegalEntities
             .Where(x => x.AccountId == accountId && x.PendingAgreementId != null)
-            .Select(x => x.PendingAgreementId).FirstOrDefaultAsync();
+            .Select(x => x.PendingAgreementId).FirstOrDefaultAsync(cancellationToken);
 
         return new GetNextUnsignedEmployerAgreementResponse
         {

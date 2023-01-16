@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Threading;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
@@ -7,7 +8,7 @@ using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetLastSignedAgreement;
 
-public class GetLastSignedAgreementQueryHandler : IAsyncRequestHandler<GetLastSignedAgreementRequest, GetLastSignedAgreementResponse>
+public class GetLastSignedAgreementQueryHandler : IRequestHandler<GetLastSignedAgreementRequest, GetLastSignedAgreementResponse>
 {
     private readonly Lazy<EmployerAccountsDbContext> _database;
     private readonly IHashingService _hashingService;
@@ -26,7 +27,7 @@ public class GetLastSignedAgreementQueryHandler : IAsyncRequestHandler<GetLastSi
         _configurationProvider = configurationProvider;
     }
 
-    public async Task<GetLastSignedAgreementResponse> Handle(GetLastSignedAgreementRequest message)
+    public async Task<GetLastSignedAgreementResponse> Handle(GetLastSignedAgreementRequest message, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(message);
 

@@ -1,8 +1,9 @@
-﻿using SFA.DAS.Validation;
+﻿using System.Threading;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetUserByEmail;
 
-public class GetUserByEmailQueryHandler : IAsyncRequestHandler<GetUserByEmailQuery, GetUserByEmailResponse>
+public class GetUserByEmailQueryHandler : IRequestHandler<GetUserByEmailQuery, GetUserByEmailResponse>
 {
     private readonly IUserAccountRepository _repository;
     private readonly IValidator<GetUserByEmailQuery> _validator;
@@ -13,9 +14,9 @@ public class GetUserByEmailQueryHandler : IAsyncRequestHandler<GetUserByEmailQue
         _validator = validator;
     }
 
-    public async  Task<GetUserByEmailResponse> Handle(GetUserByEmailQuery message)
+    public async  Task<GetUserByEmailResponse> Handle(GetUserByEmailQuery message, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(message);
+        var result = await _validator.ValidateAsync(message);
 
         if (!result.IsValid())
         {

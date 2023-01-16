@@ -1,10 +1,11 @@
-﻿using SFA.DAS.EmployerAccounts.Models.Organisation;
+﻿using System.Threading;
+using SFA.DAS.EmployerAccounts.Models.Organisation;
 using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove;
 
-public class GetAccountLegalEntityRemoveQueryHandler : IAsyncRequestHandler<GetAccountLegalEntityRemoveRequest, GetAccountLegalEntityRemoveResponse>
+public class GetAccountLegalEntityRemoveQueryHandler : IRequestHandler<GetAccountLegalEntityRemoveRequest, GetAccountLegalEntityRemoveResponse>
 {
     private readonly IValidator<GetAccountLegalEntityRemoveRequest> _validator;
     private readonly IEmployerAgreementRepository _employerAgreementRepository;
@@ -26,7 +27,7 @@ public class GetAccountLegalEntityRemoveQueryHandler : IAsyncRequestHandler<GetA
         _commitmentV2ApiClient = commitmentV2ApiClient;
     }
 
-    public async Task<GetAccountLegalEntityRemoveResponse> Handle(GetAccountLegalEntityRemoveRequest message)
+    public async Task<GetAccountLegalEntityRemoveResponse> Handle(GetAccountLegalEntityRemoveRequest message, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(message);
 

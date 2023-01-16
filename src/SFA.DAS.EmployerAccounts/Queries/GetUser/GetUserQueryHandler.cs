@@ -1,8 +1,9 @@
-﻿using SFA.DAS.Validation;
+﻿using System.Threading;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetUser;
 
-public class GetUserQueryHandler : IAsyncRequestHandler<GetUserQuery, GetUserResponse>
+public class GetUserQueryHandler : IRequestHandler<GetUserQuery, GetUserResponse>
 {
     private readonly IUserAccountRepository _repository;
     private readonly IValidator<GetUserQuery> _validator;
@@ -13,9 +14,9 @@ public class GetUserQueryHandler : IAsyncRequestHandler<GetUserQuery, GetUserRes
         _validator = validator;
     }
 
-    public async  Task<GetUserResponse> Handle(GetUserQuery message)
+    public async  Task<GetUserResponse> Handle(GetUserQuery message, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(message);
+        var result = await _validator.ValidateAsync(message);
 
         if (!result.IsValid())
         {

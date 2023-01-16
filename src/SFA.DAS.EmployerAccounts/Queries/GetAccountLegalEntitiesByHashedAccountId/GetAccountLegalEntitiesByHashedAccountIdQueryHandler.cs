@@ -1,8 +1,9 @@
-﻿using SFA.DAS.Validation;
+﻿using System.Threading;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesByHashedAccountId;
 
-public class GetAccountLegalEntitiesByHashedAccountIdQueryHandler : IAsyncRequestHandler<GetAccountLegalEntitiesByHashedAccountIdRequest, GetAccountLegalEntitiesByHashedAccountIdResponse>
+public class GetAccountLegalEntitiesByHashedAccountIdQueryHandler : IRequestHandler<GetAccountLegalEntitiesByHashedAccountIdRequest, GetAccountLegalEntitiesByHashedAccountIdResponse>
 {
     private readonly IAccountLegalEntityRepository _accountLegalEntityRepository;
     private readonly IValidator<GetAccountLegalEntitiesByHashedAccountIdRequest> _validator;
@@ -14,9 +15,9 @@ public class GetAccountLegalEntitiesByHashedAccountIdQueryHandler : IAsyncReques
         _validator = validator;
     }
 
-    public async Task<GetAccountLegalEntitiesByHashedAccountIdResponse> Handle(GetAccountLegalEntitiesByHashedAccountIdRequest message)
+    public async Task<GetAccountLegalEntitiesByHashedAccountIdResponse> Handle(GetAccountLegalEntitiesByHashedAccountIdRequest message, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(message);
+        var result = await _validator.ValidateAsync(message);
 
         if (!result.IsValid())
         {

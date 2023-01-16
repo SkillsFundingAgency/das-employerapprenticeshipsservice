@@ -3,7 +3,7 @@ using SFA.DAS.Authorization.ModelBinding;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetActivities;
 
-public class GetActivitiesQuery : IAuthorizationContextModel, IAsyncRequest<GetActivitiesResponse>
+public class GetActivitiesQuery : IAuthorizationContextModel, IRequest<GetActivitiesResponse>
 {
     public long AccountId { get; set; }
     public int? Take { get; set; }

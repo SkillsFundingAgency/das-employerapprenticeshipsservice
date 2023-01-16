@@ -1,8 +1,9 @@
-﻿using SFA.DAS.Validation;
+﻿using System.Threading;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetPensionRegulator;
 
-public class GetPensionRegulatorQueryHandler : IAsyncRequestHandler<GetPensionRegulatorRequest, GetPensionRegulatorResponse>
+public class GetPensionRegulatorQueryHandler : IRequestHandler<GetPensionRegulatorRequest, GetPensionRegulatorResponse>
 {
     private readonly IValidator<GetPensionRegulatorRequest> _validator;
     private readonly IPensionRegulatorService _pensionRegulatorService;
@@ -13,9 +14,9 @@ public class GetPensionRegulatorQueryHandler : IAsyncRequestHandler<GetPensionRe
         _pensionRegulatorService = pensionRegulatorService;
     }
 
-    public async Task<GetPensionRegulatorResponse> Handle(GetPensionRegulatorRequest message)
+    public async Task<GetPensionRegulatorResponse> Handle(GetPensionRegulatorRequest message, CancellationToken cancellationToken)
     {
-        var validationResult = _validator.Validate(message);
+        var validationResult = await _validator.ValidateAsync(message);
 
         if (!validationResult.IsValid())
         {

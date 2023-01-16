@@ -1,11 +1,12 @@
-﻿using SFA.DAS.Common.Domain.Types;
+﻿using System.Threading;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.Validation;
 using TasksEnums = SFA.DAS.Tasks.API.Types.Enums;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountTasks;
 
-public class GetAccountTasksQueryHandler : IAsyncRequestHandler<GetAccountTasksQuery, GetAccountTasksResponse>
+public class GetAccountTasksQueryHandler : IRequestHandler<GetAccountTasksQuery, GetAccountTasksResponse>
 {
     private readonly ITaskService _taskService;
     private readonly IValidator<GetAccountTasksQuery> _validator;
@@ -16,7 +17,7 @@ public class GetAccountTasksQueryHandler : IAsyncRequestHandler<GetAccountTasksQ
         _validator = validator;
     }
 
-    public async Task<GetAccountTasksResponse> Handle(GetAccountTasksQuery message)
+    public async Task<GetAccountTasksResponse> Handle(GetAccountTasksQuery message, CancellationToken cancellationToken)
     {
         ValidateMessage(message);
 

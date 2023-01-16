@@ -1,8 +1,9 @@
-﻿using SFA.DAS.Validation;
+﻿using System.Threading;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetPagedEmployerAccounts;
 
-public class GetPagedAccountsQueryHandler : IAsyncRequestHandler<GetPagedEmployerAccountsQuery, GetPagedEmployerAccountsResponse>
+public class GetPagedAccountsQueryHandler : IRequestHandler<GetPagedEmployerAccountsQuery, GetPagedEmployerAccountsResponse>
 {
     private readonly IEmployerAccountRepository _employerAccountRepository;
     private readonly IValidator<GetPagedEmployerAccountsQuery> _validator;
@@ -15,9 +16,9 @@ public class GetPagedAccountsQueryHandler : IAsyncRequestHandler<GetPagedEmploye
         _validator = validator;
     }
 
-    public async Task<GetPagedEmployerAccountsResponse> Handle(GetPagedEmployerAccountsQuery message)
+    public async Task<GetPagedEmployerAccountsResponse> Handle(GetPagedEmployerAccountsQuery message, CancellationToken cancellationToken)
     {
-        var validationResult = _validator.Validate(message);
+        var validationResult = await _validator.ValidateAsync(message);
 
         if (!validationResult.IsValid())
         {

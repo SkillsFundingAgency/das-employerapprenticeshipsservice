@@ -1,9 +1,10 @@
-﻿using SFA.DAS.NLog.Logger;
+﻿using System.Threading;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 
-public class GetUserByRefQueryHandler : IAsyncRequestHandler<GetUserByRefQuery, GetUserByRefResponse>
+public class GetUserByRefQueryHandler : IRequestHandler<GetUserByRefQuery, GetUserByRefResponse>
 {
     private readonly IUserRepository _repository;
     private readonly IValidator<GetUserByRefQuery> _validator;
@@ -16,9 +17,9 @@ public class GetUserByRefQueryHandler : IAsyncRequestHandler<GetUserByRefQuery, 
         _logger = logger;
     }
 
-    public async Task<GetUserByRefResponse> Handle(GetUserByRefQuery message)
+    public async Task<GetUserByRefResponse> Handle(GetUserByRefQuery message, CancellationToken cancellationToken)
     {
-        var validationResult = _validator.Validate(message);
+        var validationResult = await _validator.ValidateAsync(message);
 
         if (!validationResult.IsValid())
         {

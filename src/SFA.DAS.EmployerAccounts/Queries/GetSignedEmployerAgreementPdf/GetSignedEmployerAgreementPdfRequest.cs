@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf;
 
-public class GetSignedEmployerAgreementPdfRequest : IAsyncRequest<GetSignedEmployerAgreementPdfResponse>
+public class GetSignedEmployerAgreementPdfRequest : IRequest<GetSignedEmployerAgreementPdfResponse>
 {
     public string HashedAccountId { get; set; }
     public string UserId { get; set; }

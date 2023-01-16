@@ -1,8 +1,9 @@
-﻿using SFA.DAS.Hmrc;
+﻿using System.Threading;
+using SFA.DAS.Hmrc;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetGatewayInformation;
 
-public class GetGatewayInformationHandler : IAsyncRequestHandler<GetGatewayInformationQuery, GetGatewayInformationResponse>
+public class GetGatewayInformationHandler : IRequestHandler<GetGatewayInformationQuery, GetGatewayInformationResponse>
 {
     private readonly IHmrcService _hmrcService;
 
@@ -11,7 +12,7 @@ public class GetGatewayInformationHandler : IAsyncRequestHandler<GetGatewayInfor
         _hmrcService = hmrcService;
     }
 
-    public Task<GetGatewayInformationResponse> Handle(GetGatewayInformationQuery message)
+    public Task<GetGatewayInformationResponse> Handle(GetGatewayInformationQuery message, CancellationToken cancellationToken)
     {
         var returnUrl = _hmrcService.GenerateAuthRedirectUrl(message.ReturnUrl);
 

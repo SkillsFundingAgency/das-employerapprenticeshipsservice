@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Threading;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using SFA.DAS.EmployerAccounts.Dtos;
@@ -8,7 +9,7 @@ using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 
-public class GetEmployerAgreementQueryHandler : IAsyncRequestHandler<GetEmployerAgreementRequest, GetEmployerAgreementResponse>
+public class GetEmployerAgreementQueryHandler : IRequestHandler<GetEmployerAgreementRequest, GetEmployerAgreementResponse>
 {
     private readonly Lazy<EmployerAccountsDbContext> _database;
     private readonly IHashingService _hashingService;
@@ -27,7 +28,7 @@ public class GetEmployerAgreementQueryHandler : IAsyncRequestHandler<GetEmployer
         _configurationProvider = configurationProvider;
     }
 
-    public async Task<GetEmployerAgreementResponse> Handle(GetEmployerAgreementRequest message)
+    public async Task<GetEmployerAgreementResponse> Handle(GetEmployerAgreementRequest message, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(message);
 
@@ -43,7 +44,7 @@ public class GetEmployerAgreementQueryHandler : IAsyncRequestHandler<GetEmployer
 
         var agreementId = _hashingService.DecodeValue(message.AgreementId);
         var employerAgreement = await _database.Value.Agreements.ProjectTo<AgreementDto>(_configurationProvider)
-            .SingleOrDefaultAsync(x => x.Id.Equals(agreementId));
+            .SingleOrDefaultAsync(x => x.Id.Equals(agreementId), cancellationToken);
 
         if (employerAgreement == null)
             return new GetEmployerAgreementResponse();

@@ -1,26 +1,23 @@
-﻿using AutoMapper;
+﻿using System.Threading;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementsByAccountId;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetMinimumSignedAgreementVersion;
 
-public class GetMinimumSignedAgreementVersionQueryHandler : IAsyncRequestHandler<GetMinimumSignedAgreementVersionQuery, GetMinimumSignedAgreementVersionResponse>
+public class GetMinimumSignedAgreementVersionQueryHandler : IRequestHandler<GetMinimumSignedAgreementVersionQuery, GetMinimumSignedAgreementVersionResponse>
 {
     private readonly IMediator _mediator;
     private readonly IValidator<GetMinimumSignedAgreementVersionQuery> _validator;
-    private readonly IConfigurationProvider _configurationProvider;
-
+    
     public GetMinimumSignedAgreementVersionQueryHandler(
         IMediator mediator,
-        IValidator<GetMinimumSignedAgreementVersionQuery> validator,
-        IConfigurationProvider configurationProvider)
+        IValidator<GetMinimumSignedAgreementVersionQuery> validator)
     {
         _mediator = mediator;
         _validator = validator;
-        _configurationProvider = configurationProvider;
     }
 
-    public async Task<GetMinimumSignedAgreementVersionResponse> Handle(GetMinimumSignedAgreementVersionQuery message)
+    public async Task<GetMinimumSignedAgreementVersionResponse> Handle(GetMinimumSignedAgreementVersionQuery message, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(message);
 
@@ -29,7 +26,7 @@ public class GetMinimumSignedAgreementVersionQueryHandler : IAsyncRequestHandler
             throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        var agreements = await _mediator.SendAsync(new GetEmployerAgreementsByAccountIdRequest { AccountId = message.AccountId }).ConfigureAwait(false);
+        var agreements = await _mediator.Send(new GetEmployerAgreementsByAccountIdRequest { AccountId = message.AccountId }, cancellationToken).ConfigureAwait(false);
         var minAgreementVersion = agreements.EmployerAgreements.Select(ea => ea.AccountLegalEntity.SignedAgreementVersion.GetValueOrDefault(0)).Min();
 
         return new GetMinimumSignedAgreementVersionResponse

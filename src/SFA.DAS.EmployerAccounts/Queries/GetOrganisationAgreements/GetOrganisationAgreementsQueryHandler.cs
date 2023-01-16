@@ -1,14 +1,15 @@
-﻿using AutoMapper;
+﻿using System.Threading;
+using AutoMapper;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
-using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements;
 
-public class GetOrganisationAgreementsQueryHandler : IAsyncRequestHandler<GetOrganisationAgreementsRequest, GetOrganisationAgreementsResponse>
+public class GetOrganisationAgreementsQueryHandler : IRequestHandler<GetOrganisationAgreementsRequest, GetOrganisationAgreementsResponse>
 {
     private readonly IValidator<GetOrganisationAgreementsRequest> _validator;
     private readonly IEmployerAgreementRepository _employerAgreementRepository;
@@ -33,7 +34,7 @@ public class GetOrganisationAgreementsQueryHandler : IAsyncRequestHandler<GetOrg
     }
 
 
-    public async Task<GetOrganisationAgreementsResponse> Handle(GetOrganisationAgreementsRequest message)
+    public async Task<GetOrganisationAgreementsResponse> Handle(GetOrganisationAgreementsRequest message, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(message);
 

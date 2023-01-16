@@ -1,11 +1,12 @@
-﻿using SFA.DAS.EmployerAccounts.Api.Types;
+﻿using System.Threading;
+using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EntityFramework;
 using EmployerAgreementStatus = SFA.DAS.EmployerAccounts.Models.EmployerAgreement.EmployerAgreementStatus;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetStatistics;
 
-public class GetStatisticsQueryHandler : IAsyncRequestHandler<GetStatisticsQuery, GetStatisticsResponse>
+public class GetStatisticsQueryHandler : IRequestHandler<GetStatisticsQuery, GetStatisticsResponse>
 {
     private readonly Lazy<EmployerAccountsDbContext> _accountDb;
 
@@ -14,7 +15,7 @@ public class GetStatisticsQueryHandler : IAsyncRequestHandler<GetStatisticsQuery
         _accountDb = accountDb;
     }
 
-    public async Task<GetStatisticsResponse> Handle(GetStatisticsQuery message)
+    public async Task<GetStatisticsResponse> Handle(GetStatisticsQuery message, CancellationToken cancellationToken)
     {
         var accountsQuery = _accountDb.Value.Accounts.FutureCount();
         var legalEntitiesQuery = _accountDb.Value.LegalEntities.FutureCount();

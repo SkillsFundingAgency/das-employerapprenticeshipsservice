@@ -1,8 +1,9 @@
-﻿using SFA.DAS.Activities.Client;
+﻿using System.Threading;
+using SFA.DAS.Activities.Client;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetActivities;
 
-public class GetActivitiesQueryHandler : IAsyncRequestHandler<GetActivitiesQuery, GetActivitiesResponse>
+public class GetActivitiesQueryHandler : IRequestHandler<GetActivitiesQuery, GetActivitiesResponse>
 {
     private readonly IActivitiesClient _activitiesClient;
 
@@ -11,7 +12,7 @@ public class GetActivitiesQueryHandler : IAsyncRequestHandler<GetActivitiesQuery
         _activitiesClient = activitiesClient;
     }
 
-    public async Task<GetActivitiesResponse> Handle(GetActivitiesQuery message)
+    public async Task<GetActivitiesResponse> Handle(GetActivitiesQuery message, CancellationToken cancellationToken)
     {
         var result = await _activitiesClient.GetActivities(new ActivitiesQuery
         {

@@ -1,10 +1,11 @@
-﻿using SFA.DAS.Validation;
+﻿using System.Threading;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
 
-public class GetSingleCohortRequestHandler : IAsyncRequestHandler<GetSingleCohortRequest, GetSingleCohortResponse>
+public class GetSingleCohortRequestHandler : IRequestHandler<GetSingleCohortRequest, GetSingleCohortResponse>
 {
     private readonly IValidator<GetSingleCohortRequest> _validator;
     private readonly ICommitmentV2Service _commitmentV2Service;
@@ -23,9 +24,9 @@ public class GetSingleCohortRequestHandler : IAsyncRequestHandler<GetSingleCohor
         _logger = logger;
     }
 
-    public async Task<GetSingleCohortResponse> Handle(GetSingleCohortRequest message)
+    public async Task<GetSingleCohortResponse> Handle(GetSingleCohortRequest message, CancellationToken cancellationToken)
     {
-        var validationResult = _validator.Validate(message);
+        var validationResult = await _validator.ValidateAsync(message);
 
         if (!validationResult.IsValid())
         {

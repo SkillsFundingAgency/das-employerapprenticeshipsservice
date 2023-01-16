@@ -1,9 +1,10 @@
 ﻿using System.Data.Entity;
+using System.Threading;
 using AccountLegalEntity = SFA.DAS.EmployerAccounts.Models.Account.AccountLegalEntity;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetLegalEntity;
 
-public class GetLegalEntityQueryHandler : IAsyncRequestHandler<GetLegalEntityQuery, GetLegalEntityResponse>
+public class GetLegalEntityQueryHandler : IRequestHandler<GetLegalEntityQuery, GetLegalEntityResponse>
 {
     private readonly Lazy<EmployerAccountsDbContext> _db;
 
@@ -12,7 +13,7 @@ public class GetLegalEntityQueryHandler : IAsyncRequestHandler<GetLegalEntityQue
         _db = db;
     }
 
-    public async Task<GetLegalEntityResponse> Handle(GetLegalEntityQuery message)
+    public async Task<GetLegalEntityResponse> Handle(GetLegalEntityQuery message, CancellationToken cancellationToken)
     {
         var legalEntity = await  _db.Value.AccountLegalEntities.SingleOrDefaultAsync(l =>
             l.LegalEntityId == message.LegalEntityId &&

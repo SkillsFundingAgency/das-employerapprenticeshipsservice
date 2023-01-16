@@ -1,8 +1,9 @@
-﻿using SFA.DAS.Validation;
+﻿using System.Threading;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntity;
 
-public class GetAccountLegalEntityHandler : IAsyncRequestHandler<GetAccountLegalEntityRequest, GetAccountLegalEntityResponse>
+public class GetAccountLegalEntityHandler : IRequestHandler<GetAccountLegalEntityRequest, GetAccountLegalEntityResponse>
 {
     private readonly IEmployerAgreementRepository _employerAgreementRepository;
     private readonly IValidator<GetAccountLegalEntityRequest> _validator;
@@ -11,15 +12,13 @@ public class GetAccountLegalEntityHandler : IAsyncRequestHandler<GetAccountLegal
         IEmployerAgreementRepository employerAgreementRepository, 
         IValidator<GetAccountLegalEntityRequest> validator)
     {
-        if (employerAgreementRepository == null)
-            throw new ArgumentNullException(nameof(employerAgreementRepository));
-        _employerAgreementRepository = employerAgreementRepository;
+        _employerAgreementRepository = employerAgreementRepository ?? throw new ArgumentNullException(nameof(employerAgreementRepository));
         _validator = validator;
     }
 
-    public async Task<GetAccountLegalEntityResponse> Handle(GetAccountLegalEntityRequest message)
+    public async Task<GetAccountLegalEntityResponse> Handle(GetAccountLegalEntityRequest message, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(message);
+        var result = await _validator.ValidateAsync(message);
 
         if (!result.IsValid())
         {

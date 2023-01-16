@@ -1,10 +1,11 @@
 ﻿using System.Data.Entity;
+using System.Threading;
 using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesCountByHashedAccountId;
 
-public class GetAccountLegalEntitiesCountByHashedAccountIdQueryHandler : IAsyncRequestHandler<GetAccountLegalEntitiesCountByHashedAccountIdRequest, GetAccountLegalEntitiesCountByHashedAccountIdResponse>
+public class GetAccountLegalEntitiesCountByHashedAccountIdQueryHandler : IRequestHandler<GetAccountLegalEntitiesCountByHashedAccountIdRequest, GetAccountLegalEntitiesCountByHashedAccountIdResponse>
 {
     private readonly IHashingService _hashingService;
     private readonly Lazy<EmployerAccountsDbContext> _db;
@@ -20,9 +21,9 @@ public class GetAccountLegalEntitiesCountByHashedAccountIdQueryHandler : IAsyncR
         _validator = validator;
     }
 
-    public async Task<GetAccountLegalEntitiesCountByHashedAccountIdResponse> Handle(GetAccountLegalEntitiesCountByHashedAccountIdRequest message)
+    public async Task<GetAccountLegalEntitiesCountByHashedAccountIdResponse> Handle(GetAccountLegalEntitiesCountByHashedAccountIdRequest message, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(message);
+        var result = await _validator.ValidateAsync(message);
 
         if (!result.IsValid())
         {

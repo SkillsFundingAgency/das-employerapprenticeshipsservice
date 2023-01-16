@@ -1,8 +1,9 @@
-﻿using SFA.DAS.Hmrc;
+﻿using System.Threading;
+using SFA.DAS.Hmrc;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetGatewayToken;
 
-public class GetGatewayTokenHandler : IAsyncRequestHandler<GetGatewayTokenQuery, GetGatewayTokenQueryResponse>
+public class GetGatewayTokenHandler : IRequestHandler<GetGatewayTokenQuery, GetGatewayTokenQueryResponse>
 {
     private readonly IHmrcService _hmrcService;
 
@@ -11,7 +12,7 @@ public class GetGatewayTokenHandler : IAsyncRequestHandler<GetGatewayTokenQuery,
         _hmrcService = hmrcService;
     }
 
-    public async Task<GetGatewayTokenQueryResponse> Handle(GetGatewayTokenQuery message)
+    public async Task<GetGatewayTokenQueryResponse> Handle(GetGatewayTokenQuery message, CancellationToken cancellationToken)
     {
         var response = await _hmrcService.GetAuthenticationToken(message.RedirectUrl, message.AccessCode);
 
