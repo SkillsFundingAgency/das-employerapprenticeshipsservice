@@ -1,5 +1,5 @@
-﻿using SFA.DAS.Audit.Types;
-using SFA.DAS.Authorization.Services;
+﻿using System.Threading;
+using SFA.DAS.Audit.Types;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.AccountLevyStatus;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
@@ -15,7 +15,7 @@ using Entity = SFA.DAS.Audit.Types.Entity;
 namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount;
 
 //TODO this needs changing to be a facade and calling individual commands for each component
-public class CreateAccountCommandHandler : IAsyncRequestHandler<CreateAccountCommand, CreateAccountCommandResponse>
+public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand, CreateAccountCommandResponse>
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IMediator _mediator;
@@ -28,7 +28,6 @@ public class CreateAccountCommandHandler : IAsyncRequestHandler<CreateAccountCom
     private readonly IMembershipRepository _membershipRepository;
     private readonly IEmployerAgreementRepository _employerAgreementRepository;
     private readonly IEventPublisher _eventPublisher;
-    private readonly IAuthorizationService _authorizationService;
 
     public CreateAccountCommandHandler(
         IAccountRepository accountRepository,
@@ -41,8 +40,7 @@ public class CreateAccountCommandHandler : IAsyncRequestHandler<CreateAccountCom
         IAccountEventFactory accountEventFactory,
         IMembershipRepository membershipRepository,
         IEmployerAgreementRepository employerAgreementRepository,
-        IEventPublisher eventPublisher,
-        IAuthorizationService authorizationService)
+        IEventPublisher eventPublisher)
     {
         _accountRepository = accountRepository;
         _mediator = mediator;
@@ -55,21 +53,20 @@ public class CreateAccountCommandHandler : IAsyncRequestHandler<CreateAccountCom
         _membershipRepository = membershipRepository;
         _employerAgreementRepository = employerAgreementRepository;
         _eventPublisher = eventPublisher;
-        _authorizationService = authorizationService;
     }
 
-    public async Task<CreateAccountCommandResponse> Handle(CreateAccountCommand message)
+    public async Task<CreateAccountCommandResponse> Handle(CreateAccountCommand message, CancellationToken cancellationToken)
     {
         await ValidateMessage(message);
 
         var externalUserId = Guid.Parse(message.ExternalUserId);
 
-        var userResponse = await _mediator.SendAsync(new GetUserByRefQuery { UserRef = message.ExternalUserId });
+        var userResponse = await _mediator.Send(new GetUserByRefQuery { UserRef = message.ExternalUserId }, cancellationToken);
 
         if (string.IsNullOrEmpty(message.OrganisationReferenceNumber))
         {
             message.OrganisationReferenceNumber = Guid.NewGuid().ToString();
-        }         
+        }
 
         var createAccountResult = await _accountRepository.CreateAccount(new CreateAccountParams
         {
@@ -83,14 +80,14 @@ public class CreateAccountCommandHandler : IAsyncRequestHandler<CreateAccountCom
             RefreshToken = message.RefreshToken,
             CompanyStatus = message.OrganisationStatus,
             EmployerRefName = message.EmployerRefName,
-            Source = (short) message.OrganisationType,
+            Source = (short)message.OrganisationType,
             PublicSectorDataSource = message.PublicSectorDataSource,
             Sector = message.Sector,
             Aorn = message.Aorn,
             AgreementType = AgreementType.Combined,
             ApprenticeshipEmployerType = ApprenticeshipEmployerType.Unknown
-        });   
-            
+        });
+
         var hashedAccountId = _hashingService.HashValue(createAccountResult.AccountId);
         var publicHashedAccountId = _publicHashingService.HashValue(createAccountResult.AccountId);
         var hashedAgreementId = _hashingService.HashValue(createAccountResult.EmployerAgreementId);
@@ -109,14 +106,14 @@ public class CreateAccountCommandHandler : IAsyncRequestHandler<CreateAccountCom
             NotifyAccountCreated(hashedAccountId),
             CreateAuditEntries(message, createAccountResult, hashedAccountId, userResponse.User),
             PublishLegalEntityAddedMessage(createAccountResult.AccountId, createAccountResult.LegalEntityId,
-                createAccountResult.EmployerAgreementId, createAccountResult.AccountLegalEntityId, message.OrganisationName, 
+                createAccountResult.EmployerAgreementId, createAccountResult.AccountLegalEntityId, message.OrganisationName,
                 message.OrganisationReferenceNumber, message.OrganisationAddress, message.OrganisationType, createdByName, externalUserId),
             PublishAgreementCreatedMessage(createAccountResult.AccountId, createAccountResult.LegalEntityId, createAccountResult.EmployerAgreementId, message.OrganisationName, createdByName, externalUserId)
         );
 
         if (!string.IsNullOrWhiteSpace(message.Aorn))
         {
-            await _mediator.SendAsync(new AccountLevyStatusCommand
+            await _mediator.Send(new AccountLevyStatusCommand
             {
                 AccountId = createAccountResult.AccountId,
                 ApprenticeshipEmployerType = ApprenticeshipEmployerType.NonLevy
@@ -166,7 +163,7 @@ public class CreateAccountCommandHandler : IAsyncRequestHandler<CreateAccountCom
             Created = DateTime.UtcNow,
             OrganisationReferenceNumber = organisationReferenceNumber,
             OrganisationAddress = organisationAddress,
-            OrganisationType = (SFA.DAS.EmployerAccounts.Types.Models.OrganisationType) organisationType
+            OrganisationType = (SFA.DAS.EmployerAccounts.Types.Models.OrganisationType)organisationType
         });
     }
 
@@ -176,7 +173,7 @@ public class CreateAccountCommandHandler : IAsyncRequestHandler<CreateAccountCom
 
         var genericEvent = _genericEventFactory.Create(accountEvent);
 
-        return _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
+        return _mediator.Send(new PublishGenericEventCommand { Event = genericEvent });
     }
 
     private Task PublishAddPayeSchemeMessage(string empref, long accountId, string createdByName, Guid userRef, string aorn, string schemeName, string correlationId)
@@ -197,9 +194,9 @@ public class CreateAccountCommandHandler : IAsyncRequestHandler<CreateAccountCom
     private Task PublishAccountCreatedMessage(long accountId, string hashedId, string publicHashedId, string name, string createdByName, Guid userRef)
     {
         return _eventPublisher.Publish(new CreatedAccountEvent
-        { 
+        {
             AccountId = accountId,
-            HashedId = hashedId, 
+            HashedId = hashedId,
             PublicHashedId = publicHashedId,
             Name = name,
             UserName = createdByName,
@@ -219,7 +216,7 @@ public class CreateAccountCommandHandler : IAsyncRequestHandler<CreateAccountCom
     private async Task CreateAuditEntries(CreateAccountCommand message, CreateAccountResult returnValue, string hashedAccountId, User user)
     {
         //Account
-        await _mediator.SendAsync(new CreateAuditCommand
+        await _mediator.Send(new CreateAuditCommand
         {
             EasAuditMessage = new EasAuditMessage
             {
@@ -252,7 +249,7 @@ public class CreateAccountCommandHandler : IAsyncRequestHandler<CreateAccountCom
             changedProperties.Add(PropertyUpdate.FromDateTime("DateOfIncorporation", message.OrganisationDateOfInception.Value));
         }
 
-        await _mediator.SendAsync(new CreateAuditCommand
+        await _mediator.Send(new CreateAuditCommand
         {
             EasAuditMessage = new EasAuditMessage
             {
@@ -265,7 +262,7 @@ public class CreateAccountCommandHandler : IAsyncRequestHandler<CreateAccountCom
         });
 
         //EmployerAgreement 
-        await _mediator.SendAsync(new CreateAuditCommand
+        await _mediator.Send(new CreateAuditCommand
         {
             EasAuditMessage = new EasAuditMessage
             {
@@ -284,7 +281,7 @@ public class CreateAccountCommandHandler : IAsyncRequestHandler<CreateAccountCom
         });
 
         //AccountEmployerAgreement Account Employer Agreement
-        await _mediator.SendAsync(new CreateAuditCommand
+        await _mediator.Send(new CreateAuditCommand
         {
             EasAuditMessage = new EasAuditMessage
             {
@@ -305,7 +302,7 @@ public class CreateAccountCommandHandler : IAsyncRequestHandler<CreateAccountCom
         });
 
         //Paye 
-        await _mediator.SendAsync(new CreateAuditCommand
+        await _mediator.Send(new CreateAuditCommand
         {
             EasAuditMessage = new EasAuditMessage
             {
@@ -325,7 +322,7 @@ public class CreateAccountCommandHandler : IAsyncRequestHandler<CreateAccountCom
         });
 
         //Membership Account
-        await _mediator.SendAsync(new CreateAuditCommand
+        await _mediator.Send(new CreateAuditCommand
         {
             EasAuditMessage = new EasAuditMessage
             {

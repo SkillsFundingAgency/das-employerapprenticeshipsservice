@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount;
 
-public class AddPayeToAccountCommand : IAsyncRequest
+public class AddPayeToAccountCommand : IRequest
 {
     public string ExternalUserId { get; set; }
     public string Empref { get; set; }

@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Audit.Types;
+﻿using System.Threading;
+using SFA.DAS.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Types.Models;
@@ -8,7 +9,7 @@ using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole;
 
-public class ChangeTeamMemberRoleCommandHandler : AsyncRequestHandler<ChangeTeamMemberRoleCommand>
+public class ChangeTeamMemberRoleCommandHandler : IRequestHandler<ChangeTeamMemberRoleCommand>
 {
     private readonly IMembershipRepository _membershipRepository;
     private readonly IMediator _mediator;
@@ -17,17 +18,15 @@ public class ChangeTeamMemberRoleCommandHandler : AsyncRequestHandler<ChangeTeam
 
     public ChangeTeamMemberRoleCommandHandler(IMembershipRepository membershipRepository, IMediator mediator, IEventPublisher eventPublisher)
     {
-        if (membershipRepository == null)
-            throw new ArgumentNullException(nameof(membershipRepository));
-        _membershipRepository = membershipRepository;
+        _membershipRepository = membershipRepository ?? throw new ArgumentNullException(nameof(membershipRepository));
         _mediator = mediator;
         _eventPublisher = eventPublisher;
         _validator = new ChangeTeamMemberRoleCommandValidator();
     }
 
-    protected override async Task HandleCore(ChangeTeamMemberRoleCommand message)
+    public async  Task<Unit> Handle(ChangeTeamMemberRoleCommand message, CancellationToken cancellationToken)
     {
-        var validationResult = _validator.Validate(message);
+        var validationResult = await _validator.ValidateAsync(message);
 
         if (!validationResult.IsValid())
             throw new InvalidRequestException(validationResult.ValidationDictionary);
@@ -51,7 +50,7 @@ public class ChangeTeamMemberRoleCommandHandler : AsyncRequestHandler<ChangeTeam
 
         await _eventPublisher.Publish(new AccountUserRolesUpdatedEvent(caller.AccountId, existing.UserRef, (UserRole)message.Role, DateTime.UtcNow));
 
-        await _mediator.SendAsync(new CreateAuditCommand
+        await _mediator.Send(new CreateAuditCommand
         {
             EasAuditMessage = new EasAuditMessage
             {
@@ -64,6 +63,8 @@ public class ChangeTeamMemberRoleCommandHandler : AsyncRequestHandler<ChangeTeam
                 RelatedEntities = new List<Entity> { new Entity { Id = caller.AccountId.ToString(), Type = "Account" } },
                 AffectedEntity = new Entity { Type = "Membership", Id = existing.Id.ToString() }
             }
-        });
+        }, cancellationToken);
+
+        return default;
     }
 }

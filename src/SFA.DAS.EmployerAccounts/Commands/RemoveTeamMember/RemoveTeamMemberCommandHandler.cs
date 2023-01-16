@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Audit.Types;
+﻿using System.Threading;
+using SFA.DAS.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.NServiceBus.Services;
@@ -7,7 +8,7 @@ using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Commands.RemoveTeamMember;
 
-public class RemoveTeamMemberCommandHandler : AsyncRequestHandler<RemoveTeamMemberCommand>
+public class RemoveTeamMemberCommandHandler : IRequestHandler<RemoveTeamMemberCommand>
 {
     private readonly IMediator _mediator;
     private readonly IMembershipRepository _membershipRepository;
@@ -16,17 +17,15 @@ public class RemoveTeamMemberCommandHandler : AsyncRequestHandler<RemoveTeamMemb
 
     public RemoveTeamMemberCommandHandler(IMediator mediator, IMembershipRepository membershipRepository, IValidator<RemoveTeamMemberCommand> validator, IEventPublisher eventPublisher)
     {
-        if (membershipRepository == null)
-            throw new ArgumentNullException(nameof(membershipRepository));
         _mediator = mediator;
-        _membershipRepository = membershipRepository;
+        _membershipRepository = membershipRepository ?? throw new ArgumentNullException(nameof(membershipRepository));
         _validator = validator;
         _eventPublisher = eventPublisher;
     }
 
-    protected override async Task HandleCore(RemoveTeamMemberCommand message)
+    public async Task<Unit> Handle(RemoveTeamMemberCommand message, CancellationToken cancellationToken)
     {
-        var validationResult = _validator.Validate(message);
+        var validationResult = await _validator.ValidateAsync(message);
 
         if (!validationResult.IsValid())
             throw new InvalidRequestException(validationResult.ValidationDictionary);
@@ -51,11 +50,13 @@ public class RemoveTeamMemberCommandHandler : AsyncRequestHandler<RemoveTeamMemb
         await _membershipRepository.Remove(message.UserId, owner.AccountId);
 
         await _eventPublisher.Publish(new AccountUserRemovedEvent(teamMember.AccountId, message.UserRef, DateTime.UtcNow));
+
+        return default;
     }
 
     private async Task AddAuditEntry(MembershipView owner, TeamMember teamMember)
     {
-        await _mediator.SendAsync(new CreateAuditCommand
+        await _mediator.Send(new CreateAuditCommand
         {
             EasAuditMessage = new EasAuditMessage
             {

@@ -1,34 +1,24 @@
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Notifications.Api.Client;
+using System.Threading;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Commands.UnsubscribeNotification;
 
-public class UnsubscribeNotificationHandler : AsyncRequestHandler<UnsubscribeNotificationCommand>
+public class UnsubscribeNotificationHandler : IRequestHandler<UnsubscribeNotificationCommand>
 {
     private readonly IValidator<UnsubscribeNotificationCommand> _validator;
-    private readonly INotificationsApi _notificationsApi;
-    private readonly IUserRepository _userRepository;
     private readonly IAccountRepository _accountRepository;
-    private readonly ILog _logger;
 
     public UnsubscribeNotificationHandler(
         IValidator<UnsubscribeNotificationCommand> validator,
-        INotificationsApi notificationsApi,
-        IUserRepository userRepository,
-        IAccountRepository accountRepository,
-        ILog logger)
+        IAccountRepository accountRepository )
     {
         _validator = validator;
-        _notificationsApi = notificationsApi;
-        _userRepository = userRepository;
         _accountRepository = accountRepository;
-        _logger = logger;
     }
 
-    protected override async Task HandleCore(UnsubscribeNotificationCommand command)
+    public async Task<Unit> Handle(UnsubscribeNotificationCommand command, CancellationToken cancellationToken)
     {
-        _validator.Validate(command);
+        await _validator.ValidateAsync(command);
             
         var settings = await _accountRepository.GetUserAccountSettings(command.UserRef);
         var setting = settings.SingleOrDefault(m => m.AccountId == command.AccountId);
@@ -39,5 +29,7 @@ public class UnsubscribeNotificationHandler : AsyncRequestHandler<UnsubscribeNot
 
         setting.ReceiveNotifications = false;
         await _accountRepository.UpdateUserAccountSettings(command.UserRef, settings);
+
+        return default;
     }
 }

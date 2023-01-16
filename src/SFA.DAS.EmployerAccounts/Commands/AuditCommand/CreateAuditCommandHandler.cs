@@ -1,8 +1,9 @@
-﻿using SFA.DAS.Validation;
+﻿using System.Threading;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 
-public class CreateAuditCommandHandler : AsyncRequestHandler<CreateAuditCommand>
+public class CreateAuditCommandHandler : IRequestHandler<CreateAuditCommand>
 {
     private readonly IAuditService _auditService;
     private readonly IValidator<CreateAuditCommand> _validator;
@@ -13,9 +14,9 @@ public class CreateAuditCommandHandler : AsyncRequestHandler<CreateAuditCommand>
         _validator = validator;
     }
 
-    protected override async Task HandleCore(CreateAuditCommand message)
+    public async Task<Unit> Handle(CreateAuditCommand message, CancellationToken cancellationToken)
     {
-        var validationResult = _validator.Validate(message);
+        var validationResult = await _validator.ValidateAsync(message);
 
         if (!validationResult.IsValid())
         {
@@ -23,5 +24,7 @@ public class CreateAuditCommandHandler : AsyncRequestHandler<CreateAuditCommand>
         }
 
         await _auditService.SendAuditMessage(message.EasAuditMessage);
+
+        return default;
     }
 }

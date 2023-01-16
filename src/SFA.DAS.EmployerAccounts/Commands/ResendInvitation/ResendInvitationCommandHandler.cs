@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Audit.Types;
+﻿using System.Threading;
+using SFA.DAS.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.SendNotification;
 using SFA.DAS.EmployerAccounts.Configuration;
@@ -10,7 +11,7 @@ using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Commands.ResendInvitation;
 
-public class ResendInvitationCommandHandler : AsyncRequestHandler<ResendInvitationCommand>
+public class ResendInvitationCommandHandler : IRequestHandler<ResendInvitationCommand>
 {
     private readonly IInvitationRepository _invitationRepository;
     private readonly IMembershipRepository _membershipRepository;
@@ -21,25 +22,17 @@ public class ResendInvitationCommandHandler : AsyncRequestHandler<ResendInvitati
 
     public ResendInvitationCommandHandler(IInvitationRepository invitationRepository, IMembershipRepository membershipRepository, IMediator mediator, EmployerAccountsConfiguration employerApprenticeshipsServiceConfiguration, IUserAccountRepository userRepository)
     {
-        if (invitationRepository == null)
-            throw new ArgumentNullException(nameof(invitationRepository));
-        if (membershipRepository == null)
-            throw new ArgumentNullException(nameof(membershipRepository));
-        if (mediator == null)
-            throw new ArgumentNullException(nameof(mediator));
-        if (employerApprenticeshipsServiceConfiguration == null)
-            throw new ArgumentNullException(nameof(employerApprenticeshipsServiceConfiguration));
-        _invitationRepository = invitationRepository;
-        _membershipRepository = membershipRepository;
-        _mediator = mediator;
-        _employerApprenticeshipsServiceConfiguration = employerApprenticeshipsServiceConfiguration;
+        _invitationRepository = invitationRepository ?? throw new ArgumentNullException(nameof(invitationRepository));
+        _membershipRepository = membershipRepository ?? throw new ArgumentNullException(nameof(membershipRepository));
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        _employerApprenticeshipsServiceConfiguration = employerApprenticeshipsServiceConfiguration ?? throw new ArgumentNullException(nameof(employerApprenticeshipsServiceConfiguration));
         _userRepository = userRepository;
         _validator = new ResendInvitationCommandValidator();
     }
 
-    protected override async Task HandleCore(ResendInvitationCommand message)
+    public async Task<Unit> Handle(ResendInvitationCommand message, CancellationToken cancellationToken)
     {
-        var validationResult = _validator.Validate(message);
+        var validationResult = await _validator.ValidateAsync(message);
 
         if (!validationResult.IsValid())
             throw new InvalidRequestException(validationResult.ValidationDictionary);
@@ -60,12 +53,12 @@ public class ResendInvitationCommandHandler : AsyncRequestHandler<ResendInvitati
         existing.Status = InvitationStatus.Pending;
         var expiryDate = DateTimeProvider.Current.UtcNow.Date.AddDays(8);
         existing.ExpiryDate = expiryDate;
-            
+
         await _invitationRepository.Resend(existing);
 
         var existingUser = await _userRepository.Get(message.Email);
 
-        await _mediator.SendAsync(new CreateAuditCommand
+        await _mediator.Send(new CreateAuditCommand
         {
             EasAuditMessage = new EasAuditMessage
             {
@@ -79,9 +72,9 @@ public class ResendInvitationCommandHandler : AsyncRequestHandler<ResendInvitati
                 RelatedEntities = new List<Entity> { new Entity { Id = existing.AccountId.ToString(), Type = "Account" } },
                 AffectedEntity = new Entity { Type = "Invitation", Id = existing.Id.ToString() }
             }
-        });
-            
-        await _mediator.SendAsync(new SendNotificationCommand
+        }, cancellationToken);
+
+        await _mediator.Send(new SendNotificationCommand
         {
             Email = new Email
             {
@@ -98,6 +91,8 @@ public class ResendInvitationCommandHandler : AsyncRequestHandler<ResendInvitati
                     { "expiry_date", expiryDate.ToString("dd MMM yyy")}
                 }
             }
-        });
+        }, cancellationToken);
+
+        return default;
     }
 }

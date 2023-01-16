@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Audit.Types;
+﻿using System.Threading;
+using SFA.DAS.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Models;
@@ -13,7 +14,7 @@ using Entity = SFA.DAS.Audit.Types.Entity;
 namespace SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
 
 //TODO this needs changing to be a facade and calling individual commands for each component
-public class CreateUserAccountCommandHandler : IAsyncRequestHandler<CreateUserAccountCommand, CreateUserAccountCommandResponse>
+public class CreateUserAccountCommandHandler : IRequestHandler<CreateUserAccountCommand, CreateUserAccountCommandResponse>
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IMediator _mediator;
@@ -47,13 +48,13 @@ public class CreateUserAccountCommandHandler : IAsyncRequestHandler<CreateUserAc
         _eventPublisher = eventPublisher;
     }
 
-    public async Task<CreateUserAccountCommandResponse> Handle(CreateUserAccountCommand message)
+    public async Task<CreateUserAccountCommandResponse> Handle(CreateUserAccountCommand message, CancellationToken cancellationToken)
     {
         ValidateMessage(message);
 
         var externalUserId = Guid.Parse(message.ExternalUserId);
 
-        var userResponse = await _mediator.SendAsync(new GetUserByRefQuery { UserRef = message.ExternalUserId });
+        var userResponse = await _mediator.Send(new GetUserByRefQuery { UserRef = message.ExternalUserId }, cancellationToken);
 
         var createAccountResult = await _accountRepository.CreateUserAccount(userResponse.User.Id, message.OrganisationName);
 
@@ -84,7 +85,7 @@ public class CreateUserAccountCommandHandler : IAsyncRequestHandler<CreateUserAc
 
         var genericEvent = _genericEventFactory.Create(accountEvent);
 
-        return _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
+        return _mediator.Send(new PublishGenericEventCommand { Event = genericEvent });
     }
      
     private Task PublishAccountCreatedMessage(long accountId, string hashedId, string publicHashedId, string name, string createdByName, Guid userRef)
@@ -112,7 +113,7 @@ public class CreateUserAccountCommandHandler : IAsyncRequestHandler<CreateUserAc
     private async Task CreateAuditEntries(CreateUserAccountCommand message, CreateUserAccountResult returnValue, string hashedAccountId, User user)
     {
         //Account
-        await _mediator.SendAsync(new CreateAuditCommand
+        await _mediator.Send(new CreateAuditCommand
         {
             EasAuditMessage = new EasAuditMessage
             {
@@ -131,7 +132,7 @@ public class CreateUserAccountCommandHandler : IAsyncRequestHandler<CreateUserAc
         });
 
         //Membership Account
-        await _mediator.SendAsync(new CreateAuditCommand
+        await _mediator.Send(new CreateAuditCommand
         {
             EasAuditMessage = new EasAuditMessage
             {

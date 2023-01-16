@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Audit.Types;
+﻿using System.Threading;
+using SFA.DAS.Audit.Types;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
@@ -15,7 +16,7 @@ using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 
-public class CreateLegalEntityCommandHandler : IAsyncRequestHandler<CreateLegalEntityCommand, CreateLegalEntityCommandResponse>
+public class CreateLegalEntityCommandHandler : IRequestHandler<CreateLegalEntityCommand, CreateLegalEntityCommandResponse>
 {
     private readonly IValidator<CreateLegalEntityCommand> _validator;
     private readonly IAccountRepository _accountRepository;
@@ -55,7 +56,7 @@ public class CreateLegalEntityCommandHandler : IAsyncRequestHandler<CreateLegalE
         _authorizationService = authorizationService;
     }
 
-    public async Task<CreateLegalEntityCommandResponse> Handle(CreateLegalEntityCommand message)
+    public async Task<CreateLegalEntityCommandResponse> Handle(CreateLegalEntityCommand message, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(message);
 
@@ -146,7 +147,7 @@ public class CreateLegalEntityCommandHandler : IAsyncRequestHandler<CreateLegalE
         var legalEntityEvent = _legalEntityEventFactory.CreateLegalEntityCreatedEvent(hashedAccountId, legalEntityId);
         var genericEvent = _genericEventFactory.Create(legalEntityEvent);
 
-        return _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
+        return _mediator.Send(new PublishGenericEventCommand { Event = genericEvent });
     }
 
     private Task SetEmployerLegalEntityAgreementStatus(long accountLegalEntityId, long agreementId, int agreementVersion)
@@ -156,7 +157,7 @@ public class CreateLegalEntityCommandHandler : IAsyncRequestHandler<CreateLegalE
 
     private async Task CreateAuditEntries(MembershipView owner, EmployerAgreementView agreementView)
     {
-        await _mediator.SendAsync(new CreateAuditCommand
+        await _mediator.Send(new CreateAuditCommand
         {
             EasAuditMessage = new EasAuditMessage
             {
@@ -178,7 +179,7 @@ public class CreateLegalEntityCommandHandler : IAsyncRequestHandler<CreateLegalE
             }
         });
 
-        await _mediator.SendAsync(new CreateAuditCommand
+        await _mediator.Send(new CreateAuditCommand
         {
             EasAuditMessage = new EasAuditMessage
             {

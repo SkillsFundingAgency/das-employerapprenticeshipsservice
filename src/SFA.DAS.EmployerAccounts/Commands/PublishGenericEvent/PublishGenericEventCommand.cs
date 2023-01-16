@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 
-public class PublishGenericEventCommand : IAsyncRequest<PublishGenericEventCommandResponse>
+public class PublishGenericEventCommand : IRequest<PublishGenericEventCommandResponse>
 {
     public GenericEvent Event { get; set; }
 }

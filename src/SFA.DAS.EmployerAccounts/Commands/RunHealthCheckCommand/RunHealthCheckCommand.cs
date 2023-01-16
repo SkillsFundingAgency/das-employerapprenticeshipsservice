@@ -3,7 +3,7 @@ using AutoMapper;
 
 namespace SFA.DAS.EmployerAccounts.Commands.RunHealthCheckCommand;
 
-public class RunHealthCheckCommand : IAsyncRequest
+public class RunHealthCheckCommand : IRequest
 {
     [IgnoreMap]
     [Required]

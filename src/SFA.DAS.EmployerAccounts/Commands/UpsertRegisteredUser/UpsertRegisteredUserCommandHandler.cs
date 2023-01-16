@@ -1,9 +1,10 @@
+using System.Threading;
 using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser;
 
-public class UpsertRegisteredUserCommandHandler : AsyncRequestHandler<UpsertRegisteredUserCommand>
+public class UpsertRegisteredUserCommandHandler : IRequestHandler<UpsertRegisteredUserCommand>
 {
     private readonly IValidator<UpsertRegisteredUserCommand> _validator;
     private readonly IUserAccountRepository _userRepository;
@@ -11,7 +12,7 @@ public class UpsertRegisteredUserCommandHandler : AsyncRequestHandler<UpsertRegi
 
     public UpsertRegisteredUserCommandHandler(
         IValidator<UpsertRegisteredUserCommand> validator,
-        IUserAccountRepository userRepository, 
+        IUserAccountRepository userRepository,
         IEventPublisher eventPublisher)
     {
         _validator = validator;
@@ -19,9 +20,9 @@ public class UpsertRegisteredUserCommandHandler : AsyncRequestHandler<UpsertRegi
         _eventPublisher = eventPublisher;
     }
 
-    protected override async Task HandleCore(UpsertRegisteredUserCommand message)
+    public async Task<Unit> Handle(UpsertRegisteredUserCommand message, CancellationToken cancellationToken)
     {
-        var validationResult = _validator.Validate(message);
+        var validationResult = await _validator.ValidateAsync(message);
 
         if (!validationResult.IsValid()) throw new InvalidRequestException(validationResult.ValidationDictionary);
 
@@ -35,5 +36,7 @@ public class UpsertRegisteredUserCommandHandler : AsyncRequestHandler<UpsertRegi
         });
 
         await _eventPublisher.Publish(new UpsertedUserEvent { Created = DateTime.UtcNow, UserRef = message.UserRef, CorrelationId = message.CorrelationId });
+
+        return default;
     }
 }

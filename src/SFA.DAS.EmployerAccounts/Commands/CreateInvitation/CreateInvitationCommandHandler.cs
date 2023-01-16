@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Audit.Types;
+﻿using System.Threading;
+using SFA.DAS.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.SendNotification;
 using SFA.DAS.EmployerAccounts.Configuration;
@@ -11,7 +12,7 @@ using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Commands.CreateInvitation;
 
-public class CreateInvitationCommandHandler : AsyncRequestHandler<CreateInvitationCommand>
+public class CreateInvitationCommandHandler : IRequestHandler<CreateInvitationCommand>
 {
     private readonly IInvitationRepository _invitationRepository;
     private readonly IMembershipRepository _membershipRepository;
@@ -34,7 +35,7 @@ public class CreateInvitationCommandHandler : AsyncRequestHandler<CreateInvitati
         _eventPublisher = eventPublisher;
     }
 
-    protected override async Task HandleCore(CreateInvitationCommand message)
+    public async Task<Unit> Handle(CreateInvitationCommand message, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(message);
 
@@ -82,7 +83,7 @@ public class CreateInvitationCommandHandler : AsyncRequestHandler<CreateInvitati
 
         var existingUser = await _userRepository.Get(message.EmailOfPersonBeingInvited);
 
-        await _mediator.SendAsync(new CreateAuditCommand
+        await _mediator.Send(new CreateAuditCommand
         {
             EasAuditMessage = new EasAuditMessage
             {
@@ -101,9 +102,9 @@ public class CreateInvitationCommandHandler : AsyncRequestHandler<CreateInvitati
                 RelatedEntities = new List<Entity> { new Entity { Id = caller.AccountId.ToString(), Type = "Account" } },
                 AffectedEntity = new Entity { Type = "Invitation", Id = invitationId.ToString() }
             }
-        });
+        }, cancellationToken);
 
-        await _mediator.SendAsync(new SendNotificationCommand
+        await _mediator.Send(new SendNotificationCommand
         {
             Email = new Email
             {
@@ -120,11 +121,13 @@ public class CreateInvitationCommandHandler : AsyncRequestHandler<CreateInvitati
                     { "expiry_date", expiryDate.ToString("dd MMM yyy")}
                 }
             }
-        });
+        }, cancellationToken);
 
         var callerExternalUserId = caller.UserRef;
 
         await PublishUserInvitedEvent(caller.AccountId, message.NameOfPersonBeingInvited, caller.FullName(), callerExternalUserId);
+
+        return default;
     }
 
     private Task PublishUserInvitedEvent(long accountId, string personInvited, string invitedByUserName, Guid invitedByUserRef)

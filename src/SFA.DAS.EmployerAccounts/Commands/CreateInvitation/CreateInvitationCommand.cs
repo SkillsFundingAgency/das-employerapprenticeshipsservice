@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.Commands.CreateInvitation;
 
-public class CreateInvitationCommand : IAsyncRequest
+public class CreateInvitationCommand : IRequest
 {
     public string ExternalUserId { get; set; }
 

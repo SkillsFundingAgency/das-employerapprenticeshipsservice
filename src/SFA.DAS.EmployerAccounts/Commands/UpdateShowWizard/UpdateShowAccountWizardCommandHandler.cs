@@ -1,9 +1,10 @@
-﻿using SFA.DAS.NLog.Logger;
+﻿using System.Threading;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Commands.UpdateShowWizard;
 
-public class UpdateShowAccountWizardCommandHandler : AsyncRequestHandler<UpdateShowAccountWizardCommand>
+public class UpdateShowAccountWizardCommandHandler : IRequestHandler<UpdateShowAccountWizardCommand>
 {
     private readonly IMembershipRepository _membershipRepository;
     private readonly IValidator<UpdateShowAccountWizardCommand> _validator;
@@ -15,9 +16,10 @@ public class UpdateShowAccountWizardCommandHandler : AsyncRequestHandler<UpdateS
         _validator = validator;
         _logger = logger;
     }
-    protected override async Task HandleCore(UpdateShowAccountWizardCommand message)
+
+    public async Task<Unit> Handle(UpdateShowAccountWizardCommand message, CancellationToken cancellationToken)
     {
-        var validationResult = _validator.Validate(message);
+        var validationResult = await _validator.ValidateAsync(message);
 
         if (!validationResult.IsValid())
         {
@@ -27,5 +29,7 @@ public class UpdateShowAccountWizardCommandHandler : AsyncRequestHandler<UpdateS
         _logger.Info($"User {message.ExternalUserId} has set the show wizard toggle to {message.ShowWizard} for account {message.HashedAccountId}");
 
         await _membershipRepository.SetShowAccountWizard(message.HashedAccountId, message.ExternalUserId, message.ShowWizard);
+
+        return default;
     }
 }

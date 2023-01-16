@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Threading;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Commands.CreateOrganisationAddress;
@@ -12,9 +13,9 @@ public class CreateOrganisationAddressHandler : IRequestHandler<CreateOrganisati
         _validator = validator;
     }
 
-    public CreateOrganisationAddressResponse Handle(CreateOrganisationAddressRequest request)
+    public async Task<CreateOrganisationAddressResponse> Handle(CreateOrganisationAddressRequest request, CancellationToken cancellationToken)
     {
-        var validationResults = _validator.Validate(request);
+        var validationResults = await _validator.ValidateAsync(request);
 
         if (!validationResults.IsValid())
         {

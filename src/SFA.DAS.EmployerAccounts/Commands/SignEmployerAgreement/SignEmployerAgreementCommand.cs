@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement;
 
-public class SignEmployerAgreementCommand : IAsyncRequest<SignEmployerAgreementCommandResponse>
+public class SignEmployerAgreementCommand : IRequest<SignEmployerAgreementCommandResponse>
 {
     public string HashedAccountId { get; set; }
     public string ExternalUserId { get; set; }

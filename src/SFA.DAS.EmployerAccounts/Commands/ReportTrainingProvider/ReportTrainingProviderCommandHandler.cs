@@ -1,11 +1,12 @@
-﻿using NServiceBus;
+﻿using System.Threading;
+using NServiceBus;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Messages.Commands;
 
 namespace SFA.DAS.EmployerAccounts.Commands.ReportTrainingProvider;
 
-public class ReportTrainingProviderCommandHandler : AsyncRequestHandler<ReportTrainingProviderCommand>
+public class ReportTrainingProviderCommandHandler : IRequestHandler<ReportTrainingProviderCommand>
 {
     private const string ReportTrainingProviderTemplateId = "ReportTrainingProviderNotification";
     private readonly EmployerAccountsConfiguration _configuration;
@@ -22,7 +23,7 @@ public class ReportTrainingProviderCommandHandler : AsyncRequestHandler<ReportTr
         _configuration = configuration;
     }
 
-    protected override async Task HandleCore(ReportTrainingProviderCommand message)
+    public async Task<Unit> Handle(ReportTrainingProviderCommand message, CancellationToken cancellationToken)
     {
         var tokens = new Dictionary<string, string>()
         {
@@ -42,5 +43,6 @@ public class ReportTrainingProviderCommandHandler : AsyncRequestHandler<ReportTr
 
         await _publisher.Send(new SendEmailCommand(ReportTrainingProviderTemplateId, _configuration.ReportTrainingProviderEmailAddress, tokens));
 
+        return default;
     }
 }

@@ -1,3 +1,4 @@
+using System.Threading;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Types.Models;
@@ -10,7 +11,7 @@ using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Commands.AcceptInvitation;
 
-public class AcceptInvitationCommandHandler : AsyncRequestHandler<AcceptInvitationCommand>
+public class AcceptInvitationCommandHandler : IRequestHandler<AcceptInvitationCommand>
 {
     private readonly IInvitationRepository _invitationRepository;
     private readonly IMembershipRepository _membershipRepository;
@@ -40,7 +41,7 @@ public class AcceptInvitationCommandHandler : AsyncRequestHandler<AcceptInvitati
         _logger = logger;
     }
 
-    protected override async Task HandleCore(AcceptInvitationCommand message)
+    public async Task<Unit> Handle(AcceptInvitationCommand message, CancellationToken cancellationToken)
     {
         _logger.Info($"Accepting Invitation '{message.Id}'");
 
@@ -66,6 +67,8 @@ public class AcceptInvitationCommandHandler : AsyncRequestHandler<AcceptInvitati
         await CreateAuditEntry(message, user, invitation);
 
         await PublishUserJoinedMessage(invitation.AccountId, user, invitation);
+
+        return default;
     }
 
     private async Task CheckIfUserIsAlreadyAMember(Invitation invitation, User user)
@@ -127,4 +130,5 @@ public class AcceptInvitationCommandHandler : AsyncRequestHandler<AcceptInvitati
             Created = DateTime.UtcNow
         });
     }
-}
+
+    }

@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Audit.Types;
+﻿using System.Threading;
+using SFA.DAS.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Models;
@@ -7,10 +8,9 @@ using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.Validation;
 using Entity = SFA.DAS.Audit.Types.Entity;
 
-
 namespace SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
 
-public class RenameEmployerAccountCommandHandler : AsyncRequestHandler<RenameEmployerAccountCommand>
+public class RenameEmployerAccountCommandHandler : IRequestHandler<RenameEmployerAccountCommand>
 {
     private readonly IEventPublisher _eventPublisher;
     private readonly IEmployerAccountRepository _accountRepository;
@@ -41,7 +41,7 @@ public class RenameEmployerAccountCommandHandler : AsyncRequestHandler<RenameEmp
         _accountEventFactory = accountEventFactory;
     }
 
-    protected override async Task HandleCore(RenameEmployerAccountCommand message)
+    public async Task<Unit> Handle(RenameEmployerAccountCommand message, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(message);
 
@@ -69,8 +69,9 @@ public class RenameEmployerAccountCommandHandler : AsyncRequestHandler<RenameEmp
 
         await NotifyAccountRenamed(message.HashedAccountId);
 
-        await PublishAccountRenamedMessage(
-            accountId, accountPreviousName, message.NewName, owner.FullName(), owner.UserRef);
+        await PublishAccountRenamedMessage(accountId, accountPreviousName, message.NewName, owner.FullName(), owner.UserRef);
+
+        return default;
     }
 
     private Task PublishAccountRenamedMessage(
@@ -93,12 +94,12 @@ public class RenameEmployerAccountCommandHandler : AsyncRequestHandler<RenameEmp
 
         var genericEvent = _genericEventFactory.Create(accountEvent);
 
-        await _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
+        await _mediator.Send(new PublishGenericEventCommand { Event = genericEvent });
     }
 
     private async Task AddAuditEntry(string ownerEmail, long accountId, string name)
     {
-        await _mediator.SendAsync(new CreateAuditCommand
+        await _mediator.Send(new CreateAuditCommand
         {
             EasAuditMessage = new EasAuditMessage
             {

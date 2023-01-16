@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
 
-public class RenameEmployerAccountCommand : IAsyncRequest
+public class RenameEmployerAccountCommand : IRequest
 {
     public string HashedAccountId { get; set; }
     public string ExternalUserId { get; set; }

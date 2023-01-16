@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.Commands.DismissMonthlyTaskReminder;
 
-public class DismissMonthlyTaskReminderCommand : IAsyncRequest
+public class DismissMonthlyTaskReminderCommand : IRequest
 {
     public string HashedAccountId { get; set; }
     public string ExternalUserId { get; set; }

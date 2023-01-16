@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerAccounts.Commands.ReportTrainingProvider;
 
-public class ReportTrainingProviderCommand : IAsyncRequest
+public class ReportTrainingProviderCommand : IRequest
 {
     public string EmployerEmailAddress { get; }
     public DateTime EmailReportedDate { get; }

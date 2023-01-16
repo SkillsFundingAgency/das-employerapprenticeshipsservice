@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Audit.Types;
+﻿using System.Threading;
+using SFA.DAS.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.Validation;
@@ -6,8 +7,7 @@ using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Commands.UpdateUserNotificationSettings;
 
-public class UpdateUserNotificationSettingsCommandHandler :
-    AsyncRequestHandler<UpdateUserNotificationSettingsCommand>
+public class UpdateUserNotificationSettingsCommandHandler : IRequestHandler<UpdateUserNotificationSettingsCommand>
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IValidator<UpdateUserNotificationSettingsCommand> _validator;
@@ -21,9 +21,9 @@ public class UpdateUserNotificationSettingsCommandHandler :
         _mediator = mediator;
     }
 
-    protected override async Task HandleCore(UpdateUserNotificationSettingsCommand message)
+    public async Task<Unit> Handle(UpdateUserNotificationSettingsCommand message, CancellationToken cancellationToken)
     {
-        var validationResult = _validator.Validate(message);
+        var validationResult = await _validator.ValidateAsync(message);
 
         if (!validationResult.IsValid())
             throw new InvalidRequestException(validationResult.ValidationDictionary);
@@ -34,11 +34,13 @@ public class UpdateUserNotificationSettingsCommandHandler :
         {
             await AddAuditEntry(setting);
         }
+
+        return default;
     }
 
     private async Task AddAuditEntry(UserNotificationSetting setting)
     {
-        await _mediator.SendAsync(new CreateAuditCommand
+        await _mediator.Send(new CreateAuditCommand
         {
             EasAuditMessage = new EasAuditMessage
             {

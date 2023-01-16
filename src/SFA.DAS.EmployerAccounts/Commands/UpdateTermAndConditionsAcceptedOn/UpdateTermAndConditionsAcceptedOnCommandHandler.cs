@@ -1,6 +1,8 @@
+using System.Threading;
+
 namespace SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser;
 
-public class UpdateTermAndConditionsAcceptedOnCommandHandler : AsyncRequestHandler<UpdateTermAndConditionsAcceptedOnCommand>
+public class UpdateTermAndConditionsAcceptedOnCommandHandler : IRequestHandler<UpdateTermAndConditionsAcceptedOnCommand>
 {
     private readonly IUserRepository _userRepository;
     public UpdateTermAndConditionsAcceptedOnCommandHandler(
@@ -9,8 +11,10 @@ public class UpdateTermAndConditionsAcceptedOnCommandHandler : AsyncRequestHandl
         _userRepository = userRepository;
     }
 
-    protected override async Task HandleCore(UpdateTermAndConditionsAcceptedOnCommand message)
+    public async Task<Unit> Handle(UpdateTermAndConditionsAcceptedOnCommand request, CancellationToken cancellationToken)
     {
-        await _userRepository.UpdateTermAndConditionsAcceptedOn(message.UserRef);
+        await _userRepository.UpdateTermAndConditionsAcceptedOn(request.UserRef);
+
+        return default;
     }
 }

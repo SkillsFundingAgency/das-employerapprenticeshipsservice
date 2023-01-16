@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerAccounts.Commands.ResendInvitation;
 
-public class ResendInvitationCommand : IAsyncRequest
+public class ResendInvitationCommand : IRequest
 {
     public string Email { get; set; }
     public string AccountId { get; set; }

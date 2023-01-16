@@ -1,10 +1,11 @@
-﻿using SFA.DAS.HashingService;
+﻿using System.Threading;
+using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Commands.UpdateOrganisationDetails;
 
-public class UpdateOrganisationDetailsCommandHandler : AsyncRequestHandler<UpdateOrganisationDetailsCommand>
+public class UpdateOrganisationDetailsCommandHandler : IRequestHandler<UpdateOrganisationDetailsCommand>
 {
     private readonly IValidator<UpdateOrganisationDetailsCommand> _validator;
     private readonly IAccountRepository _accountRepository;
@@ -26,9 +27,9 @@ public class UpdateOrganisationDetailsCommandHandler : AsyncRequestHandler<Updat
         _eventPublisher = eventPublisher;
     }
 
-    protected override async Task HandleCore(UpdateOrganisationDetailsCommand command)
+    public async Task<Unit> Handle(UpdateOrganisationDetailsCommand command, CancellationToken cancellationToken)
     {
-        var validationResults = _validator.Validate(command);
+        var validationResults = await _validator.ValidateAsync(command);
 
         if (!validationResults.IsValid())
             throw new InvalidRequestException(validationResults.ValidationDictionary);
@@ -39,6 +40,8 @@ public class UpdateOrganisationDetailsCommandHandler : AsyncRequestHandler<Updat
             command.Address);
 
         await PublishLegalEntityUpdatedMessage(command.HashedAccountId, command.AccountLegalEntityId, command.Name, command.Address, command.UserId);
+
+        return default;
     }
 
     private async Task PublishLegalEntityUpdatedMessage(

@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.Commands.SendNotification;
 
-public class SendNotificationCommand : IAsyncRequest
+public class SendNotificationCommand : IRequest
 {
     public Email Email { get; set; }
 }

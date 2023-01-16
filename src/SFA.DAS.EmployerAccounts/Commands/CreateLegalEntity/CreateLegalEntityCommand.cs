@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 
-public class CreateLegalEntityCommand : IAsyncRequest<CreateLegalEntityCommandResponse>
+public class CreateLegalEntityCommand : IRequest<CreateLegalEntityCommandResponse>
 {
     public string HashedAccountId { get; set; }
     public string Code { get; set; }

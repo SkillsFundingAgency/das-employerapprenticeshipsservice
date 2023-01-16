@@ -1,10 +1,11 @@
-﻿using SFA.DAS.Common.Domain.Types;
+﻿using System.Threading;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.NServiceBus.Services;
 
 namespace SFA.DAS.EmployerAccounts.Commands.AccountLevyStatus;
 
-public class AccountLevyStatusCommandHandler : AsyncRequestHandler<AccountLevyStatusCommand>
+public class AccountLevyStatusCommandHandler : IRequestHandler<AccountLevyStatusCommand>
 {
     private readonly IEmployerAccountRepository _accountRepositoryObject;
     private readonly ILog _logger;
@@ -20,7 +21,7 @@ public class AccountLevyStatusCommandHandler : AsyncRequestHandler<AccountLevySt
         _eventPublisher = eventPublisher;
     }
 
-    protected override async Task HandleCore(AccountLevyStatusCommand command)
+    public async Task<Unit> Handle(AccountLevyStatusCommand command, CancellationToken cancellationToken)
     {
         var account = await _accountRepositoryObject.GetAccountById(command.AccountId);
 
@@ -31,7 +32,7 @@ public class AccountLevyStatusCommandHandler : AsyncRequestHandler<AccountLevySt
             (ApprenticeshipEmployerType) account.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy ||
             command.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Unknown)
         {
-            return;
+            return default;
         }
 
         _logger.Info(UpdatedStartedMessage(command));
@@ -52,19 +53,21 @@ public class AccountLevyStatusCommandHandler : AsyncRequestHandler<AccountLevySt
         {
             _logger.Error(ex, UpdateErrorMessage(command));
         }
+
+        return default;
     }
 
-    private string UpdatedStartedMessage(AccountLevyStatusCommand updateCommand)
+    private static string UpdatedStartedMessage(AccountLevyStatusCommand updateCommand)
     {
         return $"About to update Account with id: {updateCommand.AccountId} to {updateCommand.ApprenticeshipEmployerType} status.";
     }
 
-    private string UpdateCompleteMessage(AccountLevyStatusCommand updateCommand)
+    private static string UpdateCompleteMessage(AccountLevyStatusCommand updateCommand)
     {
         return $"Updated Account with id: {updateCommand.AccountId} to {updateCommand.ApprenticeshipEmployerType} status.";
     }
 
-    private string UpdateErrorMessage(AccountLevyStatusCommand updateCommand)
+    private static string UpdateErrorMessage(AccountLevyStatusCommand updateCommand)
     {
         return $"Error updating Account with id: {updateCommand.AccountId} to {updateCommand.ApprenticeshipEmployerType} status.";
     }

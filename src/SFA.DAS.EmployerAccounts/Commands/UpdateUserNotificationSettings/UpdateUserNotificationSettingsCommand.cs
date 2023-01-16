@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.Commands.UpdateUserNotificationSettings;
 
-public class UpdateUserNotificationSettingsCommand: IAsyncRequest
+public class UpdateUserNotificationSettingsCommand: IRequest
 {
     public string UserRef { get; set; }
     public List<UserNotificationSetting> Settings { get; set; }

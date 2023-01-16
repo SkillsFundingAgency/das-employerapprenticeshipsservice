@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole;
 
-public class ChangeTeamMemberRoleCommand : IAsyncRequest
+public class ChangeTeamMemberRoleCommand : IRequest
 {
     public string HashedAccountId { get; set; }
     public string Email { get; set; }

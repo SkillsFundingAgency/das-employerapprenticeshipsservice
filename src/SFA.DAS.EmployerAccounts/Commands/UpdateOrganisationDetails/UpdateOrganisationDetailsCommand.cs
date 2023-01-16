@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerAccounts.Commands.UpdateOrganisationDetails;
 
-public class UpdateOrganisationDetailsCommand : IAsyncRequest
+public class UpdateOrganisationDetailsCommand : IRequest
 {
     public long AccountLegalEntityId { get; set; }
     public string Address { get; set; }

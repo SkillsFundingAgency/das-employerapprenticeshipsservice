@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Audit.Types;
+﻿using System.Threading;
+using SFA.DAS.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Models;
@@ -11,7 +12,7 @@ using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity;
 
-public class RemoveLegalEntityCommandHandler : AsyncRequestHandler<RemoveLegalEntityCommand>
+public class RemoveLegalEntityCommandHandler : IRequestHandler<RemoveLegalEntityCommand>
 {
     private readonly IValidator<RemoveLegalEntityCommand> _validator;
     private readonly ILog _logger;
@@ -23,7 +24,7 @@ public class RemoveLegalEntityCommandHandler : AsyncRequestHandler<RemoveLegalEn
     private readonly IEmployerAgreementEventFactory _employerAgreementEventFactory;
     private readonly IMembershipRepository _membershipRepository;
     private readonly IEventPublisher _eventPublisher;
-    private ICommitmentsV2ApiClient _commitmentsV2ApiClient;
+    private readonly ICommitmentsV2ApiClient _commitmentsV2ApiClient;
 
     public RemoveLegalEntityCommandHandler(
         IValidator<RemoveLegalEntityCommand> validator,
@@ -51,7 +52,7 @@ public class RemoveLegalEntityCommandHandler : AsyncRequestHandler<RemoveLegalEn
         _commitmentsV2ApiClient = commitmentsV2ApiClient;
     }
 
-    protected override async Task HandleCore(RemoveLegalEntityCommand message)
+    public async Task<Unit> Handle(RemoveLegalEntityCommand message, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(message);
 
@@ -103,6 +104,8 @@ public class RemoveLegalEntityCommandHandler : AsyncRequestHandler<RemoveLegalEn
                 agreement.AccountLegalEntityId,
                 message.UserId);
         }
+
+        return default;
     }
 
     private async Task ValidateLegalEntityHasNoCommitments(EmployerAgreementView agreement, long accountId, ValidationResult validationResult)
@@ -141,7 +144,7 @@ public class RemoveLegalEntityCommandHandler : AsyncRequestHandler<RemoveLegalEn
 
     private async Task AddAuditEntry(long accountId, string employerAgreementId)
     {
-        await _mediator.SendAsync(new CreateAuditCommand
+        await _mediator.Send(new CreateAuditCommand
         {
             EasAuditMessage = new EasAuditMessage
             {
@@ -163,6 +166,6 @@ public class RemoveLegalEntityCommandHandler : AsyncRequestHandler<RemoveLegalEn
 
         var genericEvent = _genericEventFactory.Create(agreementEvent);
 
-        await _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
+        await _mediator.Send(new PublishGenericEventCommand { Event = genericEvent });
     }
 }

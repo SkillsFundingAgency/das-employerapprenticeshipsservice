@@ -1,9 +1,10 @@
-﻿using SFA.DAS.Events.Api.Client;
+﻿using System.Threading;
+using SFA.DAS.Events.Api.Client;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 
-public class PublishGenericEventCommandHandler : IAsyncRequestHandler<PublishGenericEventCommand, PublishGenericEventCommandResponse>
+public class PublishGenericEventCommandHandler : IRequestHandler<PublishGenericEventCommand, PublishGenericEventCommandResponse>
 {
     private readonly IEventsApi _eventsApi;
     private readonly ILog _logger;
@@ -14,7 +15,7 @@ public class PublishGenericEventCommandHandler : IAsyncRequestHandler<PublishGen
         _logger = logger;
     }
 
-    public async Task<PublishGenericEventCommandResponse> Handle(PublishGenericEventCommand command)
+    public async Task<PublishGenericEventCommandResponse> Handle(PublishGenericEventCommand command, CancellationToken cancellationToken)
     {
         _logger.Info($"Publishing Generic event of type {command.Event.Type}");
 

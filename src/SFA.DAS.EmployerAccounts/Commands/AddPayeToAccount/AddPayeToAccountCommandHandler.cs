@@ -1,9 +1,9 @@
-﻿using SFA.DAS.Audit.Types;
+﻿using System.Threading;
+using SFA.DAS.Audit.Types;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.AccountLevyStatus;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
-using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
@@ -14,7 +14,7 @@ using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount;
 
-public class AddPayeToAccountCommandHandler : AsyncRequestHandler<AddPayeToAccountCommand>
+public class AddPayeToAccountCommandHandler : IRequestHandler<AddPayeToAccountCommand>
 {
     private readonly IValidator<AddPayeToAccountCommand> _validator;
     private readonly IPayeRepository _payeRepository;
@@ -42,7 +42,7 @@ public class AddPayeToAccountCommandHandler : AsyncRequestHandler<AddPayeToAccou
         _payeSchemeEventFactory = payeSchemeEventFactory;
     }
 
-    protected override async Task HandleCore(AddPayeToAccountCommand message)
+    public async Task<Unit> Handle(AddPayeToAccountCommand message, CancellationToken cancellationToken)
     {
         await ValidateMessage(message);
 
@@ -55,12 +55,12 @@ public class AddPayeToAccountCommandHandler : AsyncRequestHandler<AddPayeToAccou
                 RefreshToken = message.RefreshToken,
                 AccountId = accountId,
                 EmpRef = message.Empref,
-                RefName = message.EmprefName, 
+                RefName = message.EmprefName,
                 Aorn = message.Aorn
             }
         );
 
-        var userResponse = await _mediator.SendAsync(new GetUserByRefQuery { UserRef = message.ExternalUserId });
+        var userResponse = await _mediator.Send(new GetUserByRefQuery { UserRef = message.ExternalUserId });
 
         await AddAuditEntry(message, accountId);
 
@@ -90,7 +90,7 @@ public class AddPayeToAccountCommandHandler : AsyncRequestHandler<AddPayeToAccou
 
         var genericEvent = _genericEventFactory.Create(payeEvent);
 
-        await _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
+        await _mediator.Send(new PublishGenericEventCommand { Event = genericEvent });
     }
 
     private async Task AddPayeScheme(string payeRef, long accountId, string userName, string userRef, string aorn, string schemeName, string correlationId)
@@ -109,7 +109,7 @@ public class AddPayeToAccountCommandHandler : AsyncRequestHandler<AddPayeToAccou
 
         if (!string.IsNullOrWhiteSpace(aorn))
         {
-            await _mediator.SendAsync(new AccountLevyStatusCommand
+            await _mediator.Send(new AccountLevyStatusCommand
             {
                 AccountId = accountId,
                 ApprenticeshipEmployerType = ApprenticeshipEmployerType.NonLevy
@@ -119,7 +119,7 @@ public class AddPayeToAccountCommandHandler : AsyncRequestHandler<AddPayeToAccou
 
     private async Task AddAuditEntry(AddPayeToAccountCommand message, long accountId)
     {
-        await _mediator.SendAsync(new CreateAuditCommand
+        await _mediator.Send(new CreateAuditCommand
         {
             EasAuditMessage = new EasAuditMessage
             {

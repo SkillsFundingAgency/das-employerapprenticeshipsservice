@@ -1,10 +1,11 @@
-﻿using SFA.DAS.NLog.Logger;
+﻿using System.Threading;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Commands.SendNotification;
 
-public class SendNotificationCommandHandler : AsyncRequestHandler<SendNotificationCommand>
+public class SendNotificationCommandHandler : IRequestHandler<SendNotificationCommand>
 {
     private readonly IValidator<SendNotificationCommand> _validator;
     private readonly ILog _logger;
@@ -20,9 +21,9 @@ public class SendNotificationCommandHandler : AsyncRequestHandler<SendNotificati
         _notificationsApi = notificationsApi;
     }
 
-    protected override async Task HandleCore(SendNotificationCommand message)
+    public async Task<Unit> Handle(SendNotificationCommand request, CancellationToken cancellationToken)
     {
-        var validationResult = _validator.Validate(message);
+        var validationResult = await _validator.ValidateAsync(request);
 
         if (!validationResult.IsValid())
         {
@@ -31,12 +32,13 @@ public class SendNotificationCommandHandler : AsyncRequestHandler<SendNotificati
         }
         try
         {
-            await _notificationsApi.SendEmail(message.Email);
+            await _notificationsApi.SendEmail(request.Email);
         }
         catch (Exception ex)
         {
             _logger.Error(ex, "Error sending email to notifications api");
         }
 
+        return default;
     }
 }

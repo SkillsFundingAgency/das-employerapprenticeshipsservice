@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerAccounts.Commands.UnsubscribeNotification;
 
-public class UnsubscribeNotificationCommand : IAsyncRequest
+public class UnsubscribeNotificationCommand : IRequest
 {
     public string UserRef { get; set; }
 

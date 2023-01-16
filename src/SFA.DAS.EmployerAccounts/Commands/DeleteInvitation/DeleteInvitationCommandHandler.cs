@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Audit.Types;
+﻿using System.Threading;
+using SFA.DAS.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.Validation;
@@ -6,7 +7,7 @@ using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Commands.DeleteInvitation;
 
-public class DeleteInvitationCommandHandler : AsyncRequestHandler<DeleteInvitationCommand>
+public class DeleteInvitationCommandHandler : IRequestHandler<DeleteInvitationCommand>
 {
     private readonly IInvitationRepository _invitationRepository;
     private readonly IMembershipRepository _membershipRepository;
@@ -15,19 +16,15 @@ public class DeleteInvitationCommandHandler : AsyncRequestHandler<DeleteInvitati
 
     public DeleteInvitationCommandHandler(IInvitationRepository invitationRepository, IMembershipRepository membershipRepository, IMediator mediator)
     {
-        if (invitationRepository == null)
-            throw new ArgumentNullException(nameof(invitationRepository));
-        if (membershipRepository == null)
-            throw new ArgumentNullException(nameof(membershipRepository));
-        _invitationRepository = invitationRepository;
-        _membershipRepository = membershipRepository;
+        _invitationRepository = invitationRepository ?? throw new ArgumentNullException(nameof(invitationRepository));
+        _membershipRepository = membershipRepository ?? throw new ArgumentNullException(nameof(membershipRepository));
         _mediator = mediator;
         _validator = new DeleteInvitationCommandValidator();
     }
 
-    protected override async Task HandleCore(DeleteInvitationCommand message)
+    public async Task<Unit> Handle(DeleteInvitationCommand message, CancellationToken cancellationToken)
     {
-        var validationResult = _validator.Validate(message);
+        var validationResult = await _validator.ValidateAsync(message);
 
         if (!validationResult.IsValid())
             throw new InvalidRequestException(validationResult.ValidationDictionary);
@@ -50,7 +47,7 @@ public class DeleteInvitationCommandHandler : AsyncRequestHandler<DeleteInvitati
         await _invitationRepository.ChangeStatus(existing);
 
 
-        await _mediator.SendAsync(new CreateAuditCommand
+        await _mediator.Send(new CreateAuditCommand
         {
             EasAuditMessage = new EasAuditMessage
             {
@@ -63,12 +60,12 @@ public class DeleteInvitationCommandHandler : AsyncRequestHandler<DeleteInvitati
                 RelatedEntities = new List<Entity> { new Entity { Id = existing.AccountId.ToString(), Type = "Account" } },
                 AffectedEntity = new Entity { Type = "Invitation", Id = existing.Id.ToString() }
             }
-        });
+        }, cancellationToken);
 
-
+        return default;
     }
 
-    private bool IsWrongStatusToDelete(InvitationStatus status)
+    private static bool IsWrongStatusToDelete(InvitationStatus status)
     {
         switch (status)
         {

@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount;
 
-public class CreateAccountCommand : IAsyncRequest<CreateAccountCommandResponse>
+public class CreateAccountCommand : IRequest<CreateAccountCommandResponse>
 {
     public string ExternalUserId { get; set; }
     public OrganisationType OrganisationType { get; set; }
