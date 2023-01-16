@@ -34,7 +34,7 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
     {
         try
         {
-            var response = await _mediator.SendAsync(new GetAccountEmployerAgreementsRequest
+            var response = await _mediator.Send(new GetAccountEmployerAgreementsRequest
             {
                 HashedAccountId = hashedId,
                 ExternalUserId = externalUserId
@@ -64,7 +64,7 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
     {
         try
         {
-            var response = await _mediator.SendAsync(new GetEmployerAgreementRequest
+            var response = await _mediator.Send(new GetEmployerAgreementRequest
             {
                 AgreementId = agreementid,
                 HashedAccountId = hashedId,
@@ -107,7 +107,7 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
     {
         try
         {
-            var agreement = await _mediator.SendAsync(new SignEmployerAgreementCommand
+            var agreement = await _mediator.Send(new SignEmployerAgreementCommand
             {
                 HashedAccountId = hashedId,
                 ExternalUserId = externalUserId,
@@ -115,7 +115,7 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
                 HashedAgreementId = agreementid
             });
 
-            var unsignedAgreement = await _mediator.SendAsync(new GetNextUnsignedEmployerAgreementRequest
+            var unsignedAgreement = await _mediator.Send(new GetNextUnsignedEmployerAgreementRequest
             { 
                 ExternalUserId = externalUserId,
                 HashedAccountId = hashedId
@@ -154,7 +154,7 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
 
         try
         {
-            await _mediator.SendAsync(new RemoveLegalEntityCommand
+            await _mediator.Send(new RemoveLegalEntityCommand
             {
                 HashedAccountId = model.HashedAccountId,
                 UserId = userId,
@@ -192,7 +192,7 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
 
         try
         {
-            var result = await _mediator.SendAsync(new GetEmployerAgreementPdfRequest
+            var result = await _mediator.Send(new GetEmployerAgreementPdfRequest
             {
                 HashedAccountId = hashedAccountId,
                 HashedLegalAgreementId = agreementId,
@@ -225,7 +225,7 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
         {
             var result =
                 await
-                    _mediator.SendAsync(new GetSignedEmployerAgreementPdfRequest
+                    _mediator.Send(new GetSignedEmployerAgreementPdfRequest
                     {
                         HashedAccountId = hashedAccountId,
                         HashedLegalAgreementId = agreementId,
@@ -270,7 +270,7 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
 
         try
         {
-            var result = await _mediator.SendAsync(new GetAccountLegalEntityRemoveRequest
+            var result = await _mediator.Send(new GetAccountLegalEntityRemoveRequest
             {
                 HashedAccountId = hashedAccountId,
                 UserId = userId,
@@ -314,7 +314,7 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
 
         try
         {
-            var result = await _mediator.SendAsync(new GetOrganisationAgreementsRequest
+            var result = await _mediator.Send(new GetOrganisationAgreementsRequest
             {
                 AccountLegalEntityHashedId = accountLegalEntityHashedId
             });

@@ -22,7 +22,7 @@ public class InvitationOrchestrator
 
     public virtual async Task<OrchestratorResponse<InvitationView>> GetInvitation(string id)
     {
-        var response = await _mediator.SendAsync(new GetInvitationRequest
+        var response = await _mediator.Send(new GetInvitationRequest
         {
             Id = id
         });
@@ -37,7 +37,7 @@ public class InvitationOrchestrator
 
     public virtual async Task AcceptInvitation(long invitationId, string externalUserId)
     {
-        await _mediator.SendAsync(new AcceptInvitationCommand
+        await _mediator.Send(new AcceptInvitationCommand
         {
             Id = invitationId,
             ExternalUserId = externalUserId
@@ -48,7 +48,7 @@ public class InvitationOrchestrator
     {
         try
         {
-            await _mediator.SendAsync(new CreateInvitationCommand
+            await _mediator.Send(new CreateInvitationCommand
             {
                 HashedAccountId = model.HashedAccountId,
                 ExternalUserId = externalUserId,
@@ -68,12 +68,12 @@ public class InvitationOrchestrator
     {
         try
         {
-            var response = await _mediator.SendAsync(new GetUserInvitationsRequest
+            var response = await _mediator.Send(new GetUserInvitationsRequest
             {
                 UserId = externalUserId
             });
 
-            var getUserAccountsQueryResponse = await _mediator.SendAsync(new GetUserAccountsQuery
+            var getUserAccountsQueryResponse = await _mediator.Send(new GetUserAccountsQuery
             {
                 UserRef = externalUserId
             });

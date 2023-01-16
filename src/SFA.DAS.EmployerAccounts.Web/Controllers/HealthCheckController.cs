@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Authorization.Mvc.Attributes;
+﻿using AutoMapper;
+using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerAccounts.Commands.RunHealthCheckCommand;
 using SFA.DAS.EmployerAccounts.Queries.GetHealthCheck;
 
@@ -19,7 +20,7 @@ public class HealthCheckController : Controller
 
     public async Task<IActionResult> Index(GetHealthCheckQuery query)
     {
-        var response = await _mediator.SendAsync(query);
+        var response = await _mediator.Send(query);
         var model = _mapper.Map<HealthCheckViewModel>(response);
 
         return View(model);
@@ -29,7 +30,7 @@ public class HealthCheckController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Index(RunHealthCheckCommand command)
     {
-        await _mediator.SendAsync(command);
+        await _mediator.Send(command);
 
         return RedirectToAction("Index");
     }

@@ -14,7 +14,7 @@ internal class AccountLegalEntitiesHelper
 
     internal async Task<List<AccountSpecificLegalEntity>> GetAccountLegalEntities(string hashedLegalEntityId, string userIdClaim)
     {
-        var accountEntities = await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
+        var accountEntities = await _mediator.Send(new GetAccountLegalEntitiesRequest
         {
             HashedLegalEntityId = hashedLegalEntityId,
             UserId = userIdClaim

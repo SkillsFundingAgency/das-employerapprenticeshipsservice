@@ -21,15 +21,15 @@ public class HomeOrchestrator
 
     public virtual async Task<OrchestratorResponse<UserAccountsViewModel>> GetUserAccounts(string userId, DateTime? LastTermsAndConditionsUpdate = null)
     {
-        var getUserAccountsQueryResponse = await _mediator.SendAsync(new GetUserAccountsQuery
+        var getUserAccountsQueryResponse = await _mediator.Send(new GetUserAccountsQuery
         {
             UserRef = userId
         });
-        var getUserInvitationsResponse = await _mediator.SendAsync(new GetNumberOfUserInvitationsQuery
+        var getUserInvitationsResponse = await _mediator.Send(new GetNumberOfUserInvitationsQuery
         {
             UserId = userId
         });
-        var getUserQueryResponse = await _mediator.SendAsync(new GetUserByRefQuery
+        var getUserQueryResponse = await _mediator.Send(new GetUserByRefQuery
         {
             UserRef = userId
         });
@@ -47,7 +47,7 @@ public class HomeOrchestrator
 
     public virtual async Task<OrchestratorResponse<ProviderInvitationViewModel>> GetProviderInvitation(Guid correlationId)
     {
-        var getProviderInvitationQueryResponse = await _mediator.SendAsync(new GetProviderInvitationQuery
+        var getProviderInvitationQueryResponse = await _mediator.Send(new GetProviderInvitationQuery
         {
             CorrelationId = correlationId
         });
@@ -73,7 +73,7 @@ public class HomeOrchestrator
 
     public virtual async Task Unsubscribe(Guid correlationId)
     {
-        await _mediator.SendAsync(new UnsubscribeProviderEmailQuery
+        await _mediator.Send(new UnsubscribeProviderEmailQuery
         {
             CorrelationId = correlationId
         });
@@ -81,7 +81,7 @@ public class HomeOrchestrator
 
     public virtual async Task SaveUpdatedIdentityAttributes(string userRef, string email, string firstName, string lastName, string correlationId = null)
     {
-        await _mediator.SendAsync(new UpsertRegisteredUserCommand
+        await _mediator.Send(new UpsertRegisteredUserCommand
         {
             EmailAddress = email,
             UserRef = userRef,
@@ -93,7 +93,7 @@ public class HomeOrchestrator
 
     public virtual async Task UpdateTermAndConditionsAcceptedOn(string userRef)
     {
-        await _mediator.SendAsync(new UpdateTermAndConditionsAcceptedOnCommand
+        await _mediator.Send(new UpdateTermAndConditionsAcceptedOnCommand
         {
             UserRef = userRef
         });

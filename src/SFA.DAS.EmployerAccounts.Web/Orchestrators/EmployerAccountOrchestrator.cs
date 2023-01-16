@@ -80,7 +80,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
 
         try
         {
-            await _mediator.SendAsync(new RenameEmployerAccountCommand
+            await _mediator.Send(new RenameEmployerAccountCommand
             {
                 HashedAccountId = model.HashedId,
                 ExternalUserId = userId,
@@ -157,7 +157,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
 
     private async Task UpdateAccountNameToLegalEntityName(CreateAccountModel model)
     {
-        await _mediator.SendAsync(new RenameEmployerAccountCommand
+        await _mediator.Send(new RenameEmployerAccountCommand
         {
             HashedAccountId = model.HashedAccountId.Value,
             ExternalUserId = model.UserId,

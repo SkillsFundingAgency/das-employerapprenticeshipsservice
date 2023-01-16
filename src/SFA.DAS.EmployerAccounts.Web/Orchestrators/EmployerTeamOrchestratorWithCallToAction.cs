@@ -105,25 +105,25 @@ public class EmployerTeamOrchestratorWithCallToAction : EmployerTeamOrchestrator
     {
         try
         {
-            var reservationsResponseTask = _mediator.SendAsync(new GetReservationsRequest
+            var reservationsResponseTask = _mediator.Send(new GetReservationsRequest
             {
                 HashedAccountId = hashedAccountId,
                 ExternalUserId = externalUserId
             });
 
-            var apprenticeshipsResponseTask = _mediator.SendAsync(new GetApprenticeshipsRequest
+            var apprenticeshipsResponseTask = _mediator.Send(new GetApprenticeshipsRequest
             {
                 HashedAccountId = hashedAccountId,
                 ExternalUserId = externalUserId
             });
 
-            var accountCohortResponseTask = _mediator.SendAsync(new GetSingleCohortRequest
+            var accountCohortResponseTask = _mediator.Send(new GetSingleCohortRequest
             {
                 HashedAccountId = hashedAccountId,
                 ExternalUserId = externalUserId
             });
 
-            var vacanciesResponseTask = _mediator.SendAsync(new GetVacanciesRequest
+            var vacanciesResponseTask = _mediator.Send(new GetVacanciesRequest
             {
                 HashedAccountId = hashedAccountId,
                 ExternalUserId = externalUserId

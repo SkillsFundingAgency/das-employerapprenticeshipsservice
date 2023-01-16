@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels;
+﻿using AutoMapper;
+
+namespace SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 public abstract class AccountViewModel : IAccountViewModel
 {

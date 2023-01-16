@@ -29,7 +29,7 @@ public class TaskOrchestrator
                 return new OrchestratorResponse { Status = HttpStatusCode.BadRequest };
             }
 
-            await _mediator.SendAsync(new DismissMonthlyTaskReminderCommand
+            await _mediator.Send(new DismissMonthlyTaskReminderCommand
             {
                 HashedAccountId = hashedAccountId,
                 ExternalUserId = externalUserId,

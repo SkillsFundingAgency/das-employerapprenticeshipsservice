@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Authorization.EmployerUserRoles.Options;
+﻿using AutoMapper;
+using SFA.DAS.Authorization.EmployerUserRoles.Options;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Common.Domain.Types;
 
@@ -82,7 +83,7 @@ public class EmployerAgreementController : BaseController
     [Route("agreements/unsigned/view")]
     public async Task<IActionResult> ViewUnsignedAgreements(string hashedAccountId)
     {
-        var unsignedAgreementResponse = await _mediator.SendAsync(new GetNextUnsignedEmployerAgreementRequest { HashedAccountId = hashedAccountId, ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName) });
+        var unsignedAgreementResponse = await _mediator.Send(new GetNextUnsignedEmployerAgreementRequest { HashedAccountId = hashedAccountId, ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName) });
 
         if (string.IsNullOrEmpty(unsignedAgreementResponse.HashedAgreementId)) return RedirectToAction(ControllerConstants.IndexActionName);
 
@@ -113,7 +114,7 @@ public class EmployerAgreementController : BaseController
         request.ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
         var viewModel = await GetSignedAgreementViewModel(request);
-        var entities = await _mediator.SendAsync(new GetAccountLegalEntitiesCountByHashedAccountIdRequest { HashedAccountId = request.HashedAccountId });
+        var entities = await _mediator.Send(new GetAccountLegalEntitiesCountByHashedAccountIdRequest { HashedAccountId = request.HashedAccountId });
 
         viewModel.LegalEntitiesCount = entities.LegalEntitiesCount;
 
@@ -149,11 +150,11 @@ public class EmployerAgreementController : BaseController
             return View(response);
         }
 
-        var user = await _mediator.SendAsync(new GetUserByRefQuery { UserRef = userInfo });
+        var user = await _mediator.Send(new GetUserByRefQuery { UserRef = userInfo });
 
         if (!string.IsNullOrWhiteSpace(user.User.CorrelationId))
         {
-            var getProviderInvitationQueryResponse = await _mediator.SendAsync(new GetProviderInvitationQuery
+            var getProviderInvitationQueryResponse = await _mediator.Send(new GetProviderInvitationQuery
             {
                 CorrelationId = Guid.Parse(user.User.CorrelationId)
             });
@@ -243,10 +244,10 @@ public class EmployerAgreementController : BaseController
 
     private async Task<SignEmployerAgreementViewModel> GetSignedAgreementViewModel(GetEmployerAgreementRequest request)
     {
-        var response = await _mediator.SendAsync(request);
+        var response = await _mediator.Send(request);
         var viewModel = _mapper.Map<GetEmployerAgreementResponse, SignEmployerAgreementViewModel>(response);
 
-        var signedAgreementResponse = await _mediator.SendAsync(new GetLastSignedAgreementRequest { AccountLegalEntityId = response.EmployerAgreement.LegalEntity.AccountLegalEntityId });
+        var signedAgreementResponse = await _mediator.Send(new GetLastSignedAgreementRequest { AccountLegalEntityId = response.EmployerAgreement.LegalEntity.AccountLegalEntityId });
         viewModel.PreviouslySignedEmployerAgreement = _mapper.Map<EmployerAgreementView>(signedAgreementResponse.LastSignedAgreement);
 
         return viewModel;

@@ -28,19 +28,19 @@ public class ReportController : BaseController
             _logger.Debug($"Reporting Training Provider with correlationId: {correlationId}");
 
             //If being reported, unsubscribe to not get further notifications anyway
-            await _mediator.SendAsync(new UnsubscribeProviderEmailQuery
+            await _mediator.Send(new UnsubscribeProviderEmailQuery
             {
                 CorrelationId = correlationGuid
             });
 
-            var invitation = await _mediator.SendAsync(new GetProviderInvitationQuery
+            var invitation = await _mediator.Send(new GetProviderInvitationQuery
             {
                 CorrelationId = correlationGuid
             });
 
             if (invitation.Result != null)
             {
-                await _mediator.SendAsync(new ReportTrainingProviderCommand(
+                await _mediator.Send(new ReportTrainingProviderCommand(
                         invitation.Result.EmployerEmail,
                         DateTime.Now,
                         invitation.Result.ProviderOrganisationName,

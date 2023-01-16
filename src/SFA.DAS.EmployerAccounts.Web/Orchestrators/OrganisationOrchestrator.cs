@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using AutoMapper;
 using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 using SFA.DAS.EmployerAccounts.Commands.CreateOrganisationAddress;
 using SFA.DAS.EmployerAccounts.Commands.UpdateOrganisationDetails;
@@ -40,7 +40,7 @@ public class OrganisationOrchestrator : UserVerificationOrchestratorBase, IOrche
     {
         try
         {
-            var result = await _mediator.SendAsync(new CreateLegalEntityCommand
+            var result = await _mediator.Send(new CreateLegalEntityCommand
             {
                 HashedAccountId = request.HashedAccountId,
                 Code = request.Code,
@@ -119,7 +119,7 @@ public class OrganisationOrchestrator : UserVerificationOrchestratorBase, IOrche
         {
             var request = _mapper.Map<CreateOrganisationAddressRequest>(viewModel.Address);
 
-            var response = _mediator.Send(request);
+            var response =  _mediator.Send(request).Result;
 
             return new OrchestratorResponse<OrganisationDetailsViewModel>
             {
@@ -170,7 +170,7 @@ public class OrganisationOrchestrator : UserVerificationOrchestratorBase, IOrche
 
     public virtual async Task<bool> UserShownWizard(string userId, string hashedAccountId)
     {
-        var userResponse = await Mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = hashedAccountId, TeamMemberId = userId });
+        var userResponse = await Mediator.Send(new GetTeamMemberQuery { HashedAccountId = hashedAccountId, TeamMemberId = userId });
         return userResponse.User.ShowWizard && userResponse.User.Role == Role.Owner;
     }
 
@@ -190,12 +190,12 @@ public class OrganisationOrchestrator : UserVerificationOrchestratorBase, IOrche
 
     public async Task<OrchestratorResponse<ReviewOrganisationAddressViewModel>> GetRefreshedOrganisationDetails(string accountLegalEntityPublicHashedId)
     {
-        var currentDetails = await Mediator.SendAsync(new GetAccountLegalEntityRequest
+        var currentDetails = await Mediator.Send(new GetAccountLegalEntityRequest
         {
             AccountLegalEntityId = _accountLegalEntityHashingService.DecodeValue(accountLegalEntityPublicHashedId)
         });
 
-        var refreshedDetails = await Mediator.SendAsync(new GetOrganisationByIdRequest
+        var refreshedDetails = await Mediator.Send(new GetOrganisationByIdRequest
         {
             Identifier = currentDetails.AccountLegalEntity.Identifier,
             OrganisationType = currentDetails.AccountLegalEntity.OrganisationType
@@ -243,7 +243,7 @@ public class OrganisationOrchestrator : UserVerificationOrchestratorBase, IOrche
                 UserId = userId
             };
 
-            await _mediator.SendAsync(request);
+            await _mediator.Send(request);
         }
         catch (Exception)
         {

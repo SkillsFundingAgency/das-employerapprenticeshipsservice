@@ -26,7 +26,7 @@ public class UserSettingsOrchestrator
     {
         _logger.Info($"Getting user notification settings for user {userRef}");
 
-        var response = await _mediator.SendAsync(new GetUserNotificationSettingsQuery
+        var response = await _mediator.Send(new GetUserNotificationSettingsQuery
         {
             UserRef = userRef
         });
@@ -48,7 +48,7 @@ public class UserSettingsOrchestrator
 
         DecodeAccountIds(settings);
 
-        await _mediator.SendAsync(new UpdateUserNotificationSettingsCommand
+        await _mediator.Send(new UpdateUserNotificationSettingsCommand
         {
             UserRef = userRef,
             Settings = settings
@@ -64,7 +64,7 @@ public class UserSettingsOrchestrator
             async () =>
             {
                 var accountId = _hashingService.DecodeValue(hashedAccountId);
-                var settings = await _mediator.SendAsync(new GetUserNotificationSettingsQuery
+                var settings = await _mediator.Send(new GetUserNotificationSettingsQuery
                 {
                     UserRef = userRef
                 });
@@ -76,7 +76,7 @@ public class UserSettingsOrchestrator
 
                 if (userNotificationSettings.ReceiveNotifications)
                 {
-                    await _mediator.SendAsync(
+                    await _mediator.Send(
                         new UnsubscribeNotificationCommand
                         {
                             UserRef = userRef,
@@ -113,7 +113,7 @@ public class UserSettingsOrchestrator
     {
         try
         {
-            await _mediator.SendAsync(new GetEmployerAccountByHashedIdQuery
+            await _mediator.Send(new GetEmployerAccountByHashedIdQuery
             {
                 HashedAccountId = hashedAccountId,
                 UserId = externalUserId

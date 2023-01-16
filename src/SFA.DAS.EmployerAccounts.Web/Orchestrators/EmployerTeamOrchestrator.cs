@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using AutoMapper;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
@@ -60,7 +60,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
 
         try
         {
-            await _mediator.SendAsync(new DeleteInvitationCommand
+            await _mediator.Send(new DeleteInvitationCommand
             {
                 Email = email,
                 HashedAccountId = hashedAccountId,
@@ -96,7 +96,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
     {
         try
         {
-            await _mediator.SendAsync(new ChangeTeamMemberRoleCommand
+            await _mediator.Send(new ChangeTeamMemberRoleCommand
             {
                 HashedAccountId = hashedId,
                 Email = email,
@@ -143,7 +143,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
         {
             var apiGetAccountTask = _accountApiClient.GetAccount(hashedAccountId);
 
-            var accountResponseTask = _mediator.SendAsync(new GetEmployerAccountByHashedIdQuery
+            var accountResponseTask = _mediator.Send(new GetEmployerAccountByHashedIdQuery
             {
                 HashedAccountId = hashedAccountId,
                 UserId = externalUserId
@@ -151,25 +151,25 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
 
             var userRoleResponseTask = GetUserAccountRole(hashedAccountId, externalUserId);
 
-            var userResponseTask = _mediator.SendAsync(new GetTeamMemberQuery
+            var userResponseTask = _mediator.Send(new GetTeamMemberQuery
             {
                 HashedAccountId = hashedAccountId,
                 TeamMemberId = externalUserId
             });
 
-            var accountStatsResponseTask = _mediator.SendAsync(new GetAccountStatsQuery
+            var accountStatsResponseTask = _mediator.Send(new GetAccountStatsQuery
             {
                 HashedAccountId = hashedAccountId,
                 ExternalUserId = externalUserId
             });
 
-            var agreementsResponseTask = _mediator.SendAsync(new GetAccountEmployerAgreementsRequest
+            var agreementsResponseTask = _mediator.Send(new GetAccountEmployerAgreementsRequest
             {
                 HashedAccountId = hashedAccountId,
                 ExternalUserId = externalUserId
             });
 
-            var userQueryResponseTask = _mediator.SendAsync(new GetUserByRefQuery
+            var userQueryResponseTask = _mediator.Send(new GetUserByRefQuery
             {
                 UserRef = externalUserId
             });
@@ -186,7 +186,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
 
             var apprenticeshipEmployerType = (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), accountDetailViewModel.ApprenticeshipEmployerType, true);
 
-            var tasksResponse = await _mediator.SendAsync(new GetAccountTasksQuery
+            var tasksResponse = await _mediator.Send(new GetAccountTasksQuery
             {
                 AccountId = accountResponse.Account.Id,
                 ExternalUserId = externalUserId,
@@ -259,7 +259,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
 
     public async Task<OrchestratorResponse<InvitationView>> GetInvitation(string id)
     {
-        var invitationResponse = await _mediator.SendAsync(new GetInvitationRequest
+        var invitationResponse = await _mediator.Send(new GetInvitationRequest
         {
             Id = id
         });
@@ -309,7 +309,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
             };
         }
 
-        var response = await _mediator.SendAsync(new GetMemberRequest
+        var response = await _mediator.Send(new GetMemberRequest
         {
             HashedAccountId = hashedAccountId,
             Email = email,
@@ -328,7 +328,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
         try
         {
             var response = await
-                _mediator.SendAsync(new GetAccountTeamMembersQuery
+                _mediator.Send(new GetAccountTeamMembersQuery
                 {
                     HashedAccountId = hashedId,
                     ExternalUserId = userId
@@ -364,7 +364,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
 
     public async Task HideWizard(string hashedAccountId, string externalUserId)
     {
-        await _mediator.SendAsync(new UpdateShowAccountWizardCommand
+        await _mediator.Send(new UpdateShowAccountWizardCommand
         {
             HashedAccountId = hashedAccountId,
             ExternalUserId = externalUserId,
@@ -376,7 +376,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
     {
         try
         {
-            await _mediator.SendAsync(new CreateInvitationCommand
+            await _mediator.Send(new CreateInvitationCommand
             {
                 ExternalUserId = externalUserId,
                 HashedAccountId = model.HashedAccountId,
@@ -423,7 +423,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
 
         try
         {
-            var userResponse = await _mediator.SendAsync(new GetUserQuery { UserId = userId });
+            var userResponse = await _mediator.Send(new GetUserQuery { UserId = userId });
 
             if (userResponse?.User == null)
             {
@@ -437,7 +437,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
             }
             else
             {
-                await _mediator.SendAsync(new RemoveTeamMemberCommand
+                await _mediator.Send(new RemoveTeamMemberCommand
                 {
                     UserId = userId,
                     UserRef = userResponse.User.Ref,
@@ -501,7 +501,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
 
         try
         {
-            await _mediator.SendAsync(new ResendInvitationCommand
+            await _mediator.Send(new ResendInvitationCommand
             {
                 Email = email,
                 AccountId = hashedId,
@@ -537,7 +537,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
     {
         var response = new OrchestratorResponse<InvitationViewModel>();
 
-        var queryResponse = await _mediator.SendAsync(new GetMemberRequest
+        var queryResponse = await _mediator.Send(new GetMemberRequest
         {
             HashedAccountId = hashedAccountId,
             Email = email
@@ -550,7 +550,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
 
     public virtual async Task<bool> UserShownWizard(string userId, string hashedAccountId)
     {
-        var userResponse = await Mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = hashedAccountId, TeamMemberId = userId });
+        var userResponse = await Mediator.Send(new GetTeamMemberQuery { HashedAccountId = hashedAccountId, TeamMemberId = userId });
         return userResponse.User.ShowWizard && userResponse.User.Role == Role.Owner;
     }
 
@@ -574,7 +574,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
     {
         try
         {
-            var accountResponse = await _mediator.SendAsync(new GetEmployerAccountByHashedIdQuery
+            var accountResponse = await _mediator.Send(new GetEmployerAccountByHashedIdQuery
             {
                 HashedAccountId = hashedAccountId,
                 UserId = externalUserId

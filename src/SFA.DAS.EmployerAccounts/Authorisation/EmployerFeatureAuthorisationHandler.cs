@@ -38,7 +38,7 @@ public class EmployerFeatureAuthorizationHandler : IAuthorizationHandler
             if (featureToggle.EnabledByAgreementVersion.GetValueOrDefault(0) > 0)
             {
                 var (accountId, _) = authorizationContext.GetEmployerFeatureValues();
-                var response = await _mediator.SendAsync(new GetMinimumSignedAgreementVersionQuery { AccountId = accountId.GetValueOrDefault(0) }).ConfigureAwait(false);
+                var response = await _mediator.Send(new GetMinimumSignedAgreementVersionQuery { AccountId = accountId.GetValueOrDefault(0) }).ConfigureAwait(false);
 
                 if (response.MinimumSignedAgreementVersion < featureToggle.EnabledByAgreementVersion)
                 {
