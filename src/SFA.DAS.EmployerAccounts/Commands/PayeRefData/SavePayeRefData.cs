@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 
-public sealed class SavePayeRefData : IAsyncRequest
+public sealed class SavePayeRefData : IRequest
 {
     public SavePayeRefData(EmployerAccountPayeRefData payeRefData)
     {

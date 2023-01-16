@@ -1,8 +1,9 @@
-﻿using SFA.DAS.EmployerAccounts.Models.Account;
+﻿using System.Threading;
+using SFA.DAS.EmployerAccounts.Models.Account;
 
 namespace SFA.DAS.EmployerAccounts.Commands.OrganisationData;
 
-public sealed  class CookieBasedOrganisationDataSaver : AsyncRequestHandler<SaveOrganisationData>
+public sealed  class CookieBasedOrganisationDataSaver : IRequestHandler<SaveOrganisationData>
 {
     private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
@@ -14,7 +15,7 @@ public sealed  class CookieBasedOrganisationDataSaver : AsyncRequestHandler<Save
         _cookieRepository = cookieRepository ?? throw new ArgumentNullException(nameof(cookieRepository));
     }
 
-    protected override Task HandleCore(SaveOrganisationData message)
+    public Task<Unit> Handle(SaveOrganisationData message, CancellationToken cancellationToken)
     {
         var existingCookie = _cookieRepository.Get(CookieName);
 
@@ -27,7 +28,7 @@ public sealed  class CookieBasedOrganisationDataSaver : AsyncRequestHandler<Save
             updateExistingCookieWithNewData(existingCookie, message.OrganisationData);
         }
 
-        return Task.CompletedTask;
+        return default;
     }
 
     private void updateExistingCookieWithNewData(EmployerAccountData existingCookie, EmployerAccountOrganisationData organisationData)

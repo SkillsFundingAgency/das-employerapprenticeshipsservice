@@ -1,8 +1,9 @@
-﻿using SFA.DAS.EmployerAccounts.Models.Account;
+﻿using System.Threading;
+using SFA.DAS.EmployerAccounts.Models.Account;
 
 namespace SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 
-public sealed  class CookieBasedPayeRefDataSaver : AsyncRequestHandler<SavePayeRefData>
+public sealed class CookieBasedPayeRefDataSaver : IRequestHandler<SavePayeRefData>
 {
     private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
@@ -14,7 +15,7 @@ public sealed  class CookieBasedPayeRefDataSaver : AsyncRequestHandler<SavePayeR
         _cookieRepository = cookieRepository ?? throw new ArgumentNullException(nameof(cookieRepository));
     }
 
-    protected override Task HandleCore(SavePayeRefData message)
+    public Task<Unit> Handle(SavePayeRefData message, CancellationToken cancellationToken)
     {
         var existingCookie = _cookieRepository.Get(CookieName);
 
@@ -27,10 +28,11 @@ public sealed  class CookieBasedPayeRefDataSaver : AsyncRequestHandler<SavePayeR
             updateExistingCookieWithNewData(existingCookie, message.PayeRefData);
         }
 
-        return Task.CompletedTask;
+        return default;
     }
 
-    private void updateExistingCookieWithNewData(EmployerAccountData existingCookie, EmployerAccountPayeRefData payeRefData)
+    private void updateExistingCookieWithNewData(EmployerAccountData existingCookie,
+        EmployerAccountPayeRefData payeRefData)
     {
         existingCookie.EmployerAccountPayeRefData = payeRefData;
 

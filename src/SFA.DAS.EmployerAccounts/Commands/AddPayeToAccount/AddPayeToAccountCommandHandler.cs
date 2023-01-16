@@ -60,13 +60,15 @@ public class AddPayeToAccountCommandHandler : IRequestHandler<AddPayeToAccountCo
             }
         );
 
-        var userResponse = await _mediator.Send(new GetUserByRefQuery { UserRef = message.ExternalUserId });
+        var userResponse = await _mediator.Send(new GetUserByRefQuery { UserRef = message.ExternalUserId }, cancellationToken);
 
         await AddAuditEntry(message, accountId);
 
         await AddPayeScheme(message.Empref, accountId, userResponse.User.FullName, userResponse.User.UserRef, message.Aorn, message.EmprefName, userResponse.User.CorrelationId);
 
         await NotifyPayeSchemeAdded(message.HashedAccountId, message.Empref);
+
+        return default;
     }
 
     private async Task ValidateMessage(AddPayeToAccountCommand message)

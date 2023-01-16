@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.Commands.OrganisationData;
 
-public sealed class SaveOrganisationData : IAsyncRequest
+public sealed class SaveOrganisationData : IRequest
 {
     public SaveOrganisationData(EmployerAccountOrganisationData organisationData)
     {
