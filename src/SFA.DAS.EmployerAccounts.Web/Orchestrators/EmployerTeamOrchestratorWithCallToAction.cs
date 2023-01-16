@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using AutoMapper;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
