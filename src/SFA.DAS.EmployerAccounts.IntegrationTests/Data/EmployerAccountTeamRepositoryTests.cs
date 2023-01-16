@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Configuration;
@@ -206,7 +207,9 @@ namespace SFA.DAS.EmployerAccounts.IntegrationTests.Data
 
         private EmployerAccountsDbContext CreateDbContext()
         {
-            return new EmployerAccountsDbContext(EmployerAccountsConfiguration.DatabaseConnectionString);
+            var optionsBuilder = new DbContextOptionsBuilder<EmployerAccountsDbContext>();
+            optionsBuilder.UseSqlServer(EmployerAccountsConfiguration.DatabaseConnectionString);
+            return new EmployerAccountsDbContext(optionsBuilder.Options);
         }
     }
 }

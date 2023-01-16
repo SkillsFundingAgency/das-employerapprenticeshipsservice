@@ -2,6 +2,7 @@
 using System.Configuration;
 using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Configuration;
@@ -36,23 +37,28 @@ namespace SFA.DAS.EmployerAccounts.Jobs.DependencyResolution
             var connectionString = GetConnectionString(context);
             var connectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
             bool useManagedIdentity = !connectionStringBuilder.IntegratedSecurity && string.IsNullOrEmpty(connectionStringBuilder.UserID);
-            SqlConnection sqlConnection;
+
+            var optionsBuilder = new DbContextOptionsBuilder<EmployerAccountsDbContext>();
+
+
             if (useManagedIdentity)
             {
                 var azureServiceTokenProvider = new AzureServiceTokenProvider();
                 var accessToken = azureServiceTokenProvider.GetAccessTokenAsync(AzureResource).Result;
-                sqlConnection = new SqlConnection
+                var sqlConnection = new SqlConnection
                 {
                     ConnectionString = connectionString,
                     AccessToken = accessToken,
                 };
+
+                optionsBuilder.UseSqlServer(sqlConnection);
             }
             else
             {
-                sqlConnection = new SqlConnection(connectionString);
+                optionsBuilder.UseSqlServer(connectionString);
             }
 
-            return new EmployerAccountsDbContext(sqlConnection);
+            return new EmployerAccountsDbContext(optionsBuilder.Options);
         }
 
         private static string GetConnectionString(IContext context)

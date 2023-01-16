@@ -14,6 +14,7 @@ using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Testing.Helpers;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
+using Microsoft.EntityFrameworkCore;
 
 namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.Helpers
 {
@@ -56,7 +57,9 @@ select (
         {
             var fixture = new Fixture();
 
-            var accountDbContext = new EmployerAccountsDbContext(_configuration.DatabaseConnectionString);
+            var optionsBuilder = new DbContextOptionsBuilder<EmployerAccountsDbContext>();
+            optionsBuilder.UseSqlServer(_configuration.DatabaseConnectionString);
+            var accountDbContext = new EmployerAccountsDbContext(optionsBuilder.Options);
             var lazyDb = new Lazy<EmployerAccountsDbContext>(() => accountDbContext);
             var userRepo = new UserRepository(_configuration, Mock.Of<ILog>(), lazyDb);
             var userToCreate = fixture
