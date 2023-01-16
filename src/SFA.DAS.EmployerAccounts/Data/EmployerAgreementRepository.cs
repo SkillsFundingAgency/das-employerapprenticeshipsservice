@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Data.Entity;
 using Dapper;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
@@ -40,10 +41,9 @@ public class EmployerAgreementRepository : BaseRepository, IEmployerAgreementRep
             sql += " AND ale.SignedAgreementId IS NOT NULL";
         }
 
-        var result = await _db.Value.Database.Connection.QueryAsync<AccountSpecificLegalEntity>(
+        var result = await _db.Value.Database.GetDbConnection().QueryAsync<AccountSpecificLegalEntity>(
             sql: sql,
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.Text);
 
         return result.ToList();
@@ -55,10 +55,9 @@ public class EmployerAgreementRepository : BaseRepository, IEmployerAgreementRep
 
         parameters.Add("@agreementId", agreementId, DbType.Int64);
 
-        var result = await _db.Value.Database.Connection.QueryAsync<EmployerAgreementView>(
+        var result = await _db.Value.Database.GetDbConnection().QueryAsync<EmployerAgreementView>(
             sql: "[employer_account].[GetEmployerAgreement]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.StoredProcedure);
 
         return result.SingleOrDefault();
@@ -73,10 +72,9 @@ public class EmployerAgreementRepository : BaseRepository, IEmployerAgreementRep
         parameters.Add("@signedByName", agreement.SignedByName, DbType.String);
         parameters.Add("@signedDate", agreement.SignedDate, DbType.DateTime);
             
-        return _db.Value.Database.Connection.ExecuteAsync(
+        return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[SignEmployerAgreement]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.StoredProcedure);
     }
 
@@ -86,10 +84,9 @@ public class EmployerAgreementRepository : BaseRepository, IEmployerAgreementRep
 
         parameters.Add("@employerAgreementId", agreementId, DbType.Int64);
 
-        return _db.Value.Database.Connection.ExecuteAsync(
+        return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[RemoveLegalEntityFromAccount]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.StoredProcedure);
     }
         
@@ -99,7 +96,7 @@ public class EmployerAgreementRepository : BaseRepository, IEmployerAgreementRep
 
         parameters.Add("@id", accountLegalEntityId, DbType.Int64);
 
-        var result = await _db.Value.Database.Connection.QueryAsync<AccountLegalEntityModel>(
+        var result = await _db.Value.Database.GetDbConnection().QueryAsync<AccountLegalEntityModel>(
             sql: @"
                 SELECT  ALE.Id as AccountLegalEntityId, 
                         LE.Id AS LegalEntityId, 
@@ -114,7 +111,6 @@ public class EmployerAgreementRepository : BaseRepository, IEmployerAgreementRep
                             ON LE.Id = ALE.LegalEntityId
                     WHERE ALE.Id = @Id;",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
             commandType: CommandType.Text);
 
         return result.SingleOrDefault();
