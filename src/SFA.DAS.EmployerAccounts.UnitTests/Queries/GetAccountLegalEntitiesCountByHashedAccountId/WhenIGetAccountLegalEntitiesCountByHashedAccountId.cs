@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
@@ -36,7 +37,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntitiesCoun
         private const long AccountId = 456;
 
         public GetAccountLegalEntitiesCountByHashedAccountIdRequest GetAccountLegalEntitiesCountByHashedAccountIdRequest { get; set; }
-        public IAsyncRequestHandler<GetAccountLegalEntitiesCountByHashedAccountIdRequest, GetAccountLegalEntitiesCountByHashedAccountIdResponse> Handler { get; set; }
+        public IRequestHandler<GetAccountLegalEntitiesCountByHashedAccountIdRequest, GetAccountLegalEntitiesCountByHashedAccountIdResponse> Handler { get; set; }
         public Mock<EmployerAccountsDbContext> Db { get; set; }
         public IConfigurationProvider ConfigurationProvider { get; set; }
         public List<AccountLegalEntity> AccountLegalEntities { get; set; }
@@ -72,7 +73,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntitiesCoun
 
         public Task<GetAccountLegalEntitiesCountByHashedAccountIdResponse> Handle()
         {
-            return Handler.Handle(GetAccountLegalEntitiesCountByHashedAccountIdRequest);
+            return Handler.Handle(GetAccountLegalEntitiesCountByHashedAccountIdRequest, CancellationToken.None);
         }
     }
 }

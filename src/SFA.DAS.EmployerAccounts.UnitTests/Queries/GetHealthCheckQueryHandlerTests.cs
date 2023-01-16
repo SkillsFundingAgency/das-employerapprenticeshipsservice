@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
@@ -35,7 +36,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries
     public class GetHealthCheckQueryHandlerTestsFixture
     {
         public GetHealthCheckQuery GetHealthCheckQuery { get; set; }
-        public IAsyncRequestHandler<GetHealthCheckQuery, GetHealthCheckQueryResponse> Handler { get; set; }
+        public IRequestHandler<GetHealthCheckQuery, GetHealthCheckQueryResponse> Handler { get; set; }
         public Mock<EmployerAccountsDbContext> Db { get; set; }
         public IConfigurationProvider ConfigurationProvider { get; set; }
         public List<HealthCheck> HealthChecks { get; set; }
@@ -59,7 +60,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries
 
         public Task<GetHealthCheckQueryResponse> Handle()
         {
-            return Handler.Handle(GetHealthCheckQuery);
+            return Handler.Handle(GetHealthCheckQuery, CancellationToken.None);
         }
     }
 }
