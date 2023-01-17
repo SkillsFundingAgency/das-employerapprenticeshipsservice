@@ -319,14 +319,7 @@ public class EmployerTeamController : BaseController
 
         return Redirect(_urlActionHelper.EmployerCommitmentsV2Action(RouteData, "unapproved/Inform"));
     }
-
-
-    [ChildActionOnly]
-    public IActionResult Empty(AccountDashboardViewModel model)
-    {
-        return PartialView(model);
-    }
-
+    
     [ChildActionOnly]
     public IActionResult CheckFunding(AccountDashboardViewModel model)
     {
