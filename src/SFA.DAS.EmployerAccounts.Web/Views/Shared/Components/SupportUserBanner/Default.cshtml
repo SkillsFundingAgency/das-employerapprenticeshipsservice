@@ -1,0 +1,33 @@
+@model SFA.DAS.EmployerAccounts.Web.ViewModels.SupportUserBannerViewModel
+
+<header role="banner" id="global-header" class="with-proposition">
+    <div id="service-console-header" class="header-wrapper">
+        <div class="header-global">
+            <div class="header-logo">
+                <p class="heading-large">
+                    Apprenticeship Service Console
+                </p>
+            </div>
+        </div>
+        <div class="header-proposition">
+            <div class="content">
+                @Model.ConsoleUserType
+            </div>
+        </div>
+
+
+    </div>
+
+    <div id="service-console-msg">
+
+        <div id="global-header-bar"></div>
+
+        <div class="header-wrapper">
+
+            <div class="content">
+                <p>You are viewing as @(Model.Account?.Name ?? string.Empty) (account ID:  @(Model.Account?.PublicHashedId ?? string.Empty))</p>
+            </div>
+
+        </div>
+    </div>
+</header>
