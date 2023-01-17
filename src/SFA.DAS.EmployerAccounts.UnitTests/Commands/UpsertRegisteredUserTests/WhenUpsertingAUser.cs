@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -49,14 +50,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpsertRegisteredUserTests
                 .Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string> { { "", "Error" } } });
 
             // Act + Assert
-            Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command));
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command, CancellationToken.None));
         }
 
         [Test]
         public async Task ThenItShouldUpsertTheUserInTheRepository()
         {
             // Act
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
             // Assert
             _userRepository.Verify(r => r.Upsert(It.Is<User>(u => u.Email == _command.EmailAddress
@@ -68,7 +69,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpsertRegisteredUserTests
         [Test]
         public async Task ThenItShouldPublishAnEventToReportTheUpsert()
         {
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
             _eventPublisher.Verify(x => x.Publish(It.Is<UpsertedUserEvent>(y => y.UserRef == _command.UserRef)));
         }

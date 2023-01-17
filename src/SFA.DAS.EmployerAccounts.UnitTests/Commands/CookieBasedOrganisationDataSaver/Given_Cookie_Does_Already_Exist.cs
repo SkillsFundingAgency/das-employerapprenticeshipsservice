@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -101,7 +102,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CookieBasedOrganisationDat
             return
                 _sut
                     .Handle(
-                        new SaveOrganisationData(new EmployerAccountOrganisationData()));
+                        new SaveOrganisationData(new EmployerAccountOrganisationData()), CancellationToken.None);
         }
 
         private void setupPayeRefData()

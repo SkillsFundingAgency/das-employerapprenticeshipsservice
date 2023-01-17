@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using MediatR;
@@ -137,7 +138,7 @@ namespace SFA.DAS.Authorization.Features.UnitTests.Handlers
         public EmployerFeatureAuthorisationHandlerTestsFixture SetMediatorResponse(int agreementVersion = AgreementVersion, EmployerAgreementStatus agreementStatus = EmployerAgreementStatus.Pending)
         {
             Mediator
-                .Setup(s => s.SendAsync(It.Is<GetMinimumSignedAgreementVersionQuery>(q => q.AccountId == AccountId)))
+                .Setup(s => s.Send(It.Is<GetMinimumSignedAgreementVersionQuery>(q => q.AccountId == AccountId), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetMinimumSignedAgreementVersionResponse 
                 { 
                     MinimumSignedAgreementVersion = (agreementStatus == EmployerAgreementStatus.Signed ? agreementVersion : 0) 

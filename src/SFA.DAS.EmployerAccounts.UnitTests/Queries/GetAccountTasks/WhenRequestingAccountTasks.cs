@@ -1,14 +1,15 @@
-﻿using Moq;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using Moq;
 using NUnit.Framework;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountTasks;
-using TaskEnum = SFA.DAS.Tasks.API.Types.Enums;
-using SFA.DAS.Validation;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using SFA.DAS.Common.Domain.Types;
-using System;
 using SFA.DAS.Tasks.API.Types.DTOs;
+using SFA.DAS.Validation;
+using TaskEnum = SFA.DAS.Tasks.API.Types.Enums;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTasks
 {
@@ -37,7 +38,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTasks
             var sut = GetSut();
 
             //Act
-            Assert.ThrowsAsync<InvalidRequestException>(async () => await sut.Handle(new GetAccountTasksQuery()));
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await sut.Handle(new GetAccountTasksQuery(), CancellationToken.None));
 
             //Assert
             _mockValidator.Verify(x => x.Validate(It.IsAny<GetAccountTasksQuery>()), Times.Once);
@@ -54,7 +55,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTasks
             _validQuery.ApprenticeshipEmployerType = actualApprenticeshipEmployerType;
 
             //Act
-            await sut.Handle(_validQuery);
+            await sut.Handle(_validQuery, CancellationToken.None);
 
             //Assert
             _mockTaskService.Verify(s => s.GetAccountTasks(_validQuery.AccountId, _validQuery.ExternalUserId, expectedApprenticeshipEmployerType), Times.Once);
@@ -71,7 +72,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTasks
             var sut = GetSut();
 
             //Act
-            var result = await sut.Handle(new GetAccountTasksQuery { AccountId = 1, ExternalUserId = Guid.NewGuid().ToString()});
+            var result = await sut.Handle(new GetAccountTasksQuery { AccountId = 1, ExternalUserId = Guid.NewGuid().ToString()}, CancellationToken.None);
 
             //Assert
             Assert.AreEqual(1, result.Tasks.Count);

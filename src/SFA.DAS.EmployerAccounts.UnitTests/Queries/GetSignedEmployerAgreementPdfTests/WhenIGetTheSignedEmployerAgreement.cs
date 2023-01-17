@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -77,7 +78,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSignedEmployerAgreementP
             RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<GetSignedEmployerAgreementPdfRequest>())).ReturnsAsync(new ValidationResult {IsUnauthorized = true,ValidationDictionary = new Dictionary<string, string>()});
 
             //Act Assert
-            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await RequestHandler.Handle(new GetSignedEmployerAgreementPdfRequest()));
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await RequestHandler.Handle(new GetSignedEmployerAgreementPdfRequest(), CancellationToken.None));
 
         }
 
@@ -85,7 +86,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSignedEmployerAgreementP
         public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
             //Act
-            await RequestHandler.Handle(Query);
+            await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             _hashingService.Verify(x=>x.DecodeValue(ExpectedHashedLegalAgreementId), Times.Once);
@@ -114,7 +115,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSignedEmployerAgreementP
                 });
 
             //Act
-            await RequestHandler.Handle(Query);
+            await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             _pdfService.Verify(
@@ -137,7 +138,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSignedEmployerAgreementP
             _employerAgreementView.Status = status;
 
             //Act Assert
-            Assert.ThrowsAsync<InvalidRequestException>(async () => await RequestHandler.Handle(Query));
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await RequestHandler.Handle(Query, CancellationToken.None));
         }
 
         [Test]
@@ -147,14 +148,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSignedEmployerAgreementP
             _employerAgreementView.SignedDate = null;
 
             //Act Assert
-            Assert.ThrowsAsync<InvalidRequestException>(async () => await RequestHandler.Handle(Query));
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await RequestHandler.Handle(Query, CancellationToken.None));
         }
 
         [Test]
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Act
-            var actual = await RequestHandler.Handle(Query);
+            var actual = await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             Assert.IsNotNull(actual.FileStream);
@@ -168,7 +169,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSignedEmployerAgreementP
             _employerAgreementView.Status = status;
 
             //Act
-            var actual = await RequestHandler.Handle(Query);
+            var actual = await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             Assert.IsNotNull(actual.FileStream);

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -37,7 +38,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUserNotificationSettings
             var query = new GetUserNotificationSettingsQuery();
 
             //Act
-            await _handler.Handle(query);
+            await _handler.Handle(query, CancellationToken.None);
 
             //Assert
             _validator.Verify(x => x.Validate(query), Times.Once);
@@ -53,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUserNotificationSettings
             };
 
             //Act
-            await _handler.Handle(query);
+            await _handler.Handle(query, CancellationToken.None);
 
             //Assert
             _repository.Verify(x => x.GetUserAccountSettings(

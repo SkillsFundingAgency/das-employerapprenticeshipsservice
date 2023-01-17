@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -34,7 +35,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SendNotificationTests
         public async Task ThenTheCommandIsValidated()
         {
             //Act
-            await _sendNotificationCommandHandler.Handle(new SendNotificationCommand());
+            await _sendNotificationCommandHandler.Handle(new SendNotificationCommand(), CancellationToken.None);
 
             //Assert
             _validator.Verify(x => x.Validate(It.IsAny<SendNotificationCommand>()), Times.Once());
@@ -47,7 +48,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SendNotificationTests
             var sendNotificationCommand = new SendNotificationCommand {Email = new Email {RecipientsAddress = "test@test.com",ReplyToAddress = "noreply@test.com",Subject = "Test Subject", SystemId = "123",TemplateId = "12345",Tokens = new Dictionary<string, string> { {"string","value"} } } };
 
             //Act
-            await _sendNotificationCommandHandler.Handle(sendNotificationCommand);
+            await _sendNotificationCommandHandler.Handle(sendNotificationCommand, CancellationToken.None);
 
             //Assert
             _notificationClient.Verify(x=>x.SendEmail(It.Is<Email>(c=>
@@ -67,7 +68,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SendNotificationTests
             _validator.Setup(x => x.Validate(It.IsAny<SendNotificationCommand>())).Returns(new ValidationResult {ValidationDictionary = new Dictionary<string, string> {{"", ""}}});
 
             //Act/Assert
-            Assert.ThrowsAsync<InvalidRequestException>(async () => await _sendNotificationCommandHandler.Handle(new SendNotificationCommand()));
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await _sendNotificationCommandHandler.Handle(new SendNotificationCommand(), CancellationToken.None));
 
             //Assert
             _logger.Verify(x=>x.Info("SendNotificationCommandHandler Invalid Request"), Times.Once);

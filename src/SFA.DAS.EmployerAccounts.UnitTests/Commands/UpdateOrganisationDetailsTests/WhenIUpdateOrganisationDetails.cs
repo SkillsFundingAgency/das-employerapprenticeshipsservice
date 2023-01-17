@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -65,14 +66,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpdateOrganisationDetailsT
             _validator.Setup(x => x.Validate(It.IsAny<UpdateOrganisationDetailsCommand>())).Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string> { { "", "" } } });
 
             //Act Assert
-            Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command));
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command, CancellationToken.None));
         }
 
         [Test]
         public async Task ThenTheRepositoryIsCalled()
         {
             //Act
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
             //Assert
             _accountRepository.Verify(r => r.UpdateLegalEntityDetailsForAccount(ExpectedAccountLegalEntityId, ExpectedOrganisationName, ExpectedOrganisationAddress));
@@ -81,7 +82,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpdateOrganisationDetailsT
         [Test]
         public async Task ThenTheUpdatedLegalEntityEventIsPublished()
         {
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
             _eventPublisher.Verify(ep => ep.Publish(It.Is<UpdatedLegalEntityEvent>(e =>
                 e.Name.Equals(ExpectedOrganisationName)

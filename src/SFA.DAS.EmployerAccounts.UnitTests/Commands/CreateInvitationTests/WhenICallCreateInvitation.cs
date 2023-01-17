@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.CreateInvitation;
 using SFA.DAS.EmployerAccounts.Commands.SendNotification;
@@ -94,7 +94,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateInvitationTests
         public async Task Then_InvitedUserEventPublishedWithCorrectPersonInvited()
         {
             //Act
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
             _endpoint.Verify(e =>e.Publish(It.Is<InvitedUserEvent>(i => i.PersonInvited == NameOfPersonBeingInvited)));
         }
@@ -103,7 +103,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateInvitationTests
         public async Task ValidCommandFromAccountOwnerCreatesInvitation()
         {
             //Act
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
             //Assert
             _invitationRepository.Verify(x => x.Create(It.Is<Invitation>(m => m.AccountId == ExpectedAccountId && m.Email == _command.EmailOfPersonBeingInvited && m.Name == _command.NameOfPersonBeingInvited && m.Status == InvitationStatus.Pending && m.Role == _command.RoleOfPersonBeingInvited && m.ExpiryDate == DateTimeProvider.Current.UtcNow.Date.AddDays(8))), Times.Once);
@@ -119,7 +119,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateInvitationTests
                 Email = _command.EmailOfPersonBeingInvited
             });
 
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command));
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command, CancellationToken.None));
 
             Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
         }
@@ -131,7 +131,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateInvitationTests
             _validator.Setup(x => x.ValidateAsync(It.IsAny<CreateInvitationCommand>())).ReturnsAsync(new ValidationResult { IsUnauthorized = true });
 
             //Act
-            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _handler.Handle(_command));
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _handler.Handle(_command, CancellationToken.None));
         }
 
         [Test]
@@ -148,14 +148,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateInvitationTests
             });
 
             //Act
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress.Equals(ExpectedCallerEmail)
+            _mediator.Verify(x => x.Send(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress.Equals(ExpectedCallerEmail)
                                                                                   && c.Email.ReplyToAddress.Equals("noreply@sfa.gov.uk")
                                                                                   && c.Email.SystemId.Equals("x")
                                                                                   && c.Email.TemplateId.Equals("InvitationNewUser")
-                                                                                  && c.Email.Subject.Equals("x"))));
+                                                                                  && c.Email.Subject.Equals("x")), It.IsAny<CancellationToken>()));
         }
 
         [Test]
@@ -165,14 +165,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateInvitationTests
             _command.EmailOfPersonBeingInvited = ExpectedExistingUserEmail;
 
             //Act
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress.Equals(ExpectedExistingUserEmail)
+            _mediator.Verify(x => x.Send(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress.Equals(ExpectedExistingUserEmail)
                                                                                   && c.Email.ReplyToAddress.Equals("noreply@sfa.gov.uk")
                                                                                   && c.Email.SystemId.Equals("x")
                                                                                   && c.Email.TemplateId.Equals("InvitationExistingUser")
-                                                                                  && c.Email.Subject.Equals("x"))));
+                                                                                  && c.Email.Subject.Equals("x")), It.IsAny<CancellationToken>()));
         }
 
         [Test]
@@ -191,26 +191,29 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateInvitationTests
                 });
 
             //Act
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("AccountId") && y.NewValue.Equals(ExpectedAccountId.ToString())) != null &&
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Email") && y.NewValue.Equals(ExpectedCallerEmail)) != null &&
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Name") && y.NewValue.Equals(_command.NameOfPersonBeingInvited.ToString())) != null &&
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Role") && y.NewValue.Equals(_command.RoleOfPersonBeingInvited.ToString())) != null &&
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Status") && y.NewValue.Equals(InvitationStatus.Pending.ToString())) != null &&
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("ExpiryDate") && y.NewValue.Equals(DateTimeProvider.Current.UtcNow.Date.AddDays(8).ToString("yyyy-MM-dd HH:mm:ss.fffff"))) != null
-                    )));
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
-                      c.EasAuditMessage.Description.Equals($"Member {ExpectedCallerEmail} added to account {ExpectedAccountId} as {_command.RoleOfPersonBeingInvited.ToString()}"))));
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                    ), It.IsAny<CancellationToken>()));
+            
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
+                      c.EasAuditMessage.Description.Equals($"Member {ExpectedCallerEmail} added to account {ExpectedAccountId} as {_command.RoleOfPersonBeingInvited.ToString()}")), It.IsAny<CancellationToken>()));
+            
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
                       c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(ExpectedAccountId.ToString()) && y.Type.Equals("Account")) != null
-                    )));
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                    ), It.IsAny<CancellationToken>()));
+            
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
                     c.EasAuditMessage.AffectedEntity.Id.Equals(ExpectedInvitationId.ToString()) &&
                     c.EasAuditMessage.AffectedEntity.Type.Equals("Invitation")
-                    )));
+                    ), It.IsAny<CancellationToken>()));
         }
     }
 }

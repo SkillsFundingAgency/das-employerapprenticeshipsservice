@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
@@ -100,7 +101,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLastSignedAgreementQuery
                 Validator.Object,
                 ConfigurationProvider);
 
-            Response = await handler.Handle(request);
+            Response = await handler.Handle(request, CancellationToken.None);
         }
 
         public GetLastSignedAgreementRequest BuildRequest(long accountLegalEntityId)

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.OrganisationData;
@@ -63,9 +64,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CookieBasedOrganisationDat
         private Task Handle()
         {
             return
-                _sut
-                    .Handle(
-                        new SaveOrganisationData(new EmployerAccountOrganisationData()));
+                _sut.Handle(new SaveOrganisationData(new EmployerAccountOrganisationData()), CancellationToken.None);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using MediatR;
@@ -68,7 +69,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
 
             _user = new User { Id = 33, FirstName = "Bob", LastName = "Green", Ref = Guid.NewGuid() };
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserByRefQuery>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetUserByRefQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetUserByRefResponse { User = _user });
 
             _validator = new Mock<IValidator<CreateAccountCommand>>();
@@ -105,8 +106,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
                 _accountEventFactory.Object,
                 _mockMembershipRepository.Object,
                 _mockEmployerAgreementRepository.Object,
-                _eventPublisher,
-                _mockAuthorizationService.Object);
+                _eventPublisher);
         }
 
         [Test]
@@ -116,7 +116,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             var createAccountCommand = new CreateAccountCommand { PayeReference = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT", ExternalUserId = _user.Ref.ToString() };
 
             //Act
-            await _handler.Handle(createAccountCommand);
+            await _handler.Handle(createAccountCommand, CancellationToken.None);
 
             //Assert
             _hashingService.Verify(x => x.HashValue(ExpectedAccountId), Times.Once);
@@ -129,7 +129,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             var createAccountCommand = new CreateAccountCommand { PayeReference = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT", ExternalUserId = _user.Ref.ToString() };
 
             //Act
-            await _handler.Handle(createAccountCommand);
+            await _handler.Handle(createAccountCommand, CancellationToken.None);
 
             //Assert
             _externalhashingService.Verify(x => x.HashValue(ExpectedAccountId), Times.Once);
@@ -143,7 +143,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             var createAccountCommand = new CreateAccountCommand { PayeReference = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT", ExternalUserId = _user.Ref.ToString() };
 
             //Act
-            await _handler.Handle(createAccountCommand);
+            await _handler.Handle(createAccountCommand, CancellationToken.None);
 
             //Assert
             _accountRepository.Verify(x => x.UpdateAccountHashedIds(ExpectedAccountId, ExpectedHashString, ExpectedPublicHashString), Times.Once);
@@ -158,7 +158,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             _hashingService.Setup(x => x.HashValue(ExpectedEmployerAgreementId)).Returns(agreementHash);
 
             //Act
-            var actual = await _handler.Handle(createAccountCommand);
+            var actual = await _handler.Handle(createAccountCommand, CancellationToken.None);
 
             //Assert
             Assert.IsAssignableFrom<CreateAccountCommandResponse>(actual);
@@ -175,7 +175,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             _validator.Setup(x => x.ValidateAsync(command)).ReturnsAsync(new ValidationResult { ValidationDictionary = new Dictionary<string, string> { { "", "" } } });
 
             //Act
-            Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(command));
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(command, CancellationToken.None));
 
             //Assert
             _validator.Verify(x => x.ValidateAsync(command), Times.Once);
@@ -209,7 +209,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             var expectedPublicHashedAccountId = "SCUFF";
             _externalhashingService.Setup(x => x.HashValue(accountId)).Returns(expectedPublicHashedAccountId);
 
-            await _handler.Handle(cmd);
+            await _handler.Handle(cmd, CancellationToken.None);
 
             _accountRepository.Verify(x => x.CreateAccount(It.Is<CreateAccountParams>(y =>
                     y.EmployerNumber == cmd.OrganisationReferenceNumber &&
@@ -252,14 +252,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             };
 
             //Act
-            await _handler.Handle(createAccountCommand);
+            await _handler.Handle(createAccountCommand, CancellationToken.None);
 
             //Assert
             _mediator.Verify(
-                x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                x => x.Send(It.Is<CreateAuditCommand>(c =>
                     c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("AccountId") && y.NewValue.Equals(ExpectedAccountId.ToString())) != null &&
                     c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("AccountId") && y.NewValue.Equals(ExpectedAccountId.ToString())) != null
-                )));
+                ), It.IsAny<CancellationToken>()));
         }
 
         [Test]
@@ -269,7 +269,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             var createAccountCommand = new CreateAccountCommand { PayeReference = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", ExternalUserId = _user.Ref.ToString() };
 
             //Act
-            await _handler.Handle(createAccountCommand);
+            await _handler.Handle(createAccountCommand, CancellationToken.None);
 
             //Assert
 
@@ -285,7 +285,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             var createAccountCommand = new CreateAccountCommand { PayeReference = expectedPayeRef, AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", ExternalUserId = _user.Ref.ToString() };
 
             //Act
-            await _handler.Handle(createAccountCommand);
+            await _handler.Handle(createAccountCommand, CancellationToken.None);
 
             //Assert
             var payeAddedEvent = _eventPublisher.Events.OfType<AddedPayeSchemeEvent>().Single();
@@ -305,7 +305,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             var createAccountCommand = new CreateAccountCommand { PayeReference = "123EDC", AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", OrganisationName = organisationName, ExternalUserId = _user.Ref.ToString() };
 
             //Act
-            await _handler.Handle(createAccountCommand);
+            await _handler.Handle(createAccountCommand, CancellationToken.None);
 
             //Assert
             var createdAccountEvent = _eventPublisher.Events.OfType<CreatedAccountEvent>().Single();
@@ -342,7 +342,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             };
 
             //Act
-            await _handler.Handle(createAccountCommand);
+            await _handler.Handle(createAccountCommand, CancellationToken.None);
 
             //Assert
             var addedLegalEntityEvent = _eventPublisher.Events.OfType<AddedLegalEntityEvent>().Single();
@@ -367,12 +367,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             var createAccountCommand = new CreateAccountCommand { PayeReference = "123EDC", AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", OrganisationName = "Org", Aorn = "Aorn",ExternalUserId = _user.Ref.ToString() };
 
             //Act
-            await _handler.Handle(createAccountCommand);
+            await _handler.Handle(createAccountCommand, CancellationToken.None);
 
             //Assert
-           _mediator.Verify(x => x.SendAsync(It.Is<AccountLevyStatusCommand>(c => 
+           _mediator.Verify(x => x.Send(It.Is<AccountLevyStatusCommand>(c => 
                c.AccountId.Equals(ExpectedAccountId) && 
-               c.ApprenticeshipEmployerType.Equals(ApprenticeshipEmployerType.NonLevy))), Times.Once);
+               c.ApprenticeshipEmployerType.Equals(ApprenticeshipEmployerType.NonLevy)), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]
@@ -382,10 +382,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             var createAccountCommand = new CreateAccountCommand { PayeReference = "123EDC", AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", OrganisationName = "Org", ExternalUserId = _user.Ref.ToString() };
 
             //Act
-            await _handler.Handle(createAccountCommand);
+            await _handler.Handle(createAccountCommand, CancellationToken.None);
 
             //Assert
-           _mediator.Verify(x => x.SendAsync(It.IsAny<AccountLevyStatusCommand>()), Times.Never);
+           _mediator.Verify(x => x.Send(It.IsAny<AccountLevyStatusCommand>(), It.IsAny<CancellationToken>()), Times.Never);
         }
     }
 }

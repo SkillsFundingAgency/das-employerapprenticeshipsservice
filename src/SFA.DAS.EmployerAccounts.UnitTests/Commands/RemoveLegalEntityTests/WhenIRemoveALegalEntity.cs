@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -149,7 +150,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
             _validator.Setup(x => x.ValidateAsync(It.IsAny<RemoveLegalEntityCommand>())).ReturnsAsync(new ValidationResult { ValidationDictionary = new Dictionary<string, string> { { "", "" } } });
 
             //Act Assert
-            Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(new RemoveLegalEntityCommand()));
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(new RemoveLegalEntityCommand(), CancellationToken.None));
         }
 
         [Test]
@@ -159,7 +160,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
             _validator.Setup(x => x.ValidateAsync(It.IsAny<RemoveLegalEntityCommand>())).ReturnsAsync(new ValidationResult { IsUnauthorized = true });
 
             //Act Assert
-            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _handler.Handle(new RemoveLegalEntityCommand()));
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _handler.Handle(new RemoveLegalEntityCommand(), CancellationToken.None));
             _logger.Verify(x => x.Info(It.IsAny<string>()));
         }
 
@@ -167,7 +168,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
         public async Task ThenTheRepositoryIsCalled()
         {
             //Act
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
             //Assert
             _validator.Verify(x => x.ValidateAsync(It.Is<RemoveLegalEntityCommand>(c =>
@@ -183,38 +184,38 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
         public async Task ThenTheAuditIsWrittenToWhenTheItemIsRemoved()
         {
             //Act
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Status") && y.NewValue.Equals(EmployerAgreementStatus.Removed.ToString())) != null
-                    )));
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
-                      c.EasAuditMessage.Description.Equals($"EmployerAgreement {ExpectedHashedEmployerAgreementId} removed from account {ExpectedAccountId}"))));
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                    ), It.IsAny<CancellationToken>()));
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
+                      c.EasAuditMessage.Description.Equals($"EmployerAgreement {ExpectedHashedEmployerAgreementId} removed from account {ExpectedAccountId}")), It.IsAny<CancellationToken>()));
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
                       c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(ExpectedAccountId.ToString()) && y.Type.Equals("Account")) != null
-                    )));
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                    ), It.IsAny<CancellationToken>()));
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
                     c.EasAuditMessage.AffectedEntity.Id.Equals(ExpectedHashedEmployerAgreementId.ToString()) &&
                     c.EasAuditMessage.AffectedEntity.Type.Equals("EmployerAgreement")
-                    )));
+                    ), It.IsAny<CancellationToken>()));
         }
 
         [Test]
         public async Task ThenTheEventIsFired()
         {
             //Act
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
             //Assert
             _genericEventHandler.Verify(x => x.Create(It.IsAny<AgreementRemovedEvent>()), Times.Once);
-            _mediator.Verify(x => x.SendAsync(It.Is<PublishGenericEventCommand>(c => c.Event.Payload.Equals(ExpectedHashedEmployerAgreementId))));
+            _mediator.Verify(x => x.Send(It.Is<PublishGenericEventCommand>(c => c.Event.Payload.Equals(ExpectedHashedEmployerAgreementId)), It.IsAny<CancellationToken>()));
         }
 
         [Test]
         public async Task ThenTheRemovedLegalEntityEventIsPublished()
         {
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
             _eventPublisher.Verify(ep => ep.Publish(It.Is<RemovedLegalEntityEvent>(e => 
                 e.AccountId.Equals(ExpectedAccountId)
@@ -247,7 +248,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
                       }
                   });
 
-            Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
+            Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command, CancellationToken.None));
         }
 
         [Test]
@@ -267,7 +268,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
                   }
               });
 
-            Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
+            Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command, CancellationToken.None));
         }
     }
 }

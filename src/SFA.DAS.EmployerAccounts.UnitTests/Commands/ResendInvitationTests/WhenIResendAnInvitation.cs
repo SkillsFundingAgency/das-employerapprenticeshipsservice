@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.ResendInvitation;
 using SFA.DAS.EmployerAccounts.Commands.SendNotification;
@@ -77,7 +77,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ResendInvitationTests
             var command = new ResendInvitationCommand();
 
             //Act
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command, CancellationToken.None));
             
             //Assert
             Assert.That(exception.ErrorMessages.Count, Is.EqualTo(3));
@@ -90,7 +90,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ResendInvitationTests
         public void CallerIsNotAnAccountOwner()
         {
             //Act
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command));
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command, CancellationToken.None));
 
             //Assert
             Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
@@ -104,7 +104,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ResendInvitationTests
             _invitationRepository.Setup(x => x.Get(ExpectedAccountId, _command.Email)).ReturnsAsync(() => null);
 
             //Act
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command));
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command, CancellationToken.None));
 
             //Act
             Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
@@ -124,7 +124,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ResendInvitationTests
             _invitationRepository.Setup(x => x.Get(ExpectedAccountId, _command.Email)).ReturnsAsync(invitation);
 
             //Act
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command));
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command, CancellationToken.None));
 
             //Assert
             Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
@@ -147,7 +147,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ResendInvitationTests
             _invitationRepository.Setup(x => x.Get(ExpectedAccountId, _command.Email)).ReturnsAsync(invitation);
 
             //Act
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
             //Assert
             _invitationRepository.Verify(x => x.Resend(It.Is<Invitation>(c => c.Id == invitationId && c.Status == InvitationStatus.Pending && c.ExpiryDate == DateTimeProvider.Current.UtcNow.Date.AddDays(8))), Times.Once);
@@ -167,14 +167,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ResendInvitationTests
             _invitationRepository.Setup(x => x.Get(ExpectedAccountId, _command.Email)).ReturnsAsync(invitation);
 
             //Act
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<SendNotificationCommand>(c=> c.Email.RecipientsAddress.Equals(_command.Email)
+            _mediator.Verify(x=>x.Send(It.Is<SendNotificationCommand>(c=> c.Email.RecipientsAddress.Equals(_command.Email)
                                                                                   && c.Email.ReplyToAddress.Equals("noreply@sfa.gov.uk")
                                                                                   && c.Email.SystemId.Equals("x")
                                                                                   && c.Email.Subject.Equals("x")
-                                                                                  && c.Email.TemplateId.Equals("InvitationNewUser"))));
+                                                                                  && c.Email.TemplateId.Equals("InvitationNewUser")), It.IsAny<CancellationToken>()));
         }
 
         [Test]
@@ -191,12 +191,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ResendInvitationTests
             _invitationRepository.Setup(x => x.Get(ExpectedAccountId, _command.Email)).ReturnsAsync(invitation);
 
             //Act
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Status") && y.NewValue.Equals(InvitationStatus.Pending.ToString())) != null &&
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("ExpiryDate") && y.NewValue.Equals(DateTimeProvider.Current.UtcNow.Date.AddDays(8).ToString())) != null
-                    )));
+                    ), It.IsAny<CancellationToken>()));
         }
 
 
@@ -215,14 +215,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ResendInvitationTests
             _invitationRepository.Setup(x => x.Get(ExpectedAccountId, _command.Email)).ReturnsAsync(invitation);
             
             //Act
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress.Equals(ExpectedExistingUserEmail)
+            _mediator.Verify(x => x.Send(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress.Equals(ExpectedExistingUserEmail)
                                                                                   && c.Email.ReplyToAddress.Equals("noreply@sfa.gov.uk")
                                                                                   && c.Email.SystemId.Equals("x")
                                                                                   && c.Email.TemplateId.Equals("InvitationExistingUser")
-                                                                                  && c.Email.Subject.Equals("x"))));
+                                                                                  && c.Email.Subject.Equals("x")), It.IsAny<CancellationToken>()));
         }
 
     }

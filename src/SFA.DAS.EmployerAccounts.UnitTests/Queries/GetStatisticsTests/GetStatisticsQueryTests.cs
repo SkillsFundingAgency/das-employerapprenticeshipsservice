@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
@@ -90,7 +91,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetStatisticsTests
 
         public async Task<GetStatisticsResponse> Handle()
         {
-            return await Handler.Handle(Query);
+            return await Handler.Handle(Query, CancellationToken.None);
         }
     }
 }

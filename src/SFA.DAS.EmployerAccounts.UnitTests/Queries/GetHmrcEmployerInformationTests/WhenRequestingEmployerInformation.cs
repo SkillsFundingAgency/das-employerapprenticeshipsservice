@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Threading;
 using System.Threading.Tasks;
 using HMRC.ESFA.Levy.Api.Types;
 using MediatR;
@@ -44,8 +45,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetHmrcEmployerInformationT
             _validator.Setup(x => x.Validate(It.IsAny<GetHmrcEmployerInformationQuery>())).Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string>() });
 
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetPayeSchemeInUseQuery>())).ReturnsAsync(new GetPayeSchemeInUseResponse { PayeScheme = new PayeScheme { Ref = ExpectedEmprefInUse } });
-            _mediator.Setup(x => x.SendAsync(It.Is<GetPayeSchemeInUseQuery>(c => c.Empref == ExpectedEmpref))).ReturnsAsync(new GetPayeSchemeInUseResponse { PayeScheme = null });
+            _mediator.Setup(x => x.Send(It.IsAny<GetPayeSchemeInUseQuery>(),It.IsAny<CancellationToken>())).ReturnsAsync(new GetPayeSchemeInUseResponse { PayeScheme = new PayeScheme { Ref = ExpectedEmprefInUse } });
+            _mediator.Setup(x => x.Send(It.Is<GetPayeSchemeInUseQuery>(c => c.Empref == ExpectedEmpref), It.IsAny<CancellationToken>())).ReturnsAsync(new GetPayeSchemeInUseResponse { PayeScheme = null });
             
             _getHmrcEmployerInformationHandler = new GetHmrcEmployerInformationHandler(_validator.Object, _hmrcService.Object, _mediator.Object, _logger.Object);
         }
@@ -54,7 +55,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetHmrcEmployerInformationT
         public async Task ThenTheValidatorIsCalled()
         {
             //Act
-            await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthToken });
+            await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthToken }, CancellationToken.None);
 
             //Assert
             _validator.Verify(x => x.Validate(It.IsAny<GetHmrcEmployerInformationQuery>()), Times.Once);
@@ -67,7 +68,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetHmrcEmployerInformationT
             _validator.Setup(x => x.Validate(It.IsAny<GetHmrcEmployerInformationQuery>())).Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string> { { "", "" } } });
 
             //Act
-            Assert.ThrowsAsync<InvalidRequestException>(async () => await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery()));
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery(), CancellationToken.None));
 
             //Assert
             _hmrcService.Verify(x => x.GetEmprefInformation(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
@@ -77,7 +78,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetHmrcEmployerInformationT
         public async Task ThenTheHmrcServiceIsCalledWithTheCorrectData()
         {
             //Act
-            await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthToken });
+            await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthToken }, CancellationToken.None);
 
             //Assert
             _hmrcService.Verify(x => x.GetEmprefInformation(ExpectedAuthToken, ExpectedEmpref), Times.Once);
@@ -87,7 +88,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetHmrcEmployerInformationT
         public async Task ThenTheResponseReturnsThePopulatedHmrcEmployerInformation()
         {
             //Act
-            var actual = await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthToken });
+            var actual = await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthToken }, CancellationToken.None);
 
             //Assert
             Assert.AreEqual(ExpectedEmprefAssociatedName, actual.EmployerLevyInformation.Employer.Name.EmprefAssociatedName);
@@ -98,17 +99,17 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetHmrcEmployerInformationT
         public void ThenTheSuccesfulResponseIsCheckedToSeeIfItIsAlreadyRegistered()
         {
             //Act
-            Assert.ThrowsAsync<ConstraintException>(async () => await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthTokenInUse }));
+            Assert.ThrowsAsync<ConstraintException>(async () => await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthTokenInUse }, CancellationToken.None));
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetPayeSchemeInUseQuery>(c => c.Empref.Equals(ExpectedEmprefInUse))));
+            _mediator.Verify(x => x.Send(It.Is<GetPayeSchemeInUseQuery>(c => c.Empref.Equals(ExpectedEmprefInUse)), CancellationToken.None));
         }
 
         [Test]
         public void ThenTheMessageIsNotValidIfTheSchemeAlreadyExists()
         {
             //Act
-            Assert.ThrowsAsync<ConstraintException>(async () => await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthTokenInUse }));
+            Assert.ThrowsAsync<ConstraintException>(async () => await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthTokenInUse }, CancellationToken.None));
             _logger.Verify(x => x.Warn($"PAYE scheme {ExpectedEmprefInUse} already in use."), Times.Once);
         }
 
@@ -116,10 +117,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetHmrcEmployerInformationT
         public async Task ThenTheMessageIsValidIfTheSchemeDoesNotExist()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetPayeSchemeInUseQuery>())).ReturnsAsync(new GetPayeSchemeInUseResponse { PayeScheme = null });
+            _mediator.Setup(x => x.Send(It.IsAny<GetPayeSchemeInUseQuery>(), CancellationToken.None)).ReturnsAsync(new GetPayeSchemeInUseResponse { PayeScheme = null });
 
             //Act
-            var actual = await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthToken });
+            var actual = await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthToken }, CancellationToken.None);
 
             //Assert
             Assert.IsNotNull(actual);
@@ -129,7 +130,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetHmrcEmployerInformationT
         public void ThenAnNotFoundExceptionIsRetrunedIfTheEmprefIsEmpty()
         {
             //Act Assert
-            Assert.ThrowsAsync<NotFoundException>(async () => await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthTokenNoScheme }));
+            Assert.ThrowsAsync<NotFoundException>(async () => await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthTokenNoScheme }, CancellationToken.None));
         }
     }
 }

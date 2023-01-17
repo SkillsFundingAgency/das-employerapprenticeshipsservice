@@ -1,11 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByEmail;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUserByEmailTests
@@ -41,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUserByEmailTests
             _repository.Setup(x => x.Get(It.IsAny<string>())).ReturnsAsync(() => null);
 
             //Act
-            var result = await RequestHandler.Handle(Query);
+            var result = await RequestHandler.Handle(Query, CancellationToken.None);
             Assert.IsNotNull(result);
             Assert.IsNull(result.User);
         }
@@ -50,7 +49,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUserByEmailTests
         public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
             //Act
-            await RequestHandler.Handle(Query);
+            await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             _repository.Verify(x => x.Get(Query.Email), Times.Once);
@@ -60,7 +59,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUserByEmailTests
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Act
-            var result = await RequestHandler.Handle(Query);
+            var result = await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             Assert.IsNotNull(result);

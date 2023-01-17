@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -26,7 +27,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
                     new EmployerAgreement { Template = new AgreementTemplate { AgreementType = AgreementType.Levy } }
                 });
 
-            await CommandHandler.Handle(Command);
+            await CommandHandler.Handle(Command, CancellationToken.None);
 
             AccountRepository.Verify(x =>
                 x.CreateLegalEntityWithAgreement(It.Is<CreateLegalEntityWithAgreementParams>(y =>

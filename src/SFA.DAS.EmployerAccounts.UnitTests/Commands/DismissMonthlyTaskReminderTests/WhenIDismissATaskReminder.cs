@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -38,7 +39,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.DismissMonthlyTaskReminder
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.DecodeValue(_command.HashedAccountId)).Returns(AccountId);
 
-            _handler = new DismissMonthlyTaskReminderCommandHandler(_taskService.Object, _validator.Object, _logger.Object, _hashingService.Object);
+            _handler = new DismissMonthlyTaskReminderCommandHandler(_taskService.Object, _validator.Object, _hashingService.Object);
 
             _validator.Setup(x => x.Validate(It.IsAny<DismissMonthlyTaskReminderCommand>()))
                 .Returns(new ValidationResult());
@@ -48,7 +49,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.DismissMonthlyTaskReminder
         public async Task ThenTheDismissShouldBeSaved()
         {
             //Act
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
             //Assert
             _taskService.Verify(
@@ -69,7 +70,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.DismissMonthlyTaskReminder
                 });
 
             //Act
-            Assert.ThrowsAsync<InvalidRequestException>(async() => await _handler.Handle(_command));
+            Assert.ThrowsAsync<InvalidRequestException>(async() => await _handler.Handle(_command, CancellationToken.None));
 
             //Assert
             _taskService.Verify(

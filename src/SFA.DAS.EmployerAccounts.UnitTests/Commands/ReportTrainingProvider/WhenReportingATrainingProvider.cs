@@ -1,4 +1,8 @@
-﻿using MediatR;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using NServiceBus;
 using NUnit.Framework;
@@ -6,11 +10,6 @@ using SFA.DAS.EmployerAccounts.Commands.ReportTrainingProvider;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Messages.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ReportTrainingProvider
 {
@@ -45,11 +44,11 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ReportTrainingProvider
             _configuration.ReportTrainingProviderEmailAddress = "";
 
             //Act Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () => await _handler.Handle(_validCommand));
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await _handler.Handle(_validCommand, CancellationToken.None));
         }
 
         [Test]
-        public void ThenAnEmailCommandIsSentWhenAValidCommandIsReceived()
+        public async Task ThenAnEmailCommandIsSentWhenAValidCommandIsReceived()
         {
             //Arrange
             var tokens = new Dictionary<string, string>()
@@ -62,14 +61,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ReportTrainingProvider
              };
 
             //Act 
-            _handler.Handle(_validCommand);
-            
+            await _handler.Handle(_validCommand, CancellationToken.None);
+
             //Assert
-            _publisher.Verify(s => s.Send(It.Is<SendEmailCommand>(x => 
+            _publisher.Verify(s => s.Send(It.Is<SendEmailCommand>(x =>
                 x.Tokens.OrderBy(u => u.Key).SequenceEqual(tokens.OrderBy(t => t.Key))
                 &&
                 x.RecipientsAddress == _configuration.ReportTrainingProviderEmailAddress
-                && 
+                &&
                 x.TemplateId == "ReportTrainingProviderNotification"
             ), It.IsAny<SendOptions>()));
         }

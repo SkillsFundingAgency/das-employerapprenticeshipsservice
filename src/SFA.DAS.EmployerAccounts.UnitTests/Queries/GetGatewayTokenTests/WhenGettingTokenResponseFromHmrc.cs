@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Queries.GetGatewayToken;
@@ -30,7 +31,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetGatewayTokenTests
             var url = "http://myurl.local";
 
             //Act
-            await _getGatewayTokenHandler.Handle(new GetGatewayTokenQuery { AccessCode = code, RedirectUrl = url });
+            await _getGatewayTokenHandler.Handle(new GetGatewayTokenQuery { AccessCode = code, RedirectUrl = url }, CancellationToken.None);
 
             //Assert
             _hmrcService.Verify(x => x.GetAuthenticationToken(url, code));
@@ -40,7 +41,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetGatewayTokenTests
         public async Task ThenTheReturnValueIsPopulatedFromTheHmrcService()
         {
             //Act
-            var actual = await _getGatewayTokenHandler.Handle(new GetGatewayTokenQuery { AccessCode = "", RedirectUrl = "" });
+            var actual = await _getGatewayTokenHandler.Handle(new GetGatewayTokenQuery { AccessCode = "", RedirectUrl = "" }, CancellationToken.None);
 
             //Assert
             Assert.IsAssignableFrom<GetGatewayTokenQueryResponse>(actual);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using MediatR;
@@ -14,7 +15,6 @@ using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Events.PayeScheme;
 using SFA.DAS.EmployerAccounts.Factories;
-using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
@@ -74,7 +74,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AddPayeToAccountTests
                 Ref = Guid.NewGuid()
             };
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserByRefQuery>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetUserByRefQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetUserByRefResponse { User = _user });
         }
 
@@ -85,7 +85,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AddPayeToAccountTests
             _validator.Setup(x => x.ValidateAsync(It.IsAny<AddPayeToAccountCommand>())).ReturnsAsync(new ValidationResult { ValidationDictionary = new Dictionary<string, string> { { "", "" } } });
 
             //Act
-            Assert.ThrowsAsync<InvalidRequestException>(async () => await _addPayeToAccountCommandHandler.Handle(new AddPayeToAccountCommand()));
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await _addPayeToAccountCommandHandler.Handle(new AddPayeToAccountCommand(), CancellationToken.None));
 
             //Assert
             _validator.Verify(x => x.ValidateAsync(It.IsAny<AddPayeToAccountCommand>()), Times.Once);
@@ -99,7 +99,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AddPayeToAccountTests
             var command = AddPayeToNewLegalEntityCommandObjectMother.Create();
 
             //Act
-            await _addPayeToAccountCommandHandler.Handle(command);
+            await _addPayeToAccountCommandHandler.Handle(command, CancellationToken.None);
 
             //Assert
             _accountRepository.Verify(x => x.AddPayeToAccount(
@@ -113,7 +113,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AddPayeToAccountTests
             var command = AddPayeToNewLegalEntityCommandObjectMother.Create();
 
             //Act
-            await _addPayeToAccountCommandHandler.Handle(command);
+            await _addPayeToAccountCommandHandler.Handle(command, CancellationToken.None);
 
             //Assert
             _eventPublisher.Events.Should().HaveCount(1);
@@ -125,7 +125,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AddPayeToAccountTests
             message.UserName.Should().Be(_user.FullName);
             message.UserRef.Should().Be(_user.Ref);
 
-            _mediator.Verify(x => x.SendAsync(It.IsAny<AccountLevyStatusCommand>()), Times.Never);
+            _mediator.Verify(x => x.Send(It.IsAny<AccountLevyStatusCommand>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Test]
@@ -135,12 +135,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AddPayeToAccountTests
             var command = AddPayeToNewLegalEntityCommandObjectMother.Create(aorn: "Aorn");
 
             //Act
-            await _addPayeToAccountCommandHandler.Handle(command);
+            await _addPayeToAccountCommandHandler.Handle(command, CancellationToken.None);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<AccountLevyStatusCommand>(c =>
+            _mediator.Verify(x => x.Send(It.Is<AccountLevyStatusCommand>(c =>
                 c.AccountId.Equals(ExpectedAccountId) && 
-                c.ApprenticeshipEmployerType.Equals(ApprenticeshipEmployerType.NonLevy))), Times.Once);
+                c.ApprenticeshipEmployerType.Equals(ApprenticeshipEmployerType.NonLevy)), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]
@@ -150,12 +150,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AddPayeToAccountTests
             var command = AddPayeToNewLegalEntityCommandObjectMother.Create();
 
             //Act
-            await _addPayeToAccountCommandHandler.Handle(command);
+            await _addPayeToAccountCommandHandler.Handle(command, CancellationToken.None);
 
             //Assert
             _payeSchemeEventFactory.Verify(x => x.CreatePayeSchemeAddedEvent(command.HashedAccountId, command.Empref));
             _genericEventFactory.Verify(x => x.Create(It.IsAny<PayeSchemeAddedEvent>()), Times.Once);
-            _mediator.Verify(x => x.SendAsync(It.IsAny<PublishGenericEventCommand>()));
+            _mediator.Verify(x => x.Send(It.IsAny<PublishGenericEventCommand>(), It.IsAny<CancellationToken>()));
 
         }
 
@@ -166,24 +166,24 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AddPayeToAccountTests
             var command = AddPayeToNewLegalEntityCommandObjectMother.Create();
 
             //Act
-            await _addPayeToAccountCommandHandler.Handle(command);
+            await _addPayeToAccountCommandHandler.Handle(command, CancellationToken.None);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Ref") && y.NewValue.Equals(command.Empref)) != null &&
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("AccessToken") && y.NewValue.Equals(command.AccessToken)) != null &&
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("RefreshToken") && y.NewValue.Equals(command.RefreshToken)) != null &&
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Name") && y.NewValue.Equals(command.EmprefName)) != null
-                    )));
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
-                      c.EasAuditMessage.Description.Equals($"Paye scheme {command.Empref} added to account {ExpectedAccountId}"))));
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                    ), It.IsAny<CancellationToken>()));
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
+                      c.EasAuditMessage.Description.Equals($"Paye scheme {command.Empref} added to account {ExpectedAccountId}")), It.IsAny<CancellationToken>()));
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
                       c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(ExpectedAccountId.ToString()) && y.Type.Equals("Account")) != null
-                    )));
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                    ), It.IsAny<CancellationToken>()));
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
                     c.EasAuditMessage.AffectedEntity.Id.Equals(command.Empref.ToString()) &&
                     c.EasAuditMessage.AffectedEntity.Type.Equals("Paye")
-                    )));
+                    ), It.IsAny<CancellationToken>()));
         }
 
         private static Paye AssertPayeScheme(AddPayeToAccountCommand command)

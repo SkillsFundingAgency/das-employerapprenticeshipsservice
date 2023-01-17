@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -35,7 +36,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetOrganisationsByAornTests
             _requestValidator.Setup(x => x.Validate(_query)).Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string> { { "", "" } } });
 
             //Act
-            Assert.ThrowsAsync<InvalidRequestException>(async () => await _requestHandler.Handle(_query));
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await _requestHandler.Handle(_query, CancellationToken.None));
         }
 
         [Test]
@@ -46,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetOrganisationsByAornTests
             _pensionRegulatorService.Setup(x => x.GetOrganisationsByAorn(_query.Aorn, _query.PayeRef)).ReturnsAsync(expectedResponse);
 
             //Act
-            var actual = await _requestHandler.Handle(_query);
+            var actual = await _requestHandler.Handle(_query, CancellationToken.None);
 
             //Assert
             Assert.AreSame(expectedResponse, actual.Organisations);

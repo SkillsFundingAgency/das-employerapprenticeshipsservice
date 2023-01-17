@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Activities.Client;
@@ -35,7 +36,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLatestActivitiesTests
         [Test]
         public async Task ThenShouldGetLatestActivities()
         {
-            await _handler.Handle(_query);
+            await _handler.Handle(_query, CancellationToken.None);
 
             _activitiesClient.Verify(c => c.GetLatestActivities(AccountId), Times.Once);
         }
@@ -43,7 +44,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLatestActivitiesTests
         [Test]
         public async Task ThenShouldReturnGetLatestActivitiesResponse()
         {
-            _response = await _handler.Handle(_query);
+            _response = await _handler.Handle(_query, CancellationToken.None);
 
             Assert.That(_response, Is.Not.Null);
             Assert.That(_response.Result, Is.Not.Null);

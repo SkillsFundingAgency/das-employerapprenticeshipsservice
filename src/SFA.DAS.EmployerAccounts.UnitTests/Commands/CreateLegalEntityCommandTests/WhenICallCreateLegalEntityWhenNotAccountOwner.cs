@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
@@ -22,7 +23,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
         {
             //Act &
             //Assert
-            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await CommandHandler.Handle(Command));
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await CommandHandler.Handle(Command, CancellationToken.None));
         }
     }
 }

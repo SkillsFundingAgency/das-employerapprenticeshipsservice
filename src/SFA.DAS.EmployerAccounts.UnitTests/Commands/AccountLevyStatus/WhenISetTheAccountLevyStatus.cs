@@ -1,5 +1,5 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -52,7 +52,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AccountLevyStatus
                 ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy
             };
 
-            await _accountLevyStatusCommandHandler.Handle(command);
+            await _accountLevyStatusCommandHandler.Handle(command, CancellationToken.None);
 
             _accountRepository.Verify(x => x.SetAccountLevyStatus(accountId, ApprenticeshipEmployerType.Levy), Times.Once);
 
@@ -78,7 +78,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AccountLevyStatus
                 ApprenticeshipEmployerType = ApprenticeshipEmployerType.NonLevy
             };
 
-            await _accountLevyStatusCommandHandler.Handle(command);
+            await _accountLevyStatusCommandHandler.Handle(command, CancellationToken.None);
 
             _accountRepository.Verify(x => x.SetAccountLevyStatus(accountId, ApprenticeshipEmployerType.Levy), Times.Never);
 
@@ -104,7 +104,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AccountLevyStatus
                 ApprenticeshipEmployerType = ApprenticeshipEmployerType.NonLevy
             };
 
-            await _accountLevyStatusCommandHandler.Handle(command);
+            await _accountLevyStatusCommandHandler.Handle(command, CancellationToken.None);
 
             _accountRepository.Verify(x => x.SetAccountLevyStatus(accountId, ApprenticeshipEmployerType.Levy), Times.Never);
 
@@ -130,7 +130,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AccountLevyStatus
                 ApprenticeshipEmployerType = ApprenticeshipEmployerType.Unknown
             };
 
-            await _accountLevyStatusCommandHandler.Handle(command);
+            await _accountLevyStatusCommandHandler.Handle(command, CancellationToken.None);
 
             _accountRepository.Verify(x => x.SetAccountLevyStatus(accountId, ApprenticeshipEmployerType.Levy), Times.Never);
 

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.CreateOrganisationAddress;
@@ -7,7 +9,7 @@ using SFA.DAS.Validation;
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateOrganisationAddressTests
 {
     class WhenICreateAnAddress
-    { 
+    {
         private CreateOrganisationAddressHandler _handler;
         private Mock<IValidator<CreateOrganisationAddressRequest>> _validator;
         private CreateOrganisationAddressRequest _request;
@@ -34,17 +36,17 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateOrganisationAddressT
         }
 
         [Test]
-        public void ThenIShouldGetBackAAddressInAValidFormatIfTheAddressIsValid()
+        public async Task ThenIShouldGetBackAAddressInAValidFormatIfTheAddressIsValid()
         {
             //Arange
             var expectedAddress = $"{_request.AddressFirstLine}, {_request.AddressSecondLine}, {_request.AddressThirdLine}, " +
                                   $"{_request.TownOrCity}, {_request.County}, {_request.Postcode}";
 
             //Act
-            var response = _handler.Handle(_request);
+            var response = await _handler.Handle(_request, It.IsAny<CancellationToken>());
 
             //Assert
-           _validator.Verify(x => x.Validate(_request), Times.Once);
+            _validator.Verify(x => x.Validate(_request), Times.Once);
             Assert.AreEqual(expectedAddress, response.Address);
         }
 
@@ -60,13 +62,13 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateOrganisationAddressT
                         { "test", "test"}
                     }
                 });
-            
+
             //Act + Assert
-            Assert.Throws<InvalidRequestException>(() => _handler.Handle(_request));
+            Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_request, It.IsAny<CancellationToken>()));
         }
 
         [Test]
-        public void ThenShouldNotAddAddressFieldsThatAreOptionalAndMissing()
+        public async Task ThenShouldNotAddAddressFieldsThatAreOptionalAndMissing()
         {
             //Arange
             var expectedAddress = $"{_request.AddressFirstLine}, {_request.TownOrCity}, {_request.Postcode}";
@@ -79,7 +81,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateOrganisationAddressT
             };
 
             //Act
-            var response = _handler.Handle(_request);
+            var response = await _handler.Handle(_request, CancellationToken.None);
 
             //Assert
             Assert.AreEqual(expectedAddress, response.Address);

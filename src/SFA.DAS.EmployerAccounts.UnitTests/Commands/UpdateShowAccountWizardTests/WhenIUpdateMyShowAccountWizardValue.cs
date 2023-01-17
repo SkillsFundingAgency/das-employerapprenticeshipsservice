@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.UpdateShowWizard;
@@ -40,7 +41,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpdateShowAccountWizardTes
             _validator.Setup(x => x.Validate(It.IsAny<UpdateShowAccountWizardCommand>()))
                       .Returns(new ValidationResult());
             //Act
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
             //Assert
             _memberRepository.Verify(x => x.SetShowAccountWizard(_command.HashedAccountId, 
@@ -58,7 +59,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpdateShowAccountWizardTes
                       .Returns(validationResult);
 
             //Act
-            Assert.ThrowsAsync<InvalidRequestException>(async () => { await _handler.Handle(_command); });
+            Assert.ThrowsAsync<InvalidRequestException>(async () => { await _handler.Handle(_command, CancellationToken.None); });
 
             //Assert
             _memberRepository.Verify(x => x.SetShowAccountWizard(It.IsAny<string>(), 

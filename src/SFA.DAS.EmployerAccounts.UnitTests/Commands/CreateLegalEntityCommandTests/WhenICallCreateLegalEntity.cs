@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -64,7 +65,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
         public async Task ThenTheLegalEntityIsCreated()
         {
             //Act
-            var result = await CommandHandler.Handle(Command);
+            var result = await CommandHandler.Handle(Command, CancellationToken.None);
 
             //Assert
             Assert.AreSame(_agreementView, result.AgreementView);
@@ -74,56 +75,56 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
         public async Task ThenTheAuditCommandIsCalledForTheLegalEntityWhenTheCommandIsValid()
         {
             //Act
-            await CommandHandler.Handle(Command);
+            await CommandHandler.Handle(Command, CancellationToken.None);
 
             //Assert
-            Mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+            Mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
                 c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("AccountId") && y.NewValue.Equals(_owner.AccountId.ToString())) != null &&
                 c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Id") && y.NewValue.Equals(_agreementView.LegalEntityId.ToString())) != null &&
                 c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Name") && y.NewValue.Equals(_agreementView.LegalEntityName)) != null &&
                 c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Code") && y.NewValue.Equals(_agreementView.LegalEntityCode)) != null &&
                 c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Address") && y.NewValue.Equals(_agreementView.LegalEntityAddress)) != null &&
-                c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("DateOfInception") && y.NewValue.Equals(_agreementView.LegalEntityInceptionDate.Value.ToString("G"))) != null)));
+                c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("DateOfInception") && y.NewValue.Equals(_agreementView.LegalEntityInceptionDate.Value.ToString("G"))) != null), It.IsAny<CancellationToken>()));
 
-            Mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
-                c.EasAuditMessage.Description.Equals($"User {_owner.Email} added legal entity {_agreementView.LegalEntityId} to account {_agreementView.AccountId}"))));
+            Mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
+                c.EasAuditMessage.Description.Equals($"User {_owner.Email} added legal entity {_agreementView.LegalEntityId} to account {_agreementView.AccountId}")), It.IsAny<CancellationToken>()));
 
-            Mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
-                c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(_agreementView.AccountId.ToString()) && y.Type.Equals("Account")) != null)));
+            Mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
+                c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(_agreementView.AccountId.ToString()) && y.Type.Equals("Account")) != null), It.IsAny<CancellationToken>()));
 
-            Mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+            Mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
                 c.EasAuditMessage.AffectedEntity.Id.Equals(_agreementView.LegalEntityId.ToString()) &&
-                c.EasAuditMessage.AffectedEntity.Type.Equals("LegalEntity"))));
+                c.EasAuditMessage.AffectedEntity.Type.Equals("LegalEntity")), It.IsAny<CancellationToken>()));
         }
 
         [Test]
         public async Task ThenTheAuditCommandIsCalledForTheAgreementWhenTheCommandIsValid()
         {
             //Act
-            await CommandHandler.Handle(Command);
+            await CommandHandler.Handle(Command, CancellationToken.None);
 
             //Assert
-            Mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+            Mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
                 c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("AccountId") && y.NewValue.Equals(_owner.AccountId.ToString())) != null &&
                 c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("SignedDate") && y.NewValue.Equals(_agreementView.SignedDate.Value.ToString("G"))) != null &&
-                c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("SignedBy") && y.NewValue.Equals($"{_owner.FirstName} {_owner.LastName}")) != null)));
+                c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("SignedBy") && y.NewValue.Equals($"{_owner.FirstName} {_owner.LastName}")) != null), It.IsAny<CancellationToken>()));
 
-            Mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
-                c.EasAuditMessage.Description.Equals($"User {_owner.Email} added signed agreement {_agreementView.Id} to account {_agreementView.AccountId}"))));
+            Mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
+                c.EasAuditMessage.Description.Equals($"User {_owner.Email} added signed agreement {_agreementView.Id} to account {_agreementView.AccountId}")), It.IsAny<CancellationToken>()));
 
-            Mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
-                c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(_agreementView.AccountId.ToString()) && y.Type.Equals("Account")) != null)));
+            Mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
+                c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(_agreementView.AccountId.ToString()) && y.Type.Equals("Account")) != null), It.IsAny<CancellationToken>()));
 
-            Mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+            Mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
                 c.EasAuditMessage.AffectedEntity.Id.Equals(_agreementView.Id.ToString()) &&
-                c.EasAuditMessage.AffectedEntity.Type.Equals("EmployerAgreement"))));
+                c.EasAuditMessage.AffectedEntity.Type.Equals("EmployerAgreement")), It.IsAny<CancellationToken>()));
         }
 
         [Test]
         public async Task ThenAnOrganisationCodeIsGeneratedIfOneIsNotSupplied()
         {
             //Act
-            await CommandHandler.Handle(Command);
+            await CommandHandler.Handle(Command, CancellationToken.None);
 
             //Assert
             AccountRepository.Verify(r => r.CreateLegalEntityWithAgreement(It.Is<CreateLegalEntityWithAgreementParams>(cp => !string.IsNullOrEmpty(cp.Code))), Times.Once);
@@ -133,7 +134,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
         public async Task ThenAHashedAgreementIdIsSupplied()
         {
             //Act
-            var employerAgreementView = await CommandHandler.Handle(Command);
+            var employerAgreementView = await CommandHandler.Handle(Command, CancellationToken.None);
 
             //Assert
             var expectedHashedAgreementId = $"*{employerAgreementView.AgreementView.Id}*";
@@ -143,7 +144,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
         [Test]
         public async Task ThenAddedLegalEntityEventIsPublished()
         {
-            await CommandHandler.Handle(Command);
+            await CommandHandler.Handle(Command, CancellationToken.None);
 
             EventPublisher.Verify(ep => ep.Publish(It.Is<AddedLegalEntityEvent>(e =>
                 B(e))));

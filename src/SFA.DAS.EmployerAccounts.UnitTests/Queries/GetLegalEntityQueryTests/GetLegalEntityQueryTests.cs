@@ -1,17 +1,18 @@
-﻿using FluentAssertions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Queries.GetLegalEntity;
 using SFA.DAS.EmployerAccounts.TestCommon;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using FluentTestFixture = SFA.DAS.Testing.FluentTestFixture;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLegalEntityQueryTests
@@ -104,11 +105,11 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLegalEntityQueryTests
             SetAccount()
                 .SetLegalEntity()
                 .SetLegalAccountLegalEntity()
-                .AddLegalEntityAgreement(1, EmployerAccounts.Models.EmployerAgreement.EmployerAgreementStatus.Removed, UserA.Id)
-                .AddLegalEntityAgreement(1, EmployerAccounts.Models.EmployerAgreement.EmployerAgreementStatus.Signed, UserB.Id)
-                .AddLegalEntityAgreement(2, EmployerAccounts.Models.EmployerAgreement.EmployerAgreementStatus.Signed, UserA.Id)
-                .AddLegalEntityAgreement(3, EmployerAccounts.Models.EmployerAgreement.EmployerAgreementStatus.Pending)
-                .AddLegalEntityAgreement(3, EmployerAccounts.Models.EmployerAgreement.EmployerAgreementStatus.Expired)
+                .AddLegalEntityAgreement(1, EmployerAgreementStatus.Removed, UserA.Id)
+                .AddLegalEntityAgreement(1, EmployerAgreementStatus.Signed, UserB.Id)
+                .AddLegalEntityAgreement(2, EmployerAgreementStatus.Signed, UserA.Id)
+                .AddLegalEntityAgreement(3, EmployerAgreementStatus.Pending)
+                .AddLegalEntityAgreement(3, EmployerAgreementStatus.Expired)
                 .EvaluateSignedAndPendingAgreementIdsForAllAccountLegalEntities();
         }
 
@@ -118,7 +119,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLegalEntityQueryTests
                 new GetLegalEntityQuery(
                     Account.HashedId,
                     LegalEntity.Id
-                ));
+                ), CancellationToken.None);
         }
 
         public GetLegalEntityQueryTestsFixture SetAccount()
@@ -135,7 +136,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLegalEntityQueryTests
 
         public GetLegalEntityQueryTestsFixture EvaluateSignedAndPendingAgreementIdsForAllAccountLegalEntities()
         {
-            EmployerAgreement FindVersionToUse(AccountLegalEntity ale, EmployerAccounts.Models.EmployerAgreement.EmployerAgreementStatus status)
+            EmployerAgreement FindVersionToUse(AccountLegalEntity ale, EmployerAgreementStatus status)
             {
                 return ale.Agreements.Where(a => a.StatusId == status)
                     .OrderByDescending(a => a.Template.VersionNumber)
@@ -144,8 +145,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLegalEntityQueryTests
 
             foreach (var accountLegalEntity in AccountLegalEntities)
             {
-                var pending = FindVersionToUse(accountLegalEntity, EmployerAccounts.Models.EmployerAgreement.EmployerAgreementStatus.Pending);
-                var signed = FindVersionToUse(accountLegalEntity, EmployerAccounts.Models.EmployerAgreement.EmployerAgreementStatus.Signed);
+                var pending = FindVersionToUse(accountLegalEntity, EmployerAgreementStatus.Pending);
+                var signed = FindVersionToUse(accountLegalEntity, EmployerAgreementStatus.Signed);
                 accountLegalEntity.PendingAgreementId = pending?.Id;
                 accountLegalEntity.PendingAgreement = pending;
                 accountLegalEntity.PendingAgreementVersion = pending?.Template?.VersionNumber;
@@ -193,7 +194,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLegalEntityQueryTests
             return this;
         }
 
-        private GetLegalEntityQueryTestsFixture AddLegalEntityAgreement(int versionNumber, EmployerAccounts.Models.EmployerAgreement.EmployerAgreementStatus status, long? signedUserId = null)
+        private GetLegalEntityQueryTestsFixture AddLegalEntityAgreement(int versionNumber, EmployerAgreementStatus status, long? signedUserId = null)
         {
             var newAgreement = new EmployerAgreement
             {

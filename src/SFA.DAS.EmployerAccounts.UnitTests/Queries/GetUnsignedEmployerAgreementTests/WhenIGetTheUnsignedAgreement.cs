@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -43,7 +44,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUnsignedEmployerAgreemen
             var request = new GetNextUnsignedEmployerAgreementRequest();
             _validator.Setup(x => x.ValidateAsync(request)).ReturnsAsync(new ValidationResult { ValidationDictionary = new Dictionary<string, string> { { "A", "B" }}});
 
-            Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(request));
+            Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(request, CancellationToken.None));
         }
 
         [Test]
@@ -52,7 +53,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUnsignedEmployerAgreemen
             var request = new GetNextUnsignedEmployerAgreementRequest();
             _validator.Setup(x => x.ValidateAsync(request)).ReturnsAsync(new ValidationResult { IsUnauthorized = true });
 
-            Assert.ThrowsAsync<UnauthorizedAccessException>(() => _handler.Handle(request));
+            Assert.ThrowsAsync<UnauthorizedAccessException>(() => _handler.Handle(request, CancellationToken.None));
         }
 
         [Test]
@@ -69,7 +70,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUnsignedEmployerAgreemen
             _accountLegalEntity.PendingAgreementId = agreementId;
             _hashingService.Setup(x => x.HashValue(agreementId)).Returns(hashedAgreementId);
 
-            var response = await _handler.Handle(request);
+            var response = await _handler.Handle(request, CancellationToken.None);
 
             Assert.AreEqual(hashedAgreementId, response.HashedAgreementId);
         }
@@ -84,7 +85,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUnsignedEmployerAgreemen
 
             _accountLegalEntity.AccountId = accountId;
 
-            var response = await _handler.Handle(request);
+            var response = await _handler.Handle(request, CancellationToken.None);
 
             Assert.IsNull(response.HashedAgreementId);
         }

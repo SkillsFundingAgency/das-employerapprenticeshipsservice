@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.Testing;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CookieBasedPayeRefDataSaver
@@ -97,9 +98,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CookieBasedPayeRefDataSave
         private Task Handle()
         {
             return
-                _sut
-                    .Handle(
-                        new SavePayeRefData(new EmployerAccountPayeRefData()));
+                _sut.Handle(new SavePayeRefData(new EmployerAccountPayeRefData()), CancellationToken.None);
         }
 
         private void setupOrganisationData()

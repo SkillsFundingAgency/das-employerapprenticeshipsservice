@@ -1,20 +1,21 @@
-﻿using FluentAssertions;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using FluentAssertions;
 using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus.Testing.Services;
 using SFA.DAS.Validation;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Factories;
 
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RenameEmployerAccountCommandTests
@@ -97,7 +98,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RenameEmployerAccountComma
         public async Task ThenTheAccountIsRenamedToTheNewName()
         {
             //Act
-            await _commandHandler.Handle(_command);
+            await _commandHandler.Handle(_command, CancellationToken.None);
 
             //Assert
             _repository.Verify(x => x.RenameAccount(It.Is<long>(l => l == AccountId), It.Is<string>(s => s == _command.NewName)));
@@ -107,29 +108,29 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RenameEmployerAccountComma
         public async Task ThenTheAuditCommandIsCalledWhenTheCommandIsValid()
         {
             //Act
-            await _commandHandler.Handle(_command);
+            await _commandHandler.Handle(_command, CancellationToken.None);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("AccountId") && y.NewValue.Equals(AccountId.ToString())) != null &&
-                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Name") && y.NewValue.Equals(_command.NewName)) != null)));
+                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Name") && y.NewValue.Equals(_command.NewName)) != null), It.IsAny<CancellationToken>()));
 
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
-                      c.EasAuditMessage.Description.Equals($"User {_owner.Email} has renamed account {AccountId} to {_command.NewName}"))));
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
+                      c.EasAuditMessage.Description.Equals($"User {_owner.Email} has renamed account {AccountId} to {_command.NewName}")), It.IsAny<CancellationToken>()));
 
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
-                      c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(AccountId.ToString()) && y.Type.Equals("Account")) != null)));
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
+                      c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(AccountId.ToString()) && y.Type.Equals("Account")) != null), It.IsAny<CancellationToken>()));
 
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
                     c.EasAuditMessage.AffectedEntity.Id.Equals(AccountId.ToString()) &&
-                    c.EasAuditMessage.AffectedEntity.Type.Equals("Account"))));
+                    c.EasAuditMessage.AffectedEntity.Type.Equals("Account")), It.IsAny<CancellationToken>()));
         }
 
         [Test]
         public async Task ThenAnAccountRenamedEventIsPublished()
         {
             //Act
-            await _commandHandler.Handle(_command);
+            await _commandHandler.Handle(_command, CancellationToken.None);
 
             //Assert
 
@@ -144,7 +145,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RenameEmployerAccountComma
             _repository.Setup(x => x.RenameAccount(It.IsAny<long>(), It.IsAny<string>())).Throws<Exception>();
 
             //Act
-            Assert.ThrowsAsync<Exception>(() => _commandHandler.Handle(_command));
+            Assert.ThrowsAsync<Exception>(() => _commandHandler.Handle(_command, CancellationToken.None));
 
             //Assert
             _eventPublisher.Events.Should().BeEmpty();

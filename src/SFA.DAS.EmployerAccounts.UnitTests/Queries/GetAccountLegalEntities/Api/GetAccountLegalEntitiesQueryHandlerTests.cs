@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
@@ -101,7 +102,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntities.Api
 
         public Task<GetAccountLegalEntitiesResponse> Handle()
         {
-            return Handler.Handle(Query);
+            return Handler.Handle(Query, CancellationToken.None);
         }
 
         public GetAccountLegalEntitiesQueryHandlerTestsFixture SetAccountLegalEntities(int count)

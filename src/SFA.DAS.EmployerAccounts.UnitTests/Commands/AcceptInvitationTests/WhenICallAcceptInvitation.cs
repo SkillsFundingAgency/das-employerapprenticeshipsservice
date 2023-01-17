@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.AcceptInvitation;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Interfaces;
@@ -84,7 +84,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AcceptInvitationTests
         public async Task ThenTheInviatationWillBeAccepted()
         {
             //Act
-            await _handler.Handle(new AcceptInvitationCommand());
+            await _handler.Handle(new AcceptInvitationCommand(), CancellationToken.None);
 
             //Assert
             _invitationRepository.Verify(x => x.Accept(_invitation.Email, _invitation.AccountId, _invitation.Role), Times.Once);
@@ -94,7 +94,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AcceptInvitationTests
         public async Task ThenShouldAuditWheninviteHasBeenAccepted()
         {
             //Act
-            await _handler.Handle(new AcceptInvitationCommand());
+            await _handler.Handle(new AcceptInvitationCommand(), CancellationToken.None);
 
             //Assert
             _auditService.Verify(x => x.SendAuditMessage(It.IsAny<EasAuditMessage>()), Times.Once);
@@ -107,7 +107,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AcceptInvitationTests
             _userAccountRepository.Setup(x => x.Get(_invitation.Email)).ReturnsAsync(() => null);
 
             //Act + Assert
-            Assert.ThrowsAsync<InvalidOperationException>(() => _handler.Handle(new AcceptInvitationCommand()));
+            Assert.ThrowsAsync<InvalidOperationException>(() => _handler.Handle(new AcceptInvitationCommand(), CancellationToken.None));
         }
 
         [Test]
@@ -118,7 +118,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AcceptInvitationTests
                                  .Returns(Task.FromResult(new MembershipView { FirstName = "Bob", LastName = "Green" }));
 
             //Act + Assert
-            Assert.ThrowsAsync<InvalidOperationException>(() => _handler.Handle(new AcceptInvitationCommand()));
+            Assert.ThrowsAsync<InvalidOperationException>(() => _handler.Handle(new AcceptInvitationCommand(), CancellationToken.None));
         }
 
         [Test]
@@ -130,7 +130,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AcceptInvitationTests
             //Act + Assert
 
 
-            Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(new AcceptInvitationCommand()));
+            Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(new AcceptInvitationCommand(), CancellationToken.None));
         }
 
         [Test]
@@ -142,7 +142,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AcceptInvitationTests
             //Act + Assert
 
 
-            Assert.ThrowsAsync<InvalidOperationException>(() => _handler.Handle(new AcceptInvitationCommand()));
+            Assert.ThrowsAsync<InvalidOperationException>(() => _handler.Handle(new AcceptInvitationCommand(), CancellationToken.None));
         }
 
         [Test]
@@ -155,7 +155,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AcceptInvitationTests
             //Act + Assert
 
 
-            Assert.ThrowsAsync<InvalidOperationException>(() => _handler.Handle(new AcceptInvitationCommand()));
+            Assert.ThrowsAsync<InvalidOperationException>(() => _handler.Handle(new AcceptInvitationCommand(), CancellationToken.None));
         }
 
         [Test]
@@ -165,7 +165,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AcceptInvitationTests
             _invitationRepository.Setup(x => x.Get(It.IsAny<long>())).ReturnsAsync(() => null);
 
             //Act + Assert
-            Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(new AcceptInvitationCommand()));
+            Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(new AcceptInvitationCommand(), CancellationToken.None));
         }
 
         [Test]
@@ -181,7 +181,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AcceptInvitationTests
             _hashingService.Setup(x => x.HashValue(_invitation.AccountId)).Returns(expectedHashedId);
 
             //Act
-            await _handler.Handle(new AcceptInvitationCommand());
+            await _handler.Handle(new AcceptInvitationCommand(), CancellationToken.None);
 
             //Assert
             _eventPublisher.Events.Should().HaveCount(1);
