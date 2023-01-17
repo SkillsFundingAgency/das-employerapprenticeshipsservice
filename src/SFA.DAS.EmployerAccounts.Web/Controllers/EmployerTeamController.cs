@@ -321,21 +321,6 @@ public class EmployerTeamController : BaseController
     }
 
     [ChildActionOnly]
-    public IActionResult SingleApprenticeshipContinueWithProvider(AccountDashboardViewModel model)
-    {
-        model.CallToActionViewModel.Cohorts.Single().Apprenticeships = new List<ApprenticeshipViewModel>()
-        {
-            new ApprenticeshipViewModel()
-            {
-                CourseName = model.CallToActionViewModel.Cohorts?.Single()?.CohortApprenticeshipsCount > 0 ? model.CallToActionViewModel.Cohorts?.Single()?.Apprenticeships?.Single()?.CourseName : string.Empty,
-                HashedCohortId = model.CallToActionViewModel.Cohorts?.Single().HashedCohortId,
-                TrainingProvider = model.CallToActionViewModel.Cohorts?.Single().TrainingProvider.First()
-            }
-        };          
-        return PartialView(model.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single());
-    }
-
-    [ChildActionOnly]
     public override IActionResult SupportUserBanner(IAccountIdentifier model = null)
     {
         EmployerAccounts.Models.Account.Account account = null;
