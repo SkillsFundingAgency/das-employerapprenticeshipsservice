@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-using SFA.DAS.Authorization.Mvc.Attributes;
-using SFA.DAS.EmployerAccounts.Helpers;
+﻿using SFA.DAS.Authorization.Mvc.Attributes;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
@@ -318,23 +316,6 @@ public class EmployerTeamController : BaseController
         }
 
         return Redirect(_urlActionHelper.EmployerCommitmentsV2Action(RouteData, "unapproved/Inform"));
-    }
-
-    [ChildActionOnly]
-    public IActionResult Row1Panel1(AccountDashboardViewModel model)
-    {
-        var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "Empty", Data = model };
-
-        if (model.PayeSchemeCount == 0)
-        {
-            viewModel.ViewName = "AddPAYE";
-        }
-        else
-        {
-            _employerTeamOrchestrator.GetCallToActionViewName(viewModel);
-        }
-
-        return PartialView(viewModel);
     }
 
     [HttpGet]
