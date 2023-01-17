@@ -319,12 +319,7 @@ public class EmployerTeamController : BaseController
 
         return Redirect(_urlActionHelper.EmployerCommitmentsV2Action(RouteData, "unapproved/Inform"));
     }
-    
-    [ChildActionOnly]
-    public IActionResult VacancyDraft(AccountDashboardViewModel model)
-    {   
-        return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Draft));
-    }
+
 
     [ChildActionOnly]
     public IActionResult VacancyPendingReview(AccountDashboardViewModel model)
