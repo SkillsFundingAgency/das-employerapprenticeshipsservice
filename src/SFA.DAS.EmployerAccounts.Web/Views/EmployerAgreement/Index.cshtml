@@ -2,6 +2,8 @@
 @using SFA.DAS.EmployerAccounts.Web.Helpers
 @model OrchestratorResponse<EmployerAgreementListViewModel>
 
+@inject HtmlHelpers HtmlHelpers;
+
 @{
     ViewBag.PageID = "organisations-agreements-home";
     ViewBag.Title = "Organisations";
@@ -31,7 +33,7 @@
             Transfers status:&nbsp;
             <span>
                 @{
-                    var authorizationResult = Html.GetAuthorizationResult("EmployerFeature.TransferConnectionRequests");
+                    var authorizationResult = HtmlHelpers.GetAuthorizationResult("EmployerFeature.TransferConnectionRequests");
                     if (authorizationResult.IsAuthorized)
                     {
                         @:enabled.

@@ -3,6 +3,8 @@
 @using SFA.DAS.EmployerAccounts.Web.Helpers
 @using TasksEnum = SFA.DAS.Tasks.API.Types.Enums
 
+@inject HtmlHelpers HtmlHelpers;
+
 @model SFA.DAS.EmployerAccounts.Web.OrchestratorResponse<SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel>
 
 @{
@@ -134,7 +136,7 @@ else
                         <p class="govuk-body govuk-!-font-size-16">View your financial transactions, connect with other employers and @(Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy ? "send or " : "")receive transfer funds.</p>
                     </div>
 
-                    @if (Html.IsAuthorized("EmployerFeature.EmployerIncentives"))
+                    @if (HtmlHelpers.IsAuthorized("EmployerFeature.EmployerIncentives"))
                     {
                         <div class="das-card">
                             <h3 class="govuk-heading-m das-card__heading">
@@ -183,7 +185,7 @@ else
                     </div>
                 </div>
             </section>
-            @Html.GetContentByType("covid_section")
+            @HtmlHelpers.GetContentByType("covid_section")
             <div class="das-highlight">
                 <h2 class="govuk-heading-m">Help us improve this service</h2>
                 <p class="govuk-body govuk-!-margin-bottom-0"><a href="https://www.smartsurvey.co.uk/s/apprenticeshipservicefeedback/" class="govuk-link" rel="nofollow" target="_blank">Take our 3 minute survey</a> so that we can improve this service.</p>

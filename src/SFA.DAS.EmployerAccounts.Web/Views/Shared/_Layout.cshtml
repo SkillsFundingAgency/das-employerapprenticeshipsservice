@@ -1,9 +1,8 @@
-@using SFA.DAS.EmployerAccounts.Web
 @using Microsoft.ApplicationInsights.Extensibility
-@using SFA.DAS.Authorization
-@using SFA.DAS.Authorization.Mvc
 @using SFA.DAS.EmployerAccounts.Web.Helpers
-@using SFA.DAS.EmployerAccounts.Interfaces
+@inject HtmlHelpers HtmlHelpers;
+@inject IHttpContextAccessor HtmlContextAccessor
+
 
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
@@ -18,7 +17,8 @@
             window.dataLayer.push({ 'userID': '@ViewBag.UserId' });
         </script>
     }
-    @Html.Partial("_GoogleTagManager")
+
+    @await Html.PartialAsync("_GoogleTagManager")
     <meta charset="utf-8" />
     <title>@ViewBag.Title - Manage apprentices</title>
     @if (!string.IsNullOrWhiteSpace(ViewBag.MetaDesc))
@@ -55,16 +55,16 @@
     <!--<![endif]-->
     <link href="~/dist/css/site.css" media="all" rel="stylesheet" />
 
-    @Html.Partial("GoogleAnalyticsInfo")
+    @await Html.PartialAsync("GoogleAnalyticsInfo")
     <!-- This is from individual pages -->
-    @RenderSection("gaDataLayer", required: false)
+    @await RenderSectionAsync("gaDataLayer", required: false)
     <script type="text/javascript">
         var appInsights = window.appInsights ||
-            function(config) {
+            function (config) {
                 function r(config) {
-                    t[config] = function() {
+                    t[config] = function () {
                         var i = arguments;
-                        t.queue.push(function() { t[config].apply(t, i) })
+                        t.queue.push(function () { t[config].apply(t, i) })
                     }
                 }
 
@@ -79,7 +79,7 @@
                     r("track" + i.pop());
                 return r("setAuthenticatedUserContext"), r("clearAuthenticatedUserContext"),
                     config.disableExceptionTracking ||
-                    (i = "onerror", r("_" + i), f = e[i], e[i] = function(config, r, u, e, o) {
+                    (i = "onerror", r("_" + i), f = e[i], e[i] = function (config, r, u, e, o) {
                         var s = f && f(config, r, u, e, o);
                         return s !== !0 && t["_" + i](config, r, u, e, o), s
                     }), t
@@ -91,11 +91,11 @@
         appInsights.trackPageView();
     </script>
     <!--[if lt IE 9]><script src="/dist/javascripts/respond.min.js"></script><![endif]-->
-    @Html.Partial("_ZenDeskWidget")
-    @Html.Partial("_ZenDeskApiPush")
+    @await Html.PartialAsync("_ZenDeskWidget")
+    @await Html.PartialAsync("_ZenDeskApiPush")
 </head>
 <body id="@ViewBag.PageID">
-    @Html.Partial("_GoogleTagManagerNoScript")
+    @await Html.PartialAsync("_GoogleTagManagerNoScript")
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
     <div id="skiplink-container">
         <div>
@@ -109,49 +109,50 @@
             </p>
         </div>
     <![endif]-->
-    @Html.Partial("_CookieBanner", Html.GetCookieBannerViewModel())
+    @await Html.PartialAsync("_CookieBanner", HtmlHelpers.GetCookieBannerViewModel(Html))
     <div id="svg-defs" aria-hidden="true">
-        @Html.Partial("_SVGSprite")
+        @await Html.PartialAsync("_SVGSprite")
     </div>
 
 
-    @if (Html.IsSupportUser())
+    @if (HtmlHelpers.IsSupportUser())
     {
         @(await Component.InvokeAsync("SupportUserBanner", new { model = Model is OrchestratorResponse ? Model?.Data : Model }))
     }
 
-    @Html.Partial("_Header", Html.GetHeaderViewModel(useLegacyStyles: true))
+
+    @await Html.PartialAsync("_Header", HtmlHelpers.GetHeaderViewModel(Html, useLegacyStyles: true))
 
     <main role="main" id="content">
-        @RenderSection("breadcrumb", required: false)
+        @await RenderSectionAsync("breadcrumb", required: false)
 
-
-        @if (HttpContextHelper.Current.User.Identity.IsAuthenticated)
+        @if (HtmlContextAccessor.HttpContext.User.Identity.IsAuthenticated)
         {
-            @Html.GetContentByType("banner", useLegacyStyles: true)
-            if (Html.IsAuthorized("EmployerFeature.V3AgreementBanner"))
+            @HtmlHelpers.GetContentByType("banner", useLegacyStyles: true)
+            if (HtmlHelpers.IsAuthorized("EmployerFeature.V3AgreementBanner"))
             {
-                var userId = Html.ViewContext.RequestContext.HttpContext.GetOwinContext().Authentication.User?.Claims.
-                         FirstOrDefault(x => x.Type == ControllerConstants.UserRefClaimKeyName)?.Value;
+                var userId = HtmlContextAccessor.HttpContext.User?.Claims.
+                FirstOrDefault(x => x.Type == ControllerConstants.UserRefClaimKeyName)?.Value;
                 var hashedAccountId = Html.ViewContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName]?.ToString();
                 if (!string.IsNullOrEmpty(hashedAccountId))
                 {
-                    if (Html.ShowExpiringAgreementBanner(userId, hashedAccountId))
+                    if (HtmlHelpers.ShowExpiringAgreementBanner(userId, hashedAccountId))
                     {
-                        @Html.Partial(@"_NotSignedV3AgreementMessage")
+                        @await Html.PartialAsync(@"_NotSignedV3AgreementMessage")
                     }
                 }
             }
         }
-        @Html.Partial(@"_SuccessMessage", Model as OrchestratorResponse)
+
+        @await Html.PartialAsync(@"_SuccessMessage", Model as OrchestratorResponse)
         @RenderBody()
     </main>
 
-    @Html.Partial("_Footer", Html.GetFooterViewModel(useLegacyStyles: true))
+    @await Html.PartialAsync("_Footer", HtmlHelpers.GetFooterViewModel(Html, useLegacyStyles: true))
 
     <div id="global-app-error" class="app-error hidden"></div>
-    @Scripts.Render("~/bundles/sfajs")
-    @RenderSection("pageSpecificJS", required: false)
+    <script src="/bundles/sfajs.js"></script>
+    @await RenderSectionAsync("pageSpecificJS", required: false)
     @if (!string.IsNullOrWhiteSpace(SystemDetailsViewModel.EnvironmentName))
     {
         <div class="about">
