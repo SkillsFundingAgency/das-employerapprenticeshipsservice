@@ -321,12 +321,6 @@ public class EmployerTeamController : BaseController
     }
 
     [ChildActionOnly]
-    public IActionResult VacancyClosed(AccountDashboardViewModel model)
-    {
-        return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Closed));
-    }
-
-    [ChildActionOnly]
     public IActionResult Row1Panel1(AccountDashboardViewModel model)
     {
         var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "Empty", Data = model };
