@@ -321,12 +321,6 @@ public class EmployerTeamController : BaseController
     }
 
     [ChildActionOnly]
-    public IActionResult SingleApprenticeshipApproved(AccountDashboardViewModel model)
-    {
-        return PartialView(model.CallToActionViewModel.Apprenticeships.First());
-    }
-
-    [ChildActionOnly]
     public IActionResult SingleApprenticeshipContinueWithProvider(AccountDashboardViewModel model)
     {
         model.CallToActionViewModel.Cohorts.Single().Apprenticeships = new List<ApprenticeshipViewModel>()
