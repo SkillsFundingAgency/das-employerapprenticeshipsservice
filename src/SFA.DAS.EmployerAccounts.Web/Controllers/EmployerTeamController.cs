@@ -321,12 +321,6 @@ public class EmployerTeamController : BaseController
     }
     
     [ChildActionOnly]
-    public IActionResult CheckFunding(AccountDashboardViewModel model)
-    {
-        return PartialView(model);
-    }
-
-    [ChildActionOnly]
     public IActionResult ContinueSetupForSingleReservation(AccountDashboardViewModel model)
     {
         var reservation = model.CallToActionViewModel.Reservations?.FirstOrDefault();
