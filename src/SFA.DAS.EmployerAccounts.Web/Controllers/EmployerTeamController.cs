@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using System.Web.Mvc;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerAccounts.Helpers;
 
@@ -321,12 +320,6 @@ public class EmployerTeamController : BaseController
         return Redirect(_urlActionHelper.EmployerCommitmentsV2Action(RouteData, "unapproved/Inform"));
     }
 
-
-    [ChildActionOnly]
-    public IActionResult SignAgreement(AccountDashboardViewModel model)
-    {
-        return PartialView(model);
-    }        
 
     [ChildActionOnly]
     public IActionResult Empty(AccountDashboardViewModel model)
