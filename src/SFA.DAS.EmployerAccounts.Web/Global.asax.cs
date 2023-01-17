@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             AntiForgeryConfig.RequireSsl = true;
             AreaRegistration.RegisterAllAreas();
            // BinderConfig.RegisterBinders(ModelBinders.Binders);
-            BundleConfig.RegisterBundles(BundleTable.Bundles);
+           // BundleConfig.RegisterBundles(BundleTable.Bundles);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             LoggingConfig.ConfigureLogging();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
