@@ -2,7 +2,6 @@
 @using SFA.DAS.EmployerAccounts.Web.Extensions
 @using SFA.DAS.EmployerAccounts.Web.Helpers
 @using TasksEnum = SFA.DAS.Tasks.API.Types.Enums
-@using SFA.DAS.EmployerAccounts.Web.Extensions
 
 @model SFA.DAS.EmployerAccounts.Web.OrchestratorResponse<SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel>
 
@@ -66,7 +65,7 @@
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            @Html.Action("Row1Panel1", new { model = Model.Data })
+            @await Component.InvokeAsync("Row1Panel1", new { model = Model.Data })
         </div>
     </div>
 }
@@ -75,7 +74,7 @@ else
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
-            @Html.Action("Row1Panel1", new { model = Model.Data })
+            @await Component.InvokeAsync("Row1Panel1", new { model = Model.Data })
 
             <section>
                 <h2 class="govuk-heading-l govuk-!-margin-bottom-2">Apprenticeships</h2>
@@ -88,17 +87,17 @@ else
                         <p class="govuk-body govuk-!-font-size-16">Add apprentices, update details of existing apprentices, change training providers and authorise payments to training providers.</p>
                     </div>
                     <div class="das-card">
-                            <h3 class="govuk-heading-m das-card__heading">
-                                <a href="@Url.EmployerRecruitAction()" class="govuk-link govuk-link--no-visited-state">Your apprenticeship adverts</a>
-                            </h3>
-                            <p class="govuk-body govuk-!-font-size-16">Create adverts to post on find an apprenticeship, view applications, your previous adverts and adverts created by training providers.</p>
-                        </div>                   
+                        <h3 class="govuk-heading-m das-card__heading">
+                            <a href="@Url.EmployerRecruitAction()" class="govuk-link govuk-link--no-visited-state">Your apprenticeship adverts</a>
+                        </h3>
+                        <p class="govuk-body govuk-!-font-size-16">Create adverts to post on find an apprenticeship, view applications, your previous adverts and adverts created by training providers.</p>
+                    </div>
                     <div class="das-card">
                         <h3 class="govuk-heading-m das-card__heading">
                             <a href="@Url.ProviderRelationshipsAction("providers")" class="govuk-link govuk-link--no-visited-state">Your training providers</a>
                         </h3>
                         <p class="govuk-body govuk-!-font-size-16">Add training providers and manage permissions to choose what they can do on your behalf.</p>
-                    </div>                   
+                    </div>
                     <div class="das-card">
                         <h3 class="govuk-heading-m das-card__heading">
                             <a href="https://findapprenticeshiptraining.apprenticeships.education.gov.uk/Apprenticeship/Search" rel="external" target="_blank" class="govuk-link govuk-link--no-visited-state">Find apprenticeship training</a>
@@ -202,7 +201,7 @@ else
                             <a class="govuk-tabs__tab" href="#tasks">
                                 Tasks
                             </a>
-                        </li>                        
+                        </li>
                     </ul>
                     <div class="govuk-tabs__panel" id="tasks">
                         @if (Model.Data.Tasks.Count > 0)
@@ -277,7 +276,7 @@ else
                         {
                             <p>You do not have any tasks</p>
                         }
-                    </div>                   
+                    </div>
                 </div>
             }
         </div>
