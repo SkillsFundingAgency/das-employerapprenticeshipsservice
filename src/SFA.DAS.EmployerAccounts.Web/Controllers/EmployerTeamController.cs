@@ -321,14 +321,6 @@ public class EmployerTeamController : BaseController
     }
     
     [ChildActionOnly]
-    public IActionResult ContinueSetupForSingleReservation(AccountDashboardViewModel model)
-    {
-        var reservation = model.CallToActionViewModel.Reservations?.FirstOrDefault();
-        var viewModel = new ReservationViewModel(reservation);
-        return PartialView(viewModel);
-    }
-
-    [ChildActionOnly]
     public IActionResult VacancyDraft(AccountDashboardViewModel model)
     {   
         return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Draft));
