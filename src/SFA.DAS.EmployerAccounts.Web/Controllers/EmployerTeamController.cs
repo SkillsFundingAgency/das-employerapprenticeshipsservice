@@ -320,11 +320,6 @@ public class EmployerTeamController : BaseController
         return Redirect(_urlActionHelper.EmployerCommitmentsV2Action(RouteData, "unapproved/Inform"));
     }
 
-    [ChildActionOnly]
-    public IActionResult SingleApprenticeshipContinueSetup(AccountDashboardViewModel model)
-    {
-        return PartialView(model.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single());
-    }
 
     [ChildActionOnly]
     public IActionResult SingleApprenticeshipWithTrainingProvider(AccountDashboardViewModel model)
