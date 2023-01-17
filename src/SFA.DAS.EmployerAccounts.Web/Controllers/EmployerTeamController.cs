@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using System.Web.Mvc;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerAccounts.Helpers;
 
@@ -320,49 +321,6 @@ public class EmployerTeamController : BaseController
         return Redirect(_urlActionHelper.EmployerCommitmentsV2Action(RouteData, "unapproved/Inform"));
     }
 
-    [ChildActionOnly]
-    public override IActionResult SupportUserBanner(IAccountIdentifier model = null)
-    {
-        EmployerAccounts.Models.Account.Account account = null;
-
-        if (model != null && model.HashedAccountId != null)
-        {
-            var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-            var response = AsyncHelper.RunSync(() => _employerTeamOrchestrator.GetAccountSummary(model.HashedAccountId, externalUserId));
-            account = response.Status != HttpStatusCode.OK ? null : response.Data.Account;
-        }
-
-        var consoleUserType = OwinWrapper.GetClaimValue(ClaimTypes.Role) == "Tier2User" ? "Service user (T2 Support)" : "Standard user";
-            
-        return PartialView("_SupportUserBanner", new SupportUserBannerViewModel
-        {
-            Account = account,
-            ConsoleUserType = consoleUserType
-        });
-    }
-
-    [ChildActionOnly]
-    public IActionResult Row1Panel1(AccountDashboardViewModel model)
-    {
-        var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "Empty", Data = model };
-
-        if (model.PayeSchemeCount == 0)
-        {
-            viewModel.ViewName = "AddPAYE";                
-        }
-        else
-        {
-            _employerTeamOrchestrator.GetCallToActionViewName(viewModel);
-        }
-
-        return PartialView(viewModel);
-    }
-
-    [ChildActionOnly]
-    public IActionResult AddPAYE(AccountDashboardViewModel model)
-    {
-        return PartialView(model);
-    }
 
     [ChildActionOnly]
     public IActionResult SignAgreement(AccountDashboardViewModel model)
@@ -418,6 +376,23 @@ public class EmployerTeamController : BaseController
     public IActionResult VacancyClosed(AccountDashboardViewModel model)
     {
         return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Closed));
+    }
+
+    [ChildActionOnly]
+    public IActionResult Row1Panel1(AccountDashboardViewModel model)
+    {
+        var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "Empty", Data = model };
+
+        if (model.PayeSchemeCount == 0)
+        {
+            viewModel.ViewName = "AddPAYE";
+        }
+        else
+        {
+            _employerTeamOrchestrator.GetCallToActionViewName(viewModel);
+        }
+
+        return PartialView(viewModel);
     }
 
     [HttpGet]
