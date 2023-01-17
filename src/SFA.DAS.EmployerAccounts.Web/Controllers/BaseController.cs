@@ -142,8 +142,8 @@ public class BaseController : Controller
     /// <summary>
     /// Default implementation for the SupportUserBanner.  Can be overridden to render based on the available IAccountIdentifier model.
     /// </summary>
-    public virtual Microsoft.AspNetCore.Mvc.ActionResult SupportUserBanner(IAccountIdentifier model = null)
+    public virtual ActionResult SupportUserBanner(IAccountIdentifier model = null)
     {
-        return PartialView("_SupportUserBanner", new SupportUserBannerViewModel());
+        return ViewComponent("SupportUserBanner", new SupportUserBannerViewModel());
     }
 }

@@ -12,14 +12,14 @@ public class SupportUserBannerViewComponent : ViewComponent
         _employerTeamOrchestrator = employerTeamOrchestrator;
     }
 
-    public IViewComponentResult Invoke(IAccountIdentifier model = null)
+    public async Task<IViewComponentResult> InvokeAsync(IAccountIdentifier model = null)
     {
         Account account = null;
 
         if (model != null && model.HashedAccountId != null)
         {
             var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-            var response = AsyncHelper.RunSync(() => _employerTeamOrchestrator.GetAccountSummary(model.HashedAccountId, externalUserId));
+            var response = await _employerTeamOrchestrator.GetAccountSummary(model.HashedAccountId, externalUserId);
             account = response.Status != HttpStatusCode.OK ? null : response.Data.Account;
         }
 
