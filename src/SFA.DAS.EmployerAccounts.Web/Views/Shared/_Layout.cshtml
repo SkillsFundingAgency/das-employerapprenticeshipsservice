@@ -117,7 +117,7 @@
 
     @if (Html.IsSupportUser())
     {
-        Html.RenderAction("SupportUserBanner", new { model = Model is OrchestratorResponse ? Model?.Data : Model });
+        @(await Component.InvokeAsync("SupportUserBanner", new { model = Model is OrchestratorResponse ? Model?.Data : Model }))
     }
 
     @Html.Partial("_Header", Html.GetHeaderViewModel(useLegacyStyles: true))
