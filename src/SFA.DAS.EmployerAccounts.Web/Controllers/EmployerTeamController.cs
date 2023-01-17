@@ -321,12 +321,6 @@ public class EmployerTeamController : BaseController
     }
 
     [ChildActionOnly]
-    public IActionResult VacancyRejected(AccountDashboardViewModel model)
-    {
-        return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Referred));
-    }
-
-    [ChildActionOnly]
     public IActionResult VacancyLive(AccountDashboardViewModel model)
     {
         return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Live));
