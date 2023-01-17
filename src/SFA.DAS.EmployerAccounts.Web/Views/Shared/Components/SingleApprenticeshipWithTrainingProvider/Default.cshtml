@@ -1,7 +1,6 @@
-﻿@using SFA.DAS.EmployerAccounts.Web.Extensions
-@model SFA.DAS.EmployerAccounts.Web.ViewModels.ApprenticeshipViewModel
+﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.ApprenticeshipViewModel
 
- <section>
+<section>
     <h2 class="govuk-heading-l govuk-!-margin-bottom-2" id="call-to-action-your-apprentice-status">
         Your apprentice
     </h2>
@@ -33,22 +32,22 @@
         </tr>
         @if (!String.IsNullOrEmpty(Model.CourseStartDateText))
         {
-        <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header">
-                Start month
-            </th>
-            <td id="course-start-date" class="govuk-table__cell">
-                @(Model?.CourseStartDateText)
-            </td>
-        </tr>
-        <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header">
-                Finish month
-            </th>
-            <td id="course-end-date" class="govuk-table__cell">
-                @(Model?.CourseEndDateText)
-            </td>
-        </tr>
+            <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">
+                    Start month
+                </th>
+                <td id="course-start-date" class="govuk-table__cell">
+                    @(Model?.CourseStartDateText)
+                </td>
+            </tr>
+            <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">
+                    Finish month
+                </th>
+                <td id="course-end-date" class="govuk-table__cell">
+                    @(Model?.CourseEndDateText)
+                </td>
+            </tr>
         }
         <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header">
