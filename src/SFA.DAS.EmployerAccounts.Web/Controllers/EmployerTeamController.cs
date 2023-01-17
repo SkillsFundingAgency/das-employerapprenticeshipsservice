@@ -321,12 +321,6 @@ public class EmployerTeamController : BaseController
     }
 
     [ChildActionOnly]
-    public IActionResult VacancyLive(AccountDashboardViewModel model)
-    {
-        return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Live));
-    }
-
-    [ChildActionOnly]
     public IActionResult VacancyClosed(AccountDashboardViewModel model)
     {
         return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Closed));
