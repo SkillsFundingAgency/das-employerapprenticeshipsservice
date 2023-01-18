@@ -3,8 +3,10 @@ using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
+using SFA.DAS.EmployerAccounts.Web.Filters;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace SFA.DAS.EmployerAccounts.Web
@@ -17,7 +19,7 @@ namespace SFA.DAS.EmployerAccounts.Web
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             _environment = environment;
-            
+
             var config = new ConfigurationBuilder()
                 .AddConfiguration(configuration)
                 .SetBasePath(Directory.GetCurrentDirectory());
@@ -116,7 +118,12 @@ namespace SFA.DAS.EmployerAccounts.Web
         }
 
         private void ConfigureMvcOptions(MvcOptions mvcOptions)
-        { 
+        {
+            mvcOptions.Filters.Add(new AnalyticsFilter());
+            if (!_configuration.IsDev())
+            {
+                mvcOptions.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            }
         }
     }
 }
