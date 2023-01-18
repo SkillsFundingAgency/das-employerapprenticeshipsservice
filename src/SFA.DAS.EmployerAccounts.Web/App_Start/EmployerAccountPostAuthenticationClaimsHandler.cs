@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -77,5 +78,4 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
 
         return claims;
     }
-}
 }
