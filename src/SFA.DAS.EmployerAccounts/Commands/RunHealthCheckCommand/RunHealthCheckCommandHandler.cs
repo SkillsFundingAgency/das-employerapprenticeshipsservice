@@ -13,8 +13,7 @@ public class RunHealthCheckCommandHandler : IRequestHandler<RunHealthCheckComman
     private readonly IAccountApiClient _accountsApiClient;
     private readonly IOuterApiClient _outerApiClient;
 
-    public RunHealthCheckCommandHandler(Lazy<EmployerAccountsDbContext> db, IAccountApiClient accountsApiClient,
-        IOuterApiClient outerApiClient)
+    public RunHealthCheckCommandHandler(Lazy<EmployerAccountsDbContext> db, IAccountApiClient accountsApiClient, IOuterApiClient outerApiClient)
     {
         _db = db;
         _accountsApiClient = accountsApiClient;

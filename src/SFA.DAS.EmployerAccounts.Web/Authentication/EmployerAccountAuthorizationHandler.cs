@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using Newtonsoft.Json;
 using SFA.DAS.EmployerAccounts.EmployerUsers;
 using SFA.DAS.EmployerAccounts.Infrastructure;
+using SFA.DAS.EmployerAccounts.Web.Infrastructure;
 
 namespace SFA.DAS.EmployerAccounts.Web.Authentication;
 
