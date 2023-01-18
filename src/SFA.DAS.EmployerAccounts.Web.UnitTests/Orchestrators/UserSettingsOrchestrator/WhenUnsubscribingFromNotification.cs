@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using MediatR;
@@ -29,7 +30,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.UserSettingsOrche
             _hashingService.Setup(m => m.DecodeValue("ABBA777")).Returns(777);
             _hashingService.Setup(m => m.DecodeValue("ABBA888")).Returns(888);
             _hashingService.Setup(m => m.DecodeValue("ABBA999")).Returns(999);
-            _mediator.Setup(m => m.SendAsync(It.IsAny<GetUserNotificationSettingsQuery>()))
+            _mediator.Setup(m => m.Send(It.IsAny<GetUserNotificationSettingsQuery>(), It.IsAny<CancellationToken>()))
                    .ReturnsAsync(new GetUserNotificationSettingsQueryResponse
                    {
                        NotificationSettings = new List<UserNotificationSetting>

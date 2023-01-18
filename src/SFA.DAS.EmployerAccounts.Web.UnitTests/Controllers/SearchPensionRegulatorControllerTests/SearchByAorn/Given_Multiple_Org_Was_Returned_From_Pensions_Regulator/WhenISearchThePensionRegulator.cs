@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -58,8 +59,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
                     });
 
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(new UpdateUserAornLockRequest()));
-			_mediator.Setup(x => x.SendAsync(It.IsAny<GetPayeSchemeInUseQuery>())).ReturnsAsync(new GetPayeSchemeInUseResponse());
+            _mediator.Setup(x => x.Send(new UpdateUserAornLockRequest(), It.IsAny<CancellationToken>()));
+			_mediator.Setup(x => x.Send(It.IsAny<GetPayeSchemeInUseQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(new GetPayeSchemeInUseResponse());
             _controller = new SearchPensionRegulatorController(
                 owinWrapper.Object,
                 orchestrator.Object,              
@@ -73,7 +74,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
         public async Task ThenThePayeDetailsAreSaved()
         {
             await _controller.SearchPensionRegulatorByAorn(new SearchPensionRegulatorByAornViewModel { Aorn = ExpectedAorn, PayeRef = ExpectedPayeRef });
-            _mediator.Verify(x => x.SendAsync(It.Is<SavePayeRefData>(y => y.PayeRefData.AORN == ExpectedAorn && y.PayeRefData.PayeReference == ExpectedPayeRef)));
+            _mediator.Verify(x => x.Send(It.Is<SavePayeRefData>(y => y.PayeRefData.AORN == ExpectedAorn && y.PayeRefData.PayeReference == ExpectedPayeRef), It.IsAny<CancellationToken>()));
         }
 
         [Test]
@@ -89,7 +90,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
         [Test]
         public async Task AndTheSchemeIsAlreadyInUseThenThePayeErrorPageIsDisplayed()
         {
-            _mediator.Setup(x => x.SendAsync(It.Is<GetPayeSchemeInUseQuery>(q => q.Empref == ExpectedPayeRef))).ReturnsAsync(new GetPayeSchemeInUseResponse { PayeScheme = new PayeScheme() });
+            _mediator.Setup(x => x.Send(It.Is<GetPayeSchemeInUseQuery>(q => q.Empref == ExpectedPayeRef), It.IsAny<CancellationToken>())).ReturnsAsync(new GetPayeSchemeInUseResponse { PayeScheme = new PayeScheme() });
 
             var response = await _controller.SearchPensionRegulatorByAorn(new SearchPensionRegulatorByAornViewModel { Aorn = ExpectedAorn, PayeRef = ExpectedPayeRef });
             var redirectResponse = (RedirectToRouteResult)response;

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -44,14 +45,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.HmrcOrchestratorT
             //Arrange
             var accessCode = "546tg";
             var returnUrl = "http://someUrl";
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetGatewayTokenQuery>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetGatewayTokenQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetGatewayTokenQueryResponse { HmrcTokenResponse = new HmrcTokenResponse() });
 
             //Act
             var token = await _employerAccountOrchestrator.GetGatewayTokenResponse(accessCode, returnUrl, null);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetGatewayTokenQuery>(c => c.AccessCode.Equals(accessCode) && c.RedirectUrl.Equals(returnUrl))));
+            _mediator.Verify(x => x.Send(It.Is<GetGatewayTokenQuery>(c => c.AccessCode.Equals(accessCode) && c.RedirectUrl.Equals(returnUrl)), It.IsAny<CancellationToken>()));
             Assert.IsAssignableFrom<HmrcTokenResponse>(token.Data);
         }
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -30,13 +31,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
 
             _orchestrator = new Web.Orchestrators.UserSettingsOrchestrator(_mediator.Object, _hashingService.Object, _logger.Object);
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserNotificationSettingsQuery>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetUserNotificationSettingsQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetUserNotificationSettingsQueryResponse
                 {
                     NotificationSettings = new List<UserNotificationSetting>()
                 });
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<UpdateUserNotificationSettingsCommand>()))
+            _mediator.Setup(x => x.Send(It.IsAny<UpdateUserNotificationSettingsCommand>(), It.IsAny<CancellationToken>()))
                 .Returns(() => Task.FromResult(new Unit()));
         }
 
@@ -47,8 +48,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             await _orchestrator.GetNotificationSettingsViewModel("USERREF");
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(
-                It.Is<GetUserNotificationSettingsQuery>(s => s.UserRef == "USERREF")),
+            _mediator.Verify(x => x.Send(It.Is<GetUserNotificationSettingsQuery>(s => s.UserRef == "USERREF"), It.IsAny<CancellationToken>()),
                 Times.Once);
         }
 
@@ -62,11 +62,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             await _orchestrator.UpdateNotificationSettings("USERREF", settings);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(
-                It.Is<UpdateUserNotificationSettingsCommand>(
-                    s => s.UserRef == "USERREF"
-                    && s.Settings == settings)
-                ), Times.Once);
+            _mediator.Verify(x => x.Send(
+                It.Is<UpdateUserNotificationSettingsCommand>(s => s.UserRef == "USERREF" && s.Settings == settings), 
+                It.IsAny<CancellationToken>()), Times.Once);
 
         }
     }

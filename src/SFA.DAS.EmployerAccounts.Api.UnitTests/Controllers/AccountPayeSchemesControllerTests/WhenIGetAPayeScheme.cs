@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
@@ -41,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountPayeSchemesC
                     }
             };
 
-            Mediator.Setup(x => x.SendAsync(It.Is<GetAccountPayeSchemesQuery>(q => q.HashedAccountId == _hashedAccountId))).ReturnsAsync(_accountResponse);
+            Mediator.Setup(x => x.Send(It.Is<GetAccountPayeSchemesQuery>(q => q.HashedAccountId == _hashedAccountId), It.IsAny<CancellationToken>())).ReturnsAsync(_accountResponse);
 
             Microsoft.AspNetCore.Mvc.Routing.UrlHelper.Setup(x => x.Route("GetPayeScheme", It.Is<object>(o => IsAccountPayeSchemeOne(o)))).Returns($"/api/accounts/{_hashedAccountId}/payeschemes/{_accountResponse.PayeSchemes[0].Ref.Replace(@"/", "%2f")}");
             Microsoft.AspNetCore.Mvc.Routing.UrlHelper.Setup(x => x.Route("GetPayeScheme", It.Is<object>(o => IsAccountPayeSchemeTwo(o)))).Returns($"/api/accounts/{_hashedAccountId}/payeschemes/{_accountResponse.PayeSchemes[1].Ref.Replace(@"/", "%2f")}");
@@ -68,7 +69,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountPayeSchemesC
             var hashedAccountId = "ABC123";
             var accountResponse = new GetAccountPayeSchemesResponse();
 
-            Mediator.Setup(x => x.SendAsync(It.Is<GetAccountPayeSchemesQuery>(q => q.HashedAccountId == hashedAccountId))).ReturnsAsync(accountResponse);
+            Mediator.Setup(x => x.Send(It.Is<GetAccountPayeSchemesQuery>(q => q.HashedAccountId == hashedAccountId), It.IsAny<CancellationToken>())).ReturnsAsync(accountResponse);
 
             var response = await Controller.GetPayeSchemes(hashedAccountId);
 
@@ -82,7 +83,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountPayeSchemesC
             var hashedAccountId = "ABC123";
 
             Mediator.Setup(
-                    x => x.SendAsync(It.Is<GetAccountPayeSchemesQuery>(q => q.HashedAccountId == hashedAccountId)))
+                    x => x.Send(It.Is<GetAccountPayeSchemesQuery>(q => q.HashedAccountId == hashedAccountId), It.IsAny<CancellationToken>()))
                 .Throws(new InvalidRequestException(new Dictionary<string, string>()));
 
             var response = await Controller.GetPayeSchemes(hashedAccountId);
@@ -106,7 +107,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountPayeSchemesC
                     RemovedDate = DateTime.Now
                 }
             };
-            Mediator.Setup(x => x.SendAsync(It.Is<GetPayeSchemeByRefQuery>(q => q.Ref == payeSchemeRef && q.HashedAccountId == hashedAccountId))).ReturnsAsync(payeSchemeResponse);
+            Mediator.Setup(x => x.Send(It.Is<GetPayeSchemeByRefQuery>(q => q.Ref == payeSchemeRef && q.HashedAccountId == hashedAccountId), It.IsAny<CancellationToken>())).ReturnsAsync(payeSchemeResponse);
 
             var response = await Controller.GetPayeScheme(hashedAccountId, payeSchemeRef.Replace("/", "%2f"));
 
@@ -126,7 +127,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountPayeSchemesC
             var payeSchemeRef = "ZZZ/123";
             var payeSchemeResponse = new GetPayeSchemeByRefResponse { PayeScheme = null };
 
-            Mediator.Setup(x => x.SendAsync(It.Is<GetPayeSchemeByRefQuery>(q => q.Ref == payeSchemeRef && q.HashedAccountId == hashedAccountId))).ReturnsAsync(payeSchemeResponse);
+            Mediator.Setup(x => x.Send(It.Is<GetPayeSchemeByRefQuery>(q => q.Ref == payeSchemeRef && q.HashedAccountId == hashedAccountId), It.IsAny<CancellationToken>())).ReturnsAsync(payeSchemeResponse);
 
             var response = await Controller.GetPayeScheme(hashedAccountId, payeSchemeRef);
 

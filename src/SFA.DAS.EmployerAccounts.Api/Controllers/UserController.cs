@@ -8,7 +8,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
 {
     [Authorize(Roles = "ReadUserAccounts")]
     [Route("api/user")]
-    public class UserController : Microsoft.AspNetCore.Mvc.ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;
 
@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         [Route("")]
         public async Task<IActionResult> Get(string email)
         {
-            var response = await _mediator.SendAsync(new GetUserByEmailQuery{Email = email});
+            var response = await _mediator.Send(new GetUserByEmailQuery{Email = email});
 
             if (response.User == null) return NotFound();
             return Ok(response.User);

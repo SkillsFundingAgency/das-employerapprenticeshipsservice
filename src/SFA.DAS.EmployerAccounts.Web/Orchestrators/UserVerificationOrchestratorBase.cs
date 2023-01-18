@@ -15,7 +15,7 @@ public abstract class UserVerificationOrchestratorBase
 
     public virtual async Task<GetUserAccountRoleResponse> GetUserAccountRole(string hashedAccountId, string externalUserId)
     {
-        return await Mediator.SendAsync(new GetUserAccountRoleQuery
+        return await Mediator.Send(new GetUserAccountRoleQuery
         {
             HashedAccountId = hashedAccountId,
             ExternalUserId = externalUserId

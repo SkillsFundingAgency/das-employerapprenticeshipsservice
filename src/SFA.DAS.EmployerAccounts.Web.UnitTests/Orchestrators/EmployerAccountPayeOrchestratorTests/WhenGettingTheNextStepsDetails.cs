@@ -1,8 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models;
@@ -11,13 +11,11 @@ using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestratorTests
 {
     public class WhenGettingTheNextStepsDetails
     {
-        private Mock<ILog> _logger;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
         private Mock<IMediator> _mediator;
 
@@ -29,13 +27,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
         public void Arrange()
         {
             _configuration = new EmployerAccountsConfiguration();
-
-            _logger = new Mock<ILog>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTeamMemberQuery>())).ReturnsAsync(new GetTeamMemberResponse {User = new MembershipView {ShowWizard = true, Role = Role.Owner}});
+            _mediator.Setup(x => x.Send(It.IsAny<GetTeamMemberQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(new GetTeamMemberResponse {User = new MembershipView {ShowWizard = true, Role = Role.Owner}});
 
-            _orchestrator = new EmployerAccountPayeOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration);
+            _orchestrator = new EmployerAccountPayeOrchestrator(_mediator.Object, _cookieService.Object, _configuration);
         }
 
         [Test]
@@ -49,7 +45,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
             await _orchestrator.GetNextStepsViewModel(expectedUserId, expectedAccountId);
             
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<GetTeamMemberQuery>(c=>c.TeamMemberId.Equals(expectedUserId) && c.HashedAccountId.Equals(expectedAccountId))));
+            _mediator.Verify(x=>x.Send(It.Is<GetTeamMemberQuery>(c=>c.TeamMemberId.Equals(expectedUserId) && c.HashedAccountId.Equals(expectedAccountId)), It.IsAny<CancellationToken>()));
 
         }
 
@@ -74,7 +70,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
         public async Task ThenTheShowWizardFlagIsOnlyTrueWhenTheUserIsAnOwner()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTeamMemberQuery>())).ReturnsAsync(new GetTeamMemberResponse { User = new MembershipView { ShowWizard = true, Role = Role.Transactor } });
+            _mediator.Setup(x => x.Send(It.IsAny<GetTeamMemberQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(new GetTeamMemberResponse { User = new MembershipView { ShowWizard = true, Role = Role.Transactor } });
             var expectedUserId = "AFGV1234";
             var expectedAccountId = "789GBT";
 

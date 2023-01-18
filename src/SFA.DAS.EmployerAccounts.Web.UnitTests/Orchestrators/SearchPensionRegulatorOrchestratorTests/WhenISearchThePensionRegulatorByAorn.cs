@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -30,7 +31,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.SearchPensionRegu
         {
             _mediator = new Mock<IMediator>();
           
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetPensionRegulatorRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetPensionRegulatorRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetPensionRegulatorResponse
                 {
                     Organisations = new List<Organisation>()
@@ -50,7 +51,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.SearchPensionRegu
             var aorn = "aorn";
             var queryResponse = new GetOrganisationsByAornResponse { Organisations = new List<Organisation> { new Organisation { Address = new Address() }, new Organisation { Address = new Address() } } };
 
-            _mediator.Setup(x => x.SendAsync(It.Is<GetOrganisationsByAornRequest>(c => c.PayeRef.Equals(payeRef) && c.Aorn.Equals(aorn)))).ReturnsAsync(queryResponse);
+            _mediator.Setup(x => x.Send(It.Is<GetOrganisationsByAornRequest>(c => c.PayeRef.Equals(payeRef) && c.Aorn.Equals(aorn)), It.IsAny<CancellationToken>())).ReturnsAsync(queryResponse);
 
             //Act
             var response = await _orchestrator.GetOrganisationsByAorn(aorn, payeRef);
@@ -67,9 +68,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.SearchPensionRegu
             //Arrange
             var payeRef = "123/4567";
             var aorn = "aorn";
-            var queryResponse = new GetOrganisationsByAornResponse { Organisations = new List<Organisation> { new Organisation { Address = new Address() }, new Organisation { Address = new Address() } } };
-
-            _mediator.Setup(x => x.SendAsync(It.Is<GetOrganisationsByAornRequest>(c => c.PayeRef.Equals(payeRef) && c.Aorn.Equals(aorn)))).Throws(new Exception());
+            
+            _mediator.Setup(x => x.Send(It.Is<GetOrganisationsByAornRequest>(c => c.PayeRef.Equals(payeRef) && c.Aorn.Equals(aorn)), It.IsAny<CancellationToken>())).Throws(new Exception());
 
             //Act
             var response = await _orchestrator.GetOrganisationsByAorn(aorn, payeRef);

@@ -1,32 +1,30 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using FluentAssertions;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authorization.Services;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models.Recruit;
 using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
+using SFA.DAS.EmployerAccounts.Models.Recruit;
 using SFA.DAS.EmployerAccounts.Models.Reservations;
-using SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
+using SFA.DAS.EmployerAccounts.Queries.GetApprenticeship;
 using SFA.DAS.EmployerAccounts.Queries.GetReservations;
+using SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
 using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
+using SFA.DAS.EmployerAccounts.Web.Models;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.EmployerAccounts.Queries.GetApprenticeship;
-using SFA.DAS.EmployerAccounts.Web.Models;
-using System.Net;
-using FluentAssertions;
-using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.NLog.Logger;
-using System.Net.Http;
-using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorWithCallToActionTests
 {
@@ -68,13 +66,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
 
             _mediator = new Mock<IMediator>();
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetVacanciesRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetVacanciesRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetVacanciesResponse
                 {
                      Vacancies = new List<Vacancy>()
                 });
 
-            _mediator.Setup(m => m.SendAsync(It.Is<GetReservationsRequest>(q => q.HashedAccountId == HashedAccountId)))
+            _mediator.Setup(m => m.Send(It.Is<GetReservationsRequest>(q => q.HashedAccountId == HashedAccountId), It.IsAny<CancellationToken>()))
                    .ReturnsAsync(new GetReservationsResponse
                    {
                        Reservations = new List<Reservation>
@@ -86,7 +84,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                        }
                    });
 
-            _mediator.Setup(m => m.SendAsync(It.Is<GetApprenticeshipsRequest>(q => q.HashedAccountId == HashedAccountId)))
+            _mediator.Setup(m => m.Send(It.Is<GetApprenticeshipsRequest>(q => q.HashedAccountId == HashedAccountId), It.IsAny<CancellationToken>()))
                  .ReturnsAsync(new GetApprenticeshipsResponse
                  {
                     Apprenticeships = new List<Apprenticeship>
@@ -113,7 +111,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                             }
                         }
             };
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetSingleCohortRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetSingleCohortRequest>(), It.IsAny<CancellationToken>()))
                     .ReturnsAsync(new GetSingleCohortResponse 
                     {  
                         Cohort = Cohort
@@ -258,7 +256,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         {
             //Arrange
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetVacanciesRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetVacanciesRequest>(), It.IsAny<CancellationToken>()))
                .ReturnsAsync(new GetVacanciesResponse
                {
                    HasFailed = true
@@ -276,7 +274,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         {
             //Arrange
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetVacanciesRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetVacanciesRequest>(), It.IsAny<CancellationToken>()))
                .ThrowsAsync(new Exception());
 
             // Act
@@ -291,7 +289,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         {
             //Arrange
             var exception = new Exception();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetVacanciesRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetVacanciesRequest>(), It.IsAny<CancellationToken>()))
                .ThrowsAsync(exception);
 
             // Act
@@ -312,7 +310,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             var expectedvacancy = new VacancyViewModel { Title = expectedtitle };
             var expectedVacancies = new List<VacancyViewModel> { expectedvacancy };
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetVacanciesRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetVacanciesRequest>(), It.IsAny<CancellationToken>()))
                .ReturnsAsync(new GetVacanciesResponse
                {
                    Vacancies = vacancies
@@ -336,7 +334,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         {
             //Arrange
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetReservationsRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetReservationsRequest>(), It.IsAny<CancellationToken>()))
                .ReturnsAsync(new GetReservationsResponse
                {
                    HasFailed = true
@@ -354,7 +352,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         {
             //Arrange
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetReservationsRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetReservationsRequest>(), It.IsAny<CancellationToken>()))
                .ThrowsAsync(new Exception());
 
             // Act
@@ -369,7 +367,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         {
             //Arrange
             var exception = new Exception();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetReservationsRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetReservationsRequest>(), It.IsAny<CancellationToken>()))
                .ThrowsAsync(exception);
 
             // Act
@@ -394,7 +392,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         {
             //Arrange
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipsRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetApprenticeshipsRequest>(), It.IsAny<CancellationToken>()))
                .ReturnsAsync(new GetApprenticeshipsResponse
                {
                    HasFailed = true
@@ -412,7 +410,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         {
             //Arrange
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipsRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetApprenticeshipsRequest>(), It.IsAny<CancellationToken>()))
                .ThrowsAsync(new Exception());
 
             // Act
@@ -427,7 +425,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         {
             //Arrange
             var exception = new Exception();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipsRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetApprenticeshipsRequest>(), It.IsAny<CancellationToken>()))
                .ThrowsAsync(exception);
 
             // Act
@@ -442,7 +440,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         {
             //Arrange
             var apprenticeships = new List<Apprenticeship> { new Apprenticeship { FirstName = "FirstName" } };
-            _mediator.Setup(m => m.SendAsync(It.Is<GetApprenticeshipsRequest>(q => q.HashedAccountId == HashedAccountId)))
+            _mediator.Setup(m => m.Send(It.Is<GetApprenticeshipsRequest>(q => q.HashedAccountId == HashedAccountId), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetApprenticeshipsResponse { Apprenticeships = apprenticeships });
             var expectedApprenticeship = new List<ApprenticeshipViewModel>() { new ApprenticeshipViewModel { ApprenticeshipFullName = "FullName" } };
             _mockMapper.Setup(m => m.Map<IEnumerable<Apprenticeship>, IEnumerable<ApprenticeshipViewModel>>(apprenticeships)).Returns(expectedApprenticeship);
@@ -459,7 +457,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         {
             //Arrange
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetSingleCohortRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetSingleCohortRequest>(), It.IsAny<CancellationToken>()))
                .ReturnsAsync(new GetSingleCohortResponse
                {
                    HasFailed = true
@@ -477,7 +475,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         {
             //Arrange
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetSingleCohortRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetSingleCohortRequest>(), It.IsAny<CancellationToken>()))
                .ThrowsAsync(new Exception());
 
             // Act
@@ -492,7 +490,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         {
             //Arrange
             var exception = new Exception();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetSingleCohortRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetSingleCohortRequest>(), It.IsAny<CancellationToken>()))
                .ThrowsAsync(exception);
 
             // Act
@@ -507,7 +505,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         {
             //Arrange 
             var Cohort = new Cohort() { Id = 1, NumberOfDraftApprentices = 1,  Apprenticeships = new List<Apprenticeship> { new Apprenticeship { FirstName = "FirstName" }  } };            
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetSingleCohortRequest>())).ReturnsAsync(new GetSingleCohortResponse { Cohort = Cohort });            
+            _mediator.Setup(x => x.Send(It.IsAny<GetSingleCohortRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new GetSingleCohortResponse { Cohort = Cohort });            
             var expectedCohort = new CohortViewModel()
             {                
                 NumberOfDraftApprentices = 1,

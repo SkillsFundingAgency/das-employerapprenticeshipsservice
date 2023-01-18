@@ -123,7 +123,7 @@ public class EmployerAccountController : BaseController
             var empref = await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.Data.AccessToken, email);
             _logger.Info($"Gateway response is for empref {empref.Empref} \n {JsonConvert.SerializeObject(empref)}");
 
-            await _mediatr.SendAsync(new SavePayeRefData(new EmployerAccountPayeRefData
+            await _mediatr.Send(new SavePayeRefData(new EmployerAccountPayeRefData
             {
                 EmployerRefName = empref.EmployerLevyInformation?.Employer?.Name?.EmprefAssociatedName ?? "",
                 PayeReference = empref.Empref,

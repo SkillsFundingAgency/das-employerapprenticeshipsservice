@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -41,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
                 _configuration);
 
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountsQuery>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetUserAccountsQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetUserAccountsQueryResponse()
                 {
                     Accounts = new Accounts<Account> { AccountsCount = 1, AccountList = new List<Account>{ new Account { HashedId = _existingAccountHashedId } } }
@@ -56,8 +57,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
                 It.IsAny<HttpContextBase>());
 
             _mediator.Verify(
-                x => x.SendAsync<CreateUserAccountCommandResponse>(
-                    It.IsAny<CreateUserAccountCommand>()),
+                x => x.Send<CreateUserAccountCommandResponse>(
+                    It.IsAny<CreateUserAccountCommand>(), It.IsAny<CancellationToken>()),
                 Times.Never());
         }
 

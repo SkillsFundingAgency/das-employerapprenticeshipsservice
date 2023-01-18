@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -36,14 +37,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
                 _cookieService.Object, 
                 _configuration);
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountsQuery>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetUserAccountsQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetUserAccountsQueryResponse()
                 {
                     Accounts = new Accounts<Account>()
                 });
 
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<CreateUserAccountCommand>()))
+            _mediator.Setup(x => x.Send(It.IsAny<CreateUserAccountCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new CreateUserAccountCommandResponse()
                 {
                     HashedAccountId = "ABS10"
@@ -60,9 +61,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             await _employerAccountOrchestrator.CreateMinimalUserAccountForSkipJourney(model, It.IsAny<HttpContextBase>());
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateUserAccountCommand>(
+            _mediator.Verify(x => x.Send(It.Is<CreateUserAccountCommand>(
                 c => c.OrganisationName.Equals(model.OrganisationName)
-            )));
+            ), It.IsAny<CancellationToken>()));
         }
 
         [Test]
@@ -71,7 +72,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             //Assign
             const string hashedId = "1AFGG0";
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<CreateUserAccountCommand>()))
+            _mediator.Setup(x => x.Send(It.IsAny<CreateUserAccountCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new CreateUserAccountCommandResponse()
                 {
                     HashedAccountId = hashedId

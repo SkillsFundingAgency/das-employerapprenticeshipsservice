@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
@@ -27,7 +28,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Orchestrators.AccountsOrchestra
             _orchestrator = new AccountsOrchestrator(_mediator.Object, _log.Object, Mock.Of<IMapper>(), Mock.Of<IHashingService>());
 
             _mediator
-                .Setup(x => x.SendAsync(It.IsAny<GetTeamMembersRequest>()))
+                .Setup(x => x.Send(It.IsAny<GetTeamMembersRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetTeamMembersResponse { TeamMembers = new List<TeamMember>() })
                 .Verifiable("Get account was not called");
         }

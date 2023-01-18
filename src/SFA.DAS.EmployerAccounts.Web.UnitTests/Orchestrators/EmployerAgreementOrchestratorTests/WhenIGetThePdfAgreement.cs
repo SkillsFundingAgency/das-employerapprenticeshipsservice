@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
@@ -26,9 +27,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAgreementPdfRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetEmployerAgreementPdfRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetEmployerAgreementPdfResponse { FileStream = new MemoryStream() });
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetSignedEmployerAgreementPdfRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetSignedEmployerAgreementPdfRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetSignedEmployerAgreementPdfResponse { FileStream = new MemoryStream() });
 
             _referenceDataService = new Mock<IReferenceDataService>();
@@ -44,7 +45,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
 
             //Assert
             _mediator.Verify(
-                x => x.SendAsync(It.Is<GetEmployerAgreementPdfRequest>(c => c.HashedAccountId.Equals("ACC456") && c.UserId.Equals("User1") && c.HashedLegalAgreementId.Equals("AGB123"))));
+                x => x.Send(It.Is<GetEmployerAgreementPdfRequest>(c => c.HashedAccountId.Equals("ACC456") && c.UserId.Equals("User1") && c.HashedLegalAgreementId.Equals("AGB123")), It.IsAny<CancellationToken>()));
         }
 
         [Test]
@@ -61,16 +62,16 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
                     expectedUserId);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetSignedEmployerAgreementPdfRequest>(c =>
+            _mediator.Verify(x => x.Send(It.Is<GetSignedEmployerAgreementPdfRequest>(c =>
                 c.HashedAccountId.Equals(expectedHashedAccountId) && c.UserId.Equals(expectedUserId) &&
-                c.HashedLegalAgreementId.Equals(expectedHashedAgreementId))));
+                c.HashedLegalAgreementId.Equals(expectedHashedAgreementId)), It.IsAny<CancellationToken>()));
         }
 
         [Test]
         public async Task ThenTheFlashMessageViewModelIsPopulatedWithErrorsWhenAnExceptionOccursAndTheStatusIsSetToBadRequest()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetSignedEmployerAgreementPdfRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetSignedEmployerAgreementPdfRequest>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new InvalidRequestException(new Dictionary<string, string> { { "", "" } }));
 
             //Act
@@ -85,7 +86,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         public async Task ThenTheStatusIsSetToUnauhtorizedWhenAnUnauthorizedAccessExceptionIsThrownGettingASignedAgreement()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetSignedEmployerAgreementPdfRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetSignedEmployerAgreementPdfRequest>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new UnauthorizedAccessException());
 
             //Act
@@ -100,7 +101,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         public async Task ThenTheStatusIsSetToUnauhtorizedWhenAnUnauthorizedAccessExceptionIsThrownGettingAnAgreement()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAgreementPdfRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetEmployerAgreementPdfRequest>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new UnauthorizedAccessException());
 
             //Act

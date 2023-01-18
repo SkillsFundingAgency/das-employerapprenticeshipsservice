@@ -13,13 +13,16 @@ public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorB
 {
     protected EmployerAccountPayeOrchestrator() { }
 
-    public EmployerAccountPayeOrchestrator(IMediator mediator, ICookieStorageService<EmployerAccountData> cookieService, EmployerAccountsConfiguration configuration) : base(mediator, cookieService, configuration)
+    public EmployerAccountPayeOrchestrator(
+        IMediator mediator, 
+        ICookieStorageService<EmployerAccountData> cookieService,
+        EmployerAccountsConfiguration configuration) : base(mediator, cookieService, configuration)
     {
     }
 
     public async Task<OrchestratorResponse<EmployerAccountPayeListViewModel>> Get(string hashedAccountId, string externalUserId)
     {
-        var response = await Mediator.SendAsync(new GetAccountPayeSchemesForAuthorisedUserQuery
+        var response = await Mediator.Send(new GetAccountPayeSchemesForAuthorisedUserQuery
         {
             HashedAccountId = hashedAccountId,
             ExternalUserId = externalUserId
@@ -82,7 +85,7 @@ public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorB
         HttpStatusCode status = HttpStatusCode.OK;
 
 
-        var response = await Mediator.SendAsync(new GetMemberRequest
+        var response = await Mediator.Send(new GetMemberRequest
         {
             HashedAccountId = hashedId,
             Email = email,
@@ -120,7 +123,7 @@ public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorB
 
         try
         {
-            await Mediator.SendAsync(new AddPayeToAccountCommand
+            await Mediator.Send(new AddPayeToAccountCommand
             {
                 HashedAccountId = model.HashedAccountId,
                 AccessToken = model.AccessToken,
@@ -148,14 +151,14 @@ public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorB
     public virtual async Task<OrchestratorResponse<RemovePayeSchemeViewModel>> GetRemovePayeSchemeModel(RemovePayeSchemeViewModel model)
     {
         var accountResponse = await
-            Mediator.SendAsync(new GetEmployerAccountByHashedIdQuery
+            Mediator.Send(new GetEmployerAccountByHashedIdQuery
             {
                 HashedAccountId = model.HashedAccountId,
                 UserId = model.UserId
             });
 
         var payeResponse = await
-            Mediator.SendAsync(new GetPayeSchemeByRefQuery
+            Mediator.Send(new GetPayeSchemeByRefQuery
             {
                 HashedAccountId = model.HashedAccountId,
                 Ref = model.PayeRef
@@ -173,7 +176,7 @@ public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorB
         var response = new OrchestratorResponse<RemovePayeSchemeViewModel> { Data = model };
         try
         {
-            var result = await Mediator.SendAsync(new GetPayeSchemeByRefQuery
+            var result = await Mediator.Send(new GetPayeSchemeByRefQuery
             {
                 HashedAccountId = model.HashedAccountId,
                 Ref = model.PayeRef,
@@ -181,7 +184,7 @@ public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorB
 
             model.PayeSchemeName = result.PayeScheme.Name;
 
-            await Mediator.SendAsync(new RemovePayeFromAccountCommand(model.HashedAccountId,
+            await Mediator.Send(new RemovePayeFromAccountCommand(model.HashedAccountId,
                 model.PayeRef, model.UserId, model.RemoveScheme == 2, model.PayeSchemeName));
 
 
@@ -205,14 +208,14 @@ public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorB
         var response = new OrchestratorResponse<PayeSchemeDetailViewModel>();
         try
         {
-            var englishFractionResult = await Mediator.SendAsync(new GetEmployerEnglishFractionHistoryQuery
+            var englishFractionResult = await Mediator.Send(new GetEmployerEnglishFractionHistoryQuery
             {
                 HashedAccountId = hashedAccountId,
                 EmpRef = empRef,
                 UserId = userId
             });
 
-            var payeSchemeResult = await Mediator.SendAsync(new GetPayeSchemeByRefQuery
+            var payeSchemeResult = await Mediator.Send(new GetPayeSchemeByRefQuery
             {
                 HashedAccountId = hashedAccountId,
                 Ref = empRef
@@ -239,7 +242,7 @@ public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorB
     {
         var response = new OrchestratorResponse<PayeSchemeNextStepsViewModel>();
 
-        var userResponse = await Mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = accountId, TeamMemberId = userId });
+        var userResponse = await Mediator.Send(new GetTeamMemberQuery { HashedAccountId = accountId, TeamMemberId = userId });
         var showWizard = userResponse.User.ShowWizard && userResponse.User.Role == Role.Owner;
         response.Data = new PayeSchemeNextStepsViewModel
         {

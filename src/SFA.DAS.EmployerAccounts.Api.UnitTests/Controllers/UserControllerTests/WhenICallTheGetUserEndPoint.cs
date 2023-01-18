@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using System.Web.Http.Results;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -29,7 +31,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.UserControllerTests
 
             _response = new GetUserByEmailResponse() { User = _user };
 
-            _mediator.Setup(m => m.SendAsync(It.IsAny<GetUserByEmailQuery>())).ReturnsAsync(_response);
+            _mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(_response);
 
             _controller = new UserController(_mediator.Object);
         }

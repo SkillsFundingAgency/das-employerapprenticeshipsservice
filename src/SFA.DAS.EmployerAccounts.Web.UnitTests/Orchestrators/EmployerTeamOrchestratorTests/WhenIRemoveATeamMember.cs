@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
@@ -38,13 +39,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
 
             _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, Mock.Of<ICurrentDateTime>(), _accountApiClient.Object, _mapper.Object, Mock.Of<EmployerAccountsConfiguration>());
             
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTeamMembersQuery>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetAccountTeamMembersQuery>(), It.IsAny<CancellationToken>()))
                      .ReturnsAsync(new GetAccountTeamMembersResponse
                 {
                     TeamMembers = new List<TeamMember>()
                 });
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserQuery>())).ReturnsAsync(new GetUserResponse
+            _mediator.Setup(x => x.Send(It.IsAny<GetUserQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(new GetUserResponse
             {
                 User = new User
                 {
@@ -58,7 +59,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         public async Task ThenIShouldGetASuccessMessage()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<RemoveTeamMemberCommand>())).ReturnsAsync(Unit.Value);
+            _mediator.Setup(x => x.Send(It.IsAny<RemoveTeamMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Unit.Value);
 
             //Act
             var result = await _orchestrator.Remove(2, "3242", "32342");
@@ -73,8 +74,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         public async Task ThenIShouldGetANotFoundErrorMessageIfNoUserCanBeFound()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserQuery>())).ReturnsAsync(new GetUserResponse());
-            _mediator.Setup(x => x.SendAsync(It.IsAny<RemoveTeamMemberCommand>())).ReturnsAsync(Unit.Value);
+            _mediator.Setup(x => x.Send(It.IsAny<GetUserQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(new GetUserResponse());
+            _mediator.Setup(x => x.Send(It.IsAny<RemoveTeamMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Unit.Value);
 
             //Act
             var result = await _orchestrator.Remove(2, "3242", "32342");
@@ -87,7 +88,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         public async Task ThenIShouldGetAInvalidRequestErrorMessageIfExceptionIsThrow()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<RemoveTeamMemberCommand>())).Throws(new InvalidRequestException(new Dictionary<string, string>()));
+            _mediator.Setup(x => x.Send(It.IsAny<RemoveTeamMemberCommand>(), It.IsAny<CancellationToken>())).Throws(new InvalidRequestException(new Dictionary<string, string>()));
 
             //Act
             var result = await _orchestrator.Remove(2, "3242", "32342");
@@ -100,7 +101,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         public async Task ThenIShouldGetAUnauthorisedErrorMessageIfExceptionIsThrow()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<RemoveTeamMemberCommand>())).Throws<UnauthorizedAccessException>();
+            _mediator.Setup(x => x.Send(It.IsAny<RemoveTeamMemberCommand>(), It.IsAny<CancellationToken>())).Throws<UnauthorizedAccessException>();
 
             //Act
             var result = await _orchestrator.Remove(2, "3242", "32342");

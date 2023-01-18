@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -31,7 +32,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.StatisticsControlle
 
             _response = new GetStatisticsResponse { Statistics = _statistics };
 
-            _mediator.Setup(m => m.SendAsync(It.IsAny<GetStatisticsQuery>())).ReturnsAsync(_response);
+            _mediator.Setup(m => m.Send(It.IsAny<GetStatisticsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(_response);
 
             _controller = new StatisticsController(_mediator.Object);
         }

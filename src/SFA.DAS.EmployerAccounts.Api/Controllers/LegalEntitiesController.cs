@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
 
             try
             {
-                result = await _mediator.SendAsync(
+                result = await _mediator.Send(
                     new GetAccountLegalEntitiesByHashedAccountIdRequest
                     {
                         HashedAccountId = hashedAccountId
@@ -75,7 +75,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         [HttpNotFoundForNullModel]
         public async Task<IActionResult> GetLegalEntity(string hashedAccountId, long legalEntityId, bool includeAllAgreements = false)
         {
-            var response = await _mediator.SendAsync(request: new GetLegalEntityQuery(hashedAccountId, legalEntityId));
+            var response = await _mediator.Send(request: new GetLegalEntityQuery(hashedAccountId, legalEntityId));
 
             var model = LegalEntityMapping.MapFromAccountLegalEntity(response.LegalEntity, response.LatestAgreement, includeAllAgreements);
 

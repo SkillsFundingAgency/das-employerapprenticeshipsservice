@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -13,7 +14,6 @@ using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerAccounts.Queries.RemovePayeFromAccount;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestratorTests
@@ -25,7 +25,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
 
         private EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
         private Mock<IMediator> _mediator;
-        private Mock<ILog> _logger;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
         private EmployerAccountsConfiguration _configuration;
         private PayeSchemeView _payeScheme;
@@ -41,19 +40,16 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
             };
 
             _mediator = new Mock<IMediator>();
-            
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetPayeSchemeByRefQuery>()))
+
+            _mediator.Setup(x => x.Send(It.IsAny<GetPayeSchemeByRefQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetPayeSchemeByRefResponse
                 {
                     PayeScheme = _payeScheme
                 });
 
-            _logger = new Mock<ILog>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _configuration = new EmployerAccountsConfiguration();
-            new Mock<IEmpRefFileBasedService>();
-            
-            _employerAccountPayeOrchestrator = new EmployerAccountPayeOrchestrator(_mediator.Object, _logger.Object,_cookieService.Object,_configuration);
+            _employerAccountPayeOrchestrator = new EmployerAccountPayeOrchestrator(_mediator.Object, _cookieService.Object, _configuration);
         }
 
         [Test]
@@ -75,22 +71,22 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
             await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(model);
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<RemovePayeFromAccountCommand>(c=>c.HashedAccountId.Equals(hashedId) && c.PayeRef.Equals(payeRef) && c.UserId.Equals(userRef) && c.CompanyName.Equals(SchemeName))), Times.Once);
-            
+            _mediator.Verify(x => x.Send(It.Is<RemovePayeFromAccountCommand>(c => c.HashedAccountId.Equals(hashedId) && c.PayeRef.Equals(payeRef) && c.UserId.Equals(userRef) && c.CompanyName.Equals(SchemeName)), It.IsAny<CancellationToken>()), Times.Once);
+
         }
 
         [Test]
         public async Task WhenAnUnathorizedExceptionIsThrownThenAUnauthorizedHttpCodeIsReturned()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<RemovePayeFromAccountCommand>())).ThrowsAsync(new UnauthorizedAccessException(""));
+            _mediator.Setup(x => x.Send(It.IsAny<RemovePayeFromAccountCommand>(), It.IsAny<CancellationToken>())).ThrowsAsync(new UnauthorizedAccessException(""));
 
             //Act
-            var actual = await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(new RemovePayeSchemeViewModel ());
+            var actual = await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(new RemovePayeSchemeViewModel());
 
             //Assert
-            Assert.AreEqual(actual.Status,HttpStatusCode.Unauthorized);
-            
+            Assert.AreEqual(actual.Status, HttpStatusCode.Unauthorized);
+
         }
 
         [Test]
@@ -98,21 +94,21 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
         {
 
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<RemovePayeFromAccountCommand>())).ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
+            _mediator.Setup(x => x.Send(It.IsAny<RemovePayeFromAccountCommand>(), It.IsAny<CancellationToken>())).ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
 
             //Act
             var actual = await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(new RemovePayeSchemeViewModel());
 
             //Assert
             Assert.AreEqual(actual.Status, HttpStatusCode.BadRequest);
-            
+
         }
 
         [Test]
         public async Task ThenTheMediatorIsCalledToGetThePayeSchemeWhenASchemeIsSelectedToBeRemoved()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountByHashedIdQuery>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetEmployerAccountByHashedIdQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetEmployerAccountByHashedIdResponse
                 {
                     Account = new Account
@@ -126,7 +122,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
 
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.IsAny<GetPayeSchemeByRefQuery>()), Times.Once);
+            _mediator.Verify(x => x.Send(It.IsAny<GetPayeSchemeByRefQuery>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]
@@ -138,7 +134,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
             var payeRef = "123/abc";
             var model = new RemovePayeSchemeViewModel { HashedAccountId = hashedId, PayeRef = payeRef, UserId = userRef };
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountByHashedIdQuery>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetEmployerAccountByHashedIdQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetEmployerAccountByHashedIdResponse
                 {
                     Account = new Account
@@ -161,7 +157,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
             await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(new RemovePayeSchemeViewModel());
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.IsAny<GetPayeSchemeByRefQuery>()), Times.Once);
+            _mediator.Verify(x => x.Send(It.IsAny<GetPayeSchemeByRefQuery>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]

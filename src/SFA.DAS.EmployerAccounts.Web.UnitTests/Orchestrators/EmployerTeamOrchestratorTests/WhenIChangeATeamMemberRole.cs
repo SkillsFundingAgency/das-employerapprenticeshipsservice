@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
@@ -41,8 +42,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             const string email = "test@test.com";
             const Role role = Role.Owner;
             var response = new GetAccountTeamMembersResponse();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<ChangeTeamMemberRoleCommand>())).ReturnsAsync(Unit.Value);
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTeamMembersQuery>())).ReturnsAsync(response);
+            _mediator.Setup(x => x.Send(It.IsAny<ChangeTeamMemberRoleCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Unit.Value);
+            _mediator.Setup(x => x.Send(It.IsAny<GetAccountTeamMembersQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
 
             //Act
             var result = await _orchestrator.ChangeRole("437675", email, role, "37648");
@@ -62,7 +63,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             const string email = "test@test.com";
             const Role role = Role.Owner;
             
-            _mediator.Setup(x => x.SendAsync(It.IsAny<ChangeTeamMemberRoleCommand>()))
+            _mediator.Setup(x => x.Send(It.IsAny<ChangeTeamMemberRoleCommand>(), It.IsAny<CancellationToken>()))
                      .Throws(new InvalidRequestException(new Dictionary<string, string>()));
            
             //Act
@@ -72,7 +73,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             //Assert
             Assert.IsNotNull(result);
             Assert.AreEqual(HttpStatusCode.BadRequest, result.Status);
-            _mediator.Verify(x => x.SendAsync(It.IsAny<GetAccountTeamMembersQuery>()), Times.Never);
+            _mediator.Verify(x => x.Send(It.IsAny<GetAccountTeamMembersQuery>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Test]
@@ -82,7 +83,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             const string email = "test@test.com";
             const Role role = Role.Owner;
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<ChangeTeamMemberRoleCommand>()))
+            _mediator.Setup(x => x.Send(It.IsAny<ChangeTeamMemberRoleCommand>(), It.IsAny<CancellationToken>()))
                      .Throws(new UnauthorizedAccessException());
 
             //Act
@@ -91,7 +92,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             //Assert
             Assert.IsNotNull(result);
             Assert.AreEqual(HttpStatusCode.Unauthorized, result.Status);
-            _mediator.Verify(x => x.SendAsync(It.IsAny<GetAccountTeamMembersQuery>()), Times.Never);
+            _mediator.Verify(x => x.Send(It.IsAny<GetAccountTeamMembersQuery>(), It.IsAny<CancellationToken>()), Times.Never);
         }
     }
 }

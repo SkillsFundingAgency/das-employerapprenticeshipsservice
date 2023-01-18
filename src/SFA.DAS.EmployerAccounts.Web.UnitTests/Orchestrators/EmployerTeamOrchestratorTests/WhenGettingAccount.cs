@@ -31,6 +31,7 @@ using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.EmployerAccounts.Queries.GetApprenticeship;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
+using System.Threading;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
 {
@@ -73,7 +74,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             };
 
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(m => m.SendAsync(It.Is<GetEmployerAccountByHashedIdQuery>(q => q.HashedAccountId == HashedAccountId)))
+            _mediator.Setup(m => m.Send(It.Is<GetEmployerAccountByHashedIdQuery>(q => q.HashedAccountId == HashedAccountId), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetEmployerAccountByHashedIdResponse
                 {
                     Account = new Account
@@ -84,19 +85,19 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                     }
                 });
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTasksQuery>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetAccountTasksQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetAccountTasksResponse
                 {
                     Tasks = _tasks
                 });
 
-            _mediator.Setup(m => m.SendAsync(It.Is<GetUserAccountRoleQuery>(q => q.ExternalUserId == UserId)))
+            _mediator.Setup(m => m.Send(It.Is<GetUserAccountRoleQuery>(q => q.ExternalUserId == UserId), It.IsAny<CancellationToken>()))
                      .ReturnsAsync(new GetUserAccountRoleResponse
                      {
                          UserRole = Role.Owner
                      });
 
-            _mediator.Setup(m => m.SendAsync(It.IsAny<GetUserByRefQuery>()))
+            _mediator.Setup(m => m.Send(It.IsAny<GetUserByRefQuery>(), It.IsAny<CancellationToken>()))
                     .ReturnsAsync(new GetUserByRefResponse
                     {
                       User =  new SFA.DAS.EmployerAccounts.Models.UserProfile.User
@@ -105,7 +106,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                       }
                     });
 
-            _mediator.Setup(m => m.SendAsync(It.Is<GetAccountEmployerAgreementsRequest>(q => q.HashedAccountId == HashedAccountId)))
+            _mediator.Setup(m => m.Send(It.Is<GetAccountEmployerAgreementsRequest>(q => q.HashedAccountId == HashedAccountId), It.IsAny<CancellationToken>()))
                      .ReturnsAsync(new GetAccountEmployerAgreementsResponse
                      {
                          EmployerAgreements = new List<EmployerAgreementStatusDto>
@@ -141,10 +142,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                          }
                      });
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTeamMemberQuery>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetTeamMemberQuery>(), It.IsAny<CancellationToken>()))
                      .ReturnsAsync(new GetTeamMemberResponse{User = new MembershipView{FirstName = "Bob"}});
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountStatsQuery>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetAccountStatsQuery>(), It.IsAny<CancellationToken>()))
                      .ReturnsAsync(new GetAccountStatsResponse {Stats = _accountStats});
 
             _currentDateTime = new Mock<ICurrentDateTime>();
@@ -178,7 +179,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         [Test]
         public async Task ThenShouldDispayTermsAndConditionBanner()
         {
-            _mediator.Setup(m => m.SendAsync(It.IsAny<GetUserByRefQuery>()))
+            _mediator.Setup(m => m.Send(It.IsAny<GetUserByRefQuery>(), It.IsAny<CancellationToken>()))
              .ReturnsAsync(new GetUserByRefResponse
              {
                  User = new SFA.DAS.EmployerAccounts.Models.UserProfile.User
@@ -198,7 +199,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         [Test]
         public async Task ThenShouldNotDispayTermsAndConditionBanner()
         {
-            _mediator.Setup(m => m.SendAsync(It.IsAny<GetUserByRefQuery>()))
+            _mediator.Setup(m => m.Send(It.IsAny<GetUserByRefQuery>(), It.IsAny<CancellationToken>()))
              .ReturnsAsync(new GetUserByRefResponse
              {
                  User = new SFA.DAS.EmployerAccounts.Models.UserProfile.User
@@ -222,7 +223,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
 
             //Assert
-            _mediator.Verify(m => m.SendAsync(It.IsAny<GetAccountTasksQuery>()), Times.Once);
+            _mediator.Verify(m => m.Send(It.IsAny<GetAccountTasksQuery>(), It.IsAny<CancellationToken>()), Times.Once);
             Assert.IsNotNull(actual.Data);
             Assert.Contains(_testTask, actual.Data.Tasks.ToArray());
         }
@@ -245,7 +246,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         public async Task ThenShouldReturnNoTasksIfANullIsReturnedFromTaskQuery()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTasksQuery>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetAccountTasksQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => null);
 
             // Act
@@ -264,7 +265,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
 
             //Assert
             Assert.AreEqual(_tasks, actual.Data.Tasks);
-            _mediator.Verify(x => x.SendAsync(It.Is<GetAccountTasksQuery>(r => r.AccountId.Equals(AccountId))),Times.Once);
+            _mediator.Verify(x => x.Send(It.Is<GetAccountTasksQuery>(r => r.AccountId.Equals(AccountId)), It.IsAny<CancellationToken>()),Times.Once);
         }
 
         [Test]

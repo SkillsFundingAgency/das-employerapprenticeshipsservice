@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -26,8 +27,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.InvitationOrchest
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserInvitationsRequest>())).ReturnsAsync(new GetUserInvitationsResponse {Invitations = new List<InvitationView> {new InvitationView()} });
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountsQuery>())).ReturnsAsync(new GetUserAccountsQueryResponse
+            _mediator.Setup(x => x.Send(It.IsAny<GetUserInvitationsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new GetUserInvitationsResponse {Invitations = new List<InvitationView> {new InvitationView()} });
+            _mediator.Setup(x => x.Send(It.IsAny<GetUserAccountsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(new GetUserAccountsQueryResponse
                 {
                     Accounts = new Accounts<Account> { AccountList = new List<Account>()}
                 });
@@ -47,7 +48,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.InvitationOrchest
             var actual = await _invitationOrchestrator.GetAllInvitationsForUser(userId);
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<GetUserInvitationsRequest>(c=>c.UserId.Equals(userId))), Times.Once);
+            _mediator.Verify(x=>x.Send(It.Is<GetUserInvitationsRequest>(c=>c.UserId.Equals(userId)), It.IsAny<CancellationToken>()), Times.Once);
             Assert.IsAssignableFrom<UserInvitationsViewModel>(actual.Data);
         }
 
@@ -57,7 +58,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.InvitationOrchest
         public async Task ThenTheExpiresInDayIsCorrectlyCalculated(int days, string expectedValue)
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserInvitationsRequest>())).ReturnsAsync(new GetUserInvitationsResponse
+            _mediator.Setup(x => x.Send(It.IsAny<GetUserInvitationsRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new GetUserInvitationsResponse
             {
                 Invitations = new List<InvitationView> {new InvitationView
             {
@@ -76,7 +77,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.InvitationOrchest
         public async Task ThenNullIsReturnedWhenAnInvalidRequestExceptionIsThrown()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserInvitationsRequest>())).ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
+            _mediator.Setup(x => x.Send(It.IsAny<GetUserInvitationsRequest>(), It.IsAny<CancellationToken>())).ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
 
             //act
             var actual = await _invitationOrchestrator.GetAllInvitationsForUser("test");
@@ -96,7 +97,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.InvitationOrchest
             await _invitationOrchestrator.GetAllInvitationsForUser(expectedUserId);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetUserAccountsQuery>(c => c.UserRef.Equals(expectedUserId))), Times.Once);
+            _mediator.Verify(x => x.Send(It.Is<GetUserAccountsQuery>(c => c.UserRef.Equals(expectedUserId)), It.IsAny<CancellationToken>()), Times.Once);
         }
     }
 }

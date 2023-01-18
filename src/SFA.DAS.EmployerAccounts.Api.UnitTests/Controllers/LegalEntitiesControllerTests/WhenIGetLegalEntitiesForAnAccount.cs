@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerAccounts.Api.Mappings;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesByHashedAccountId;
@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
                     }
             };
                 
-            Mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesByHashedAccountIdRequest>(q => q.HashedAccountId == _hashedAccountId))).ReturnsAsync(_response);
+            Mediator.Setup(x => x.Send(It.Is<GetAccountLegalEntitiesByHashedAccountIdRequest>(q => q.HashedAccountId == _hashedAccountId), It.IsAny<CancellationToken>())).ReturnsAsync(_response);
 
             SetupUrlHelperForAccountLegalEntityOne();
             SetupUrlHelperForAccountLegalEntityTwo();
@@ -73,7 +73,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
                 LegalEntities = legalEntities
             };
                 
-            Mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesByHashedAccountIdRequest>(q => q.HashedAccountId == _hashedAccountId))).ReturnsAsync(_response);
+            Mediator.Setup(x => x.Send(It.Is<GetAccountLegalEntitiesByHashedAccountIdRequest>(q => q.HashedAccountId == _hashedAccountId), It.IsAny<CancellationToken>())).ReturnsAsync(_response);
 
             SetupUrlHelperForAccountLegalEntityOne();
             SetupUrlHelperForAccountLegalEntityTwo();
@@ -91,8 +91,8 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
         public async Task AndTheAccountCannotBeDecodedThenItIsNotReturned()
         {
             Mediator.Setup(
-                    x => x.SendAsync(
-                        It.Is<GetAccountLegalEntitiesByHashedAccountIdRequest>(q => q.HashedAccountId == _hashedAccountId)))
+                    x => x.Send(
+                        It.Is<GetAccountLegalEntitiesByHashedAccountIdRequest>(q => q.HashedAccountId == _hashedAccountId), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
 
             var response = await Controller.GetLegalEntities(_hashedAccountId);
@@ -105,8 +105,8 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
         public async Task AndTheAccountDoesNotExistThenItIsNotReturned()
         {
             Mediator.Setup(
-                    x => x.SendAsync(
-                        It.Is<GetAccountLegalEntitiesByHashedAccountIdRequest>(q => q.HashedAccountId == _hashedAccountId)))
+                    x => x.Send(
+                        It.Is<GetAccountLegalEntitiesByHashedAccountIdRequest>(q => q.HashedAccountId == _hashedAccountId), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(
                     new GetAccountLegalEntitiesByHashedAccountIdResponse
                     {

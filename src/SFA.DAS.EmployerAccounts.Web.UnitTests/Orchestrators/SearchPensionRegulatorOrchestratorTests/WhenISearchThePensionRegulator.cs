@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -27,7 +28,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.SearchPensionRegu
         {
             _mediator = new Mock<IMediator>();
           
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetPensionRegulatorRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetPensionRegulatorRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetPensionRegulatorResponse
                 {
                     Organisations = new List<Organisation>()
@@ -49,7 +50,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.SearchPensionRegu
             await _orchestrator.SearchPensionRegulator(payeRef);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetPensionRegulatorRequest>(c => c.PayeRef.Equals(payeRef))), Times.Once);
+            _mediator.Verify(x => x.Send(It.Is<GetPensionRegulatorRequest>(c => c.PayeRef.Equals(payeRef)), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
@@ -20,7 +21,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.OrganisationOrche
     {
         private OrganisationOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
-        private Mock<ILog> _logger;
         private Mock<IMapper> _mapper;
         private Mock<IAccountLegalEntityPublicHashingService> _hashingService;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
@@ -29,14 +29,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.OrganisationOrche
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _logger = new Mock<ILog>();
             _mapper = new Mock<IMapper>();
             _hashingService = new Mock<IAccountLegalEntityPublicHashingService>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
 
             _orchestrator = new OrganisationOrchestrator(
                 _mediator.Object, 
-                _logger.Object, 
                 _mapper.Object,
                 _cookieService.Object, 
                 _hashingService.Object);
@@ -61,7 +59,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.OrganisationOrche
             const long legalEntityId = 5;
             const long agreementEntityId = 6;
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<CreateLegalEntityCommand>()))
+            _mediator.Setup(x => x.Send(It.IsAny<CreateLegalEntityCommand>(), It.IsAny<CancellationToken>()))
                      .ReturnsAsync(new CreateLegalEntityCommandResponse
                      {
                          AgreementView = new EmployerAgreementView
@@ -81,13 +79,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.OrganisationOrche
             await _orchestrator.CreateLegalEntity(request);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateLegalEntityCommand>(command =>
+            _mediator.Verify(x => x.Send(It.Is<CreateLegalEntityCommand>(command =>
             command.Name.Equals(request.Name) &&
             command.Address.Equals(request.Address) &&
             command.Code.Equals(request.Code) &&
             command.Source.Equals(request.Source) &&
             command.DateOfIncorporation.Equals(request.IncorporatedDate) &&
-            command.Status.Equals(request.LegalEntityStatus))));
+            command.Status.Equals(request.LegalEntityStatus)), It.IsAny<CancellationToken>()));
         }
     }
 }

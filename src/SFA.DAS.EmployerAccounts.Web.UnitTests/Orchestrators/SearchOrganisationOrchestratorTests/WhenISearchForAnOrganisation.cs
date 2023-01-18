@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -32,7 +33,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.SearchOrganisatio
             _mediator = new Mock<IMediator>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetOrganisationsRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetOrganisationsRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetOrganisationsResponse { Organisations = new PagedResponse<OrganisationName> { Data = new List<OrganisationName>() } });
 
             _orchestrator = new SearchOrganisationOrchestrator(_mediator.Object, _cookieService.Object);
@@ -51,7 +52,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.SearchOrganisatio
 
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetOrganisationsRequest>(c => c.SearchTerm.Equals(searchTerm) && c.PageNumber == pageNumber && c.OrganisationType == organisationType)), Times.Once);
+            _mediator.Verify(x => x.Send(It.Is<GetOrganisationsRequest>(c => c.SearchTerm.Equals(searchTerm) && c.PageNumber == pageNumber && c.OrganisationType == organisationType), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]
@@ -73,7 +74,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.SearchOrganisatio
         public async Task ThenAnInvalidRequestExceptionIsHandledTheOrchestratorResponseIsSetToBadRequest()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetOrganisationsRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetOrganisationsRequest>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new InvalidRequestException(new Dictionary<string, string> {{"", ""}}));
 
             //Act
@@ -95,12 +96,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.SearchOrganisatio
             {
                 LegalEntities = new List<AccountSpecificLegalEntity> { new AccountSpecificLegalEntity { Source = OrganisationType.CompaniesHouse, Code = "zzz999" } } 
             };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
+            _mediator.Setup(x => x.Send(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId), It.IsAny<CancellationToken>())).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse
             {
                 Organisations = new PagedResponse<OrganisationName> { Data = new List<OrganisationName> { new OrganisationName { Type = OrganisationType.CompaniesHouse, Code = "123456789", Address = new Address() } } }
             };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetOrganisationsRequest>(c => c.SearchTerm.Equals(searchTerm) && c.PageNumber == pageNumber))).ReturnsAsync(expectedSearchResults);
+            _mediator.Setup(x => x.Send(It.Is<GetOrganisationsRequest>(c => c.SearchTerm.Equals(searchTerm) && c.PageNumber == pageNumber), It.IsAny<CancellationToken>())).ReturnsAsync(expectedSearchResults);
 
             //Act
             var result = await _orchestrator.SearchOrganisation(searchTerm, pageNumber, null, hashedAccountId, userId);
@@ -122,12 +123,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.SearchOrganisatio
             {
                 LegalEntities = new List<AccountSpecificLegalEntity> { new AccountSpecificLegalEntity { Source = OrganisationType.CompaniesHouse, Code = companyCode } } 
             };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
+            _mediator.Setup(x => x.Send(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId), It.IsAny<CancellationToken>())).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse
             {
                 Organisations = new PagedResponse<OrganisationName> { Data = new List<OrganisationName> { new OrganisationName { Type = OrganisationType.CompaniesHouse, Code = companyCode, Address = new Address() } } }
             };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetOrganisationsRequest>(c => c.SearchTerm.Equals(searchTerm) && c.PageNumber == pageNumber))).ReturnsAsync(expectedSearchResults);
+            _mediator.Setup(x => x.Send(It.Is<GetOrganisationsRequest>(c => c.SearchTerm.Equals(searchTerm) && c.PageNumber == pageNumber), It.IsAny<CancellationToken>())).ReturnsAsync(expectedSearchResults);
 
             //Act
             var result = await _orchestrator.SearchOrganisation(searchTerm, pageNumber, null, hashedAccountId, userId);
@@ -149,12 +150,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.SearchOrganisatio
             {
                 LegalEntities = new List<AccountSpecificLegalEntity> { new AccountSpecificLegalEntity { Source = OrganisationType.Charities, Code = charityCode } }
             };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
+            _mediator.Setup(x => x.Send(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId), It.IsAny<CancellationToken>())).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse
             {
                 Organisations = new PagedResponse<OrganisationName> { Data = new List<OrganisationName> { new OrganisationName { Type = OrganisationType.Charities, Code = charityCode, Address = new Address() } } }
             };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetOrganisationsRequest>(c => c.SearchTerm.Equals(searchTerm) && c.PageNumber == pageNumber))).ReturnsAsync(expectedSearchResults);
+            _mediator.Setup(x => x.Send(It.Is<GetOrganisationsRequest>(c => c.SearchTerm.Equals(searchTerm) && c.PageNumber == pageNumber), It.IsAny<CancellationToken>())).ReturnsAsync(expectedSearchResults);
 
             //Act
             var result = await _orchestrator.SearchOrganisation(searchTerm, pageNumber, null, hashedAccountId, userId);
@@ -176,12 +177,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.SearchOrganisatio
             {
                 LegalEntities = new List<AccountSpecificLegalEntity> { new AccountSpecificLegalEntity { Source = OrganisationType.PublicBodies, Name = organisationName } } 
             };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
+            _mediator.Setup(x => x.Send(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId), It.IsAny<CancellationToken>())).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse
             {
                 Organisations = new PagedResponse<OrganisationName> { Data = new List<OrganisationName> { new OrganisationName { Type = OrganisationType.PublicBodies, Name = organisationName, Address = new Address() } } }
             };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetOrganisationsRequest>(c => c.SearchTerm.Equals(searchTerm) && c.PageNumber == pageNumber))).ReturnsAsync(expectedSearchResults);
+            _mediator.Setup(x => x.Send(It.Is<GetOrganisationsRequest>(c => c.SearchTerm.Equals(searchTerm) && c.PageNumber == pageNumber), It.IsAny<CancellationToken>())).ReturnsAsync(expectedSearchResults);
 
             //Act
             var result = await _orchestrator.SearchOrganisation(searchTerm, pageNumber, null, hashedAccountId, userId);
@@ -203,12 +204,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.SearchOrganisatio
             {
                 LegalEntities = new List<AccountSpecificLegalEntity> { new AccountSpecificLegalEntity { Source = OrganisationType.Other, Name = organisationName } } 
             };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
+            _mediator.Setup(x => x.Send(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId), It.IsAny<CancellationToken>())).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse
             {
                 Organisations = new PagedResponse<OrganisationName> { Data = new List<OrganisationName> { new OrganisationName { Type = OrganisationType.Other, Name = organisationName, Address = new Address() } } }
             };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetOrganisationsRequest>(c => c.SearchTerm.Equals(searchTerm) && c.PageNumber == pageNumber))).ReturnsAsync(expectedSearchResults);
+            _mediator.Setup(x => x.Send(It.Is<GetOrganisationsRequest>(c => c.SearchTerm.Equals(searchTerm) && c.PageNumber == pageNumber), It.IsAny<CancellationToken>())).ReturnsAsync(expectedSearchResults);
 
             //Act
             var result = await _orchestrator.SearchOrganisation(searchTerm, pageNumber, null, hashedAccountId, userId);
@@ -230,12 +231,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.SearchOrganisatio
             {
                 LegalEntities = new List<AccountSpecificLegalEntity> { new AccountSpecificLegalEntity { Source = OrganisationType.PensionsRegulator, Code = companyCode } }
             };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
+            _mediator.Setup(x => x.Send(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId), It.IsAny<CancellationToken>())).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse
             {
                 Organisations = new PagedResponse<OrganisationName> { Data = new List<OrganisationName> { new OrganisationName { Type = OrganisationType.PensionsRegulator, Code = companyCode, Address = new Address() } } }
             };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetOrganisationsRequest>(c => c.SearchTerm.Equals(searchTerm) && c.PageNumber == pageNumber))).ReturnsAsync(expectedSearchResults);
+            _mediator.Setup(x => x.Send(It.Is<GetOrganisationsRequest>(c => c.SearchTerm.Equals(searchTerm) && c.PageNumber == pageNumber), It.IsAny<CancellationToken>())).ReturnsAsync(expectedSearchResults);
 
             //Act
             var result = await _orchestrator.SearchOrganisation(searchTerm, pageNumber, null, hashedAccountId, userId);
@@ -251,7 +252,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.SearchOrganisatio
             await _orchestrator.SearchOrganisation("Test Org", 1, null, null, null);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.IsAny<GetAccountLegalEntitiesRequest>()), Times.Never);
+            _mediator.Verify(x => x.Send(It.IsAny<GetAccountLegalEntitiesRequest>(), It.IsAny<CancellationToken>()), Times.Never);
         }
     }
 }

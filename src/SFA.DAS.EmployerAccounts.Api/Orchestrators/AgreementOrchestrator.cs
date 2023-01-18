@@ -23,7 +23,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
         
         public async Task<EmployerAgreementView> GetAgreement(string hashedAgreementId)
         {
-            var response = await _mediator.SendAsync(new GetEmployerAgreementByIdRequest
+            var response = await _mediator.Send(new GetEmployerAgreementByIdRequest
             {
                 HashedAgreementId = hashedAgreementId
             });
@@ -36,7 +36,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
         {
             _logger.Info($"Requesting minimum signed agreement version for account {accountId}");
 
-            var response = await _mediator.SendAsync(new GetMinimumSignedAgreementVersionQuery { AccountId = accountId });
+            var response = await _mediator.Send(new GetMinimumSignedAgreementVersionQuery { AccountId = accountId });
             return response.MinimumSignedAgreementVersion;
         }
     }

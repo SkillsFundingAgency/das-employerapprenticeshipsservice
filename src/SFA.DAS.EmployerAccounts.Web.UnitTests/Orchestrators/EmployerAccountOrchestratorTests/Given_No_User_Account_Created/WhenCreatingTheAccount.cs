@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -31,7 +32,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             _configuration = new EmployerAccountsConfiguration();
 
             _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration);
-            _mediator.Setup(x => x.SendAsync(It.IsAny<CreateAccountCommand>()))
+            _mediator.Setup(x => x.Send(It.IsAny<CreateAccountCommand>(), It.IsAny<CancellationToken>()))
                      .ReturnsAsync(new CreateAccountCommandResponse()
                      {
                          HashedAccountId = "ABS10"
@@ -48,7 +49,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             await _employerAccountOrchestrator.CreateOrUpdateAccount(model, It.IsAny<HttpContextBase>());
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAccountCommand>(
+            _mediator.Verify(x => x.Send(It.Is<CreateAccountCommand>(
                         c => c.AccessToken.Equals(model.AccessToken)
                         && c.OrganisationDateOfInception.Equals(model.OrganisationDateOfInception)
                         && c.OrganisationName.Equals(model.OrganisationName)
@@ -60,7 +61,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
                         && c.AccessToken.Equals(model.AccessToken)
                         && c.RefreshToken.Equals(model.RefreshToken)
                         && c.EmployerRefName.Equals(model.EmployerRefName)
-                    )));
+                    ), It.IsAny<CancellationToken>()));
         }
 
         [Test]
@@ -68,7 +69,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
         {
             //Assign
             const string hashedId = "1AFGG0";
-            _mediator.Setup(x => x.SendAsync(It.IsAny<CreateAccountCommand>()))
+            _mediator.Setup(x => x.Send(It.IsAny<CreateAccountCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new CreateAccountCommandResponse()
                 {
                     HashedAccountId = hashedId

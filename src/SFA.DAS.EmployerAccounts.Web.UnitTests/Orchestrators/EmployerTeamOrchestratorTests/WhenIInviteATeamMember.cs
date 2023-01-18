@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
@@ -46,8 +47,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                 Email = "test@test.com"
             };
             var response = new GetAccountTeamMembersResponse();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<CreateInvitationCommand>())).ReturnsAsync(Unit.Value);
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTeamMembersQuery>())).ReturnsAsync(response);
+            _mediator.Setup(x => x.Send(It.IsAny<CreateInvitationCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(Unit.Value);
+            _mediator.Setup(x => x.Send(It.IsAny<GetAccountTeamMembersQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
 
             //Act
             var result = await _orchestrator.InviteTeamMember(request, "37648");
@@ -67,10 +68,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                 Email = "test@test.com"
             };
             
-            _mediator.Setup(x => x.SendAsync(It.IsAny<CreateInvitationCommand>()))
+            _mediator.Setup(x => x.Send(It.IsAny<CreateInvitationCommand>(), It.IsAny<CancellationToken>()))
                      .ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTeamMembersQuery>()));
+            _mediator.Setup(x => x.Send(It.IsAny<GetAccountTeamMembersQuery>(), It.IsAny<CancellationToken>()));
 
             //Act
             var result = await _orchestrator.InviteTeamMember(request, "37648");
@@ -78,7 +79,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             //Assert
             Assert.IsNotNull(result);
             Assert.AreEqual(HttpStatusCode.BadRequest, result.Status);
-            _mediator.Verify(x => x.SendAsync(It.IsAny<GetAccountTeamMembersQuery>()), Times.Never);
+            _mediator.Verify(x => x.Send(It.IsAny<GetAccountTeamMembersQuery>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Test]
@@ -90,10 +91,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                 Email = "test@test.com"
             };
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<CreateInvitationCommand>()))
+            _mediator.Setup(x => x.Send(It.IsAny<CreateInvitationCommand>(), It.IsAny<CancellationToken>()))
                      .ThrowsAsync(new UnauthorizedAccessException());
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTeamMembersQuery>()));
+            _mediator.Setup(x => x.Send(It.IsAny<GetAccountTeamMembersQuery>(), It.IsAny<CancellationToken>()));
 
             //Act
             var result = await _orchestrator.InviteTeamMember(request, "37648");
@@ -101,7 +102,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             //Assert
             Assert.IsNotNull(result);
             Assert.AreEqual(HttpStatusCode.Unauthorized, result.Status);
-            _mediator.Verify(x => x.SendAsync(It.IsAny<GetAccountTeamMembersQuery>()), Times.Never);
+            _mediator.Verify(x => x.Send(It.IsAny<GetAccountTeamMembersQuery>(), It.IsAny<CancellationToken>()), Times.Never);
         }
         
         [TestCase(Role.Viewer, HttpStatusCode.Unauthorized)]
@@ -113,7 +114,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             const string hashAccountId = "123ABC";
             const string externalUserId = "1234";
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountRoleQuery>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetUserAccountRoleQuery>(), It.IsAny<CancellationToken>()))
                      .ReturnsAsync(new GetUserAccountRoleResponse
                      {
                          UserRole = userRole

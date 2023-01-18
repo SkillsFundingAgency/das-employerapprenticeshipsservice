@@ -12,6 +12,7 @@ using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Models;
 
@@ -41,10 +42,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
                 Name = "Test Account"
             };
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountByHashedIdQuery>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetEmployerAccountByHashedIdQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetEmployerAccountByHashedIdResponse { Account = _account });
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountRoleQuery>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetUserAccountRoleQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetUserAccountRoleResponse { UserRole = Role.Owner });
 
             _orchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration);
@@ -57,7 +58,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             var response = await _orchestrator.GetEmployerAccount("ABC123");
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetEmployerAccountByHashedIdQuery>(q => q.HashedAccountId.Equals(_account.HashedId))));
+            _mediator.Verify(x => x.Send(It.Is<GetEmployerAccountByHashedIdQuery>(q => q.HashedAccountId.Equals(_account.HashedId)), It.IsAny<CancellationToken>()));
             Assert.AreEqual(_account.HashedId, response.Data.HashedId);
             Assert.AreEqual(_account.Name, response.Data.Name);
             Assert.AreEqual(HttpStatusCode.OK, response.Status);
@@ -76,7 +77,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             Assert.IsInstanceOf<OrchestratorResponse<RenameEmployerAccountViewModel>>(response);
 
             _mediator.Verify(x =>
-                    x.SendAsync(It.Is<RenameEmployerAccountCommand>(c => c.NewName == "New Account Name")),
+                    x.Send(It.Is<RenameEmployerAccountCommand>(c => c.NewName == "New Account Name"), It.IsAny<CancellationToken>()),
                     Times.Once());
         }
     }

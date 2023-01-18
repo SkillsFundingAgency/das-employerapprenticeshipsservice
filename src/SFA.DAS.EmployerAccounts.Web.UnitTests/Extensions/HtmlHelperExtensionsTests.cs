@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Security.Principal;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -18,7 +20,8 @@ using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using Claim = System.Security.Claims.Claim;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using HtmlHelper = Microsoft.AspNetCore.Mvc.ViewFeatures.HtmlHelper;
+using ViewContext = Microsoft.AspNetCore.Mvc.Rendering.ViewContext;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
 {
@@ -194,7 +197,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
             var dependancyResolver = new Mock<IDependencyResolver>();
             dependancyResolver.Setup(r => r.GetService(typeof(IMediator))).Returns(_mockMediator.Object);
             DependencyResolver.SetResolver(dependancyResolver.Object);
-            _mockMediator.Setup(m => m.SendAsync(It.Is<GetAccountEmployerAgreementsRequest>(q => q.HashedAccountId == hashedAccountId)))
+            _mockMediator.Setup(m => m.Send(It.Is<GetAccountEmployerAgreementsRequest>(q => q.HashedAccountId == hashedAccountId), It.IsAny<CancellationToken>()))
                     .Returns(Task.FromResult(new GetAccountEmployerAgreementsResponse
                     {
                         EmployerAgreements = new List<EmployerAgreementStatusDto>
@@ -238,7 +241,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
             var dependancyResolver = new Mock<IDependencyResolver>();
             dependancyResolver.Setup(r => r.GetService(typeof(IMediator))).Returns(_mockMediator.Object);
             DependencyResolver.SetResolver(dependancyResolver.Object);
-            _mockMediator.Setup(m => m.SendAsync(It.Is<GetAccountEmployerAgreementsRequest>(q => q.HashedAccountId == hashedAccountId)))
+            _mockMediator.Setup(m => m.Send(It.Is<GetAccountEmployerAgreementsRequest>(q => q.HashedAccountId == hashedAccountId), It.IsAny<CancellationToken>()))
                     .Returns(Task.FromResult(new GetAccountEmployerAgreementsResponse
                     {
                         EmployerAgreements = new List<EmployerAgreementStatusDto>
@@ -290,7 +293,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
                 LegalEntity = new AccountSpecificLegalEntityDto { AccountLegalEntityId = 3 }
             });
 
-            _mockMediator.Setup(m => m.SendAsync(It.Is<GetAccountEmployerAgreementsRequest>(q => q.HashedAccountId == hashedAccountId)))
+            _mockMediator.Setup(m => m.Send(It.Is<GetAccountEmployerAgreementsRequest>(q => q.HashedAccountId == hashedAccountId), It.IsAny<CancellationToken>()))
                     .Returns(Task.FromResult(new GetAccountEmployerAgreementsResponse
                     {
                         EmployerAgreements = employerAgreements

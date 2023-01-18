@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Common.Domain.Types;
@@ -13,7 +13,6 @@ using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
 {
@@ -21,7 +20,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.OrganisationOrche
     {
         private OrganisationOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
-        private Mock<ILog> _logger;
         private Mock<IMapper> _mapper;
         private Mock<IAccountLegalEntityPublicHashingService> _hashingService;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
@@ -30,14 +28,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.OrganisationOrche
         {
 
             _mediator = new Mock<IMediator>();
-            _logger = new Mock<ILog>();
             _mapper = new Mock<IMapper>();
             _hashingService = new Mock<IAccountLegalEntityPublicHashingService>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
 
             _orchestrator = new OrganisationOrchestrator(
                 _mediator.Object,
-                _logger.Object,
                 _mapper.Object,
                 _cookieService.Object,
                 _hashingService.Object);
@@ -59,7 +55,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.OrganisationOrche
                 LegalEntityStatus = "active"
             };
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<CreateLegalEntityCommand>()))
+            _mediator.Setup(x => x.Send(It.IsAny<CreateLegalEntityCommand>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new UnauthorizedAccessException());
 
             //Act & Assert

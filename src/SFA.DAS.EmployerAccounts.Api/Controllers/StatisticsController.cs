@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         [Route("")]
         public async Task<IActionResult> GetStatistics()
         {
-            var response = await _mediator.SendAsync(new GetStatisticsQuery());
+            var response = await _mediator.Send(new GetStatisticsQuery());
             return Ok(response.Statistics);
         }
     }

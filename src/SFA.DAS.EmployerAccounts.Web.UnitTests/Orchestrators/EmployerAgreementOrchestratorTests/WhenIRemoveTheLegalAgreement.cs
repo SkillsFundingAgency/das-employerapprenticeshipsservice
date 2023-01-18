@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
@@ -38,7 +39,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         public async Task ThenIfAnInvalidRequestExceptionIsThrownTheOrchestratorResponseContainsTheError()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<RemoveLegalEntityCommand>())).ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
+            _mediator.Setup(x => x.Send(It.IsAny<RemoveLegalEntityCommand>(), It.IsAny<CancellationToken>())).ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
 
             //Act
             var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmOrganisationToRemoveViewModel(), ExpectedUserId);
@@ -51,7 +52,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         public async Task ThenIfAUnauthroizedAccessExceptionIsThrownThenTheOrchestratorResponseShowsAccessDenied()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<RemoveLegalEntityCommand>())).ThrowsAsync(new UnauthorizedAccessException());
+            _mediator.Setup(x => x.Send(It.IsAny<RemoveLegalEntityCommand>(), It.IsAny<CancellationToken>())).ThrowsAsync(new UnauthorizedAccessException());
 
             //Act
             var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmOrganisationToRemoveViewModel { Name = "TestName" }, ExpectedUserId);
@@ -67,10 +68,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
             var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmOrganisationToRemoveViewModel { Name = "TestName", HashedAccountId = ExpectedHashedAccountId, HashedAccountLegalEntitytId = ExpectedHashedAccountLegalEntitytId }, ExpectedUserId);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<RemoveLegalEntityCommand>(
+            _mediator.Verify(x => x.Send(It.Is<RemoveLegalEntityCommand>(
                 c => c.HashedAccountId.Equals(ExpectedHashedAccountId)
                 && c.HashedAccountLegalEntityId.Equals(ExpectedHashedAccountLegalEntitytId)
-                && c.UserId.Equals(ExpectedUserId))), Times.Once);
+                && c.UserId.Equals(ExpectedUserId)), It.IsAny<CancellationToken>()), Times.Once);
             Assert.IsNotNull(actual);
             Assert.IsNotNull(actual.FlashMessage);
             Assert.AreEqual("You have removed TestName.", actual.FlashMessage.Headline);

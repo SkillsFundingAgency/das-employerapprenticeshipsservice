@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
@@ -28,7 +29,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntityRemoveRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetAccountLegalEntityRemoveRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetAccountLegalEntityRemoveResponse
                 {
                     Name = ExpectedName,
@@ -49,11 +50,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
             await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAccountLegalEntityId, ExpectedHahsedAccountId, ExpectedUserId);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetAccountLegalEntityRemoveRequest>(
+            _mediator.Verify(x => x.Send(It.Is<GetAccountLegalEntityRemoveRequest>(
                 c => c.HashedAccountId.Equals(ExpectedHahsedAccountId)
                      && c.UserId.Equals(ExpectedUserId)
                      && c.HashedAccountLegalEntityId.Equals(ExpectedHashedAccountLegalEntityId)
-                )), Times.Once);
+                ), It.IsAny<CancellationToken>()), Times.Once);
         }
 
 
@@ -61,7 +62,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         public async Task ThenIfAnInvalidRequestExceptionIsThrownTheOrchestratorResponseContainsTheError()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntityRemoveRequest>())).ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
+            _mediator.Setup(x => x.Send(It.IsAny<GetAccountLegalEntityRemoveRequest>(), It.IsAny<CancellationToken>())).ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
 
             //Act
             var actual = await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAccountLegalEntityId, ExpectedHahsedAccountId, ExpectedUserId);
@@ -74,7 +75,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         public async Task ThenIfAUnauthroizedAccessExceptionIsThrownThenTheOrchestratorResponseShowsAccessDenied()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntityRemoveRequest>())).ThrowsAsync(new UnauthorizedAccessException());
+            _mediator.Setup(x => x.Send(It.IsAny<GetAccountLegalEntityRemoveRequest>(), It.IsAny<CancellationToken>())).ThrowsAsync(new UnauthorizedAccessException());
 
             //Act
             var actual = await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAccountLegalEntityId, ExpectedHahsedAccountId, ExpectedUserId);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
@@ -36,7 +37,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Orchestrators.AgreementOrchestr
 
             _orchestrator = new AgreementOrchestrator(_mediator.Object, _logger.Object, _mapper);
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAgreementByIdRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetEmployerAgreementByIdRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(response);
         }
 

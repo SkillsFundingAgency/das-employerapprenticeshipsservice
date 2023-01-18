@@ -8,7 +8,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
 {
     [Authorize(Roles = "ReadUserAccounts")]
     [Route("api/accountlegalentities")]
-    public class AccountLegalEntitiesController : Microsoft.AspNetCore.Mvc.ControllerBase
+    public class AccountLegalEntitiesController : ControllerBase
     {
         private readonly IMediator _mediator;
 
@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
 
         public async Task<IActionResult> Get([FromQuery] GetAccountLegalEntitiesQuery query)
         {
-            var response = await _mediator.SendAsync(query);
+            var response = await _mediator.Send(query);
             return Ok(response.AccountLegalEntities);
         }
     }

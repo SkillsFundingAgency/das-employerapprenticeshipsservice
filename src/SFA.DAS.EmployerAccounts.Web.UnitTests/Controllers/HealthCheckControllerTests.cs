@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
 using MediatR;
@@ -62,7 +63,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                 HealthCheck = new HealthCheckDto()
             };
 
-            Mediator.Setup(m => m.SendAsync(GetHealthCheckQuery)).ReturnsAsync(GetHealthCheckQueryResponse);
+            Mediator.Setup(m => m.Send(GetHealthCheckQuery, It.IsAny<CancellationToken>())).ReturnsAsync(GetHealthCheckQueryResponse);
 
             return HealthCheckController.Index(GetHealthCheckQuery);
         }
@@ -71,7 +72,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
         {
             RunHealthCheckCommand = new RunHealthCheckCommand();
 
-            Mediator.Setup(m => m.SendAsync(RunHealthCheckCommand)).ReturnsAsync(Unit.Value);
+            Mediator.Setup(m => m.Send(RunHealthCheckCommand, It.IsAny<CancellationToken>())).ReturnsAsync(Unit.Value);
 
             return HealthCheckController.Index(RunHealthCheckCommand);
         }

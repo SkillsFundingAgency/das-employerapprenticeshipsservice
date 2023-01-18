@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using HMRC.ESFA.Levy.Api.Types;
 using MediatR;
 using Moq;
@@ -44,13 +45,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.HmrcOrchestratorT
         {
             //Arrange
             var redirectUrl = "myUrl";
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetGatewayInformationQuery>())).ReturnsAsync(new GetGatewayInformationResponse { Url = "someurl" });
+            _mediator.Setup(x => x.Send(It.IsAny<GetGatewayInformationQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(new GetGatewayInformationResponse { Url = "someurl" });
 
             //Act
             await _employerAccountOrchestrator.GetGatewayUrl(redirectUrl);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetGatewayInformationQuery>(c => c.ReturnUrl.Equals(redirectUrl))));
+            _mediator.Verify(x => x.Send(It.Is<GetGatewayInformationQuery>(c => c.ReturnUrl.Equals(redirectUrl)), It.IsAny<CancellationToken>()));
         }
 
         [Test]
@@ -58,13 +59,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.HmrcOrchestratorT
         {
             //Arrange
             var expectedAuthToken = "123";
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetHmrcEmployerInformationQuery>())).ReturnsAsync(new GetHmrcEmployerInformationResponse { EmployerLevyInformation = new EmpRefLevyInformation() });
+            _mediator.Setup(x => x.Send(It.IsAny<GetHmrcEmployerInformationQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(new GetHmrcEmployerInformationResponse { EmployerLevyInformation = new EmpRefLevyInformation() });
 
             //Act
             await _employerAccountOrchestrator.GetHmrcEmployerInformation(expectedAuthToken, string.Empty);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetHmrcEmployerInformationQuery>(c => c.AuthToken.Equals(expectedAuthToken))));
+            _mediator.Verify(x => x.Send(It.Is<GetHmrcEmployerInformationQuery>(c => c.AuthToken.Equals(expectedAuthToken)), It.IsAny<CancellationToken>()));
         }
 
         [Test]
@@ -74,7 +75,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.HmrcOrchestratorT
             var scenarioUserEmail = "test.user@test.com";
             var expectedEmpRef = "123/456789";
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetHmrcEmployerInformationQuery>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetHmrcEmployerInformationQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetHmrcEmployerInformationResponse { EmployerLevyInformation = new EmpRefLevyInformation(), Empref = expectedEmpRef });
           
             //Act
@@ -88,7 +89,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.HmrcOrchestratorT
         public async Task ThenIfANotFoundExceptionIsThrownThePropertyIsSetOnTheResponse()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetHmrcEmployerInformationQuery>())).ThrowsAsync(new NotFoundException("Empref not found"));
+            _mediator.Setup(x => x.Send(It.IsAny<GetHmrcEmployerInformationQuery>(), It.IsAny<CancellationToken>())).ThrowsAsync(new NotFoundException("Empref not found"));
 
             //Act
             var result = await _employerAccountOrchestrator.GetHmrcEmployerInformation("123", "test@test.com");

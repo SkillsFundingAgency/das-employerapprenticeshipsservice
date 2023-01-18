@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
@@ -106,7 +107,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             return RunAsync(
                 arrange: fixtures =>
                 {
-                    fixtures.Mediator.Setup(x => x.SendAsync(It.Is<GetNextUnsignedEmployerAgreementRequest>(y => y.HashedAccountId == fixtures.HashedAccountId)))
+                    fixtures.Mediator.Setup(x => x.Send(It.Is<GetNextUnsignedEmployerAgreementRequest>(y => y.HashedAccountId == fixtures.HashedAccountId), It.IsAny<CancellationToken>()))
                         .ReturnsAsync(new GetNextUnsignedEmployerAgreementResponse
                         {
                             HashedAgreementId = fixtures.HashedAgreementId
@@ -320,14 +321,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                 EmployerAgreement = new AgreementDto { LegalEntity = new AccountSpecificLegalEntityDto { AccountLegalEntityId = AccountLegalEntityId } }
             };
 
-            Mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAgreementRequest>(r => r.AgreementId == GetAgreementRequest.AgreementId && r.HashedAccountId == GetAgreementRequest.HashedAccountId)))
+            Mediator.Setup(x => x.Send(It.Is<GetEmployerAgreementRequest>(r => r.AgreementId == GetAgreementRequest.AgreementId && r.HashedAccountId == GetAgreementRequest.HashedAccountId), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(agreementResponse);
             var entitiesCountResponse = new GetAccountLegalEntitiesCountByHashedAccountIdResponse
             {
                 LegalEntitiesCount = 1
             };
 
-            Mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntitiesCountByHashedAccountIdRequest>()))
+            Mediator.Setup(x => x.Send(It.IsAny<GetAccountLegalEntitiesCountByHashedAccountIdRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(entitiesCountResponse);
 
             Mapper.Setup(x => x.Map<GetEmployerAgreementResponse, EmployerAgreementViewModel>(agreementResponse))
@@ -347,8 +348,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             var response = new GetLastSignedAgreementResponse { LastSignedAgreement = new AgreementDto() };
 
             Mediator.Setup(x =>
-                    x.SendAsync(
-                        It.Is<GetLastSignedAgreementRequest>(r => r.AccountLegalEntityId == AccountLegalEntityId)))
+                    x.Send(It.Is<GetLastSignedAgreementRequest>(r => r.AccountLegalEntityId == AccountLegalEntityId), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(response);
             
             return this;

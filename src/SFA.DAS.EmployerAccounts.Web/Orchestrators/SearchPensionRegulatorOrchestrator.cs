@@ -29,7 +29,7 @@ public class SearchPensionRegulatorOrchestrator : UserVerificationOrchestratorBa
 
         try
         {
-            var result = await Mediator.SendAsync(new GetPensionRegulatorRequest { PayeRef = payeRef });
+            var result = await Mediator.Send(new GetPensionRegulatorRequest { PayeRef = payeRef });
             response.Data.Results = CreateResult(result.Organisations).ToList();
         }
         catch (Exception ex)
@@ -47,7 +47,7 @@ public class SearchPensionRegulatorOrchestrator : UserVerificationOrchestratorBa
 
         try
         {
-            var result = await Mediator.SendAsync(new GetOrganisationsByAornRequest(aorn, payeRef));
+            var result = await Mediator.Send(new GetOrganisationsByAornRequest(aorn, payeRef));
 
             response.Data.Results = CreateResult(result.Organisations).ToList();
         }

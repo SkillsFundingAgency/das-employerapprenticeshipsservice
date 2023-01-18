@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -47,9 +48,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
                         }
                     });
 
-            mediator.Setup(x => x.SendAsync(new UpdateUserAornLockRequest()));
-			mediator.Setup(x => x.SendAsync(It.IsAny<GetPayeSchemeInUseQuery>())).ReturnsAsync(new GetPayeSchemeInUseResponse());
-            mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAornLockRequest>())).ReturnsAsync(
+            mediator.Setup(x => x.Send(new UpdateUserAornLockRequest(), It.IsAny<CancellationToken>()));
+			mediator.Setup(x => x.Send(It.IsAny<GetPayeSchemeInUseQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(new GetPayeSchemeInUseResponse());
+            mediator.Setup(x => x.Send(It.IsAny<GetUserAornLockRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(
                 new GetUserAornLockResponse
                 {
                     UserAornStatus = new UserAornPayeStatus

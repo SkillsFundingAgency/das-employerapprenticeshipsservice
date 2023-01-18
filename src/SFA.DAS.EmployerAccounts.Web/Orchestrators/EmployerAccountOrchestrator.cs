@@ -30,7 +30,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
 
     public async Task<OrchestratorResponse<EmployerAccountViewModel>> GetEmployerAccount(string hashedAccountId)
     {
-        var response = await Mediator.SendAsync(new GetEmployerAccountByHashedIdQuery
+        var response = await Mediator.Send(new GetEmployerAccountByHashedIdQuery
         {
             HashedAccountId = hashedAccountId
         });
@@ -47,7 +47,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
 
     public virtual async Task<OrchestratorResponse<RenameEmployerAccountViewModel>> GetRenameEmployerAccountViewModel(string hashedAccountId, string userId)
     {
-        var response = await Mediator.SendAsync(new GetEmployerAccountByHashedIdQuery
+        var response = await Mediator.Send(new GetEmployerAccountByHashedIdQuery
         {
             HashedAccountId = hashedAccountId,
             UserId = userId
@@ -167,7 +167,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
 
     private async Task<string> AddLegalEntityToExistingAccount(CreateAccountModel model)
     {
-        var response = await Mediator.SendAsync(new CreateLegalEntityCommand
+        var response = await Mediator.Send(new CreateLegalEntityCommand
         {
             HashedAccountId = model.HashedAccountId.Value,
             Code = model.OrganisationReferenceNumber,
@@ -186,7 +186,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
 
     private async Task AddPayeToExistingAccount(CreateAccountModel model)
     {
-        await Mediator.SendAsync(new AddPayeToAccountCommand
+        await Mediator.Send(new AddPayeToAccountCommand
         {
             HashedAccountId = model.HashedAccountId.Value,
             AccessToken = model.AccessToken,
@@ -202,7 +202,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
     {
         try
         {
-            var result = await Mediator.SendAsync(new CreateAccountCommand
+            var result = await Mediator.Send(new CreateAccountCommand
             {
                 ExternalUserId = model.UserId,
                 OrganisationType = model.OrganisationType,
@@ -251,7 +251,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
         try
         {
             var existingUserAccounts =
-                await Mediator.SendAsync(new GetUserAccountsQuery { UserRef = viewModel.UserId });
+                await Mediator.Send(new GetUserAccountsQuery { UserRef = viewModel.UserId });
 
             if (existingUserAccounts?.Accounts?.AccountList?.Any() == true)
                 return new OrchestratorResponse<EmployerAccountViewModel>
@@ -263,7 +263,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
                     Status = HttpStatusCode.OK
                 };
 
-            var result = await Mediator.SendAsync(new CreateUserAccountCommand
+            var result = await Mediator.Send(new CreateUserAccountCommand
             {
                 ExternalUserId = viewModel.UserId,
                 OrganisationName = viewModel.OrganisationName

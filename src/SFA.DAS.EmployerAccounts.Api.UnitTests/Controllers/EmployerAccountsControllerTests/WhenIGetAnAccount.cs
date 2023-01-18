@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using System.Web.Http.Results;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -24,7 +26,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.EmployerAccountsCon
                 }
             };
 
-            Mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountDetailByHashedIdQuery>()))
+            Mediator.Setup(x => x.Send(It.IsAny<GetEmployerAccountDetailByHashedIdQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(accountsResponse);
           
             var response = await Controller.GetAccount(hashedAccountId);

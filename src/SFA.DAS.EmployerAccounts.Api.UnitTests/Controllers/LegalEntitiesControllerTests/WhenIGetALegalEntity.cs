@@ -1,12 +1,12 @@
-﻿using MediatR;
+﻿using System.Threading.Tasks;
+using AutoFixture.NUnit3;
+using FluentAssertions;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Controllers;
-using SFA.DAS.EmployerAccounts.Queries.GetLegalEntity;
-using System.Threading.Tasks;
-using AutoFixture.NUnit3;
-using FluentAssertions;
 using SFA.DAS.EmployerAccounts.Api.Mappings;
+using SFA.DAS.EmployerAccounts.Queries.GetLegalEntity;
 using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesControllerTests
@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
             [Greedy] LegalEntitiesController controller)
         {
             var expectedModel = LegalEntityMapping.MapFromAccountLegalEntity(mediatorResponse.LegalEntity, mediatorResponse.LatestAgreement, includeAllAgreements);
-            mediator.Setup(m => m.SendAsync(
+            mediator.Setup(m => m.Send(
                     It.Is<GetLegalEntityQuery>(
                         q => q.AccountHashedId.Equals(hashedAccountId) && q.LegalEntityId.Equals(legalEntityId))))
                 .ReturnsAsync(mediatorResponse);

@@ -21,7 +21,7 @@ public class SearchOrganisationOrchestrator : UserVerificationOrchestratorBase, 
 
         try
         {
-            var result = await Mediator.SendAsync(new GetOrganisationsRequest { SearchTerm = searchTerm, PageNumber = pageNumber, OrganisationType = organisationType });
+            var result = await Mediator.Send(new GetOrganisationsRequest { SearchTerm = searchTerm, PageNumber = pageNumber, OrganisationType = organisationType });
             response.Data = new SearchOrganisationResultsViewModel
             {
                 Results = CreateResult(result.Organisations),

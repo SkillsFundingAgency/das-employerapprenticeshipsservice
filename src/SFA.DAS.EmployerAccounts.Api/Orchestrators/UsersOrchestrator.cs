@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
         {
             _logger.Info($"Requesting user's accounts for user Ref  {userRef}");
 
-            var accounts = await _mediator.SendAsync(new GetUserAccountsQuery { UserRef = userRef });
+            var accounts = await _mediator.Send(new GetUserAccountsQuery { UserRef = userRef });
 
             var viewModels = accounts.Accounts.AccountList.Select(x => _mapper.Map<AccountDetail>(x)).ToList();
 

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Http.Results;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -28,7 +30,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.EmployerAccountsCon
                 }
             };
 
-            Mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountDetailByHashedIdQuery>()))
+            Mediator.Setup(x => x.Send(It.IsAny<GetEmployerAccountDetailByHashedIdQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(accountsResponse);
 
             Microsoft.AspNetCore.Mvc.Routing.UrlHelper.Setup(x => x.Route("GetLegalEntity", It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId, legalEntityId = accountsResponse.Account.LegalEntities[0] })))).Returns($"/api/accounts/{hashedAccountId}/legalEntity/{accountsResponse.Account.LegalEntities[0]}");

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -19,7 +20,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
     public class WhenIGetPayeEnglishFractionHistory
     {
         private EmployerAccountsConfiguration _configuration;
-        private Mock<ILog> _logger;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
         private Mock<IMediator> _mediator;
         private EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
@@ -31,14 +31,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
         public void Arrange()
         {
             _configuration = new EmployerAccountsConfiguration { Hmrc = new HmrcConfiguration() };
-
-            _logger = new Mock<ILog>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
-
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerEnglishFractionHistoryQuery>())).ReturnsAsync(new GetEmployerEnglishFractionHistoryResponse { Fractions = new List<DasEnglishFraction>() });
-            
-            _employerAccountPayeOrchestrator = new EmployerAccountPayeOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration);
+            _mediator.Setup(x => x.Send(It.IsAny<GetEmployerEnglishFractionHistoryQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(new GetEmployerEnglishFractionHistoryResponse { Fractions = new List<DasEnglishFraction>() });
+
+            _employerAccountPayeOrchestrator = new EmployerAccountPayeOrchestrator(_mediator.Object, _cookieService.Object, _configuration);
         }
 
         [Test]
@@ -48,14 +45,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
             await _employerAccountPayeOrchestrator.GetPayeDetails(EmpRef, AccountId, UserId);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.IsAny<GetEmployerEnglishFractionHistoryQuery>()), Times.Once);
+            _mediator.Verify(x => x.Send(It.IsAny<GetEmployerEnglishFractionHistoryQuery>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]
         public async Task TheIfTheCallReturnsAnUnauthorizedAccessExceptionTheResponseIsSetAsUnauthenticated()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerEnglishFractionHistoryQuery>())).ThrowsAsync(new UnauthorizedAccessException(""));
+            _mediator.Setup(x => x.Send(It.IsAny<GetEmployerEnglishFractionHistoryQuery>(), It.IsAny<CancellationToken>())).ThrowsAsync(new UnauthorizedAccessException(""));
 
             //Act
             var actual = await _employerAccountPayeOrchestrator.GetPayeDetails(EmpRef, AccountId, UserId);

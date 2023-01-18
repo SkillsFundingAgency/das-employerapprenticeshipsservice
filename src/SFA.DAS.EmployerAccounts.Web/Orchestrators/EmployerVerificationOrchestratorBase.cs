@@ -27,7 +27,7 @@ public abstract class EmployerVerificationOrchestratorBase
 
     public virtual async Task<GetUserAccountRoleResponse> GetUserAccountRole(string hashedAccountId, string externalUserId)
     {
-        return await Mediator.SendAsync(new GetUserAccountRoleQuery
+        return await Mediator.Send(new GetUserAccountRoleQuery
         {
             HashedAccountId = hashedAccountId,
             ExternalUserId = externalUserId
@@ -36,7 +36,7 @@ public abstract class EmployerVerificationOrchestratorBase
 
     public virtual async Task<string> GetGatewayUrl(string redirectUrl)
     {
-        var response = await Mediator.SendAsync(new GetGatewayInformationQuery
+        var response = await Mediator.Send(new GetGatewayInformationQuery
         {
             ReturnUrl = redirectUrl
         });
@@ -76,7 +76,7 @@ public abstract class EmployerVerificationOrchestratorBase
             };
         }
 
-        var response = await Mediator.SendAsync(new GetGatewayTokenQuery
+        var response = await Mediator.Send(new GetGatewayTokenQuery
         {
             RedirectUrl = returnUrl,
             AccessCode = accessCode
@@ -91,7 +91,7 @@ public abstract class EmployerVerificationOrchestratorBase
         var response = new GetHmrcEmployerInformationResponse();
         try
         {
-            response = await Mediator.SendAsync(new GetHmrcEmployerInformationQuery
+            response = await Mediator.Send(new GetHmrcEmployerInformationQuery
             {
                 AuthToken = authToken
             });

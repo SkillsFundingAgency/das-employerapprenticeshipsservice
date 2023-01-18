@@ -106,7 +106,7 @@ public class SearchPensionRegulatorController : BaseController
         }
 
         var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-        var aornLock = await _mediatr.SendAsync(new GetUserAornLockRequest
+        var aornLock = await _mediatr.Send(new GetUserAornLockRequest
         {
             UserRef = userRef
         });
@@ -154,7 +154,7 @@ public class SearchPensionRegulatorController : BaseController
         var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
         var model = await _searchPensionRegulatorOrchestrator.GetOrganisationsByAorn(viewModel.Aorn, viewModel.PayeRef);
 
-        await _mediatr.SendAsync(new UpdateUserAornLockRequest
+        await _mediatr.Send(new UpdateUserAornLockRequest
         {
             UserRef = userRef,
             Success = model.Data.Results.Count > 0
@@ -164,7 +164,7 @@ public class SearchPensionRegulatorController : BaseController
         {
             case 0:
             {
-                var aornLock = await _mediatr.SendAsync(new GetUserAornLockRequest
+                var aornLock = await _mediatr.Send(new GetUserAornLockRequest
                 {
                     UserRef = userRef
                 });
@@ -231,14 +231,14 @@ public class SearchPensionRegulatorController : BaseController
 
     private async Task<bool> CheckIfPayeSchemeAlreadyInUse(string empRef)
     {
-        var schemeCheck = await _mediatr.SendAsync(new GetPayeSchemeInUseQuery { Empref = empRef });
+        var schemeCheck = await _mediatr.Send(new GetPayeSchemeInUseQuery { Empref = empRef });
 
         return schemeCheck.PayeScheme != null;
     }
 
     private async Task SavePayeDetails(string aorn, string payeRef)
     {
-        await _mediatr.SendAsync(new SavePayeRefData(new EmployerAccountPayeRefData
+        await _mediatr.Send(new SavePayeRefData(new EmployerAccountPayeRefData
         {
             PayeReference = payeRef,
             AORN = aorn
@@ -251,7 +251,7 @@ public class SearchPensionRegulatorController : BaseController
         if (viewModel?.Name != null)
         {
             await _mediatr
-                .SendAsync(new SaveOrganisationData
+                .Send(new SaveOrganisationData
                 (
                     new EmployerAccountOrganisationData
                     {
@@ -272,7 +272,7 @@ public class SearchPensionRegulatorController : BaseController
         if (viewModel?.Name != null)
         {
             await _mediatr
-                .SendAsync(new SaveOrganisationAndPayeData
+                .Send(new SaveOrganisationAndPayeData
                 (
                     new EmployerAccountOrganisationData
                     {

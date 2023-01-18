@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
@@ -59,15 +59,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntitiesRequest>())).ReturnsAsync(new GetAccountLegalEntitiesResponse { LegalEntities = new List<AccountSpecificLegalEntity>() });
-            _mediator.Setup(x => x.SendAsync(It.Is<GetGatewayTokenQuery>(c => c.AccessCode.Equals("1")))).ReturnsAsync(new GetGatewayTokenQueryResponse { HmrcTokenResponse = new HmrcTokenResponse { AccessToken = "1" } });
-            _mediator.Setup(x => x.SendAsync(It.Is<GetHmrcEmployerInformationQuery>(c => c.AuthToken.Equals("1")))).ReturnsAsync(new GetHmrcEmployerInformationResponse { Empref = "123/ABC", EmployerLevyInformation = new EmpRefLevyInformation { Employer = new Employer { Name = new Name { EmprefAssociatedName = ExpectedEmprefName } } } });
-            _mediator.Setup(x => x.SendAsync(It.Is<GetHmrcEmployerInformationQuery>(c => c.AuthToken.Equals("2")))).ReturnsAsync(new GetHmrcEmployerInformationResponse { Empref = "456/ABC", EmployerLevyInformation = new EmpRefLevyInformation { Employer = new Employer { Name = new Name { EmprefAssociatedName = ExpectedEmprefName } } } });
+            _mediator.Setup(x => x.Send(It.IsAny<GetAccountLegalEntitiesRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new GetAccountLegalEntitiesResponse { LegalEntities = new List<AccountSpecificLegalEntity>() });
+            _mediator.Setup(x => x.Send(It.Is<GetGatewayTokenQuery>(c => c.AccessCode.Equals("1")), It.IsAny<CancellationToken>())).ReturnsAsync(new GetGatewayTokenQueryResponse { HmrcTokenResponse = new HmrcTokenResponse { AccessToken = "1" } });
+            _mediator.Setup(x => x.Send(It.Is<GetHmrcEmployerInformationQuery>(c => c.AuthToken.Equals("1")), It.IsAny<CancellationToken>())).ReturnsAsync(new GetHmrcEmployerInformationResponse { Empref = "123/ABC", EmployerLevyInformation = new EmpRefLevyInformation { Employer = new Employer { Name = new Name { EmprefAssociatedName = ExpectedEmprefName } } } });
+            _mediator.Setup(x => x.Send(It.Is<GetHmrcEmployerInformationQuery>(c => c.AuthToken.Equals("2")), It.IsAny<CancellationToken>())).ReturnsAsync(new GetHmrcEmployerInformationResponse { Empref = "456/ABC", EmployerLevyInformation = new EmpRefLevyInformation { Employer = new Employer { Name = new Name { EmprefAssociatedName = ExpectedEmprefName } } } });
 
-            _employerAccountPayeOrchestrator = new EmployerAccountPayeOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration);
+            _employerAccountPayeOrchestrator = new EmployerAccountPayeOrchestrator(_mediator.Object, _cookieService.Object, _configuration);
         }
         
-
         [Test]
         public async Task ThenTheAddPayeToAccountCommandIsCalled()
         {
@@ -75,10 +74,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
             await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(_model, ExpectedUserId);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<AddPayeToAccountCommand>(c => c.HashedAccountId.Equals(ExpectedHashedId) && c.Empref.Equals(ExpectedEmpref) && c.ExternalUserId.Equals(ExpectedUserId) && c.EmprefName.Equals(ExpectedEmprefName))), Times.Once);
+            _mediator.Verify(x => x.Send(It.Is<AddPayeToAccountCommand>(c => c.HashedAccountId.Equals(ExpectedHashedId) && c.Empref.Equals(ExpectedEmpref) && c.ExternalUserId.Equals(ExpectedUserId) && c.EmprefName.Equals(ExpectedEmprefName)), It.IsAny<CancellationToken>()), Times.Once);
         }
         
-
         [Test]
         public async Task ThenTheCallToHmrcIsPerformed()
         {
@@ -86,7 +84,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
             await _employerAccountPayeOrchestrator.GetPayeConfirmModel("1", "1", "", null);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetHmrcEmployerInformationQuery>(c => c.AuthToken.Equals("1"))), Times.Once);
+            _mediator.Verify(x => x.Send(It.Is<GetHmrcEmployerInformationQuery>(c => c.AuthToken.Equals("1")), It.IsAny<CancellationToken>()), Times.Once);
         }
         
 
@@ -94,7 +92,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
         public async Task ThenIfTheSchemeExistsAConflictIsReturnedAndTheValuesAreCleared()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetHmrcEmployerInformationQuery>())).ThrowsAsync(new ConstraintException());
+            _mediator.Setup(x => x.Send(It.IsAny<GetHmrcEmployerInformationQuery>(), It.IsAny<CancellationToken>())).ThrowsAsync(new ConstraintException());
             
             //Act
             var actual = await _employerAccountPayeOrchestrator.GetPayeConfirmModel("1", "1", "", null);
@@ -113,14 +111,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
             await _employerAccountPayeOrchestrator.CheckUserIsOwner(ExpectedHashedId, ExpectedUserId, "", "");
 
             //assert
-            _mediator.Verify(x => x.SendAsync(It.IsAny<GetMemberRequest>()), Times.Once);
+            _mediator.Verify(x => x.Send(It.IsAny<GetMemberRequest>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]
         public async Task ThenIfNotAuthorisedItIsReturnedInTheResponse()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetMemberRequest>())).ReturnsAsync(new GetMemberResponse { TeamMember = new TeamMember { Role = Role.Viewer } });
+            _mediator.Setup(x => x.Send(It.IsAny<GetMemberRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new GetMemberResponse { TeamMember = new TeamMember { Role = Role.Viewer } });
 
             //Act
             var actual = await _employerAccountPayeOrchestrator.CheckUserIsOwner(ExpectedHashedId, ExpectedUserId, "", "");

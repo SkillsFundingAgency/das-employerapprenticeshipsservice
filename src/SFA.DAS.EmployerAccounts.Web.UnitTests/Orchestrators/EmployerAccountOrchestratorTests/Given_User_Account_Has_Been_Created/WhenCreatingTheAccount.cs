@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -35,8 +36,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             _configuration = new EmployerAccountsConfiguration();
 
             _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration);
-            _mediator.Setup(x => x.SendAsync(It.IsAny<CreateLegalEntityCommand>())).ReturnsAsync(new CreateLegalEntityCommandResponse { AgreementView = new EmployerAgreementView() });
-            _mediator.Setup(x => x.SendAsync(It.IsAny<CreateAccountCommand>()))
+            _mediator.Setup(x => x.Send(It.IsAny<CreateLegalEntityCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(new CreateLegalEntityCommandResponse { AgreementView = new EmployerAgreementView() });
+            _mediator.Setup(x => x.Send(It.IsAny<CreateAccountCommand>(), It.IsAny<CancellationToken>()))
                      .ReturnsAsync(new CreateAccountCommandResponse()
                      {
                          HashedAccountId = "ABS10"
@@ -51,9 +52,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
 
             _mediator
                 .Verify(
-                    x => x.SendAsync(
-                        It.IsAny<CreateAccountCommand>()
-                    ),
+                    x => x.Send(It.IsAny<CreateAccountCommand>(), It.IsAny<CancellationToken>()),
                     Times.Never);
         }
 
@@ -65,9 +64,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             await _employerAccountOrchestrator.CreateOrUpdateAccount(requestModel,
                 It.IsAny<HttpContextBase>());
 
-            _mediator.Verify(x => x.SendAsync(It.Is<AddPayeToAccountCommand>(
-                c => c.HashedAccountId.Equals(requestModel.HashedAccountId.Value)
-            )));
+            _mediator.Verify(x => x.Send(It.Is<AddPayeToAccountCommand>(c => c.HashedAccountId.Equals(requestModel.HashedAccountId.Value)), It.IsAny<CancellationToken>()));
         }
 
         [Test]
@@ -77,7 +74,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             var expectedHashedAgreementId = "LKJDDSF";
 
             _mediator
-                .Setup(x => x.SendAsync(It.Is<CreateLegalEntityCommand>(c =>
+                .Setup(x => x.Send(It.Is<CreateLegalEntityCommand>(c =>
                     c.HashedAccountId == requestModel.HashedAccountId.Value &&
                     c.Code == requestModel.OrganisationReferenceNumber &&
                     c.DateOfIncorporation == requestModel.OrganisationDateOfInception &&
@@ -87,7 +84,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
                     c.Sector == requestModel.Sector &&
                     c.Name == requestModel.OrganisationName &&
                     c.Address == requestModel.OrganisationAddress &&
-                    c.ExternalUserId == requestModel.UserId)))
+                    c.ExternalUserId == requestModel.UserId),
+                    It.IsAny<CancellationToken>()))
             .ReturnsAsync(new CreateLegalEntityCommandResponse { AgreementView = new EmployerAgreementView { HashedAgreementId = expectedHashedAgreementId } });
 
             var result = await _employerAccountOrchestrator.CreateOrUpdateAccount(requestModel, It.IsAny<HttpContextBase>());
@@ -103,10 +101,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             await _employerAccountOrchestrator.CreateOrUpdateAccount(ArrangeModel(),
                 It.IsAny<HttpContextBase>());
 
-            _mediator.Verify(x => x.SendAsync(It.Is<RenameEmployerAccountCommand>(
-                c => c.HashedAccountId.Equals(requestModel.HashedAccountId.Value) &&
-                     c.NewName.Equals(requestModel.OrganisationName)
-            )));
+            _mediator.Verify(x => x.Send(It.Is<RenameEmployerAccountCommand>(c => c.HashedAccountId.Equals(requestModel.HashedAccountId.Value) 
+                && c.NewName.Equals(requestModel.OrganisationName)),
+                It.IsAny<CancellationToken>()));
         }
 
         private static CreateAccountModel ArrangeModel()

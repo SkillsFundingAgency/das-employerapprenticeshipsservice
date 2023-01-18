@@ -91,8 +91,7 @@ public class SearchOrganisationController : BaseController
     {
         if (viewModel?.Name != null)
         {
-            _mediatr
-                .SendAsync(new SaveOrganisationData
+            _mediatr.Send(new SaveOrganisationData
                 (
                     new EmployerAccountOrganisationData
                     {

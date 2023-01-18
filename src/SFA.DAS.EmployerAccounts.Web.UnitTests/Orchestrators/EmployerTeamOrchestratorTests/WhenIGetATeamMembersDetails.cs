@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
@@ -46,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
 
             _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, Mock.Of<ICurrentDateTime>(), _accountApiClient.Object, _mapper.Object, Mock.Of<EmployerAccountsConfiguration>());
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetMemberRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetMemberRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(_teamMemberResponse);
         }
 
@@ -56,16 +57,16 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         public async Task ThenOnlyOwnersShouldBeAbleToGetATeamMembersDetails(Role userRole, HttpStatusCode status)
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountRoleQuery>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetUserAccountRoleQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetUserAccountRoleResponse {UserRole = userRole});
 
             //Act
             var result = await _orchestrator.GetActiveTeamMember(HashedAccountId, TeamMemberEmail, ExternalUserId);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetUserAccountRoleQuery>(q => 
+            _mediator.Verify(x => x.Send(It.Is<GetUserAccountRoleQuery>(q => 
                         q.HashedAccountId.Equals(HashedAccountId) && 
-                        q.ExternalUserId.Equals(ExternalUserId))), Times.Once);
+                        q.ExternalUserId.Equals(ExternalUserId)), It.IsAny<CancellationToken>()), Times.Once);
 
             Assert.AreEqual(status, result.Status);
         }
@@ -74,16 +75,16 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         public async Task ThenAnOwnerShouldBeAbleToSeeTeamMemberDetails()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountRoleQuery>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetUserAccountRoleQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetUserAccountRoleResponse { UserRole = Role.Owner });
 
             //Act
             var result = await _orchestrator.GetActiveTeamMember(HashedAccountId, TeamMemberEmail, ExternalUserId);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetMemberRequest>(r => 
+            _mediator.Verify(x => x.Send(It.Is<GetMemberRequest>(r => 
                         r.HashedAccountId.Equals(HashedAccountId) &&
-                        r.Email.Equals(TeamMemberEmail))), Times.Once);
+                        r.Email.Equals(TeamMemberEmail)), It.IsAny<CancellationToken>()), Times.Once);
 
             Assert.AreEqual(_teamMemberResponse.TeamMember, result.Data);
         }
@@ -93,23 +94,23 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         public async Task ThenUsersWhoAreNotOwnersShouldNotGetTeamMemberDetails(Role userRole)
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountRoleQuery>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetUserAccountRoleQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetUserAccountRoleResponse { UserRole = userRole });
 
             //Act
             await _orchestrator.GetActiveTeamMember(HashedAccountId, TeamMemberEmail, ExternalUserId);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.IsAny<GetMemberRequest>()), Times.Never);
+            _mediator.Verify(x => x.Send(It.IsAny<GetMemberRequest>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Test]
         public async Task ThenItShouldReturnANotFoundIfNoTeamMembersAreFound()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountRoleQuery>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetUserAccountRoleQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetUserAccountRoleResponse { UserRole = Role.Owner });
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetMemberRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetMemberRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetMemberResponse
                 {
                     TeamMember = new TeamMember()
