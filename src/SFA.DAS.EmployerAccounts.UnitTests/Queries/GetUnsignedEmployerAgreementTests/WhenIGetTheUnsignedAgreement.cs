@@ -7,8 +7,8 @@ using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
+using SFA.DAS.EmployerAccounts.TestCommon;
 using SFA.DAS.HashingService;
-using SFA.DAS.Testing.EntityFramework;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUnsignedEmployerAgreementTests

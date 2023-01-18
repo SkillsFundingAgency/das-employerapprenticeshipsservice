@@ -16,7 +16,6 @@
     <PackageReference Include="SFA.DAS.Testing" Version="1.0.14" />
     <PackageReference Include="SFA.DAS.NServiceBus.Testing" Version="15.0.25" />
     <PackageReference Include="SFA.DAS.Testing.AutoFixture" Version="3.0.169" />
-    <PackageReference Include="SFA.DAS.Testing.EntityFramework" Version="2.0.5" />
     <PackageReference Include="SFA.DAS.Validation" Version="5.1.167" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.355802">

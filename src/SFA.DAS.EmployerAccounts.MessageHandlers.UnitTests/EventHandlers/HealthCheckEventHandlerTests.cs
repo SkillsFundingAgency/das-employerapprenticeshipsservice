@@ -9,14 +9,13 @@ using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.Testing;
+using SFA.DAS.EmployerAccounts.TestCommon;
 using SFA.DAS.Testing.Builders;
-using SFA.DAS.Testing.EntityFramework;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
 {
     [TestFixture]
-    public class HealthCheckEventHandlerTests : FluentTest<HealthCheckEventHandlerTestsFixture>
+    public class HealthCheckEventHandlerTests : Testing.FluentTest<HealthCheckEventHandlerTestsFixture>
     {
         [Test]
         public Task Handle_WhenHandlingAHealthCheckEvent_ThenShouldUpdateHealthCheck()

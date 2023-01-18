@@ -10,15 +10,14 @@ using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesCountByHashedAccountId;
+using SFA.DAS.EmployerAccounts.TestCommon;
 using SFA.DAS.HashingService;
-using SFA.DAS.Testing;
-using SFA.DAS.Testing.EntityFramework;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntitiesCountByHashedAccountId
 {
     [TestFixture]
-    public class GetAccountLegalEntitiesCountByHashedAccountIdTests : FluentTest<GetAccountLegalEntitiesCountByHashedAccountIdTestsFixture>
+    public class GetAccountLegalEntitiesCountByHashedAccountIdTests : Testing.FluentTest<GetAccountLegalEntitiesCountByHashedAccountIdTestsFixture>
     {
         [Test]
         public Task Handle_WhenHandlingAGetAccountLegalEntitiesCountByHashedAccountIdRequest_ThenShouldReturnTheNumberOfLegalEntitiesForAnAccount()

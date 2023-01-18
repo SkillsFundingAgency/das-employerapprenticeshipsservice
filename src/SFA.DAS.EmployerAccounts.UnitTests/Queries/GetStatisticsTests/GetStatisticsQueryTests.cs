@@ -10,14 +10,14 @@ using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Queries.GetStatistics;
-using SFA.DAS.Testing;
-using SFA.DAS.Testing.EntityFramework;
+using SFA.DAS.EmployerAccounts.TestCommon;
 using Z.EntityFramework.Plus;
+using FluentTestFixture = SFA.DAS.Testing.FluentTestFixture;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetStatisticsTests
 {
     [TestFixture]
-    public class GetStatisticsQueryTests : FluentTest<GetStatisticsQueryTestsFixtures>
+    public class GetStatisticsQueryTests : Testing.FluentTest<GetStatisticsQueryTestsFixtures>
     {
         [Test]
         public Task Handle_WhenIGetStatistics_ThenShouldReturnResponse()

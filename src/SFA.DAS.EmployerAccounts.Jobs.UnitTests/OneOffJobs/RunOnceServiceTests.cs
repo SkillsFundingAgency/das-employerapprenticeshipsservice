@@ -8,14 +8,13 @@ using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
 using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.Testing;
-using SFA.DAS.Testing.EntityFramework;
+using SFA.DAS.EmployerAccounts.TestCommon;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
 {
     [TestFixture]
     [Parallelizable]
-    public class RunOnceServiceTests : FluentTest<RunOnceServiceTestsFixture>
+    public class RunOnceServiceTests : Testing.FluentTest<RunOnceServiceTestsFixture>
     {
         [Test]
         public Task RunOnce_WhenRunningAfterJobHasPreviouslySuccessfullyCompleted_ThenShouldImmediatelyReturnAndNotRunTheJob()

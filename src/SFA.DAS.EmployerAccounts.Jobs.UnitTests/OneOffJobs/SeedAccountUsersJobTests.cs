@@ -13,16 +13,15 @@ using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;
 using SFA.DAS.EmployerAccounts.ReadStore.Models;
+using SFA.DAS.EmployerAccounts.TestCommon;
 using SFA.DAS.EmployerAccounts.Types.Models;
-using SFA.DAS.Testing;
 using SFA.DAS.Testing.Builders;
-using SFA.DAS.Testing.EntityFramework;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
 {
     [TestFixture]
     [Parallelizable]
-    public class SeedAccountUsersJobTests : FluentTest<SeedAccountUsersJobTestsFixture>
+    public class SeedAccountUsersJobTests : Testing.FluentTest<SeedAccountUsersJobTestsFixture>
     {
         [Test]
         public Task Run_WhenRunningJob_ThenShouldAddUsersWhichHaveRealRolesAndIgnoreThoseSetToNone()

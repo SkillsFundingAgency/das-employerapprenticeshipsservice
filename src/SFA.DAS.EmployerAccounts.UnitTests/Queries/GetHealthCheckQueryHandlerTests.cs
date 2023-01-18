@@ -12,15 +12,14 @@ using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Mappings;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Queries.GetHealthCheck;
+using SFA.DAS.EmployerAccounts.TestCommon;
 using SFA.DAS.EmployerAccounts.UnitTests.Builders;
-using SFA.DAS.Testing;
-using SFA.DAS.Testing.EntityFramework;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries
 {
 
     [TestFixture]
-    public class GetHealthCheckQueryHandlerTests : FluentTest<GetHealthCheckQueryHandlerTestsFixture>
+    public class GetHealthCheckQueryHandlerTests : Testing.FluentTest<GetHealthCheckQueryHandlerTestsFixture>
     {
         [Test]
         public Task Handle_WhenHandlingAGetHealthCheckQuery_ThenShouldReturnAGetHealthCheckQueryResponse()
