@@ -1,4 +1,7 @@
 ﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 
@@ -41,8 +44,6 @@ public class HomeController : BaseController
 
         if (!string.IsNullOrWhiteSpace(userId))
         {
-            await OwinWrapper.UpdateClaims();
-
             var partialLogin = _contextAccessor.HttpContext.User.FindFirstValue(DasClaimTypes.RequiresVerification);
 
             if (partialLogin.Equals("true", StringComparison.CurrentCultureIgnoreCase))
@@ -142,8 +143,6 @@ public class HomeController : BaseController
             return Redirect(returnUrl);
         }
 
-        await OwinWrapper.UpdateClaims();
-
         var userRef = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
         var email = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.EmailClaimKeyName);
         var firstName = _contextAccessor.HttpContext.User.FindFirstValue(DasClaimTypes.GivenName);
@@ -170,8 +169,6 @@ public class HomeController : BaseController
     [Route("register/new/{correlationId?}")]
     public async Task<IActionResult> HandleNewRegistration(string correlationId = null)
     {
-        await OwinWrapper.UpdateClaims();
-
         if (!string.IsNullOrWhiteSpace(correlationId))
         {
             var userRef = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
@@ -236,10 +233,9 @@ public class HomeController : BaseController
                 Severity = FlashMessageSeverityLevel.Success,
                 Headline = "You've changed your email"
             };
+            
             AddFlashMessageToCookie(flashMessage);
-
-            await OwinWrapper.UpdateClaims();
-
+            
             var userRef = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
             var email = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.EmailClaimKeyName);
             var firstName = _contextAccessor.HttpContext.User.FindFirstValue(DasClaimTypes.GivenName);
@@ -259,22 +255,30 @@ public class HomeController : BaseController
     }
 
     [Route("signOut")]
-    public IActionResult SignOut()
+    public async Task<IActionResult> SignOut()
     {
-        OwinWrapper.SignOutUser();
+        var idToken = await HttpContext.GetTokenAsync("id_token");
 
-        var owinContext = HttpContext.GetOwinContext();
-        var authenticationManager = owinContext.Authentication;
-        var idToken = authenticationManager.User.FindFirst("id_token")?.Value;
+        var authenticationProperties = new AuthenticationProperties();
+        authenticationProperties.Parameters.Clear();
+        authenticationProperties.Parameters.Add("id_token", idToken);
+        SignOut(authenticationProperties, CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
+        
         var constants = new Constants(_configuration.Identity);
 
         return new RedirectResult(string.Format(constants.LogoutEndpoint(), idToken));
     }
 
     [Route("SignOutCleanup")]
-    public void SignOutCleanup()
+    public async Task SignOutCleanup()
     {
-        OwinWrapper.SignOutUser();
+        var idToken = await HttpContext.GetTokenAsync("id_token");
+
+        var authenticationProperties = new AuthenticationProperties();
+        authenticationProperties.Parameters.Clear();
+        authenticationProperties.Parameters.Add("id_token", idToken);
+
+        SignOut(authenticationProperties, CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
     }
 
     [HttpGet]
