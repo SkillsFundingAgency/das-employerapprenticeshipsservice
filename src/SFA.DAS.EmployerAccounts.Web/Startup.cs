@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
@@ -60,7 +61,6 @@ namespace SFA.DAS.EmployerAccounts.Web
                 .Get<IdentityServerConfiguration>();
 
             services.AddConfigurationOptions(_configuration);
-            services.AddFluentValidation();
             services.AddOrchestrators();
             services.AddAutoMapper(typeof(Startup).Assembly);
             services.AddDatabaseRegistration(employerAccountsConfiguration, _configuration["Environment"]);
@@ -71,8 +71,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddDateTimeServices(_configuration);
             services.AddEventsApi();
             services.AddNotifications(_configuration);
-            services.AddValidators();
-
+            
             services.AddMediatR(typeof(Startup).Assembly);
 
             services.AddLogging();
@@ -91,6 +90,7 @@ namespace SFA.DAS.EmployerAccounts.Web
                 });
 
             services.AddHttpContextAccessor();
+            services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
 
             services.AddAdvancedDependencyInjection();
 
