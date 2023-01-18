@@ -7,11 +7,13 @@ using SFA.DAS.NServiceBus.Configuration.AzureServiceBus;
 
 namespace SFA.DAS.EmployerAccounts.Extensions;
 
-public static class EndpointConfigurationExtensions
+namespace SFA.DAS.EmployerAccounts.Extensions
 {
-    public static EndpointConfiguration UseAzureServiceBusTransport(this EndpointConfiguration config, Func<string> connectionStringBuilder, IContainer container)
+    public static class EndpointConfigurationExtensions
     {
-        var isDevelopment = container.GetInstance<IEnvironmentService>().IsCurrent(DasEnv.LOCAL);
+        public static EndpointConfiguration UseAzureServiceBusTransport(this EndpointConfiguration config, Func<string> connectionStringBuilder, IContainer container)
+        {
+            var isDevelopment = false; // container.GetInstance<IEnvironmentService>().IsCurrent(DasEnv.LOCAL);
 
         if (isDevelopment)
         {

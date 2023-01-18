@@ -9,6 +9,7 @@ using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
 using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 using SFA.DAS.EmployerAccounts.Types.Models;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.Testing;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.EmployerAccounts
@@ -59,7 +60,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Emplo
                 Created = Created
             };
 
-            Handler = new CreatedAccountEventHandler(ReadStoreMediator.Object);
+            Handler = new CreatedAccountEventHandler(ReadStoreMediator.Object, Mock.Of<ILog>());
         }
     }
 }
