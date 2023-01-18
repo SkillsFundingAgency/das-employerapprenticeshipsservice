@@ -14,6 +14,7 @@ using System.Linq;
 using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
+using SFA.DAS.EmployerAccounts.Web.Infrastructure;
 using static SFA.DAS.EmployerAccounts.Web.Authorization.ImpersonationAuthorizationContext;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
@@ -60,7 +61,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
 
             var routeBase = new Route("teams/view", MockRouteHandler.Object);
             var routeData = new RouteData(routeBase, MockRouteHandler.Object);
-            routeData.Values.Add(RouteValueKeys.AccountHashedId, "ABC123");
+            routeData.Values.Add(RouteValues.EncodedAccountId, "ABC123");
             MockContextBase.Setup(x => x.Request.RequestContext.RouteData).Returns(routeData);
 
             var authorizationContext = new DAS.Authorization.Context.AuthorizationContext();

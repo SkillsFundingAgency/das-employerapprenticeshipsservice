@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.ViewEngines;
 using SFA.DAS.EmployerAccounts.Configuration;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
+using SFA.DAS.EmployerAccounts.Web.Infrastructure;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
 {
@@ -43,7 +44,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
             var dependancyResolver = new Mock<IDependencyResolver>();
             dependancyResolver.Setup(r => r.GetService(typeof(EmployerAccountsConfiguration))).Returns(_config);
             DependencyResolver.SetResolver(dependancyResolver.Object);
-            claims.Add(new Claim(RouteValueKeys.AccountHashedId, HashedAccountId));
+            claims.Add(new Claim(RouteValues.EncodedAccountId, HashedAccountId));
             MockIPrincipal = new Mock<IPrincipal>();           
             MockViewDataContainer = new Mock<IViewDataContainer>();
             MockContextBase = new Mock<HttpContextBase>();

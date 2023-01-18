@@ -2,6 +2,7 @@
 using SFA.DAS.Authorization.Context;
 using SFA.DAS.Authorization.EmployerFeatures.Context;
 using SFA.DAS.Authorization.EmployerUserRoles.Context;
+using SFA.DAS.EmployerAccounts.Web.Infrastructure;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.HashingService;
 using AuthorizationContext = SFA.DAS.Authorization.Context.AuthorizationContext;
@@ -42,7 +43,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
 
         private (string HashedId, long? Id) GetAccountValues()
         {
-            if (!_actionContextAccessor.ActionContext.RouteData.Values.TryGetValue(RouteValueKeys.AccountHashedId, out var accountHashedId))
+            if (!_actionContextAccessor.ActionContext.RouteData.Values.TryGetValue(RouteValues.EncodedAccountId, out var accountHashedId))
             {
                 return (null, null);
             }
