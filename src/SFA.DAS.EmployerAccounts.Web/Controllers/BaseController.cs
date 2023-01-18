@@ -13,7 +13,7 @@ public class BaseController : Controller
     }
 
     public BaseController() { }
-
+    
     public void AddFlashMessageToCookie(FlashMessageViewModel model)
     {
         _flashMessage.Delete(FlashMessageCookieName);

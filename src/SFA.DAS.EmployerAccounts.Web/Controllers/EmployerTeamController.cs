@@ -1,6 +1,5 @@
 ﻿using System.Security.Claims;
 using SFA.DAS.Authorization.Mvc.Attributes;
-using SFA.DAS.EmployerAccounts.Web.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
@@ -13,7 +12,6 @@ public class EmployerTeamController : BaseController
     private readonly IHttpContextAccessor _contextAccessor;
 
     public EmployerTeamController(IUrlActionHelper urlActionHelper)
-        
     {
         _urlActionHelper = urlActionHelper;
         _employerTeamOrchestrator = null;
@@ -32,9 +30,9 @@ public class EmployerTeamController : BaseController
     [HttpGet]
     public async Task<IActionResult> Index(string hashedAccountId, string reservationId)
     {
-        PopulateViewBagWithExternalUserId();            
+        PopulateViewBagWithExternalUserId();
         var response = await GetAccountInformation(hashedAccountId);
-            
+
         if (response.Status != HttpStatusCode.OK)
         {
             return View(response);
@@ -311,7 +309,7 @@ public class EmployerTeamController : BaseController
             ViewData.ModelState.AddModelError("Choice", "You must select an option to continue.");
             return View();
         }
-        else if(requiresAdvert.Value == true)
+        else if (requiresAdvert.Value == true)
         {
             return Redirect(_urlActionHelper.EmployerRecruitAction(RouteData));
         }
@@ -339,19 +337,19 @@ public class EmployerTeamController : BaseController
         switch (model.TriageOption)
         {
             case TriageOptions.Yes:
-            {
-                return RedirectToAction(ControllerConstants.TriageHaveYouChosenATrainingProviderActionName);
-            }
+                {
+                    return RedirectToAction(ControllerConstants.TriageHaveYouChosenATrainingProviderActionName);
+                }
 
             case TriageOptions.No:
-            {
-                return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetCourseProviderActionName);
-            }
+                {
+                    return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetCourseProviderActionName);
+                }
 
             default:
-            {
-                return View(model);
-            }
+                {
+                    return View(model);
+                }
         }
     }
 
@@ -382,19 +380,19 @@ public class EmployerTeamController : BaseController
         switch (model.TriageOption)
         {
             case TriageOptions.Yes:
-            {
-                return RedirectToAction(ControllerConstants.TriageWillApprenticeshipTrainingStartActionName);
-            }
+                {
+                    return RedirectToAction(ControllerConstants.TriageWillApprenticeshipTrainingStartActionName);
+                }
 
             case TriageOptions.No:
-            {
-                return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetProviderActionName);
-            }
+                {
+                    return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetProviderActionName);
+                }
 
             default:
-            {
-                return View(model);
-            }
+                {
+                    return View(model);
+                }
         }
     }
 
@@ -425,24 +423,24 @@ public class EmployerTeamController : BaseController
         switch (model.TriageOption)
         {
             case TriageOptions.Yes:
-            {
-                return RedirectToAction(ControllerConstants.TriageApprenticeForExistingEmployeeActionName);
-            }
+                {
+                    return RedirectToAction(ControllerConstants.TriageApprenticeForExistingEmployeeActionName);
+                }
 
             case TriageOptions.No:
-            {
-                return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetStartDateActionName);
-            }
+                {
+                    return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetStartDateActionName);
+                }
 
             case TriageOptions.Unknown:
-            {
-                return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetApproximateStartDateActionName);
-            }
+                {
+                    return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetApproximateStartDateActionName);
+                }
 
             default:
-            {
-                return View(model);
-            }
+                {
+                    return View(model);
+                }
         }
     }
 
@@ -480,19 +478,19 @@ public class EmployerTeamController : BaseController
         switch (model.TriageOption)
         {
             case TriageOptions.Yes:
-            {
-                return View(ControllerConstants.TriageSetupApprenticeshipExistingEmployeeViewName);
-            }
+                {
+                    return View(ControllerConstants.TriageSetupApprenticeshipExistingEmployeeViewName);
+                }
 
             case TriageOptions.No:
-            {
-                return View(ControllerConstants.TriageSetupApprenticeshipNewEmployeeViewName);
-            }
+                {
+                    return View(ControllerConstants.TriageSetupApprenticeshipNewEmployeeViewName);
+                }
 
             default:
-            {
-                return View(model);
-            }
+                {
+                    return View(model);
+                }
         }
     }
 

@@ -10,10 +10,9 @@ public class ReportController : BaseController
     private readonly ILog _logger;
 
     public ReportController(IMediator mediator,
-        ILog logger, IAuthenticationService owinWrapper,
-        IMultiVariantTestingService multiVariantTestingService,
+        ILog logger,
         ICookieStorageService<FlashMessageViewModel> flashMessage)
-        : base(owinWrapper, multiVariantTestingService, flashMessage)
+        : base(flashMessage)
     {
         _mediator = mediator;
         _logger = logger;

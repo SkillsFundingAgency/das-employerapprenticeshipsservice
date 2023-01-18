@@ -2,14 +2,7 @@
 
 public class CookieConsentController : BaseController
 {
-    public CookieConsentController(
-        IAuthenticationService owinWrapper,
-        IMultiVariantTestingService multiVariantTestingService,
-        ICookieStorageService<FlashMessageViewModel> flashMessage
-    ) : base(owinWrapper, multiVariantTestingService, flashMessage)
-    {
-
-    }
+    public CookieConsentController(ICookieStorageService<FlashMessageViewModel> flashMessage) : base(flashMessage) { }
 
     [HttpGet]
     [Route("accounts/{HashedAccountId}/cookieConsent", Order = 0)]
