@@ -61,4 +61,5 @@ public class EmployerAccountsConfiguration : ITopicMessagePublisherConfiguration
     public string SupportConsoleUsers { get; set; }
     public DateTime? LastTermsAndConditionsUpdate { get; set; }
     public TaskApiConfiguration TasksApi { get; set; }
+    public bool UseGovSignIn { get; set; }
 }

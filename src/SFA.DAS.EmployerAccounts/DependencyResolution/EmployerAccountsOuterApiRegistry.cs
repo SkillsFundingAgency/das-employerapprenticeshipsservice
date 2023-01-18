@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces.OuterApi;
-using SFA.DAS.EmployerAccounts.Infrastructure;
+using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi;
 
 namespace SFA.DAS.EmployerAccounts.DependencyResolution;
 

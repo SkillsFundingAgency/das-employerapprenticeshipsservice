@@ -1,5 +1,5 @@
-﻿using SFA.DAS.EmployerAccounts.Infrastructure.OuterApiRequests.Reservations;
-using SFA.DAS.EmployerAccounts.Infrastructure.OuterApiResponses.Reservations;
+﻿using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Responses.Reservations;
+using SFA.DAS.EmployerAccounts.Infrastructure.OuterApiRequests.Reservations;
 using SFA.DAS.EmployerAccounts.Interfaces.OuterApi;
 using SFA.DAS.EmployerAccounts.Models.Reservations;
 using SFA.DAS.NLog.Logger;

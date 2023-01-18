@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using DasEnglishFraction = SFA.DAS.EmployerAccounts.Models.Levy.DasEnglishFraction;
-using OuterDasEnglishFraction = SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.OuterApiResponses.Finance.DasEnglishFraction;
+using OuterDasEnglishFraction = SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Responses.Finance.DasEnglishFraction;
 
 namespace SFA.DAS.EmployerAccounts.Mappings;
 

@@ -22,7 +22,7 @@ public class OuterApiClient : IOuterApiClient
     public async Task<TResponse> Get<TResponse>(IGetApiRequest request)
     {
         var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, request.GetUrl);
-            
+
         AddHeaders(httpRequestMessage);
 
         var response = await _httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);

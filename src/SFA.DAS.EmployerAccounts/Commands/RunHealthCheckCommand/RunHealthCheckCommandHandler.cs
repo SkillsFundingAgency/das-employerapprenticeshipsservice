@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using SFA.DAS.EAS.Account.Api.Client;
-using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.OuterApiRequests.HealthCheck;
-using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.OuterApiResponses.HealthCheck;
+using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Requests.HealthCheck;
+using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Responses.HealthCheck;
 using SFA.DAS.EmployerAccounts.Interfaces.OuterApi;
 using SFA.DAS.EmployerAccounts.Models;
 

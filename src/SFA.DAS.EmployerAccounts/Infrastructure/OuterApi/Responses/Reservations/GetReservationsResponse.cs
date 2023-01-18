@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EmployerAccounts.Infrastructure.OuterApiResponses.Reservations;
+﻿namespace SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Responses.Reservations;
 
 public class GetReservationsResponse
 {

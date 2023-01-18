@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.OuterApiResponses.Finance;
+﻿namespace SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Responses.Finance;
 
 public class GetEnglishFractionResponse
 {

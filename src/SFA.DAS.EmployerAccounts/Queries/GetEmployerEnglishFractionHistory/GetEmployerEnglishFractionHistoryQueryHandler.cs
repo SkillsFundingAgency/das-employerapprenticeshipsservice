@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using AutoMapper;
-using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.OuterApiRequests.Finance;
-using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.OuterApiResponses.Finance;
+using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Requests.Finance;
+using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Responses.Finance;
 using SFA.DAS.EmployerAccounts.Interfaces.OuterApi;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeInUse;
 using SFA.DAS.Validation;

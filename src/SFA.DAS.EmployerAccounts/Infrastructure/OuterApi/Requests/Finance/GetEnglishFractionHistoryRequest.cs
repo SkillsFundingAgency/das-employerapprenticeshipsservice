@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.EmployerAccounts.Interfaces.OuterApi;
 
-namespace SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.OuterApiRequests.Finance;
+namespace SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Requests.Finance;
 
 public class GetEnglishFractionHistoryRequest : IGetApiRequest
 {

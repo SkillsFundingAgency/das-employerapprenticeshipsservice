@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.EmployerAccounts.Interfaces.OuterApi;
 
-namespace SFA.DAS.EmployerAccounts.Infrastructure.OuterApiRequests.Reservations;
+namespace SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Requests.Reservations;
 
 public class GetReservationsRequest : IGetApiRequest
 {

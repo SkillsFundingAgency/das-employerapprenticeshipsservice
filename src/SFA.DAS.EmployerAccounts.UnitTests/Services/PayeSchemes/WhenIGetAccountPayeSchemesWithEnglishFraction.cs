@@ -7,15 +7,15 @@ using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.OuterApiRequests.Finance;
-using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.OuterApiResponses.Finance;
+using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Requests.Finance;
+using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Responses.Finance;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Interfaces.OuterApi;
 using SFA.DAS.EmployerAccounts.Mappings;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.HashingService;
-using OuterApiDasEnglishFraction = SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.OuterApiResponses.Finance.DasEnglishFraction;
+using OuterApiDasEnglishFraction = SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Responses.Finance.DasEnglishFraction;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Services.PayeSchemes
 {
