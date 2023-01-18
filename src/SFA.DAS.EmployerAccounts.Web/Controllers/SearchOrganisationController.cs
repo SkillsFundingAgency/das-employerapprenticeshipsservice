@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Authorization.Mvc.Attributes;
+﻿using System.Security.Claims;
+using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.OrganisationData;
 using SFA.DAS.EmployerAccounts.Models.ReferenceData;
@@ -11,19 +12,20 @@ public class SearchOrganisationController : BaseController
 {
     private readonly SearchOrganisationOrchestrator _orchestrator;
     //This is temporary until the existing add org function is replaced, at which point the method used can be moved to the org search orchestrator
-    private IMediator _mediatr;
+    private IMediator _mediator;
+    private readonly HttpContextAccessor _contextAccessor;
 
 
     public SearchOrganisationController(
-        IAuthenticationService owinWrapper,
         SearchOrganisationOrchestrator orchestrator,
-        IMultiVariantTestingService multiVariantTestingService,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
-        IMediator mediatr)
-        : base(owinWrapper, multiVariantTestingService, flashMessage)
+        IMediator mediator,
+        HttpContextAccessor contextAccessor)
+        : base( flashMessage)
     {
         _orchestrator = orchestrator;
-        _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr));
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        _contextAccessor = contextAccessor;
     }
 
     [HttpGet]
@@ -61,7 +63,7 @@ public class SearchOrganisationController : BaseController
         }
         else
         {
-            model = await _orchestrator.SearchOrganisation(searchTerm, pageNumber, organisationType, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            model = await _orchestrator.SearchOrganisation(searchTerm, pageNumber, organisationType, hashedAccountId, _contextAccessor.HttpContext.User.FindFirstValue(@"sub"));
         }
         model.Data.IsExistingAccount = !string.IsNullOrEmpty(hashedAccountId);
 
@@ -91,7 +93,7 @@ public class SearchOrganisationController : BaseController
     {
         if (viewModel?.Name != null)
         {
-            _mediatr.Send(new SaveOrganisationData
+            _mediator.Send(new SaveOrganisationData
                 (
                     new EmployerAccountOrganisationData
                     {

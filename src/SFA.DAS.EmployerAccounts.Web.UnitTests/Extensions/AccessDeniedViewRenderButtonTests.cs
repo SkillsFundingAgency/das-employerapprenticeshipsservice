@@ -5,14 +5,18 @@ using SFA.DAS.EmployerAccounts.Web.Extensions;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Security.Principal;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 using SFA.DAS.EmployerAccounts.Configuration;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using SFA.DAS.EmployerAccounts.Web.Helpers;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
 {
     [TestFixture]
     public class AccessDeniedViewRenderButtonTests
     {
+        private Mock<IHtmlGenerator> _htmlGenerator;
+        private Mock<ICompositeViewEngine> _viewEngine;
         private Mock<IViewDataContainer> MockViewDataContainer;
         private Mock<ViewContext> MockViewContext;        
         private Mock<HttpContextBase> MockContextBase;            
@@ -32,6 +36,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
             {
                 SupportConsoleUsers = _supportConsoleUsers
             };
+
+            _htmlGenerator = new Mock<IHtmlGenerator>();
+            _viewEngine = new Mock<ICompositeViewEngine>();
+
             var dependancyResolver = new Mock<IDependencyResolver>();
             dependancyResolver.Setup(r => r.GetService(typeof(EmployerAccountsConfiguration))).Returns(_config);
             DependencyResolver.SetResolver(dependancyResolver.Object);
@@ -46,6 +54,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
             MockContextBase.Setup(c => c.User).Returns(MockIPrincipal.Object);
             MockViewContext = new Mock<ViewContext>();
             MockViewContext.Setup(x => x.HttpContext).Returns(MockContextBase.Object);
+            _helper = new HtmlHelpers(_config, null, );
         }
 
 
@@ -57,7 +66,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
         {
             //Arrange
             MockIPrincipal.Setup(x => x.IsInRole(Tier2User)).Returns(isTier2User);
-            var htmlHelper = new HtmlHelper(MockViewContext.Object, MockViewDataContainer.Object);
+            var htmlHelper = new HtmlHelper(_htmlGenerator.Object, _viewEngine.Object);
 
             //Act
             var result = Helpers.HtmlHelperExtensions.ReturnToHomePageLinkText(htmlHelper, accountId);

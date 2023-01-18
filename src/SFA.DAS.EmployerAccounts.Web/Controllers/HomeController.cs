@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Authorization.Mvc.Attributes;
+﻿using System.Security.Claims;
+using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
@@ -10,32 +11,31 @@ public class HomeController : BaseController
     private readonly EmployerAccountsConfiguration _configuration;
     private readonly ICookieStorageService<ReturnUrlModel> _returnUrlCookieStorageService;
     private readonly ILog _logger;
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IHttpContextAccessor _contextAccessor;
 
     private const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
 
-    public HomeController(IAuthenticationService owinWrapper,
+    public HomeController(
         HomeOrchestrator homeOrchestrator,
         EmployerAccountsConfiguration configuration,
-        IMultiVariantTestingService multiVariantTestingService,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
         ICookieStorageService<ReturnUrlModel> returnUrlCookieStorageService,
         ILog logger,
-        IHttpContextAccessor httpContextAccessor)
-        : base(owinWrapper, multiVariantTestingService, flashMessage)
+        IHttpContextAccessor contextAccessor)
+        : base(flashMessage)
     {
         _homeOrchestrator = homeOrchestrator;
         _configuration = configuration;
         _returnUrlCookieStorageService = returnUrlCookieStorageService;
         _logger = logger;
-        _httpContextAccessor = httpContextAccessor;
+        _contextAccessor = contextAccessor;
     }
 
     [Route("~/")]
     [Route("Index")]
     public async Task<IActionResult> Index()
     {
-        var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+        var userId = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
 
         OrchestratorResponse<UserAccountsViewModel> accounts;
 
@@ -43,17 +43,17 @@ public class HomeController : BaseController
         {
             await OwinWrapper.UpdateClaims();
 
-            var partialLogin = OwinWrapper.GetClaimValue(DasClaimTypes.RequiresVerification);
+            var partialLogin = _contextAccessor.HttpContext.User.FindFirstValue(DasClaimTypes.RequiresVerification);
 
             if (partialLogin.Equals("true", StringComparison.CurrentCultureIgnoreCase))
             {
                 return Redirect(ConfigurationFactory.Current.Get().AccountActivationUrl);
             }
 
-            var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-            var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
-            var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
-            var lastName = OwinWrapper.GetClaimValue(DasClaimTypes.FamilyName);
+            var userRef = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+            var email = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.EmailClaimKeyName);
+            var firstName = _contextAccessor.HttpContext.User.FindFirstValue(DasClaimTypes.GivenName);
+            var lastName = _contextAccessor.HttpContext.User.FindFirstValue(DasClaimTypes.FamilyName);
 
             await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName);
 
@@ -121,7 +121,7 @@ public class HomeController : BaseController
     [Route("termsAndConditions")]
     public async Task<IActionResult> TermsAndConditions(TermsAndConditionsNewViewModel termsAndConditionViewModel)
     {
-        var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+        var userRef = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
         await _homeOrchestrator.UpdateTermAndConditionsAcceptedOn(userRef);
 
         if (termsAndConditionViewModel.ReturnUrl == "EmployerTeam")
@@ -135,7 +135,7 @@ public class HomeController : BaseController
     [Route("SaveAndSearch")]
     public async Task<IActionResult> SaveAndSearch(string returnUrl)
     {
-        var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+        var userId = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
         if (string.IsNullOrWhiteSpace(userId))
         {
             _logger.Warn($"UserId not found on OwinWrapper. Redirecting back to passed in returnUrl: {returnUrl}");
@@ -144,10 +144,10 @@ public class HomeController : BaseController
 
         await OwinWrapper.UpdateClaims();
 
-        var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-        var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
-        var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
-        var lastName = OwinWrapper.GetClaimValue(DasClaimTypes.FamilyName);
+        var userRef = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+        var email = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.EmailClaimKeyName);
+        var firstName = _contextAccessor.HttpContext.User.FindFirstValue(DasClaimTypes.GivenName);
+        var lastName = _contextAccessor.HttpContext.User.FindFirstValue(DasClaimTypes.FamilyName);
 
         await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName);
 
@@ -161,7 +161,7 @@ public class HomeController : BaseController
     [Route("accounts")]
     public async Task<IActionResult> ViewAccounts()
     {
-        var accounts = await _homeOrchestrator.GetUserAccounts(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+        var accounts = await _homeOrchestrator.GetUserAccounts(_contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
         return View(ControllerConstants.IndexActionName, accounts);
     }
 
@@ -174,10 +174,10 @@ public class HomeController : BaseController
 
         if (!string.IsNullOrWhiteSpace(correlationId))
         {
-            var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-            var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
-            var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
-            var lastName = OwinWrapper.GetClaimValue(DasClaimTypes.FamilyName);
+            var userRef = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+            var email = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.EmailClaimKeyName);
+            var firstName = _contextAccessor.HttpContext.User.FindFirstValue(DasClaimTypes.GivenName);
+            var lastName = _contextAccessor.HttpContext.User.FindFirstValue(DasClaimTypes.FamilyName);
 
             await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName, correlationId);
         }
@@ -191,7 +191,7 @@ public class HomeController : BaseController
     public async Task<IActionResult> RegisterUser(Guid? correlationId)
     {
         var schema = Request.Scheme;
-        var authority = _httpContextAccessor.HttpContext?.Request.Host.Value;
+        var authority = _contextAccessor.HttpContext?.Request.Host.Value;
         var appConstants = new Constants(_configuration.Identity);
 
         if (!correlationId.HasValue)
@@ -240,10 +240,10 @@ public class HomeController : BaseController
 
             await OwinWrapper.UpdateClaims();
 
-            var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-            var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
-            var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
-            var lastName = OwinWrapper.GetClaimValue(DasClaimTypes.FamilyName);
+            var userRef = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+            var email = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.EmailClaimKeyName);
+            var firstName = _contextAccessor.HttpContext.User.FindFirstValue(DasClaimTypes.GivenName);
+            var lastName = _contextAccessor.HttpContext.User.FindFirstValue(DasClaimTypes.FamilyName);
 
             await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName);
         }

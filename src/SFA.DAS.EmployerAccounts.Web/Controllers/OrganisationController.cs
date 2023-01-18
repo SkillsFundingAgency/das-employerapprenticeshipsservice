@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Authorization.Mvc.Attributes;
+﻿using System.Security.Claims;
+using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
@@ -8,22 +9,23 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 public class OrganisationController : BaseController
 {
     private readonly OrganisationOrchestrator _orchestrator;
+    private readonly HttpContextAccessor _contextAccessor;
 
     public OrganisationController(
-        IAuthenticationService owinWrapper,
         OrganisationOrchestrator orchestrator,
-        IMultiVariantTestingService multiVariantTestingService,
-       ICookieStorageService<FlashMessageViewModel> flashMessage)
-        : base(owinWrapper, multiVariantTestingService, flashMessage)
+       ICookieStorageService<FlashMessageViewModel> flashMessage,
+        HttpContextAccessor contextAccessor)
+        : base( flashMessage)
     {
         _orchestrator = orchestrator;
+        _contextAccessor = contextAccessor;
     }
 
     [HttpGet]
     [Route("nextStep")]
     public async Task<IActionResult> OrganisationAddedNextSteps(string organisationName, string hashedAccountId, string hashedAgreementId)
     {
-        var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+        var userId = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
 
         var viewModel = await _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName, userId, hashedAccountId, hashedAgreementId);
 
@@ -36,7 +38,7 @@ public class OrganisationController : BaseController
     [Route("nextStepSearch")]
     public async Task<IActionResult> OrganisationAddedNextStepsSearch(string organisationName, string hashedAccountId, string hashedAgreementId)
     {
-        var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+        var userId = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
 
         var viewModel = await _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName, userId, hashedAccountId, hashedAgreementId);
 
@@ -59,7 +61,7 @@ public class OrganisationController : BaseController
             Code = code,
             Address = address,
             IncorporatedDate = incorporated,
-            ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName),
+            ExternalUserId = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName),
             LegalEntityStatus = string.IsNullOrWhiteSpace(legalEntityStatus) ? null : legalEntityStatus,
             Source = organisationType,
             PublicSectorDataSource = publicSectorDataSource,
@@ -94,7 +96,7 @@ public class OrganisationController : BaseController
     [Route("nextStep")]
     public async Task<IActionResult> GoToNextStep(string nextStep, string hashedAccountId, string organisationName, string hashedAgreementId)
     {
-        var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+        var userId = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
 
         var userShownWizard = await _orchestrator.UserShownWizard(userId, hashedAccountId);
 
@@ -152,7 +154,7 @@ public class OrganisationController : BaseController
         {
             case "update":
 
-                var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+                var userId = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
 
                 var response = await _orchestrator.UpdateOrganisation(
                     accountLegalEntityPublicHashedId,

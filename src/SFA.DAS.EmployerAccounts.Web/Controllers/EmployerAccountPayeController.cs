@@ -8,21 +8,22 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 public class EmployerAccountPayeController : BaseController
 {
     private readonly EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
+    private readonly IHttpContextAccessor _contextAccessor;
 
     public EmployerAccountPayeController(
-        IAuthenticationService owinWrapper,
         EmployerAccountPayeOrchestrator employerAccountPayeOrchestrator,
-        IMultiVariantTestingService multiVariantTestingService,
-        ICookieStorageService<FlashMessageViewModel> flashMessage) : base(owinWrapper, multiVariantTestingService, flashMessage)
+        ICookieStorageService<FlashMessageViewModel> flashMessage,
+        IHttpContextAccessor contextAccessor) : base( flashMessage)
     {
         _employerAccountPayeOrchestrator = employerAccountPayeOrchestrator;
+        _contextAccessor = contextAccessor;
     }
 
     [HttpGet]
     [Route("{HashedAccountId}/schemes")]
     public async Task<IActionResult> Index(string hashedAccountId)
     {
-        var model = await _employerAccountPayeOrchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+        var model = await _employerAccountPayeOrchestrator.Get(hashedAccountId, _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
         var flashMessage = GetFlashMessageViewModelFromCookie();
         if (flashMessage != null)
@@ -37,7 +38,7 @@ public class EmployerAccountPayeController : BaseController
     [Route("{HashedAccountId}/schemes/next")]
     public async Task<IActionResult> NextSteps(string hashedAccountId)
     {
-        var model = await _employerAccountPayeOrchestrator.GetNextStepsViewModel(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName), hashedAccountId);
+        var model = await _employerAccountPayeOrchestrator.GetNextStepsViewModel(_contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName), hashedAccountId);
 
         model.FlashMessage = GetFlashMessageViewModelFromCookie();
 
@@ -70,7 +71,7 @@ public class EmployerAccountPayeController : BaseController
     {
         empRef = empRef.FormatPayeFromUrl();
 
-        var response = await _employerAccountPayeOrchestrator.GetPayeDetails(empRef, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+        var response = await _employerAccountPayeOrchestrator.GetPayeDetails(empRef, hashedAccountId, _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
         return View(response);
     }
@@ -81,7 +82,7 @@ public class EmployerAccountPayeController : BaseController
     {
         var response = await _employerAccountPayeOrchestrator.CheckUserIsOwner(
             hashedAccountId,
-            OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName),
+            _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.EmailClaimKeyName),
             Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerAccountPayeControllerName, new { hashedAccountId }),
             Url.Action(ControllerConstants.GetGatewayActionName, ControllerConstants.EmployerAccountPayeControllerName, new { hashedAccountId }));
 
@@ -116,7 +117,7 @@ public class EmployerAccountPayeController : BaseController
         {
             gatewayResponseModel.Status = HttpStatusCode.OK;
 
-            var model = await _employerAccountPayeOrchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+            var model = await _employerAccountPayeOrchestrator.Get(hashedAccountId, _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
             model.FlashMessage = gatewayResponseModel.FlashMessage;
 
             return View(ControllerConstants.IndexActionName, model);
@@ -130,7 +131,7 @@ public class EmployerAccountPayeController : BaseController
     [Route("{HashedAccountId}/schemes/confirm")]
     public async Task<IActionResult> ConfirmPayeScheme(string hashedAccountId, AddNewPayeSchemeViewModel model)
     {
-        var result = await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(model, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+        var result = await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(model, _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
         if (result.Status != HttpStatusCode.OK)
         {
@@ -158,7 +159,7 @@ public class EmployerAccountPayeController : BaseController
         {
             HashedAccountId = hashedAccountId,
             PayeRef = empRef.FormatPayeFromUrl(),
-            UserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)
+            UserId = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName)
         });
 
         return View(model);
@@ -169,7 +170,7 @@ public class EmployerAccountPayeController : BaseController
     [Route("{HashedAccountId}/schemes/remove")]
     public async Task<IActionResult> RemovePaye(string hashedAccountId, RemovePayeSchemeViewModel model)
     {
-        model.UserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+        model.UserId = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
 
         if (model.RemoveScheme == 1)
         {

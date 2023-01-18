@@ -1,4 +1,6 @@
-﻿using SFA.DAS.Authorization.Mvc.Attributes;
+﻿using System.Security.Claims;
+using SFA.DAS.Authorization.Mvc.Attributes;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
@@ -8,24 +10,23 @@ public class EmployerTeamController : BaseController
 {
     private readonly IUrlActionHelper _urlActionHelper;
     private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
-   
-    public EmployerTeamController(
-        IAuthenticationService owinWrapper,
-        IUrlActionHelper urlActionHelper)
-        : base(owinWrapper)
+    private readonly IHttpContextAccessor _contextAccessor;
+
+    public EmployerTeamController(IUrlActionHelper urlActionHelper)
+        
     {
         _urlActionHelper = urlActionHelper;
         _employerTeamOrchestrator = null;
     }
 
     public EmployerTeamController(
-        IAuthenticationService owinWrapper,
-        IMultiVariantTestingService multiVariantTestingService,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
-        EmployerTeamOrchestrator employerTeamOrchestrator)
-        : base(owinWrapper, multiVariantTestingService, flashMessage)
+        EmployerTeamOrchestrator employerTeamOrchestrator,
+        IHttpContextAccessor contextAccessor)
+        : base(flashMessage)
     {
         _employerTeamOrchestrator = employerTeamOrchestrator;
+        _contextAccessor = contextAccessor;
     }
 
     [HttpGet]
@@ -51,7 +52,7 @@ public class EmployerTeamController : BaseController
     [Route("view")]
     public async Task<IActionResult> ViewTeam(string hashedAccountId)
     {
-        var response = await _employerTeamOrchestrator.GetTeamMembers(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+        var response = await _employerTeamOrchestrator.GetTeamMembers(hashedAccountId, _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
         var flashMessage = GetFlashMessageViewModelFromCookie();
         if (flashMessage != null)
@@ -80,7 +81,7 @@ public class EmployerTeamController : BaseController
     [Route("invite")]
     public async Task<IActionResult> Invite(string hashedAccountId)
     {
-        var response = await _employerTeamOrchestrator.GetNewInvitation(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+        var response = await _employerTeamOrchestrator.GetNewInvitation(hashedAccountId, _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
         return View(response);
     }
@@ -90,7 +91,7 @@ public class EmployerTeamController : BaseController
     [Route("invite")]
     public async Task<IActionResult> Invite(InviteTeamMemberViewModel model)
     {
-        var response = await _employerTeamOrchestrator.InviteTeamMember(model, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+        var response = await _employerTeamOrchestrator.InviteTeamMember(model, _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
         if (response.Status == HttpStatusCode.OK)
         {
@@ -121,7 +122,7 @@ public class EmployerTeamController : BaseController
     [Route("invite/next")]
     public async Task<IActionResult> NextSteps(string hashedAccountId)
     {
-        var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+        var userId = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
 
         var userShownWizard = await _employerTeamOrchestrator.UserShownWizard(userId, hashedAccountId);
 
@@ -143,7 +144,7 @@ public class EmployerTeamController : BaseController
     [Route("invite/next")]
     public async Task<IActionResult> NextSteps(int? choice, string hashedAccountId)
     {
-        var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+        var userId = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
 
         var userShownWizard = await _employerTeamOrchestrator.UserShownWizard(userId, hashedAccountId);
 
@@ -184,7 +185,7 @@ public class EmployerTeamController : BaseController
         if (cancel != 1)
             return RedirectToAction(ControllerConstants.ViewTeamViewName, new { HashedAccountId = hashedAccountId });
 
-        var response = await _employerTeamOrchestrator.Cancel(email, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+        var response = await _employerTeamOrchestrator.Cancel(email, hashedAccountId, _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
         return View(ControllerConstants.ViewTeamViewName, response);
     }
@@ -194,7 +195,7 @@ public class EmployerTeamController : BaseController
     [Route("resend")]
     public async Task<IActionResult> Resend(string hashedAccountId, string email, string name)
     {
-        var response = await _employerTeamOrchestrator.Resend(email, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName), name);
+        var response = await _employerTeamOrchestrator.Resend(email, hashedAccountId, _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName), name);
 
         return View(ControllerConstants.ViewTeamViewName, response);
     }
@@ -221,7 +222,7 @@ public class EmployerTeamController : BaseController
             if (remove != 1)
                 return RedirectToAction(ControllerConstants.ViewTeamViewName, new { HashedAccountId = hashedAccountId });
 
-            var response = await _employerTeamOrchestrator.Remove(userId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+            var response = await _employerTeamOrchestrator.Remove(userId, hashedAccountId, _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
             return View(ControllerConstants.ViewTeamViewName, response);
         }
@@ -247,7 +248,7 @@ public class EmployerTeamController : BaseController
     [Route("{email}/role/change")]
     public async Task<IActionResult> ChangeRole(string hashedAccountId, string email)
     {
-        var teamMember = await _employerTeamOrchestrator.GetTeamMemberWhetherActiveOrNot(hashedAccountId, email, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+        var teamMember = await _employerTeamOrchestrator.GetTeamMemberWhetherActiveOrNot(hashedAccountId, email, _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
         return View(teamMember);
     }
@@ -257,14 +258,14 @@ public class EmployerTeamController : BaseController
     [Route("{email}/role/change")]
     public async Task<IActionResult> ChangeRole(string hashedAccountId, string email, Role role)
     {
-        var response = await _employerTeamOrchestrator.ChangeRole(hashedAccountId, email, role, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+        var response = await _employerTeamOrchestrator.ChangeRole(hashedAccountId, email, role, _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
         if (response.Status == HttpStatusCode.OK)
         {
             return View(ControllerConstants.ViewTeamViewName, response);
         }
 
-        var teamMemberResponse = await _employerTeamOrchestrator.GetTeamMemberWhetherActiveOrNot(hashedAccountId, email, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+        var teamMemberResponse = await _employerTeamOrchestrator.GetTeamMemberWhetherActiveOrNot(hashedAccountId, email, _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
         //We have to override flash message as the change role view has different model to view team view
         teamMemberResponse.FlashMessage = response.FlashMessage;
@@ -277,7 +278,7 @@ public class EmployerTeamController : BaseController
     [Route("{email}/review")]
     public async Task<IActionResult> Review(string hashedAccountId, string email)
     {
-        var invitation = await _employerTeamOrchestrator.GetTeamMemberWhetherActiveOrNot(hashedAccountId, email, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+        var invitation = await _employerTeamOrchestrator.GetTeamMemberWhetherActiveOrNot(hashedAccountId, email, _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
         return View(invitation);
     }
@@ -286,7 +287,7 @@ public class EmployerTeamController : BaseController
     [Route("hideWizard")]
     public async Task<IActionResult> HideWizard(string hashedAccountId)
     {
-        var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+        var externalUserId = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
 
         await _employerTeamOrchestrator.HideWizard(hashedAccountId, externalUserId);
 
@@ -497,7 +498,7 @@ public class EmployerTeamController : BaseController
 
     private async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccountInformation(string hashedAccountId)
     {
-        var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+        var externalUserId = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
         var response = await _employerTeamOrchestrator.GetAccount(hashedAccountId, externalUserId);
 
         var flashMessage = GetFlashMessageViewModelFromCookie();
@@ -513,7 +514,7 @@ public class EmployerTeamController : BaseController
 
     private void PopulateViewBagWithExternalUserId()
     {
-        var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+        var externalUserId = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
         if (externalUserId != null)
             ViewBag.UserId = externalUserId;
     }

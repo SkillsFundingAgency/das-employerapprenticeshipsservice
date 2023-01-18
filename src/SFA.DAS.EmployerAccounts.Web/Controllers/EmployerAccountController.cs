@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Http.Extensions;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Http.Extensions;
 using Newtonsoft.Json;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
@@ -23,16 +25,13 @@ public class EmployerAccountController : BaseController
     private const int AddPayeNowAorn = 3;
     private const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
         
-    public EmployerAccountController(IAuthenticationService owinWrapper,
-        EmployerAccountOrchestrator employerAccountOrchestrator,
-        IMultiVariantTestingService multiVariantTestingService,
+    public EmployerAccountController(EmployerAccountOrchestrator employerAccountOrchestrator,
         ILog logger,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
         IMediator mediatr,
         ICookieStorageService<ReturnUrlModel> returnUrlCookieStorageService,
         ICookieStorageService<HashedAccountIdModel> accountCookieStorage,
-        IHttpContextAccessor contextAccessor)
-        : base(owinWrapper, multiVariantTestingService, flashMessage)
+        IHttpContextAccessor contextAccessor) : base( flashMessage)
     {
         _employerAccountOrchestrator = employerAccountOrchestrator;
         _logger = logger;
@@ -116,10 +115,10 @@ public class EmployerAccountController : BaseController
                 return RedirectToAction(ControllerConstants.GatewayInformActionName);
             }
 
-            var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+            var externalUserId = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
             _logger.Info($"Gateway response is for user identity ID {externalUserId}");
 
-            var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
+            var email = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.EmailClaimKeyName);
             var empref = await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.Data.AccessToken, email);
             _logger.Info($"Gateway response is for empref {empref.Empref} \n {JsonConvert.SerializeObject(empref)}");
 
@@ -211,7 +210,7 @@ public class EmployerAccountController : BaseController
 
     [HttpGet]
     [Route("payeerror")]
-    public Microsoft.AspNetCore.Mvc.ViewResult PayeError(bool? notFound)
+    public ViewResult PayeError(bool? notFound)
     {
         ViewBag.NotFound = notFound ?? false;
         return View();
@@ -219,7 +218,7 @@ public class EmployerAccountController : BaseController
 
     [HttpGet]
     [Route("summary")]
-    public Microsoft.AspNetCore.Mvc.ViewResult Summary()
+    public ViewResult Summary()
     {
         var result = _employerAccountOrchestrator.GetSummaryViewModel(HttpContext);
         return View(result);
@@ -292,7 +291,7 @@ public class EmployerAccountController : BaseController
     [Route("{HashedAccountId}/rename")]
     public async Task<IActionResult> RenameAccount(string hashedAccountId)
     {
-        var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+        var userIdClaim = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
         var vm = await _employerAccountOrchestrator.GetRenameEmployerAccountViewModel(hashedAccountId, userIdClaim);
         return View(vm);
     }
@@ -302,7 +301,7 @@ public class EmployerAccountController : BaseController
     [Route("{HashedAccountId}/rename")]
     public async Task<IActionResult> RenameAccount(RenameEmployerAccountViewModel vm)
     {
-        var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+        var userIdClaim = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
         var response = await _employerAccountOrchestrator.RenameEmployerAccount(vm, userIdClaim);
 
         if (response.Status == HttpStatusCode.OK)
@@ -361,13 +360,13 @@ public class EmployerAccountController : BaseController
 
     private string GetUserId()
     {
-        var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+        var userIdClaim = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
         return userIdClaim ?? "";
     }
 
     private void PopulateViewBagWithExternalUserId()
     {
-        var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+        var externalUserId = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
         if (externalUserId != null)
             ViewBag.UserId = externalUserId;
     }

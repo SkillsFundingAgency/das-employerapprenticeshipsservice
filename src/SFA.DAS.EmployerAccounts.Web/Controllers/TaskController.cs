@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Authorization.Mvc.Attributes;
+﻿using System.Security.Claims;
+using SFA.DAS.Authorization.Mvc.Attributes;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
@@ -8,16 +9,18 @@ public class TaskController : BaseController
 {
     private readonly TaskOrchestrator _orchestrator;
     private readonly ILog _logger;
+    private readonly HttpContextAccessor _contextAccessor;
 
     public TaskController(
-        IAuthenticationService owinWrapper,
         TaskOrchestrator taskOrchestrator,
-        IMultiVariantTestingService multiVariantTestingService,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
-        ILog logger) : base(owinWrapper, multiVariantTestingService, flashMessage)
+        ILog logger,
+        HttpContextAccessor contextAccessor
+        ) : base(flashMessage)
     {
         _orchestrator = taskOrchestrator;
         _logger = logger;
+        _contextAccessor = contextAccessor;
     }
 
     [HttpPost]
@@ -25,12 +28,12 @@ public class TaskController : BaseController
     [Route("dismissTask", Name = "DismissTask")]
     public async Task<IActionResult> DismissTask(DismissTaskViewModel viewModel)
     {
-        if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)))
+        if (string.IsNullOrEmpty(_contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName)))
         {
             return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
         }
 
-        var externalUserId = OwinWrapper.GetClaimValue("sub");
+        var externalUserId = _contextAccessor.HttpContext.User.FindFirstValue("sub");
 
         _logger.Debug($"Task dismiss requested for account id '{viewModel.HashedAccountId}', user id '{externalUserId}' and task '{viewModel.TaskType}'");
 
