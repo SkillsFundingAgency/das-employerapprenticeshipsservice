@@ -1,12 +1,6 @@
 using SFA.DAS.Authorization.Context;
 using SFA.DAS.Authorization.Handlers;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
-using SFA.DAS.EmployerAccounts.Web.Helpers;
-using SFA.DAS.EmployerAccounts.Web.Logging;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.NLog.Logger;
 using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution

@@ -3,11 +3,12 @@ using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Filters;
+using SFA.DAS.GovUK.Auth.AppStart;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace SFA.DAS.EmployerAccounts.Web
@@ -71,25 +72,55 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddDateTimeServices(_configuration);
             services.AddEventsApi();
             services.AddNotifications(_configuration);
-            
+
+            services.AddAuthenticationServices();
+
             services.AddMediatR(typeof(Startup).Assembly);
 
+            if (_configuration["ForecastingConfiguration:UseGovSignIn"] != null &&
+                _configuration["ForecastingConfiguration:UseGovSignIn"]
+                    .Equals("true", StringComparison.CurrentCultureIgnoreCase))
+            {
+                services.AddAndConfigureGovUkAuthentication(_configuration,
+                    $"{typeof(Startup).Assembly.GetName().Name}.Auth",
+                    typeof(EmployerAccountPostAuthenticationClaimsHandler));
+            }
+            else
+            {
+                services.AddAndConfigureEmployerAuthentication(identityServerConfiguration);
+            }
+
             services.AddLogging();
+            services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
 
 
             services.AddHttpContextAccessor();
 
-            services.AddControllersWithViews(ConfigureMvcOptions)
-                // Newtonsoft.Json is added for compatibility reasons
-                // The recommended approach is to use System.Text.Json for serialization
-                // Visit the following link for more guidance about moving away from Newtonsoft.Json to System.Text.Json
-                // https://docs.microsoft.com/dotnet/standard/serialization/system-text-json-migrate-from-newtonsoft-how-to
-                .AddNewtonsoftJson(options =>
+            services.Configure<RouteOptions>(options =>
+            {
+
+            }).AddMvc(options =>
+            {
+                options.Filters.Add(new AnalyticsFilter());
+                if (!_configuration.IsDev())
                 {
-                    options.UseMemberCasing();
-                });
+                    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                }
 
-            services.AddHttpContextAccessor();
+            });
+
+            services.AddApplicationInsightsTelemetry();
+
+            if (!_environment.IsDevelopment())
+            {
+                services.AddHealthChecks();
+                services.AddDataProtection(_configuration);
+            }
+
+#if DEBUG
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
+#endif
+
             services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
 
             services.AddAdvancedDependencyInjection();
@@ -119,11 +150,6 @@ namespace SFA.DAS.EmployerAccounts.Web
 
         private void ConfigureMvcOptions(MvcOptions mvcOptions)
         {
-            mvcOptions.Filters.Add(new AnalyticsFilter());
-            if (!_configuration.IsDev())
-            {
-                mvcOptions.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-            }
         }
     }
 }
