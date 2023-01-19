@@ -93,6 +93,13 @@ jobs:
       configuration: 'release'
       clean: true
 
+  - task: ArchiveFiles@2
+    displayName: 'Archive SFA.DAS.EmployerAccounts.Host'
+    inputs:
+      includeRootFolder: false
+      rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EmployerAccounts.Host'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EmployerAccounts.Host.zip'
+
   - task: VSTest@2
     displayName: 'VsTest - testAssemblies'
     inputs:
