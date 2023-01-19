@@ -86,6 +86,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddExecutionPolicies();
             services.AddActivitiesClient();
             services.AddApprenticeshipLevyClient(employerAccountsConfiguration);
+            services.AddEmployerAccountsOuterApi(employerAccountsConfiguration);
 
             services.AddAuthenticationServices();
 
