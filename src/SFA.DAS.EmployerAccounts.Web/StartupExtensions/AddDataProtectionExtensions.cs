@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
 using StackExchange.Redis;
 
-namespace SFA.DAS.EmployerAccounts.Web;
+namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 
 public static class AddDataProtectionExtensions
 {
-    public static void AddDataProtection(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddDataProtection(this IServiceCollection services, IConfiguration configuration)
     {
 
         var config = configuration.GetSection(nameof(EmployerAccountsConfiguration))
@@ -25,5 +25,7 @@ public static class AddDataProtectionExtensions
                 .SetApplicationName("das-forecasting-web")
                 .PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys");
         }
+
+        return services;
     }
 }

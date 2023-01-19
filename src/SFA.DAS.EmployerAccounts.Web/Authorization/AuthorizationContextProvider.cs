@@ -5,7 +5,6 @@ using SFA.DAS.Authorization.EmployerUserRoles.Context;
 using SFA.DAS.EmployerAccounts.Web.Infrastructure;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.HashingService;
-using AuthorizationContext = SFA.DAS.Authorization.Context.AuthorizationContext;
 
 namespace SFA.DAS.EmployerAccounts.Web.Authorization
 {
@@ -15,7 +14,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
         private readonly IAuthenticationService _authenticationService;
         private readonly IActionContextAccessor _actionContextAccessor;
 
-        public AuthorizationContextProvider(HttpContext httpContext, 
+        public AuthorizationContextProvider(HttpContext httpContext,
                                             IHashingService hashingService,
                                             IAuthenticationService authenticationService,
                                             IActionContextAccessor actionContextAccessor)
@@ -37,7 +36,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
             }
 
             authorizationContext.AddEmployerFeatureValues(accountValues.Id, userValues.Email);
-            
+
             return authorizationContext;
         }
 

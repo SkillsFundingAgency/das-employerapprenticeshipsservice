@@ -4,11 +4,11 @@ using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 
-namespace SFA.DAS.EmployerAccounts.Web;
+namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 
 public static class NotificationsRegistrationExtensions
 {
-    public static void AddNotifications(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddNotifications(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddTransient<INotificationsApi>(s =>
         {
@@ -16,7 +16,8 @@ public static class NotificationsRegistrationExtensions
             var httpClient = GetHttpClient(config);
             return new NotificationsApi(httpClient, config);
         });
-        
+
+        return services;
     }
 
     private static HttpClient GetHttpClient(INotificationsApiClientConfiguration config)

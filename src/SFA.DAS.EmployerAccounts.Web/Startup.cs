@@ -5,9 +5,15 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using SFA.DAS.Authorization.DependencyResolution.Microsoft;
+using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.Microsoft;
+using SFA.DAS.Authorization.Mvc.Extensions;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Filters;
+using SFA.DAS.EmployerAccounts.Web.Handlers;
+using SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 using SFA.DAS.GovUK.Auth.AppStart;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
@@ -73,6 +79,9 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddEventsApi();
             services.AddNotifications(_configuration);
 
+            services.AddEmployerFeaturesAuthorization();
+            services.AddDasAuthorization();
+            
             services.AddAuthenticationServices();
 
             services.AddMediatR(typeof(Startup).Assembly);
@@ -118,7 +127,10 @@ namespace SFA.DAS.EmployerAccounts.Web
             }
 
 #if DEBUG
-            services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            services.AddControllersWithViews(o =>
+            {
+                o.AddAuthorization();
+            }).AddRazorRuntimeCompilation();
 #endif
 
             services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
@@ -134,6 +146,8 @@ namespace SFA.DAS.EmployerAccounts.Web
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseUnauthorizedAccessExceptionHandler();
 
             app.UseStaticFiles();
             app.UseRouting();

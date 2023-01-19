@@ -12,6 +12,7 @@ using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
+using SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 using SFA.DAS.GovUK.Auth.Services;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.AppStart;

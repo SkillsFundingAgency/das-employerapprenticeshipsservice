@@ -1,10 +1,10 @@
 ﻿using SFA.DAS.EmployerAccounts.Time;
 
-namespace SFA.DAS.EmployerAccounts.Web;
+namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 
 public static class DateTimeRegistrationExtensions
 {
-    public static void AddDateTimeServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddDateTimeServices(this IServiceCollection services, IConfiguration configuration)
     {
         var cloudCurrentTime = configuration.GetValue<string>("CurrentTime");
 
@@ -15,5 +15,6 @@ public static class DateTimeRegistrationExtensions
 
         services.AddSingleton<ICurrentDateTime>(_ => new CurrentDateTime(currentTime));
 
-     }
+        return services;
+    }
 }

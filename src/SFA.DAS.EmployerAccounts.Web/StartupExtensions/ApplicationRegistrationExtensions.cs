@@ -5,22 +5,20 @@ using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Services;
-using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.HashingService;
 
-namespace SFA.DAS.EmployerAccounts.Web;
+namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 
 public static class ApplicationRegistrationExtensions
 {
-    public static void AddApplicationServices(this IServiceCollection services, EmployerAccountsConfiguration configuration)
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services, EmployerAccountsConfiguration configuration)
     {
         services.AddScoped<HtmlHelpers>();
-
         services.AddTransient<IRestClientFactory, RestClientFactory>();
         services.AddTransient<IRestServiceFactory, RestServiceFactory>();
         services.AddTransient<IHttpServiceFactory, HttpServiceFactory>();
         services.AddTransient<IUserAornPayeLockService, UserAornPayeLockService>();
-        
+
         services.AddTransient<IReservationsService, ReservationsService>();
         services.Decorate<IReservationsService, ReservationsServiceWithTimeout>();
         services.AddTransient<ICommitmentV2Service, CommitmentsV2Service>();
@@ -33,7 +31,7 @@ public static class ApplicationRegistrationExtensions
         services.AddSingleton<IReferenceDataService, ReferenceDataService>();
         services.AddTransient<ITaskService, TaskService>();
         services.AddTransient<IPensionRegulatorService, PensionRegulatorService>();
-        
+
         services.AddTransient<IApprenticeshipLevyApiClient>(s =>
         {
             var settings = s.GetService<IOptions<EmployerAccountsConfiguration>>().Value;
@@ -52,9 +50,11 @@ public static class ApplicationRegistrationExtensions
         services.AddTransient<IHashingService>(_ => new HashingService.HashingService(configuration.AllowedHashstringCharacters, configuration.Hashstring));
 
         services.AddTransient<IUserAccountRepository, UserAccountRepository>();
-        
-        services.AddScoped(typeof(ICookieService<>),typeof(HttpCookieService<>));
-        services.AddScoped(typeof(ICookieStorageService<>),typeof(CookieStorageService<>));
-        services.AddScoped<IUrlActionHelper,UrlActionHelper>();
+
+        services.AddScoped(typeof(ICookieService<>), typeof(HttpCookieService<>));
+        services.AddScoped(typeof(ICookieStorageService<>), typeof(CookieStorageService<>));
+        services.AddScoped<IUrlActionHelper, UrlActionHelper>();
+
+        return services;
     }
 }

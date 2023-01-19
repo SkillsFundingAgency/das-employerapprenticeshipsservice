@@ -6,14 +6,13 @@ using SFA.DAS.EmployerAccounts.ReadStore.Configuration;
 using SFA.DAS.Hmrc.Configuration;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.ReferenceData.Api.Client;
-using SFA.DAS.Tasks.API.Client;
 using SFA.DAS.TokenService.Api.Client;
 
-namespace SFA.DAS.EmployerAccounts.Web;
+namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 
 public static class ConfigurationRegistrationExtensions
 {
-    public static void AddConfigurationOptions(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddConfigurationOptions(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddOptions();
 
@@ -55,5 +54,6 @@ public static class ConfigurationRegistrationExtensions
         services.AddSingleton(_ => employerAccountsConfiguration.TokenServiceApi);
         services.AddSingleton(_ => employerAccountsConfiguration.TasksApi);
 
+        return services;
     }
 }

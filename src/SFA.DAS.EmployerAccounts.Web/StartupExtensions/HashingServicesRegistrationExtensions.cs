@@ -1,11 +1,11 @@
 ﻿using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.HashingService;
 
-namespace SFA.DAS.EmployerAccounts.Web
+namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions
 {
     public static class HashingServicesRegistrationExtensions
     {
-        public static void AddHashingServices(this IServiceCollection services, EmployerAccountsConfiguration configuration)
+        public static IServiceCollection AddHashingServices(this IServiceCollection services, EmployerAccountsConfiguration configuration)
         {
             services.AddTransient<IHashingService>(_ => new HashingService.HashingService(configuration.AllowedHashstringCharacters, configuration.Hashstring));
             services.AddTransient<IPublicHashingService>(_ =>
@@ -18,7 +18,8 @@ namespace SFA.DAS.EmployerAccounts.Web
                     new HashingService.HashingService(configuration.PublicAllowedAccountLegalEntityHashstringCharacters, configuration.PublicAllowedAccountLegalEntityHashstringSalt)
                     )
             );
-
+            
+            return services;
         }
     }
 

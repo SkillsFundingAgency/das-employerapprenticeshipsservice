@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SFA.DAS.EmployerAccounts.Data;
 
-namespace SFA.DAS.EmployerAccounts.Web;
+namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 
 public static class DatabaseRegistrationExtension
 {
-    public static void AddDatabaseRegistration(this IServiceCollection services, EmployerAccountsConfiguration config, string environmentName)
+    public static IServiceCollection AddDatabaseRegistration(this IServiceCollection services, EmployerAccountsConfiguration config, string environmentName)
     {
         if (environmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase))
         {
@@ -18,5 +18,7 @@ public static class DatabaseRegistrationExtension
 
         services.AddTransient<EmployerAccountsDbContext, EmployerAccountsDbContext>(provider => provider.GetService<EmployerAccountsDbContext>());
         services.AddTransient(provider => new Lazy<EmployerAccountsDbContext>(provider.GetService<EmployerAccountsDbContext>()));
+
+        return services;
     }
 }

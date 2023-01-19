@@ -7,7 +7,7 @@ using SFA.DAS.EmployerAccounts.EmployerUsers;
 using SFA.DAS.EmployerAccounts.Infrastructure;
 using SFA.DAS.GovUK.Auth.Services;
 
-namespace SFA.DAS.EmployerAccounts.Web;
+namespace SFA.DAS.EmployerAccounts.Web.Handlers;
 
 public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
 {

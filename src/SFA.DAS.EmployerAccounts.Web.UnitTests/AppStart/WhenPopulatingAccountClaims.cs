@@ -16,6 +16,7 @@ using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.EmployerUsers;
 using SFA.DAS.EmployerAccounts.Infrastructure;
+using SFA.DAS.EmployerAccounts.Web.Handlers;
 using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.AppStart;

@@ -38,7 +38,7 @@
 //            var accountDataCookieStorageService = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<ICookieStorageService<EmployerAccountData>>();
 //            var hashedAccountIdCookieStorageService = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<ICookieStorageService<HashedAccountIdModel>>();
 //            var constants = new Constants(config.Identity);
-            
+
 //            app.UseCookieAuthentication(new CookieAuthenticationOptions
 //            {
 //                AuthenticationType = CookieAuthenticationDefaults.AuthenticationType,
@@ -52,19 +52,19 @@
 //                AuthenticationMode = AuthenticationMode.Passive
 //            });
 
-//            app.UseSupportConsoleAuthentication(new SupportConsoleAuthenticationOptions 
-//            { 
-//                AdfsOptions = new ADFSOptions
-//                {
-                   
-//                    MetadataAddress = config.AdfsMetadata , 
-//                    Wreply = config.EmployerAccountsBaseUrl , 
-//                    Wtrealm = config.EmployerAccountsBaseUrl ,
-//                    BaseUrl = config.Identity.BaseAddress,
-                    
-//                },
-//                Logger = Logger
-//            });
+app.UseSupportConsoleAuthentication(new SupportConsoleAuthenticationOptions
+{
+    AdfsOptions = new ADFSOptions
+    {
+
+        MetadataAddress = config.AdfsMetadata,
+        Wreply = config.EmployerAccountsBaseUrl,
+        Wtrealm = config.EmployerAccountsBaseUrl,
+        BaseUrl = config.Identity.BaseAddress,
+
+    },
+    Logger = Logger
+});
 
 //            app.UseCodeFlowAuthentication(GetOidcMiddlewareOptions(config, accountDataCookieStorageService, hashedAccountIdCookieStorageService, constants));
 

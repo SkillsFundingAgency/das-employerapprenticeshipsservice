@@ -7,11 +7,11 @@ using SFA.DAS.EmployerAccounts.Infrastructure;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.GovUK.Auth.Services;
 
-namespace SFA.DAS.EmployerAccounts.Web;
+namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 
 public static class ConfigureEmployerAuthenticationExtension
 {
-    public static void AddAuthenticationServices(this IServiceCollection services)
+    public static IServiceCollection AddAuthenticationServices(this IServiceCollection services)
     {
         services.AddTransient<IEmployerAccountAuthorisationHandler, EmployerAccountAuthorizationHandler>();
         services.AddSingleton<IAuthorizationHandler, EmployerAccountAuthorizationHandler>();
@@ -27,9 +27,11 @@ public static class ConfigureEmployerAuthenticationExtension
                     policy.RequireAuthenticatedUser();
                 });
         });
+
+        return services;
     }
 
-    public static void AddAndConfigureEmployerAuthentication(
+    public static IServiceCollection AddAndConfigureEmployerAuthentication(
             this IServiceCollection services,
             IdentityServerConfiguration configuration)
     {
@@ -88,5 +90,7 @@ public static class ConfigureEmployerAuthenticationExtension
             options.Cookie.SameSite = SameSiteMode.None;
             options.CookieManager = new ChunkingCookieManager { ChunkSize = 3000 };
         });
+
+        return services;
     }
 }

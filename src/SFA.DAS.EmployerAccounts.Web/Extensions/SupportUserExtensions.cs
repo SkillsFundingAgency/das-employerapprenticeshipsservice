@@ -1,5 +1,7 @@
 ﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.IdentityModel.Protocols;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Notifications;
 using Microsoft.Owin.Security.WsFederation;
@@ -30,7 +32,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
 
             Logger = options.Logger;
 
-            app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
+            app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationScheme);
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {

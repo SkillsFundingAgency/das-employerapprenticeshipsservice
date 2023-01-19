@@ -1,8 +1,8 @@
-﻿namespace SFA.DAS.EmployerAccounts.Web;
+﻿namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 
 public static class RegisterOrchestratorsExtensions
 {
-    public static void AddOrchestrators(this IServiceCollection services)
+    public static IServiceCollection AddOrchestrators(this IServiceCollection services)
     {
         services.AddTransient<EmployerAccountOrchestrator>();
         services.AddTransient<EmployerAccountPayeOrchestrator>();
@@ -18,5 +18,7 @@ public static class RegisterOrchestratorsExtensions
         services.AddTransient<SupportErrorOrchestrator>();
         services.AddTransient<TaskOrchestrator>();
         services.AddTransient<UserSettingsOrchestrator>();
+
+        return services;
     }
 }

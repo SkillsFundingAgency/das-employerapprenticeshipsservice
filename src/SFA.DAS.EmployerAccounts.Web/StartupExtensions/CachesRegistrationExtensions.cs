@@ -1,11 +1,11 @@
 ﻿using SFA.DAS.AutoConfiguration;
 using SFA.DAS.Caches;
 
-namespace SFA.DAS.EmployerAccounts.Web;
+namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 
 public static class CachesRegistrationExtensions
 {
-    public static void AddCachesRegistrations(this IServiceCollection services)
+    public static IServiceCollection AddCachesRegistrations(this IServiceCollection services)
     {
         services.AddSingleton<IInProcessCache, InProcessCache>();
 
@@ -18,5 +18,7 @@ public static class CachesRegistrationExtensions
                 ? new LocalDevCache() as IDistributedCache
                 : new RedisCache(config.RedisConnectionString);
         });
+
+        return services;
     }
 }
