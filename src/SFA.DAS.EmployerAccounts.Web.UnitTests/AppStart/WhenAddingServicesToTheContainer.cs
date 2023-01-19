@@ -60,8 +60,8 @@ public class WhenAddingServicesToTheContainer
     private static void SetupServiceCollection(IServiceCollection serviceCollection)
     {
         var configuration = GenerateConfiguration();
-        var forecastingConfiguration = configuration
-            .GetSection("ForecastingConfiguration")
+        var EmployerAccountsConfiguration = configuration
+            .GetSection("EmployerAccountsConfiguration")
             .Get<EmployerAccountsConfiguration>();
         var hostEnvironment = new Mock<IWebHostEnvironment>();
         serviceCollection.AddSingleton(hostEnvironment.Object);
@@ -69,10 +69,10 @@ public class WhenAddingServicesToTheContainer
         serviceCollection.AddConfigurationOptions(configuration);
         serviceCollection.AddDistributedMemoryCache();
         serviceCollection.AddAuthenticationServices();
-        serviceCollection.AddApplicationServices(forecastingConfiguration);
+        serviceCollection.AddApplicationServices(EmployerAccountsConfiguration);
         serviceCollection.AddOrchestrators();
 
-        serviceCollection.AddDatabaseRegistration(forecastingConfiguration, configuration["Environment"]);
+        serviceCollection.AddDatabaseRegistration(EmployerAccountsConfiguration, configuration["Environment"]);
         serviceCollection.AddLogging();
     }
 
@@ -82,13 +82,12 @@ public class WhenAddingServicesToTheContainer
         {
             InitialData = new List<KeyValuePair<string, string>>
                 {
-                    new("ForecastingConfiguration:DatabaseConnectionString", "test"),
-                    new("ForecastingConfiguration:AllowedCharacters", "ABCDEFGHJKLMN12345"),
-                    new("ForecastingConfiguration:HashString", "ABC123"),
-                    new("ForecastingConfiguration:CosmosDbConnectionString", "AccountEndpoint=https://localhost:8081;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;Database=Forecasting;Collection=ForecastingDev;ThroughputOffer=400"),
+                    new("EmployerAccountsConfiguration:DatabaseConnectionString", "test"),
+                    new("EmployerAccountsConfiguration:AllowedCharacters", "ABCDEFGHJKLMN12345"),
+                    new("EmployerAccountsConfiguration:HashString", "ABC123"),
                     new("AccountApiConfiguration:ApiBaseUrl", "https://localhost:1"),
-                    new("ForecastingConfiguration:OuterApiApiBaseUri", "https://localhost:1"),
-                    new("ForecastingConfiguration:OuterApiSubscriptionKey", "test"),
+                    new("EmployerAccountsConfiguration:OuterApiApiBaseUri", "https://localhost:1"),
+                    new("EmployerAccountsConfiguration:OuterApiSubscriptionKey", "test"),
                     new("Environment", "test"),
                 }
         };
