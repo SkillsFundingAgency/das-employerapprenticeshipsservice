@@ -3,7 +3,7 @@ using SFA.DAS.EmployerAccounts.Data;
 
 namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 
-public static class DatabaseRegistrationExtension
+public static class DatabaseServiceRegistrations
 {
     public static IServiceCollection AddDatabaseRegistration(this IServiceCollection services, EmployerAccountsConfiguration config, string environmentName)
     {

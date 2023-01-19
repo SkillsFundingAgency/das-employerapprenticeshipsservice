@@ -3,7 +3,7 @@ using SFA.DAS.AutoConfiguration;
 
 namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 
-public static class AuditRegistrationExtensions
+public static class AuditServiceRegistrations
 {
     public static IServiceCollection AddAuditServices(this IServiceCollection services)
     {

@@ -3,7 +3,7 @@ using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions
 {
-    public static class HashingServicesRegistrationExtensions
+    public static class HashingServiceRegistrations
     {
         public static IServiceCollection AddHashingServices(this IServiceCollection services, EmployerAccountsConfiguration configuration)
         {

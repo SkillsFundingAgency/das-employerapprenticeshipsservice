@@ -3,7 +3,7 @@ using SFA.DAS.Caches;
 
 namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 
-public static class CachesRegistrationExtensions
+public static class CachesServiceRegistrations
 {
     public static IServiceCollection AddCachesRegistrations(this IServiceCollection services)
     {

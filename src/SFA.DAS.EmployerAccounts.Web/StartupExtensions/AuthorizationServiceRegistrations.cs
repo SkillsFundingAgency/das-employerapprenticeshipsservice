@@ -7,7 +7,7 @@ using SFA.DAS.EmployerAccounts.Web.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions
 {
-    public static class AuthorizationStartupExtensions
+    public static class AuthorizationServiceRegistrations
     {
         public static IServiceCollection AddDasAuthorization(this IServiceCollection services)
         {

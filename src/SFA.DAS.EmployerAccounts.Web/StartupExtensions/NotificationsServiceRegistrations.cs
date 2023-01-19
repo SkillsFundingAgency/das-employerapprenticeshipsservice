@@ -7,7 +7,7 @@ using SFA.DAS.Notifications.Api.Client.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 
-public static class NotificationsRegistrationExtensions
+public static class NotificationsServiceRegistrations
 {
     public static IServiceCollection AddNotifications(this IServiceCollection services, IConfiguration configuration)
     {

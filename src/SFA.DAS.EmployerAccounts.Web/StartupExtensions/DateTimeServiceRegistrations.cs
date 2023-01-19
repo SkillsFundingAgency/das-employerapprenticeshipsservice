@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 
-public static class DateTimeRegistrationExtensions
+public static class DateTimeServiceRegistrations
 {
     public static IServiceCollection AddDateTimeServices(this IServiceCollection services, IConfiguration configuration)
     {

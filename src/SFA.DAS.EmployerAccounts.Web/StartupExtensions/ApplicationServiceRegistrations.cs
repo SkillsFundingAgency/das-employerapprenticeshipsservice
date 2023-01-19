@@ -7,7 +7,7 @@ using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 
-public static class ApplicationRegistrationExtensions
+public static class ApplicationServiceRegistrations
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, EmployerAccountsConfiguration configuration)
     {

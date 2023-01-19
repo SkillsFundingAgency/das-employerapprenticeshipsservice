@@ -5,11 +5,31 @@ using Polly.Timeout;
 
 namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 
-public static class PollyPolicyServiceRegistrationExtensions
+public static class PollyPolicyServiceRegistrations
 {
     public static IServiceCollection AddPollyPolicy(this IServiceCollection services, EmployerAccountsConfiguration configuration)
     {
-        services.AddTransient<IReadOnlyPolicyRegistry<string>>(provider => GetPolicyRegistry(provider, configuration));
+        services.AddTransient<IReadOnlyPolicyRegistry<string>>(provider =>
+        {
+            var logger = provider.GetService<ILogger>();
+            var policyRegistry = new PolicyRegistry();
+        
+            var timeout = Policy
+                .TimeoutAsync(TimeSpan.FromMilliseconds(configuration.DefaultServiceTimeoutMilliseconds), TimeoutStrategy.Pessimistic
+                    , (pollyContext, timeSpan, task) =>
+                    {
+                        logger.LogWarning($"Error executing command for method {pollyContext.ExecutionKey} " +
+                                          $"Reason: {task?.Exception?.Message}. " +
+                                          $"Retrying in {timeSpan.Seconds} secs..."
+                        );
+                        return Task.CompletedTask;
+                    }
+                );
+
+            policyRegistry.Add(EmployerAccounts.Constants.DefaultServiceTimeout, timeout);
+
+            return policyRegistry;
+        });
 
         return services;
     }

@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 
-public static class RegisterOrchestratorsExtensions
+public static class OrchestratorsServiceRegistrations
 {
     public static IServiceCollection AddOrchestrators(this IServiceCollection services)
     {

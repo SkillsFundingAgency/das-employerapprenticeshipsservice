@@ -9,11 +9,11 @@ using SFA.DAS.TokenService.Api.Client;
 
 namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 
-public static class ConfigurationRegistrationExtensions
+public static class ConfigurationServiceRegistrations
 {
     public static IServiceCollection AddConfigurationOptions(this IServiceCollection services, IConfiguration configuration, EmployerAccountsConfiguration employerAccountsConfiguration)
     {
-       services.Configure<EmployerAccountsConfiguration>(configuration.GetSection(nameof(EmployerAccountsConfiguration)));
+        services.Configure<EmployerAccountsConfiguration>(configuration.GetSection(nameof(EmployerAccountsConfiguration)));
         services.AddSingleton(cfg => cfg.GetService<IOptions<EmployerAccountsConfiguration>>().Value);
 
         services.Configure<EmployerAccountsReadStoreConfiguration>(configuration.GetSection(nameof(EmployerAccountsReadStoreConfiguration)));

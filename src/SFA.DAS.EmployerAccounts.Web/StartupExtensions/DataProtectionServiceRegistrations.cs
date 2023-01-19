@@ -3,7 +3,7 @@ using StackExchange.Redis;
 
 namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 
-public static class AddDataProtectionExtensions
+public static class DataProtectionServiceRegistrations
 {
     public static IServiceCollection AddDataProtection(this IServiceCollection services, IConfiguration configuration)
     {

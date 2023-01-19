@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 
-public static class EmployerAccountsApiClientRegistrationExtensions
+public static class EmployerAccountsApiClientServiceRegistrations
 {
     public static IServiceCollection AddEmployerAccountsApi(this IServiceCollection services)
     {

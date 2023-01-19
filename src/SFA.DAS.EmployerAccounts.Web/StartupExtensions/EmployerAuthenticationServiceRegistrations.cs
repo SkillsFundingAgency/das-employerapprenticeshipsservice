@@ -9,7 +9,7 @@ using SFA.DAS.GovUK.Auth.Services;
 
 namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 
-public static class ConfigureEmployerAuthenticationExtension
+public static class EmployerAuthenticationServiceRegistrations
 {
     public static IServiceCollection AddAuthenticationServices(this IServiceCollection services)
     {
