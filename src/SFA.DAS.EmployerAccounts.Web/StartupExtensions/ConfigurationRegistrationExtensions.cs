@@ -69,6 +69,7 @@ public static class ConfigurationRegistrationExtensions
         services.AddSingleton<IHmrcConfiguration>(_ => employerAccountsConfiguration.Hmrc);
         services.AddSingleton(_ => employerAccountsConfiguration.TokenServiceApi);
         services.AddSingleton(_ => employerAccountsConfiguration.TasksApi);
+        services.AddSingleton(_ => employerAccountsConfiguration.CommitmentsApi);
 
         return services;
     }
