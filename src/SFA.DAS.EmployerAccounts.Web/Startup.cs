@@ -88,7 +88,8 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddApprenticeshipLevyClient(employerAccountsConfiguration);
             services.AddEmployerAccountsOuterApi(employerAccountsConfiguration);
             services.AddCommittmentsV2Client();
-
+            services.AddPollyPolicy(employerAccountsConfiguration);
+            
             services.AddAuthenticationServices();
 
             services.AddMediatR(typeof(Startup).Assembly);
