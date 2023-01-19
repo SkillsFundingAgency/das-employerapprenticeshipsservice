@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
                 //c.AddRegistry<ValidationRegistry>();
                 //c.AddRegistry<PensionsRegulatorRegistry>();
                 //c.AddRegistry<RecruitRegistry>();
-                c.AddRegistry<DefaultRegistry>();
+                //c.AddRegistry<DefaultRegistry>();
                 c.AddRegistry<EmployerFeaturesAuthorizationRegistry>();
                 c.AddRegistry<EmployerAccountsAuthorizationRegistry>();
                 c.AddRegistry<EmployerAccountsOuterApiRegistry>();
