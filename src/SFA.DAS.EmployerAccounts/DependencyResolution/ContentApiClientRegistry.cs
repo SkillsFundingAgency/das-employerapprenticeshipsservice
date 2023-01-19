@@ -1,6 +1,5 @@
 ﻿using System.Net.Http;
 using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.Http;
 using SFA.DAS.NLog.Logger.Web.MessageHandlers;
 

@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using SFA.DAS.Authorization.DependencyResolution.Microsoft;
 using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.Microsoft;
 using SFA.DAS.Authorization.Mvc.Extensions;
 using SFA.DAS.Configuration.AzureTableStorage;
@@ -15,7 +13,6 @@ using SFA.DAS.EmployerAccounts.Web.Filters;
 using SFA.DAS.EmployerAccounts.Web.Handlers;
 using SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 using SFA.DAS.GovUK.Auth.AppStart;
-using SFA.DAS.Hmrc.ExecutionPolicy;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace SFA.DAS.EmployerAccounts.Web
@@ -60,6 +57,9 @@ namespace SFA.DAS.EmployerAccounts.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
+            services.AddHttpContextAccessor();
+
             var employerAccountsConfiguration = _configuration
                 .GetSection(nameof(EmployerAccountsConfiguration))
                 .Get<EmployerAccountsConfiguration>();
@@ -68,7 +68,7 @@ namespace SFA.DAS.EmployerAccounts.Web
                 .GetSection(nameof(IdentityServerConfiguration))
                 .Get<IdentityServerConfiguration>();
 
-            services.AddConfigurationOptions(_configuration);
+            services.AddConfigurationOptions(_configuration, employerAccountsConfiguration);
             services.AddOrchestrators();
             services.AddAutoMapper(typeof(Startup).Assembly);
             services.AddDatabaseRegistration(employerAccountsConfiguration, _configuration["Environment"]);
@@ -84,13 +84,14 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddDasAuthorization();
             services.AddEmployerAccountsApi();
             services.AddExecutionPolicies();
-            services.AddActivitiesClient();
+            services.AddActivitiesClient(_configuration);
             services.AddApprenticeshipLevyClient(employerAccountsConfiguration);
-            services.AddEmployerAccountsOuterApi(employerAccountsConfiguration);
+            services.AddEmployerAccountsOuterApi(employerAccountsConfiguration, _configuration);
             services.AddCommittmentsV2Client();
             services.AddPollyPolicy(employerAccountsConfiguration);
             services.AddContentApiClient(employerAccountsConfiguration, _configuration);
-
+            services.AddProviderRegistration(employerAccountsConfiguration, _configuration);
+            services.AddApprenticeshipLevyApi(employerAccountsConfiguration);
 
             services.AddAuthenticationServices();
 
@@ -111,9 +112,6 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             services.AddLogging();
             services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
-
-
-            services.AddHttpContextAccessor();
 
             services.Configure<RouteOptions>(options =>
             {

@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using Microsoft.Extensions.Options;
 using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Notifications.Api.Client;
@@ -10,6 +11,9 @@ public static class NotificationsRegistrationExtensions
 {
     public static IServiceCollection AddNotifications(this IServiceCollection services, IConfiguration configuration)
     {
+        services.Configure<INotificationsApiClientConfiguration>(configuration.GetSection(nameof(NotificationsApiClientConfiguration)));
+        services.AddSingleton(cfg => cfg.GetService<IOptions<NotificationsApiClientConfiguration>>().Value);
+
         services.AddTransient<INotificationsApi>(s =>
         {
             var config = s.GetService<NotificationsApiClientConfiguration>();

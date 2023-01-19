@@ -9,8 +9,10 @@ public static class ContentApiClientServiceRegistrations
         EmployerAccountsConfiguration employerAccountsConfiguration, IConfiguration configuration)
     {
         services.AddSingleton(employerAccountsConfiguration.ContentApi);
+
         services.Configure<IContentClientApiConfiguration>(
             configuration.GetSection(nameof(ContentClientApiConfiguration)));
+        
         services.AddHttpClient<IContentApiClient, ContentApiClient>()
             .AddHttpMessageHandler<RequestIdMessageRequestHandler>()
             .AddHttpMessageHandler<SessionIdMessageRequestHandler>();
