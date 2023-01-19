@@ -1,7 +1,11 @@
 ﻿using Microsoft.Extensions.Options;
+using NLog.Fluent;
+using SFA.DAS.Activities.Client;
+using SFA.DAS.Activities.IndexMappers;
 using SFA.DAS.Audit.Client;
 using SFA.DAS.Authorization.EmployerFeatures.Configuration;
 using SFA.DAS.EAS.Account.Api.Client;
+using SFA.DAS.Elastic;
 using SFA.DAS.EmployerAccounts.ReadStore.Configuration;
 using SFA.DAS.Hmrc.Configuration;
 using SFA.DAS.Notifications.Api.Client.Configuration;
@@ -40,6 +44,15 @@ public static class ConfigurationRegistrationExtensions
         services.Configure<IAuditApiConfiguration>(configuration.GetSection(nameof(AuditApiClientConfiguration)));
         services.AddSingleton(cfg => cfg.GetService<IOptions<IAuditApiConfiguration>>().Value);
 
+        services.Configure<ActivitiesClientConfiguration>(configuration.GetSection(nameof(ActivitiesClientConfiguration)));
+        services.AddSingleton(cfg => cfg.GetService<IOptions<ActivitiesClientConfiguration>>().Value);
+
+        services.AddSingleton<ElasticConfiguration>(cfg =>
+        {
+            var config = cfg.GetService<ActivitiesClientConfiguration>();
+            return GetElasticConfiguration(config);
+        });
+
         services.Configure<IAccountApiConfiguration>(configuration.GetSection(nameof(AccountApiConfiguration)));
         services.AddSingleton<IAccountApiConfiguration, AccountApiConfiguration>();
 
@@ -58,5 +71,20 @@ public static class ConfigurationRegistrationExtensions
         services.AddSingleton(_ => employerAccountsConfiguration.TasksApi);
 
         return services;
+    }
+
+    private static ElasticConfiguration GetElasticConfiguration(ActivitiesClientConfiguration activitiesdClientConfig)
+    {
+        var elasticConfig = new ElasticConfiguration()
+            .UseSingleNodeConnectionPool(activitiesdClientConfig.ElasticUrl)
+            .ScanForIndexMappers(typeof(ActivitiesIndexMapper).Assembly)
+            .OnRequestCompleted(r => Log.Debug(r.DebugInformation));
+
+        if (!string.IsNullOrWhiteSpace(activitiesdClientConfig.ElasticUsername) && !string.IsNullOrWhiteSpace(activitiesdClientConfig.ElasticPassword))
+        {
+            elasticConfig.UseBasicAuthentication(activitiesdClientConfig.ElasticUsername, activitiesdClientConfig.ElasticPassword);
+        }
+
+        return elasticConfig;
     }
 }

@@ -83,8 +83,9 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddEmployerFeaturesAuthorization();
             services.AddDasAuthorization();
             services.AddEmployerAccountsApi();
-            services.AddExectionPolicies();
-            
+            services.AddExecutionPolicies();
+            services.AddActivitiesClient();
+
             services.AddAuthenticationServices();
 
             services.AddMediatR(typeof(Startup).Assembly);
