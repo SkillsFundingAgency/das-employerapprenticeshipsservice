@@ -8,7 +8,8 @@ parameters:
 jobs:
 - deployment: DeployWebApp
   pool:
-    name: DAS - Continuous Deployment Agents
+    name: Azure Pipelines
+    vmImage: 'windows-2019'
   environment: ${{ parameters.Environment }}
   strategy:
     runOnce:
