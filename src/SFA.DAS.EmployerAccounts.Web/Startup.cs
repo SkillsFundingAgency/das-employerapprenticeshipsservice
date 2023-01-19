@@ -15,6 +15,7 @@ using SFA.DAS.EmployerAccounts.Web.Filters;
 using SFA.DAS.EmployerAccounts.Web.Handlers;
 using SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 using SFA.DAS.GovUK.Auth.AppStart;
+using SFA.DAS.Hmrc.ExecutionPolicy;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace SFA.DAS.EmployerAccounts.Web
@@ -82,13 +83,15 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddEmployerFeaturesAuthorization();
             services.AddDasAuthorization();
             services.AddEmployerAccountsApi();
+
+            services.AddTransient<ExecutionPolicy, HmrcExecutionPolicy>();
             
             services.AddAuthenticationServices();
 
             services.AddMediatR(typeof(Startup).Assembly);
 
-            if (_configuration["ForecastingConfiguration:UseGovSignIn"] != null &&
-                _configuration["ForecastingConfiguration:UseGovSignIn"]
+            if (_configuration["EmployerAccountsConfiguration:UseGovSignIn"] != null &&
+                _configuration["EmployerAccountsConfiguration:UseGovSignIn"]
                     .Equals("true", StringComparison.CurrentCultureIgnoreCase))
             {
                 services.AddAndConfigureGovUkAuthentication(_configuration,
