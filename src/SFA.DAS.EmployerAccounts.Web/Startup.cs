@@ -89,7 +89,9 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddEmployerAccountsOuterApi(employerAccountsConfiguration);
             services.AddCommittmentsV2Client();
             services.AddPollyPolicy(employerAccountsConfiguration);
-            
+            services.AddContentApiClient(employerAccountsConfiguration, _configuration);
+
+
             services.AddAuthenticationServices();
 
             services.AddMediatR(typeof(Startup).Assembly);
