@@ -5,6 +5,7 @@ using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Services;
+using SFA.DAS.Encoding;
 using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
@@ -54,6 +55,8 @@ public static class ApplicationRegistrationExtensions
         services.AddScoped(typeof(ICookieService<>), typeof(HttpCookieService<>));
         services.AddScoped(typeof(ICookieStorageService<>), typeof(CookieStorageService<>));
         services.AddScoped<IUrlActionHelper, UrlActionHelper>();
+
+        services.AddScoped<IEncodingService, EncodingService>();
 
         return services;
     }
