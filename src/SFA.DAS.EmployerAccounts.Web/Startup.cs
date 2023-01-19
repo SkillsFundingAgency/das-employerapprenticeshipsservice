@@ -81,6 +81,7 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             services.AddEmployerFeaturesAuthorization();
             services.AddDasAuthorization();
+            services.AddEmployerAccountsApi();
             
             services.AddAuthenticationServices();
 

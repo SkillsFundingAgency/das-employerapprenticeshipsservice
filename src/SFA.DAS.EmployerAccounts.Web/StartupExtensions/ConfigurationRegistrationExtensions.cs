@@ -19,6 +19,9 @@ public static class ConfigurationRegistrationExtensions
         services.Configure<EmployerAccountsConfiguration>(configuration.GetSection(nameof(EmployerAccountsConfiguration)));
         services.AddSingleton(cfg => cfg.GetService<IOptions<EmployerAccountsConfiguration>>().Value);
 
+        services.Configure<EmployerAccountsOuterApiConfiguration>(configuration.GetSection(nameof(EmployerAccountsOuterApiConfiguration)));
+        services.AddSingleton(cfg => cfg.GetService<IOptions<EmployerAccountsOuterApiConfiguration>>().Value);
+
         services.Configure<EmployerAccountsReadStoreConfiguration>(configuration.GetSection(nameof(EmployerAccountsReadStoreConfiguration)));
         services.AddSingleton(cfg => cfg.GetService<IOptions<EmployerAccountsReadStoreConfiguration>>().Value);
 

@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Clients.ActiveDirectory;
 
 namespace SFA.DAS.EmployerAccounts.Api.Client
 {
-    internal class SecureHttpClient : ISecureHttpClient
+    public class SecureHttpClient : ISecureHttpClient
     {
         private readonly IEmployerAccountsApiClientConfiguration _configuration;
 
@@ -31,14 +31,14 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
             {
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-                var response = await client.GetAsync(url);
+                var response = await client.GetAsync(url, cancellationToken);
                 response.EnsureSuccessStatusCode();
 
                 return await response.Content.ReadAsStringAsync();
             }
         }
 
-        private async Task<string> GetClientCredentialAuthenticationResult(string clientId, string clientSecret, string resource, string tenant)
+        private static async Task<string> GetClientCredentialAuthenticationResult(string clientId, string clientSecret, string resource, string tenant)
         {
             var authority = $"https://login.microsoftonline.com/{tenant}";
             var clientCredential = new ClientCredential(clientId, clientSecret);
@@ -47,13 +47,13 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
             return result.AccessToken;
         }
 
-        private async Task<string> GetManagedIdentityAuthenticationResult(string resource)
+        private static async Task<string> GetManagedIdentityAuthenticationResult(string resource)
         {
             var azureServiceTokenProvider = new AzureServiceTokenProvider();
             return await azureServiceTokenProvider.GetAccessTokenAsync(resource);
         }
 
-        private bool IsClientCredentialConfiguration(string clientId, string clientSecret, string tenant)
+        private static bool IsClientCredentialConfiguration(string clientId, string clientSecret, string tenant)
         {
             return !string.IsNullOrEmpty(clientId) && !string.IsNullOrEmpty(clientSecret) && !string.IsNullOrEmpty(tenant);
         }
