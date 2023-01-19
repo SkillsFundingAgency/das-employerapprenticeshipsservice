@@ -83,8 +83,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddEmployerFeaturesAuthorization();
             services.AddDasAuthorization();
             services.AddEmployerAccountsApi();
-
-            services.AddTransient<ExecutionPolicy, HmrcExecutionPolicy>();
+            services.AddExectionPolicies();
             
             services.AddAuthenticationServices();
 
