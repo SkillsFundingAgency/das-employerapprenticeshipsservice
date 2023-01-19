@@ -14,14 +14,13 @@ using SFA.DAS.EmployerAccounts.Queries.GetLastSignedAgreement;
 using SFA.DAS.EmployerAccounts.TestCommon;
 using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
-using FluentTestFixture = SFA.DAS.Testing.FluentTestFixture;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLastSignedAgreementQueryTests
 {
     [TestFixture]
     class GetLastSignedAgreementTests : Testing.FluentTest<GetLastSignedAgreementTestFixtures>
     {
-        const long AccountLegalEntityId = 3;
+        private const long AccountLegalEntityId = 3;
 
         [Test]
         public Task GetLastSignedAgreement_IfRequestIsNotValid_DoNotGetAgreement()
@@ -29,11 +28,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLastSignedAgreementQuery
             User user = null;
             EmployerAgreement signedAgreement = null;
 
-            return RunAsync(
-                arrange: fixtures => fixtures
-                    .WithInvalidRequest(),
-                act: fixtures => fixtures.Handle(AccountLegalEntityId),
-                assert: (f, r) => r.ShouldThrowExactly<InvalidRequestException>());
+            return TestExceptionAsync(
+                arrange:fixtures => fixtures.WithInvalidRequest(),  
+                act:fixtures => fixtures.Handle(AccountLegalEntityId),
+                assert:(f, r) => r.Should().ThrowAsync<InvalidRequestException>());
         }
 
         [Test]
@@ -43,9 +41,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLastSignedAgreementQuery
             EmployerAgreement pendingAgreement = null;
             User user = null;
 
-            return RunAsync(
-                arrange: fixtures => fixtures
-                                        .WithSignedAgreement(123354, 2, AccountLegalEntityId, 1, DateTime.Now.AddDays(-30), out latestSignedAgreement),
+            return TestAsync(
+                arrange: fixtures => fixtures.WithSignedAgreement(123354, 2, AccountLegalEntityId, 1, DateTime.Now.AddDays(-30), out latestSignedAgreement),
                 act: fixtures => fixtures.Handle(AccountLegalEntityId),
                 assert: fixtures =>
                 {
@@ -56,7 +53,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLastSignedAgreementQuery
         [Test]
         public Task GetLastSignedAgreement_IfNoSignedAgreementsExists_ShouldReturnNoSignedAgreement()
         {
-            return RunAsync(
+            return TestAsync(
                 act: fixtures => fixtures.Handle(AccountLegalEntityId),
                 assert: fixtures =>
                     Assert.IsNull(fixtures.Response.LastSignedAgreement));

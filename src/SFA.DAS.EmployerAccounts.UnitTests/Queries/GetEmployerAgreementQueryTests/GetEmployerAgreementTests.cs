@@ -15,17 +15,16 @@ using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerAccounts.TestCommon;
 using SFA.DAS.Validation;
-using FluentTestFixture = SFA.DAS.Testing.FluentTestFixture;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTests
 {
     [TestFixture]
-    class GetEmployerAgreementTests : Testing.FluentTest<GetEmployerAgreementTestFixtures>
+    internal class GetEmployerAgreementTests : Testing.FluentTest<GetEmployerAgreementTestFixtures>
     {
-        const long AccountId = 1;
-        const long LegalEntityId = 2;
-        const long AccountLegalEntityId = 3;
-        const string HashedAccountId = "ACC123";
+        private const long AccountId = 1;
+        private const long LegalEntityId = 2;
+        private const long AccountLegalEntityId = 3;
+        private const string HashedAccountId = "ACC123";
 
         [Test]
         public Task GetAgreementToSign_IfRequestIsNotValid_DoNotShowAgreement()
@@ -33,20 +32,20 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
             User user = null;
             EmployerAgreement signedAgreement = null;
 
-            return RunAsync(
-                arrange: fixtures => fixtures
+            return TestExceptionAsync(
+                arrange: f => f
                     .WithAccount(AccountId, HashedAccountId)
                     .WithSignedAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 3, DateTime.Now.AddDays(-20), out signedAgreement)
                     .WithUser(AccountId, "Buck", "Rogers", Role.Owner, out user)
                     .WithInvalidRequest(),
                 act: fixtures => fixtures.Handle(HashedAccountId, signedAgreement.Id, user.Ref),
-                assert: (f, r) => r.ShouldThrowExactly<InvalidRequestException>());
+                assert: (f, r) => r.Should().ThrowAsync<InvalidRequestException>());
         }
 
         [Test]
         public Task GetAgreementToSign_IfNoAgreementFound_ShouldReturn()
         {
-            return RunAsync(
+            return TestAsync(
                 act: fixtures => fixtures.Handle("ACC123", 1, Guid.NewGuid()),
                 assert: fixtures =>
                 {
@@ -61,7 +60,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
             EmployerAgreement expectedAgreement = null;
             User user = null;
 
-            return RunAsync(
+            return TestAsync(
                 arrange: fixtures => fixtures
                                         .WithAccount(AccountId, HashedAccountId)
                                         .WithAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 1, EmployerAgreementStatus.Pending, out expectedAgreement)
@@ -77,7 +76,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
             User user = null;
             EmployerAgreement latestAgreement = null;
 
-            return RunAsync(
+            return TestAsync(
                 arrange: fixtures => fixtures
                                         .WithAccount(AccountId, HashedAccountId)
                                         .WithPendingAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 2, out latestAgreement)
@@ -95,7 +94,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
             EmployerAgreement signedAgreement = null;
             User user = null;
 
-            return RunAsync(
+            return TestAsync(
                 arrange: fixtures => fixtures
                     .WithAccount(AccountId, HashedAccountId)
                     .WithSignedAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 3, DateTime.Now.AddDays(-30), out signedAgreement)

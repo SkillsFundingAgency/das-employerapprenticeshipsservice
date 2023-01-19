@@ -10,7 +10,7 @@ using Moq.Protected;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Infrastructure;
+using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi;
 using SFA.DAS.EmployerAccounts.Interfaces.OuterApi;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Infrastructure

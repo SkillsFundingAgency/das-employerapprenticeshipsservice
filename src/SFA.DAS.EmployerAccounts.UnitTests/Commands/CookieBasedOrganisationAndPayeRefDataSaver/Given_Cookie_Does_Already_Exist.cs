@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CookieBasedOrganisationAnd
         public Task Then_CreateCookie_Is_Not_Called()
         {
             return
-                RunAsync(
+                TestAsync(
                     act: f => f.Handle(),
                     assert: f => f.CookieRepository
                             .Verify(m => m.Create(It.IsAny<EmployerAccountData>(), It.IsAny<string>(), It.IsAny<int>()), Times.Never));
@@ -50,7 +50,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CookieBasedOrganisationAnd
         public Task Then_UpdateCookie_Is_Called()
         {
             return
-                RunAsync(
+                TestAsync(
                     act: f => f.Handle(),
                     assert: f =>
                         f.CookieRepository

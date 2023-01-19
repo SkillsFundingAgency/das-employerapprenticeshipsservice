@@ -41,7 +41,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CookieBasedPayeRefDataSave
         public Task Then_CreateCookie_Is_Not_Called()
         {
             return
-                RunAsync(
+                TestAsync(
                     act: f => f.Handle(),
                     assert: f =>
                         f.CookieRepository
@@ -58,7 +58,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CookieBasedPayeRefDataSave
         public Task Then_UpdateCookie_Is_Called()
         {
             return
-                RunAsync(
+                TestAsync(
                     act: f => f.Handle(),
                     assert: f =>
                         f.CookieRepository
@@ -73,7 +73,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CookieBasedPayeRefDataSave
         public Task Then_Existing_PayeRef_Data_Is_Unchanged()
         {
             return
-                RunAsync(
+                TestAsync(
                     act: f => f.Handle(),
                     assert: f =>
                         f.CookieRepository

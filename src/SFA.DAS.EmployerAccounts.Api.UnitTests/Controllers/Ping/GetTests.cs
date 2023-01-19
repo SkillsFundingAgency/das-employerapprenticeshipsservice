@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Controllers;
 using SFA.DAS.Testing;
@@ -25,7 +26,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.Ping
             Controller = new PingController();
         }
 
-        public IHttpActionResult Get()
+        public IActionResult Get()
         {
             return Controller.Get();
         }

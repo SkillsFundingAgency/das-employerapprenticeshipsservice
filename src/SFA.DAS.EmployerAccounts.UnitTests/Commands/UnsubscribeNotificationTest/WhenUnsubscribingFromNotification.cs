@@ -83,7 +83,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UnsubscribeNotificationTes
                                           }
                                   });
             Func<Task> act = async () => await _sut.Handle(_command, CancellationToken.None);
-            act.ShouldThrow<Exception>().Where(m => m.Message.StartsWith("Trying to unsubscribe from an already unsubscribed account"));
+            act.Should().ThrowAsync<Exception>().Where(m => m.Message.StartsWith("Trying to unsubscribe from an already unsubscribed account"));
         }
 
         [Test]
@@ -102,7 +102,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UnsubscribeNotificationTes
                                           }
                                   });
             Func<Task> act = async () => await _sut.Handle(_command, CancellationToken.None);
-            act.ShouldThrow<Exception>().Where(m => m.Message.StartsWith("Missing settings for account 123456 and user with ref ABBA12"));
+            act.Should().ThrowAsync<Exception>().Where(m => m.Message.StartsWith("Missing settings for account 123456 and user with ref ABBA12"));
         }
 
         [Test]

@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries
         [Test]
         public Task Handle_WhenHandlingAGetHealthCheckQuery_ThenShouldReturnAGetHealthCheckQueryResponse()
         {
-            return RunAsync(f => f.Handle(), (f, r) =>
+            return TestAsync(f => f.Handle(), (f, r) =>
             {
                 r.Should().NotBeNull();
                 r.HealthCheck.Should().NotBeNull().And.Match<HealthCheckDto>(d => d.Id == f.HealthChecks[1].Id);

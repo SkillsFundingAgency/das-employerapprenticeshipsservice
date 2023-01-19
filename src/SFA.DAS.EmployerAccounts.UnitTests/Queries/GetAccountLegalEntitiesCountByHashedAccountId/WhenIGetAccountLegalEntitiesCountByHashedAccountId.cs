@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntitiesCoun
         [Test]
         public Task Handle_WhenHandlingAGetAccountLegalEntitiesCountByHashedAccountIdRequest_ThenShouldReturnTheNumberOfLegalEntitiesForAnAccount()
         {
-            return RunAsync(f => f.Handle(), (f, r) =>
+            return TestAsync(f => f.Handle(), (f, r) =>
             {
                 r.Should().NotBeNull();
                 r.LegalEntitiesCount.Should().Be(1);

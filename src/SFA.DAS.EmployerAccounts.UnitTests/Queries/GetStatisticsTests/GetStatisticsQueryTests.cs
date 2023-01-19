@@ -12,7 +12,6 @@ using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Queries.GetStatistics;
 using SFA.DAS.EmployerAccounts.TestCommon;
 using Z.EntityFramework.Plus;
-using FluentTestFixture = SFA.DAS.Testing.FluentTestFixture;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetStatisticsTests
 {
@@ -22,7 +21,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetStatisticsTests
         [Test]
         public Task Handle_WhenIGetStatistics_ThenShouldReturnResponse()
         {
-            return RunAsync(f => f.Handle(), (f, r) => r.Should().NotBeNull()
+            return TestAsync(f => f.Handle(), (f, r) => r.Should().NotBeNull()
                 .And.Match<GetStatisticsResponse>(r2 =>
                     r2.Statistics != null &&
                     r2.Statistics.TotalAccounts == 2 &&

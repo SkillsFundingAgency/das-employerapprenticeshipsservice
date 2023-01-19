@@ -13,7 +13,6 @@ using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Queries.GetLegalEntity;
 using SFA.DAS.EmployerAccounts.TestCommon;
-using FluentTestFixture = SFA.DAS.Testing.FluentTestFixture;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLegalEntityQueryTests
 {
@@ -24,7 +23,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLegalEntityQueryTests
         [Test]
         public Task Handle_WhenGettingLegalEntity_WithAllAgreements_ThenShouldReturnLegalEntity()
         {
-            return RunAsync(f => f.Handle(), (f, r) => r.Should().NotBeNull()
+            return TestAsync(f => f.Handle(), (f, r) => r.Should().NotBeNull()
                 .And.Match<GetLegalEntityResponse>(r2 =>
                     r2.LegalEntity.LegalEntityId == f.LegalEntity.Id &&
                     r2.LegalEntity.Agreements.Count == 5 &&
@@ -61,7 +60,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLegalEntityQueryTests
             actual.Address.Should().Be(f.LegalEntity.AccountLegalEntities.First().Address);
             actual.Name.Should().NotBeNullOrEmpty();
             actual.Name.Should().Be(f.LegalEntity.AccountLegalEntities.First().Name);
-            actual.Should().ShouldBeEquivalentTo(f.LegalEntity, opt => opt.ExcludingMissingMembers());
+            actual.Should().BeEquivalentTo(f.LegalEntity, opt => opt.ExcludingMissingMembers());
         }
     }
 
