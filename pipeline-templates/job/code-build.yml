@@ -87,7 +87,7 @@ jobs:
     inputs:
       solution: 'src/SFA.DAS.EmployerAccounts.Webjobs.Host/SFA.DAS.EmployerAccounts.Webjobs.Host.csproj'
       vsVersion: 16.0
-      msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=WebPublish /p:PackageAsSingleFile=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/SFA.DAS.EmployerAccounts.Webjobs.Host"'
+      msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/SFA.DAS.EmployerAccounts.Webjobs.Host"'
       platform: 'anycpu'
       configuration: 'release'
       clean: true
