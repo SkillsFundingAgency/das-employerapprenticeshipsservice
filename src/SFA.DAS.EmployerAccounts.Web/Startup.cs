@@ -40,36 +40,34 @@ namespace SFA.DAS.EmployerAccounts.Web
 #endif
 
             config.AddEnvironmentVariables();
-            if (!configuration.IsDev())
-            {
-                config.AddAzureTableStorage(options =>
-                    {
-                        options.ConfigurationKeys = configuration["ConfigNames"].Split(",");
-                        options.StorageConnectionString = configuration["ConfigurationStorageConnectionString"];
-                        options.EnvironmentName = configuration["Environment"];
-                        options.PreFixConfigurationKeys = false;
-                    }
-                );
-            }
+
+
+            config.AddAzureTableStorage(options =>
+                {
+                    options.ConfigurationKeys = configuration["ConfigNames"].Split(",");
+                    options.StorageConnectionString = configuration["ConfigurationStorageConnectionString"];
+                    options.EnvironmentName = configuration["EnvironmentName"];
+                    options.PreFixConfigurationKeys = false;
+                }
+            );
 
             _configuration = config.Build();
         }
-        
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
             services.AddHttpContextAccessor();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
-            var employerAccountsConfiguration = _configuration
-                .GetSection(nameof(EmployerAccountsConfiguration))
-                .Get<EmployerAccountsConfiguration>();
+            services.AddConfigurationOptions(_configuration);
+
+            var employerAccountsConfiguration = _configuration.Get<EmployerAccountsConfiguration>();
 
             var identityServerConfiguration = _configuration
-                .GetSection(nameof(IdentityServerConfiguration))
+                .GetSection("Identity")
                 .Get<IdentityServerConfiguration>();
 
-            services.AddConfigurationOptions(_configuration, employerAccountsConfiguration);
             services.AddOrchestrators();
             services.AddAutoMapper(typeof(Startup).Assembly);
             services.AddDatabaseRegistration(employerAccountsConfiguration, _configuration["Environment"]);
@@ -80,8 +78,9 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddDateTimeServices(_configuration);
             services.AddEventsApi();
             services.AddNotifications(_configuration);
-            
+
             services.StartNServiceBus(_configuration, employerAccountsConfiguration);
+            services.AddNServiceBusClientUnitOfWork();
 
             services.AddEmployerFeaturesAuthorization();
             services.AddDasAuthorization();
