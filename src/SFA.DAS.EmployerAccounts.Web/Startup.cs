@@ -55,7 +55,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             _configuration = config.Build();
         }
         
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
             services.AddHttpContextAccessor();
@@ -81,7 +81,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddEventsApi();
             services.AddNotifications(_configuration);
             
-            var serviceProvider = services.StartNServiceBus(_configuration, employerAccountsConfiguration);
+            services.StartNServiceBus(_configuration, employerAccountsConfiguration);
 
             services.AddEmployerFeaturesAuthorization();
             services.AddDasAuthorization();
@@ -146,8 +146,6 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
 
             services.AddAdvancedDependencyInjection();
-
-            return serviceProvider;
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
