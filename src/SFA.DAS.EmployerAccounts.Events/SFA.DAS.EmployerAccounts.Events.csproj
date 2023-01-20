@@ -8,6 +8,7 @@
   </PropertyGroup>
   
   <ItemGroup>
+    <PackageReference Include="NServiceBus.MSDependencyInjection" Version="0.1.4" />
     <PackageReference Include="SFA.DAS.Messaging" Version="3.1.133" />
   </ItemGroup>
 </Project>

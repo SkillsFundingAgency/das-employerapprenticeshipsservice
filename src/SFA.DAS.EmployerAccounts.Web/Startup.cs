@@ -53,9 +53,8 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             _configuration = config.Build();
         }
-
-
-        public void ConfigureServices(IServiceCollection services)
+        
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
             services.AddHttpContextAccessor();
@@ -79,6 +78,8 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddDateTimeServices(_configuration);
             services.AddEventsApi();
             services.AddNotifications(_configuration);
+            
+            var serviceProvider = services.StartNServiceBus(_configuration, employerAccountsConfiguration);
 
             services.AddEmployerFeaturesAuthorization();
             services.AddDasAuthorization();
@@ -144,9 +145,9 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             services.AddAdvancedDependencyInjection();
 
+            return serviceProvider;
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
