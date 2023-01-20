@@ -83,24 +83,21 @@ jobs:
       archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EmployerAccounts.Web.zip'
 
   - task: VSBuild@1
-    displayName: 'Publish SFA.DAS.EmployerAccounts.Host'
-    inputs:
-      solution: 'src/SFA.DAS.EmployerAccounts.Host/SFA.DAS.EmployerAccounts.Host.csproj'
-      vsVersion: 16.0
-      msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
-      platform: 'anycpu'
-      configuration: 'release'
-      clean: true
-
-  - task: VSBuild@1
     displayName: 'Publish SFA.DAS.EmployerAccounts.Webjobs.Host'
     inputs:
       solution: 'src/SFA.DAS.EmployerAccounts.Webjobs.Host/SFA.DAS.EmployerAccounts.Webjobs.Host.csproj'
       vsVersion: 16.0
-      msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
+      msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/SFA.DAS.EmployerAccounts.Webjobs.Host"'
       platform: 'anycpu'
       configuration: 'release'
       clean: true
+
+  - task: ArchiveFiles@2
+    displayName: 'Archive SFA.DAS.EmployerAccounts.Webjobs.Host'
+    inputs:
+      includeRootFolder: false
+      rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EmployerAccounts.Webjobs.Host'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EmployerAccounts.Webjobs.Host.zip'
 
   - task: VSTest@2
     displayName: 'VsTest - testAssemblies'
