@@ -26,12 +26,11 @@ jobs:
       extraProperties: |
         sonar.cs.opencover.reportsPaths=$(Agent.TempDirectory)/CoverageResults/coverage.opencover.xml
 
-  - task: DotNetCoreCLI@2
-    displayName: 'dotnet restore all'
+  - task: NuGetCommand@2
+    displayName: Restore
     inputs:
-      command: restore
-      projects: "src/**/*.csproj"
-      noCache: true
+      command: 'restore'
+      restoreSolution: '**/*.sln'
 
   - task: VSBuild@1
     displayName: 'Build solution EAS'
