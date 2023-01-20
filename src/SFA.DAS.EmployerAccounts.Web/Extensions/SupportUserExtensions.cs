@@ -34,16 +34,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
 
             app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AuthenticationType = Staff,
-            });
+            //app.UseCookieAuthentication(new CookieAuthenticationOptions
+            //{
+            //    AuthenticationType = Staff,
+            //});
 
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AuthenticationType = Employer,
-                ExpireTimeSpan = new TimeSpan(0, 10, 0)
-            });
+            //app.UseCookieAuthentication(new CookieAuthenticationOptions
+            //{
+            //    AuthenticationType = Employer,
+            //    ExpireTimeSpan = new TimeSpan(0, 10, 0)
+            //});
 
             var WsFederationAuthenticationOptions = new WsFederationAuthenticationOptions
             {
@@ -191,7 +191,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
                         RedirectUri = "/service/index",
                         IsPersistent = true
                     },
-                    CookieAuthenticationDefaults.AuthenticationType);
+                        CookieAuthenticationDefaults.AuthenticationScheme);
 
                     context.Response.StatusCode = 401;
                     return context.Response.WriteAsync(string.Empty);

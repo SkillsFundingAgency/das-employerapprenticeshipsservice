@@ -52,19 +52,19 @@
 //                AuthenticationMode = AuthenticationMode.Passive
 //            });
 
-app.UseSupportConsoleAuthentication(new SupportConsoleAuthenticationOptions
-{
-    AdfsOptions = new ADFSOptions
-    {
+//app.UseSupportConsoleAuthentication(new SupportConsoleAuthenticationOptions
+//{
+//    AdfsOptions = new ADFSOptions
+//    {
 
-        MetadataAddress = config.AdfsMetadata,
-        Wreply = config.EmployerAccountsBaseUrl,
-        Wtrealm = config.EmployerAccountsBaseUrl,
-        BaseUrl = config.Identity.BaseAddress,
+//        MetadataAddress = config.AdfsMetadata,
+//        Wreply = config.EmployerAccountsBaseUrl,
+//        Wtrealm = config.EmployerAccountsBaseUrl,
+//        BaseUrl = config.Identity.BaseAddress,
 
-    },
-    Logger = Logger
-});
+//    },
+//    Logger = Logger
+//});
 
 //            app.UseCodeFlowAuthentication(GetOidcMiddlewareOptions(config, accountDataCookieStorageService, hashedAccountIdCookieStorageService, constants));
 
