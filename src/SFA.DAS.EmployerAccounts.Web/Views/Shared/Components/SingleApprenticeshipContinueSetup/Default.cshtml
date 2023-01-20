@@ -1,4 +1,5 @@
 ﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.ApprenticeshipViewModel
+@inject IUrlActionHelper UrlHelper;
 
 <section>
     <h2 class="govuk-heading-l govuk-!-margin-bottom-2" id="call-to-action-continue-setting-up-an-apprenticeship">
@@ -32,7 +33,7 @@
         </tr>
     </table>
     <p>
-        <a href="@Url.EmployerCommitmentsV2Action($"{Model.ViewOrEditApprenticeDetailsLink}")" role="button" draggable="false" class="govuk-button">
+        <a href="@UrlHelper.EmployerCommitmentsV2Action($"{Model.ViewOrEditApprenticeDetailsLink}")" role="button" draggable="false" class="govuk-button">
             Continue
         </a>
     </p>

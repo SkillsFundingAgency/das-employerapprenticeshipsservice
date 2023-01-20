@@ -311,10 +311,10 @@ public class EmployerTeamController : BaseController
         }
         else if (requiresAdvert.Value == true)
         {
-            return Redirect(_urlActionHelper.EmployerRecruitAction(RouteData));
+            return Redirect(_urlActionHelper.EmployerRecruitAction());
         }
 
-        return Redirect(_urlActionHelper.EmployerCommitmentsV2Action(RouteData, "unapproved/Inform"));
+        return Redirect(_urlActionHelper.EmployerCommitmentsV2Action("unapproved/Inform"));
     }
 
     [HttpGet]

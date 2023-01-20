@@ -12,6 +12,7 @@ public static class ApplicationServiceRegistrations
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, EmployerAccountsConfiguration configuration)
     {
         services.AddScoped<HtmlHelpers>();
+        services.AddScoped<ActivitiesHelper>();
         services.AddTransient<IRestClientFactory, RestClientFactory>();
         services.AddTransient<IRestServiceFactory, RestServiceFactory>();
         services.AddTransient<IHttpServiceFactory, HttpServiceFactory>();

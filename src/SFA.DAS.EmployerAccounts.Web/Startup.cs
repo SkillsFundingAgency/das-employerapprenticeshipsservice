@@ -3,6 +3,7 @@ using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Hosting;
 using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.Microsoft;
@@ -58,6 +59,7 @@ namespace SFA.DAS.EmployerAccounts.Web
         {
             services.AddOptions();
             services.AddHttpContextAccessor();
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
             var employerAccountsConfiguration = _configuration
                 .GetSection(nameof(EmployerAccountsConfiguration))

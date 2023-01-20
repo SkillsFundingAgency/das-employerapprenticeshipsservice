@@ -160,7 +160,7 @@ public class EmployerAgreementController : BaseController
 
             if (getProviderInvitationQueryResponse.Result?.Status < InvitationComplete)
             {
-                return Redirect(_urlActionHelper.ProviderRelationshipsAction(RouteData, $"providers/invitation/{user.User.CorrelationId}"));
+                return Redirect(_urlActionHelper.ProviderRelationshipsAction($"providers/invitation/{user.User.CorrelationId}"));
             }
         }
 

@@ -9,4 +9,5 @@ public class SignEmployerAgreementViewModel
     public EmployerAgreementView PreviouslySignedEmployerAgreement { get; set; }
     public int Choice { get; set; }
     public int LegalEntitiesCount { get; set; }
+    public bool NoChoiceSelected { get; set; }
 }

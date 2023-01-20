@@ -1,5 +1,5 @@
 ﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.VacancyViewModel
-
+@inject IUrlActionHelper UrlHelper;
 @{
     var applicationsTextSuffix = !Model.NoOfApplications.GetValueOrDefault().Equals(0) ? (Model.NoOfApplications.Value.Equals(1) ? "application" : "applications") : "";
     var applicationsTextPrefix = !Model.NoOfApplications.GetValueOrDefault().Equals(0) ? "View " : "";
@@ -45,7 +45,7 @@
         </tr>
     </table>
     <p>
-        <a href="@Url.EmployerCommitmentsV2Action("unapproved/inform")" role="button" draggable="false" class="button">
+        <a href="@UrlHelper.EmployerCommitmentsV2Action("unapproved/inform")" role="button" draggable="false" class="button">
             Add apprentice details
         </a>
     </p>

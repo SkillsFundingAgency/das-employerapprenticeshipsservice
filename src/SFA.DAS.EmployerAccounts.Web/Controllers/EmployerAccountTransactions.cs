@@ -17,6 +17,6 @@ public class EmployerAccountTransactionsController : Controller
     [Route("balance")]
     public IActionResult Index(string hashedAccountId)
     {
-        return Redirect(_urlHelper.EmployerFinanceAction(RouteData,"finance"));
+        return Redirect(_urlHelper.EmployerFinanceAction("finance"));
     }
 }

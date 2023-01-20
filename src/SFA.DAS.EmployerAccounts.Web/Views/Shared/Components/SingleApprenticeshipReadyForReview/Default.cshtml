@@ -1,4 +1,4 @@
-﻿@using SFA.DAS.EmployerAccounts.Web.Extensions
+﻿@inject IUrlActionHelper UrlHelper;
 @model SFA.DAS.EmployerAccounts.Web.ViewModels.ApprenticeshipViewModel
 
  <section>
@@ -56,7 +56,7 @@
         </tr>
     </table>
     <p>
-        <a href="@Url.EmployerCommitmentsV2Action($"{Model.ApprovedOrRejectApprenticeDetailsLink}")" role="button" draggable="false" class="govuk-button">
+        <a href="@UrlHelper.EmployerCommitmentsV2Action($"{Model.ApprovedOrRejectApprenticeDetailsLink}")" role="button" draggable="false" class="govuk-button">
             Review apprentice details
         </a>
     </p>

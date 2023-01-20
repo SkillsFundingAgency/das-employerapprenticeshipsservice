@@ -1,5 +1,5 @@
-﻿@using SFA.DAS.Activities.Client
-@model SFA.DAS.EmployerAccounts.Models.Activities.ActivitiesViewModel
+﻿@model SFA.DAS.EmployerAccounts.Models.Activities.ActivitiesViewModel
+@inject ActivitiesHelper ActivitiesWebHelper
 
 @{
     ViewBag.Title = "Activity";
@@ -59,6 +59,6 @@
         </div>
     </div>*@
     <div class="column-two-thirds">
-        @Html.Activities(Model.Result)
+        @ActivitiesWebHelper.Activities(Model.Result)
     </div>
 </div>

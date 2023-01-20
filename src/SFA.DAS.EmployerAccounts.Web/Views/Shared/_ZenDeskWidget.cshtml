@@ -1,4 +1,4 @@
-﻿@inject HtmlHelpers HtmlHelpers;
+﻿@inject HtmlHelpers HtmlWebHelpers;
 
 <script type="text/javascript">
     window.zESettings = {
@@ -13,14 +13,14 @@
             },
             helpCenter: {
                 filter: {
-                    section: @HtmlHelpers.GetZenDeskSnippetSectionId()
+                    section: @HtmlWebHelpers.GetZenDeskSnippetSectionId()
                 }
             }
         }
     };
 </script>
-<script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=@Html.GetZenDeskSnippetKey()"></script>
-<script id="co-snippet" src="https://embed-euw1.rcrsv.io/@Html.GetZenDeskCobrowsingSnippetKey()?zwwi=1"></script>
-@HtmlHelpers.SetZenDeskLabels(new string[] { ViewBag.ZenDeskLabel })
+<script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=@HtmlWebHelpers.GetZenDeskSnippetKey()"></script>
+<script id="co-snippet" src="https://embed-euw1.rcrsv.io/@HtmlWebHelpers.GetZenDeskCobrowsingSnippetKey()?zwwi=1"></script>
+@HtmlWebHelpers.SetZenDeskLabels(new string[] { ViewBag.ZenDeskLabel })
 
 

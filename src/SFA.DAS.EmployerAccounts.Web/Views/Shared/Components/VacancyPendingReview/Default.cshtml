@@ -1,5 +1,5 @@
 ﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.VacancyViewModel
-
+@inject IUrlActionHelper UrlHelper;
 <section>
     <h2 class="govuk-heading-l govuk-!-margin-bottom-2">
         Your apprenticeship advert
@@ -32,7 +32,7 @@
         </tr>
     </table>
     <p>
-        <a href="@Url.EmployerRecruitAction()" class="govuk-link">Go to your vacancy dashboard</a>
+        <a href="@UrlHelper.EmployerRecruitAction()" class="govuk-link">Go to your vacancy dashboard</a>
     </p>
 </section>
 

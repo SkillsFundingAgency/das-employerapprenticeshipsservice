@@ -1,4 +1,4 @@
-﻿@using SFA.DAS.Activities.Client
-@model SFA.DAS.EmployerAccounts.Models.Activities.LatestActivitiesViewModel
+﻿@model SFA.DAS.EmployerAccounts.Models.Activities.LatestActivitiesViewModel
+@inject ActivitiesHelper ActivitiesWebHelper
 
-@Html.LatestActivities(Model.Result)
+@ActivitiesWebHelper.LatestActivities(Model.Result)
