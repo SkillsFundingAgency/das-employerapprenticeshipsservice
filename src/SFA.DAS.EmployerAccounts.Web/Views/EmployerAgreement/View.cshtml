@@ -1,4 +1,5 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
+@inject HtmlHelpers HtmlHelpers;
 @model SignEmployerAgreementViewModel
 @{
     ViewBag.PageID = "agreement-view";
@@ -62,13 +63,13 @@
 </div>
 
 
-    @if (Html.ViewExists(Model.EmployerAgreement.TemplatePartialViewName + "_body"))
+    @if (HtmlHelpers.ViewExists(Html, Model.EmployerAgreement.TemplatePartialViewName + "_body"))
     {
-        @Html.Partial(Model.EmployerAgreement.TemplatePartialViewName + "_body");
+        @await Html.PartialAsync(Model.EmployerAgreement.TemplatePartialViewName + "_body")
     }
     else
     {
-        @Html.Partial(Model.EmployerAgreement.TemplatePartialViewName)
+        @await Html.PartialAsync(Model.EmployerAgreement.TemplatePartialViewName)
     }
 
     @section breadcrumb {
