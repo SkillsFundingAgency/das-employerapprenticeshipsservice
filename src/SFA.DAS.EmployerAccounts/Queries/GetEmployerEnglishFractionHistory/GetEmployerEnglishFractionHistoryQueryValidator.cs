@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Validation;
+﻿using SFA.DAS.EmployerAccounts.Data.Contracts;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerEnglishFractionHistory;
 

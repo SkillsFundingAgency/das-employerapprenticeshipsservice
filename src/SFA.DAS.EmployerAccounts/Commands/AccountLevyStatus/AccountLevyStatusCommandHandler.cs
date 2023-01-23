@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.NServiceBus.Services;
 
 namespace SFA.DAS.EmployerAccounts.Commands.AccountLevyStatus;

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Models;
 
-namespace SFA.DAS.EmployerAccounts.Data;
+namespace SFA.DAS.EmployerAccounts.Data.Contracts;
 
 public class InvitationRepository : BaseRepository, IInvitationRepository
 {

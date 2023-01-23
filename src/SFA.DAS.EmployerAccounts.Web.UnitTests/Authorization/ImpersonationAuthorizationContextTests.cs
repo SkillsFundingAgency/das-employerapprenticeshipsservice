@@ -1,7 +1,6 @@
 ﻿using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authorization.Context;
-using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
@@ -16,6 +15,7 @@ using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Infrastructure;
 using static SFA.DAS.EmployerAccounts.Web.Authorization.ImpersonationAuthorizationContext;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
 {

@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.DependencyResolution;
+﻿using SFA.DAS.EmployerAccounts.Data.Contracts;
+
+namespace SFA.DAS.EmployerAccounts.DependencyResolution;
 
 public class RepositoriesRegistry : Registry
 {

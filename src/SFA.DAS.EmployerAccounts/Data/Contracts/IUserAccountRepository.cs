@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.EmployerAccounts.Models.Account;
 
-namespace SFA.DAS.EmployerAccounts.Data;
+namespace SFA.DAS.EmployerAccounts.Data.Contracts;
 
 public interface IUserAccountRepository
 {

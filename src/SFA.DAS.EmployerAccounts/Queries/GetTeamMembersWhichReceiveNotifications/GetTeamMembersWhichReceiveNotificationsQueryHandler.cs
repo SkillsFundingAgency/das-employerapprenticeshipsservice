@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 

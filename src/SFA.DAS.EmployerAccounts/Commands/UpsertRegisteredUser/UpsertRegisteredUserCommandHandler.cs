@@ -1,4 +1,5 @@
 using System.Threading;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.Validation;
 

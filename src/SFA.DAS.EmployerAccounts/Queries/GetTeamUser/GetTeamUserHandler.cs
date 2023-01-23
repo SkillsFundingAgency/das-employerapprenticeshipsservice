@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 

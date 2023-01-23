@@ -1,6 +1,7 @@
 using System.Threading;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.Audit.Types;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.HashingService;

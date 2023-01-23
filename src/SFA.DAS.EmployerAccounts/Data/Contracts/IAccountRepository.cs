@@ -3,7 +3,7 @@ using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 
-namespace SFA.DAS.EmployerAccounts.Data;
+namespace SFA.DAS.EmployerAccounts.Data.Contracts;
 
 public interface IAccountRepository
 {

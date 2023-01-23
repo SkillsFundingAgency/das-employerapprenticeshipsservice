@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization.Context;
-using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.EmployerAccounts.Web.Authorization;

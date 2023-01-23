@@ -1,7 +1,7 @@
 ﻿using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.Common.Domain.Types;
 
-namespace SFA.DAS.EmployerAccounts.Data;
+namespace SFA.DAS.EmployerAccounts.Data.Contracts;
 
 public interface IEmployerAccountRepository
 {

@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.EmployerAccounts.Models;
 
-namespace SFA.DAS.EmployerAccounts.Data;
+namespace SFA.DAS.EmployerAccounts.Data.Contracts;
 
 public interface IInvitationRepository
 {

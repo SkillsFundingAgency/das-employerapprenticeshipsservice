@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Requests.Finance;
 using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Responses.Finance;
 using SFA.DAS.EmployerAccounts.Interfaces.OuterApi;

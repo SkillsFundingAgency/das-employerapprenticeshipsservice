@@ -2,11 +2,11 @@
 using NUnit.Framework;
 using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
-using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using System;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Models;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RenameEmployerAccountCommandTests
 {

@@ -3,6 +3,7 @@ using System.Data.Entity;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;

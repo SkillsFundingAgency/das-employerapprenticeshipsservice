@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EmployerAccounts.Models.PAYE;
+﻿using SFA.DAS.EmployerAccounts.Data.Contracts;
+using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EmployerAccounts.Services;

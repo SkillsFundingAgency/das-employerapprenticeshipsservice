@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using SFA.DAS.Audit.Client;
 using SFA.DAS.Authorization.EmployerFeatures.Configuration;
+using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerAccounts.ReadStore.Configuration;
 using SFA.DAS.Encoding;
 using SFA.DAS.Hmrc.Configuration;
@@ -28,8 +29,8 @@ public static class ConfigurationServiceRegistrations
         //services.Configure<AccountApiConfiguration>(configuration.GetSection(ConfigurationKeys.a));
         //services.AddSingleton(cfg => cfg.GetService<IOptions<AccountApiConfiguration>>().Value);
 
-        //services.Configure<IAccountApiConfiguration>(configuration.GetSection(nameof(AccountApiConfiguration)));
-        //services.AddSingleton<IAccountApiConfiguration, AccountApiConfiguration>();
+        services.Configure<IAccountApiConfiguration>(configuration.GetSection(nameof(AccountApiConfiguration)));
+        services.AddSingleton<IAccountApiConfiguration, AccountApiConfiguration>();
 
         services.Configure<IdentityServerConfiguration>(configuration.GetSection("Identity"));
         services.AddSingleton(cfg => cfg.GetService<IOptions<IdentityServerConfiguration>>().Value);

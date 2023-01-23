@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using AutoMapper;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;

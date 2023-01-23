@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EmployerAccounts.Data;
+﻿namespace SFA.DAS.EmployerAccounts.Data.Contracts;
 
 public interface IEmployerAccountTeamRepository
 {

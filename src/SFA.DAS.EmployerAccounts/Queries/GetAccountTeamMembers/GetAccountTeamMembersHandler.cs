@@ -4,6 +4,7 @@ using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Models;
 using Entity = SFA.DAS.Audit.Types.Entity;
 using SFA.DAS.EmployerAccounts.Extensions;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers;
 
