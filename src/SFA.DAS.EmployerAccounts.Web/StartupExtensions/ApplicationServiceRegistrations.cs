@@ -7,6 +7,7 @@ using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.EmployerAccounts.TasksApi;
 using SFA.DAS.Encoding;
 using SFA.DAS.HashingService;
+using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.ReferenceData.Api.Client;
 
 namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
@@ -40,7 +41,8 @@ public static class ApplicationServiceRegistrations
         services.AddTransient<IPensionRegulatorService, PensionRegulatorService>();
 
         services.AddScoped<IReferenceDataApiClient, ReferenceDataApiClient>();
-        
+
+        services.AddTransient<IDateTimeService, DateTimeService>();
 
         services.AddTransient<IHashingService>(_ => new HashingService.HashingService(configuration.AllowedHashstringCharacters, configuration.Hashstring));
 

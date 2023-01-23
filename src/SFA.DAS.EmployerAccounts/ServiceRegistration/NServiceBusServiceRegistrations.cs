@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using NServiceBus;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.EmployerAccounts.Configuration;
@@ -9,14 +8,8 @@ using SFA.DAS.NServiceBus.Configuration;
 using SFA.DAS.NServiceBus.Configuration.AzureServiceBus;
 using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.Hosting;
-using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.NServiceBus.SqlServer.Configuration;
-using SFA.DAS.UnitOfWork.DependencyResolution.Microsoft;
-using SFA.DAS.UnitOfWork.Managers;
 using SFA.DAS.UnitOfWork.NServiceBus.Configuration;
-using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.Managers;
-using SFA.DAS.UnitOfWork.NServiceBus.Services;
-using SFA.DAS.UnitOfWork.Pipeline;
 using Endpoint = NServiceBus.Endpoint;
 
 namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
@@ -72,14 +65,4 @@ public static class NServiceBusServiceRegistrations
 
         return container;
     }
-
-    public static IServiceCollection AddNServiceBusClientUnitOfWork(this IServiceCollection services)
-    {
-        services.TryAddScoped<IEventPublisher, EventPublisher>();
-
-        return services.AddUnitOfWork()
-            .AddScoped<IUnitOfWork, UnitOfWork.NServiceBus.Features.ClientOutbox.Pipeline.UnitOfWork>()
-            .AddScoped<IUnitOfWorkManager, UnitOfWorkManager>();
-    }
 }
-

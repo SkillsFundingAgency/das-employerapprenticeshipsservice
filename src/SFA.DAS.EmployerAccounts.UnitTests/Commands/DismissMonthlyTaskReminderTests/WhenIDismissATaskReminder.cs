@@ -5,9 +5,9 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.DismissMonthlyTaskReminder;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.TasksApi;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.Tasks.API.Types.Enums;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.DismissMonthlyTaskReminderTests

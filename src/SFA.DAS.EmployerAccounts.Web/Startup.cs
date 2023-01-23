@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Hosting;
+using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.Microsoft;
 using SFA.DAS.Authorization.Mvc.Extensions;
 using SFA.DAS.Configuration.AzureTableStorage;
@@ -15,6 +16,7 @@ using SFA.DAS.EmployerAccounts.Web.Filters;
 using SFA.DAS.EmployerAccounts.Web.Handlers;
 using SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 using SFA.DAS.GovUK.Auth.AppStart;
+using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.Microsoft;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace SFA.DAS.EmployerAccounts.Web
@@ -23,6 +25,7 @@ namespace SFA.DAS.EmployerAccounts.Web
     {
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
+        private EmployerAccountsConfiguration _employerAccountsConfiguration;
 
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
@@ -67,7 +70,7 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             services.AddConfigurationOptions(_configuration);
 
-            var employerAccountsConfiguration = _configuration.Get<EmployerAccountsConfiguration>();
+            _employerAccountsConfiguration = _configuration.Get<EmployerAccountsConfiguration>();
 
             var identityServerConfiguration = _configuration
                 .GetSection("Identity")
@@ -75,30 +78,29 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             services.AddOrchestrators();
             services.AddAutoMapper(typeof(Startup).Assembly);
-            services.AddDatabaseRegistration(employerAccountsConfiguration, _configuration["Environment"]);
+            services.AddDatabaseRegistration(_employerAccountsConfiguration, _configuration["Environment"]);
             services.AddDataRepositories();
-            services.AddApplicationServices(employerAccountsConfiguration);
-            services.AddHashingServices(employerAccountsConfiguration);
+            services.AddApplicationServices(_employerAccountsConfiguration);
+            services.AddHashingServices(_employerAccountsConfiguration);
             services.AddAuditServices();
             services.AddCachesRegistrations();
             services.AddDateTimeServices(_configuration);
             services.AddEventsApi();
             services.AddNotifications(_configuration);
 
-            services.StartNServiceBus(_configuration, employerAccountsConfiguration, _configuration.IsDev());
             services.AddNServiceBusClientUnitOfWork();
-
+            services.StartNServiceBus(_configuration, _employerAccountsConfiguration, _configuration.IsDev());
             services.AddEmployerFeaturesAuthorization();
             services.AddDasAuthorization();
             services.AddEmployerAccountsApi();
             services.AddExecutionPolicies();
             services.AddActivitiesClient(_configuration);
-            services.AddEmployerAccountsOuterApi(employerAccountsConfiguration, _configuration);
+            services.AddEmployerAccountsOuterApi(_employerAccountsConfiguration, _configuration);
             services.AddCommittmentsV2Client();
-            services.AddPollyPolicy(employerAccountsConfiguration);
-            services.AddContentApiClient(employerAccountsConfiguration, _configuration);
-            services.AddProviderRegistration(employerAccountsConfiguration, _configuration);
-            services.AddApprenticeshipLevyApi(employerAccountsConfiguration);
+            services.AddPollyPolicy(_employerAccountsConfiguration);
+            services.AddContentApiClient(_employerAccountsConfiguration, _configuration);
+            services.AddProviderRegistration(_employerAccountsConfiguration, _configuration);
+            services.AddApprenticeshipLevyApi(_employerAccountsConfiguration);
 
             services.AddAuthenticationServices();
 
@@ -148,6 +150,11 @@ namespace SFA.DAS.EmployerAccounts.Web
 #endif
 
             services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
+        }
+
+        public void ConfigureContainer(UpdateableServiceProvider serviceProvider)
+        {
+            serviceProvider.StartNServiceBus(_configuration, _employerAccountsConfiguration, _configuration.IsDev());
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
