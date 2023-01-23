@@ -1,7 +1,9 @@
-﻿using SFA.DAS.AutoConfiguration;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.AutoConfiguration;
 using SFA.DAS.Caches;
+using SFA.DAS.EmployerAccounts.Configuration;
 
-namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
+namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 
 public static class CachesServiceRegistrations
 {

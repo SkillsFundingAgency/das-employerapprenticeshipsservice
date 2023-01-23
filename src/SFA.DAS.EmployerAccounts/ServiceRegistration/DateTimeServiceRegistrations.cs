@@ -1,6 +1,8 @@
-﻿using SFA.DAS.EmployerAccounts.Time;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.EmployerAccounts.Time;
 
-namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
+namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 
 public static class DateTimeServiceRegistrations
 {

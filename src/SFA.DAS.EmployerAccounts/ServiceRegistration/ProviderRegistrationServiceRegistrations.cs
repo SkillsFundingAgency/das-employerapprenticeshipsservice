@@ -1,7 +1,9 @@
-﻿using SFA.DAS.EmployerAccounts.Services;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.NLog.Logger.Web.MessageHandlers;
 
-namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
+namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 
 public static class ProviderRegistrationServiceRegistrations
 {

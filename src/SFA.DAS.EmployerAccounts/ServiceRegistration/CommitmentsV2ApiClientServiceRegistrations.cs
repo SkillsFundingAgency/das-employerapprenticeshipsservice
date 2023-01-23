@@ -1,7 +1,7 @@
-﻿using SFA.DAS.EmployerAccounts.Services;
+﻿using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.NLog.Logger.Web.MessageHandlers;
 
-namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
+namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 
 public static class CommitmentsV2ApiClientServiceRegistrations
 {

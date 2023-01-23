@@ -1,6 +1,7 @@
-﻿using SFA.DAS.Hmrc.ExecutionPolicy;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.Hmrc.ExecutionPolicy;
 
-namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
+namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 
 public static class ExecutionPolicyServiceRegistrations
 {

@@ -1,11 +1,13 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Nest;
 using NLog.Fluent;
 using SFA.DAS.Activities.Client;
 using SFA.DAS.Activities.IndexMappers;
 using SFA.DAS.Elastic;
 
-namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
+namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 
 public static class ActivitiesServiceRegistrations
 {

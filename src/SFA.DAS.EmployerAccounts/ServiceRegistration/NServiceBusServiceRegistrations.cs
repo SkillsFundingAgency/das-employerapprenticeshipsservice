@@ -1,8 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using NServiceBus;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
-using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.NServiceBus.Configuration;
 using SFA.DAS.NServiceBus.Configuration.AzureServiceBus;
 using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
@@ -17,13 +19,13 @@ using SFA.DAS.UnitOfWork.NServiceBus.Services;
 using SFA.DAS.UnitOfWork.Pipeline;
 using Endpoint = NServiceBus.Endpoint;
 
-namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
+namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 
 public static class NServiceBusServiceRegistrations
 {
     private const string EndPointName = "SFA.DAS.EmployerAccounts";
 
-    public static UpdateableServiceProvider StartNServiceBus(this IServiceCollection services, IConfiguration configuration, EmployerAccountsConfiguration employerAccountsConfiguration)
+    public static UpdateableServiceProvider StartNServiceBus(this IServiceCollection services, IConfiguration configuration, EmployerAccountsConfiguration employerAccountsConfiguration, bool isDevelopment)
     {
         var endpointConfiguration = new EndpointConfiguration(EndPointName)
             .UseInstallers()
@@ -31,7 +33,7 @@ public static class NServiceBusServiceRegistrations
             .UseMessageConventions()
             .UseNewtonsoftJsonSerializer()
             .UseOutbox(true)
-            .UseSqlServerPersistence(() => DatabaseExtensions.GetSqlConnection(configuration.IsDev(), employerAccountsConfiguration.DatabaseConnectionString))
+            .UseSqlServerPersistence(() => DatabaseExtensions.GetSqlConnection(isDevelopment, employerAccountsConfiguration.DatabaseConnectionString))
             .UseUnitOfWork();
 
         // https://github.com/twenzel/NServiceBus.MSDependencyInjection/blob/master/README.md
@@ -48,7 +50,7 @@ public static class NServiceBusServiceRegistrations
             });
         });
 
-        if (configuration.IsDev())
+        if (isDevelopment)
         {
             endpointConfiguration.UseLearningTransport();
         }

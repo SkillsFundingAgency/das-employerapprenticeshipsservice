@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.Microsoft;
 using SFA.DAS.Authorization.Mvc.Extensions;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.EmployerAccounts.ServiceRegistration;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Filters;
 using SFA.DAS.EmployerAccounts.Web.Handlers;
@@ -79,7 +80,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddEventsApi();
             services.AddNotifications(_configuration);
 
-            services.StartNServiceBus(_configuration, employerAccountsConfiguration);
+            services.StartNServiceBus(_configuration, employerAccountsConfiguration, _configuration.IsDev());
             services.AddNServiceBusClientUnitOfWork();
 
             services.AddEmployerFeaturesAuthorization();

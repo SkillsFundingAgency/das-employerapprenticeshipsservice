@@ -1,7 +1,8 @@
-﻿using SFA.DAS.Events.Api.Client;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Events.Api.Client.Configuration;
 
-namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
+namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 
 public static class EventsApiServiceRegistrations
 {

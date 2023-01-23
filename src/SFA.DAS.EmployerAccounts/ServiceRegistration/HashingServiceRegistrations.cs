@@ -1,7 +1,8 @@
-﻿using SFA.DAS.EmployerAccounts.MarkerInterfaces;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.HashingService;
 
-namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions
+namespace SFA.DAS.EmployerAccounts.ServiceRegistration
 {
     public static class HashingServiceRegistrations
     {

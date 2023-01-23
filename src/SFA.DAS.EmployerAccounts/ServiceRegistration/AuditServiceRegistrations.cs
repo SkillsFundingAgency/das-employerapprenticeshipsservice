@@ -1,7 +1,8 @@
-﻿using SFA.DAS.Audit.Client;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.Audit.Client;
 using SFA.DAS.AutoConfiguration;
 
-namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
+namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 
 public static class AuditServiceRegistrations
 {

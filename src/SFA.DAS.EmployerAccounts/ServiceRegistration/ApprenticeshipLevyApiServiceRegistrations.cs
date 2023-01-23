@@ -1,6 +1,8 @@
 ﻿using HMRC.ESFA.Levy.Api.Client;
+using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.EmployerAccounts.Configuration;
 
-namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
+namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 
 public static class ApprenticeshipLevyApiServiceRegistrations
 {

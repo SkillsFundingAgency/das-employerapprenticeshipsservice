@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.EmployerAccounts.Configuration;
 using StackExchange.Redis;
 
-namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
+namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 
 public static class DataProtectionServiceRegistrations
 {

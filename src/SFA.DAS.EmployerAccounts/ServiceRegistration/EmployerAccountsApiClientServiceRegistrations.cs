@@ -1,6 +1,7 @@
-﻿using SFA.DAS.EmployerAccounts.Api.Client;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.EmployerAccounts.Api.Client;
 
-namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
+namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 
 public static class EmployerAccountsApiClientServiceRegistrations
 {
