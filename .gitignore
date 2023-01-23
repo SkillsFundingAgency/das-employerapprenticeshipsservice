@@ -276,3 +276,4 @@ SonarQube.Analysis.xml
 **/*.slconfig
 /src/.upgrade-assistant
 /src/**/UpgradeReport.sarif
+/src/SFA.DAS.EmployerAccounts.Web/internal-nlog.txt
