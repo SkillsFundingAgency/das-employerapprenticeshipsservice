@@ -59,7 +59,7 @@ namespace SFA.DAS.EmployerAccounts.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpContextAccessor();
-
+            
             services.AddOptions();
 
             services.AddLogging();

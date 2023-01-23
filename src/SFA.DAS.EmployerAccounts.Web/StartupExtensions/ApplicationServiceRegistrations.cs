@@ -7,6 +7,7 @@ using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.Encoding;
 using SFA.DAS.HashingService;
+using SFA.DAS.ReferenceData.Api.Client;
 
 namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 
@@ -33,11 +34,13 @@ public static class ApplicationServiceRegistrations
         services.Decorate<IRecruitService, RecruitServiceWithTimeout>();
 
         services.AddScoped<IAccountApiClient, AccountApiClient>();
-        services.AddSingleton<IReferenceDataService, ReferenceDataService>();
+        services.AddTransient<IReferenceDataService, ReferenceDataService>();
         services.AddTransient<ITaskService, TaskService>();
         services.AddTransient<IPensionRegulatorService, PensionRegulatorService>();
 
-       
+        services.AddScoped<IReferenceDataApiClient, ReferenceDataApiClient>();
+        
+
         services.AddTransient<IHashingService>(_ => new HashingService.HashingService(configuration.AllowedHashstringCharacters, configuration.Hashstring));
 
         services.AddTransient<IUserAccountRepository, UserAccountRepository>();

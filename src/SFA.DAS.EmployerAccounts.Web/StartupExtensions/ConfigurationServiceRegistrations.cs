@@ -23,8 +23,8 @@ public static class ConfigurationServiceRegistrations
         services.AddSingleton(cfg => cfg.GetService<IOptions<EmployerAccountsReadStoreConfiguration>>().Value);
 
         services.Configure<ReferenceDataApiClientConfiguration>(configuration.GetSection(ConfigurationKeys.ReferenceDataApiClient));
-        services.AddSingleton(cfg => cfg.GetService<IOptions<ReferenceDataApiClientConfiguration>>().Value);
-
+        services.AddSingleton<IReferenceDataApiConfiguration>(cfg => cfg.GetService<IOptions<ReferenceDataApiClientConfiguration>>().Value);
+        
         services.Configure<EmployerFeaturesConfiguration>(configuration.GetSection(ConfigurationKeys.Features));
         services.AddSingleton(cfg => cfg.GetService<IOptions<EmployerFeaturesConfiguration>>().Value);
 
@@ -43,8 +43,6 @@ public static class ConfigurationServiceRegistrations
         services.Configure<EncodingConfig>(configuration.GetSection(ConfigurationKeys.EncodingConfig));
         services.AddSingleton(cfg => cfg.GetService<IOptions<EncodingConfig>>().Value);
 
-        services.Configure<IReferenceDataApiConfiguration>(configuration.GetSection(nameof(ReferenceDataApiClientConfiguration)));
-        services.AddSingleton(cfg => cfg.GetService<IOptions<ReferenceDataApiClientConfiguration>>().Value);
 
         services.Configure<ITokenServiceApiClientConfiguration>(configuration.GetSection(nameof(TokenServiceApiClientConfiguration)));
 
@@ -55,6 +53,7 @@ public static class ConfigurationServiceRegistrations
         services.AddSingleton<ITaskApiConfiguration>(_ => employerAccountsConfiguration.TasksApi);
         services.AddSingleton<CommitmentsApiV2ClientConfiguration>(_ => employerAccountsConfiguration.CommitmentsApi);
         services.AddSingleton<IProviderRegistrationClientApiConfiguration>(_ => employerAccountsConfiguration.ProviderRegistrationsApi);
+        
 
         services.AddSingleton<IEmployerAccountsApiClientConfiguration>(_ => new EmployerAccountsApiClientConfiguration
         {
