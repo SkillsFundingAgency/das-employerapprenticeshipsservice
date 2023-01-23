@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.CosmosDb.Testing;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Queries;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;
-using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 using SFA.DAS.EmployerAccounts.ReadStore.Models;
 using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.Testing;
@@ -55,7 +55,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
     {
         internal IsUserInAnyRoleQuery Query { get; set; }
         public CancellationToken CancellationToken { get; set; }
-        internal IReadStoreRequestHandler<IsUserInAnyRoleQuery,bool> Handler { get; set; }
+        internal IRequestHandler<IsUserInAnyRoleQuery,bool> Handler { get; set; }
         internal Mock<IAccountUsersRepository> UserRolesRepository { get; set; }
         internal List<AccountUser> AccountUsers { get; set; }
 

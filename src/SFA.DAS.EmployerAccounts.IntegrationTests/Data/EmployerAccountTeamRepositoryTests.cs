@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Configuration;
@@ -12,8 +13,6 @@ using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Sql.Client;
 using SFA.DAS.Testing.Helpers;
 
 namespace SFA.DAS.EmployerAccounts.IntegrationTests.Data
@@ -73,13 +72,18 @@ namespace SFA.DAS.EmployerAccounts.IntegrationTests.Data
         {
             EmployerAccountsConfiguration = ConfigurationTestHelper.GetConfiguration<EmployerAccountsConfiguration>(ConfigurationKeys.EmployerAccounts);
 
-            LoggerMock = new Mock<ILog>();
+            InvitationRepositoryLoggerMock = new Mock<ILogger<InvitationRepository>>();
+            EmployerAccountTeamRepositoryLoggerMock = new Mock<ILogger<EmployerAccountTeamRepository>>();
         }
 
         public EmployerAccountsConfiguration EmployerAccountsConfiguration { get; }
 
-        public Mock<ILog> LoggerMock { get; private set; }
-        public ILog Logger => LoggerMock.Object;
+        public Mock<ILogger<InvitationRepository>> InvitationRepositoryLoggerMock { get; private set; }
+        public ILogger<InvitationRepository> InvitationRepositoryLogger => InvitationRepositoryLoggerMock.Object;
+
+        public Mock<ILogger<EmployerAccountTeamRepository>> EmployerAccountTeamRepositoryLoggerMock { get; private set; }
+        public ILogger<EmployerAccountTeamRepository> EmployerAccountTeamRepositoryLogger => EmployerAccountTeamRepositoryLoggerMock.Object;
+
 
         public EmployerAccountTeamRepositoryTestFixtures WithNewAccountAndActiveUser(string email, Role role, out string hashedId)
         {
@@ -142,7 +146,7 @@ namespace SFA.DAS.EmployerAccounts.IntegrationTests.Data
         public Task CheckEmployerAccountTeamRepository(Func<EmployerAccountTeamRepository, Task> action)
         {
             return RunWithTransaction(
-                repositoryCreator: db => new EmployerAccountTeamRepository(EmployerAccountsConfiguration, Logger,
+                repositoryCreator: db => new EmployerAccountTeamRepository(EmployerAccountsConfiguration, EmployerAccountTeamRepositoryLogger,
                     new Lazy<EmployerAccountsDbContext>(() => db)),
                 action: action);
         }
@@ -150,7 +154,7 @@ namespace SFA.DAS.EmployerAccounts.IntegrationTests.Data
         public Task CheckInvitationRepository(Func<InvitationRepository, Task> action)
         {
             return RunWithTransaction(
-                repositoryCreator: db => new InvitationRepository(EmployerAccountsConfiguration, Logger,
+                repositoryCreator: db => new InvitationRepository(EmployerAccountsConfiguration, InvitationRepositoryLogger,
                     new Lazy<EmployerAccountsDbContext>(() => db)),
                 action: action);
         }

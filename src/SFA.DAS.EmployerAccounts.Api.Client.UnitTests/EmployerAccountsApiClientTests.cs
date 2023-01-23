@@ -4,10 +4,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Queries;
-using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.Testing;
 
@@ -72,14 +72,14 @@ namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
         public IsUserInAnyRoleRequest IsUserInAnyRoleRequest { get; set; }
         public CancellationToken CancellationToken { get; set; }
         public Mock<ISecureHttpClient> MockSecureHttpClient { get; set; }
-        public Mock<IReadStoreMediator> MockApiMediator { get; set; }
+        public Mock<IMediator> MockApiMediator { get; set; }
         public IEmployerAccountsApiClient EmployerAccountsApiClient { get; set; }
 
         public EmployerAccountsApiClientTestsFixture()
         {
             CancellationToken = CancellationToken.None;
             MockSecureHttpClient = new Mock<ISecureHttpClient>();
-            MockApiMediator = new Mock<IReadStoreMediator>();
+            MockApiMediator = new Mock<IMediator>();
             EmployerAccountsApiClient = new EmployerAccountsApiClient(MockSecureHttpClient.Object, MockApiMediator.Object);
 
             IsUserInRoleRequest = new IsUserInRoleRequest

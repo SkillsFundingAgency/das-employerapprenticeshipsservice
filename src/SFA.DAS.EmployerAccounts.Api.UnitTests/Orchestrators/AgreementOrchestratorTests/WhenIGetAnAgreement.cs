@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementById;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Orchestrators.AgreementOrchestratorTests
 {
@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Orchestrators.AgreementOrchestr
     {
         private AgreementOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
-        private Mock<ILog> _logger;
+        private Mock<ILogger<AgreementOrchestrator>> _logger;
         private IMapper _mapper;
         private Models.EmployerAgreement.EmployerAgreementView _agreement;
 
@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Orchestrators.AgreementOrchestr
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _logger = new Mock<ILog>();
+            _logger = new Mock<ILogger<AgreementOrchestrator>>();
             _mapper = ConfigureMapper();
             _agreement = new Models.EmployerAgreement.EmployerAgreementView();
 
@@ -51,7 +51,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Orchestrators.AgreementOrchestr
             var result = await _orchestrator.GetAgreement(hashedAgreementId);
 
             //Assert
-            result.ShouldBeEquivalentTo(_agreement);
+            result.Should().BeEquivalentTo(_agreement);
         }
 
         private IMapper ConfigureMapper()

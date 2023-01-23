@@ -1,8 +1,5 @@
-﻿using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
+﻿using MediatR;
 
-namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Queries
-{
-    public class PingQuery : IReadStoreRequest<Unit>
-    {
-    }
-}
+namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Queries;
+
+public class PingQuery : IRequest { }
