@@ -152,11 +152,6 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
         }
 
-        public void ConfigureContainer(UpdateableServiceProvider serviceProvider)
-        {
-            serviceProvider.StartNServiceBus(_configuration, _employerAccountsConfiguration, _configuration.IsDev());
-        }
-
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
