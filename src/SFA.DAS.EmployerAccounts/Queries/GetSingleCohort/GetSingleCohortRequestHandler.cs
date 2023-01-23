@@ -1,6 +1,6 @@
 ﻿using System.Threading;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.HashingService;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
@@ -10,13 +10,13 @@ public class GetSingleCohortRequestHandler : IRequestHandler<GetSingleCohortRequ
     private readonly IValidator<GetSingleCohortRequest> _validator;
     private readonly ICommitmentV2Service _commitmentV2Service;
     private readonly IHashingService _hashingService;
-    private readonly ILog _logger;
+    private readonly ILogger<GetSingleCohortRequestHandler> _logger;
 
     public GetSingleCohortRequestHandler(
         IValidator<GetSingleCohortRequest> validator,
         ICommitmentV2Service commitmentV2Service,            
         IHashingService hashingService,
-        ILog logger)
+        ILogger<GetSingleCohortRequestHandler> logger)
     {
         _validator = validator;
         _commitmentV2Service = commitmentV2Service;
@@ -53,7 +53,7 @@ public class GetSingleCohortRequestHandler : IRequestHandler<GetSingleCohortRequ
         }
         catch(Exception ex)
         {
-            _logger.Error(ex, $"Failed to get Cohorts for {message.HashedAccountId}");
+            _logger.LogError(ex, $"Failed to get Cohorts for {message.HashedAccountId}");
             return new GetSingleCohortResponse
             {
                 HasFailed = true

@@ -8,7 +8,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators;
 
 public class SearchPensionRegulatorOrchestrator : UserVerificationOrchestratorBase
 {
-    private readonly ILog _logger;
+    private readonly ILogger<SearchPensionRegulatorOrchestrator> _logger;
     private readonly ICookieStorageService<EmployerAccountData> _cookieService;
     private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
@@ -16,7 +16,7 @@ public class SearchPensionRegulatorOrchestrator : UserVerificationOrchestratorBa
     {
     }
 
-    public SearchPensionRegulatorOrchestrator(IMediator mediator, ICookieStorageService<EmployerAccountData> cookieService, ILog logger)
+    public SearchPensionRegulatorOrchestrator(IMediator mediator, ICookieStorageService<EmployerAccountData> cookieService, ILogger<SearchPensionRegulatorOrchestrator> logger)
         : base(mediator)
     {
         _cookieService = cookieService;
@@ -34,7 +34,7 @@ public class SearchPensionRegulatorOrchestrator : UserVerificationOrchestratorBa
         }
         catch (Exception ex)
         {
-            _logger.Error(ex, ex.Message);
+            _logger.LogError(ex, ex.Message);
             response.Data.Results = new List<PensionRegulatorDetailsViewModel>();
         }
 
@@ -53,7 +53,7 @@ public class SearchPensionRegulatorOrchestrator : UserVerificationOrchestratorBa
         }
         catch (Exception ex)
         {
-            _logger.Error(ex, ex.Message);
+            _logger.LogError(ex, ex.Message);
             response.Data.Results = new List<PensionRegulatorDetailsViewModel>();
         }
 

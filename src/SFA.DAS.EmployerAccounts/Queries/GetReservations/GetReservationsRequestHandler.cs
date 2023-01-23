@@ -1,6 +1,6 @@
 ﻿using System.Threading;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.HashingService;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetReservations;
@@ -8,13 +8,13 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetReservations;
 public class GetReservationsRequestHandler : IRequestHandler<GetReservationsRequest, GetReservationsResponse>
 {
     private readonly IValidator<GetReservationsRequest> _validator;
-    private readonly ILog _logger;
+    private readonly ILogger<GetReservationsRequestHandler> _logger;
     private readonly IReservationsService _service;
     private readonly IHashingService _hashingService;
 
     public GetReservationsRequestHandler(
         IValidator<GetReservationsRequest> validator,
-        ILog logger,
+        ILogger<GetReservationsRequestHandler> logger,
         IReservationsService service,
         IHashingService hashingService)
     {
@@ -35,7 +35,7 @@ public class GetReservationsRequestHandler : IRequestHandler<GetReservationsRequ
 
         long accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
-        _logger.Info($"Getting reservations for hashed account id {message.HashedAccountId}");
+        _logger.LogInformation($"Getting reservations for hashed account id {message.HashedAccountId}");
 
         try
         {
@@ -46,7 +46,7 @@ public class GetReservationsRequestHandler : IRequestHandler<GetReservationsRequ
         }
         catch (Exception ex)
         {
-            _logger.Error(ex, $"Failed to get Reservations for {message.HashedAccountId}");
+            _logger.LogError(ex, $"Failed to get Reservations for {message.HashedAccountId}");
             return new GetReservationsResponse
             {
                 HasFailed = true

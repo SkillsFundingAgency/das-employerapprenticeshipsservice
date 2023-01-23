@@ -7,10 +7,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 public class ReportController : BaseController
 {
     private readonly IMediator _mediator;
-    private readonly ILog _logger;
+    private readonly ILogger<ReportController> _logger;
 
     public ReportController(IMediator mediator,
-        ILog logger,
+        ILogger<ReportController> logger,
         ICookieStorageService<FlashMessageViewModel> flashMessage)
         : base(flashMessage)
     {
@@ -24,7 +24,7 @@ public class ReportController : BaseController
     {
         if (Guid.TryParse(correlationId, out var correlationGuid))
         {
-            _logger.Debug($"Reporting Training Provider with correlationId: {correlationId}");
+            _logger.LogDebug($"Reporting Training Provider with correlationId: {correlationId}");
 
             //If being reported, unsubscribe to not get further notifications anyway
             await _mediator.Send(new UnsubscribeProviderEmailQuery

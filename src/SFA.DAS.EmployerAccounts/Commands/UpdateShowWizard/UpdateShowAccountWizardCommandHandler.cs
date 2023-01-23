@@ -1,5 +1,5 @@
 ﻿using System.Threading;
-using SFA.DAS.NLog.Logger;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Commands.UpdateShowWizard;
@@ -8,9 +8,9 @@ public class UpdateShowAccountWizardCommandHandler : IRequestHandler<UpdateShowA
 {
     private readonly IMembershipRepository _membershipRepository;
     private readonly IValidator<UpdateShowAccountWizardCommand> _validator;
-    private readonly ILog _logger;
+    private readonly ILogger<UpdateShowAccountWizardCommandHandler> _logger;
 
-    public UpdateShowAccountWizardCommandHandler(IMembershipRepository membershipRepository, IValidator<UpdateShowAccountWizardCommand> validator, ILog logger)
+    public UpdateShowAccountWizardCommandHandler(IMembershipRepository membershipRepository, IValidator<UpdateShowAccountWizardCommand> validator, ILogger<UpdateShowAccountWizardCommandHandler> logger)
     {
         _membershipRepository = membershipRepository;
         _validator = validator;
@@ -26,7 +26,7 @@ public class UpdateShowAccountWizardCommandHandler : IRequestHandler<UpdateShowA
             throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        _logger.Info($"User {message.ExternalUserId} has set the show wizard toggle to {message.ShowWizard} for account {message.HashedAccountId}");
+        _logger.LogInformation($"User {message.ExternalUserId} has set the show wizard toggle to {message.ShowWizard} for account {message.HashedAccountId}");
 
         await _membershipRepository.SetShowAccountWizard(message.HashedAccountId, message.ExternalUserId, message.ShowWizard);
 

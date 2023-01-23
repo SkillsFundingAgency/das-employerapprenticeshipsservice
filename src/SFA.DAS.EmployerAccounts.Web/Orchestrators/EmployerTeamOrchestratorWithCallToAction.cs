@@ -17,7 +17,7 @@ public class EmployerTeamOrchestratorWithCallToAction : EmployerTeamOrchestrator
     private readonly ICookieStorageService<AccountContext> _accountContext;
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
-    private readonly ILog _logger;
+    private readonly ILogger<EmployerTeamOrchestratorWithCallToAction> _logger;
 
     public EmployerTeamOrchestratorWithCallToAction(
         EmployerTeamOrchestrator employerTeamOrchestrator,
@@ -26,7 +26,7 @@ public class EmployerTeamOrchestratorWithCallToAction : EmployerTeamOrchestrator
         IAccountApiClient accountApiClient,
         IMapper mapper,
         ICookieStorageService<AccountContext> accountContext,
-        ILog logger,
+        ILogger<EmployerTeamOrchestratorWithCallToAction> logger,
         EmployerAccountsConfiguration configuration)
         : base(mediator, currentDateTime, accountApiClient, mapper, configuration)
     {
@@ -62,7 +62,7 @@ public class EmployerTeamOrchestratorWithCallToAction : EmployerTeamOrchestrator
             }
             else
             {
-                _logger.Error(callToActionResponse.Exception, $"An error occured whilst trying to retrieve account CallToAction: {hashedAccountId}");
+                _logger.LogError(callToActionResponse.Exception, $"An error occured whilst trying to retrieve account CallToAction: {hashedAccountId}");
             }
         }
 

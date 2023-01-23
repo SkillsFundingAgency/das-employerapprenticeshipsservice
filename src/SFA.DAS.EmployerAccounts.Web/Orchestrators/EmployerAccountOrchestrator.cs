@@ -12,7 +12,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators;
 public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
 {
     private readonly IMediator _mediator;
-    private readonly ILog _logger;
+    private readonly ILogger<EmployerAccountOrchestrator> _logger;
     private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
     //Needed for tests
@@ -20,7 +20,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
     {
     }
 
-    public EmployerAccountOrchestrator(IMediator mediator, ILog logger, ICookieStorageService<EmployerAccountData> cookieService,
+    public EmployerAccountOrchestrator(IMediator mediator, ILogger<EmployerAccountOrchestrator> logger, ICookieStorageService<EmployerAccountData> cookieService,
         EmployerAccountsConfiguration configuration)
         : base(mediator, cookieService, configuration)
     {
@@ -144,7 +144,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
         }
         catch (Exception e)
         {
-            _logger.Error(e,$"Create Account Validation Error: {e.Message}");
+            _logger.LogError(e,$"Create Account Validation Error: {e.Message}");
             return new OrchestratorResponse<EmployerAgreementViewModel>
             {
                 Data = new EmployerAgreementViewModel(),
@@ -235,7 +235,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
         }
         catch (InvalidRequestException ex)
         {
-            _logger.Error(ex, $"Create Account Validation Error: {ex.Message}");
+            _logger.LogError(ex, $"Create Account Validation Error: {ex.Message}");
             return new OrchestratorResponse<EmployerAgreementViewModel>
             {
                 Data = new EmployerAgreementViewModel(),
@@ -280,7 +280,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
         }
         catch (InvalidRequestException ex)
         {
-            _logger.Error(ex, $"Create User Account Validation Error: {ex.Message}");
+            _logger.LogError(ex, $"Create User Account Validation Error: {ex.Message}");
             return new OrchestratorResponse<EmployerAccountViewModel>
             {
                 Data = new EmployerAccountViewModel(),

@@ -1,8 +1,8 @@
 ﻿using System.Data;
 using System.Threading;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeInUse;
 using SFA.DAS.Hmrc;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetHmrcEmployerInformation;
@@ -12,10 +12,10 @@ public class GetHmrcEmployerInformationHandler : IRequestHandler<GetHmrcEmployer
     private readonly IValidator<GetHmrcEmployerInformationQuery> _validator;
     private readonly IHmrcService _hmrcService;
     private readonly IMediator _mediator;
-    private readonly ILog _logger;
+    private readonly ILogger<GetHmrcEmployerInformationHandler> _logger;
 
 
-    public GetHmrcEmployerInformationHandler(IValidator<GetHmrcEmployerInformationQuery> validator, IHmrcService hmrcService, IMediator mediator, ILog logger)
+    public GetHmrcEmployerInformationHandler(IValidator<GetHmrcEmployerInformationQuery> validator, IHmrcService hmrcService, IMediator mediator, ILogger<GetHmrcEmployerInformationHandler> logger)
     {
         _validator = validator;
         _hmrcService = hmrcService;
@@ -45,7 +45,7 @@ public class GetHmrcEmployerInformationHandler : IRequestHandler<GetHmrcEmployer
 
         if (schemeCheck.PayeScheme != null)
         {
-            _logger.Warn($"PAYE scheme {empref} already in use.");
+            _logger.LogWarning($"PAYE scheme {empref} already in use.");
             throw new ConstraintException("PAYE scheme already in use");
         }
             

@@ -1,9 +1,9 @@
 ﻿using System.Configuration;
 using System.IO;
+using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage;
 using Newtonsoft.Json;
 using SFA.DAS.AutoConfiguration;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Services;
 
@@ -17,7 +17,7 @@ public abstract class AzureServiceBase<T>
     }
 
     public abstract string ConfigurationName { get; }
-    public abstract ILog Logger { get; set; }
+    public abstract ILogger Logger { get; set; }
 
     public async Task<T> GetDataFromBlobStorage(string containerName, string blobName)
     {
@@ -55,7 +55,7 @@ public abstract class AzureServiceBase<T>
         }
         catch (StorageException ex)
         {
-            Logger.Warn(ex, "Unable to get blob from azure storage.");
+            Logger.LogWarning(ex, "Unable to get blob from azure storage.");
         }
 
         return null;

@@ -1,8 +1,8 @@
-﻿using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Requests.Reservations;
+﻿using Microsoft.Extensions.Logging;
+using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Requests.Reservations;
 using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Responses.Reservations;
 using SFA.DAS.EmployerAccounts.Interfaces.OuterApi;
 using SFA.DAS.EmployerAccounts.Models.Reservations;
-using SFA.DAS.NLog.Logger;
 using ReservationStatus = SFA.DAS.EmployerAccounts.Models.Reservations.ReservationStatus;
 
 namespace SFA.DAS.EmployerAccounts.Services;
@@ -10,8 +10,8 @@ namespace SFA.DAS.EmployerAccounts.Services;
 public class ReservationsService : IReservationsService
 {
     private readonly IOuterApiClient _outerApiClient;
-    private readonly ILog _logger;
-    public ReservationsService(IOuterApiClient apiClient, ILog logger)
+    private readonly ILogger<ReservationsService> _logger;
+    public ReservationsService(IOuterApiClient apiClient, ILogger<ReservationsService> logger)
     {
         _logger = logger;
         _outerApiClient = apiClient;
@@ -23,7 +23,7 @@ public class ReservationsService : IReservationsService
 
         try
         {
-            _logger.Info($"Getting reservations for account ID: {accountId}");
+            _logger.LogInformation($"Getting reservations for account ID: {accountId}");
 
             var reservationsResponse = await _outerApiClient.Get<GetReservationsResponse>(new GetReservationsRequest(accountId));
 
@@ -34,7 +34,7 @@ public class ReservationsService : IReservationsService
         }
         catch (Exception ex)
         {
-            _logger.Error(ex, $"Could not find reservations for account ID: {accountId} when calling reservations API");
+            _logger.LogError(ex, $"Could not find reservations for account ID: {accountId} when calling reservations API");
         }
 
         return reservation;

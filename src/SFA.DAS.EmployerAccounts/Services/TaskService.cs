@@ -1,4 +1,4 @@
-﻿using SFA.DAS.NLog.Logger;
+﻿using Microsoft.Extensions.Logging;
 using SFA.DAS.Tasks.API.Client;
 using SFA.DAS.Tasks.API.Types.DTOs;
 using SFA.DAS.Tasks.API.Types.Enums;
@@ -8,9 +8,9 @@ namespace SFA.DAS.EmployerAccounts.Services;
 public class TaskService : ITaskService
 {
     private readonly ITaskApiClient _apiClient;
-    private readonly ILog _logger;
+    private readonly ILogger<TaskService> _logger;
 
-    public TaskService(ITaskApiClient apiClient, ILog logger)
+    public TaskService(ITaskApiClient apiClient, ILogger<TaskService> logger)
     {
         _apiClient = apiClient;
         _logger = logger;
@@ -24,7 +24,7 @@ public class TaskService : ITaskService
         }
         catch (Exception ex)
         {
-            _logger.Error(ex, "Could not retrieve account tasks successfully");
+            _logger.LogError(ex, "Could not retrieve account tasks successfully");
         }
 
         return new TaskDto[0];
@@ -42,7 +42,7 @@ public class TaskService : ITaskService
         }
         catch (Exception ex)
         {
-            _logger.Error(ex, "Could not dismiss account tasks successfully");
+            _logger.LogError(ex, "Could not dismiss account tasks successfully");
         }
     }
 }

@@ -10,11 +10,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators;
 public class InvitationOrchestrator
 {
     private readonly IMediator _mediator;
-    private readonly ILog _logger;
+    private readonly ILogger<InvitationOrchestrator> _logger;
 
     protected InvitationOrchestrator() { }
 
-    public InvitationOrchestrator(IMediator mediator, ILog logger)
+    public InvitationOrchestrator(IMediator mediator, ILogger<InvitationOrchestrator> logger)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         _logger = logger;
@@ -59,7 +59,7 @@ public class InvitationOrchestrator
         }
         catch (InvalidRequestException ex)
         {
-            _logger.Info(ex.Message);
+            _logger.LogInformation(ex.Message);
         }
 
     }
@@ -92,7 +92,7 @@ public class InvitationOrchestrator
         catch (InvalidRequestException ex)
         {
 
-            _logger.Info(ex.Message);
+            _logger.LogInformation(ex.Message);
         }
 
         return new OrchestratorResponse<UserInvitationsViewModel>

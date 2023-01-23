@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Common.Domain.Types;
@@ -12,7 +13,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 public class EmployerAccountController : BaseController
 {
     private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
-    private readonly ILog _logger;
+    private readonly ILogger<EmployerAccountController> _logger;
     private readonly IMediator _mediatr;
     private readonly ICookieStorageService<HashedAccountIdModel> _accountCookieStorage;
     private readonly IHttpContextAccessor _contextAccessor;
@@ -25,7 +26,7 @@ public class EmployerAccountController : BaseController
     private const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
         
     public EmployerAccountController(EmployerAccountOrchestrator employerAccountOrchestrator,
-        ILog logger,
+        ILogger<EmployerAccountController> logger,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
         IMediator mediatr,
         ICookieStorageService<ReturnUrlModel> returnUrlCookieStorageService,
@@ -92,7 +93,7 @@ public class EmployerAccountController : BaseController
     {
         try
         {
-            _logger.Info("Starting processing gateway response");
+            _logger.LogInformation("Starting processing gateway response");
 
             if (string.IsNullOrEmpty(Request.GetDisplayUrl()))
             {
@@ -106,7 +107,7 @@ public class EmployerAccountController : BaseController
 
             if (response.Status != HttpStatusCode.OK)
             {
-                _logger.Warn($"Gateway response does not indicate success. Status = {response.Status}.");
+                _logger.LogWarning($"Gateway response does not indicate success. Status = {response.Status}.");
                 response.Status = HttpStatusCode.OK;
 
                 AddFlashMessageToCookie(response.FlashMessage);
@@ -115,11 +116,11 @@ public class EmployerAccountController : BaseController
             }
 
             var externalUserId = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
-            _logger.Info($"Gateway response is for user identity ID {externalUserId}");
+            _logger.LogInformation($"Gateway response is for user identity ID {externalUserId}");
 
             var email = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.EmailClaimKeyName);
             var empref = await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.Data.AccessToken, email);
-            _logger.Info($"Gateway response is for empref {empref.Empref} \n {JsonConvert.SerializeObject(empref)}");
+            _logger.LogInformation($"Gateway response is for empref {empref.Empref} \n {JsonConvert.SerializeObject(empref)}");
 
             await _mediatr.Send(new SavePayeRefData(new EmployerAccountPayeRefData
             {
@@ -130,7 +131,7 @@ public class EmployerAccountController : BaseController
                 EmpRefNotFound = empref.EmprefNotFound,
             }));
 
-            _logger.Info("Finished processing gateway response");
+            _logger.LogInformation("Finished processing gateway response");
 
             if (string.IsNullOrEmpty(empref.Empref) || empref.EmprefNotFound)
             {
@@ -145,7 +146,7 @@ public class EmployerAccountController : BaseController
         }
         catch (Exception ex)
         {
-            _logger.Error(ex, $"Error processing Gateway response - {ex.Message}");
+            _logger.LogError(ex, $"Error processing Gateway response - {ex.Message}");
             throw;
         }
     }

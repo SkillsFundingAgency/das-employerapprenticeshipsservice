@@ -13,7 +13,7 @@ public class HomeController : BaseController
     private readonly HomeOrchestrator _homeOrchestrator;
     private readonly EmployerAccountsConfiguration _configuration;
     private readonly ICookieStorageService<ReturnUrlModel> _returnUrlCookieStorageService;
-    private readonly ILog _logger;
+    private readonly ILogger<HomeController> _logger;
     private readonly IHttpContextAccessor _contextAccessor;
 
     private const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
@@ -23,7 +23,7 @@ public class HomeController : BaseController
         EmployerAccountsConfiguration configuration,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
         ICookieStorageService<ReturnUrlModel> returnUrlCookieStorageService,
-        ILog logger,
+        ILogger<HomeController> logger,
         IHttpContextAccessor contextAccessor)
         : base(flashMessage)
     {
@@ -139,7 +139,7 @@ public class HomeController : BaseController
         var userId = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
         if (string.IsNullOrWhiteSpace(userId))
         {
-            _logger.Warn($"UserId not found on OwinWrapper. Redirecting back to passed in returnUrl: {returnUrl}");
+            _logger.LogWarning($"UserId not found on OwinWrapper. Redirecting back to passed in returnUrl: {returnUrl}");
             return Redirect(returnUrl);
         }
 

@@ -1,4 +1,5 @@
 using System.Threading;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Types.Models;
@@ -20,7 +21,7 @@ public class AcceptInvitationCommandHandler : IRequestHandler<AcceptInvitationCo
     private readonly IValidator<AcceptInvitationCommand> _validator;
     private readonly IHashingService _hashingService;
     private readonly IEventPublisher _eventPublisher;
-    private readonly ILog _logger;
+    private readonly ILogger<AcceptInvitationCommandHandler> _logger;
 
     public AcceptInvitationCommandHandler(IInvitationRepository invitationRepository,
         IMembershipRepository membershipRepository,
@@ -29,7 +30,7 @@ public class AcceptInvitationCommandHandler : IRequestHandler<AcceptInvitationCo
         IEventPublisher eventPublisher,
         IValidator<AcceptInvitationCommand> validator,
         IHashingService hashingService,
-        ILog logger)
+        ILogger<AcceptInvitationCommandHandler> logger)
     {
         _invitationRepository = invitationRepository;
         _membershipRepository = membershipRepository;
@@ -43,7 +44,7 @@ public class AcceptInvitationCommandHandler : IRequestHandler<AcceptInvitationCo
 
     public async Task<Unit> Handle(AcceptInvitationCommand message, CancellationToken cancellationToken)
     {
-        _logger.Info($"Accepting Invitation '{message.Id}'");
+        _logger.LogInformation($"Accepting Invitation '{message.Id}'");
 
         var validationResult = _validator.Validate(message);
 

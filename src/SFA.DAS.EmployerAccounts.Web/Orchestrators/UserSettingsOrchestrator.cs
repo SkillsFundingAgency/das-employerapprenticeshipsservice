@@ -10,12 +10,12 @@ public class UserSettingsOrchestrator
 {
     private readonly IMediator _mediator;
     private readonly IHashingService _hashingService;
-    private readonly ILog _logger;
+    private readonly ILogger<UserSettingsOrchestrator> _logger;
 
     //Needed for tests
     protected UserSettingsOrchestrator() { }
 
-    public UserSettingsOrchestrator(IMediator mediator, IHashingService hashingService, ILog logger)
+    public UserSettingsOrchestrator(IMediator mediator, IHashingService hashingService, ILogger<UserSettingsOrchestrator> logger)
     {
         _mediator = mediator;
         _hashingService = hashingService;
@@ -24,7 +24,7 @@ public class UserSettingsOrchestrator
 
     public virtual async Task<OrchestratorResponse<NotificationSettingsViewModel>> GetNotificationSettingsViewModel(string userRef)
     {
-        _logger.Info($"Getting user notification settings for user {userRef}");
+        _logger.LogInformation($"Getting user notification settings for user {userRef}");
 
         var response = await _mediator.Send(new GetUserNotificationSettingsQuery
         {
@@ -44,7 +44,7 @@ public class UserSettingsOrchestrator
     public virtual async Task UpdateNotificationSettings(
         string userRef, List<UserNotificationSetting> settings)
     {
-        _logger.Info($"Updating user notification settings for user {userRef}");
+        _logger.LogInformation($"Updating user notification settings for user {userRef}");
 
         DecodeAccountIds(settings);
 
@@ -83,11 +83,11 @@ public class UserSettingsOrchestrator
                             AccountId = accountId
                         });
 
-                    _logger.Info("Unsubscribed from alerts for user {userRef} in account {accountId}");
+                    _logger.LogInformation("Unsubscribed from alerts for user {userRef} in account {accountId}");
                 }
                 else {
 
-                    _logger.Info("Already unsubscribed from alerts for user {userRef} in account {accountId}");
+                    _logger.LogInformation("Already unsubscribed from alerts for user {userRef} in account {accountId}");
                 }
 
                 return new OrchestratorResponse<SummaryUnsubscribeViewModel>
@@ -124,7 +124,7 @@ public class UserSettingsOrchestrator
         catch (UnauthorizedAccessException exception)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
-            _logger.Warn($"User not associated to account. UserId:{externalUserId} AccountId:{accountId}");
+            _logger.LogWarning($"User not associated to account. UserId:{externalUserId} AccountId:{accountId}");
 
             return new OrchestratorResponse<T>
             {

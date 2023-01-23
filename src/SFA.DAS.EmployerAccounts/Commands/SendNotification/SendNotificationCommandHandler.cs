@@ -1,5 +1,5 @@
 ﻿using System.Threading;
-using SFA.DAS.NLog.Logger;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Validation;
 
@@ -8,12 +8,12 @@ namespace SFA.DAS.EmployerAccounts.Commands.SendNotification;
 public class SendNotificationCommandHandler : IRequestHandler<SendNotificationCommand>
 {
     private readonly IValidator<SendNotificationCommand> _validator;
-    private readonly ILog _logger;
+    private readonly ILogger<SendNotificationCommandHandler> _logger;
     private readonly INotificationsApi _notificationsApi;
 
     public SendNotificationCommandHandler(
         IValidator<SendNotificationCommand> validator,
-        ILog logger,
+        ILogger<SendNotificationCommandHandler> logger,
         INotificationsApi notificationsApi)
     {
         _validator = validator;
@@ -27,7 +27,7 @@ public class SendNotificationCommandHandler : IRequestHandler<SendNotificationCo
 
         if (!validationResult.IsValid())
         {
-            _logger.Info("SendNotificationCommandHandler Invalid Request");
+            _logger.LogInformation("SendNotificationCommandHandler Invalid Request");
             throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
         try
@@ -36,7 +36,7 @@ public class SendNotificationCommandHandler : IRequestHandler<SendNotificationCo
         }
         catch (Exception ex)
         {
-            _logger.Error(ex, "Error sending email to notifications api");
+            _logger.LogError(ex, "Error sending email to notifications api");
         }
 
         return default;

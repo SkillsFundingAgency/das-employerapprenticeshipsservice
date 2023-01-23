@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Models;
@@ -8,7 +9,6 @@ using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.Sql.Client;
 
 namespace SFA.DAS.EmployerAccounts.Data;
 
@@ -19,7 +19,7 @@ public class AccountRepository : BaseRepository, IAccountRepository
 
     public AccountRepository(
         EmployerAccountsConfiguration configuration,
-        ILog logger, Lazy<EmployerAccountsDbContext> db,
+        ILogger<AccountRepository> logger, Lazy<EmployerAccountsDbContext> db,
         IAccountLegalEntityPublicHashingService accountLegalEntityHashingService)
         : base(configuration.DatabaseConnectionString, logger)
     {

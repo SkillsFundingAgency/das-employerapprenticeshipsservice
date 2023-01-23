@@ -1,6 +1,6 @@
 ﻿using System.Threading;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.NServiceBus.Services;
 
 namespace SFA.DAS.EmployerAccounts.Commands.AccountLevyStatus;
@@ -8,12 +8,12 @@ namespace SFA.DAS.EmployerAccounts.Commands.AccountLevyStatus;
 public class AccountLevyStatusCommandHandler : IRequestHandler<AccountLevyStatusCommand>
 {
     private readonly IEmployerAccountRepository _accountRepositoryObject;
-    private readonly ILog _logger;
+    private readonly ILogger<AccountLevyStatusCommandHandler> _logger;
     private readonly IEventPublisher _eventPublisher;
 
     public AccountLevyStatusCommandHandler(
         IEmployerAccountRepository accountRepositoryObject,
-        ILog logger,
+        ILogger<AccountLevyStatusCommandHandler> logger,
         IEventPublisher eventPublisher)
     {
         _accountRepositoryObject = accountRepositoryObject;
@@ -35,7 +35,7 @@ public class AccountLevyStatusCommandHandler : IRequestHandler<AccountLevyStatus
             return default;
         }
 
-        _logger.Info(UpdatedStartedMessage(command));
+        _logger.LogInformation(UpdatedStartedMessage(command));
 
         try
         {
@@ -47,11 +47,11 @@ public class AccountLevyStatusCommandHandler : IRequestHandler<AccountLevyStatus
                 ApprenticeshipEmployerType = command.ApprenticeshipEmployerType
             });
 
-            _logger.Info(UpdateCompleteMessage(command));
+            _logger.LogInformation(UpdateCompleteMessage(command));
         }
         catch (Exception ex)
         {
-            _logger.Error(ex, UpdateErrorMessage(command));
+            _logger.LogError(ex, UpdateErrorMessage(command));
         }
 
         return default;

@@ -6,9 +6,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators;
 public class TaskOrchestrator
 {
     private readonly IMediator _mediator;
-    private readonly ILog _logger;
+    private readonly ILogger<TaskOrchestrator> _logger;
 
-    public TaskOrchestrator(IMediator mediator, ILog logger)
+    public TaskOrchestrator(IMediator mediator, ILogger<TaskOrchestrator> logger)
     {
         _mediator = mediator;
         _logger = logger;
@@ -20,11 +20,11 @@ public class TaskOrchestrator
         {
             TaskType taskType;
 
-            _logger.Debug($"Dismissing task reminder {taskTypeName} for account id {hashedAccountId} and user id {externalUserId}");
+            _logger.LogDebug($"Dismissing task reminder {taskTypeName} for account id {hashedAccountId} and user id {externalUserId}");
 
             if (!Enum.TryParse(taskTypeName, out taskType))
             {
-                _logger.Warn(
+                _logger.LogWarning(
                     $"Invalid task name for account (account id: {hashedAccountId}, user id: {externalUserId}, Task type: {taskTypeName}");
                 return new OrchestratorResponse { Status = HttpStatusCode.BadRequest };
             }
@@ -38,12 +38,12 @@ public class TaskOrchestrator
         }
         catch (InvalidRequestException ire)
         {
-            _logger.Warn(ire, $"Invalid request for account (account id: {hashedAccountId}, user id: {externalUserId}, Task type: {taskTypeName}");
+            _logger.LogWarning(ire, $"Invalid request for account (account id: {hashedAccountId}, user id: {externalUserId}, Task type: {taskTypeName}");
             return new OrchestratorResponse { Status = HttpStatusCode.BadRequest};
         }
         catch (Exception ex)
         {
-            _logger.Error(ex, $"Error occurred when dismissing a task reminder (account id: {hashedAccountId}, user id: {externalUserId}, Task type: {taskTypeName}");
+            _logger.LogError(ex, $"Error occurred when dismissing a task reminder (account id: {hashedAccountId}, user id: {externalUserId}, Task type: {taskTypeName}");
             return new OrchestratorResponse { Status = HttpStatusCode.InternalServerError, Exception = ex};
         }
 

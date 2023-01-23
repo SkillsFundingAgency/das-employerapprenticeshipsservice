@@ -1,5 +1,5 @@
-﻿using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.NLog.Logger;
+﻿using Microsoft.Extensions.Logging;
+using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.Services;
 
@@ -7,12 +7,12 @@ public class UserAornPayeLockService : IUserAornPayeLockService
 {
     private readonly IUserRepository _userRepository;
     private readonly UserAornPayeLockConfiguration _configuration;
-    private readonly ILog _logger;
+    private readonly ILogger<UserAornPayeLockService> _logger;
 
     public UserAornPayeLockService(
         IUserRepository userRepository, 
         EmployerAccountsConfiguration configuration,
-        ILog logger)
+        ILogger<UserAornPayeLockService> logger)
     {
         _logger = logger;
         _userRepository = userRepository;
@@ -27,7 +27,7 @@ public class UserAornPayeLockService : IUserAornPayeLockService
         }
         catch (Exception e)
         {
-            _logger.Error(e, "An error occurred when calling the Aorn Lock Service.");
+            _logger.LogError(e, "An error occurred when calling the Aorn Lock Service.");
             return false;
         }
             
@@ -57,7 +57,7 @@ public class UserAornPayeLockService : IUserAornPayeLockService
         }
         catch (Exception e)
         {
-            _logger.Error(e, "An error occurred when calling the Aorn Lock Service.");
+            _logger.LogError(e, "An error occurred when calling the Aorn Lock Service.");
 
             return new UserAornPayeStatus
             {

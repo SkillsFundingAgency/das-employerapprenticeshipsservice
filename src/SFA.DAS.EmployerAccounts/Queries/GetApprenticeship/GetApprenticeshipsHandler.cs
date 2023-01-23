@@ -1,20 +1,20 @@
 ﻿using System.Threading;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Validation;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.HashingService;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetApprenticeship;
 
 public class GetApprenticeshipsHandler : IRequestHandler<GetApprenticeshipsRequest, GetApprenticeshipsResponse>
 {
     private readonly IValidator<GetApprenticeshipsRequest> _validator;
-    private readonly ILog _logger;
+    private readonly ILogger<GetApprenticeshipsHandler> _logger;
     private readonly ICommitmentV2Service _commitmentV2Service;
     private readonly IHashingService _hashingService;
 
     public GetApprenticeshipsHandler(
         IValidator<GetApprenticeshipsRequest> validator,
-        ILog logger,
+        ILogger<GetApprenticeshipsHandler> logger,
         ICommitmentV2Service commitmentV2Service,
         IHashingService hashingService)
     {
@@ -44,7 +44,7 @@ public class GetApprenticeshipsHandler : IRequestHandler<GetApprenticeshipsReque
         }
         catch(Exception ex)
         {
-            _logger.Error(ex, $"Failed to get Cohorts for {message.HashedAccountId}");
+            _logger.LogError(ex, $"Failed to get Cohorts for {message.HashedAccountId}");
             return new GetApprenticeshipsResponse
             {
                 HasFailed = true

@@ -1,6 +1,6 @@
-﻿using SFA.DAS.Audit.Client;
+﻿using Microsoft.Extensions.Logging;
+using SFA.DAS.Audit.Client;
 using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Services;
 
@@ -8,9 +8,9 @@ public class AuditService : IAuditService
 {
     private readonly IAuditApiClient _auditApiClient;
     private readonly IAuditMessageFactory _factory;
-    private readonly ILog _logger;
+    private readonly ILogger<AuditService> _logger;
 
-    public AuditService(IAuditApiClient auditApiClient, IAuditMessageFactory factory, ILog logger)
+    public AuditService(IAuditApiClient auditApiClient, IAuditMessageFactory factory, ILogger<AuditService> logger)
     {
         _auditApiClient = auditApiClient;
         _factory = factory;
@@ -32,7 +32,7 @@ public class AuditService : IAuditService
         }
         catch (Exception exception)
         {
-            _logger.Error(exception,"An error occurred when calling the audit service.");
+            _logger.LogError(exception,"An error occurred when calling the audit service.");
         }
     }
 }

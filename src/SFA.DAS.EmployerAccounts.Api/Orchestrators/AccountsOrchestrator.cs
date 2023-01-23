@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
@@ -14,7 +15,6 @@ using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamMembers;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamMembersWhichReceiveNotifications;
 using SFA.DAS.HashingService;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 using PayeScheme = SFA.DAS.EmployerAccounts.Api.Types.PayeScheme;
 
@@ -23,13 +23,13 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
     public class AccountsOrchestrator
     {
         private readonly IMediator _mediator;
-        private readonly ILog _logger;
+        private readonly ILogger<AccountsOrchestrator> _logger;
         private readonly IMapper _mapper;
         private readonly IHashingService _hashingService;
 
         public AccountsOrchestrator(
-            IMediator mediator, 
-            ILog logger, 
+            IMediator mediator,
+            ILogger<AccountsOrchestrator> logger, 
             IMapper mapper,
             IHashingService hashingService)
         {
@@ -41,7 +41,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
 
         public async Task<PayeScheme> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
         {
-            _logger.Info($"Getting paye scheme {payeSchemeRef} for account {hashedAccountId}");
+            _logger.LogInformation($"Getting paye scheme {payeSchemeRef} for account {hashedAccountId}");
 
             var payeSchemeResult = await _mediator.Send(new GetPayeSchemeByRefQuery { HashedAccountId = hashedAccountId, Ref = payeSchemeRef });
             return payeSchemeResult.PayeScheme == null ? null : ConvertToPayeScheme(hashedAccountId, payeSchemeResult);
@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
 
         public async Task<AccountDetail> GetAccount(string hashedAccountId)
         {
-            _logger.Info($"Getting account {hashedAccountId}");
+            _logger.LogInformation($"Getting account {hashedAccountId}");
 
             var accountResult = await _mediator.Send(new GetEmployerAccountDetailByHashedIdQuery { HashedAccountId = hashedAccountId });
             return accountResult.Account == null ? null : ConvertToAccountDetail(accountResult);
@@ -57,7 +57,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
 
         public async Task<PagedApiResponse<Account>> GetAccounts(string toDate, int pageSize, int pageNumber)
         {
-            _logger.Info("Getting all accounts.");
+            _logger.LogInformation("Getting all accounts.");
 
             toDate = toDate ?? DateTime.MaxValue.ToString("yyyyMMddHHmmss");
 
@@ -90,7 +90,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
 
         public async Task<List<TeamMember>> GetAccountTeamMembers(string hashedAccountId)
         {
-            _logger.Info($"Requesting team members for account {hashedAccountId}");
+            _logger.LogInformation($"Requesting team members for account {hashedAccountId}");
 
             var teamMembers = await _mediator.Send(new GetTeamMembersRequest { HashedAccountId = hashedAccountId });
             return teamMembers.TeamMembers.Select(x => _mapper.Map<TeamMember>(x)).ToList();
@@ -104,7 +104,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
 
         public async Task<List<TeamMember>> GetAccountTeamMembersWhichReceiveNotifications(string hashedAccountId)
         {
-            _logger.Info($"Requesting team members which receive notifications for account {hashedAccountId}");
+            _logger.LogInformation($"Requesting team members which receive notifications for account {hashedAccountId}");
 
             var teamMembers = await _mediator.Send(new GetTeamMembersWhichReceiveNotificationsQuery { HashedAccountId = hashedAccountId });
             return teamMembers.TeamMembersWhichReceiveNotifications.Select(x => _mapper.Map<TeamMember>(x)).ToList();

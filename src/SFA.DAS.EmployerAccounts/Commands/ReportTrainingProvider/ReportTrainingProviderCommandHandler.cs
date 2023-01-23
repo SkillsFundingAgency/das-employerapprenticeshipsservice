@@ -1,7 +1,7 @@
 ﻿using System.Threading;
+using Microsoft.Extensions.Logging;
 using NServiceBus;
 using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Messages.Commands;
 
 namespace SFA.DAS.EmployerAccounts.Commands.ReportTrainingProvider;
@@ -11,11 +11,11 @@ public class ReportTrainingProviderCommandHandler : IRequestHandler<ReportTraini
     private const string ReportTrainingProviderTemplateId = "ReportTrainingProviderNotification";
     private readonly EmployerAccountsConfiguration _configuration;
     private readonly IMessageSession _publisher;
-    private readonly ILog _logger;
+    private readonly ILogger<ReportTrainingProviderCommandHandler> _logger;
 
     public ReportTrainingProviderCommandHandler(
         IMessageSession publisher,
-        ILog logger,
+        ILogger<ReportTrainingProviderCommandHandler> logger,
         EmployerAccountsConfiguration configuration)
     {
         _publisher = publisher;
@@ -37,7 +37,7 @@ public class ReportTrainingProviderCommandHandler : IRequestHandler<ReportTraini
         if (string.IsNullOrWhiteSpace(_configuration.ReportTrainingProviderEmailAddress))
         {
             var exception = new ArgumentNullException("reportTrainingProviderEmailAddress", "ReportTrainingProviderEmailAddress configuration value can not be blank.");
-            _logger.Error(exception, "Report Training Provider Email must be provided in configuration");
+            _logger.LogError(exception, "Report Training Provider Email must be provided in configuration");
             throw exception;
         }
 

@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 
@@ -8,12 +9,12 @@ public class GetTeamMembersWhichReceiveNotificationsQueryHandler : IRequestHandl
 {
     private readonly IEmployerAccountTeamRepository _repository;
     private readonly IValidator<GetTeamMembersWhichReceiveNotificationsQuery> _validator;
-    private readonly ILog _logger;
+    private readonly ILogger<GetTeamMembersWhichReceiveNotificationsQueryHandler> _logger;
 
     public GetTeamMembersWhichReceiveNotificationsQueryHandler(
         IEmployerAccountTeamRepository repository, 
         IValidator<GetTeamMembersWhichReceiveNotificationsQuery> validator,
-        ILog logger)
+        ILogger<GetTeamMembersWhichReceiveNotificationsQueryHandler> logger)
     {
         _repository = repository;
         _validator = validator;
@@ -29,7 +30,7 @@ public class GetTeamMembersWhichReceiveNotificationsQueryHandler : IRequestHandl
             throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        _logger.Info($"Getting team members for account id {message.HashedAccountId}");
+        _logger.LogInformation($"Getting team members for account id {message.HashedAccountId}");
 
         var teamMembers = await _repository.GetAccountTeamMembers(message.HashedAccountId);
 

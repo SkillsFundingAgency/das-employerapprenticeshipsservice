@@ -1,7 +1,7 @@
-﻿using SFA.DAS.Caches;
-using SFA.DAS.EmployerAccounts.Models.UserView;
-using SFA.DAS.NLog.Logger;
+﻿using Microsoft.Extensions.Logging;
 using SFA.DAS.AutoConfiguration;
+using SFA.DAS.Caches;
+using SFA.DAS.EmployerAccounts.Models.UserView;
 
 namespace SFA.DAS.EmployerAccounts.Services;
 
@@ -9,9 +9,9 @@ public class MultiVariantTestingService : AzureServiceBase<MultiVariantViewLooku
 {
     private readonly IInProcessCache _inProcessCache;
     public override string ConfigurationName => "SFA.DAS.EmployerApprenticeshipsService.MultiVariantTesting";
-    public sealed override ILog Logger { get; set; }
+    public sealed override ILogger Logger { get; set; }
 
-    public MultiVariantTestingService(IInProcessCache inProcessCache, ILog logger, IAutoConfigurationService autoConfigurationService) : base(autoConfigurationService)
+    public MultiVariantTestingService(IInProcessCache inProcessCache, ILogger logger, IAutoConfigurationService autoConfigurationService) : base(autoConfigurationService)
     {
         _inProcessCache = inProcessCache;
         Logger = logger;

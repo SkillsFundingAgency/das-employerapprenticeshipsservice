@@ -1,9 +1,8 @@
 ﻿using System.Data;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Sql.Client;
 
 namespace SFA.DAS.EmployerAccounts.Data;
 
@@ -11,7 +10,7 @@ public class EmployerAccountTeamRepository : BaseRepository, IEmployerAccountTea
 {
     private readonly Lazy<EmployerAccountsDbContext> _db;
 
-    public EmployerAccountTeamRepository(EmployerAccountsConfiguration configuration, ILog logger, Lazy<EmployerAccountsDbContext> db)
+    public EmployerAccountTeamRepository(EmployerAccountsConfiguration configuration, ILogger<EmployerAccountTeamRepository> logger, Lazy<EmployerAccountsDbContext> db)
         : base(configuration.DatabaseConnectionString, logger)
     {
         _db = db;

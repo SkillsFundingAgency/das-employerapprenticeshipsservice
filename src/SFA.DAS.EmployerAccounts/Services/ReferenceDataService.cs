@@ -3,15 +3,14 @@ using AutoMapper;
 using SFA.DAS.Caches;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Models.ReferenceData;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.ReferenceData.Api.Client;
 using SFA.DAS.ReferenceData.Types.DTO;
 using Address = SFA.DAS.EmployerAccounts.Models.Organisation.Address;
 using Charity = SFA.DAS.EmployerAccounts.Models.ReferenceData.Charity;
-using OrganisationSubType = SFA.DAS.Common.Domain.Types.OrganisationSubType;
 using CommonOrganisationType = SFA.DAS.Common.Domain.Types.OrganisationType;
-using ReferenceDataOrganisationType = SFA.DAS.ReferenceData.Types.DTO.OrganisationType;
+using OrganisationSubType = SFA.DAS.Common.Domain.Types.OrganisationSubType;
 using PublicSectorOrganisation = SFA.DAS.EmployerAccounts.Models.ReferenceData.PublicSectorOrganisation;
+using ReferenceDataOrganisationType = SFA.DAS.ReferenceData.Types.DTO.OrganisationType;
 
 
 namespace SFA.DAS.EmployerAccounts.Services;
@@ -30,8 +29,8 @@ public class ReferenceDataService : IReferenceDataService
     public ReferenceDataService(
         IReferenceDataApiClient client, 
         IMapper mapper, 
-        IInProcessCache inProcessCache,
-        ILog logger)
+        IInProcessCache inProcessCache
+        )
     {
         _client = client;
         _mapper = mapper;

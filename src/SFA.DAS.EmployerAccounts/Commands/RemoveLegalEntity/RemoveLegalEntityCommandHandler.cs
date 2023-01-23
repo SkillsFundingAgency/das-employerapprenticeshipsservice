@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
@@ -15,7 +16,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity;
 public class RemoveLegalEntityCommandHandler : IRequestHandler<RemoveLegalEntityCommand>
 {
     private readonly IValidator<RemoveLegalEntityCommand> _validator;
-    private readonly ILog _logger;
+    private readonly ILogger<RemoveLegalEntityCommandHandler> _logger;
     private readonly IEmployerAgreementRepository _employerAgreementRepository;
     private readonly IMediator _mediator;
     private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityHashingService;
@@ -28,7 +29,7 @@ public class RemoveLegalEntityCommandHandler : IRequestHandler<RemoveLegalEntity
 
     public RemoveLegalEntityCommandHandler(
         IValidator<RemoveLegalEntityCommand> validator,
-        ILog logger,
+        ILogger<RemoveLegalEntityCommandHandler> logger,
         IEmployerAgreementRepository employerAgreementRepository,
         IMediator mediator,
         IAccountLegalEntityPublicHashingService accountLegalEntityHashingService,
@@ -63,7 +64,7 @@ public class RemoveLegalEntityCommandHandler : IRequestHandler<RemoveLegalEntity
 
         if (validationResult.IsUnauthorized)
         {
-            _logger.Info($"User {message.UserId} tried to remove {message.HashedAccountLegalEntityId} from Account {message.HashedAccountId}");
+            _logger.LogInformation($"User {message.UserId} tried to remove {message.HashedAccountLegalEntityId} from Account {message.HashedAccountId}");
             throw new UnauthorizedAccessException();
         }
 

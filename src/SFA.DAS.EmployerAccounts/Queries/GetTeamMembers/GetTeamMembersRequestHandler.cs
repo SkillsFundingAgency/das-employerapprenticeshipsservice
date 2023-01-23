@@ -1,5 +1,5 @@
 ﻿using System.Threading;
-using SFA.DAS.NLog.Logger;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetTeamMembers;
@@ -8,12 +8,12 @@ public class GetTeamMembersRequestHandler : IRequestHandler<GetTeamMembersReques
 {
     private readonly IEmployerAccountTeamRepository _repository;
     private readonly IValidator<GetTeamMembersRequest> _validator;
-    private readonly ILog _logger;
+    private readonly ILogger<GetTeamMembersRequestHandler> _logger;
 
     public GetTeamMembersRequestHandler(
         IEmployerAccountTeamRepository repository, 
         IValidator<GetTeamMembersRequest> validator,
-        ILog logger)
+        ILogger<GetTeamMembersRequestHandler> logger)
     {
         _repository = repository;
         _validator = validator;
@@ -29,7 +29,7 @@ public class GetTeamMembersRequestHandler : IRequestHandler<GetTeamMembersReques
             throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        _logger.Info($"Getting team members for account id {message.HashedAccountId}");
+        _logger.LogInformation($"Getting team members for account id {message.HashedAccountId}");
 
         var teamMembers = await _repository.GetAccountTeamMembers(message.HashedAccountId);
 

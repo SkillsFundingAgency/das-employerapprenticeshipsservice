@@ -93,12 +93,6 @@
     <PackageReference Include="SFA.DAS.HashingService">
       <Version>1.0.183</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Logging">
-      <Version>1.0.5</Version>
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.NLog.Logger">
-      <Version>1.2.1</Version>
-    </PackageReference>
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis">
       <Version>1.2.1</Version>
     </PackageReference>

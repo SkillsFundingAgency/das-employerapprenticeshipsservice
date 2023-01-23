@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.ModelBuilders;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess.Adapters;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess.Dtos;
@@ -11,7 +13,6 @@ using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.HashingService;
 using SFA.DAS.Testing.Helpers;
-using SFA.DAS.NLog.Logger;
 using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
@@ -37,8 +38,9 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
 
             _hashingService = _container.GetInstance<IHashingService>();
             _publicHashingService = _container.GetInstance<IPublicHashingService>();
-
-            _dbContext = new EmployerAccountsDbContext(_configuration.DatabaseConnectionString);
+            var optionsBuilder = new DbContextOptionsBuilder<EmployerAccountsDbContext>();
+            optionsBuilder.UseSqlServer(_configuration.DatabaseConnectionString);
+            _dbContext = new EmployerAccountsDbContext(optionsBuilder.Options);
 
             _lazyAccountRepository = new  Lazy<IAccountRepository>(buildAccountRepository);
             _lazyUserRepository = new Lazy<IUserRepository>(buildUserRepository);
@@ -50,7 +52,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
             return 
                 new UserRepository(
                     _configuration,
-                    _container.GetInstance<ILog>(),
+                    _container.GetInstance<ILogger<UserRepository>>(),
                     new Lazy<EmployerAccountsDbContext>(() => _dbContext)
                     );
         }
@@ -60,7 +62,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
             return
                 new AccountRepository(
                     _configuration,
-                    _container.GetInstance<ILog>(),
+                    _container.GetInstance<ILogger<AccountRepository>>(),
                     new Lazy<EmployerAccountsDbContext>(() => _dbContext),
                     _container.GetInstance<IAccountLegalEntityPublicHashingService>());
         }

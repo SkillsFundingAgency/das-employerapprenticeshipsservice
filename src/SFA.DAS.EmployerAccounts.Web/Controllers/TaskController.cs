@@ -8,13 +8,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 public class TaskController : BaseController
 {
     private readonly TaskOrchestrator _orchestrator;
-    private readonly ILog _logger;
+    private readonly ILogger<TaskController> _logger;
     private readonly HttpContextAccessor _contextAccessor;
 
     public TaskController(
         TaskOrchestrator taskOrchestrator,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
-        ILog logger,
+        ILogger<TaskController> logger,
         HttpContextAccessor contextAccessor
         ) : base(flashMessage)
     {
@@ -35,7 +35,7 @@ public class TaskController : BaseController
 
         var externalUserId = _contextAccessor.HttpContext.User.FindFirstValue("sub");
 
-        _logger.Debug($"Task dismiss requested for account id '{viewModel.HashedAccountId}', user id '{externalUserId}' and task '{viewModel.TaskType}'");
+        _logger.LogDebug($"Task dismiss requested for account id '{viewModel.HashedAccountId}', user id '{externalUserId}' and task '{viewModel.TaskType}'");
 
         var result = await _orchestrator.DismissMonthlyReminderTask(viewModel.HashedAccountId, externalUserId, viewModel.TaskType);
 
@@ -43,7 +43,7 @@ public class TaskController : BaseController
         {
             //Curently we are not telling the user of the error and are instead just logging the issue
             //The error log will be done at a lower level
-            _logger.Debug($"Task dismiss requested failed for account id '{viewModel.HashedAccountId}', user id '{externalUserId}' and task '{viewModel.TaskType}'");
+            _logger.LogDebug($"Task dismiss requested failed for account id '{viewModel.HashedAccountId}', user id '{externalUserId}' and task '{viewModel.TaskType}'");
         }
 
         return RedirectToAction("Index", "EmployerTeam");

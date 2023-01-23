@@ -1,14 +1,14 @@
 ﻿using System.Threading;
-using SFA.DAS.NLog.Logger;
+using Microsoft.Extensions.Logging;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 
 public class GetTeamUserHandler : IRequestHandler<GetTeamMemberQuery, GetTeamMemberResponse>
 {
     private readonly IMembershipRepository _repository;
-    private readonly ILog _logger;
+    private readonly ILogger<GetTeamUserHandler> _logger;
 
-    public GetTeamUserHandler(IMembershipRepository repository, ILog logger)
+    public GetTeamUserHandler(IMembershipRepository repository, ILogger<GetTeamUserHandler> logger)
     {
         _repository = repository;
         _logger = logger;
@@ -16,7 +16,7 @@ public class GetTeamUserHandler : IRequestHandler<GetTeamMemberQuery, GetTeamMem
 
     public async Task<GetTeamMemberResponse> Handle(GetTeamMemberQuery message, CancellationToken cancellationToken)
     {
-        _logger.Debug($"Getting team member for account hashed ID {message.HashedAccountId} and team member ID {message.TeamMemberId}");
+        _logger.LogDebug($"Getting team member for account hashed ID {message.HashedAccountId} and team member ID {message.TeamMemberId}");
         var member = await _repository.GetCaller(message.HashedAccountId, message.TeamMemberId);
 
         return new GetTeamMemberResponse
