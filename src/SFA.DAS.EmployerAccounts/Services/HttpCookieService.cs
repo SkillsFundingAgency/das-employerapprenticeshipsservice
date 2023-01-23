@@ -14,7 +14,7 @@ public class HttpCookieService<T> : ICookieService<T>
         _protector = provider.CreateProtector("SFA.DAS.EmployerAccounts.Services.HttpCookieService");
     }
 
-    public void Create(HttpContextAccessor contextAccessor, string name, T content, int expireDays)
+    public void Create(IHttpContextAccessor contextAccessor, string name, T content, int expireDays)
     {
         var cookieContent = JsonConvert.SerializeObject(content);
 
@@ -28,7 +28,7 @@ public class HttpCookieService<T> : ICookieService<T>
         });
     }
 
-    public void Update(HttpContextAccessor contextAccessor, string name, T content)
+    public void Update(IHttpContextAccessor contextAccessor, string name, T content)
     {
         var cookie = contextAccessor.HttpContext.Request.Cookies[name];
 
@@ -41,7 +41,7 @@ public class HttpCookieService<T> : ICookieService<T>
         }
     }
 
-    public void Delete(HttpContextAccessor contextAccessor, string name)
+    public void Delete(IHttpContextAccessor contextAccessor, string name)
     {
         if (contextAccessor.HttpContext.Request.Cookies[name] != null)
         {
@@ -49,7 +49,7 @@ public class HttpCookieService<T> : ICookieService<T>
         }
     }
 
-    public T Get(HttpContextAccessor contextAccessor, string name)
+    public T Get(IHttpContextAccessor contextAccessor, string name)
     {
         if (contextAccessor.HttpContext.Request.Cookies[name] == null)
             return default(T);

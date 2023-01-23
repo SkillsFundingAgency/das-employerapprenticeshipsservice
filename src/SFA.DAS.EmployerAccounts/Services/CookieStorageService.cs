@@ -5,9 +5,9 @@ namespace SFA.DAS.EmployerAccounts.Services;
 public class CookieStorageService<T> : ICookieStorageService<T>
 {
     private readonly ICookieService<T> _cookieService;
-    private readonly HttpContextAccessor _httpContextAccessor;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public CookieStorageService(ICookieService<T> cookieService, HttpContextAccessor httpContextAccessor)
+    public CookieStorageService(ICookieService<T> cookieService, IHttpContextAccessor httpContextAccessor)
     {
         _cookieService = cookieService;
         _httpContextAccessor = httpContextAccessor;
