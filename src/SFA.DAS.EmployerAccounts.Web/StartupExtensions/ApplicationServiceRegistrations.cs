@@ -2,6 +2,8 @@
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Factories;
+using SFA.DAS.EmployerAccounts.Policies;
+using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.Encoding;
 using SFA.DAS.HashingService;
@@ -18,6 +20,8 @@ public static class ApplicationServiceRegistrations
         services.AddTransient<IRestServiceFactory, RestServiceFactory>();
         services.AddTransient<IHttpServiceFactory, HttpServiceFactory>();
         services.AddTransient<IUserAornPayeLockService, UserAornPayeLockService>();
+        
+        services.AddScoped<IProviderRegistrationApiClient, ProviderRegistrationApiClient>();
 
         services.AddTransient<IReservationsService, ReservationsService>();
         services.Decorate<IReservationsService, ReservationsServiceWithTimeout>();
@@ -44,6 +48,8 @@ public static class ApplicationServiceRegistrations
 
         services.AddScoped<IEncodingService, EncodingService>();
 
+        services.AddTransient<HmrcExecutionPolicy>();
+        
         return services;
     }
 }

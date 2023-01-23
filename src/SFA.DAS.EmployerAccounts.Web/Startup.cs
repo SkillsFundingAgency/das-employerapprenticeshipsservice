@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.Microsoft;
 using SFA.DAS.Authorization.Mvc.Extensions;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.EmployerAccounts.ReadStore.ServiceRegistration;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Filters;
@@ -57,8 +58,12 @@ namespace SFA.DAS.EmployerAccounts.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddOptions();
             services.AddHttpContextAccessor();
+
+            services.AddOptions();
+
+            services.AddLogging();
+
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
             services.AddConfigurationOptions(_configuration);
@@ -80,6 +85,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddDateTimeServices(_configuration);
             services.AddEventsApi();
             services.AddNotifications(_configuration);
+            services.AddReadstoreMediator();
 
             services.StartNServiceBus(_configuration, employerAccountsConfiguration, _configuration.IsDev());
             services.AddNServiceBusClientUnitOfWork();
@@ -113,7 +119,6 @@ namespace SFA.DAS.EmployerAccounts.Web
                 services.AddAndConfigureEmployerAuthentication(identityServerConfiguration);
             }
 
-            services.AddLogging();
             services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
 
             services.Configure<RouteOptions>(options =>
