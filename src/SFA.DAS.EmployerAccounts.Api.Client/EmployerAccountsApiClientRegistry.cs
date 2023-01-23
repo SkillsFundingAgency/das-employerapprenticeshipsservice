@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
             For<ISecureHttpClient>().Use<SecureHttpClient>();
             IncludeRegistry<AutoConfigurationRegistry>();
             IncludeRegistry<ReadStoreDataRegistry>();
-            IncludeRegistry<ReadStoreMediatorRegistry>();
+            //IncludeRegistry<ReadStoreMediatorRegistry>();
         }
     }
 }
