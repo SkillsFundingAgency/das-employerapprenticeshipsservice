@@ -11,14 +11,14 @@ namespace SFA.DAS.EmployerAccounts.Policies
     {
         public const string Name = "HMRC Policy";
 
-        private readonly ILogger _logger;
+        private readonly ILogger<HmrcExecutionPolicy> _logger;
         private readonly Policy _tooManyRequestsPolicy;
         private readonly Policy _serviceUnavailablePolicy;
         private readonly Policy _internalServerErrorPolicy;
         private readonly Policy _requestTimeoutPolicy;
         private readonly Policy _unauthorizedPolicy;
 
-        public HmrcExecutionPolicy(ILogger logger)
+        public HmrcExecutionPolicy(ILogger<HmrcExecutionPolicy> logger)
         {
             _logger = logger;
 
