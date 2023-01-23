@@ -20,6 +20,7 @@ public static class ApplicationServiceRegistrations
 
         services.AddTransient<IReservationsService, ReservationsService>();
         services.Decorate<IReservationsService, ReservationsServiceWithTimeout>();
+
         services.AddTransient<ICommitmentV2Service, CommitmentsV2Service>();
         services.Decorate<ICommitmentV2Service, CommitmentsV2ServiceWithTimeout>();
 
