@@ -1,5 +1,5 @@
 ﻿using SFA.DAS.EmployerAccounts.Commands.DismissMonthlyTaskReminder;
-using SFA.DAS.Tasks.API.Types.Enums;
+using SFA.DAS.EmployerAccounts.TasksApi;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators;
 
@@ -18,11 +18,9 @@ public class TaskOrchestrator
     {
         try
         {
-            TaskType taskType;
-
             _logger.LogDebug($"Dismissing task reminder {taskTypeName} for account id {hashedAccountId} and user id {externalUserId}");
 
-            if (!Enum.TryParse(taskTypeName, out taskType))
+            if (!Enum.TryParse(taskTypeName, out TaskType taskType))
             {
                 _logger.LogWarning(
                     $"Invalid task name for account (account id: {hashedAccountId}, user id: {externalUserId}, Task type: {taskTypeName}");

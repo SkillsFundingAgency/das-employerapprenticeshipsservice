@@ -1,8 +1,8 @@
 ﻿using SFA.DAS.Authentication;
 using SFA.DAS.EAS.Account.Api.Client;
+using SFA.DAS.EmployerAccounts.TasksApi;
 using SFA.DAS.Hmrc.Configuration;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
-using SFA.DAS.Tasks.API.Client;
 using SFA.DAS.TokenService.Api.Client;
 
 namespace SFA.DAS.EmployerAccounts.Configuration;

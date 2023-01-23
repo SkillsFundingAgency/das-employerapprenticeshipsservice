@@ -3,8 +3,8 @@ using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Policies;
-using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 using SFA.DAS.EmployerAccounts.Services;
+using SFA.DAS.EmployerAccounts.TasksApi;
 using SFA.DAS.Encoding;
 using SFA.DAS.HashingService;
 using SFA.DAS.ReferenceData.Api.Client;
@@ -35,6 +35,7 @@ public static class ApplicationServiceRegistrations
 
         services.AddScoped<IAccountApiClient, AccountApiClient>();
         services.AddTransient<IReferenceDataService, ReferenceDataService>();
+        services.AddScoped<ITaskApiClient, TaskApiClient>();
         services.AddTransient<ITaskService, TaskService>();
         services.AddTransient<IPensionRegulatorService, PensionRegulatorService>();
 

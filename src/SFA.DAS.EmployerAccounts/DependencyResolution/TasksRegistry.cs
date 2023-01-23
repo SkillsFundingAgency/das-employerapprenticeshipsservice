@@ -1,6 +1,5 @@
 ﻿using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Services;
-using SFA.DAS.Tasks.API.Client;
+using SFA.DAS.EmployerAccounts.TasksApi;
 
 namespace SFA.DAS.EmployerAccounts.DependencyResolution;
 

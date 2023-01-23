@@ -2,7 +2,6 @@
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.Validation;
-using TasksEnums = SFA.DAS.Tasks.API.Types.Enums;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountTasks;
 
@@ -33,8 +32,8 @@ public class GetAccountTasksQueryHandler : IRequestHandler<GetAccountTasksQuery,
     {
         var apprenticeshipEmployerType = 
             message.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy 
-                ? TasksEnums.ApprenticeshipEmployerType.Levy 
-                : TasksEnums.ApprenticeshipEmployerType.NonLevy;
+                ? TasksApi.ApprenticeshipEmployerType.Levy 
+                : TasksApi.ApprenticeshipEmployerType.NonLevy;
 
         var tasks = await _taskService.GetAccountTasks(message.AccountId, message.ExternalUserId, apprenticeshipEmployerType);
 

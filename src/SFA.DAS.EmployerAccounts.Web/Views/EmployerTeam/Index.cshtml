@@ -1,6 +1,6 @@
 ﻿@using SFA.DAS.Common.Domain.Types
 @using SFA.DAS.EmployerAccounts.Web.Helpers
-@using TasksEnum = SFA.DAS.Tasks.API.Types.Enums
+@using TasksEnum = SFA.DAS.EmployerAccounts.TasksApi.TaskType
 
 @inject HtmlHelpers HtmlHelpers;
 @inject IUrlActionHelper UrlHelpers;
@@ -223,7 +223,7 @@ else
                                                     Levy declaration due by 19 @DateTime.Now.ToString("MMMM")
                                                 </span>
                                                 <form action="@Url.Action("DismissTask", "Task")" method="POST">
-                                                    <input type="hidden" name="taskType" value="@Enum.GetName(typeof(TasksEnum.TaskType), TasksEnum.TaskType.LevyDeclarationDue)" />
+                                                    <input type="hidden" name="taskType" value="@Enum.GetName(typeof(TasksEnum), TasksEnum.LevyDeclarationDue)" />
                                                     <button type="submit" class="das-button--inline-link">Dismiss this message</button>
                                                 </form>
                                                 break;

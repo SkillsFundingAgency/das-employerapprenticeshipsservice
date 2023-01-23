@@ -1,4 +1,4 @@
-﻿using SFA.DAS.Tasks.API.Types.Enums;
+﻿using SFA.DAS.EmployerAccounts.TasksApi;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Commands.DismissMonthlyTaskReminder;

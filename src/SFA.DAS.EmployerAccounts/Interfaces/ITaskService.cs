@@ -1,5 +1,4 @@
-﻿using SFA.DAS.Tasks.API.Types.DTOs;
-using SFA.DAS.Tasks.API.Types.Enums;
+﻿using SFA.DAS.EmployerAccounts.TasksApi;
 
 namespace SFA.DAS.EmployerAccounts.Interfaces;
 
