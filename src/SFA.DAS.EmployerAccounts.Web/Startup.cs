@@ -144,8 +144,6 @@ namespace SFA.DAS.EmployerAccounts.Web
 #endif
 
             services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
-
-            services.AddAdvancedDependencyInjection();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -166,8 +164,6 @@ namespace SFA.DAS.EmployerAccounts.Web
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
-
-            app.UseAdvancedDependencyInjection();
         }
 
         private void ConfigureMvcOptions(MvcOptions mvcOptions)
