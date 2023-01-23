@@ -4,11 +4,11 @@ namespace SFA.DAS.EmployerAccounts.Interfaces;
 
 public interface ICookieService<T>
 {
-    void Create(HttpContext context, string name, T content, int expireDays);
+    void Create(HttpContextAccessor contextAccessor, string name, T content, int expireDays);
 
-    void Update(HttpContext context, string name, T content);
+    void Update(HttpContextAccessor contextAccessor, string name, T content);
 
-    void Delete(HttpContext context, string name);
+    void Delete(HttpContextAccessor contextAccessor, string name);
 
-    T Get(HttpContext context, string name);
+    T Get(HttpContextAccessor contextAccessor, string name);
 }
