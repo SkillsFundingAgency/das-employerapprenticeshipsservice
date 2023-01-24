@@ -12,7 +12,6 @@
     <PackageReference Include="NLog" Version="5.1.1" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="5.2.1" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.11.2" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions">
       <Version>2.2.0</Version>
     </PackageReference>

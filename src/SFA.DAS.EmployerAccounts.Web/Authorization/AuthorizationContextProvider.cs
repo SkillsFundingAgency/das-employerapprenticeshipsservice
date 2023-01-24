@@ -14,8 +14,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
         private readonly IAuthenticationService _authenticationService;
         private readonly IActionContextAccessor _actionContextAccessor;
 
-        public AuthorizationContextProvider(HttpContext httpContext,
-                                            IHashingService hashingService,
+        public AuthorizationContextProvider(IHashingService hashingService,
                                             IAuthenticationService authenticationService,
                                             IActionContextAccessor actionContextAccessor)
         {

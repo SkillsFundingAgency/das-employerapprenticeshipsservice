@@ -6,6 +6,7 @@ using NLog.Fluent;
 using SFA.DAS.Activities.Client;
 using SFA.DAS.Activities.IndexMappers;
 using SFA.DAS.Elastic;
+using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 
@@ -13,7 +14,7 @@ public static class ActivitiesServiceRegistrations
 {
     public static IServiceCollection AddActivitiesClient(this IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<ActivitiesClientConfiguration>(configuration.GetSection(nameof(ActivitiesClientConfiguration)));
+        services.Configure<ActivitiesClientConfiguration>(configuration.GetSection(ConfigurationKeys.ActivitiesApiClient));
         services.AddSingleton(cfg => cfg.GetService<IOptions<ActivitiesClientConfiguration>>().Value);
 
         services.AddSingleton<ElasticConfiguration>(cfg =>
@@ -39,16 +40,16 @@ public static class ActivitiesServiceRegistrations
         return services;
     }
 
-    private static ElasticConfiguration GetElasticConfiguration(ActivitiesClientConfiguration activitiesdClientConfig)
+    private static ElasticConfiguration GetElasticConfiguration(ActivitiesClientConfiguration activitiesClientConfig)
     {
         var elasticConfig = new ElasticConfiguration()
-            .UseSingleNodeConnectionPool(activitiesdClientConfig.ElasticUrl)
+            .UseSingleNodeConnectionPool(activitiesClientConfig.ElasticUrl)
             .ScanForIndexMappers(typeof(ActivitiesIndexMapper).Assembly)
             .OnRequestCompleted(r => Log.Debug(r.DebugInformation));
 
-        if (!string.IsNullOrWhiteSpace(activitiesdClientConfig.ElasticUsername) && !string.IsNullOrWhiteSpace(activitiesdClientConfig.ElasticPassword))
+        if (!string.IsNullOrWhiteSpace(activitiesClientConfig.ElasticUsername) && !string.IsNullOrWhiteSpace(activitiesClientConfig.ElasticPassword))
         {
-            elasticConfig.UseBasicAuthentication(activitiesdClientConfig.ElasticUsername, activitiesdClientConfig.ElasticPassword);
+            elasticConfig.UseBasicAuthentication(activitiesClientConfig.ElasticUsername, activitiesClientConfig.ElasticPassword);
         }
 
         return elasticConfig;

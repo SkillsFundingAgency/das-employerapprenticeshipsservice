@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
@@ -6,7 +7,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Hosting;
-using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.Microsoft;
 using SFA.DAS.Authorization.Mvc.Extensions;
 using SFA.DAS.Configuration.AzureTableStorage;
@@ -16,7 +16,6 @@ using SFA.DAS.EmployerAccounts.Web.Filters;
 using SFA.DAS.EmployerAccounts.Web.Handlers;
 using SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 using SFA.DAS.GovUK.Auth.AppStart;
-using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.Microsoft;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace SFA.DAS.EmployerAccounts.Web
@@ -45,15 +44,17 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             config.AddEnvironmentVariables();
 
-
-            config.AddAzureTableStorage(options =>
-                {
-                    options.ConfigurationKeys = configuration["ConfigNames"].Split(",");
-                    options.StorageConnectionString = configuration["ConfigurationStorageConnectionString"];
-                    options.EnvironmentName = configuration["EnvironmentName"];
-                    options.PreFixConfigurationKeys = false;
-                }
-            );
+            if (!configuration.IsTest())
+            {
+                config.AddAzureTableStorage(options =>
+                    {
+                        options.ConfigurationKeys = configuration["ConfigNames"].Split(",");
+                        options.StorageConnectionString = configuration["ConfigurationStorageConnectionString"];
+                        options.EnvironmentName = configuration["EnvironmentName"];
+                        options.PreFixConfigurationKeys = false;
+                    }
+                );
+            }
 
             _configuration = config.Build();
         }
@@ -93,7 +94,6 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddDasAuthorization();
             services.AddEmployerAccountsApi();
             services.AddExecutionPolicies();
-            services.AddActivitiesClient(_configuration);
             services.AddEmployerAccountsOuterApi(_employerAccountsConfiguration, _configuration);
             services.AddCommittmentsV2Client();
             services.AddPollyPolicy(_employerAccountsConfiguration);
