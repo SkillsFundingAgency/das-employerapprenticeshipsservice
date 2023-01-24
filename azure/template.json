@@ -233,6 +233,30 @@
             ]
         },
         {
+            "apiVersion": "2020-06-01",
+            "name": "[concat(variables('workerAppServiceName'), '-application-insights-', parameters('utcValue'))]",
+            "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[variables('resourceGroupName')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('deploymentUrlBase'),'application-insights.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "appInsightsName": {
+                        "value": "[variables('workerAppServiceName')]"
+                    },
+                    "attachedService": {
+                        "value": "[variables('workerAppServiceName')]"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[variables('resourceGroupName')]"
+            ]
+        },
+        {
             "condition": "[greater(length(parameters('uiCustomHostname')), 0)]",
             "apiVersion": "2020-06-01",
             "name": "[concat(variables('uiAppServiceName'), '-certificate-', parameters('utcValue'))]",
@@ -553,6 +577,10 @@
                                 {
                                     "name": "StorageConnectionString",
                                     "value": "[parameters('sharedStorageAccountConnectionString')]"
+                                },
+                                {
+                                    "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                                    "value": "[reference(concat(variables('workerAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.InstrumentationKey.value]"
                                 }
                             ]
                         }
