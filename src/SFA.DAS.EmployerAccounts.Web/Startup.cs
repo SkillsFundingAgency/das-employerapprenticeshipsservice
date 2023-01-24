@@ -94,7 +94,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddDasAuthorization();
             services.AddEmployerAccountsApi();
             services.AddExecutionPolicies();
-            services.AddEmployerAccountsOuterApi(_employerAccountsConfiguration, _configuration);
+            services.AddEmployerAccountsOuterApi(_employerAccountsConfiguration.EmployerAccountsOuterApiConfiguration, _configuration);
             services.AddCommittmentsV2Client();
             services.AddPollyPolicy(_employerAccountsConfiguration);
             services.AddContentApiClient(_employerAccountsConfiguration, _configuration);

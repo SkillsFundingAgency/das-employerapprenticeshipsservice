@@ -52,6 +52,7 @@ public static class ConfigurationServiceRegistrations
         services.AddSingleton<ITaskApiConfiguration>(_ => employerAccountsConfiguration.TasksApi);
         services.AddSingleton<CommitmentsApiV2ClientConfiguration>(_ => employerAccountsConfiguration.CommitmentsApi);
         services.AddSingleton<IProviderRegistrationClientApiConfiguration>(_ => employerAccountsConfiguration.ProviderRegistrationsApi);
+        services.AddSingleton<EmployerAccountsOuterApiConfiguration>(_ => employerAccountsConfiguration.EmployerAccountsOuterApiConfiguration);
 
         services.Configure<IEmployerAccountsApiClientConfiguration>(configuration.GetSection(ConfigurationKeys.EmployerAccountsApiClient));
         services.AddSingleton<IEmployerAccountsApiClientConfiguration>(cfg => cfg.GetService<IOptions<EmployerAccountsApiClientConfiguration>>().Value);

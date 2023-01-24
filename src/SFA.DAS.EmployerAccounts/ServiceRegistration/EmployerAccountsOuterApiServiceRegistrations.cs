@@ -9,7 +9,7 @@ namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 
 public static class EmployerAccountsOuterApiServiceRegistrations
 {
-    public static IServiceCollection AddEmployerAccountsOuterApi(this IServiceCollection services, EmployerAccountsConfiguration employerAccountsConfiguration, IConfiguration configuration)
+    public static IServiceCollection AddEmployerAccountsOuterApi(this IServiceCollection services, EmployerAccountsOuterApiConfiguration outerApiConfiguration, IConfiguration configuration)
     {
         services.Configure<EmployerAccountsOuterApiConfiguration>(configuration.GetSection(nameof(EmployerAccountsOuterApiConfiguration)));
         services.AddSingleton(cfg => cfg.GetService<IOptions<EmployerAccountsOuterApiConfiguration>>().Value);
@@ -18,8 +18,8 @@ public static class EmployerAccountsOuterApiServiceRegistrations
 
         services.AddHttpClient<IOuterApiClient, OuterApiClient>(x =>
         {
-            x.BaseAddress = new Uri(employerAccountsConfiguration.EmployerAccountsOuterApiConfiguration.BaseUrl);
-            x.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", employerAccountsConfiguration.EmployerAccountsOuterApiConfiguration.Key);
+            x.BaseAddress = new Uri(outerApiConfiguration.BaseUrl);
+            x.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", outerApiConfiguration.Key);
             x.DefaultRequestHeaders.Add("X-Version", "1");
         });
 
