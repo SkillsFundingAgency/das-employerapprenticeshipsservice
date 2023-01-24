@@ -16,13 +16,13 @@ public static class ApplicationServiceRegistrations
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, EmployerAccountsConfiguration configuration)
     {
-        services.AddScoped<HtmlHelpers>();
+        services.AddScoped<IHtmlHelpers, HtmlHelpers>();
         services.AddScoped<ActivitiesHelper>();
         services.AddTransient<IRestClientFactory, RestClientFactory>();
         services.AddTransient<IRestServiceFactory, RestServiceFactory>();
         services.AddTransient<IHttpServiceFactory, HttpServiceFactory>();
         services.AddTransient<IUserAornPayeLockService, UserAornPayeLockService>();
-        
+
         services.AddScoped<IProviderRegistrationApiClient, ProviderRegistrationApiClient>();
 
         services.AddTransient<IReservationsService, ReservationsService>();
@@ -55,7 +55,7 @@ public static class ApplicationServiceRegistrations
         services.AddScoped<IEncodingService, EncodingService>();
 
         services.AddTransient<HmrcExecutionPolicy>();
-        
+
         return services;
     }
 }

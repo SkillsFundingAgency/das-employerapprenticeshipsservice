@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
-using Microsoft.Extensions.Logging;
 using SFA.DAS.Authorization.Results;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Helpers;
