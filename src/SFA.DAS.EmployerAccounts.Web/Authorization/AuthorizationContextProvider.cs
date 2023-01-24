@@ -2,6 +2,7 @@
 using SFA.DAS.Authorization.Context;
 using SFA.DAS.Authorization.EmployerFeatures.Context;
 using SFA.DAS.Authorization.EmployerUserRoles.Context;
+using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerAccounts.Web.Infrastructure;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.HashingService;
@@ -11,11 +12,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
     public class AuthorizationContextProvider : IAuthorizationContextProvider
     {
         private readonly IHashingService _hashingService;
-        private readonly IAuthenticationService _authenticationService;
+        private readonly IAuthenticationServiceWrapper _authenticationService;
         private readonly IActionContextAccessor _actionContextAccessor;
 
         public AuthorizationContextProvider(IHashingService hashingService,
-                                            IAuthenticationService authenticationService,
+            IAuthenticationServiceWrapper authenticationService,
                                             IActionContextAccessor actionContextAccessor)
         {
             _hashingService = hashingService;

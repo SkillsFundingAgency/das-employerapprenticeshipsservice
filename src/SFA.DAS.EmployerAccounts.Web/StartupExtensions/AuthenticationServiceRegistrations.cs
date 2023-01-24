@@ -15,6 +15,7 @@ public static class EmployerAuthenticationServiceRegistrations
     {
         services.AddTransient<IEmployerAccountAuthorisationHandler, EmployerAccountAuthorizationHandler>();
         services.AddSingleton<IAuthorizationHandler, EmployerAccountAuthorizationHandler>();
+        services.AddSingleton<IAuthenticationServiceWrapper, AuthenticationServiceWrapper>();
         services.AddTransient<IEmployerAccountService, EmployerAccountService>();
         services.AddAuthorization(options =>
         {
