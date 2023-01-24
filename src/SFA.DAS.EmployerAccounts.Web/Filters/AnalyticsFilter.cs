@@ -28,12 +28,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Filters
             public string UserId { get; set; }
             public string UserEmail { get; set; }
             public string UserName { get; set; }
-
             public string Vpv { get; set; }
             public string Acc { get; set; }
 
-            public string AgreementId { get; set; }
-            public string LevyFlag { get; set; }
+            public IDictionary<string, string> Extras { get; set; } = new Dictionary<string, string>();
         }
     }
 }

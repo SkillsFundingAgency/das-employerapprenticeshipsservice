@@ -3,6 +3,7 @@
 public static class ConfigurationKeys
 {
     public const string EmployerAccounts = "SFA.DAS.EmployerAccounts";
+    public const string EmployerAccountsApiClient = "SFA.DAS.EmployerAccounts.Api.Client";
     public const string EmployerAccountsReadStore = "SFA.DAS.EmployerAccounts.ReadStore";
     public const string NotificationsApiClient = "SFA.DAS.EmployerAccounts.Notifications";
     public const string Features = "SFA.DAS.EmployerAccounts.Features";

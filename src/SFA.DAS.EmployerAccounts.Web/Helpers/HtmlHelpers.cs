@@ -15,7 +15,29 @@ using SFA.DAS.MA.Shared.UI.Models.Links;
 
 namespace SFA.DAS.EmployerAccounts.Web.Helpers;
 
-public class HtmlHelpers
+public interface IHtmlHelpers
+{
+    HtmlString CdnLink(string folderName, string fileName);
+    bool IsSupportUser();
+    string GetZenDeskSnippetKey();
+    string GetZenDeskSnippetSectionId();
+    string GetZenDeskCobrowsingSnippetKey();
+    IHeaderViewModel GetHeaderViewModel(IHtmlHelper html, bool useLegacyStyles = false);
+    IFooterViewModel GetFooterViewModel(IHtmlHelper html, bool useLegacyStyles = false);
+    ICookieBannerViewModel GetCookieBannerViewModel(IHtmlHelper html);
+    HtmlString GetContentByType(string type, bool useLegacyStyles = false);
+    AuthorizationResult GetAuthorizationResult(string featureType);
+    bool IsAuthorized(string featureType);
+    bool ShowExpiringAgreementBanner(string userId, string hashedAccountId);
+    bool ViewExists(IHtmlHelper html, string viewName);
+    string ReturnToHomePageButtonHref(string accountId);
+    string ReturnToHomePageButtonText(string accountId);
+    string ReturnToHomePageLinkHref(string accountId);
+    string ReturnToHomePageLinkText(string accountId);
+    string ReturnParagraphContent();
+}
+
+public class HtmlHelpers : IHtmlHelpers
 {
     private readonly EmployerAccountsConfiguration _configuration;
     private readonly IMediator _mediator;
@@ -60,7 +82,7 @@ public class HtmlHelpers
         return requiredRoles.Any(role => claimsIdentity.Claims.Any(c => c.Type == claimsIdentity.RoleClaimType && c.Value.Equals(role)));
     }
 
-    public HtmlString SetZenDeskLabels(params string[] labels)
+    public static HtmlString SetZenDeskLabels(params string[] labels)
     {
         var keywords = string.Join(",", labels
             .Where(label => !string.IsNullOrEmpty(label))

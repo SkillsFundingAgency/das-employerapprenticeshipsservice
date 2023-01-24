@@ -8,34 +8,31 @@
     window.dataLayer = window.dataLayer || [];
     dataLayer.push({
         'event': '@ViewBag.GaData.DataLoaded',
-        'loggedIn': '@HttpContextHelper.Current.User.Identity.IsAuthenticated',
+        'loggedIn': '@User.Identity.IsAuthenticated',
         'userID': '@ViewBag.GaData.UserId',
         'vpv': '@ViewBag.GaData.Vpv',
         'acc': '@ViewBag.GaData.Acc',
         'org': '',
-        'Account': '@ViewBag.GaData.Acc',
-        'Agreement': '@ViewBag.GaData.AgreementId',
-        'LevyFlag': '@ViewBag.GaData.LevyFlag'
-
-        @if (ViewBag.GaData.Extras.Count>0)
+        'Account': '@ViewBag.GaData.Acc'
+    @if (ViewBag.GaData.Extras.Count > 0)
+    {
+        @Html.Raw(",")
+        ;
+    }
+    @{
+        var count = 0;
+        foreach (var extra in ViewBag.GaData.Extras)
         {
-            @Html.Raw(",");
-        }
-
-        @{
-            var count = 0;
-            foreach (var extra in ViewBag.GaData.Extras)
+            count++;
+            @Html.Raw($"'{extra.Key}' : '{extra.Value}'")
+            ;
+            if (count < ViewBag.GaData.Extras.Count)
             {
-                count++;
-                
-                @Html.Raw($"'{extra.Key}' : '{extra.Value}'");
-
-                if (count < ViewBag.GaData.Extras.Count)
-                {
-                    @Html.Raw("," + Environment.NewLine);
-                }
+                @Html.Raw("," + Environment.NewLine)
+                ;
             }
         }
+    }
     });
 
 </script>

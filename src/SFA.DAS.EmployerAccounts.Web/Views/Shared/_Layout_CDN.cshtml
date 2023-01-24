@@ -2,7 +2,6 @@
 @using SFA.DAS.EmployerAccounts.Web.Helpers
 
 @inject HtmlHelpers HtmlHelpers;
-@inject HttpContextAccessor HttpContextAccessor;
 
 
 @{
@@ -160,13 +159,13 @@
         @await RenderSectionAsync("breadcrumb", required: false)
 
         <main class="govuk-main-wrapper" id="main-content" role="main">
-            @if (HttpContextHelper.Current.User.Identity.IsAuthenticated)
+            @if (User.Identity.IsAuthenticated)
             {
                 @HtmlHelpers.GetContentByType("banner")
 
                 if (HtmlHelpers.IsAuthorized("EmployerFeature.V3AgreementBanner"))
                 {
-                    var userId = HttpContextAccessor.HttpContext.User?.Claims.
+                    var userId = User?.Claims.
                     FirstOrDefault(x => x.Type == ControllerConstants.UserRefClaimKeyName)?.Value;
                     var hashedAccountId = Html.ViewContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName]?.ToString();
                     {
