@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using NServiceBus;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.EmployerAccounts.Configuration;
@@ -7,6 +6,7 @@ using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.NServiceBus.Configuration;
 using SFA.DAS.NServiceBus.Configuration.AzureServiceBus;
 using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
+using SFA.DAS.NServiceBus.Configuration.NLog;
 using SFA.DAS.NServiceBus.Hosting;
 using SFA.DAS.NServiceBus.SqlServer.Configuration;
 using SFA.DAS.UnitOfWork.NServiceBus.Configuration;
@@ -18,19 +18,20 @@ public static class NServiceBusServiceRegistrations
 {
     private const string EndPointName = "SFA.DAS.EmployerAccounts";
 
-    public static UpdateableServiceProvider StartNServiceBus(this IServiceCollection services, IConfiguration configuration, EmployerAccountsConfiguration employerAccountsConfiguration, bool isDevelopment)
+    public static void StartNServiceBus(this IServiceCollection services, EmployerAccountsConfiguration employerAccountsConfiguration, bool isDevOrLocal)
     {
         var endpointConfiguration = new EndpointConfiguration(EndPointName)
-            .UseInstallers()
             .UseErrorQueue($"{EndPointName}-errors")
+            .UseInstallers()
             .UseMessageConventions()
             .UseNewtonsoftJsonSerializer()
+            .UseNLogFactory()
             .UseOutbox(true)
-            .UseSqlServerPersistence(() => DatabaseExtensions.GetSqlConnection(isDevelopment, employerAccountsConfiguration.DatabaseConnectionString))
+            .UseSqlServerPersistence(() => DatabaseExtensions.GetSqlConnection(isDevOrLocal, employerAccountsConfiguration.DatabaseConnectionString))
             .UseUnitOfWork();
 
-        // https://github.com/twenzel/NServiceBus.MSDependencyInjection/blob/master/README.md
-       
+        //// https://github.com/twenzel/NServiceBus.MSDependencyInjection/blob/master/README.md
+
         UpdateableServiceProvider container = null;
 
         endpointConfiguration.UseContainer<ServicesBuilder>(customisations =>
@@ -43,7 +44,7 @@ public static class NServiceBusServiceRegistrations
             });
         });
 
-        if (isDevelopment)
+        if (isDevOrLocal)
         {
             endpointConfiguration.UseLearningTransport();
         }
@@ -62,7 +63,5 @@ public static class NServiceBusServiceRegistrations
         services.AddSingleton(p => endpoint)
             .AddSingleton<IMessageSession>(p => p.GetService<IEndpointInstance>())
             .AddHostedService<NServiceBusHostedService>();
-
-        return container;
     }
 }

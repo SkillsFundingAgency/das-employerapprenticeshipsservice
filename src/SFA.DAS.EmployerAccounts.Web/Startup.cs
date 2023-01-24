@@ -61,7 +61,7 @@ namespace SFA.DAS.EmployerAccounts.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpContextAccessor();
-            
+
             services.AddOptions();
 
             services.AddLogging();
@@ -88,8 +88,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddEventsApi();
             services.AddNotifications(_configuration);
 
-            services.AddNServiceBusClientUnitOfWork();
-            services.StartNServiceBus(_configuration, _employerAccountsConfiguration, _configuration.IsDev());
+            services.StartNServiceBus(_employerAccountsConfiguration, _configuration.IsDevOrLocal());
             services.AddEmployerFeaturesAuthorization();
             services.AddDasAuthorization();
             services.AddEmployerAccountsApi();
