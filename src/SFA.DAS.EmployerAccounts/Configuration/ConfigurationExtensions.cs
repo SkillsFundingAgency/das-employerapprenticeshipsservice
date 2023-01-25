@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Web.Extensions;
+﻿using Microsoft.Extensions.Configuration;
+
+namespace SFA.DAS.EmployerAccounts.Configuration;
 
 public static class ConfigurationExtensions
 {

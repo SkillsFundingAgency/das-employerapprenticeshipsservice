@@ -3,10 +3,14 @@
 		<OutputType>Exe</OutputType>
 	</PropertyGroup>
 	<ItemGroup>
+		<PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="6.0.2" />
 		<PackageReference Include="AutoMapper" Version="5.1.1" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="1.2.0" />
+		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
 		<PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
 		<PackageReference Include="Microsoft.ApplicationInsights.NLogTarget" Version="2.21.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.13" />
+		<PackageReference Include="Microsoft.Extensions.HealthChecks.SqlServer" Version="1.0.0" />
 		<PackageReference Include="NLog" Version="5.1.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
@@ -37,6 +41,7 @@
 		<PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="15.0.25" />
 		<PackageReference Include="SFA.DAS.OidcMiddleware" Version="2.0.0.61553" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework" Version="9.0.13" />
+		<PackageReference Include="SFA.DAS.UnitOfWork.Mvc" Version="9.0.28" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="9.0.13" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.WebApi" Version="9.0.13" />
 		<PackageReference Include="SFA.DAS.Validation.WebApi">
