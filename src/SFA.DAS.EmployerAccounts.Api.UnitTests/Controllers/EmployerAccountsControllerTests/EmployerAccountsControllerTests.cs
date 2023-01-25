@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using AutoMapper;
-using Castle.Core.Logging;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -21,7 +20,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.EmployerAccountsCon
         protected Mock<IMediator> Mediator;
         protected Mock<ILogger<AccountsOrchestrator>> Logger;
         protected Mock<IHashingService> HashingService;
-        protected Mock<IUrlHelper> UrlHelper;
+        protected Mock<IUrlHelper> UrlTestHelper;
         protected Mock<IMapper> Mapper;
 
         [SetUp]
@@ -35,8 +34,8 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.EmployerAccountsCon
             var orchestrator = new AccountsOrchestrator(Mediator.Object, Logger.Object, Mapper.Object, HashingService.Object);
             Controller = new EmployerAccountsController(orchestrator);
 
-            var UrlHelper = new Mock<IUrlHelper>();
-            Controller.Url = UrlHelper.Object;
+            UrlTestHelper = new Mock<IUrlHelper>();
+            Controller.Url = UrlTestHelper.Object;
 
             var accountsResponse = new GetPagedEmployerAccountsResponse
             {

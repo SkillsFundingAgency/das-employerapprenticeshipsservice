@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountPayeSchemesC
         protected AccountPayeSchemesController Controller;
         protected Mock<IMediator> Mediator;
         protected Mock<ILogger<AccountsOrchestrator>> Logger;
-        protected Mock<IUrlHelper> UrlHelper;
+        protected Mock<IUrlHelper> UrlTestHelper;
         protected Mock<IMapper> Mapper;
         protected Mock<IHashingService> HashingService;
 
@@ -29,8 +29,8 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountPayeSchemesC
             var orchestrator = new AccountsOrchestrator(Mediator.Object, Logger.Object, Mapper.Object, HashingService.Object);
             Controller = new AccountPayeSchemesController(orchestrator);
 
-            var urlhelper = new Mock<IUrlHelper>();
-            Controller.Url = urlhelper.Object;
+            UrlTestHelper = new Mock<IUrlHelper>();
+            Controller.Url = UrlTestHelper.Object;
         }
     }
 }

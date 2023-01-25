@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Http.Results;
 using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Types;
@@ -33,23 +33,23 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.EmployerAccountsCon
             Mediator.Setup(x => x.Send(It.IsAny<GetEmployerAccountDetailByHashedIdQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(accountsResponse);
 
-            Microsoft.AspNetCore.Mvc.Routing.UrlHelper.Setup(x => x.Route("GetLegalEntity", It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId, legalEntityId = accountsResponse.Account.LegalEntities[0] })))).Returns($"/api/accounts/{hashedAccountId}/legalEntity/{accountsResponse.Account.LegalEntities[0]}");
-            Microsoft.AspNetCore.Mvc.Routing.UrlHelper.Setup(x => x.Route("GetLegalEntity", It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId, legalEntityId = accountsResponse.Account.LegalEntities[1] })))).Returns($"/api/accounts/{hashedAccountId}/legalEntity/{accountsResponse.Account.LegalEntities[1]}");
+            UrlTestHelper.Setup(x => x.RouteUrl("GetLegalEntity", It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId, legalEntityId = accountsResponse.Account.LegalEntities[0] })))).Returns($"/api/accounts/{hashedAccountId}/legalEntity/{accountsResponse.Account.LegalEntities[0]}");
+            UrlTestHelper.Setup(x => x.RouteUrl("GetLegalEntity", It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId, legalEntityId = accountsResponse.Account.LegalEntities[1] })))).Returns($"/api/accounts/{hashedAccountId}/legalEntity/{accountsResponse.Account.LegalEntities[1]}");
 
             var response = await Controller.GetAccount(hashedAccountId);
 
             Assert.IsNotNull(response);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<AccountDetail>>(response);
-            var model = response as OkNegotiatedContentResult<AccountDetail>;
+            Assert.IsInstanceOf<OkObjectResult>(response);
+            var model = ((OkObjectResult)response).Value as AccountDetail;
 
-            model?.Content?.Should().NotBeNull();
-            model?.Content?.AccountId.Should().Be(123);
-            model?.Content?.DasAccountName.Should().Be("Test 1");
-            model?.Content?.HashedAccountId.Should().Be(hashedAccountId);
+            model.Should().NotBeNull();
+            model.AccountId.Should().Be(123);
+            model.DasAccountName.Should().Be("Test 1");
+            model.HashedAccountId.Should().Be(hashedAccountId);
 
             foreach (var legalEntity in accountsResponse.Account.LegalEntities)
             {
-                var matchedScheme = model?.Content?.LegalEntities.Single(x => x.Id == legalEntity.ToString());
+                var matchedScheme = model.LegalEntities.Single(x => x.Id == legalEntity.ToString());
                 matchedScheme?.Href.Should().Be($"/api/accounts/{hashedAccountId}/legalEntity/{legalEntity}");
             }
         }

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Mappings;
@@ -10,7 +11,6 @@ using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesByHashedAccountId;
 using SFA.DAS.Testing.AutoFixture;
 using SFA.DAS.Validation;
-using It = Moq.It;
 
 namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesControllerTests
 {
@@ -50,14 +50,14 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
             var response = await Controller.GetLegalEntities(_hashedAccountId);
 
             Assert.IsNotNull(response);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<EmployerAccounts.Api.Types.ResourceList>>(response);
-            var model = response as OkNegotiatedContentResult<EmployerAccounts.Api.Types.ResourceList>;
+            Assert.IsInstanceOf<OkObjectResult>(response);
+            var model = ((OkObjectResult)response).Value as EmployerAccounts.Api.Types.ResourceList;
 
-            model?.Content.Should().NotBeNull();
+            model.Should().NotBeNull();
 
             foreach (var legalEntity in _response.LegalEntities)
             {
-                var matchedEntity = model.Content.Single(x => x.Id == legalEntity.LegalEntityId.ToString());
+                var matchedEntity = model.Single(x => x.Id == legalEntity.LegalEntityId.ToString());
                 matchedEntity.Href.Should().Be($"/api/accounts/{_hashedAccountId}/legalentities/{legalEntity.LegalEntityId}");
             }
         }
@@ -81,10 +81,10 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
             var response = await Controller.GetLegalEntities(_hashedAccountId, true);
 
             Assert.IsNotNull(response);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<List<Types.LegalEntity>>>(response);
-            var model = response as OkNegotiatedContentResult<List<Types.LegalEntity>>;
-            model?.Content.Should().NotBeNull();
-            model?.Content.ShouldBeEquivalentTo(expectedModel);
+            Assert.IsInstanceOf<OkObjectResult>(response);
+            var model = ((OkObjectResult)response).Value as List<Types.LegalEntity>;
+            model.Should().NotBeNull();
+            model.Should().BeEquivalentTo(expectedModel);
         }
 
         [Test]
@@ -121,8 +121,8 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
 
         private void SetupUrlHelperForAccountLegalEntityOne()
         {
-            Microsoft.AspNetCore.Mvc.Routing.UrlHelper.Setup(
-                    x => x.Route(
+            UrlTestHelper.Setup(
+                    x => x.RouteUrl(
                         "GetLegalEntity",
                         It.Is<object>(
                             obj => IsAccountLegalEntityOne(obj))))
@@ -132,8 +132,8 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
 
         private void SetupUrlHelperForAccountLegalEntityTwo()
         {
-            Microsoft.AspNetCore.Mvc.Routing.UrlHelper.Setup(
-                    x => x.Route(
+            UrlTestHelper.Setup(
+                    x => x.RouteUrl(
                         "GetLegalEntity",
                         It.Is<object>(
                             obj => IsAccountLegalEntityTwo(obj))))

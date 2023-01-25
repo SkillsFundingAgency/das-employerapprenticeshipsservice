@@ -10,17 +10,17 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
     {
         protected LegalEntitiesController Controller;
         protected Mock<IMediator> Mediator;
-        protected Mock<IUrlHelper> UrlHelper;
+        protected Mock<IUrlHelper> UrlTestHelper;
 
         [SetUp]
         public void Arrange()
         {
             Mediator = new Mock<IMediator>();
-            Microsoft.AspNetCore.Mvc.IUrlHelper = new Mock<IUrlHelper>();
+            UrlTestHelper = new Mock<IUrlHelper>();
 
             Controller = new LegalEntitiesController(Mediator.Object);
 
-            Controller.Url = Microsoft.AspNetCore.Mvc.Routing.UrlHelper.Object;
+            Controller.Url = UrlTestHelper.Object;
 
         }
     }

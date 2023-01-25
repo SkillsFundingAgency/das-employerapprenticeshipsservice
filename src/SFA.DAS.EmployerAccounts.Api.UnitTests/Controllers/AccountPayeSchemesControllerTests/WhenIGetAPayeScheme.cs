@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Types;
@@ -44,21 +45,22 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountPayeSchemesC
 
             Mediator.Setup(x => x.Send(It.Is<GetAccountPayeSchemesQuery>(q => q.HashedAccountId == _hashedAccountId), It.IsAny<CancellationToken>())).ReturnsAsync(_accountResponse);
 
-            Microsoft.AspNetCore.Mvc.Routing.UrlHelper.Setup(x => x.Route("GetPayeScheme", It.Is<object>(o => IsAccountPayeSchemeOne(o)))).Returns($"/api/accounts/{_hashedAccountId}/payeschemes/{_accountResponse.PayeSchemes[0].Ref.Replace(@"/", "%2f")}");
-            Microsoft.AspNetCore.Mvc.Routing.UrlHelper.Setup(x => x.Route("GetPayeScheme", It.Is<object>(o => IsAccountPayeSchemeTwo(o)))).Returns($"/api/accounts/{_hashedAccountId}/payeschemes/{_accountResponse.PayeSchemes[1].Ref.Replace(@"/", "%2f")}");
+            UrlTestHelper.Setup(x => x.RouteUrl("GetPayeScheme", It.Is<object>(o => IsAccountPayeSchemeOne(o)))).Returns($"/api/accounts/{_hashedAccountId}/payeschemes/{_accountResponse.PayeSchemes[0].Ref.Replace(@"/", "%2f")}");
+            UrlTestHelper.Setup(x => x.RouteUrl("GetPayeScheme", It.Is<object>(o => IsAccountPayeSchemeTwo(o)))).Returns($"/api/accounts/{_hashedAccountId}/payeschemes/{_accountResponse.PayeSchemes[1].Ref.Replace(@"/", "%2f")}");
 
 
             var response = await Controller.GetPayeSchemes(_hashedAccountId);
 
             Assert.IsNotNull(response);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<ResourceList>>(response);
-            var model = response as OkNegotiatedContentResult<ResourceList>;
-
-            model?.Content.Should().NotBeNull();
+            Assert.IsInstanceOf<OkObjectResult>(response);
+            
+            var model = ((OkObjectResult)response).Value as ResourceList;
+            
+            model.Should().NotBeNull();
 
             foreach (var payeScheme in _accountResponse.PayeSchemes)
             {
-                var matchedScheme = model?.Content.Single(x => x.Id == payeScheme.Ref);
+                var matchedScheme = model.Single(x => x.Id == payeScheme.Ref);
                 matchedScheme?.Href.Should().Be($"/api/accounts/{_hashedAccountId}/payeschemes/{payeScheme.Ref.Replace(@"/", "%2f")}");
             }
         }
@@ -109,15 +111,22 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountPayeSchemesC
             };
             Mediator.Setup(x => x.Send(It.Is<GetPayeSchemeByRefQuery>(q => q.Ref == payeSchemeRef && q.HashedAccountId == hashedAccountId), It.IsAny<CancellationToken>())).ReturnsAsync(payeSchemeResponse);
 
-            var response = await Controller.GetPayeScheme(hashedAccountId, payeSchemeRef.Replace("/", "%2f"));
+            var response = await Controller.GetPayeScheme(hashedAccountId, payeSchemeRef.Replace("/", "%2f")) as OkObjectResult;
 
             Assert.IsNotNull(response);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<PayeScheme>>(response);
-            var model = response as OkNegotiatedContentResult<PayeScheme>;
+            Assert.IsInstanceOf<OkObjectResult>(response);
 
-            model?.Content.Should().NotBeNull();
-            model?.Content.ShouldBeEquivalentTo(payeSchemeResponse.PayeScheme, options => options.Excluding(x => x.DasAccountId));
-            model?.Content.DasAccountId.Should().Be(hashedAccountId);
+           
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<OkObjectResult>(response);
+
+            var model = ((OkObjectResult)response).Value as PayeScheme;
+            
+            model.Should().NotBeNull();
+            //model.Should().BeEquivalentTo(payeSchemeResponse.PayeScheme, options => options.Excluding(x => x.DasAccountId));
+            model.Should().BeEquivalentTo(payeSchemeResponse.PayeScheme);
+            model?.DasAccountId.Should().Be(hashedAccountId);
         }
 
         [Test]
