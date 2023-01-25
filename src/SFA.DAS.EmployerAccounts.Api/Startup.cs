@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SFA.DAS.Authorization.DependencyResolution.StructureMap;
+using SFA.DAS.Authorization.Mvc.Extensions;
+using SFA.DAS.EmployerAccounts.Api.Authentication;
+using SFA.DAS.EmployerAccounts.Api.Authorization;
+using SFA.DAS.EmployerAccounts.Api.Filters;
 using SFA.DAS.EmployerAccounts.Api.ServiceRegistrations;
-using SFA.DAS.EmployerAccounts.DependencyResolution;
-using SFA.DAS.UnitOfWork.NServiceBus.DependencyResolution.StructureMap;
-using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Api
 {
@@ -26,7 +26,18 @@ namespace SFA.DAS.EmployerAccounts.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApiConfigurationSections(Configuration)
-                .AddApiAuthentication();
+                .AddApiAuthentication(Configuration)
+                .AddApiAuthorization(_environment)
+                .Configure<ApiBehaviorOptions>(opt =>
+                {
+                    opt.SuppressModelStateInvalidFilter = true;
+                })
+                .AddMvc(opt =>
+                {
+                    opt.AddAuthorization();
+                    opt.Filters.Add<ValidateModelStateFilter>();
+                    opt.Filters.Add<StopwatchFilter>();
+                });
 
             services.AddControllersWithViews(ConfigureMvcOptions)
                 // https://docs.microsoft.com/dotnet/standard/serialization/system-text-json-migrate-from-newtonsoft-how-to
