@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using NServiceBus;
+using SFA.DAS.EmployerAccounts.Commands.RunHealthCheckCommand;
 
 namespace SFA.DAS.EmployerAccounts.Api.HealthChecks
 {

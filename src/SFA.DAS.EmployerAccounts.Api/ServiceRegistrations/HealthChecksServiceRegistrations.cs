@@ -7,6 +7,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.Configuration;
 using SFA.DAS.EmployerAccounts.Api.HealthChecks;
+using SFA.DAS.EmployerAccounts.Api.Http;
 using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.Api.ServiceRegistrations

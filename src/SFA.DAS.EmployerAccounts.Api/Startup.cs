@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using Aspose.Pdf.Forms;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -43,6 +44,7 @@ public class Startup
             .Configure<ApiBehaviorOptions>(opt =>
             {
                 opt.SuppressModelStateInvalidFilter = true;
+
             })
             .AddMvc(opt =>
             {
@@ -53,6 +55,7 @@ public class Startup
 
         services.AddSwaggerGen(c =>
         {
+            c.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
             c.SwaggerDoc("v1", new OpenApiInfo
             {
                 Version = "v1",
@@ -75,7 +78,14 @@ public class Startup
         services.AddAutoMapper(typeof(Startup).Assembly);
         services.AddMediatR(typeof(Startup).Assembly);
         services.AddNotifications(Configuration);
-            
+
+        services.AddControllers(options =>
+        {
+            options.Filters.Add(new ProducesAttribute("text/html"));
+        });
+
+        services.AddApplicationInsightsTelemetry();
+
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
