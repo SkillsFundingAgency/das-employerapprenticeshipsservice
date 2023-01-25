@@ -27,9 +27,6 @@ public static class ConfigurationServiceRegistrations
         services.Configure<EmployerFeaturesConfiguration>(configuration.GetSection(ConfigurationKeys.Features));
         services.AddSingleton(cfg => cfg.GetService<IOptions<EmployerFeaturesConfiguration>>().Value);
 
-        //services.Configure<AccountApiConfiguration>(configuration.GetSection(ConfigurationKeys.a));
-        //services.AddSingleton(cfg => cfg.GetService<IOptions<AccountApiConfiguration>>().Value);
-
         services.Configure<IAccountApiConfiguration>(configuration.GetSection(nameof(AccountApiConfiguration)));
         services.AddSingleton<IAccountApiConfiguration, AccountApiConfiguration>();
 

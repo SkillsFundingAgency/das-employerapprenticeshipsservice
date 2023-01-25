@@ -4,6 +4,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="5.1.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.13" />
 		<PackageReference Include="NLog" Version="5.1.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
