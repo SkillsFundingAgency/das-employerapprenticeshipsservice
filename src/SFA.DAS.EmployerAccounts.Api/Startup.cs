@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Reflection;
+using System;
+using System.IO;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using SFA.DAS.Authorization.Mvc.Extensions;
 using SFA.DAS.EmployerAccounts.Api.Authentication;
 using SFA.DAS.EmployerAccounts.Api.Authorization;
@@ -16,13 +20,13 @@ namespace SFA.DAS.EmployerAccounts.Api
     {
         public IConfiguration Configuration { get; }
         private readonly IHostEnvironment _environment;
-        
+
         public Startup(IConfiguration configuration, IHostEnvironment environment)
         {
             _environment = environment;
             Configuration = configuration;
         }
-        
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApiConfigurationSections(Configuration)
@@ -39,12 +43,18 @@ namespace SFA.DAS.EmployerAccounts.Api
                     opt.Filters.Add<StopwatchFilter>();
                 });
 
-            services.AddControllersWithViews(ConfigureMvcOptions)
-                // https://docs.microsoft.com/dotnet/standard/serialization/system-text-json-migrate-from-newtonsoft-how-to
-                .AddNewtonsoftJson(options =>
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    options.UseMemberCasing();
+                    Version = "v1",
+                    Title = "Employer Accounts API"
                 });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
 
             //c.AddRegistry<AuthorizationRegistry>();
             //c.AddRegistry<CachesRegistry>();
@@ -72,6 +82,18 @@ namespace SFA.DAS.EmployerAccounts.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection()
+                .UseSwagger()
+                .UseSwaggerUI(opt =>
+                {
+                    opt.SwaggerEndpoint("/swagger/v1/swagger.json", "Employer Accounts API");
+                    opt.RoutePrefix = string.Empty;
+                });
 
             app.UseStaticFiles();
             app.UseRouting();
@@ -85,7 +107,7 @@ namespace SFA.DAS.EmployerAccounts.Api
         }
 
         private void ConfigureMvcOptions(MvcOptions mvcOptions)
-        { 
+        {
         }
     }
 }
