@@ -11,7 +11,7 @@ using SFA.DAS.NLog.Logger;
 namespace SFA.DAS.EAS.Support.Web.Controllers
 {
     [Authorize(Roles = "das-support-portal")]
-    public class ChallengeController : Controller
+    public class ChallengeController : Microsoft.AspNetCore.Mvc.Controller
     {
         private readonly IChallengeHandler _handler;
         private readonly ILog _log;
@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
 
         [HttpGet]
         [Route("challenge/{id}")]
-        public async Task<ActionResult> Index(string id)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Index(string id)
         {
             _log.Info($"ChallengeController-Index : Getting Response for id : {id}");
 
@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
 
         [HttpPost]
         [Route("challenge/{id}")]
-        public async Task<ActionResult> Index(string id, ChallengeEntry challengeEntry)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Index(string id, ChallengeEntry challengeEntry)
         {
             var response = await _handler.Handle(Map(challengeEntry));
 

@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Web.Http;
+using System.Net;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Account.Api.Attributes;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
-    [RoutePrefix("api/accounts/{hashedAccountId}/transactions")]
-    public class AccountTransactionsController : ApiController
+    [ApiController]
+    [Route("api/accounts/{hashedAccountId}/transactions")]
+    public class AccountTransactionsController : Microsoft.AspNetCore.Mvc.ControllerBase
     {
         private readonly AccountTransactionsOrchestrator _orchestrator;
 
@@ -17,9 +19,8 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
             _orchestrator = orchestrator;
         }
 
-        [Route("", Name = "GetTransactionSummary")]
-        [HttpGet]
-        public async Task<IHttpActionResult> Index(string hashedAccountId)
+        [HttpGet(Name = "GetTransactionSummary")]
+        public async Task<IActionResult> Index(string hashedAccountId)
         {
             var result = await _orchestrator.GetAccountTransactionSummary(hashedAccountId);
 
@@ -28,15 +29,14 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
                 return NotFound();
             }
 
-            result.Data.ForEach(x => x.Href = Url.Route("GetTransactions", new { hashedAccountId, year = x.Year, month = x.Month }));
+            result.Data.ForEach(x => x.Href = Url.Link("GetTransactions", new { hashedAccountId, year = x.Year, month = x.Month }));
 
             return Ok(result.Data);
         }
 
-        [Route("{year?}/{month?}", Name = "GetTransactions")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetTransactions(string hashedAccountId, int year = 0, int month = 0)
+        [Authorize(Policy = "LoopBack", Roles = "ReadAllEmployerAccountBalances")]
+        [HttpGet("{year?}/{month?}", Name = "GetTransactions")]
+        public async Task<IActionResult> GetTransactions(string hashedAccountId, int year = 0, int month = 0)
         {
             var result = await GetAccountTransactions(hashedAccountId, year, month);
 
@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
             if (result.Data.HasPreviousTransactions)
             {
                 var previousMonth = new DateTime(result.Data.Year, result.Data.Month, 1).AddMonths(-1);
-                result.Data.PreviousMonthUri = Url.Route("GetTransactions", new { hashedAccountId, year = previousMonth.Year, month = previousMonth.Month });
+                result.Data.PreviousMonthUri = Url.Link("GetTransactions", new { hashedAccountId, year = previousMonth.Year, month = previousMonth.Month });
             }
 
             return Ok(result.Data);
@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
                 month = DateTime.Now.Month;
             }
 
-            var result = await _orchestrator.GetAccountTransactions(hashedAccountId, year, month, Url);
+            var result = await _orchestrator.GetAccountTransactions(hashedAccountId, year, month);
             return result;
         }
     }

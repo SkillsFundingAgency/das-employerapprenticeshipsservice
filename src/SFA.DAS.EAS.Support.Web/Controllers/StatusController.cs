@@ -3,12 +3,13 @@ using System.Reflection;
 using System.Web;
 using System.Web.Http;
 using SFA.DAS.Support.Shared;
+using SFA.DAS.EAS.Support.Web;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers
 {
     [Authorize(Roles = "das-support-portal")]
     [System.Web.Mvc.RoutePrefix("api/status")]
-    public class StatusController : ApiController
+    public class StatusController : Microsoft.AspNetCore.Mvc.ControllerBase
     {
         // GET: Status
         [System.Web.Mvc.AllowAnonymous]
@@ -38,7 +39,7 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
         {
             try
             {
-                return $" {HttpContext.Current.Request.HttpMethod}: {HttpContext.Current.Request.RawUrl}";
+                return $" {HttpContextHelper.Current.Request.HttpMethod}: {HttpContextHelper.Current.Request.RawUrl}";
             }
             catch
             {

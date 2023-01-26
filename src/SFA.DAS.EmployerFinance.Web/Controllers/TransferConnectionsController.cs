@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 {
     [DasAuthorize(EmployerUserRole.Any)]
     [RoutePrefix("accounts/{HashedAccountId}/transfers/connections")]
-    public class TransferConnectionsController : Controller
+    public class TransferConnectionsController : Microsoft.AspNetCore.Mvc.Controller
     {
         private readonly ILog _logger;
         private readonly IMapper _mapper;
@@ -36,7 +36,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         }
 
         [Route]
-        public async Task<ActionResult> Index(GetEmployerAccountDetailByHashedIdQuery query)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Index(GetEmployerAccountDetailByHashedIdQuery query)
         {
             // redirecting to access denied only when the feature toggle is not enabled, this is not checking
             // whether the feature is authorized, as the view is always displayed when the feature is enabled
@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         }
 
         [ChildActionOnly]
-        public ActionResult TransferAllowance(GetTransferAllowanceQuery query)
+        public Microsoft.AspNetCore.Mvc.ActionResult TransferAllowance(GetTransferAllowanceQuery query)
         {
             var response = Task.Run(() => _mediator.SendAsync(query)).GetAwaiter().GetResult();
             var model = _mapper.Map<TransferAllowanceViewModel>(response);
@@ -63,7 +63,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         }
 
         [ChildActionOnly]
-        public ActionResult TransferConnectionInvitationAuthorization(GetTransferConnectionInvitationAuthorizationQuery query)
+        public Microsoft.AspNetCore.Mvc.ActionResult TransferConnectionInvitationAuthorization(GetTransferConnectionInvitationAuthorizationQuery query)
         {
             var response = Task.Run(() => _mediator.SendAsync(query)).GetAwaiter().GetResult();
             var model = _mapper.Map<TransferConnectionInvitationAuthorizationViewModel>(response);
@@ -72,7 +72,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         }
 
         [ChildActionOnly]
-        public ActionResult TransferConnectionInvitations(GetTransferConnectionInvitationsQuery query)
+        public Microsoft.AspNetCore.Mvc.ActionResult TransferConnectionInvitations(GetTransferConnectionInvitationsQuery query)
         {
             var response = Task.Run(() => _mediator.SendAsync(query)).GetAwaiter().GetResult();
             var model = _mapper.Map<TransferConnectionInvitationsViewModel>(response);
@@ -81,7 +81,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         }
 
         [ChildActionOnly]
-        public ActionResult TransferRequests(GetTransferRequestsQuery query)
+        public Microsoft.AspNetCore.Mvc.ActionResult TransferRequests(GetTransferRequestsQuery query)
         {
             try
             {

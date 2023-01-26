@@ -70,7 +70,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
 
             var getCallerExpression = Expression.Lambda<Func<object>>(memberExpression);
             var getCaller = getCallerExpression.Compile();
-            var ctrlr = (Controller)getCaller();
+            var ctrlr = (Microsoft.AspNetCore.Mvc.Controller)getCaller();
 
             var controllerDescriptor = new ReflectedControllerDescriptor(ctrlr.GetType());
             var actionDescriptor = new ReflectedActionDescriptor(method, method.Name, controllerDescriptor);
@@ -78,7 +78,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             // OnActionExecuting
 
             ctrlr.ControllerContext = _controllerContext.Object;
-            var actionExecutingContext = new ActionExecutingContext(ctrlr.ControllerContext, actionDescriptor, new Dictionary<string, object>());
+            var actionExecutingContext = new Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext(ctrlr.ControllerContext, actionDescriptor, new Dictionary<string, object>());
             var onActionExecuting = ctrlr.GetType().GetMethod("OnActionExecuting", BindingFlags.Instance | BindingFlags.NonPublic);
             onActionExecuting.Invoke(ctrlr, new object[] { actionExecutingContext });
             var actionResult = actionExecutingContext.Result;
@@ -91,7 +91,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             var result = exp.Compile()();
 
             // OnActionExecuted
-            var ctx2 = new ActionExecutedContext(ctrlr.ControllerContext, actionDescriptor, false, null)
+            var ctx2 = new Microsoft.AspNetCore.Mvc.Filters.ActionExecutedContext(ctrlr.ControllerContext, actionDescriptor, false, null)
             { Result = result };
             MethodInfo onActionExecuted = ctrlr.GetType().GetMethod("OnActionExecuted", BindingFlags.Instance | BindingFlags.NonPublic);
             onActionExecuted.Invoke(ctrlr, new object[] { ctx2 });

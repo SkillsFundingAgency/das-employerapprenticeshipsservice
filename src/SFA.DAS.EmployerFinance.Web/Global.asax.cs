@@ -23,6 +23,7 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerFinance.Startup;
 using SFA.DAS.EmployerFinance.Web.App_Start;
+using SFA.DAS.EmployerFinance.Web;
 
 namespace SFA.DAS.EmployerFinance.Web
 {
@@ -81,7 +82,7 @@ namespace SFA.DAS.EmployerFinance.Web
         protected void Application_PreSendRequestHeaders(object sender, EventArgs e)
         {
             new HttpContextPolicyProvider(new List<IHttpContextPolicy> { new ResponseHeaderRestrictionPolicy() })
-                .Apply(new HttpContextWrapper(HttpContext.Current), PolicyConcern.HttpResponse);
+                .Apply(new HttpContextWrapper(HttpContextHelper.Current), PolicyConcern.HttpResponse);
         }
 
         protected void Application_End()

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Account
             AccountHandler.Setup(x => x.Find(id)).ReturnsAsync(accountReponse);
             var actual = await Unit.Header(id);
             Assert.IsNotNull(actual);
-            Assert.IsInstanceOf<HttpNotFoundResult>(actual);
+            Assert.IsInstanceOf<NotFoundResult>(actual);
         }
 
         [Test]
@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Account
             AccountHandler.Setup(x => x.Find(id)).ReturnsAsync(accountReponse);
             var actual = await Unit.Header(id);
             Assert.IsNotNull(actual);
-            Assert.IsInstanceOf<HttpNotFoundResult>(actual);
+            Assert.IsInstanceOf<NotFoundResult>(actual);
         }
 
         [Test]

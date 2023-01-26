@@ -4,9 +4,9 @@ using SFA.DAS.EmployerFinance.Web.Controllers;
 
 namespace SFA.DAS.EmployerFinance.Web.Filters
 {
-    public class AnalyticsFilter : ActionFilterAttribute
+    public class AnalyticsFilter : Microsoft.AspNetCore.Mvc.Filters.ActionFilterAttribute
     {
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        public override void OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext filterContext)
         {
             string userId = null;
             string hashedAccountId = null;
@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerFinance.Web.Filters
             {
                 hashedAccountId = filterContext.ActionParameters["hashedAccountId"] as string;
             }
-            else if(filterContext.Controller.ControllerContext.RouteData.Values.ContainsKey("hashedAccountId"))
+            else if(Microsoft.AspNetCore.Mvc.Controller.ControllerContext.RouteData.Values.ContainsKey("hashedAccountId"))
             {
                 hashedAccountId = filterContext.Controller.ControllerContext.RouteData.Values["hashedAccountId"] as string;
             }

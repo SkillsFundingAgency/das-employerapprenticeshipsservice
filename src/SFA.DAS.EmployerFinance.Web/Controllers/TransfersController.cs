@@ -8,7 +8,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 {
     [DasAuthorize(EmployerUserRole.Any)]
     [RoutePrefix("accounts/{HashedAccountId}")] 
-    public class TransfersController : Controller
+    public class TransfersController : Microsoft.AspNetCore.Mvc.Controller
     {
         private readonly TransfersOrchestrator _transfersOrchestrator;
 
@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 
         [HttpGet]
         [Route("transfers")]
-        public async Task<ActionResult> Index(string hashedAccountId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Index(string hashedAccountId)
         {
             var viewModel = await _transfersOrchestrator.GetIndexViewModel(hashedAccountId);
 
@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         [DasAuthorize("EmployerFeature.FinanceDetails")]
         [HttpGet]
         [Route("transfers/financial-breakdown")]
-        public async Task<ActionResult> FinancialBreakdown(string hashedAccountId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> FinancialBreakdown(string hashedAccountId)
         {
             var viewModel = await _transfersOrchestrator.GetFinancialBreakdownViewModel(hashedAccountId);
             return View(viewModel);

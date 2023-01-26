@@ -1,4 +1,5 @@
-﻿@using Microsoft.ApplicationInsights.Extensibility
+@using SFA.DAS.EAS.Web
+@using Microsoft.ApplicationInsights.Extensibility
 @using SFA.DAS.Authorization
 @using SFA.DAS.Authorization.Mvc
 @using SFA.DAS.EAS.Web
@@ -120,7 +121,7 @@
             </div>
         </div>
     </header>
-    @if (HttpContext.Current.User.Identity.IsAuthenticated || Model?.GetType().GetProperty("HideHeaderSignInLink") == null)
+    @if (HttpContextHelper.Current.User.Identity.IsAuthenticated || Model?.GetType().GetProperty("HideHeaderSignInLink") == null)
     {
         <div id="floating-menu-holder">
             <div class="account-information floating-menu" role="navigation">
@@ -129,7 +130,7 @@
                     <nav id="user-nav">
                         <ul>
                             <li><a href="@Url.Action("Help", "Home")" target="_blank">Help</a></li>
-                            @if (HttpContext.Current.User.Identity.IsAuthenticated)
+                            @if (HttpContextHelper.Current.User.Identity.IsAuthenticated)
                             {
                                 <li class="has-sub-menu">
                                     <a href="/" role="menuitem">Settings</a>
@@ -149,7 +150,7 @@
                                 </li>
                                 <li><a href="@Url.Action("SignOut", "Home")" role="menuitem">Sign out</a></li>
                             }
-                            else if (HttpContext.Current.User.Identity.IsAuthenticated || Model?.GetType().GetProperty("HideHeaderSignInLink") == null)
+                            else if (HttpContextHelper.Current.User.Identity.IsAuthenticated || Model?.GetType().GetProperty("HideHeaderSignInLink") == null)
                             {
                                 {
 
@@ -162,7 +163,7 @@
             </div>
         </div> <!--/floating-menu-holder-->
     }
-    @if (HttpContext.Current.User.Identity.IsAuthenticated)
+    @if (HttpContextHelper.Current.User.Identity.IsAuthenticated)
     {
         var controllerString = ViewContext.RouteData.Values["Controller"].ToString();
 

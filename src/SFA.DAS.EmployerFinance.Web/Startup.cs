@@ -1,148 +1,67 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IdentityModel.Tokens;
-using System.Linq;
-using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using System.Web.Mvc;
-using Microsoft.Owin;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Cookies;
-using NLog;
-using Owin;
-using SFA.DAS.Authentication;
-using SFA.DAS.EmployerFinance.Configuration;
-using SFA.DAS.EmployerFinance.Web;
-using SFA.DAS.EmployerFinance.Web.App_Start;
-using SFA.DAS.EmployerFinance.Web.Authentication;
-using SFA.DAS.EmployerFinance.Web.Orchestrators;
-using SFA.DAS.EmployerUsers.WebClientComponents;
-using SFA.DAS.OidcMiddleware;
+﻿// This Startup file is based on ASP.NET Core new project templates and is included
+// as a starting point for DI registration and HTTP request processing pipeline configuration.
+// This file will need updated according to the specific scenario of the application being upgraded.
+// For more information on ASP.NET Core startup files, see https://docs.microsoft.com/aspnet/core/fundamentals/startup
 
-[assembly: OwinStartup(typeof(Startup))]
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace SFA.DAS.EmployerFinance.Web
 {
     public class Startup
     {
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
-
-        public void Configuration(IAppBuilder app)
+        public Startup(IConfiguration configuration)
         {
-            var config = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<EmployerFinanceConfiguration>();
-            var constants = new Constants(config.Identity);
-            var urlHelper = new UrlHelper();
-
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AuthenticationType = "Cookies",
-                ExpireTimeSpan = new TimeSpan(0, 10, 0),
-                SlidingExpiration = true
-            });
-
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AuthenticationType = "TempState",
-                AuthenticationMode = AuthenticationMode.Passive
-            });
-
-            app.UseCodeFlowAuthentication(new OidcMiddlewareOptions
-            {
-                BaseUrl = config.Identity.BaseAddress,
-                ClientId = config.Identity.ClientId,
-                ClientSecret = config.Identity.ClientSecret,
-                Scopes = config.Identity.Scopes,
-                AuthorizeEndpoint = constants.AuthorizeEndpoint(),
-                TokenEndpoint = constants.TokenEndpoint(),
-                UserInfoEndpoint = constants.UserInfoEndpoint(),
-                TokenSigningCertificateLoader = GetSigningCertificate(config.Identity.UseCertificate),
-                TokenValidationMethod = config.Identity.UseCertificate ? TokenValidationMethod.SigningKey : TokenValidationMethod.BinarySecret,
-                AuthenticatedCallback = identity =>
-                {
-                    var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestrator>();
-                    PostAuthentiationAction(identity, authenticationOrchestrator, constants);
-                }
-            });
-
-            ConfigurationFactory.Current = new IdentityServerConfigurationFactory(config);
-            JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
+            Configuration = configuration;
         }
 
-        private static Func<X509Certificate2> GetSigningCertificate(bool useCertificate)
+        public IConfiguration Configuration { get; }
+
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
         {
-            if (!useCertificate)
+            services.AddControllersWithViews(ConfigureMvcOptions)
+                // Newtonsoft.Json is added for compatibility reasons
+                // The recommended approach is to use System.Text.Json for serialization
+                // Visit the following link for more guidance about moving away from Newtonsoft.Json to System.Text.Json
+                // https://docs.microsoft.com/dotnet/standard/serialization/system-text-json-migrate-from-newtonsoft-how-to
+                .AddNewtonsoftJson(options =>
+                {
+                    options.UseMemberCasing();
+                });
+
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
             {
-                return null;
+                app.UseDeveloperExceptionPage();
             }
 
-            return () =>
+            app.UseStaticFiles();
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
             {
-                var store = new X509Store(StoreLocation.CurrentUser);
-
-                store.Open(OpenFlags.ReadOnly);
-
-                try
-                {
-                    var thumbprint = ConfigurationManager.AppSettings["TokenCertificateThumbprint"];
-                    var certificates = store.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, false);
-
-                    if (certificates.Count < 1)
-                    {
-                        throw new Exception($"Could not find certificate with thumbprint '{thumbprint}' in CurrentUser store.");
-                    }
-
-                    return certificates[0];
-                }
-                finally
-                {
-                    store.Close();
-                }
-            };
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
 
-        private static void PostAuthentiationAction(ClaimsIdentity identity, AuthenticationOrchestrator authenticationOrchestrator, Constants constants)
-        {
-            Logger.Info("Retrieving claims from OIDC server.");
-
-            var userRef = identity.Claims.FirstOrDefault(claim => claim.Type == constants.Id())?.Value;
-            var email = identity.Claims.FirstOrDefault(claim => claim.Type == constants.Email())?.Value;
-            var firstName = identity.Claims.FirstOrDefault(claim => claim.Type == constants.GivenName())?.Value;
-            var lastName = identity.Claims.FirstOrDefault(claim => claim.Type == constants.FamilyName())?.Value;
-
-            Logger.Info($"Retrieved claims from OIDC server for user with external ID '{userRef}'.");
-
-            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, identity.Claims.First(c => c.Type == constants.Id()).Value));
-            identity.AddClaim(new Claim(ClaimTypes.Name, identity.Claims.First(c => c.Type == constants.DisplayName()).Value));
-            identity.AddClaim(new Claim("sub", identity.Claims.First(c => c.Type == constants.Id()).Value));
-            identity.AddClaim(new Claim("email", identity.Claims.First(c => c.Type == constants.Email()).Value));
-
-            Task.Run(async () => await authenticationOrchestrator.SaveIdentityAttributes(userRef, email, firstName, lastName)).Wait();
+        private void ConfigureMvcOptions(MvcOptions mvcOptions)
+        { 
         }
-    }
-
-    public class Constants
-    {
-        private readonly string _baseUrl;
-        private readonly IdentityServerConfiguration _configuration;
-
-        public Constants(IdentityServerConfiguration configuration)
-        {
-            _baseUrl = configuration.ClaimIdentifierConfiguration.ClaimsBaseUrl;
-            _configuration = configuration;
-        }
-
-        public string AuthorizeEndpoint() => $"{_configuration.BaseAddress}{_configuration.AuthorizeEndPoint}";
-        public string ChangeEmailLink() => _configuration.BaseAddress.Replace("/identity", "") + string.Format(_configuration.ChangeEmailLink, _configuration.ClientId);
-        public string ChangePasswordLink() => _configuration.BaseAddress.Replace("/identity", "") + string.Format(_configuration.ChangePasswordLink, _configuration.ClientId);
-        public string DisplayName() => _baseUrl + _configuration.ClaimIdentifierConfiguration.DisplayName;
-        public string Email() => _baseUrl + _configuration.ClaimIdentifierConfiguration.Email;
-        public string FamilyName() => _baseUrl + _configuration.ClaimIdentifierConfiguration.FaimlyName;
-        public string GivenName() => _baseUrl + _configuration.ClaimIdentifierConfiguration.GivenName;
-        public string Id() => _baseUrl + _configuration.ClaimIdentifierConfiguration.Id;
-        public string LogoutEndpoint() => $"{_configuration.BaseAddress}{_configuration.LogoutEndpoint}";
-        public string TokenEndpoint() => $"{_configuration.BaseAddress}{_configuration.TokenEndpoint}";
-        public string UserInfoEndpoint() => $"{_configuration.BaseAddress}{_configuration.UserInfoEndpoint}";
     }
 }

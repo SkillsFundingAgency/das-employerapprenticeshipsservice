@@ -57,7 +57,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.OrganisationControl
                 });
 
             //Act
-            var result = _controller.OrganisationAddedNextSteps("test", hashedAccountId, hashedAgreementId).Result as ViewResult;
+            var result = _controller.OrganisationAddedNextSteps("test", hashedAccountId, hashedAgreementId).Result as Microsoft.AspNetCore.Mvc.ViewResult;
             var model = result?.Model as OrchestratorResponse<OrganisationAddedNextStepsViewModel>;
 
             //Assert
@@ -82,7 +82,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.OrganisationControl
                 });
 
             //Act
-            var result = _controller.OrganisationAddedNextStepsSearch("test", hashedAccountId, hashedAgreementId).Result as ViewResult;
+            var result = _controller.OrganisationAddedNextStepsSearch("test", hashedAccountId, hashedAgreementId).Result as Microsoft.AspNetCore.Mvc.ViewResult;
             var model = result?.Model as OrchestratorResponse<OrganisationAddedNextStepsViewModel>;
 
             //Assert
@@ -104,7 +104,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.OrganisationControl
                 .ReturnsAsync(true);
 
             //Act
-            var result = _controller.GoToNextStep("Not A Step", hashedAccountId, hashedAgreementId, "test").Result as ViewResult;
+            var result = _controller.GoToNextStep("Not A Step", hashedAccountId, hashedAgreementId, "test").Result as Microsoft.AspNetCore.Mvc.ViewResult;
             var model = result?.Model as OrchestratorResponse<OrganisationAddedNextStepsViewModel>;
 
             //Assert

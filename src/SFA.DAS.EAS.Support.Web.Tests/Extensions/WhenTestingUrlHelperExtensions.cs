@@ -1,6 +1,5 @@
-﻿using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Support.Infrastructure.Settings;
@@ -13,7 +12,7 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Extensions
     public class WhenTestingUrlHelperExtensions
     {
         private WebConfiguration _configuration;
-        private UrlHelper _urlHelper;
+        private IUrlHelper _urlHelper;
 
         [SetUp]
         public void Setup()

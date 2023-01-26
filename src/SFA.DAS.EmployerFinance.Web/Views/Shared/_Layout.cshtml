@@ -1,4 +1,5 @@
-﻿@using Microsoft.ApplicationInsights.Extensibility
+@using SFA.DAS.EmployerFinance.Web
+@using Microsoft.ApplicationInsights.Extensibility
 @using SFA.DAS.Authorization
 @using SFA.DAS.Authorization.Mvc
 @using SFA.DAS.EmployerFinance.Web.Helpers
@@ -112,7 +113,7 @@
     <main role="main" id="content">
         @RenderSection("breadcrumb", false)
 
-        @if (HttpContext.Current.User.Identity.IsAuthenticated)
+        @if (HttpContextHelper.Current.User.Identity.IsAuthenticated)
         {
             @Html.GetContentByType("banner", useLegacyStyles: true)
         }

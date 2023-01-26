@@ -6,7 +6,6 @@ using SFA.DAS.EAS.Domain.Models.Account;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Http.Results;
 using AccountWithBalanceViewModel = SFA.DAS.EAS.Account.Api.Types.AccountWithBalanceViewModel;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControllerTests

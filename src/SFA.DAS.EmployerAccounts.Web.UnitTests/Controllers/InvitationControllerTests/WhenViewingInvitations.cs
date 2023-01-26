@@ -85,7 +85,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.InvitationControlle
             //Assert
             _invitationOrchestrator.Verify(x => x.GetInvitation(It.Is<string>(i => i == "123")));
             Assert.IsNotNull(actual);
-            var viewResult = actual as ViewResult;
+            var viewResult = actual as Microsoft.AspNetCore.Mvc.ViewResult;
             Assert.IsNotNull(viewResult);
         }
 

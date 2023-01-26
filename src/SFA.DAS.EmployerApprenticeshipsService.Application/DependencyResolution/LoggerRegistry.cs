@@ -1,7 +1,7 @@
-﻿using System.Web;
-using SFA.DAS.EAS.Application.Logging;
+﻿using SFA.DAS.EAS.Application.Logging;
 using SFA.DAS.NLog.Logger;
 using StructureMap;
+using SFA.DAS.EAS.Application;
 
 namespace SFA.DAS.EAS.Application.DependencyResolution
 {
@@ -10,7 +10,7 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
         public LoggerRegistry()
         {
             For<ILog>().Use(c => new NLogLogger(c.ParentType, c.GetInstance<ILoggingContext>(), null)).AlwaysUnique();
-            For<ILoggingContext>().Use(c => HttpContext.Current == null ? null : new LoggingContext(new HttpContextWrapper(HttpContext.Current)));
+            For<ILoggingContext>().Use(c => HttpContextHelper.Current == null ? null : new LoggingContext(new HttpContextWrapper(HttpContextHelper.Current)));
         }
     }
 }

@@ -6,45 +6,45 @@ namespace SFA.DAS.EAS.Web.Controllers
 {
     [RoutePrefix("accounts")]
     [AuthoriseActiveUser]
-    public class EmployerAccountController : Controller
+    public class EmployerAccountController : Microsoft.AspNetCore.Mvc.Controller
     {
         [HttpGet]
         [Route("gatewayInform")]
-        public ActionResult GatewayInform()
+        public Microsoft.AspNetCore.Mvc.ActionResult GatewayInform()
         {
             return Redirect(Url.EmployerAccountsAction("gatewayInform"));
         }
 
         [HttpGet]
         [Route("gateway")]
-        public ActionResult Gateway()
+        public Microsoft.AspNetCore.Mvc.ActionResult Gateway()
         {
             return Redirect(Url.EmployerAccountsAction("gateway"));
         }
 
         [Route("gatewayResponse")]
-        public ActionResult GateWayResponse()
+        public Microsoft.AspNetCore.Mvc.ActionResult GateWayResponse()
         {
             return Redirect(Url.EmployerAccountsAction($"gatewayResponse{Request.Url?.Query}"));
         }
 
         [HttpGet]
         [Route("summary")]
-        public ActionResult Summary()
+        public Microsoft.AspNetCore.Mvc.ActionResult Summary()
         {
             return Redirect(Url.EmployerAccountsAction("summary"));
         }
 
         [HttpGet]
         [Route("create")]
-        public ActionResult Create()
+        public Microsoft.AspNetCore.Mvc.ActionResult Create()
         {
             return Redirect(Url.EmployerAccountsAction("create"));
         }
 
         [HttpGet]
         [Route("{HashedAccountId}/rename")]
-        public ActionResult RenameAccount(string hashedAccountId)
+        public Microsoft.AspNetCore.Mvc.ActionResult RenameAccount(string hashedAccountId)
         {
             return Redirect(Url.EmployerAccountsAction("rename"));
         }

@@ -1,13 +1,14 @@
 ﻿using System.Threading.Tasks;
-using System.Web.Http;
-using SFA.DAS.EAS.Account.Api.Attributes;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
-    [ApiAuthorize(Roles = "ReadUserAccounts")]
-    [RoutePrefix("api/accounts/{hashedAccountId}/transfers/connections")]
-    public class TransferConnectionsController : ApiController
+    [ApiController]
+    [Authorize(Policy = "LoopBack", Roles = "ReadUserAccounts")]
+    [Route("api/accounts/{hashedAccountId}/transfers/connections")]
+    public class TransferConnectionsController : ControllerBase
     {
         private readonly IEmployerFinanceApiService _apiService;
 
@@ -16,8 +17,8 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
             _apiService = apiService;
         }
 
-        [Route]
-        public async Task<IHttpActionResult> GetTransferConnections(string hashedAccountId)
+        [HttpGet]
+        public async Task<IActionResult> GetTransferConnections(string hashedAccountId)
         {
             return Ok(await _apiService.Redirect($"/api/accounts/{hashedAccountId}/transfers/connections"));
         }

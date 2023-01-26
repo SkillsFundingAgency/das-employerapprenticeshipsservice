@@ -12,7 +12,7 @@ using SFA.DAS.Support.Shared.Discovery;
 namespace SFA.DAS.EAS.Support.Web.Controllers
 {
     [Authorize(Roles = "das-support-portal")]
-    public class AccountController : Controller
+    public class AccountController : Microsoft.AspNetCore.Mvc.Controller
     {
         private readonly IAccountHandler _accountHandler;
         private readonly IPayeLevySubmissionsHandler _payeLevySubmissionsHandler;
@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
         }
 
         [Route("account/{id}")]
-        public async Task<ActionResult> Index(string id)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Index(string id)
         {
             var response = await _accountHandler.FindOrganisations(id);            
 
@@ -54,7 +54,7 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
         }
 
         [Route("account/payeschemes/{id}")]
-        public async Task<ActionResult> PayeSchemes(string id)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> PayeSchemes(string id)
         {            
             var response = await _accountHandler.FindPayeSchemes(id);
 
@@ -69,11 +69,11 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
                 return View(vm);
             }
             
-            return new HttpNotFoundResult();
+            return new Microsoft.AspNetCore.Mvc.NotFoundResult();
         }
 
         [Route("account/header/{id}")]
-        public async Task<ActionResult> Header(string id)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Header(string id)
         {
             var response = await _accountHandler.Find(id);            
 
@@ -84,7 +84,7 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
         }
 
         [Route("account/team/{id}")]
-        public async Task<ActionResult> Team(string id)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Team(string id)
         {
             var response = await _accountHandler.FindTeamMembers(id);
 
@@ -104,7 +104,7 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
         }
 
         [Route("account/finance/{id}")]
-        public async Task<ActionResult> Finance(string id)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Finance(string id)
         {
             var response = await _accountHandler.FindFinance(id);
 
@@ -123,7 +123,7 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
         }
 
         [Route("account/levysubmissions/{id}/{payeSchemeId}")]
-        public async Task<ActionResult> PayeSchemeLevySubmissions(string id, string payeSchemeId)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> PayeSchemeLevySubmissions(string id, string payeSchemeId)
         {
             var response = await _payeLevySubmissionsHandler.FindPayeSchemeLevySubmissions(id, payeSchemeId);
 

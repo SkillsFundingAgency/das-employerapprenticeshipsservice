@@ -7,6 +7,7 @@ using IdentityModel.Client;
 using SFA.DAS.Authentication;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EmployerUsers.WebClientComponents;
+using SFA.DAS.EAS.Web;
 
 namespace SFA.DAS.EAS.Web.Authentication
 {
@@ -23,7 +24,7 @@ namespace SFA.DAS.EAS.Web.Authentication
 
         public string GetClaimValue(string key)
         {
-            var claimIdentity = ((ClaimsIdentity)HttpContext.Current.User.Identity).Claims.FirstOrDefault(c => c.Type == key);
+            var claimIdentity = ((ClaimsIdentity)HttpContextHelper.Current.User.Identity).Claims.FirstOrDefault(c => c.Type == key);
             return claimIdentity == null ? "" : claimIdentity.Value;
         }
 
@@ -34,12 +35,12 @@ namespace SFA.DAS.EAS.Web.Authentication
 
         public bool IsUserAuthenticated()
         {
-            return HttpContext.Current.GetOwinContext().Authentication.User.Identity.IsAuthenticated;
+            return HttpContextHelper.Current.GetOwinContext().Authentication.User.Identity.IsAuthenticated;
         }
 
         public void SignOutUser()
         {
-            var owinContext = HttpContext.Current.GetOwinContext();
+            var owinContext = HttpContextHelper.Current.GetOwinContext();
             var authenticationManager = owinContext.Authentication;
 
             authenticationManager.SignOut("Cookies");
@@ -62,7 +63,7 @@ namespace SFA.DAS.EAS.Web.Authentication
             var accessToken = GetClaimValue("access_token");
             var userInfoClient = new UserInfoClient(new Uri(userInfoEndpoint), accessToken);
             var userInfo = await userInfoClient.GetAsync();
-            var identity = (ClaimsIdentity)HttpContext.Current.User.Identity;
+            var identity = (ClaimsIdentity)HttpContextHelper.Current.User.Identity;
 
             foreach (var claim in userInfo.Claims.ToList())
             {

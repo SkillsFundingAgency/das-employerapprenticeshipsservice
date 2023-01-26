@@ -9,6 +9,7 @@ using SFA.DAS.TokenService.Api.Client;
 using StructureMap;
 using System.Diagnostics.CodeAnalysis;
 using System.Web;
+using SFA.DAS.EAS.Support.Web;
 
 namespace SFA.DAS.EAS.Support.Web.DependencyResolution
 {
@@ -17,12 +18,12 @@ namespace SFA.DAS.EAS.Support.Web.DependencyResolution
     {
         public InfrastuctureRegistry()
         {
-            For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
+            For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContextHelper.Current));
             For<ILoggingPropertyFactory>().Use<LoggingPropertyFactory>();
 
             HttpContextBase conTextBase = null;
-            if (HttpContext.Current != null)
-                conTextBase = new HttpContextWrapper(HttpContext.Current);
+            if (HttpContextHelper.Current != null)
+                conTextBase = new HttpContextWrapper(HttpContextHelper.Current);
 
             For<IWebLoggingContext>().Use(x => new WebLoggingContext(conTextBase));
 

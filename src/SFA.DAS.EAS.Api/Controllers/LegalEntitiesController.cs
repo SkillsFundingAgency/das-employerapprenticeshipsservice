@@ -1,12 +1,13 @@
 ﻿using System.Threading.Tasks;
-using System.Web.Http;
-using SFA.DAS.EAS.Account.Api.Attributes;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
-    [RoutePrefix("api/accounts/{hashedAccountId}/legalentities")]
-    public class LegalEntitiesController : ApiController
+    [ApiController]
+    [Route("api/accounts/{hashedAccountId}/legalentities")]
+    public class LegalEntitiesController : Microsoft.AspNetCore.Mvc.ControllerBase
     {
         private readonly IEmployerAccountsApiService _apiService;
 
@@ -15,17 +16,16 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
             _apiService = apiService;
         }
 
-        [Route("", Name = "GetLegalEntities")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetLegalEntities(string hashedAccountId)
+        [Authorize(Policy = "LoopBack", Roles = "ReadAllEmployerAccountBalances")]
+        [HttpGet(Name = "GetLegalEntities")]
+        public async Task<IActionResult> GetLegalEntities(string hashedAccountId)
         {
             return Ok(await _apiService.Redirect($"/api/accounts/{hashedAccountId}/legalentities"));
         }
 
-        [Route("{legalEntityId}", Name = "GetLegalEntity")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
-        public async Task<IHttpActionResult> GetLegalEntity(
+        [Authorize(Policy = "LoopBack", Roles = "ReadAllEmployerAccountBalances")]
+        [HttpGet("{legalEntityId}", Name = "GetLegalEntity")]
+        public async Task<IActionResult> GetLegalEntity(
             string hashedAccountId,
             long legalEntityId)
         {

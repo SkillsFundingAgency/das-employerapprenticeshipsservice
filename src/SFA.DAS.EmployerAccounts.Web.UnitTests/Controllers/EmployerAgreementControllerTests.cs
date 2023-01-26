@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                 act: fixtures => fixtures.ConfirmRemoveOrganisation(),
                 assert: (fixtures, result) =>
                 {
-                    ViewResult viewResult = result as ViewResult;
+                    Microsoft.AspNetCore.Mvc.ViewResult viewResult = result as Microsoft.AspNetCore.Mvc.ViewResult;
                     Assert.AreEqual(ControllerConstants.AccessDeniedViewName, viewResult.ViewName);
                 });
         }
@@ -62,7 +62,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                 act: fixtures => fixtures.ConfirmRemoveOrganisation(),
                 assert: (fixtures, result) =>
                 {
-                    ViewResult viewResult = result as ViewResult;
+                    Microsoft.AspNetCore.Mvc.ViewResult viewResult = result as Microsoft.AspNetCore.Mvc.ViewResult;
                     Assert.AreEqual(ControllerConstants.ConfirmRemoveOrganisationViewName, viewResult.ViewName);
                 }) ;
         }
@@ -82,7 +82,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                 act: fixtures => fixtures.ConfirmRemoveOrganisation(),
                 assert: (fixtures, result) =>
                 {
-                    ViewResult viewResult = result as ViewResult;
+                    Microsoft.AspNetCore.Mvc.ViewResult viewResult = result as Microsoft.AspNetCore.Mvc.ViewResult;
                     Assert.AreEqual(ControllerConstants.CannotRemoveOrganisationViewName, viewResult.ViewName);
                 });
         }
@@ -129,7 +129,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             return RunAsync(arrange: fixtures => fixtures.WithUnsignedEmployerAgreement().WithPreviouslySignedAgreement(),
                 act: fixtures => fixtures.SignedAgreement(),
                 assert: (fixtures, result) =>
-                    Assert.AreEqual(fixtures.GetSignAgreementViewModel, fixtures.ViewResult.Model));
+                    Assert.AreEqual(fixtures.GetSignAgreementViewModel, Microsoft.AspNetCore.Mvc.ViewResult.Model));
         }
 
         [Test]
@@ -312,7 +312,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
 
         public SignEmployerAgreementViewModel GetSignAgreementViewModel { get; }
 
-        public ViewResult ViewResult { get; set; }
+        public Microsoft.AspNetCore.Mvc.ViewResult ViewResult { get; set; }
 
         public EmployerAgreementControllerTestFixtures WithUnsignedEmployerAgreement()
         {
@@ -378,7 +378,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             return controller;
         }
 
-        public Task<ActionResult> ConfirmRemoveOrganisation()
+        public Task<Microsoft.AspNetCore.Mvc.ActionResult> ConfirmRemoveOrganisation()
         {
             var controller = CreateController();
             return controller.ConfirmRemoveOrganisation(HashedAccountLegalEntityId, HashedAccountId);
@@ -391,28 +391,28 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             return result;
         }
 
-        public async Task<ViewResult> SignedAgreement()
+        public async Task<Microsoft.AspNetCore.Mvc.ViewResult> SignedAgreement()
         {
             var controller = CreateController();
-            ViewResult = await controller.SignAgreement(GetAgreementRequest) as ViewResult;
+            ViewResult = await controller.SignAgreement(GetAgreementRequest) as Microsoft.AspNetCore.Mvc.ViewResult;
             return ViewResult;
         }
 
-        public async Task<Tuple<ViewResult, ModelStateDictionary>> Sign(int? choice)
+        public async Task<Tuple<Microsoft.AspNetCore.Mvc.ViewResult, ModelStateDictionary>> Sign(int? choice)
         {
             var controller = CreateController();
-            var result = await controller.Sign(HashedAgreementId, HashedAccountId, choice) as ViewResult;
+            var result = await controller.Sign(HashedAgreementId, HashedAccountId, choice) as Microsoft.AspNetCore.Mvc.ViewResult;
             return new Tuple<ViewResult, ModelStateDictionary>(result, controller.ModelState);
         }
 
-        public async Task<ViewResult> AboutYourAgreement()
+        public async Task<Microsoft.AspNetCore.Mvc.ViewResult> AboutYourAgreement()
         {
             var controller = CreateController();
             ViewResult = await controller.AboutYourAgreement(HashedAgreementId, HashedAccountId) as ViewResult;
             return ViewResult;
         }
 
-        public async Task<ViewResult> WhenDoYouWantToView()
+        public async Task<Microsoft.AspNetCore.Mvc.ViewResult> WhenDoYouWantToView()
         {
             var controller = CreateController();
             ViewResult = await controller.WhenDoYouWantToView(HashedAgreementId, HashedAccountId) as ViewResult;

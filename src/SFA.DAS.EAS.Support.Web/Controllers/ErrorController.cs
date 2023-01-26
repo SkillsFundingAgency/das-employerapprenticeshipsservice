@@ -4,21 +4,21 @@ using System.Web.Mvc;
 namespace SFA.DAS.EAS.Support.Web.Controllers
 {
     [ExcludeFromCodeCoverage]
-    public class ErrorController : Controller
+    public class ErrorController : Microsoft.AspNetCore.Mvc.Controller
     {
 
-        public ActionResult Error()
+        public Microsoft.AspNetCore.Mvc.ActionResult Error()
         {
             return View();
         }
 
 
-        public ActionResult NotFound()
+        public Microsoft.AspNetCore.Mvc.ActionResult NotFound()
         {
             return View("Error");
         }
 
-        public ActionResult BadRequest()
+        public Microsoft.AspNetCore.Mvc.ActionResult BadRequest()
         {
             return View("Error");
         }

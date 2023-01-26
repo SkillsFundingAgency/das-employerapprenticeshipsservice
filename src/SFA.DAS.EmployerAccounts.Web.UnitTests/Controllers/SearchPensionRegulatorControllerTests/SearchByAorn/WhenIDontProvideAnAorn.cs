@@ -36,7 +36,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
         public async Task ThenAnErrorIsDisplayed(string aorn)
         {
             var response = await _controller.SearchPensionRegulatorByAorn(new SearchPensionRegulatorByAornViewModel { Aorn = aorn, PayeRef = "000/EDDEFDS" });
-            var viewResponse = (ViewResult)response;
+            var viewResponse = (Microsoft.AspNetCore.Mvc.ViewResult)response;
 
             Assert.AreEqual(ControllerConstants.SearchUsingAornViewName, viewResponse.ViewName);
             var viewModel = viewResponse.Model as SearchPensionRegulatorByAornViewModel;

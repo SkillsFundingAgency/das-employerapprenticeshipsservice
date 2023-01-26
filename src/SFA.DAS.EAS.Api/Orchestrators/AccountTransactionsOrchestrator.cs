@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             _employerFinanceApiService = employerFinanceApiService;
         }
 
-        public async Task<OrchestratorResponse<TransactionsViewModel>> GetAccountTransactions(string hashedAccountId, int year, int month, UrlHelper urlHelper)
+        public async Task<OrchestratorResponse<TransactionsViewModel>> GetAccountTransactions(string hashedAccountId, int year, int month)
         {
             _logger.Info($"Requesting GetAccountTransactions for account {hashedAccountId} from employerFinanceApiService");
 

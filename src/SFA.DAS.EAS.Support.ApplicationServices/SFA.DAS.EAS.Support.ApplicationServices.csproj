@@ -1,101 +1,30 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{84CD1351-253C-43D7-886D-A5E9CA3606CA}</ProjectGuid>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SFA.DAS.EAS.Support.ApplicationServices</RootNamespace>
-    <AssemblyName>SFA.DAS.EAS.Support.ApplicationServices</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <RuntimeIdentifier>win</RuntimeIdentifier>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\PayeLevySubmissionsResponseCodes.cs" />
-    <Compile Include="Models\PayeLevySubmissionsResponse.cs" />
-    <Compile Include="Models\AccountPayeLevyResponse.cs" />
-    <Compile Include="Models\ChallengeResponse.cs" />
-    <Compile Include="ChallengeHandler.cs" />
-    <Compile Include="IChallengeHandler.cs" />
-    <Compile Include="Models\AccountReponse.cs" />
-    <Compile Include="Models\ChallengePermissionResponse.cs" />
-    <Compile Include="Models\AccountDetailOrganisationsResponse.cs" />
-    <Compile Include="Models\AccountPayeSchemesResponse.cs" />
-    <Compile Include="Models\AccountFinanceResponse.cs" />
-    <Compile Include="Models\SearchResponseCodes.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\IPayeLevySubmissionsHandler.cs" />
-    <Compile Include="Services\PayeLevySubmissionsHandler.cs" />
-    <Compile Include="Services\ChallengeService.cs" />
-    <Compile Include="Services\IAccountHandler.cs" />
-    <Compile Include="Services\IChallengeService.cs" />
-    <Compile Include="Services\AccountHandler.cs" />
+    <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj" />
+    <ProjectReference Include="..\SFA.DAS.EAS.Support.Core\SFA.DAS.EAS.Support.Core.csproj" />
+    <ProjectReference Include="..\SFA.DAS.EAS.Support.Infrastructure\SFA.DAS.EAS.Support.Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj">
-      <Project>{8afb0bbe-1e53-488c-a971-d236df9eaa77}</Project>
-      <Name>SFA.DAS.EAS.Account.Api.Types</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EAS.Support.Core\SFA.DAS.EAS.Support.Core.csproj">
-      <Project>{99F6DD4A-CD1C-4D45-A2C9-ED2F89D1FB84}</Project>
-      <Name>SFA.DAS.EAS.Support.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EAS.Support.Infrastructure\SFA.DAS.EAS.Support.Infrastructure.csproj">
-      <Project>{9a31db97-209c-48ef-ae2a-b4a4f761f670}</Project>
-      <Name>SFA.DAS.EAS.Support.Infrastructure</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="HMRC.ESFA.Levy.Api.Client">
-      <Version>1.0.43</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.AspNet.Mvc">
-      <Version>5.2.6</Version>
-    </PackageReference>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">
       <Version>5.2.6</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
-      <Version>11.0.1</Version>
+      <Version>13.0.1</Version>
     </PackageReference>
     <PackageReference Include="NLog">
       <Version>4.6.8</Version>
@@ -109,13 +38,18 @@
     <PackageReference Include="SFA.DAS.Support.Shared">
       <Version>2.1.70</Version>
     </PackageReference>
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt">
-      <Version>4.0.3.308261200</Version>
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
+    <PackageReference Include="System.ServiceModel.Duplex" Version="4.9.0" />
+    <PackageReference Include="System.ServiceModel.NetTcp" Version="4.9.0" />
+    <PackageReference Include="System.ServiceModel.Federation" Version="4.8.1" />
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.355802">
+      <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="HMRC.ESFA.Levy.Api.Client" Version="2.0.4" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="4.0.4.403061554" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

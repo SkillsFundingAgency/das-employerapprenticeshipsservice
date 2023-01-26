@@ -1,4 +1,5 @@
-﻿@using SFA.DAS.EmployerFinance.Web.Filters
+@using SFA.DAS.EmployerFinance.Web
+@using SFA.DAS.EmployerFinance.Web.Filters
 @using System.Web
 
 <script>
@@ -9,7 +10,7 @@
     window.dataLayer = window.dataLayer || [];
     dataLayer.push({
         'event': '@ViewBag.GaData.DataLoaded',
-        'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
+        'loggedIn': '@HttpContextHelper.Current.User.Identity.IsAuthenticated',
         'userID': '@ViewBag.GaData.UserId',
         'vpv': '@ViewBag.GaData.Vpv',
         'acc': '@ViewBag.GaData.Acc',

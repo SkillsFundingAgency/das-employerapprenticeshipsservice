@@ -9,6 +9,7 @@ using System.Web.Routing;
 using Microsoft.ApplicationInsights.Extensibility;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Web.Policy;
+using SFA.DAS.EAS.Support.Web;
 
 namespace SFA.DAS.EAS.Support.Web
 {
@@ -32,14 +33,14 @@ namespace SFA.DAS.EAS.Support.Web
 
         protected void Application_PreSendRequestHeaders(object sender, EventArgs e)
         {
-            if (HttpContext.Current == null) return;
+            if (HttpContextHelper.Current == null) return;
 
             new HttpContextPolicyProvider(
                 new List<IHttpContextPolicy>()
                 {
                     new ResponseHeaderRestrictionPolicy()
                 }
-            ).Apply(new HttpContextWrapper(HttpContext.Current), PolicyConcern.HttpResponse);
+            ).Apply(new HttpContextWrapper(HttpContextHelper.Current), PolicyConcern.HttpResponse);
         }
         protected void Application_Error(object sender, EventArgs e)
         {

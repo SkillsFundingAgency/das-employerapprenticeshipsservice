@@ -1,4 +1,4 @@
-﻿using System.Web.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Web.Controllers;
 

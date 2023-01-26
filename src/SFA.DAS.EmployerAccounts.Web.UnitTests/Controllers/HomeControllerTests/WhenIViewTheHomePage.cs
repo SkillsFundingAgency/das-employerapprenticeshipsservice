@@ -112,7 +112,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
 
             //Assert
             Assert.IsNotNull(actual);
-            var actualRedirect = actual as RedirectResult;
+            var actualRedirect = actual as Microsoft.AspNetCore.Mvc.RedirectResult;
             Assert.IsNotNull(actualRedirect);
             Assert.AreEqual("http://test.local/confirm", actualRedirect.Url);
         }
@@ -154,7 +154,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
 
                 foreach (var attribute in attributes)
                 {
-                    var actual = attribute as AuthorizeAttribute;
+                    var actual = attribute as Microsoft.AspNetCore.Authorization.AuthorizeAttribute;
                     Assert.IsNull(actual);
                 }
             }
@@ -171,7 +171,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
 
             //Assert
             Assert.IsNotNull(actual);
-            var actualViewResult = actual as ViewResult;
+            var actualViewResult = actual as Microsoft.AspNetCore.Mvc.ViewResult;
             Assert.IsNotNull(actualViewResult);
             Assert.AreEqual("ServiceStartPage", actualViewResult.ViewName);
         }
@@ -216,7 +216,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
 
             //Assert
             Assert.IsNotNull(actual);
-            var actualViewResult = actual as ViewResult;
+            var actualViewResult = actual as Microsoft.AspNetCore.Mvc.ViewResult;
             Assert.IsNotNull(actualViewResult);
             Assert.AreEqual("", actualViewResult.ViewName);
         }
@@ -246,7 +246,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
 
             //Assert
             Assert.IsNotNull(actual);
-            var actualViewResult = actual as ViewResult;
+            var actualViewResult = actual as Microsoft.AspNetCore.Mvc.ViewResult;
             Assert.IsNotNull(actualViewResult);
 
             var viewModel = actualViewResult.Model;
@@ -281,7 +281,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
 
             //Assert
             Assert.IsNotNull(actual);
-            var actualViewResult = actual as ViewResult;
+            var actualViewResult = actual as Microsoft.AspNetCore.Mvc.ViewResult;
             Assert.IsNotNull(actualViewResult);
 
             var viewModel = actualViewResult.Model;

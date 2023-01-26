@@ -56,7 +56,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
 
             //Assert
             Assert.IsNotNull(actual);
-            Assert.IsAssignableFrom<ViewResult>(actual);
+            Assert.IsAssignableFrom<Microsoft.AspNetCore.Mvc.ViewResult>(actual);
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
             var result = _homeController.TermsAndConditions("returnUrl", "hashedId");
 
             //Assert
-            var viewResult = (ViewResult)result;
+            var viewResult = (Microsoft.AspNetCore.Mvc.ViewResult)result;
             var viewModel = viewResult.Model;
 
             Assert.IsInstanceOf<TermsAndConditionsNewViewModel>(viewModel);

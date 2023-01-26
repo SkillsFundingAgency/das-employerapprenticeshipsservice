@@ -80,7 +80,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
         public async Task ThenThePensionRegulatorResultsPageIsDisplayed()
         {
             var response = await _controller.SearchPensionRegulatorByAorn(new SearchPensionRegulatorByAornViewModel { Aorn = ExpectedAorn, PayeRef = ExpectedPayeRef });
-            var viewResponse = (ViewResult) response;
+            var viewResponse = (Microsoft.AspNetCore.Mvc.ViewResult) response;
 
             Assert.AreEqual(ControllerConstants.SearchPensionRegulatorResultsViewName, viewResponse.ViewName);
             Assert.AreSame(_expectedData, viewResponse.Model);

@@ -1,12 +1,13 @@
 ﻿using System.Threading.Tasks;
-using System.Web.Http;
-using SFA.DAS.EAS.Account.Api.Attributes;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
-    [RoutePrefix("api/user/{userRef}")]
-    public class EmployerUserController : ApiController
+    [ApiController]
+    [Route("api/user/{userRef}")]
+    public class EmployerUserController : Microsoft.AspNetCore.Mvc.ControllerBase
     {
         private readonly IEmployerAccountsApiService _apiService;
 
@@ -15,10 +16,9 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
             _apiService = apiService;
         }
 
-        [Route("accounts", Name = "Accounts")]
-        [ApiAuthorize(Roles = "ReadUserAccounts")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetUserAccounts(string userRef)
+        [Authorize(Policy = "LoopBack", Roles = "ReadUserAccounts")]
+        [HttpGet("accounts", Name = "Accounts")]
+        public async Task<IActionResult> GetUserAccounts(string userRef)
         {
             return Ok(await _apiService.Redirect($"/api/user/{userRef}/accounts"));
         }

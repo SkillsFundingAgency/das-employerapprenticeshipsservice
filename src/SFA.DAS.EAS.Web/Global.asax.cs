@@ -33,6 +33,7 @@ using SFA.DAS.NServiceBus.SqlServer.Configuration;
 using SFA.DAS.NServiceBus.Configuration.StructureMap;
 using StructureMap;
 using SFA.DAS.NServiceBus.Configuration;
+using SFA.DAS.EAS.Web;
 
 namespace SFA.DAS.EAS.Web
 {
@@ -93,7 +94,7 @@ namespace SFA.DAS.EAS.Web
         protected void Application_PreSendRequestHeaders(object sender, EventArgs e)
         {
             new HttpContextPolicyProvider(new List<IHttpContextPolicy> { new ResponseHeaderRestrictionPolicy() })
-                .Apply(new HttpContextWrapper(HttpContext.Current), PolicyConcern.HttpResponse);
+                .Apply(new HttpContextWrapper(HttpContextHelper.Current), PolicyConcern.HttpResponse);
         }
 
         protected void Application_Error(object sender, EventArgs e)

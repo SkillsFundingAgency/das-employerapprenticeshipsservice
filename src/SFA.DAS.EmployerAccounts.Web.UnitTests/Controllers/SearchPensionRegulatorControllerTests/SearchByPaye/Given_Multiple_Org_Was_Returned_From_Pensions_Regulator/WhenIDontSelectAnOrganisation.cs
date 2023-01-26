@@ -45,7 +45,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
             };
 
             var response = _controller.SearchPensionRegulator(It.IsAny<string>(), viewModel).Result;
-            var viewResponse = (ViewResult) response;
+            var viewResponse = (Microsoft.AspNetCore.Mvc.ViewResult) response;
 
             Assert.AreEqual(ControllerConstants.SearchPensionRegulatorResultsViewName, viewResponse.ViewName);
             Assert.AreEqual(true, viewResponse.ViewBag.InError);

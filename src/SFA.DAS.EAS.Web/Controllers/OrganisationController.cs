@@ -7,26 +7,26 @@ namespace SFA.DAS.EAS.Web.Controllers
 {
     [DasAuthorize]
     [RoutePrefix("accounts/{HashedAccountId}/organisations")]
-    public class OrganisationController : Controller
+    public class OrganisationController : Microsoft.AspNetCore.Mvc.Controller
     {
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("confirm")]
-        public async Task<ActionResult> Confirm()
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Confirm()
         {
             return Redirect(Url.EmployerAccountsAction("organisations/confirm"));
         }
 
         [HttpGet]
         [Route("nextStep")]
-        public async Task<ActionResult> OrganisationAddedNextSteps()
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> OrganisationAddedNextSteps()
         {
             return Redirect(Url.EmployerAccountsAction($"organisations/nextStep"));
         }
 
         [HttpGet]
         [Route("nextStepSearch")]
-        public async Task<ActionResult> OrganisationAddedNextStepsSearch()
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> OrganisationAddedNextStepsSearch()
         {
             return Redirect(Url.EmployerAccountsAction($"organisations/nextStepSearch"));
         }
@@ -34,28 +34,28 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpPost]
         [Route("nextStep")]
-        public async Task<ActionResult> GoToNextStep()
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> GoToNextStep()
         {
             return Redirect(Url.EmployerAccountsAction("nextStep"));
         }
 
         [HttpGet]
         [Route("review")]
-        public async Task<ActionResult> Review()
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Review()
         {
             return Redirect(Url.EmployerAccountsAction("organisations/review"));
         }
 
         [HttpPost]
         [Route("review")]
-        public async Task<ActionResult> ProcessReviewSelection()
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> ProcessReviewSelection()
         {
             return Redirect(Url.EmployerAccountsAction("organisations/review"));
         }
 
         [HttpPost]
         [Route("PostUpdateSelection")]
-        public ActionResult GoToPostUpdateSelection()
+        public Microsoft.AspNetCore.Mvc.ActionResult GoToPostUpdateSelection()
         {
             return Redirect(Url.EmployerAccountsAction("organisations/PostUpdateSelection"));
         }

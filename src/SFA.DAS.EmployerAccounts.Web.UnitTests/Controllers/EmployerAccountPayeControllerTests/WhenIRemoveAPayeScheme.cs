@@ -65,7 +65,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountPaye
 
             //Assert
             Assert.IsNotNull(actual);
-            var actualView = actual as ViewResult;
+            var actualView = actual as Microsoft.AspNetCore.Mvc.ViewResult;
             Assert.IsNotNull(actualView);
             Assert.AreEqual("Remove", actualView.ViewName);
         }

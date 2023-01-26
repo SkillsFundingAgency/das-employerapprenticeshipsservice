@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Web.Mvc;
 using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Common.Domain.Types;

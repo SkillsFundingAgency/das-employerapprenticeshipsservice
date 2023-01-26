@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Web.Http.Results;
-using System.Web.Http.Routing;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;

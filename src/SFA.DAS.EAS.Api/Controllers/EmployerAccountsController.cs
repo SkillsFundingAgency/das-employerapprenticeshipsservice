@@ -1,14 +1,15 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
-using System.Web.Http;
-using SFA.DAS.EAS.Account.Api.Attributes;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
-    [RoutePrefix("api/accounts")]
-    public class EmployerAccountsController : ApiController
+    [ApiController]
+    [Route("api/accounts")]
+    public class EmployerAccountsController : Microsoft.AspNetCore.Mvc.ControllerBase
     {
         private readonly AccountsOrchestrator _orchestrator;
         private readonly IEmployerAccountsApiService _apiService;
@@ -19,16 +20,15 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
             _apiService = apiService;
         }
 
-        [Route("", Name = "AccountsIndex")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
-        [HttpGet]   
-        public async Task<IHttpActionResult> GetAccounts(string toDate = null, int pageSize = 1000, int pageNumber = 1)
+        [Authorize(Policy = "LoopBack", Roles = "ReadAllEmployerAccountBalances")]
+        [HttpGet(Name = "AccountsIndex")]   
+        public async Task<IActionResult> GetAccounts(string toDate = null, int pageSize = 1000, int pageNumber = 1)
         {
             var result = await _orchestrator.GetAllAccountsWithBalances(toDate, pageSize, pageNumber);
             
             if (result.Status == HttpStatusCode.OK)
             {
-                result.Data.Data.ForEach(x => x.Href = Url.Route("GetAccount", new { hashedAccountId = x.AccountHashId }));
+                result.Data.Data.ForEach(x => x.Href = Url.Link("GetAccount", new { hashedAccountId = x.AccountHashId }));
                 return Ok(result.Data);
             }
         
@@ -36,10 +36,9 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
         }
 
 
-        [Route("{hashedAccountId}", Name = "GetAccount")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetAccount(string hashedAccountId)
+        [Authorize(Policy = "LoopBack", Roles = "ReadAllEmployerAccountBalances")]
+        [HttpGet("{hashedAccountId}", Name = "GetAccount")]
+        public async Task<IActionResult> GetAccount(string hashedAccountId)
         {
             var result = await _orchestrator.GetAccount(hashedAccountId);
 
@@ -51,10 +50,9 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
             return Ok(result.Data);
         }
 
-        [Route("internal/{accountId}", Name = "GetAccountByInternalId")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetAccount(long accountId)
+        [Authorize(Policy = "LoopBack", Roles = "ReadAllEmployerAccountBalances")]
+        [HttpGet("internal/{accountId}", Name = "GetAccountByInternalId")]
+        public async Task<IActionResult> GetAccount(long accountId)
         {
             var result = await _orchestrator.GetAccount(accountId);
 
@@ -66,18 +64,16 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
             return Ok(result.Data);
         }
 
-        [Route("{hashedAccountId}/users", Name = "GetAccountUsers")]
-        [ApiAuthorize(Roles = "ReadAllAccountUsers")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetAccountUsers(string hashedAccountId)
+        [Authorize(Policy = "LoopBack", Roles = "ReadAllAccountUsers")]
+        [HttpGet("{hashedAccountId}/users", Name = "GetAccountUsers")]
+        public async Task<IActionResult> GetAccountUsers(string hashedAccountId)
         {
             return Ok(await _apiService.Redirect($"/api/accounts/{hashedAccountId}/users"));
         }
 
-        [Route("internal/{accountId}/users", Name = "GetAccountUsersByInternalAccountId")]
-        [ApiAuthorize(Roles = "ReadAllAccountUsers")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetAccountUsers(long accountId)
+        [Authorize(Policy = "LoopBack", Roles = "ReadAllAccountUsers")]
+        [HttpGet("internal/{accountId}/users", Name = "GetAccountUsersByInternalAccountId")]
+        public async Task<IActionResult> GetAccountUsers(long accountId)
         {
             return Ok(await _apiService.Redirect($"/api/accounts/internal/{accountId}/users"));
         }

@@ -7,10 +7,10 @@ using SFA.DAS.EmployerFinance.Web.Orchestrators;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
 using System;
 using System.Threading.Tasks;
-using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
 using SFA.DAS.NLog.Logger;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers
 {

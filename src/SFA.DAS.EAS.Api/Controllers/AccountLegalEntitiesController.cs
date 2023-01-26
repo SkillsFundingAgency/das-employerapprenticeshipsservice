@@ -1,13 +1,14 @@
 ﻿using System.Threading.Tasks;
-using System.Web.Http;
-using SFA.DAS.EAS.Account.Api.Attributes;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
-    [ApiAuthorize(Roles = "ReadUserAccounts")]
-    [RoutePrefix("api/accountlegalentities")]
-    public class AccountLegalEntitiesController : ApiController
+    [ApiController]
+    [Authorize(Policy = "LoopBack", Roles = "ReadUserAccounts")]
+    [Route("api/accountlegalentities")]
+    public class AccountLegalEntitiesController : ControllerBase
     {      
         private readonly IEmployerAccountsApiService _apiService;
 
@@ -16,8 +17,8 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
             _apiService = apiService;
         }
 
-        [Route]
-        public async Task<IHttpActionResult> Get(int? pageSize, int? pageNumber)
+        [HttpGet]
+        public async Task<IActionResult> Get(int? pageSize, int? pageNumber)
         {
             return Ok(await _apiService.Redirect($"/api/accountlegalentities?{(pageSize.HasValue ? "pageSize=" + pageSize + "&" : "")}{(pageNumber.HasValue ? "pageNumber=" + pageNumber : "")}"));
         }

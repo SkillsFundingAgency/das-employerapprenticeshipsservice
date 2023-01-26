@@ -1,14 +1,15 @@
-﻿using System.Web.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
-    [RoutePrefix("api/ping")]
-    public class PingController : ApiController
+    [Route("api/ping")]
+    public class PingController : ControllerBase
     {
-        [Route("")]
-        public IHttpActionResult Get()
+        [HttpGet]
+        public IActionResult Get()
         {
-            return Ok();
+            return Ok(new { Hello = "World" });
         }
     }
 }

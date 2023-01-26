@@ -1,12 +1,13 @@
 ﻿using System.Threading.Tasks;
-using System.Web.Http;
-using SFA.DAS.EAS.Account.Api.Attributes;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
-    [RoutePrefix("api/accounts/{hashedAccountId}/levy")]
-    public class AccountLevyController : ApiController
+    [ApiController]
+    [Route("api/accounts/{hashedAccountId}/levy")]
+    public class AccountLevyController : ControllerBase
     {
         private readonly AccountsOrchestrator _orchestrator;
 
@@ -15,10 +16,9 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
             _orchestrator = orchestrator;
         }
 
-        [Route("", Name = "GetLevy")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
-        [HttpGet]
-        public async Task<IHttpActionResult> Index(string hashedAccountId)
+        [Authorize(Policy = "LoopBack", Roles = "ReadAllEmployerAccountBalances")]
+        [HttpGet(Name = "GetLevy")]
+        public async Task<IActionResult> Index(string hashedAccountId)
         {
             var result = await _orchestrator.GetLevy(hashedAccountId);
 
@@ -30,10 +30,9 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
             return Ok(result.Data);
         }
 
-        [Route("{payrollYear}/{payrollMonth}", Name = "GetLevyForPeriod")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetLevy(string hashedAccountId, string payrollYear, short payrollMonth)
+        [Authorize(Policy = "LoopBack", Roles = "ReadAllEmployerAccountBalances")]
+        [HttpGet("{payrollYear}/{payrollMonth}", Name = "GetLevyForPeriod")]
+        public async Task<IActionResult> GetLevy(string hashedAccountId, string payrollYear, short payrollMonth)
         {
             var result = await _orchestrator.GetLevy(hashedAccountId, payrollYear, payrollMonth);
 

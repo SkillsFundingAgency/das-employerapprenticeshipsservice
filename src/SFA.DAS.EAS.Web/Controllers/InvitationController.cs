@@ -6,10 +6,10 @@ using SFA.DAS.Authorization.Mvc.Attributes;
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [RoutePrefix("invitations")]
-    public class InvitationController : Controller
+    public class InvitationController : Microsoft.AspNetCore.Mvc.Controller
     {
         [Route("invite")]
-        public ActionResult Invite()
+        public Microsoft.AspNetCore.Mvc.ActionResult Invite()
         {
             return Redirect(Url.EmployerAccountsAction("invitations/invite", false));
         }
@@ -17,7 +17,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpGet]
         [AuthoriseActiveUser]
         [Route]
-        public ActionResult All()
+        public Microsoft.AspNetCore.Mvc.ActionResult All()
         {
             return Redirect(Url.EmployerAccountsAction("invitations", false));
         }
@@ -25,14 +25,14 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpGet]
         [DasAuthorize]
         [Route("view")]
-        public ActionResult Details(string invitationId)
+        public Microsoft.AspNetCore.Mvc.ActionResult Details(string invitationId)
         {
             return Redirect(Url.EmployerAccountsAction($"invitations/view?invitationId={invitationId}", false));
         }
 
         [HttpGet]
         [Route("register-and-accept")]
-        public ActionResult AcceptInvitationNewUser()
+        public Microsoft.AspNetCore.Mvc.ActionResult AcceptInvitationNewUser()
         {
             return Redirect(Url.EmployerAccountsAction("invitations/register-and-accept", false));
         }
@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("accept")]
-        public ActionResult AcceptInvitationExistingUser()
+        public Microsoft.AspNetCore.Mvc.ActionResult AcceptInvitationExistingUser()
         {
             return Redirect(Url.EmployerAccountsAction("invitations/accept", false));
         }

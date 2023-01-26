@@ -6,54 +6,54 @@ namespace SFA.DAS.EAS.Web.Controllers
 {
     [DasAuthorize]
     [RoutePrefix("accounts/{HashedAccountId}")]
-    public class EmployerAccountPayeController : Controller
+    public class EmployerAccountPayeController : Microsoft.AspNetCore.Mvc.Controller
     {
 
         [HttpGet]
         [Route("schemes")]
-        public ActionResult Index(string hashedAccountId)
+        public Microsoft.AspNetCore.Mvc.ActionResult Index(string hashedAccountId)
         {
             return Redirect(Url.EmployerAccountsAction("schemes"));
         }
 
         [HttpGet]
         [Route("schemes/next")]
-        public ActionResult NextSteps(string hashedAccountId)
+        public Microsoft.AspNetCore.Mvc.ActionResult NextSteps(string hashedAccountId)
         {
             return Redirect(Url.EmployerAccountsAction("schemes/next"));
         }
 
         [HttpGet]
         [Route("schemes/{empRef}/details")]
-        public ActionResult Details(string hashedAccountId, string empRef)
+        public Microsoft.AspNetCore.Mvc.ActionResult Details(string hashedAccountId, string empRef)
         {
             return Redirect(Url.EmployerAccountsAction($"schemes/{empRef}/details"));
         }
 
         [HttpGet]
         [Route("schemes/gatewayInform")]
-        public ActionResult GatewayInform(string hashedAccountId)
+        public Microsoft.AspNetCore.Mvc.ActionResult GatewayInform(string hashedAccountId)
         {
             return Redirect(Url.EmployerAccountsAction("schemes/gatewayInform"));
         }
         
         [HttpGet]
         [Route("schemes/gateway")]
-        public ActionResult GetGateway(string hashedAccountId)
+        public Microsoft.AspNetCore.Mvc.ActionResult GetGateway(string hashedAccountId)
         {
             return Redirect(Url.EmployerAccountsAction("schemes/gateway"));
         }
 
         [HttpGet]
         [Route("schemes/confirm")]
-        public ActionResult ConfirmPayeScheme(string hashedAccountId)
+        public Microsoft.AspNetCore.Mvc.ActionResult ConfirmPayeScheme(string hashedAccountId)
         {
             return Redirect(Url.EmployerAccountsAction($"/schemes/confirm{Request.Url?.Query}"));
         }
         
         [HttpGet]
         [Route("schemes/{empRef}/remove")]
-        public ActionResult Remove(string hashedAccountId, string empRef)
+        public Microsoft.AspNetCore.Mvc.ActionResult Remove(string hashedAccountId, string empRef)
         {
             return Redirect(Url.EmployerAccountsAction($"schemes/{empRef}/remove"));
         }

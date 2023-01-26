@@ -10,7 +10,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 {
     [Authorize]
     [RoutePrefix("healthcheck")]
-    public class HealthCheckController : Controller
+    public class HealthCheckController : Microsoft.AspNetCore.Mvc.Controller
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         }
 
         [Route]
-        public async Task<ActionResult> Index(GetHealthCheckQuery query)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Index(GetHealthCheckQuery query)
         {
             var response = await _mediator.SendAsync(query);
             var model = _mapper.Map<HealthCheckViewModel>(response);
@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route]
-        public async Task<ActionResult> Index(RunHealthCheckCommand command)
+        public async Task<Microsoft.AspNetCore.Mvc.ActionResult> Index(RunHealthCheckCommand command)
         {
             await _mediator.SendAsync(command);
 

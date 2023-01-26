@@ -10,7 +10,7 @@ using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerFinance.Web.Controllers
 {
-    public class BaseController : Controller
+    public class BaseController : Microsoft.AspNetCore.Mvc.Controller
     {
         public IAuthenticationService OwinWrapper;
 
@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             OwinWrapper = owinWrapper;
         }
 
-        protected override ViewResult View(string viewName, string masterName, object model)
+        protected override Microsoft.AspNetCore.Mvc.ViewResult View(string viewName, string masterName, object model)
         {
             var orchestratorResponse = model as OrchestratorResponse;
 
@@ -62,7 +62,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 
             throw new Exception($"Orchestrator response of type '{model.GetType()}' could not be handled.");
         }
-        private ViewResult ReturnViewResult(string viewName, string masterName, OrchestratorResponse orchestratorResponse)
+        private Microsoft.AspNetCore.Mvc.ViewResult ReturnViewResult(string viewName, string masterName, OrchestratorResponse orchestratorResponse)
         {
             return base.View(viewName, masterName, orchestratorResponse);
         }

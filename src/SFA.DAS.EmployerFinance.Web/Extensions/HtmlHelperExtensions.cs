@@ -15,15 +15,15 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
 {
     public static class HtmlHelperExtensions
     {
-        public static MvcHtmlString CdnLink(this HtmlHelper html, string folderName, string fileName)
+        public static Microsoft.AspNetCore.Html.HtmlString CdnLink(this HtmlHelper html, string folderName, string fileName)
         {
             var cdnLocation = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<EmployerFinanceConfiguration>().CdnBaseUrl;
 
             var trimCharacters = new char[] { '/' };
-            return new MvcHtmlString($"{cdnLocation.Trim(trimCharacters)}/{folderName.Trim(trimCharacters)}/{fileName.Trim(trimCharacters)}");
+            return new Microsoft.AspNetCore.Html.HtmlString($"{cdnLocation.Trim(trimCharacters)}/{folderName.Trim(trimCharacters)}/{fileName.Trim(trimCharacters)}");
         }
 
-        public static MvcHtmlString SetZenDeskLabels(this HtmlHelper html, params string[] labels)
+        public static Microsoft.AspNetCore.Html.HtmlString SetZenDeskLabels(this HtmlHelper html, params string[] labels)
         {
             var keywords = string.Join(",", labels
                .Where(label => !string.IsNullOrEmpty(label))
@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
                 + (!string.IsNullOrEmpty(keywords) ? keywords : "''")
                 + "] });</script>";
 
-            return MvcHtmlString.Create(apiCallString);
+            return Microsoft.AspNetCore.Html.HtmlString.Create(apiCallString);
         }
 
         private static string EscapeApostrophes(string input)
@@ -136,7 +136,7 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
             );
         }
 
-        public static MvcHtmlString GetContentByType(this HtmlHelper html, string type, bool useLegacyStyles = false)
+        public static Microsoft.AspNetCore.Html.HtmlString GetContentByType(this HtmlHelper html, string type, bool useLegacyStyles = false)
         {
             var mediator = DependencyResolver.Current.GetService<IMediator>();
 

@@ -113,7 +113,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             _claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, ControllerConstants.Tier2UserClaim));
 
             //Act
-            var result = _controller.SupportUserBanner(null) as PartialViewResult;
+            var result = _controller.SupportUserBanner(null) as Microsoft.AspNetCore.Mvc.PartialViewResult;
 
             //Assert
             Assert.AreEqual("_SupportUserBanner", result.ViewName);
@@ -129,7 +129,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             var model = new TestModel(null);
 
             //Act
-            var result = _controller.SupportUserBanner(model) as PartialViewResult;
+            var result = _controller.SupportUserBanner(model) as Microsoft.AspNetCore.Mvc.PartialViewResult;
 
             //Assert            
             Assert.AreEqual("_SupportUserBanner", result.ViewName);
@@ -148,7 +148,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 .Setup(m => m.GetAccountSummary(_hashedAccountId, It.IsAny<string>()))
                 .ReturnsAsync(_orchestratorAccountSummaryResponse);
             //Act
-            var result = _controller.SupportUserBanner(model) as PartialViewResult;
+            var result = _controller.SupportUserBanner(model) as Microsoft.AspNetCore.Mvc.PartialViewResult;
 
             //Assert
             mockEmployerTeamOrchestrator.Verify(m => m.GetAccountSummary(_hashedAccountId, It.IsAny<string>()), Times.Once);
@@ -167,7 +167,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 .ReturnsAsync(_orchestratorAccountSummaryResponse);
 
             //Act
-            var result = _controller.SupportUserBanner(model) as PartialViewResult;
+            var result = _controller.SupportUserBanner(model) as Microsoft.AspNetCore.Mvc.PartialViewResult;
 
             //Assert
             Assert.AreSame(_account, ((SupportUserBannerViewModel)result.Model).Account);
@@ -190,7 +190,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 .ReturnsAsync(new OrchestratorResponse<AccountSummaryViewModel> { Status = System.Net.HttpStatusCode.BadRequest });
 
             //Act
-            var result = _controller.SupportUserBanner(model) as PartialViewResult;
+            var result = _controller.SupportUserBanner(model) as Microsoft.AspNetCore.Mvc.PartialViewResult;
 
             //Assert
             Assert.IsNull(((SupportUserBannerViewModel)result.Model).Account);

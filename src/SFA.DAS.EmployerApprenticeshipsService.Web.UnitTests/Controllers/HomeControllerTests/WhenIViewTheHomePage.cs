@@ -1,12 +1,11 @@
-﻿using Moq;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.Controllers;
 using System;
 using System.Collections.Specialized;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
 {

@@ -109,7 +109,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         public async Task ThenIShouldGoToTheReturnUrl()
         {
             //Act
-            var result = await _employerAccountController.CreateAccount() as RedirectResult;
+            var result = await _employerAccountController.CreateAccount() as Microsoft.AspNetCore.Mvc.RedirectResult;
 
             //Assert
             Assert.AreEqual(ExpectedReturnUrl, result.Url);

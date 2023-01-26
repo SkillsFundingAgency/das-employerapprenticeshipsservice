@@ -3,10 +3,10 @@
 namespace SFA.DAS.EmployerFinance.Web.Controllers
 {
     [RoutePrefix("accounts/{HashedAccountId}")]
-    public class AccessDeniedController : Controller
+    public class AccessDeniedController : Microsoft.AspNetCore.Mvc.Controller
     {
         [Route("accessdenied", Name ="AccessDenied")]
-        public ActionResult Index()
+        public Microsoft.AspNetCore.Mvc.ActionResult Index()
         {
             return View();
         }

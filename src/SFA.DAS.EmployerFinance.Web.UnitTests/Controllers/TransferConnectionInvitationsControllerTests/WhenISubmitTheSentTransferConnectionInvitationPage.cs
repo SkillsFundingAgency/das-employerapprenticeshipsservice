@@ -1,7 +1,6 @@
-﻿using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
-using MediatR;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Web.Controllers;

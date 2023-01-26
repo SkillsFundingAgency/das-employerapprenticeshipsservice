@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             };
 
             //Act
-            var result = _controller.Row1Panel1(model) as PartialViewResult;
+            var result = _controller.Row1Panel1(model) as Microsoft.AspNetCore.Mvc.PartialViewResult;
 
             //Assert
             Assert.IsNotNull(result);

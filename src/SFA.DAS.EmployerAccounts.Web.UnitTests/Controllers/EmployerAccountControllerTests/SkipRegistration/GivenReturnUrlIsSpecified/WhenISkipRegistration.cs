@@ -78,7 +78,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         public async Task ThenIShouldGoToTheReturnUrl()
         {
             //Act
-            var result = await _employerAccountController.SkipRegistration() as RedirectResult;
+            var result = await _employerAccountController.SkipRegistration() as Microsoft.AspNetCore.Mvc.RedirectResult;
 
             //Assert
             Assert.AreEqual(ExpectedReturnUrl, result.Url);

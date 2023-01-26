@@ -1,12 +1,13 @@
 ﻿using System.Threading.Tasks;
-using System.Web.Http;
-using SFA.DAS.EAS.Account.Api.Attributes;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
-    [RoutePrefix("api/accounts/{hashedAccountId}/legalEntities/{hashedlegalEntityId}/agreements")]
-    public class EmployerAgreementController : ApiController
+    [ApiController]
+    [Route("api/accounts/{hashedAccountId}/legalEntities/{hashedlegalEntityId}/agreements")]
+    public class EmployerAgreementController : Microsoft.AspNetCore.Mvc.ControllerBase
     {
         private readonly IEmployerAccountsApiService _apiService;
 
@@ -15,10 +16,9 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
             _apiService = apiService;
         }
 
-        [Route("{hashedAgreementId}", Name = "AgreementById")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAgreements")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetAgreement(
+        [Authorize(Policy = "LoopBack", Roles = "ReadAllEmployerAgreements")]
+        [HttpGet("{hashedAgreementId}", Name = "AgreementById")]
+        public async Task<IActionResult> GetAgreement(
             string hashedAccountId,
             string hashedLegalEntityId,
             string hashedAgreementId)

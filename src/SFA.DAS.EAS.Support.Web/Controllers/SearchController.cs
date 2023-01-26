@@ -5,7 +5,7 @@ using SFA.DAS.EAS.Support.ApplicationServices.Services;
 namespace SFA.DAS.EAS.Support.Web.Controllers
 {
     [Authorize(Roles = "das-support-portal")]
-    public class SearchController : ApiController
+    public class SearchController : Microsoft.AspNetCore.Mvc.ControllerBase
     {
         private readonly IAccountHandler _handler;
 

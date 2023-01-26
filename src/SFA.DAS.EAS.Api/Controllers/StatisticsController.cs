@@ -1,13 +1,14 @@
 ﻿using System.Threading.Tasks;
-using System.Web.Http;
-using SFA.DAS.EAS.Account.Api.Attributes;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
-    [ApiAuthorize(Roles = "ReadUserAccounts")]
-    [RoutePrefix("api/statistics")]
-    public class StatisticsController : ApiController
+    [ApiController]
+    [Authorize(Policy = "LoopBack", Roles = "ReadUserAccounts")]
+    [Route("api/statistics")]
+    public class StatisticsController : ControllerBase
     {
         private readonly StatisticsOrchestrator _statisticsOrchestrator;
 
@@ -16,8 +17,8 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
             _statisticsOrchestrator = statisticsOrchestrator;
         }
 
-        [Route("")]
-        public async Task<IHttpActionResult> GetStatistics()
+        [HttpGet]
+        public async Task<IActionResult> GetStatistics()
         {
             return Ok(await _statisticsOrchestrator.Get());
         }

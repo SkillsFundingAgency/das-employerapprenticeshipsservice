@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
         private string _expectedLastName;
         private string _expectedReturnUrl;
         private string _expectedCorrelationId;
-        private ActionResult _actualResult;
+        private Microsoft.AspNetCore.Mvc.ActionResult _actualResult;
 
         [SetUp]
         public async Task Arrange()

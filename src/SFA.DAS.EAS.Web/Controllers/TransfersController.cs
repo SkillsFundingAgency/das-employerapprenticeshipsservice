@@ -6,10 +6,10 @@ namespace SFA.DAS.EAS.Web.Controllers
 {
     [DasAuthorize]
     [RoutePrefix("accounts/{HashedAccountId}/transfers")]
-    public class TransfersController : Controller
+    public class TransfersController : Microsoft.AspNetCore.Mvc.Controller
     {
         [Route]
-        public ActionResult Index()
+        public Microsoft.AspNetCore.Mvc.ActionResult Index()
         {
             return Redirect(Url.EmployerFinanceAction("transfers/connections"));
         }

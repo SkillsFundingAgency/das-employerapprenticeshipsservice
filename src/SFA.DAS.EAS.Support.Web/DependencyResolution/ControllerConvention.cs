@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Support.Web.DependencyResolution
         public void ScanTypes(TypeSet types, Registry registry)
         {
             types.FindTypes(TypeClassification.Concretes | TypeClassification.Closed)
-                  .Where(t => t.CanBeCastTo<Controller>())
+                  .Where(t => t.CanBeCastTo<Microsoft.AspNetCore.Mvc.Controller>())
                   .ForEach(t => registry.For(t).LifecycleIs(new UniquePerRequestLifecycle()));
 
         }

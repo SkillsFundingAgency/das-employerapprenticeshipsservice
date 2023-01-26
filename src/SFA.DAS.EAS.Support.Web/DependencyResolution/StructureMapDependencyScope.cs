@@ -1,3 +1,4 @@
+using SFA.DAS.EAS.Support.Web;
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="StructureMapDependencyScope.cs" company="Web Advanced">
 // Copyright 2012 Web Advanced (www.webadvanced.com)
@@ -75,9 +76,9 @@ namespace SFA.DAS.EAS.Support.Web.DependencyResolution {
             get
             {
                 var ctx = Container.TryGetInstance<HttpContextBase>();
-                if (ctx == null && System.Web.HttpContext.Current == null)
+                if (ctx == null && HttpContextHelper.Current == null)
                     return null;
-                return ctx ?? new HttpContextWrapper(System.Web.HttpContext.Current);
+                return ctx ?? new HttpContextWrapper(HttpContextHelper.Current);
             }
         }
 

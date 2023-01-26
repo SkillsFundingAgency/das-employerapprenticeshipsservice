@@ -9,9 +9,9 @@ using SFA.DAS.EmployerFinance.Web.Helpers;
 
 namespace SFA.DAS.EmployerFinance.Web.Filters
 {
-    public class LevyEmployerTypeOnly : ActionFilterAttribute
+    public class LevyEmployerTypeOnly : Microsoft.AspNetCore.Mvc.Filters.ActionFilterAttribute
     {
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        public override void OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext filterContext)
         {
             try
             {
@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerFinance.Web.Filters
 
                 if(string.IsNullOrWhiteSpace(hashedAccountId))
                 {
-                    filterContext.Result = new ViewResult { ViewName = ControllerConstants.BadRequestViewName };
+                    filterContext.Result = new Microsoft.AspNetCore.Mvc.ViewResult { ViewName = ControllerConstants.BadRequestViewName };
                     return;
                 }
                 
@@ -55,7 +55,7 @@ namespace SFA.DAS.EmployerFinance.Web.Filters
             }
             catch (Exception)
             {
-                filterContext.Result = new ViewResult { ViewName = ControllerConstants.BadRequestViewName };
+                filterContext.Result = new Microsoft.AspNetCore.Mvc.ViewResult { ViewName = ControllerConstants.BadRequestViewName };
             }
         }
     }

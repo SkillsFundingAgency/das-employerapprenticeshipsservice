@@ -1,13 +1,14 @@
 ﻿using System.Threading.Tasks;
-using System.Web;
-using System.Web.Http;
-using SFA.DAS.EAS.Account.Api.Attributes;
+using System.Net;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
-    [RoutePrefix("api/accounts/{hashedAccountId}/payeschemes")]
-    public class AccountPayeSchemesController : ApiController
+    [ApiController]
+    [Route("api/accounts/{hashedAccountId}/payeschemes")]
+    public class AccountPayeSchemesController : Microsoft.AspNetCore.Mvc.ControllerBase
     {
         private readonly IEmployerAccountsApiService _apiService;
 
@@ -16,20 +17,18 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
             _apiService = apiService;
         }
 
-        [Route("", Name = "GetPayeSchemes")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetPayeSchemes(string hashedAccountId)
+        [Authorize(Policy = "LoopBack", Roles = "ReadAllEmployerAccountBalances")]
+        [HttpGet(Name = "GetPayeSchemes")]
+        public async Task<IActionResult> GetPayeSchemes(string hashedAccountId)
         {
             return Ok(await _apiService.Redirect($"/api/accounts/{hashedAccountId}/payeschemes"));
         }
 
-        [Route("{payeschemeref}", Name = "GetPayeScheme")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
+        [Authorize(Policy = "LoopBack", Roles = "ReadAllEmployerAccountBalances")]
+        [HttpGet("{payeschemeref}", Name = "GetPayeScheme")]
+        public async Task<IActionResult> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
         {
-            return Ok(await _apiService.Redirect($"/api/accounts/{hashedAccountId}/payeschemes/{HttpUtility.UrlEncode(payeSchemeRef)}"));
+            return Ok(await _apiService.Redirect($"/api/accounts/{hashedAccountId}/payeschemes/{WebUtility.UrlEncode(payeSchemeRef)}"));
         }
     }
 }

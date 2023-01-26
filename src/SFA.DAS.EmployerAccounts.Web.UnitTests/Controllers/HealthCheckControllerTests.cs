@@ -23,8 +23,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
         {
             return RunAsync(f => f.Index(), (f, r) =>
             {
-                r.Should().NotBeNull().And.Match<ViewResult>(a => a.ViewName == "");
-                r.As<ViewResult>().Model.Should().NotBeNull().And.Match<HealthCheckViewModel>(m => m.HealthCheck == f.GetHealthCheckQueryResponse.HealthCheck);
+                r.Should().NotBeNull().And.Match<Microsoft.AspNetCore.Mvc.ViewResult>(a => a.ViewName == "");
+                r.As<Microsoft.AspNetCore.Mvc.ViewResult>().Model.Should().NotBeNull().And.Match<HealthCheckViewModel>(m => m.HealthCheck == f.GetHealthCheckQueryResponse.HealthCheck);
             });
         }
 
@@ -53,7 +53,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             HealthCheckController = new HealthCheckController(Mediator.Object, Mapper);
         }
 
-        public Task<ActionResult> Index()
+        public Task<Microsoft.AspNetCore.Mvc.ActionResult> Index()
         {
             GetHealthCheckQuery = new GetHealthCheckQuery();
 
@@ -67,7 +67,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             return HealthCheckController.Index(GetHealthCheckQuery);
         }
 
-        public Task<ActionResult> PostIndex()
+        public Task<Microsoft.AspNetCore.Mvc.ActionResult> PostIndex()
         {
             RunHealthCheckCommand = new RunHealthCheckCommand();
 

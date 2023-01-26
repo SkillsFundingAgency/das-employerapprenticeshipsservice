@@ -1,13 +1,14 @@
 ﻿using System.Threading.Tasks;
-using System.Web.Http;
-using SFA.DAS.EAS.Account.Api.Attributes;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
-    [ApiAuthorize(Roles = "ReadUserAccounts")]
-    [RoutePrefix("api/user")]
-    public class UserController : ApiController
+    [ApiController]
+    [Authorize(Policy = "LoopBack", Roles = "ReadUserAccounts")]
+    [Route("api/user")]
+    public class UserController : ControllerBase
     {
         private readonly IEmployerAccountsApiService _apiService;
 
@@ -16,8 +17,8 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
             _apiService = apiService;
         }
 
-        [Route("")]
-        public async Task<IHttpActionResult> Get(string email)
+        [HttpGet]
+        public async Task<IActionResult> Get(string email)
         {
             try
             {

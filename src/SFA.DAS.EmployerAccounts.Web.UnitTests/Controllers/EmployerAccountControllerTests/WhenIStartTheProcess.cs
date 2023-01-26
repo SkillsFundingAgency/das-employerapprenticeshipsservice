@@ -124,7 +124,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
             //Assert
             Assert.IsNotNull(actual);
-            var actualResult = actual as RedirectResult;
+            var actualResult = actual as Microsoft.AspNetCore.Mvc.RedirectResult;
             Assert.IsNotNull(actualResult);
             Assert.AreEqual(ExpectedRedirectUrl, actualResult.Url);
         }

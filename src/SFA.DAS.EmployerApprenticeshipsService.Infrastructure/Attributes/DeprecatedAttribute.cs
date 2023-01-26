@@ -1,6 +1,6 @@
-﻿using NLog;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
+using NLog;
 using System;
-using System.Web.Mvc;
 
 namespace SFA.DAS.EAS.Infrastructure.Attributes
 {

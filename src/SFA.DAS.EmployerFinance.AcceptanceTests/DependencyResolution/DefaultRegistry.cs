@@ -1,5 +1,4 @@
-﻿using System.Web;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
 using SFA.DAS.Authentication;
 using SFA.DAS.EAS.Account.Api.Client;
@@ -11,6 +10,7 @@ using SFA.DAS.EmployerFinance.Web.Logging;
 using SFA.DAS.EmployerFinance.Web.Orchestrators;
 using SFA.DAS.NLog.Logger;
 using StructureMap;
+using SFA.DAS.EmployerFinance.AcceptanceTests;
 
 namespace SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution
 {
@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution
     {
         public DefaultRegistry()
         {
-            For<ILoggingContext>().Use(c => HttpContext.Current == null ? null : new LoggingContext(new HttpContextWrapper(HttpContext.Current)));
+            For<ILoggingContext>().Use(c => HttpContextHelper.Current == null ? null : new LoggingContext(new HttpContextWrapper(HttpContextHelper.Current)));
             For<ITestTransactionRepository>().Use<TestTransactionRepository>();
 
             RegisterEmployerAccountTransactionsController();

@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
     public class DasEmployerAccountsAuthorizationFilterTests
     {
         private Mock<IAuthenticationService> _mockAuthenticationService;
-        public ActionExecutingContext ActionExecutingContext { get; set; }
+        public Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext ActionExecutingContext { get; set; }
         public Mock<ActionDescriptor> MockActionDescriptor { get; set; }
         public AuthorizationFilter AuthorizationFilter { get; set; }
         public Mock<IAuthorizationService> MockAuthorizationService { get; set; }
@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
         {
             _mockAuthenticationService = new Mock<IAuthenticationService>();
             MockActionDescriptor = new Mock<ActionDescriptor>();
-            ActionExecutingContext = new ActionExecutingContext { ActionDescriptor = MockActionDescriptor.Object };
+            ActionExecutingContext = new Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext { ActionDescriptor = MockActionDescriptor.Object };
             MockAuthorizationService = new Mock<IAuthorizationService>();
             ActionOptions = new string[0];
             ControllerOptions = new string[0];
@@ -74,7 +74,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
             AuthorizationFilter.OnActionExecuting(ActionExecutingContext);
 
             //Assert
-            var httpStatusCodeResult = ActionExecutingContext.Result as HttpStatusCodeResult;
+            var httpStatusCodeResult = ActionExecutingContext.Result as Microsoft.AspNetCore.Mvc.StatusCodeResult;
             Assert.That(httpStatusCodeResult, Is.Not.Null);
             Assert.AreEqual(httpStatusCodeResult.StatusCode, (int)HttpStatusCode.Forbidden);
         }
