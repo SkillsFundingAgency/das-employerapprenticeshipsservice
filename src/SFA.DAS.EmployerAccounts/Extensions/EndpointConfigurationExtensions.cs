@@ -3,7 +3,6 @@ using NServiceBus;
 using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.Notifications.Messages.Commands;
-using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.Configuration;
 using SFA.DAS.NServiceBus.Configuration.AzureServiceBus;
 using StructureMap;
@@ -14,7 +13,7 @@ namespace SFA.DAS.EmployerAccounts.Extensions
     {
         public static EndpointConfiguration UseAzureServiceBusTransport(this EndpointConfiguration config, Func<string> connectionStringBuilder, IContainer container)
         {
-            var isDevelopment = false; // container.GetInstance<IEnvironmentService>().IsCurrent(DasEnv.LOCAL);
+            var isDevelopment = container.GetInstance<IEnvironmentService>().IsCurrent(DasEnv.LOCAL);
 
             if (isDevelopment)
             {
