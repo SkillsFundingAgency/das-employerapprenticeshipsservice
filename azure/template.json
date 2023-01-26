@@ -138,6 +138,9 @@
         "utcValue": {
             "type": "string",
             "defaultValue": "[utcNow()]"
+        },
+        "tempWorkerAppServicePlan": {
+            "type": "string"
         }
     },
     "variables": {
@@ -547,10 +550,10 @@
                         "value": "[variables('workerAppServiceName')]"
                     },
                     "appServicePlanName": {
-                        "value": "[variables('workerAppServicePlanName')]"
+                        "value": "[parameters('tempWorkerAppServicePlan')]"
                     },
                     "appServicePlanResourceGroup": {
-                        "value": "[variables('resourceGroupName')]"
+                        "value": "[parameters('sharedEnvResourceGroup')]"
                     },
                     "subnetResourceId": {
                         "value": "[reference(concat(parameters('accountsWorkerSubnetObject').name, '-', parameters('utcValue'))).outputs.SubnetResourceId.value]"
