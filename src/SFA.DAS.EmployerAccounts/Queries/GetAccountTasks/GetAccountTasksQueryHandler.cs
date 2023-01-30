@@ -18,7 +18,7 @@ public class GetAccountTasksQueryHandler : IRequestHandler<GetAccountTasksQuery,
 
     public async Task<GetAccountTasksResponse> Handle(GetAccountTasksQuery message, CancellationToken cancellationToken)
     {
-        await ValidateMessage(message);
+        ValidateMessage(message);
 
         var accountTasks = await GetTasks(message);
 
@@ -30,12 +30,13 @@ public class GetAccountTasksQueryHandler : IRequestHandler<GetAccountTasksQuery,
 
     private async Task<AccountTask[]> GetTasks(GetAccountTasksQuery message)
     {
-        var apprenticeshipEmployerType = 
-            message.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy 
-                ? TasksApi.ApprenticeshipEmployerType.Levy 
+        var apprenticeshipEmployerType =
+            message.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy
+                ? TasksApi.ApprenticeshipEmployerType.Levy
                 : TasksApi.ApprenticeshipEmployerType.NonLevy;
 
-        var tasks = await _taskService.GetAccountTasks(message.AccountId, message.ExternalUserId, apprenticeshipEmployerType);
+        var tasks = await _taskService.GetAccountTasks(message.AccountId, message.ExternalUserId,
+            apprenticeshipEmployerType);
 
         var accountTasks = tasks.Select(x => new AccountTask
         {
@@ -46,9 +47,9 @@ public class GetAccountTasksQueryHandler : IRequestHandler<GetAccountTasksQuery,
         return accountTasks;
     }
 
-    private async Task ValidateMessage(GetAccountTasksQuery message)
+    private void ValidateMessage(GetAccountTasksQuery message)
     {
-        var validationResults = await _validator.ValidateAsync(message);
+        var validationResults = _validator.Validate(message);
 
         if (!validationResults.IsValid())
         {

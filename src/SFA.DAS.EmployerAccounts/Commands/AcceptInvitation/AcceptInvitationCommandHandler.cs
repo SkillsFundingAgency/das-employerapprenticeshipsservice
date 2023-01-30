@@ -47,7 +47,7 @@ public class AcceptInvitationCommandHandler : IRequestHandler<AcceptInvitationCo
     {
         _logger.LogInformation($"Accepting Invitation '{message.Id}'");
 
-        var validationResult = await _validator.ValidateAsync(message);
+        var validationResult = _validator.Validate(message);
 
         if (!validationResult.IsValid())
             throw new InvalidRequestException(validationResult.ValidationDictionary);

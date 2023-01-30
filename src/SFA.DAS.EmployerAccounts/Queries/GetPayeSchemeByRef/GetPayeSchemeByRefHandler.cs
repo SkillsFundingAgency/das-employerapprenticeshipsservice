@@ -16,7 +16,7 @@ public class GetPayeSchemeByRefHandler : IRequestHandler<GetPayeSchemeByRefQuery
 
     public async Task<GetPayeSchemeByRefResponse> Handle(GetPayeSchemeByRefQuery message, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(message);
+        var validationResult = _validator.Validate(message);
 
         if (!validationResult.IsValid())
         {

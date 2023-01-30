@@ -50,10 +50,9 @@ public class
         _eventPublisher = eventPublisher;
     }
 
-    public async Task<CreateUserAccountCommandResponse> Handle(CreateUserAccountCommand message,
-        CancellationToken cancellationToken)
+    public async Task<CreateUserAccountCommandResponse> Handle(CreateUserAccountCommand message, CancellationToken cancellationToken)
     {
-        await ValidateMessage(message);
+        ValidateMessage(message);
 
         var externalUserId = Guid.Parse(message.ExternalUserId);
 
@@ -110,9 +109,9 @@ public class
         });
     }
 
-    private async Task ValidateMessage(CreateUserAccountCommand message)
+    private void ValidateMessage(CreateUserAccountCommand message)
     {
-        var validationResult = await _validator.ValidateAsync(message);
+        var validationResult = _validator.Validate(message);
 
         if (!validationResult.IsValid())
             throw new InvalidRequestException(validationResult.ValidationDictionary);
