@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
@@ -10,8 +9,8 @@ using Microsoft.Extensions.Hosting;
 using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.Microsoft;
 using SFA.DAS.Authorization.Mvc.Extensions;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
-using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Filters;
 using SFA.DAS.EmployerAccounts.Web.Handlers;
 using SFA.DAS.EmployerAccounts.Web.StartupExtensions;
@@ -103,7 +102,8 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             services.AddAuthenticationServices();
 
-            services.AddMediatR(typeof(Startup).Assembly);
+            services.AddMediatorValidators();
+            services.AddMediatR(typeof(GetEmployerAccountByHashedIdQuery));
 
             if (_configuration["EmployerAccountsConfiguration:UseGovSignIn"] != null &&
                 _configuration["EmployerAccountsConfiguration:UseGovSignIn"]

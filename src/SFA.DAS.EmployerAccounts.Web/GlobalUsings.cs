@@ -11,6 +11,7 @@ global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Logging;
 global using SFA.DAS.Authentication;
 global using SFA.DAS.EmployerAccounts.Configuration;
+global using SFA.DAS.EmployerAccounts.Exceptions;
 global using SFA.DAS.EmployerAccounts.Interfaces;
 global using SFA.DAS.EmployerAccounts.Models;
 global using SFA.DAS.EmployerAccounts.Models.Account;

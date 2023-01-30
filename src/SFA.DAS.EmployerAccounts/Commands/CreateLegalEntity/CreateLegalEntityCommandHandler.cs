@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using SFA.DAS.Audit.Types;
-using SFA.DAS.Authorization.Services;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
@@ -11,9 +10,7 @@ using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus.Services;
-using SFA.DAS.Validation;
 using Entity = SFA.DAS.Audit.Types.Entity;
-
 
 namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 
@@ -25,7 +22,6 @@ public class CreateLegalEntityCommandHandler : IRequestHandler<CreateLegalEntity
     private readonly IMediator _mediator;
     private readonly IGenericEventFactory _genericEventFactory;
     private readonly ILegalEntityEventFactory _legalEntityEventFactory;
-    private readonly IAuthorizationService _authorizationService;
     private readonly IEventPublisher _eventPublisher;
     private readonly IHashingService _hashingService;
     private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityPublicHashingService;
@@ -41,8 +37,7 @@ public class CreateLegalEntityCommandHandler : IRequestHandler<CreateLegalEntity
         IHashingService hashingService,
         IAccountLegalEntityPublicHashingService accountLegalEntityPublicHashingService,
         IEmployerAgreementRepository employerAgreementRepository,
-        IValidator<CreateLegalEntityCommand> validator,
-        IAuthorizationService authorizationService)
+        IValidator<CreateLegalEntityCommand> validator)
     {
         _accountRepository = accountRepository;
         _membershipRepository = membershipRepository;
@@ -54,7 +49,6 @@ public class CreateLegalEntityCommandHandler : IRequestHandler<CreateLegalEntity
         _accountLegalEntityPublicHashingService = accountLegalEntityPublicHashingService;
         _employerAgreementRepository = employerAgreementRepository;
         _validator = validator;
-        _authorizationService = authorizationService;
     }
 
     public async Task<CreateLegalEntityCommandResponse> Handle(CreateLegalEntityCommand message, CancellationToken cancellationToken)

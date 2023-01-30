@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -9,32 +10,26 @@ using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount;
+using SFA.DAS.EmployerAccounts.Commands.CreateAccount;
+using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
+using SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
+using SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
+using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
-using SFA.DAS.EmployerAccounts.Validation;
+using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
+using SFA.DAS.EmployerAccounts.ServiceRegistration;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.StartupExtensions;
+using SFA.DAS.NServiceBus.Services;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Temp.AppStart;
 
 public class WhenAddingServicesToTheContainer
 {
-    private readonly ServiceCollection _serviceCollection = new();
-    private ServiceProvider _provider;
-
-    [SetUp]
-    public void Setup()
-    {
-        var mockHostingEnvironment = new Mock<IHostingEnvironment>();
-        mockHostingEnvironment.Setup(x => x.EnvironmentName).Returns("Test");
-
-        var startup = new Startup(GenerateConfiguration(), new Mock<IWebHostEnvironment>().Object);
-        startup.ConfigureServices(_serviceCollection);
-        _serviceCollection.AddSingleton(_ => mockHostingEnvironment.Object);
-        _provider = _serviceCollection.BuildServiceProvider();
-    }
-
     [TestCase(typeof(EmployerAccountOrchestrator))]
     [TestCase(typeof(EmployerAccountPayeOrchestrator))]
     [TestCase(typeof(EmployerAgreementOrchestrator))]
@@ -57,7 +52,7 @@ public class WhenAddingServicesToTheContainer
         var startup = new Startup(GenerateConfiguration(), new Mock<IWebHostEnvironment>().Object);
         var serviceCollection = new ServiceCollection();
         startup.ConfigureServices(serviceCollection);
-        
+
         serviceCollection.AddSingleton(_ => mockHostingEnvironment.Object);
         var provider = serviceCollection.BuildServiceProvider();
 
@@ -65,19 +60,41 @@ public class WhenAddingServicesToTheContainer
         Assert.IsNotNull(type);
     }
 
-    [TestCase(typeof(IValidator<GetEmployerAccountByHashedIdQuery>))]
-    public void Then_The_Dependencies_Are_Correctly_Resolved_For_Validators(Type toResolve)
+    [TestCase(typeof(IRequestHandler<GetEmployerAccountByHashedIdQuery, GetEmployerAccountByHashedIdResponse>))]
+    [TestCase(typeof(IRequestHandler<RenameEmployerAccountCommand, Unit>))]
+    [TestCase(typeof(IRequestHandler<CreateLegalEntityCommand, CreateLegalEntityCommandResponse>))]
+    [TestCase(typeof(IRequestHandler<AddPayeToAccountCommand, Unit>))]
+    [TestCase(typeof(IRequestHandler<CreateAccountCommand, CreateAccountCommandResponse>))]
+    [TestCase(typeof(IRequestHandler<GetUserAccountsQuery, GetUserAccountsQueryResponse>))]
+    [TestCase(typeof(IRequestHandler<CreateUserAccountCommand, CreateUserAccountCommandResponse>))]
+    public void Then_The_Dependencies_Are_Correctly_Resolved_For_Handlers(Type toResolve)
     {
-
         var mockHostingEnvironment = new Mock<IHostingEnvironment>();
         mockHostingEnvironment.Setup(x => x.EnvironmentName).Returns("Test");
 
         var config = GenerateConfiguration();
         var serviceCollection = new ServiceCollection();
+
         serviceCollection.AddSingleton(mockHostingEnvironment.Object);
-        serviceCollection.AddScoped(_=> new Mock<IMembershipRepository>().Object);
+        serviceCollection.AddSingleton(Mock.Of<IMembershipRepository>());
+        serviceCollection.AddSingleton(Mock.Of<IAccountRepository>());
+        serviceCollection.AddSingleton(Mock.Of<IEmployerAccountRepository>());
+        serviceCollection.AddSingleton(Mock.Of<IEmployerSchemesRepository>());
+        serviceCollection.AddSingleton(Mock.Of<IEmployerAgreementRepository>());
+        serviceCollection.AddSingleton(Mock.Of<IPayeRepository>());
+        serviceCollection.AddSingleton(Mock.Of<IUserAccountRepository>());
+        serviceCollection.AddSingleton(Mock.Of<IGenericEventFactory>());
+        serviceCollection.AddSingleton(Mock.Of<ILegalEntityEventFactory>());
+        serviceCollection.AddSingleton(Mock.Of<IPayeSchemeEventFactory>());
+        serviceCollection.AddSingleton(Mock.Of<IAccountEventFactory>());
+        serviceCollection.AddSingleton(Mock.Of<IEventPublisher>());
+
         serviceCollection.AddConfigurationOptions(config);
-        serviceCollection.AddMediatorValidation();
+        serviceCollection.AddMediatR(typeof(GetEmployerAccountByHashedIdQuery));
+        serviceCollection.AddMediatorValidators();
+        var employerAccountsConfiguration = config.Get<EmployerAccountsConfiguration>();
+        serviceCollection.AddHashingServices(employerAccountsConfiguration);
+        //serviceCollection.StartNServiceBus(employerAccountsConfiguration, true);
 
         var provider = serviceCollection.BuildServiceProvider();
 
@@ -89,7 +106,16 @@ public class WhenAddingServicesToTheContainer
     [Test]
     public void Then_Resolves_Authorization_Handlers()
     {
-        var type = _provider.GetServices(typeof(IAuthorizationHandler)).ToList();
+        var mockHostingEnvironment = new Mock<IHostingEnvironment>();
+        mockHostingEnvironment.Setup(x => x.EnvironmentName).Returns("Test");
+
+        var startup = new Startup(GenerateConfiguration(), new Mock<IWebHostEnvironment>().Object);
+        var serviceCollection = new ServiceCollection();
+        startup.ConfigureServices(serviceCollection);
+        serviceCollection.AddSingleton(_ => mockHostingEnvironment.Object);
+        var provider = serviceCollection.BuildServiceProvider();
+
+        var type = provider.GetServices(typeof(IAuthorizationHandler)).ToList();
 
         Assert.IsNotNull(type);
         type.Count.Should().Be(1);
