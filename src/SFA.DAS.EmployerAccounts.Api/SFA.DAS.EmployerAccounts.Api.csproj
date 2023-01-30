@@ -37,7 +37,6 @@
 		<PackageReference Include="SFA.DAS.Logging">
 			<Version>1.0.5</Version>
 		</PackageReference>
-		<PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
 		<PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="15.0.25" />
 		<PackageReference Include="SFA.DAS.OidcMiddleware" Version="2.0.0.61553" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework" Version="9.0.13" />
