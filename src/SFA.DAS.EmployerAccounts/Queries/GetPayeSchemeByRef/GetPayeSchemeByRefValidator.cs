@@ -10,7 +10,7 @@ public class GetPayeSchemeByRefValidator : IValidator<GetPayeSchemeByRefQuery>
 
         if (string.IsNullOrEmpty(item.HashedAccountId))
         {
-            validationResult.AddError(nameof(item.Ref), "HashedAccountId has not been supplied");
+            validationResult.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
         }
 
         if (string.IsNullOrEmpty(item.Ref))
@@ -22,6 +22,6 @@ public class GetPayeSchemeByRefValidator : IValidator<GetPayeSchemeByRefQuery>
 
     public Task<ValidationResult> ValidateAsync(GetPayeSchemeByRefQuery item)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

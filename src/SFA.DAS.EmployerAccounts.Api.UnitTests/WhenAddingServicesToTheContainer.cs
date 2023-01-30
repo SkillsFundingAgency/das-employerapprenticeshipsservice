@@ -8,7 +8,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountDetail;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementById;
+using SFA.DAS.EmployerAccounts.Queries.GetMinimumSignedAgreementVersion;
+using SFA.DAS.EmployerAccounts.Queries.GetPagedEmployerAccounts;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
+using SFA.DAS.EmployerAccounts.Queries.GetTeamMembers;
+using SFA.DAS.EmployerAccounts.Queries.GetTeamMembersWhichReceiveNotifications;
+using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
 using SFA.DAS.EmployerAccounts.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Api.UnitTests;
@@ -40,6 +48,8 @@ public class WhenAddingServicesToTheContainer
     }
 
     [TestCase(typeof(IRequestHandler<GetPayeSchemeByRefQuery, GetPayeSchemeByRefResponse>))]
+    [TestCase(typeof(IRequestHandler<GetUserAccountsQuery, GetUserAccountsQueryResponse>))]
+    [TestCase(typeof(IRequestHandler<GetAccountPayeSchemesQuery, GetAccountPayeSchemesResponse>))]
     public void Then_The_Dependencies_Are_Correctly_Resolved_For_Handlers(Type toResolve)
     {
         var type = _provider.GetService(toResolve);
@@ -47,6 +57,13 @@ public class WhenAddingServicesToTheContainer
     }
 
     [TestCase(typeof(IValidator<GetPayeSchemeByRefQuery>))]
+    [TestCase(typeof(IValidator<GetEmployerAccountDetailByHashedIdQuery>))]
+    [TestCase(typeof(IValidator<GetPagedEmployerAccountsQuery>))]
+    [TestCase(typeof(IValidator<GetTeamMembersRequest>))]
+    [TestCase(typeof(IValidator<GetTeamMembersWhichReceiveNotificationsQuery>))]
+    [TestCase(typeof(IValidator<GetAccountPayeSchemesQuery>))]
+    [TestCase(typeof(IValidator<GetEmployerAgreementByIdRequest>))]
+    [TestCase(typeof(IValidator<GetMinimumSignedAgreementVersionQuery>))]
     public void Then_The_Dependencies_Are_Correctly_Resolved_For_Validators(Type toResolve)
     {
         var type = _provider.GetService(toResolve);

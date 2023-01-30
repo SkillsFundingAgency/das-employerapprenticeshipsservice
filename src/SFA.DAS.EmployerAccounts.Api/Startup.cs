@@ -75,8 +75,8 @@ public class Startup
         services.AddExecutionPolicies();
         services.AddHashingServices(employerAccountsConfiguration);
         services.AddAutoMapper(typeof(Startup).Assembly);
-        services.AddMediatR(typeof(GetPayeSchemeByRefQuery));
         services.AddMediatorValidation();
+        services.AddMediatR(typeof(GetPayeSchemeByRefQuery));
         services.AddNotifications(Configuration);
 
         services.AddControllers(options => { options.Filters.Add(new ProducesAttribute("text/html")); });
