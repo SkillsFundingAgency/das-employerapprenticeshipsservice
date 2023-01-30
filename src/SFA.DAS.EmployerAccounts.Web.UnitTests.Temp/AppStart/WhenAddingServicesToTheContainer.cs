@@ -9,8 +9,12 @@ using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
+using SFA.DAS.EmployerAccounts.Validation;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
+using SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Temp.AppStart;
 
@@ -47,9 +51,40 @@ public class WhenAddingServicesToTheContainer
     //[TestCase(typeof(ICustomClaims))]
     public void Then_The_Dependencies_Are_Correctly_Resolved_For_Orchestrators(Type toResolve)
     {
-        var type = _provider.GetService(toResolve);
+        var mockHostingEnvironment = new Mock<IHostingEnvironment>();
+        mockHostingEnvironment.Setup(x => x.EnvironmentName).Returns("Test");
+
+        var startup = new Startup(GenerateConfiguration(), new Mock<IWebHostEnvironment>().Object);
+        var serviceCollection = new ServiceCollection();
+        startup.ConfigureServices(serviceCollection);
+        
+        serviceCollection.AddSingleton(_ => mockHostingEnvironment.Object);
+        var provider = serviceCollection.BuildServiceProvider();
+
+        var type = provider.GetService(toResolve);
         Assert.IsNotNull(type);
     }
+
+    [TestCase(typeof(IValidator<GetEmployerAccountByHashedIdQuery>))]
+    public void Then_The_Dependencies_Are_Correctly_Resolved_For_Validators(Type toResolve)
+    {
+
+        var mockHostingEnvironment = new Mock<IHostingEnvironment>();
+        mockHostingEnvironment.Setup(x => x.EnvironmentName).Returns("Test");
+
+        var config = GenerateConfiguration();
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddSingleton(mockHostingEnvironment.Object);
+        serviceCollection.AddScoped(_=> new Mock<IMembershipRepository>().Object);
+        serviceCollection.AddConfigurationOptions(config);
+        serviceCollection.AddMediatorValidation();
+
+        var provider = serviceCollection.BuildServiceProvider();
+
+        var type = provider.GetService(toResolve);
+        Assert.IsNotNull(type);
+    }
+
 
     [Test]
     public void Then_Resolves_Authorization_Handlers()

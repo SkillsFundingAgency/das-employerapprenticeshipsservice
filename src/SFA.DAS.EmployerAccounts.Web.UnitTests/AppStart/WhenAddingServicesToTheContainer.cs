@@ -9,6 +9,8 @@ using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
+using SFA.DAS.EmployerAccounts.Validation;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 
@@ -46,6 +48,13 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(UserSettingsOrchestrator))]
     //[TestCase(typeof(ICustomClaims))]
     public void Then_The_Dependencies_Are_Correctly_Resolved_For_Orchestrators(Type toResolve)
+    {
+        var type = _provider.GetService(toResolve);
+        Assert.IsNotNull(type);
+    }
+
+    [TestCase(typeof(IValidator<GetEmployerAccountByHashedIdQuery>))]
+    public void Then_The_Dependencies_Are_Correctly_Resolved_For_Validators(Type toResolve)
     {
         var type = _provider.GetService(toResolve);
         Assert.IsNotNull(type);
