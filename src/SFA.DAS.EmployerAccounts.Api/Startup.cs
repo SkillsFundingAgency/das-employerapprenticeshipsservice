@@ -47,7 +47,6 @@ public class Startup
             {
                 opt.AddValidation();
                 opt.AddAuthorization();
-                opt.Filters.Add<ValidateModelStateFilter>();
                 opt.Filters.Add<StopwatchFilter>();
             });
 
