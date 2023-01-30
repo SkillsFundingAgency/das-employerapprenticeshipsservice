@@ -66,6 +66,7 @@ public class Startup
 
         services.AddDasDistributedMemoryCache(employerAccountsConfiguration, _environment.IsDevelopment());
         services.AddDasHealthChecks(employerAccountsConfiguration);
+        services.AddOrchestrators();
         services.StartNServiceBus(employerAccountsConfiguration,
             Configuration.IsDevOrLocal() || Configuration.IsTest());
         services.AddDatabaseRegistration(employerAccountsConfiguration, Configuration["EnvironmentName"]);
@@ -75,6 +76,7 @@ public class Startup
         services.AddHashingServices(employerAccountsConfiguration);
         services.AddAutoMapper(typeof(Startup).Assembly);
         services.AddMediatR(typeof(GetPayeSchemeByRefQuery));
+        services.AddMediatorValidation();
         services.AddNotifications(Configuration);
 
         services.AddControllers(options => { options.Filters.Add(new ProducesAttribute("text/html")); });
