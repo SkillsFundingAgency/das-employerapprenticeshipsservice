@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Types;
@@ -32,11 +33,26 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.EmployerAccountsCon
                     new Models.Account.Account { HashedId = "ABC999", Id = 987, Name = "Test 2" }
                 }
             };
-            Mediator.Setup(x => x.Send(It.Is<GetPagedEmployerAccountsQuery>(q => q.PageNumber == pageNumber && q.PageSize == pageSize && q.ToDate == toDate), It.IsAny<CancellationToken>()))
+            Mediator
+                .Setup(
+                    x => x.Send(It.Is<GetPagedEmployerAccountsQuery>(q => q.PageNumber == pageNumber && q.PageSize == pageSize && q.ToDate == toDate),
+                        It.IsAny<CancellationToken>())
+                    )
                 .ReturnsAsync(accountsResponse);
 
-            UrlTestHelper.Setup(x => x.RouteUrl("GetAccount", It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId = accountsResponse.Accounts[0].HashedId })))).Returns($"/api/accounts/{accountsResponse.Accounts[0].HashedId}");
-            UrlTestHelper.Setup(x => x.RouteUrl("GetAccount", It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId = accountsResponse.Accounts[1].HashedId })))).Returns($"/api/accounts/{accountsResponse.Accounts[1].HashedId}");
+
+            UrlTestHelper
+                  .Setup(
+                  x => x.RouteUrl(
+                      It.Is<UrlRouteContext>(c =>
+                          c.RouteName == "GetAccount" && c.Values.IsEquivalentTo(new { hashedAccountId = accountsResponse.Accounts[0].HashedId })))
+                  ).Returns($"/api/accounts/{accountsResponse.Accounts[0].HashedId}");
+
+            UrlTestHelper
+                .Setup(x =>
+                    x.RouteUrl(It.Is<UrlRouteContext>(
+                        c => c.RouteName.Equals("GetAccount") && c.Values.IsEquivalentTo(new { hashedAccountId = accountsResponse.Accounts[1].HashedId })))
+                    ).Returns($"/api/accounts/{accountsResponse.Accounts[1].HashedId}");
 
             var response = await Controller.GetAccounts(toDate, pageSize, pageNumber);
 

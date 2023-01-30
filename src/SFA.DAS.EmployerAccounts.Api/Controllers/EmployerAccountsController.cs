@@ -24,7 +24,11 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         {
             var result = await _orchestrator.GetAccounts(toDate, pageSize, pageNumber);
 
-            result.Data.ForEach(x => x.Href = Url.RouteUrl("GetAccount", new { hashedAccountId = x.AccountHashId }));
+            foreach (var account in result.Data)
+            {
+                account.Href = Url.RouteUrl("GetAccount", new { hashedAccountId = account.AccountHashId });
+            }
+
             return Ok(result);
         }
 
@@ -36,8 +40,8 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
             var result = await _orchestrator.GetAccount(hashedAccountId);
 
             if (result == null) return NotFound();
-             
-            result.LegalEntities.ForEach(x => CreateGetLegalEntityLink(hashedAccountId, x));
+
+            result.LegalEntities.ForEach(x=> CreateGetLegalEntityLink(hashedAccountId, x));
             result.PayeSchemes.ForEach(x => CreateGetPayeSchemeLink(hashedAccountId, x));
             return Ok(result);
         }

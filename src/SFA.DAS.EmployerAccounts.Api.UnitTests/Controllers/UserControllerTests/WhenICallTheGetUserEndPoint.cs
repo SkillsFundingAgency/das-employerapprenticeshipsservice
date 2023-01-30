@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Web.Http.Results;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Controllers;
@@ -39,10 +40,10 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.UserControllerTests
         [Test]
         public async Task ThenShouldReturnAUser()
         {
-            var result = await _controller.Get("Email@Test.com") as OkNegotiatedContentResult<User>; 
+            var result = await _controller.Get("Email@Test.com") as OkObjectResult; 
 
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Content, Is.SameAs(_user));
+            Assert.That(result.Value, Is.SameAs(_user));
         }
     }
 }

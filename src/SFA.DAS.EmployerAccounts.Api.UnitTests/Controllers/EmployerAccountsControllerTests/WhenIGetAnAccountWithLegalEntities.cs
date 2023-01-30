@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Types;
@@ -32,10 +33,19 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.EmployerAccountsCon
 
             Mediator.Setup(x => x.Send(It.IsAny<GetEmployerAccountDetailByHashedIdQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(accountsResponse);
-
-            UrlTestHelper.Setup(x => x.RouteUrl("GetLegalEntity", It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId, legalEntityId = accountsResponse.Account.LegalEntities[0] })))).Returns($"/api/accounts/{hashedAccountId}/legalEntity/{accountsResponse.Account.LegalEntities[0]}");
-            UrlTestHelper.Setup(x => x.RouteUrl("GetLegalEntity", It.Is<object>(o => o.IsEquivalentTo(new { hashedAccountId, legalEntityId = accountsResponse.Account.LegalEntities[1] })))).Returns($"/api/accounts/{hashedAccountId}/legalEntity/{accountsResponse.Account.LegalEntities[1]}");
-
+            
+             UrlTestHelper.Setup(x => x.RouteUrl(
+                 It.Is<UrlRouteContext>(c =>
+                     c.RouteName == "GetLegalEntity" && c.Values.IsEquivalentTo(new { hashedAccountId = hashedAccountId, legalEntityId = accountsResponse.Account.LegalEntities[0].ToString() })))
+             )
+                 .Returns($"/api/accounts/{hashedAccountId}/legalEntity/{accountsResponse.Account.LegalEntities[0]}");
+             
+             UrlTestHelper.Setup(x => x.RouteUrl(
+                     It.Is<UrlRouteContext>(c =>
+                         c.RouteName == "GetLegalEntity" && c.Values.IsEquivalentTo(new { hashedAccountId = hashedAccountId, legalEntityId = accountsResponse.Account.LegalEntities[1].ToString() })))
+                 )
+                 .Returns($"/api/accounts/{hashedAccountId}/legalEntity/{accountsResponse.Account.LegalEntities[1]}");
+             
             var response = await Controller.GetAccount(hashedAccountId);
 
             Assert.IsNotNull(response);
