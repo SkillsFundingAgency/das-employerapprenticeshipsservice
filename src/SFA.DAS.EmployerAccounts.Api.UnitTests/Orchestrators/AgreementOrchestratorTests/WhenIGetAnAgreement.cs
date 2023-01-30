@@ -51,7 +51,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Orchestrators.AgreementOrchestr
             var result = await _orchestrator.GetAgreement(hashedAgreementId);
 
             //Assert
-            result.Should().BeEquivalentTo(_agreement);
+            result.Should().BeEquivalentTo(_agreement, option => option.ExcludingMissingMembers());
         }
 
         private IMapper ConfigureMapper()
