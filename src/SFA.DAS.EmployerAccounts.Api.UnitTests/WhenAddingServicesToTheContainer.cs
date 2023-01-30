@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -8,6 +9,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
+using SFA.DAS.EmployerAccounts.Api.ServiceRegistrations;
+using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
+using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountDetail;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementById;
@@ -17,59 +22,70 @@ using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamMembers;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamMembersWhichReceiveNotifications;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
-using SFA.DAS.EmployerAccounts.Validation;
+using SFA.DAS.EmployerAccounts.ServiceRegistration;
 
 namespace SFA.DAS.EmployerAccounts.Api.UnitTests;
 
 public class WhenAddingServicesToTheContainer
 {
-    private readonly ServiceCollection _serviceCollection = new();
-    private ServiceProvider _provider;
-
-    [SetUp]
-    public void Setup()
-    {
-        var mockHostingEnvironment = new Mock<IHostingEnvironment>();
-        mockHostingEnvironment.Setup(x => x.EnvironmentName).Returns("Test");
-
-        var startup = new Startup(GenerateConfiguration(), new Mock<IWebHostEnvironment>().Object);
-        startup.ConfigureServices(_serviceCollection);
-        _serviceCollection.AddSingleton(_ => mockHostingEnvironment.Object);
-        _provider = _serviceCollection.BuildServiceProvider();
-    }
-
     [TestCase(typeof(AccountsOrchestrator))]
     [TestCase(typeof(AgreementOrchestrator))]
     [TestCase(typeof(UsersOrchestrator))]
     public void Then_The_Dependencies_Are_Correctly_Resolved_For_Orchestrators(Type toResolve)
     {
-        var type = _provider.GetService(toResolve);
+        var mockHostingEnvironment = new Mock<IHostingEnvironment>();
+        mockHostingEnvironment.Setup(x => x.EnvironmentName).Returns("Test");
+
+        var config = GenerateConfiguration();
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddSingleton(mockHostingEnvironment.Object);
+        serviceCollection.AddMediatR(typeof(GetUserAccountsQuery));
+        serviceCollection.AddAutoMapper(typeof(Startup).Assembly);
+        serviceCollection.AddOrchestrators();
+        serviceCollection.AddHashingServices(config.Get<EmployerAccountsConfiguration>());
+        serviceCollection.AddLogging();
+        var provider = serviceCollection.BuildServiceProvider();
+        var type = provider.GetService(toResolve);
         Assert.IsNotNull(type);
     }
 
     [TestCase(typeof(IRequestHandler<GetPayeSchemeByRefQuery, GetPayeSchemeByRefResponse>))]
+    [TestCase(typeof(IRequestHandler<GetEmployerAccountDetailByHashedIdQuery, GetEmployerAccountDetailByHashedIdResponse>))]
+    [TestCase(typeof(IRequestHandler<GetPagedEmployerAccountsQuery, GetPagedEmployerAccountsResponse>))]
+    [TestCase(typeof(IRequestHandler<GetTeamMembersRequest, GetTeamMembersResponse>))]
+    [TestCase(typeof(IRequestHandler<GetTeamMembersWhichReceiveNotificationsQuery, GetTeamMembersWhichReceiveNotificationsQueryResponse>))]
+    [TestCase(typeof(IRequestHandler<GetAccountPayeSchemesQuery, GetAccountPayeSchemesResponse>))]
     [TestCase(typeof(IRequestHandler<GetUserAccountsQuery, GetUserAccountsQueryResponse>))]
     [TestCase(typeof(IRequestHandler<GetAccountPayeSchemesQuery, GetAccountPayeSchemesResponse>))]
+    [TestCase(typeof(IRequestHandler<GetEmployerAgreementByIdRequest, GetEmployerAgreementByIdResponse>))]
+    [TestCase(typeof(IRequestHandler<GetMinimumSignedAgreementVersionQuery, GetMinimumSignedAgreementVersionResponse>))]
+    [TestCase(typeof(IRequestHandler<GetUserAccountsQuery, GetUserAccountsQueryResponse>))]
     public void Then_The_Dependencies_Are_Correctly_Resolved_For_Handlers(Type toResolve)
     {
-        var type = _provider.GetService(toResolve);
+        var mockHostingEnvironment = new Mock<IHostingEnvironment>();
+        mockHostingEnvironment.Setup(x => x.EnvironmentName).Returns("Test");
+
+        var config = GenerateConfiguration();
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddSingleton(mockHostingEnvironment.Object);
+        serviceCollection.AddSingleton(Mock.Of<IPayeSchemesService>());
+        serviceCollection.AddSingleton(Mock.Of<IPayeRepository>());
+        serviceCollection.AddSingleton(Mock.Of<IUserAccountRepository>());
+        serviceCollection.AddSingleton(Mock.Of<IEmployerAccountRepository>());
+        serviceCollection.AddSingleton(Mock.Of<IEmployerAgreementRepository>());
+        serviceCollection.AddSingleton(Mock.Of<IEmployerAccountTeamRepository>());
+        serviceCollection.AddApiConfigurationSections(config);
+        serviceCollection.AddMediatR(typeof(GetAccountPayeSchemesQuery));
+        serviceCollection.AddMediatorValidation();
+        serviceCollection.AddLogging();
+        serviceCollection.AddHashingServices(config.Get<EmployerAccountsConfiguration>());
+
+        var provider = serviceCollection.BuildServiceProvider();
+
+        var type = provider.GetService(toResolve);
         Assert.IsNotNull(type);
     }
-
-    [TestCase(typeof(IValidator<GetPayeSchemeByRefQuery>))]
-    [TestCase(typeof(IValidator<GetEmployerAccountDetailByHashedIdQuery>))]
-    [TestCase(typeof(IValidator<GetPagedEmployerAccountsQuery>))]
-    [TestCase(typeof(IValidator<GetTeamMembersRequest>))]
-    [TestCase(typeof(IValidator<GetTeamMembersWhichReceiveNotificationsQuery>))]
-    [TestCase(typeof(IValidator<GetAccountPayeSchemesQuery>))]
-    [TestCase(typeof(IValidator<GetEmployerAgreementByIdRequest>))]
-    [TestCase(typeof(IValidator<GetMinimumSignedAgreementVersionQuery>))]
-    public void Then_The_Dependencies_Are_Correctly_Resolved_For_Validators(Type toResolve)
-    {
-        var type = _provider.GetService(toResolve);
-        Assert.IsNotNull(type);
-    }
-
+    
     private static IConfigurationRoot GenerateConfiguration()
     {
         var configSource = new MemoryConfigurationSource
@@ -102,6 +118,6 @@ public class WhenAddingServicesToTheContainer
 
         var provider = new MemoryConfigurationProvider(configSource);
 
-        return new ConfigurationRoot(new List<IConfigurationProvider> { provider });
+        return new ConfigurationRoot(new List<Microsoft.Extensions.Configuration.IConfigurationProvider> { provider });
     }
 }

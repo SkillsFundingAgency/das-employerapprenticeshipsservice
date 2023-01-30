@@ -5,11 +5,12 @@ namespace SFA.DAS.EmployerAccounts.Exceptions;
 
 [Serializable]
 public class InvalidRequestException : Exception
-{        
-    public InvalidRequestException() { }
+{
+    public Dictionary<string, string> ErrorMessages { get; private set; }
 
-    public InvalidRequestException(Dictionary<string, string> errorMessages): base(BuildErrorMessage(errorMessages))
+    public InvalidRequestException(Dictionary<string, string> errorMessages) : base(BuildErrorMessage(errorMessages))
     {
+        ErrorMessages = errorMessages;
     }
 
     protected InvalidRequestException(SerializationInfo info, StreamingContext context) : base(info, context) { }
