@@ -1,7 +1,9 @@
 ﻿using System.Threading;
 using Microsoft.Extensions.Logging;
+using Microsoft.ServiceBus;
 using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.Validation;
+using SFA.DAS.EmployerAccounts.Validation;
+using InvalidRequestException = SFA.DAS.EmployerAccounts.Exceptions.InvalidRequestException;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetContent;
 

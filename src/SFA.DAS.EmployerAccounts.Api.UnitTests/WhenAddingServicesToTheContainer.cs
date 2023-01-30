@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Memory;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
+using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 
 namespace SFA.DAS.EmployerAccounts.Api.UnitTests;
 
@@ -30,6 +32,7 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(AccountsOrchestrator))]
     [TestCase(typeof(AgreementOrchestrator))]
     [TestCase(typeof(UsersOrchestrator))]
+    [TestCase(typeof(IRequestHandler<GetPayeSchemeByRefQuery, GetPayeSchemeByRefResponse>))]
     //[TestCase(typeof(ICustomClaims))]
     public void Then_The_Dependencies_Are_Correctly_Resolved_For_Orchestrators(Type toResolve)
     {

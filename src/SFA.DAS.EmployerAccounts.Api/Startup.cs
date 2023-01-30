@@ -16,8 +16,10 @@ using SFA.DAS.EmployerAccounts.Api.Authorization;
 using SFA.DAS.EmployerAccounts.Api.Filters;
 using SFA.DAS.EmployerAccounts.Api.ServiceRegistrations;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
 using SFA.DAS.UnitOfWork.Mvc.Extensions;
+using SFA.DAS.Validation.Mvc.Extensions;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace SFA.DAS.EmployerAccounts.Api;
@@ -40,13 +42,10 @@ public class Startup
         services.AddApiConfigurationSections(Configuration)
             .AddApiAuthentication(Configuration)
             .AddApiAuthorization(_environment)
-            .Configure<ApiBehaviorOptions>(opt =>
-            {
-                opt.SuppressModelStateInvalidFilter = true;
-
-            })
+            .Configure<ApiBehaviorOptions>(opt => { opt.SuppressModelStateInvalidFilter = true; })
             .AddMvc(opt =>
             {
+                opt.AddValidation();
                 opt.AddAuthorization();
                 opt.Filters.Add<ValidateModelStateFilter>();
                 opt.Filters.Add<StopwatchFilter>();
@@ -68,23 +67,20 @@ public class Startup
 
         services.AddDasDistributedMemoryCache(employerAccountsConfiguration, _environment.IsDevelopment());
         services.AddDasHealthChecks(employerAccountsConfiguration);
-        services.StartNServiceBus(employerAccountsConfiguration, Configuration.IsDevOrLocal());
+        services.StartNServiceBus(employerAccountsConfiguration,
+            Configuration.IsDevOrLocal() || Configuration.IsTest());
         services.AddDatabaseRegistration(employerAccountsConfiguration, Configuration["EnvironmentName"]);
-        services.AddDataRepositories(); 
+        services.AddDataRepositories();
         services.AddEventsApi();
         services.AddExecutionPolicies();
         services.AddHashingServices(employerAccountsConfiguration);
         services.AddAutoMapper(typeof(Startup).Assembly);
-        services.AddMediatR(typeof(Startup).Assembly);
+        services.AddMediatR(typeof(GetPayeSchemeByRefQuery));
         services.AddNotifications(Configuration);
 
-        services.AddControllers(options =>
-        {
-            options.Filters.Add(new ProducesAttribute("text/html"));
-        });
+        services.AddControllers(options => { options.Filters.Add(new ProducesAttribute("text/html")); });
 
         services.AddApplicationInsightsTelemetry();
-
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -118,6 +114,5 @@ public class Startup
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
-
     }
 }

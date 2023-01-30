@@ -18,7 +18,7 @@ public class GetAccountTasksQueryHandler : IRequestHandler<GetAccountTasksQuery,
 
     public async Task<GetAccountTasksResponse> Handle(GetAccountTasksQuery message, CancellationToken cancellationToken)
     {
-        ValidateMessage(message);
+        await ValidateMessage(message);
 
         var accountTasks = await GetTasks(message);
 
@@ -46,9 +46,9 @@ public class GetAccountTasksQueryHandler : IRequestHandler<GetAccountTasksQuery,
         return accountTasks;
     }
 
-    private void ValidateMessage(GetAccountTasksQuery message)
+    private async Task ValidateMessage(GetAccountTasksQuery message)
     {
-        var validationResults = _validator.Validate(message);
+        var validationResults = await _validator.ValidateAsync(message);
 
         if (!validationResults.IsValid())
         {

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Mappings;
+using SFA.DAS.EmployerAccounts.Exceptions;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesByHashedAccountId;
 using SFA.DAS.EmployerAccounts.TestCommon.Extensions;

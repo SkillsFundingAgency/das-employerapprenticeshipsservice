@@ -3,7 +3,6 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.Validation;
 using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Commands.UpdateUserNotificationSettings;

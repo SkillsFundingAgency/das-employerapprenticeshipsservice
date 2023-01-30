@@ -43,6 +43,8 @@
 		<PackageReference Include="SFA.DAS.UnitOfWork.Mvc" Version="9.0.28" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="9.0.13" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.WebApi" Version="9.0.13" />
+		<PackageReference Include="SFA.DAS.Validation" Version="6.0.30" />
+		<PackageReference Include="SFA.DAS.Validation.Mvc" Version="6.0.30" />
 		<PackageReference Include="SFA.DAS.Validation.WebApi">
 			<Version>5.1.167</Version>
 		</PackageReference>

@@ -4,13 +4,14 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
+using SFA.DAS.EmployerAccounts.Exceptions;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Validation;
 using SFA.DAS.HashingService;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.NServiceBus.Services;
-using SFA.DAS.Validation;
 using Entity = SFA.DAS.Audit.Types.Entity;
+using ValidationResult = SFA.DAS.EmployerAccounts.Validation.ValidationResult;
 
 namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity;
 

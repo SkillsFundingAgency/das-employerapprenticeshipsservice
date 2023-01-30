@@ -55,7 +55,7 @@
     <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="15.0.25" />
     <PackageReference Include="SFA.DAS.UnitOfWork" Version="9.0.13" />
     <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="9.0.13" />
-    <PackageReference Include="SFA.DAS.Validation" Version="5.1.167" />
+    <PackageReference Include="SFA.DAS.Validation" Version="6.0.30" />
     <PackageReference Include="StructureMap" Version="4.7.1" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.1" />
     <PackageReference Include="System.Runtime" Version="4.3.1" />

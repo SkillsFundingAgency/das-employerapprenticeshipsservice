@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Types;
+using SFA.DAS.EmployerAccounts.Exceptions;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;

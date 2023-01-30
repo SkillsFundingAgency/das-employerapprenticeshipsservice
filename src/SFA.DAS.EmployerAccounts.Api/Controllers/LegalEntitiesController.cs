@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EmployerAccounts.Api.Mappings;
 using SFA.DAS.EmployerAccounts.Api.Types;
+using SFA.DAS.EmployerAccounts.Exceptions;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesByHashedAccountId;
 using SFA.DAS.EmployerAccounts.Queries.GetLegalEntity;
-using SFA.DAS.Validation;
 using SFA.DAS.Validation.WebApi;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers
@@ -59,7 +59,8 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
                             new Resource
                             {
                                 Id = legalEntity.LegalEntityId.ToString(),
-                                Href = Url.RouteUrl("GetLegalEntity", new { hashedAccountId, legalEntityId = legalEntity.LegalEntityId })
+                                Href = Url.RouteUrl("GetLegalEntity",
+                                    new { hashedAccountId, legalEntityId = legalEntity.LegalEntityId })
                             });
                 }
 
@@ -73,11 +74,13 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         [Route("{legalEntityId}", Name = "GetLegalEntity")]
         [Authorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpNotFoundForNullModel]
-        public async Task<IActionResult> GetLegalEntity(string hashedAccountId, long legalEntityId, bool includeAllAgreements = false)
+        public async Task<IActionResult> GetLegalEntity(string hashedAccountId, long legalEntityId,
+            bool includeAllAgreements = false)
         {
             var response = await _mediator.Send(request: new GetLegalEntityQuery(hashedAccountId, legalEntityId));
 
-            var model = LegalEntityMapping.MapFromAccountLegalEntity(response.LegalEntity, response.LatestAgreement, includeAllAgreements);
+            var model = LegalEntityMapping.MapFromAccountLegalEntity(response.LegalEntity, response.LatestAgreement,
+                includeAllAgreements);
 
             return Ok(model);
         }

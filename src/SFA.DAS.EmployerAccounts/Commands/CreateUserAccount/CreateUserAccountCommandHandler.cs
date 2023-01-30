@@ -15,16 +15,17 @@ using Entity = SFA.DAS.Audit.Types.Entity;
 namespace SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
 
 //TODO this needs changing to be a facade and calling individual commands for each component
-public class CreateUserAccountCommandHandler : IRequestHandler<CreateUserAccountCommand, CreateUserAccountCommandResponse>
+public class
+    CreateUserAccountCommandHandler : IRequestHandler<CreateUserAccountCommand, CreateUserAccountCommandResponse>
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IMediator _mediator;
     private readonly IValidator<CreateUserAccountCommand> _validator;
     private readonly IHashingService _hashingService;
-    private readonly IPublicHashingService _publicHashingService;    
+    private readonly IPublicHashingService _publicHashingService;
     private readonly IGenericEventFactory _genericEventFactory;
     private readonly IAccountEventFactory _accountEventFactory;
-    private readonly IMembershipRepository _membershipRepository;    
+    private readonly IMembershipRepository _membershipRepository;
     private readonly IEventPublisher _eventPublisher;
 
     public CreateUserAccountCommandHandler(
@@ -35,40 +36,45 @@ public class CreateUserAccountCommandHandler : IRequestHandler<CreateUserAccount
         IPublicHashingService publicHashingService,
         IGenericEventFactory genericEventFactory,
         IAccountEventFactory accountEventFactory,
-        IMembershipRepository membershipRepository, 
+        IMembershipRepository membershipRepository,
         IEventPublisher eventPublisher)
     {
         _accountRepository = accountRepository;
         _mediator = mediator;
         _validator = validator;
         _hashingService = hashingService;
-        _publicHashingService = publicHashingService;          
+        _publicHashingService = publicHashingService;
         _genericEventFactory = genericEventFactory;
         _accountEventFactory = accountEventFactory;
-        _membershipRepository = membershipRepository;         
+        _membershipRepository = membershipRepository;
         _eventPublisher = eventPublisher;
     }
 
-    public async Task<CreateUserAccountCommandResponse> Handle(CreateUserAccountCommand message, CancellationToken cancellationToken)
+    public async Task<CreateUserAccountCommandResponse> Handle(CreateUserAccountCommand message,
+        CancellationToken cancellationToken)
     {
-        ValidateMessage(message);
+        await ValidateMessage(message);
 
         var externalUserId = Guid.Parse(message.ExternalUserId);
 
-        var userResponse = await _mediator.Send(new GetUserByRefQuery { UserRef = message.ExternalUserId }, cancellationToken);
+        var userResponse =
+            await _mediator.Send(new GetUserByRefQuery { UserRef = message.ExternalUserId }, cancellationToken);
 
-        var createAccountResult = await _accountRepository.CreateUserAccount(userResponse.User.Id, message.OrganisationName);
+        var createAccountResult =
+            await _accountRepository.CreateUserAccount(userResponse.User.Id, message.OrganisationName);
 
         var hashedAccountId = _hashingService.HashValue(createAccountResult.AccountId);
         var publicHashedAccountId = _publicHashingService.HashValue(createAccountResult.AccountId);
 
-        await _accountRepository.UpdateAccountHashedIds(createAccountResult.AccountId, hashedAccountId, publicHashedAccountId);
+        await _accountRepository.UpdateAccountHashedIds(createAccountResult.AccountId, hashedAccountId,
+            publicHashedAccountId);
 
         var caller = await _membershipRepository.GetCaller(createAccountResult.AccountId, message.ExternalUserId);
 
         var createdByName = caller.FullName();
-           
-        await PublishAccountCreatedMessage(createAccountResult.AccountId, hashedAccountId, publicHashedAccountId, message.OrganisationName, createdByName, externalUserId);
+
+        await PublishAccountCreatedMessage(createAccountResult.AccountId, hashedAccountId, publicHashedAccountId,
+            message.OrganisationName, createdByName, externalUserId);
 
         await NotifyAccountCreated(hashedAccountId);
 
@@ -79,7 +85,7 @@ public class CreateUserAccountCommandHandler : IRequestHandler<CreateUserAccount
             HashedAccountId = hashedAccountId
         };
     }
-      
+
     private Task NotifyAccountCreated(string hashedAccountId)
     {
         var accountEvent = _accountEventFactory.CreateAccountCreatedEvent(hashedAccountId);
@@ -88,13 +94,14 @@ public class CreateUserAccountCommandHandler : IRequestHandler<CreateUserAccount
 
         return _mediator.Send(new PublishGenericEventCommand { Event = genericEvent });
     }
-     
-    private Task PublishAccountCreatedMessage(long accountId, string hashedId, string publicHashedId, string name, string createdByName, Guid userRef)
+
+    private Task PublishAccountCreatedMessage(long accountId, string hashedId, string publicHashedId, string name,
+        string createdByName, Guid userRef)
     {
         return _eventPublisher.Publish(new CreatedAccountEvent
-        { 
+        {
             AccountId = accountId,
-            HashedId = hashedId, 
+            HashedId = hashedId,
             PublicHashedId = publicHashedId,
             Name = name,
             UserName = createdByName,
@@ -103,15 +110,16 @@ public class CreateUserAccountCommandHandler : IRequestHandler<CreateUserAccount
         });
     }
 
-    private void ValidateMessage(CreateUserAccountCommand message)
+    private async Task ValidateMessage(CreateUserAccountCommand message)
     {
-        var validationResult =  _validator.Validate(message);
+        var validationResult = await _validator.ValidateAsync(message);
 
         if (!validationResult.IsValid())
             throw new InvalidRequestException(validationResult.ValidationDictionary);
     }
 
-    private async Task CreateAuditEntries(CreateUserAccountCommand message, CreateUserAccountResult returnValue, string hashedAccountId, User user)
+    private async Task CreateAuditEntries(CreateUserAccountCommand message, CreateUserAccountResult returnValue,
+        string hashedAccountId, User user)
     {
         //Account
         await _mediator.Send(new CreateAuditCommand
