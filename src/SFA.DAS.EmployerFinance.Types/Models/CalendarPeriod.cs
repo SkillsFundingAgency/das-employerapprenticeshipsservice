@@ -73,7 +73,7 @@ namespace SFA.DAS.EmployerFinance.Types.Models
         private static int GetTaxYearFromDate(DateTime firstPeriod)
         {
             return firstPeriod.Month >= 1 && firstPeriod.Month < 4
-                ? firstPeriod.Year -1
+                ? firstPeriod.Year - 1
                 : firstPeriod.Year;
         }
 
