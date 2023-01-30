@@ -88,6 +88,7 @@ stages:
   variables:
   - group: DevTest Management Resources
   - group: TEST2 DevTest Shared Resources
+  - group: TEST2 das-employer-accounts
   jobs:
   - template: pipeline-templates/job/deploy.yml
     parameters:
@@ -103,6 +104,7 @@ stages:
   variables:
   - group: PreProd Management Resources
   - group: PreProd Shared Resources
+  - group: PreProd das-employer-accounts
   jobs:
   - template: pipeline-templates/job/deploy.yml
     parameters:
@@ -118,7 +120,7 @@ stages:
 #   variables:
 #   - group: PROD Management Resources
 #   - group: PROD Shared Resources
-#   - group: __PRODSpecificReleaseVariables__ #PLACEHOLDER
+#   - group: PROD das-employer-accounts
 #   jobs:
 #   - template: pipeline-templates/job/deploy.yml
 #     parameters:
@@ -134,6 +136,7 @@ stages:
 #   variables:
 #   - group: MO Management Resources
 #   - group: MO Shared Resources
+#   - group: MO das-employer-accounts
 #   jobs:
 #   - template: pipeline-templates/job/deploy.yml
 #     parameters:
@@ -149,6 +152,7 @@ stages:
   variables:
   - group: DevTest Management Resources
   - group: DEMO DevTest Shared Resources
+  - group: DEMO das-employer-accounts
   jobs:
   - template: pipeline-templates/job/deploy.yml
     parameters:
