@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerAccounts.Commands.AcceptInvitation;
 using SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount;
 using SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole;
 using SFA.DAS.EmployerAccounts.Commands.CreateAccount;
@@ -123,6 +124,7 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IRequestHandler<UnsubscribeProviderEmailCommand, Unit>))]
     [TestCase(typeof(IRequestHandler<UpsertRegisteredUserCommand, Unit>))]
     [TestCase(typeof(IRequestHandler<UpdateTermAndConditionsAcceptedOnCommand, Unit>))]
+    [TestCase(typeof(IRequestHandler<AcceptInvitationCommand, Unit>))]
     public void Then_The_Dependencies_Are_Correctly_Resolved_For_Command_Handlers(Type toResolve)
     {
         var mockHostingEnvironment = new Mock<IHostingEnvironment>();
@@ -150,6 +152,7 @@ public class WhenAddingServicesToTheContainer
         serviceCollection.AddSingleton(Mock.Of<ICommitmentV2Service>());
         serviceCollection.AddSingleton(Mock.Of<IProviderRegistrationApiClient>());
         serviceCollection.AddSingleton(Mock.Of<IInvitationRepository>());
+        serviceCollection.AddSingleton(Mock.Of<IAuditService>());
 
         serviceCollection.AddConfigurationOptions(config);
         serviceCollection.AddMediatR(typeof(GetEmployerAccountByHashedIdQuery));
@@ -201,6 +204,7 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IRequestHandler<GetHmrcEmployerInformationQuery, GetHmrcEmployerInformationResponse>))]
     [TestCase(typeof(IRequestHandler<GetNumberOfUserInvitationsQuery, GetNumberOfUserInvitationsResponse>))]
     [TestCase(typeof(IRequestHandler<GetProviderInvitationQuery, GetProviderInvitationResponse>))]
+    [TestCase(typeof(IRequestHandler<GetUserInvitationsRequest, GetUserInvitationsResponse>))]
     
     public void Then_The_Dependencies_Are_Correctly_Resolved_For_Query_Handlers(Type toResolve)
     {

@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount;
+﻿using SFA.DAS.EmployerAccounts.Commands.AcceptInvitation;
+using SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount;
 using SFA.DAS.EmployerAccounts.Commands.CreateAccount;
 using SFA.DAS.EmployerAccounts.Commands.CreateInvitation;
 using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
@@ -49,6 +50,7 @@ public static class MediatorValidationServiceRegistration
         services.AddTransient<IValidator<UpdateShowAccountWizardCommand>, UpdateShowAccountWizardCommandValidator>();
         services.AddTransient<IValidator<CreateInvitationCommand>, CreateInvitationCommandValidator>();
         services.AddTransient<IValidator<UpsertRegisteredUserCommand>, UpsertRegisteredUserCommandValidator>();
+        services.AddTransient<IValidator<AcceptInvitationCommand>, AcceptInvitationCommandValidator>();
         
         return services;
     }
