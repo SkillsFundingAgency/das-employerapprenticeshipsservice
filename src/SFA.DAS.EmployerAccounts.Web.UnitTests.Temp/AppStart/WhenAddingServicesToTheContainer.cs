@@ -20,6 +20,7 @@ using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 using SFA.DAS.EmployerAccounts.Commands.CreateOrganisationAddress;
 using SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
 using SFA.DAS.EmployerAccounts.Commands.DeleteInvitation;
+using SFA.DAS.EmployerAccounts.Commands.DismissMonthlyTaskReminder;
 using SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity;
 using SFA.DAS.EmployerAccounts.Commands.RemoveTeamMember;
 using SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
@@ -134,6 +135,7 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IRequestHandler<UpdateTermAndConditionsAcceptedOnCommand, Unit>))]
     [TestCase(typeof(IRequestHandler<AcceptInvitationCommand, Unit>))]
     [TestCase(typeof(IRequestHandler<UpdateOrganisationDetailsCommand, Unit>))]
+    [TestCase(typeof(IRequestHandler<DismissMonthlyTaskReminderCommand, Unit>))]
     public void Then_The_Dependencies_Are_Correctly_Resolved_For_Command_Handlers(Type toResolve)
     {
         var mockHostingEnvironment = new Mock<IHostingEnvironment>();
@@ -162,6 +164,7 @@ public class WhenAddingServicesToTheContainer
         serviceCollection.AddSingleton(Mock.Of<IProviderRegistrationApiClient>());
         serviceCollection.AddSingleton(Mock.Of<IInvitationRepository>());
         serviceCollection.AddSingleton(Mock.Of<IAuditService>());
+        serviceCollection.AddSingleton(Mock.Of<ITaskService>());
 
         serviceCollection.AddConfigurationOptions(config);
         serviceCollection.AddMediatR(typeof(GetEmployerAccountByHashedIdQuery));
