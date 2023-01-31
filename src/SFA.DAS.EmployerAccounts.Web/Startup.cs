@@ -15,6 +15,7 @@ using SFA.DAS.EmployerAccounts.Web.Filters;
 using SFA.DAS.EmployerAccounts.Web.Handlers;
 using SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 using SFA.DAS.GovUK.Auth.AppStart;
+using SFA.DAS.UnitOfWork.NServiceBus.DependencyResolution.Microsoft;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace SFA.DAS.EmployerAccounts.Web
@@ -88,6 +89,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddEventsApi();
             services.AddNotifications(_configuration);
 
+            services.AddNServiceBusUnitOfWork();
             services.StartNServiceBus(_employerAccountsConfiguration, _configuration.IsDevOrLocal());
             services.AddEmployerFeaturesAuthorization();
             services.AddDasAuthorization();

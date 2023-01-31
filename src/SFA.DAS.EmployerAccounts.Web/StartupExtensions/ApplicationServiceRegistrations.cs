@@ -1,6 +1,7 @@
 ﻿using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
+using SFA.DAS.EmployerAccounts.Events;
 using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Policies;
 using SFA.DAS.EmployerAccounts.Services;
@@ -55,6 +56,9 @@ public static class ApplicationServiceRegistrations
         services.AddScoped<IEncodingService, EncodingService>();
 
         services.AddTransient<HmrcExecutionPolicy>();
+
+        services.AddTransient<IGenericEventFactory, GenericEventFactory>();
+        services.AddTransient<IPayeSchemeEventFactory, PayeSchemeEventFactory>();
 
         return services;
     }

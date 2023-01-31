@@ -12,6 +12,7 @@ using SFA.DAS.EmployerAccounts.Api.Orchestrators;
 using SFA.DAS.EmployerAccounts.Api.ServiceRegistrations;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
+using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountDetail;
@@ -22,7 +23,10 @@ using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamMembers;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamMembersWhichReceiveNotifications;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
+using SFA.DAS.EmployerAccounts.Queries.RemovePayeFromAccount;
+using SFA.DAS.EmployerAccounts.Queries.UpdateUserAornLock;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
+using SFA.DAS.NServiceBus.Services;
 
 namespace SFA.DAS.EmployerAccounts.Api.UnitTests;
 
@@ -60,6 +64,8 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IRequestHandler<GetEmployerAgreementByIdRequest, GetEmployerAgreementByIdResponse>))]
     [TestCase(typeof(IRequestHandler<GetMinimumSignedAgreementVersionQuery, GetMinimumSignedAgreementVersionResponse>))]
     [TestCase(typeof(IRequestHandler<GetUserAccountsQuery, GetUserAccountsQueryResponse>))]
+    [TestCase(typeof(IRequestHandler<UpdateUserAornLockRequest, Unit>))]
+    [TestCase(typeof(IRequestHandler<RemovePayeFromAccountCommand, Unit>))]
     public void Then_The_Dependencies_Are_Correctly_Resolved_For_Handlers(Type toResolve)
     {
         var mockHostingEnvironment = new Mock<IHostingEnvironment>();
@@ -70,10 +76,15 @@ public class WhenAddingServicesToTheContainer
         serviceCollection.AddSingleton(mockHostingEnvironment.Object);
         serviceCollection.AddSingleton(Mock.Of<IPayeSchemesService>());
         serviceCollection.AddSingleton(Mock.Of<IPayeRepository>());
+        serviceCollection.AddSingleton(Mock.Of<IMembershipRepository>());
         serviceCollection.AddSingleton(Mock.Of<IUserAccountRepository>());
         serviceCollection.AddSingleton(Mock.Of<IEmployerAccountRepository>());
         serviceCollection.AddSingleton(Mock.Of<IEmployerAgreementRepository>());
         serviceCollection.AddSingleton(Mock.Of<IEmployerAccountTeamRepository>());
+        serviceCollection.AddSingleton(Mock.Of<IUserAornPayeLockService>());
+        serviceCollection.AddSingleton(Mock.Of<IGenericEventFactory>());
+        serviceCollection.AddSingleton(Mock.Of<IPayeSchemeEventFactory>());
+        serviceCollection.AddSingleton(Mock.Of<IEventPublisher>());
         serviceCollection.AddApiConfigurationSections(config);
         serviceCollection.AddMediatR(typeof(GetAccountPayeSchemesQuery));
         serviceCollection.AddMediatorValidation();

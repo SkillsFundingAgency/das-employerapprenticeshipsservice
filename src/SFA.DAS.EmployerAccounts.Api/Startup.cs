@@ -19,6 +19,8 @@ using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
 using SFA.DAS.UnitOfWork.Mvc.Extensions;
+using SFA.DAS.UnitOfWork.NServiceBus.DependencyResolution.Microsoft;
+using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.Microsoft;
 using SFA.DAS.Validation.Mvc.Extensions;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
@@ -28,7 +30,7 @@ public class Startup
 {
     public IConfiguration Configuration { get; }
     private readonly IHostEnvironment _environment;
-
+    
     public Startup(IConfiguration configuration, IHostEnvironment environment)
     {
         _environment = environment;
@@ -64,11 +66,14 @@ public class Startup
             c.IncludeXmlComments(xmlPath);
         });
 
+        services.AddApplicationServices();
         services.AddDasDistributedMemoryCache(employerAccountsConfiguration, _environment.IsDevelopment());
         services.AddDasHealthChecks(employerAccountsConfiguration);
         services.AddOrchestrators();
-        services.StartNServiceBus(employerAccountsConfiguration,
-            Configuration.IsDevOrLocal() || Configuration.IsTest());
+        
+        services.AddNServiceBusUnitOfWork();
+        services.StartNServiceBus(employerAccountsConfiguration, Configuration.IsDevOrLocal() || Configuration.IsTest());
+        
         services.AddDatabaseRegistration(employerAccountsConfiguration, Configuration["EnvironmentName"]);
         services.AddDataRepositories();
         services.AddEventsApi();
