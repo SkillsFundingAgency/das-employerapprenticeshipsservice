@@ -14,13 +14,17 @@ using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountStats;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountTasks;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers;
+using SFA.DAS.EmployerAccounts.Queries.GetApprenticeship;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerEnglishFractionHistory;
 using SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
+using SFA.DAS.EmployerAccounts.Queries.GetReservations;
 using SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf;
+using SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
 using SFA.DAS.EmployerAccounts.Queries.GetUser;
+using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
 using SFA.DAS.EmployerAccounts.Queries.RemovePayeFromAccount;
 using SFA.DAS.EmployerAccounts.Validation;
 
@@ -63,7 +67,12 @@ public static class MediatorValidationServiceRegistration
         services.AddTransient<IValidator<GetUserQuery>, GetUserQueryValidator>();
         services.AddTransient<IValidator<GetUserByRefQuery>, GetUserByRefQueryValidator>();
         services.AddTransient<IValidator<GetAccountTasksQuery>, GetAccountTasksQueryValidator>();
-
+        services.AddTransient<IValidator<GetApprenticeshipsRequest>, GetApprenticeshipsValidator>();
+        services.AddTransient<IValidator<GetReservationsRequest>, GetReservationsRequestValidator>();
+        services.AddTransient<IValidator<GetSingleCohortRequest>, GetSingleCohortRequestValidator>();
+        services.AddTransient<IValidator<GetVacanciesRequest>, GetVacanciesRequestValidator>();
+        
+        
         return services;
     }
 }
