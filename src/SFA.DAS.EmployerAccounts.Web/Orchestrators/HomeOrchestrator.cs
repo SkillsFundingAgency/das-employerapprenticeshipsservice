@@ -73,7 +73,7 @@ public class HomeOrchestrator
 
     public virtual async Task Unsubscribe(Guid correlationId)
     {
-        await _mediator.Send(new UnsubscribeProviderEmailQuery
+        await _mediator.Send(new UnsubscribeProviderEmailCommand
         {
             CorrelationId = correlationId
         });

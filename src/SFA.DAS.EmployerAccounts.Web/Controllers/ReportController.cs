@@ -27,7 +27,7 @@ public class ReportController : BaseController
             _logger.LogDebug($"Reporting Training Provider with correlationId: {correlationId}");
 
             //If being reported, unsubscribe to not get further notifications anyway
-            await _mediator.Send(new UnsubscribeProviderEmailQuery
+            await _mediator.Send(new UnsubscribeProviderEmailCommand
             {
                 CorrelationId = correlationGuid
             });

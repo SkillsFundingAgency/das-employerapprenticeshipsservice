@@ -8,6 +8,7 @@ using SFA.DAS.EmployerAccounts.Commands.RemoveTeamMember;
 using SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
 using SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Commands.UpdateShowWizard;
+using SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
@@ -47,6 +48,7 @@ public static class MediatorValidationServiceRegistration
         services.AddTransient<IValidator<RemoveTeamMemberCommand>, RemoveTeamMemberCommandValidator>();
         services.AddTransient<IValidator<UpdateShowAccountWizardCommand>, UpdateShowAccountWizardCommandValidator>();
         services.AddTransient<IValidator<CreateInvitationCommand>, CreateInvitationCommandValidator>();
+        services.AddTransient<IValidator<UpsertRegisteredUserCommand>, UpsertRegisteredUserCommandValidator>();
         
         return services;
     }
