@@ -10,8 +10,10 @@ using SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity;
 using SFA.DAS.EmployerAccounts.Commands.RemoveTeamMember;
 using SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
 using SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement;
+using SFA.DAS.EmployerAccounts.Commands.UnsubscribeNotification;
 using SFA.DAS.EmployerAccounts.Commands.UpdateOrganisationDetails;
 using SFA.DAS.EmployerAccounts.Commands.UpdateShowWizard;
+using SFA.DAS.EmployerAccounts.Commands.UpdateUserNotificationSettings;
 using SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities;
@@ -29,13 +31,16 @@ using SFA.DAS.EmployerAccounts.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetOrganisationById;
 using SFA.DAS.EmployerAccounts.Queries.GetOrganisations;
+using SFA.DAS.EmployerAccounts.Queries.GetOrganisationsByAorn;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
+using SFA.DAS.EmployerAccounts.Queries.GetPensionRegulator;
 using SFA.DAS.EmployerAccounts.Queries.GetReservations;
 using SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf;
 using SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
 using SFA.DAS.EmployerAccounts.Queries.GetUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
 using SFA.DAS.EmployerAccounts.Queries.GetUserInvitations;
+using SFA.DAS.EmployerAccounts.Queries.GetUserNotificationSettings;
 using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
 using SFA.DAS.EmployerAccounts.Queries.RemovePayeFromAccount;
 using SFA.DAS.EmployerAccounts.Validation;
@@ -61,6 +66,8 @@ public static class MediatorValidationServiceRegistration
         services.AddTransient<IValidator<AcceptInvitationCommand>, AcceptInvitationCommandValidator>();
         services.AddTransient<IValidator<UpdateOrganisationDetailsCommand>, UpdateOrganisationDetailsCommandValidator>();
         services.AddTransient<IValidator<DismissMonthlyTaskReminderCommand>, DismissMonthlyTaskReminderCommandValidator>();
+        services.AddTransient<IValidator<UnsubscribeNotificationCommand>, UnsubscribeNotificationValidator>();
+        services.AddTransient<IValidator<UpdateUserNotificationSettingsCommand>, UpdateUserNotificationSettingsValidator>();
         
         return services;
     }
@@ -95,6 +102,9 @@ public static class MediatorValidationServiceRegistration
         services.AddTransient<IValidator<CreateOrganisationAddressRequest>, CreateOrganisationAddressValidator>();
         services.AddTransient<IValidator<GetAccountLegalEntitiesRequest>, GetAccountLegalEntitiesValidator>();
         services.AddTransient<IValidator<GetOrganisationsRequest>, GetOrganisationsValidator>();
+        services.AddTransient<IValidator<GetOrganisationsByAornRequest>, GetOrganisationsByAornValidator>();
+        services.AddTransient<IValidator<GetPensionRegulatorRequest>, GetPensionRegulatorValidator>();
+        services.AddTransient<IValidator<GetUserNotificationSettingsQuery>, GetUserNotificationSettingsQueryValidator>();
         
         return services;
     }

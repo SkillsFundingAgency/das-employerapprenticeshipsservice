@@ -26,9 +26,11 @@ using SFA.DAS.EmployerAccounts.Commands.RemoveTeamMember;
 using SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
 using SFA.DAS.EmployerAccounts.Commands.ResendInvitation;
 using SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement;
+using SFA.DAS.EmployerAccounts.Commands.UnsubscribeNotification;
 using SFA.DAS.EmployerAccounts.Commands.UnsubscribeProviderEmail;
 using SFA.DAS.EmployerAccounts.Commands.UpdateOrganisationDetails;
 using SFA.DAS.EmployerAccounts.Commands.UpdateShowWizard;
+using SFA.DAS.EmployerAccounts.Commands.UpdateUserNotificationSettings;
 using SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
@@ -72,6 +74,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 using SFA.DAS.EmployerAccounts.Queries.GetUserInvitations;
+using SFA.DAS.EmployerAccounts.Queries.GetUserNotificationSettings;
 using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
 using SFA.DAS.EmployerAccounts.Queries.RemovePayeFromAccount;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
@@ -136,6 +139,8 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IRequestHandler<AcceptInvitationCommand, Unit>))]
     [TestCase(typeof(IRequestHandler<UpdateOrganisationDetailsCommand, Unit>))]
     [TestCase(typeof(IRequestHandler<DismissMonthlyTaskReminderCommand, Unit>))]
+    [TestCase(typeof(IRequestHandler<UpdateUserNotificationSettingsCommand, Unit>))]
+    [TestCase(typeof(IRequestHandler<UnsubscribeNotificationCommand, Unit>))]
     public void Then_The_Dependencies_Are_Correctly_Resolved_For_Command_Handlers(Type toResolve)
     {
         var mockHostingEnvironment = new Mock<IHostingEnvironment>();
@@ -224,6 +229,7 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IRequestHandler<GetAccountLegalEntitiesRequest, GetAccountLegalEntitiesResponse>))]
     [TestCase(typeof(IRequestHandler<GetPensionRegulatorRequest, GetPensionRegulatorResponse>))]
     [TestCase(typeof(IRequestHandler<GetOrganisationsByAornRequest, GetOrganisationsByAornResponse>))]
+    [TestCase(typeof(IRequestHandler<GetUserNotificationSettingsQuery, GetUserNotificationSettingsQueryResponse>))]
     public void Then_The_Dependencies_Are_Correctly_Resolved_For_Query_Handlers(Type toResolve)
     {
         var mockHostingEnvironment = new Mock<IHostingEnvironment>();
@@ -234,6 +240,7 @@ public class WhenAddingServicesToTheContainer
 
         serviceCollection.AddSingleton(mockHostingEnvironment.Object);
         serviceCollection.AddSingleton(Mock.Of<IMembershipRepository>());
+        serviceCollection.AddSingleton(Mock.Of<IAccountRepository>());
         serviceCollection.AddSingleton(Mock.Of<IEmployerAccountRepository>());
         serviceCollection.AddSingleton(Mock.Of<IEmployerAgreementRepository>());
         serviceCollection.AddSingleton(Mock.Of<IEmployerAccountTeamRepository>());
