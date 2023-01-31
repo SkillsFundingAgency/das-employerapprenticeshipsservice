@@ -42,6 +42,9 @@ using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerEnglishFractionHistory;
+using SFA.DAS.EmployerAccounts.Queries.GetGatewayInformation;
+using SFA.DAS.EmployerAccounts.Queries.GetGatewayToken;
+using SFA.DAS.EmployerAccounts.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EmployerAccounts.Queries.GetInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetMember;
 using SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements;
@@ -52,6 +55,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetUser;
+using SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
@@ -60,6 +64,7 @@ using SFA.DAS.EmployerAccounts.ServiceRegistration;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.StartupExtensions;
+using SFA.DAS.Hmrc;
 using SFA.DAS.NServiceBus.Services;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Temp.AppStart;
@@ -181,6 +186,10 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IRequestHandler<GetApprenticeshipsRequest, GetApprenticeshipsResponse>))]
     [TestCase(typeof(IRequestHandler<GetSingleCohortRequest, GetSingleCohortResponse>))]
     [TestCase(typeof(IRequestHandler<GetVacanciesRequest, GetVacanciesResponse>))]
+    [TestCase(typeof(IRequestHandler<GetUserAccountRoleQuery, GetUserAccountRoleResponse>))]
+    [TestCase(typeof(IRequestHandler<GetGatewayInformationQuery, GetGatewayInformationResponse>))]
+    [TestCase(typeof(IRequestHandler<GetGatewayTokenQuery, GetGatewayTokenQueryResponse>))]
+    [TestCase(typeof(IRequestHandler<GetHmrcEmployerInformationQuery, GetHmrcEmployerInformationResponse>))]
     public void Then_The_Dependencies_Are_Correctly_Resolved_For_Query_Handlers(Type toResolve)
     {
         var mockHostingEnvironment = new Mock<IHostingEnvironment>();
@@ -208,6 +217,7 @@ public class WhenAddingServicesToTheContainer
         serviceCollection.AddSingleton(Mock.Of<ICommitmentV2Service>());
         serviceCollection.AddSingleton(Mock.Of<IReservationsService>());
         serviceCollection.AddSingleton(Mock.Of<IRecruitService>());
+        serviceCollection.AddSingleton(Mock.Of<IHmrcService>());
         serviceCollection.AddSingleton(Mock.Of<Lazy<EmployerAccountsDbContext>>());
 
         serviceCollection.AddConfigurationOptions(config);

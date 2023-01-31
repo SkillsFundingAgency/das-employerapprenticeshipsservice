@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using SFA.DAS.EmployerAccounts.Queries.GetGatewayInformation;
 using SFA.DAS.EmployerAccounts.Queries.GetGatewayToken;
 using SFA.DAS.EmployerAccounts.Queries.GetHmrcEmployerInformation;
