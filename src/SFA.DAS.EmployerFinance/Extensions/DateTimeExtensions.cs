@@ -9,7 +9,7 @@ namespace SFA.DAS.EmployerFinance.Extensions
 
         public static string ToFinancialYearString(this DateTime dateTime)
         {
-            var financialYearStartDate = new DateTime(DateTime.UtcNow.Year, FinancialYearStartMonth, FinancialYearStartDay);
+            var financialYearStartDate = new DateTime(dateTime.Year, FinancialYearStartMonth, FinancialYearStartDay);
             if(dateTime < financialYearStartDate)
             {
                 return $"{dateTime.Year - 1}/{dateTime:yy}";
