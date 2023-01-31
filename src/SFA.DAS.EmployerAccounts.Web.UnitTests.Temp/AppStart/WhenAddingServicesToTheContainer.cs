@@ -12,32 +12,45 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount;
+using SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole;
 using SFA.DAS.EmployerAccounts.Commands.CreateAccount;
+using SFA.DAS.EmployerAccounts.Commands.CreateInvitation;
 using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 using SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
+using SFA.DAS.EmployerAccounts.Commands.DeleteInvitation;
 using SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity;
+using SFA.DAS.EmployerAccounts.Commands.RemoveTeamMember;
 using SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
+using SFA.DAS.EmployerAccounts.Commands.ResendInvitation;
 using SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement;
+using SFA.DAS.EmployerAccounts.Commands.UpdateShowWizard;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
+using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Interfaces.OuterApi;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountStats;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountTasks;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerEnglishFractionHistory;
+using SFA.DAS.EmployerAccounts.Queries.GetInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetMember;
 using SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
+using SFA.DAS.EmployerAccounts.Queries.GetUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
+using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 using SFA.DAS.EmployerAccounts.Queries.RemovePayeFromAccount;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
@@ -88,6 +101,12 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IRequestHandler<RemovePayeFromAccountCommand, Unit>))]
     [TestCase(typeof(IRequestHandler<SignEmployerAgreementCommand, SignEmployerAgreementCommandResponse>))]
     [TestCase(typeof(IRequestHandler<RemoveLegalEntityCommand, Unit>))]
+    [TestCase(typeof(IRequestHandler<DeleteInvitationCommand, Unit>))]
+    [TestCase(typeof(IRequestHandler<ChangeTeamMemberRoleCommand, Unit>))]
+    [TestCase(typeof(IRequestHandler<UpdateShowAccountWizardCommand, Unit>))]
+    [TestCase(typeof(IRequestHandler<CreateInvitationCommand, Unit>))]
+    [TestCase(typeof(IRequestHandler<RemoveTeamMemberCommand, Unit>))]
+    [TestCase(typeof(IRequestHandler<ResendInvitationCommand, Unit>))]
     public void Then_The_Dependencies_Are_Correctly_Resolved_For_Command_Handlers(Type toResolve)
     {
         var mockHostingEnvironment = new Mock<IHostingEnvironment>();
@@ -102,6 +121,7 @@ public class WhenAddingServicesToTheContainer
         serviceCollection.AddSingleton(Mock.Of<IEmployerAccountRepository>());
         serviceCollection.AddSingleton(Mock.Of<IEmployerSchemesRepository>());
         serviceCollection.AddSingleton(Mock.Of<IEmployerAgreementRepository>());
+        serviceCollection.AddSingleton(Mock.Of<IUserAccountRepository>());
         serviceCollection.AddSingleton(Mock.Of<IPayeRepository>());
         serviceCollection.AddSingleton(Mock.Of<IGenericEventFactory>());
         serviceCollection.AddSingleton(Mock.Of<IEmployerAgreementEventFactory>());
@@ -111,10 +131,11 @@ public class WhenAddingServicesToTheContainer
         serviceCollection.AddSingleton(Mock.Of<IEventPublisher>());
         serviceCollection.AddSingleton(Mock.Of<ICommitmentsV2ApiClient>());
         serviceCollection.AddSingleton(Mock.Of<ICommitmentV2Service>());
+        serviceCollection.AddSingleton(Mock.Of<IInvitationRepository>());
         
         serviceCollection.AddConfigurationOptions(config);
         serviceCollection.AddMediatR(typeof(GetEmployerAccountByHashedIdQuery));
-        serviceCollection.AddMediatorValidators();
+        serviceCollection.AddMediatorCommandValidators();
         serviceCollection.AddLogging();
         serviceCollection.AddAutoMapper(typeof(Startup).Assembly);
 
@@ -142,6 +163,16 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IRequestHandler<GetSignedEmployerAgreementPdfRequest, GetSignedEmployerAgreementPdfResponse>))]
     [TestCase(typeof(IRequestHandler<GetAccountLegalEntityRemoveRequest, GetAccountLegalEntityRemoveResponse>))]
     [TestCase(typeof(IRequestHandler<GetOrganisationAgreementsRequest, GetOrganisationAgreementsResponse>))]
+    [TestCase(typeof(IRequestHandler<GetEmployerAccountByHashedIdQuery, GetEmployerAccountByHashedIdResponse>))]
+    [TestCase(typeof(IRequestHandler<GetTeamMemberQuery, GetTeamMemberResponse>))]
+    [TestCase(typeof(IRequestHandler<GetAccountStatsQuery, GetAccountStatsResponse>))]
+    [TestCase(typeof(IRequestHandler<GetAccountEmployerAgreementsRequest, GetAccountEmployerAgreementsResponse>))]
+    [TestCase(typeof(IRequestHandler<GetUserByRefQuery, GetUserByRefResponse>))]
+    [TestCase(typeof(IRequestHandler<GetAccountTasksQuery, GetAccountTasksResponse>))]
+    [TestCase(typeof(IRequestHandler<GetInvitationRequest, GetInvitationResponse>))]
+    [TestCase(typeof(IRequestHandler<GetAccountTeamMembersQuery, GetAccountTeamMembersResponse>))]
+    [TestCase(typeof(IRequestHandler<GetUserQuery, GetUserResponse>))]
+    [TestCase(typeof(IRequestHandler<GetEmployerAccountByHashedIdQuery, GetEmployerAccountByHashedIdResponse>))]
     public void Then_The_Dependencies_Are_Correctly_Resolved_For_Query_Handlers(Type toResolve)
     {
         var mockHostingEnvironment = new Mock<IHostingEnvironment>();
@@ -155,18 +186,22 @@ public class WhenAddingServicesToTheContainer
         serviceCollection.AddSingleton(Mock.Of<IEmployerAccountRepository>());
         serviceCollection.AddSingleton(Mock.Of<IEmployerAgreementRepository>());
         serviceCollection.AddSingleton(Mock.Of<IEmployerAccountTeamRepository>());
+        serviceCollection.AddSingleton(Mock.Of<IInvitationRepository>());
         serviceCollection.AddSingleton(Mock.Of<IPayeRepository>());
+        serviceCollection.AddSingleton(Mock.Of<IUserRepository>());
         serviceCollection.AddSingleton(Mock.Of<IUserAccountRepository>());
         serviceCollection.AddSingleton(Mock.Of<IPayeSchemesWithEnglishFractionService>());
         serviceCollection.AddSingleton(Mock.Of<IOuterApiClient>());
         serviceCollection.AddSingleton(Mock.Of<ICommitmentsV2ApiClient>());
         serviceCollection.AddSingleton(Mock.Of<IPdfService>());
+        serviceCollection.AddSingleton(Mock.Of<ITaskService>());
+        serviceCollection.AddSingleton(Mock.Of<IUserContext>());
         serviceCollection.AddSingleton(Mock.Of<IReferenceDataService>());
         serviceCollection.AddSingleton(Mock.Of<Lazy<EmployerAccountsDbContext>>());
 
         serviceCollection.AddConfigurationOptions(config);
         serviceCollection.AddMediatR(typeof(GetEmployerAccountByHashedIdQuery));
-        serviceCollection.AddMediatorValidators();
+        serviceCollection.AddMediatorQueryValidators();
         serviceCollection.AddLogging();
         serviceCollection.AddAutoMapper(typeof(Startup).Assembly);
 
