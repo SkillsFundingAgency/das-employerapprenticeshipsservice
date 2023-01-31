@@ -3,14 +3,18 @@ using SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount;
 using SFA.DAS.EmployerAccounts.Commands.CreateAccount;
 using SFA.DAS.EmployerAccounts.Commands.CreateInvitation;
 using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
+using SFA.DAS.EmployerAccounts.Commands.CreateOrganisationAddress;
 using SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
 using SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity;
 using SFA.DAS.EmployerAccounts.Commands.RemoveTeamMember;
 using SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
 using SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement;
+using SFA.DAS.EmployerAccounts.Commands.UpdateOrganisationDetails;
 using SFA.DAS.EmployerAccounts.Commands.UpdateShowWizard;
 using SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntity;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountStats;
@@ -22,6 +26,8 @@ using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerEnglishFractionHistory;
 using SFA.DAS.EmployerAccounts.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements;
+using SFA.DAS.EmployerAccounts.Queries.GetOrganisationById;
+using SFA.DAS.EmployerAccounts.Queries.GetOrganisations;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerAccounts.Queries.GetReservations;
 using SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf;
@@ -52,6 +58,7 @@ public static class MediatorValidationServiceRegistration
         services.AddTransient<IValidator<CreateInvitationCommand>, CreateInvitationCommandValidator>();
         services.AddTransient<IValidator<UpsertRegisteredUserCommand>, UpsertRegisteredUserCommandValidator>();
         services.AddTransient<IValidator<AcceptInvitationCommand>, AcceptInvitationCommandValidator>();
+        services.AddTransient<IValidator<UpdateOrganisationDetailsCommand>, UpdateOrganisationDetailsCommandValidator>();
         
         return services;
     }
@@ -81,6 +88,11 @@ public static class MediatorValidationServiceRegistration
         services.AddTransient<IValidator<GetUserAccountRoleQuery>, GetUserAccountRoleValidator>();
         services.AddTransient<IValidator<GetHmrcEmployerInformationQuery>, GetHmrcEmployerInformationValidator>();
         services.AddTransient<IValidator<GetNumberOfUserInvitationsQuery>, GetNumberOfUserInvitationsValidator>();
+        services.AddTransient<IValidator<GetAccountLegalEntityRequest>, GetAccountLegalEntityValidator>();
+        services.AddTransient<IValidator<GetOrganisationByIdRequest>, GetOrganisationByIdValidator>();
+        services.AddTransient<IValidator<CreateOrganisationAddressRequest>, CreateOrganisationAddressValidator>();
+        services.AddTransient<IValidator<GetAccountLegalEntitiesRequest>, GetAccountLegalEntitiesValidator>();
+        services.AddTransient<IValidator<GetOrganisationsRequest>, GetOrganisationsValidator>();
         
         return services;
     }

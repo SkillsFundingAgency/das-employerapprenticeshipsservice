@@ -37,6 +37,7 @@ using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Interfaces.OuterApi;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntity;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
@@ -55,6 +56,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetMember;
 using SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetOrganisationById;
+using SFA.DAS.EmployerAccounts.Queries.GetOrganisations;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerAccounts.Queries.GetProviderInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetReservations;
@@ -213,6 +215,8 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IRequestHandler<CreateOrganisationAddressRequest, CreateOrganisationAddressResponse>))]
     [TestCase(typeof(IRequestHandler<GetAccountLegalEntityRequest, GetAccountLegalEntityResponse>))]
     [TestCase(typeof(IRequestHandler<GetOrganisationByIdRequest, GetOrganisationByIdResponse>))]
+    [TestCase(typeof(IRequestHandler<GetOrganisationsRequest, GetOrganisationsResponse>))]
+    [TestCase(typeof(IRequestHandler<GetAccountLegalEntitiesRequest, GetAccountLegalEntitiesResponse>))]
     public void Then_The_Dependencies_Are_Correctly_Resolved_For_Query_Handlers(Type toResolve)
     {
         var mockHostingEnvironment = new Mock<IHostingEnvironment>();
@@ -241,6 +245,7 @@ public class WhenAddingServicesToTheContainer
         serviceCollection.AddSingleton(Mock.Of<IReservationsService>());
         serviceCollection.AddSingleton(Mock.Of<IRecruitService>());
         serviceCollection.AddSingleton(Mock.Of<IHmrcService>());
+        serviceCollection.AddSingleton(Mock.Of<IPensionRegulatorService>());
         serviceCollection.AddSingleton(Mock.Of<IProviderRegistrationApiClient>());
         serviceCollection.AddSingleton(Mock.Of<Lazy<EmployerAccountsDbContext>>());
 
