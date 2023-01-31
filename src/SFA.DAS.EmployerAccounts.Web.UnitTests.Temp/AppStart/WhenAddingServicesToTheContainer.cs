@@ -234,6 +234,7 @@ public class WhenAddingServicesToTheContainer
         serviceCollection.AddSingleton(Mock.Of<IReservationsService>());
         serviceCollection.AddSingleton(Mock.Of<IRecruitService>());
         serviceCollection.AddSingleton(Mock.Of<IHmrcService>());
+        serviceCollection.AddSingleton(Mock.Of<IProviderRegistrationApiClient>());
         serviceCollection.AddSingleton(Mock.Of<Lazy<EmployerAccountsDbContext>>());
 
         serviceCollection.AddConfigurationOptions(config);

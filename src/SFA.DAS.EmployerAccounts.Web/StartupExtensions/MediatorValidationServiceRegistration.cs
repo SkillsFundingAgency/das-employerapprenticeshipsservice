@@ -28,6 +28,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf;
 using SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
 using SFA.DAS.EmployerAccounts.Queries.GetUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
+using SFA.DAS.EmployerAccounts.Queries.GetUserInvitations;
 using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
 using SFA.DAS.EmployerAccounts.Queries.RemovePayeFromAccount;
 using SFA.DAS.EmployerAccounts.Validation;
@@ -79,6 +80,7 @@ public static class MediatorValidationServiceRegistration
         services.AddTransient<IValidator<GetVacanciesRequest>, GetVacanciesRequestValidator>();
         services.AddTransient<IValidator<GetUserAccountRoleQuery>, GetUserAccountRoleValidator>();
         services.AddTransient<IValidator<GetHmrcEmployerInformationQuery>, GetHmrcEmployerInformationValidator>();
+        services.AddTransient<IValidator<GetNumberOfUserInvitationsQuery>, GetNumberOfUserInvitationsValidator>();
         
         return services;
     }
