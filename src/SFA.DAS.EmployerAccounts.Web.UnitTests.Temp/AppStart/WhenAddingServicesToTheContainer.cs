@@ -79,31 +79,16 @@ public class WhenAddingServicesToTheContainer
         Assert.IsNotNull(type);
     }
 
-    [TestCase(typeof(IRequestHandler<GetEmployerAccountByHashedIdQuery, GetEmployerAccountByHashedIdResponse>))]
     [TestCase(typeof(IRequestHandler<RenameEmployerAccountCommand, Unit>))]
     [TestCase(typeof(IRequestHandler<CreateLegalEntityCommand, CreateLegalEntityCommandResponse>))]
     [TestCase(typeof(IRequestHandler<AddPayeToAccountCommand, Unit>))]
     [TestCase(typeof(IRequestHandler<CreateAccountCommand, CreateAccountCommandResponse>))]
-    [TestCase(typeof(IRequestHandler<GetUserAccountsQuery, GetUserAccountsQueryResponse>))]
     [TestCase(typeof(IRequestHandler<CreateUserAccountCommand, CreateUserAccountCommandResponse>))]
-    [TestCase(typeof(IRequestHandler<GetAccountPayeSchemesForAuthorisedUserQuery, GetAccountPayeSchemesResponse>))]
-    [TestCase(typeof(IRequestHandler<GetMemberRequest, GetMemberResponse>))]
     [TestCase(typeof(IRequestHandler<AddPayeToAccountCommand, Unit>))]
-    [TestCase(typeof(IRequestHandler<GetEmployerAccountByHashedIdQuery, GetEmployerAccountByHashedIdResponse>))]
-    [TestCase(typeof(IRequestHandler<GetPayeSchemeByRefQuery, GetPayeSchemeByRefResponse>))]
     [TestCase(typeof(IRequestHandler<RemovePayeFromAccountCommand, Unit>))]
-    [TestCase(typeof(IRequestHandler<GetEmployerEnglishFractionHistoryQuery, GetEmployerEnglishFractionHistoryResponse>))]
-    [TestCase(typeof(IRequestHandler<GetTeamMemberQuery, GetTeamMemberResponse>))]
-    [TestCase(typeof(IRequestHandler<GetAccountEmployerAgreementsRequest, GetAccountEmployerAgreementsResponse>))]
-    [TestCase(typeof(IRequestHandler<GetEmployerAgreementRequest, GetEmployerAgreementResponse>))]
     [TestCase(typeof(IRequestHandler<SignEmployerAgreementCommand, SignEmployerAgreementCommandResponse>))]
-    [TestCase(typeof(IRequestHandler<GetNextUnsignedEmployerAgreementRequest, GetNextUnsignedEmployerAgreementResponse>))]
     [TestCase(typeof(IRequestHandler<RemoveLegalEntityCommand, Unit>))]
-    [TestCase(typeof(IRequestHandler<GetEmployerAgreementPdfRequest, GetEmployerAgreementPdfResponse>))]
-    [TestCase(typeof(IRequestHandler<GetSignedEmployerAgreementPdfRequest, GetSignedEmployerAgreementPdfResponse>))]
-    [TestCase(typeof(IRequestHandler<GetAccountLegalEntityRemoveRequest, GetAccountLegalEntityRemoveResponse>))]
-    [TestCase(typeof(IRequestHandler<GetOrganisationAgreementsRequest, GetOrganisationAgreementsResponse>))]
-    public void Then_The_Dependencies_Are_Correctly_Resolved_For_Handlers(Type toResolve)
+    public void Then_The_Dependencies_Are_Correctly_Resolved_For_Command_Handlers(Type toResolve)
     {
         var mockHostingEnvironment = new Mock<IHostingEnvironment>();
         mockHostingEnvironment.Setup(x => x.EnvironmentName).Returns("Test");
@@ -117,19 +102,64 @@ public class WhenAddingServicesToTheContainer
         serviceCollection.AddSingleton(Mock.Of<IEmployerAccountRepository>());
         serviceCollection.AddSingleton(Mock.Of<IEmployerSchemesRepository>());
         serviceCollection.AddSingleton(Mock.Of<IEmployerAgreementRepository>());
-        serviceCollection.AddSingleton(Mock.Of<IEmployerAccountTeamRepository>());
         serviceCollection.AddSingleton(Mock.Of<IPayeRepository>());
-        serviceCollection.AddSingleton(Mock.Of<IUserAccountRepository>());
         serviceCollection.AddSingleton(Mock.Of<IGenericEventFactory>());
         serviceCollection.AddSingleton(Mock.Of<IEmployerAgreementEventFactory>());
         serviceCollection.AddSingleton(Mock.Of<ILegalEntityEventFactory>());
         serviceCollection.AddSingleton(Mock.Of<IPayeSchemeEventFactory>());
         serviceCollection.AddSingleton(Mock.Of<IAccountEventFactory>());
         serviceCollection.AddSingleton(Mock.Of<IEventPublisher>());
+        serviceCollection.AddSingleton(Mock.Of<ICommitmentsV2ApiClient>());
+        serviceCollection.AddSingleton(Mock.Of<ICommitmentV2Service>());
+        
+        serviceCollection.AddConfigurationOptions(config);
+        serviceCollection.AddMediatR(typeof(GetEmployerAccountByHashedIdQuery));
+        serviceCollection.AddMediatorValidators();
+        serviceCollection.AddLogging();
+        serviceCollection.AddAutoMapper(typeof(Startup).Assembly);
+
+        var employerAccountsConfiguration = config.Get<EmployerAccountsConfiguration>();
+        serviceCollection.AddHashingServices(employerAccountsConfiguration);
+        
+        var provider = serviceCollection.BuildServiceProvider();
+
+        var type = provider.GetService(toResolve);
+        Assert.IsNotNull(type);
+    }
+
+    [TestCase(typeof(IRequestHandler<GetEmployerAccountByHashedIdQuery, GetEmployerAccountByHashedIdResponse>))]
+    [TestCase(typeof(IRequestHandler<GetUserAccountsQuery, GetUserAccountsQueryResponse>))]
+    [TestCase(typeof(IRequestHandler<GetAccountPayeSchemesForAuthorisedUserQuery, GetAccountPayeSchemesResponse>))]
+    [TestCase(typeof(IRequestHandler<GetMemberRequest, GetMemberResponse>))]
+    [TestCase(typeof(IRequestHandler<GetEmployerAccountByHashedIdQuery, GetEmployerAccountByHashedIdResponse>))]
+    [TestCase(typeof(IRequestHandler<GetPayeSchemeByRefQuery, GetPayeSchemeByRefResponse>))]
+    [TestCase(typeof(IRequestHandler<GetEmployerEnglishFractionHistoryQuery, GetEmployerEnglishFractionHistoryResponse>))]
+    [TestCase(typeof(IRequestHandler<GetTeamMemberQuery, GetTeamMemberResponse>))]
+    [TestCase(typeof(IRequestHandler<GetAccountEmployerAgreementsRequest, GetAccountEmployerAgreementsResponse>))]
+    [TestCase(typeof(IRequestHandler<GetEmployerAgreementRequest, GetEmployerAgreementResponse>))]
+    [TestCase(typeof(IRequestHandler<GetNextUnsignedEmployerAgreementRequest, GetNextUnsignedEmployerAgreementResponse>))]
+    [TestCase(typeof(IRequestHandler<GetEmployerAgreementPdfRequest, GetEmployerAgreementPdfResponse>))]
+    [TestCase(typeof(IRequestHandler<GetSignedEmployerAgreementPdfRequest, GetSignedEmployerAgreementPdfResponse>))]
+    [TestCase(typeof(IRequestHandler<GetAccountLegalEntityRemoveRequest, GetAccountLegalEntityRemoveResponse>))]
+    [TestCase(typeof(IRequestHandler<GetOrganisationAgreementsRequest, GetOrganisationAgreementsResponse>))]
+    public void Then_The_Dependencies_Are_Correctly_Resolved_For_Query_Handlers(Type toResolve)
+    {
+        var mockHostingEnvironment = new Mock<IHostingEnvironment>();
+        mockHostingEnvironment.Setup(x => x.EnvironmentName).Returns("Test");
+
+        var config = GenerateConfiguration();
+        var serviceCollection = new ServiceCollection();
+
+        serviceCollection.AddSingleton(mockHostingEnvironment.Object);
+        serviceCollection.AddSingleton(Mock.Of<IMembershipRepository>());
+        serviceCollection.AddSingleton(Mock.Of<IEmployerAccountRepository>());
+        serviceCollection.AddSingleton(Mock.Of<IEmployerAgreementRepository>());
+        serviceCollection.AddSingleton(Mock.Of<IEmployerAccountTeamRepository>());
+        serviceCollection.AddSingleton(Mock.Of<IPayeRepository>());
+        serviceCollection.AddSingleton(Mock.Of<IUserAccountRepository>());
         serviceCollection.AddSingleton(Mock.Of<IPayeSchemesWithEnglishFractionService>());
         serviceCollection.AddSingleton(Mock.Of<IOuterApiClient>());
         serviceCollection.AddSingleton(Mock.Of<ICommitmentsV2ApiClient>());
-        serviceCollection.AddSingleton(Mock.Of<ICommitmentV2Service>());
         serviceCollection.AddSingleton(Mock.Of<IPdfService>());
         serviceCollection.AddSingleton(Mock.Of<IReferenceDataService>());
         serviceCollection.AddSingleton(Mock.Of<Lazy<EmployerAccountsDbContext>>());
@@ -142,7 +172,7 @@ public class WhenAddingServicesToTheContainer
 
         var employerAccountsConfiguration = config.Get<EmployerAccountsConfiguration>();
         serviceCollection.AddHashingServices(employerAccountsConfiguration);
-        
+
         var provider = serviceCollection.BuildServiceProvider();
 
         var type = provider.GetService(toResolve);
