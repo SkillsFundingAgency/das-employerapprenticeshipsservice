@@ -18,7 +18,7 @@
 		<PackageReference Include="Dapper" Version="2.0.123" />
 		<PackageReference Include="System.Memory" Version="4.5.4" />
 		<PackageReference Include="System.ValueTuple" Version="4.5.0" />
-		<PackageReference Include="Pipelines.Sockets.Unofficial" Version="2.2.0"/>
+		<PackageReference Include="Pipelines.Sockets.Unofficial" Version="2.2.0" />
 		<PackageReference Include="AutoMapper">
 			<Version>5.1.1</Version>
 		</PackageReference>
@@ -109,7 +109,7 @@
 		<PackageReference Include="CommonServiceLocator" Version="1.4.0" />
 		<PackageReference Include="EntityFramework" Version="6.4.4" />
 		<PackageReference Include="HtmlTags" Version="8.1.1" />
-		<PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="2.0.5" />
+		<PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
 		<PackageReference Include="SFA.DAS.Elastic" Version="2.0.14" />
 		<PackageReference Include="SFA.DAS.Events.Api.Types" Version="2.1.31" />
 		<PackageReference Include="SpecFlow" Version="3.9.74" />

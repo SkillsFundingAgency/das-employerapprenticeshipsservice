@@ -65,7 +65,7 @@
     </PackageReference>
     <PackageReference Include="Aspose.Pdf" Version="17.12.0" />
     <PackageReference Include="SFA.DAS.Commitments.Events" Version="8.29.1" />
-    <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="2.0.5" />
+    <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
     <PackageReference Include="SFA.DAS.Events.Api.Types" Version="2.1.31" />
   </ItemGroup>
   <ItemGroup>
