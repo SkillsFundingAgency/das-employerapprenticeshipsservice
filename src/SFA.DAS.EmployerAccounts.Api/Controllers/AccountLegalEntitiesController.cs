@@ -17,6 +17,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
             _mediator = mediator;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Get([FromQuery] GetAccountLegalEntitiesQuery query)
         {
             var response = await _mediator.Send(query);

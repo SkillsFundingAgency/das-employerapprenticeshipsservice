@@ -17,6 +17,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
             _mediator = mediator;
         }
 
+        [HttpGet]
         [Route("")]
         public async Task<IActionResult> GetStatistics()
         {

@@ -71,6 +71,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
                 .ToList());
         }
 
+        [HttpGet]
         [Route("{legalEntityId}", Name = "GetLegalEntity")]
         [Authorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpNotFoundForNullModel]
