@@ -27,7 +27,7 @@ public class GetContentRequestHandler : IRequestHandler<GetContentRequest, GetCo
 
     public async Task<GetContentResponse> Handle(GetContentRequest message, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(message);
+        var validationResult = _validator.Validate(message);
 
         if (!validationResult.IsValid())
         {

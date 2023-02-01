@@ -19,12 +19,10 @@ public class GetLegalEntityQueryHandler : IRequestHandler<GetLegalEntityQuery, G
             l.LegalEntityId == message.LegalEntityId &&
             l.Account.HashedId == message.AccountHashedId &&
             (l.PendingAgreementId != null || l.SignedAgreementId != null) &&
-            l.Deleted == null);
+            l.Deleted == null, cancellationToken);
 
         // TODO: The template version number can now be the same across agreement types so this logic may fail
-        var latestAgreement = legalEntity?.Agreements
-            .OrderByDescending(a => a.Template.VersionNumber)
-            .FirstOrDefault();
+        var latestAgreement = (legalEntity?.Agreements).MaxBy(a => a.Template.VersionNumber);
 
         await SetEmailAddressForSignatures(legalEntity);
             

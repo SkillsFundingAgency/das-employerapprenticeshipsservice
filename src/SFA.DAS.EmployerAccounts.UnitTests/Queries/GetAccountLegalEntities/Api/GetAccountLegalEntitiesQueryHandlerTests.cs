@@ -26,7 +26,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntities.Api
             {
                 r.Should().NotBeNull().And.BeOfType<GetAccountLegalEntitiesResponse>();
                 r.AccountLegalEntities.Should().NotBeNull().And.BeOfType<PagedApiResponse<AccountLegalEntity>>();
-                r.AccountLegalEntities.Data.Should().AllBeEquivalentTo(f.AccountLegalEntities.Select(a => new AccountLegalEntity { AccountLegalEntityId = a.Id, AccountLegalEntityPublicHashedId = a.PublicHashedId }));
+                
+                var expected = f.AccountLegalEntities.Select(a => new AccountLegalEntity { AccountLegalEntityId = a.Id, AccountLegalEntityPublicHashedId = a.PublicHashedId });
+                r.AccountLegalEntities.Data.Should().BeEquivalentTo(expected);
+                
                 r.AccountLegalEntities.Page.Should().Be(1);
                 r.AccountLegalEntities.TotalPages.Should().Be(1);
             });

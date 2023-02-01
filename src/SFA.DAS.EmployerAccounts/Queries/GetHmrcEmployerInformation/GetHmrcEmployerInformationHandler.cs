@@ -25,7 +25,7 @@ public class GetHmrcEmployerInformationHandler : IRequestHandler<GetHmrcEmployer
 
     public async Task<GetHmrcEmployerInformationResponse> Handle(GetHmrcEmployerInformationQuery message, CancellationToken cancellationToken)
     {
-        var result = await _validator.ValidateAsync(message);
+        var result = _validator.Validate(message);
 
         if (!result.IsValid())
         {

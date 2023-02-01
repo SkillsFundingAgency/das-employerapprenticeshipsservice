@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLegalEntityQueryTests
     [TestFixture]
     public class GetLegalEntityQueryTests : Testing.FluentTest<GetLegalEntityQueryTestsFixture>
     {
-        
+
         [Test]
         public Task Handle_WhenGettingLegalEntity_WithAllAgreements_ThenShouldReturnLegalEntity()
         {
@@ -133,13 +133,25 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLegalEntityQueryTests
             return this;
         }
 
+        private GetLegalEntityQueryTestsFixture SetLegalEntity()
+        {
+            LegalEntity = new LegalEntity
+            {
+                Id = 222222,
+                Code = "0123456",
+                Sector = "Some Sector",
+                Status = "Some Status"
+            };
+
+            LegalEntities.Add(LegalEntity);
+            return this;
+        }
+
         public GetLegalEntityQueryTestsFixture EvaluateSignedAndPendingAgreementIdsForAllAccountLegalEntities()
         {
             EmployerAgreement FindVersionToUse(AccountLegalEntity ale, EmployerAgreementStatus status)
             {
-                return ale.Agreements.Where(a => a.StatusId == status)
-                    .OrderByDescending(a => a.Template.VersionNumber)
-                    .FirstOrDefault();
+                return ale.Agreements.Where(a => a.StatusId == status).MaxBy(a => a.Template.VersionNumber);
             }
 
             foreach (var accountLegalEntity in AccountLegalEntities)
@@ -155,20 +167,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLegalEntityQueryTests
                 accountLegalEntity.SignedAgreementVersion = signed?.Template?.VersionNumber;
             }
 
-            return this;
-        }
-
-        private GetLegalEntityQueryTestsFixture SetLegalEntity()
-        {
-            LegalEntity = new LegalEntity
-            {
-                Id = 222222,
-                Code = "0123456",
-                Sector = "Some Sector",
-                Status = "Some Status"
-            };
-
-            LegalEntities.Add(LegalEntity);
             return this;
         }
 

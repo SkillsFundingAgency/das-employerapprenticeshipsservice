@@ -23,7 +23,7 @@ public class GetAccountLegalEntitiesCountByHashedAccountIdQueryHandler : IReques
 
     public async Task<GetAccountLegalEntitiesCountByHashedAccountIdResponse> Handle(GetAccountLegalEntitiesCountByHashedAccountIdRequest message, CancellationToken cancellationToken)
     {
-        var result = await _validator.ValidateAsync(message);
+        var result = _validator.Validate(message);
 
         if (!result.IsValid())
         {

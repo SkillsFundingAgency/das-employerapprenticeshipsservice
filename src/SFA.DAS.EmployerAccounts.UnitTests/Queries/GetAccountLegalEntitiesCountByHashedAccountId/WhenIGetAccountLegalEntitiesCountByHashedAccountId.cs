@@ -38,7 +38,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntitiesCoun
         public GetAccountLegalEntitiesCountByHashedAccountIdRequest GetAccountLegalEntitiesCountByHashedAccountIdRequest { get; set; }
         public IRequestHandler<GetAccountLegalEntitiesCountByHashedAccountIdRequest, GetAccountLegalEntitiesCountByHashedAccountIdResponse> Handler { get; set; }
         public Mock<EmployerAccountsDbContext> Db { get; set; }
-        public IConfigurationProvider ConfigurationProvider { get; set; }
         public List<AccountLegalEntity> AccountLegalEntities { get; set; }
         public Mock<IHashingService> HashingService { get; set; }
         public Mock<IValidator<GetAccountLegalEntitiesCountByHashedAccountIdRequest>> RequestValidator { get; set; }
