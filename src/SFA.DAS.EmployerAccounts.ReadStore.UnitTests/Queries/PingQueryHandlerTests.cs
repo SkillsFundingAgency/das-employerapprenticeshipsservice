@@ -23,7 +23,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
         {
             return TestExceptionAsync(
                 f => f.Handle(),
-                (f, r) => r.ShouldNotThrow<Exception>());
+                (f, r) => r.Should().NotThrowAsync<Exception>());
         }
 
         [Test]
@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
             return TestExceptionAsync(
                 f => f.SetPingFailure(), 
                 f => f.Handle(),
-                (f, r) => r.ShouldThrow<Exception>().WithMessage("Read store database ping failed"));
+                (f, r) => r.Should().ThrowAsync<Exception>().WithMessage("Read store database ping failed"));
         }
     }
 
