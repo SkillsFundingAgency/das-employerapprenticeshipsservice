@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Configuration;
@@ -7,7 +8,6 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Queries.GetContent;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Testing.AutoFixture;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
 {
@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
         private Mock<IContentApiClient> _contentBannerService;
         private string _contentType;
         private string _clientId;
-        private Mock<ILog> _logger;
+        private Mock<ILogger<GetContentRequestHandler>> _logger;
         public string ContentBanner;
         public static EmployerAccountsConfiguration EmployerAccountsConfiguration;
         [SetUp]
@@ -37,7 +37,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
             MockCacheStorageService = new Mock<ICacheStorageService>();
             _contentType = "banner";
             _clientId = "eas-acc";
-            _logger = new Mock<ILog>();
+            _logger = new Mock<ILogger<GetContentRequestHandler>>();
             _contentBannerService = new Mock<IContentApiClient>();
             _contentBannerService
                 .Setup(cbs => cbs.Get(_contentType, _clientId))
@@ -75,7 +75,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
             Mock<ICacheStorageService> cacheStorageService1,
             GetContentRequestHandler requestHandler1,
             Mock<IValidator<GetContentRequest>> requestValidator1,
-            Mock<ILog> logger,
+            Mock<ILogger<GetContentRequestHandler>> logger,
             Mock<IContentApiClient> MockContentService)
         {
             //Arrange

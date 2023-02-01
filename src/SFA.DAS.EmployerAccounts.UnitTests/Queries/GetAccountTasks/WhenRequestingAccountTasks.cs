@@ -4,12 +4,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountTasks;
-using SFA.DAS.Tasks.API.Types.DTOs;
-using SFA.DAS.Validation;
-using TaskEnum = SFA.DAS.Tasks.API.Types.Enums;
+using SFA.DAS.EmployerAccounts.TasksApi;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTasks
 {
@@ -42,12 +39,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTasks
 
             //Assert
             _mockValidator.Verify(x => x.Validate(It.IsAny<GetAccountTasksQuery>()), Times.Once);
-            _mockTaskService.Verify(x => x.GetAccountTasks(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<TaskEnum.ApprenticeshipEmployerType>()), Times.Never);
+            _mockTaskService.Verify(x => x.GetAccountTasks(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<ApprenticeshipEmployerType>()), Times.Never);
         }
 
-        [TestCase(ApprenticeshipEmployerType.Levy, TaskEnum.ApprenticeshipEmployerType.Levy)]
-        [TestCase(ApprenticeshipEmployerType.NonLevy, TaskEnum.ApprenticeshipEmployerType.NonLevy)]
-        public async Task ThenTasksServiceIsInvoked(ApprenticeshipEmployerType actualApprenticeshipEmployerType, TaskEnum.ApprenticeshipEmployerType expectedApprenticeshipEmployerType)
+        [TestCase(ApprenticeshipEmployerType.Levy, ApprenticeshipEmployerType.Levy)]
+        [TestCase(ApprenticeshipEmployerType.NonLevy, ApprenticeshipEmployerType.NonLevy)]
+        public async Task ThenTasksServiceIsInvoked(ApprenticeshipEmployerType actualApprenticeshipEmployerType, ApprenticeshipEmployerType expectedApprenticeshipEmployerType)
         {
             //Arrange
             _mockValidator.Setup(x => x.Validate(It.IsAny<GetAccountTasksQuery>())).Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string>() });
@@ -68,7 +65,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTasks
             var taskDto = new TaskDto { Type = Guid.NewGuid().ToString(), ItemsDueCount = 1 };
             var taskList = new List<TaskDto>() { taskDto };
             _mockValidator.Setup(x => x.Validate(It.IsAny<GetAccountTasksQuery>())).Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string>() });
-            _mockTaskService.Setup(x => x.GetAccountTasks(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<TaskEnum.ApprenticeshipEmployerType>())).ReturnsAsync(taskList);
+            _mockTaskService.Setup(x => x.GetAccountTasks(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<ApprenticeshipEmployerType>())).ReturnsAsync(taskList);
             var sut = GetSut();
 
             //Act

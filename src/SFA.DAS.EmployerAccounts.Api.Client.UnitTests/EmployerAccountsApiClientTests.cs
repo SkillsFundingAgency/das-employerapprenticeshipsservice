@@ -44,25 +44,25 @@ namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
         [Test]
         public Task Ping_WhenHttpPingSucceeds_ThenShouldNotThrowException()
         {
-            return TestExceptionAsync(f => f.SetHttpPingSuccess(), f => f.Ping(), (f, r) => r.ShouldNotThrow<Exception>());
+            return TestExceptionAsync(f => f.SetHttpPingSuccess(), f => f.Ping(), (f, r) => r.Should().NotThrowAsync<Exception>());
         }
 
         [Test]
         public Task Ping_WhenHttpPingFails_ThenShouldThrowException()
         {
-            return TestExceptionAsync(f => f.SetHttpPingFailure(), f => f.Ping(), (f, r) => r.ShouldThrow<Exception>());
+            return TestExceptionAsync(f => f.SetHttpPingFailure(), f => f.Ping(), (f, r) => r.Should().ThrowAsync<Exception>());
         }
 
         [Test]
         public Task Ping_WhenReadStorePingSucceeds_ThenShouldNotThrowException()
         {
-            return TestExceptionAsync(f => f.SetReadStorePingSuccess(), f => f.Ping(), (f, r) => r.ShouldNotThrow<Exception>());
+            return TestExceptionAsync(f => f.SetReadStorePingSuccess(), f => f.Ping(), (f, r) => r.Should().NotThrowAsync<Exception>());
         }
 
         [Test]
         public Task Ping_WhenReadStorePingFails_ThenShouldThrowException()
         {
-            return TestExceptionAsync(f => f.SetReadStorePingFailure(), f => f.Ping(), (f, r) => r.ShouldThrow<Exception>());
+            return TestExceptionAsync(f => f.SetReadStorePingFailure(), f => f.Ping(), (f, r) => r.Should().ThrowAsync<Exception>());
         }
     }
 

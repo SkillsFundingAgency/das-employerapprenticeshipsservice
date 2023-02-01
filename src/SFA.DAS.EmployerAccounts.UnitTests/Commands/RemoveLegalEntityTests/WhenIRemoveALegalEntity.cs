@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.CommitmentsV2.Api.Types.Responses;
@@ -23,7 +24,6 @@ using SFA.DAS.Events.Api.Types;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.NServiceBus.Services;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
 {
@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
     {
         private RemoveLegalEntityCommandHandler _handler;
         private Mock<IValidator<RemoveLegalEntityCommand>> _validator;
-        private Mock<ILog> _logger;
+        private Mock<ILogger<RemoveLegalEntityCommandHandler>> _logger;
         private Mock<IEmployerAgreementRepository> _repository;
         private RemoveLegalEntityCommand _command;
         private Mock<IMediator> _mediator;
@@ -60,8 +60,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
             _validator = new Mock<IValidator<RemoveLegalEntityCommand>>();
             _validator.Setup(x => x.ValidateAsync(It.IsAny<RemoveLegalEntityCommand>())).ReturnsAsync(new ValidationResult());
 
-            _logger = new Mock<ILog>();
-
+            _logger = new Mock<ILogger<RemoveLegalEntityCommandHandler>>();
             _mediator = new Mock<IMediator>();
 
             _repository = new Mock<IEmployerAgreementRepository>();
@@ -161,7 +160,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
 
             //Act Assert
             Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _handler.Handle(new RemoveLegalEntityCommand(), CancellationToken.None));
-            _logger.Verify(x => x.Info(It.IsAny<string>()));
+            _logger.Verify(x => x.LogInformation(It.IsAny<string>()));
         }
 
         [Test]

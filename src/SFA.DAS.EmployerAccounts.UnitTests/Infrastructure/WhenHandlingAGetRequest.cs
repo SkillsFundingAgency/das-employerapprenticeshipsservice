@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Infrastructure
             };
             var httpMessageHandler = MessageHandler.SetupMessageHandlerMock(response, $"{config.BaseUrl}{getTestRequest.GetUrl}", config.Key);
             var client = new HttpClient(httpMessageHandler.Object);
-            var apiClient = new OuterApiClient(client, config);
+            var apiClient = new OuterApiClient(client);
 
             //Act
             var actual = await apiClient.Get<List<string>>(getTestRequest);
@@ -57,7 +57,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Infrastructure
             
             var httpMessageHandler = MessageHandler.SetupMessageHandlerMock(response, $"{config.BaseUrl}{getTestRequest.GetUrl}", config.Key);
             var client = new HttpClient(httpMessageHandler.Object);
-            var apiClient = new OuterApiClient(client, config);
+            var apiClient = new OuterApiClient(client);
             
             //Act Assert
             Assert.ThrowsAsync<HttpRequestException>(() => apiClient.Get<List<string>>(getTestRequest));

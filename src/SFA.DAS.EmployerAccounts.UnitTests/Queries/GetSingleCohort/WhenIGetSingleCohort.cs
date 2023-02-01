@@ -1,15 +1,16 @@
-﻿using Moq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
 using SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
+using SFA.DAS.EmployerAccounts.Validation;
 using SFA.DAS.HashingService;
-using SFA.DAS.Validation;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using SFA.DAS.NLog.Logger;
-using System.Threading;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
 {
@@ -41,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
            
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.DecodeValue(HashedAccountId)).Returns(_accountId);
-            RequestHandler = new GetSingleCohortRequestHandler(RequestValidator.Object, _commitmentV2Service.Object, _hashingService.Object, Mock.Of<ILog>());
+            RequestHandler = new GetSingleCohortRequestHandler(RequestValidator.Object, _commitmentV2Service.Object, _hashingService.Object, Mock.Of<ILogger<GetSingleCohortRequestHandler>>());
 
             Query = new GetSingleCohortRequest
             {

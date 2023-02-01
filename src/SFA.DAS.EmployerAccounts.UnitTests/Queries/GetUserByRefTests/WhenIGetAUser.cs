@@ -1,5 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Castle.Core.Logging;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Interfaces;
@@ -31,7 +33,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUserByRefTests
             _repository.Setup(x => x.GetUserByRef(It.IsAny<string>())).ReturnsAsync(_user);
 
             Query = new GetUserByRefQuery { UserRef = "ABC123" };
-            RequestHandler = new GetUserByRefQueryHandler(_repository.Object, RequestValidator.Object, Mock.Of<ILog>());
+            RequestHandler = new GetUserByRefQueryHandler(_repository.Object, RequestValidator.Object, Mock.Of<ILogger<GetUserByRefQueryHandler>>());
         }
 
         [Test]

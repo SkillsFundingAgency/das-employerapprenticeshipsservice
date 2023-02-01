@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NServiceBus;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.ReportTrainingProvider;
 using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Messages.Commands;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ReportTrainingProvider
@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ReportTrainingProvider
     public class WhenReportingATrainingProvider
     {
         private ReportTrainingProviderCommandHandler _handler;
-        private Mock<ILog> _logger;
+        private Mock<ILogger<ReportTrainingProviderCommandHandler>> _logger;
         private Mock<IMessageSession> _publisher;
         private EmployerAccountsConfiguration _configuration;
         private ReportTrainingProviderCommand _validCommand;
@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ReportTrainingProvider
         [SetUp]
         public void Arrange()
         {
-            _logger = new Mock<ILog>();
+            _logger = new Mock<ILogger<ReportTrainingProviderCommandHandler>>();
             _publisher = new Mock<IMessageSession>();
             _configuration = new EmployerAccountsConfiguration
             {

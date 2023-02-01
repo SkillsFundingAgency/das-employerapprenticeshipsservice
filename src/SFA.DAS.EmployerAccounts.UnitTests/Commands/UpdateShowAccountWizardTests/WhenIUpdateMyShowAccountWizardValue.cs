@@ -1,11 +1,10 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.UpdateShowWizard;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpdateShowAccountWizardTests
 {
@@ -14,7 +13,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpdateShowAccountWizardTes
     {
         private Mock<IMembershipRepository> _memberRepository;
         private UpdateShowAccountWizardCommandHandler _handler;
-        private Mock<ILog> _logger;
+        private Mock<ILogger<UpdateShowAccountWizardCommandHandler>> _logger;
         private Mock<IValidator<UpdateShowAccountWizardCommand>> _validator;
         private UpdateShowAccountWizardCommand _command;
 
@@ -23,7 +22,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpdateShowAccountWizardTes
         {
             _memberRepository = new Mock<IMembershipRepository>();
             _validator = new Mock<IValidator<UpdateShowAccountWizardCommand>>();
-            _logger = new Mock<ILog>();
+            _logger = new Mock<ILogger<UpdateShowAccountWizardCommandHandler>>();
 
             _handler = new UpdateShowAccountWizardCommandHandler(_memberRepository.Object, _validator.Object, _logger.Object);
             _command = new UpdateShowAccountWizardCommand

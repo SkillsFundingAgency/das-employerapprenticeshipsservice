@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Configuration;
@@ -120,7 +121,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services
         public void ItShouldReturnTheCorrectAornLockStatus([ValueSource("TestData")] TestData testData)
         {
             var userRef = Guid.NewGuid();
-            var logger = Mock.Of<ILog>();
+            var logger = Mock.Of<ILogger<UserAornPayeLockService>>();
             var userRepo = new Mock<IUserRepository>();
             userRepo.Setup(x => x.GetAornPayeQueryAttempts(It.IsAny<string>())).ReturnsAsync(testData.Attempts.ToList());
 

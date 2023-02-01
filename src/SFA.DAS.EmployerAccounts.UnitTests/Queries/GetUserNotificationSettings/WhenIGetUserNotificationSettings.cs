@@ -6,7 +6,7 @@ using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Queries.GetUserNotificationSettings;
-using SFA.DAS.Validation;
+using SFA.DAS.EmployerAccounts.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUserNotificationSettings
 {

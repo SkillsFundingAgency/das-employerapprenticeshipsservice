@@ -12,7 +12,6 @@ using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus.Services;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTests
 {
@@ -77,8 +76,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
                 HashingService.Object,
                 AccountLegalEntityPublicHashingService.Object,
                 EmployerAgreementRepository.Object,
-                Validator.Object,
-                AuthorizationService.Object
+                Validator.Object
             );
         }
     }

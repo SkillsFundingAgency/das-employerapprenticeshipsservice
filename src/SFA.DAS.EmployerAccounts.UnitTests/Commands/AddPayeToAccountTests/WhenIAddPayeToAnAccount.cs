@@ -22,7 +22,6 @@ using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 using SFA.DAS.EmployerAccounts.UnitTests.ObjectMothers;
 using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus.Testing.Services;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AddPayeToAccountTests
 {

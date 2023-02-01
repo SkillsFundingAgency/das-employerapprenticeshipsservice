@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamMembers;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetTeamMembers
 {
@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetTeamMembers
 
         private Mock<IEmployerAccountTeamRepository> _repository;
         private TeamMember _teamMember;
-        private Mock<ILog> _logger;
+        private Mock<ILogger<GetTeamMembersRequestHandler>> _logger;
 
         [SetUp]
         public void Arrange()
@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetTeamMembers
             SetUp();
 
             _teamMember = new TeamMember();
-            _logger = new Mock<ILog>();
+            _logger = new Mock<ILogger<GetTeamMembersRequestHandler>>();
 
             _repository = new Mock<IEmployerAccountTeamRepository>();
 

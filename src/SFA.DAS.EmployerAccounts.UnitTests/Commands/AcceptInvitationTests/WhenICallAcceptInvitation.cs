@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.AcceptInvitation;
@@ -71,7 +72,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AcceptInvitationTests
                 _eventPublisher,
                 _validator.Object,
                 _hashingService.Object,
-                Mock.Of<ILog>());
+                Mock.Of<ILogger<AcceptInvitationCommandHandler>>());
         }
 
         [TearDown]

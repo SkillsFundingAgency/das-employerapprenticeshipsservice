@@ -13,6 +13,7 @@ using SFA.DAS.EmployerAccounts.Commands.AccountLevyStatus;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.CreateAccount;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
+using SFA.DAS.EmployerAccounts.Exceptions;
 using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Messages.Events;
@@ -23,7 +24,6 @@ using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus.Testing.Services;
-using SFA.DAS.Validation;
 using IAccountEventFactory = SFA.DAS.EmployerAccounts.Factories.IAccountEventFactory;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests

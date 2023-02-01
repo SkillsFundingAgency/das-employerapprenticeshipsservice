@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using HMRC.ESFA.Levy.Api.Types;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
@@ -21,7 +22,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetHmrcEmployerInformationT
         private Mock<IValidator<GetHmrcEmployerInformationQuery>> _validator;
         private Mock<IHmrcService> _hmrcService;
         private Mock<IMediator> _mediator;
-        private Mock<ILog> _logger;
+        private Mock<ILogger<GetHmrcEmployerInformationHandler>> _logger;
         private const string ExpectedAuthToken = "token1";
         private const string ExpectedAuthTokenInUse = "token12";
         private const string ExpectedAuthTokenNoScheme = "token5";
@@ -32,7 +33,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetHmrcEmployerInformationT
         [SetUp]
         public void Arrange()
         {
-            _logger = new Mock<ILog>();
+            _logger = new Mock<ILogger<GetHmrcEmployerInformationHandler>>();
 
             _hmrcService = new Mock<IHmrcService>();
             _hmrcService.Setup(x => x.DiscoverEmpref(ExpectedAuthToken)).ReturnsAsync(ExpectedEmpref);
@@ -110,7 +111,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetHmrcEmployerInformationT
         {
             //Act
             Assert.ThrowsAsync<ConstraintException>(async () => await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthTokenInUse }, CancellationToken.None));
-            _logger.Verify(x => x.Warn($"PAYE scheme {ExpectedEmprefInUse} already in use."), Times.Once);
+            _logger.Verify(x => x.LogWarning($"PAYE scheme {ExpectedEmprefInUse} already in use."), Times.Once);
         }
 
         [Test]

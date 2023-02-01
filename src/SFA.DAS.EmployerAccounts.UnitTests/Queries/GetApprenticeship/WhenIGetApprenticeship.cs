@@ -1,15 +1,15 @@
-﻿using Moq;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Queries.GetApprenticeship;
-using SFA.DAS.Validation;
-using System;
-using NUnit.Framework;
-using SFA.DAS.NLog.Logger;
-using System.Threading.Tasks;
+﻿using System;
 using System.Collections.Generic;
-using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
-using SFA.DAS.HashingService;
 using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Moq;
+using NUnit.Framework;
+using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
+using SFA.DAS.EmployerAccounts.Queries.GetApprenticeship;
+using SFA.DAS.HashingService;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetApprenticeship
 {
@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetApprenticeship
 
         private Mock<ICommitmentV2Service> _commitmentV2Service;
         private Mock<IHashingService> _hashingService;
-        private Mock<ILog> _logger;
+        private Mock<ILogger<GetApprenticeshipsHandler>> _logger;
         private long _accountId;
         private string _hashedAccountId;
         
@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetApprenticeship
 
             _accountId = 123;
             _hashedAccountId = "ABC123";
-            _logger = new Mock<ILog>();
+            _logger = new Mock<ILogger<GetApprenticeshipsHandler>>();
             
             _commitmentV2Service = new Mock<ICommitmentV2Service>();
             _hashingService = new Mock<IHashingService>();

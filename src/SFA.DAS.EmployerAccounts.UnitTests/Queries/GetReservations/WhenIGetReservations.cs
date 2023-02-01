@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Reservations;
 using SFA.DAS.EmployerAccounts.Queries.GetReservations;
+using SFA.DAS.EmployerAccounts.Validation;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetReservations
 {
@@ -22,7 +23,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetReservations
         private Mock<IReservationsService> _reservationsService;
         private Mock<IHashingService> _hashingService;
         private Reservation _reservation;
-        private Mock<ILog> _logger;
+        private Mock<ILogger<GetReservationsRequestHandler>> _logger;
         private string _hashedAccountId;
         private long _accountId;
 
@@ -36,7 +37,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetReservations
             _accountId = 123;
 
             _reservation = new Reservation();
-            _logger = new Mock<ILog>();
+            _logger = new Mock<ILogger<GetReservationsRequestHandler>>();
 
             _reservationsService = new Mock<IReservationsService>();
             _reservationsService

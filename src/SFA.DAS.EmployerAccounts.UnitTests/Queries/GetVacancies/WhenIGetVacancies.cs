@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Interfaces;
@@ -20,7 +21,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetVacancies
 
         private Mock<IRecruitService> _recruitService;
         private Vacancy _vacancy;
-        private Mock<ILog> _logger;
+        private Mock<ILogger<GetVacanciesRequestHandler>> _logger;
         private string _hashedAccountId;
 
         [SetUp]
@@ -31,7 +32,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetVacancies
             _hashedAccountId = "123ABC";
 
             _vacancy = new Vacancy();
-            _logger = new Mock<ILog>();
+            _logger = new Mock<ILogger<GetVacanciesRequestHandler>>();
 
             _recruitService = new Mock<IRecruitService>();
             _recruitService

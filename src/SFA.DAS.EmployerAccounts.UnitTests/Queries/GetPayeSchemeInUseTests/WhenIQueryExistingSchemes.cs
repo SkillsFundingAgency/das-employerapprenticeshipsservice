@@ -5,7 +5,7 @@ using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeInUse;
-using SFA.DAS.Validation;
+using SFA.DAS.EmployerAccounts.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetPayeSchemeInUseTests
 {

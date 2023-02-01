@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.SendNotification;
@@ -15,13 +16,13 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SendNotificationTests
     {
         private SendNotificationCommandHandler _sendNotificationCommandHandler;
         private Mock<IValidator<SendNotificationCommand>>  _validator;
-        private Mock<ILog> _logger;
+        private Mock<ILogger<SendNotificationCommandHandler>> _logger;
         private Mock<INotificationsApi> _notificationClient;
 
         [SetUp]
         public void Arrange()
         {
-            _logger = new Mock<ILog>();
+            _logger = new Mock<ILogger<SendNotificationCommandHandler>>();
 
             _validator = new Mock<IValidator<SendNotificationCommand>>();
             _validator.Setup(x => x.Validate(It.IsAny<SendNotificationCommand>())).Returns(new ValidationResult());
@@ -71,7 +72,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SendNotificationTests
             Assert.ThrowsAsync<InvalidRequestException>(async () => await _sendNotificationCommandHandler.Handle(new SendNotificationCommand(), CancellationToken.None));
 
             //Assert
-            _logger.Verify(x=>x.Info("SendNotificationCommandHandler Invalid Request"), Times.Once);
+            _logger.Verify(x=>x.LogInformation("SendNotificationCommandHandler Invalid Request"), Times.Once);
         }
         
     }
