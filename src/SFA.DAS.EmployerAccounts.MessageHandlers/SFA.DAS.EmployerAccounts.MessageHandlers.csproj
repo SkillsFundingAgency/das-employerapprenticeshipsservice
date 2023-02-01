@@ -21,7 +21,7 @@
 		<PackageReference Include="SFA.DAS.EmployerFinance.Messages" Version="1.6.2933" />
 		<PackageReference Include="SFA.DAS.Messaging" Version="3.1.133" />
 		<PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
-		<PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="15.0.25" />
+		<PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="16.0.20" />
 		<PackageReference Include="SFA.DAS.Testing" Version="3.0.22" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework" Version="9.0.13" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="9.0.13" />

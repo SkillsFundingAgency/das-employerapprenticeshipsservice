@@ -1,10 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using NServiceBus;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.NServiceBus.Configuration;
 using SFA.DAS.NServiceBus.Configuration.AzureServiceBus;
+using SFA.DAS.NServiceBus.Configuration.MicrosoftDependencyInjection;
 using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.Configuration.NLog;
 using SFA.DAS.NServiceBus.Hosting;
@@ -18,8 +20,10 @@ public static class NServiceBusServiceRegistrations
 {
     private const string EndPointName = "SFA.DAS.EmployerAccounts";
 
-    public static void StartNServiceBus(this IServiceCollection services, EmployerAccountsConfiguration employerAccountsConfiguration, bool isDevOrLocal)
+   public static void StartNServiceBus(this UpdateableServiceProvider services, IConfiguration configuration , bool isDevOrLocal)
     {
+        var employerAccountsConfiguration = configuration.Get<EmployerAccountsConfiguration>();
+
         var endpointConfiguration = new EndpointConfiguration(EndPointName)
             .UseErrorQueue($"{EndPointName}-errors")
             .UseInstallers()
@@ -27,22 +31,9 @@ public static class NServiceBusServiceRegistrations
             .UseNewtonsoftJsonSerializer()
             .UseNLogFactory()
             .UseOutbox(true)
+            .UseServicesBuilder(services)
             .UseSqlServerPersistence(() => DatabaseExtensions.GetSqlConnection(isDevOrLocal, employerAccountsConfiguration.DatabaseConnectionString))
             .UseUnitOfWork();
-
-        //// https://github.com/twenzel/NServiceBus.MSDependencyInjection/blob/master/README.md
-
-        UpdateableServiceProvider container = null;
-
-        endpointConfiguration.UseContainer<ServicesBuilder>(customisations =>
-        {
-            customisations.ExistingServices(services);
-            customisations.ServiceProviderFactory(sc =>
-            {
-                container = new UpdateableServiceProvider(sc);
-                return container;
-            });
-        });
 
         if (isDevOrLocal)
         {

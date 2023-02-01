@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.Authorization.Mvc.Extensions;
 using SFA.DAS.EmployerAccounts.Api.Authentication;
 using SFA.DAS.EmployerAccounts.Api.Authorization;
@@ -20,7 +21,6 @@ using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
 using SFA.DAS.UnitOfWork.Mvc.Extensions;
 using SFA.DAS.UnitOfWork.NServiceBus.DependencyResolution.Microsoft;
-using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.Microsoft;
 using SFA.DAS.Validation.Mvc.Extensions;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
@@ -30,7 +30,7 @@ public class Startup
 {
     public IConfiguration Configuration { get; }
     private readonly IHostEnvironment _environment;
-    
+
     public Startup(IConfiguration configuration, IHostEnvironment environment)
     {
         _environment = environment;
@@ -70,10 +70,9 @@ public class Startup
         services.AddDasDistributedMemoryCache(employerAccountsConfiguration, _environment.IsDevelopment());
         services.AddDasHealthChecks(employerAccountsConfiguration);
         services.AddOrchestrators();
-        
+
         services.AddNServiceBusUnitOfWork();
-        services.StartNServiceBus(employerAccountsConfiguration, Configuration.IsDevOrLocal() || Configuration.IsTest());
-        
+
         services.AddDatabaseRegistration(employerAccountsConfiguration, Configuration["EnvironmentName"]);
         services.AddDataRepositories();
         services.AddEventsApi();
@@ -87,6 +86,11 @@ public class Startup
         services.AddControllers(options => { options.Filters.Add(new ProducesAttribute("text/html")); });
 
         services.AddApplicationInsightsTelemetry();
+    }
+
+    public void ConfigureContainer(UpdateableServiceProvider serviceProvider)
+    {
+        serviceProvider.StartNServiceBus(Configuration, Configuration.IsDevOrLocal() || Configuration.IsTest());
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -18,11 +18,10 @@ public class Program
 
     public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
+            .UseNServiceBusContainer()
+            .UseNLog()
             .ConfigureWebHostDefaults(webBuilder =>
             {
-                webBuilder
-                    .UseNServiceBusContainer()
-                    .UseStartup<Startup>()
-                    .UseNLog();
+                webBuilder.UseStartup<Startup>();
             });
 }

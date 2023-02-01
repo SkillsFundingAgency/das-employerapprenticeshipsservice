@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Hosting;
+using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.Microsoft;
 using SFA.DAS.Authorization.Mvc.Extensions;
 using SFA.DAS.Configuration.AzureTableStorage;
@@ -90,7 +91,6 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddNotifications(_configuration);
 
             services.AddNServiceBusUnitOfWork();
-            services.StartNServiceBus(_employerAccountsConfiguration, _configuration.IsDevOrLocal());
             services.AddEmployerFeaturesAuthorization();
             services.AddDasAuthorization();
             services.AddEmployerAccountsApi();
@@ -152,6 +152,11 @@ namespace SFA.DAS.EmployerAccounts.Web
 #endif
 
             services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
+        }
+
+        public void ConfigureContainer(UpdateableServiceProvider serviceProvider)
+        {
+            serviceProvider.StartNServiceBus(_configuration, _configuration.IsDevOrLocal() || _configuration.IsTest());
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -10,8 +10,10 @@
   <ItemGroup>
     <Reference Include="System.IdentityModel" />
     <PackageReference Include="NLog" Version="5.1.1" />
+    <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="9.0.28" />
+    <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="17.0.49" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
-    <PackageReference Include="System.Net.NameResolution" Version="4.3.0"/>
+    <PackageReference Include="System.Net.NameResolution" Version="4.3.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="7.0.0" />
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.1" />
@@ -99,7 +101,7 @@
       <Version>1.2.1</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.NServiceBus.SqlServer">
-      <Version>15.0.25</Version>
+      <Version>16.0.20</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.OidcMiddleware">
       <Version>2.0.0.61553</Version>
@@ -120,7 +122,7 @@
       <Version>9.0.13</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Validation">
-      <Version>5.1.167</Version>
+      <Version>6.0.30</Version>
     </PackageReference>
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
