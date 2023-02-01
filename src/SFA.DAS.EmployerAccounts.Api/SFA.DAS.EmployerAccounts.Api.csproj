@@ -35,6 +35,7 @@
 		<PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="16.0.20" />
 		<PackageReference Include="SFA.DAS.OidcMiddleware" Version="2.0.0.61553" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework" Version="9.0.13" />
+		<PackageReference Include="SFA.DAS.UnitOfWork.EntityFrameworkCore" Version="9.0.28" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.Mvc" Version="9.0.28" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="9.0.28" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.WebApi" Version="9.0.13" />
