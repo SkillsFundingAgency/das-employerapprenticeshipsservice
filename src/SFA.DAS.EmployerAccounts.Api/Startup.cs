@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Api;
 
 public class Startup
 {
-    private IConfiguration _configuration { get; }
+    private readonly IConfiguration _configuration;
     private readonly IHostEnvironment _environment;
 
     public Startup(IConfiguration configuration, IHostEnvironment environment)
