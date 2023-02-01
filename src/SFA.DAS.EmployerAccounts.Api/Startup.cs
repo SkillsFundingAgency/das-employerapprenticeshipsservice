@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
+﻿using System.IO;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -12,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.Authorization.Mvc.Extensions;
+using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerAccounts.Api.Authentication;
 using SFA.DAS.EmployerAccounts.Api.Authorization;
 using SFA.DAS.EmployerAccounts.Api.Filters;
@@ -28,21 +27,47 @@ namespace SFA.DAS.EmployerAccounts.Api;
 
 public class Startup
 {
-    public IConfiguration Configuration { get; }
+    private IConfiguration _configuration { get; }
     private readonly IHostEnvironment _environment;
 
     public Startup(IConfiguration configuration, IHostEnvironment environment)
     {
         _environment = environment;
-        Configuration = configuration;
+
+        var config = new ConfigurationBuilder()
+            .AddConfiguration(configuration)
+            .SetBasePath(Directory.GetCurrentDirectory());
+
+#if DEBUG
+        if (!configuration.IsDev())
+        {
+            config.AddJsonFile("appsettings.json", false)
+                .AddJsonFile("appsettings.Development.json", true);
+        }
+#endif
+
+        config.AddEnvironmentVariables();
+
+        if (!configuration.IsTest())
+        {
+            config.AddAzureTableStorage(options =>
+                {
+                    options.ConfigurationKeys = configuration["ConfigNames"].Split(",");
+                    options.StorageConnectionString = configuration["ConfigurationStorageConnectionString"];
+                    options.EnvironmentName = configuration["EnvironmentName"];
+                    options.PreFixConfigurationKeys = false;
+                }
+            );
+        }
+        _configuration = config.Build();
     }
 
     public void ConfigureServices(IServiceCollection services)
     {
-        var employerAccountsConfiguration = Configuration.Get<EmployerAccountsConfiguration>();
+        var employerAccountsConfiguration = _configuration.Get<EmployerAccountsConfiguration>();
 
-        services.AddApiConfigurationSections(Configuration)
-            .AddApiAuthentication(Configuration)
+        services.AddApiConfigurationSections(_configuration)
+            .AddApiAuthentication(_configuration)
             .AddApiAuthorization(_environment)
             .Configure<ApiBehaviorOptions>(opt => { opt.SuppressModelStateInvalidFilter = true; })
             .AddMvc(opt =>
@@ -60,10 +85,6 @@ public class Startup
                 Version = "v1",
                 Title = "Employer Accounts API"
             });
-
-            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-            c.IncludeXmlComments(xmlPath);
         });
 
         services.AddApplicationServices();
@@ -73,7 +94,7 @@ public class Startup
 
         services.AddNServiceBusUnitOfWork();
 
-        services.AddDatabaseRegistration(employerAccountsConfiguration, Configuration["EnvironmentName"]);
+        services.AddDatabaseRegistration(employerAccountsConfiguration, _configuration["EnvironmentName"]);
         services.AddDataRepositories();
         services.AddEventsApi();
         services.AddExecutionPolicies();
@@ -81,7 +102,7 @@ public class Startup
         services.AddAutoMapper(typeof(Startup).Assembly);
         services.AddMediatorValidation();
         services.AddMediatR(typeof(GetPayeSchemeByRefQuery));
-        services.AddNotifications(Configuration);
+        services.AddNotifications(_configuration);
 
         services.AddControllers(options => { options.Filters.Add(new ProducesAttribute("text/html")); });
 
@@ -90,7 +111,7 @@ public class Startup
 
     public void ConfigureContainer(UpdateableServiceProvider serviceProvider)
     {
-        serviceProvider.StartNServiceBus(Configuration, Configuration.IsDevOrLocal() || Configuration.IsTest());
+        serviceProvider.StartNServiceBus(_configuration, _configuration.IsDevOrLocal() || _configuration.IsTest());
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

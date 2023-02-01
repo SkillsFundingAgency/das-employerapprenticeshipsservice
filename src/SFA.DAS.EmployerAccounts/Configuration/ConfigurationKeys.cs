@@ -9,7 +9,7 @@ public static class ConfigurationKeys
     public const string EmployerAccountsReadStore = $"{ServiceName}.ReadStore";
     public const string NotificationsApiClient = $"{ServiceName}.Notifications";
     public const string Features = $"{ServiceName}.Features";
-    public const string AzureActiveDirectoryApiConfiguration = $"{ServiceName}:AzureADApiAuthentication";
+    public const string AzureActiveDirectoryApiConfiguration = "AzureADApiAuthentication";
 
     public const string AuditApi = "SFA.DAS.AuditApiClient";
     public const string ReferenceDataApiClient = "SFA.DAS.ReferenceDataApiClient";
