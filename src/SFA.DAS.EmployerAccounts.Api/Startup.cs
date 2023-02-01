@@ -20,6 +20,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
 using SFA.DAS.UnitOfWork.Mvc.Extensions;
 using SFA.DAS.UnitOfWork.NServiceBus.DependencyResolution.Microsoft;
+using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.Microsoft;
 using SFA.DAS.Validation.Mvc.Extensions;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
@@ -92,7 +93,7 @@ public class Startup
         services.AddDasHealthChecks(employerAccountsConfiguration);
         services.AddOrchestrators();
 
-        services.AddNServiceBusUnitOfWork();
+        services.AddNServiceBusClientUnitOfWork();
 
         services.AddDatabaseRegistration(employerAccountsConfiguration, _configuration["EnvironmentName"]);
         services.AddDataRepositories();
