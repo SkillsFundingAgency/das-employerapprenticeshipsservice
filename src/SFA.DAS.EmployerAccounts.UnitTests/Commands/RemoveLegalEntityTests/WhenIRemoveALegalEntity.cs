@@ -22,7 +22,6 @@ using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.Events.Api.Types;
 using SFA.DAS.HashingService;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.NServiceBus.Services;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
@@ -75,7 +74,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
                         SignedDate = DateTime.Now
                     }
                 });
-            
+
             _expectedAgreement = new EmployerAgreementView
             {
                 AccountLegalEntityId = ExpectedAccountLegalEntityId,
@@ -103,7 +102,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
             _membershipRepository = new Mock<IMembershipRepository>();
             _membershipRepository
                 .Setup(mr => mr.GetCaller(ExpectedAccountId, _expectedUserId))
-                .Returns<long, string>((accountId, userRef) => Task.FromResult(new MembershipView {AccountId = ExpectedAccountId, FirstName = "Harry", LastName = "Potter"}));
+                .Returns<long, string>((accountId, userRef) => Task.FromResult(new MembershipView { AccountId = ExpectedAccountId, FirstName = "Harry", LastName = "Potter" }));
 
             _eventPublisher = new Mock<IEventPublisher>();
 
@@ -159,8 +158,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
             _validator.Setup(x => x.ValidateAsync(It.IsAny<RemoveLegalEntityCommand>())).ReturnsAsync(new ValidationResult { IsUnauthorized = true });
 
             //Act Assert
-            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _handler.Handle(new RemoveLegalEntityCommand(), CancellationToken.None));
-            _logger.Verify(x => x.LogInformation(It.IsAny<string>()));
+            var command = new RemoveLegalEntityCommand();
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _handler.Handle(command, CancellationToken.None));
+            _logger.VerifyLogging($"User {command.UserId} tried to remove {command.HashedAccountLegalEntityId} from Account {command.HashedAccountId}", LogLevel.Information);
         }
 
         [Test]
@@ -216,7 +216,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
         {
             await _handler.Handle(_command, CancellationToken.None);
 
-            _eventPublisher.Verify(ep => ep.Publish(It.Is<RemovedLegalEntityEvent>(e => 
+            _eventPublisher.Verify(ep => ep.Publish(It.Is<RemovedLegalEntityEvent>(e =>
                 e.AccountId.Equals(ExpectedAccountId)
                 && e.AgreementId.Equals(ExpectedEmployerAgreementId)
                 && e.LegalEntityId.Equals(ExpectedLegalEntityId)

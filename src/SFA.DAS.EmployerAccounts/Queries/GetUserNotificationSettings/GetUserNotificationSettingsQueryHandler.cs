@@ -17,7 +17,7 @@ public class GetUserNotificationSettingsQueryHandler: IRequestHandler<GetUserNot
 
     public async Task<GetUserNotificationSettingsQueryResponse> Handle(GetUserNotificationSettingsQuery message, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(message);
+        var validationResult = _validator.Validate(message);
 
         if (!validationResult.IsValid())
         {

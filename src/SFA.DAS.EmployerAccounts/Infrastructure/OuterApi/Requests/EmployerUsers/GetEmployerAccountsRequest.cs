@@ -1,4 +1,4 @@
-using System.Web;
+using System.Net;
 using SFA.DAS.EmployerAccounts.Interfaces.OuterApi;
 
 namespace SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Requests.EmployerUsers;
@@ -10,7 +10,7 @@ public class GetEmployerAccountsRequest : IGetApiRequest
 
     public GetEmployerAccountsRequest(string email, string userId)
     {
-        _email = HttpUtility.UrlEncode(email);
+        _email = WebUtility.UrlEncode(email);
         _userId = userId;
     }
 

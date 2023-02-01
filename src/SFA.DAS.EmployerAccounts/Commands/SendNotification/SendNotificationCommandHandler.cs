@@ -23,7 +23,7 @@ public class SendNotificationCommandHandler : IRequestHandler<SendNotificationCo
 
     public async Task<Unit> Handle(SendNotificationCommand request, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(request);
+        var validationResult = _validator.Validate(request);
 
         if (!validationResult.IsValid())
         {

@@ -23,7 +23,7 @@ public class UpdateUserNotificationSettingsCommandHandler : IRequestHandler<Upda
 
     public async Task<Unit> Handle(UpdateUserNotificationSettingsCommand message, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(message);
+        var validationResult = _validator.Validate(message);
 
         if (!validationResult.IsValid())
             throw new InvalidRequestException(validationResult.ValidationDictionary);

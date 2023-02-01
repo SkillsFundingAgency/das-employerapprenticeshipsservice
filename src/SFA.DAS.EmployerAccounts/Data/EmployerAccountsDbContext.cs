@@ -13,23 +13,26 @@ public class EmployerAccountsDbContext : DbContext
 {
     private readonly EmployerAccountsConfiguration _configuration;
     private readonly AzureServiceTokenProvider _azureServiceTokenProvider;
- 
+
     private const string AzureResource = "https://database.windows.net/";
 
-    public DbSet<AccountLegalEntity> AccountLegalEntities { get; set; }
-    public DbSet<Account> Accounts { get; set; }
-    public DbSet<AccountHistory> AccountHistory { get; set; }
-    public DbSet<EmployerAgreement> Agreements { get; set; }
-    public DbSet<AgreementTemplate> AgreementTemplates { get; set; }
-    public DbSet<HealthCheck> HealthChecks { get; set; }
-    public DbSet<LegalEntity> LegalEntities { get; set; }
-    public DbSet<Membership> Memberships { get; set; }
-    public DbSet<User> Users { get; set; }
-    public DbSet<UserAccountSetting> UserAccountSettings { get; set; }
-    public DbSet<RunOnceJob> RunOnceJobs { get; set; }
-    public DbSet<Paye> Payees { get; set; }
+    public virtual DbSet<AccountLegalEntity> AccountLegalEntities { get; set; }
+    public virtual DbSet<Account> Accounts { get; set; }
+    public virtual DbSet<AccountHistory> AccountHistory { get; set; }
+    public virtual DbSet<EmployerAgreement> Agreements { get; set; }
+    public virtual DbSet<AgreementTemplate> AgreementTemplates { get; set; }
+    public virtual DbSet<HealthCheck> HealthChecks { get; set; }
+    public virtual DbSet<LegalEntity> LegalEntities { get; set; }
+    public virtual DbSet<Membership> Memberships { get; set; }
+    public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<UserAccountSetting> UserAccountSettings { get; set; }
+    public virtual DbSet<RunOnceJob> RunOnceJobs { get; set; }
+    public virtual DbSet<Paye> Payees { get; set; }
 
-    public EmployerAccountsDbContext(DbContextOptions options): base(options) { }
+    // For tests
+    public EmployerAccountsDbContext() { }
+
+    public EmployerAccountsDbContext(DbContextOptions options) : base(options) { }
 
     public EmployerAccountsDbContext(IOptions<EmployerAccountsConfiguration> configuration, DbContextOptions options, AzureServiceTokenProvider azureServiceTokenProvider) : base(options)
     {

@@ -1,5 +1,4 @@
 ﻿using System.Threading;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 
@@ -16,7 +15,7 @@ public class CreateAuditCommandHandler : IRequestHandler<CreateAuditCommand>
 
     public async Task<Unit> Handle(CreateAuditCommand message, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(message);
+        var validationResult = _validator.Validate(message);
 
         if (!validationResult.IsValid())
         {

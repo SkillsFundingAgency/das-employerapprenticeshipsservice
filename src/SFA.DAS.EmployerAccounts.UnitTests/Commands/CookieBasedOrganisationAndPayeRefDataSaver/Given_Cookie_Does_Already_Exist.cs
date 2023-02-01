@@ -10,22 +10,19 @@ using SFA.DAS.Testing;
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CookieBasedOrganisationAndPayeRefDataSaver
 {
     [TestFixture]
-    public sealed class Given_Cookie_Does_Already_Exist
-        : FluentTest<Given_Cookie_Does_Already_Exist>
+    public sealed class Given_Cookie_Does_Already_Exist : FluentTest<Given_Cookie_Does_Already_Exist>
     {
         private CookieBasedOrganisationAndPayeDataSaver _sut;
         private EmployerAccountOrganisationData _organisationData;
 
         public Given_Cookie_Does_Already_Exist()
         {
-            setupOrganisationData();
+            SetupOrganisationData();
 
             CookieRepository = new Mock<ICookieStorageService<EmployerAccountData>>();
 
             CookieRepository
-                .Setup(
-                    m =>
-                        m.Get(It.IsAny<string>()))
+                .Setup(m => m.Get(It.IsAny<string>()))
                 .Returns(
                     new EmployerAccountData
                     {
@@ -41,8 +38,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CookieBasedOrganisationAnd
         {
             return
                 TestAsync(
-                    act: f => f.Handle(),
-                    assert: f => f.CookieRepository
+                     f => f.Handle(),
+                     f => f.CookieRepository
                             .Verify(m => m.Create(It.IsAny<EmployerAccountData>(), It.IsAny<string>(), It.IsAny<int>()), Times.Never));
         }
 
@@ -67,7 +64,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CookieBasedOrganisationAnd
                         new SaveOrganisationAndPayeData(new EmployerAccountOrganisationData(), new EmployerAccountPayeRefData()), CancellationToken.None);
         }
 
-        private void setupOrganisationData()
+        private void SetupOrganisationData()
         {
             _organisationData = new EmployerAccountOrganisationData
             {

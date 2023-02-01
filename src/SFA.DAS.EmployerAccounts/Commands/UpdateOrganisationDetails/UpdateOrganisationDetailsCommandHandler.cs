@@ -30,7 +30,7 @@ public class UpdateOrganisationDetailsCommandHandler : IRequestHandler<UpdateOrg
 
     public async Task<Unit> Handle(UpdateOrganisationDetailsCommand command, CancellationToken cancellationToken)
     {
-        var validationResults = await _validator.ValidateAsync(command);
+        var validationResults = _validator.Validate(command);
 
         if (!validationResults.IsValid())
             throw new InvalidRequestException(validationResults.ValidationDictionary);

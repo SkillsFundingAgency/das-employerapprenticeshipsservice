@@ -19,7 +19,7 @@ public class UnsubscribeNotificationHandler : IRequestHandler<UnsubscribeNotific
 
     public async Task<Unit> Handle(UnsubscribeNotificationCommand command, CancellationToken cancellationToken)
     {
-        await _validator.ValidateAsync(command);
+        _validator.Validate(command);
             
         var settings = await _accountRepository.GetUserAccountSettings(command.UserRef);
         var setting = settings.SingleOrDefault(m => m.AccountId == command.AccountId);

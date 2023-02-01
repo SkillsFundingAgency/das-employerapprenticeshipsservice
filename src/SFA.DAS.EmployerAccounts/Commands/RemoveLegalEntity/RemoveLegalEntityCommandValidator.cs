@@ -1,7 +1,6 @@
 ﻿using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.HashingService;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity;
 

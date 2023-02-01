@@ -33,7 +33,7 @@ public class ResendInvitationCommandHandler : IRequestHandler<ResendInvitationCo
 
     public async Task<Unit> Handle(ResendInvitationCommand message, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(message);
+        var validationResult = _validator.Validate(message);
 
         if (!validationResult.IsValid())
             throw new InvalidRequestException(validationResult.ValidationDictionary);

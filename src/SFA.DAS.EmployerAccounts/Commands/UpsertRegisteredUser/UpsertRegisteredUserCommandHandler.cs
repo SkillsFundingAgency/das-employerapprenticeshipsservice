@@ -1,7 +1,6 @@
 using System.Threading;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.NServiceBus.Services;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser;
 
@@ -23,7 +22,7 @@ public class UpsertRegisteredUserCommandHandler : IRequestHandler<UpsertRegister
 
     public async Task<Unit> Handle(UpsertRegisteredUserCommand message, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(message);
+        var validationResult = _validator.Validate(message);
 
         if (!validationResult.IsValid()) throw new InvalidRequestException(validationResult.ValidationDictionary);
 

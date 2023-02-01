@@ -1,5 +1,4 @@
 ﻿using System.Threading;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationsByAorn;
 
@@ -16,7 +15,7 @@ public class GetOrganisationsByAornQueryHandler : IRequestHandler<GetOrganisatio
 
     public async Task<GetOrganisationsByAornResponse> Handle(GetOrganisationsByAornRequest message, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(message);
+        var validationResult = _validator.Validate(message);
 
         if (!validationResult.IsValid())
         {

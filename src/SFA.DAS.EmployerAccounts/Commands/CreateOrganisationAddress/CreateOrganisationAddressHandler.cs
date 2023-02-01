@@ -15,7 +15,7 @@ public class CreateOrganisationAddressHandler : IRequestHandler<CreateOrganisati
 
     public async Task<CreateOrganisationAddressResponse> Handle(CreateOrganisationAddressRequest request, CancellationToken cancellationToken)
     {
-        var validationResults = await _validator.ValidateAsync(request);
+        var validationResults = _validator.Validate(request);
 
         if (!validationResults.IsValid())
         {
