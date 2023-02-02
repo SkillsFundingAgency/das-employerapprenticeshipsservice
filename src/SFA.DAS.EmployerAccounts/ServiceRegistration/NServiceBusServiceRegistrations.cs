@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Data.Common;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NServiceBus;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
@@ -31,8 +32,6 @@ public static class NServiceBusServiceRegistrations
             throw new Exception("DatabaseConnectionString configuration value is empty.");
         }
 
-        var sqlConnection = DatabaseExtensions.GetSqlConnection(isDevOrLocal, databaseConnectionString);
-
         var endpointConfiguration = new EndpointConfiguration(EndPointName)
             .UseErrorQueue($"{EndPointName}-errors")
             .UseInstallers()
@@ -41,7 +40,7 @@ public static class NServiceBusServiceRegistrations
             .UseNewtonsoftJsonSerializer()
             .UseNLogFactory()
             .UseOutbox(true)
-             .UseSqlServerPersistence(() => sqlConnection)
+             .UseSqlServerPersistence(() => DatabaseExtensions.GetSqlConnection(isDevOrLocal, databaseConnectionString))
             .UseUnitOfWork();
 
         if (isDevOrLocal)
