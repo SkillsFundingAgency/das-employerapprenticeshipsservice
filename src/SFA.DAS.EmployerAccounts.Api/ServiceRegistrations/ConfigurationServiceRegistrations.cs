@@ -12,8 +12,9 @@ public static  class ConfigurationServiceRegistrations
     {
         services.AddOptions();
         services.Configure<EmployerAccountsConfiguration>(configuration.GetSection(ConfigurationKeys.EmployerAccounts));
-        
-        services.AddSingleton(configuration.Get<EmployerAccountsConfiguration>());
+
+        var employerAccountsConfiguration = configuration.Get<EmployerAccountsConfiguration>();
+        services.AddSingleton(employerAccountsConfiguration);
         
         services.Configure<EncodingConfig>(configuration.GetSection(ConfigurationKeys.EncodingConfig));
         services.AddSingleton(cfg => cfg.GetService<IOptions<EncodingConfig>>().Value);

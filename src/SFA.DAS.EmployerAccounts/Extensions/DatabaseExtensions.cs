@@ -10,14 +10,22 @@ public static class DatabaseExtensions
 
     public static DbConnection GetSqlConnection(bool configurationIsLocalOrDev, string connectionString)
     {
+        if (string.IsNullOrEmpty(connectionString))
+        {
+            throw new ArgumentNullException(nameof(connectionString));
+        }
+
+        if (configurationIsLocalOrDev)
+        {
+            return new SqlConnection(connectionString);
+        }
+        
         var azureServiceTokenProvider = new AzureServiceTokenProvider();
 
-        return configurationIsLocalOrDev
-            ? new SqlConnection(connectionString)
-            : new SqlConnection
-            {
-                ConnectionString = connectionString,
-                AccessToken = azureServiceTokenProvider.GetAccessTokenAsync(AzureResource).Result
-            };
+        return new SqlConnection
+        {
+            ConnectionString = connectionString,
+            AccessToken = azureServiceTokenProvider.GetAccessTokenAsync(AzureResource).Result
+        };
     }
 }

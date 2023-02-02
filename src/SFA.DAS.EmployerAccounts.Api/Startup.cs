@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Configuration;
+using System.IO;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -7,18 +8,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.Authorization.Mvc.Extensions;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerAccounts.Api.Authentication;
 using SFA.DAS.EmployerAccounts.Api.Authorization;
+using SFA.DAS.EmployerAccounts.Api.ErrorHandler;
 using SFA.DAS.EmployerAccounts.Api.Filters;
 using SFA.DAS.EmployerAccounts.Api.ServiceRegistrations;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
+using SFA.DAS.Encoding;
 using SFA.DAS.UnitOfWork.EntityFrameworkCore.DependencyResolution.Microsoft;
 using SFA.DAS.UnitOfWork.Mvc.Extensions;
 using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.Microsoft;
@@ -69,14 +73,14 @@ public class Startup
         var employerAccountsConfiguration = _configuration.Get<EmployerAccountsConfiguration>();
 
         services.AddApiConfigurationSections(_configuration)
-            .AddApiAuthentication(_configuration)
-            .AddApiAuthorization(_environment)
+            //.AddApiAuthentication(_configuration)
+            //.AddApiAuthorization(_environment)
             .Configure<ApiBehaviorOptions>(opt => { opt.SuppressModelStateInvalidFilter = true; })
             .AddMvc(opt =>
             {
-                opt.AddValidation();
-                opt.AddAuthorization();
-                opt.Filters.Add<StopwatchFilter>();
+                //opt.AddValidation();
+                // opt.AddAuthorization();
+                // opt.Filters.Add<StopwatchFilter>();
             });
 
         services.AddSwaggerGen(c =>
@@ -103,11 +107,14 @@ public class Startup
         services.AddExecutionPolicies();
         services.AddHashingServices(employerAccountsConfiguration);
         services.AddAutoMapper(typeof(Startup).Assembly);
-        services.AddMediatorValidation();
+        services.AddMediatorValidators();
         services.AddMediatR(typeof(GetPayeSchemeByRefQuery));
         services.AddNotifications(_configuration);
 
-        services.AddControllers(options => { options.Filters.Add(new ProducesAttribute("text/html")); });
+        services.AddControllers(options =>
+        {
+            //options.Filters.Add(new ProducesAttribute("text/html"));
+        });
 
         services.AddApplicationInsightsTelemetry();
     }
@@ -117,7 +124,7 @@ public class Startup
         serviceProvider.StartNServiceBus(_configuration, _configuration.IsDevOrLocal() || _configuration.IsTest());
     }
 
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
     {
         if (env.IsDevelopment())
         {
@@ -129,24 +136,25 @@ public class Startup
         }
 
         app.UseHttpsRedirection()
-            .UseSwagger()
-            .UseSwaggerUI(opt =>
-            {
-                opt.SwaggerEndpoint("/swagger/v1/swagger.json", "Employer Accounts API");
-                opt.RoutePrefix = string.Empty;
-            })
+            .UseApiGlobalExceptionHandler(loggerFactory.CreateLogger("Startup"))
             .UseStaticFiles()
             .UseDasHealthChecks()
             .UseUnauthorizedAccessExceptionHandler()
-            .UseAuthentication()
             .UseUnitOfWork()
             .UseRouting()
-            .UseAuthorization()
+            // .UseAuthentication()
+            //.UseAuthorization()
             .UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
+            })
+          .UseSwagger()
+          .UseSwaggerUI(opt =>
+          {
+              opt.SwaggerEndpoint("/swagger/v1/swagger.json", "Employer Accounts API");
+              opt.RoutePrefix = "swagger";
+          });
     }
 }

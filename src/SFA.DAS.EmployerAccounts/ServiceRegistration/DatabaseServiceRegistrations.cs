@@ -17,7 +17,6 @@ public static class DatabaseServiceRegistrations
             services.AddDbContext<EmployerAccountsDbContext>(ServiceLifetime.Transient);
         }
 
-        services.AddTransient<EmployerAccountsDbContext, EmployerAccountsDbContext>(provider => provider.GetService<EmployerAccountsDbContext>());
         services.AddTransient(provider => new Lazy<EmployerAccountsDbContext>(provider.GetService<EmployerAccountsDbContext>()));
 
         return services;

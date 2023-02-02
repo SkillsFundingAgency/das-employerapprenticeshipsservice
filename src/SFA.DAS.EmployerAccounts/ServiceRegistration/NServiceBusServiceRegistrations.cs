@@ -20,19 +20,28 @@ public static class NServiceBusServiceRegistrations
 {
     private const string EndPointName = "SFA.DAS.EmployerAccounts";
 
-   public static void StartNServiceBus(this UpdateableServiceProvider services, IConfiguration configuration , bool isDevOrLocal)
+    public static void StartNServiceBus(this UpdateableServiceProvider services, IConfiguration configuration, bool isDevOrLocal)
     {
         var employerAccountsConfiguration = configuration.Get<EmployerAccountsConfiguration>();
+
+        var databaseConnectionString = employerAccountsConfiguration.DatabaseConnectionString;
+
+        if (string.IsNullOrEmpty(databaseConnectionString))
+        {
+            throw new Exception("DatabaseConnectionString configuration value is empty.");
+        }
+
+        var sqlConnection = DatabaseExtensions.GetSqlConnection(isDevOrLocal, databaseConnectionString);
 
         var endpointConfiguration = new EndpointConfiguration(EndPointName)
             .UseErrorQueue($"{EndPointName}-errors")
             .UseInstallers()
             .UseMessageConventions()
+            .UseServicesBuilder(services)
             .UseNewtonsoftJsonSerializer()
             .UseNLogFactory()
             .UseOutbox(true)
-            .UseServicesBuilder(services)
-            .UseSqlServerPersistence(() => DatabaseExtensions.GetSqlConnection(isDevOrLocal, employerAccountsConfiguration.DatabaseConnectionString))
+             .UseSqlServerPersistence(() => sqlConnection)
             .UseUnitOfWork();
 
         if (isDevOrLocal)
