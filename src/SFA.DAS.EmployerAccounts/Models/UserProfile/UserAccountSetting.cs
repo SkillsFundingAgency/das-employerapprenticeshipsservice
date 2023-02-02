@@ -9,6 +9,8 @@ public class UserAccountSetting
     public virtual User User { get; protected set; }
     public virtual bool ReceiveNotifications { get; protected set; }
 
+    private UserAccountSetting() { }
+
     public UserAccountSetting(Account.Account account, User user, bool receiveNotifications)
     {
         Account = account;

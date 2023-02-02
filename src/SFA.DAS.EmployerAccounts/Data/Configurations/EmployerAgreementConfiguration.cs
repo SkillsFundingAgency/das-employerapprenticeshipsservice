@@ -8,8 +8,11 @@ public class EmployerAgreementConfiguration: IEntityTypeConfiguration<EmployerAg
 {
     public void Configure(EntityTypeBuilder<EmployerAgreement> builder)
     {
-        builder.Property(a => a.AccountLegalEntity).IsRequired();
-        builder.Property(a => a.Template).IsRequired();
         builder.Ignore(c => c.SignedByEmail);
+        
+        builder
+            .HasOne(x => x.AccountLegalEntity)
+            .WithOne(x=> x.SignedAgreement)
+            .HasForeignKey<EmployerAgreement>(x=> x.AccountLegalEntityId);
     }
 }

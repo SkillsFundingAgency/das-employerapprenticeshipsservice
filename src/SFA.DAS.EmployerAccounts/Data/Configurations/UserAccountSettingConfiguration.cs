@@ -8,7 +8,5 @@ public class UserAccountSettingConfiguration : IEntityTypeConfiguration<UserAcco
     public void Configure(EntityTypeBuilder<UserAccountSetting> builder)
     {
         builder.ToTable("UserAccountSettings");
-        builder.Property(u => u.Account).IsRequired();
-        builder.Property(u => u.User).IsRequired();
     }
 }
