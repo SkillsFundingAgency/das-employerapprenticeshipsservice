@@ -13,6 +13,7 @@ using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Queries.GetLegalEntity;
 using SFA.DAS.EmployerAccounts.TestCommon;
+using SFA.DAS.EmployerAccounts.TestCommon.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLegalEntityQueryTests
 {
@@ -60,7 +61,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLegalEntityQueryTests
             actual.Address.Should().Be(f.LegalEntity.AccountLegalEntities.First().Address);
             actual.Name.Should().NotBeNullOrEmpty();
             actual.Name.Should().Be(f.LegalEntity.AccountLegalEntities.First().Name);
-            actual.Should().BeEquivalentTo(f.LegalEntity, opt => opt.ExcludingMissingMembers());
+            actual.Should().IsEquivalentTo(f.LegalEntity);
         }
     }
 
