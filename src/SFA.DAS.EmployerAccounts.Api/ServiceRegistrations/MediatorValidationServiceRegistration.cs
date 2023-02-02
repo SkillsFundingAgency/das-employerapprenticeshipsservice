@@ -14,7 +14,7 @@ namespace SFA.DAS.EmployerAccounts.Api.ServiceRegistrations;
 
 public static class MediatorValidationServiceRegistration
 {
-    public static IServiceCollection AddMediatorValidation(this IServiceCollection services)
+    public static IServiceCollection AddMediatorValidators(this IServiceCollection services)
     {
         services.AddTransient<IValidator<GetPayeSchemeByRefQuery>, GetPayeSchemeByRefValidator>();
         services.AddTransient<IValidator<GetEmployerAccountDetailByHashedIdQuery>, GetEmployerAccountDetailByHashedIdValidator>();

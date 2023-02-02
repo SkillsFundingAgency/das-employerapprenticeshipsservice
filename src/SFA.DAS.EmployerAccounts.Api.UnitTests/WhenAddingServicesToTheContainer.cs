@@ -87,7 +87,7 @@ public class WhenAddingServicesToTheContainer
         serviceCollection.AddSingleton(Mock.Of<IEventPublisher>());
         serviceCollection.AddApiConfigurationSections(config);
         serviceCollection.AddMediatR(typeof(GetAccountPayeSchemesQuery));
-        serviceCollection.AddMediatorValidation();
+        serviceCollection.AddMediatorValidators();
         serviceCollection.AddLogging();
         serviceCollection.AddHashingServices(config.Get<EmployerAccountsConfiguration>());
 
