@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using System.IO;
+﻿using System.IO;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -22,7 +21,6 @@ using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
-using SFA.DAS.Encoding;
 using SFA.DAS.UnitOfWork.EntityFrameworkCore.DependencyResolution.Microsoft;
 using SFA.DAS.UnitOfWork.Mvc.Extensions;
 using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.Microsoft;
@@ -73,14 +71,14 @@ public class Startup
         var employerAccountsConfiguration = _configuration.Get<EmployerAccountsConfiguration>();
 
         services.AddApiConfigurationSections(_configuration)
-            //.AddApiAuthentication(_configuration)
-            //.AddApiAuthorization(_environment)
+            .AddApiAuthentication(_configuration)
+            .AddApiAuthorization(_environment)
             .Configure<ApiBehaviorOptions>(opt => { opt.SuppressModelStateInvalidFilter = true; })
             .AddMvc(opt =>
             {
-                //opt.AddValidation();
-                // opt.AddAuthorization();
-                // opt.Filters.Add<StopwatchFilter>();
+                opt.AddValidation();
+                opt.AddAuthorization();
+                opt.Filters.Add<StopwatchFilter>();
             });
 
         services.AddSwaggerGen(c =>
@@ -113,7 +111,7 @@ public class Startup
 
         services.AddControllers(options =>
         {
-            //options.Filters.Add(new ProducesAttribute("text/html"));
+            options.Filters.Add(new ProducesAttribute("text/html"));
         });
 
         services.AddApplicationInsightsTelemetry();
@@ -142,8 +140,8 @@ public class Startup
             .UseUnauthorizedAccessExceptionHandler()
             .UseUnitOfWork()
             .UseRouting()
-            // .UseAuthentication()
-            //.UseAuthorization()
+            .UseAuthentication()
+            .UseAuthorization()
             .UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
