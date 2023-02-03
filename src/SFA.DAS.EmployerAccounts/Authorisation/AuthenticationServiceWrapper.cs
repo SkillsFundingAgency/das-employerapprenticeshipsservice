@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
-namespace SFA.DAS.EmployerAccounts.Web.Authentication;
+namespace SFA.DAS.EmployerAccounts.Authorisation;
 
 public interface IAuthenticationServiceWrapper
 {

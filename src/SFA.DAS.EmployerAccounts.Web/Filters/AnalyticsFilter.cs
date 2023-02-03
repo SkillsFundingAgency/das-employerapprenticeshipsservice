@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
+using SFA.DAS.EmployerAccounts.Infrastructure;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
-using SFA.DAS.EmployerAccounts.Web.Infrastructure;
 
 namespace SFA.DAS.EmployerAccounts.Web.Filters
 {

@@ -1,10 +1,11 @@
-﻿using SFA.DAS.Authorization.DependencyResolution.Microsoft;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using SFA.DAS.Authorization.DependencyResolution.Microsoft;
 using SFA.DAS.Authorization.EmployerUserRoles.Handlers;
 using SFA.DAS.Authorization.Logging;
 using SFA.DAS.EmployerAccounts.Api.Client;
-using SFA.DAS.EmployerAccounts.Authorisation;
 
-namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
+namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 
 public static class AuthorizationServiceRegistrations
 {

@@ -22,17 +22,6 @@ public static class AuthorizationExtensions
 
                 });
 
-                x.AddPolicy("Provider", policy =>
-                {
-                    if (isDevelopment)
-                        policy.AllowAnonymousUser();
-                    else
-                    {
-                        policy.RequireAuthenticatedUser();
-                        policy.RequireRole("Provider");
-                    }
-                });
-
                 x.AddPolicy("Employer", policy =>
                 {
                     if (isDevelopment)

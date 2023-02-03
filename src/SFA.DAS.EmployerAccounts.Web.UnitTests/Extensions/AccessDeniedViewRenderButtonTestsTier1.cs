@@ -7,7 +7,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using SFA.DAS.EmployerAccounts.Configuration;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using SFA.DAS.EmployerAccounts.Web.Infrastructure;
+using SFA.DAS.EmployerAccounts.Infrastructure;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
 {

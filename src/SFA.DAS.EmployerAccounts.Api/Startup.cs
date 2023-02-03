@@ -4,12 +4,15 @@ using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
+using SFA.DAS.Authorization.DependencyResolution.Microsoft;
+using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.Microsoft;
 using SFA.DAS.Authorization.Mvc.Extensions;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerAccounts.Api.Authentication;
@@ -17,6 +20,7 @@ using SFA.DAS.EmployerAccounts.Api.Authorization;
 using SFA.DAS.EmployerAccounts.Api.ErrorHandler;
 using SFA.DAS.EmployerAccounts.Api.Filters;
 using SFA.DAS.EmployerAccounts.Api.ServiceRegistrations;
+using SFA.DAS.EmployerAccounts.Authorisation;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
@@ -91,6 +95,8 @@ public class Startup
             });
         });
 
+        services.AddEmployerFeaturesAuthorization();
+
         services.AddApplicationServices();
         services.AddDasDistributedMemoryCache(employerAccountsConfiguration, _environment.IsDevelopment());
         services.AddDasHealthChecks(employerAccountsConfiguration);
@@ -108,6 +114,10 @@ public class Startup
         services.AddMediatorValidators();
         services.AddMediatR(typeof(GetPayeSchemeByRefQuery));
         services.AddNotifications(_configuration);
+
+        services.AddAuthorization<AuthorizationContextProvider>();
+        services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+        services.AddSingleton<IAuthenticationServiceWrapper, AuthenticationServiceWrapper>();
 
         services.AddControllers(options =>
         {

@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EmployerAccounts.Web.Infrastructure;
+﻿namespace SFA.DAS.EmployerAccounts.Infrastructure;
 
 public class RouteValues
 {

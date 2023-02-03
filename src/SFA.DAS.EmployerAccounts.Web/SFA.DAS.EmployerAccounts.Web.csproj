@@ -42,13 +42,13 @@
     <PackageReference Include="Scrutor.AspNetCore" Version="3.3.0" />
     <PackageReference Include="SFA.DAS.Audit.Client.Web" Version="1.0.0.20553" />
     <PackageReference Include="SFA.DAS.Authorization.EmployerFeatures">
-      <Version>6.0.52</Version>
+      <Version>6.0.97</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles">
-      <Version>6.0.52</Version>
+      <Version>6.0.97</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.Mvc">
-      <Version>6.0.52</Version>
+      <Version>6.0.97</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authentication">
       <Version>1.1.2</Version>

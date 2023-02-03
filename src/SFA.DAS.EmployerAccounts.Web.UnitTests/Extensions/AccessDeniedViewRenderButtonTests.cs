@@ -8,8 +8,8 @@ using System.Security.Principal;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using SFA.DAS.EmployerAccounts.Configuration;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using SFA.DAS.EmployerAccounts.Infrastructure;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
-using SFA.DAS.EmployerAccounts.Web.Infrastructure;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
 {

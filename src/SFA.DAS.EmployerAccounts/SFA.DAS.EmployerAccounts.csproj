@@ -30,8 +30,8 @@
     <PackageReference Include="SFA.DAS.Audit.Client" Version="1.0.0.20553" />
     <PackageReference Include="SFA.DAS.Authentication" Version="1.1.2" />
     <PackageReference Include="SFA.DAS.Authentication.Extensions.Legacy" Version="1.0.29" />
-    <PackageReference Include="SFA.DAS.Authorization.EmployerFeatures" Version="6.0.52" />
-    <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles" Version="6.0.52" />
+    <PackageReference Include="SFA.DAS.Authorization.EmployerFeatures" Version="6.0.97" />
+    <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles" Version="6.0.97" />
     <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
     <PackageReference Include="SFA.DAS.CommitmentsV2.Api.Types" Version="8.2.0" />
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.52781" />
