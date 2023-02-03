@@ -44,7 +44,6 @@
 		<PackageReference Include="SFA.DAS.Validation.WebApi">
 			<Version>5.1.167</Version>
 		</PackageReference>
-		<PackageReference Include="StructureMap" Version="4.7.1" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
 		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
 		<PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
