@@ -1,7 +1,6 @@
-﻿using System.Data.Entity;
-using System.Threading;
+﻿using System.Threading;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.HashingService;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
 

@@ -1,7 +1,7 @@
-﻿using System.Data.Entity;
-using System.Threading;
+﻿using System.Threading;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.EmployerAccounts.Dtos;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetHealthCheck;

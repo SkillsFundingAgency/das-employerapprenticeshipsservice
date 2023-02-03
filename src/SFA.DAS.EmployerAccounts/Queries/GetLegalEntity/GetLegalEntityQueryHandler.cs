@@ -1,5 +1,5 @@
-﻿using System.Data.Entity;
-using System.Threading;
+﻿using System.Threading;
+using Microsoft.EntityFrameworkCore;
 using AccountLegalEntity = SFA.DAS.EmployerAccounts.Models.Account.AccountLegalEntity;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetLegalEntity;

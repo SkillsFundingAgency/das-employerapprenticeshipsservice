@@ -119,10 +119,7 @@ public class Startup
         services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
         services.AddSingleton<IAuthenticationServiceWrapper, AuthenticationServiceWrapper>();
 
-        services.AddControllers(options =>
-        {
-            options.Filters.Add(new ProducesAttribute("text/html"));
-        });
+        services.AddControllers();
 
         services.AddApplicationInsightsTelemetry();
     }

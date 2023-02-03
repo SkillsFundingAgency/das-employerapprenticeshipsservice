@@ -8,6 +8,7 @@ public class EmployerAgreementConfiguration: IEntityTypeConfiguration<EmployerAg
 {
     public void Configure(EntityTypeBuilder<EmployerAgreement> builder)
     {
+        builder.ToTable("EmployerAgreement");
         builder.Ignore(c => c.SignedByEmail);
         
         builder

@@ -1,11 +1,10 @@
-﻿using System.Data.Entity;
-using System.Threading;
+﻿using System.Threading;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.HashingService;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 
@@ -45,7 +44,7 @@ public class GetAccountEmployerAgreementsQueryHandler : IRequestHandler<GetAccou
             .WithSignedOrPendingAgreementsForAccount(accountId)
             .ProjectTo<EmployerAgreementStatusDto>(_configurationProvider)
             .OrderBy(ea => ea.LegalEntity.Name)
-            .ToListAsync();
+            .ToListAsync(cancellationToken: cancellationToken);
                                     
         agreements = agreements.PostFixEmployerAgreementStatusDto(_hashingService, accountId).ToList();
 

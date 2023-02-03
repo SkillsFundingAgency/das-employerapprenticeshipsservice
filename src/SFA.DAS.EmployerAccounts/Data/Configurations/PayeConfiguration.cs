@@ -8,6 +8,7 @@ public class PayeConfiguration: IEntityTypeConfiguration<Paye>
 {
     public void Configure(EntityTypeBuilder<Paye> builder)
     {
+        builder.ToTable("Paye");
         builder.Ignore(a => a.AccountId);
     }
 }

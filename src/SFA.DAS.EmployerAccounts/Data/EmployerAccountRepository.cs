@@ -1,7 +1,7 @@
 ﻿using System.Data;
-using System.Data.Entity;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
@@ -30,8 +30,8 @@ public class EmployerAccountRepository : IEmployerAccountRepository
 
         var countResult = await _db.Value.Database.GetDbConnection().QueryAsync<int>(
             sql: $"select count(*) from [employer_account].[Account] a;");
-        
-        var result = QueryableExtensions.Include(_db.Value.Accounts, x => x.AccountLegalEntities.Select(y => y.Agreements))
+
+        var result = _db.Value.Accounts.Include(x => x.AccountLegalEntities.Select(y => y.Agreements))
             .OrderBy(x => x.Id)
             .Skip(offset)
             .Take(pageSize);
@@ -59,8 +59,9 @@ public class EmployerAccountRepository : IEmployerAccountRepository
 
     public async Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId)
     {
-        var account = await QueryableExtensions.Include(_db.Value.Accounts, x => x.AccountLegalEntities.Select(y => y.Agreements))
-            .SingleOrDefaultAsync<Account>(x => x.HashedId == hashedAccountId);
+        var account = await _db.Value.Accounts
+            .Include(x => x.AccountLegalEntities.Select(y => y.Agreements))
+            .SingleOrDefaultAsync(x => x.HashedId == hashedAccountId);
 
         if (account == null)
         {
@@ -115,7 +116,7 @@ public class EmployerAccountRepository : IEmployerAccountRepository
             .Select(x => x.AgreementType)
             .ToListAsync()
             .ConfigureAwait(false);
-              
+
         return accountDetail;
     }
 

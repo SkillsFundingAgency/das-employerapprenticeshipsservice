@@ -1,7 +1,6 @@
-﻿using System.Data.Entity;
-using System.Threading;
+﻿using System.Threading;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.HashingService;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesCountByHashedAccountId;
 
@@ -32,7 +31,7 @@ public class GetAccountLegalEntitiesCountByHashedAccountIdQueryHandler : IReques
 
         if (_hashingService.TryDecodeValue(message.HashedAccountId, out var accountId))
         {
-            var accountSpecificLegalEntity = await _db.Value.AccountLegalEntities.CountAsync(ale => ale.AccountId == accountId && !ale.Deleted.HasValue);
+            var accountSpecificLegalEntity = await _db.Value.AccountLegalEntities.CountAsync(ale => ale.AccountId == accountId && !ale.Deleted.HasValue, cancellationToken: cancellationToken);
 
             return new GetAccountLegalEntitiesCountByHashedAccountIdResponse
             {

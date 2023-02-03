@@ -40,15 +40,6 @@ public class EmployerAccountsDbContext : DbContext
         _azureServiceTokenProvider = azureServiceTokenProvider;
     }
 
-
-    //public EmployerAccountsDbContext(DbConnection connection, DbTransaction transaction = null)
-    //    : base(connection, false)
-    //{
-    //    if (transaction == null) Database.BeginTransaction();
-    //    else Database.UseTransaction(transaction);
-    //}
-
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseLazyLoadingProxies();

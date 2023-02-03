@@ -8,6 +8,7 @@ public class AccountLegalEntityConfiguration : IEntityTypeConfiguration<AccountL
 {
     public void Configure(EntityTypeBuilder<AccountLegalEntity> builder)
     {
+        builder.ToTable("AccountLegalEntity");
         builder.HasMany(x => x.Agreements);
 
         builder.HasOne(x => x.PendingAgreement);

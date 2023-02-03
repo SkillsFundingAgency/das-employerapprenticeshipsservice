@@ -7,6 +7,7 @@ public class MembershipConfiguration: IEntityTypeConfiguration<Membership>
 {
     public void Configure(EntityTypeBuilder<Membership> builder)
     {
+        builder.ToTable("Membership");
         builder.HasKey(m => new { m.AccountId, m.UserId });
     }
 }

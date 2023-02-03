@@ -8,6 +8,7 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
 {
     public void Configure(EntityTypeBuilder<Account> builder)
     {
+        builder.ToTable("Account");
         builder.Ignore(a => a.role).Ignore(a => a.RoleName);
 
         builder.HasMany(a => a.AccountLegalEntities);

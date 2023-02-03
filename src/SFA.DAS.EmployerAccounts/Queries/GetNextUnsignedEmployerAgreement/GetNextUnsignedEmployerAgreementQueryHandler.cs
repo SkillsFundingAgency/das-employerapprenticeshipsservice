@@ -1,9 +1,9 @@
-﻿using System.Data.Entity;
-using System.Threading;
+﻿using System.Threading;
+using Microsoft.EntityFrameworkCore;
+using SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
 using SFA.DAS.HashingService;
-using SFA.DAS.Validation;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
+namespace SFA.DAS.EmployerAccounts.Queries.GetNextUnsignedEmployerAgreement;
 
 public class GetNextUnsignedEmployerAgreementQueryHandler : IRequestHandler<GetNextUnsignedEmployerAgreementRequest, GetNextUnsignedEmployerAgreementResponse>
 {

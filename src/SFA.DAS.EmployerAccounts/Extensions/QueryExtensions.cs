@@ -1,6 +1,4 @@
-﻿using Z.EntityFramework.Plus;
-
-namespace SFA.DAS.EmployerAccounts.Extensions;
+﻿namespace SFA.DAS.EmployerAccounts.Extensions;
 
 public static class QueryExtensions
 {
@@ -15,10 +13,5 @@ public static class QueryExtensions
 
             yield return item;
         }
-    }
-
-    public static QueryFutureEnumerable<int> FutureCount<T>(this IQueryable<T> source)
-    {
-        return source.GroupBy(a => 1).Select(g => g.Count()).Future();
     }
 }

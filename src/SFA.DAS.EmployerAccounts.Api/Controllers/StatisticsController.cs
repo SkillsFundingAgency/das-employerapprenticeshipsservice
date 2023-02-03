@@ -6,7 +6,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetStatistics;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers;
 
-//[Authorize(Roles = "ReadUserAccounts")]
+[Authorize(Roles = "ReadUserAccounts")]
 [Route("api/statistics")]
 public class StatisticsController : ControllerBase
 {
