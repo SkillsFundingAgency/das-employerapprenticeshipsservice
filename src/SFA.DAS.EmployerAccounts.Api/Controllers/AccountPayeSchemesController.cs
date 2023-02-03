@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
 using SFA.DAS.EmployerAccounts.Api.Types;
 
@@ -19,7 +19,7 @@ public class AccountPayeSchemesController : ControllerBase
     }
 
     [Route("{payeschemeref}", Name = "GetPayeScheme")]
-    [Authorize(Roles = "ReadAllEmployerAccountBalances")]
+    [DasAuthorize(Roles = "ReadAllEmployerAccountBalances")]
     [HttpGet]
     public async Task<IActionResult> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
     {
@@ -34,7 +34,7 @@ public class AccountPayeSchemesController : ControllerBase
     }
 
     [Route("", Name = "GetPayeSchemes")]
-    [Authorize(Roles = "ReadAllEmployerAccountBalances")]
+    [DasAuthorize(Roles = "ReadAllEmployerAccountBalances")]
     [HttpGet]
     public async Task<IActionResult> GetPayeSchemes(string hashedAccountId)
     {

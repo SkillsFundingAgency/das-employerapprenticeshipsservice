@@ -1,6 +1,9 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +14,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
+using SFA.DAS.Api.Common.AppStart;
+using SFA.DAS.Api.Common.Configuration;
+using SFA.DAS.Api.Common.Infrastructure;
 using SFA.DAS.Authorization.DependencyResolution.Microsoft;
 using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.Microsoft;
 using SFA.DAS.Authorization.Mvc.Extensions;
@@ -29,6 +35,7 @@ using SFA.DAS.UnitOfWork.EntityFrameworkCore.DependencyResolution.Microsoft;
 using SFA.DAS.UnitOfWork.Mvc.Extensions;
 using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.Microsoft;
 using SFA.DAS.Validation.Mvc.Extensions;
+using StructureMap;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace SFA.DAS.EmployerAccounts.Api;
@@ -75,15 +82,47 @@ public class Startup
         var employerAccountsConfiguration = _configuration.Get<EmployerAccountsConfiguration>();
 
         services.AddApiConfigurationSections(_configuration)
-            .AddApiAuthentication(_configuration)
-            .AddApiAuthorization(_environment)
             .Configure<ApiBehaviorOptions>(opt => { opt.SuppressModelStateInvalidFilter = true; })
             .AddMvc(opt =>
             {
+                if (!_configuration.IsDevOrLocal())
+                {
+                    opt.Conventions.Add(new AuthorizeControllerModelConvention(new List<string>()));
+                    opt.AddAuthorization();
+                }
+
                 opt.AddValidation();
-                opt.AddAuthorization();
+
                 opt.Filters.Add<StopwatchFilter>();
             });
+
+        if (_configuration.IsDevOrLocal())
+        {
+            services.AddAuthentication("BasicAuthentication")
+                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+
+            services.AddAuthorization(opt =>
+            {
+                opt.AddPolicy("Default", builder => { builder.AllowAnonymousUser(); });
+            });
+
+            services.AddAuthorizationHandler<LocalAuthorizationHandler>();
+        }
+        else
+        {
+            var azureAdConfiguration = _configuration
+                        .GetSection("AzureAd")
+                        .Get<AzureActiveDirectoryConfiguration>();
+
+            var policies = new Dictionary<string, string>
+            {
+                {PolicyNames.Default, RoleNames.Default},
+            };
+            services.AddAuthentication(azureAdConfiguration, policies);
+            services.AddAuthorization<AuthorizationContextProvider>();
+        }
+
+        services.AddEmployerFeaturesAuthorization();
 
         services.AddSwaggerGen(c =>
         {
@@ -95,7 +134,6 @@ public class Startup
             });
         });
 
-        services.AddEmployerFeaturesAuthorization();
 
         services.AddApplicationServices();
         services.AddDasDistributedMemoryCache(employerAccountsConfiguration, _environment.IsDevelopment());
@@ -115,11 +153,8 @@ public class Startup
         services.AddMediatR(typeof(GetPayeSchemeByRefQuery));
         services.AddNotifications(_configuration);
 
-        services.AddAuthorization<AuthorizationContextProvider>();
         services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
         services.AddSingleton<IAuthenticationServiceWrapper, AuthenticationServiceWrapper>();
-
-        services.AddControllers();
 
         services.AddApplicationInsightsTelemetry();
     }
@@ -161,5 +196,7 @@ public class Startup
               opt.SwaggerEndpoint("/swagger/v1/swagger.json", "Employer Accounts API");
               opt.RoutePrefix = "swagger";
           });
+
+
     }
 }

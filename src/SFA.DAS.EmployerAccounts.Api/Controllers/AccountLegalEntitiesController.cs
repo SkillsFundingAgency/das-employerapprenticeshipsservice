@@ -1,12 +1,12 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities.Api;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers
 {
-    [Authorize(Roles = "ReadUserAccounts")]
+    [DasAuthorize(Roles = "ReadUserAccounts")]
     [Route("api/accountlegalentities")]
     public class AccountLegalEntitiesController : ControllerBase
     {

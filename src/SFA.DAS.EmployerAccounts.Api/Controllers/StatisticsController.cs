@@ -1,21 +1,18 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerAccounts.Queries.GetStatistics;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers;
 
-[Authorize(Roles = "ReadUserAccounts")]
+[DasAuthorize(Roles = "ReadUserAccounts")]
 [Route("api/statistics")]
 public class StatisticsController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public StatisticsController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
+    public StatisticsController(IMediator mediator) => _mediator = mediator;
 
     [HttpGet]
     [Route("")]

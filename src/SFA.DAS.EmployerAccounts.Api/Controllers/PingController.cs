@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace SFA.DAS.EmployerAccounts.Api.Controllers
+namespace SFA.DAS.EmployerAccounts.Api.Controllers;
+
+[Route("ping")]
+public class PingController : ControllerBase
 {
-    [Route("ping")]
-    public class PingController : ControllerBase
+    [HttpGet]
+    public IActionResult Get()
     {
-        [HttpGet]
-        public IActionResult Get()
-        {
-            return Ok();
-        }
+        return Ok();
     }
 }
