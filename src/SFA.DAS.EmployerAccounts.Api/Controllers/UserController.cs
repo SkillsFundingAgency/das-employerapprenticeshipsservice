@@ -2,11 +2,12 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.Authorization.Mvc.Attributes;
+using SFA.DAS.EmployerAccounts.Api.Authorization;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByEmail;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers;
 
-[DasAuthorize(Roles = "ReadUserAccounts")]
+[DasAuthorize(Roles = ApiRoles.ReadUserAccounts)]
 [Route("api/user")]
 public class UserController : ControllerBase
 {

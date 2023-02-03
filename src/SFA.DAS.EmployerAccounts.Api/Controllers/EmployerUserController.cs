@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.Authorization.Mvc.Attributes;
+using SFA.DAS.EmployerAccounts.Api.Authorization;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers;
@@ -16,7 +17,7 @@ public class EmployerUserController : ControllerBase
     }
 
     [Route("accounts", Name = "Accounts")]
-    [DasAuthorize(Roles = "ReadUserAccounts")]
+    [DasAuthorize(Roles = ApiRoles.ReadUserAccounts)]
     [HttpGet]
     public async Task<IActionResult> GetUserAccounts(string userRef)
     {

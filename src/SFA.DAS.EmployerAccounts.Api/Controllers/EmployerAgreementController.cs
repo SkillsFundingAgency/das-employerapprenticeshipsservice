@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.Authorization.Mvc.Attributes;
+using SFA.DAS.EmployerAccounts.Api.Authorization;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers;
@@ -17,7 +18,7 @@ public class EmployerAgreementController : ControllerBase
     }
 
     [Route("{hashedAccountId}/legalEntities/{hashedlegalEntityId}/agreements/{agreementId}", Name = "AgreementById")]
-    [DasAuthorize(Roles = "ReadAllEmployerAgreements")]
+    [DasAuthorize(Roles = ApiRoles.ReadAllEmployerAgreements)]
     [HttpGet]
     public async Task<IActionResult> GetAgreement(string agreementId)
     {
@@ -32,7 +33,7 @@ public class EmployerAgreementController : ControllerBase
     }
 
     [Route("internal/{accountId}/minimum-signed-agreement-version", Name = "GetMinimumSignedAgreemmentVersion")]
-    [DasAuthorize(Roles = "ReadAllEmployerAgreements")]
+    [DasAuthorize(Roles = ApiRoles.ReadAllEmployerAgreements)]
     [HttpGet]
     public async Task<IActionResult> GetMinimumSignedAgreemmentVersion(long accountId)
     {
