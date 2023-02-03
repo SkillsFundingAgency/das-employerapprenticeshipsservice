@@ -13,7 +13,7 @@ using SFA.DAS.Authorization.EmployerFeatures.Models;
 using SFA.DAS.Authorization.Features.Services;
 using SFA.DAS.Authorization.Handlers;
 using SFA.DAS.Authorization.Results;
-using SFA.DAS.EmployerAccounts.AuthorisationExtensions;
+using SFA.DAS.EmployerAccounts.Authorisation;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetMinimumSignedAgreementVersion;
 using SFA.DAS.Testing;

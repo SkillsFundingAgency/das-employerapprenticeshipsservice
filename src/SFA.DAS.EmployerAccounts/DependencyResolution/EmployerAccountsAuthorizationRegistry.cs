@@ -1,5 +1,4 @@
 ﻿using SFA.DAS.Authorization.Handlers;
-using SFA.DAS.EmployerAccounts.AuthorisationExtensions;
 using SFA.DAS.EmployerAccounts.Services;
 
 namespace SFA.DAS.EmployerAccounts.DependencyResolution;

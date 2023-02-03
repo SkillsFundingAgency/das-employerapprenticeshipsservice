@@ -5,10 +5,9 @@ using SFA.DAS.Authorization.Features.Services;
 using SFA.DAS.Authorization.Handlers;
 using SFA.DAS.Authorization.Options;
 using SFA.DAS.Authorization.Results;
-
 using SFA.DAS.EmployerAccounts.Queries.GetMinimumSignedAgreementVersion;
 
-namespace SFA.DAS.EmployerAccounts.AuthorisationExtensions;
+namespace SFA.DAS.EmployerAccounts.Authorisation;
 
 public class EmployerFeatureAuthorizationHandler : IAuthorizationHandler
 {
