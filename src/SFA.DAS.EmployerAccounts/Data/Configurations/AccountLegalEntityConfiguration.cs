@@ -9,10 +9,6 @@ public class AccountLegalEntityConfiguration : IEntityTypeConfiguration<AccountL
     public void Configure(EntityTypeBuilder<AccountLegalEntity> builder)
     {
         builder.ToTable("AccountLegalEntity");
-        
-        //builder.HasMany(x => x.Agreements)
-        //    .WithOne(x=> x.AccountLegalEntity)
-        //    .HasForeignKey(k => k.AccountLegalEntityId);
 
         builder.HasOne(x => x.PendingAgreement)
             .WithMany()
@@ -21,7 +17,6 @@ public class AccountLegalEntityConfiguration : IEntityTypeConfiguration<AccountL
 
         builder.HasOne(x => x.SignedAgreement)
             .WithMany()
-            .HasForeignKey(y => y.SignedAgreementId);
-
+           .HasForeignKey(y => y.SignedAgreementId);
     }
 }
