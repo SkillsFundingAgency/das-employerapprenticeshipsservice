@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Configuration;
@@ -98,7 +99,8 @@ public class AccountRepository : BaseRepository, IAccountRepository
         await _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[CreateAccount]",
             param: parameters,
-            commandType: CommandType.StoredProcedure);
+            commandType: CommandType.StoredProcedure,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction());
 
         var accountLegalEntityId = parameters.Get<long>("@accountLegalentityId");
 
@@ -137,7 +139,8 @@ public class AccountRepository : BaseRepository, IAccountRepository
         await _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[CreateLegalEntityWithAgreement]",
             param: parameters,
-            commandType: CommandType.StoredProcedure);
+            commandType: CommandType.StoredProcedure,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction());
 
         var legalEntityId = parameters.Get<long>("@legalEntityId");
         var agreementId = parameters.Get<long>("@employerAgreementId");
@@ -233,7 +236,8 @@ public class AccountRepository : BaseRepository, IAccountRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[UpdateAccountHashedIds]",
             param: parameters,
-            commandType: CommandType.StoredProcedure);
+            commandType: CommandType.StoredProcedure,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction());
     }
 
     public Task UpdateUserAccountSettings(string userRef, List<UserNotificationSetting> settings)
@@ -330,7 +334,8 @@ public class AccountRepository : BaseRepository, IAccountRepository
         return connection.ExecuteAsync(
             sql: "[employer_account].[UpdateAccountLegalEntity_SetPublicHashedId]",
             param: parameters,
-            commandType: CommandType.StoredProcedure);
+            commandType: CommandType.StoredProcedure,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction());
     }
 
     public Task UpdateLegalEntityDetailsForAccount(long accountId, long legalEntityId, string address, string name)
@@ -345,7 +350,8 @@ public class AccountRepository : BaseRepository, IAccountRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[UpdateAccountLegalEntity_SetNameAndAddress]",
             param: parameters,
-            commandType: CommandType.StoredProcedure);
+            commandType: CommandType.StoredProcedure,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction());
     }
 
     private class AccountNameItem
