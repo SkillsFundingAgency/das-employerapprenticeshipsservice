@@ -29,17 +29,21 @@ public class EmployerAccountRepository : IEmployerAccountRepository
         var offset = pageSize * (pageNumber - 1);
 
         var countResult = await _db.Value.Database.GetDbConnection().QueryAsync<int>(
-            sql: $"select count(*) from [employer_account].[Account] a;");
+            sql: "select count(*) from [employer_account].[Account] a;");
 
-        var result = _db.Value.Accounts.Include(x => x.AccountLegalEntities.Select(y => y.Agreements))
+        var result = await _db.Value.Accounts
+            .Include(x => x.AccountLegalEntities)
+            .ThenInclude(y => y.Agreements)
+            .ThenInclude(x=> x.Template)
             .OrderBy(x => x.Id)
             .Skip(offset)
-            .Take(pageSize);
+            .Take(pageSize)
+            .ToListAsync();
 
         return new Accounts<Account>
         {
             AccountsCount = countResult.First(),
-            AccountList = result.ToList()
+            AccountList = result
         };
     }
 

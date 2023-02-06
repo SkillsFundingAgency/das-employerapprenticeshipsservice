@@ -26,7 +26,7 @@ public class LegalEntitiesController : ControllerBase
     }
 
     [Route("", Name = "GetLegalEntities")]
-   // [DasAuthorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
+    [DasAuthorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet]
     public async Task<IActionResult> GetLegalEntities(string hashedAccountId, bool includeDetails = false)
     {
@@ -78,10 +78,9 @@ public class LegalEntitiesController : ControllerBase
 
     [HttpGet]
     [Route("{legalEntityId}", Name = "GetLegalEntity")]
-   // [DasAuthorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
+    [DasAuthorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpNotFoundForNullModel]
-    public async Task<IActionResult> GetLegalEntity(string hashedAccountId, long legalEntityId,
-        bool includeAllAgreements = false)
+    public async Task<IActionResult> GetLegalEntity(string hashedAccountId, long legalEntityId, bool includeAllAgreements = false)
     {
         var response = await _mediator.Send(request: new GetLegalEntityQuery(hashedAccountId, legalEntityId));
 
