@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Configuration;
 
@@ -112,7 +113,8 @@ public class UserRepository : BaseRepository, IUserRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[UpsertUser] @userRef, @email, @firstName, @lastName, @correlationId",
             param: parameters,
-            commandType: CommandType.Text);
+            commandType: CommandType.Text,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction());
     }
 
     public async Task<Users> GetAllUsers()
