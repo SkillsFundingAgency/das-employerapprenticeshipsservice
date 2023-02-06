@@ -25,17 +25,18 @@ using SFA.DAS.EmployerAccounts.Api.Authentication;
 using SFA.DAS.EmployerAccounts.Api.Authorization;
 using SFA.DAS.EmployerAccounts.Api.ErrorHandler;
 using SFA.DAS.EmployerAccounts.Api.Filters;
+using SFA.DAS.EmployerAccounts.Api.Mappings;
 using SFA.DAS.EmployerAccounts.Api.ServiceRegistrations;
 using SFA.DAS.EmployerAccounts.Authorisation;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Mappings;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
 using SFA.DAS.UnitOfWork.EntityFrameworkCore.DependencyResolution.Microsoft;
 using SFA.DAS.UnitOfWork.Mvc.Extensions;
 using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.Microsoft;
 using SFA.DAS.Validation.Mvc.Extensions;
-using StructureMap;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace SFA.DAS.EmployerAccounts.Api;
@@ -81,21 +82,6 @@ public class Startup
     {
         var employerAccountsConfiguration = _configuration.Get<EmployerAccountsConfiguration>();
 
-        services.AddApiConfigurationSections(_configuration)
-            .Configure<ApiBehaviorOptions>(opt => { opt.SuppressModelStateInvalidFilter = true; })
-            .AddMvc(opt =>
-            {
-                if (!_configuration.IsDevOrLocal())
-                {
-                    opt.Conventions.Add(new AuthorizeControllerModelConvention(new List<string>()));
-                    opt.AddAuthorization();
-                }
-
-                opt.AddValidation();
-
-                opt.Filters.Add<StopwatchFilter>();
-            });
-
         if (_configuration.IsDevOrLocal())
         {
             services.AddAuthentication("BasicAuthentication")
@@ -107,11 +93,12 @@ public class Startup
             });
 
             services.AddAuthorizationHandler<LocalAuthorizationHandler>();
+            services.AddTransient<SFA.DAS.Authorization.Services.IAuthorizationService, LocalAuthorisationService>();
         }
         else
         {
             var azureAdConfiguration = _configuration
-                        .GetSection("AzureAd")
+                        .GetSection(ConfigurationKeys.AzureActiveDirectoryApiConfiguration)
                         .Get<AzureActiveDirectoryConfiguration>();
 
             var policies = new Dictionary<string, string>
@@ -148,13 +135,30 @@ public class Startup
         services.AddEventsApi();
         services.AddExecutionPolicies();
         services.AddHashingServices(employerAccountsConfiguration);
-        services.AddAutoMapper(typeof(Startup).Assembly);
+
+        services.AddAutoMapper(typeof(ActivityMappings), typeof(Startup));
+
         services.AddMediatorValidators();
         services.AddMediatR(typeof(GetPayeSchemeByRefQuery));
         services.AddNotifications(_configuration);
 
         services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
         services.AddSingleton<IAuthenticationServiceWrapper, AuthenticationServiceWrapper>();
+
+        services.AddApiConfigurationSections(_configuration)
+            .Configure<ApiBehaviorOptions>(opt => { opt.SuppressModelStateInvalidFilter = true; })
+            .AddMvc(opt =>
+            {
+                if (!_configuration.IsDevOrLocal())
+                {
+                    opt.Conventions.Add(new AuthorizeControllerModelConvention(new List<string>()));
+                    opt.AddAuthorization();
+                }
+
+                opt.AddValidation();
+
+                opt.Filters.Add<StopwatchFilter>();
+            });
 
         services.AddApplicationInsightsTelemetry();
     }

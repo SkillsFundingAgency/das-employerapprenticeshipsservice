@@ -1,33 +1,33 @@
 ﻿using System.Threading;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using Microsoft.Azure.Cosmos.Linq;
-using SFA.DAS.CosmosDb;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.EmployerAccounts.Api.Types;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities.Api;
 
 public class GetAccountLegalEntitiesQueryHandler : IRequestHandler<GetAccountLegalEntitiesQuery, GetAccountLegalEntitiesResponse>
 {
-    private readonly IConfigurationProvider _configurationProvider;
     private readonly Lazy<EmployerAccountsDbContext> _db;
+    private readonly IMapper _mapper;
 
-    public GetAccountLegalEntitiesQueryHandler(IConfigurationProvider configurationProvider, Lazy<EmployerAccountsDbContext> db)
+    public GetAccountLegalEntitiesQueryHandler(Lazy<EmployerAccountsDbContext> db, IMapper mapper)
     {
-        _configurationProvider = configurationProvider;
         _db = db;
+        _mapper = mapper;
     }
 
     public async Task<GetAccountLegalEntitiesResponse> Handle(GetAccountLegalEntitiesQuery message, CancellationToken cancellationToken)
     {
         var accountLegalEntitiesCount = await _db.Value.AccountLegalEntities.Where(ale => ale.Deleted == null).CountAsync(cancellationToken);
 
-        var accountLegalEntities = await _db.Value.AccountLegalEntities
+        var accountLegalEntities = _db.Value.AccountLegalEntities
             .Where(ale => ale.Deleted == null)
             .OrderBy(a => a.Id)
             .Skip(message.PageSize.Value * (message.PageNumber.Value - 1))
-            .Take(message.PageSize.Value)
-            .ProjectTo<AccountLegalEntity>(_configurationProvider)
+            .Take(message.PageSize.Value);
+
+        var entities = await _mapper
+            .ProjectTo<AccountLegalEntity>(accountLegalEntities)
             .ToListAsync(cancellationToken);
         
         var totalPages = (accountLegalEntitiesCount + message.PageSize.Value - 1) / message.PageSize.Value;
@@ -36,7 +36,7 @@ public class GetAccountLegalEntitiesQueryHandler : IRequestHandler<GetAccountLeg
         {
             AccountLegalEntities = new PagedApiResponse<AccountLegalEntity>
             {
-                Data = accountLegalEntities,
+                Data = entities,
                 Page = message.PageNumber.Value,
                 TotalPages = totalPages
             }

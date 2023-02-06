@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using AutoMapper;
+using AutoMapper.Configuration.Annotations;
 
 namespace SFA.DAS.EmployerAccounts.Commands.RunHealthCheckCommand;
 
 public class RunHealthCheckCommand : IRequest
 {
-    [IgnoreMap]
+    [Ignore]
     [Required]
     public Guid? UserRef { get; set; }
 }

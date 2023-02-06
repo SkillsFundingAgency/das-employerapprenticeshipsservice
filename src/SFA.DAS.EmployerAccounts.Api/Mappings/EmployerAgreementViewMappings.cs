@@ -3,9 +3,9 @@ using SFA.DAS.EmployerAccounts.Api.Types;
 
 namespace SFA.DAS.EmployerAccounts.Api.Mappings
 {
-    public class AccountMappings : Profile
+    public class EmployerAgreementViewMappings : Profile
     {
-        public AccountMappings()
+        public EmployerAgreementViewMappings()
         {
             CreateMap<Models.EmployerAgreement.EmployerAgreementView, EmployerAgreementView>();
         }
