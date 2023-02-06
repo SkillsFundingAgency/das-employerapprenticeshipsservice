@@ -11,7 +11,6 @@ using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Queries.GetStatistics;
 using SFA.DAS.EmployerAccounts.TestCommon;
-using Z.EntityFramework.Plus;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetStatisticsTests
 {
@@ -84,8 +83,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetStatisticsTests
 
             Handler = new GetStatisticsQueryHandler(new Lazy<EmployerAccountsDbContext>(() => AccountsDb.Object));
             Query = new GetStatisticsQuery();
-
-            QueryFutureManager.AllowQueryBatch = false;
         }
 
         public async Task<GetStatisticsResponse> Handle()

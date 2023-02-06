@@ -12,7 +12,6 @@ using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Mappings;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities.Api;
 using SFA.DAS.EmployerAccounts.TestCommon;
-using Z.EntityFramework.Plus;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntities.Api
 {
@@ -26,10 +25,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntities.Api
             {
                 r.Should().NotBeNull().And.BeOfType<GetAccountLegalEntitiesResponse>();
                 r.AccountLegalEntities.Should().NotBeNull().And.BeOfType<PagedApiResponse<AccountLegalEntity>>();
-                
+
                 var expected = f.AccountLegalEntities.Select(a => new AccountLegalEntity { AccountLegalEntityId = a.Id, AccountLegalEntityPublicHashedId = a.PublicHashedId });
                 r.AccountLegalEntities.Data.Should().BeEquivalentTo(expected);
-                
+
                 r.AccountLegalEntities.Page.Should().Be(1);
                 r.AccountLegalEntities.TotalPages.Should().Be(1);
             });
@@ -80,7 +79,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntities.Api
     {
         public GetAccountLegalEntitiesQueryHandler Handler { get; set; }
         public GetAccountLegalEntitiesQuery Query { get; set; }
-        public IConfigurationProvider ConfigurationProvider { get; set; }
+        public IMapper Mapper { get; set; }
         public Mock<EmployerAccountsDbContext> Db { get; set; }
         public List<EmployerAccounts.Models.Account.AccountLegalEntity> AccountLegalEntities { get; set; }
 
@@ -88,19 +87,17 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntities.Api
         {
             Query = new GetAccountLegalEntitiesQuery();
 
-            ConfigurationProvider = new MapperConfiguration(c =>
+            Mapper = new Mapper(new MapperConfiguration(c =>
             {
                 c.AddProfile<LegalEntityMappings>();
-            });
+            }));
 
             Db = new Mock<EmployerAccountsDbContext>();
             AccountLegalEntities = new List<EmployerAccounts.Models.Account.AccountLegalEntity>();
 
             Db.Setup(d => d.AccountLegalEntities).Returns(new DbSetStub<EmployerAccounts.Models.Account.AccountLegalEntity>(AccountLegalEntities));
 
-            Handler = new GetAccountLegalEntitiesQueryHandler(ConfigurationProvider, new Lazy<EmployerAccountsDbContext>(() => Db.Object));
-
-            QueryFutureManager.AllowQueryBatch = false;
+            Handler = new GetAccountLegalEntitiesQueryHandler(new Lazy<EmployerAccountsDbContext>(() => Db.Object), Mapper);
         }
 
         public Task<GetAccountLegalEntitiesResponse> Handle()

@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EmployerAccounts.TasksApi;
+﻿using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountTasks;
 

@@ -1,12 +1,12 @@
-﻿using AutoMapper;
+﻿using AutoMapper.Configuration.Annotations;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 public abstract class AccountViewModel : IAccountViewModel
 {
-    [IgnoreMap]
+    [Ignore]
     public long AccountId { get; set; }
 
-    [IgnoreMap]
+    [Ignore]
     public string AccountHashedId { get; set; }
 }
