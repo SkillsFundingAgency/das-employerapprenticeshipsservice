@@ -14,6 +14,7 @@ using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesByHashedAccountId;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountDetail;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementById;
@@ -64,6 +65,7 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IRequestHandler<GetEmployerAgreementByIdRequest, GetEmployerAgreementByIdResponse>))]
     [TestCase(typeof(IRequestHandler<GetMinimumSignedAgreementVersionQuery, GetMinimumSignedAgreementVersionResponse>))]
     [TestCase(typeof(IRequestHandler<GetUserAccountsQuery, GetUserAccountsQueryResponse>))]
+    [TestCase(typeof(IRequestHandler<GetAccountLegalEntitiesByHashedAccountIdRequest, GetAccountLegalEntitiesByHashedAccountIdResponse>))]
     [TestCase(typeof(IRequestHandler<UpdateUserAornLockRequest, Unit>))]
     [TestCase(typeof(IRequestHandler<RemovePayeFromAccountCommand, Unit>))]
     public void Then_The_Dependencies_Are_Correctly_Resolved_For_Handlers(Type toResolve)
@@ -81,6 +83,7 @@ public class WhenAddingServicesToTheContainer
         serviceCollection.AddSingleton(Mock.Of<IEmployerAccountRepository>());
         serviceCollection.AddSingleton(Mock.Of<IEmployerAgreementRepository>());
         serviceCollection.AddSingleton(Mock.Of<IEmployerAccountTeamRepository>());
+        serviceCollection.AddSingleton(Mock.Of<IAccountLegalEntityRepository>());
         serviceCollection.AddSingleton(Mock.Of<IUserAornPayeLockService>());
         serviceCollection.AddSingleton(Mock.Of<IGenericEventFactory>());
         serviceCollection.AddSingleton(Mock.Of<IPayeSchemeEventFactory>());
