@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.Helpers;
@@ -24,7 +23,7 @@ public class WhenIGetTheStatistics : GivenEmployerAccountsApi.GivenEmployerAccou
             _expectedStatisticsViewModel = await accountStatisticsDataHelper.GetStatistics();
         }
 
-        WhenControllerActionIsCalled(@"https://localhost:44330/api/statistics");
+        WhenControllerActionIsCalled(@"/api/statistics");
     }
 
     private static bool AnyAccountStatisticsAreZero(Statistics accountStatistics)

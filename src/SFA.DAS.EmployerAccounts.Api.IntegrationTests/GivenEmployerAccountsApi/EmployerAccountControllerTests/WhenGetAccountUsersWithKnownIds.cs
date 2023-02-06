@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Net;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Testing;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.Helpers;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.ModelBuilders;
@@ -37,11 +33,11 @@ public class WhenGetAccountUsersWithKnownIds : GivenEmployerAccountsApi
             _userRef = data.CurrentUser.UserOutput.UserRef;
         });
 
-        WhenControllerActionIsCalled($"https://localhost:44330/api/accounts/{hashedAccountId}/users");
+        WhenControllerActionIsCalled($"/api/accounts/{hashedAccountId}/users");
     }
 
     [Test]
-    public async Task ThenTheStatusShouldBeFound_AndDataShouldContainOnlyTheExpectedUser()
+    public void ThenTheStatusShouldBeFound_AndDataShouldContainOnlyTheExpectedUser()
     {
         var teamMembers = Response.GetContent<List<TeamMember>>();
         Response.ExpectStatusCodes(HttpStatusCode.OK);

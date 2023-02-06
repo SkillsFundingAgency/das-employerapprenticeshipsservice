@@ -12,7 +12,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers;
 public class EmployerAccountsController : ControllerBase
 {
     private readonly AccountsOrchestrator _orchestrator;
-      
+
     public EmployerAccountsController(AccountsOrchestrator orchestrator)
     {
         _orchestrator = orchestrator;
@@ -42,7 +42,7 @@ public class EmployerAccountsController : ControllerBase
 
         if (result == null) return NotFound();
 
-        result.LegalEntities.ForEach(x=> CreateGetLegalEntityLink(hashedAccountId, x));
+        result.LegalEntities.ForEach(x => CreateGetLegalEntityLink(hashedAccountId, x));
         result.PayeSchemes.ForEach(x => CreateGetPayeSchemeLink(hashedAccountId, x));
         return Ok(result);
     }

@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Net;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.Helpers;
 
@@ -13,10 +12,11 @@ public class WhenGetLegalEntitiesWithNoKey : GivenEmployerAccountsApi
     [SetUp]
     public void Setup()
     {
-        WhenControllerActionIsCalled(@"https://localhost:44330/api/accounts/%20/legalentities");
+        WhenControllerActionIsCalled(@"/api/accounts/%20/legalentities");
     }
+
     [Test]
-    public async Task ThenTheStatusShouldBeBadRequest()
+    public void ThenTheStatusShouldBeBadRequest()
     {
         Response.ExpectStatusCodes(HttpStatusCode.BadRequest);
     }

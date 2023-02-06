@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Net;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.Helpers;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.ModelBuilders;
@@ -30,14 +29,13 @@ public class WhenGetAccountWithKnownIds : GivenEmployerAccountsApi
             _employerAccount = data.CurrentAccount.AccountOutput;
         });
 
-        WhenControllerActionIsCalled($"https://localhost:44330/api/accounts/{_employerAccount.HashedAccountId}");
+        WhenControllerActionIsCalled($"/api/accounts/{_employerAccount.HashedAccountId}");
     }
 
     [Test]
-    public async Task ThenTheStatusShouldBeFound_ByHashedAccountId()
+    public void ThenTheStatusShouldBeFound_ByHashedAccountId()
     {
         Response.ExpectStatusCodes(HttpStatusCode.OK);
         Assert.IsNotNull(Response.GetContent<AccountDetail>());
     }
-
 }

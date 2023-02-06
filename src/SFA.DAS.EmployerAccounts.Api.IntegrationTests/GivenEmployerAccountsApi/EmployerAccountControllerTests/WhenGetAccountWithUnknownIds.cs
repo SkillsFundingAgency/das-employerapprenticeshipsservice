@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Net;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.Helpers;
 
@@ -13,14 +12,12 @@ public class WhenGetAccountWithUnknownIds : GivenEmployerAccountsApi
     [SetUp]
     public void SetUp()
     {
-        WhenControllerActionIsCalled($"https://localhost:44330/api/accounts/MADE*UP*ID");
+        WhenControllerActionIsCalled("/api/accounts/MADE*UP*ID");
     }
 
     [Test]
-    public async Task ThenTheStatusShouldBeNotFound_ByHashedId()
+    public void ThenTheStatusShouldBeNotFound_ByHashedId()
     {
         Response.ExpectStatusCodes(HttpStatusCode.NotFound);
     }
-
-
 }

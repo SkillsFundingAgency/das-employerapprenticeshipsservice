@@ -43,12 +43,14 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
             optionsBuilder.UseSqlServer(_configuration.DatabaseConnectionString);
             _dbContext = new EmployerAccountsDbContext(optionsBuilder.Options);
 
-            _lazyAccountRepository = new  Lazy<IAccountRepository>(buildAccountRepository);
-            _lazyUserRepository = new Lazy<IUserRepository>(buildUserRepository);
+            _lazyAccountRepository = new  Lazy<IAccountRepository>(BuildAccountRepository);
+            _lazyUserRepository = new Lazy<IUserRepository>(BuildUserRepository);
+
+
 
         }
 
-        private IUserRepository buildUserRepository()
+        private IUserRepository BuildUserRepository()
         {
             return 
                 new UserRepository(
@@ -58,7 +60,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
                     );
         }
 
-        private IAccountRepository buildAccountRepository()
+        private IAccountRepository BuildAccountRepository()
         {
             return
                 new AccountRepository(

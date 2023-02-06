@@ -13,7 +13,7 @@ public class WhenPingIsCalled : GivenEmployerAccountsApi
     [SetUp]
     public void SetUp()
     {
-        WhenControllerActionIsCalled(@"https://localhost:44330/ping");
+        WhenControllerActionIsCalled("/ping");
     }
 
     [Test]
