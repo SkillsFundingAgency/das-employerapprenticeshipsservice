@@ -64,7 +64,9 @@ public class EmployerAccountRepository : IEmployerAccountRepository
     public async Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId)
     {
         var account = await _db.Value.Accounts
-            .Include(x => x.AccountLegalEntities.Select(y => y.Agreements))
+            .Include(x => x.AccountLegalEntities)
+            .ThenInclude(y => y.Agreements)
+            .ThenInclude(x=> x.Template)
             .SingleOrDefaultAsync(x => x.HashedId == hashedAccountId);
 
         if (account == null)

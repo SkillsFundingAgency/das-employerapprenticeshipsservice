@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetTeamMembers;
 
@@ -23,7 +22,7 @@ public class GetTeamMembersRequestHandler : IRequestHandler<GetTeamMembersReques
 
     public async Task<GetTeamMembersResponse> Handle(GetTeamMembersRequest message, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(message);
+        var validationResult = _validator.Validate(message);
 
         if (!validationResult.IsValid())
         {

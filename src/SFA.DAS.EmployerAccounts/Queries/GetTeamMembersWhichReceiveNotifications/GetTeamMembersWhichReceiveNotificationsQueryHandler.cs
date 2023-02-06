@@ -1,8 +1,6 @@
 ﻿using System.Threading;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetTeamMembersWhichReceiveNotifications;
 
@@ -24,7 +22,7 @@ public class GetTeamMembersWhichReceiveNotificationsQueryHandler : IRequestHandl
 
     public async Task<GetTeamMembersWhichReceiveNotificationsQueryResponse> Handle(GetTeamMembersWhichReceiveNotificationsQuery message, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(message);
+        var validationResult = _validator.Validate(message);
 
         if (!validationResult.IsValid())
         {
