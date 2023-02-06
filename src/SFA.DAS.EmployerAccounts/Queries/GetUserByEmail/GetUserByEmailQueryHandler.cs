@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetUserByEmail;
 
@@ -17,7 +16,7 @@ public class GetUserByEmailQueryHandler : IRequestHandler<GetUserByEmailQuery, G
 
     public async  Task<GetUserByEmailResponse> Handle(GetUserByEmailQuery message, CancellationToken cancellationToken)
     {
-        var result = await _validator.ValidateAsync(message);
+        var result = _validator.Validate(message);
 
         if (!result.IsValid())
         {

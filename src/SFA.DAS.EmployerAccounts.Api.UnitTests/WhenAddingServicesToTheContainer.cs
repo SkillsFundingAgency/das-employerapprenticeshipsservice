@@ -25,6 +25,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamMembers;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamMembersWhichReceiveNotifications;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
+using SFA.DAS.EmployerAccounts.Queries.GetUserByEmail;
 using SFA.DAS.EmployerAccounts.Queries.RemovePayeFromAccount;
 using SFA.DAS.EmployerAccounts.Queries.UpdateUserAornLock;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
@@ -68,6 +69,7 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IRequestHandler<GetUserAccountsQuery, GetUserAccountsQueryResponse>))]
     [TestCase(typeof(IRequestHandler<GetAccountLegalEntitiesByHashedAccountIdRequest, GetAccountLegalEntitiesByHashedAccountIdResponse>))]
     [TestCase(typeof(IRequestHandler<GetEmployerAgreementsByAccountIdRequest, GetEmployerAgreementsByAccountIdResponse>))]
+    [TestCase(typeof(IRequestHandler<GetUserByEmailQuery, GetUserByEmailResponse>))]
     [TestCase(typeof(IRequestHandler<UpdateUserAornLockRequest, Unit>))]
     [TestCase(typeof(IRequestHandler<RemovePayeFromAccountCommand, Unit>))]
     public void Then_The_Dependencies_Are_Correctly_Resolved_For_Handlers(Type toResolve)
