@@ -26,7 +26,7 @@ public class LegalEntitiesController : ControllerBase
     }
 
     [Route("", Name = "GetLegalEntities")]
-    [DasAuthorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
+   // [DasAuthorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet]
     public async Task<IActionResult> GetLegalEntities(string hashedAccountId, bool includeDetails = false)
     {
@@ -69,13 +69,16 @@ public class LegalEntitiesController : ControllerBase
             return Ok(new ResourceList(resources));
         }
 
-        return Ok(result.LegalEntities.Select(c => LegalEntityMapping.MapFromAccountLegalEntity(c, null, false))
-            .ToList());
+        var model = result.LegalEntities
+            .Select(entity => LegalEntityMapping.MapFromAccountLegalEntity(entity, null, false))
+            .ToList();
+
+        return Ok(model);
     }
 
     [HttpGet]
     [Route("{legalEntityId}", Name = "GetLegalEntity")]
-    [DasAuthorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
+   // [DasAuthorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpNotFoundForNullModel]
     public async Task<IActionResult> GetLegalEntity(string hashedAccountId, long legalEntityId,
         bool includeAllAgreements = false)

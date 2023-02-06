@@ -10,7 +10,7 @@ public class AccountLegalEntityRepository : BaseRepository, IAccountLegalEntityR
 {
     private readonly Lazy<EmployerAccountsDbContext> _db;
 
-    public AccountLegalEntityRepository(EmployerAccountsConfiguration configuration, ILogger<AccountLegalEntityRepository> logger,  Lazy<EmployerAccountsDbContext> db) 
+    public AccountLegalEntityRepository(EmployerAccountsConfiguration configuration, ILogger<AccountLegalEntityRepository> logger, Lazy<EmployerAccountsDbContext> db)
         : base(configuration.DatabaseConnectionString, logger)
     {
         _db = db;
@@ -18,10 +18,10 @@ public class AccountLegalEntityRepository : BaseRepository, IAccountLegalEntityR
 
     public async Task<List<AccountLegalEntity>> GetAccountLegalEntities(string accountHashedId)
     {
-        var accountLegalEntities =  await _db.Value.AccountLegalEntities.Where(l =>
-            l.Account.HashedId == accountHashedId &&
-            (l.PendingAgreementId != null || l.SignedAgreementId != null) &&
-            l.Deleted == null).ToListAsync();
+        var accountLegalEntities = await _db.Value.AccountLegalEntities.Where(l =>
+                 l.Account.HashedId == accountHashedId &&
+                 (l.PendingAgreementId != null || l.SignedAgreementId != null) &&
+                 l.Deleted == null).ToListAsync();
 
         return accountLegalEntities;
     }

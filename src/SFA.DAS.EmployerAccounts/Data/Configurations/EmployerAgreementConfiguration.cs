@@ -10,7 +10,7 @@ public class EmployerAgreementConfiguration: IEntityTypeConfiguration<EmployerAg
     {
         builder.ToTable("EmployerAgreement");
         builder.Ignore(c => c.SignedByEmail);
-        
+
         builder
             .HasOne(x => x.AccountLegalEntity)
             .WithOne(x=> x.SignedAgreement)
