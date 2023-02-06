@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.ModelBuilders;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess.Adapters;
@@ -14,7 +15,6 @@ using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.HashingService;
 using SFA.DAS.Testing.Helpers;
-using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
 {
@@ -23,22 +23,22 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
     {
         private const string ServiceName = "SFA.DAS.EmployerAccounts";
 
-        private readonly IContainer _container;
+        private readonly IServiceProvider _serviceProvider;
         private readonly IHashingService _hashingService;
         private readonly IPublicHashingService _publicHashingService;
         private readonly EmployerAccountsDbContext _dbContext;
         private readonly Lazy<IAccountRepository> _lazyAccountRepository;
         private readonly Lazy<IUserRepository> _lazyUserRepository;
-        private EmployerAccountsConfiguration _configuration;
+        private readonly EmployerAccountsConfiguration _configuration;
 
-        public EmployerAccountsDbBuilder(IContainer container)
+        public EmployerAccountsDbBuilder(IServiceProvider serviceProvider)
         {
-            _container = container;
+            _serviceProvider = serviceProvider;
 
             _configuration = ConfigurationTestHelper.GetConfiguration<EmployerAccountsConfiguration>(ServiceName);
 
-            _hashingService = _container.GetInstance<IHashingService>();
-            _publicHashingService = _container.GetInstance<IPublicHashingService>();
+            _hashingService = _serviceProvider.GetService<IHashingService>();
+            _publicHashingService = _serviceProvider.GetService<IPublicHashingService>();
             var optionsBuilder = new DbContextOptionsBuilder<EmployerAccountsDbContext>();
             optionsBuilder.UseSqlServer(_configuration.DatabaseConnectionString);
             _dbContext = new EmployerAccountsDbContext(optionsBuilder.Options);
@@ -53,7 +53,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
             return 
                 new UserRepository(
                     _configuration,
-                    _container.GetInstance<ILogger<UserRepository>>(),
+                    _serviceProvider.GetService<ILogger<UserRepository>>(),
                     new Lazy<EmployerAccountsDbContext>(() => _dbContext)
                     );
         }
@@ -63,9 +63,9 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
             return
                 new AccountRepository(
                     _configuration,
-                    _container.GetInstance<ILogger<AccountRepository>>(),
+                    _serviceProvider.GetService<ILogger<AccountRepository>>(),
                     new Lazy<EmployerAccountsDbContext>(() => _dbContext),
-                    _container.GetInstance<IAccountLegalEntityPublicHashingService>());
+                    _serviceProvider.GetService<IAccountLegalEntityPublicHashingService>());
         }
 
         public bool HasTransaction => _dbContext.Database.CurrentTransaction != null;
