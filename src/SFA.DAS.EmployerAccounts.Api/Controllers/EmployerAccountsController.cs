@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerAccounts.Api.Authorization;
@@ -20,7 +19,7 @@ public class EmployerAccountsController : ControllerBase
     }
 
     [Route("", Name = "AccountsIndex")]
-    //[DasAuthorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
+    [DasAuthorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet]
     public async Task<IActionResult> GetAccounts(string toDate = null, int pageSize = 1000, int pageNumber = 1)
     {
@@ -35,7 +34,7 @@ public class EmployerAccountsController : ControllerBase
     }
 
     [Route("{hashedAccountId}", Name = "GetAccount")]
-    //[DasAuthorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
+    [DasAuthorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet]
     public async Task<IActionResult> GetAccount(string hashedAccountId)
     {
@@ -49,7 +48,7 @@ public class EmployerAccountsController : ControllerBase
     }
 
     [Route("{hashedAccountId}/users", Name = "GetAccountUsers")]
-    //[DasAuthorize(Roles = ApiRoles.ReadAllAccountUsers)]
+    [DasAuthorize(Roles = ApiRoles.ReadAllAccountUsers)]
     [HttpGet]
     public async Task<IActionResult> GetAccountUsers(string hashedAccountId)
     {
@@ -58,7 +57,7 @@ public class EmployerAccountsController : ControllerBase
     }
 
     [Route("internal/{accountId}/users", Name = "GetAccountUsersByInternalAccountId")]
-    //[DasAuthorize(Roles = ApiRoles.ReadAllAccountUsers)]
+    [DasAuthorize(Roles = ApiRoles.ReadAllAccountUsers)]
     [HttpGet]
     public async Task<IActionResult> GetAccountUsers(long accountId)
     {
@@ -67,7 +66,7 @@ public class EmployerAccountsController : ControllerBase
     }
 
     [Route("internal/{accountId}/users/which-receive-notifications", Name = "GetAccountUsersByInteralIdWhichReceiveNotifications")]
-    //[Authorize(Roles = ApiRoles.ReadAllAccountUsers)]
+    [DasAuthorize(Roles = ApiRoles.ReadAllAccountUsers)]
     [HttpGet]
     public async Task<IActionResult> GetAccountUsersWhichReceiveNotifications(long accountId)
     {
