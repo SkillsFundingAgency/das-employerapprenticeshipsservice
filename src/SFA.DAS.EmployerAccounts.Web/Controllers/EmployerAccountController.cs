@@ -23,7 +23,7 @@ public class EmployerAccountController : BaseController
     private const int AddPayeLater = 1;
     private const int AddPayeNow = 2;
     private const int AddPayeNowAorn = 3;
-    private const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
+    public const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
 
     public EmployerAccountController(EmployerAccountOrchestrator employerAccountOrchestrator,
         ILogger<EmployerAccountController> logger,
@@ -205,9 +205,13 @@ public class EmployerAccountController : BaseController
 
         var response = await _employerAccountOrchestrator.CreateMinimalUserAccountForSkipJourney(request, HttpContext);
         var returnUrlCookie = _returnUrlCookieStorageService.Get(ReturnUrlCookieName);
+
         _returnUrlCookieStorageService.Delete(ReturnUrlCookieName);
+        
         if (returnUrlCookie != null && !string.IsNullOrWhiteSpace(returnUrlCookie.Value))
+        {
             return Redirect(returnUrlCookie.Value);
+        }
 
         return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId = response.Data.HashedId });
     }
