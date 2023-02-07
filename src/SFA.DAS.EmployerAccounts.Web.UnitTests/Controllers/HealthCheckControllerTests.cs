@@ -22,7 +22,7 @@ public class HealthCheckControllerTests : FluentTest<HealthCheckControllerTestsF
     [Test]
     public Task Index_WhenGettingTheIndexAction_ThenShouldReturnTheIndexView()
     {
-        return RunAsync(f => f.Index(), (f, r) =>
+        return TestAsync(f => f.Index(), (f, r) =>
         {
             r.Should().NotBeNull().And.Match<ViewResult>(a => a.ViewName == "");
             r.As<ViewResult>().Model.Should().NotBeNull().And.Match<HealthCheckViewModel>(m => m.HealthCheck == f.GetHealthCheckQueryResponse.HealthCheck);
@@ -32,7 +32,7 @@ public class HealthCheckControllerTests : FluentTest<HealthCheckControllerTestsF
     [Test]
     public Task Index_WhenPostingTheIndexAction_ThenShouldRedirectToTheIndexAction()
     {
-        return RunAsync(f => f.PostIndex(), (f, r) => r.Should().NotBeNull().And.Match<RedirectToRouteResult>(a =>
+        return TestAsync(f => f.PostIndex(), (f, r) => r.Should().NotBeNull().And.Match<RedirectToRouteResult>(a =>
             a.RouteValues["Action"].Equals("Index") &&
             a.RouteValues["Controller"] == null));
     }

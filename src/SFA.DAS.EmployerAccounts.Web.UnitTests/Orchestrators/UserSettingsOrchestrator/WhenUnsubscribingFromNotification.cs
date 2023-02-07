@@ -63,7 +63,7 @@ public class WhenUnsubscribingFromNotification
     public void CantFindSettingsForAccount()
     {
         Func<Task> act = async () => await _sut.Unsubscribe("REF", "ABBA777", "URL/to/Settings");
-        act.ShouldThrow<Exception>()
+        act.Should().ThrowAsync<Exception>()
             .Where(m => m.Message == "Cannot find user settings for user REF in account 777");
     }
 
