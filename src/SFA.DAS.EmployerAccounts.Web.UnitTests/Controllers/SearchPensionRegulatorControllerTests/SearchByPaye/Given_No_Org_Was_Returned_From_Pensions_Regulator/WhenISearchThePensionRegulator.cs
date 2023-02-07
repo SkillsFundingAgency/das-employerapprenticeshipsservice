@@ -50,8 +50,7 @@ class WhenISearchThePensionRegulator
             orchestrator.Object,
             Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
             Mock.Of<IMediator>(),
-            Mock.Of<ICookieStorageService<HashedAccountIdModel>>(),
-            Mock.Of<IHttpContextAccessor>());
+            Mock.Of<ICookieStorageService<HashedAccountIdModel>>());
     }
 
     [Test]

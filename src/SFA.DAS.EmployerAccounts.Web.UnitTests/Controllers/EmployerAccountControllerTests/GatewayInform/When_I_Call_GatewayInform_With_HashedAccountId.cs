@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -22,7 +23,6 @@ public class When_I_Call_GatewayInform_With_HashedAccountId : ControllerTestBase
 {
     private EmployerAccountController _employerAccountController;
     private Mock<EmployerAccountOrchestrator> _orchestrator;
-    private Mock<IAuthenticationService> _owinWrapper;     
     private string _hashedAccountId = @"W4X7DL";
     private Mock<ICookieStorageService<HashedAccountIdModel>> _mockAccountCookieStorage;
     private string _cookieKeyName;
@@ -35,8 +35,6 @@ public class When_I_Call_GatewayInform_With_HashedAccountId : ControllerTestBase
         _cookieKeyName = typeof(HashedAccountIdModel).FullName;
 
         _orchestrator = new Mock<EmployerAccountOrchestrator>();
-
-        _owinWrapper = new Mock<IAuthenticationService>();        
 
         _orchestrator.Setup(x => x.RenameEmployerAccount(It.IsAny<RenameEmployerAccountViewModel>(), It.IsAny<string>()))
             .ReturnsAsync(new OrchestratorResponse<RenameEmployerAccountViewModel>
@@ -54,9 +52,9 @@ public class When_I_Call_GatewayInform_With_HashedAccountId : ControllerTestBase
             Mock.Of<IMediator>(),
             Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
             _mockAccountCookieStorage.Object,
-            Mock.Of<IHttpContextAccessor>())
+            Mock.Of<LinkGenerator>())
         {
-            ControllerContext = ControllerContext.Object,
+            ControllerContext = ControllerContext,
             Url = new UrlHelper(new ActionContext(HttpContext.Object, Routes, new ActionDescriptor()))
         };
     }

@@ -9,18 +9,14 @@ public class TaskController : BaseController
 {
     private readonly TaskOrchestrator _orchestrator;
     private readonly ILogger<TaskController> _logger;
-    private readonly HttpContextAccessor _contextAccessor;
-
     public TaskController(
         TaskOrchestrator taskOrchestrator,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
-        ILogger<TaskController> logger,
-        HttpContextAccessor contextAccessor
-        ) : base(flashMessage)
+        ILogger<TaskController> logger)
+        : base(flashMessage)
     {
         _orchestrator = taskOrchestrator;
         _logger = logger;
-        _contextAccessor = contextAccessor;
     }
 
     [HttpPost]
@@ -28,12 +24,12 @@ public class TaskController : BaseController
     [Route("dismissTask", Name = "DismissTask")]
     public async Task<IActionResult> DismissTask(DismissTaskViewModel viewModel)
     {
-        if (string.IsNullOrEmpty(_contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName)))
+        if (string.IsNullOrEmpty(HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName)))
         {
             return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
         }
 
-        var externalUserId = _contextAccessor.HttpContext.User.FindFirstValue("sub");
+        var externalUserId = HttpContext.User.FindFirstValue("sub");
 
         _logger.LogDebug($"Task dismiss requested for account id '{viewModel.HashedAccountId}', user id '{externalUserId}' and task '{viewModel.TaskType}'");
 

@@ -60,8 +60,7 @@ public class WhenIAcceptAnInvitation : ControllerTestBase
 
         _controller = new InvitationController(
             _invitationOrchestrator.Object,
-            _configuration, _flashMessage.Object,
-            Mock.Of<IHttpContextAccessor>());
+            _configuration, _flashMessage.Object);
 
         //Act
         await _controller.Accept(invitationId, invitation);

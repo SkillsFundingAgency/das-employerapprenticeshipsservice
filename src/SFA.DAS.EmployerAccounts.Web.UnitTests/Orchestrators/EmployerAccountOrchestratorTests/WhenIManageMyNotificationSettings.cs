@@ -49,9 +49,9 @@ public class WhenIManageMyNotificationSettings : ControllerTestBase
                 It.IsAny<List<UserNotificationSetting>>()))
             .Returns(() => Task.FromResult(new Unit()));
 
-        _controller = new SettingsController( _orchestrator.Object, _flashMessage.Object, Mock.Of<IHttpContextAccessor>())
+        _controller = new SettingsController( _orchestrator.Object, _flashMessage.Object)
         {
-            ControllerContext = ControllerContext.Object,
+            ControllerContext = ControllerContext,
             Url = new UrlHelper(new ActionContext(HttpContext.Object, Routes, new ActionDescriptor()))
         };
     }

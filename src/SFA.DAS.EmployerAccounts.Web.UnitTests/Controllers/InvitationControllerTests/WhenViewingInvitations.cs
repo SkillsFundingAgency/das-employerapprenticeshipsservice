@@ -38,8 +38,7 @@ public class WhenViewingInvitations : ControllerTestBase
         _controller = new InvitationController(
             _invitationOrchestrator.Object,
             _configuration,
-            _flashMessage.Object,
-            Mock.Of<IHttpContextAccessor>());
+            _flashMessage.Object);
     }
 
     [Test]

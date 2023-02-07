@@ -374,8 +374,7 @@ public class EmployerAgreementControllerTestFixtures : FluentTest<EmployerAgreem
             FlashMessage.Object,
             Mediator.Object,
             Mapper.Object,
-            Mock.Of<IUrlActionHelper>(),
-            Mock.Of<IHttpContextAccessor>());
+            Mock.Of<IUrlActionHelper>());
             
         controller.ControllerContext = controllerContext.Object;
             

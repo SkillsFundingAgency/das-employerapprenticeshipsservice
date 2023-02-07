@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
@@ -27,8 +26,7 @@ class WhenISelectOrganisationNotListed
             orchestrator.Object,            
             Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
             Mock.Of<IMediator>(),
-            Mock.Of<ICookieStorageService<HashedAccountIdModel>>(),
-            Mock.Of<IHttpContextAccessor>());
+            Mock.Of<ICookieStorageService<HashedAccountIdModel>>());
     }
 
     [Test]

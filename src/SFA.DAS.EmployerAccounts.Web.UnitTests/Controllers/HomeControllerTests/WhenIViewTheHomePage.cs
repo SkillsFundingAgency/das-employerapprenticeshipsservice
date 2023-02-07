@@ -71,8 +71,7 @@ public class WhenIViewTheHomePage
             _configuration,
             _flashMessage.Object,
             Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
-            Mock.Of<ILogger<HomeController>>(),
-            Mock.Of<IHttpContextAccessor>())
+            Mock.Of<ILogger<HomeController>>())
         {
             Url = new UrlHelper(new ActionContext(Mock.Of<HttpContext>(), new RouteData(), new ActionDescriptor()))
         };

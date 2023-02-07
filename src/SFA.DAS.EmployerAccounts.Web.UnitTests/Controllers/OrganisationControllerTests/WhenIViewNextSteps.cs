@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
@@ -26,8 +25,7 @@ class WhenIViewNextSteps
 
         _controller = new OrganisationController(
             _orchestrator.Object,
-            _flashMessage.Object,
-            Mock.Of<IHttpContextAccessor>());
+            _flashMessage.Object);
     }
 
     [Test]

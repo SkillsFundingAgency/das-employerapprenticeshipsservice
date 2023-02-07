@@ -45,8 +45,7 @@ public class WhenIConfirmAddOfOrganisation
 
         _controller = new OrganisationController(
             _orchestrator.Object,           
-            _flashMessage.Object,
-            Mock.Of<IHttpContextAccessor>());
+            _flashMessage.Object);
     }
 
     [Test]

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -46,9 +47,9 @@ public class When_I_Call_GatewayInform_Without_HashedAccountId : ControllerTestB
             Mock.Of<IMediator>(),
             Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
             _mockAccountCookieStorage.Object,
-            Mock.Of<IHttpContextAccessor>())
+            Mock.Of<LinkGenerator>())
         {
-            ControllerContext = ControllerContext.Object,
+            ControllerContext = ControllerContext,
             Url = new UrlHelper(new ActionContext(HttpContext.Object, Routes, new ActionDescriptor()))
         };
     }

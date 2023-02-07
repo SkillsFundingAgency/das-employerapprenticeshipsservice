@@ -1,19 +1,18 @@
 ﻿using System.Threading.Tasks;
+using FluentAssertions;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Models;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests;
 
@@ -21,23 +20,18 @@ public class WhenIStartTheProcess : ControllerTestBase
 {
     private EmployerAccountController _employerAccountController;
     private Mock<EmployerAccountOrchestrator> _orchestrator;
-    private Mock<IAuthenticationService> _owinWrapper;
-    private Mock<IMultiVariantTestingService> _userViewTestingService;
-    private string ExpectedRedirectUrl = "http://redirect.local.test";
+    private readonly string _expectedRedirectUrl = "http://redirect.local.test";
     private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
 
 
     [SetUp]
     public void Arrange()
     {
-        base.Arrange(ExpectedRedirectUrl);
+        base.Arrange(_expectedRedirectUrl);
             
         _orchestrator = new Mock<EmployerAccountOrchestrator>();
-        _orchestrator.Setup(x => x.GetGatewayUrl(It.IsAny<string>())).ReturnsAsync(ExpectedRedirectUrl);
+        _orchestrator.Setup(x => x.GetGatewayUrl(It.IsAny<string>())).ReturnsAsync(_expectedRedirectUrl);
 
-        _owinWrapper = new Mock<IAuthenticationService>();
-        _userViewTestingService = new Mock<IMultiVariantTestingService>();
-        var logger = new Mock<ILog>();
         _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
         _employerAccountController = new EmployerAccountController(
@@ -47,12 +41,30 @@ public class WhenIStartTheProcess : ControllerTestBase
             Mock.Of<IMediator>(),
             Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
             Mock.Of<ICookieStorageService<HashedAccountIdModel>>(),
-            Mock.Of<IHttpContextAccessor>())
+            Mock.Of<LinkGenerator>())
         {
-            ControllerContext = ControllerContext.Object,
+            ControllerContext = ControllerContext,
             Url = new UrlHelper(new ActionContext(HttpContext.Object, Routes, new ActionDescriptor()))
         };
     }
+    [Test]
+    public async Task ThenIAmRedirectedToTheGovernmentGatewayWhenIConfirmIHaveGatewayCredentials()
+    {
+        //Arrange
+        _orchestrator.Setup(x => x.GetGatewayUrl(It.IsAny<string>())).ReturnsAsync(_expectedRedirectUrl);
+
+        //Act
+        var actual = await _employerAccountController.Gateway();
+
+        //Assert
+        Assert.IsNotNull(actual);
+        var actualResult = actual as RedirectResult;
+        Assert.IsNotNull(actualResult);
+        Assert.AreEqual(_expectedRedirectUrl, actualResult.Url);
+        actualResult.Url.Should().NotBeNull();
+        actualResult.Url.Should().Be(_expectedRedirectUrl);
+    }
+
 
     //TODO add EmployerAccountOrganisationController tests when created
     //[Test]
@@ -111,20 +123,4 @@ public class WhenIStartTheProcess : ControllerTestBase
     //        && ((EmployerAccountData)c).OrganisationRegisteredAddress.Equals(registeredAddress)
     //        )));
     //}
-
-    [Test]
-    public async Task ThenIAmRedirectedToTheGovernmentGatewayWhenIConfirmIHaveGatewayCredentials()
-    {
-        //Arrange
-        _orchestrator.Setup(x => x.GetGatewayUrl(It.IsAny<string>())).ReturnsAsync(ExpectedRedirectUrl);
-
-        //Act
-        var actual = await _employerAccountController.Gateway();
-
-        //Assert
-        Assert.IsNotNull(actual);
-        var actualResult = actual as RedirectResult;
-        Assert.IsNotNull(actualResult);
-        Assert.AreEqual(ExpectedRedirectUrl, actualResult.Url);
-    }
 }

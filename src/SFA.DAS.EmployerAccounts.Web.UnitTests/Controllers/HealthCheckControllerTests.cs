@@ -22,19 +22,29 @@ public class HealthCheckControllerTests : FluentTest<HealthCheckControllerTestsF
     [Test]
     public Task Index_WhenGettingTheIndexAction_ThenShouldReturnTheIndexView()
     {
-        return TestAsync(f => f.Index(), (f, r) =>
+        return TestAsync(fixture => fixture.Index(), (fixture, result) =>
         {
-            r.Should().NotBeNull().And.Match<ViewResult>(a => a.ViewName == "");
-            r.As<ViewResult>().Model.Should().NotBeNull().And.Match<HealthCheckViewModel>(m => m.HealthCheck == f.GetHealthCheckQueryResponse.HealthCheck);
+            result.Should().NotBeNull();
+            result.As<ViewResult>().ViewName.Should().BeNull();
+
+            var model = result.As<ViewResult>().Model as HealthCheckViewModel;
+
+            model.Should().NotBeNull();
+            model.HealthCheck.Should().Be(fixture.GetHealthCheckQueryResponse.HealthCheck);
         });
     }
 
     [Test]
     public Task Index_WhenPostingTheIndexAction_ThenShouldRedirectToTheIndexAction()
     {
-        return TestAsync(f => f.PostIndex(), (f, r) => r.Should().NotBeNull().And.Match<RedirectToRouteResult>(a =>
-            a.RouteValues["Action"].Equals("Index") &&
-            a.RouteValues["Controller"] == null));
+        return TestAsync(fixture => fixture.PostIndex(), (fixture, result) =>
+        {
+            result.Should().NotBeNull();
+            
+            var redirect = (RedirectToActionResult)result ;
+            redirect.ActionName.Should().Be("Index");
+            redirect.ControllerName.Should().BeNull();
+        });
     }
 }
 

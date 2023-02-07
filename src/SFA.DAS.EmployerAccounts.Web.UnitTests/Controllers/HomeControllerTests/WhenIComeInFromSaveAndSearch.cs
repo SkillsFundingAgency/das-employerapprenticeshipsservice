@@ -45,10 +45,9 @@ public class WhenIComeInFromSaveAndSearch
             _configuration,
             Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
             _returnUrlCookieStorageService.Object,
-            Mock.Of<ILogger<HomeController>>(),
-            Mock.Of<IHttpContextAccessor>());
+                Mock.Of<ILogger<HomeController>>());
 
-            
+
         _expectedEmail = "test@test.com";
         _expectedId = "123456";
         _expectedFirstName = "Test";

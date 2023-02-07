@@ -33,8 +33,7 @@ public class WhenIAddAPayeScheme
 
         _controller = new EmployerAccountPayeController(
             _employerAccountPayeOrchestrator.Object, 
-            _flashMessage.Object,
-            Mock.Of<IHttpContextAccessor>());
+            _flashMessage.Object);
     }
 
     [Test]

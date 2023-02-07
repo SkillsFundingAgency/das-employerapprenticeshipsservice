@@ -25,8 +25,7 @@ public class WhenIChooseIIfIKnowApprenticehipStartDate
 
         _controller = new EmployerTeamController(
             _mockCookieStorageService.Object,
-            _mockEmployerTeamOrchestrator.Object,
-            Mock.Of<IHttpContextAccessor>());
+            _mockEmployerTeamOrchestrator.Object);
     }
 
     [Test]

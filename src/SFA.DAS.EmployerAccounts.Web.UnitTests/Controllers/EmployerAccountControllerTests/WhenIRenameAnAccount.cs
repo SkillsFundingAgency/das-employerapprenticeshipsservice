@@ -1,20 +1,18 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Models;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests;
 
@@ -31,7 +29,7 @@ public class WhenIRenameAnAccount : ControllerTestBase
         base.Arrange(ExpectedRedirectUrl);
 
         _orchestrator = new Mock<EmployerAccountOrchestrator>();
-        
+
         _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
         _orchestrator.Setup(x =>
@@ -42,16 +40,19 @@ public class WhenIRenameAnAccount : ControllerTestBase
                 Data = new RenameEmployerAccountViewModel()
             });
 
+        
+        AddUserToContext();
+
         _employerAccountController = new EmployerAccountController(
-            _orchestrator.Object,
-            Mock.Of<ILogger<EmployerAccountController>>(),
-            _flashMessage.Object,
-            Mock.Of<IMediator>(),
-            Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
-            Mock.Of<ICookieStorageService<HashedAccountIdModel>>(),
-            Mock.Of<IHttpContextAccessor>())
+           _orchestrator.Object,
+           Mock.Of<ILogger<EmployerAccountController>>(),
+           _flashMessage.Object,
+           Mock.Of<IMediator>(),
+           Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
+           Mock.Of<ICookieStorageService<HashedAccountIdModel>>(),
+           Mock.Of<LinkGenerator>())
         {
-            ControllerContext = ControllerContext.Object,
+            ControllerContext = ControllerContext,
             Url = new UrlHelper(new ActionContext(HttpContext.Object, Routes, new ActionDescriptor()))
         };
     }
@@ -76,5 +77,4 @@ public class WhenIRenameAnAccount : ControllerTestBase
             && r.NewName == "New Account Name"
         ), It.IsAny<string>()));
     }
-
 }
