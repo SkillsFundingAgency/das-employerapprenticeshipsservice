@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
                 Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
                 Mock.Of<ILog>())
             {
-                ControllerContext = _controllerContext.Object
+                ControllerContext = ControllerContext.Object
             };
         }
         

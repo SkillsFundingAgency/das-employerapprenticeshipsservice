@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Net;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
@@ -13,7 +15,6 @@ using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Models;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests
 {
@@ -21,8 +22,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
     {
         private EmployerAccountController _employerAccountController;
         private Mock<EmployerAccountOrchestrator> _orchestrator;
-        private Mock<IAuthenticationService> _owinWrapper;
-        private Mock<IMultiVariantTestingService> _userViewTestingService;
         private const string ExpectedRedirectUrl = "http://redirect.local.test";
         private EmployerAccountData _accountData;
         private OrchestratorResponse<EmployerAgreementViewModel> _response;
@@ -36,23 +35,19 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
             _orchestrator = new Mock<EmployerAccountOrchestrator>();
 
-            _owinWrapper = new Mock<IAuthenticationService>();
-            _userViewTestingService = new Mock<IMultiVariantTestingService>();
-            var logger = new Mock<ILog>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
             _employerAccountController = new EmployerAccountController(
-                _owinWrapper.Object,
                 _orchestrator.Object,
-                _userViewTestingService.Object,
-                logger.Object,
+                Mock.Of<ILogger<EmployerAccountController>>(),
                 _flashMessage.Object,
                 Mock.Of<IMediator>(),
                 Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
-                Mock.Of<ICookieStorageService<HashedAccountIdModel>>())
+                Mock.Of<ICookieStorageService<HashedAccountIdModel>>(),
+                Mock.Of<IHttpContextAccessor>())
             {
-                ControllerContext = _controllerContext.Object,
-                Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)
+                ControllerContext = ControllerContext.Object,
+                Url = new UrlHelper(new ActionContext(HttpContext.Object, Routes, new ActionDescriptor()))
             };
 
             _accountData = new EmployerAccountData
@@ -81,9 +76,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 Status = HttpStatusCode.OK
             };
 
-            _orchestrator.Setup(x => x.CreateOrUpdateAccount(It.IsAny<CreateAccountModel>(), It.IsAny<HttpContextBase>()))
+            _orchestrator.Setup(x => x.CreateOrUpdateAccount(It.IsAny<CreateAccountModel>(), It.IsAny<HttpContext>()))
                 .ReturnsAsync(_response);
         }
+
         //TODO add EmployerAccountOrganisationController tests when created
         //[Test]
         //public void ThenIShouldSaveTheSelectedEmployerDetailsToCookies()

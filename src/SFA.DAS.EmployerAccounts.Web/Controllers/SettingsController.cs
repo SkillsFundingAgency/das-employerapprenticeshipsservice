@@ -8,12 +8,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 public class SettingsController : BaseController
 {
     private readonly UserSettingsOrchestrator _userSettingsOrchestrator;
-    private readonly HttpContextAccessor _contextAccessor;
+    private readonly IHttpContextAccessor _contextAccessor;
 
     public SettingsController(
         UserSettingsOrchestrator userSettingsOrchestrator,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
-        HttpContextAccessor contextAccessor)
+        IHttpContextAccessor contextAccessor)
         : base(flashMessage)
     {
         _userSettingsOrchestrator = userSettingsOrchestrator;
