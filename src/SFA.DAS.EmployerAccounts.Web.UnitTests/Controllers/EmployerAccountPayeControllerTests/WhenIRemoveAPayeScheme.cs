@@ -10,7 +10,7 @@ using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountPayeControllerTests;
 
-public class WhenIRemoveAPayeScheme
+public class WhenIRemoveAPayeScheme : ControllerTestBase
 {
     private Mock<Web.Orchestrators.EmployerAccountPayeOrchestrator> _employerAccountPayeOrchestrator;
     private EmployerAccountPayeController _controller;
@@ -19,6 +19,10 @@ public class WhenIRemoveAPayeScheme
     [SetUp]
     public void Arrange()
     {
+
+        base.Arrange();
+        AddUserToContext();
+        
         _employerAccountPayeOrchestrator = new Mock<Web.Orchestrators.EmployerAccountPayeOrchestrator>();
         _employerAccountPayeOrchestrator.Setup(x => x.RemoveSchemeFromAccount(It.IsAny<RemovePayeSchemeViewModel>())).ReturnsAsync(new OrchestratorResponse<RemovePayeSchemeViewModel>());
         
@@ -26,7 +30,10 @@ public class WhenIRemoveAPayeScheme
 
         _controller = new EmployerAccountPayeController(
             _employerAccountPayeOrchestrator.Object,
-            _flashMessage.Object);
+            _flashMessage.Object)
+        {
+            ControllerContext = ControllerContext
+        };
     }
 
     [Test]
@@ -38,10 +45,10 @@ public class WhenIRemoveAPayeScheme
         //Assert
         _employerAccountPayeOrchestrator.Verify(x => x.RemoveSchemeFromAccount(It.IsAny<RemovePayeSchemeViewModel>()), Times.Once);
         Assert.IsNotNull(actual);
-        var actualRedirect = actual as RedirectToRouteResult;
+        var actualRedirect = actual as RedirectToActionResult;
         Assert.IsNotNull(actualRedirect);
-        Assert.AreEqual("Index", actualRedirect.RouteValues["Action"]);
-        Assert.AreEqual("EmployerAccountPaye", actualRedirect.RouteValues["Controller"]);
+        Assert.AreEqual("Index", actualRedirect.ActionName);
+        Assert.AreEqual("EmployerAccountPaye", actualRedirect.ControllerName);
         _flashMessage.Verify(x => x.Create(It.Is<FlashMessageViewModel>(c => c.HiddenFlashMessageInformation.Equals("page-paye-scheme-deleted")), It.IsAny<string>(), 1));
     }
 
