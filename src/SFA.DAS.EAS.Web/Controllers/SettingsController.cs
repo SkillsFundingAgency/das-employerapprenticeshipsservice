@@ -1,23 +1,23 @@
-﻿using System.Web.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
-    [RoutePrefix("settings")]
+    [Route("settings")]
     [AuthoriseActiveUser]
-    public class SettingsController : Microsoft.AspNetCore.Mvc.Controller
+    public class SettingsController : Controller
     {
         [HttpGet]
         [Route("notifications")]
-        public Microsoft.AspNetCore.Mvc.ActionResult NotificationSettings()
+        public ActionResult NotificationSettings()
         {
             return Redirect(Url.EmployerAccountsAction("settings/notifications", false));
         }
 
         [HttpGet]
         [Route("notifications/unsubscribe/{hashedAccountId}")]
-        public Microsoft.AspNetCore.Mvc.ActionResult NotificationUnsubscribe(string hashedAccountId)
+        public ActionResult NotificationUnsubscribe(string hashedAccountId)
         {
             return Redirect(Url.EmployerAccountsAction($"settings/notifications/unsubscribe/{hashedAccountId}", false));
         }

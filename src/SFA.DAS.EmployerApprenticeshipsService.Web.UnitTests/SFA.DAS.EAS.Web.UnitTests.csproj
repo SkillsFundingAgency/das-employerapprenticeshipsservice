@@ -1,10 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>Library</OutputType>
-    <RuntimeIdentifier>win</RuntimeIdentifier>
-  </PropertyGroup>
-  <PropertyGroup>
     <TargetFramework>net6.0-windows</TargetFramework>
+	<OutputType>Library</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
@@ -132,10 +129,11 @@
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="FluentValidation" Version="6.4.1" />
     <PackageReference Include="HMRC.ESFA.Levy.Api.Types" Version="2.0.4" />
-    <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="2.0.5" />
+    <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
 	<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	<PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.6" />
 	<PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="2.2.1" />
+	<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.5.0" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Orchestrators\TaskOrchestratorTests\WhenIDismissAMonthlyTaskReminder.cs" />

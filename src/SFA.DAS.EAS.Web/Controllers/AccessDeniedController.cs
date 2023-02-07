@@ -1,10 +1,10 @@
-﻿using System.Web.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
-    public class AccessDeniedController : Microsoft.AspNetCore.Mvc.Controller
+    public class AccessDeniedController : Controller
     {
-        public Microsoft.AspNetCore.Mvc.ActionResult Index()
+        public ActionResult Index()
         {
             return View();
         }

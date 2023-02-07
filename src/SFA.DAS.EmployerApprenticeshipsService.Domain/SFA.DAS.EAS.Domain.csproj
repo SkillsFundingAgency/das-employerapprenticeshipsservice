@@ -2,7 +2,6 @@
   <PropertyGroup>
     <TargetFramework>net6.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
-    <RuntimeIdentifier>win</RuntimeIdentifier>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
@@ -93,7 +92,7 @@
     <PackageReference Include="CommonServiceLocator" Version="1.4.0" />
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="HMRC.ESFA.Levy.Api.Types" Version="2.0.4" />
-    <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="2.0.5" />
+    <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
     <PackageReference Include="SFA.DAS.Events.Api.Types" Version="2.1.31" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.0" />
 	<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />

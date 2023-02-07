@@ -2,7 +2,6 @@
   <PropertyGroup>
     <TargetFramework>net6.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
-    <RuntimeIdentifier>win</RuntimeIdentifier>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
@@ -152,7 +151,7 @@
     </PackageReference>
     <PackageReference Include="CommonServiceLocator" Version="1.4.0" />
     <PackageReference Include="FluentValidation" Version="6.4.1" />
-    <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="2.0.5" />
+    <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
     <PackageReference Include="SFA.DAS.Events.Api.Types" Version="2.1.31" />
 	<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	<PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.6" />

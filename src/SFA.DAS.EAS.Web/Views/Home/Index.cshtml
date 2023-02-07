@@ -1,7 +1,9 @@
 @using SFA.DAS.Authorization
+@using SFA.DAS.EAS.Web
 @using SFA.DAS.EAS.Domain
 @using SFA.DAS.EAS.Domain.Models.UserProfile
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.UserAccountsViewModel>
+@using SFA.DAS.EAS.Web.ViewModels
+@model OrchestratorResponse<UserAccountsViewModel>
 @{ViewBag.PageID = "page-auth-homepage"; }
 @{ViewBag.Section = "home"; }
 @{ViewBag.Title = "Your accounts"; }

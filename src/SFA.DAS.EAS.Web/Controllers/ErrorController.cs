@@ -1,12 +1,12 @@
 ﻿using System.Net;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
-    public class ErrorController : Microsoft.AspNetCore.Mvc.Controller
+    public class ErrorController : Controller
     {
         [Route("accessdenied")]
-        public Microsoft.AspNetCore.Mvc.ActionResult AccessDenied()
+        public ActionResult AccessDenied()
         {
             Response.StatusCode = (int)HttpStatusCode.Forbidden;
 
@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [Route("error")]
-        public Microsoft.AspNetCore.Mvc.ActionResult Error()
+        public ActionResult Error()
         {
             Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [Route("notfound")]
-        public Microsoft.AspNetCore.Mvc.ActionResult NotFound()
+        public ActionResult NotFound()
         {
             Response.StatusCode = (int)HttpStatusCode.NotFound;
 

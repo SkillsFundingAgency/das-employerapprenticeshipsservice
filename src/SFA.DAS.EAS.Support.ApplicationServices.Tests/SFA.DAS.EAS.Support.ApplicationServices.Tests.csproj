@@ -2,7 +2,6 @@
   <PropertyGroup>
     <TargetFramework>net6.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
-    <RuntimeIdentifier>win</RuntimeIdentifier>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
@@ -60,7 +59,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="HMRC.ESFA.Levy.Api.Client" Version="2.0.4" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="4.0.4.403061554" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.10.1" />
   </ItemGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />

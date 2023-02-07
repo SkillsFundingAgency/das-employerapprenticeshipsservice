@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EAS.Domain.Configuration;
+﻿using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.Helpers;
 using System.Web.Mvc;
 
@@ -6,7 +7,7 @@ namespace SFA.DAS.EAS.Web.Extensions
 {
     public static class UrlHelperExtensions
     {
-        public static string EmployerAccountsAction(this UrlHelper helper, string path, bool includedAccountId = true)
+        public static string EmployerAccountsAction(this IUrlHelper helper, string path, bool includedAccountId = true)
         {
             var configuration = DependencyResolver.Current.GetService<EmployerApprenticeshipsServiceConfiguration>();
             var baseUrl = configuration.EmployerAccountsBaseUrl;
@@ -14,7 +15,7 @@ namespace SFA.DAS.EAS.Web.Extensions
             return includedAccountId ? AccountAction(helper, baseUrl, path) : Action(baseUrl, path);
         }
 
-        public static string EmployerCommitmentsAction(this UrlHelper helper, string path)
+        public static string EmployerCommitmentsAction(this IUrlHelper helper, string path)
         {
             var configuration = DependencyResolver.Current.GetService<EmployerApprenticeshipsServiceConfiguration>();
             var baseUrl = configuration.EmployerCommitmentsBaseUrl;
@@ -22,7 +23,7 @@ namespace SFA.DAS.EAS.Web.Extensions
             return AccountAction(helper, baseUrl, path);
         }
 
-        public static string EmployerFinanceAction(this UrlHelper helper, string path)
+        public static string EmployerFinanceAction(this IUrlHelper helper, string path)
         {
             var configuration = DependencyResolver.Current.GetService<EmployerApprenticeshipsServiceConfiguration>();
             var baseUrl = configuration.EmployerFinanceBaseUrl;
@@ -30,7 +31,7 @@ namespace SFA.DAS.EAS.Web.Extensions
             return AccountAction(helper, baseUrl, path);
         }
 
-        public static string EmployerProjectionsAction(this UrlHelper helper, string path)
+        public static string EmployerProjectionsAction(this IUrlHelper helper, string path)
         {
             var configuration = DependencyResolver.Current.GetService<EmployerApprenticeshipsServiceConfiguration>();
             var baseUrl = configuration.EmployerProjectionsBaseUrl;
@@ -38,7 +39,7 @@ namespace SFA.DAS.EAS.Web.Extensions
             return AccountAction(helper, baseUrl, path);
         }
 
-        public static string EmployerRecruitAction(this UrlHelper helper)
+        public static string EmployerRecruitAction(this IUrlHelper helper)
         {
             var configuration = DependencyResolver.Current.GetService<EmployerApprenticeshipsServiceConfiguration>();
             var baseUrl = configuration.EmployerRecruitBaseUrl;
@@ -46,9 +47,9 @@ namespace SFA.DAS.EAS.Web.Extensions
             return AccountAction(helper, baseUrl, "");
         }
 
-        private static string AccountAction(UrlHelper helper, string baseUrl, string path)
+        private static string AccountAction(IUrlHelper helper, string baseUrl, string path)
         {
-            var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
+            var hashedAccountId = helper.ActionContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName]; ;
             var accountPath = hashedAccountId == null ? $"accounts/{path}" : $"accounts/{hashedAccountId}/{path}";
 
             return Action(baseUrl, accountPath);

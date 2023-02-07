@@ -2,20 +2,9 @@
   <PropertyGroup>
     <TargetFramework>net6.0-windows</TargetFramework>
     <LangVersion>latest</LangVersion>
-    <OutputType>Exe</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <OutputPath>bin\</OutputPath>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Update="Global.asax.cs">
-      <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="NLog.xsd">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj" />
@@ -64,7 +53,7 @@
       <Version>1.2.1</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.OidcMiddleware">
-      <Version>2.0.0.61553</Version>
+      <Version>2.1.11</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Validation.Mvc">
       <Version>5.1.167</Version>
@@ -86,7 +75,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Web.Administration" Version="10.0.0" />
     <PackageReference Include="SFA.DAS.Web.Policy" Version="1.1.0.63777" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.2.2" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.1.10" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.13" />
 	<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	<PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.6" />

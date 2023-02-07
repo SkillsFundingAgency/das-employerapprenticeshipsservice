@@ -21,11 +21,9 @@ using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.OidcMiddleware;
 
-[assembly: OwinStartup(typeof(Startup))]
-
-namespace SFA.DAS.EAS.Web
+namespace SFA.DAS.EAS.Web.Old
 {
-    public class Startup
+    public class StartupOld
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
