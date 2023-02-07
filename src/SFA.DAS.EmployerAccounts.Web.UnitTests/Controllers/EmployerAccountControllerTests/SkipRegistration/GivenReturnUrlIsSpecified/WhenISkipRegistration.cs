@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -45,11 +46,13 @@ class WhenISkipRegistration : ControllerTestBase
             Status = HttpStatusCode.OK
         };
 
+        AddUserToContext();
+
         _orchestrator.Setup(x =>
                 x.CreateMinimalUserAccountForSkipJourney(It.IsAny<CreateUserAccountViewModel>(), It.IsAny<HttpContext>()))
             .ReturnsAsync(_response);
 
-        _returnUrlCookieStorage.Setup(x => x.Get("SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie"))
+        _returnUrlCookieStorage.Setup(x => x.Get(EmployerAccountController.ReturnUrlCookieName))
             .Returns(new ReturnUrlModel() {Value = ExpectedReturnUrl});
 
         _employerAccountController = new EmployerAccountController(
@@ -57,11 +60,11 @@ class WhenISkipRegistration : ControllerTestBase
             Mock.Of<ILogger<EmployerAccountController>>(),
             _flashMessage.Object,
             Mock.Of<IMediator>(),
-            Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
+            _returnUrlCookieStorage.Object,
             Mock.Of<ICookieStorageService<HashedAccountIdModel>>(),
-            Mock.Of<IHttpContextAccessor>())
+            Mock.Of<LinkGenerator>())
         {
-            ControllerContext = ControllerContext.Object,
+            ControllerContext = ControllerContext,
             Url = new UrlHelper(new ActionContext(HttpContext.Object, Routes, new ActionDescriptor()))
         };
     }

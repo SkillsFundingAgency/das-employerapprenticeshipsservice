@@ -8,23 +8,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 public class SettingsController : BaseController
 {
     private readonly UserSettingsOrchestrator _userSettingsOrchestrator;
-    private readonly IHttpContextAccessor _contextAccessor;
 
     public SettingsController(
         UserSettingsOrchestrator userSettingsOrchestrator,
-        ICookieStorageService<FlashMessageViewModel> flashMessage,
-        IHttpContextAccessor contextAccessor)
+        ICookieStorageService<FlashMessageViewModel> flashMessage)
         : base(flashMessage)
     {
         _userSettingsOrchestrator = userSettingsOrchestrator;
-        _contextAccessor = contextAccessor;
     }
 
     [HttpGet]
     [Route("notifications")]
     public async Task<IActionResult> NotificationSettings()
     {
-        var userIdClaim = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+        var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
         var vm = await _userSettingsOrchestrator.GetNotificationSettingsViewModel(userIdClaim);
 
         var flashMessage = GetFlashMessageViewModelFromCookie();
@@ -38,7 +35,7 @@ public class SettingsController : BaseController
     [Route("notifications")]
     public async Task<IActionResult> NotificationSettings(NotificationSettingsViewModel vm)
     {
-        var userIdClaim = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+        var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
 
         await _userSettingsOrchestrator.UpdateNotificationSettings(userIdClaim,
             vm.NotificationSettings);
@@ -58,7 +55,7 @@ public class SettingsController : BaseController
     [Route("notifications/unsubscribe/{hashedAccountId}")]
     public async Task<IActionResult> NotificationUnsubscribe(string hashedAccountId)
     {
-        var userIdClaim = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+        var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
 
         var url = Url.Action(ControllerConstants.NotificationSettingsActionName);
         var model = await _userSettingsOrchestrator.Unsubscribe(userIdClaim, hashedAccountId, url);

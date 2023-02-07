@@ -92,8 +92,7 @@ public class WhenSupportUserBannerIsRendered
 
         _controller = new EmployerTeamController(
             _mockCookieStorageService.Object,
-            _mockEmployerTeamOrchestrator.Object,
-            Mock.Of<IHttpContextAccessor>())
+            _mockEmployerTeamOrchestrator.Object)
         {
             ControllerContext = _mockControllerContext.Object
         };

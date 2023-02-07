@@ -9,23 +9,20 @@ public class InvitationController : BaseController
     private readonly InvitationOrchestrator _invitationOrchestrator;
 
     private readonly EmployerAccountsConfiguration _configuration;
-    private readonly IHttpContextAccessor _contextAccessor;
-
+    
     public InvitationController(InvitationOrchestrator invitationOrchestrator,
         EmployerAccountsConfiguration configuration,
-        ICookieStorageService<FlashMessageViewModel> flashMessage,
-        IHttpContextAccessor contextAccessor)
+        ICookieStorageService<FlashMessageViewModel> flashMessage)
         : base(flashMessage)
     {
         _invitationOrchestrator = invitationOrchestrator ?? throw new ArgumentNullException(nameof(invitationOrchestrator));
         _configuration = configuration;
-        _contextAccessor = contextAccessor;
     }
 
     [Route("invite")]
     public IActionResult Invite()
     {
-        if (string.IsNullOrEmpty(_contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName)))
+        if (string.IsNullOrEmpty(HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName)))
         {
             return View();
         }
@@ -37,12 +34,12 @@ public class InvitationController : BaseController
     [DasAuthorize]
     public async Task<IActionResult> All()
     {
-        if (string.IsNullOrEmpty(_contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName)))
+        if (string.IsNullOrEmpty(HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName)))
         {
             return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
         }
 
-        var model = await _invitationOrchestrator.GetAllInvitationsForUser(_contextAccessor.HttpContext.User.FindFirstValue("sub"));
+        var model = await _invitationOrchestrator.GetAllInvitationsForUser(HttpContext.User.FindFirstValue("sub"));
 
         return View(model);
     }
@@ -52,7 +49,7 @@ public class InvitationController : BaseController
     [Route("view")]
     public async Task<IActionResult> Details(string invitationId)
     {
-        if (string.IsNullOrEmpty(_contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName)))
+        if (string.IsNullOrEmpty(HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName)))
         {
             return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
         }
@@ -68,7 +65,7 @@ public class InvitationController : BaseController
     [Route("accept")]
     public async Task<IActionResult> Accept(long invitation, UserInvitationsViewModel model)
     {
-        if (string.IsNullOrEmpty(_contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName)))
+        if (string.IsNullOrEmpty(HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName)))
         {
             return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
         }
@@ -80,7 +77,7 @@ public class InvitationController : BaseController
             return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
         }
 
-        await _invitationOrchestrator.AcceptInvitation(invitationItem.Id, _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
+        await _invitationOrchestrator.AcceptInvitation(invitationItem.Id, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
         var flashMessage = new FlashMessageViewModel
         {
@@ -100,12 +97,12 @@ public class InvitationController : BaseController
     [Route("create")]
     public async Task<IActionResult> Create(InviteTeamMemberViewModel model)
     {
-        if (string.IsNullOrEmpty(_contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName)))
+        if (string.IsNullOrEmpty(HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName)))
         {
             return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
         }
 
-        await _invitationOrchestrator.CreateInvitation(model, _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
+        await _invitationOrchestrator.CreateInvitation(model, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
         return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
     }
@@ -114,8 +111,8 @@ public class InvitationController : BaseController
     [Route("register-and-accept")]
     public IActionResult AcceptInvitationNewUser()
     {
-        var schema = _contextAccessor.HttpContext?.Request.Scheme;
-        var authority = _contextAccessor.HttpContext?.Request.Host;
+        var schema = HttpContext?.Request.Scheme;
+        var authority = HttpContext?.Request.Host;
         var appConstants = new Constants(_configuration.Identity);
         return new RedirectResult($"{appConstants.RegisterLink()}{schema}://{authority}/invitations");
     }

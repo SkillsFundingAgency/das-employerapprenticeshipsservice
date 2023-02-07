@@ -32,7 +32,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
     [Test]
     public Task WhenRequestingConfirmRemoveOrganisationPage_AndUserIsUnauthorised_ThenAccessDeniedIsReturned()
     {
-        return RunAsync(
+        return TestAsync(
             arrange: fixtures => fixtures.Orchestrator.Setup(x => x.GetConfirmRemoveOrganisationViewModel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>
                 {
@@ -50,7 +50,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
     [Test]
     public Task WhenRequestingConfirmRemoveOrganisationPage_AndUserIsAuthorised_AndOrganisationCanBeRemoved_ThenConfirmRemoveViewIsReturned()
     {
-        return RunAsync(
+        return TestAsync(
             arrange: fixtures => fixtures.Orchestrator.Setup(x => x.GetConfirmRemoveOrganisationViewModel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>
                 {
@@ -70,7 +70,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
     [Test]
     public Task WhenRequestingConfirmRemoveOrganisationPage_AndUserIsAuthorised_AndOrganisationCannotBeRemoved_ThenCannotRemoveOrganisationViewIsReturned()
     {
-        return RunAsync(
+        return TestAsync(
             arrange: fixtures => fixtures.Orchestrator.Setup(x => x.GetConfirmRemoveOrganisationViewModel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>
                 {
@@ -90,7 +90,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
     [Test]
     public Task ConfirmRemoveOrganisation_WhenIRemoveAlegalEntityFromAnAccount_ThenTheOrchestratorIsCalledToGetTheConfirmRemoveModel()
     {
-        return RunAsync(
+        return TestAsync(
             fixtures => fixtures.Orchestrator.Setup(x => x.GetConfirmRemoveOrganisationViewModel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>
                 {
@@ -104,7 +104,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
     [Test]
     public Task ViewUnsignedAgreements_WhenIViewUnsignedAgreements_ThenIShouldGoStraightToTheUnsignedAgreementIfThereIsOnlyOne()
     {
-        return RunAsync(
+        return TestAsync(
             arrange: fixtures =>
             {
                 fixtures.Mediator.Setup(x => x.Send(It.Is<GetNextUnsignedEmployerAgreementRequest>(y => y.HashedAccountId == fixtures.HashedAccountId), It.IsAny<CancellationToken>()))
@@ -126,7 +126,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
     [Test]
     public Task ViewAgreementToSign_ShouldReturnAgreements()
     {
-        return RunAsync(arrange: fixtures => fixtures.WithUnsignedEmployerAgreement().WithPreviouslySignedAgreement(),
+        return TestAsync(arrange: fixtures => fixtures.WithUnsignedEmployerAgreement().WithPreviouslySignedAgreement(),
             act: fixtures => fixtures.SignedAgreement(),
             assert: (fixtures, result) =>
                 Assert.AreEqual(fixtures.GetSignAgreementViewModel, fixtures.ViewResult.Model));
@@ -135,7 +135,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
     [Test]
     public Task AboutYourAgreement_WhenIViewAboutYourAgreementAsLevy_ThenShouldShowTheAboutYourAgreementView()
     {
-        return RunAsync(
+        return TestAsync(
             arrange: fixtures =>
             {
                 fixtures.OwinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(fixtures.UserId);
@@ -162,7 +162,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
     [Test]
     public Task AboutYourAgreement_WhenIViewAboutYourAgreementAsEoi_ThenShouldShowTheAboutYourAgreementView()
     {
-        return RunAsync(
+        return TestAsync(
             arrange: fixtures =>
             {
                 fixtures.OwinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(fixtures.UserId);
@@ -189,7 +189,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
     [Test]
     public Task ViewAgreementToSign_WhenIHaveNotSelectedAnOption_ThenAnErrorIsDisplayed()
     {
-        return RunAsync(
+        return TestAsync(
             fixtures => fixtures.WithUnsignedEmployerAgreement().WithPreviouslySignedAgreement(),
             fixtures => fixtures.Sign(null),
             (fixtures, result) =>
@@ -207,7 +207,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
     [Test]
     public Task WhenDoYouWantToView_WhenILandOnThePage_ThenTheLegalEntityNameIsCorrect()
     {
-        return RunAsync(
+        return TestAsync(
             arrange: fixtures =>
             {
                 fixtures.Orchestrator
@@ -232,7 +232,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
     [Test]
     public Task WhenDoYouWantToView_WhenISelectNow_ThenTheAgreementIsShown()
     {
-        return RunAsync(
+        return TestAsync(
             act: fixtures => fixtures.WhenDoYouWantToView(1, new WhenDoYouWantToViewViewModel { EmployerAgreement = new EmployerAgreementView() }),
             assert: (fixtures, actualResult) =>
             {
@@ -244,7 +244,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
     [Test]
     public Task WhenDoYouWantToView_WhenISelectLater_ThenTheHomepageIsShown()
     {
-        return RunAsync(
+        return TestAsync(
             act: fixtures => fixtures.WhenDoYouWantToView(2, new WhenDoYouWantToViewViewModel{ EmployerAgreement = new EmployerAgreementView() }),
             assert: (fixtures, actualResult) =>
             {
@@ -255,7 +255,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
     }
 }
 
-public class EmployerAgreementControllerTestFixtures : FluentTestFixture
+public class EmployerAgreementControllerTestFixtures : FluentTest<EmployerAgreementControllerTestFixtures>
 {
     public Mock<EmployerAgreementOrchestrator> Orchestrator;
     public Mock<IAuthenticationService> OwinWrapper;
@@ -374,8 +374,7 @@ public class EmployerAgreementControllerTestFixtures : FluentTestFixture
             FlashMessage.Object,
             Mediator.Object,
             Mapper.Object,
-            Mock.Of<IUrlActionHelper>(),
-            Mock.Of<IHttpContextAccessor>());
+            Mock.Of<IUrlActionHelper>());
             
         controller.ControllerContext = controllerContext.Object;
             

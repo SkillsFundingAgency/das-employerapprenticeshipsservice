@@ -1,22 +1,20 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
-using Azure;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Models;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.GetApprenticeshipFunding;
 
@@ -37,9 +35,6 @@ class WhenIChooseGovernmentGateway : ControllerTestBase
 
         _orchestrator = new Mock<EmployerAccountOrchestrator>();
 
-        //_owinWrapper = new Mock<IAuthenticationService>();
-        //_owinWrapper.Setup(x => x.GetClaimValue(ControllerConstants.UserRefClaimKeyName)).Returns(ExpectedUserId);
-        //_userViewTestingService = new Mock<IMultiVariantTestingService>();
         _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
         _response = new OrchestratorResponse<EmployerAccountViewModel>()
@@ -61,9 +56,9 @@ class WhenIChooseGovernmentGateway : ControllerTestBase
             Mock.Of<IMediator>(),
             Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
             Mock.Of<ICookieStorageService<HashedAccountIdModel>>(),
-            Mock.Of<IHttpContextAccessor>())
+            Mock.Of<LinkGenerator>())
         {
-            ControllerContext = ControllerContext.Object,
+            ControllerContext = ControllerContext,
             Url = new UrlHelper(new ActionContext(HttpContext.Object, Routes, new ActionDescriptor()))
         };
     }
@@ -72,9 +67,9 @@ class WhenIChooseGovernmentGateway : ControllerTestBase
     public async Task ThenIShouldGoToGatewayInform()
     {
         //Act
-        var result = await _employerAccountController.GetApprenticeshipFunding(2) as RedirectToRouteResult;
+        var result = await _employerAccountController.GetApprenticeshipFunding(2) as RedirectToActionResult;
 
         //Assert
-        Assert.AreEqual(ControllerConstants.GatewayInformActionName, result.RouteValues["Action"]);
+        Assert.AreEqual(ControllerConstants.GatewayInformActionName, result.ActionName);
     }
 }

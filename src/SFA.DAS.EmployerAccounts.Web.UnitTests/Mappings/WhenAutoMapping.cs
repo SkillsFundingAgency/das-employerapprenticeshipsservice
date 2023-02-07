@@ -6,25 +6,25 @@ using AgreementMappings = SFA.DAS.EmployerAccounts.Web.Mappings.AgreementMapping
 using HealthCheckMappings = SFA.DAS.EmployerAccounts.Web.Mappings.HealthCheckMappings;
 using VacancyMappings = SFA.DAS.EmployerAccounts.Web.Mappings.VacancyMappings;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Mappings
-{
-    [TestFixture]
-    public class WhenAutoMapping
-    {
-        [Test]
-        public void ThenShouldUseValidConfiguration()
-        {
-            var config = new MapperConfiguration(c =>
-            {
-                c.AddProfiles(typeof(HealthCheckMappings));
-                c.AddProfile<ActivityMappings>();
-                c.AddProfile<OrganisationMappings>();
-                c.AddProfile<AgreementMappings>();
-                c.AddProfile<VacancyMappings>();
-                c.AddProfile<CohortMapping>();
-            });
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Mappings;
 
-            config.AssertConfigurationIsValid();
-        }
+[TestFixture]
+public class WhenAutoMapping
+{
+    [Test]
+    public void ThenShouldUseValidConfiguration()
+    {
+        var config = new MapperConfiguration(c =>
+        {
+            c.AddProfile<AgreementMappings>();
+            c.AddProfile<CohortMapping>();
+            c.AddProfile<HealthCheckMappings>();
+            c.AddProfile<OrganisationMappings>();
+            c.AddProfile<VacancyMappings>();
+
+            c.AddProfile<ActivityMappings>();
+        });
+
+        config.AssertConfigurationIsValid();
     }
 }

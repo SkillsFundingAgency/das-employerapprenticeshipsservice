@@ -36,10 +36,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
                 _configuration,
                 _flashMessage.Object,
                 Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
-                Mock.Of<ILogger<HomeController>>(),
-                Mock.Of<IHttpContextAccessor>())
+                Mock.Of<ILogger<HomeController>>())
             {
-                ControllerContext = ControllerContext.Object
+                ControllerContext = ControllerContext
             };
         }
 

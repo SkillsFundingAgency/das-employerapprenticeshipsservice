@@ -24,9 +24,9 @@ public abstract class EmployerVerificationOrchestratorBase
     }
 
 
-    public virtual async Task<GetUserAccountRoleResponse> GetUserAccountRole(string hashedAccountId, string externalUserId)
+    public virtual Task<GetUserAccountRoleResponse> GetUserAccountRole(string hashedAccountId, string externalUserId)
     {
-        return await Mediator.Send(new GetUserAccountRoleQuery
+        return Mediator.Send(new GetUserAccountRoleQuery
         {
             HashedAccountId = hashedAccountId,
             ExternalUserId = externalUserId

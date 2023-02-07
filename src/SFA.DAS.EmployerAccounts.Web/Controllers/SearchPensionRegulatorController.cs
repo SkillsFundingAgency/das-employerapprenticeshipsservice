@@ -20,21 +20,18 @@ public class SearchPensionRegulatorController : BaseController
     private Regex _aornRegex = new("^[A-Z0-9]{13}$");
     private Regex _payeRegex = new("^[0-9]{3}/?[A-Z0-9]{1,7}$");
     private ICookieStorageService<HashedAccountIdModel> _accountCookieStorage;
-    private readonly HttpContextAccessor _contextAccessor;
 
     public SearchPensionRegulatorController(
         SearchPensionRegulatorOrchestrator searchPensionRegulatorOrchestrator,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
         IMediator mediatr,
-        ICookieStorageService<HashedAccountIdModel> accountCookieStorage,
-        HttpContextAccessor contextAccessor)
+        ICookieStorageService<HashedAccountIdModel> accountCookieStorage)
         : base(flashMessage)
     {
         _searchPensionRegulatorOrchestrator = searchPensionRegulatorOrchestrator;
         _mediatr = mediatr;
         _accountCookieStorage = accountCookieStorage;
-        _contextAccessor = contextAccessor;
-    }
+     }
 
     [Route("{HashedAccountId}/pensionregulator", Order = 0)]
     [Route("pensionregulator", Order = 1)]
@@ -107,7 +104,7 @@ public class SearchPensionRegulatorController : BaseController
                 typeof(HashedAccountIdModel).FullName);
         }
 
-        var userRef = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+        var userRef = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
         var aornLock = await _mediatr.Send(new GetUserAornLockRequest
         {
             UserRef = userRef
@@ -153,7 +150,7 @@ public class SearchPensionRegulatorController : BaseController
 
     private async Task<IActionResult> PerformSearchPensionRegulatorByAorn(SearchPensionRegulatorByAornViewModel viewModel)
     {
-        var userRef = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+        var userRef = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
         var model = await _searchPensionRegulatorOrchestrator.GetOrganisationsByAorn(viewModel.Aorn, viewModel.PayeRef);
 
         await _mediatr.Send(new UpdateUserAornLockRequest

@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -38,16 +39,16 @@ public class WhenIAmendTheOrganisation
             Mock.Of<IMediator>(),
             Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
             Mock.Of<ICookieStorageService<HashedAccountIdModel>>(),
-            Mock.Of<IHttpContextAccessor>());
+            Mock.Of<LinkGenerator>());
     }
 
     [Test]
-    public async Task ThenTheAORNPensionRegulatorChooseOrganisationPageIsDisplayed()
+    public void ThenTheAORNPensionRegulatorChooseOrganisationPageIsDisplayed()
     {
         var response = _employerAccountController.AmendOrganisation();
-        var redirectResponse = (RedirectToRouteResult)response;
+        var redirectResponse = (RedirectToActionResult)response;
 
-        Assert.AreEqual(ControllerConstants.SearchUsingAornActionName, redirectResponse.RouteValues["action"].ToString());
-        Assert.AreEqual(ControllerConstants.SearchPensionRegulatorControllerName, redirectResponse.RouteValues["controller"].ToString());
+        Assert.AreEqual(ControllerConstants.SearchUsingAornActionName, redirectResponse.ActionName);
+        Assert.AreEqual(ControllerConstants.SearchPensionRegulatorControllerName, redirectResponse.ControllerName);
     }
 }

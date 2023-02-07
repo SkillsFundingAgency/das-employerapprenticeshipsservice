@@ -13,68 +13,89 @@ using System.Threading.Tasks;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using SFA.DAS.EmployerUsers.WebClientComponents;
 using ActionExecutedContext = Microsoft.AspNetCore.Mvc.Filters.ActionExecutedContext;
 using ActionExecutingContext = Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext;
 using ActionResult = Microsoft.AspNetCore.Mvc.ActionResult;
 using Controller = Microsoft.AspNetCore.Mvc.Controller;
 using ControllerContext = Microsoft.AspNetCore.Mvc.ControllerContext;
+using SFA.DAS.EmployerAccounts.Web.Helpers;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
 {
     public abstract class ControllerTestBase
     {
-        protected Mock<HttpRequest> HttpRequest;
-        protected Mock<HttpContext> HttpContext;
-        protected Mock<ControllerContext> ControllerContext;
-        protected Mock<HttpResponse> HttpResponse;
+        protected Mock<HttpRequest> HttpRequest = new();
+        protected Mock<HttpContext> HttpContext = new();
+        protected ControllerContext ControllerContext;
+        protected Mock<HttpResponse> HttpResponse = new();
         protected RouteData Routes;
         protected Mock<ILog> Logger;
         protected Mock<IMediator> Mediator;
-        protected Mock<IHttpContextAccessor> HttpContextAccessor;
-
+        
         public virtual void Arrange(string redirectUrl = "http://localhost/testpost")
         {
-
             Logger = new Mock<ILog>();
             Mediator = new Mock<IMediator>();
 
             Routes = new RouteData();
-            HttpContextAccessor = new Mock<IHttpContextAccessor>();
-
-
-            HttpContextAccessor.Setup(x => x.HttpContext.Connection.RemoteIpAddress).Returns(IPAddress.Parse("123.123.123.123"));
-            HttpContextAccessor.Setup(x => x.HttpContext.Request.GetUri()).Returns(new Uri("http://test.local", UriKind.Absolute));;
-            HttpContextAccessor.Setup(x => x.HttpContext.Request.PathBase).Returns("/");;
+            
+            HttpContext.Setup(x => x.Request.Host).Returns(new HostString("test.local"));
+            HttpContext.Setup(x => x.Request.Scheme).Returns("http");
+            HttpContext.Setup(x => x.Request.PathBase).Returns("/");
+            HttpContext.Setup(x => x.Connection.RemoteIpAddress).Returns(IPAddress.Parse("123.123.123.123"));
+            HttpContext.Setup(c => c.Request).Returns(HttpRequest.Object);
+            HttpContext.Setup(c => c.Response).Returns(HttpResponse.Object);
 
             //_httpRequest = new Mock<HttpRequestBase>();
             //_httpRequest.Setup(r => r.UserHostAddress).Returns("123.123.123.123");
-           // _httpRequest.Setup(r => r.Url).Returns(new Uri("http://test.local", UriKind.Absolute));
+            // _httpRequest.Setup(r => r.Url).Returns(new Uri("http://test.local", UriKind.Absolute));
             //_httpRequest.Setup(r => r.ApplicationPath).Returns("/");
-            
+
             //_httpRequest.Setup(r => r.ServerVariables).Returns(new System.Collections.Specialized.NameValueCollection());
 
             //_httpResponse = new Mock<HttpResponseBase>(MockBehavior.Strict);
             //HttpResponse.Setup(x => x.ApplyAppPathModifier(It.IsAny<string>())).Returns("http://localhost/testpost");
 
             //_httpContext = new Mock<HttpContextBase>();
-            HttpContextAccessor.Setup(c => c.HttpContext.Request).Returns(HttpRequest.Object);
-            HttpContextAccessor.Setup(c => c.HttpContext.Response).Returns(HttpResponse.Object);
 
-            ControllerContext = new Mock<ControllerContext>();
-            ControllerContext.Setup(c => c.HttpContext).Returns(HttpContextAccessor.Object.HttpContext);
+
+            ControllerContext = new ControllerContext()
+            {
+                HttpContext = HttpContext.Object,
+                RouteData = Routes,
+            };
+            //ControllerContext.Setup(c => c.HttpContext).Returns(HttpContextAccessor.Object.HttpContext);
+            //ControllerContext.Setup(c => c.HttpContext).Returns(new ControllerContext(HttpContextAccessor.Object.HttpContext));
         }
 
-        //protected void AddUserToContext(string id = "USER_ID", string email = "my@local.com", string name = "test name")
-        //{
-        //    var identity = new ClaimsIdentity(new[]
-        //    {
-        //        new Claim(ClaimTypes.Name, name),
-        //        new Claim(ClaimTypes.Email, email),
-        //        new Claim("sub", id),
-        //    });
-        //    var principal = new ClaimsPrincipal(identity);
-        //    HttpContextAccessor.Setup(c => c.HttpContext.User).Returns(principal);
-        //}
+        protected void AddUserToContext(string id = "USER_ID", string email = "my@local.com", string name = "test name")
+        {
+            var identity = new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.Name, name),
+                new Claim(ClaimTypes.Email, email),
+                new Claim("sub", id),
+            });
+            var principal = new ClaimsPrincipal(identity);
+            HttpContext.Setup(c => c.User).Returns(principal);
+        }
+
+        protected void AddUserToContext(string id, string email, string givenName, string familyName)
+        {
+            var identity = new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.Name, $"{givenName} {familyName}"),
+                new Claim(ClaimTypes.Email, email),
+                new Claim(ControllerConstants.EmailClaimKeyName, email),
+                new Claim(DasClaimTypes.GivenName, givenName),
+                new Claim(DasClaimTypes.FamilyName, familyName),
+                new Claim(ControllerConstants.UserRefClaimKeyName, id),
+                new Claim("sub", id),
+            });
+            var principal = new ClaimsPrincipal(identity);
+            HttpContext.Setup(c => c.User).Returns(principal);
+        }
 
         //public T Invoke<T>(Expression<Func<T>> exp) where T : ActionResult
         //{

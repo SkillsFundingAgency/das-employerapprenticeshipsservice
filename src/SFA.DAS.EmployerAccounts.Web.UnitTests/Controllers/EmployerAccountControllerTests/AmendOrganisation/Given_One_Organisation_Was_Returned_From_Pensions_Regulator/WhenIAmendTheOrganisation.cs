@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -37,16 +38,16 @@ public class WhenIAmendTheOrganisation
             Mock.Of<IMediator>(),
             Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
             Mock.Of<ICookieStorageService<HashedAccountIdModel>>(),
-            Mock.Of<IHttpContextAccessor>());
+            Mock.Of<LinkGenerator>());
     }
 
     [Test]
     public async Task ThenTheSearchOrganisationPageIsDisplayed()
     {
         var response =  _employerAccountController.AmendOrganisation();
-        var redirectResponse = (RedirectToRouteResult)response;
+        var redirectResponse = (RedirectToActionResult)response;
 
-        Assert.AreEqual(ControllerConstants.SearchForOrganisationActionName, redirectResponse.RouteValues["action"].ToString());
-        Assert.AreEqual(ControllerConstants.SearchOrganisationControllerName, redirectResponse.RouteValues["controller"].ToString());
+        Assert.AreEqual(ControllerConstants.SearchForOrganisationActionName, redirectResponse.ActionName);
+        Assert.AreEqual(ControllerConstants.SearchOrganisationControllerName, redirectResponse.ControllerName);
     }
 }

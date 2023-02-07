@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

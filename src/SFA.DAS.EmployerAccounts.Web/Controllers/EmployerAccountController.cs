@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Routing;
 using Newtonsoft.Json;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Common.Domain.Types;
@@ -16,29 +16,29 @@ public class EmployerAccountController : BaseController
     private readonly ILogger<EmployerAccountController> _logger;
     private readonly IMediator _mediatr;
     private readonly ICookieStorageService<HashedAccountIdModel> _accountCookieStorage;
-    private readonly IHttpContextAccessor _contextAccessor;
+    private readonly LinkGenerator _linkGenerator;
     private readonly ICookieStorageService<ReturnUrlModel> _returnUrlCookieStorageService;
     private readonly string _hashedAccountIdCookieName;
 
     private const int AddPayeLater = 1;
     private const int AddPayeNow = 2;
     private const int AddPayeNowAorn = 3;
-    private const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
-        
+    public const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
+
     public EmployerAccountController(EmployerAccountOrchestrator employerAccountOrchestrator,
         ILogger<EmployerAccountController> logger,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
         IMediator mediatr,
         ICookieStorageService<ReturnUrlModel> returnUrlCookieStorageService,
         ICookieStorageService<HashedAccountIdModel> accountCookieStorage,
-        IHttpContextAccessor contextAccessor) : base( flashMessage)
+        LinkGenerator linkGenerator) : base(flashMessage)
     {
         _employerAccountOrchestrator = employerAccountOrchestrator;
         _logger = logger;
         _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr));
         _returnUrlCookieStorageService = returnUrlCookieStorageService;
         _accountCookieStorage = accountCookieStorage;
-        _contextAccessor = contextAccessor;
+        _linkGenerator = linkGenerator;
         _hashedAccountIdCookieName = typeof(HashedAccountIdModel).FullName;
     }
 
@@ -61,7 +61,7 @@ public class EmployerAccountController : BaseController
             Data = new GatewayInformViewModel
             {
                 BreadcrumbDescription = "Back to Your User Profile",
-                ConfirmUrl = Url.Action(ControllerConstants.GatewayViewName, ControllerConstants.EmployerAccountControllerName),
+                ConfirmUrl = _linkGenerator.GetUriByAction(HttpContext, ControllerConstants.GatewayViewName, ControllerConstants.EmployerAccountControllerName),
             }
         };
 
@@ -79,11 +79,15 @@ public class EmployerAccountController : BaseController
     [Route("gateway")]
     public async Task<IActionResult> Gateway()
     {
-        var url = await _employerAccountOrchestrator.GetGatewayUrl(
-            Url.Action(ControllerConstants.GateWayResponseActionName,
-                ControllerConstants.EmployerAccountControllerName,
-                null,
-                HttpContext.Request.Scheme));
+        var link = _linkGenerator.GetUriByAction(
+            HttpContext,
+            ControllerConstants.GateWayResponseActionName,
+            ControllerConstants.EmployerAccountControllerName,
+            null,
+            HttpContext.Request.Scheme
+        );
+
+        var url = await _employerAccountOrchestrator.GetGatewayUrl(link);
 
         return Redirect(url);
     }
@@ -115,10 +119,10 @@ public class EmployerAccountController : BaseController
                 return RedirectToAction(ControllerConstants.GatewayInformActionName);
             }
 
-            var externalUserId = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+            var externalUserId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
             _logger.LogInformation($"Gateway response is for user identity ID {externalUserId}");
 
-            var email = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.EmailClaimKeyName);
+            var email = HttpContext.User.FindFirstValue(ControllerConstants.EmailClaimKeyName);
             var empref = await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.Data.AccessToken, email);
             _logger.LogInformation($"Gateway response is for empref {empref.Empref} \n {JsonConvert.SerializeObject(empref)}");
 
@@ -177,15 +181,15 @@ public class EmployerAccountController : BaseController
             case AddPayeNow: return RedirectToAction(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName);
             case AddPayeNowAorn: return RedirectToAction(ControllerConstants.SearchUsingAornActionName, ControllerConstants.SearchPensionRegulatorControllerName);
             default:
-            {
-                var model = new
                 {
-                    HideHeaderSignInLink = true,
-                    InError = true
-                };
+                    var model = new
+                    {
+                        HideHeaderSignInLink = true,
+                        InError = true
+                    };
 
-                return View(model);
-            }
+                    return View(model);
+                }
         }
     }
 
@@ -199,11 +203,15 @@ public class EmployerAccountController : BaseController
             OrganisationName = "MY ACCOUNT"
         };
 
-        var response = await _employerAccountOrchestrator.CreateMinimalUserAccountForSkipJourney(request, _contextAccessor.HttpContext);
+        var response = await _employerAccountOrchestrator.CreateMinimalUserAccountForSkipJourney(request, HttpContext);
         var returnUrlCookie = _returnUrlCookieStorageService.Get(ReturnUrlCookieName);
+
         _returnUrlCookieStorageService.Delete(ReturnUrlCookieName);
+        
         if (returnUrlCookie != null && !string.IsNullOrWhiteSpace(returnUrlCookie.Value))
+        {
             return Redirect(returnUrlCookie.Value);
+        }
 
         return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId = response.Data.HashedId });
     }
@@ -291,7 +299,7 @@ public class EmployerAccountController : BaseController
     [Route("{HashedAccountId}/rename")]
     public async Task<IActionResult> RenameAccount(string hashedAccountId)
     {
-        var userIdClaim = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+        var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
         var vm = await _employerAccountOrchestrator.GetRenameEmployerAccountViewModel(hashedAccountId, userIdClaim);
         return View(vm);
     }
@@ -301,7 +309,7 @@ public class EmployerAccountController : BaseController
     [Route("{HashedAccountId}/rename")]
     public async Task<IActionResult> RenameAccount(RenameEmployerAccountViewModel vm)
     {
-        var userIdClaim = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+        var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
         var response = await _employerAccountOrchestrator.RenameEmployerAccount(vm, userIdClaim);
 
         if (response.Status == HttpStatusCode.OK)
@@ -360,13 +368,13 @@ public class EmployerAccountController : BaseController
 
     private string GetUserId()
     {
-        var userIdClaim = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+        var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
         return userIdClaim ?? "";
     }
 
     private void PopulateViewBagWithExternalUserId()
     {
-        var externalUserId = _contextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+        var externalUserId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
         if (externalUserId != null)
             ViewBag.UserId = externalUserId;
     }

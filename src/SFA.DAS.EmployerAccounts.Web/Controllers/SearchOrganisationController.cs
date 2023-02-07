@@ -13,19 +13,16 @@ public class SearchOrganisationController : BaseController
     private readonly SearchOrganisationOrchestrator _orchestrator;
     //This is temporary until the existing add org function is replaced, at which point the method used can be moved to the org search orchestrator
     private IMediator _mediator;
-    private readonly HttpContextAccessor _contextAccessor;
-
+    
 
     public SearchOrganisationController(
         SearchOrganisationOrchestrator orchestrator,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
-        IMediator mediator,
-        HttpContextAccessor contextAccessor)
+        IMediator mediator)
         : base( flashMessage)
     {
         _orchestrator = orchestrator;
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        _contextAccessor = contextAccessor;
     }
 
     [HttpGet]
@@ -63,7 +60,7 @@ public class SearchOrganisationController : BaseController
         }
         else
         {
-            model = await _orchestrator.SearchOrganisation(searchTerm, pageNumber, organisationType, hashedAccountId, _contextAccessor.HttpContext.User.FindFirstValue(@"sub"));
+            model = await _orchestrator.SearchOrganisation(searchTerm, pageNumber, organisationType, hashedAccountId, HttpContext.User.FindFirstValue(@"sub"));
         }
         model.Data.IsExistingAccount = !string.IsNullOrEmpty(hashedAccountId);
 
