@@ -6,42 +6,44 @@ using SFA.DAS.NServiceBus.Configuration.AzureServiceBus;
 
 namespace SFA.DAS.EmployerAccounts.Extensions;
 
-public static class EndpointConfigurationExtensions
+namespace SFA.DAS.EmployerAccounts.Extensions
 {
-    public static EndpointConfiguration UseAzureServiceBusTransport(this EndpointConfiguration config, Func<string> connectionStringBuilder, IContainer container)
+    public static class EndpointConfigurationExtensions
     {
-        var isDevelopment = false; // container.GetInstance<IEnvironmentService>().IsCurrent(DasEnv.LOCAL);
-
-        if (isDevelopment)
+        public static EndpointConfiguration UseAzureServiceBusTransport(this EndpointConfiguration config, Func<string> connectionStringBuilder, IContainer container)
         {
-            var transport = config.UseTransport<LearningTransport>();
-            transport.Transactions(TransportTransactionMode.ReceiveOnly);
-            ConfigureRouting(transport.Routing());
+            var isDevelopment = container.GetInstance<IEnvironmentService>().IsCurrent(DasEnv.LOCAL);
+
+            if (isDevelopment)
+            {
+                var transport = config.UseTransport<LearningTransport>();
+                transport.Transactions(TransportTransactionMode.ReceiveOnly);
+                ConfigureRouting(transport.Routing());
+            }
+
+            else
+            {
+                config.UseAzureServiceBusTransport(connectionStringBuilder(), ConfigureRouting);
+            }
+
+            // 5 seperate endpoints call this helper method, easier to add here.
+            config.UseMessageConventions();
+
+            return config;
         }
 
-        else
+        private static void ConfigureRouting(RoutingSettings routing)
         {
-            config.UseAzureServiceBusTransport(connectionStringBuilder(), ConfigureRouting);
+            routing.RouteToEndpoint(
+                typeof(ImportLevyDeclarationsCommand).Assembly,
+                typeof(ImportLevyDeclarationsCommand).Namespace,
+                "SFA.DAS.EmployerFinance.MessageHandlers"
+            );
+
+            routing.RouteToEndpoint(
+                typeof(SendEmailCommand).Assembly,
+                typeof(SendEmailCommand).Namespace,
+                "SFA.DAS.Notifications.MessageHandlers"
+            );
         }
-
-        // 5 seperate endpoints call this helper method, easier to add here.
-        config.UseMessageConventions();
-
-        return config;
     }
-
-    private static void ConfigureRouting(RoutingSettings routing)
-    {
-        routing.RouteToEndpoint(
-            typeof(ImportLevyDeclarationsCommand).Assembly,
-            typeof(ImportLevyDeclarationsCommand).Namespace,
-            "SFA.DAS.EmployerFinance.MessageHandlers"
-        );
-
-        routing.RouteToEndpoint(
-            typeof(SendEmailCommand).Assembly,
-            typeof(SendEmailCommand).Namespace,
-            "SFA.DAS.Notifications.MessageHandlers"
-        );
-    }
-}

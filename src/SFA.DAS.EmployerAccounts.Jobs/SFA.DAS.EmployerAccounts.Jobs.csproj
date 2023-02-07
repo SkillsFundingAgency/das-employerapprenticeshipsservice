@@ -17,6 +17,7 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.1" />
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.3.0" />
     <PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="3.1.66" />
+    <PackageReference Include="Microsoft.Web.WebJobs.Publish" Version="17.1.361" />
     <PackageReference Include="NLog.Extensions.Logging" Version="1.4.0" />
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
     <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />

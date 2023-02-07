@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution
                 c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DataRegistry>();
-                //c.AddRegistry<EntityFrameworkUnitOfWorkRegistry<EmployerAccountsDbContext>>();
+                c.AddRegistry<EntityFrameworkUnitOfWorkRegistry<EmployerAccountsDbContext>>();
                 c.AddRegistry<EventsRegistry>();
                 c.AddRegistry<ExecutionPoliciesRegistry>();
                 c.AddRegistry<HashingRegistry>();
@@ -28,7 +28,8 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution
                 c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
                 c.AddRegistry<ReadStoreDataRegistry>();
-                //c.AddRegistry<ReadStoreMediatorRegistry>();
+                c.AddRegistry<ReadStoreMediatorRegistry>();
+                c.AddRegistry<StartupRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
         }
