@@ -9,13 +9,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 public class OrganisationController : BaseController
 {
     private readonly OrganisationOrchestrator _orchestrator;
-    private readonly HttpContextAccessor _contextAccessor;
+    private readonly IHttpContextAccessor _contextAccessor;
 
     public OrganisationController(
         OrganisationOrchestrator orchestrator,
-       ICookieStorageService<FlashMessageViewModel> flashMessage,
-        HttpContextAccessor contextAccessor)
-        : base( flashMessage)
+        ICookieStorageService<FlashMessageViewModel> flashMessage,
+        IHttpContextAccessor contextAccessor)
+        : base(flashMessage)
     {
         _orchestrator = orchestrator;
         _contextAccessor = contextAccessor;

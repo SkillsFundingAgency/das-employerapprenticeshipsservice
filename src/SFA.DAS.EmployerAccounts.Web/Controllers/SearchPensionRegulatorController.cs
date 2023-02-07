@@ -20,14 +20,14 @@ public class SearchPensionRegulatorController : BaseController
     private Regex _aornRegex = new("^[A-Z0-9]{13}$");
     private Regex _payeRegex = new("^[0-9]{3}/?[A-Z0-9]{1,7}$");
     private ICookieStorageService<HashedAccountIdModel> _accountCookieStorage;
-    private readonly HttpContextAccessor _contextAccessor;
+    private readonly IHttpContextAccessor _contextAccessor;
 
     public SearchPensionRegulatorController(
         SearchPensionRegulatorOrchestrator searchPensionRegulatorOrchestrator,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
         IMediator mediatr,
         ICookieStorageService<HashedAccountIdModel> accountCookieStorage,
-        HttpContextAccessor contextAccessor)
+        IHttpContextAccessor contextAccessor)
         : base(flashMessage)
     {
         _searchPensionRegulatorOrchestrator = searchPensionRegulatorOrchestrator;
