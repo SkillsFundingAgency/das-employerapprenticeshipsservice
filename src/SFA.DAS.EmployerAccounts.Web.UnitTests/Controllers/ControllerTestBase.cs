@@ -13,11 +13,13 @@ using System.Threading.Tasks;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using SFA.DAS.EmployerUsers.WebClientComponents;
 using ActionExecutedContext = Microsoft.AspNetCore.Mvc.Filters.ActionExecutedContext;
 using ActionExecutingContext = Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext;
 using ActionResult = Microsoft.AspNetCore.Mvc.ActionResult;
 using Controller = Microsoft.AspNetCore.Mvc.Controller;
 using ControllerContext = Microsoft.AspNetCore.Mvc.ControllerContext;
+using SFA.DAS.EmployerAccounts.Web.Helpers;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
 {
@@ -73,6 +75,22 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             {
                 new Claim(ClaimTypes.Name, name),
                 new Claim(ClaimTypes.Email, email),
+                new Claim("sub", id),
+            });
+            var principal = new ClaimsPrincipal(identity);
+            HttpContext.Setup(c => c.User).Returns(principal);
+        }
+
+        protected void AddUserToContext(string id, string email, string givenName, string familyName)
+        {
+            var identity = new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.Name, $"{givenName} {familyName}"),
+                new Claim(ClaimTypes.Email, email),
+                new Claim(ControllerConstants.EmailClaimKeyName, email),
+                new Claim(DasClaimTypes.GivenName, givenName),
+                new Claim(DasClaimTypes.FamilyName, familyName),
+                new Claim(ControllerConstants.UserRefClaimKeyName, id),
                 new Claim("sub", id),
             });
             var principal = new ClaimsPrincipal(identity);

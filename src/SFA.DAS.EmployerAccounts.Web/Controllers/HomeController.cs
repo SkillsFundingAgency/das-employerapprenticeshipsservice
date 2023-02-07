@@ -15,7 +15,7 @@ public class HomeController : BaseController
     private readonly ICookieStorageService<ReturnUrlModel> _returnUrlCookieStorageService;
     private readonly ILogger<HomeController> _logger;
 
-    private const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
+    public const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
 
     public HomeController(
         HomeOrchestrator homeOrchestrator,

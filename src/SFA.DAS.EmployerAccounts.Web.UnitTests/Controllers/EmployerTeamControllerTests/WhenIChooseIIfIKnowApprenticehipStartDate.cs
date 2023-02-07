@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Interfaces;
@@ -10,7 +9,7 @@ using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests;
 
-public class WhenIChooseIIfIKnowApprenticehipStartDate
+public class WhenIChooseIIfIKnowApprenticehipStartDate 
 {
     private EmployerTeamController _controller;
 
@@ -32,29 +31,29 @@ public class WhenIChooseIIfIKnowApprenticehipStartDate
     public void IfIChooseYesIContinueTheJourney()
     {
         //Act
-        var result = _controller.TriageWillApprenticeshipTrainingStart(new TriageViewModel { TriageOption = TriageOptions.Yes }) as RedirectToRouteResult;
+        var result = _controller.TriageWillApprenticeshipTrainingStart(new TriageViewModel { TriageOption = TriageOptions.Yes }) as RedirectToActionResult;
 
         //Assert
-        Assert.AreEqual(ControllerConstants.TriageApprenticeForExistingEmployeeActionName, result.RouteValues["Action"]);
+        Assert.AreEqual(ControllerConstants.TriageApprenticeForExistingEmployeeActionName, result.ActionName);
     }
 
     [Test]
     public void IfIChooseNoICannotSetupAnApprentice()
     {
         //Act
-        var result = _controller.TriageWillApprenticeshipTrainingStart(new TriageViewModel { TriageOption = TriageOptions.No }) as RedirectToRouteResult;
+        var result = _controller.TriageWillApprenticeshipTrainingStart(new TriageViewModel { TriageOption = TriageOptions.No }) as RedirectToActionResult;
 
         //Assert
-        Assert.AreEqual(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetStartDateActionName, result.RouteValues["Action"]);
+        Assert.AreEqual(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetStartDateActionName, result.ActionName);
     }
 
     [Test]
     public void IfIChooseDontKnowICannotSetupAnApprentice()
     {
         //Act
-        var result = _controller.TriageWillApprenticeshipTrainingStart(new TriageViewModel { TriageOption = TriageOptions.Unknown }) as RedirectToRouteResult;
+        var result = _controller.TriageWillApprenticeshipTrainingStart(new TriageViewModel { TriageOption = TriageOptions.Unknown }) as RedirectToActionResult;
 
         //Assert
-        Assert.AreEqual(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetApproximateStartDateActionName, result.RouteValues["Action"]);
+        Assert.AreEqual(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetApproximateStartDateActionName, result.ActionName);
     }
 }
