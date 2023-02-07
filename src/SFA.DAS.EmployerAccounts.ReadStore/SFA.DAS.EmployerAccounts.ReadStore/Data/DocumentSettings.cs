@@ -1,8 +1,7 @@
-﻿namespace SFA.DAS.EmployerAccounts.ReadStore.Data
+﻿namespace SFA.DAS.EmployerAccounts.ReadStore.Data;
+
+public static class DocumentSettings
 {
-    public static class DocumentSettings
-    {
-        public const string DatabaseName = "SFA.DAS.EmployerAccounts.ReadStore.Database";
-        public const string AccountUsersCollectionName = "AccountUsers";
-    }
+    public const string DatabaseName = "SFA.DAS.EmployerAccounts.ReadStore.Database";
+    public const string AccountUsersCollectionName = "AccountUsers";
 }
