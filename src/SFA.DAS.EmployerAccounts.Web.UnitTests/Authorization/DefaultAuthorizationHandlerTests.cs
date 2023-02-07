@@ -47,7 +47,8 @@ public class DefaultAuthorizationHandlerTests
         MockIAuthorisationResourceRepository = new Mock<IAuthorisationResourceRepository>();
         Options = new List<string>();
         _userContext = new UserContext(_mockAuthenticationService.Object,_configuration);
-        SutDefaultAuthorizationHandler = new DefaultAuthorizationHandler(MockIAuthorisationResourceRepository.Object,_userContext);
+       // SutDefaultAuthorizationHandler = new DefaultAuthorizationHandler(MockIAuthorisationResourceRepository.Object,_userContext);
+        SutDefaultAuthorizationHandler = new DefaultAuthorizationHandler();
         _testAuthorizationResource = new AuthorizationResource
         {
             Name = "Test",

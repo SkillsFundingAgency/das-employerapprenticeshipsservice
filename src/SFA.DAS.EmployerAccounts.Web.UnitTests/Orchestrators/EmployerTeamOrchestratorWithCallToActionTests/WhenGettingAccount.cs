@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Common.Domain.Types;
@@ -44,7 +45,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         private Mock<IAccountApiClient> _mockAccountApiClient;
         private Mock<IMapper> _mockMapper;
         private Mock<ICookieStorageService<AccountContext>> _mockAccountContext;
-        private Mock<ILog> _mockLogger;
+        private Mock<ILogger<EmployerTeamOrchestratorWithCallToAction>> _mockLogger;
 
         [SetUp]
         public void Arrange()
@@ -127,7 +128,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
            
             _mockMapper = new Mock<IMapper>();
 
-            _mockLogger = new Mock<ILog>();
+            _mockLogger = new Mock<ILogger<EmployerTeamOrchestratorWithCallToAction>>();
 
             _sut = new EmployerTeamOrchestratorWithCallToAction(
                 _employerTeamOrchestrator.Object,
@@ -296,7 +297,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             var result = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
-            _mockLogger.Verify(m => m.Error(exception, $"An error occured whilst trying to retrieve account CallToAction: {HashedAccountId}"), Times.Once);
+            _mockLogger.Verify(m => m.LogError(exception, $"An error occured whilst trying to retrieve account CallToAction: {HashedAccountId}"), Times.Once);
         }
 
         [Test]
@@ -374,7 +375,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             var result = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
-            _mockLogger.Verify(m => m.Error(exception, $"An error occured whilst trying to retrieve account CallToAction: {HashedAccountId}"), Times.Once);
+            _mockLogger.Verify(m => m.LogError(exception, $"An error occured whilst trying to retrieve account CallToAction: {HashedAccountId}"), Times.Once);
         }
 
         [Test]
@@ -432,7 +433,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             var result = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
-            _mockLogger.Verify(m => m.Error(exception, $"An error occured whilst trying to retrieve account CallToAction: {HashedAccountId}"), Times.Once);
+            _mockLogger.Verify(m => m.LogError(exception, $"An error occured whilst trying to retrieve account CallToAction: {HashedAccountId}"), Times.Once);
         }
 
         [Test]
@@ -497,7 +498,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             var result = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
-            _mockLogger.Verify(m => m.Error(exception, $"An error occured whilst trying to retrieve account CallToAction: {HashedAccountId}"), Times.Once);
+            _mockLogger.Verify(m => m.LogError(exception, $"An error occured whilst trying to retrieve account CallToAction: {HashedAccountId}"), Times.Once);
         }                        
 
         [Test]

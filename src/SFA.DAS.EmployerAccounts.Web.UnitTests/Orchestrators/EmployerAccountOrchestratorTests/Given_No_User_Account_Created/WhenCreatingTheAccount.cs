@@ -2,6 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.CreateAccount;
@@ -18,7 +20,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
     {
         private EmployerAccountOrchestrator _employerAccountOrchestrator;
         private Mock<IMediator> _mediator;
-        private Mock<ILog> _logger;
+        private Mock<ILogger<EmployerAccountOrchestrator>> _logger;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
 
         private EmployerAccountsConfiguration _configuration;
@@ -27,7 +29,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _logger = new Mock<ILog>();
+            _logger = new Mock<ILogger<EmployerAccountOrchestrator>>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _configuration = new EmployerAccountsConfiguration();
 
@@ -46,7 +48,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             var model = ArrangeModel();
 
             //Act
-            await _employerAccountOrchestrator.CreateOrUpdateAccount(model, It.IsAny<HttpContextBase>());
+            await _employerAccountOrchestrator.CreateOrUpdateAccount(model, It.IsAny<HttpContext>());
 
             //Assert
             _mediator.Verify(x => x.Send(It.Is<CreateAccountCommand>(
@@ -76,7 +78,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
                 });
 
             //Act
-            var response = await _employerAccountOrchestrator.CreateOrUpdateAccount(new CreateAccountModel(), It.IsAny<HttpContextBase>());
+            var response = await _employerAccountOrchestrator.CreateOrUpdateAccount(new CreateAccountModel(), It.IsAny<HttpContext>());
 
             //Assert
             Assert.AreEqual(hashedId, response.Data?.EmployerAgreement?.HashedAccountId);
@@ -108,7 +110,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             _cookieService.Setup(x => x.Get( It.IsAny<string>()))
                 .Returns(employerAccountData);
 
-            var context = new Mock<HttpContextBase>();
+            var context = new Mock<HttpContext>();
 
             //Act
             var model = _employerAccountOrchestrator.GetSummaryViewModel(context.Object);
