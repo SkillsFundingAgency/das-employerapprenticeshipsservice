@@ -61,7 +61,7 @@ public class EmployerAccountController : BaseController
             Data = new GatewayInformViewModel
             {
                 BreadcrumbDescription = "Back to Your User Profile",
-                ConfirmUrl = Url.Action(ControllerConstants.GatewayViewName, ControllerConstants.EmployerAccountControllerName),
+                ConfirmUrl = _linkGenerator.GetUriByAction(HttpContext, ControllerConstants.GatewayViewName, ControllerConstants.EmployerAccountControllerName),
             }
         };
 

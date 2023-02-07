@@ -45,9 +45,9 @@ public class WhenIAmendTheOrganisation
     public async Task ThenTheSearchOrganisationPageIsDisplayed()
     {
         var response =  _employerAccountController.AmendOrganisation();
-        var redirectResponse = (RedirectToRouteResult)response;
+        var redirectResponse = (RedirectToActionResult)response;
 
-        Assert.AreEqual(ControllerConstants.SearchForOrganisationActionName, redirectResponse.RouteValues["action"].ToString());
-        Assert.AreEqual(ControllerConstants.SearchOrganisationControllerName, redirectResponse.RouteValues["controller"].ToString());
+        Assert.AreEqual(ControllerConstants.SearchForOrganisationActionName, redirectResponse.ActionName);
+        Assert.AreEqual(ControllerConstants.SearchOrganisationControllerName, redirectResponse.ControllerName);
     }
 }

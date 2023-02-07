@@ -75,9 +75,9 @@ class WhenIChooseAorn : ControllerTestBase
     public async Task ThenIShouldGoToGatewayInform()
     {
         //Act
-        var result = await _employerAccountController.GetApprenticeshipFunding(3) as RedirectToRouteResult;
+        var result = await _employerAccountController.GetApprenticeshipFunding(3) as RedirectToActionResult;
 
         //Assert
-        Assert.AreEqual(ControllerConstants.SearchUsingAornActionName, result.RouteValues["Action"]);
+        Assert.AreEqual(ControllerConstants.SearchUsingAornActionName, result.ActionName);
     }
 }

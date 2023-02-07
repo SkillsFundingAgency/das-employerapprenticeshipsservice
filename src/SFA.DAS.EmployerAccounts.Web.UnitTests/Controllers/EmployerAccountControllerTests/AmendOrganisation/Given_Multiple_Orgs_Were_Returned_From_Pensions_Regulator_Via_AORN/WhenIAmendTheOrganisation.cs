@@ -43,12 +43,12 @@ public class WhenIAmendTheOrganisation
     }
 
     [Test]
-    public async Task ThenTheAORNPensionRegulatorChooseOrganisationPageIsDisplayed()
+    public void ThenTheAORNPensionRegulatorChooseOrganisationPageIsDisplayed()
     {
         var response = _employerAccountController.AmendOrganisation();
-        var redirectResponse = (RedirectToRouteResult)response;
+        var redirectResponse = (RedirectToActionResult)response;
 
-        Assert.AreEqual(ControllerConstants.SearchUsingAornActionName, redirectResponse.RouteValues["action"].ToString());
-        Assert.AreEqual(ControllerConstants.SearchPensionRegulatorControllerName, redirectResponse.RouteValues["controller"].ToString());
+        Assert.AreEqual(ControllerConstants.SearchUsingAornActionName, redirectResponse.ActionName);
+        Assert.AreEqual(ControllerConstants.SearchPensionRegulatorControllerName, redirectResponse.ControllerName);
     }
 }

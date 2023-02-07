@@ -46,9 +46,9 @@ public class WhenIAmendTheOrganisation
     public async Task ThenTheGovernmentGatewayPensionRegulatorChooseOrganisationPageIsDisplayed()
     {
         var response = _employerAccountController.AmendOrganisation();
-        var redirectResponse = (RedirectToRouteResult)response;
+        var redirectResponse = (RedirectToActionResult)response;
 
-        Assert.AreEqual(ControllerConstants.SearchPensionRegulatorActionName, redirectResponse.RouteValues["action"].ToString());
-        Assert.AreEqual(ControllerConstants.SearchPensionRegulatorControllerName, redirectResponse.RouteValues["controller"].ToString());
+        Assert.AreEqual(ControllerConstants.SearchPensionRegulatorActionName, redirectResponse.ActionName);
+        Assert.AreEqual(ControllerConstants.SearchPensionRegulatorControllerName, redirectResponse.ControllerName);
     }
 }

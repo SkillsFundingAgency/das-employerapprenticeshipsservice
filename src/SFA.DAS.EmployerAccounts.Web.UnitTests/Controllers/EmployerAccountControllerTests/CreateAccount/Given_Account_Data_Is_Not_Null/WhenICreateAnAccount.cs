@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authentication;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
@@ -66,6 +65,8 @@ class WhenICreateAnAccount : ControllerTestBase
             }
         };
 
+        AddUserToContext();
+
         _orchestrator.Setup(x => x.GetCookieData())
             .Returns(_accountData);
 
@@ -102,18 +103,18 @@ class WhenICreateAnAccount : ControllerTestBase
     public async Task ThenIShouldGoToWhenDoYouWantToView()
     {
         //Act
-        var result = await _employerAccountController.CreateAccount() as RedirectToRouteResult;
+        var result = await _employerAccountController.CreateAccount() as RedirectToActionResult;
 
         //Assert
-        Assert.AreEqual(ControllerConstants.WhenDoYouWantToView, result.RouteValues["Action"]);
-        Assert.AreEqual(ControllerConstants.EmployerAgreementControllerName, result.RouteValues["Controller"]);
+        Assert.AreEqual(ControllerConstants.WhenDoYouWantToView, result.ActionName);
+        Assert.AreEqual(ControllerConstants.EmployerAgreementControllerName, result.ControllerName);
     }
 
     [Test]
     public async Task ThenIShouldGetBackTheAccountId()
     {
         //Act
-        var result = await _employerAccountController.CreateAccount() as RedirectToRouteResult;
+        var result = await _employerAccountController.CreateAccount() as RedirectToActionResult;
 
         //Assert
         Assert.IsNotNull(result);

@@ -34,9 +34,6 @@ class WhenISkipRegistration : ControllerTestBase
         base.Arrange(ExpectedRedirectUrl);
 
         _orchestrator = new Mock<EmployerAccountOrchestrator>();
-
-        //_owinWrapper = new Mock<IAuthenticationService>();
-        // _owinWrapper.Setup(x => x.GetClaimValue(ControllerConstants.UserRefClaimKeyName)).Returns(ExpectedUserId);
         _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
         _response = new OrchestratorResponse<EmployerAccountViewModel>()
@@ -69,9 +66,9 @@ class WhenISkipRegistration : ControllerTestBase
     public async Task ThenIShouldGoToSkipRegistration()
     {
         //Act
-        var result = await _employerAccountController.GetApprenticeshipFunding(1) as RedirectToRouteResult;
+        var result = await _employerAccountController.GetApprenticeshipFunding(1) as RedirectToActionResult;
 
         //Assert
-        Assert.AreEqual(ControllerConstants.SkipRegistrationActionName, result.RouteValues["Action"]);
+        Assert.AreEqual(ControllerConstants.SkipRegistrationActionName, result.ActionName);
     }
 }

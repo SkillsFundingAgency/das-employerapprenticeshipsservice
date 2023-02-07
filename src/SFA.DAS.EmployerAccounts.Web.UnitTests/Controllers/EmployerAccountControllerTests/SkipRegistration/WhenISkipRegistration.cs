@@ -35,8 +35,6 @@ class WhenISkipRegistration : ControllerTestBase
 
         _orchestrator = new Mock<EmployerAccountOrchestrator>();
 
-        //_owinWrapper = new Mock<IAuthenticationService>();
-        //_owinWrapper.Setup(x => x.GetClaimValue(ControllerConstants.UserRefClaimKeyName)).Returns(ExpectedUserId);
         _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();  
 
         _response = new OrchestratorResponse<EmployerAccountViewModel>()
@@ -48,7 +46,10 @@ class WhenISkipRegistration : ControllerTestBase
             Status = HttpStatusCode.OK
         };
 
-        _orchestrator.Setup(x => x.CreateMinimalUserAccountForSkipJourney(It.IsAny<CreateUserAccountViewModel>(), It.IsAny<HttpContext>()))
+        AddUserToContext(ExpectedUserId);
+
+        _orchestrator
+            .Setup(x => x.CreateMinimalUserAccountForSkipJourney(It.Is<CreateUserAccountViewModel>(vm => vm.UserId == ExpectedUserId && vm.OrganisationName == "MY ACCOUNT"), It.IsAny<HttpContext>()))
             .ReturnsAsync(_response);
 
         _employerAccountController = new EmployerAccountController(
@@ -69,28 +70,28 @@ class WhenISkipRegistration : ControllerTestBase
     public async Task ThenTheAccountIsCreated()
     {
         //Act
-        var result = await _employerAccountController.SkipRegistration() as RedirectToRouteResult;
+        var result = await _employerAccountController.SkipRegistration() as RedirectToActionResult;
 
         //Assert
-        _orchestrator.Verify(x => x.CreateMinimalUserAccountForSkipJourney(It.Is<CreateUserAccountViewModel>(vm => vm.UserId == ExpectedUserId && vm.OrganisationName == "MY ACCOUNT"), It.IsAny<HttpContext>()));
+        _orchestrator.Verify(x => x.CreateMinimalUserAccountForSkipJourney(It.Is<CreateUserAccountViewModel>(vm => vm.UserId == ExpectedUserId && vm.OrganisationName == "MY ACCOUNT"), It.IsAny<HttpContext>()), Times.Once);
     }
 
     [Test]
     public async Task ThenIShouldGoToTheHomePage()
     {
         //Act
-        var result = await _employerAccountController.SkipRegistration() as RedirectToRouteResult;
+        var result = await _employerAccountController.SkipRegistration() as RedirectToActionResult;
 
         //Assert
-        Assert.AreEqual(ControllerConstants.IndexActionName, result.RouteValues["Action"]);
-        Assert.AreEqual(ControllerConstants.EmployerTeamControllerName, result.RouteValues["Controller"]);
+        Assert.AreEqual(ControllerConstants.IndexActionName, result.ActionName);
+        Assert.AreEqual(ControllerConstants.EmployerTeamControllerName, result.ControllerName);
     }
 
     [Test]
     public async Task ThenIShouldGetBackTheAccountId()
     {
         //Act
-        var result = await _employerAccountController.SkipRegistration() as RedirectToRouteResult;
+        var result = await _employerAccountController.SkipRegistration() as RedirectToActionResult;
 
         //Assert
         Assert.IsNotNull(result);

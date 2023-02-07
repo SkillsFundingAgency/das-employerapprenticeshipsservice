@@ -68,6 +68,8 @@ public class WhenICreateAnAccount : ControllerTestBase
             }
         };
 
+        AddUserToContext();
+
         _orchestrator.Setup(x => x.GetCookieData())
             .Returns(_accountData);
 

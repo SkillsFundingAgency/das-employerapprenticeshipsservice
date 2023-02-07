@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +8,6 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
@@ -37,28 +35,6 @@ class WhenICreateAnAccount : ControllerTestBase
         var logger = new Mock<ILogger<EmployerAccountController>>();
         _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
-        new EmployerAccountData
-        {
-            EmployerAccountOrganisationData = new EmployerAccountOrganisationData
-            { 
-                OrganisationName = "Test Corp",
-                OrganisationReferenceNumber = "1244454",
-                OrganisationRegisteredAddress = "1, Test Street",
-                OrganisationDateOfInception = DateTime.Now.AddYears(-10),
-                OrganisationStatus = "active",
-                OrganisationType = OrganisationType.Charities,
-                Sector = "Public"
-            },
-            EmployerAccountPayeRefData = new EmployerAccountPayeRefData
-            { 
-                PayeReference = "123/ABC",
-                EmployerRefName = "Scheme 1",
-                RefreshToken = "123",
-                AccessToken = "456",
-                EmpRefNotFound = true,
-            }
-        };
-
         _orchestrator.Setup(x => x.GetCookieData())
             .Returns((EmployerAccountData)null);
 
@@ -74,19 +50,17 @@ class WhenICreateAnAccount : ControllerTestBase
             ControllerContext = ControllerContext,
             Url = new UrlHelper(new ActionContext(HttpContext.Object, Routes, new ActionDescriptor()))
         };
-
-
     }
 
     [Test]
     public async Task Then_I_Should_Be_Redirected_To_Search_Organisatoin_Page()
     {
         //Act
-        var result = await _employerAccountController.CreateAccount() as RedirectToRouteResult;
+        var result = await _employerAccountController.CreateAccount() as RedirectToActionResult;
 
         //Assert
-        Assert.AreEqual(ControllerConstants.SearchForOrganisationActionName, result.RouteValues["Action"]);
-        Assert.AreEqual(ControllerConstants.SearchOrganisationControllerName, result.RouteValues["Controller"]);
+        Assert.AreEqual(ControllerConstants.SearchForOrganisationActionName, result.ActionName);
+        Assert.AreEqual(ControllerConstants.SearchOrganisationControllerName, result.ControllerName);
     }
 
     [Test]
