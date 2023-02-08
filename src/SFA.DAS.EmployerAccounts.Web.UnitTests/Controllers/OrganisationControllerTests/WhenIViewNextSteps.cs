@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Authentication;
-
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.OrganisationControllerTests;
+﻿namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.OrganisationControllerTests;
 
 class WhenIViewNextSteps : ControllerTestBase
 {

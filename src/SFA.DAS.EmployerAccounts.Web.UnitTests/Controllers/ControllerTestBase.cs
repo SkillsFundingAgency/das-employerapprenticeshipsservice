@@ -1,11 +1,8 @@
 ﻿using System.Linq;
-using System.Net;
 using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using Moq;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers;
@@ -88,5 +85,4 @@ public abstract class ControllerTestBase
         var principal = new ClaimsPrincipal(identity);
         MockHttpContext.Setup(c => c.User).Returns(principal);
     }
-
 }
