@@ -24,8 +24,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         private readonly string _userId = Guid.NewGuid().ToString();
 
         private EmployerTeamOrchestratorWithCallToAction _sut;
-        private readonly Mock<IMediator> _mediator = new();
-        private readonly Mock<EmployerTeamOrchestrator> _employerTeamOrchestrator = new();
+        private Mock<IMediator> _mediator;
+        private Mock<EmployerTeamOrchestrator> _employerTeamOrchestrator;
 
         private Mock<ICurrentDateTime> _mockCurrentDateTime;
         private Mock<IAccountApiClient> _mockAccountApiClient;
@@ -36,7 +36,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         [SetUp]
         public void Arrange()
         {
-
+            _mediator = new Mock<IMediator>();
+            _employerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
             _mockAccountContext = new Mock<ICookieStorageService<AccountContext>>();
 
             _accountDashboardViewModel = new AccountDashboardViewModel

@@ -3,13 +3,16 @@
 class WhenIViewNextSteps : ControllerTestBase
 {
     private OrganisationController _controller;
-    private readonly Mock<OrganisationOrchestrator> _orchestrator = new();
-    private readonly Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage = new();
+    private Mock<OrganisationOrchestrator> _orchestrator;
+    private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
 
     [SetUp]
     public void Arrange()
     {
         base.Arrange();
+
+        _orchestrator = new Mock<OrganisationOrchestrator>();
+        _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
         
         _controller = new OrganisationController(
             _orchestrator.Object,

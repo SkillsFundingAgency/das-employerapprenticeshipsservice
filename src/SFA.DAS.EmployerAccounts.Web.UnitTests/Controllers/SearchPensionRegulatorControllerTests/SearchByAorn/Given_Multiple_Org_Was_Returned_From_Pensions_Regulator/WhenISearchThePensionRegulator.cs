@@ -14,7 +14,7 @@ class WhenISearchThePensionRegulator : ControllerTestBase
     private readonly string _expectedId = Guid.NewGuid().ToString();
     private SearchPensionRegulatorController _controller;
     private SearchPensionRegulatorResultsViewModel _expectedData;
-    private Mock<IMediator> _mediator = new();
+    private Mock<IMediator> _mediator;
 
     [SetUp]
     public void Setup()
@@ -22,6 +22,8 @@ class WhenISearchThePensionRegulator : ControllerTestBase
         base.Arrange();
 
         AddUserToContext(_expectedId);
+
+        _mediator = new Mock<IMediator>();
 
         _expectedData = new SearchPensionRegulatorResultsViewModel { Results = new List<PensionRegulatorDetailsViewModel> { new PensionRegulatorDetailsViewModel(), new PensionRegulatorDetailsViewModel() } };
 

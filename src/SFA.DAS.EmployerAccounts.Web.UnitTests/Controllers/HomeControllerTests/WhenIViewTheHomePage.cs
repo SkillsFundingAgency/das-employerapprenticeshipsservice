@@ -7,23 +7,36 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.Authentication;
 
-
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests;
 
 public class WhenIViewTheHomePage : ControllerTestBase
 {
     private HomeController _homeController;
-    private readonly Mock<HomeOrchestrator> _homeOrchestrator = new();
+    private Mock<HomeOrchestrator> _homeOrchestrator;
     private EmployerAccountsConfiguration _configuration;
     private const string ExpectedUserId = "123ABC";
-    private readonly Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage = new();
+    private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
 
     [SetUp]
     public void Arrange()
     {
         base.Arrange();
 
-        SetupHomeOrchestratorFor(ExpectedUserId);
+        _homeOrchestrator = new Mock<HomeOrchestrator>();
+        _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
+        _homeOrchestrator = new Mock<HomeOrchestrator>();
+
+        _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId, null)).ReturnsAsync(
+            new OrchestratorResponse<UserAccountsViewModel>
+            {
+                Data = new UserAccountsViewModel
+                {
+                    Accounts = new Accounts<Account>
+                    {
+                        AccountList = new List<Account> { new Account() }
+                    }
+                }
+            });
 
         _configuration = new EmployerAccountsConfiguration
         {
@@ -50,21 +63,6 @@ public class WhenIViewTheHomePage : ControllerTestBase
         };
     }
 
-    private void SetupHomeOrchestratorFor(string userId)
-    {
-        _homeOrchestrator.Setup(x => x.GetUserAccounts(userId, null)).ReturnsAsync(
-            new OrchestratorResponse<UserAccountsViewModel>
-            {
-                Data = new UserAccountsViewModel
-                {
-                    Accounts = new Accounts<Account>
-                    {
-                        AccountList = new List<Account> { new Account() }
-                    }
-                }
-            });
-    }
-    
     [Test]
     public async Task ThenTheAccountsAreNotReturnedWhenYouAreNotAuthenticated()
     {
@@ -104,10 +102,9 @@ public class WhenIViewTheHomePage : ControllerTestBase
     public async Task ThenTheAccountsAreReturnedForThatUserWhenAuthenticated()
     {
         //Arrange
-        var userId = Guid.NewGuid().ToString();
-        SetupHomeOrchestratorFor(userId);
-        AddUserToContext(userId, string.Empty, string.Empty,
-            new Claim(ControllerConstants.UserRefClaimKeyName, userId),
+        
+        AddUserToContext(ExpectedUserId, string.Empty, string.Empty,
+            new Claim(ControllerConstants.UserRefClaimKeyName, ExpectedUserId),
             new Claim(DasClaimTypes.RequiresVerification, "false")
         );
 
@@ -115,7 +112,7 @@ public class WhenIViewTheHomePage : ControllerTestBase
         await _homeController.Index();
 
         //Assert
-        _homeOrchestrator.Verify(x => x.GetUserAccounts(userId, It.IsAny<DateTime?>()), Times.Once);
+        _homeOrchestrator.Verify(x => x.GetUserAccounts(ExpectedUserId, It.IsAny<DateTime?>()), Times.Once);
     }
 
     [Test]

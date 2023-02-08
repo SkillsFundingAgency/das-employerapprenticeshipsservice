@@ -13,13 +13,15 @@ class WhenISearchThePensionRegulator : ControllerTestBase
     private const string ExpectedPayeRef = "000/TGFDSAS";
     private PensionRegulatorDetailsViewModel _expectedViewModel;
     private SearchPensionRegulatorController _controller;
-    private Mock<IMediator> _mediator = new();
+    private Mock<IMediator> _mediator;
        
     [SetUp]
     public void Setup()
     {
         base.Arrange();
-        base.AddUserToContext();
+        AddUserToContext();
+
+        _mediator = new Mock<IMediator>();
 
         _expectedViewModel = new PensionRegulatorDetailsViewModel
         {

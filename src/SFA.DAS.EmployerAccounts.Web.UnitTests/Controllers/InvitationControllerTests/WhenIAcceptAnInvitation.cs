@@ -4,15 +4,19 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.InvitationControlle
 
 public class WhenIAcceptAnInvitation : ControllerTestBase
 {
-    private readonly Mock<InvitationOrchestrator> _invitationOrchestrator = new();
+    private Mock<InvitationOrchestrator> _invitationOrchestrator;
+    private EmployerAccountsConfiguration _configuration;
+    private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
     private InvitationController _controller;
-    private readonly EmployerAccountsConfiguration _configuration = new();
-    private readonly Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage = new();
 
     [SetUp]
     public void Arrange()
     {
         base.Arrange();
+
+        _invitationOrchestrator = new Mock<InvitationOrchestrator>();
+        _configuration = new EmployerAccountsConfiguration();
+        _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
     }
 
     [Test]
