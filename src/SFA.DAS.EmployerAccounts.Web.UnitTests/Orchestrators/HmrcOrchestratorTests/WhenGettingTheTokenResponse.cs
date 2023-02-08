@@ -1,19 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Logging;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models.Account;
+using Microsoft.Extensions.Primitives;
 using SFA.DAS.EmployerAccounts.Queries.GetGatewayToken;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Hmrc.Configuration;
 using SFA.DAS.Hmrc.Models;
+using SFA.DAS.Testing.Builders;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.HmrcOrchestratorTests;
 
@@ -59,11 +52,16 @@ public class WhenGettingTheTokenResponse
     [Test]
     public async Task ThenTheFlashMessageIsPopulatedWhenAuthorityIsNotGranted()
     {
-        //Act
-        var queryCollection = new QueryCollection
+        //Arrange
+        var store = new Dictionary<string, StringValues>
         {
-            Keys = { "error", "USER_DENIED_AUTHORIZATION", "error_Code", "USER_DENIED_AUTHORIZATION" }
+            { "error", new StringValues("USER_DENIED_AUTHORIZATION") },
+            { "error_Code", new StringValues("USER_DENIED_AUTHORIZATION") }
         };
+
+        var queryCollection = new QueryCollection(store);
+
+        //Act
         var actual = await _employerAccountOrchestrator.GetGatewayTokenResponse(string.Empty, string.Empty, queryCollection);
 
         //Assert

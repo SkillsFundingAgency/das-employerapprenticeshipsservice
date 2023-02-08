@@ -91,7 +91,6 @@ public class InvitationOrchestrator
         }
         catch (InvalidRequestException ex)
         {
-
             _logger.LogInformation(ex.Message);
         }
 

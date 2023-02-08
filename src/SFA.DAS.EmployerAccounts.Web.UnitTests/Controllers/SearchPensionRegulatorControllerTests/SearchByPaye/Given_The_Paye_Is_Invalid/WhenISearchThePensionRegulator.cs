@@ -1,17 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.EmployerAccounts.Web.Controllers;
-using SFA.DAS.EmployerAccounts.Web.Helpers;
-using SFA.DAS.EmployerAccounts.Web.Models;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegulatorControllerTests.SearchByPaye.Given_The_Paye_Is_Invalid;
 
@@ -60,9 +48,9 @@ class WhenISearchThePensionRegulator
     public async Task ThenTheGatewayInformPageIsDisplayed()
     {
         var response = await _controller.SearchPensionRegulator(It.IsAny<string>());
-        var redirectResponse = (RedirectToRouteResult) response;
+        var redirectResponse = (RedirectToActionResult) response;
 
-        Assert.AreEqual(ControllerConstants.GatewayViewName, redirectResponse.RouteValues["action"].ToString());
-        Assert.AreEqual(ControllerConstants.EmployerAccountControllerName, redirectResponse.RouteValues["controller"].ToString());
+        Assert.AreEqual(ControllerConstants.GatewayViewName, redirectResponse.ActionName);
+        Assert.AreEqual(ControllerConstants.EmployerAccountControllerName, redirectResponse.ControllerName);
     }
 }

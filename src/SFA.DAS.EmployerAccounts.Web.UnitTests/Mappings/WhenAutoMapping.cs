@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Mappings;
 using SFA.DAS.EmployerAccounts.Web.Mappings;
 using AgreementMappings = SFA.DAS.EmployerAccounts.Web.Mappings.AgreementMappings;
@@ -24,7 +23,7 @@ public class WhenAutoMapping
 
             c.AddProfile<ActivityMappings>();
         });
-
+        
         config.AssertConfigurationIsValid();
     }
 }

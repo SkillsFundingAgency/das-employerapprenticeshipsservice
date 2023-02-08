@@ -1,29 +1,17 @@
 ﻿using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
 using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.Authentication;
-using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTests;
 
 public class WhenIManageMyNotificationSettings : ControllerTestBase
 {
     private SettingsController _controller;
-    private Mock<Web.Orchestrators.UserSettingsOrchestrator> _orchestrator;
-    private Mock<IAuthenticationService> _owinWrapper;
-    private Mock<IMultiVariantTestingService> _userViewTestingService;
-    private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
+    private readonly Mock<Web.Orchestrators.UserSettingsOrchestrator> _orchestrator = new();
+    private readonly Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage = new();
     private const string ExpectedRedirectUrl = "http://redirect.local.test";
 
     [SetUp]
@@ -31,11 +19,7 @@ public class WhenIManageMyNotificationSettings : ControllerTestBase
     {
         base.Arrange(ExpectedRedirectUrl);
 
-        _orchestrator = new Mock<Web.Orchestrators.UserSettingsOrchestrator>();
-
-        _owinWrapper = new Mock<IAuthenticationService>();
-        _userViewTestingService = new Mock<IMultiVariantTestingService>();
-        _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
+        AddUserToContext("TEST");
 
         _orchestrator.Setup(x => x.GetNotificationSettingsViewModel(It.IsAny<string>()))
             .ReturnsAsync(new OrchestratorResponse<NotificationSettingsViewModel>
@@ -59,9 +43,6 @@ public class WhenIManageMyNotificationSettings : ControllerTestBase
     [Test]
     public async Task ThenMySettingsAreRetrieved()
     {
-        //Arrange
-        _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("TEST");
-
         //Act
         await _controller.NotificationSettings();
 
@@ -74,9 +55,6 @@ public class WhenIManageMyNotificationSettings : ControllerTestBase
     [Test]
     public async Task TheMySettingsAreUpdated()
     {
-        //Arrange
-        _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("TEST");
-
         var payload = new NotificationSettingsViewModel();
 
         //Act

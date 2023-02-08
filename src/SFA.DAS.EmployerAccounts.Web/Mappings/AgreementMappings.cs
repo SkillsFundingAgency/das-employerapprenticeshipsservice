@@ -30,6 +30,7 @@ public class AgreementMappings : Profile
         CreateMap<GetEmployerAgreementResponse, SignEmployerAgreementViewModel>()
             .ForMember(dest => dest.PreviouslySignedEmployerAgreement, opts => opts.Ignore())
             .ForMember(dest => dest.Choice, opts => opts.Ignore())
+            .ForMember(dest => dest.NoChoiceSelected, opts => opts.Ignore())
             .ForMember(dest => dest.LegalEntitiesCount, opts => opts.Ignore());
 
         CreateMap<AccountDetailViewModel, AgreementInfoViewModel>()

@@ -48,7 +48,7 @@ public abstract class EmployerVerificationOrchestratorBase
         var errorResponse = queryCollection?["error"].ToString();
         if (!string.IsNullOrEmpty(errorResponse))
         {
-            if (queryCollection["error_Code"] == "USER_DENIED_AUTHORIZATION")
+            if (queryCollection["error_Code"].ToString() == "USER_DENIED_AUTHORIZATION")
             {
                 return new OrchestratorResponse<HmrcTokenResponse>
                 {

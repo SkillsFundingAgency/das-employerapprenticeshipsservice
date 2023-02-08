@@ -2,9 +2,9 @@
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace SFA.DAS.EmployerAccounts.UnitTests;
+namespace SFA.DAS.EmployerAccounts.TestCommon;
 
-internal static class LoggingMockExtensions
+public static class LoggingMockExtensions
 {
     // https://adamstorr.azurewebsites.net/blog/mocking-ilogger-with-moq
     public static Mock<ILogger<T>> VerifyLogging<T>(this Mock<ILogger<T>> logger, string expectedMessage, LogLevel expectedLogLevel = LogLevel.Debug, Times? times = null)
