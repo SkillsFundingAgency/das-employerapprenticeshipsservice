@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+﻿using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.InvitationControllerTests;
 
@@ -43,7 +39,8 @@ public class WhenIAcceptAnInvitation : ControllerTestBase
 
         _controller = new InvitationController(
             _invitationOrchestrator.Object,
-            _configuration, _flashMessage.Object)
+            _configuration, _flashMessage.Object,
+            Mock.Of<IMultiVariantTestingService>())
         {
             ControllerContext = ControllerContext
         };

@@ -18,8 +18,9 @@ public class SearchOrganisationController : BaseController
     public SearchOrganisationController(
         SearchOrganisationOrchestrator orchestrator,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
-        IMediator mediator)
-        : base( flashMessage)
+        IMediator mediator,
+        IMultiVariantTestingService multiVariantTestingService)
+        : base( flashMessage, multiVariantTestingService)
     {
         _orchestrator = orchestrator;
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));

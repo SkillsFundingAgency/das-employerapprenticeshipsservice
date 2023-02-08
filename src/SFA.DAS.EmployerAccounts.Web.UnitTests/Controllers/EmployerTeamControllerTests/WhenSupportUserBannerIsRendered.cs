@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.EmployerAccounts.Web.Controllers;
-using SFA.DAS.EmployerAccounts.Web.Helpers;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests;
 
@@ -77,7 +66,8 @@ public class WhenSupportUserBannerIsRendered
 
         _controller = new EmployerTeamController(
             _mockCookieStorageService.Object,
-            _mockEmployerTeamOrchestrator.Object)
+            _mockEmployerTeamOrchestrator.Object,
+            Mock.Of<IMultiVariantTestingService>())
         {
             ControllerContext = new ControllerContext { HttpContext = _mockHttpContext.Object },
         };

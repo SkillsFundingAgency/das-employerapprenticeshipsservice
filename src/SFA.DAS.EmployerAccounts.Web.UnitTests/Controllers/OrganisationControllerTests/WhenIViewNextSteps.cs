@@ -13,7 +13,8 @@ class WhenIViewNextSteps : ControllerTestBase
         
         _controller = new OrganisationController(
             _orchestrator.Object,
-            _flashMessage.Object)
+            _flashMessage.Object,
+            Mock.Of<IMultiVariantTestingService>())
         {
             ControllerContext = ControllerContext
         };

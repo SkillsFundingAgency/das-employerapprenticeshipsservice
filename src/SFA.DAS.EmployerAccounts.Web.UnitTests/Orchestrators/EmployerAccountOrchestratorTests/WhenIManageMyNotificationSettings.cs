@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
 using SFA.DAS.EmployerAccounts.Models;
@@ -33,7 +32,7 @@ public class WhenIManageMyNotificationSettings : ControllerTestBase
                 It.IsAny<List<UserNotificationSetting>>()))
             .Returns(() => Task.FromResult(new Unit()));
 
-        _controller = new SettingsController( _orchestrator.Object, _flashMessage.Object)
+        _controller = new SettingsController( _orchestrator.Object, _flashMessage.Object, Mock.Of<IMultiVariantTestingService>())
         {
             ControllerContext = ControllerContext,
             Url = new UrlHelper(new ActionContext(MockHttpContext.Object, Routes, new ActionDescriptor()))

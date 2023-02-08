@@ -1,14 +1,4 @@
-﻿using System.Net;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Web.Controllers;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
-
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountPayeControllerTests;
+﻿namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountPayeControllerTests;
 
 public class WhenIRemoveAPayeScheme : ControllerTestBase
 {
@@ -30,7 +20,8 @@ public class WhenIRemoveAPayeScheme : ControllerTestBase
 
         _controller = new EmployerAccountPayeController(
             _employerAccountPayeOrchestrator.Object,
-            _flashMessage.Object)
+            _flashMessage.Object,
+            Mock.Of<IMultiVariantTestingService>())
         {
             ControllerContext = ControllerContext
         };

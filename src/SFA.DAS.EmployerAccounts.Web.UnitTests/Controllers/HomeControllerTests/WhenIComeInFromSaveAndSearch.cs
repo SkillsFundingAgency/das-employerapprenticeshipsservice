@@ -1,16 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.Authentication;
-using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Web.Controllers;
-using SFA.DAS.EmployerAccounts.Web.Helpers;
-using SFA.DAS.EmployerAccounts.Web.Models;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
+﻿using Microsoft.Extensions.Logging;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests;
 
@@ -44,15 +32,11 @@ public class WhenIComeInFromSaveAndSearch : ControllerTestBase
             _configuration,
             Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
             _returnUrlCookieStorageService.Object,
-                Mock.Of<ILogger<HomeController>>())
+                Mock.Of<ILogger<HomeController>>(),
+            Mock.Of<IMultiVariantTestingService>())
         {
             ControllerContext = ControllerContext
         };
-
-        //_owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedId);
-        //_owinWrapper.Setup(x => x.GetClaimValue("email")).Returns(ExpectedEmail);
-        //_owinWrapper.Setup(x => x.GetClaimValue(DasClaimTypes.GivenName)).Returns(ExpectedFirstName);
-        //_owinWrapper.Setup(x => x.GetClaimValue(DasClaimTypes.FamilyName)).Returns(ExpectedLastName);
 
         _actualResult = await _homeController.SaveAndSearch(ExpectedReturnUrl);
     }

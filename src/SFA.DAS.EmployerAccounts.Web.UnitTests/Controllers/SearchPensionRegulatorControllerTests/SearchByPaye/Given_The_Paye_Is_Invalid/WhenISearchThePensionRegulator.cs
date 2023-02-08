@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using MediatR;
+﻿using MediatR;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegulatorControllerTests.SearchByPaye.Given_The_Paye_Is_Invalid;
 
@@ -41,7 +40,8 @@ class WhenISearchThePensionRegulator
             orchestrator.Object,
             Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
             Mock.Of<IMediator>(),
-            Mock.Of<ICookieStorageService<HashedAccountIdModel>>());
+            Mock.Of<ICookieStorageService<HashedAccountIdModel>>(),
+            Mock.Of<IMultiVariantTestingService>());
     }
 
     [Test]

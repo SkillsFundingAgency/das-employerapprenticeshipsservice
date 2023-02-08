@@ -1,5 +1,4 @@
-﻿using System;
-using SFA.DAS.Common.Domain.Types;
+﻿using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.OrganisationControllerTests;
 
@@ -20,7 +19,8 @@ public class WhenIConfirmAddOfOrganisationAndIAmNotTheOwner : ControllerTestBase
 
         _controller = new OrganisationController(
             _orchestrator.Object,
-            _flashMessage.Object)
+            _flashMessage.Object,
+            Mock.Of<IMultiVariantTestingService>())
         {
             ControllerContext = ControllerContext
         };

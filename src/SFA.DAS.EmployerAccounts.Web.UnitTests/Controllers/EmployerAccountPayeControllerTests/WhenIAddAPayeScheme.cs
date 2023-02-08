@@ -30,7 +30,8 @@ public class WhenIAddAPayeScheme : ControllerTestBase
 
         _controller = new EmployerAccountPayeController(
             _employerAccountPayeOrchestrator.Object,
-            _flashMessage.Object)
+            _flashMessage.Object,
+            Mock.Of<IMultiVariantTestingService>())
         {
             ControllerContext = ControllerContext
         };

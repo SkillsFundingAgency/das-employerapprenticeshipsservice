@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using MediatR;
+﻿using MediatR;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeInUse;
@@ -55,7 +52,8 @@ class WhenISearchThePensionRegulator : ControllerTestBase
             orchestrator.Object,              
             Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
             _mediator.Object,
-            Mock.Of<ICookieStorageService<HashedAccountIdModel>>())
+            Mock.Of<ICookieStorageService<HashedAccountIdModel>>(),
+            Mock.Of<IMultiVariantTestingService>())
         {
             ControllerContext = ControllerContext
         };

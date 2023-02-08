@@ -1,13 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Web.Controllers;
-using SFA.DAS.EmployerAccounts.Web.Helpers;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
-
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests;
+﻿namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests;
 
 public class WhenIChooseIIfIKnowApprenticehipStartDate 
 {
@@ -24,7 +15,8 @@ public class WhenIChooseIIfIKnowApprenticehipStartDate
 
         _controller = new EmployerTeamController(
             _mockCookieStorageService.Object,
-            _mockEmployerTeamOrchestrator.Object);
+            _mockEmployerTeamOrchestrator.Object,
+            Mock.Of<IMultiVariantTestingService>());
     }
 
     [Test]
