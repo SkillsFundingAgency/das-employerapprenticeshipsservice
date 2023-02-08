@@ -11,8 +11,9 @@ public class ReportController : BaseController
 
     public ReportController(IMediator mediator,
         ILogger<ReportController> logger,
-        ICookieStorageService<FlashMessageViewModel> flashMessage)
-        : base(flashMessage)
+        ICookieStorageService<FlashMessageViewModel> flashMessage,
+        IMultiVariantTestingService multiVariantTestingService)
+        : base(flashMessage, multiVariantTestingService)
     {
         _mediator = mediator;
         _logger = logger;

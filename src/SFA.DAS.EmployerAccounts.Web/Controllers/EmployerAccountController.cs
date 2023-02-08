@@ -31,7 +31,9 @@ public class EmployerAccountController : BaseController
         IMediator mediatr,
         ICookieStorageService<ReturnUrlModel> returnUrlCookieStorageService,
         ICookieStorageService<HashedAccountIdModel> accountCookieStorage,
-        LinkGenerator linkGenerator) : base(flashMessage)
+        LinkGenerator linkGenerator,
+        IMultiVariantTestingService multiVariantTestingService
+        ) : base(flashMessage, multiVariantTestingService)
     {
         _employerAccountOrchestrator = employerAccountOrchestrator;
         _logger = logger;

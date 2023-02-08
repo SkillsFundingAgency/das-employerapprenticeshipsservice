@@ -12,8 +12,9 @@ public class TaskController : BaseController
     public TaskController(
         TaskOrchestrator taskOrchestrator,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
-        ILogger<TaskController> logger)
-        : base(flashMessage)
+        ILogger<TaskController> logger,
+        IMultiVariantTestingService multiVariantTestingService)
+        : base(flashMessage, multiVariantTestingService)
     {
         _orchestrator = taskOrchestrator;
         _logger = logger;

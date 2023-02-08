@@ -22,7 +22,8 @@ public class WhenIHandleNewRegistration
             _configuration,
             Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
             Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
-            Mock.Of<ILogger<HomeController>>());
+            Mock.Of<ILogger<HomeController>>(),
+            Mock.Of<IMultiVariantTestingService>());
     }
 
     [Test]

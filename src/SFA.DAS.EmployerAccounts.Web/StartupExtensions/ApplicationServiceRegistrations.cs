@@ -44,6 +44,7 @@ public static class ApplicationServiceRegistrations
         services.AddScoped<IReferenceDataApiClient, ReferenceDataApiClient>();
 
         services.AddTransient<IDateTimeService, DateTimeService>();
+        services.AddTransient<IMultiVariantTestingService, MultiVariantTestingService>();
 
         services.AddTransient<IHashingService>(_ => new HashingService.HashingService(configuration.AllowedHashstringCharacters, configuration.Hashstring));
 

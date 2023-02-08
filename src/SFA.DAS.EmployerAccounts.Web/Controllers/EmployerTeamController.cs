@@ -19,8 +19,9 @@ public class EmployerTeamController : BaseController
 
     public EmployerTeamController(
         ICookieStorageService<FlashMessageViewModel> flashMessage,
-        EmployerTeamOrchestrator employerTeamOrchestrator)
-        : base(flashMessage)
+        EmployerTeamOrchestrator employerTeamOrchestrator,
+        IMultiVariantTestingService multiVariantTestingService)
+        : base(flashMessage, multiVariantTestingService)
     {
         _employerTeamOrchestrator = employerTeamOrchestrator;
     }

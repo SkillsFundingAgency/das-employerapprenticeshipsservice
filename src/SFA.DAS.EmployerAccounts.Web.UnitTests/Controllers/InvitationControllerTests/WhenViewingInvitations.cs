@@ -1,8 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+﻿using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.InvitationControllerTests;
 
@@ -21,7 +17,8 @@ public class WhenViewingInvitations : ControllerTestBase
        _controller = new InvitationController(
             _invitationOrchestrator.Object,
             _configuration,
-            _flashMessage.Object)
+            _flashMessage.Object,
+            Mock.Of<IMultiVariantTestingService>())
        {
            ControllerContext = ControllerContext
        };

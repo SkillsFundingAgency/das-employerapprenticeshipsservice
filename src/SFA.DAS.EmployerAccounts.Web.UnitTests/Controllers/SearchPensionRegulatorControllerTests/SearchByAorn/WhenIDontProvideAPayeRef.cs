@@ -1,15 +1,4 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Web.Controllers;
-using SFA.DAS.EmployerAccounts.Web.Helpers;
-using SFA.DAS.EmployerAccounts.Web.Models;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
+﻿using MediatR;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegulatorControllerTests.SearchByAorn;
 
@@ -25,7 +14,8 @@ class WhenIDontProvideAPayeRef
             Mock.Of<SearchPensionRegulatorOrchestrator>(),
             Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
             Mock.Of<IMediator>(),
-            Mock.Of<ICookieStorageService<HashedAccountIdModel>>());
+            Mock.Of<ICookieStorageService<HashedAccountIdModel>>(),
+            Mock.Of<IMultiVariantTestingService>());
     }
 
     [TestCase("")]
