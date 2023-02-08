@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 Mock.Of<LinkGenerator>())
             {
                 ControllerContext = ControllerContext,
-                Url = new UrlHelper(new ActionContext(HttpContext.Object, Routes, new ActionDescriptor()))
+                Url = new UrlHelper(new ActionContext(MockHttpContext.Object, Routes, new ActionDescriptor()))
             };
 
             _accountData = new EmployerAccountData

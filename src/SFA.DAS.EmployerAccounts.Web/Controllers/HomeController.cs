@@ -35,11 +35,11 @@ public class HomeController : BaseController
     [Route("Index")]
     public async Task<IActionResult> Index()
     {
-        var userId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+        var userIdClaim = HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals(ControllerConstants.UserRefClaimKeyName));
 
         OrchestratorResponse<UserAccountsViewModel> accounts;
 
-        if (!string.IsNullOrWhiteSpace(userId))
+        if (userIdClaim != null)
         {
             var partialLogin = HttpContext.User.FindFirstValue(DasClaimTypes.RequiresVerification);
 
@@ -55,7 +55,7 @@ public class HomeController : BaseController
 
             await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName);
 
-            accounts = await _homeOrchestrator.GetUserAccounts(userId, _configuration.LastTermsAndConditionsUpdate);
+            accounts = await _homeOrchestrator.GetUserAccounts(userIdClaim.Value, _configuration.LastTermsAndConditionsUpdate);
         }
         else
         {
@@ -230,9 +230,9 @@ public class HomeController : BaseController
                 Severity = FlashMessageSeverityLevel.Success,
                 Headline = "You've changed your email"
             };
-            
+
             AddFlashMessageToCookie(flashMessage);
-            
+
             var userRef = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
             var email = HttpContext.User.FindFirstValue(ControllerConstants.EmailClaimKeyName);
             var firstName = HttpContext.User.FindFirstValue(DasClaimTypes.GivenName);
@@ -260,7 +260,7 @@ public class HomeController : BaseController
         authenticationProperties.Parameters.Clear();
         authenticationProperties.Parameters.Add("id_token", idToken);
         SignOut(authenticationProperties, CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
-        
+
         var constants = new Constants(_configuration.Identity);
 
         return new RedirectResult(string.Format(constants.LogoutEndpoint(), idToken));

@@ -95,7 +95,7 @@ class WhenICreateAnAccount : ControllerTestBase
             Mock.Of<LinkGenerator>())
         {
             ControllerContext = ControllerContext,
-            Url = new UrlHelper(new ActionContext(HttpContext.Object, Routes, new ActionDescriptor()))
+            Url = new UrlHelper(new ActionContext(MockHttpContext.Object, Routes, new ActionDescriptor()))
         };
     }
 

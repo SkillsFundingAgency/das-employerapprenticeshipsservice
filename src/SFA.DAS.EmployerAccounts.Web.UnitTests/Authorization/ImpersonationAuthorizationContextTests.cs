@@ -26,7 +26,7 @@
 //public class ImpersonationAuthorizationContextTests
 //{
 //    protected Mock<IAuthorizationContextProvider> MockAuthorizationContextProvider;
-//    protected Mock<HttpContext> MockContextBase;
+//    protected Mock<MockHttpContext> MockContextBase;
 //    public ImpersonationAuthorizationContext SutImpersonationAuthorizationContext;
 //    protected Mock<IRouteHandler> MockRouteHandler { get; set; }
 //    private Mock<IEmployerAccountTeamRepository> _mockEmployerAccountTeamRepository;
@@ -59,13 +59,13 @@
 //        _mockEmployerAccountTeamRepository = new Mock<IEmployerAccountTeamRepository>();
 //        _mockEmployerAccountTeamRepository.Setup(x => x.GetAccountTeamMembers(It.IsAny<string>()));
 //        MockAuthorizationContextProvider = new Mock<IAuthorizationContextProvider>();
-//        MockContextBase = new Mock<HttpContext>();
+//        MockContextBase = new Mock<MockHttpContext>();
 //        MockRouteHandler = new Mock<IRouteHandler>();
 
 //        var routeBase = new Route( MockRouteHandler.Object, "teams/view");
 //        var routeData = new RouteData(routeBase, MockRouteHandler.Object);
 //        routeData.Values.Add(RouteValues.EncodedAccountId, "ABC123");
-//        MockContextBase.Setup(x => x.Request.HttpContext.GetRouteData()).Returns(routeData);
+//        MockContextBase.Setup(x => x.Request.MockHttpContext.GetRouteData()).Returns(routeData);
 
 //        var authorizationContext = new DAS.Authorization.Context.AuthorizationContext();
 //        MockAuthorizationContextProvider.Setup(x => x.GetAuthorizationContext()).Returns(authorizationContext);

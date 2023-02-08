@@ -52,7 +52,7 @@ public class WhenIManageMyNotificationSettings : ControllerTestBase
         _controller = new SettingsController( _orchestrator.Object, _flashMessage.Object)
         {
             ControllerContext = ControllerContext,
-            Url = new UrlHelper(new ActionContext(HttpContext.Object, Routes, new ActionDescriptor()))
+            Url = new UrlHelper(new ActionContext(MockHttpContext.Object, Routes, new ActionDescriptor()))
         };
     }
 

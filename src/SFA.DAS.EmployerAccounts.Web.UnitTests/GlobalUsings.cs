@@ -1,0 +1,10 @@
+﻿global using SFA.DAS.EmployerAccounts.Configuration;
+global using SFA.DAS.EmployerAccounts.Interfaces;
+global using SFA.DAS.EmployerAccounts.Models.Account;
+global using SFA.DAS.EmployerAccounts.Web.Authentication;
+global using SFA.DAS.EmployerAccounts.Web.Controllers;
+global using SFA.DAS.EmployerAccounts.Web.Helpers;
+global using SFA.DAS.EmployerAccounts.Web.Models;
+global using SFA.DAS.EmployerAccounts.Web.Orchestrators;
+global using SFA.DAS.EmployerAccounts.Web.ViewModels;
+global using SFA.DAS.EmployerUsers.WebClientComponents;

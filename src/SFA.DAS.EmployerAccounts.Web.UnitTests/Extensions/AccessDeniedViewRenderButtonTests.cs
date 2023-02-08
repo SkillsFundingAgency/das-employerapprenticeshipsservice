@@ -55,7 +55,7 @@
 //            MockIPrincipal.Setup(x => x.IsInRole(Tier2User)).Returns(true);
 //            MockContextBase.Setup(c => c.User).Returns(MockIPrincipal.Object);
 //            MockViewContext = new Mock<ViewContext>();
-//            MockViewContext.Setup(x => x.HttpContext).Returns(MockContextBase.Object);
+//            MockViewContext.Setup(x => x.MockHttpContext).Returns(MockContextBase.Object);
 //            _helper = new HtmlHelpers(_config, null, );
 //        }
 

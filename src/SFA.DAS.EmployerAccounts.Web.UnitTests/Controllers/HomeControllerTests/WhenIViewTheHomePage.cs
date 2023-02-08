@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -12,47 +13,24 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
-using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.EmployerAccounts.Web.Authentication;
-using SFA.DAS.EmployerAccounts.Web.Controllers;
-using SFA.DAS.EmployerAccounts.Web.Models;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.EmployerUsers.WebClientComponents;
+
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests;
 
-public class WhenIViewTheHomePage
+public class WhenIViewTheHomePage : ControllerTestBase
 {
-    private Mock<IAuthenticationService> _owinWrapper;
     private HomeController _homeController;
-    private Mock<HomeOrchestrator> _homeOrchestrator;
+    private readonly Mock<HomeOrchestrator> _homeOrchestrator = new();
     private EmployerAccountsConfiguration _configuration;
-    private string ExpectedUserId = "123ABC";     
-    private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
+    private const string ExpectedUserId = "123ABC";
+    private readonly Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage = new();
 
     [SetUp]
     public void Arrange()
     {
-        _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
+        base.Arrange();
 
-        _owinWrapper = new Mock<IAuthenticationService>();
-        _owinWrapper.Setup(x => x.GetClaimValue(DasClaimTypes.RequiresVerification)).Returns("false");
-
-        _homeOrchestrator = new Mock<HomeOrchestrator>();
-        _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId, null)).ReturnsAsync(
-            new OrchestratorResponse<UserAccountsViewModel>
-            {
-                Data = new UserAccountsViewModel
-                {
-                    Accounts = new Accounts<Account>
-                    {
-                        AccountList = new List<Account> { new Account() }
-                    }
-                }
-            });
+        SetupHomeOrchestratorFor(ExpectedUserId);
 
         _configuration = new EmployerAccountsConfiguration
         {
@@ -67,24 +45,44 @@ public class WhenIViewTheHomePage
         };
 
         _homeController = new HomeController(
-            _homeOrchestrator.Object,      
+            _homeOrchestrator.Object,
             _configuration,
             _flashMessage.Object,
             Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
             Mock.Of<ILogger<HomeController>>())
         {
+            ControllerContext = new ControllerContext { HttpContext = MockHttpContext.Object },
             Url = new UrlHelper(new ActionContext(Mock.Of<HttpContext>(), new RouteData(), new ActionDescriptor()))
         };
     }
 
+    private void SetupHomeOrchestratorFor(string userId)
+    {
+        _homeOrchestrator.Setup(x => x.GetUserAccounts(userId, null)).ReturnsAsync(
+            new OrchestratorResponse<UserAccountsViewModel>
+            {
+                Data = new UserAccountsViewModel
+                {
+                    Accounts = new Accounts<Account>
+                    {
+                        AccountList = new List<Account> { new Account() }
+                    }
+                }
+            });
+    }
+
+
     [Test]
     public async Task ThenTheAccountsAreNotReturnedWhenYouAreNotAuthenticated()
     {
+        //Arrange
+        AddEmptyUserToContext();
+
         //Act
         await _homeController.Index();
 
         //Assert
-        _homeOrchestrator.Verify(x => x.GetUserAccounts(It.IsAny<string>(), It.IsAny<DateTime?>()), Times.Never);
+        _homeOrchestrator.Verify(x => x.GetUserAccounts(It.Is<string>(c => c.Equals(string.Empty)), It.IsAny<DateTime?>()), Times.Never);
     }
 
     [Test]
@@ -96,8 +94,8 @@ public class WhenIViewTheHomePage
             {
                 Identity = new IdentityServerConfiguration { BaseAddress = "http://test.local/identity", AccountActivationUrl = "/confirm" }
             });
-        _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
-        _owinWrapper.Setup(x => x.GetClaimValue(DasClaimTypes.RequiresVerification)).Returns("true");
+
+        AddUserToContext(new Claim(ControllerConstants.UserRefClaimKeyName, ExpectedUserId), new Claim(DasClaimTypes.RequiresVerification, "true"));
 
         //Act
         var actual = await _homeController.Index();
@@ -113,26 +111,18 @@ public class WhenIViewTheHomePage
     public async Task ThenTheAccountsAreReturnedForThatUserWhenAuthenticated()
     {
         //Arrange
-        _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
+        var userId = Guid.NewGuid().ToString();
+        SetupHomeOrchestratorFor(userId);
+        AddUserToContext(userId, string.Empty, string.Empty,
+            new Claim(ControllerConstants.UserRefClaimKeyName, userId),
+            new Claim(DasClaimTypes.RequiresVerification, "false")
+        );
 
         //Act
         await _homeController.Index();
 
         //Assert
-        _homeOrchestrator.Verify(x => x.GetUserAccounts(ExpectedUserId, It.IsAny<DateTime?>()), Times.Once);
-    }
-
-    [Test]
-    public async Task ThenTheClaimsAreRefreshedForThatUserWhenAuthenticated()
-    {
-        //Arrange
-        _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
-
-        //Act
-        await _homeController.Index();
-
-        //Assert
-        _owinWrapper.Verify(x => x.UpdateClaims(), Times.Once);
+        _homeOrchestrator.Verify(x => x.GetUserAccounts(userId, It.IsAny<DateTime?>()), Times.Once);
     }
 
     [Test]
@@ -156,7 +146,7 @@ public class WhenIViewTheHomePage
     public async Task ThenTheUnauthenticatedViewIsReturnedWhenNoUserIsLoggedIn()
     {
         //Arrange
-        _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("");
+        AddEmptyUserToContext();
 
         //Act
         var actual = await _homeController.Index();
@@ -172,17 +162,20 @@ public class WhenIViewTheHomePage
     public async Task ThenIfIHaveOneAccountIAmRedirectedToTheEmployerTeamsIndexPage()
     {
         //Arrange
-        _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
+        AddUserToContext(ExpectedUserId, string.Empty, string.Empty,
+            new Claim(ControllerConstants.UserRefClaimKeyName, ExpectedUserId),
+            new Claim(DasClaimTypes.RequiresVerification, "false")
+        );
 
         //Act
         var actual = await _homeController.Index();
 
         //Assert
         Assert.IsNotNull(actual);
-        var actualViewResult = actual as RedirectToRouteResult;
+        var actualViewResult = actual as RedirectToActionResult;
         Assert.IsNotNull(actualViewResult);
-        Assert.AreEqual("Index", actualViewResult.RouteValues["Action"].ToString());
-        Assert.AreEqual("EmployerTeam", actualViewResult.RouteValues["Controller"].ToString());
+        Assert.AreEqual("Index", actualViewResult.ActionName);
+        Assert.AreEqual("EmployerTeam", actualViewResult.ControllerName);
     }
 
 
@@ -190,7 +183,11 @@ public class WhenIViewTheHomePage
     public async Task ThenIfIHaveMoreThanOneAccountIAmRedirectedToTheAccountsIndexPage()
     {
         //Arrange
-        _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
+        AddUserToContext(ExpectedUserId, string.Empty, string.Empty,
+            new Claim(ControllerConstants.UserRefClaimKeyName, ExpectedUserId),
+            new Claim(DasClaimTypes.RequiresVerification, "false")
+        );
+
         _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId, It.IsAny<DateTime?>())).ReturnsAsync(
             new OrchestratorResponse<UserAccountsViewModel>
             {
@@ -210,14 +207,18 @@ public class WhenIViewTheHomePage
         Assert.IsNotNull(actual);
         var actualViewResult = actual as ViewResult;
         Assert.IsNotNull(actualViewResult);
-        Assert.AreEqual("", actualViewResult.ViewName);
+        Assert.AreEqual(null, actualViewResult.ViewName);
     }
 
     [Test]
     public async Task ThenIfIHaveMoreThanOneAccountIAmRedirectedToTheAccountsIndexPage_WithTermsAndConditionBannerDisplayed()
     {
         //Arrange
-        _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
+        AddUserToContext(ExpectedUserId, string.Empty, string.Empty,
+            new Claim(ControllerConstants.UserRefClaimKeyName, ExpectedUserId),
+            new Claim(DasClaimTypes.RequiresVerification, "false")
+        );
+
         _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId, It.IsAny<DateTime?>())).ReturnsAsync(
             new OrchestratorResponse<UserAccountsViewModel>
             {
@@ -252,7 +253,11 @@ public class WhenIViewTheHomePage
     public async Task ThenIfIHaveMoreThanOneAccountIAmRedirectedToTheAccountsIndexPage_WithTermsAndConditionBannerNotDisplayed()
     {
         //Arrange
-        _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
+        AddUserToContext(ExpectedUserId, string.Empty, string.Empty,
+            new Claim(ControllerConstants.UserRefClaimKeyName, ExpectedUserId),
+            new Claim(DasClaimTypes.RequiresVerification, "false")
+        );
+
         _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId, It.IsAny<DateTime?>())).ReturnsAsync(
             new OrchestratorResponse<UserAccountsViewModel>
             {
