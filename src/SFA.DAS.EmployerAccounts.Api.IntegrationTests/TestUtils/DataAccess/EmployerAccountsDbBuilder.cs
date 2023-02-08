@@ -29,9 +29,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
         private readonly Lazy<IUserRepository> _lazyUserRepository;
         private EmployerAccountsConfiguration _configuration;
 
-        public EmployerAccountsDbBuilder(
-            IContainer container
-            )
+        public EmployerAccountsDbBuilder(IContainer container)
         {
             _container = container;
 

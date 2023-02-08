@@ -72,7 +72,7 @@
       <Version>12.0.1</Version>
     </PackageReference>
     <PackageReference Include="NUnit">
-      <Version>3.13.2</Version>
+      <Version>3.13.3</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Testing">
       <Version>3.0.121</Version>

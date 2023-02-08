@@ -1,5 +1,4 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Data.Common;
 using System.Data.SqlClient;
 using Microsoft.Azure.Documents;
@@ -28,15 +27,23 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
 
             For<DbConnection>().Use($"Build DbConnection", c =>
             {
-                var azureServiceTokenProvider = new AzureServiceTokenProvider();
-
-                return environmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase)
-                    ? new SqlConnection(GetEmployerAccountsConnectionString(c))
-                    : new SqlConnection
+                var connectionString = GetEmployerAccountsConnectionString(c);
+                var connectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
+                bool useManagedIdentity = !connectionStringBuilder.IntegratedSecurity && string.IsNullOrEmpty(connectionStringBuilder.UserID);
+                if (useManagedIdentity)
+                {
+                    var azureServiceTokenProvider = new AzureServiceTokenProvider();
+                    var accessToken = azureServiceTokenProvider.GetAccessTokenAsync(AzureResource).Result;
+                    return new SqlConnection
                     {
-                        ConnectionString = GetEmployerAccountsConnectionString(c),
-                        AccessToken = azureServiceTokenProvider.GetAccessTokenAsync(AzureResource).Result
+                        ConnectionString = connectionString,
+                        AccessToken = accessToken,
                     };
+                }
+                else
+                {
+                    return new SqlConnection(connectionString);
+                }
             });
 
             For<EmployerAccountsDbContext>().Use(c => GetEmployerAccountsDbContext(c));

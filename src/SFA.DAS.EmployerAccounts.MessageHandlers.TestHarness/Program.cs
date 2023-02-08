@@ -18,6 +18,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness
                 {
                     await container.GetInstance<PublishCreateAccountUserEvents>().Run();
                     await container.GetInstance<PublishCohortCreatedEvents>().Run();
+                    await container.GetInstance<PublishCreatedAccountEvents>().Run();
                 }
                 finally
                 {

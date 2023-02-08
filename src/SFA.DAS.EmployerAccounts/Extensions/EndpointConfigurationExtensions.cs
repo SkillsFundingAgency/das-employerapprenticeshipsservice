@@ -3,7 +3,6 @@ using NServiceBus;
 using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.Notifications.Messages.Commands;
-using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.Configuration;
 using SFA.DAS.NServiceBus.Configuration.AzureServiceBus;
 using StructureMap;

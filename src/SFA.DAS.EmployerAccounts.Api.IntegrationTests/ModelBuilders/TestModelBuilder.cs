@@ -90,10 +90,11 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.ModelBuilders
                 .Build<LegalEntityWithAgreementInput>()
                 .With(input => input.AccountId, () => currentAccount.AccountOutput.AccountId)
                 .Create();
-
+            
             var legalEntitySetup = new LegalEntityWithAgreementSetup
             {
-                LegalEntityWithAgreementInput = legalEntity
+               LegalEntityWithAgreementInput = legalEntity,
+
             };
 
             currentAccount.LegalEntities.Add(legalEntitySetup);

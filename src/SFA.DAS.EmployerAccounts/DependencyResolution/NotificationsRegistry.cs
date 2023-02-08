@@ -1,11 +1,11 @@
-﻿using SFA.DAS.Http;
+﻿using System.Net.Http;
+using SFA.DAS.AutoConfiguration;
+using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using StructureMap;
-using System.Net.Http;
-using SFA.DAS.AutoConfiguration;
-using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.DependencyResolution
 {
@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
 
         }
 
-        private HttpClient GetHttpClient(IContext context)
+        private static HttpClient GetHttpClient(IContext context)
         {
             var config = context.GetInstance<NotificationsApiClientConfiguration>();
 
