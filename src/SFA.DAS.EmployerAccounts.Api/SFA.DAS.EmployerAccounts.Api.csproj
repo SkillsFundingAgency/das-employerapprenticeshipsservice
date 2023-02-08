@@ -31,7 +31,6 @@
 			<Version>1.0.5</Version>
 		</PackageReference>
 		<PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="16.0.20" />
-		<PackageReference Include="SFA.DAS.OidcMiddleware" Version="2.0.0.61553" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework" Version="9.0.13" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.EntityFrameworkCore" Version="9.0.28" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.Mvc" Version="9.0.28" />
@@ -39,9 +38,6 @@
 		<PackageReference Include="SFA.DAS.UnitOfWork.WebApi" Version="9.0.13" />
 		<PackageReference Include="SFA.DAS.Validation" Version="6.0.30" />
 		<PackageReference Include="SFA.DAS.Validation.Mvc" Version="6.0.30" />
-		<PackageReference Include="SFA.DAS.Validation.WebApi">
-			<Version>5.1.167</Version>
-		</PackageReference>
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
 		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
 		<PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
@@ -54,7 +50,6 @@
 		</PackageReference>
 		<PackageReference Include="SFA.DAS.Web.Policy" Version="1.1.0.63777" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.1" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.12" />
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Update="Global.asax.cs">
@@ -64,12 +59,6 @@
 	<ItemGroup>
 		<None Update="NLog.xsd">
 			<SubType>Designer</SubType>
-		</None>
-		<None Include="Web.Debug.config">
-			<DependentUpon>Web.config</DependentUpon>
-		</None>
-		<None Include="Web.Release.config">
-			<DependentUpon>Web.config</DependentUpon>
 		</None>
 	</ItemGroup>
 	<ItemGroup>
