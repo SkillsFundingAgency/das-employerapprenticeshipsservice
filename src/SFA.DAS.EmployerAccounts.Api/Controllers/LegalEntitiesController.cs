@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerAccounts.Api.Authorization;
 using SFA.DAS.EmployerAccounts.Api.Mappings;
 using SFA.DAS.EmployerAccounts.Api.Types;
@@ -15,6 +15,7 @@ using SFA.DAS.Validation.WebApi;
 namespace SFA.DAS.EmployerAccounts.Api.Controllers;
 
 [Route("api/accounts/{hashedAccountId}/legalentities")]
+[Authorize(Policy = ApiRoles.ReadAllEmployerAccountBalances)]
 public class LegalEntitiesController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -25,7 +26,6 @@ public class LegalEntitiesController : ControllerBase
     }
 
     [Route("", Name = "GetLegalEntities")]
-    [DasAuthorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet]
     public async Task<IActionResult> GetLegalEntities(string hashedAccountId, bool includeDetails = false)
     {
@@ -77,7 +77,6 @@ public class LegalEntitiesController : ControllerBase
 
     [HttpGet]
     [Route("{legalEntityId}", Name = "GetLegalEntity")]
-    [DasAuthorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpNotFoundForNullModel]
     public async Task<IActionResult> GetLegalEntity(string hashedAccountId, long legalEntityId, bool includeAllAgreements = false)
     {
