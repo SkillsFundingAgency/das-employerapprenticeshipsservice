@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SFA.DAS.EmployerAccounts.Api.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.Api.Authentication;
 
@@ -22,31 +23,15 @@ public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSc
 
     protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
     {
-        string username;
-        try
-        {
-            var authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
-            var credentialBytes = Convert.FromBase64String(authHeader.Parameter);
-            var credentials =  System.Text.Encoding.UTF8.GetString(credentialBytes).Split(new[] { ':' }, 2);
-            username = credentials[0];
-        }
-        catch
-        {
-            //if no authorization header specified default to employer.
-            username = "employer";
-        }
-
-        bool isProvider = false;
-        if (username == "provider")
-        {
-            isProvider = true;
-        }
-
         var claims = new[] {
-            new Claim(ClaimTypes.NameIdentifier, username),
-            new Claim(ClaimTypes.Name, username),
-            new Claim(ClaimTypes.Role,  isProvider ? "Provider" : "Employer"),
+            new Claim(ClaimTypes.NameIdentifier, "username"),
+            new Claim(ClaimTypes.Name, "username"),
+            new Claim(ClaimTypes.Role, ApiRoles.ReadUserAccounts),
+            new Claim(ClaimTypes.Role, ApiRoles.ReadAllAccountUsers),
+            new Claim(ClaimTypes.Role, ApiRoles.ReadAllEmployerAccountBalances),
+            new Claim(ClaimTypes.Role, ApiRoles.ReadAllEmployerAgreements)
         };
+
         var identity = new ClaimsIdentity(claims, Scheme.Name);
         var principal = new ClaimsPrincipal(identity);
         var ticket = new AuthenticationTicket(principal, Scheme.Name);

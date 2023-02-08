@@ -1,19 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using SFA.DAS.Authorization.Context;
-using SFA.DAS.Authorization.Handlers;
-using SFA.DAS.Authorization.Results;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.Api.Authorization;
 
-public class LocalAuthorizationHandler : IAuthorizationHandler
+public class LocalAuthorizationHandler : AuthorizationHandler<NoneRequirement>
 {
-    public string Prefix => "SFA.DAS.EmployerAccounts";
-
-    public Task<AuthorizationResult> GetAuthorizationResult(IReadOnlyCollection<string> options, IAuthorizationContext authorizationContext)
+    protected override Task HandleRequirementAsync(AuthorizationHandlerContext context,
+        NoneRequirement requirement)
     {
-        var result = new AuthorizationResult();
-
-        return Task.FromResult(result);
+        context.Succeed(requirement);
+        return Task.CompletedTask;
     }
 }

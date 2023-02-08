@@ -7,13 +7,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.Api.Common.AppStart;
@@ -27,7 +25,6 @@ using SFA.DAS.EmployerAccounts.Api.Authentication;
 using SFA.DAS.EmployerAccounts.Api.Authorization;
 using SFA.DAS.EmployerAccounts.Api.ErrorHandler;
 using SFA.DAS.EmployerAccounts.Api.Filters;
-using SFA.DAS.EmployerAccounts.Api.Mappings;
 using SFA.DAS.EmployerAccounts.Api.ServiceRegistrations;
 using SFA.DAS.EmployerAccounts.Authorisation;
 using SFA.DAS.EmployerAccounts.Configuration;
@@ -83,33 +80,74 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         var employerAccountsConfiguration = _configuration.Get<EmployerAccountsConfiguration>();
+        var isDevelopment = _configuration.IsDevOrLocal();
 
-        if (_configuration.IsDevOrLocal())
+        var policies = new Dictionary<string, string> { { PolicyNames.Default, RoleNames.Default } };
+        if (isDevelopment)
         {
             services.AddAuthentication("BasicAuthentication")
-                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
-
-            services.AddAuthorization(opt =>
-            {
-                opt.AddPolicy("Default", builder => { builder.AllowAnonymousUser(); });
-            });
-
-            services.AddAuthorizationHandler<LocalAuthorizationHandler>();
-            services.AddTransient<SFA.DAS.Authorization.Services.IAuthorizationService, LocalAuthorisationService>();
+                   .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
         }
         else
         {
             var azureAdConfiguration = _configuration
-                        .GetSection(ConfigurationKeys.AzureActiveDirectoryApiConfiguration)
-                        .Get<AzureActiveDirectoryConfiguration>();
+                   .GetSection(ConfigurationKeys.AzureActiveDirectoryApiConfiguration)
+                   .Get<AzureActiveDirectoryConfiguration>();
 
-            var policies = new Dictionary<string, string>
-            {
-                {PolicyNames.Default, RoleNames.Default},
-            };
             services.AddAuthentication(azureAdConfiguration, policies);
-            services.AddAuthorization<AuthorizationContextProvider>();
+            services.AddSingleton<IClaimsTransformation, AzureAdScopeClaimTransformation>();
         }
+        services.AddAuthorization(x =>
+        {
+            {
+                x.AddPolicy("default", policy =>
+                {
+                    if (isDevelopment)
+                        policy.AllowAnonymousUser();
+                    else
+                        policy.RequireAuthenticatedUser();
+
+                });
+
+                x.AddPolicy(ApiRoles.ReadAllEmployerAccountBalances, policy =>
+                {
+                    if (isDevelopment)
+                        policy.AllowAnonymousUser();
+                    else
+                    {
+                        policy.RequireAuthenticatedUser();
+                        policy.RequireRole(ApiRoles.ReadAllEmployerAccountBalances);
+                    }
+                });
+
+                x.AddPolicy(ApiRoles.ReadUserAccounts, policy =>
+                {
+                    if (isDevelopment)
+                        policy.AllowAnonymousUser();
+                    else
+                    {
+                        policy.RequireAuthenticatedUser();
+                        policy.RequireRole(ApiRoles.ReadUserAccounts);
+                    }
+                });
+
+                x.AddPolicy(ApiRoles.ReadAllAccountUsers, policy =>
+                {
+                    if (isDevelopment)
+                        policy.AllowAnonymousUser();
+                    else
+                    {
+                        policy.RequireAuthenticatedUser();
+                        policy.RequireRole(ApiRoles.ReadAllAccountUsers);
+                    }
+                });
+
+                x.DefaultPolicy = x.GetPolicy("default");
+            }
+        });
+        if (isDevelopment)
+            services.AddSingleton<IAuthorizationHandler, LocalAuthorizationHandler>();
+        
 
         services.AddEmployerFeaturesAuthorization();
 
@@ -132,7 +170,7 @@ public class Startup
         services.AddEntityFrameworkUnitOfWork<EmployerAccountsDbContext>();
         services.AddNServiceBusClientUnitOfWork();
 
-        services.AddDatabaseRegistration(employerAccountsConfiguration, _configuration["EnvironmentName"]);
+        services.AddDatabaseRegistration(employerAccountsConfiguration.DatabaseConnectionString);
         services.AddDataRepositories();
         services.AddEventsApi();
         services.AddExecutionPolicies();
@@ -179,6 +217,7 @@ public class Startup
         else
         {
             app.UseHsts();
+            app.UseAuthentication();
         }
 
         app.UseHttpsRedirection()
@@ -188,7 +227,7 @@ public class Startup
             .UseUnauthorizedAccessExceptionHandler()
             .UseUnitOfWork()
             .UseRouting()
-            .UseAuthentication()
+
             .UseAuthorization()
             .UseEndpoints(endpoints =>
             {
@@ -200,7 +239,7 @@ public class Startup
           .UseSwaggerUI(opt =>
           {
               opt.SwaggerEndpoint("/swagger/v1/swagger.json", "Employer Accounts API");
-              opt.RoutePrefix = "swagger";
+              opt.RoutePrefix = string.Empty;
           });
 
 
