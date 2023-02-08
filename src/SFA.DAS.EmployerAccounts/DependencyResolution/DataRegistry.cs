@@ -52,9 +52,9 @@ public class DataRegistry : Registry
     private static EmployerAccountsDbContext GetEmployerAccountsDbContext(IContext context)
     {
         var unitOfWorkContext = context.GetInstance<IUnitOfWorkContext>();
-        //var clientSession = unitOfWorkContext.Find<IClientOutboxTransaction>();
-        //var serverSession = unitOfWorkContext.Find<SynchronizedStorageSession>();
-        
+        var clientSession = unitOfWorkContext.Find<IClientOutboxTransaction>();
+        var serverSession = unitOfWorkContext.Find<SynchronizedStorageSession>();
+
         var optionsBuilder = new DbContextOptionsBuilder<EmployerAccountsDbContext>();
         var connectionString = GetEmployerAccountsConnectionString(context);
         optionsBuilder.UseSqlServer(connectionString);
