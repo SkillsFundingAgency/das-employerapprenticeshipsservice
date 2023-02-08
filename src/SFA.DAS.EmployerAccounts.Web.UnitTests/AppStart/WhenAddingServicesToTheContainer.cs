@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -8,8 +5,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
-using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.AcceptInvitation;
 using SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount;
 using SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole;
@@ -31,12 +26,10 @@ using SFA.DAS.EmployerAccounts.Commands.UpdateOrganisationDetails;
 using SFA.DAS.EmployerAccounts.Commands.UpdateShowWizard;
 using SFA.DAS.EmployerAccounts.Commands.UpdateUserNotificationSettings;
 using SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Factories;
-using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Interfaces.OuterApi;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities;
@@ -77,8 +70,6 @@ using SFA.DAS.EmployerAccounts.Queries.GetUserNotificationSettings;
 using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
 using SFA.DAS.EmployerAccounts.Queries.RemovePayeFromAccount;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
-using SFA.DAS.EmployerAccounts.Web.Authentication;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 using SFA.DAS.Hmrc;
 using SFA.DAS.NServiceBus.Services;
@@ -303,7 +294,7 @@ public class WhenAddingServicesToTheContainer
         {
             InitialData = new List<KeyValuePair<string, string>>
                 {
-                    new("EmployerAccountsConfiguration:DatabaseConnectionString", "test"),
+                    new("DatabaseConnectionString", "Server=(localdb)\\MSSQLLocalDB;Integrated Security=true"),
                     new("AllowedHashstringCharacters", "ABCDEFGHJKLMN12345"),
                     new("PublicAllowedHashstringCharacters", "ABCDEFGHJKLMN12345"),
                     new("PublicHashstring", "ABCDEFGHJKLMN12345"),

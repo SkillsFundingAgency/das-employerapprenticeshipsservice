@@ -1,28 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.Extensions.Logging;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Dtos;
-using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
-using SFA.DAS.EmployerAccounts.Web.Helpers;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using Claim = System.Security.Claims.Claim;
 using ControllerContext = Microsoft.AspNetCore.Mvc.ControllerContext;
 using ViewContext = Microsoft.AspNetCore.Mvc.Rendering.ViewContext;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions;
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Helpers;
 
-class HtmlHelperExtensionsTests
+class HtmlHelpersTests
 {
     private Mock<ControllerContext> _mockControllerContext;
     private Mock<HttpContext> _mockHttpContext;
@@ -64,14 +53,14 @@ class HtmlHelperExtensionsTests
 
         _mockMediator = new Mock<IMediator>();
 
-        _htmlHelper = new HtmlHelpers(_employerConfirguration, 
-            Mock.Of<IMediator>(), 
+        _htmlHelper = new HtmlHelpers(_employerConfirguration,
+            Mock.Of<IMediator>(),
             Mock.Of<IHttpContextAccessor>(),
             Mock.Of<ILogger<HtmlHelpers>>(),
             Mock.Of<DAS.Authorization.Services.IAuthorizationService>(),
             Mock.Of<ICompositeViewEngine>()
             );
-        
+
         var serviceProviderMock = new Mock<IServiceProvider>();
         serviceProviderMock.Setup(provider => provider.GetService(typeof(EmployerAccountsConfiguration)))
             .Returns(_employerConfirguration);

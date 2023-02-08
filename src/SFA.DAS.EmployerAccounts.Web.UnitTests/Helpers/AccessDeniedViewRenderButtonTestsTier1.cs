@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Security.Claims;
-using System.Security.Principal;
+﻿using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
@@ -8,18 +6,21 @@ using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Infrastructure;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions;
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Helpers;
 
 [TestFixture]
 public class AccessDeniedViewRenderButtonTestsTier1
 {
-    private Mock<IPrincipal> _mockIPrincipal;
+    private Mock<ClaimsPrincipal> _mockIPrincipal;
     private Mock<ClaimsIdentity> _mockClaimsIdentity;
     private const string Tier1User = "Tier1User";
     private const string HashedAccountId = "HashedAccountId";
     private readonly List<Claim> _claims = new();
     private readonly string _supportConsoleUsers = "Tier1User,Tier2User";
     private EmployerAccountsConfiguration _config;
+    private Mock<HttpContext> _mockHttpContext = new();
+    private Mock<IHttpContextAccessor> _mockHttpContextAccessor = new();
+
 
     [SetUp]
     public void Arrange()
@@ -30,11 +31,14 @@ public class AccessDeniedViewRenderButtonTestsTier1
         };
 
         _claims.Add(new Claim(RouteValues.EncodedAccountId, HashedAccountId));
-        _mockIPrincipal = new Mock<IPrincipal>();
+        _mockIPrincipal = new Mock<ClaimsPrincipal>();
         _mockClaimsIdentity = new Mock<ClaimsIdentity>();
         _mockClaimsIdentity.Setup(m => m.Claims).Returns(_claims);
         _mockIPrincipal.Setup(m => m.Identity).Returns(_mockClaimsIdentity.Object);
         _mockIPrincipal.Setup(x => x.IsInRole(Tier1User)).Returns(true);
+
+        _mockHttpContext.Setup(x => x.User).Returns(_mockIPrincipal.Object);
+        _mockHttpContextAccessor.Setup(x => x.HttpContext).Returns(_mockHttpContext.Object);
     }
 
     [TestCase(false, null, "Back")]
@@ -47,7 +51,7 @@ public class AccessDeniedViewRenderButtonTestsTier1
         _mockIPrincipal.Setup(x => x.IsInRole(Tier1User)).Returns(isTier1User);
         var htmlHelper = new HtmlHelpers(_config,
             Mock.Of<IMediator>(),
-            Mock.Of<IHttpContextAccessor>(),
+            _mockHttpContextAccessor.Object,
             Mock.Of<ILogger<HtmlHelpers>>(),
             Mock.Of<DAS.Authorization.Services.IAuthorizationService>(),
             Mock.Of<ICompositeViewEngine>()
@@ -68,7 +72,7 @@ public class AccessDeniedViewRenderButtonTestsTier1
         _mockIPrincipal.Setup(x => x.IsInRole(Tier1User)).Returns(true);
         var htmlHelper = new HtmlHelpers(_config,
             Mock.Of<IMediator>(),
-            Mock.Of<IHttpContextAccessor>(),
+            _mockHttpContextAccessor.Object,
             Mock.Of<ILogger<HtmlHelpers>>(),
             Mock.Of<DAS.Authorization.Services.IAuthorizationService>(),
             Mock.Of<ICompositeViewEngine>()
@@ -91,7 +95,7 @@ public class AccessDeniedViewRenderButtonTestsTier1
         _mockIPrincipal.Setup(x => x.IsInRole(Tier1User)).Returns(isTier1User);
         var htmlHelper = new HtmlHelpers(_config,
             Mock.Of<IMediator>(),
-            Mock.Of<IHttpContextAccessor>(),
+            _mockHttpContextAccessor.Object,
             Mock.Of<ILogger<HtmlHelpers>>(),
             Mock.Of<DAS.Authorization.Services.IAuthorizationService>(),
             Mock.Of<ICompositeViewEngine>()
@@ -112,7 +116,7 @@ public class AccessDeniedViewRenderButtonTestsTier1
         _mockIPrincipal.Setup(x => x.IsInRole(Tier1User)).Returns(true);
         var htmlHelper = new HtmlHelpers(_config,
             Mock.Of<IMediator>(),
-            Mock.Of<IHttpContextAccessor>(),
+            _mockHttpContextAccessor.Object,
             Mock.Of<ILogger<HtmlHelpers>>(),
             Mock.Of<DAS.Authorization.Services.IAuthorizationService>(),
             Mock.Of<ICompositeViewEngine>()
@@ -135,7 +139,7 @@ public class AccessDeniedViewRenderButtonTestsTier1
         _mockIPrincipal.Setup(x => x.IsInRole(Tier1User)).Returns(isTier1User);
         var htmlHelper = new HtmlHelpers(_config,
             Mock.Of<IMediator>(),
-            Mock.Of<IHttpContextAccessor>(),
+            _mockHttpContextAccessor.Object,
             Mock.Of<ILogger<HtmlHelpers>>(),
             Mock.Of<DAS.Authorization.Services.IAuthorizationService>(),
             Mock.Of<ICompositeViewEngine>()
@@ -157,7 +161,7 @@ public class AccessDeniedViewRenderButtonTestsTier1
         _mockIPrincipal.Setup(x => x.IsInRole(Tier1User)).Returns(true);
         var htmlHelper = new HtmlHelpers(_config,
             Mock.Of<IMediator>(),
-            Mock.Of<IHttpContextAccessor>(),
+            _mockHttpContextAccessor.Object,
             Mock.Of<ILogger<HtmlHelpers>>(),
             Mock.Of<DAS.Authorization.Services.IAuthorizationService>(),
             Mock.Of<ICompositeViewEngine>()
@@ -181,7 +185,7 @@ public class AccessDeniedViewRenderButtonTestsTier1
         _mockIPrincipal.Setup(x => x.IsInRole(Tier1User)).Returns(isTier1User);
         var htmlHelper = new HtmlHelpers(_config,
             Mock.Of<IMediator>(),
-            Mock.Of<IHttpContextAccessor>(),
+            _mockHttpContextAccessor.Object,
             Mock.Of<ILogger<HtmlHelpers>>(),
             Mock.Of<DAS.Authorization.Services.IAuthorizationService>(),
             Mock.Of<ICompositeViewEngine>()
@@ -203,7 +207,7 @@ public class AccessDeniedViewRenderButtonTestsTier1
         _mockIPrincipal.Setup(x => x.IsInRole(Tier1User)).Returns(true);
         var htmlHelper = new HtmlHelpers(_config,
             Mock.Of<IMediator>(),
-            Mock.Of<IHttpContextAccessor>(),
+            _mockHttpContextAccessor.Object,
             Mock.Of<ILogger<HtmlHelpers>>(),
             Mock.Of<DAS.Authorization.Services.IAuthorizationService>(),
             Mock.Of<ICompositeViewEngine>()
@@ -224,7 +228,7 @@ public class AccessDeniedViewRenderButtonTestsTier1
         _mockIPrincipal.Setup(x => x.IsInRole(Tier1User)).Returns(isTier1User);
         var htmlHelper = new HtmlHelpers(_config,
             Mock.Of<IMediator>(),
-            Mock.Of<IHttpContextAccessor>(),
+            _mockHttpContextAccessor.Object,
             Mock.Of<ILogger<HtmlHelpers>>(),
             Mock.Of<DAS.Authorization.Services.IAuthorizationService>(),
             Mock.Of<ICompositeViewEngine>()
@@ -242,7 +246,7 @@ public class AccessDeniedViewRenderButtonTestsTier1
     {
         //Act
         //MockIPrincipal
-        var result = SecurityExtensions.HashedAccountId(_mockClaimsIdentity.Object);
+        var result = _mockClaimsIdentity.Object.HashedAccountId();
 
         //Assert
         Assert.IsNotNull(result);
