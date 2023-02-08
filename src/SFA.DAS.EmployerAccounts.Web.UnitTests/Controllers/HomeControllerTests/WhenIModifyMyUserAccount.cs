@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -45,17 +44,17 @@ public class WhenIModifyMyUserAccount : ControllerTestBase
     }
         
     [Test]
-    public void ThenThePasswordChangedActionCreatsARedirectToRouteResultToTheIndex()
+    public void ThenThePasswordChangedActionCreatsARedirectToActionResultToTheIndex()
     {
         //Act
         var actual = _homeController.HandlePasswordChanged();
 
         //Assert
         Assert.IsNotNull(actual);
-        Assert.IsAssignableFrom<RedirectToRouteResult>(actual);
-        var actualRedirect = actual as RedirectToRouteResult;
+        Assert.IsAssignableFrom<RedirectToActionResult>(actual);
+        var actualRedirect = actual as RedirectToActionResult;
         Assert.IsNotNull(actualRedirect);
-        Assert.AreEqual("Index", actualRedirect.RouteValues["action"]);
+        Assert.AreEqual("Index", actualRedirect.ActionName);
     }
         
     [Test]
@@ -81,17 +80,17 @@ public class WhenIModifyMyUserAccount : ControllerTestBase
     }
 
     [Test]
-    public async Task ThenTheAccountCreatedActionCreatesARedirectToRouteResultToIndex()
+    public async Task ThenTheAccountCreatedActionCreatesARedirectToActionResultToIndex()
     {
         //Act
         var actual = await _homeController.HandleNewRegistration();
 
         //Assert
         Assert.IsNotNull(actual);
-        Assert.IsAssignableFrom<RedirectToRouteResult>(actual);
-        var actualRedirect = actual as RedirectToRouteResult;
+        Assert.IsAssignableFrom<RedirectToActionResult>(actual);
+        var actualRedirect = actual as RedirectToActionResult;
         Assert.IsNotNull(actualRedirect);
-        Assert.AreEqual("Index", actualRedirect.RouteValues["action"]);
+        Assert.AreEqual("Index", actualRedirect.ActionName);
     }
 
     [Test]

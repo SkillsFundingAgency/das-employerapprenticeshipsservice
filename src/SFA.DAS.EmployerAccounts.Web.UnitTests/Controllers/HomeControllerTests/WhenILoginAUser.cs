@@ -42,8 +42,8 @@ public class WhenILoginAUser
             
         //Assert
         Assert.IsNotNull(actual);
-        var actualRedirectResult = actual as RedirectToRouteResult;
+        var actualRedirectResult = actual as RedirectToActionResult;
         Assert.IsNotNull(actualRedirectResult);
-        Assert.AreEqual("Index", actualRedirectResult.RouteValues["Action"]);
+        Assert.AreEqual("Index", actualRedirectResult.ActionName);
     }
 }
