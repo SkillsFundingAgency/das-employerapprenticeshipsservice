@@ -40,7 +40,7 @@ public static class NServiceBusServiceRegistrations
             .UseNewtonsoftJsonSerializer()
             .UseNLogFactory()
             .UseOutbox(true)
-             .UseSqlServerPersistence(() => DatabaseExtensions.GetSqlConnection(isDevOrLocal, databaseConnectionString))
+            .UseSqlServerPersistence(() => DatabaseExtensions.GetSqlConnection(databaseConnectionString))
             .UseUnitOfWork();
 
         if (isDevOrLocal)

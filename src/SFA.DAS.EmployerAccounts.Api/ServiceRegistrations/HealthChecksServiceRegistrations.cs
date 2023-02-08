@@ -1,11 +1,9 @@
-using System;
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
-using SFA.DAS.Configuration;
 using SFA.DAS.EmployerAccounts.Api.HealthChecks;
 using SFA.DAS.EmployerAccounts.Api.Http;
 using SFA.DAS.EmployerAccounts.Configuration;
@@ -17,12 +15,12 @@ namespace SFA.DAS.EmployerAccounts.Api.ServiceRegistrations
         private const string AzureResource = "https://database.windows.net/";
 
         public static IServiceCollection AddDasHealthChecks(this IServiceCollection services, EmployerAccountsConfiguration configuration)
-        {
-            var environmentName = Environment.GetEnvironmentVariable(EnvironmentVariableNames.EnvironmentName);
-            
+        {   
             void BeforeOpen(SqlConnection connection)
             {
-                if (!environmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase))
+                var connectionStringBuilder = new SqlConnectionStringBuilder(connection.ConnectionString);
+                bool useManagedIdentity = !connectionStringBuilder.IntegratedSecurity && string.IsNullOrEmpty(connectionStringBuilder.UserID);
+                if (useManagedIdentity)
                 {
                     var azureServiceTokenProvider = new AzureServiceTokenProvider();
                     connection.AccessToken = azureServiceTokenProvider.GetAccessTokenAsync(AzureResource).Result;

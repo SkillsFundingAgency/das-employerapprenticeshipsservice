@@ -8,18 +8,21 @@ public static class DatabaseExtensions
 {
     private const string AzureResource = "https://database.windows.net/";
 
-    public static DbConnection GetSqlConnection(bool configurationIsLocalOrDev, string connectionString)
+    public static DbConnection GetSqlConnection(string connectionString)
     {
         if (string.IsNullOrEmpty(connectionString))
         {
             throw new ArgumentNullException(nameof(connectionString));
         }
 
-        if (configurationIsLocalOrDev)
+        var connectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
+        bool useManagedIdentity = !connectionStringBuilder.IntegratedSecurity && string.IsNullOrEmpty(connectionStringBuilder.UserID);
+        
+        if (!useManagedIdentity)
         {
             return new SqlConnection(connectionString);
         }
-        
+
         var azureServiceTokenProvider = new AzureServiceTokenProvider();
 
         return new SqlConnection
