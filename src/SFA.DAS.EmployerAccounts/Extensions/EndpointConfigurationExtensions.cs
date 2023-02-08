@@ -13,31 +13,31 @@ namespace SFA.DAS.EmployerAccounts.Extensions
         {
             var isDevelopment = container.GetInstance<IEnvironmentService>().IsCurrent(DasEnv.LOCAL);
 
-            if (isDevelopment)
-            {
-                var transport = config.UseTransport<LearningTransport>();
-                transport.Transactions(TransportTransactionMode.ReceiveOnly);
-                ConfigureRouting(transport.Routing());
-            }
-
-            else
-            {
-                config.UseAzureServiceBusTransport(connectionStringBuilder(), ConfigureRouting);
-            }
-
-            // 5 seperate endpoints call this helper method, easier to add here.
-            config.UseMessageConventions();
-
-            return config;
+        if (isDevelopment)
+        {
+            var transport = config.UseTransport<LearningTransport>();
+            transport.Transactions(TransportTransactionMode.ReceiveOnly);
+            ConfigureRouting(transport.Routing());
         }
 
-        private static void ConfigureRouting(RoutingSettings routing)
+        else
         {
-            routing.RouteToEndpoint(
-                typeof(ImportLevyDeclarationsCommand).Assembly,
-                typeof(ImportLevyDeclarationsCommand).Namespace,
-                "SFA.DAS.EmployerFinance.MessageHandlers"
-            );
+            config.UseAzureServiceBusTransport(connectionStringBuilder(), ConfigureRouting);
+        }
+
+        // 5 seperate endpoints call this helper method, easier to add here.
+        config.UseMessageConventions();
+
+        return config;
+    }
+
+    private static void ConfigureRouting(RoutingSettings routing)
+    {
+        routing.RouteToEndpoint(
+            typeof(ImportLevyDeclarationsCommand).Assembly,
+            typeof(ImportLevyDeclarationsCommand).Namespace,
+            "SFA.DAS.EmployerFinance.MessageHandlers"
+        );
 
             routing.RouteToEndpoint(
                 typeof(SendEmailCommand).Assembly,

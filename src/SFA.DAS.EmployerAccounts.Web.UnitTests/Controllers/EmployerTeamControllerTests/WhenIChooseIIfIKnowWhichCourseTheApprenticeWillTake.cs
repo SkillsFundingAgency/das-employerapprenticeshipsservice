@@ -33,19 +33,19 @@ public class WhenIChooseIIfIKnowWhichCourseTheApprenticeWillTake
     public void IfIChooseYesIContinueTheJourney()
     {
         //Act
-        var result = _controller.TriageWhichCourseYourApprenticeWillTake(new TriageViewModel { TriageOption = TriageOptions.Yes }) as RedirectToRouteResult;
+        var result = _controller.TriageWhichCourseYourApprenticeWillTake(new TriageViewModel { TriageOption = TriageOptions.Yes }) as RedirectToActionResult;
 
         //Assert
-        Assert.AreEqual(ControllerConstants.TriageHaveYouChosenATrainingProviderActionName, result.RouteValues["Action"]);
+        Assert.AreEqual(ControllerConstants.TriageHaveYouChosenATrainingProviderActionName, result.ActionName);
     }
 
     [Test]
     public void IfIChooseNoICannotSetupAnApprentice()
     {
         //Act
-        var result = _controller.TriageWhichCourseYourApprenticeWillTake(new TriageViewModel { TriageOption = TriageOptions.No }) as RedirectToRouteResult;
+        var result = _controller.TriageWhichCourseYourApprenticeWillTake(new TriageViewModel { TriageOption = TriageOptions.No }) as RedirectToActionResult;
 
         //Assert
-        Assert.AreEqual(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetCourseProviderActionName, result.RouteValues["Action"]);
+        Assert.AreEqual(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetCourseProviderActionName, result.ActionName);
     }
 }

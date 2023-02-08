@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -11,91 +10,90 @@ using SFA.DAS.EmployerAccounts.Web.Models;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests;
+
+public class WhenIViewTermsAndCondition : ControllerTestBase
 {
-    public class WhenIViewTermsAndCondition : ControllerTestBase
+    private Mock<HomeOrchestrator> _homeOrchestrator;
+    private EmployerAccountsConfiguration _configuration;
+    private HomeController _homeController;
+    private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
+
+    [SetUp]
+    public void Arrage()
     {
-        private Mock<HomeOrchestrator> _homeOrchestrator;
-        private EmployerAccountsConfiguration _configuration;
-        private Mock<IMultiVariantTestingService> _userViewTestingService;
-        private HomeController _homeController;
-        private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
+        base.Arrange();
 
-        [SetUp]
-        public void Arrage()
+        AddUserToContext();
+
+        _homeOrchestrator = new Mock<HomeOrchestrator>();
+        _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
+        _configuration = new EmployerAccountsConfiguration();
+
+        _homeController = new HomeController(
+            _homeOrchestrator.Object,
+            _configuration,
+            _flashMessage.Object,
+            Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
+            Mock.Of<ILogger<HomeController>>())
         {
-            base.Arrange();
+            ControllerContext = ControllerContext
+        };
+    }
 
-            _homeOrchestrator = new Mock<HomeOrchestrator>();
-            _userViewTestingService = new Mock<IMultiVariantTestingService>();
-            _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-            _configuration = new EmployerAccountsConfiguration();
+    [Test]
+    public void ThenTheViewIsReturned()
+    {
+        //Act
+        var actual = _homeController.TermsAndConditions("returnUrl", "hashedId");
 
-            _homeController = new HomeController(
-                _homeOrchestrator.Object,
-                _configuration,
-                _flashMessage.Object,
-                Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
-                Mock.Of<ILogger<HomeController>>())
-            {
-                ControllerContext = ControllerContext
-            };
-        }
+        //Assert
+        Assert.IsNotNull(actual);
+        Assert.IsAssignableFrom<ViewResult>(actual);
+    }
 
-        [Test]
-        public void ThenTheViewIsReturned()
-        {
-            //Act
-            var actual = _homeController.TermsAndConditions("returnUrl", "hashedId");
+    [Test]
+    public void ThenTheViewModelIsMappedCorrectly()
+    {
+        //Act
+        var result = _homeController.TermsAndConditions("returnUrl", "hashedId");
 
-            //Assert
-            Assert.IsNotNull(actual);
-            Assert.IsAssignableFrom<ViewResult>(actual);
-        }
+        //Assert
+        var viewResult = (ViewResult)result;
+        var viewModel = viewResult.Model;
 
-        [Test]
-        public void ThenTheViewModelIsMappedCorrectly()
-        {
-            //Act
-            var result = _homeController.TermsAndConditions("returnUrl", "hashedId");
+        Assert.IsInstanceOf<TermsAndConditionsNewViewModel>(viewModel);
+        var termsAndConditionViewModel = (TermsAndConditionsNewViewModel)viewModel;
 
-            //Assert
-            var viewResult = (ViewResult)result;
-            var viewModel = viewResult.Model;
-
-            Assert.IsInstanceOf<TermsAndConditionsNewViewModel>(viewModel);
-            var termsAndConditionViewModel = (TermsAndConditionsNewViewModel)viewModel;
-
-            Assert.AreEqual("returnUrl", termsAndConditionViewModel.ReturnUrl);
-            Assert.AreEqual("hashedId", termsAndConditionViewModel.HashedAccountId);
-        }
+        Assert.AreEqual("returnUrl", termsAndConditionViewModel.ReturnUrl);
+        Assert.AreEqual("hashedId", termsAndConditionViewModel.HashedAccountId);
+    }
 
 
-        [Test]
-        public async Task ThenIsRedirectedToEmployerTeamController()
-        {
-            var termsAndConditionViewModel = new TermsAndConditionsNewViewModel() { HashedAccountId = "HashedId", ReturnUrl = "EmployerTeam" };
-            //Act
-            var result = await _homeController.TermsAndConditions(termsAndConditionViewModel);
+    [Test]
+    public async Task ThenIsRedirectedToEmployerTeamController()
+    {
+        var termsAndConditionViewModel = new TermsAndConditionsNewViewModel() { HashedAccountId = "HashedId", ReturnUrl = "EmployerTeam" };
+        //Act
+        var result = await _homeController.TermsAndConditions(termsAndConditionViewModel);
 
-            //Assert
-            var redirectResult = (RedirectToRouteResult)result;
+        //Assert
+        var redirectResult = (RedirectToActionResult)result;
 
-            Assert.AreEqual("Index", redirectResult.RouteValues["action"].ToString());
-            Assert.AreEqual("EmployerTeam", redirectResult.RouteValues["controller"].ToString());
-        }
+        Assert.AreEqual("Index", redirectResult.ActionName);
+        Assert.AreEqual("EmployerTeam", redirectResult.ControllerName);
+    }
 
-        [Test]
-        public async Task ThenIsRedirectedToHomeController()
-        {
-            var termsAndConditionViewModel = new TermsAndConditionsNewViewModel() { HashedAccountId = "HashedId", ReturnUrl = "Home" };
-            //Act
-            var result = await _homeController.TermsAndConditions(termsAndConditionViewModel);
+    [Test]
+    public async Task ThenIsRedirectedToHomeController()
+    {
+        var termsAndConditionViewModel = new TermsAndConditionsNewViewModel() { HashedAccountId = "HashedId", ReturnUrl = "Home" };
+        //Act
+        var result = await _homeController.TermsAndConditions(termsAndConditionViewModel);
 
-            //Assert
-            var redirectResult = (RedirectToRouteResult)result;
+        //Assert
+        var redirectResult = (RedirectToActionResult)result;
 
-            Assert.AreEqual("Index", redirectResult.RouteValues["action"].ToString());
-        }
+        Assert.AreEqual("Index", redirectResult.ActionName);
     }
 }
