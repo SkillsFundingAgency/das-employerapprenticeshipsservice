@@ -10,7 +10,6 @@ using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.EmployerAccounts.Exceptions;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesByHashedAccountId;
 using SFA.DAS.EmployerAccounts.Queries.GetLegalEntity;
-using SFA.DAS.Validation.WebApi;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers;
 
@@ -77,13 +76,17 @@ public class LegalEntitiesController : ControllerBase
 
     [HttpGet]
     [Route("{legalEntityId}", Name = "GetLegalEntity")]
-    [HttpNotFoundForNullModel]
     public async Task<IActionResult> GetLegalEntity(string hashedAccountId, long legalEntityId, bool includeAllAgreements = false)
     {
         var response = await _mediator.Send(request: new GetLegalEntityQuery(hashedAccountId, legalEntityId));
 
         var model = LegalEntityMapping.MapFromAccountLegalEntity(response.LegalEntity, response.LatestAgreement,
             includeAllAgreements);
+
+        if(model == null)
+        {
+            return NotFound();
+        }
 
         return Ok(model);
     }
