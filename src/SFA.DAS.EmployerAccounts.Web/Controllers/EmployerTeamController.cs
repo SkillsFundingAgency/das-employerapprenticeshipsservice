@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using SFA.DAS.Authorization.Mvc.Attributes;
+using SFA.DAS.EmployerAccounts.Helpers;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
@@ -489,6 +490,26 @@ public class EmployerTeamController : BaseController
                     return View(model);
                 }
         }
+    }
+
+    public override IActionResult SupportUserBanner(IAccountIdentifier model = null)
+    {
+        Account account = null;
+
+        if (model != null && model.HashedAccountId != null)
+        {
+            var externalUserId = HttpContext.User.Claims.First(x=> x.Type.Equals(ControllerConstants.UserRefClaimKeyName)).Value;
+            var response = AsyncHelper.RunSync(() => _employerTeamOrchestrator.GetAccountSummary(model.HashedAccountId, externalUserId));
+            account = response.Status != HttpStatusCode.OK ? null : response.Data.Account;
+        }
+
+        var consoleUserType = HttpContext.User.Claims.First(x => x.Type.Equals(ClaimTypes.Role)).Value == "Tier2User" ? "Service user (T2 Support)" : "Standard user";
+
+        return ViewComponent("SupportUserBanner", new SupportUserBannerViewModel
+        {
+            Account = account,
+            ConsoleUserType = consoleUserType
+        });
     }
 
     private async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccountInformation(string hashedAccountId)

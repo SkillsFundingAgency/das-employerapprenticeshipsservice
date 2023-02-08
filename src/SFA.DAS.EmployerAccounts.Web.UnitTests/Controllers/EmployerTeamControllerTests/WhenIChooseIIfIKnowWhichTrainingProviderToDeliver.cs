@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Interfaces;
@@ -32,19 +31,19 @@ public class WhenIChooseIIfIKnowWhichTrainingProviderToDeliver
     public void IfIChooseYesIContinueTheJourney()
     {
         //Act
-        var result = _controller.TriageHaveYouChosenATrainingProvider(new TriageViewModel { TriageOption = TriageOptions.Yes }) as RedirectToRouteResult;
+        var result = _controller.TriageHaveYouChosenATrainingProvider(new TriageViewModel { TriageOption = TriageOptions.Yes }) as RedirectToActionResult;
 
         //Assert
-        Assert.AreEqual(ControllerConstants.TriageWillApprenticeshipTrainingStartActionName, result.RouteValues["Action"]);
+        Assert.AreEqual(ControllerConstants.TriageWillApprenticeshipTrainingStartActionName, result.ActionName);
     }
 
     [Test]
     public void IfIChooseNoICannotSetupAnApprentice()
     {
         //Act
-        var result = _controller.TriageHaveYouChosenATrainingProvider(new TriageViewModel { TriageOption = TriageOptions.No }) as RedirectToRouteResult;
+        var result = _controller.TriageHaveYouChosenATrainingProvider(new TriageViewModel { TriageOption = TriageOptions.No }) as RedirectToActionResult;
 
         //Assert
-        Assert.AreEqual(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetProviderActionName, result.RouteValues["Action"]);
+        Assert.AreEqual(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetProviderActionName, result.ActionName);
     }
 }

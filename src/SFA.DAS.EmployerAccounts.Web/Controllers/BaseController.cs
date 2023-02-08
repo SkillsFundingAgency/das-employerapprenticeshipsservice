@@ -31,7 +31,7 @@ public class BaseController : Controller
     /// <summary>
     /// Default implementation for the SupportUserBanner.  Can be overridden to render based on the available IAccountIdentifier model.
     /// </summary>
-    public virtual ActionResult SupportUserBanner(IAccountIdentifier model = null)
+    public virtual IActionResult SupportUserBanner(IAccountIdentifier model = null)
     {
         return ViewComponent("SupportUserBanner", new SupportUserBannerViewModel());
     }
