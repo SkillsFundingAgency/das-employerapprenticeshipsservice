@@ -25,11 +25,6 @@
 		<Reference Include="System.Transactions" />
 	</ItemGroup>
 	<ItemGroup>
-		<None Include="..\SFA.DAS.EmployerAccounts.Api\Web.config">
-			<Link>Web.config</Link>
-		</None>
-	</ItemGroup>
-	<ItemGroup>
 		<ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj" />
 		<ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Types\SFA.DAS.EmployerAccounts.Api.Types.csproj" />
 		<ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api\SFA.DAS.EmployerAccounts.Api.csproj" />
