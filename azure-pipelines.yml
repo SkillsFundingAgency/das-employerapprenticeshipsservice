@@ -114,37 +114,37 @@ stages:
       OverrideBlockOnPossibleDataLoss: ${{ parameters.OverrideBlockOnPossibleDataLoss  }}
       AppRoleAssignmentsServiceConnection: das-app-role-assignments-FCS
 
-# - stage: Deploy_PROD
-#   dependsOn: Build
-#   displayName: Deploy to PROD
-#   variables:
-#   - group: PROD Management Resources
-#   - group: PROD Shared Resources
-#   - group: PROD das-employer-accounts
-#   jobs:
-#   - template: pipeline-templates/job/deploy.yml
-#     parameters:
-#       Environment: PROD
-#       SolutionBaseName: $(SolutionBaseName)
-#       ServiceConnection: SFA-DIG-Prod-ARM
-#       OverrideBlockOnPossibleDataLoss: ${{ parameters.OverrideBlockOnPossibleDataLoss  }}
-#       AppRoleAssignmentsServiceConnection: das-app-role-assignments-FCS
+- stage: Deploy_PROD
+  dependsOn: Build
+  displayName: Deploy to PROD
+  variables:
+  - group: PROD Management Resources
+  - group: PROD Shared Resources
+  - group: PROD das-employer-accounts
+  jobs:
+  - template: pipeline-templates/job/deploy.yml
+    parameters:
+      Environment: PROD
+      SolutionBaseName: $(SolutionBaseName)
+      ServiceConnection: SFA-DIG-Prod-ARM
+      OverrideBlockOnPossibleDataLoss: ${{ parameters.OverrideBlockOnPossibleDataLoss  }}
+      AppRoleAssignmentsServiceConnection: das-app-role-assignments-FCS
 
-# - stage: Deploy_MO
-#   dependsOn: Build
-#   displayName: Deploy to MO
-#   variables:
-#   - group: MO Management Resources
-#   - group: MO Shared Resources
-#   - group: MO das-employer-accounts
-#   jobs:
-#   - template: pipeline-templates/job/deploy.yml
-#     parameters:
-#       Environment: MO
-#       SolutionBaseName: $(SolutionBaseName)
-#       ServiceConnection: SFA-ASM-ModelOffice-ARM
-#       OverrideBlockOnPossibleDataLoss: ${{ parameters.OverrideBlockOnPossibleDataLoss  }}
-#       AppRoleAssignmentsServiceConnection: das-app-role-assignments-FCS
+- stage: Deploy_MO
+  dependsOn: Build
+  displayName: Deploy to MO
+  variables:
+  - group: MO Management Resources
+  - group: MO Shared Resources
+  - group: MO das-employer-accounts
+  jobs:
+  - template: pipeline-templates/job/deploy.yml
+    parameters:
+      Environment: MO
+      SolutionBaseName: $(SolutionBaseName)
+      ServiceConnection: SFA-ASM-ModelOffice-ARM
+      OverrideBlockOnPossibleDataLoss: ${{ parameters.OverrideBlockOnPossibleDataLoss  }}
+      AppRoleAssignmentsServiceConnection: das-app-role-assignments-FCS
 
 - stage: Deploy_DEMO
   dependsOn: Build
