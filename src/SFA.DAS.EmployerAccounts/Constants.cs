@@ -7,4 +7,6 @@ public static class Constants
     public const string Tier2User = "Tier2User";
     public const string ServiceNamespace = "SFA.DAS.EmployerAccounts";
     public const string DefaultServiceTimeout = "DefaultServiceTimeout";
+
+    public const string ScopeClaimType = "http://schemas.microsoft.com/identity/claims/scope";
 }
