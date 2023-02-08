@@ -4,12 +4,14 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NLog.Web.LayoutRenderers;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.ModelBuilders;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess.Adapters;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess.Dtos;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
+using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
@@ -39,15 +41,13 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
 
             _hashingService = _serviceProvider.GetService<IHashingService>();
             _publicHashingService = _serviceProvider.GetService<IPublicHashingService>();
+            var sqlConnection = DatabaseExtensions.GetSqlConnection(_configuration.DatabaseConnectionString);
             var optionsBuilder = new DbContextOptionsBuilder<EmployerAccountsDbContext>();
-            optionsBuilder.UseSqlServer(_configuration.DatabaseConnectionString);
+            optionsBuilder.UseSqlServer(sqlConnection);
             _dbContext = new EmployerAccountsDbContext(optionsBuilder.Options);
 
             _lazyAccountRepository = new  Lazy<IAccountRepository>(BuildAccountRepository);
             _lazyUserRepository = new Lazy<IUserRepository>(BuildUserRepository);
-
-
-
         }
 
         private IUserRepository BuildUserRepository()

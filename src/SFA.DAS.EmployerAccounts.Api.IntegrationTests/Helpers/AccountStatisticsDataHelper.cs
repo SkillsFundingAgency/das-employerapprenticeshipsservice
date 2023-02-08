@@ -1,20 +1,18 @@
-﻿using System;
-using System.Data.SqlClient;
-using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
 using AutoFixture;
 using Dapper;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Moq;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.Testing.Helpers;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using SFA.DAS.Testing.Helpers;
 
 namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.Helpers
 {
@@ -31,7 +29,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.Helpers
 
         public async Task<Statistics> GetStatistics()
         {
-            using (var connection = new SqlConnection(_configuration.DatabaseConnectionString))
+            using (var connection = DatabaseExtensions.GetSqlConnection(_configuration.DatabaseConnectionString))
             {
                 return await connection.QuerySingleAsync<Statistics>(GetStatisticsSql);
             }
@@ -57,8 +55,10 @@ select (
         {
             var fixture = new Fixture();
 
+            var sqlConnection = DatabaseExtensions.GetSqlConnection(_configuration.DatabaseConnectionString);
             var optionsBuilder = new DbContextOptionsBuilder<EmployerAccountsDbContext>();
-            optionsBuilder.UseSqlServer(_configuration.DatabaseConnectionString);
+            optionsBuilder.UseSqlServer(sqlConnection);
+
             var accountDbContext = new EmployerAccountsDbContext(optionsBuilder.Options);
             var lazyDb = new Lazy<EmployerAccountsDbContext>(() => accountDbContext);
             var userRepo = new UserRepository(_configuration, Mock.Of<ILogger<UserRepository>>(), lazyDb);
@@ -95,11 +95,11 @@ select (
                     AgreementType = fixture.Create<AgreementType>()
                 });
 
-                accountDbContext.Database.CurrentTransaction.Commit();
+                accountDbContext.Database.CurrentTransaction?.Commit();
             }
             catch (Exception e)
             {
-                accountDbContext.Database.CurrentTransaction.Rollback();
+                accountDbContext.Database.CurrentTransaction?.Rollback();
                 Console.WriteLine(e);
                 throw;
             }
