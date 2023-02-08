@@ -1,22 +1,12 @@
-﻿using System.Net;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.EmployerAccounts.Interfaces;
+﻿using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
-using SFA.DAS.EmployerAccounts.Web.Controllers;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.OrganisationControllerTests;
 
 /// <summary>
 /// AML-2459: Move to EmployerAccounts site tests
 /// </summary>
-public class WhenIConfirmAddOfOrganisation
+public class WhenIConfirmAddOfOrganisation : ControllerTestBase
 {
     private OrganisationController _controller;
     private Mock<OrganisationOrchestrator> _orchestrator;
@@ -27,6 +17,9 @@ public class WhenIConfirmAddOfOrganisation
     [SetUp]
     public void Arrange()
     {
+        base.Arrange();
+        AddUserToContext();
+
         _orchestrator = new Mock<OrganisationOrchestrator>();
         _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
@@ -45,36 +38,39 @@ public class WhenIConfirmAddOfOrganisation
 
         _controller = new OrganisationController(
             _orchestrator.Object,           
-            _flashMessage.Object);
+            _flashMessage.Object)
+        {
+            ControllerContext = ControllerContext
+        };
     }
 
     [Test]
     public async Task ThenIAmRedirectedToNextStepsViewIfSuccessful()
     {
         //Act
-        var result = await _controller.Confirm("", "", "", "", null, "", OrganisationType.Other, 1, null, false) as RedirectToRouteResult;
+        var result = await _controller.Confirm("", "", "", "", null, "", OrganisationType.Other, 1, null, false) as RedirectToActionResult;
 
         //Assert
         Assert.IsNotNull(result);
-        Assert.AreEqual("OrganisationAddedNextSteps", result.RouteValues["Action"]);
+        Assert.AreEqual("OrganisationAddedNextSteps", result.ActionName);
     }
 
     [Test]
     public async Task ThenIAmRedirectedToNextStepsNewSearchIfTheNewSearchFlagIsSet()
     {
         //Act
-        var result = await _controller.Confirm("", "", "", "", null, "", OrganisationType.Other, 1, null, true) as RedirectToRouteResult;
+        var result = await _controller.Confirm("", "", "", "", null, "", OrganisationType.Other, 1, null, true) as RedirectToActionResult;
 
         //Assert
         Assert.IsNotNull(result);
-        Assert.AreEqual("OrganisationAddedNextStepsSearch", result.RouteValues["Action"]);
+        Assert.AreEqual("OrganisationAddedNextStepsSearch", result.ActionName);
     }
 
     [Test]
     public async Task ThenIAmSuppliedTheHashedAgreementIdForANewSearch()
     {
         //Act
-        var result = await _controller.Confirm("", "", "", "", null, "", OrganisationType.Other, 1, null, true) as RedirectToRouteResult;
+        var result = await _controller.Confirm("", "", "", "", null, "", OrganisationType.Other, 1, null, true) as RedirectToActionResult;
 
         //Assert
         Assert.IsNotNull(result);

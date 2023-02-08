@@ -1,31 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.Authentication;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Web.Controllers;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
+﻿using SFA.DAS.Authentication;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.OrganisationControllerTests;
 
-class WhenIViewNextSteps
+class WhenIViewNextSteps : ControllerTestBase
 {
     private OrganisationController _controller;
-    private Mock<OrganisationOrchestrator> _orchestrator;
-    private Mock<IAuthenticationService> _owinWrapper;
-    private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
+    private readonly Mock<OrganisationOrchestrator> _orchestrator = new();
+    private readonly Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage = new();
 
     [SetUp]
     public void Arrange()
     {
-        _orchestrator = new Mock<OrganisationOrchestrator>();
-        _owinWrapper = new Mock<IAuthenticationService>();
-        _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-
+        base.Arrange();
+        
         _controller = new OrganisationController(
             _orchestrator.Object,
-            _flashMessage.Object);
+            _flashMessage.Object)
+        {
+            ControllerContext = ControllerContext
+        };
     }
 
     [Test]
@@ -36,7 +29,8 @@ class WhenIViewNextSteps
         const string hashedAccountId = "ABC123";
         const string hashedAgreementId = "DGF6756";
 
-        _owinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(userId);
+        AddUserToContext(userId);
+
         _orchestrator.Setup(x => x.GetOrganisationAddedNextStepViewModel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
             .ReturnsAsync(new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
             {
@@ -60,8 +54,9 @@ class WhenIViewNextSteps
         const string userId = "123";
         const string hashedAccountId = "ABC123";
         const string hashedAgreementId = "DEF456";
+        
+        AddUserToContext(userId);
 
-        _owinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(userId);
         _orchestrator.Setup(x => x.GetOrganisationAddedNextStepViewModel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
             .ReturnsAsync(new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
             {
@@ -86,7 +81,8 @@ class WhenIViewNextSteps
         const string hashedAccountId = "ABC123";
         const string hashedAgreementId = "DEF456";
 
-        _owinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(userId);
+        AddUserToContext(userId);
+
         _orchestrator.Setup(x => x.UserShownWizard(It.IsAny<string>(), It.IsAny<string>()))
             .ReturnsAsync(true);
 
