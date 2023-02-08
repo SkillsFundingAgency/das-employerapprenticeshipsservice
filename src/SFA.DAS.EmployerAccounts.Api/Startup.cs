@@ -82,72 +82,9 @@ public class Startup
         var employerAccountsConfiguration = _configuration.Get<EmployerAccountsConfiguration>();
         var isDevelopment = _configuration.IsDevOrLocal();
 
-        var policies = new Dictionary<string, string> { { PolicyNames.Default, RoleNames.Default } };
-        if (isDevelopment)
-        {
-            services.AddAuthentication("BasicAuthentication")
-                   .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
-        }
-        else
-        {
-            var azureAdConfiguration = _configuration
-                   .GetSection(ConfigurationKeys.AzureActiveDirectoryApiConfiguration)
-                   .Get<AzureActiveDirectoryConfiguration>();
-
-            services.AddAuthentication(azureAdConfiguration, policies);
-            services.AddSingleton<IClaimsTransformation, AzureAdScopeClaimTransformation>();
-        }
-        services.AddAuthorization(x =>
-        {
-            {
-                x.AddPolicy("default", policy =>
-                {
-                    if (isDevelopment)
-                        policy.AllowAnonymousUser();
-                    else
-                        policy.RequireAuthenticatedUser();
-
-                });
-
-                x.AddPolicy(ApiRoles.ReadAllEmployerAccountBalances, policy =>
-                {
-                    if (isDevelopment)
-                        policy.AllowAnonymousUser();
-                    else
-                    {
-                        policy.RequireAuthenticatedUser();
-                        policy.RequireRole(ApiRoles.ReadAllEmployerAccountBalances);
-                    }
-                });
-
-                x.AddPolicy(ApiRoles.ReadUserAccounts, policy =>
-                {
-                    if (isDevelopment)
-                        policy.AllowAnonymousUser();
-                    else
-                    {
-                        policy.RequireAuthenticatedUser();
-                        policy.RequireRole(ApiRoles.ReadUserAccounts);
-                    }
-                });
-
-                x.AddPolicy(ApiRoles.ReadAllAccountUsers, policy =>
-                {
-                    if (isDevelopment)
-                        policy.AllowAnonymousUser();
-                    else
-                    {
-                        policy.RequireAuthenticatedUser();
-                        policy.RequireRole(ApiRoles.ReadAllAccountUsers);
-                    }
-                });
-
-                x.DefaultPolicy = x.GetPolicy("default");
-            }
-        });
-        if (isDevelopment)
-            services.AddSingleton<IAuthorizationHandler, LocalAuthorizationHandler>();
-        
+        services
+            .AddApiAuthentication(_configuration, isDevelopment)
+            .AddApiAuthorization(isDevelopment);
 
         services.AddEmployerFeaturesAuthorization();
 

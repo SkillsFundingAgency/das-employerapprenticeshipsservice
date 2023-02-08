@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Polly;
 using SFA.DAS.EmployerAccounts.Api.Authorization;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
 using SFA.DAS.EmployerAccounts.Api.Types;
