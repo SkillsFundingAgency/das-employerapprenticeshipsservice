@@ -845,6 +845,7 @@
     <Content Include="Views\EmployerAgreement\_AcceptedAgreement.cshtml" />
     <Content Include="Views\Home\TermsAndConditionsOverview.cshtml" />
     <Content Include="Views\Shared\_Agreement_v8.cshtml" />
+    <Content Include="Views\Settings\ChangeSignInDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj">

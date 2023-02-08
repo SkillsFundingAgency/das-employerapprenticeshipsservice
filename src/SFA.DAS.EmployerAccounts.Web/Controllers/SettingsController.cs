@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization.Mvc.Attributes;
@@ -68,6 +69,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             var model = await _userSettingsOrchestrator.Unsubscribe(userIdClaim, hashedAccountId, url);
 
             return View(model);
+        }
+
+        [HttpGet]
+        [Route("change-signin-details")]
+        public ActionResult ChangeSignInDetails()
+        {
+            return View();
         }
     }
 }
