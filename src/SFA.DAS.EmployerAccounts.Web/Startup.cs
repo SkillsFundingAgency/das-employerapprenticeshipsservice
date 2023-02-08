@@ -82,7 +82,7 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             services.AddOrchestrators();
             services.AddAutoMapper(typeof(Startup).Assembly);
-            services.AddDatabaseRegistration(_employerAccountsConfiguration, _configuration["Environment"]);
+            services.AddDatabaseRegistration(_employerAccountsConfiguration.DatabaseConnectionString);
             services.AddDataRepositories();
             services.AddApplicationServices(_employerAccountsConfiguration);
             services.AddHashingServices(_employerAccountsConfiguration);

@@ -70,8 +70,7 @@ public class WhenIViewTheHomePage : ControllerTestBase
                 }
             });
     }
-
-
+    
     [Test]
     public async Task ThenTheAccountsAreNotReturnedWhenYouAreNotAuthenticated()
     {

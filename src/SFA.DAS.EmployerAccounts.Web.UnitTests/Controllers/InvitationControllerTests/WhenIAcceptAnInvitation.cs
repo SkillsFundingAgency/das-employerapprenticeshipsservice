@@ -1,46 +1,29 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authentication;
-using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
-using SFA.DAS.EmployerAccounts.Web.Controllers;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.InvitationControllerTests;
 
 public class WhenIAcceptAnInvitation : ControllerTestBase
 {
-    private Mock<InvitationOrchestrator> _invitationOrchestrator;
+    private readonly Mock<InvitationOrchestrator> _invitationOrchestrator = new();
     private InvitationController _controller;
-    private Mock<IAuthenticationService> _owinWrapper;
-    private Mock<IMultiVariantTestingService> _userViewTestingService;
-    private EmployerAccountsConfiguration _configuration;
-    private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
+    private readonly EmployerAccountsConfiguration _configuration = new();
+    private readonly Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage = new();
 
     [SetUp]
     public void Arrange()
     {
         base.Arrange();
-
-        _owinWrapper = new Mock<IAuthenticationService>();
-        _userViewTestingService = new Mock<IMultiVariantTestingService>();
-        _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-
-        _configuration = new EmployerAccountsConfiguration();
-
-        _invitationOrchestrator = new Mock<InvitationOrchestrator>();
     }
 
     [Test]
     public async Task ThenTheInvitationIsAccepted()
     {
         //Arrange
-        _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("TEST");
+        AddUserToContext("TEST");
 
         var invitationId = 12345L;
         var invitation = new UserInvitationsViewModel
@@ -60,7 +43,10 @@ public class WhenIAcceptAnInvitation : ControllerTestBase
 
         _controller = new InvitationController(
             _invitationOrchestrator.Object,
-            _configuration, _flashMessage.Object);
+            _configuration, _flashMessage.Object)
+        {
+            ControllerContext = ControllerContext
+        };
 
         //Act
         await _controller.Accept(invitationId, invitation);
@@ -68,5 +54,4 @@ public class WhenIAcceptAnInvitation : ControllerTestBase
         //Assert
         _invitationOrchestrator.Verify(x=> x.AcceptInvitation(It.Is<long>(l => l==12345L), It.IsAny<string>()), Times.Once);
     }
-
 }
