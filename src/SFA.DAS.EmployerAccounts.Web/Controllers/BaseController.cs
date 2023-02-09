@@ -5,7 +5,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
 public class BaseController : Controller
 {
-
     private const string FlashMessageCookieName = "sfa-das-employerapprenticeshipsservice-flashmessage";
 
     private readonly ICookieStorageService<FlashMessageViewModel> _flashMessage;
@@ -74,7 +73,6 @@ public class BaseController : Controller
 
     private ViewResult ReturnViewResult(string viewName, OrchestratorResponse orchestratorResponse)
     {
-
         var userViews = _multiVariantTestingService.GetMultiVariantViews();
 
         if (userViews == null)
@@ -87,31 +85,28 @@ public class BaseController : Controller
         var userView = userViews.Data.SingleOrDefault(c => c.Controller.Equals(controllerName, StringComparison.CurrentCultureIgnoreCase)
                         && c.Action.Equals(actionName, StringComparison.CurrentCultureIgnoreCase));
 
-        if (userView != null)
+        if (userView == null)
         {
-            if (!userView.SplitAccessAcrossUsers)
-            {
-                var userEmail = HttpContext.User.FindFirstValue(ControllerConstants.EmailClaimKeyName);
+            return base.View(viewName, orchestratorResponse);
+        }
 
-                foreach (var view in userView.Views)
+        if (!userView.SplitAccessAcrossUsers)
+        {
+            var userEmail = HttpContext.User.FindFirstValue(ControllerConstants.EmailClaimKeyName);
+
+            foreach (var view in userView.Views)
+            {
+                if (view.EmailAddresses.Any(pattern => Regex.IsMatch(userEmail, pattern, RegexOptions.IgnoreCase)))
                 {
-                    if (view.EmailAddresses.Any(pattern => Regex.IsMatch(userEmail, pattern, RegexOptions.IgnoreCase)))
-                    {
-                        return base.View(view.ViewName, orchestratorResponse);
-                    }
+                    return base.View(view.ViewName, orchestratorResponse);
                 }
             }
-            else
-            {
-                var randomViewName = _multiVariantTestingService.GetRandomViewNameToShow(userView.Views);
+        }
+        else
+        {
+            var randomViewName = _multiVariantTestingService.GetRandomViewNameToShow(userView.Views);
 
-                if (string.IsNullOrEmpty(randomViewName))
-                {
-                    return base.View(viewName, orchestratorResponse);
-                }
-
-                return base.View(randomViewName, orchestratorResponse);
-            }
+            return base.View(string.IsNullOrEmpty(randomViewName) ? viewName : randomViewName, orchestratorResponse);
         }
 
         return base.View(viewName, orchestratorResponse);
