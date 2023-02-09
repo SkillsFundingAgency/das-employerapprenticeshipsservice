@@ -6,9 +6,8 @@ using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Services;
-using SFA.DAS.Validation;
 using Entity = SFA.DAS.Audit.Types.Entity;
 
 
@@ -21,8 +20,7 @@ public class
     private readonly IAccountRepository _accountRepository;
     private readonly IMediator _mediator;
     private readonly IValidator<CreateUserAccountCommand> _validator;
-    private readonly IHashingService _hashingService;
-    private readonly IPublicHashingService _publicHashingService;
+    private readonly IEncodingService _encodingService;
     private readonly IGenericEventFactory _genericEventFactory;
     private readonly IAccountEventFactory _accountEventFactory;
     private readonly IMembershipRepository _membershipRepository;
@@ -32,8 +30,7 @@ public class
         IAccountRepository accountRepository,
         IMediator mediator,
         IValidator<CreateUserAccountCommand> validator,
-        IHashingService hashingService,
-        IPublicHashingService publicHashingService,
+        IEncodingService encodingService,
         IGenericEventFactory genericEventFactory,
         IAccountEventFactory accountEventFactory,
         IMembershipRepository membershipRepository,
@@ -42,8 +39,7 @@ public class
         _accountRepository = accountRepository;
         _mediator = mediator;
         _validator = validator;
-        _hashingService = hashingService;
-        _publicHashingService = publicHashingService;
+        _encodingService = encodingService;
         _genericEventFactory = genericEventFactory;
         _accountEventFactory = accountEventFactory;
         _membershipRepository = membershipRepository;
@@ -56,17 +52,14 @@ public class
 
         var externalUserId = Guid.Parse(message.ExternalUserId);
 
-        var userResponse =
-            await _mediator.Send(new GetUserByRefQuery { UserRef = message.ExternalUserId }, cancellationToken);
+        var userResponse = await _mediator.Send(new GetUserByRefQuery { UserRef = message.ExternalUserId }, cancellationToken);
 
-        var createAccountResult =
-            await _accountRepository.CreateUserAccount(userResponse.User.Id, message.OrganisationName);
+        var createAccountResult = await _accountRepository.CreateUserAccount(userResponse.User.Id, message.OrganisationName);
 
-        var hashedAccountId = _hashingService.HashValue(createAccountResult.AccountId);
-        var publicHashedAccountId = _publicHashingService.HashValue(createAccountResult.AccountId);
+        var hashedAccountId = _encodingService.Encode(createAccountResult.AccountId, EncodingType.AccountId);
+        var publicHashedAccountId = _encodingService.Encode(createAccountResult.AccountId, EncodingType.PublicAccountId);
 
-        await _accountRepository.UpdateAccountHashedIds(createAccountResult.AccountId, hashedAccountId,
-            publicHashedAccountId);
+        await _accountRepository.UpdateAccountHashedIds(createAccountResult.AccountId, hashedAccountId, publicHashedAccountId);
 
         var caller = await _membershipRepository.GetCaller(createAccountResult.AccountId, message.ExternalUserId);
 

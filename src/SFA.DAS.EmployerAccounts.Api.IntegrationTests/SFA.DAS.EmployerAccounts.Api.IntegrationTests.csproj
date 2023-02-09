@@ -85,9 +85,6 @@
 		<PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents">
 			<Version>1.0.0.4388</Version>
 		</PackageReference>
-		<PackageReference Include="SFA.DAS.HashingService">
-			<Version>1.0.183</Version>
-		</PackageReference>
 		<PackageReference Include="SFA.DAS.NServiceBus.SqlServer">
 			<Version>16.0.20</Version>
 		</PackageReference>

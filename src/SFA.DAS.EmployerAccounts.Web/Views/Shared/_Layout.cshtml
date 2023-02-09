@@ -1,6 +1,5 @@
 @using Microsoft.ApplicationInsights.Extensibility
 @using SFA.DAS.EmployerAccounts.Web.Helpers
-@using System.Threading
 @inject IHtmlHelpers HtmlHelpers;
 @inject IHttpContextAccessor HtmlContextAccessor
 
@@ -130,19 +129,6 @@
         @if (HtmlContextAccessor.HttpContext.User.Identity.IsAuthenticated)
         {
             @HtmlHelpers.GetContentByType("banner", useLegacyStyles: true)
-            if (HtmlHelpers.IsAuthorized("EmployerFeature.V3AgreementBanner"))
-            {
-                var userId = HtmlContextAccessor.HttpContext.User?.Claims.
-                FirstOrDefault(x => x.Type == ControllerConstants.UserRefClaimKeyName)?.Value;
-                var hashedAccountId = Html.ViewContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName]?.ToString();
-                if (!string.IsNullOrEmpty(hashedAccountId))
-                {
-                    if (await HtmlHelpers.ShowExpiringAgreementBanner(userId, hashedAccountId))
-                    {
-                        @await Html.PartialAsync(@"_NotSignedV3AgreementMessage")
-                    }
-                }
-            }
         }
 
         @await Html.PartialAsync(@"_SuccessMessage", Model as OrchestratorResponse)

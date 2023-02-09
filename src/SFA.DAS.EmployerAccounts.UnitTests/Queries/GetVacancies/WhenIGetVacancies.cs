@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetVacancies
 
             Query = new GetVacanciesRequest
             {
-                HashedAccountId = _hashedAccountId
+                AccountId = _hashedAccountId
             };
         }
 

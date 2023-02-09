@@ -1,5 +1,4 @@
 ﻿using SFA.DAS.EmployerAccounts.Data.Contracts;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
 
@@ -22,9 +21,9 @@ public class GetAccountPayeSchemesForAuthorisedUserQueryValidator : IValidator<G
     {
         var validationResult = new ValidationResult();
 
-        if (string.IsNullOrEmpty(query.HashedAccountId))
+        if (query.AccountId <= 0)
         {
-            validationResult.ValidationDictionary.Add(nameof(query.HashedAccountId), "Hashed account ID has not been supplied");
+            validationResult.ValidationDictionary.Add(nameof(query.AccountId), "Account ID has not been supplied");
         }
 
         if (string.IsNullOrEmpty(query.ExternalUserId))
@@ -34,7 +33,7 @@ public class GetAccountPayeSchemesForAuthorisedUserQueryValidator : IValidator<G
 
         if (validationResult.IsValid())
         {
-            var member = await _membershipRepository.GetCaller(query.HashedAccountId, query.ExternalUserId);
+            var member = await _membershipRepository.GetCaller(query.AccountId, query.ExternalUserId);
             if (member == null)
             {
                 validationResult.AddError(nameof(member), "Unauthorised: User not connected to account");

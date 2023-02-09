@@ -2,5 +2,5 @@
 
 public class GetInvitationRequest : IRequest<GetInvitationResponse>
 {
-    public string Id { get; set; }
+    public long Id { get; set; }
 }

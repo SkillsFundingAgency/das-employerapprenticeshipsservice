@@ -4,25 +4,25 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 
 public class GetEmployerAgreementQueryHandler : IRequestHandler<GetEmployerAgreementRequest, GetEmployerAgreementResponse>
 {
     private readonly Lazy<EmployerAccountsDbContext> _database;
-    private readonly IHashingService _hashingService;
+    private readonly IEncodingService _encodingService;
     private readonly IValidator<GetEmployerAgreementRequest> _validator;
     private readonly IConfigurationProvider _configurationProvider;
         
     public GetEmployerAgreementQueryHandler(
         Lazy<EmployerAccountsDbContext> database,
-        IHashingService hashingService,
+        IEncodingService encodingService,
         IValidator<GetEmployerAgreementRequest> validator,
         IConfigurationProvider configurationProvider)
     {
         _database = database;
-        _hashingService = hashingService;
+        _encodingService = encodingService;
         _validator = validator;
         _configurationProvider = configurationProvider;
     }
@@ -41,16 +41,15 @@ public class GetEmployerAgreementQueryHandler : IRequestHandler<GetEmployerAgree
             throw new UnauthorizedAccessException();
         }
 
-        var agreementId = _hashingService.DecodeValue(message.AgreementId);
+        var agreementId = _encodingService.Decode(message.HashedAgreementId, EncodingType.AccountId);
         var employerAgreement = await _database.Value.Agreements.ProjectTo<AgreementDto>(_configurationProvider)
             .SingleOrDefaultAsync(x => x.Id.Equals(agreementId), cancellationToken);
 
         if (employerAgreement == null)
             return new GetEmployerAgreementResponse();
 
-        employerAgreement.HashedAccountId = _hashingService.HashValue(employerAgreement.AccountId);
-        employerAgreement.HashedAgreementId = _hashingService.HashValue(employerAgreement.Id);
-        employerAgreement.HashedLegalEntityId = _hashingService.HashValue(employerAgreement.LegalEntityId);
+        employerAgreement.HashedAccountId = message.HashedAccountId;
+        employerAgreement.HashedAgreementId = message.HashedAgreementId;
 
         if (employerAgreement.StatusId != EmployerAgreementStatus.Signed)
         {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using SFA.DAS.Authorization.EmployerFeatures.Configuration;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.Encoding;
@@ -16,9 +17,10 @@ public static  class ConfigurationServiceRegistrations
 
         var employerAccountsConfiguration = configuration.Get<EmployerAccountsConfiguration>();
         services.AddSingleton(employerAccountsConfiguration);
-        
-        services.Configure<EncodingConfig>(configuration.GetSection(ConfigurationKeys.EncodingConfig));
-        services.AddSingleton(cfg => cfg.GetService<IOptions<EncodingConfig>>().Value);
+
+        var encodingConfigJson = configuration.GetSection("SFA.DAS.Encoding").Value;
+        var encodingConfig = JsonConvert.DeserializeObject<EncodingConfig>(encodingConfigJson);
+        services.AddSingleton(encodingConfig);
 
         services.Configure<EmployerFeaturesConfiguration>(configuration.GetSection(ConfigurationKeys.Features));
         services.AddSingleton(cfg => cfg.GetService<IOptions<EmployerFeaturesConfiguration>>().Value);

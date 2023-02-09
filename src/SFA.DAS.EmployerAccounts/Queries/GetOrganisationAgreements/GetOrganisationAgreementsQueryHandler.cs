@@ -5,8 +5,7 @@ using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
-using SFA.DAS.HashingService;
-using SFA.DAS.Validation;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements;
 
@@ -14,22 +13,19 @@ public class GetOrganisationAgreementsQueryHandler : IRequestHandler<GetOrganisa
 {
     private readonly IValidator<GetOrganisationAgreementsRequest> _validator;
     private readonly IEmployerAgreementRepository _employerAgreementRepository;
-    private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityPublicHashingService;
-    private readonly IHashingService _hashingService;
+    private readonly IEncodingService _encodingService;
     private readonly IReferenceDataService _referenceDataService;
     private readonly IMapper _mapper;
 
     public GetOrganisationAgreementsQueryHandler(IValidator<GetOrganisationAgreementsRequest> validator,
         IEmployerAgreementRepository employerAgreementRepository,
-        IAccountLegalEntityPublicHashingService accountLegalEntityPublicHashingService,
-        IHashingService hashingService,
+        IEncodingService encodingService,
         IReferenceDataService referenceDataService,
         IMapper mapper)
     {
         _validator = validator;
         _employerAgreementRepository = employerAgreementRepository;
-        _accountLegalEntityPublicHashingService = accountLegalEntityPublicHashingService;
-        _hashingService = hashingService;
+        _encodingService = encodingService;
         _referenceDataService = referenceDataService;
         _mapper = mapper;
     }
@@ -44,7 +40,7 @@ public class GetOrganisationAgreementsQueryHandler : IRequestHandler<GetOrganisa
             throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        var accountLegalEntityId = _accountLegalEntityPublicHashingService.DecodeValue(message.AccountLegalEntityHashedId);
+        var accountLegalEntityId = _encodingService.Decode(message.AccountLegalEntityHashedId, EncodingType.AccountLegalEntityId);
 
         var accountLegalEntity = await _employerAgreementRepository.GetOrganisationsAgreements(accountLegalEntityId);          
         if (accountLegalEntity == null) return new GetOrganisationAgreementsResponse();
@@ -61,9 +57,9 @@ public class GetOrganisationAgreementsQueryHandler : IRequestHandler<GetOrganisa
                 {
                     dest.ToList().ForEach(e =>
                     {
-                        e.HashedAccountId = _hashingService.HashValue(accountLegalEntity.AccountId);
-                        e.HashedAgreementId = _hashingService.HashValue(e.Id);
-                        e.HashedLegalEntityId = _hashingService.HashValue(accountLegalEntity.Id);
+                        e.HashedAccountId = _encodingService.Encode(accountLegalEntity.AccountId, EncodingType.AccountId);
+                        e.HashedAgreementId = _encodingService.Encode(e.Id, EncodingType.AccountId);
+                        e.HashedLegalEntityId = _encodingService.Encode(accountLegalEntity.Id, EncodingType.AccountId);
                         e.OrganisationLookupPossible = organisationLookupByIdPossible || accountLegalEntity.LegalEntity.Source == OrganisationType.PensionsRegulator;
                     });
                 });

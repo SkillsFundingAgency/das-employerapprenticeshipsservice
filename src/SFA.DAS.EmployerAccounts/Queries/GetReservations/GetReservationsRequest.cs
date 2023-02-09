@@ -2,6 +2,6 @@
 
 public class GetReservationsRequest : IRequest<GetReservationsResponse>
 {
-    public string HashedAccountId { get; set; }
+    public long AccountId { get; set; }
     public string ExternalUserId { get; set; }
 }

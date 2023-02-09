@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Queries.GetTeamMembersWhichReceiveNotifications;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetTeamMembersWhichReceiveNotifications;
 
 public class GetTeamMembersWhichReceiveNotificationsQueryValidator : IValidator<GetTeamMembersWhichReceiveNotificationsQuery>
 {
@@ -8,10 +6,10 @@ public class GetTeamMembersWhichReceiveNotificationsQueryValidator : IValidator<
     {
         var result = new ValidationResult();
 
-        if (string.IsNullOrEmpty(item.HashedAccountId))
+        if (item.AccountId <= 0)
         {
-            result.ValidationDictionary.Add(nameof(item.HashedAccountId),
-                "Hashed Account Id cannot be null or empty.");
+            result.ValidationDictionary.Add(nameof(item.AccountId),
+                "Account Id must have a value.");
         }
 
         return result;

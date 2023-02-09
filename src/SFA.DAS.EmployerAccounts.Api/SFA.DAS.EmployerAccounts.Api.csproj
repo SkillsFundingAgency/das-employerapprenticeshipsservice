@@ -24,17 +24,14 @@
 		<PackageReference Include="SFA.DAS.Authorization.Mvc" Version="6.0.97" />
 		<PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.283" />
 		<PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
-		<PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.52781" />
-		<PackageReference Include="SFA.DAS.HashingService" Version="1.0.183" />
+		<PackageReference Include="SFA.DAS.Encoding" Version="1.1.76" />
 		<PackageReference Include="SFA.DAS.Logging">
 			<Version>1.0.5</Version>
 		</PackageReference>
 		<PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="16.0.20" />
-		<PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework" Version="9.0.13" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.EntityFrameworkCore" Version="9.0.28" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.Mvc" Version="9.0.28" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="9.0.28" />
-		<PackageReference Include="SFA.DAS.UnitOfWork.WebApi" Version="9.0.13" />
 		<PackageReference Include="SFA.DAS.Validation" Version="6.0.30" />
 		<PackageReference Include="SFA.DAS.Validation.Mvc" Version="6.0.30" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
@@ -44,7 +41,6 @@
 			<Version>4.3.4</Version>
 		</PackageReference>
 		<PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
-		<PackageReference Include="SFA.DAS.Web.Policy" Version="1.1.0.63777" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.1" />
 	</ItemGroup>
 	<ItemGroup>

@@ -267,7 +267,7 @@ public class EmployerAgreementControllerTestFixtures : FluentTest<EmployerAgreem
         {
             ExternalUserId = UserId,
             HashedAccountId = HashedAccountId,
-            AgreementId = HashedAgreementId
+            HashedAgreementId = HashedAgreementId
         };
 
         GetAgreementToSignViewModel = new EmployerAgreementViewModel
@@ -310,7 +310,7 @@ public class EmployerAgreementControllerTestFixtures : FluentTest<EmployerAgreem
             EmployerAgreement = new AgreementDto { LegalEntity = new AccountSpecificLegalEntityDto { AccountLegalEntityId = AccountLegalEntityId } }
         };
 
-        Mediator.Setup(x => x.Send(It.Is<GetEmployerAgreementRequest>(r => r.AgreementId == GetAgreementRequest.AgreementId && r.HashedAccountId == GetAgreementRequest.HashedAccountId), It.IsAny<CancellationToken>()))
+        Mediator.Setup(x => x.Send(It.Is<GetEmployerAgreementRequest>(r => r.HashedAgreementId == GetAgreementRequest.HashedAgreementId && r.HashedAccountId == GetAgreementRequest.HashedAccountId), It.IsAny<CancellationToken>()))
             .ReturnsAsync(agreementResponse);
         var entitiesCountResponse = new GetAccountLegalEntitiesCountByHashedAccountIdResponse
         {
@@ -326,7 +326,7 @@ public class EmployerAgreementControllerTestFixtures : FluentTest<EmployerAgreem
         Mapper.Setup(x => x.Map<GetEmployerAgreementResponse, SignEmployerAgreementViewModel>(agreementResponse))
             .Returns(GetSignAgreementViewModel);
 
-        Orchestrator.Setup(x => x.GetById(GetAgreementRequest.AgreementId, GetAgreementRequest.HashedAccountId, GetAgreementRequest.ExternalUserId))
+        Orchestrator.Setup(x => x.GetById(GetAgreementRequest.HashedAgreementId, GetAgreementRequest.HashedAccountId, GetAgreementRequest.ExternalUserId))
             .ReturnsAsync(new OrchestratorResponse<EmployerAgreementViewModel> { Data = GetAgreementToSignViewModel });
 
         return this;

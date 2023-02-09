@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Queries.GetReservations;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetReservations;
 
 public class GetReservationsRequestValidator : IValidator<GetReservationsRequest>
 {
@@ -13,10 +11,10 @@ public class GetReservationsRequestValidator : IValidator<GetReservationsRequest
             validationResult.AddError(nameof(item.ExternalUserId), "ExternalUserId has not been supplied");
         }
 
-        if (string.IsNullOrEmpty(item.HashedAccountId))
+        if (item.AccountId <= 0)
         {
-            validationResult.ValidationDictionary.Add(nameof(item.HashedAccountId),
-                "Hashed Account Id cannot be null or empty.");
+            validationResult.ValidationDictionary.Add(nameof(item.AccountId),
+                "Account Id must be set.");
         }
 
         return validationResult;

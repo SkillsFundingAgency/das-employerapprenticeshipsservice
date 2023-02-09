@@ -8,7 +8,6 @@ global using SFA.DAS.EmployerAccounts.Data;
 global using SFA.DAS.EmployerAccounts.Exceptions;
 global using SFA.DAS.EmployerAccounts.Factories;
 global using SFA.DAS.EmployerAccounts.Interfaces;
-global using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 global using SFA.DAS.EmployerAccounts.Messages.Events;
 global using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 global using SFA.DAS.EmployerAccounts.Models.UserProfile;

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EmployerAccounts.Api.Authorization;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
 using SFA.DAS.EmployerAccounts.Api.Types;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers;
 
@@ -13,10 +14,12 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers;
 public class AccountPayeSchemesController : ControllerBase
 {
     private readonly AccountsOrchestrator _orchestrator;
+    private readonly IEncodingService _encodingService;
 
-    public AccountPayeSchemesController(AccountsOrchestrator orchestrator)
+    public AccountPayeSchemesController(AccountsOrchestrator orchestrator, IEncodingService encodingService)
     {
         _orchestrator = orchestrator;
+        _encodingService = encodingService;
     }
 
     [Route("{payeschemeref}", Name = "GetPayeScheme")]
@@ -39,29 +42,18 @@ public class AccountPayeSchemesController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetPayeSchemes(string hashedAccountId)
     {
-        var result = await _orchestrator.GetPayeSchemesForAccount(hashedAccountId);
-
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+        var result = await _orchestrator.GetPayeSchemesForAccount(accountId);
 
         if (result == null)
         {
             return NotFound();
         }
 
-        return Ok(
-            new ResourceList(
-                result
-                    .Select(
-                        pv => new Resource
-                        {
-                            Id = pv.Ref,
-                            Href = Url.RouteUrl(
-                                "GetPayeScheme",
-                                new
-                                {
-                                    hashedAccountId,
-                                    payeSchemeRef = WebUtility.UrlEncode(pv.Ref)
-                                })
-                        }))
-        );
+        return Ok(new ResourceList(result.Select(pv => new Resource
+        {
+            Id = pv.Ref,
+            Href = Url.RouteUrl("GetPayeScheme", new { hashedAccountId, payeSchemeRef = WebUtility.UrlEncode(pv.Ref) })
+        })));
     }
 }

@@ -5,9 +5,8 @@ using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Services;
-using SFA.DAS.Validation;
 using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Queries.RemovePayeFromAccount;
@@ -17,7 +16,7 @@ public class RemovePayeFromAccountCommandHandler : IRequestHandler<RemovePayeFro
     private readonly IMediator _mediator;
     private readonly IValidator<RemovePayeFromAccountCommand> _validator;
     private readonly IPayeRepository _payeRepository;
-    private readonly IHashingService _hashingService;
+    private readonly IEncodingService __encodingService;
     private readonly IGenericEventFactory _genericEventFactory;
     private readonly IPayeSchemeEventFactory _payeSchemeEventFactory;
     private readonly IEventPublisher _eventPublisher;
@@ -28,7 +27,7 @@ public class RemovePayeFromAccountCommandHandler : IRequestHandler<RemovePayeFro
         IMediator mediator,
         IValidator<RemovePayeFromAccountCommand> validator,
         IPayeRepository payeRepository,
-        IHashingService hashingService,
+        IEncodingService encodingService,
         IGenericEventFactory genericEventFactory,
         IPayeSchemeEventFactory payeSchemeEventFactory,
         IEventPublisher eventPublisher,
@@ -37,7 +36,7 @@ public class RemovePayeFromAccountCommandHandler : IRequestHandler<RemovePayeFro
         _mediator = mediator;
         _validator = validator;
         _payeRepository = payeRepository;
-        _hashingService = hashingService;
+        __encodingService = encodingService;
         _genericEventFactory = genericEventFactory;
         _payeSchemeEventFactory = payeSchemeEventFactory;
         _eventPublisher = eventPublisher;
@@ -48,7 +47,7 @@ public class RemovePayeFromAccountCommandHandler : IRequestHandler<RemovePayeFro
     {
         await ValidateMessage(message);
 
-        var accountId = _hashingService.DecodeValue(message.HashedAccountId);
+        var accountId = __encodingService.Decode(message.HashedAccountId, EncodingType.AccountId);
 
         await AddAuditEntry(message.UserId, message.PayeRef, accountId.ToString());
 

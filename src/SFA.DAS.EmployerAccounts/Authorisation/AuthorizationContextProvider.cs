@@ -3,22 +3,22 @@ using SFA.DAS.Authorization.Context;
 using SFA.DAS.Authorization.EmployerFeatures.Context;
 using SFA.DAS.Authorization.EmployerUserRoles.Context;
 using SFA.DAS.EmployerAccounts.Infrastructure;
-using SFA.DAS.EmployerUsers.WebClientComponents;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Authorisation;
 
 public class AuthorizationContextProvider : IAuthorizationContextProvider
 {
-    private readonly IHashingService _hashingService;
+    private readonly IEncodingService _encodingService;
     private readonly IAuthenticationServiceWrapper _authenticationService;
     private readonly IActionContextAccessor _actionContextAccessor;
 
-    public AuthorizationContextProvider(IHashingService hashingService,
+    public AuthorizationContextProvider(
+        IEncodingService encodingService,
         IAuthenticationServiceWrapper authenticationService,
         IActionContextAccessor actionContextAccessor)
     {
-        _hashingService = hashingService;
+        _encodingService = encodingService;
         _authenticationService = authenticationService;
         _actionContextAccessor = actionContextAccessor;
     }
@@ -46,7 +46,7 @@ public class AuthorizationContextProvider : IAuthorizationContextProvider
             return (null, null);
         }
 
-        if (!_hashingService.TryDecodeValue(accountHashedId.ToString(), out var accountId))
+        if (!_encodingService.TryDecode(accountHashedId.ToString(), EncodingType.AccountId, out var accountId))
         {
             throw new UnauthorizedAccessException();
         }
@@ -61,7 +61,7 @@ public class AuthorizationContextProvider : IAuthorizationContextProvider
             return (null, null);
         }
 
-        if (!_authenticationService.TryGetClaimValue(DasClaimTypes.Id, out var userRefClaimValue))
+        if (!_authenticationService.TryGetClaimValue(EmployerClaims.Id, out var userRefClaimValue))
         {
             throw new UnauthorizedAccessException();
         }
@@ -71,11 +71,18 @@ public class AuthorizationContextProvider : IAuthorizationContextProvider
             throw new UnauthorizedAccessException();
         }
 
-        if (!_authenticationService.TryGetClaimValue(DasClaimTypes.Email, out var userEmail))
+        if (!_authenticationService.TryGetClaimValue(EmployerClaims.Email, out var userEmail))
         {
             throw new UnauthorizedAccessException();
         }
 
         return (userRef, userEmail);
+    }
+
+    private static class EmployerClaims
+    {
+        public static readonly string Id = "http://das/employer/identity/claims/id";
+        public static readonly string Email = "http://das/employer/identity/claims/email_address";
+        public static readonly string Name = "http://das/employer/identity/claims/display_name";
     }
 }

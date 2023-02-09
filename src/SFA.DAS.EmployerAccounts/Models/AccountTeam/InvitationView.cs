@@ -1,6 +1,6 @@
 namespace SFA.DAS.EmployerAccounts.Models.AccountTeam;
 
-public class InvitationView : IAccountIdentifier
+public class InvitationView
 {
     public long Id { get; set; }
     public string Name { get; set; }
@@ -31,5 +31,4 @@ public class InvitationView : IAccountIdentifier
     public InvitationStatus Status { get; set; }
     public int InternalUserId { get; set; }
     public Guid ExternalUserId { get; set; }
-    public string HashedAccountId { get; set; }
 }

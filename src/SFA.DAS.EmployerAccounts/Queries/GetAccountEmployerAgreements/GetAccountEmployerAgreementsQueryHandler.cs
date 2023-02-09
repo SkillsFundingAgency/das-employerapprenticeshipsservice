@@ -4,27 +4,27 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Extensions;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 
 public class GetAccountEmployerAgreementsQueryHandler : IRequestHandler<GetAccountEmployerAgreementsRequest, GetAccountEmployerAgreementsResponse>
 {
     private readonly Lazy<EmployerAccountsDbContext> _db;
-    private readonly IHashingService _hashingService;
+    private readonly IEncodingService _encodingService;
     private readonly IValidator<GetAccountEmployerAgreementsRequest> _validator;
     private readonly IConfigurationProvider _configurationProvider;
 
 
     public GetAccountEmployerAgreementsQueryHandler(
         Lazy<EmployerAccountsDbContext> db,
-        IHashingService hashingService,
+        IEncodingService encodingService,
         IValidator<GetAccountEmployerAgreementsRequest> validator,
         IConfigurationProvider configurationProvider
     )
     {
         _db = db;
-        _hashingService = hashingService;
+        _encodingService = encodingService;
         _validator = validator;
         _configurationProvider = configurationProvider;
     }
@@ -38,7 +38,7 @@ public class GetAccountEmployerAgreementsQueryHandler : IRequestHandler<GetAccou
             throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        var accountId = _hashingService.DecodeValue(message.HashedAccountId);
+        var accountId = _encodingService.Decode(message.HashedAccountId, EncodingType.AccountId);
 
         var agreements = await _db.Value.AccountLegalEntities
             .WithSignedOrPendingAgreementsForAccount(accountId)
@@ -46,7 +46,7 @@ public class GetAccountEmployerAgreementsQueryHandler : IRequestHandler<GetAccou
             .OrderBy(ea => ea.LegalEntity.Name)
             .ToListAsync(cancellationToken: cancellationToken);
                                     
-        agreements = agreements.PostFixEmployerAgreementStatusDto(_hashingService, accountId).ToList();
+        agreements = agreements.PostFixEmployerAgreementStatusDto(_encodingService, accountId).ToList();
 
         return new GetAccountEmployerAgreementsResponse
         {

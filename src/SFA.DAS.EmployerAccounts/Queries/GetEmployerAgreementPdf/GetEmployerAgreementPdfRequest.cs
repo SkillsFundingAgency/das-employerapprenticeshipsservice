@@ -2,7 +2,7 @@
 
 public class GetEmployerAgreementPdfRequest : IRequest<GetEmployerAgreementPdfResponse>
 {
-    public string HashedAccountId { get; set; }
-    public string HashedLegalAgreementId { get; set; }
+    public long AccountId { get; set; }
+    public long LegalAgreementId { get; set; }
     public string UserId { get; set; }
 }

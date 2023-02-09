@@ -7,9 +7,8 @@ using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Services;
-using SFA.DAS.Validation;
 using Entity = SFA.DAS.Audit.Types.Entity;
 using IGenericEventFactory = SFA.DAS.EmployerAccounts.Factories.IGenericEventFactory;
 
@@ -19,7 +18,7 @@ public class SignEmployerAgreementCommandHandler : IRequestHandler<SignEmployerA
 {
     private readonly IMembershipRepository _membershipRepository;
     private readonly IEmployerAgreementRepository _employerAgreementRepository;
-    private readonly IHashingService _hashingService;
+    private readonly IEncodingService _encodingService;
     private readonly IValidator<SignEmployerAgreementCommand> _validator;
     private readonly IEmployerAgreementEventFactory _agreementEventFactory;
     private readonly IGenericEventFactory _genericEventFactory;
@@ -30,7 +29,7 @@ public class SignEmployerAgreementCommandHandler : IRequestHandler<SignEmployerA
     public SignEmployerAgreementCommandHandler(
         IMembershipRepository membershipRepository,
         IEmployerAgreementRepository employerAgreementRepository,
-        IHashingService hashingService,
+        IEncodingService encodingService,
         IValidator<SignEmployerAgreementCommand> validator,
         IEmployerAgreementEventFactory agreementEventFactory,
         IGenericEventFactory genericEventFactory,
@@ -40,7 +39,7 @@ public class SignEmployerAgreementCommandHandler : IRequestHandler<SignEmployerA
     {
         _membershipRepository = membershipRepository;
         _employerAgreementRepository = employerAgreementRepository;
-        _hashingService = hashingService;
+        _encodingService = encodingService;
         _validator = validator;
         _agreementEventFactory = agreementEventFactory;
         _genericEventFactory = genericEventFactory;
@@ -55,13 +54,13 @@ public class SignEmployerAgreementCommandHandler : IRequestHandler<SignEmployerA
         var owner = await VerifyUserIsAccountOwner(message);
         var userResponse = await _mediator.Send(new GetUserByRefQuery { UserRef = message.ExternalUserId }, cancellationToken);
 
-        var agreementId = _hashingService.DecodeValue(message.HashedAgreementId);
+        var agreementId = _encodingService.Decode(message.HashedAgreementId, EncodingType.AccountId);
 
         await SignAgreement(message, agreementId, owner);
 
         var agreement = await _employerAgreementRepository.GetEmployerAgreement(agreementId);
 
-        var hashedLegalEntityId = _hashingService.HashValue((long)agreement.LegalEntityId);
+        var hashedLegalEntityId = _encodingService.Encode(agreement.LegalEntityId, EncodingType.AccountId);
 
         await Task.WhenAll(
             AddAuditEntry(message, agreement.AccountId, agreementId),

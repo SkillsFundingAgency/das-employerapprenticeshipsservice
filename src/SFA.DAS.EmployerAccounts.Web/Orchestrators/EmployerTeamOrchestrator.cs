@@ -257,7 +257,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
         }
     }
 
-    public async Task<OrchestratorResponse<InvitationView>> GetInvitation(string id)
+    public async Task<OrchestratorResponse<InvitationView>> GetInvitation(long id)
     {
         var invitationResponse = await _mediator.Send(new GetInvitationRequest
         {

@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc.ViewEngines;
 using SFA.DAS.Authorization.Results;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Helpers;
-using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetContent;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.MA.Shared.UI.Configuration;
@@ -28,7 +27,6 @@ public interface IHtmlHelpers
     HtmlString GetContentByType(string type, bool useLegacyStyles = false);
     AuthorizationResult GetAuthorizationResult(string featureType);
     bool IsAuthorized(string featureType);
-    Task<bool> ShowExpiringAgreementBanner(string userId, string hashedAccountId);
     bool ViewExists(IHtmlHelper html, string viewName);
     string ReturnToHomePageButtonHref(string accountId);
     string ReturnToHomePageButtonText(string accountId);
@@ -207,36 +205,7 @@ public class HtmlHelpers : IHtmlHelpers
     {
         return _authorisationService.IsAuthorized(featureType);
     }
-
-    public async Task<bool> ShowExpiringAgreementBanner(string userId, string hashedAccountId)
-    {
-        var agreementResponse = await _mediator.Send(new GetAccountEmployerAgreementsRequest
-            {
-                HashedAccountId = hashedAccountId,
-                ExternalUserId = userId
-            });
-
-        if (!agreementResponse.EmployerAgreements.Any(ea => ea.HasSignedAgreement))
-        {
-            return false;
-        }
-
-        var employerAgreements = agreementResponse.EmployerAgreements;
-
-        var legalEntityAgreements = employerAgreements.GroupBy(ea => ea.LegalEntity.AccountLegalEntityId);
-
-        foreach (var legalEntityAgreement in legalEntityAgreements)
-        {
-            var latestSignedAgreement = legalEntityAgreement
-                .Where(lea => lea.HasSignedAgreement).MaxBy(lea => lea.Signed.VersionNumber);
-
-            if (latestSignedAgreement?.Signed.VersionNumber != 3) return true;
-        }
-
-        return false;
-    }
-
-
+    
     private string GetHashedAccountId(string accountId, out bool isConsoleUser, out bool isAccountIdSet)
     {
         isConsoleUser = IsSupportConsoleUser();

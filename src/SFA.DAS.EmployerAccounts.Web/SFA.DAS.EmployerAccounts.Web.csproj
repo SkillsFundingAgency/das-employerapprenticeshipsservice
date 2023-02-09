@@ -60,7 +60,6 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.52781" />
     <PackageReference Include="SFA.DAS.GovUK.Auth" Version="0.2.203" />
-    <PackageReference Include="SFA.DAS.HashingService" Version="1.0.183" />
     <PackageReference Include="SFA.DAS.Http">
       <Version>3.2.28</Version>
     </PackageReference>

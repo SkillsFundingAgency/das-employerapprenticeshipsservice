@@ -1,6 +1,5 @@
 ﻿using System.Threading;
-using SFA.DAS.HashingService;
-using SFA.DAS.Validation;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Commands.DismissMonthlyTaskReminder;
 
@@ -8,16 +7,16 @@ public class DismissMonthlyTaskReminderCommandHandler : IRequestHandler<DismissM
 {
     private readonly ITaskService _taskService;
     private readonly IValidator<DismissMonthlyTaskReminderCommand> _validator;
-    private readonly IHashingService _hashingService;
+    private readonly IEncodingService _encodingService;
 
     public DismissMonthlyTaskReminderCommandHandler(
         ITaskService taskService, 
         IValidator<DismissMonthlyTaskReminderCommand> validator, 
-        IHashingService hashingService)
+        IEncodingService encodingService)
     {
         _taskService = taskService;
         _validator = validator;
-        _hashingService = hashingService;
+        _encodingService = encodingService;
     }
 
     public async Task<Unit> Handle(DismissMonthlyTaskReminderCommand request, CancellationToken cancellationToken)
@@ -29,7 +28,7 @@ public class DismissMonthlyTaskReminderCommandHandler : IRequestHandler<DismissM
             throw new InvalidRequestException(validationResults.ValidationDictionary);
         }
 
-        var accountId = _hashingService.DecodeValue(request.HashedAccountId);
+        var accountId = _encodingService.Decode(request.HashedAccountId, EncodingType.AccountId);
           
         await _taskService.DismissMonthlyTaskReminder(accountId, request.ExternalUserId, request.TaskType);
 

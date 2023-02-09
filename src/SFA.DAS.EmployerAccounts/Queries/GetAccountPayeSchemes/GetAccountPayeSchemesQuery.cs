@@ -2,5 +2,5 @@
 
 public class GetAccountPayeSchemesQuery : IRequest<GetAccountPayeSchemesResponse>
 {
-    public string HashedAccountId { get; set; }
+    public long AccountId { get; set; }
 }

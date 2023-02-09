@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EmployerAccounts.Api.Authorization;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers;
 
@@ -10,10 +11,12 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers;
 public class EmployerAgreementController : ControllerBase
 {
     private readonly AgreementOrchestrator _orchestrator;
-        
-    public EmployerAgreementController(AgreementOrchestrator orchestrator)
+    private readonly IEncodingService _encodingService;
+
+    public EmployerAgreementController(AgreementOrchestrator orchestrator, IEncodingService encodingService)
     {
         _orchestrator = orchestrator;
+        this._encodingService = encodingService;
     }
 
     [Route("{hashedAccountId}/legalEntities/{hashedlegalEntityId}/agreements/{agreementId}", Name = "AgreementById")]
@@ -21,7 +24,8 @@ public class EmployerAgreementController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAgreement(string agreementId)
     {
-        var response = await _orchestrator.GetAgreement(agreementId);
+        var decodedAgreementId = _encodingService.Decode(agreementId, EncodingType.AccountId);
+        var response = await _orchestrator.GetAgreement(decodedAgreementId);
 
         if (response == null)
         {

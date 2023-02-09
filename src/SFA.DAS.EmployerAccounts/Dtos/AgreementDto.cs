@@ -17,6 +17,4 @@ public class AgreementDto
     public DateTime? SignedDate { get; set; }
     public EmployerAgreementStatus StatusId { get; set; }
     public AgreementTemplateDto Template { get; set; }
-    public int TemplateId { get; set; }
-    public string HashedLegalEntityId { get; set; }
 }

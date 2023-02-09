@@ -1,7 +1,5 @@
 ﻿using System.Threading;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.HashingService;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetReservations;
 
@@ -10,18 +8,15 @@ public class GetReservationsRequestHandler : IRequestHandler<GetReservationsRequ
     private readonly IValidator<GetReservationsRequest> _validator;
     private readonly ILogger<GetReservationsRequestHandler> _logger;
     private readonly IReservationsService _service;
-    private readonly IHashingService _hashingService;
 
     public GetReservationsRequestHandler(
         IValidator<GetReservationsRequest> validator,
         ILogger<GetReservationsRequestHandler> logger,
-        IReservationsService service,
-        IHashingService hashingService)
+        IReservationsService service)
     {
         _validator = validator;
         _logger = logger;
         _service = service;
-        _hashingService = hashingService;
     }
 
     public async Task<GetReservationsResponse> Handle(GetReservationsRequest message, CancellationToken cancellationToken)
@@ -33,20 +28,18 @@ public class GetReservationsRequestHandler : IRequestHandler<GetReservationsRequ
             throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        long accountId = _hashingService.DecodeValue(message.HashedAccountId);
-
-        _logger.LogInformation($"Getting reservations for hashed account id {message.HashedAccountId}");
+        _logger.LogInformation($"Getting reservations for hashed account id {message.AccountId}");
 
         try
         {
             return new GetReservationsResponse
             {
-                Reservations = await _service.Get(accountId)
+                Reservations = await _service.Get(message.AccountId)
             };
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Failed to get Reservations for {message.HashedAccountId}");
+            _logger.LogError(ex, $"Failed to get Reservations for {message.AccountId}");
             return new GetReservationsResponse
             {
                 HasFailed = true

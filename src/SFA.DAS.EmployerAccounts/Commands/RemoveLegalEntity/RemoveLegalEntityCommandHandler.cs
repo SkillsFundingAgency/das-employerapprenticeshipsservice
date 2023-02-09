@@ -6,7 +6,7 @@ using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Services;
 using Entity = SFA.DAS.Audit.Types.Entity;
 using ValidationResult = SFA.DAS.EmployerAccounts.Validation.ValidationResult;
@@ -19,8 +19,7 @@ public class RemoveLegalEntityCommandHandler : IRequestHandler<RemoveLegalEntity
     private readonly ILogger<RemoveLegalEntityCommandHandler> _logger;
     private readonly IEmployerAgreementRepository _employerAgreementRepository;
     private readonly IMediator _mediator;
-    private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityHashingService;
-    private readonly IHashingService _hashingService;
+    private readonly IEncodingService _encodingService;
     private readonly IGenericEventFactory _genericEventFactory;
     private readonly IEmployerAgreementEventFactory _employerAgreementEventFactory;
     private readonly IMembershipRepository _membershipRepository;
@@ -32,8 +31,7 @@ public class RemoveLegalEntityCommandHandler : IRequestHandler<RemoveLegalEntity
         ILogger<RemoveLegalEntityCommandHandler> logger,
         IEmployerAgreementRepository employerAgreementRepository,
         IMediator mediator,
-        IAccountLegalEntityPublicHashingService accountLegalEntityHashingService,
-        IHashingService hashingService,
+        IEncodingService encodingService,
         IGenericEventFactory genericEventFactory,
         IEmployerAgreementEventFactory employerAgreementEventFactory,
         IMembershipRepository membershipRepository,
@@ -44,8 +42,7 @@ public class RemoveLegalEntityCommandHandler : IRequestHandler<RemoveLegalEntity
         _logger = logger;
         _employerAgreementRepository = employerAgreementRepository;
         _mediator = mediator;
-        _accountLegalEntityHashingService = accountLegalEntityHashingService;
-        _hashingService = hashingService;
+        _encodingService = encodingService;
         _genericEventFactory = genericEventFactory;
         _employerAgreementEventFactory = employerAgreementEventFactory;
         _membershipRepository = membershipRepository;
@@ -64,27 +61,27 @@ public class RemoveLegalEntityCommandHandler : IRequestHandler<RemoveLegalEntity
 
         if (validationResult.IsUnauthorized)
         {
-            _logger.LogInformation($"User {message.UserId} tried to remove {message.HashedAccountLegalEntityId} from Account {message.HashedAccountId}");
+            _logger.LogInformation($"User {message.UserId} tried to remove {message.AccountLegalEntityId} from Account {message.AccountId}");
             throw new UnauthorizedAccessException();
         }
 
-        var accountId = _hashingService.DecodeValue(message.HashedAccountId);
-        var accountLegalEntityId = _accountLegalEntityHashingService.DecodeValue(message.HashedAccountLegalEntityId);
-        var agreements = (await _employerAgreementRepository.GetAccountLegalEntityAgreements(accountLegalEntityId)).ToList();
+        var agreements = (await _employerAgreementRepository.GetAccountLegalEntityAgreements(message.AccountLegalEntityId)).ToList();
         var legalAgreement = agreements.OrderByDescending(a => a.TemplateId).First();
-        var hashedLegalAgreementId = _hashingService.HashValue(legalAgreement.Id);
+
+        var hashedAccountId = _encodingService.Encode(message.AccountId, EncodingType.AccountId);
+        var hashedLegalAgreementId = _encodingService.Encode(legalAgreement.Id, EncodingType.AccountId);
 
         var agreement = await _employerAgreementRepository.GetEmployerAgreement(legalAgreement.Id);
 
         if (agreements.Any(x => x.SignedDate.HasValue))
         {
-            await ValidateLegalEntityHasNoCommitments(agreement, accountId, validationResult);
+            await ValidateLegalEntityHasNoCommitments(agreement, message.AccountId, validationResult);
         }
 
         await _employerAgreementRepository.RemoveLegalEntityFromAccount(legalAgreement.Id);
 
         await Task.WhenAll(
-            AddAuditEntry(accountId, hashedLegalAgreementId),
+            AddAuditEntry(hashedAccountId, hashedLegalAgreementId),
             CreateEvent(hashedLegalAgreementId)
         );
 
@@ -92,11 +89,11 @@ public class RemoveLegalEntityCommandHandler : IRequestHandler<RemoveLegalEntity
         if (agreement != null)
         {
             var agreementSigned = agreement.Status == EmployerAgreementStatus.Signed;
-            var caller = await _membershipRepository.GetCaller(accountId, message.UserId);
+            var caller = await _membershipRepository.GetCaller(message.AccountId, message.UserId);
             var createdByName = caller.FullName();
 
             await PublishLegalEntityRemovedMessage(
-                accountId,
+                message.AccountId,
                 legalAgreement.Id,
                 agreementSigned,
                 createdByName,
@@ -120,7 +117,7 @@ public class RemoveLegalEntityCommandHandler : IRequestHandler<RemoveLegalEntity
 
         if (commitment != null && (commitment.ActiveCount + commitment.PausedCount + commitment.PendingApprovalCount + commitment.WithdrawnCount) != 0)
         {
-            validationResult.AddError(nameof(agreement.HashedAgreementId), "Agreement has already been signed and has active commitments");
+            validationResult.AddError(nameof(agreement.Id), "Agreement has already been signed and has active commitments");
             throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
     }
@@ -143,19 +140,19 @@ public class RemoveLegalEntityCommandHandler : IRequestHandler<RemoveLegalEntity
         });
     }
 
-    private async Task AddAuditEntry(long accountId, string employerAgreementId)
+    private async Task AddAuditEntry(string hashedAccountId, string employerAgreementId)
     {
         await _mediator.Send(new CreateAuditCommand
         {
             EasAuditMessage = new EasAuditMessage
             {
                 Category = "UPDATED",
-                Description = $"EmployerAgreement {employerAgreementId} removed from account {accountId}",
+                Description = $"EmployerAgreement {employerAgreementId} removed from account {hashedAccountId}",
                 ChangedProperties = new List<PropertyUpdate>
                 {
                     PropertyUpdate.FromString("Status", EmployerAgreementStatus.Removed.ToString())
                 },
-                RelatedEntities = new List<Entity> { new Entity { Id = accountId.ToString(), Type = "Account" } },
+                RelatedEntities = new List<Entity> { new Entity { Id = hashedAccountId.ToString(), Type = "Account" } },
                 AffectedEntity = new Entity { Type = "EmployerAgreement", Id = employerAgreementId }
             }
         });

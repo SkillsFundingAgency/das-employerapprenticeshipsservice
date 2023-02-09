@@ -1,6 +1,5 @@
 ﻿using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity;
 
@@ -8,13 +7,11 @@ public class RemoveLegalEntityCommandValidator : IValidator<RemoveLegalEntityCom
 {
     private readonly IMembershipRepository _membershipRepository;
     private readonly IEmployerAgreementRepository _employerAgreementRepository;
-    private readonly IHashingService _hashingService;
 
-    public RemoveLegalEntityCommandValidator(IMembershipRepository membershipRepository, IEmployerAgreementRepository employerAgreementRepository, IHashingService hashingService)
+    public RemoveLegalEntityCommandValidator(IMembershipRepository membershipRepository, IEmployerAgreementRepository employerAgreementRepository)
     {
         _membershipRepository = membershipRepository;
         _employerAgreementRepository = employerAgreementRepository;
-        _hashingService = hashingService;
     }
 
     public ValidationResult Validate(RemoveLegalEntityCommand item)
@@ -26,17 +23,17 @@ public class RemoveLegalEntityCommandValidator : IValidator<RemoveLegalEntityCom
     {
         var validationResult = new ValidationResult();
 
-        if (string.IsNullOrEmpty(item.HashedAccountId))
+        if (item.AccountId <= 0)
         {
-            validationResult.AddError(nameof(item.HashedAccountId));
+            validationResult.AddError(nameof(item.AccountId));
         }
         if (string.IsNullOrEmpty(item.UserId))
         {
             validationResult.AddError(nameof(item.UserId));
         }
-        if (string.IsNullOrEmpty(item.HashedAccountLegalEntityId))
+        if (item.AccountLegalEntityId <= 0)
         {
-            validationResult.AddError(nameof(item.HashedAccountLegalEntityId));
+            validationResult.AddError(nameof(item.AccountLegalEntityId));
         }
 
         if (!validationResult.IsValid())
@@ -44,20 +41,19 @@ public class RemoveLegalEntityCommandValidator : IValidator<RemoveLegalEntityCom
             return validationResult;
         }
 
-        var member = await _membershipRepository.GetCaller(item.HashedAccountId, item.UserId);
+        var member = await _membershipRepository.GetCaller(item.AccountId, item.UserId);
 
         if (member == null || !member.Role.Equals(Role.Owner))
         {
             validationResult.IsUnauthorized = true;
             return validationResult;
         }
-
-        var accountId = _hashingService.DecodeValue(item.HashedAccountId);
-        var legalEntities = await _employerAgreementRepository.GetLegalEntitiesLinkedToAccount(accountId, false);
+        
+        var legalEntities = await _employerAgreementRepository.GetLegalEntitiesLinkedToAccount(item.AccountId, false);
 
         if (legalEntities != null && legalEntities.Count == 1)
         {
-            validationResult.AddError(nameof(item.HashedAccountLegalEntityId), "There must be at least one legal entity on the account");
+            validationResult.AddError(nameof(item.AccountLegalEntityId), "There must be at least one legal entity on the account");
             return validationResult;
         }
 

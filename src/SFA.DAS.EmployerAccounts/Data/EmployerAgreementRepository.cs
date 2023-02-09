@@ -20,8 +20,7 @@ public class EmployerAgreementRepository : BaseRepository, IEmployerAgreementRep
         _db = db;
     }
 
-    public async Task<List<AccountSpecificLegalEntity>> GetLegalEntitiesLinkedToAccount(long accountId,
-        bool signedOnly)
+    public async Task<List<AccountSpecificLegalEntity>> GetLegalEntitiesLinkedToAccount(long accountId, bool signedOnly)
     {
         var parameters = new DynamicParameters();
 

@@ -1,21 +1,21 @@
 ﻿using System.Threading;
 using Microsoft.EntityFrameworkCore;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesCountByHashedAccountId;
 
 public class GetAccountLegalEntitiesCountByHashedAccountIdQueryHandler : IRequestHandler<GetAccountLegalEntitiesCountByHashedAccountIdRequest, GetAccountLegalEntitiesCountByHashedAccountIdResponse>
 {
-    private readonly IHashingService _hashingService;
+    private readonly IEncodingService _encodingService;
     private readonly Lazy<EmployerAccountsDbContext> _db;
     private readonly IValidator<GetAccountLegalEntitiesCountByHashedAccountIdRequest> _validator;
 
     public GetAccountLegalEntitiesCountByHashedAccountIdQueryHandler(
-        IHashingService hashingService,
+        IEncodingService encodingService,
         Lazy<EmployerAccountsDbContext> db,
         IValidator<GetAccountLegalEntitiesCountByHashedAccountIdRequest> validator)
     {
-        _hashingService = hashingService;
+        _encodingService = encodingService;
         _db = db;
         _validator = validator;
     }
@@ -29,7 +29,7 @@ public class GetAccountLegalEntitiesCountByHashedAccountIdQueryHandler : IReques
             throw new InvalidRequestException(result.ValidationDictionary);
         }
 
-        if (_hashingService.TryDecodeValue(message.HashedAccountId, out var accountId))
+        if (_encodingService.TryDecode(message.HashedAccountId, EncodingType.AccountId, out var accountId))
         {
             var accountSpecificLegalEntity = await _db.Value.AccountLegalEntities.CountAsync(ale => ale.AccountId == accountId && !ale.Deleted.HasValue, cancellationToken: cancellationToken);
 

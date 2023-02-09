@@ -2,8 +2,6 @@
 using System.IO;
 using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -14,8 +12,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
-using SFA.DAS.Api.Common.AppStart;
-using SFA.DAS.Api.Common.Configuration;
 using SFA.DAS.Api.Common.Infrastructure;
 using SFA.DAS.Authorization.DependencyResolution.Microsoft;
 using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.Microsoft;
@@ -71,6 +67,7 @@ public class Startup
                     options.StorageConnectionString = configuration["ConfigurationStorageConnectionString"];
                     options.EnvironmentName = configuration["EnvironmentName"];
                     options.PreFixConfigurationKeys = false;
+                    options.ConfigurationKeysRawJsonResult = new[] { "SFA.DAS.Encoding" };
                 }
             );
         }
@@ -98,7 +95,6 @@ public class Startup
             });
         });
 
-
         services.AddApplicationServices();
         services.AddDasDistributedMemoryCache(employerAccountsConfiguration, _environment.IsDevelopment());
         services.AddDasHealthChecks(employerAccountsConfiguration);
@@ -111,7 +107,6 @@ public class Startup
         services.AddDataRepositories();
         services.AddEventsApi();
         services.AddExecutionPolicies();
-        services.AddHashingServices(employerAccountsConfiguration);
 
         services.AddAutoMapper(typeof(ActivityMappings), typeof(Startup));
 

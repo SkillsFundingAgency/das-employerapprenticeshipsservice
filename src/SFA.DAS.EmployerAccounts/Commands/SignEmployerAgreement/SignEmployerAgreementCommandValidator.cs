@@ -1,19 +1,18 @@
 ﻿using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
-using SFA.DAS.HashingService;
-using SFA.DAS.Validation;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement;
 
 public class SignEmployerAgreementCommandValidator : IValidator<SignEmployerAgreementCommand>
 {
     private readonly IEmployerAgreementRepository _employerAgreementRepository;
-    private readonly IHashingService _hashingService;
+    private readonly IEncodingService _encodingService;
 
-    public SignEmployerAgreementCommandValidator(IEmployerAgreementRepository employerAgreementRepository, IHashingService hashingService)
+    public SignEmployerAgreementCommandValidator(IEmployerAgreementRepository employerAgreementRepository, IEncodingService hashingService)
     {
         _employerAgreementRepository = employerAgreementRepository;
-        _hashingService = hashingService;
+        _encodingService = hashingService;
     }
 
     public ValidationResult Validate(SignEmployerAgreementCommand item)
@@ -42,7 +41,7 @@ public class SignEmployerAgreementCommandValidator : IValidator<SignEmployerAgre
             return validationResult;
         }
 
-        var agreementId = _hashingService.DecodeValue(item.HashedAgreementId);
+        var agreementId = _encodingService.Decode(item.HashedAgreementId, EncodingType.AccountId);
         var employerAgreementStatus = await _employerAgreementRepository.GetEmployerAgreementStatus(agreementId);
 
         if (employerAgreementStatus == null)
