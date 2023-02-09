@@ -15,7 +15,6 @@
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
 		<PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.3.0" />
-		<PackageReference Include="Microsoft.AspNet.WebApi" Version="5.2.7" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging">
 			<Version>2.2.0</Version>
@@ -45,9 +44,6 @@
 			<Version>4.3.4</Version>
 		</PackageReference>
 		<PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
-		<PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.355802">
-			<PrivateAssets>all</PrivateAssets>
-		</PackageReference>
 		<PackageReference Include="SFA.DAS.Web.Policy" Version="1.1.0.63777" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.1" />
 	</ItemGroup>
