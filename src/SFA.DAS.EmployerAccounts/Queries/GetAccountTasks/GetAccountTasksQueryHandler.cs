@@ -1,6 +1,6 @@
 ﻿using System.Threading;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.EmployerAccounts.TasksApi;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountTasks;
 

@@ -1,5 +1,6 @@
 @using Microsoft.ApplicationInsights.Extensibility
 @using SFA.DAS.EmployerAccounts.Web.Helpers
+@using System.Threading
 
 @inject IHtmlHelpers HtmlHelpers;
 
@@ -171,7 +172,7 @@
                     {
                         if (!string.IsNullOrEmpty(hashedAccountId))
                         {
-                            if (HtmlHelpers.ShowExpiringAgreementBanner(userId, hashedAccountId))
+                            if (await HtmlHelpers.ShowExpiringAgreementBanner(userId, hashedAccountId))
                             {
                                 @await Html.PartialAsync(@"_NotSignedV3AgreementMessage_CDN")
                             }

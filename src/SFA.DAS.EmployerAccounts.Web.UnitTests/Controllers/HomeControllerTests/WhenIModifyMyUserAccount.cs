@@ -91,17 +91,14 @@ public class WhenIModifyMyUserAccount : ControllerTestBase
         var expectedId = "123456";
         var expectedFirstName = "Test";
         var expectedLastName = "tester";
-           
-        _owinWrapper.Setup(x => x.GetClaimValue("email")).Returns(expectedEmail);
-        _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(expectedId);
-        _owinWrapper.Setup(x => x.GetClaimValue(DasClaimTypes.GivenName)).Returns(expectedFirstName);
-        _owinWrapper.Setup(x => x.GetClaimValue(DasClaimTypes.FamilyName)).Returns(expectedLastName);
+
+        AddUserToContext(expectedId, expectedEmail, expectedFirstName, expectedLastName);
+          
 
         //Act
         await _homeController.HandleEmailChanged();
 
         //Assert
-        _owinWrapper.Verify(x => x.UpdateClaims(), Times.Once);
         _homeOrchestrator.Verify(x => x.SaveUpdatedIdentityAttributes(expectedId, expectedEmail, expectedFirstName, expectedLastName, null));
     }
 }

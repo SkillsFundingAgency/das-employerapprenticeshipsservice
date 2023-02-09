@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using System.Threading;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
@@ -27,7 +28,7 @@ public interface IHtmlHelpers
     HtmlString GetContentByType(string type, bool useLegacyStyles = false);
     AuthorizationResult GetAuthorizationResult(string featureType);
     bool IsAuthorized(string featureType);
-    bool ShowExpiringAgreementBanner(string userId, string hashedAccountId);
+    Task<bool> ShowExpiringAgreementBanner(string userId, string hashedAccountId);
     bool ViewExists(IHtmlHelper html, string viewName);
     string ReturnToHomePageButtonHref(string accountId);
     string ReturnToHomePageButtonText(string accountId);
@@ -47,10 +48,10 @@ public class HtmlHelpers : IHtmlHelpers
 
 
     public HtmlHelpers(
-        EmployerAccountsConfiguration configuration, 
-        IMediator mediator, 
+        EmployerAccountsConfiguration configuration,
+        IMediator mediator,
         IHttpContextAccessor httpContextAccessor,
-        ILogger<HtmlHelpers> logger, 
+        ILogger<HtmlHelpers> logger,
         IAuthorizationService authorisationService,
         ICompositeViewEngine compositeViewEngine)
     {
@@ -207,35 +208,35 @@ public class HtmlHelpers : IHtmlHelpers
         return _authorisationService.IsAuthorized(featureType);
     }
 
-    public bool ShowExpiringAgreementBanner(string userId, string hashedAccountId)
+    public async Task<bool> ShowExpiringAgreementBanner(string userId, string hashedAccountId)
     {
-        var agreementResponse = AsyncHelper.RunSync(() => _mediator
-            .Send(new GetAccountEmployerAgreementsRequest
+        var agreementResponse = await _mediator.Send(new GetAccountEmployerAgreementsRequest
             {
                 HashedAccountId = hashedAccountId,
                 ExternalUserId = userId
-            }));
+            });
 
-        if (agreementResponse.EmployerAgreements.Any(ea => ea.HasSignedAgreement))
+        if (!agreementResponse.EmployerAgreements.Any(ea => ea.HasSignedAgreement))
         {
-            var employerAgreements = agreementResponse.EmployerAgreements;
-
-            var legalEntityAgreements = employerAgreements.GroupBy(ea => ea.LegalEntity.AccountLegalEntityId);
-
-            foreach (var legalEntityAgreement in legalEntityAgreements)
-            {
-                var latestSignedAgreement = legalEntityAgreement
-                    .Where(lea => lea.HasSignedAgreement)
-                    .OrderByDescending(lea => lea.Signed.VersionNumber)
-                    .FirstOrDefault();
-
-                if (latestSignedAgreement?.Signed.VersionNumber != 3) return true;
-            }
+            return false;
         }
+
+        var employerAgreements = agreementResponse.EmployerAgreements;
+
+        var legalEntityAgreements = employerAgreements.GroupBy(ea => ea.LegalEntity.AccountLegalEntityId);
+
+        foreach (var legalEntityAgreement in legalEntityAgreements)
+        {
+            var latestSignedAgreement = legalEntityAgreement
+                .Where(lea => lea.HasSignedAgreement).MaxBy(lea => lea.Signed.VersionNumber);
+
+            if (latestSignedAgreement?.Signed.VersionNumber != 3) return true;
+        }
+
         return false;
     }
 
-    
+
     private string GetHashedAccountId(string accountId, out bool isConsoleUser, out bool isAccountIdSet)
     {
         isConsoleUser = IsSupportConsoleUser();
@@ -247,7 +248,7 @@ public class HtmlHelpers : IHtmlHelpers
         return accountId;
     }
 
-    public  bool ViewExists(IHtmlHelper html, string viewName)
+    public bool ViewExists(IHtmlHelper html, string viewName)
     {
         var result = _compositeViewEngine.FindView(html.ViewContext, viewName, false);
 
@@ -260,7 +261,7 @@ public class HtmlHelpers : IHtmlHelpers
         return requiredRoles.Any(role => _httpContextAccessor.HttpContext.User.IsInRole(role));
     }
 
-    public  string ReturnToHomePageButtonHref(string accountId)
+    public string ReturnToHomePageButtonHref(string accountId)
     {
         accountId = GetHashedAccountId(accountId, out bool isConsoleUser, out bool isAccountIdSet);
 

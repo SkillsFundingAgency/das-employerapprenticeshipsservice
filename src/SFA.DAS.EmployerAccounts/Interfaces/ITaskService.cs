@@ -1,4 +1,6 @@
-﻿using SFA.DAS.EmployerAccounts.TasksApi;
+﻿
+using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerAccounts.TasksApi;
 
 namespace SFA.DAS.EmployerAccounts.Interfaces;
 

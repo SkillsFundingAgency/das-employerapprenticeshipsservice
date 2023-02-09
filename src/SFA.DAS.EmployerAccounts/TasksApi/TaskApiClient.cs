@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EmployerAccounts.TasksApi;
 
@@ -24,7 +25,7 @@ public class TaskApiClient : ITaskApiClient
         _httpClient = new SecureHttpClient(configuration);
     }
 
-    public async Task<IEnumerable<TaskDto>> GetTasks(string employerAccountId, string userId, ApprenticeshipEmployerType applicableToApprenticeshipEmployerType = ApprenticeshipEmployerType.All)
+    public async Task<IEnumerable<TaskDto>> GetTasks(string employerAccountId, string userId, ApprenticeshipEmployerType applicableToApprenticeshipEmployerType)
     {
         var baseUrl = GetBaseUrl();
         var url = $"{baseUrl}api/tasks/{employerAccountId}/{userId}?{nameof(applicableToApprenticeshipEmployerType)}={(int)applicableToApprenticeshipEmployerType}";
