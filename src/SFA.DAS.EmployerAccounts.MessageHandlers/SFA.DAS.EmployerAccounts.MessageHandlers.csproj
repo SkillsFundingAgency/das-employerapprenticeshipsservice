@@ -29,9 +29,6 @@
 		<PackageReference Include="System.Net.Http">
 			<Version>4.3.4</Version>
 		</PackageReference>
-		<PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.355802">
-			<PrivateAssets>all</PrivateAssets>
-		</PackageReference>
 		<PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.33" />
 		<PackageReference Include="SFA.DAS.Commitments.Events" Version="8.29.1" />
 	</ItemGroup>

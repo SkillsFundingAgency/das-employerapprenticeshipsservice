@@ -31,9 +31,6 @@
     <PackageReference Include="System.Net.Http">
       <Version>4.3.4</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.355802">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions" Version="4.0.1" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Logging.ApplicationInsights" Version="3.0.33" />
   </ItemGroup>

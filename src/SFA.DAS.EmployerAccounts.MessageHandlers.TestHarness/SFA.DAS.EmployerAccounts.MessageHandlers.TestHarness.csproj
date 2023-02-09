@@ -14,9 +14,6 @@
     <PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework" Version="9.0.13" />
     <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="9.0.13" />
     <PackageReference Include="StructureMap" Version="4.7.1" />
-    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.355802">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
     <PackageReference Include="SFA.DAS.Commitments.Events" Version="8.29.1" />
   </ItemGroup>
   <ItemGroup>
