@@ -1,16 +1,16 @@
 ﻿using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Options;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 
 namespace SFA.DAS.EmployerAccounts.Data;
 
-public class EmployerAccountsDbContext : DbContext
+public class EmployerAccountsDbContext : DbContext, IEmployerAccountsDbContext
 {
     private readonly EmployerAccountsConfiguration _configuration;
     private readonly AzureServiceTokenProvider _azureServiceTokenProvider;

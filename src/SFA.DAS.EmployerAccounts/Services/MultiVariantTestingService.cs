@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.AutoConfiguration;
 using SFA.DAS.Caches;
 using SFA.DAS.EmployerAccounts.Models.UserView;
@@ -7,11 +8,17 @@ namespace SFA.DAS.EmployerAccounts.Services;
 
 public class MultiVariantTestingService : AzureServiceBase<MultiVariantViewLookup>, IMultiVariantTestingService
 {
+    private const int CacheExpirationMinutes = 30;
     private readonly IInProcessCache _inProcessCache;
     public override string ConfigurationName => "SFA.DAS.EmployerApprenticeshipsService.MultiVariantTesting";
     public sealed override ILogger Logger { get; set; }
 
-    public MultiVariantTestingService(IInProcessCache inProcessCache, ILogger logger, IAutoConfigurationService autoConfigurationService) : base(autoConfigurationService)
+    public MultiVariantTestingService(
+        IInProcessCache inProcessCache, 
+        ILogger logger, 
+        IAutoConfigurationService autoConfigurationService, 
+        IConfiguration configuration) 
+        : base(autoConfigurationService, configuration)
     {
         _inProcessCache = inProcessCache;
         Logger = logger;
@@ -21,13 +28,16 @@ public class MultiVariantTestingService : AzureServiceBase<MultiVariantViewLooku
     {
         var views = _inProcessCache.Get<MultiVariantViewLookup>(nameof(MultiVariantViewLookup));
 
-        if (views == null)
+        if (views != null)
         {
-            views = GetDataFromTableStorage();
-            if (views.Data != null && views.Data.Any())
-            {
-                _inProcessCache.Set(nameof(MultiVariantViewLookup), views, new TimeSpan(0, 30, 0));
-            }
+            return views;
+        }
+
+        views = GetDataFromTableStorage();
+
+        if (views.Data != null && views.Data.Any())
+        {
+            _inProcessCache.Set(nameof(MultiVariantViewLookup), views, new TimeSpan(0, CacheExpirationMinutes, 0));
         }
 
         return views;
@@ -52,10 +62,9 @@ public class MultiVariantTestingService : AzureServiceBase<MultiVariantViewLooku
                 continue;
             }
 
-            maxValue = maxValue - view.Weighting;
+            maxValue -= view.Weighting;
         }
 
         return viewName;
     }
-
 }

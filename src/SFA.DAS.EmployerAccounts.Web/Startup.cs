@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.Microsoft;
 using SFA.DAS.Authorization.Mvc.Extensions;
+using SFA.DAS.AutoConfiguration.DependencyResolution;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
@@ -82,6 +83,7 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             services.AddOrchestrators();
             services.AddAutoMapper(typeof(Startup).Assembly);
+            services.AddAutoConfiguration();
             services.AddDatabaseRegistration(_employerAccountsConfiguration.DatabaseConnectionString);
             services.AddDataRepositories();
             services.AddApplicationServices(_employerAccountsConfiguration);

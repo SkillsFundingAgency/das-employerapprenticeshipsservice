@@ -1,10 +1,7 @@
-﻿using Moq;
-using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Web.Extensions;
-using System.Linq;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Logging;
 using Microsoft.Owin.Security.WsFederation;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions;
 
@@ -12,16 +9,16 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions;
 public class SupportUserExtensionTests
 {
     private Mock<ILogger> _logger;
-    private SupportConsoleAuthenticationOptions supportConsoleAuthenticationOptions;
-    private TestAppBuilder sut;
+    private SupportConsoleAuthenticationOptions _supportConsoleAuthenticationOptions;
+    private TestAppBuilder _sut;
 
     [SetUp]
     public void Arrange()
     {
         //Arrange
         _logger = new Mock<ILogger>();
-        sut = new TestAppBuilder();
-        supportConsoleAuthenticationOptions = new SupportConsoleAuthenticationOptions
+        _sut = new TestAppBuilder();
+        _supportConsoleAuthenticationOptions = new SupportConsoleAuthenticationOptions
         {
             AdfsOptions = new ADFSOptions
             {
@@ -34,13 +31,11 @@ public class SupportUserExtensionTests
         };
     }
 
-
-
     [Test]
     public void GivenSupportUserHasAccess_WhenAuthenticateSupportUser_ThenVerifyCookieAuthentications()
     {
         //Act
-        var result = sut.UseSupportConsoleAuthentication(supportConsoleAuthenticationOptions) as TestAppBuilder;
+        var result = _sut.UseSupportConsoleAuthentication(_supportConsoleAuthenticationOptions) as TestAppBuilder;
 
         //Assert
         var cookieOptions = result.MiddlewareOptions.OfType<CookieAuthenticationOptions>();
@@ -56,14 +51,14 @@ public class SupportUserExtensionTests
     public void GivenSupportUserHasAccess_WhenAuthenticateSupportUser_ThenVerifyWsFederationAuthenticationOptions()
     {
         //Act
-        var result = sut.UseSupportConsoleAuthentication(supportConsoleAuthenticationOptions) as TestAppBuilder;
+        var result = _sut.UseSupportConsoleAuthentication(_supportConsoleAuthenticationOptions) as TestAppBuilder;
 
         //Assert                        
         var wsFederationAuthenticationOptions = result.MiddlewareOptions.OfType<WsFederationAuthenticationOptions>().Single();
         Assert.AreEqual("Staff", wsFederationAuthenticationOptions.AuthenticationType);
-        Assert.AreEqual(supportConsoleAuthenticationOptions.AdfsOptions.Wtrealm, wsFederationAuthenticationOptions.Wtrealm);
-        Assert.AreEqual(supportConsoleAuthenticationOptions.AdfsOptions.MetadataAddress, wsFederationAuthenticationOptions.MetadataAddress);
-        Assert.AreEqual(supportConsoleAuthenticationOptions.AdfsOptions.Wreply, wsFederationAuthenticationOptions.Wreply);
+        Assert.AreEqual(_supportConsoleAuthenticationOptions.AdfsOptions.Wtrealm, wsFederationAuthenticationOptions.Wtrealm);
+        Assert.AreEqual(_supportConsoleAuthenticationOptions.AdfsOptions.MetadataAddress, wsFederationAuthenticationOptions.MetadataAddress);
+        Assert.AreEqual(_supportConsoleAuthenticationOptions.AdfsOptions.Wreply, wsFederationAuthenticationOptions.Wreply);
         Assert.IsNotNull(wsFederationAuthenticationOptions.Notifications);
             
     }
@@ -72,7 +67,7 @@ public class SupportUserExtensionTests
     public void GivenSupportUserHasAccess_WhenAuthenticateSupportUser_ThenVerifyMapOptions()
     {
         //Act
-        var result = sut.UseSupportConsoleAuthentication(supportConsoleAuthenticationOptions) as TestAppBuilder;
+        var result = _sut.UseSupportConsoleAuthentication(_supportConsoleAuthenticationOptions) as TestAppBuilder;
 
         //Assert
         var mapOptions = result.MiddlewareOptions.OfType<Microsoft.Owin.Mapping.MapOptions>();

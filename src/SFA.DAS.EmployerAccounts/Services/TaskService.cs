@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.TasksApi;
 
 namespace SFA.DAS.EmployerAccounts.Services;

@@ -31,8 +31,8 @@ public class GetAccountTasksQueryHandler : IRequestHandler<GetAccountTasksQuery,
     {
         var apprenticeshipEmployerType =
             message.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy
-                ? TasksApi.ApprenticeshipEmployerType.Levy
-                : TasksApi.ApprenticeshipEmployerType.NonLevy;
+                ? ApprenticeshipEmployerType.Levy
+                : ApprenticeshipEmployerType.NonLevy;
 
         var tasks = await _taskService.GetAccountTasks(message.AccountId, message.ExternalUserId,
             apprenticeshipEmployerType);

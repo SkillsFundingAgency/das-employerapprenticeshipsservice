@@ -1,5 +1,5 @@
-﻿using System.Configuration;
-using System.IO;
+﻿using System.IO;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage;
 using Newtonsoft.Json;
@@ -10,10 +10,12 @@ namespace SFA.DAS.EmployerAccounts.Services;
 public abstract class AzureServiceBase<T>
 {
     private readonly IAutoConfigurationService _autoConfigurationService;
+    private readonly IConfiguration _configuration;
 
-    protected AzureServiceBase(IAutoConfigurationService autoConfigurationService)
+    protected AzureServiceBase(IAutoConfigurationService autoConfigurationService, IConfiguration configuration)
     {
         _autoConfigurationService = autoConfigurationService;
+        _configuration = configuration;
     }
 
     public abstract string ConfigurationName { get; }
@@ -25,7 +27,7 @@ public abstract class AzureServiceBase<T>
         {
             using (var reader = new StreamReader(blobData))
             {
-                var value = reader.ReadToEnd();
+                var value = await reader.ReadToEndAsync();
 
                 return string.IsNullOrEmpty(value)
                     ? default(T)
@@ -43,7 +45,7 @@ public abstract class AzureServiceBase<T>
     {
         try
         {
-            var storageAccount = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["StorageConnectionString"]);
+            var storageAccount = CloudStorageAccount.Parse(_configuration["StorageConnectionString"]);
             var client = storageAccount.CreateCloudBlobClient();
             var container = client.GetContainerReference(containerName);
             var blob = container.GetBlobReference(blobName);

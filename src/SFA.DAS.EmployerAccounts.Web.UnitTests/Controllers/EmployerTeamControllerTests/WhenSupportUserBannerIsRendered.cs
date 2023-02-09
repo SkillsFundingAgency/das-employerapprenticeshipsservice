@@ -7,13 +7,13 @@ public class WhenSupportUserBannerIsRendered
 {
     private EmployerTeamController _controller;
 
-    private readonly Mock<ICookieStorageService<FlashMessageViewModel>> _mockCookieStorageService = new();
-    private readonly Mock<EmployerTeamOrchestrator> _mockEmployerTeamOrchestrator = new();
-    private readonly Mock<HttpContext> _mockHttpContext = new();
-    private readonly Mock<ClaimsPrincipal> _mockPrincipal = new();
-    private readonly Mock<ClaimsIdentity> _mockClaimsIdentity = new();
+    private Mock<ICookieStorageService<FlashMessageViewModel>> _mockCookieStorageService;
+    private Mock<EmployerTeamOrchestrator> _mockEmployerTeamOrchestrator;
+    private Mock<HttpContext> _mockHttpContext;
+    private Mock<ClaimsPrincipal> _mockPrincipal;
+    private Mock<ClaimsIdentity> _mockClaimsIdentity;
     private bool _isAuthenticated = true;
-    private readonly List<Claim> _claims = new();
+    private List<Claim> _claims;
     private OrchestratorResponse<AccountDashboardViewModel> _orchestratorResponse;
     private OrchestratorResponse<AccountSummaryViewModel> _orchestratorAccountSummaryResponse;
     private AccountDashboardViewModel _accountViewModel;
@@ -25,8 +25,13 @@ public class WhenSupportUserBannerIsRendered
     [SetUp]
     public void Arrange()
     {
-        _claims.Add(new Claim(ControllerConstants.UserRefClaimKeyName, UserId));
-        
+        _mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
+        _mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
+        _mockHttpContext = new Mock<HttpContext>();
+        _mockPrincipal = new Mock<ClaimsPrincipal>();
+        _mockClaimsIdentity = new Mock<ClaimsIdentity>();
+        _claims = new List<Claim> { new Claim(ControllerConstants.UserRefClaimKeyName, UserId) };
+
         _mockPrincipal.Setup(m => m.Identity).Returns(_mockClaimsIdentity.Object);
         _mockClaimsIdentity.Setup(m => m.IsAuthenticated).Returns(_isAuthenticated);
         _mockPrincipal.Setup(x => x.Claims).Returns(_claims);

@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Aspose.Pdf;
 using Aspose.Pdf.Text;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.AutoConfiguration;
 
@@ -8,11 +9,14 @@ namespace SFA.DAS.EmployerAccounts.Services;
 
 public class PdfService : AzureServiceBase<string>, IPdfService
 {
-        
     public override string ConfigurationName => "legal-agreements";
     public sealed override ILogger Logger { get; set; }
 
-    public PdfService(ILogger logger, IAutoConfigurationService autoConfigurationService) : base(autoConfigurationService)
+    public PdfService(
+        ILogger logger,
+        IAutoConfigurationService autoConfigurationService, 
+        IConfiguration configuration) 
+        : base(autoConfigurationService, configuration)
     {
         Logger = logger;
     }

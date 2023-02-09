@@ -13,15 +13,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Helpers;
 
 class HtmlHelpersTests
 {
-    private Mock<ControllerContext> _mockControllerContext;
     private Mock<HttpContext> _mockHttpContext;
+    private Mock<IHttpContextAccessor> _mockHttpContextAccessor;
     private Mock<ClaimsPrincipal> _mockPrincipal;
     private Mock<ClaimsIdentity> _mockClaimsIdentity;
     private bool _isAuthenticated = true;
     private List<Claim> _claims;
     private string _userId;
     private IHtmlHelpers _htmlHelper;
-    private ViewContext _viewContext;
     private Mock<IMediator> _mockMediator;
     private EmployerAccountsConfiguration _employerConfirguration;
     private readonly string _supportConsoleUsers = "Tier1User,Tier2User";
@@ -29,8 +28,8 @@ class HtmlHelpersTests
     [SetUp]
     public void SetUp()
     {
-        _mockControllerContext = new Mock<ControllerContext>();
         _mockHttpContext = new Mock<HttpContext>();
+        _mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
         _mockPrincipal = new Mock<ClaimsPrincipal>();
         _mockClaimsIdentity = new Mock<ClaimsIdentity>();
         _employerConfirguration = new EmployerAccountsConfiguration()
@@ -49,13 +48,13 @@ class HtmlHelpersTests
         _mockClaimsIdentity.Setup(m => m.IsAuthenticated).Returns(_isAuthenticated);
         _mockClaimsIdentity.Setup(m => m.Claims).Returns(_claims);
         _mockHttpContext.Setup(m => m.User).Returns(_mockPrincipal.Object);
-        _mockControllerContext.Setup(m => m.HttpContext).Returns(_mockHttpContext.Object);
+        _mockHttpContextAccessor.Setup(x=> x.HttpContext).Returns(_mockHttpContext.Object);
 
         _mockMediator = new Mock<IMediator>();
 
         _htmlHelper = new HtmlHelpers(_employerConfirguration,
-            Mock.Of<IMediator>(),
-            Mock.Of<IHttpContextAccessor>(),
+            _mockMediator.Object,
+            _mockHttpContextAccessor.Object,
             Mock.Of<ILogger<HtmlHelpers>>(),
             Mock.Of<DAS.Authorization.Services.IAuthorizationService>(),
             Mock.Of<ICompositeViewEngine>()
@@ -146,14 +145,14 @@ class HtmlHelpersTests
     [TestCase(false, false, false)]
     [TestCase(true, false, false)]
     [TestCase(false, true, false)]
-    public void SingleOrg_SignedV3Agreement_ShouldNotShowExpiringAgreementBanner(bool hasSignedV1, bool hasSignedV2, bool shouldShowBanner)
+    public async Task SingleOrg_SignedV3Agreement_ShouldNotShowExpiringAgreementBanner(bool hasSignedV1, bool hasSignedV2, bool shouldShowBanner)
     {
         //Arrange
         var hashedAccountId = "ABC123";
         var userId = "USER1";
 
         _mockMediator.Setup(m => m.Send(It.Is<GetAccountEmployerAgreementsRequest>(q => q.HashedAccountId == hashedAccountId), It.IsAny<CancellationToken>()))
-            .Returns(Task.FromResult(new GetAccountEmployerAgreementsResponse
+            .ReturnsAsync(new GetAccountEmployerAgreementsResponse
             {
                 EmployerAgreements = new List<EmployerAgreementStatusDto>
                 {
@@ -175,10 +174,10 @@ class HtmlHelpersTests
                         LegalEntity = new AccountSpecificLegalEntityDto{ AccountLegalEntityId = 1 }
                     }
                 }
-            }));
+            });
 
         //Act
-        var actual = _htmlHelper.ShowExpiringAgreementBanner(userId, hashedAccountId);
+        var actual = await _htmlHelper.ShowExpiringAgreementBanner(userId, hashedAccountId);
 
         //Assert
         Assert.AreEqual(shouldShowBanner, actual);
@@ -188,14 +187,14 @@ class HtmlHelpersTests
     [TestCase(false, false, false)]
     [TestCase(true, false, true)]
     [TestCase(false, true, true)]
-    public void SingleOrg_PreviousAgreementSigned_V3NotSigned_ShouldShowExpiringAgreementBanner(bool hasSignedV1, bool hasSignedV2, bool shouldShowBanner)
+    public async Task SingleOrg_PreviousAgreementSigned_V3NotSigned_ShouldShowExpiringAgreementBanner(bool hasSignedV1, bool hasSignedV2, bool shouldShowBanner)
     {
         //Arrange
         var hashedAccountId = "ABC123";
         var userId = "USER1";
 
         _mockMediator.Setup(m => m.Send(It.Is<GetAccountEmployerAgreementsRequest>(q => q.HashedAccountId == hashedAccountId), It.IsAny<CancellationToken>()))
-            .Returns(Task.FromResult(new GetAccountEmployerAgreementsResponse
+            .ReturnsAsync(new GetAccountEmployerAgreementsResponse
             {
                 EmployerAgreements = new List<EmployerAgreementStatusDto>
                 {
@@ -212,10 +211,10 @@ class HtmlHelpersTests
                         LegalEntity = new AccountSpecificLegalEntityDto{ AccountLegalEntityId = 1 }
                     }
                 }
-            }));
+            });
 
         //Act
-        var actual = _htmlHelper.ShowExpiringAgreementBanner(userId, hashedAccountId);
+        var actual = await _htmlHelper.ShowExpiringAgreementBanner(userId, hashedAccountId);
 
         //Assert
         Assert.AreEqual(shouldShowBanner, actual);
@@ -224,7 +223,7 @@ class HtmlHelpersTests
     [Test]
     [TestCase(1)]
     [TestCase(5)]
-    public void MultipleOrg_OneWithSignedPrevious_AndV3NotSigned_ShouldShowExpiringAgreementBanner(int numOfOrgsWithSignedV3)
+    public async Task MultipleOrg_OneWithSignedPrevious_AndV3NotSigned_ShouldShowExpiringAgreementBanner(int numOfOrgsWithSignedV3)
     {
         //Arrange
         var hashedAccountId = "ABC123";
@@ -243,20 +242,21 @@ class HtmlHelpersTests
             LegalEntity = new AccountSpecificLegalEntityDto { AccountLegalEntityId = 3 }
         });
 
-        _mockMediator.Setup(m => m.Send(It.Is<GetAccountEmployerAgreementsRequest>(q => q.HashedAccountId == hashedAccountId), It.IsAny<CancellationToken>()))
-            .Returns(Task.FromResult(new GetAccountEmployerAgreementsResponse
+        _mockMediator.Setup(m => m.Send(
+                It.Is<GetAccountEmployerAgreementsRequest>(q => q.HashedAccountId == hashedAccountId && q.ExternalUserId == userId), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new GetAccountEmployerAgreementsResponse
             {
                 EmployerAgreements = employerAgreements
-            }));
+            });
 
         //Act
-        var actual = _htmlHelper.ShowExpiringAgreementBanner(userId, hashedAccountId);
+        var actual = await _htmlHelper.ShowExpiringAgreementBanner(userId, hashedAccountId);
 
         //Assert
         Assert.IsTrue(actual);
     }
 
-    private List<EmployerAgreementStatusDto> GetAgreementTestData(int numOfOrgsWithSignedV3)
+    private static List<EmployerAgreementStatusDto> GetAgreementTestData(int numOfOrgsWithSignedV3)
     {
         var employerAgreementStatusDtos = new List<EmployerAgreementStatusDto>();
 

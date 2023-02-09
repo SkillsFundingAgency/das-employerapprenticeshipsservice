@@ -15,16 +15,20 @@ public class AccessDeniedViewRenderButtonTestsTier1
     private Mock<ClaimsIdentity> _mockClaimsIdentity;
     private const string Tier1User = "Tier1User";
     private const string HashedAccountId = "HashedAccountId";
-    private readonly List<Claim> _claims = new();
+    private List<Claim> _claims;
     private readonly string _supportConsoleUsers = "Tier1User,Tier2User";
     private EmployerAccountsConfiguration _config;
-    private Mock<HttpContext> _mockHttpContext = new();
-    private Mock<IHttpContextAccessor> _mockHttpContextAccessor = new();
+    private Mock<HttpContext> _mockHttpContext;
+    private Mock<IHttpContextAccessor> _mockHttpContextAccessor;
 
 
     [SetUp]
     public void Arrange()
     {
+        _claims = new List<Claim>();
+        _mockHttpContext = new Mock<HttpContext>();
+        _mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
+
         _config = new EmployerAccountsConfiguration()
         {
             SupportConsoleUsers = _supportConsoleUsers

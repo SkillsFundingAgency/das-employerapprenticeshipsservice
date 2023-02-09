@@ -9,8 +9,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
 public class WhenIManageMyNotificationSettings : ControllerTestBase
 {
     private SettingsController _controller;
-    private readonly Mock<Web.Orchestrators.UserSettingsOrchestrator> _orchestrator = new();
-    private readonly Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage = new();
+    private Mock<Web.Orchestrators.UserSettingsOrchestrator> _orchestrator;
+    private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
     private const string ExpectedRedirectUrl = "http://redirect.local.test";
 
     [SetUp]
@@ -19,6 +19,9 @@ public class WhenIManageMyNotificationSettings : ControllerTestBase
         base.Arrange(ExpectedRedirectUrl);
 
         AddUserToContext("TEST");
+
+        _orchestrator = new Mock<Web.Orchestrators.UserSettingsOrchestrator>();
+        _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
         _orchestrator.Setup(x => x.GetNotificationSettingsViewModel(It.IsAny<string>()))
             .ReturnsAsync(new OrchestratorResponse<NotificationSettingsViewModel>

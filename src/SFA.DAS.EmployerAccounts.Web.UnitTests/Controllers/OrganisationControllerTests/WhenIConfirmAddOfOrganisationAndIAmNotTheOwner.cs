@@ -5,14 +5,17 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.OrganisationControl
 public class WhenIConfirmAddOfOrganisationAndIAmNotTheOwner : ControllerTestBase
 {
     private OrganisationController _controller;
-    private readonly Mock<OrganisationOrchestrator> _orchestrator = new();
-    private readonly Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage = new();
+    private Mock<OrganisationOrchestrator> _orchestrator;
+    private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
 
     [SetUp]
     public void Arrange()
     {
         base.Arrange();
         AddUserToContext();
+
+        _orchestrator = new Mock<OrganisationOrchestrator>();
+        _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
         _orchestrator.Setup(x => x.CreateLegalEntity(It.IsAny<CreateNewLegalEntityViewModel>()))
             .Throws<UnauthorizedAccessException>();

@@ -16,7 +16,7 @@
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
 		<PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="3.1.66" />
 		<PackageReference Include="NLog.Schema" Version="4.5.3" />
-		<PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
+		<PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.2.17" />
 		<PackageReference Include="SFA.DAS.Authentication" Version="1.1.2" />
 		<PackageReference Include="SFA.DAS.EmployerFinance.Messages" Version="1.6.2933" />
 		<PackageReference Include="SFA.DAS.Messaging" Version="3.1.133" />

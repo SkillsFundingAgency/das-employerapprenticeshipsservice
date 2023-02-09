@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using System.Threading;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
@@ -45,10 +46,10 @@ public class HtmlHelpers : IHtmlHelpers
 
 
     public HtmlHelpers(
-        EmployerAccountsConfiguration configuration, 
-        IMediator mediator, 
+        EmployerAccountsConfiguration configuration,
+        IMediator mediator,
         IHttpContextAccessor httpContextAccessor,
-        ILogger<HtmlHelpers> logger, 
+        ILogger<HtmlHelpers> logger,
         IAuthorizationService authorisationService,
         ICompositeViewEngine compositeViewEngine)
     {
@@ -216,7 +217,7 @@ public class HtmlHelpers : IHtmlHelpers
         return accountId;
     }
 
-    public  bool ViewExists(IHtmlHelper html, string viewName)
+    public bool ViewExists(IHtmlHelper html, string viewName)
     {
         var result = _compositeViewEngine.FindView(html.ViewContext, viewName, false);
 
@@ -229,7 +230,7 @@ public class HtmlHelpers : IHtmlHelpers
         return requiredRoles.Any(role => _httpContextAccessor.HttpContext.User.IsInRole(role));
     }
 
-    public  string ReturnToHomePageButtonHref(string accountId)
+    public string ReturnToHomePageButtonHref(string accountId)
     {
         accountId = GetHashedAccountId(accountId, out bool isConsoleUser, out bool isAccountIdSet);
 
