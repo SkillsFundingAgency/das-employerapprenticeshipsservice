@@ -145,7 +145,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
 
             var accountResponseTask = _mediator.Send(new GetEmployerAccountByHashedIdQuery
             {
-                HashedAccountId = hashedAccountId,
+                AccountId = hashedAccountId,
                 UserId = externalUserId
             });
 
@@ -576,7 +576,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
         {
             var accountResponse = await _mediator.Send(new GetEmployerAccountByHashedIdQuery
             {
-                HashedAccountId = hashedAccountId,
+                AccountId = hashedAccountId,
                 UserId = externalUserId
             });
 

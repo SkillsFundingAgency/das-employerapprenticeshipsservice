@@ -32,7 +32,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
     {
         var response = await Mediator.Send(new GetEmployerAccountByHashedIdQuery
         {
-            HashedAccountId = hashedAccountId
+            AccountId = hashedAccountId
         });
 
         return new OrchestratorResponse<EmployerAccountViewModel>
@@ -49,7 +49,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
     {
         var response = await Mediator.Send(new GetEmployerAccountByHashedIdQuery
         {
-            HashedAccountId = hashedAccountId,
+            AccountId = hashedAccountId,
             UserId = userId
         });
 

@@ -26,14 +26,14 @@ public class GetEmployerAccountByHashedIdValidator : IValidator<GetEmployerAccou
             result.AddError(nameof(item.UserId), "UserId has not been supplied");
         }
 
-        if (string.IsNullOrEmpty(item.HashedAccountId))
+        if (string.IsNullOrEmpty(item.AccountId))
         {
-            result.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
+            result.AddError(nameof(item.AccountId), "HashedAccountId has not been supplied");
         }
 
         if (result.IsValid())
         {
-            var membership = await _membershipRepository.GetCaller(item.HashedAccountId, item.UserId);
+            var membership = await _membershipRepository.GetCaller(item.AccountId, item.UserId);
 
             if (membership == null)
                 result.IsUnauthorized = true;

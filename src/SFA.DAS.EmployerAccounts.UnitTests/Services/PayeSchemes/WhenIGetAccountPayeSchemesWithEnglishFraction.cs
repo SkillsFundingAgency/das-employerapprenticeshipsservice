@@ -14,7 +14,7 @@ using SFA.DAS.EmployerAccounts.Interfaces.OuterApi;
 using SFA.DAS.EmployerAccounts.Mappings;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Services;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 using OuterApiDasEnglishFraction = SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Responses.Finance.DasEnglishFraction;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Services.PayeSchemes
@@ -29,11 +29,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.PayeSchemes
 
         private Mock<IOuterApiClient> _outerApiClient;
         private Mock<IPayeRepository> _payeSchemesRepository;
-        private Mock<IHashingService> _hashingService;
+        private Mock<IEncodingService> _encodingService;
         private IMapper _mapper;
 
         private IPayeSchemesWithEnglishFractionService _sut;
-        private string _hashedAccountId;
 
         [SetUp]
         public void Arrange()
@@ -51,11 +50,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.PayeSchemes
                 Amount = 0.5m
             };
 
-            _hashedAccountId = "123ABC";
-
             _outerApiClient = new Mock<IOuterApiClient>();
             _payeSchemesRepository = new Mock<IPayeRepository>();
-            _hashingService = new Mock<IHashingService>();
+            _encodingService = new Mock<IEncodingService>();
             
             _mapper = new Mapper(new MapperConfiguration(c =>
             {
@@ -71,20 +68,20 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.PayeSchemes
                 .Setup(s => s.Get<GetEnglishFractionCurrentResponse>(It.IsAny<GetEnglishFractionCurrentRequest>()))
                 .ReturnsAsync(new GetEnglishFractionCurrentResponse { Fractions = new List<OuterApiDasEnglishFraction> { _englishFraction } });
 
-            _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>()))
+            _encodingService.Setup(x => x.Decode(It.IsAny<string>(), EncodingType.AccountId))
                 .Returns(AccountId);
 
             _sut = new PayeSchemesWithEnglishFractionService(
                 _outerApiClient.Object,
                 _payeSchemesRepository.Object,
-                _hashingService.Object,
+                _encodingService.Object,
                 _mapper);
         }
 
         [Test]
         public  async Task ThenIfAccountIdIsValidThenOuterApiIsCalled()
         {
-            await _sut.GetPayeSchemes(_hashedAccountId);
+            await _sut.GetPayeSchemes(AccountId);
 
             _outerApiClient.Verify(v => v.Get<GetEnglishFractionCurrentResponse>(It.IsAny<GetEnglishFractionCurrentRequest>()), Times.Once);
         }
@@ -93,7 +90,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.PayeSchemes
         public  async Task ThenIfAccountIdIsValidPayeSchemesAreReturned()
         {
             //Act
-            var result = await _sut.GetPayeSchemes(_hashedAccountId);
+            var result = await _sut.GetPayeSchemes(AccountId);
 
             //Assert
             Assert.AreEqual(1, result.Count());
@@ -107,7 +104,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.PayeSchemes
             _payeSchemesRepository.Setup(x => x.GetPayeSchemesByAccountId(It.IsAny<long>()))
                               .ReturnsAsync(new List<PayeView>());
 
-            var result = await _sut.GetPayeSchemes(_hashedAccountId);
+            var result = await _sut.GetPayeSchemes(AccountId);
 
             //Assert
             Assert.IsEmpty(result);

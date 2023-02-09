@@ -10,7 +10,7 @@ using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.TestCommon.DatabaseMock;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.TestCommon;
 
@@ -26,7 +26,7 @@ public class EmployerAgreementBuilder
 {
     public EmployerAgreementBuilder()
     {
-        HashingServiceMock = new Mock<IHashingService>();
+        EncodingServiceMock = new Mock<IEncodingService>();
         Accounts = new List<Account>();
         AccountLegalEntities = new List<AccountLegalEntity>();
         AgreementTemplates = new List<AgreementTemplate>();
@@ -37,10 +37,8 @@ public class EmployerAgreementBuilder
         EmployerAccountDbContextMock = new Mock<EmployerAccountsDbContext>();
     }
 
-    public Mock<IHashingService> HashingServiceMock { get; }
-    public IHashingService HashingService => HashingServiceMock.Object;
-    public Mock<IHashingService> AccountLegalEntityHashingServiceMock { get; }
-    public IHashingService AccountLegalEntityHashingService => AccountLegalEntityHashingServiceMock.Object;
+    public Mock<IEncodingService> EncodingServiceMock { get; }
+    public IEncodingService EncodingService => EncodingServiceMock.Object;
     public List<Account> Accounts { get; }
     public List<AgreementTemplate> AgreementTemplates { get; set; }
     public List<AccountLegalEntity> AccountLegalEntities { get; set; }
@@ -264,8 +262,8 @@ public class EmployerAgreementBuilder
 
     private void AddHash(long id, string hashValue)
     {
-        HashingServiceMock.Setup(c => c.DecodeValue(hashValue)).Returns(id);
-        HashingServiceMock.Setup(c => c.HashValue(id)).Returns(hashValue);
+        EncodingServiceMock.Setup(c => c.Decode(hashValue, It.IsAny<EncodingType>())).Returns(id);
+        EncodingServiceMock.Setup(c => c.Encode(id, It.IsAny<EncodingType>())).Returns(hashValue);
     }
 
     private AccountLegalEntity EnsureAccountLegalEntity(long accountId, long legalEntityId, long accountLegalEntityId)

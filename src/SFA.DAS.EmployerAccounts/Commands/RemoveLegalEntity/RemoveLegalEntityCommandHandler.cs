@@ -65,8 +65,8 @@ public class RemoveLegalEntityCommandHandler : IRequestHandler<RemoveLegalEntity
             throw new UnauthorizedAccessException();
         }
 
-        var agreements = (await _employerAgreementRepository.GetAccountLegalEntityAgreements(message.AccountLegalEntityId)).ToList();
-        var legalAgreement = agreements.OrderByDescending(a => a.TemplateId).First();
+        var agreements = await _employerAgreementRepository.GetAccountLegalEntityAgreements(message.AccountLegalEntityId);
+        var legalAgreement = agreements.ToList().OrderByDescending(a => a.TemplateId).First();
 
         var hashedAccountId = _encodingService.Encode(message.AccountId, EncodingType.AccountId);
         var hashedLegalAgreementId = _encodingService.Encode(legalAgreement.Id, EncodingType.AccountId);

@@ -55,7 +55,7 @@ public class WhenRenamingAnAccount
         var response = await _orchestrator.GetEmployerAccount("ABC123");
 
         //Assert
-        _mediator.Verify(x => x.Send(It.Is<GetEmployerAccountByHashedIdQuery>(q => q.HashedAccountId.Equals(_account.HashedId)), It.IsAny<CancellationToken>()));
+        _mediator.Verify(x => x.Send(It.Is<GetEmployerAccountByHashedIdQuery>(q => q.AccountId.Equals(_account.HashedId)), It.IsAny<CancellationToken>()));
         Assert.AreEqual(_account.HashedId, response.Data.HashedId);
         Assert.AreEqual(_account.Name, response.Data.Name);
         Assert.AreEqual(HttpStatusCode.OK, response.Status);

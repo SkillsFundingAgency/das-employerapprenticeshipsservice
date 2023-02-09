@@ -9,9 +9,9 @@ using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Extensions;
-using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
+using SFA.DAS.Encoding;
 using SFA.DAS.Testing.Helpers;
 
 namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.Helpers
@@ -67,8 +67,9 @@ select (
                 .Without(user => user.Id)
                 .Without(user => user.UserRef)
                 .Create();
+            
             var accountRepo = new AccountRepository(_configuration,
-                Mock.Of<ILogger<AccountRepository>>(), lazyDb, Mock.Of<IAccountLegalEntityPublicHashingService>());
+                Mock.Of<ILogger<AccountRepository>>(), lazyDb, Mock.Of<IEncodingService>());
 
             accountDbContext.Database.BeginTransaction();
 

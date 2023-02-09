@@ -15,14 +15,13 @@ using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Events.Agreement;
 using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.TestCommon;
+using SFA.DAS.Encoding;
 using SFA.DAS.Events.Api.Types;
-using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus.Services;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
@@ -35,8 +34,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
         private Mock<IEmployerAgreementRepository> _repository;
         private RemoveLegalEntityCommand _command;
         private Mock<IMediator> _mediator;
-        private Mock<IHashingService> _hashingService;
-        private Mock<IAccountLegalEntityPublicHashingService> _accountLegalEntityPublicHashingService;
+        private Mock<IEncodingService> _encodingService;
         private Mock<IGenericEventFactory> _genericEventHandler;
         private Mock<IEmployerAgreementEventFactory> _employerAgreementEventFactory;
         private Mock<IMembershipRepository> _membershipRepository;
@@ -87,13 +85,11 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
 
             _repository.Setup(r => r.GetEmployerAgreement(ExpectedEmployerAgreementId)).ReturnsAsync(_expectedAgreement);
 
-            _hashingService = new Mock<IHashingService>();
-            _hashingService.Setup(x => x.DecodeValue(ExpectedHashedAccountId)).Returns(ExpectedAccountId);
-            _hashingService.Setup(x => x.DecodeValue(ExpectedHashedEmployerAgreementId)).Returns(ExpectedEmployerAgreementId);
-            _hashingService.Setup(x => x.HashValue(ExpectedEmployerAgreementId)).Returns(ExpectedHashedEmployerAgreementId);
-
-            _accountLegalEntityPublicHashingService = new Mock<IAccountLegalEntityPublicHashingService>();
-            _accountLegalEntityPublicHashingService.Setup(x => x.DecodeValue(ExpectedHashedAccountLegalEntityId)).Returns(ExpectedAccountLegalEntityId);
+            _encodingService = new Mock<IEncodingService>();
+            _encodingService.Setup(x => x.Decode(ExpectedHashedAccountId, EncodingType.AccountId)).Returns(ExpectedAccountId);
+            _encodingService.Setup(x => x.Decode(ExpectedHashedEmployerAgreementId, EncodingType.AccountId)).Returns(ExpectedEmployerAgreementId);
+            _encodingService.Setup(x => x.Encode(ExpectedEmployerAgreementId, EncodingType.AccountId)).Returns(ExpectedHashedEmployerAgreementId);
+            _encodingService.Setup(x => x.Decode(ExpectedHashedAccountLegalEntityId, EncodingType.AccountLegalEntityId)).Returns(ExpectedAccountLegalEntityId);
 
             _employerAgreementEventFactory = new Mock<IEmployerAgreementEventFactory>();
             _employerAgreementEventFactory.Setup(x => x.RemoveAgreementEvent(ExpectedHashedEmployerAgreementId)).Returns(new AgreementRemovedEvent { HashedAgreementId = ExpectedHashedEmployerAgreementId });
@@ -126,15 +122,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
 
               });
 
-            _command = new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId, UserId = _expectedUserId, HashedAccountLegalEntityId = ExpectedHashedAccountLegalEntityId };
+            _command = new RemoveLegalEntityCommand { AccountId = ExpectedAccountId, UserId = _expectedUserId, AccountLegalEntityId = ExpectedAccountLegalEntityId };
 
             _handler = new RemoveLegalEntityCommandHandler(
                 _validator.Object,
                 _logger.Object,
                 _repository.Object,
                 _mediator.Object,
-                _accountLegalEntityPublicHashingService.Object,
-                _hashingService.Object,
+                _encodingService.Object,
                 _genericEventHandler.Object,
                 _employerAgreementEventFactory.Object,
                 _membershipRepository.Object,
@@ -161,7 +156,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
             //Act Assert
             var command = new RemoveLegalEntityCommand();
             Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _handler.Handle(command, CancellationToken.None));
-            _logger.VerifyLogging($"User {command.UserId} tried to remove {command.HashedAccountLegalEntityId} from Account {command.HashedAccountId}", LogLevel.Information);
+            _logger.VerifyLogging($"User {command.UserId} tried to remove {command.AccountLegalEntityId} from Account {command.AccountId}", LogLevel.Information);
         }
 
         [Test]
@@ -172,7 +167,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
 
             //Assert
             _validator.Verify(x => x.ValidateAsync(It.Is<RemoveLegalEntityCommand>(c =>
-                                                                          c.HashedAccountId.Equals(ExpectedHashedAccountId)
+                                                                          c.AccountId.Equals(ExpectedAccountId)
                                                                           && c.UserId.Equals(_expectedUserId))));
 
             _repository.Verify(x => x.GetAccountLegalEntityAgreements(ExpectedAccountLegalEntityId));

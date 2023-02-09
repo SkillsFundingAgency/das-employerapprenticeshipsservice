@@ -37,7 +37,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountTests
             //Act
             await RequestHandler.Handle(new GetEmployerAccountByHashedIdQuery
             {
-                HashedAccountId = ExpectedHashedAccountId
+                AccountId = ExpectedHashedAccountId
             }, CancellationToken.None);
 
             //Assert
@@ -50,7 +50,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountTests
             //Act
             var result = await RequestHandler.Handle(new GetEmployerAccountByHashedIdQuery
             {
-                HashedAccountId = ExpectedHashedAccountId
+                AccountId = ExpectedHashedAccountId
             }, CancellationToken.None);
 
             //Assert

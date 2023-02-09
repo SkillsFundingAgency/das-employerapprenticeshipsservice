@@ -12,7 +12,6 @@ public enum OrganisationUpdatesAvailable
 public class ReviewOrganisationAddressViewModel : OrganisationViewModelBase
 {
     public string DataSourceFriendlyName { get; set; }
-    public string AccountLegalEntityPublicHashedId { get; set; }
     public string RefreshedName { get; set; }
     public string RefreshedAddress { get; set; }
     public OrganisationUpdatesAvailable UpdatesAvailable { get; set; }

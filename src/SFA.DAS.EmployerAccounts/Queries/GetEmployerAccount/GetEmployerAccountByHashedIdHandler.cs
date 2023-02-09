@@ -30,7 +30,7 @@ public class GetEmployerAccountByHashedIdHandler : IRequestHandler<GetEmployerAc
             throw new UnauthorizedAccessException();
         }
 
-        var employerAccount = await _employerAccountRepository.GetAccountByHashedId(message.HashedAccountId);
+        var employerAccount = await _employerAccountRepository.GetAccountById(message.AccountId);
 
         return new GetEmployerAccountByHashedIdResponse
         {

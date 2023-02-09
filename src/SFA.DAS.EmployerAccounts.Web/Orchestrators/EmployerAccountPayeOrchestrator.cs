@@ -152,7 +152,7 @@ public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorB
         var accountResponse = await
             Mediator.Send(new GetEmployerAccountByHashedIdQuery
             {
-                HashedAccountId = model.HashedAccountId,
+                AccountId = model.HashedAccountId,
                 UserId = model.UserId
             });
 

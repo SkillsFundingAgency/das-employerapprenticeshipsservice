@@ -20,7 +20,7 @@ using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 using SFA.DAS.EmployerAccounts.UnitTests.ObjectMothers;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Testing.Services;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AddPayeToAccountTests
@@ -31,11 +31,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AddPayeToAccountTests
         private Mock<IValidator<AddPayeToAccountCommand>> _validator;
         private Mock<IPayeRepository> _accountRepository;
         private TestableEventPublisher _eventPublisher;
-        private Mock<IHashingService> _hashingService;
+        private Mock<IEncodingService> _encodingService;
         private Mock<IMediator> _mediator;
         private Mock<IGenericEventFactory> _genericEventFactory;
         private Mock<IPayeSchemeEventFactory> _payeSchemeEventFactory;
 
+        private const string ExpectedHashedAccountId = "GG7840";
         private const long ExpectedAccountId = 54564;
         private const string ExpectedPayeName = "Paye Scheme 1";
         private User _user;
@@ -50,8 +51,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AddPayeToAccountTests
             _validator = new Mock<IValidator<AddPayeToAccountCommand>>();
             _validator.Setup(x => x.ValidateAsync(It.IsAny<AddPayeToAccountCommand>())).ReturnsAsync(new ValidationResult());
 
-            _hashingService = new Mock<IHashingService>();
-            _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>())).Returns(ExpectedAccountId);
+            _encodingService = new Mock<IEncodingService>();
+            _encodingService.Setup(x => x.Decode(ExpectedHashedAccountId, EncodingType.AccountId)).Returns(ExpectedAccountId);
 
             _mediator = new Mock<IMediator>();
             _genericEventFactory = new Mock<IGenericEventFactory>();
@@ -61,7 +62,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AddPayeToAccountTests
                 _validator.Object,
                 _accountRepository.Object,
                 _eventPublisher,
-                _hashingService.Object,
+                _encodingService.Object,
                 _mediator.Object,
                 _genericEventFactory.Object,
                 _payeSchemeEventFactory.Object);

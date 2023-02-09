@@ -17,7 +17,7 @@ public class SupportErrorOrchestrator
         {
             var accountResponse = await _mediator.Send(new GetEmployerAccountByHashedIdQuery
             {
-                HashedAccountId = hashedAccountId,
+                AccountId = hashedAccountId,
                 UserId = externalUserId
             });
 

@@ -7,19 +7,16 @@ using NUnit.Framework;
 using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.Organisation;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove;
-using SFA.DAS.HashingService;
-using SFA.DAS.Validation;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntityRemove
 {
     public class WhenIGetAccountLegalEntityRemove : QueryBaseTest<GetAccountLegalEntityRemoveQueryHandler, GetAccountLegalEntityRemoveRequest, GetAccountLegalEntityRemoveResponse>
     {
-        private Mock<IHashingService> _hashingService;
-        private Mock<IAccountLegalEntityPublicHashingService> _accountLegalEntityPublicHashingService;
+        private Mock<IEncodingService> _encodingService;
         private Mock<IEmployerAgreementRepository> _repository;
         private Mock<ICommitmentsV2ApiClient> _commitmentsV2ApiClient;
       
@@ -29,6 +26,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntityRemove
 
         private const string ExpectedHashedAccountId = "345ASD";
         private const string ExpectedHashedAccountLegalEntityId = "PHF78";
+        private const string ExpectedHashedAgreementId = "ZH157";
         private const long ExpectedAgreementId = 12345555;
         private const string ExpectedUserId = "098GHY";
         private const long ExpectedAccountId = 98172938;
@@ -60,12 +58,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntityRemove
                     new List<EmployerAgreement>()
                 );
 
-            _hashingService = new Mock<IHashingService>();
-            _hashingService.Setup(x => x.DecodeValue(ExpectedHashedAccountId)).Returns(ExpectedAccountId);
-            _hashingService.Setup(x => x.DecodeValue(ExpectedHashedAccountLegalEntityId)).Returns(ExpectedAgreementId);
-
-            _accountLegalEntityPublicHashingService = new Mock<IAccountLegalEntityPublicHashingService>();
-            _accountLegalEntityPublicHashingService.Setup(x => x.DecodeValue(ExpectedHashedAccountLegalEntityId)).Returns(ExpectedAccountLegalEntityId);
+            _encodingService = new Mock<IEncodingService>();
+            _encodingService.Setup(x => x.Decode(ExpectedHashedAccountId, EncodingType.AccountId)).Returns(ExpectedAccountId);
+            _encodingService.Setup(x => x.Decode(ExpectedHashedAgreementId, EncodingType.AccountLegalEntityId)).Returns(ExpectedAgreementId);
+            _encodingService.Setup(x => x.Decode(ExpectedHashedAccountLegalEntityId, EncodingType.AccountLegalEntityId)).Returns(ExpectedAccountLegalEntityId);
 
             _commitmentsV2ApiClient = new Mock<ICommitmentsV2ApiClient>();
             _commitmentsV2ApiClient.Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
@@ -78,8 +74,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntityRemove
             RequestHandler = new GetAccountLegalEntityRemoveQueryHandler(
                 RequestValidator.Object,
                 _repository.Object,
-                _hashingService.Object,
-                _accountLegalEntityPublicHashingService.Object,
+                _encodingService.Object,
                 _commitmentsV2ApiClient.Object
             );
         }

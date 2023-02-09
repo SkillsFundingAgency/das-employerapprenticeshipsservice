@@ -13,9 +13,8 @@ using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Testing.Services;
-using SFA.DAS.Validation;
 
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RenameEmployerAccountCommandTests
@@ -24,7 +23,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RenameEmployerAccountComma
     {
         private Mock<IEmployerAccountRepository> _repository;
         private Mock<IValidator<RenameEmployerAccountCommand>> _validator;
-        private Mock<IHashingService> _hashingService;
+        private Mock<IEncodingService> _encodingService;
         private Mock<IMediator> _mediator;
         private Mock<IMembershipRepository> _membershipRepository;
         private Mock<IGenericEventFactory> _genericEventFactory;
@@ -57,12 +56,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RenameEmployerAccountComma
             };
 
             _membershipRepository = new Mock<IMembershipRepository>();
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(_owner);
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(_owner);
 
-            _hashingService = new Mock<IHashingService>();
-            _hashingService.Setup(x => x.DecodeValue(It.Is<string>(s => s == HashedAccountId)))
-                .Returns(AccountId);
+            _encodingService = new Mock<IEncodingService>();
+            _encodingService.Setup(x => x.Decode(HashedAccountId, EncodingType.AccountId)).Returns(AccountId);
 
             _repository = new Mock<IEmployerAccountRepository>();
             _repository.Setup(x => x.GetAccountById(It.IsAny<long>()))
@@ -88,7 +85,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RenameEmployerAccountComma
                 _repository.Object,
                 _membershipRepository.Object,
                 _validator.Object,
-                _hashingService.Object,
+                _encodingService.Object,
                 _mediator.Object,
                 _genericEventFactory.Object,
                 _accountEventFactory.Object);

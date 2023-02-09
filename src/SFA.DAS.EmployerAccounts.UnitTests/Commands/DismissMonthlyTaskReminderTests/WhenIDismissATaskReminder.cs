@@ -4,12 +4,10 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.DismissMonthlyTaskReminder;
-using SFA.DAS.EmployerAccounts.Exceptions;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.TasksApi;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.DismissMonthlyTaskReminderTests
 {
@@ -20,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.DismissMonthlyTaskReminder
         private DismissMonthlyTaskReminderCommand _command;
         private Mock<ILog> _logger;
         private Mock<IValidator<DismissMonthlyTaskReminderCommand>> _validator;
-        private Mock<IHashingService> _hashingService;
+        private Mock<IEncodingService> _encodingService;
         private const long AccountId = 3;
         
         [SetUp]
@@ -37,10 +35,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.DismissMonthlyTaskReminder
                 TaskType = TaskType.LevyDeclarationDue
             };
 
-            _hashingService = new Mock<IHashingService>();
-            _hashingService.Setup(x => x.DecodeValue(_command.HashedAccountId)).Returns(AccountId);
+            _encodingService = new Mock<IEncodingService>();
+            _encodingService.Setup(x => x.Decode(_command.HashedAccountId, EncodingType.AccountId)).Returns(AccountId);
 
-            _handler = new DismissMonthlyTaskReminderCommandHandler(_taskService.Object, _validator.Object, _hashingService.Object);
+            _handler = new DismissMonthlyTaskReminderCommandHandler(_taskService.Object, _validator.Object, _encodingService.Object);
 
             _validator.Setup(x => x.Validate(It.IsAny<DismissMonthlyTaskReminderCommand>()))
                 .Returns(new ValidationResult());

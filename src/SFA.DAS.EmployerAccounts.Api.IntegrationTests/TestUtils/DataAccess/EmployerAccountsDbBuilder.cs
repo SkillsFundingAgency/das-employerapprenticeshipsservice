@@ -10,9 +10,8 @@ using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 using SFA.DAS.Testing.Helpers;
 
 namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
@@ -23,8 +22,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
         private const string ServiceName = "SFA.DAS.EmployerAccounts";
 
         private readonly IServiceProvider _serviceProvider;
-        private readonly IHashingService _hashingService;
-        private readonly IPublicHashingService _publicHashingService;
+        private readonly IEncodingService _encodingService;
         private readonly EmployerAccountsDbContext _dbContext;
         private readonly Lazy<IAccountRepository> _lazyAccountRepository;
         private readonly Lazy<IUserRepository> _lazyUserRepository;
@@ -36,8 +34,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
 
             _configuration = ConfigurationTestHelper.GetConfiguration<EmployerAccountsConfiguration>(ServiceName);
 
-            _hashingService = _serviceProvider.GetService<IHashingService>();
-            _publicHashingService = _serviceProvider.GetService<IPublicHashingService>();
+            _encodingService = _serviceProvider.GetService<IEncodingService>();
             var sqlConnection = DatabaseExtensions.GetSqlConnection(_configuration.DatabaseConnectionString);
             var optionsBuilder = new DbContextOptionsBuilder<EmployerAccountsDbContext>();
             optionsBuilder.UseSqlServer(sqlConnection);
@@ -64,7 +61,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
                     _configuration,
                     _serviceProvider.GetService<ILogger<AccountRepository>>(),
                     new Lazy<EmployerAccountsDbContext>(() => _dbContext),
-                    _serviceProvider.GetService<IAccountLegalEntityPublicHashingService>());
+                    _encodingService);
         }
 
         public bool HasTransaction => _dbContext.Database.CurrentTransaction != null;
@@ -123,8 +120,8 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
             var output = new EmployerAccountOutput
             {
                 AccountId = createResult.AccountId,
-                HashedAccountId = _hashingService.HashValue(createResult.AccountId),
-                PublicHashedAccountId = _publicHashingService.HashValue(createResult.AccountId),
+                HashedAccountId = _encodingService.Encode(createResult.AccountId, EncodingType.AccountId),
+                PublicHashedAccountId = _encodingService.Encode(createResult.AccountId, EncodingType.PublicAccountId),
                 LegalEntityId =  createResult.LegalEntityId
             };
 
@@ -142,7 +139,8 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
             {
                 EmployerAgreementId = view.Id,
                 LegalEntityId = view.LegalEntityId,
-                HashedAgreementId = view.HashedAgreementId
+                // TODO: maybe
+                //HashedAgreementId = view.HashedAgreementId
             };
 
             return output;

@@ -14,11 +14,9 @@ using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Types.Models;
-using SFA.DAS.HashingService;
-using SFA.DAS.NLog.Logger;
+using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Testing.Services;
 using SFA.DAS.TimeProvider;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AcceptInvitationTests
 {
@@ -33,7 +31,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AcceptInvitationTests
         private Mock<IAuditService> _auditService;
         private TestableEventPublisher _eventPublisher;
         private Mock<IValidator<AcceptInvitationCommand>> _validator;
-        private Mock<IHashingService> _hashingService;
+        private Mock<IEncodingService> _encodingService;
 
         [SetUp]
         public void Setup()
@@ -55,7 +53,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AcceptInvitationTests
             _auditService = new Mock<IAuditService>();
             _eventPublisher = new TestableEventPublisher();
             _validator = new Mock<IValidator<AcceptInvitationCommand>>();
-            _hashingService = new Mock<IHashingService>();
+            _encodingService = new Mock<IEncodingService>();
 
             _validator.Setup(x => x.Validate(It.IsAny<AcceptInvitationCommand>())).Returns(new ValidationResult());
 
@@ -71,7 +69,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AcceptInvitationTests
                 _auditService.Object,
                 _eventPublisher,
                 _validator.Object,
-                _hashingService.Object,
+                _encodingService.Object,
                 Mock.Of<ILogger<AcceptInvitationCommandHandler>>());
         }
 
@@ -179,7 +177,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AcceptInvitationTests
                                  .ReturnsAsync(user);
 
             var expectedHashedId = "HASHED";
-            _hashingService.Setup(x => x.HashValue(_invitation.AccountId)).Returns(expectedHashedId);
+            _encodingService.Setup(x => x.Encode(_invitation.AccountId, EncodingType.AccountId)).Returns(expectedHashedId);
 
             //Act
             await _handler.Handle(new AcceptInvitationCommand(), CancellationToken.None);

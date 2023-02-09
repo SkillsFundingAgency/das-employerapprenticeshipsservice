@@ -15,9 +15,8 @@ using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Queries.RemovePayeFromAccount;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Testing.Services;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemovePayeFromAccountTests
 {
@@ -35,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemovePayeFromAccountTests
         private RemovePayeFromAccountCommandHandler _handler;
         private Mock<IValidator<RemovePayeFromAccountCommand>> _validator;
         private Mock<IPayeRepository> _accountRepository;
-        private Mock<IHashingService> _hashingService;
+        private Mock<IEncodingService> _encodingServiceMock;
         private Mock<IMediator> _mediator;
         private Mock<IGenericEventFactory> _genericEventFactory;
         private Mock<IPayeSchemeEventFactory> _payeSchemeEventFactory;
@@ -50,8 +49,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemovePayeFromAccountTests
             _validator = new Mock<IValidator<RemovePayeFromAccountCommand>>();
             _validator.Setup(x => x.ValidateAsync(It.IsAny<RemovePayeFromAccountCommand>())).ReturnsAsync(new ValidationResult());
 
-            _hashingService = new Mock<IHashingService>();
-            _hashingService.Setup(x => x.DecodeValue(HashedAccountId)).Returns(AccountId);
+            _encodingServiceMock = new Mock<IEncodingService>();
+            _encodingServiceMock.Setup(x => x.Decode(HashedAccountId, EncodingType.AccountId)).Returns(AccountId);
 
             _mediator = new Mock<IMediator>();
             _genericEventFactory = new Mock<IGenericEventFactory>();
@@ -67,7 +66,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemovePayeFromAccountTests
                 _mediator.Object,
                 _validator.Object,
                 _accountRepository.Object,
-                _hashingService.Object,
+                _encodingServiceMock.Object,
                 _genericEventFactory.Object,
                 _payeSchemeEventFactory.Object,
                 _eventPublisher,

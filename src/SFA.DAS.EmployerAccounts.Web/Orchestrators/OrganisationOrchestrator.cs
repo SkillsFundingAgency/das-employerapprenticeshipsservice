@@ -3,7 +3,6 @@ using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 using SFA.DAS.EmployerAccounts.Commands.CreateOrganisationAddress;
 using SFA.DAS.EmployerAccounts.Commands.UpdateOrganisationDetails;
 using SFA.DAS.EmployerAccounts.Extensions;
-using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntity;
 using SFA.DAS.EmployerAccounts.Queries.GetOrganisationById;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
@@ -17,21 +16,18 @@ public class OrganisationOrchestrator : UserVerificationOrchestratorBase, IOrche
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
     private readonly ICookieStorageService<EmployerAccountData> _cookieService;
-    private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityHashingService;
 
     private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
     public OrganisationOrchestrator(
         IMediator mediator,
         IMapper mapper,
-        ICookieStorageService<EmployerAccountData> cookieService,
-        IAccountLegalEntityPublicHashingService accountLegalEntityHashingService)
+        ICookieStorageService<EmployerAccountData> cookieService)
         : base(mediator)
     {
         _mediator = mediator;
         _mapper = mapper;
         _cookieService = cookieService;
-        _accountLegalEntityHashingService = accountLegalEntityHashingService;
     }
     
     protected OrganisationOrchestrator() { }
@@ -188,11 +184,11 @@ public class OrganisationOrchestrator : UserVerificationOrchestratorBase, IOrche
         };
     }
 
-    public async Task<OrchestratorResponse<ReviewOrganisationAddressViewModel>> GetRefreshedOrganisationDetails(string accountLegalEntityPublicHashedId)
+    public async Task<OrchestratorResponse<ReviewOrganisationAddressViewModel>> GetRefreshedOrganisationDetails(long accountLegalEntityId)
     {
         var currentDetails = await Mediator.Send(new GetAccountLegalEntityRequest
         {
-            AccountLegalEntityId = _accountLegalEntityHashingService.DecodeValue(accountLegalEntityPublicHashedId)
+            AccountLegalEntityId = accountLegalEntityId
         });
 
         var refreshedDetails = await Mediator.Send(new GetOrganisationByIdRequest
@@ -206,7 +202,6 @@ public class OrganisationOrchestrator : UserVerificationOrchestratorBase, IOrche
             Data = new ReviewOrganisationAddressViewModel
             {
                 DataSourceFriendlyName = currentDetails.AccountLegalEntity.OrganisationType.GetFriendlyName(),
-                AccountLegalEntityPublicHashedId = accountLegalEntityPublicHashedId,
                 OrganisationName = currentDetails.AccountLegalEntity.Name,
                 OrganisationAddress = currentDetails.AccountLegalEntity.Address,
                 RefreshedName = refreshedDetails.Organisation.Name,

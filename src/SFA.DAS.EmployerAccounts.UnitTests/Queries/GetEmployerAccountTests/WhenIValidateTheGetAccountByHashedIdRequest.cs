@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountTests
         public async Task ThenTheResultIsValidWhenAllFieldsArePopulatedAndTheUserIsPartOfTheAccount()
         {
             //Act
-            var result = await _validator.ValidateAsync(new GetEmployerAccountByHashedIdQuery { HashedAccountId = ExpectedHashedId, UserId = ExpectedUserId });
+            var result = await _validator.ValidateAsync(new GetEmployerAccountByHashedIdQuery { AccountId = ExpectedHashedId, UserId = ExpectedUserId });
 
             //Assert
             Assert.IsTrue(result.IsValid());
