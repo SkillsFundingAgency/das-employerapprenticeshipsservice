@@ -12,6 +12,7 @@ using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Mappings;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities.Api;
 using SFA.DAS.EmployerAccounts.TestCommon;
+using SFA.DAS.EmployerAccounts.TestCommon.DatabaseMock;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntities.Api
 {
@@ -94,8 +95,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntities.Api
 
             Db = new Mock<EmployerAccountsDbContext>();
             AccountLegalEntities = new List<EmployerAccounts.Models.Account.AccountLegalEntity>();
+           
+            var mockDbSet = AccountLegalEntities.AsQueryable().BuildMockDbSet();
 
-            Db.Setup(d => d.AccountLegalEntities).Returns(new DbSetStub<EmployerAccounts.Models.Account.AccountLegalEntity>(AccountLegalEntities));
+            Db.Setup(d => d.AccountLegalEntities).Returns(mockDbSet.Object);
 
             Handler = new GetAccountLegalEntitiesQueryHandler(new Lazy<EmployerAccountsDbContext>(() => Db.Object), Mapper);
         }
