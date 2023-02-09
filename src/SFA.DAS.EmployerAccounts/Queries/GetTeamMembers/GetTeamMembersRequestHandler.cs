@@ -29,9 +29,9 @@ public class GetTeamMembersRequestHandler : IRequestHandler<GetTeamMembersReques
             throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        _logger.LogInformation($"Getting team members for account id {message.HashedAccountId}");
+        _logger.LogInformation($"Getting team members for account id {message.AccountId}");
 
-        var teamMembers = await _repository.GetAccountTeamMembers(message.HashedAccountId);
+        var teamMembers = await _repository.GetAccountTeamMembers(message.AccountId);
 
         return new GetTeamMembersResponse
         {

@@ -2,5 +2,5 @@
 
 public class GetEmployerAgreementByIdRequest : IRequest<GetEmployerAgreementByIdResponse>
 {
-    public string HashedAgreementId { get; set; }
+    public long AgreementId { get; set; }
 }

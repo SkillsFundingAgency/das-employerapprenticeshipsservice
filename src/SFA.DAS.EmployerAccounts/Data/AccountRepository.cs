@@ -10,6 +10,7 @@ using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
+using SFA.DAS.Encoding;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Data;
@@ -17,16 +18,16 @@ namespace SFA.DAS.EmployerAccounts.Data;
 public class AccountRepository : BaseRepository, IAccountRepository
 {
     private readonly Lazy<EmployerAccountsDbContext> _db;
-    private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityHashingService;
+    private readonly IEncodingService _encodingService;
 
     public AccountRepository(
         EmployerAccountsConfiguration configuration,
         ILogger<AccountRepository> logger, Lazy<EmployerAccountsDbContext> db,
-        IAccountLegalEntityPublicHashingService accountLegalEntityHashingService)
+        IEncodingService encodingService)
         : base(configuration.DatabaseConnectionString, logger)
     {
         _db = db;
-        _accountLegalEntityHashingService = accountLegalEntityHashingService;
+        _encodingService = encodingService;
     }
 
     public Task AddPayeToAccount(Paye payeScheme)
@@ -326,7 +327,7 @@ public class AccountRepository : BaseRepository, IAccountRepository
     {
         var parameters = new DynamicParameters();
 
-        var publicHash = _accountLegalEntityHashingService.HashValue(accountLegalEntityId);
+        var publicHash = _encodingService.Encode(accountLegalEntityId, EncodingType.AccountLegalEntityId);
 
         parameters.Add("@AccountLegalEntityId", accountLegalEntityId, DbType.Int64);
         parameters.Add("@PublicHashedId", publicHash, DbType.String);

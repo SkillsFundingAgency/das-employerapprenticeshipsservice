@@ -8,9 +8,8 @@ using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Services;
-using SFA.DAS.Validation;
 using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount;
@@ -21,9 +20,7 @@ public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand,
     private readonly IAccountRepository _accountRepository;
     private readonly IMediator _mediator;
     private readonly IValidator<CreateAccountCommand> _validator;
-    private readonly IHashingService _hashingService;
-    private readonly IPublicHashingService _publicHashingService;
-    private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityPublicHashingService;
+    private readonly IEncodingService _encodingService;
     private readonly IGenericEventFactory _genericEventFactory;
     private readonly IAccountEventFactory _accountEventFactory;
     private readonly IMembershipRepository _membershipRepository;
@@ -34,9 +31,7 @@ public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand,
         IAccountRepository accountRepository,
         IMediator mediator,
         IValidator<CreateAccountCommand> validator,
-        IHashingService hashingService,
-        IPublicHashingService publicHashingService,
-        IAccountLegalEntityPublicHashingService accountLegalEntityPublicHashingService,
+        IEncodingService encodingService,
         IGenericEventFactory genericEventFactory,
         IAccountEventFactory accountEventFactory,
         IMembershipRepository membershipRepository,
@@ -46,9 +41,7 @@ public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand,
         _accountRepository = accountRepository;
         _mediator = mediator;
         _validator = validator;
-        _hashingService = hashingService;
-        _publicHashingService = publicHashingService;
-        _accountLegalEntityPublicHashingService = accountLegalEntityPublicHashingService;
+        _encodingService = encodingService;
         _genericEventFactory = genericEventFactory;
         _accountEventFactory = accountEventFactory;
         _membershipRepository = membershipRepository;
@@ -89,9 +82,10 @@ public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand,
             ApprenticeshipEmployerType = ApprenticeshipEmployerType.Unknown
         });
 
-        var hashedAccountId = _hashingService.HashValue(createAccountResult.AccountId);
-        var publicHashedAccountId = _publicHashingService.HashValue(createAccountResult.AccountId);
-        var hashedAgreementId = _hashingService.HashValue(createAccountResult.EmployerAgreementId);
+        var hashedAccountId = _encodingService.Encode(createAccountResult.AccountId, EncodingType.AccountId);
+        var publicHashedAccountId = _encodingService.Encode(createAccountResult.AccountId, EncodingType.PublicAccountId);
+        // TODO: Add encoding type for Employer legal agreement Id
+        var hashedAgreementId = _encodingService.Encode(createAccountResult.EmployerAgreementId, EncodingType.AccountId);
 
         await Task.WhenAll(
             _accountRepository.UpdateAccountHashedIds(createAccountResult.AccountId, hashedAccountId, publicHashedAccountId),
@@ -149,7 +143,7 @@ public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand,
 
     private Task PublishLegalEntityAddedMessage(long accountId, long legalEntityId, long employerAgreementId, long accountLegalEntityId, string organisationName, string organisationReferenceNumber, string organisationAddress, OrganisationType organisationType, string userName, Guid userRef)
     {
-        var accountLegalEntityPublicHashedId = _accountLegalEntityPublicHashingService.HashValue(accountLegalEntityId);
+        var accountLegalEntityPublicHashedId = _encodingService.Encode(accountLegalEntityId, EncodingType.AccountLegalEntityId);
 
         return _eventPublisher.Publish(new AddedLegalEntityEvent
         {
@@ -164,7 +158,7 @@ public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand,
             Created = DateTime.UtcNow,
             OrganisationReferenceNumber = organisationReferenceNumber,
             OrganisationAddress = organisationAddress,
-            OrganisationType = (SFA.DAS.EmployerAccounts.Types.Models.OrganisationType)organisationType
+            OrganisationType = (Types.Models.OrganisationType)organisationType
         });
     }
 

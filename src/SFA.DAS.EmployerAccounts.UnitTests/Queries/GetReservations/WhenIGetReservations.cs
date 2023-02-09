@@ -53,7 +53,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetReservations
 
             Query = new GetReservationsRequest
             {
-                HashedAccountId = _hashedAccountId
+                AccountId = _hashedAccountId
             };
         }
 

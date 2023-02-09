@@ -1,8 +1,7 @@
 ﻿using System.Threading;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models.Organisation;
-using SFA.DAS.HashingService;
-using SFA.DAS.Validation;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove;
 
@@ -10,21 +9,18 @@ public class GetAccountLegalEntityRemoveQueryHandler : IRequestHandler<GetAccoun
 {
     private readonly IValidator<GetAccountLegalEntityRemoveRequest> _validator;
     private readonly IEmployerAgreementRepository _employerAgreementRepository;
-    private readonly IHashingService _hashingService;
-    private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityHashingService;
+    private readonly IEncodingService _encodingService;
     private readonly ICommitmentsV2ApiClient _commitmentV2ApiClient;
 
     public GetAccountLegalEntityRemoveQueryHandler(
         IValidator<GetAccountLegalEntityRemoveRequest> validator,
         IEmployerAgreementRepository employerAgreementRepository, 
-        IHashingService hashingService,
-        IAccountLegalEntityPublicHashingService accountLegalEntityHashingService,
+        IEncodingService encodingService,
         ICommitmentsV2ApiClient commitmentV2ApiClient)
     {
         _validator = validator;
         _employerAgreementRepository = employerAgreementRepository;
-        _hashingService = hashingService;
-        _accountLegalEntityHashingService = accountLegalEntityHashingService;
+        _encodingService = encodingService;
         _commitmentV2ApiClient = commitmentV2ApiClient;
     }
 
@@ -42,8 +38,8 @@ public class GetAccountLegalEntityRemoveQueryHandler : IRequestHandler<GetAccoun
             throw new UnauthorizedAccessException();
         }
 
-        var accountId = _hashingService.DecodeValue(message.HashedAccountId);
-        var accountLegalEntityId = _accountLegalEntityHashingService.DecodeValue(message.HashedAccountLegalEntityId);
+        var accountId = _encodingService.Decode(message.HashedAccountId, EncodingType.AccountId);
+        var accountLegalEntityId = _encodingService.Decode(message.HashedAccountLegalEntityId, EncodingType.AccountLegalEntityId);
         var accountLegalEntity = await _employerAgreementRepository.GetAccountLegalEntity(accountLegalEntityId);
 
         var result = await _employerAgreementRepository.GetAccountLegalEntityAgreements(accountLegalEntityId);

@@ -6,7 +6,7 @@ public class UpdateOrganisationDetailsCommand : IRequest
     public string Address { get; set; }
     public string Name { get; set; }
 
-    public string HashedAccountId { get; set; }
+    public long AccountId { get; set; }
 
     /// <summary>
     ///     The UserRef of the user.

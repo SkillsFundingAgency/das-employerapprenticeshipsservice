@@ -33,7 +33,7 @@ public class GetSingleCohortRequestHandler : IRequestHandler<GetSingleCohortRequ
             throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        long accountId = _hashingService.DecodeValue(message.HashedAccountId);
+        long accountId = _hashingService.DecodeValue(message.AccountId);
 
         try
         {
@@ -53,7 +53,7 @@ public class GetSingleCohortRequestHandler : IRequestHandler<GetSingleCohortRequ
         }
         catch(Exception ex)
         {
-            _logger.LogError(ex, $"Failed to get Cohorts for {message.HashedAccountId}");
+            _logger.LogError(ex, $"Failed to get Cohorts for {message.AccountId}");
             return new GetSingleCohortResponse
             {
                 HasFailed = true

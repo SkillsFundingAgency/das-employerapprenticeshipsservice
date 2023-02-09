@@ -8,9 +8,9 @@ public class GetSingleCohortRequestValidator : IValidator<GetSingleCohortRequest
     {
         var validationResult = new ValidationResult();
 
-        if (item.HashedAccountId == String.Empty)
+        if (item.AccountId == String.Empty)
         {
-            validationResult.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
+            validationResult.AddError(nameof(item.AccountId), "HashedAccountId has not been supplied");
         }
 
         return validationResult;

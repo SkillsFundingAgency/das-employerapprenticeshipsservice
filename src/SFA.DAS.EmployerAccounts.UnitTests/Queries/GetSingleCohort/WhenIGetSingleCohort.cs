@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
 
             Query = new GetSingleCohortRequest
             {
-                HashedAccountId = HashedAccountId
+                AccountId = HashedAccountId
             };
         }
 

@@ -4,11 +4,9 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Types.Models;
-using SFA.DAS.HashingService;
-using SFA.DAS.NLog.Logger;
+using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.TimeProvider;
-using SFA.DAS.Validation;
 using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Commands.AcceptInvitation;
@@ -20,7 +18,7 @@ public class AcceptInvitationCommandHandler : IRequestHandler<AcceptInvitationCo
     private readonly IUserAccountRepository _userAccountRepository;
     private readonly IAuditService _auditService;
     private readonly IValidator<AcceptInvitationCommand> _validator;
-    private readonly IHashingService _hashingService;
+    private readonly IEncodingService _encodingService;
     private readonly IEventPublisher _eventPublisher;
     private readonly ILogger<AcceptInvitationCommandHandler> _logger;
 
@@ -30,7 +28,7 @@ public class AcceptInvitationCommandHandler : IRequestHandler<AcceptInvitationCo
         IAuditService auditService,
         IEventPublisher eventPublisher,
         IValidator<AcceptInvitationCommand> validator,
-        IHashingService hashingService,
+        IEncodingService encodingService,
         ILogger<AcceptInvitationCommandHandler> logger)
     {
         _invitationRepository = invitationRepository;
@@ -39,7 +37,7 @@ public class AcceptInvitationCommandHandler : IRequestHandler<AcceptInvitationCo
         _auditService = auditService;
         _eventPublisher = eventPublisher;
         _validator = validator;
-        _hashingService = hashingService;
+        _encodingService = encodingService;
         _logger = logger;
     }
 
@@ -125,7 +123,7 @@ public class AcceptInvitationCommandHandler : IRequestHandler<AcceptInvitationCo
         return _eventPublisher.Publish(new UserJoinedEvent
         {
             AccountId = accountId,
-            HashedAccountId = _hashingService.HashValue(accountId),
+            HashedAccountId = _encodingService.Encode(accountId, EncodingType.AccountId),
             UserName = user.FullName,
             UserRef = user.Ref,
             Role = (UserRole)invitation.Role,

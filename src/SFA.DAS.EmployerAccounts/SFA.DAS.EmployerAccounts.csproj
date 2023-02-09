@@ -37,7 +37,6 @@
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.52781" />
     <PackageReference Include="SFA.DAS.Encoding" Version="1.1.61" />
     <PackageReference Include="SFA.DAS.EmployerFinance.Messages" Version="1.6.2933" />
-    <PackageReference Include="SFA.DAS.HashingService" Version="1.0.183" />
     <PackageReference Include="SFA.DAS.Hmrc" Version="1.0.30" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
     <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.2.37" />

@@ -2,7 +2,7 @@
 
 public class RemoveLegalEntityCommand : IRequest
 {
-    public string HashedAccountId { get; set; }
-    public string HashedAccountLegalEntityId { get; set; }
+    public long AccountId { get; set; }
+    public long AccountLegalEntityId { get; set; }
     public string UserId { get; set; }
 }

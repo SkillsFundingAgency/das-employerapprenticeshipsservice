@@ -51,9 +51,10 @@ public class EmployerTeamOrchestratorWithCallToAction : EmployerTeamOrchestrator
             }
         }
 
-        // here we are either non levy or unknown caller context            
-        var callToActionResponse = await GetCallToAction(hashedAccountId, externalUserId);
+        // here we are either non levy or unknown caller context
         var accountResponse = await accountResponseTask;
+        var callToActionResponse = await GetCallToAction(accountResponse.Data.Account.Id, externalUserId);
+      
         if (accountResponse.Status == HttpStatusCode.OK)
         {
             if (callToActionResponse.Status == HttpStatusCode.OK)
@@ -101,31 +102,31 @@ public class EmployerTeamOrchestratorWithCallToAction : EmployerTeamOrchestrator
         return false;
     }
 
-    private async Task<OrchestratorResponse<CallToActionViewModel>> GetCallToAction(string hashedAccountId, string externalUserId)
+    private async Task<OrchestratorResponse<CallToActionViewModel>> GetCallToAction(long accountId, string externalUserId)
     {
         try
         {
             var reservationsResponseTask = _mediator.Send(new GetReservationsRequest
             {
-                HashedAccountId = hashedAccountId,
+                AccountId = accountId,
                 ExternalUserId = externalUserId
             });
 
             var apprenticeshipsResponseTask = _mediator.Send(new GetApprenticeshipsRequest
             {
-                HashedAccountId = hashedAccountId,
+                AccountId = accountId,
                 ExternalUserId = externalUserId
             });
 
             var accountCohortResponseTask = _mediator.Send(new GetSingleCohortRequest
             {
-                HashedAccountId = hashedAccountId,
+                AccountId = accountId,
                 ExternalUserId = externalUserId
             });
 
             var vacanciesResponseTask = _mediator.Send(new GetVacanciesRequest
             {
-                HashedAccountId = hashedAccountId,
+                AccountId = accountId,
                 ExternalUserId = externalUserId
             });
 

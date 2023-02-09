@@ -15,7 +15,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetPagedEmployerAccounts;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamMembers;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamMembersWhichReceiveNotifications;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 using PayeScheme = SFA.DAS.EmployerAccounts.Api.Types.PayeScheme;
 
 namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
@@ -25,18 +25,18 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
         private readonly IMediator _mediator;
         private readonly ILogger<AccountsOrchestrator> _logger;
         private readonly IMapper _mapper;
-        private readonly IHashingService _hashingService;
+        private readonly IEncodingService _encodingService;
 
         public AccountsOrchestrator(
             IMediator mediator,
             ILogger<AccountsOrchestrator> logger, 
             IMapper mapper,
-            IHashingService hashingService)
+            IEncodingService encodingService)
         {
             _mediator = mediator;
             _logger = logger;
             _mapper = mapper;
-            _hashingService = hashingService;
+            _encodingService = encodingService;
         }
 
         public async Task<PayeScheme> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
@@ -90,16 +90,11 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
 
         public async Task<List<TeamMember>> GetAccountTeamMembers(string hashedAccountId)
         {
-            _logger.LogInformation($"Requesting team members for account {hashedAccountId}");
+            var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+            _logger.LogInformation($"Requesting team members for account {accountId}");
 
-            var teamMembers = await _mediator.Send(new GetTeamMembersRequest { HashedAccountId = hashedAccountId });
+            var teamMembers = await _mediator.Send(new GetTeamMembersRequest(accountId));
             return teamMembers.TeamMembers.Select(x => _mapper.Map<TeamMember>(x)).ToList();
-        }
-
-        public async Task<List<TeamMember>> GetAccountTeamMembers(long accountId)
-        {
-            var hashedAccountId = _hashingService.HashValue(accountId);
-            return await GetAccountTeamMembers(hashedAccountId);
         }
 
         public async Task<List<TeamMember>> GetAccountTeamMembersWhichReceiveNotifications(string hashedAccountId)
@@ -112,7 +107,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
 
         public async Task<List<TeamMember>> GetAccountTeamMembersWhichReceiveNotifications(long accountId)
         {
-            var hashedAccountId = _hashingService.HashValue(accountId);
+            var hashedAccountId = _encodingService.HashValue(accountId);
             return await GetAccountTeamMembersWhichReceiveNotifications(hashedAccountId);
         }
         

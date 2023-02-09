@@ -4,9 +4,8 @@ using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Services;
-using SFA.DAS.Validation;
 using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
@@ -17,7 +16,7 @@ public class RenameEmployerAccountCommandHandler : IRequestHandler<RenameEmploye
     private readonly IEmployerAccountRepository _accountRepository;
     private readonly IMembershipRepository _membershipRepository;
     private readonly IValidator<RenameEmployerAccountCommand> _validator;
-    private readonly IHashingService _hashingService;
+    private readonly IEncodingService _encodingService;
     private readonly IMediator _mediator;
     private readonly IGenericEventFactory _genericEventFactory;
     private readonly IAccountEventFactory _accountEventFactory;
@@ -27,7 +26,7 @@ public class RenameEmployerAccountCommandHandler : IRequestHandler<RenameEmploye
         IEmployerAccountRepository accountRepository,
         IMembershipRepository membershipRepository,
         IValidator<RenameEmployerAccountCommand> validator,
-        IHashingService hashingService,
+        IEncodingService encodingService,
         IMediator mediator,
         IGenericEventFactory genericEventFactory,
         IAccountEventFactory accountEventFactory)
@@ -36,7 +35,7 @@ public class RenameEmployerAccountCommandHandler : IRequestHandler<RenameEmploye
         _accountRepository = accountRepository;
         _membershipRepository = membershipRepository;
         _validator = validator;
-        _hashingService = hashingService;
+        _encodingService = encodingService;
         _mediator = mediator;
         _genericEventFactory = genericEventFactory;
         _accountEventFactory = accountEventFactory;
@@ -56,7 +55,7 @@ public class RenameEmployerAccountCommandHandler : IRequestHandler<RenameEmploye
             throw new UnauthorizedAccessException();
         }
 
-        var accountId = _hashingService.DecodeValue(message.HashedAccountId);
+        var accountId = _encodingService.Decode(message.HashedAccountId, EncodingType.AccountId);
 
         var account = await _accountRepository.GetAccountById(accountId);
 

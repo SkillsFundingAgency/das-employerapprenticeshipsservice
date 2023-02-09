@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
         public async Task ThenACombinedAgreementIsCreated()
         {
             var accountId = 12345;
-            HashingService.Setup(x => x.DecodeValue(Command.HashedAccountId)).Returns(accountId);
+            EncodingService.Setup(x => x.DecodeValue(Command.HashedAccountId)).Returns(accountId);
             EmployerAgreementRepository.Setup(x => x.GetAccountAgreements(accountId)).ReturnsAsync(
                 new List<EmployerAgreement>
                 {

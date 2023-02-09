@@ -21,15 +21,14 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
             _mapper = mapper;
         }
         
-        public async Task<EmployerAgreementView> GetAgreement(string hashedAgreementId)
+        public async Task<EmployerAgreementView> GetAgreement(long agreementId)
         {
             var response = await _mediator.Send(new GetEmployerAgreementByIdRequest
             {
-                HashedAgreementId = hashedAgreementId
+                AgreementId = agreementId
             });
 
-            return
-                _mapper.Map<EmployerAgreementView>(response.EmployerAgreement);
+            return _mapper.Map<EmployerAgreementView>(response.EmployerAgreement);
         }
 
         public async Task<int> GetMinimumSignedAgreemmentVersion(long accountId)

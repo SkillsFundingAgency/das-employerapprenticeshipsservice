@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.HashingService;
-using SFA.DAS.Validation;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetApprenticeship;
 
@@ -10,18 +9,18 @@ public class GetApprenticeshipsHandler : IRequestHandler<GetApprenticeshipsReque
     private readonly IValidator<GetApprenticeshipsRequest> _validator;
     private readonly ILogger<GetApprenticeshipsHandler> _logger;
     private readonly ICommitmentV2Service _commitmentV2Service;
-    private readonly IHashingService _hashingService;
+    private readonly IEncodingService _encodingService;
 
     public GetApprenticeshipsHandler(
         IValidator<GetApprenticeshipsRequest> validator,
         ILogger<GetApprenticeshipsHandler> logger,
         ICommitmentV2Service commitmentV2Service,
-        IHashingService hashingService)
+        IEncodingService encodingService)
     {
         _validator = validator;
         _logger = logger;
         _commitmentV2Service = commitmentV2Service;
-        _hashingService = hashingService;
+        _encodingService = encodingService;
     }
 
     public async Task<GetApprenticeshipsResponse> Handle(GetApprenticeshipsRequest message, CancellationToken cancellationToken)
@@ -33,7 +32,7 @@ public class GetApprenticeshipsHandler : IRequestHandler<GetApprenticeshipsReque
             throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        var accountId = _hashingService.DecodeValue(message.HashedAccountId);
+        var accountId = _encodingService.Decode(message.HashedAccountId, EncodingType.AccountId);
 
         try
         {

@@ -129,19 +129,6 @@
         @if (HtmlContextAccessor.HttpContext.User.Identity.IsAuthenticated)
         {
             @HtmlHelpers.GetContentByType("banner", useLegacyStyles: true)
-            if (HtmlHelpers.IsAuthorized("EmployerFeature.V3AgreementBanner"))
-            {
-                var userId = HtmlContextAccessor.HttpContext.User?.Claims.
-                FirstOrDefault(x => x.Type == ControllerConstants.UserRefClaimKeyName)?.Value;
-                var hashedAccountId = Html.ViewContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName]?.ToString();
-                if (!string.IsNullOrEmpty(hashedAccountId))
-                {
-                    if (HtmlHelpers.ShowExpiringAgreementBanner(userId, hashedAccountId))
-                    {
-                        @await Html.PartialAsync(@"_NotSignedV3AgreementMessage")
-                    }
-                }
-            }
         }
 
         @await Html.PartialAsync(@"_SuccessMessage", Model as OrchestratorResponse)

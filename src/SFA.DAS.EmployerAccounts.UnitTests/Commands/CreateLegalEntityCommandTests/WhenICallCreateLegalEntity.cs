@@ -55,8 +55,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
 
             AccountRepository.Setup(x => x.CreateLegalEntityWithAgreement(It.Is<CreateLegalEntityWithAgreementParams>(createParams => createParams.AccountId == _owner.AccountId))).ReturnsAsync(_agreementView);
 
-            HashingService.Setup(hs => hs.HashValue(It.IsAny<long>())).Returns<long>(value => $"*{value}*");
-            HashingService.Setup(hs => hs.DecodeValue(Command.HashedAccountId)).Returns(_owner.AccountId);
+            EncodingService.Setup(hs => hs.HashValue(It.IsAny<long>())).Returns<long>(value => $"*{value}*");
+            EncodingService.Setup(hs => hs.DecodeValue(Command.HashedAccountId)).Returns(_owner.AccountId);
 
             AccountLegalEntityPublicHashingService.Setup(x => x.HashValue(_agreementView.AccountLegalEntityId)).Returns(ExpectedAccountLegalEntityPublicHashString);
         }

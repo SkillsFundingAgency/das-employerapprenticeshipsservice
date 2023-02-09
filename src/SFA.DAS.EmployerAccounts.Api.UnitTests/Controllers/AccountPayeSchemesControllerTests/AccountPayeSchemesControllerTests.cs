@@ -6,7 +6,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Controllers;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountPayeSchemesControllerTests
 {
@@ -17,7 +17,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountPayeSchemesC
         protected Mock<ILogger<AccountsOrchestrator>> Logger;
         protected Mock<IUrlHelper> UrlTestHelper;
         protected Mock<IMapper> Mapper;
-        protected Mock<IHashingService> HashingService;
+        protected Mock<IEncodingService> EncodingService;
 
         [SetUp]
         public void Arrange()
@@ -25,8 +25,8 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountPayeSchemesC
             Mediator = new Mock<IMediator>();
             Logger = new Mock<ILogger<AccountsOrchestrator>>();
             Mapper = new Mock<IMapper>();
-            HashingService = new Mock<IHashingService>();
-            var orchestrator = new AccountsOrchestrator(Mediator.Object, Logger.Object, Mapper.Object, HashingService.Object);
+            EncodingService = new Mock<IEncodingService>();
+            var orchestrator = new AccountsOrchestrator(Mediator.Object, Logger.Object, Mapper.Object, EncodingService.Object);
             Controller = new AccountPayeSchemesController(orchestrator);
 
             UrlTestHelper = new Mock<IUrlHelper>();

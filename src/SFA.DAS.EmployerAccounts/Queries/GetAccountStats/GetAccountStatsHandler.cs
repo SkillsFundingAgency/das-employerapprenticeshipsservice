@@ -1,20 +1,19 @@
 ﻿using System.Threading;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
-using SFA.DAS.HashingService;
-using SFA.DAS.Validation;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountStats;
 
 public class GetAccountStatsHandler : IRequestHandler<GetAccountStatsQuery, GetAccountStatsResponse>
 {
     private readonly IEmployerAccountRepository _repository;
-    private readonly IHashingService _hashingService;
+    private readonly IEncodingService _encodingService;
     private readonly IValidator<GetAccountStatsQuery> _validator;
 
-    public GetAccountStatsHandler(IEmployerAccountRepository repository, IHashingService hashingService, IValidator<GetAccountStatsQuery> validator)
+    public GetAccountStatsHandler(IEmployerAccountRepository repository, IEncodingService encodingService, IValidator<GetAccountStatsQuery> validator)
     {
         _repository = repository;
-        _hashingService = hashingService;
+        _encodingService = encodingService;
         _validator = validator;
     }
 
@@ -32,7 +31,7 @@ public class GetAccountStatsHandler : IRequestHandler<GetAccountStatsQuery, GetA
             throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        var accoundId = _hashingService.DecodeValue(message.HashedAccountId);
+        var accoundId = _encodingService.Decode(message.HashedAccountId, EncodingType.AccountId);
 
         var stats = await _repository.GetAccountStats(accoundId);
 

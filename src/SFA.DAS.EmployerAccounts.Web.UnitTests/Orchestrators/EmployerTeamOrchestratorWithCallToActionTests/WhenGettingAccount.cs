@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                      Vacancies = new List<Vacancy>()
                 });
 
-            _mediator.Setup(m => m.Send(It.Is<GetReservationsRequest>(q => q.HashedAccountId == _hashedAccountId), It.IsAny<CancellationToken>()))
+            _mediator.Setup(m => m.Send(It.Is<GetReservationsRequest>(q => q.AccountId == _hashedAccountId), It.IsAny<CancellationToken>()))
                    .ReturnsAsync(new GetReservationsResponse
                    {
                        Reservations = new List<Reservation>

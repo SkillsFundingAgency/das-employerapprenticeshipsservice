@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [employer_account].[GetEmployerAccountMembers]
-	@hashedAccountId VARCHAR(MAX)	
+	@accountId BIGINT	
 AS
 	SELECT 
 		tm.*, s.ReceiveNotifications AS CanReceiveNotifications
@@ -12,5 +12,5 @@ AS
 	AND
 		tm.AccountId = s.AccountId
     WHERE 
-		tm.HashedId = @hashedAccountId
+		tm.AccountId = @accountId
 GO

@@ -1,8 +1,7 @@
 ﻿using System.Threading;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Services;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Commands.UpdateOrganisationDetails;
 
@@ -11,20 +10,17 @@ public class UpdateOrganisationDetailsCommandHandler : IRequestHandler<UpdateOrg
     private readonly IValidator<UpdateOrganisationDetailsCommand> _validator;
     private readonly IAccountRepository _accountRepository;
     private readonly IMembershipRepository _membershipRepository;
-    private readonly IHashingService _hashingService;
     private readonly IEventPublisher _eventPublisher;
 
     public UpdateOrganisationDetailsCommandHandler(
         IValidator<UpdateOrganisationDetailsCommand> validator,
         IAccountRepository accountRepository,
         IMembershipRepository membershipRepository,
-        IHashingService hashingService,
         IEventPublisher eventPublisher)
     {
         _validator = validator;
         _accountRepository = accountRepository;
         _membershipRepository = membershipRepository;
-        _hashingService = hashingService;
         _eventPublisher = eventPublisher;
     }
 
@@ -40,20 +36,18 @@ public class UpdateOrganisationDetailsCommandHandler : IRequestHandler<UpdateOrg
             command.Name,
             command.Address);
 
-        await PublishLegalEntityUpdatedMessage(command.HashedAccountId, command.AccountLegalEntityId, command.Name, command.Address, command.UserId);
+        await PublishLegalEntityUpdatedMessage(command.AccountId, command.AccountLegalEntityId, command.Name, command.Address, command.UserId);
 
         return default;
     }
 
     private async Task PublishLegalEntityUpdatedMessage(
-        string hashedAccountId,
+        long accountId,
         long accountLegalEntityId,
         string name,
         string address,
         string userRef)
-    {
-        var accountId = _hashingService.DecodeValue(hashedAccountId);
-
+    { 
         var caller = await _membershipRepository.GetCaller(accountId, userRef);
         var updatedByName = caller.FullName();
 

@@ -8,7 +8,7 @@ using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Services;
 using Entity = SFA.DAS.Audit.Types.Entity;
 
@@ -23,8 +23,7 @@ public class CreateLegalEntityCommandHandler : IRequestHandler<CreateLegalEntity
     private readonly IGenericEventFactory _genericEventFactory;
     private readonly ILegalEntityEventFactory _legalEntityEventFactory;
     private readonly IEventPublisher _eventPublisher;
-    private readonly IHashingService _hashingService;
-    private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityPublicHashingService;
+    private readonly IEncodingService _encodingService;
     private readonly IEmployerAgreementRepository _employerAgreementRepository;
 
     public CreateLegalEntityCommandHandler(
@@ -34,8 +33,7 @@ public class CreateLegalEntityCommandHandler : IRequestHandler<CreateLegalEntity
         IGenericEventFactory genericEventFactory,
         ILegalEntityEventFactory legalEntityEventFactory,
         IEventPublisher eventPublisher,
-        IHashingService hashingService,
-        IAccountLegalEntityPublicHashingService accountLegalEntityPublicHashingService,
+        IEncodingService encodingService,
         IEmployerAgreementRepository employerAgreementRepository,
         IValidator<CreateLegalEntityCommand> validator)
     {
@@ -45,8 +43,7 @@ public class CreateLegalEntityCommandHandler : IRequestHandler<CreateLegalEntity
         _genericEventFactory = genericEventFactory;
         _legalEntityEventFactory = legalEntityEventFactory;
         _eventPublisher = eventPublisher;
-        _hashingService = hashingService;
-        _accountLegalEntityPublicHashingService = accountLegalEntityPublicHashingService;
+        _encodingService = encodingService;
         _employerAgreementRepository = employerAgreementRepository;
         _validator = validator;
     }
@@ -85,9 +82,11 @@ public class CreateLegalEntityCommandHandler : IRequestHandler<CreateLegalEntity
 
         var agreementView = await _accountRepository.CreateLegalEntityWithAgreement(createParams);
 
-        agreementView.HashedAgreementId = _hashingService.HashValue(agreementView.Id);
-        var accountId = _hashingService.DecodeValue(message.HashedAccountId);
-        agreementView.AccountLegalEntityPublicHashedId = _accountLegalEntityPublicHashingService.HashValue(agreementView.AccountLegalEntityId);
+        // TODO: Add separate encoding type
+        agreementView.HashedAgreementId = _encodingService.Encode(agreementView.Id, EncodingType.AccountId);
+
+        var accountId = _encodingService.Decode(message.HashedAccountId, EncodingType.AccountId);
+        agreementView.AccountLegalEntityPublicHashedId = _encodingService.Encode(agreementView.AccountLegalEntityId, EncodingType.AccountLegalEntityId);
 
         await Task.WhenAll(
             CreateAuditEntries(owner, agreementView),

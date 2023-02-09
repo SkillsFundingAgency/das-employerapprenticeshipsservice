@@ -8,9 +8,8 @@ using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Services;
-using SFA.DAS.Validation;
 using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount;
@@ -20,7 +19,7 @@ public class AddPayeToAccountCommandHandler : IRequestHandler<AddPayeToAccountCo
     private readonly IValidator<AddPayeToAccountCommand> _validator;
     private readonly IPayeRepository _payeRepository;
     private readonly IEventPublisher _eventPublisher;
-    private readonly IHashingService _hashingService;
+    private readonly IEncodingService _encodingService;
     private readonly IMediator _mediator;
     private readonly IGenericEventFactory _genericEventFactory;
     private readonly IPayeSchemeEventFactory _payeSchemeEventFactory;
@@ -29,7 +28,7 @@ public class AddPayeToAccountCommandHandler : IRequestHandler<AddPayeToAccountCo
         IValidator<AddPayeToAccountCommand> validator,
         IPayeRepository payeRepository,
         IEventPublisher eventPublisher,
-        IHashingService hashingService,
+        IEncodingService hashingService,
         IMediator mediator,
         IGenericEventFactory genericEventFactory,
         IPayeSchemeEventFactory payeSchemeEventFactory)
@@ -37,7 +36,7 @@ public class AddPayeToAccountCommandHandler : IRequestHandler<AddPayeToAccountCo
         _validator = validator;
         _payeRepository = payeRepository;
         _eventPublisher = eventPublisher;
-        _hashingService = hashingService;
+        _encodingService = hashingService;
         _mediator = mediator;
         _genericEventFactory = genericEventFactory;
         _payeSchemeEventFactory = payeSchemeEventFactory;
@@ -47,7 +46,7 @@ public class AddPayeToAccountCommandHandler : IRequestHandler<AddPayeToAccountCo
     {
         await ValidateMessage(message);
 
-        var accountId = _hashingService.DecodeValue(message.HashedAccountId);
+        var accountId = _encodingService.Decode(message.HashedAccountId, EncodingType.AccountId);
 
         await _payeRepository.AddPayeToAccount(
             new Paye
