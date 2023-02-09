@@ -45,27 +45,15 @@ public class AccountPayeSchemesController : ControllerBase
         var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
         var result = await _orchestrator.GetPayeSchemesForAccount(accountId);
 
-
         if (result == null)
         {
             return NotFound();
         }
 
-        return Ok(
-            new ResourceList(
-                result
-                    .Select(
-                        pv => new Resource
-                        {
-                            Id = pv.Ref,
-                            Href = Url.RouteUrl(
-                                "GetPayeScheme",
-                                new
-                                {
-                                    hashedAccountId,
-                                    payeSchemeRef = WebUtility.UrlEncode(pv.Ref)
-                                })
-                        }))
-        );
+        return Ok(new ResourceList(result.Select(pv => new Resource
+        {
+            Id = pv.Ref,
+            Href = Url.RouteUrl("GetPayeScheme", new { hashedAccountId, payeSchemeRef = WebUtility.UrlEncode(pv.Ref) })
+        })));
     }
 }

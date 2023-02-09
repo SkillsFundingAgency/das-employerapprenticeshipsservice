@@ -25,6 +25,7 @@
 		<PackageReference Include="SFA.DAS.Authorization.Mvc" Version="6.0.97" />
 		<PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.283" />
 		<PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
+		<PackageReference Include="SFA.DAS.Encoding" Version="1.1.76" />
 		<PackageReference Include="SFA.DAS.Logging">
 			<Version>1.0.5</Version>
 		</PackageReference>
