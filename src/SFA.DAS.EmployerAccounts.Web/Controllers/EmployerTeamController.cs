@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerAccounts.Helpers;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
@@ -10,20 +11,17 @@ public class EmployerTeamController : BaseController
 {
     private readonly IUrlActionHelper _urlActionHelper;
     private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
-
-    public EmployerTeamController(IUrlActionHelper urlActionHelper)
-    {
-        _urlActionHelper = urlActionHelper;
-        _employerTeamOrchestrator = null;
-    }
+    private readonly IEncodingService _encodingService;
 
     public EmployerTeamController(
         ICookieStorageService<FlashMessageViewModel> flashMessage,
         EmployerTeamOrchestrator employerTeamOrchestrator,
-        IMultiVariantTestingService multiVariantTestingService)
+        IMultiVariantTestingService multiVariantTestingService,
+        IEncodingService encodingService)
         : base(flashMessage, multiVariantTestingService)
     {
         _employerTeamOrchestrator = employerTeamOrchestrator;
+        _encodingService = encodingService;
     }
 
     [HttpGet]
@@ -168,8 +166,8 @@ public class EmployerTeamController : BaseController
     [Route("{invitationId}/cancel")]
     public async Task<IActionResult> Cancel(string email, string invitationId, string hashedAccountId)
     {
-        var invitation = await _employerTeamOrchestrator.GetInvitation(invitationId);
-        invitation.Data.HashedAccountId = hashedAccountId;
+        var decodedInvitationId = _encodingService.Decode(invitationId, EncodingType.AccountId);
+        var invitation = await _employerTeamOrchestrator.GetInvitation(decodedInvitationId);
 
         return View(invitation);
     }

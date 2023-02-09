@@ -66,7 +66,7 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
         {
             var response = await _mediator.Send(new GetEmployerAgreementRequest
             {
-                AgreementId = agreementid,
+                HashedAgreementId = agreementid,
                 HashedAccountId = hashedId,
                 ExternalUserId = externalUserId
             });
@@ -186,7 +186,7 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
         return response;
     }
 
-    public async Task<OrchestratorResponse<EmployerAgreementPdfViewModel>> GetPdfEmployerAgreement(string hashedAccountId, string agreementId, string userId)
+    public async Task<OrchestratorResponse<EmployerAgreementPdfViewModel>> GetPdfEmployerAgreement(long accountId, long agreementId, string userId)
     {
         var pdfEmployerAgreement = new OrchestratorResponse<EmployerAgreementPdfViewModel>();
 
@@ -194,8 +194,8 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
         {
             var result = await _mediator.Send(new GetEmployerAgreementPdfRequest
             {
-                HashedAccountId = hashedAccountId,
-                HashedLegalAgreementId = agreementId,
+                AccountId = accountId,
+                LegalAgreementId = agreementId,
                 UserId = userId
             });
 
@@ -216,7 +216,7 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
         return pdfEmployerAgreement;
     }
 
-    public async Task<OrchestratorResponse<EmployerAgreementPdfViewModel>> GetSignedPdfEmployerAgreement(string hashedAccountId, string agreementId, string userId)
+    public async Task<OrchestratorResponse<EmployerAgreementPdfViewModel>> GetSignedPdfEmployerAgreement(long accountId, long agreementId, string userId)
     {
 
         var signedPdfEmployerAgreement = new OrchestratorResponse<EmployerAgreementPdfViewModel>();
@@ -227,8 +227,8 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
                 await
                     _mediator.Send(new GetSignedEmployerAgreementPdfRequest
                     {
-                        HashedAccountId = hashedAccountId,
-                        HashedLegalAgreementId = agreementId,
+                        AccountId = accountId,
+                        LegalAgreementId = agreementId,
                         UserId = userId
                     });
 

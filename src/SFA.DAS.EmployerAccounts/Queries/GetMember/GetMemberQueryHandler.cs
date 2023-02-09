@@ -1,24 +1,24 @@
 ﻿using System.Threading;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetMember;
 
 public class GetMemberQueryHandler : IRequestHandler<GetMemberRequest, GetMemberResponse>
 {
     private readonly IEmployerAccountTeamRepository _accountTeamRepository;
-    private readonly IHashingService _hashingService;
+    private readonly IEncodingService _encodingService;
 
-    public GetMemberQueryHandler(IEmployerAccountTeamRepository accountTeamRepository, IHashingService hashingService)
+    public GetMemberQueryHandler(IEmployerAccountTeamRepository accountTeamRepository, IEncodingService encodingService)
     {
         _accountTeamRepository = accountTeamRepository ?? throw new ArgumentNullException(nameof(accountTeamRepository));
-        _hashingService = hashingService;
+        _encodingService = encodingService;
     }
 
     public async Task<GetMemberResponse> Handle(GetMemberRequest message, CancellationToken cancellationToken)
     {
         var member = await _accountTeamRepository.GetMember(message.HashedAccountId, message.Email, message.OnlyIfMemberIsActive) ?? new TeamMember();
-        member.HashedInvitationId = _hashingService.HashValue(member.Id);
+        member.HashedInvitationId = _encodingService.Encode(member.Id, EncodingType.AccountId);
         member.HashedAccountId = message.HashedAccountId;
 
         return new GetMemberResponse

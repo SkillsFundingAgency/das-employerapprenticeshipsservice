@@ -20,11 +20,11 @@ public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorB
     {
     }
 
-    public async Task<OrchestratorResponse<EmployerAccountPayeListViewModel>> Get(string hashedAccountId, string externalUserId)
+    public async Task<OrchestratorResponse<EmployerAccountPayeListViewModel>> Get(long accountId, string externalUserId)
     {
         var response = await Mediator.Send(new GetAccountPayeSchemesForAuthorisedUserQuery
         {
-            HashedAccountId = hashedAccountId,
+            AccountId = accountId,
             ExternalUserId = externalUserId
         });
 
@@ -32,7 +32,6 @@ public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorB
         {
             Data = new EmployerAccountPayeListViewModel
             {
-                HashedId = hashedAccountId,
                 PayeSchemes = response.PayeSchemes
             }
         };

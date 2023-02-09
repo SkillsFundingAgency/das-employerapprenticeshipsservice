@@ -2,5 +2,5 @@
 
 public class GetTeamMembersWhichReceiveNotificationsQuery : IRequest<GetTeamMembersWhichReceiveNotificationsQueryResponse>
 {
-    public string HashedAccountId { get; set; }
+    public long AccountId { get; set; }
 }

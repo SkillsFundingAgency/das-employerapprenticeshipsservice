@@ -15,9 +15,9 @@ public class GetEmployerAgreementQueryValidator : IValidator<GetEmployerAgreemen
         {
             var validationResult = new ValidationResult();
 
-            if (string.IsNullOrEmpty(item.AgreementId))
+            if (string.IsNullOrEmpty(item.HashedAgreementId))
             {
-                validationResult.AddError(nameof(item.AgreementId));
+                validationResult.AddError(nameof(item.HashedAgreementId));
             }
 
             if (string.IsNullOrEmpty(item.ExternalUserId))

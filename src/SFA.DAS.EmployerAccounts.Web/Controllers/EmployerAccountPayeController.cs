@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
@@ -9,21 +10,25 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 public class EmployerAccountPayeController : BaseController
 {
     private readonly EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
+    private readonly IEncodingService _encodingService;
 
     public EmployerAccountPayeController(
         EmployerAccountPayeOrchestrator employerAccountPayeOrchestrator,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
-        IMultiVariantTestingService multiVariantTestingService) 
+        IMultiVariantTestingService multiVariantTestingService,
+        IEncodingService encodingService) 
         : base( flashMessage, multiVariantTestingService)
     {
         _employerAccountPayeOrchestrator = employerAccountPayeOrchestrator;
+        this._encodingService = encodingService;
     }
 
     [HttpGet]
     [Route("{HashedAccountId}/schemes")]
     public async Task<IActionResult> Index(string hashedAccountId)
     {
-        var model = await _employerAccountPayeOrchestrator.Get(hashedAccountId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+        var model = await _employerAccountPayeOrchestrator.Get(accountId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
         var flashMessage = GetFlashMessageViewModelFromCookie();
         if (flashMessage != null)
@@ -117,7 +122,9 @@ public class EmployerAccountPayeController : BaseController
         {
             gatewayResponseModel.Status = HttpStatusCode.OK;
 
-            var model = await _employerAccountPayeOrchestrator.Get(hashedAccountId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
+            var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+
+            var model = await _employerAccountPayeOrchestrator.Get(accountId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
             model.FlashMessage = gatewayResponseModel.FlashMessage;
 
             return View(ControllerConstants.IndexActionName, model);

@@ -3,6 +3,7 @@ using AutoMapper;
 using SFA.DAS.Authorization.EmployerUserRoles.Options;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
@@ -14,6 +15,7 @@ public class EmployerAgreementController : BaseController
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
     private readonly IUrlActionHelper _urlActionHelper;
+    private readonly IEncodingService _encodingService;
     private const int ViewAgreementNow = 1;
     private const int ViewAgreementLater = 2;
 
@@ -23,13 +25,15 @@ public class EmployerAgreementController : BaseController
         IMediator mediator,
         IMapper mapper,
         IUrlActionHelper urlActionHelper,
-        IMultiVariantTestingService multiVariantTestingService)
+        IMultiVariantTestingService multiVariantTestingService,
+        IEncodingService encodingService)
         : base( flashMessage, multiVariantTestingService)
     {
         _orchestrator = orchestrator;
         _mediator = mediator;
         _mapper = mapper;
         _urlActionHelper = urlActionHelper;
+        _encodingService = encodingService;
     }
 
     [HttpGet]
@@ -71,7 +75,7 @@ public class EmployerAgreementController : BaseController
     public async Task<IActionResult> View(string agreementId, string hashedAccountId,
         FlashMessageViewModel flashMessage)
     {
-        var agreement = await GetSignedAgreementViewModel(new GetEmployerAgreementRequest { AgreementId = agreementId, HashedAccountId = hashedAccountId, ExternalUserId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName) });
+        var agreement = await GetSignedAgreementViewModel(new GetEmployerAgreementRequest { HashedAgreementId = agreementId, HashedAccountId = hashedAccountId, ExternalUserId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName) });
         return View(agreement);
     }
 
@@ -82,9 +86,11 @@ public class EmployerAgreementController : BaseController
     {   
         var unsignedAgreementResponse = await _mediator.Send(new GetNextUnsignedEmployerAgreementRequest { HashedAccountId = hashedAccountId, ExternalUserId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName) });
 
-        if (string.IsNullOrEmpty(unsignedAgreementResponse.HashedAgreementId)) return RedirectToAction(ControllerConstants.IndexActionName);
+        if (!unsignedAgreementResponse.AgreementId.HasValue) return RedirectToAction(ControllerConstants.IndexActionName);
 
-        return RedirectToAction(ControllerConstants.AboutYourAgreementActionName, new { agreementId = unsignedAgreementResponse.HashedAgreementId });
+        var hashedAgreementId = _encodingService.Encode(unsignedAgreementResponse.AgreementId.Value, EncodingType.AccountId);
+
+        return RedirectToAction(ControllerConstants.AboutYourAgreementActionName, new { agreementId = hashedAgreementId });
     }
 
     [HttpGet]
@@ -128,7 +134,7 @@ public class EmployerAgreementController : BaseController
 
         if (choice == null)
         {
-            var agreement = await GetSignedAgreementViewModel(new GetEmployerAgreementRequest { AgreementId = agreementId, HashedAccountId = hashedAccountId, ExternalUserId = userInfo });
+            var agreement = await GetSignedAgreementViewModel(new GetEmployerAgreementRequest { HashedAgreementId = agreementId, HashedAccountId = hashedAccountId, ExternalUserId = userInfo });
 
             ModelState.AddModelError(nameof(agreement.Choice), "Select whether you accept the agreement");
 
@@ -170,7 +176,7 @@ public class EmployerAgreementController : BaseController
             return View(ControllerConstants.AcceptedEmployerAgreementViewName);
         }
 
-        return RedirectToAction(ControllerConstants.SignAgreementActionName, new GetEmployerAgreementRequest { AgreementId = agreementId, ExternalUserId = userInfo, HashedAccountId = hashedAccountId });
+        return RedirectToAction(ControllerConstants.SignAgreementActionName, new GetEmployerAgreementRequest { HashedAgreementId = agreementId, ExternalUserId = userInfo, HashedAccountId = hashedAccountId });
     }
 
     [HttpGet]
@@ -178,7 +184,10 @@ public class EmployerAgreementController : BaseController
     [Route("agreements/{agreementId}/agreement-pdf")]
     public async Task<IActionResult> GetPdfAgreement(string agreementId, string hashedAccountId)
     {
-        var stream = await _orchestrator.GetPdfEmployerAgreement(hashedAccountId, agreementId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+        var decodedAgreementId = _encodingService.Decode(agreementId, EncodingType.AccountId);
+
+        var stream = await _orchestrator.GetPdfEmployerAgreement(accountId, decodedAgreementId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
         if (stream.Data.PdfStream == null)
         {
@@ -194,7 +203,10 @@ public class EmployerAgreementController : BaseController
     [Route("agreements/{agreementId}/signed-agreement-pdf")]
     public async Task<IActionResult> GetSignedPdfAgreement(string agreementId, string hashedAccountId)
     {
-        var stream = await _orchestrator.GetSignedPdfEmployerAgreement(hashedAccountId, agreementId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+        var decodedAgreementId = _encodingService.Decode(agreementId, EncodingType.AccountId);
+
+        var stream = await _orchestrator.GetSignedPdfEmployerAgreement(decodedAgreementId, accountId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
         if (stream.Data.PdfStream == null)
         {

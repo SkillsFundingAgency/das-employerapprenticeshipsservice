@@ -29,9 +29,6 @@ public class AgreementMappings : Profile
                 o => o.Ignore())
             .ForMember(
                 d => d.HashedAgreementId,
-                o => o.Ignore())
-            .ForMember(
-                d => d.HashedLegalEntityId,
                 o => o.Ignore());
 
         CreateMap<EmployerAgreement, AgreementViewModel>()

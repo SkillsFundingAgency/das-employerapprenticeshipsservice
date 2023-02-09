@@ -1,24 +1,24 @@
 ﻿using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetNextUnsignedEmployerAgreement;
 
 public class GetNextUnsignedEmployerAgreementQueryHandler : IRequestHandler<GetNextUnsignedEmployerAgreementRequest, GetNextUnsignedEmployerAgreementResponse>
 {
     private readonly Lazy<EmployerAccountsDbContext> _db;
-    private readonly IHashingService _hashingService;
+    private readonly IEncodingService _encodingService;
     private readonly IValidator<GetNextUnsignedEmployerAgreementRequest> _validator;
 
     public GetNextUnsignedEmployerAgreementQueryHandler(
         Lazy<EmployerAccountsDbContext> db,
-        IHashingService hashingService,
+        IEncodingService encodingService,
         IValidator<GetNextUnsignedEmployerAgreementRequest> validator
     )
     {
         _db = db;
-        _hashingService = hashingService;
+        _encodingService = encodingService;
         _validator = validator;
     }
 
@@ -36,15 +36,16 @@ public class GetNextUnsignedEmployerAgreementQueryHandler : IRequestHandler<GetN
             throw new UnauthorizedAccessException();
         }
 
-        var accountId = _hashingService.DecodeValue(message.HashedAccountId);
+        var accountId = _encodingService.Decode(message.HashedAccountId, EncodingType.AccountId);
 
         var pendingAgreementId = await _db.Value.AccountLegalEntities
             .Where(x => x.AccountId == accountId && x.PendingAgreementId != null)
-            .Select(x => x.PendingAgreementId).FirstOrDefaultAsync(cancellationToken);
+            .Select(x => x.PendingAgreementId)
+            .FirstOrDefaultAsync(cancellationToken);
 
         return new GetNextUnsignedEmployerAgreementResponse
         {
-            HashedAgreementId = pendingAgreementId.HasValue ? _hashingService.HashValue(pendingAgreementId.Value) : null
+            AgreementId = pendingAgreementId
         };
     }
 }

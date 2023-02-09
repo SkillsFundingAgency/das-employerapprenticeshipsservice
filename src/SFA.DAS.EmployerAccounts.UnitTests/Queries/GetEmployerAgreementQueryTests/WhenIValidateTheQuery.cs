@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
             {
                 ExternalUserId = "ASDABASD",
                 HashedAccountId = "ASDANSDLKN123",
-                AgreementId = "123EDADS"
+                HashedAgreementId = "123EDADS"
             };
 
             _validator = new GetEmployerAgreementQueryValidator();

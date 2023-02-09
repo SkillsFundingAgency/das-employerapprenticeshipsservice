@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
 
         public AccountsOrchestrator(
             IMediator mediator,
-            ILogger<AccountsOrchestrator> logger, 
+            ILogger<AccountsOrchestrator> logger,
             IMapper mapper,
             IEncodingService encodingService)
         {
@@ -61,9 +61,9 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
 
             toDate = toDate ?? DateTime.MaxValue.ToString("yyyyMMddHHmmss");
 
-            var accountsResult = await _mediator.Send(new GetPagedEmployerAccountsQuery { ToDate = toDate, PageSize = pageSize, PageNumber = pageNumber });            
+            var accountsResult = await _mediator.Send(new GetPagedEmployerAccountsQuery { ToDate = toDate, PageSize = pageSize, PageNumber = pageNumber });
 
-            var data = new List<Account>();          
+            var data = new List<Account>();
 
             accountsResult.Accounts.ForEach(account =>
             {
@@ -88,41 +88,29 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
             };
         }
 
-        public async Task<List<TeamMember>> GetAccountTeamMembers(string hashedAccountId)
+        public async Task<List<TeamMember>> GetAccountTeamMembers(long accountId)
         {
-            var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
             _logger.LogInformation($"Requesting team members for account {accountId}");
 
             var teamMembers = await _mediator.Send(new GetTeamMembersRequest(accountId));
             return teamMembers.TeamMembers.Select(x => _mapper.Map<TeamMember>(x)).ToList();
         }
 
-        public async Task<List<TeamMember>> GetAccountTeamMembersWhichReceiveNotifications(string hashedAccountId)
+        public async Task<List<TeamMember>> GetAccountTeamMembersWhichReceiveNotifications(long accountId)
         {
-            _logger.LogInformation($"Requesting team members which receive notifications for account {hashedAccountId}");
+            _logger.LogInformation($"Requesting team members which receive notifications for account {accountId}");
 
-            var teamMembers = await _mediator.Send(new GetTeamMembersWhichReceiveNotificationsQuery { HashedAccountId = hashedAccountId });
+            var teamMembers = await _mediator.Send(new GetTeamMembersWhichReceiveNotificationsQuery { AccountId = accountId });
             return teamMembers.TeamMembersWhichReceiveNotifications.Select(x => _mapper.Map<TeamMember>(x)).ToList();
         }
 
-        public async Task<List<TeamMember>> GetAccountTeamMembersWhichReceiveNotifications(long accountId)
-        {
-            var hashedAccountId = _encodingService.HashValue(accountId);
-            return await GetAccountTeamMembersWhichReceiveNotifications(hashedAccountId);
-        }
-        
-        public async Task<IEnumerable<PayeView>> GetPayeSchemesForAccount(string hashedAccountId)
+        public async Task<IEnumerable<PayeView>> GetPayeSchemesForAccount(long accountId)
         {
             try
             {
-                return
-                    (await _mediator.Send(
-                        new GetAccountPayeSchemesQuery
-                        {
-                            HashedAccountId = hashedAccountId
-                        })
-                    )
-                    .PayeSchemes;
+                var response = await _mediator.Send(new GetAccountPayeSchemesQuery { AccountId = accountId });
+
+                return response.PayeSchemes;
             }
             catch (InvalidRequestException)
             {

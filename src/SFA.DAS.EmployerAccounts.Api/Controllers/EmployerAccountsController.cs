@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EmployerAccounts.Api.Authorization;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
 using SFA.DAS.EmployerAccounts.Api.Types;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers;
 
@@ -13,10 +14,12 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers;
 public class EmployerAccountsController : ControllerBase
 {
     private readonly AccountsOrchestrator _orchestrator;
+    private readonly IEncodingService _encodingService;
 
-    public EmployerAccountsController(AccountsOrchestrator orchestrator)
+    public EmployerAccountsController(AccountsOrchestrator orchestrator, IEncodingService encodingService)
     {
         _orchestrator = orchestrator;
+        _encodingService = encodingService;
     }
 
     [Route("", Name = "AccountsIndex")]
@@ -53,7 +56,8 @@ public class EmployerAccountsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAccountUsers(string hashedAccountId)
     {
-        var result = await _orchestrator.GetAccountTeamMembers(hashedAccountId);
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+        var result = await _orchestrator.GetAccountTeamMembers(accountId);
         return Ok(result);
     }
 

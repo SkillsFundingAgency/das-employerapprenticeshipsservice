@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
-using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetInvitation;
 
@@ -8,17 +7,15 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetInvitation;
 public class GetInvitationQueryHandler : IRequestHandler<GetInvitationRequest, GetInvitationResponse>
 {
     private readonly IInvitationRepository _invitationRepository;
-    private readonly IHashingService _hashingService;
 
-    public GetInvitationQueryHandler(IInvitationRepository invitationRepository, IHashingService hashingService)
+    public GetInvitationQueryHandler(IInvitationRepository invitationRepository)
     {
         _invitationRepository = invitationRepository ?? throw new ArgumentNullException(nameof(invitationRepository));
-        _hashingService = hashingService;
     }
 
     public async Task<GetInvitationResponse> Handle(GetInvitationRequest message, CancellationToken cancellationToken)
     {
-        var invitation = await _invitationRepository.GetView(_hashingService.DecodeValue(message.Id));
+        var invitation = await _invitationRepository.GetView(message.Id);
 
         return new GetInvitationResponse
         {

@@ -151,7 +151,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
             var request = new GetEmployerAgreementRequest
             {
                 HashedAccountId = hashedAccountId,
-                AgreementId = agreementHashId,
+                HashedAgreementId = agreementHashId,
                 ExternalUserId = externalUserId.ToString()
             };
 

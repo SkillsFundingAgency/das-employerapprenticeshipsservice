@@ -24,14 +24,12 @@ public class GetAccountPayeSchemesQueryHandler : IRequestHandler<GetAccountPayeS
             throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        var payeSchemes =
-            (await _payeSchemesService
-                .GetPayeSchemes(message.HashedAccountId))
-            .ToList();
+        var payeSchemes = await _payeSchemesService.GetPayeSchemes(message.AccountId);
+           
 
         return new GetAccountPayeSchemesResponse
         {
-            PayeSchemes = payeSchemes
-        };
+            PayeSchemes = payeSchemes.ToList()
+    };
     }
 }

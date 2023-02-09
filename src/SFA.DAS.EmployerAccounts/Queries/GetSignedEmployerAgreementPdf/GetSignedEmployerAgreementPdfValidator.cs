@@ -22,14 +22,14 @@ public class GetSignedEmployerAgreementPdfValidator : IValidator<GetSignedEmploy
     {
         var validationResult = new ValidationResult();
 
-        if (string.IsNullOrEmpty(item.HashedAccountId))
+        if (item.AccountId <= 0)
         {
-            validationResult.AddError(nameof(item.HashedAccountId));
+            validationResult.AddError(nameof(item.AccountId));
         }
 
-        if (string.IsNullOrEmpty(item.HashedLegalAgreementId))
+        if (item.LegalAgreementId <= 0)
         {
-            validationResult.AddError(nameof(item.HashedLegalAgreementId));
+            validationResult.AddError(nameof(item.LegalAgreementId));
         }
 
         if (string.IsNullOrEmpty(item.UserId))
@@ -42,7 +42,7 @@ public class GetSignedEmployerAgreementPdfValidator : IValidator<GetSignedEmploy
             return validationResult;
         }
 
-        var member = await _membershipRepository.GetCaller(item.HashedAccountId, item.UserId);
+        var member = await _membershipRepository.GetCaller(item.AccountId, item.UserId);
 
         if (member == null || member.Role != Role.Owner)
         {

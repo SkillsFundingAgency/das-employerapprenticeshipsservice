@@ -1,8 +1,6 @@
 ﻿using System.Threading;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
-using SFA.DAS.HashingService;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf;
 
@@ -12,14 +10,12 @@ public class GetSignedEmployerAgreementPdfQueryHandler : IRequestHandler<GetSign
     private readonly IValidator<GetSignedEmployerAgreementPdfRequest> _validator;
     private readonly IPdfService _pdfService;
     private readonly IEmployerAgreementRepository _employerAgreementRepository;
-    private readonly IHashingService _hashingService;
 
-    public GetSignedEmployerAgreementPdfQueryHandler(IValidator<GetSignedEmployerAgreementPdfRequest> validator, IPdfService pdfService, IEmployerAgreementRepository employerAgreementRepository, IHashingService hashingService)
+    public GetSignedEmployerAgreementPdfQueryHandler(IValidator<GetSignedEmployerAgreementPdfRequest> validator, IPdfService pdfService, IEmployerAgreementRepository employerAgreementRepository)
     {
         _validator = validator;
         _pdfService = pdfService;
         _employerAgreementRepository = employerAgreementRepository;
-        _hashingService = hashingService;
     }
 
 
@@ -37,9 +33,7 @@ public class GetSignedEmployerAgreementPdfQueryHandler : IRequestHandler<GetSign
             throw new UnauthorizedAccessException();
         }
 
-        var legalAgreementId = _hashingService.DecodeValue(message.HashedLegalAgreementId);
-
-        var legalAgreement = await _employerAgreementRepository.GetEmployerAgreement(legalAgreementId);
+        var legalAgreement = await _employerAgreementRepository.GetEmployerAgreement(message.LegalAgreementId);
 
         if (legalAgreement.Status == EmployerAgreementStatus.Pending || legalAgreement.Status == EmployerAgreementStatus.Removed || !legalAgreement.SignedDate.HasValue)
         {

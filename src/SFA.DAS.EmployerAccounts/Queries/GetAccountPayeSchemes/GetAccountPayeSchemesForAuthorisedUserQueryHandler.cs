@@ -30,14 +30,11 @@ public class GetAccountPayeSchemesForAuthorisedUserQueryHandler : IRequestHandle
             throw new UnauthorizedAccessException();
         }
 
-        var payeSchemes =
-            (await _payeSchemesService
-                .GetPayeSchemes(message.HashedAccountId))
-            .ToList();
+        var payeSchemes = await _payeSchemesService.GetPayeSchemes(message.AccountId);
 
         return new GetAccountPayeSchemesResponse
         {
-            PayeSchemes = payeSchemes
+            PayeSchemes = payeSchemes.ToList()
         };
     }
 }

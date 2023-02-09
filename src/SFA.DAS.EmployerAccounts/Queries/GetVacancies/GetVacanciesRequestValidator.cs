@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Queries.GetVacancies;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetVacancies;
 
 public class GetVacanciesRequestValidator : IValidator<GetVacanciesRequest>
 {
@@ -13,10 +11,10 @@ public class GetVacanciesRequestValidator : IValidator<GetVacanciesRequest>
             validationResult.AddError(nameof(item.ExternalUserId), "ExternalUserId has not been supplied");
         }
 
-        if (string.IsNullOrEmpty(item.AccountId))
+        if (item.AccountId <= 0)
         {
             validationResult.ValidationDictionary.Add(nameof(item.AccountId),
-                "Hashed Account Id cannot be null or empty.");
+                "Account Id must be set.");
         }
 
         return validationResult;

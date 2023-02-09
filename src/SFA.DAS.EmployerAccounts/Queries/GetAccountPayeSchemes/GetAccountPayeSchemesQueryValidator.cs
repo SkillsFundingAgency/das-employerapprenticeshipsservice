@@ -13,9 +13,9 @@ public class GetAccountPayeSchemesQueryValidator : IValidator<GetAccountPayeSche
     {
         var validationResult = new ValidationResult();
 
-        if (string.IsNullOrEmpty(query.HashedAccountId))
+        if (query.AccountId <= 0)
         {
-            validationResult.ValidationDictionary.Add(nameof(query.HashedAccountId), "Hashed account ID has not been supplied");
+            validationResult.ValidationDictionary.Add(nameof(query.AccountId), "Account Id must be supplied");
         }
 
         return validationResult;

@@ -8,9 +8,9 @@ public class GetEmployerAgreementByIdRequestValidator : IValidator<GetEmployerAg
     {
         var validationResults = new Dictionary<string,string>();
 
-        if (string.IsNullOrEmpty(item.HashedAgreementId))
+        if (item.AgreementId <= 0)
         {
-            validationResults.Add(nameof(item.HashedAgreementId), "Hashed agreement ID must be populated");
+            validationResults.Add(nameof(item.AgreementId), "Hashed agreement ID must be populated");
         }
 
         return new ValidationResult

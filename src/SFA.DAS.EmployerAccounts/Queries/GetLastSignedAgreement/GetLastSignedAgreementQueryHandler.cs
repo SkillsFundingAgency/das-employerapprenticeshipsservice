@@ -3,26 +3,25 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
-using SFA.DAS.HashingService;
-using SFA.DAS.Validation;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetLastSignedAgreement;
 
 public class GetLastSignedAgreementQueryHandler : IRequestHandler<GetLastSignedAgreementRequest, GetLastSignedAgreementResponse>
 {
     private readonly Lazy<EmployerAccountsDbContext> _database;
-    private readonly IHashingService _hashingService;
+    private readonly IEncodingService __encodingService;
     private readonly IValidator<GetLastSignedAgreementRequest> _validator;
     private readonly IConfigurationProvider _configurationProvider;
 
     public GetLastSignedAgreementQueryHandler(
         Lazy<EmployerAccountsDbContext> database,
-        IHashingService hashingService,
+        IEncodingService encodingService,
         IValidator<GetLastSignedAgreementRequest> validator,
         IConfigurationProvider configurationProvider)
     {
         _database = database;
-        _hashingService = hashingService;
+        __encodingService = encodingService;
         _validator = validator;
         _configurationProvider = configurationProvider;
     }
@@ -44,9 +43,8 @@ public class GetLastSignedAgreementQueryHandler : IRequestHandler<GetLastSignedA
 
         if (lastSignedAgreement != null)
         {
-            lastSignedAgreement.HashedAccountId = _hashingService.HashValue(lastSignedAgreement.AccountId);
-            lastSignedAgreement.HashedAgreementId = _hashingService.HashValue(lastSignedAgreement.Id);
-            lastSignedAgreement.HashedLegalEntityId = _hashingService.HashValue(lastSignedAgreement.LegalEntityId);
+            lastSignedAgreement.HashedAccountId = __encodingService.Encode(lastSignedAgreement.AccountId, EncodingType.AccountId);
+            lastSignedAgreement.HashedAgreementId = __encodingService.Encode(lastSignedAgreement.Id, EncodingType.AccountId);
         }
 
         return new GetLastSignedAgreementResponse

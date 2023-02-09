@@ -9,18 +9,15 @@ public class GetApprenticeshipsHandler : IRequestHandler<GetApprenticeshipsReque
     private readonly IValidator<GetApprenticeshipsRequest> _validator;
     private readonly ILogger<GetApprenticeshipsHandler> _logger;
     private readonly ICommitmentV2Service _commitmentV2Service;
-    private readonly IEncodingService _encodingService;
 
     public GetApprenticeshipsHandler(
         IValidator<GetApprenticeshipsRequest> validator,
         ILogger<GetApprenticeshipsHandler> logger,
-        ICommitmentV2Service commitmentV2Service,
-        IEncodingService encodingService)
+        ICommitmentV2Service commitmentV2Service)
     {
         _validator = validator;
         _logger = logger;
         _commitmentV2Service = commitmentV2Service;
-        _encodingService = encodingService;
     }
 
     public async Task<GetApprenticeshipsResponse> Handle(GetApprenticeshipsRequest message, CancellationToken cancellationToken)
@@ -32,18 +29,16 @@ public class GetApprenticeshipsHandler : IRequestHandler<GetApprenticeshipsReque
             throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        var accountId = _encodingService.Decode(message.HashedAccountId, EncodingType.AccountId);
-
         try
         {
             return new GetApprenticeshipsResponse
             {
-                Apprenticeships = await _commitmentV2Service.GetApprenticeships(accountId)
+                Apprenticeships = await _commitmentV2Service.GetApprenticeships(message.AccountId)
             };
         }
         catch(Exception ex)
         {
-            _logger.LogError(ex, $"Failed to get Cohorts for {message.HashedAccountId}");
+            _logger.LogError(ex, $"Failed to get Cohorts for AccountId: {message.AccountId}");
             return new GetApprenticeshipsResponse
             {
                 HasFailed = true
