@@ -162,7 +162,7 @@ public class WhenAddingServicesToTheContainer
         serviceCollection.AddSingleton(Mock.Of<ITaskService>());
 
         serviceCollection.AddConfigurationOptions(config);
-        serviceCollection.AddMediatR(typeof(GetEmployerAccountByHashedIdQuery));
+        serviceCollection.AddMediatR(typeof(GetEmployerAccountByIdQuery));
         serviceCollection.AddMediatorCommandValidators();
         serviceCollection.AddLogging();
         serviceCollection.AddAutoMapper(typeof(Startup).Assembly);
@@ -176,11 +176,11 @@ public class WhenAddingServicesToTheContainer
         Assert.IsNotNull(type);
     }
 
-    [TestCase(typeof(IRequestHandler<GetEmployerAccountByHashedIdQuery, GetEmployerAccountByHashedIdResponse>))]
+    [TestCase(typeof(IRequestHandler<GetEmployerAccountByIdQuery, GetEmployerAccountByIdResponse>))]
     [TestCase(typeof(IRequestHandler<GetUserAccountsQuery, GetUserAccountsQueryResponse>))]
     [TestCase(typeof(IRequestHandler<GetAccountPayeSchemesForAuthorisedUserQuery, GetAccountPayeSchemesResponse>))]
     [TestCase(typeof(IRequestHandler<GetMemberRequest, GetMemberResponse>))]
-    [TestCase(typeof(IRequestHandler<GetEmployerAccountByHashedIdQuery, GetEmployerAccountByHashedIdResponse>))]
+    [TestCase(typeof(IRequestHandler<GetEmployerAccountByIdQuery, GetEmployerAccountByIdResponse>))]
     [TestCase(typeof(IRequestHandler<GetPayeSchemeByRefQuery, GetPayeSchemeByRefResponse>))]
     [TestCase(typeof(IRequestHandler<GetEmployerEnglishFractionHistoryQuery, GetEmployerEnglishFractionHistoryResponse>))]
     [TestCase(typeof(IRequestHandler<GetTeamMemberQuery, GetTeamMemberResponse>))]
@@ -191,7 +191,7 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IRequestHandler<GetSignedEmployerAgreementPdfRequest, GetSignedEmployerAgreementPdfResponse>))]
     [TestCase(typeof(IRequestHandler<GetAccountLegalEntityRemoveRequest, GetAccountLegalEntityRemoveResponse>))]
     [TestCase(typeof(IRequestHandler<GetOrganisationAgreementsRequest, GetOrganisationAgreementsResponse>))]
-    [TestCase(typeof(IRequestHandler<GetEmployerAccountByHashedIdQuery, GetEmployerAccountByHashedIdResponse>))]
+    [TestCase(typeof(IRequestHandler<GetEmployerAccountByIdQuery, GetEmployerAccountByIdResponse>))]
     [TestCase(typeof(IRequestHandler<GetTeamMemberQuery, GetTeamMemberResponse>))]
     [TestCase(typeof(IRequestHandler<GetAccountStatsQuery, GetAccountStatsResponse>))]
     [TestCase(typeof(IRequestHandler<GetAccountEmployerAgreementsRequest, GetAccountEmployerAgreementsResponse>))]
@@ -200,7 +200,7 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IRequestHandler<GetInvitationRequest, GetInvitationResponse>))]
     [TestCase(typeof(IRequestHandler<GetAccountTeamMembersQuery, GetAccountTeamMembersResponse>))]
     [TestCase(typeof(IRequestHandler<GetUserQuery, GetUserResponse>))]
-    [TestCase(typeof(IRequestHandler<GetEmployerAccountByHashedIdQuery, GetEmployerAccountByHashedIdResponse>))]
+    [TestCase(typeof(IRequestHandler<GetEmployerAccountByIdQuery, GetEmployerAccountByIdResponse>))]
     [TestCase(typeof(IRequestHandler<GetReservationsRequest, GetReservationsResponse>))]
     [TestCase(typeof(IRequestHandler<GetApprenticeshipsRequest, GetApprenticeshipsResponse>))]
     [TestCase(typeof(IRequestHandler<GetSingleCohortRequest, GetSingleCohortResponse>))]
@@ -254,7 +254,7 @@ public class WhenAddingServicesToTheContainer
         serviceCollection.AddSingleton(Mock.Of<Lazy<EmployerAccountsDbContext>>());
 
         serviceCollection.AddConfigurationOptions(config);
-        serviceCollection.AddMediatR(typeof(GetEmployerAccountByHashedIdQuery));
+        serviceCollection.AddMediatR(typeof(GetEmployerAccountByIdQuery));
         serviceCollection.AddMediatorQueryValidators();
         serviceCollection.AddLogging();
         serviceCollection.AddAutoMapper(typeof(Startup).Assembly);

@@ -12,7 +12,7 @@ using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Queries.GetLastSignedAgreement;
 using SFA.DAS.EmployerAccounts.TestCommon;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLastSignedAgreementQueryTests;
 
@@ -93,7 +93,7 @@ internal class GetLastSignedAgreementTestFixtures : FluentTestFixture
 
         var handler = new GetLastSignedAgreementQueryHandler(
             new Lazy<EmployerAccountsDbContext>(() => EmployerAgreementBuilder.EmployerAccountDbContext),
-            Mock.Of<IHashingService>(),
+            Mock.Of<IEncodingService>(),
             Validator.Object,
             ConfigurationProvider);
 

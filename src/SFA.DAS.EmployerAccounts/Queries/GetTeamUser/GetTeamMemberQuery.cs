@@ -2,6 +2,6 @@
 
 public class GetTeamMemberQuery : IRequest<GetTeamMemberResponse>
 {
-    public string HashedAccountId { get; set; }
+    public long AccountId { get; set; }
     public string TeamMemberId { get; set; }
 }

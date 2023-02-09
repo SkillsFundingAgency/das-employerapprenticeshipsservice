@@ -30,7 +30,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
 
     public async Task<OrchestratorResponse<EmployerAccountViewModel>> GetEmployerAccount(string hashedAccountId)
     {
-        var response = await Mediator.Send(new GetEmployerAccountByHashedIdQuery
+        var response = await Mediator.Send(new GetEmployerAccountByIdQuery
         {
             AccountId = hashedAccountId
         });
@@ -47,7 +47,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
 
     public virtual async Task<OrchestratorResponse<RenameEmployerAccountViewModel>> GetRenameEmployerAccountViewModel(string hashedAccountId, string userId)
     {
-        var response = await Mediator.Send(new GetEmployerAccountByHashedIdQuery
+        var response = await Mediator.Send(new GetEmployerAccountByIdQuery
         {
             AccountId = hashedAccountId,
             UserId = userId

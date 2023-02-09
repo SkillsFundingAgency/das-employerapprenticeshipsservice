@@ -112,7 +112,7 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             services.AddMediatorCommandValidators();
             services.AddMediatorQueryValidators();
-            services.AddMediatR(typeof(GetEmployerAccountByHashedIdQuery));
+            services.AddMediatR(typeof(GetEmployerAccountByIdQuery));
 
             if (_configuration["EmployerAccountsConfiguration:UseGovSignIn"] != null &&
                 _configuration["EmployerAccountsConfiguration:UseGovSignIn"]

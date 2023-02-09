@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 
-public class GetEmployerAccountByHashedIdResponse
+public class GetEmployerAccountByIdResponse
 {
     public Account Account { get; set; }
 }

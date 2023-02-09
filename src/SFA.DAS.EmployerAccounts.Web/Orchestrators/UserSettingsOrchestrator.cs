@@ -100,7 +100,7 @@ public class UserSettingsOrchestrator
     {
         try
         {
-            await _mediator.Send(new GetEmployerAccountByHashedIdQuery
+            await _mediator.Send(new GetEmployerAccountByIdQuery
             {
                 AccountId = accountId,
                 UserId = externalUserId

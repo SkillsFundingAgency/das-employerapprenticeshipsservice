@@ -137,35 +137,35 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
         }
     }
 
-    public virtual async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string hashedAccountId, string externalUserId)
+    public virtual async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(long accountId, string externalUserId)
     {
         try
         {
-            var apiGetAccountTask = _accountApiClient.GetAccount(hashedAccountId);
+            var apiGetAccountTask = _accountApiClient.GetAccount(accountId);
 
-            var accountResponseTask = _mediator.Send(new GetEmployerAccountByHashedIdQuery
+            var accountResponseTask = _mediator.Send(new GetEmployerAccountByIdQuery
             {
-                AccountId = hashedAccountId,
+                AccountId = accountId,
                 UserId = externalUserId
             });
 
-            var userRoleResponseTask = GetUserAccountRole(hashedAccountId, externalUserId);
+            var userRoleResponseTask = GetUserAccountRole(accountId, externalUserId);
 
             var userResponseTask = _mediator.Send(new GetTeamMemberQuery
             {
-                HashedAccountId = hashedAccountId,
+                AccountId = accountId,
                 TeamMemberId = externalUserId
             });
 
             var accountStatsResponseTask = _mediator.Send(new GetAccountStatsQuery
             {
-                HashedAccountId = hashedAccountId,
+                AccountId = accountId,
                 ExternalUserId = externalUserId
             });
 
             var agreementsResponseTask = _mediator.Send(new GetAccountEmployerAgreementsRequest
             {
-                HashedAccountId = hashedAccountId,
+                AccountId = accountId,
                 ExternalUserId = externalUserId
             });
 
@@ -211,7 +211,6 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
                 ShowWizard = showWizard,
                 ShowAcademicYearBanner = _currentDateTime.Now < new DateTime(2017, 10, 20),
                 Tasks = tasks,
-                HashedAccountId = hashedAccountId,
                 RequiresAgreementSigning = pendingAgreements.Count(),
                 SignedAgreementCount = agreementsResponse.EmployerAgreements.Count(x => x.HasSignedAgreement),
                 PendingAgreements = pendingAgreements,
@@ -548,9 +547,9 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
         return response;
     }
 
-    public virtual async Task<bool> UserShownWizard(string userId, string hashedAccountId)
+    public virtual async Task<bool> UserShownWizard(string userId, long accountId)
     {
-        var userResponse = await Mediator.Send(new GetTeamMemberQuery { HashedAccountId = hashedAccountId, TeamMemberId = userId });
+        var userResponse = await Mediator.Send(new GetTeamMemberQuery { AccountId = accountId, TeamMemberId = userId });
         return userResponse.User.ShowWizard && userResponse.User.Role == Role.Owner;
     }
 
@@ -570,13 +569,13 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
         };
     }
 
-    public virtual async Task<OrchestratorResponse<AccountSummaryViewModel>> GetAccountSummary(string hashedAccountId, string externalUserId)
+    public virtual async Task<OrchestratorResponse<AccountSummaryViewModel>> GetAccountSummary(long accountId, string externalUserId)
     {
         try
         {
-            var accountResponse = await _mediator.Send(new GetEmployerAccountByHashedIdQuery
+            var accountResponse = await _mediator.Send(new GetEmployerAccountByIdQuery
             {
-                AccountId = hashedAccountId,
+                AccountId = accountId,
                 UserId = externalUserId
             });
 

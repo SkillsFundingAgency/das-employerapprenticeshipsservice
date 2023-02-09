@@ -39,8 +39,8 @@ public class WhenRenamingAnAccount
             Name = "Test Account"
         };
 
-        _mediator.Setup(x => x.Send(It.IsAny<GetEmployerAccountByHashedIdQuery>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new GetEmployerAccountByHashedIdResponse { Account = _account });
+        _mediator.Setup(x => x.Send(It.IsAny<GetEmployerAccountByIdQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new GetEmployerAccountByIdResponse { Account = _account });
 
         _mediator.Setup(x => x.Send(It.IsAny<GetUserAccountRoleQuery>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new GetUserAccountRoleResponse { UserRole = Role.Owner });
@@ -55,7 +55,7 @@ public class WhenRenamingAnAccount
         var response = await _orchestrator.GetEmployerAccount("ABC123");
 
         //Assert
-        _mediator.Verify(x => x.Send(It.Is<GetEmployerAccountByHashedIdQuery>(q => q.AccountId.Equals(_account.HashedId)), It.IsAny<CancellationToken>()));
+        _mediator.Verify(x => x.Send(It.Is<GetEmployerAccountByIdQuery>(q => q.AccountId.Equals(_account.HashedId)), It.IsAny<CancellationToken>()));
         Assert.AreEqual(_account.HashedId, response.Data.HashedId);
         Assert.AreEqual(_account.Name, response.Data.Name);
         Assert.AreEqual(HttpStatusCode.OK, response.Status);

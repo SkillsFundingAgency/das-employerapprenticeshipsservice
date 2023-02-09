@@ -10,7 +10,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountTests
 {
     public class WhenIValidateTheGetAccountByHashedIdRequest
     {
-        private GetEmployerAccountByHashedIdValidator _validator;
+        private GetEmployerAccountByIdValidator _validator;
         private Mock<IMembershipRepository> _membershipRepository;
 
         private const string ExpectedHashedId = "4567";
@@ -22,14 +22,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountTests
             _membershipRepository = new Mock<IMembershipRepository>();
             _membershipRepository.Setup(x => x.GetCaller(ExpectedHashedId, ExpectedUserId)).ReturnsAsync(new MembershipView());
 
-            _validator = new GetEmployerAccountByHashedIdValidator(_membershipRepository.Object);
+            _validator = new GetEmployerAccountByIdValidator(_membershipRepository.Object);
         }
 
         [Test]
         public async Task ThenTheResultIsValidWhenAllFieldsArePopulatedAndTheUserIsPartOfTheAccount()
         {
             //Act
-            var result = await _validator.ValidateAsync(new GetEmployerAccountByHashedIdQuery { AccountId = ExpectedHashedId, UserId = ExpectedUserId });
+            var result = await _validator.ValidateAsync(new GetEmployerAccountByIdQuery { AccountId = ExpectedHashedId, UserId = ExpectedUserId });
 
             //Assert
             Assert.IsTrue(result.IsValid());
@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountTests
         public async Task ThenTheUnauthorizedFlagIsSetWhenTheUserIsNotPartOfTheAccount()
         {
             //Act
-            var result = await _validator.ValidateAsync(new GetEmployerAccountByHashedIdQuery());
+            var result = await _validator.ValidateAsync(new GetEmployerAccountByIdQuery());
 
             //Assert
             Assert.IsFalse(result.IsUnauthorized);
@@ -50,7 +50,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountTests
         public async Task ThenTheDictionaryIsPopulatedWithValidationErrors()
         {
             //Act
-            var result = await _validator.ValidateAsync(new GetEmployerAccountByHashedIdQuery());
+            var result = await _validator.ValidateAsync(new GetEmployerAccountByIdQuery());
 
             //Assert
             Assert.IsFalse(result.IsValid());

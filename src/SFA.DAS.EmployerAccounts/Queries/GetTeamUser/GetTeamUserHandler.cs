@@ -17,8 +17,8 @@ public class GetTeamUserHandler : IRequestHandler<GetTeamMemberQuery, GetTeamMem
 
     public async Task<GetTeamMemberResponse> Handle(GetTeamMemberQuery message, CancellationToken cancellationToken)
     {
-        _logger.LogDebug($"Getting team member for account hashed ID {message.HashedAccountId} and team member ID {message.TeamMemberId}");
-        var member = await _repository.GetCaller(message.HashedAccountId, message.TeamMemberId);
+        _logger.LogDebug($"Getting team member for account hashed ID {message.AccountId} and team member ID {message.TeamMemberId}");
+        var member = await _repository.GetCaller(message.AccountId, message.TeamMemberId);
 
         return new GetTeamMemberResponse
         {

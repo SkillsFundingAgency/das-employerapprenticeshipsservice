@@ -24,14 +24,14 @@ public class GetAccountStatsQueryValidator : IValidator<GetAccountStatsQuery>
         {
             validationResult.AddError(nameof(item.ExternalUserId), "UserId has not been supplied");
         }
-        if (string.IsNullOrEmpty(item.HashedAccountId))
+        if (item.AccountId <= 0)
         {
-            validationResult.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
+            validationResult.AddError(nameof(item.AccountId), "AccountId has not been supplied");
         }
 
         if (validationResult.IsValid())
         {
-            var member = await _repository.GetCaller(item.HashedAccountId, item.ExternalUserId);
+            var member = await _repository.GetCaller(item.AccountId, item.ExternalUserId);
             if (member == null)
             {
                 validationResult.AddError(nameof(member), "Unauthorised: User not connected to account");

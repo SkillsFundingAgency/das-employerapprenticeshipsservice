@@ -8,8 +8,7 @@ using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
 using SFA.DAS.EmployerAccounts.Queries.GetApprenticeship;
-using SFA.DAS.HashingService;
-using SFA.DAS.NLog.Logger;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetApprenticeship
 {
@@ -20,10 +19,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetApprenticeship
         public override Mock<IValidator<GetApprenticeshipsRequest>> RequestValidator { get; set; }
 
         private Mock<ICommitmentV2Service> _commitmentV2Service;
-        private Mock<IHashingService> _hashingService;
         private Mock<ILogger<GetApprenticeshipsHandler>> _logger;
         private long _accountId;
-        private string _hashedAccountId;
         
         [SetUp]
         public void Arrange()
@@ -31,20 +28,17 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetApprenticeship
             SetUp();
 
             _accountId = 123;
-            _hashedAccountId = "ABC123";
             _logger = new Mock<ILogger<GetApprenticeshipsHandler>>();
             
             _commitmentV2Service = new Mock<ICommitmentV2Service>();
-            _hashingService = new Mock<IHashingService>();
 
             _commitmentV2Service.Setup(m => m.GetApprenticeships(_accountId)).ReturnsAsync(new List<Apprenticeship> { new Apprenticeship { Id = 3 } });
-            _hashingService = new Mock<IHashingService>();
-            _hashingService.Setup(x => x.DecodeValue(_hashedAccountId)).Returns(_accountId);
-            RequestHandler = new GetApprenticeshipsHandler(RequestValidator.Object, _logger.Object, _commitmentV2Service.Object, _hashingService.Object);
+
+            RequestHandler = new GetApprenticeshipsHandler(RequestValidator.Object, _logger.Object, _commitmentV2Service.Object);
             
             Query = new GetApprenticeshipsRequest
             {
-                HashedAccountId = _hashedAccountId
+                AccountId = _accountId
             };
         }
 

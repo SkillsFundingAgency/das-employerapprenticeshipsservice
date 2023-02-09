@@ -10,12 +10,12 @@ using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountTests
 {
-    public class WhenIGetEmployerAccountsByHashedId : QueryBaseTest<GetEmployerAccountByHashedIdHandler, GetEmployerAccountByHashedIdQuery, GetEmployerAccountByHashedIdResponse>
+    public class WhenIGetEmployerAccountsByHashedId : QueryBaseTest<GetEmployerAccountByIdHandler, GetEmployerAccountByIdQuery, GetEmployerAccountByIdResponse>
     {
         private Mock<IEmployerAccountRepository> _employerAccountRepository;
-        public override GetEmployerAccountByHashedIdQuery Query { get; set; }
-        public override GetEmployerAccountByHashedIdHandler RequestHandler { get; set; }
-        public override Mock<IValidator<GetEmployerAccountByHashedIdQuery>> RequestValidator { get; set; }
+        public override GetEmployerAccountByIdQuery Query { get; set; }
+        public override GetEmployerAccountByIdHandler RequestHandler { get; set; }
+        public override Mock<IValidator<GetEmployerAccountByIdQuery>> RequestValidator { get; set; }
 
         private const string ExpectedHashedAccountId = "MNBGBD";
        
@@ -27,15 +27,15 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountTests
             _employerAccountRepository = new Mock<IEmployerAccountRepository>();
             _employerAccountRepository.Setup(x => x.GetAccountByHashedId(ExpectedHashedAccountId)).ReturnsAsync(new Account { HashedId = ExpectedHashedAccountId });
 
-            RequestHandler = new GetEmployerAccountByHashedIdHandler(_employerAccountRepository.Object, RequestValidator.Object);
-            Query = new GetEmployerAccountByHashedIdQuery();
+            RequestHandler = new GetEmployerAccountByIdHandler(_employerAccountRepository.Object, RequestValidator.Object);
+            Query = new GetEmployerAccountByIdQuery();
         }
 
         [Test]
         public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
             //Act
-            await RequestHandler.Handle(new GetEmployerAccountByHashedIdQuery
+            await RequestHandler.Handle(new GetEmployerAccountByIdQuery
             {
                 AccountId = ExpectedHashedAccountId
             }, CancellationToken.None);
@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountTests
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Act
-            var result = await RequestHandler.Handle(new GetEmployerAccountByHashedIdQuery
+            var result = await RequestHandler.Handle(new GetEmployerAccountByIdQuery
             {
                 AccountId = ExpectedHashedAccountId
             }, CancellationToken.None);
@@ -62,10 +62,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountTests
         public void ThenIfValidationResponseIsUnauthorizedAnUnauthorizedAccessExceptionIsThrown()
         {
             //Arrange
-            RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<GetEmployerAccountByHashedIdQuery>())).ReturnsAsync(new ValidationResult {IsUnauthorized = true});
+            RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<GetEmployerAccountByIdQuery>())).ReturnsAsync(new ValidationResult {IsUnauthorized = true});
 
             //Act Assert
-            Assert.ThrowsAsync<UnauthorizedAccessException>(async ()=> await RequestHandler.Handle(new GetEmployerAccountByHashedIdQuery(), CancellationToken.None));
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async ()=> await RequestHandler.Handle(new GetEmployerAccountByIdQuery(), CancellationToken.None));
         }
     }
 }

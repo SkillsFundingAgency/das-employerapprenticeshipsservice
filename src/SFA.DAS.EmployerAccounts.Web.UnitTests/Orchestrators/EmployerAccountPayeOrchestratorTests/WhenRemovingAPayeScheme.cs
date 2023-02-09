@@ -108,8 +108,8 @@ public class WhenRemovingAPayeScheme
     public async Task ThenTheMediatorIsCalledToGetThePayeSchemeWhenASchemeIsSelectedToBeRemoved()
     {
         //Arrange
-        _mediator.Setup(x => x.Send(It.IsAny<GetEmployerAccountByHashedIdQuery>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new GetEmployerAccountByHashedIdResponse
+        _mediator.Setup(x => x.Send(It.IsAny<GetEmployerAccountByIdQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new GetEmployerAccountByIdResponse
             {
                 Account = new Account
                 {
@@ -134,8 +134,8 @@ public class WhenRemovingAPayeScheme
         var payeRef = "123/abc";
         var model = new RemovePayeSchemeViewModel { HashedAccountId = hashedId, PayeRef = payeRef, UserId = userRef };
 
-        _mediator.Setup(x => x.Send(It.IsAny<GetEmployerAccountByHashedIdQuery>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new GetEmployerAccountByHashedIdResponse
+        _mediator.Setup(x => x.Send(It.IsAny<GetEmployerAccountByIdQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new GetEmployerAccountByIdResponse
             {
                 Account = new Account
                 {

@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
 
 public class GetUserAccountRoleValidator : IValidator<GetUserAccountRoleQuery>
 {
@@ -13,9 +11,9 @@ public class GetUserAccountRoleValidator : IValidator<GetUserAccountRoleQuery>
             result.AddError(nameof(query.ExternalUserId), "ExternalUserId has not been supplied");
         }
 
-        if (string.IsNullOrEmpty(query.HashedAccountId))
+        if (query.AccountId <= 0)
         {
-            result.AddError(nameof(query.HashedAccountId), "HashedAccountId has not been supplied");
+            result.AddError(nameof(query.AccountId), "AccountId has not been supplied");
         }
 
         return result;

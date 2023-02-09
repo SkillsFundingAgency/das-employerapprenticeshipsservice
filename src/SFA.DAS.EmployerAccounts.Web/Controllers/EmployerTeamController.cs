@@ -25,10 +25,11 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index(string hashedAccountId, string reservationId)
+    public async Task<IActionResult> Index(string hashedAccountId)
     {
         PopulateViewBagWithExternalUserId();
-        var response = await GetAccountInformation(hashedAccountId);
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+        var response = await GetAccountInformation(accountId);
 
         if (response.Status != HttpStatusCode.OK)
         {
@@ -119,7 +120,8 @@ public class EmployerTeamController : BaseController
     {
         var userId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
 
-        var userShownWizard = await _employerTeamOrchestrator.UserShownWizard(userId, hashedAccountId);
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+        var userShownWizard = await _employerTeamOrchestrator.UserShownWizard(userId, accountId);
 
         var model = new OrchestratorResponse<InviteTeamMemberNextStepsViewModel>
         {
@@ -140,8 +142,8 @@ public class EmployerTeamController : BaseController
     public async Task<IActionResult> NextSteps(int? choice, string hashedAccountId)
     {
         var userId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
-
-        var userShownWizard = await _employerTeamOrchestrator.UserShownWizard(userId, hashedAccountId);
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+        var userShownWizard = await _employerTeamOrchestrator.UserShownWizard(userId, accountId);
 
         switch (choice ?? 0)
         {
@@ -498,7 +500,8 @@ public class EmployerTeamController : BaseController
         if (model != null && model.HashedAccountId != null)
         {
             var externalUserId = HttpContext.User.Claims.First(x=> x.Type.Equals(ControllerConstants.UserRefClaimKeyName)).Value;
-            var response = AsyncHelper.RunSync(() => _employerTeamOrchestrator.GetAccountSummary(model.HashedAccountId, externalUserId));
+            var accountId = _encodingService.Decode(model.HashedAccountId, EncodingType.AccountId);
+            var response = AsyncHelper.RunSync(() => _employerTeamOrchestrator.GetAccountSummary(accountId, externalUserId));
             account = response.Status != HttpStatusCode.OK ? null : response.Data.Account;
         }
 
@@ -511,10 +514,10 @@ public class EmployerTeamController : BaseController
         });
     }
 
-    private async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccountInformation(string hashedAccountId)
+    private async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccountInformation(long accountId)
     {
         var externalUserId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
-        var response = await _employerTeamOrchestrator.GetAccount(hashedAccountId, externalUserId);
+        var response = await _employerTeamOrchestrator.GetAccount(accountId, externalUserId);
 
         var flashMessage = GetFlashMessageViewModelFromCookie();
 

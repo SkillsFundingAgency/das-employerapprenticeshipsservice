@@ -150,7 +150,7 @@ public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorB
     public virtual async Task<OrchestratorResponse<RemovePayeSchemeViewModel>> GetRemovePayeSchemeModel(RemovePayeSchemeViewModel model)
     {
         var accountResponse = await
-            Mediator.Send(new GetEmployerAccountByHashedIdQuery
+            Mediator.Send(new GetEmployerAccountByIdQuery
             {
                 AccountId = model.HashedAccountId,
                 UserId = model.UserId

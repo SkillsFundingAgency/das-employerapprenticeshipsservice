@@ -1,23 +1,22 @@
 using SFA.DAS.EmployerAccounts.Data.Contracts;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 
-public class GetEmployerAccountByHashedIdValidator : IValidator<GetEmployerAccountByHashedIdQuery>
+public class GetEmployerAccountByIdValidator : IValidator<GetEmployerAccountByIdQuery>
 {
     private readonly IMembershipRepository _membershipRepository;
 
-    public GetEmployerAccountByHashedIdValidator(IMembershipRepository membershipRepository)
+    public GetEmployerAccountByIdValidator(IMembershipRepository membershipRepository)
     {
         _membershipRepository = membershipRepository;
     }
 
-    public ValidationResult Validate(GetEmployerAccountByHashedIdQuery item)
+    public ValidationResult Validate(GetEmployerAccountByIdQuery item)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<ValidationResult> ValidateAsync(GetEmployerAccountByHashedIdQuery item)
+    public async Task<ValidationResult> ValidateAsync(GetEmployerAccountByIdQuery item)
     {
         var result = new ValidationResult();
 
@@ -26,9 +25,9 @@ public class GetEmployerAccountByHashedIdValidator : IValidator<GetEmployerAccou
             result.AddError(nameof(item.UserId), "UserId has not been supplied");
         }
 
-        if (string.IsNullOrEmpty(item.AccountId))
+        if (item.AccountId <= 0)
         {
-            result.AddError(nameof(item.AccountId), "HashedAccountId has not been supplied");
+            result.AddError(nameof(item.AccountId), "AccountId has not been supplied");
         }
 
         if (result.IsValid())

@@ -6,7 +6,6 @@ public class AccountDashboardViewModel : IAccountIdentifier
 {
     public Account Account { get; set; }
     public string EmployerAccountType { get; set; }
-    public string HashedAccountId { get; set; }
     public string HashedUserId { get; set; }
     public int OrganisationCount { get; set; }
     public int PayeSchemeCount { get; set; }

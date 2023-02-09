@@ -38,15 +38,13 @@ public class GetAccountEmployerAgreementsQueryHandler : IRequestHandler<GetAccou
             throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        var accountId = _encodingService.Decode(message.HashedAccountId, EncodingType.AccountId);
-
         var agreements = await _db.Value.AccountLegalEntities
-            .WithSignedOrPendingAgreementsForAccount(accountId)
+            .WithSignedOrPendingAgreementsForAccount(message.AccountId)
             .ProjectTo<EmployerAgreementStatusDto>(_configurationProvider)
             .OrderBy(ea => ea.LegalEntity.Name)
             .ToListAsync(cancellationToken: cancellationToken);
                                     
-        agreements = agreements.PostFixEmployerAgreementStatusDto(_encodingService, accountId).ToList();
+        agreements = agreements.PostFixEmployerAgreementStatusDto(_encodingService, message.AccountId).ToList();
 
         return new GetAccountEmployerAgreementsResponse
         {

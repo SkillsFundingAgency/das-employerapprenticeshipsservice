@@ -125,7 +125,7 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
             {
                 Data = new SignAgreementViewModel
                 {
-                    HasFurtherPendingAgreements = !string.IsNullOrEmpty(unsignedAgreement.HashedAgreementId),
+                    HasFurtherPendingAgreements = unsignedAgreement.AgreementId.HasValue,
                     SignedAgreementType = agreement.AgreementType,
                     LegalEntityName = agreement.LegalEntityName
                 }

@@ -1,13 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementById;
-using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
-using SFA.DAS.HashingService;
-using SFA.DAS.Validation;
-using System.Threading;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
+using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementById;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementByIdTests
 {
@@ -16,7 +14,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementByIdTes
         private static long AgreementId => 12;
 
         private Mock<IEmployerAgreementRepository> _employerAgreementRepository;
-        private Mock<IHashingService> _hashingService;
         private EmployerAgreementView _agreement;
 
         public override GetEmployerAgreementByIdRequest Query { get; set; }
@@ -29,27 +26,20 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementByIdTes
             base.SetUp();
 
             _employerAgreementRepository = new Mock<IEmployerAgreementRepository>();
-            _hashingService = new Mock<IHashingService>();
             _agreement = new EmployerAgreementView()
             {
                 AgreementType = AgreementType.NonLevyExpressionOfInterest
             };
 
-            RequestHandler = new GetEmployerAgreementByIdRequestHandler(
-                _employerAgreementRepository.Object,
-                _hashingService.Object,
-                RequestValidator.Object);
+            RequestHandler = new GetEmployerAgreementByIdRequestHandler(_employerAgreementRepository.Object, RequestValidator.Object);
 
             Query = new GetEmployerAgreementByIdRequest
             {
-                HashedAgreementId = "ABC123",
+                AgreementId = 121,
             };
 
             _employerAgreementRepository.Setup(x => x.GetEmployerAgreement(It.IsAny<long>()))
                                         .ReturnsAsync(_agreement);
-
-            _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>()))
-                           .Returns(AgreementId);
         }
       
         [Test]
@@ -60,7 +50,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementByIdTes
 
             //Assert
             _employerAgreementRepository.Verify(x => x.GetEmployerAgreement(AgreementId), Times.Once);
-            _hashingService.Verify(x => x.DecodeValue(Query.HashedAgreementId), Times.Once);
         }
 
         [Test]
@@ -80,7 +69,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementByIdTes
             var response = await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
-            Assert.AreEqual(Query.HashedAgreementId, response.EmployerAgreement.HashedAgreementId);
+            Assert.AreEqual(Query.AgreementId, response.EmployerAgreement.Id);
         }
 
         [Test]

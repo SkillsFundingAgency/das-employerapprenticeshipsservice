@@ -11,7 +11,7 @@ using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesCountByHashedAccountId;
 using SFA.DAS.EmployerAccounts.TestCommon.DatabaseMock;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntitiesCountByHashedAccountId;
 
@@ -38,7 +38,7 @@ public class GetAccountLegalEntitiesCountByHashedAccountIdTestsFixture
     public IRequestHandler<GetAccountLegalEntitiesCountByHashedAccountIdRequest, GetAccountLegalEntitiesCountByHashedAccountIdResponse> Handler { get; set; }
     public Mock<EmployerAccountsDbContext> Db { get; set; }
     public List<AccountLegalEntity> AccountLegalEntities { get; set; }
-    public Mock<IHashingService> HashingService { get; set; }
+    public Mock<IEncodingService> EncodingService { get; set; }
     public Mock<IValidator<GetAccountLegalEntitiesCountByHashedAccountIdRequest>> RequestValidator { get; set; }
 
     public GetAccountLegalEntitiesCountByHashedAccountIdTestsFixture()
@@ -51,8 +51,8 @@ public class GetAccountLegalEntitiesCountByHashedAccountIdTestsFixture
         RequestValidator = new Mock<IValidator<GetAccountLegalEntitiesCountByHashedAccountIdRequest>>();
         RequestValidator.Setup(x => x.Validate(It.IsAny<GetAccountLegalEntitiesCountByHashedAccountIdRequest>())).Returns(new ValidationResult());
 
-        HashingService = new Mock<IHashingService>();
-        HashingService.Setup(m => m.TryDecodeValue(HashedId, out decodeAccountId)).Returns(true);
+        EncodingService = new Mock<IEncodingService>();
+        EncodingService.Setup(m => m.TryDecode(HashedId, EncodingType.AccountId, out decodeAccountId)).Returns(true);
 
         AccountLegalEntities = new List<AccountLegalEntity>
         {
@@ -65,7 +65,7 @@ public class GetAccountLegalEntitiesCountByHashedAccountIdTestsFixture
         Db.Setup(d => d.AccountLegalEntities).Returns(mockDbSet.Object);
 
         Handler = new GetAccountLegalEntitiesCountByHashedAccountIdQueryHandler(
-            HashingService.Object,
+            EncodingService.Object,
             new Lazy<EmployerAccountsDbContext>(() => Db.Object), 
             RequestValidator.Object);
     }

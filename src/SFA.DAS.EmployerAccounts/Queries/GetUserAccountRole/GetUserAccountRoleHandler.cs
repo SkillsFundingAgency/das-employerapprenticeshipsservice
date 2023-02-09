@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
 
@@ -25,7 +24,7 @@ public class GetUserAccountRoleHandler: IRequestHandler<GetUserAccountRoleQuery,
             throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        var caller = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
+        var caller = await _membershipRepository.GetCaller(message.AccountId, message.ExternalUserId);
 
         return new GetUserAccountRoleResponse
         {

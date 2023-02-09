@@ -3,20 +3,20 @@ using SFA.DAS.EmployerAccounts.Data.Contracts;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 
-public class GetEmployerAccountByHashedIdHandler : IRequestHandler<GetEmployerAccountByHashedIdQuery, GetEmployerAccountByHashedIdResponse>
+public class GetEmployerAccountByIdHandler : IRequestHandler<GetEmployerAccountByIdQuery, GetEmployerAccountByIdResponse>
 {
     private readonly IEmployerAccountRepository _employerAccountRepository;
-    private readonly IValidator<GetEmployerAccountByHashedIdQuery> _validator;
+    private readonly IValidator<GetEmployerAccountByIdQuery> _validator;
 
-    public GetEmployerAccountByHashedIdHandler(
+    public GetEmployerAccountByIdHandler(
         IEmployerAccountRepository employerAccountRepository,
-        IValidator<GetEmployerAccountByHashedIdQuery> validator)
+        IValidator<GetEmployerAccountByIdQuery> validator)
     {
         _employerAccountRepository = employerAccountRepository;
         _validator = validator;
     }
 
-    public async Task<GetEmployerAccountByHashedIdResponse> Handle(GetEmployerAccountByHashedIdQuery message, CancellationToken cancellationToken)
+    public async Task<GetEmployerAccountByIdResponse> Handle(GetEmployerAccountByIdQuery message, CancellationToken cancellationToken)
     {
         var result = await _validator.ValidateAsync(message);
 
@@ -32,7 +32,7 @@ public class GetEmployerAccountByHashedIdHandler : IRequestHandler<GetEmployerAc
 
         var employerAccount = await _employerAccountRepository.GetAccountById(message.AccountId);
 
-        return new GetEmployerAccountByHashedIdResponse
+        return new GetEmployerAccountByIdResponse
         {
             Account = employerAccount
         };

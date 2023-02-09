@@ -74,7 +74,7 @@ public static class MediatorValidationServiceRegistration
 
     public static IServiceCollection AddMediatorQueryValidators(this IServiceCollection services)
     {
-        services.AddTransient<IValidator<GetEmployerAccountByHashedIdQuery>, GetEmployerAccountByHashedIdValidator>();
+        services.AddTransient<IValidator<GetEmployerAccountByIdQuery>, GetEmployerAccountByIdValidator>();
         services.AddTransient<IValidator<GetEmployerEnglishFractionHistoryQuery>, GetEmployerEnglishFractionHistoryQueryValidator>();
         services.AddTransient<IValidator<GetPayeSchemeByRefQuery>, GetPayeSchemeByRefValidator>();
         services.AddTransient<IValidator<GetAccountPayeSchemesForAuthorisedUserQuery>, GetAccountPayeSchemesForAuthorisedUserQueryValidator>();

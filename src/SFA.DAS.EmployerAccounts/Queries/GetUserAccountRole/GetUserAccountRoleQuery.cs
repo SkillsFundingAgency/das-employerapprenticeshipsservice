@@ -2,6 +2,6 @@
 
 public class GetUserAccountRoleQuery : IRequest<GetUserAccountRoleResponse>
 {
-    public string HashedAccountId { get; set; }
+    public long AccountId { get; set; }
     public string ExternalUserId { get; set; }
 }

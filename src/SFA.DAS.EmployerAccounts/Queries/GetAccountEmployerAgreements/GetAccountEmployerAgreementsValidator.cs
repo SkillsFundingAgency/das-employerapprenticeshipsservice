@@ -25,9 +25,9 @@ public class GetAccountEmployerAgreementsValidator : IValidator<GetAccountEmploy
         {
             validationResult.AddError(nameof(item.ExternalUserId),"ExternalUserId has not been supplied");
         }
-        if (string.IsNullOrEmpty(item.HashedAccountId))
+        if (item.AccountId <= 0)
         {
-            validationResult.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
+            validationResult.AddError(nameof(item.AccountId), "AccountId has not been supplied");
         }
 
         if (!validationResult.IsValid())
@@ -35,7 +35,7 @@ public class GetAccountEmployerAgreementsValidator : IValidator<GetAccountEmploy
             return validationResult;
         }
 
-        var membership = await _membershipRepository.GetCaller(item.HashedAccountId, item.ExternalUserId);
+        var membership = await _membershipRepository.GetCaller(item.AccountId, item.ExternalUserId);
 
         if (membership == null)
         {

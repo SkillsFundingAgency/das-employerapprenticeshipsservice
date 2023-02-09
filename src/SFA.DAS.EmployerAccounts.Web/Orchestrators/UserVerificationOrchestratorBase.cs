@@ -13,11 +13,11 @@ public abstract class UserVerificationOrchestratorBase
         Mediator = mediator;
     }
 
-    public virtual async Task<GetUserAccountRoleResponse> GetUserAccountRole(string hashedAccountId, string externalUserId)
+    public virtual async Task<GetUserAccountRoleResponse> GetUserAccountRole(long accountId, string externalUserId)
     {
         return await Mediator.Send(new GetUserAccountRoleQuery
         {
-            HashedAccountId = hashedAccountId,
+            AccountId = accountId,
             ExternalUserId = externalUserId
         });
     }
