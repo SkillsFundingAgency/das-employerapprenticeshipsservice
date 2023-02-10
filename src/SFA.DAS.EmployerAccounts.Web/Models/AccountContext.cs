@@ -4,6 +4,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Models;
 
 public class AccountContext
 {
-    public string HashedAccountId { get; set; }
+    public long AccountId { get; set; }
     public ApprenticeshipEmployerType ApprenticeshipEmployerType { get; set; }
 }

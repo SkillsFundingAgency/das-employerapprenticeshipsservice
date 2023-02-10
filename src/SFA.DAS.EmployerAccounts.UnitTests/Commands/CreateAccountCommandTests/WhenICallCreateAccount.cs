@@ -78,8 +78,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _accountEventFactory = new Mock<IAccountEventFactory>();
 
-            _mockAuthorizationService = new Mock<IAuthorizationService>();
-
             _mockMembershipRepository = new Mock<IMembershipRepository>();
             _mockMembershipRepository.Setup(r => r.GetCaller(It.IsAny<long>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(new MembershipView() { FirstName = _user.FirstName, LastName = _user.LastName }));
@@ -152,7 +150,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             //Assert
             Assert.IsAssignableFrom<CreateAccountCommandResponse>(actual);
             Assert.AreEqual(ExpectedHashString, actual.HashedAccountId);
-            Assert.AreEqual(agreementHash, actual.HashedAgreementId);
         }
 
         [Test]

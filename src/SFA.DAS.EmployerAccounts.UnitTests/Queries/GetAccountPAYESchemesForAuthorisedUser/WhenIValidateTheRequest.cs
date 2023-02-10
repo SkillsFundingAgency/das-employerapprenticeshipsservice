@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemesForAut
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView { Role = Role.Viewer });
 
             //Act
-            var actual = await _validator.ValidateAsync(new GetAccountPayeSchemesForAuthorisedUserQuery { ExternalUserId = "123ABC", HashedAccountId = "1" });
+            var actual = await _validator.ValidateAsync(new GetAccountPayeSchemesForAuthorisedUserQuery { ExternalUserId = "123ABC", AccountId = 112 });
 
             //Assert
             Assert.IsTrue(actual.IsValid());
@@ -56,7 +56,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemesForAut
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(() => null);
 
             //Act
-            var actual = await _validator.ValidateAsync(new GetAccountPayeSchemesForAuthorisedUserQuery { ExternalUserId = "123ABC", HashedAccountId = "1" });
+            var actual = await _validator.ValidateAsync(new GetAccountPayeSchemesForAuthorisedUserQuery { ExternalUserId = "123ABC", AccountId = 113 });
 
             //Assert
             Assert.IsFalse(actual.IsValid());

@@ -88,7 +88,6 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddDatabaseRegistration(_employerAccountsConfiguration.DatabaseConnectionString);
             services.AddDataRepositories();
             services.AddApplicationServices(_employerAccountsConfiguration);
-            services.AddHashingServices(_employerAccountsConfiguration);
             services.AddAuditServices();
             services.AddCachesRegistrations();
             services.AddDateTimeServices(_configuration);

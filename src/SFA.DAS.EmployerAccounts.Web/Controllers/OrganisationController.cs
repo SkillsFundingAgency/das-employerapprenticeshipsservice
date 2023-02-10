@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
@@ -9,14 +10,17 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 public class OrganisationController : BaseController
 {
     private readonly OrganisationOrchestrator _orchestrator;
-    
+    private readonly IEncodingService _encodingService;
+
     public OrganisationController(
         OrganisationOrchestrator orchestrator,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
-        IMultiVariantTestingService multiVariantTestingService)
+        IMultiVariantTestingService multiVariantTestingService,
+        IEncodingService encodingService)
         : base(flashMessage, multiVariantTestingService)
     {
         _orchestrator = orchestrator;
+        _encodingService = encodingService;
     }
 
     [HttpGet]
@@ -82,11 +86,13 @@ public class OrganisationController : BaseController
 
         AddFlashMessageToCookie(flashMessage);
 
+        var hashedAgreementId = _encodingService.Encode(response.Data.EmployerAgreement.Id, EncodingType.AccountId);
+
         return RedirectToAction(newSearch ? ControllerConstants.OrganisationAddedNextStepsSearchActionName : ControllerConstants.OrganisationAddedNextStepsActionName, new
         {
             hashedAccountId,
             organisationName = name,
-            hashedAgreementId = response.Data.EmployerAgreement.HashedAgreementId
+            hashedAgreementId = hashedAgreementId
         });
     }
 
@@ -128,7 +134,8 @@ public class OrganisationController : BaseController
     [Route("review")]
     public async Task<IActionResult> Review(string hashedAccountId, string accountLegalEntityPublicHashedId)
     {
-        var viewModel = await _orchestrator.GetRefreshedOrganisationDetails(accountLegalEntityPublicHashedId);
+        var accountLegalEntityId = _encodingService.Decode(accountLegalEntityPublicHashedId, EncodingType.AccountLegalEntityId);
+        var viewModel = await _orchestrator.GetRefreshedOrganisationDetails(accountLegalEntityId);
 
         if ((viewModel.Data.UpdatesAvailable & OrganisationUpdatesAvailable.Any) != 0)
         {

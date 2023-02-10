@@ -20,6 +20,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetMember;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUser;
+using SFA.DAS.Encoding;
 using ResourceNotFoundException = SFA.DAS.EmployerAccounts.Web.Exceptions.ResourceNotFoundException;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -31,12 +32,14 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
     private readonly IAccountApiClient _accountApiClient;
     private readonly IMapper _mapper;
     private readonly EmployerAccountsConfiguration _configuration;
+    private readonly IEncodingService _encodingService;
 
     public EmployerTeamOrchestrator(IMediator mediator,
         ICurrentDateTime currentDateTime,
         IAccountApiClient accountApiClient,
         IMapper mapper,
-        EmployerAccountsConfiguration configuration)
+        EmployerAccountsConfiguration configuration,
+        IEncodingService encodingService)
         : base(mediator)
     {
         _mediator = mediator;
@@ -44,6 +47,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
         _accountApiClient = accountApiClient;
         _mapper = mapper;
         _configuration = configuration;
+        _encodingService = encodingService;
     }
     
     //Needed for tests	
@@ -137,11 +141,13 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
         }
     }
 
-    public virtual async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(long accountId, string externalUserId)
+    public virtual async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string hashedAccountId, string externalUserId)
     {
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+
         try
         {
-            var apiGetAccountTask = _accountApiClient.GetAccount(accountId);
+            var apiGetAccountTask = _accountApiClient.GetAccount(hashedAccountId);
 
             var accountResponseTask = _mediator.Send(new GetEmployerAccountByIdQuery
             {
@@ -243,7 +249,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
             return new OrchestratorResponse<AccountDashboardViewModel>
             {
                 Status = HttpStatusCode.InternalServerError,
-                Exception = new ResourceNotFoundException($"An error occured whilst trying to retrieve account: {hashedAccountId}", ex)
+                Exception = new ResourceNotFoundException($"An error occured whilst trying to retrieve account: {accountId}", ex)
             };
         }
         catch (Exception ex)
@@ -256,11 +262,12 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
         }
     }
 
-    public async Task<OrchestratorResponse<InvitationView>> GetInvitation(long id)
+    public async Task<OrchestratorResponse<InvitationView>> GetInvitation(string invitationId)
     {
+        var decodedId = _encodingService.Decode(invitationId, EncodingType.AccountId);
         var invitationResponse = await _mediator.Send(new GetInvitationRequest
         {
-            Id = id
+            Id = decodedId
         });
 
         var response = new OrchestratorResponse<InvitationView>
@@ -273,32 +280,32 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
 
     public async Task<OrchestratorResponse<InviteTeamMemberViewModel>> GetNewInvitation(string hashedAccountId, string externalUserId)
     {
-        var response = await GetUserAccountRole(hashedAccountId, externalUserId);
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+        var response = await GetUserAccountRole(accountId, externalUserId);
 
         return new OrchestratorResponse<InviteTeamMemberViewModel>
         {
             Data = new InviteTeamMemberViewModel
             {
-                HashedAccountId = hashedAccountId,
                 Role = Role.None
             },
             Status = response.UserRole.Equals(Role.Owner) ? HttpStatusCode.OK : HttpStatusCode.Unauthorized
         };
     }
 
-    public Task<OrchestratorResponse<TeamMember>> GetActiveTeamMember(string hashedAccountId, string email, string externalUserId)
+    public Task<OrchestratorResponse<TeamMember>> GetActiveTeamMember(long accountId, string email, string externalUserId)
     {
-        return GetTeamMember(hashedAccountId, email, externalUserId, true);
+        return GetTeamMember(accountId, email, externalUserId, true);
     }
 
-    public Task<OrchestratorResponse<TeamMember>> GetTeamMemberWhetherActiveOrNot(string hashedAccountId, string email, string externalUserId)
+    public Task<OrchestratorResponse<TeamMember>> GetTeamMemberWhetherActiveOrNot(long accountId, string email, string externalUserId)
     {
-        return GetTeamMember(hashedAccountId, email, externalUserId, false);
+        return GetTeamMember(accountId, email, externalUserId, false);
     }
 
-    private async Task<OrchestratorResponse<TeamMember>> GetTeamMember(string hashedAccountId, string email, string externalUserId, bool onlyIfMemberIsActive)
+    private async Task<OrchestratorResponse<TeamMember>> GetTeamMember(long accountId, string email, string externalUserId, bool onlyIfMemberIsActive)
     {
-        var userRoleResponse = await GetUserAccountRole(hashedAccountId, externalUserId);
+        var userRoleResponse = await GetUserAccountRole(accountId, externalUserId);
 
         if (!userRoleResponse.UserRole.Equals(Role.Owner))
         {
@@ -310,7 +317,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
 
         var response = await _mediator.Send(new GetMemberRequest
         {
-            HashedAccountId = hashedAccountId,
+            AccountId = accountId,
             Email = email,
             OnlyIfMemberIsActive = onlyIfMemberIsActive
         });
@@ -534,11 +541,12 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
 
     public async Task<OrchestratorResponse<InvitationViewModel>> Review(string hashedAccountId, string email)
     {
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
         var response = new OrchestratorResponse<InvitationViewModel>();
 
         var queryResponse = await _mediator.Send(new GetMemberRequest
         {
-            HashedAccountId = hashedAccountId,
+            AccountId = accountId,
             Email = email
         });
 
@@ -547,8 +555,9 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
         return response;
     }
 
-    public virtual async Task<bool> UserShownWizard(string userId, long accountId)
+    public virtual async Task<bool> UserShownWizard(string userId, string hashedAccountId)
     {
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
         var userResponse = await Mediator.Send(new GetTeamMemberQuery { AccountId = accountId, TeamMemberId = userId });
         return userResponse.User.ShowWizard && userResponse.User.Role == Role.Owner;
     }
@@ -569,8 +578,10 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
         };
     }
 
-    public virtual async Task<OrchestratorResponse<AccountSummaryViewModel>> GetAccountSummary(long accountId, string externalUserId)
+    public virtual async Task<OrchestratorResponse<AccountSummaryViewModel>> GetAccountSummary(string hashedAccountId, string externalUserId)
     {
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+
         try
         {
             var accountResponse = await _mediator.Send(new GetEmployerAccountByIdQuery
@@ -606,6 +617,12 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
                 Status = HttpStatusCode.Unauthorized
             };
         }
+    }
+
+    public virtual Task<OrchestratorResponse<TeamMember>> GetTeamMemberWhetherActiveOrNot(string hashedAccountId, string email, string externalUserId)
+    {
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+        return GetTeamMemberWhetherActiveOrNot(accountId, email, externalUserId);
     }
 
     public void GetCallToActionViewName(PanelViewModel<AccountDashboardViewModel> viewModel)

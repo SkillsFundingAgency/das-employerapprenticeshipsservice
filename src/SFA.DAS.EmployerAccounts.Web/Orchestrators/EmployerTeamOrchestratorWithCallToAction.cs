@@ -7,6 +7,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetApprenticeship;
 using SFA.DAS.EmployerAccounts.Queries.GetReservations;
 using SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
 using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators;
 
@@ -18,6 +19,7 @@ public class EmployerTeamOrchestratorWithCallToAction : EmployerTeamOrchestrator
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
     private readonly ILogger<EmployerTeamOrchestratorWithCallToAction> _logger;
+    private readonly IEncodingService _encodingService;
 
     public EmployerTeamOrchestratorWithCallToAction(
         EmployerTeamOrchestrator employerTeamOrchestrator,
@@ -27,21 +29,24 @@ public class EmployerTeamOrchestratorWithCallToAction : EmployerTeamOrchestrator
         IMapper mapper,
         ICookieStorageService<AccountContext> accountContext,
         ILogger<EmployerTeamOrchestratorWithCallToAction> logger,
-        EmployerAccountsConfiguration configuration)
-        : base(mediator, currentDateTime, accountApiClient, mapper, configuration)
+        EmployerAccountsConfiguration configuration,
+        IEncodingService encodingService)
+        : base(mediator, currentDateTime, accountApiClient, mapper, configuration, encodingService)
     {
         _employerTeamOrchestrator = employerTeamOrchestrator;
         _accountContext = accountContext;
         _mediator = mediator;
         _mapper = mapper;
         _logger = logger;
+        _encodingService = encodingService;
     }
 
     public override async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string hashedAccountId, string externalUserId)
     {
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
         var accountResponseTask = _employerTeamOrchestrator.GetAccount(hashedAccountId, externalUserId);
 
-        if (TryGetAccountContext(hashedAccountId, out AccountContext accountContext))
+        if (TryGetAccountContext(accountId, out AccountContext accountContext))
         {
             if (accountContext.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
             {
@@ -53,7 +58,7 @@ public class EmployerTeamOrchestratorWithCallToAction : EmployerTeamOrchestrator
 
         // here we are either non levy or unknown caller context
         var accountResponse = await accountResponseTask;
-        var callToActionResponse = await GetCallToAction(accountResponse.Data.Account.Id, externalUserId);
+        var callToActionResponse = await GetCallToAction(hashedAccountId, externalUserId);
       
         if (accountResponse.Status == HttpStatusCode.OK)
         {
@@ -63,7 +68,7 @@ public class EmployerTeamOrchestratorWithCallToAction : EmployerTeamOrchestrator
             }
             else
             {
-                _logger.LogError(callToActionResponse.Exception, $"An error occurred whilst trying to retrieve account CallToAction: {hashedAccountId}");
+                _logger.LogError(callToActionResponse.Exception, $"An error occurred whilst trying to retrieve account CallToAction: {accountId}");
             }
         }
 
@@ -80,18 +85,18 @@ public class EmployerTeamOrchestratorWithCallToAction : EmployerTeamOrchestrator
             _accountContext.Create(
                 new AccountContext
                 {
-                    HashedAccountId = orchestratorResponse.Data.HashedAccountId,
+                    AccountId = orchestratorResponse.Data.Account.Id,
                     ApprenticeshipEmployerType = orchestratorResponse.Data.ApprenticeshipEmployerType
                 }
                 , AccountContextCookieName);
         }
     }
 
-    private bool TryGetAccountContext(string hashedAccountId, out AccountContext accountContext)
+    private bool TryGetAccountContext(long accountId, out AccountContext accountContext)
     {
         if (_accountContext.Get(AccountContextCookieName) is AccountContext accountCookie)
         {
-            if (accountCookie.HashedAccountId.Equals(hashedAccountId, StringComparison.InvariantCultureIgnoreCase))
+            if (accountCookie.AccountId == accountId)
             {
                 accountContext = accountCookie;
                 return true;
@@ -102,8 +107,10 @@ public class EmployerTeamOrchestratorWithCallToAction : EmployerTeamOrchestrator
         return false;
     }
 
-    private async Task<OrchestratorResponse<CallToActionViewModel>> GetCallToAction(long accountId, string externalUserId)
+    private async Task<OrchestratorResponse<CallToActionViewModel>> GetCallToAction(string hashedAccountId, string externalUserId)
     {
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+
         try
         {
             var reservationsResponseTask = _mediator.Send(new GetReservationsRequest
@@ -126,7 +133,7 @@ public class EmployerTeamOrchestratorWithCallToAction : EmployerTeamOrchestrator
 
             var vacanciesResponseTask = _mediator.Send(new GetVacanciesRequest
             {
-                AccountId = accountId,
+                HashedAccountId = hashedAccountId,
                 ExternalUserId = externalUserId
             });
 

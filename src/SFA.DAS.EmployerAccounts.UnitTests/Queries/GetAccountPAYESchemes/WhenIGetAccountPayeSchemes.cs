@@ -9,7 +9,6 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Levy;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemes
 {
@@ -21,7 +20,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemes
         private PayeView _payeView;
 
         private Mock<IPayeSchemesService> _payeSchemesService;
-        private string _hashedAccountId;
+        private long _accountId;
 
         public override GetAccountPayeSchemesQuery Query { get; set; }
         public override GetAccountPayeSchemesQueryHandler RequestHandler { get; set; }
@@ -46,17 +45,17 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemes
                 Amount = 0.5m
             };
 
-            _hashedAccountId = "123ABC";
+            _accountId = 1876;
             Query = new GetAccountPayeSchemesQuery()
             {
-                HashedAccountId = _hashedAccountId,
+                AccountId = _accountId,
             };
 
             _payeSchemesService = new Mock<IPayeSchemesService>();
 
             _payeSchemesService
                 .Setup(
-                    m => m.GetPayeSchemes(_hashedAccountId)
+                    m => m.GetPayeSchemes(_accountId)
                 )
                 .ReturnsAsync(new List<PayeView> {_payeView});
 
@@ -73,7 +72,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemes
             await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
-            _payeSchemesService.Verify(x => x.GetPayeSchemes(_hashedAccountId), Times.Once);
+            _payeSchemesService.Verify(x => x.GetPayeSchemes(_accountId), Times.Once);
         }
 
         [Test]

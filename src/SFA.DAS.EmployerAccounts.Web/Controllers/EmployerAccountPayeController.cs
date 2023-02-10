@@ -43,7 +43,8 @@ public class EmployerAccountPayeController : BaseController
     [Route("{HashedAccountId}/schemes/next")]
     public async Task<IActionResult> NextSteps(string hashedAccountId)
     {
-        var model = await _employerAccountPayeOrchestrator.GetNextStepsViewModel(HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName), hashedAccountId);
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+        var model = await _employerAccountPayeOrchestrator.GetNextStepsViewModel(HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName), accountId);
 
         model.FlashMessage = GetFlashMessageViewModelFromCookie();
 
@@ -181,7 +182,7 @@ public class EmployerAccountPayeController : BaseController
 
         if (model.RemoveScheme == 1)
         {
-            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerAccountPayeControllerName, new { model.HashedAccountId });
+            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerAccountPayeControllerName, new { hashedAccountId });
         }
 
         var result = await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(model);
@@ -203,6 +204,6 @@ public class EmployerAccountPayeController : BaseController
 
         AddFlashMessageToCookie(flashMessage);
 
-        return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerAccountPayeControllerName, new { model.HashedAccountId });
+        return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerAccountPayeControllerName, new { hashedAccountId });
     }
 }

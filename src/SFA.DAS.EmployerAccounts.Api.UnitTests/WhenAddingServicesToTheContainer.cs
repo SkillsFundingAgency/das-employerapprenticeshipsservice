@@ -49,7 +49,6 @@ public class WhenAddingServicesToTheContainer
         serviceCollection.AddMediatR(typeof(GetUserAccountsQuery));
         serviceCollection.AddAutoMapper(typeof(Startup).Assembly);
         serviceCollection.AddOrchestrators();
-        serviceCollection.AddHashingServices(config.Get<EmployerAccountsConfiguration>());
         serviceCollection.AddLogging();
         var provider = serviceCollection.BuildServiceProvider();
         var type = provider.GetService(toResolve);
@@ -96,7 +95,6 @@ public class WhenAddingServicesToTheContainer
         serviceCollection.AddMediatR(typeof(GetAccountPayeSchemesQuery));
         serviceCollection.AddMediatorValidators();
         serviceCollection.AddLogging();
-        serviceCollection.AddHashingServices(config.Get<EmployerAccountsConfiguration>());
 
         var provider = serviceCollection.BuildServiceProvider();
 

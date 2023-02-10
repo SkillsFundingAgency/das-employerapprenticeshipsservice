@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Identity.Client;
 using SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity;
 using SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Dtos;
@@ -7,6 +8,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
 using SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators;
 
@@ -15,6 +17,7 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
     private readonly IMapper _mapper;
     private readonly IMediator _mediator;
     private readonly IReferenceDataService _referenceDataService;
+    private readonly IEncodingService _encodingService;
 
     protected EmployerAgreementOrchestrator()
     {
@@ -23,20 +26,22 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
     public EmployerAgreementOrchestrator(
         IMediator mediator,
         IMapper mapper,
-        IReferenceDataService referenceDataService) : base(mediator)
+        IReferenceDataService referenceDataService,
+        IEncodingService encodingService) : base(mediator)
     {
         _mediator = mediator;
         _mapper = mapper;
         _referenceDataService = referenceDataService;
+        _encodingService = encodingService;
     }
 
-    public virtual async Task<OrchestratorResponse<EmployerAgreementListViewModel>> Get(string hashedId, string externalUserId)
+    public virtual async Task<OrchestratorResponse<EmployerAgreementListViewModel>> Get(long accountId, string externalUserId)
     {
         try
         {
             var response = await _mediator.Send(new GetAccountEmployerAgreementsRequest
             {
-                HashedAccountId = hashedId,
+                AccountId = accountId,
                 ExternalUserId = externalUserId
             });
 
@@ -44,7 +49,6 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
             {
                 Data = new EmployerAgreementListViewModel
                 {
-                    HashedAccountId = hashedId,
                     EmployerAgreementsData = response
                 }
             };
@@ -150,15 +154,17 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
 
     public virtual async Task<OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>> RemoveLegalAgreement(ConfirmOrganisationToRemoveViewModel model, string userId)
     {
+        var accountId = _encodingService.Decode(model.HashedAccountId, EncodingType.AccountId);
+        var accountLegalEntityId = _encodingService.Decode(model.HashedAccountLegalEntitytId, EncodingType.AccountLegalEntityId);
         var response = new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>();
 
         try
         {
             await _mediator.Send(new RemoveLegalEntityCommand
             {
-                HashedAccountId = model.HashedAccountId,
+                AccountId = accountId,
                 UserId = userId,
-                HashedAccountLegalEntityId = model.HashedAccountLegalEntitytId
+                AccountLegalEntityId = accountLegalEntityId
             });
 
             response.FlashMessage = new FlashMessageViewModel

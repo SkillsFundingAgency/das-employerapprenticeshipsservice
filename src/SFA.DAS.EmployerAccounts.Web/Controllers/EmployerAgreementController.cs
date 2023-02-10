@@ -41,7 +41,8 @@ public class EmployerAgreementController : BaseController
     [Route("agreements")]
     public async Task<IActionResult> Index(string hashedAccountId, bool agreementSigned = false)
     {
-        var model = await _orchestrator.Get(hashedAccountId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
+        var accounId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+        var model = await _orchestrator.Get(accounId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
         var flashMessage = GetFlashMessageViewModelFromCookie();
         if (flashMessage != null)

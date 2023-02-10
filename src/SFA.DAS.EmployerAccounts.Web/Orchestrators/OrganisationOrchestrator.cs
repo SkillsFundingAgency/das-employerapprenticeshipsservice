@@ -8,6 +8,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetOrganisationById;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Validation;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators;
 
@@ -16,18 +17,20 @@ public class OrganisationOrchestrator : UserVerificationOrchestratorBase, IOrche
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
     private readonly ICookieStorageService<EmployerAccountData> _cookieService;
-
+    private readonly IEncodingService _encodingService;
     private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
     public OrganisationOrchestrator(
         IMediator mediator,
         IMapper mapper,
-        ICookieStorageService<EmployerAccountData> cookieService)
+        ICookieStorageService<EmployerAccountData> cookieService,
+        IEncodingService encodingService)
         : base(mediator)
     {
         _mediator = mediator;
         _mapper = mapper;
         _cookieService = cookieService;
+        this._encodingService = encodingService;
     }
     
     protected OrganisationOrchestrator() { }
@@ -166,7 +169,8 @@ public class OrganisationOrchestrator : UserVerificationOrchestratorBase, IOrche
 
     public virtual async Task<bool> UserShownWizard(string userId, string hashedAccountId)
     {
-        var userResponse = await Mediator.Send(new GetTeamMemberQuery { HashedAccountId = hashedAccountId, TeamMemberId = userId });
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+        var userResponse = await Mediator.Send(new GetTeamMemberQuery { AccountId = accountId, TeamMemberId = userId });
         return userResponse.User.ShowWizard && userResponse.User.Role == Role.Owner;
     }
 
@@ -222,6 +226,9 @@ public class OrganisationOrchestrator : UserVerificationOrchestratorBase, IOrche
         string hashedAccountId, 
         string userId)
     {
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+        var accountLegalEntityId = _encodingService.Decode(accountLegalEntityPublicHashedId, EncodingType.AccountLegalEntityId);    
+
         var result = new OrchestratorResponse<OrganisationUpdatedNextStepsViewModel>
         {
             Data = new OrganisationUpdatedNextStepsViewModel()
@@ -231,10 +238,10 @@ public class OrganisationOrchestrator : UserVerificationOrchestratorBase, IOrche
         {
             var request = new UpdateOrganisationDetailsCommand
             {
-                AccountLegalEntityId = _accountLegalEntityHashingService.DecodeValue(accountLegalEntityPublicHashedId),
+                AccountLegalEntityId = accountLegalEntityId,
                 Name = organisationName,
                 Address = organisationAddress,
-                HashedAccountId = hashedAccountId,
+                AccountId = accountId,
                 UserId = userId
             };
 

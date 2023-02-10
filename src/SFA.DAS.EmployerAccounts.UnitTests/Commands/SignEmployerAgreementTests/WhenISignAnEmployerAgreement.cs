@@ -170,7 +170,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
         {
             //Arrange
             const int agreementId = 87761263;
-            _encodingService.Setup(x => x.DecodeValue(_command.HashedAgreementId)).Returns(agreementId);
+            _encodingService.Setup(x => x.Decode(_command.HashedAgreementId, EncodingType.AccountId)).Returns(agreementId);
 
             //Act
             var response = await _handler.Handle(_command, CancellationToken.None);
@@ -205,7 +205,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
 
             //Assert
             _agreementRepository.Verify(x => x.GetEmployerAgreement(AgreementId), Times.Once);
-            _encodingService.Verify(x => x.HashValue(_agreement.LegalEntityId), Times.Once);
+            _encodingService.Verify(x => x.Encode(_agreement.LegalEntityId, EncodingType.AccountId), Times.Once);
             _agreementEventFactory.Verify(x => x.CreateSignedEvent(_command.HashedAccountId, HashedLegalEntityId,
                 _command.HashedAgreementId), Times.Once);
             _genericEventFactory.Verify(x => x.Create(_agreementEvent), Times.Once);

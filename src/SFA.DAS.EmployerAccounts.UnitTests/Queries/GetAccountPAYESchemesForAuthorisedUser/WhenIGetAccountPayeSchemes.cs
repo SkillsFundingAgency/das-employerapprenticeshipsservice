@@ -9,7 +9,6 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Levy;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemesForAuthorisedUser
 {
@@ -20,7 +19,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemesForAut
 
         private PayeView _payeView;
         private Mock<IPayeSchemesWithEnglishFractionService> _payeSchemesService;
-        private string _hashedAccountId;
 
         public override GetAccountPayeSchemesForAuthorisedUserQuery Query { get; set; }
         public override GetAccountPayeSchemesForAuthorisedUserQueryHandler RequestHandler { get; set; }
@@ -45,11 +43,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemesForAut
                 Amount = 0.5m
             };
 
-            _hashedAccountId = "123ABC";
-
             Query = new GetAccountPayeSchemesForAuthorisedUserQuery
             {
-                HashedAccountId = _hashedAccountId,
+                AccountId = AccountId,
                 ExternalUserId = "1234"
             };
 
@@ -57,7 +53,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemesForAut
 
             _payeSchemesService
                 .Setup(
-                    m => m.GetPayeSchemes(_hashedAccountId)
+                    m => m.GetPayeSchemes(AccountId)
                 )
                 .ReturnsAsync(new List<PayeView> { _payeView });
 
@@ -74,7 +70,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemesForAut
             //Act
             await RequestHandler.Handle(Query, CancellationToken.None);
 
-            _payeSchemesService.Verify(x => x.GetPayeSchemes(_hashedAccountId), Times.Once);
+            _payeSchemesService.Verify(x => x.GetPayeSchemes(AccountId), Times.Once);
         }
 
         [Test]

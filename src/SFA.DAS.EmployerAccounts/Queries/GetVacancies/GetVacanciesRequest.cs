@@ -2,6 +2,6 @@
 
 public class GetVacanciesRequest : IRequest<GetVacanciesResponse>
 {
-    public long AccountId { get; set; }
+    public string HashedAccountId { get; set; }
     public string ExternalUserId { get; set; }
 }

@@ -11,9 +11,9 @@ public class GetVacanciesRequestValidator : IValidator<GetVacanciesRequest>
             validationResult.AddError(nameof(item.ExternalUserId), "ExternalUserId has not been supplied");
         }
 
-        if (item.AccountId <= 0)
+        if (string.IsNullOrEmpty(item.HashedAccountId))
         {
-            validationResult.ValidationDictionary.Add(nameof(item.AccountId),
+            validationResult.ValidationDictionary.Add(nameof(item.HashedAccountId),
                 "Account Id must be set.");
         }
 

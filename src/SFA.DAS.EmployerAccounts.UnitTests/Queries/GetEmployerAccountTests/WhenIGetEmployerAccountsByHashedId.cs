@@ -6,7 +6,6 @@ using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountTests
 {
@@ -17,7 +16,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountTests
         public override GetEmployerAccountByIdHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetEmployerAccountByIdQuery>> RequestValidator { get; set; }
 
-        private const string ExpectedHashedAccountId = "MNBGBD";
+        private const long ExpectedAccountId = 1876;
        
         [SetUp]
         public void Arrange()
@@ -25,7 +24,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountTests
             SetUp();
 
             _employerAccountRepository = new Mock<IEmployerAccountRepository>();
-            _employerAccountRepository.Setup(x => x.GetAccountByHashedId(ExpectedHashedAccountId)).ReturnsAsync(new Account { HashedId = ExpectedHashedAccountId });
+            _employerAccountRepository.Setup(x => x.GetAccountById(ExpectedAccountId)).ReturnsAsync(new Account { Id = ExpectedAccountId });
 
             RequestHandler = new GetEmployerAccountByIdHandler(_employerAccountRepository.Object, RequestValidator.Object);
             Query = new GetEmployerAccountByIdQuery();
@@ -37,11 +36,11 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountTests
             //Act
             await RequestHandler.Handle(new GetEmployerAccountByIdQuery
             {
-                AccountId = ExpectedHashedAccountId
+                AccountId = ExpectedAccountId
             }, CancellationToken.None);
 
             //Assert
-            _employerAccountRepository.Verify(x => x.GetAccountByHashedId(ExpectedHashedAccountId));
+            _employerAccountRepository.Verify(x => x.GetAccountById(ExpectedAccountId));
         }
 
         [Test]
@@ -50,7 +49,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountTests
             //Act
             var result = await RequestHandler.Handle(new GetEmployerAccountByIdQuery
             {
-                AccountId = ExpectedHashedAccountId
+                AccountId = ExpectedAccountId
             }, CancellationToken.None);
 
             //Assert

@@ -11,13 +11,13 @@ public class SupportErrorOrchestrator
         _mediator = mediator;
     }
 
-    public virtual async Task<OrchestratorResponse<AccountSummaryViewModel>> GetAccountSummary(string hashedAccountId, string externalUserId)
+    public virtual async Task<OrchestratorResponse<AccountSummaryViewModel>> GetAccountSummary(long accountId, string externalUserId)
     {
         try
         {
             var accountResponse = await _mediator.Send(new GetEmployerAccountByIdQuery
             {
-                AccountId = hashedAccountId,
+                AccountId = accountId,
                 UserId = externalUserId
             });
 

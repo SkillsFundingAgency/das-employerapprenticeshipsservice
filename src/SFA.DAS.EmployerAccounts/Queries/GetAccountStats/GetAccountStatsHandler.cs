@@ -31,9 +31,7 @@ public class GetAccountStatsHandler : IRequestHandler<GetAccountStatsQuery, GetA
             throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        var accoundId = _encodingService.Decode(message.HashedAccountId, EncodingType.AccountId);
-
-        var stats = await _repository.GetAccountStats(accoundId);
+        var stats = await _repository.GetAccountStats(message.AccountId);
 
         return new GetAccountStatsResponse { Stats = stats };
     }

@@ -8,9 +8,6 @@ using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Reservations;
 using SFA.DAS.EmployerAccounts.Queries.GetReservations;
-using SFA.DAS.EmployerAccounts.Validation;
-using SFA.DAS.HashingService;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetReservations
 {
@@ -21,7 +18,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetReservations
         public override Mock<IValidator<GetReservationsRequest>> RequestValidator { get; set; }
 
         private Mock<IReservationsService> _reservationsService;
-        private Mock<IHashingService> _hashingService;
         private Reservation _reservation;
         private Mock<ILogger<GetReservationsRequestHandler>> _logger;
         private string _hashedAccountId;
@@ -43,17 +39,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetReservations
             _reservationsService
                 .Setup(s => s.Get(_accountId))
                 .ReturnsAsync(new List<Reservation> { _reservation });
-
-            _hashingService = new Mock<IHashingService>();
-            _hashingService
-                .Setup(m => m.DecodeValue(_hashedAccountId))
-                .Returns(_accountId);
             
-            RequestHandler = new GetReservationsRequestHandler(RequestValidator.Object, _logger.Object, _reservationsService.Object, _hashingService.Object);
+            RequestHandler = new GetReservationsRequestHandler(RequestValidator.Object, _logger.Object, _reservationsService.Object);
 
             Query = new GetReservationsRequest
             {
-                AccountId = _hashedAccountId
+                AccountId = _accountId
             };
         }
 
@@ -65,16 +56,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetReservations
 
             //Assert
             _reservationsService.Verify(x => x.Get(_accountId), Times.Once);
-        }
-
-        [Test]
-        public async Task ThenIfTheMessageIsValidTheHashingServiceIsCalled()
-        {
-            //Act
-            await RequestHandler.Handle(Query, CancellationToken.None);
-
-            //Assert
-            _hashingService.Verify(x => x.DecodeValue(_hashedAccountId), Times.Once);
         }
 
         [Test]

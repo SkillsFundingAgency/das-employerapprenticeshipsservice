@@ -17,27 +17,27 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetTeamMembers
         public void ThenShouldReturnValidIfRequestIsValid()
         {
             //Act
-            var result = _validator.Validate(new GetTeamMembersRequest { HashedAccountId = "123ABC" });
+            var result = _validator.Validate(new GetTeamMembersRequest(123));
 
             //Assert
             Assert.IsTrue(result.IsValid());
         }
 
         [Test]
-        public void ThenShouldReturnInvalidIfNoAccountIdIsProvided()
+        public void ThenShouldReturnInvalidIfNegativeAccountIdIsProvided()
         {
             //Act
-            var result = _validator.Validate(new GetTeamMembersRequest());
+            var result = _validator.Validate(new GetTeamMembersRequest(-999));
 
             //Assert
             Assert.IsFalse(result.IsValid());
         }
 
         [Test]
-        public void ThenShouldReturnInvalidIfAccountIdIsEmpty()
+        public void ThenShouldReturnInvalidIfAccountIdIsZero()
         {
             //Act
-            var result = _validator.Validate(new GetTeamMembersRequest { HashedAccountId = string.Empty });
+            var result = _validator.Validate(new GetTeamMembersRequest(0));
 
             //Assert
             Assert.IsFalse(result.IsValid());

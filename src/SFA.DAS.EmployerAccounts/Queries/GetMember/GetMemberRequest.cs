@@ -2,7 +2,7 @@
 
 public class GetMemberRequest : IRequest<GetMemberResponse>
 {
-    public string HashedAccountId { get; set; }
+    public long AccountId { get; set; }
     public string Email { get; set; }
 
     /// <summary>

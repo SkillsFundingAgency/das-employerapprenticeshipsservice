@@ -5,7 +5,7 @@ using SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
 using SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
-
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators;
 
@@ -13,6 +13,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
 {
     private readonly IMediator _mediator;
     private readonly ILogger<EmployerAccountOrchestrator> _logger;
+    private IEncodingService _encodingService;
     private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
     //Needed for tests
@@ -20,26 +21,30 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
     {
     }
 
-    public EmployerAccountOrchestrator(IMediator mediator, ILogger<EmployerAccountOrchestrator> logger, ICookieStorageService<EmployerAccountData> cookieService,
-        EmployerAccountsConfiguration configuration)
+    public EmployerAccountOrchestrator(
+        IMediator mediator, 
+        ILogger<EmployerAccountOrchestrator> logger, 
+        ICookieStorageService<EmployerAccountData> cookieService,
+        EmployerAccountsConfiguration configuration,
+        IEncodingService encodingService)
         : base(mediator, cookieService, configuration)
     {
         _mediator = mediator;
         _logger = logger;
+        _encodingService = encodingService;
     }
 
-    public async Task<OrchestratorResponse<EmployerAccountViewModel>> GetEmployerAccount(string hashedAccountId)
+    public async Task<OrchestratorResponse<EmployerAccountViewModel>> GetEmployerAccount(long accountId)
     {
         var response = await Mediator.Send(new GetEmployerAccountByIdQuery
         {
-            AccountId = hashedAccountId
+            AccountId = accountId
         });
 
         return new OrchestratorResponse<EmployerAccountViewModel>
         {
             Data = new EmployerAccountViewModel
             {
-                HashedId = hashedAccountId,
                 Name = response.Account.Name
             }
         };
@@ -47,9 +52,10 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
 
     public virtual async Task<OrchestratorResponse<RenameEmployerAccountViewModel>> GetRenameEmployerAccountViewModel(string hashedAccountId, string userId)
     {
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
         var response = await Mediator.Send(new GetEmployerAccountByIdQuery
         {
-            AccountId = hashedAccountId,
+            AccountId = accountId,
             UserId = userId
         });
 
@@ -57,7 +63,6 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
         {
             Data = new RenameEmployerAccountViewModel
             {
-                HashedId = hashedAccountId,
                 CurrentName = response.Account.Name,
                 NewName = string.Empty
             }
@@ -66,9 +71,10 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
 
     public virtual async Task<OrchestratorResponse<RenameEmployerAccountViewModel>> RenameEmployerAccount(RenameEmployerAccountViewModel model, string userId)
     {
+        var accountId = _encodingService.Decode(model.HashedId, EncodingType.AccountId);
         var response = new OrchestratorResponse<RenameEmployerAccountViewModel> { Data = model };
 
-        var userRoleResponse = await GetUserAccountRole(model.HashedId, userId);
+        var userRoleResponse = await GetUserAccountRole(accountId, userId);
 
         if (!userRoleResponse.UserRole.Equals(Role.Owner))
         {
@@ -125,7 +131,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
         {
             await AddPayeToExistingAccount(model);
 
-            var hashedAgreementId = await AddLegalEntityToExistingAccount(model);
+            var agreementId = await AddLegalEntityToExistingAccount(model);
 
             await UpdateAccountNameToLegalEntityName(model);
 
@@ -136,7 +142,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
                     EmployerAgreement = new EmployerAgreementView
                     {
                         HashedAccountId = model.HashedAccountId.Value,
-                        HashedAgreementId = hashedAgreementId
+                        Id = agreementId
                     }
                 },
                 Status = HttpStatusCode.OK
@@ -165,7 +171,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
         });
     }
 
-    private async Task<string> AddLegalEntityToExistingAccount(CreateAccountModel model)
+    private async Task<long> AddLegalEntityToExistingAccount(CreateAccountModel model)
     {
         var response = await Mediator.Send(new CreateLegalEntityCommand
         {
@@ -181,7 +187,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
             ExternalUserId = model.UserId
         });
 
-        return response.AgreementView.HashedAgreementId;
+        return response.AgreementView.Id;
     }
 
     private async Task AddPayeToExistingAccount(CreateAccountModel model)
@@ -227,7 +233,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
                     EmployerAgreement = new EmployerAgreementView
                     {
                         HashedAccountId = result.HashedAccountId,
-                        HashedAgreementId = result.HashedAgreementId
+                        HashedAgreementId = result.HashedAccountId
                     }
                 },
                 Status = HttpStatusCode.OK

@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels;
 
-public class AccountDashboardViewModel : IAccountIdentifier
+public class AccountDashboardViewModel
 {
     public Account Account { get; set; }
     public string EmployerAccountType { get; set; }

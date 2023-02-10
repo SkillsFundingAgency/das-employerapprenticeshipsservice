@@ -11,25 +11,21 @@ public class EmployerTeamController : BaseController
 {
     private readonly IUrlActionHelper _urlActionHelper;
     private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
-    private readonly IEncodingService _encodingService;
 
     public EmployerTeamController(
         ICookieStorageService<FlashMessageViewModel> flashMessage,
         EmployerTeamOrchestrator employerTeamOrchestrator,
-        IMultiVariantTestingService multiVariantTestingService,
-        IEncodingService encodingService)
+        IMultiVariantTestingService multiVariantTestingService)
         : base(flashMessage, multiVariantTestingService)
     {
         _employerTeamOrchestrator = employerTeamOrchestrator;
-        _encodingService = encodingService;
     }
 
     [HttpGet]
     public async Task<IActionResult> Index(string hashedAccountId)
     {
         PopulateViewBagWithExternalUserId();
-        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
-        var response = await GetAccountInformation(accountId);
+        var response = await GetAccountInformation(hashedAccountId);
 
         if (response.Status != HttpStatusCode.OK)
         {
@@ -119,9 +115,7 @@ public class EmployerTeamController : BaseController
     public async Task<IActionResult> NextSteps(string hashedAccountId)
     {
         var userId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
-
-        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
-        var userShownWizard = await _employerTeamOrchestrator.UserShownWizard(userId, accountId);
+        var userShownWizard = await _employerTeamOrchestrator.UserShownWizard(userId, hashedAccountId);
 
         var model = new OrchestratorResponse<InviteTeamMemberNextStepsViewModel>
         {
@@ -142,8 +136,7 @@ public class EmployerTeamController : BaseController
     public async Task<IActionResult> NextSteps(int? choice, string hashedAccountId)
     {
         var userId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
-        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
-        var userShownWizard = await _employerTeamOrchestrator.UserShownWizard(userId, accountId);
+        var userShownWizard = await _employerTeamOrchestrator.UserShownWizard(userId, hashedAccountId);
 
         switch (choice ?? 0)
         {
@@ -168,8 +161,7 @@ public class EmployerTeamController : BaseController
     [Route("{invitationId}/cancel")]
     public async Task<IActionResult> Cancel(string email, string invitationId, string hashedAccountId)
     {
-        var decodedInvitationId = _encodingService.Decode(invitationId, EncodingType.AccountId);
-        var invitation = await _employerTeamOrchestrator.GetInvitation(decodedInvitationId);
+        var invitation = await _employerTeamOrchestrator.GetInvitation(invitationId);
 
         return View(invitation);
     }
@@ -500,8 +492,7 @@ public class EmployerTeamController : BaseController
         if (model != null && model.HashedAccountId != null)
         {
             var externalUserId = HttpContext.User.Claims.First(x=> x.Type.Equals(ControllerConstants.UserRefClaimKeyName)).Value;
-            var accountId = _encodingService.Decode(model.HashedAccountId, EncodingType.AccountId);
-            var response = AsyncHelper.RunSync(() => _employerTeamOrchestrator.GetAccountSummary(accountId, externalUserId));
+            var response = AsyncHelper.RunSync(() => _employerTeamOrchestrator.GetAccountSummary(model.HashedAccountId, externalUserId));
             account = response.Status != HttpStatusCode.OK ? null : response.Data.Account;
         }
 
@@ -514,10 +505,10 @@ public class EmployerTeamController : BaseController
         });
     }
 
-    private async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccountInformation(long accountId)
+    private async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccountInformation(string hashedAccountId)
     {
         var externalUserId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
-        var response = await _employerTeamOrchestrator.GetAccount(accountId, externalUserId);
+        var response = await _employerTeamOrchestrator.GetAccount(hashedAccountId, externalUserId);
 
         var flashMessage = GetFlashMessageViewModelFromCookie();
 

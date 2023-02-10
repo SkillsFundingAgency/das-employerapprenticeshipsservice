@@ -45,10 +45,10 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Orchestrators.AgreementOrchestr
         public async Task ThenARequestShouldBeCreatedAndItsResponseReturned()
         {
             //Arrange
-            const string hashedAgreementId = "ABC123";
+            const long agreementId = 123;
 
             //Act
-            var result = await _orchestrator.GetAgreement(hashedAgreementId);
+            var result = await _orchestrator.GetAgreement(agreementId);
 
             //Assert
             result.Should().BeEquivalentTo(_agreement, option => option.ExcludingMissingMembers());

@@ -6,18 +6,23 @@ using SFA.DAS.EmployerAccounts.Queries.GetMember;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Queries.RemovePayeFromAccount;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators;
 
 public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorBase
 {
+    private IEncodingService _encodingService;
+
     protected EmployerAccountPayeOrchestrator() { }
 
     public EmployerAccountPayeOrchestrator(
         IMediator mediator, 
         ICookieStorageService<EmployerAccountData> cookieService,
-        EmployerAccountsConfiguration configuration) : base(mediator, cookieService, configuration)
+        EmployerAccountsConfiguration configuration,
+        IEncodingService encodingService) : base(mediator, cookieService, configuration)
     {
+        _encodingService = encodingService;
     }
 
     public async Task<OrchestratorResponse<EmployerAccountPayeListViewModel>> Get(long accountId, string externalUserId)
@@ -79,14 +84,14 @@ public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorB
 
     }
 
-    public async Task<OrchestratorResponse<GatewayInformViewModel>> CheckUserIsOwner(string hashedId, string email, string redirectUrl, string confirmUrl)
+    public async Task<OrchestratorResponse<GatewayInformViewModel>> CheckUserIsOwner(string hashedAccountId, string email, string redirectUrl, string confirmUrl)
     {
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
         HttpStatusCode status = HttpStatusCode.OK;
-
 
         var response = await Mediator.Send(new GetMemberRequest
         {
-            HashedAccountId = hashedId,
+            AccountId = accountId,
             Email = email,
             OnlyIfMemberIsActive = true
         });
@@ -149,10 +154,12 @@ public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorB
 
     public virtual async Task<OrchestratorResponse<RemovePayeSchemeViewModel>> GetRemovePayeSchemeModel(RemovePayeSchemeViewModel model)
     {
+        var accountId = _encodingService.Decode(model.HashedAccountId, EncodingType.AccountId);
+
         var accountResponse = await
             Mediator.Send(new GetEmployerAccountByIdQuery
             {
-                AccountId = model.HashedAccountId,
+                AccountId = accountId,
                 UserId = model.UserId
             });
 
@@ -237,11 +244,11 @@ public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorB
         return response;
     }
 
-    public async Task<OrchestratorResponse<PayeSchemeNextStepsViewModel>> GetNextStepsViewModel(string userId, string accountId)
+    public async Task<OrchestratorResponse<PayeSchemeNextStepsViewModel>> GetNextStepsViewModel(string userId, long accountId)
     {
         var response = new OrchestratorResponse<PayeSchemeNextStepsViewModel>();
 
-        var userResponse = await Mediator.Send(new GetTeamMemberQuery { HashedAccountId = accountId, TeamMemberId = userId });
+        var userResponse = await Mediator.Send(new GetTeamMemberQuery { AccountId = accountId, TeamMemberId = userId });
         var showWizard = userResponse.User.ShowWizard && userResponse.User.Role == Role.Owner;
         response.Data = new PayeSchemeNextStepsViewModel
         {

@@ -37,10 +37,10 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Orchestrators.AccountsOrchestra
         public async Task TheARequestToGetAccountUsersShouldBeMade()
         {
             //Arrange
-            const string hashedAgreementId = "ABC123";
+            const long agreementId = 123;
 
             //Act
-            await _orchestrator.GetAccountTeamMembers(hashedAgreementId);
+            await _orchestrator.GetAccountTeamMembers(agreementId);
 
             //Assert
             _mediator.VerifyAll();

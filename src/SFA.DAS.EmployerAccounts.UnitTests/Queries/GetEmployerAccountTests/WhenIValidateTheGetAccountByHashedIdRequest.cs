@@ -13,14 +13,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountTests
         private GetEmployerAccountByIdValidator _validator;
         private Mock<IMembershipRepository> _membershipRepository;
 
-        private const string ExpectedHashedId = "4567";
+        private const long ExpectedId = 4567;
         private const string ExpectedUserId = "asdf4660";
 
         [SetUp]
         public void Arrange()
         {
             _membershipRepository = new Mock<IMembershipRepository>();
-            _membershipRepository.Setup(x => x.GetCaller(ExpectedHashedId, ExpectedUserId)).ReturnsAsync(new MembershipView());
+            _membershipRepository.Setup(x => x.GetCaller(ExpectedId, ExpectedUserId)).ReturnsAsync(new MembershipView());
 
             _validator = new GetEmployerAccountByIdValidator(_membershipRepository.Object);
         }
@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountTests
         public async Task ThenTheResultIsValidWhenAllFieldsArePopulatedAndTheUserIsPartOfTheAccount()
         {
             //Act
-            var result = await _validator.ValidateAsync(new GetEmployerAccountByIdQuery { AccountId = ExpectedHashedId, UserId = ExpectedUserId });
+            var result = await _validator.ValidateAsync(new GetEmployerAccountByIdQuery { AccountId = ExpectedId, UserId = ExpectedUserId });
 
             //Assert
             Assert.IsTrue(result.IsValid());

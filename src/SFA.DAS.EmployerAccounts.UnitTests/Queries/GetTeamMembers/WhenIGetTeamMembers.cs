@@ -8,7 +8,6 @@ using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamMembers;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetTeamMembers
 {
@@ -32,15 +31,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetTeamMembers
 
             _repository = new Mock<IEmployerAccountTeamRepository>();
 
-            _repository.Setup(x => x.GetAccountTeamMembers(It.IsAny<string>()))
+            _repository.Setup(x => x.GetAccountTeamMembers(It.IsAny<long>()))
                 .ReturnsAsync(new List<TeamMember> { _teamMember });
             
             RequestHandler = new GetTeamMembersRequestHandler(_repository.Object, RequestValidator.Object, _logger.Object);
 
-            Query = new GetTeamMembersRequest
-            {
-                HashedAccountId = "123ABC"
-            };
+            Query = new GetTeamMembersRequest(756);
         }
 
         [Test]
@@ -50,7 +46,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetTeamMembers
             await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
-            _repository.Verify(x => x.GetAccountTeamMembers(Query.HashedAccountId), Times.Once);
+            _repository.Verify(x => x.GetAccountTeamMembers(Query.AccountId), Times.Once);
         }
 
         [Test]

@@ -16,7 +16,6 @@ using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerAccounts.TestCommon.Extensions;
-using SFA.DAS.Validation;
 using PayeScheme = SFA.DAS.EmployerAccounts.Api.Types.PayeScheme;
 
 namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountPayeSchemesControllerTests;
@@ -24,12 +23,14 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountPayeSchemesC
 [TestFixture]
 public class WhenIGetAPayeScheme : AccountPayeSchemesControllerTests
 {
+    private long _accountId;
     private string _hashedAccountId;
     private GetAccountPayeSchemesResponse _accountResponse;
 
     [Test]
     public async Task ThenThePayeSchemesAreReturned()
     {
+        _accountId = 123;
         _hashedAccountId = "ABC123";
         _accountResponse = new GetAccountPayeSchemesResponse
         {
@@ -47,7 +48,7 @@ public class WhenIGetAPayeScheme : AccountPayeSchemesControllerTests
                 }
         };
 
-        Mediator.Setup(x => x.Send(It.Is<GetAccountPayeSchemesQuery>(q => q.HashedAccountId == _hashedAccountId),
+        Mediator.Setup(x => x.Send(It.Is<GetAccountPayeSchemesQuery>(q => q.AccountId == _accountId),
             It.IsAny<CancellationToken>())).ReturnsAsync(_accountResponse);
 
         UrlTestHelper
@@ -57,12 +58,12 @@ public class WhenIGetAPayeScheme : AccountPayeSchemesControllerTests
                         c.RouteName == "GetPayeScheme" &&
                         c.Values.IsEquivalentTo(new
                         {
-                            hashedAccountId = _hashedAccountId,
+                            hashedAccountId = _accountId,
                             payeSchemeRef = WebUtility.UrlEncode(_accountResponse.PayeSchemes[0].Ref)
                         })))
             )
             .Returns(
-                $"/api/accounts/{_hashedAccountId}/payeschemes/{_accountResponse.PayeSchemes[0].Ref.Replace(@"/", "%2f")}");
+                $"/api/accounts/{_accountId}/payeschemes/{_accountResponse.PayeSchemes[0].Ref.Replace(@"/", "%2f")}");
 
         UrlTestHelper
             .Setup(
@@ -71,12 +72,12 @@ public class WhenIGetAPayeScheme : AccountPayeSchemesControllerTests
                         c.RouteName == "GetPayeScheme" &&
                         c.Values.IsEquivalentTo(new
                         {
-                            hashedAccountId = _hashedAccountId,
+                            hashedAccountId = _accountId,
                             payeSchemeRef = WebUtility.UrlEncode(_accountResponse.PayeSchemes[1].Ref)
                         })))
             )
             .Returns(
-                $"/api/accounts/{_hashedAccountId}/payeschemes/{_accountResponse.PayeSchemes[1].Ref.Replace(@"/", "%2f")}");
+                $"/api/accounts/{_accountId}/payeschemes/{_accountResponse.PayeSchemes[1].Ref.Replace(@"/", "%2f")}");
 
         var response = await Controller.GetPayeSchemes(_hashedAccountId);
 
@@ -91,7 +92,7 @@ public class WhenIGetAPayeScheme : AccountPayeSchemesControllerTests
         {
             var matchedScheme = model.Single(x => x.Id == payeScheme.Ref);
             matchedScheme?.Href.Should()
-                .Be($"/api/accounts/{_hashedAccountId}/payeschemes/{payeScheme.Ref.Replace(@"/", "%2f")}");
+                .Be($"/api/accounts/{_accountId}/payeschemes/{payeScheme.Ref.Replace(@"/", "%2f")}");
         }
     }
 
@@ -99,9 +100,10 @@ public class WhenIGetAPayeScheme : AccountPayeSchemesControllerTests
     public async Task AndTheAccountDoesNotExistThenItIsNotReturned()
     {
         var hashedAccountId = "ABC123";
+        var accountId = 123;
         var accountResponse = new GetAccountPayeSchemesResponse();
 
-        Mediator.Setup(x => x.Send(It.Is<GetAccountPayeSchemesQuery>(q => q.HashedAccountId == hashedAccountId),
+        Mediator.Setup(x => x.Send(It.Is<GetAccountPayeSchemesQuery>(q => q.AccountId == accountId),
             It.IsAny<CancellationToken>())).ReturnsAsync(accountResponse);
 
         var response = await Controller.GetPayeSchemes(hashedAccountId);
@@ -114,9 +116,10 @@ public class WhenIGetAPayeScheme : AccountPayeSchemesControllerTests
     public async Task AndTheAccountCannotBeDecodedThenItIsNotReturned()
     {
         var hashedAccountId = "ABC123";
+        var accountId = 123;
 
         Mediator.Setup(
-                x => x.Send(It.Is<GetAccountPayeSchemesQuery>(q => q.HashedAccountId == hashedAccountId),
+                x => x.Send(It.Is<GetAccountPayeSchemesQuery>(q => q.AccountId == accountId),
                     It.IsAny<CancellationToken>()))
             .Throws(new InvalidRequestException(new Dictionary<string, string>()));
 

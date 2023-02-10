@@ -4,6 +4,7 @@ using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Queries.GetInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
 using SFA.DAS.EmployerAccounts.Queries.GetUserInvitations;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators;
 
@@ -11,20 +12,23 @@ public class InvitationOrchestrator
 {
     private readonly IMediator _mediator;
     private readonly ILogger<InvitationOrchestrator> _logger;
+    private readonly IEncodingService _encodingService;
 
     protected InvitationOrchestrator() { }
 
-    public InvitationOrchestrator(IMediator mediator, ILogger<InvitationOrchestrator> logger)
+    public InvitationOrchestrator(IMediator mediator, ILogger<InvitationOrchestrator> logger, IEncodingService encodingService)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         _logger = logger;
+        _encodingService = encodingService;
     }
 
-    public virtual async Task<OrchestratorResponse<InvitationView>> GetInvitation(string id)
+    public virtual async Task<OrchestratorResponse<InvitationView>> GetInvitation(string hashedId)
     {
+        var invitationId = _encodingService.Decode(hashedId, EncodingType.AccountId);
         var response = await _mediator.Send(new GetInvitationRequest
         {
-            Id = id
+            Id = invitationId
         });
 
         var result = new OrchestratorResponse<InvitationView>

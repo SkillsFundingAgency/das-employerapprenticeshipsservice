@@ -24,11 +24,11 @@ public abstract class EmployerVerificationOrchestratorBase
     }
 
 
-    public virtual Task<GetUserAccountRoleResponse> GetUserAccountRole(string hashedAccountId, string externalUserId)
+    public virtual Task<GetUserAccountRoleResponse> GetUserAccountRole(long accountId, string externalUserId)
     {
         return Mediator.Send(new GetUserAccountRoleQuery
         {
-            HashedAccountId = hashedAccountId,
+            AccountId = accountId,
             ExternalUserId = externalUserId
         });
     }

@@ -14,6 +14,7 @@ using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerAccounts.TestCommon;
+using SFA.DAS.Encoding;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTests
@@ -147,7 +148,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
 
         public GetEmployerAgreementRequest BuildRequest(string hashedAccountId, long agreementId, Guid externalUserId)
         {
-            var agreementHashId = EmployerAgreementBuilder.EncodingService.HashValue(agreementId);
+            var agreementHashId = EmployerAgreementBuilder.EncodingService.Encode(agreementId, EncodingType.AccountId);
             var request = new GetEmployerAgreementRequest
             {
                 HashedAccountId = hashedAccountId,

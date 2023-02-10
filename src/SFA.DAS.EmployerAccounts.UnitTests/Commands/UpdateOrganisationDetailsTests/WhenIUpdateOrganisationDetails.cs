@@ -20,8 +20,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpdateOrganisationDetailsT
         private Mock<IAccountRepository> _accountRepository;
         private Mock<IMembershipRepository> _membershipRepository;
         private Mock<IEventPublisher> _eventPublisher;
-
-        private const string HashedAccountId = "34RFD";
         private const long AccountId = 123455;
         private const string ExpectedOrganisationName = "Org Name";
         private const string ExpectedOrganisationAddress = "Org Address";
@@ -43,7 +41,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpdateOrganisationDetailsT
 
             _eventPublisher = new Mock<IEventPublisher>();
 
-            _command = new UpdateOrganisationDetailsCommand { AccountLegalEntityId = ExpectedAccountLegalEntityId, Name = ExpectedOrganisationName, Address = ExpectedOrganisationAddress, HashedAccountId = HashedAccountId, UserId = _expectedUserId };
+            _command = new UpdateOrganisationDetailsCommand { AccountLegalEntityId = ExpectedAccountLegalEntityId, Name = ExpectedOrganisationName, Address = ExpectedOrganisationAddress, AccountId = AccountId, UserId = _expectedUserId };
 
             _handler = new UpdateOrganisationDetailsCommandHandler(
                 _validator.Object,
