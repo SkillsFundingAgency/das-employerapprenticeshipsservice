@@ -31,7 +31,7 @@
                 @Html.AntiForgeryToken()
                 <input type="hidden" name="organisationName" value="@Model.Data.RefreshedName" />
                 <input type="hidden" name="organisationAddress" value="@Model.Data.RefreshedAddress" />
-                <input type="hidden" name="accountLegalEntityPublicHashedId" value="@Model.Data.AccountLegalEntityPublicHashedId" />
+                <input type="hidden" name="accountLegalEntityPublicHashedId" value="@Model.Data.HashedAccountLegalEntityId" />
                 <input type="hidden" name="dataSourceFriendlyName" value="@Model.Data.DataSourceFriendlyName" />
 
                 <div class="form-group">

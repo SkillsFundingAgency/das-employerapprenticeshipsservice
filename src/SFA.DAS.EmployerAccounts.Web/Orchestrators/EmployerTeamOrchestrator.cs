@@ -205,6 +205,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
 
             var viewModel = new AccountDashboardViewModel
             {
+                HashedAccountId = hashedAccountId,
                 Account = accountResponse.Account,
                 SingleAccountLegalEntityId = agreementsResponse.EmployerAgreements.Count == 1 ? agreementsResponse.EmployerAgreements.First().LegalEntity.AccountLegalEntityPublicHashedId : null,
                 UserRole = userRoleResponse.UserRole,

@@ -1,53 +1,45 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Extensions.Hosting;
 using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution;
 using SFA.DAS.EmployerAccounts.Startup;
+using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers
 {
     public class Program
     {
-        public static void Main()
+        public static async Task Main(string[] args)
         {
-            TelemetryConfiguration.Active.InstrumentationKey = ConfigurationManager.AppSettings["APPINSIGHTS_INSTRUMENTATIONKEY"];
+            //var hostBuilder = new HostBuilder();
+            //try
+            //{
+            //    hostBuilder
+            //        .UseDasEnvironment()
+            //        .ConfigureDasAppConfiguration(args)
+            //        .UseConsoleLifetime()
+            //        .ConfigureLogging(b => b.AddNLog())
+            //        .UseStructureMap()
+            //        .ConfigureServices((c, s) => s
+            //            .AddDasDistributedMemoryCache(c.Configuration, c.HostingEnvironment.IsDevelopment())
+            //            .AddMemoryCache()
+            //            .AddNServiceBus())
+            //        .ConfigureContainer<Registry>(IoC.Initialize);
 
-            MainAsync().GetAwaiter().GetResult();
-        }
-
-        public static async Task MainAsync()
-        {
-            using (var container = IoC.Initialize())
-            {
-                var config = new JobHostConfiguration();
-                var startup = container.GetInstance<IStartup>();
-
-                if (container.GetInstance<IEnvironmentService>().IsCurrent(DasEnv.LOCAL))
-                {
-                    config.UseDevelopmentSettings();
-                }
-
-                var jobHost = new JobHost(config);
-
-                await startup.StartAsync();
-                await jobHost.CallAsync(typeof(Program).GetMethod(nameof(Block)));
-
-                jobHost.RunAndBlock();
-
-                await startup.StopAsync();
-            }
-        }
-
-        [NoAutomaticTrigger]
-        public static async Task Block(CancellationToken cancellationToken)
-        {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                await Task.Delay(3000, cancellationToken);
-            }
+            //    using (var host = hostBuilder.Build())
+            //    {
+            //        await host.RunAsync();
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e.Message);
+            //    throw;
+            //}
         }
     }
 }

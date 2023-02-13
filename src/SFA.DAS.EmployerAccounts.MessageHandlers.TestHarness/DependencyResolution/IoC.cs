@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.DependencyResolution;
-using SFA.DAS.UnitOfWork.EntityFramework.StructureMap;
+using SFA.DAS.UnitOfWork.EntityFrameworkCore.DependencyResolution.StructureMap;
 using SFA.DAS.UnitOfWork.NServiceBus.DependencyResolution.StructureMap;
 using StructureMap;
 
@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness.DependencyResolut
                 c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DataRegistry>();
-                c.AddRegistry<EntityFrameworkUnitOfWorkRegistry<EmployerAccountsDbContext>>();
+                c.AddRegistry<EntityFrameworkCoreUnitOfWorkRegistry<EmployerAccountsDbContext>>();
                 c.AddRegistry<EventsRegistry>();
                 c.AddRegistry<ExecutionPoliciesRegistry>();
                 c.AddRegistry<LoggerRegistry>();

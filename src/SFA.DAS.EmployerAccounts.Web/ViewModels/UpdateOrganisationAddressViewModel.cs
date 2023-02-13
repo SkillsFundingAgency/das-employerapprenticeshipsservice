@@ -15,4 +15,5 @@ public class ReviewOrganisationAddressViewModel : OrganisationViewModelBase
     public string RefreshedName { get; set; }
     public string RefreshedAddress { get; set; }
     public OrganisationUpdatesAvailable UpdatesAvailable { get; set; }
+    public string HashedAccountLegalEntityId { get; set; }
 }

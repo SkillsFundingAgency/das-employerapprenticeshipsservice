@@ -14,6 +14,7 @@ using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Filters;
 using SFA.DAS.EmployerAccounts.Web.Handlers;
 using SFA.DAS.EmployerAccounts.Web.StartupExtensions;
@@ -125,6 +126,8 @@ namespace SFA.DAS.EmployerAccounts.Web
             {
                 services.AddAndConfigureEmployerAuthentication(identityServerConfiguration);
             }
+
+            //services.AddAndConfigureSupportUserAuthentications(new SupportConsoleAuthenticationOptions());
 
             services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
 

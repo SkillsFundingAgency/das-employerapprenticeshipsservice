@@ -43,5 +43,6 @@ public class AccountDashboardViewModel
         }
     }
 
-    public string SingleAccountLegalEntityId { get; internal set; }
+    public string SingleAccountLegalEntityId { get; set; }
+    public string HashedAccountId { get; set; }
 }

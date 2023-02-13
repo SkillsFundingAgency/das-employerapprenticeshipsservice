@@ -10,17 +10,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 public class OrganisationController : BaseController
 {
     private readonly OrganisationOrchestrator _orchestrator;
-    private readonly IEncodingService _encodingService;
 
     public OrganisationController(
         OrganisationOrchestrator orchestrator,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
-        IMultiVariantTestingService multiVariantTestingService,
-        IEncodingService encodingService)
+        IMultiVariantTestingService multiVariantTestingService)
         : base(flashMessage, multiVariantTestingService)
     {
         _orchestrator = orchestrator;
-        _encodingService = encodingService;
     }
 
     [HttpGet]
@@ -86,13 +83,11 @@ public class OrganisationController : BaseController
 
         AddFlashMessageToCookie(flashMessage);
 
-        var hashedAgreementId = _encodingService.Encode(response.Data.EmployerAgreement.Id, EncodingType.AccountId);
-
         return RedirectToAction(newSearch ? ControllerConstants.OrganisationAddedNextStepsSearchActionName : ControllerConstants.OrganisationAddedNextStepsActionName, new
         {
             hashedAccountId,
             organisationName = name,
-            hashedAgreementId = hashedAgreementId
+            hashedAgreementId = response.Data.EmployerAgreement.HashedAgreementId
         });
     }
 
@@ -134,8 +129,7 @@ public class OrganisationController : BaseController
     [Route("review")]
     public async Task<IActionResult> Review(string hashedAccountId, string accountLegalEntityPublicHashedId)
     {
-        var accountLegalEntityId = _encodingService.Decode(accountLegalEntityPublicHashedId, EncodingType.AccountLegalEntityId);
-        var viewModel = await _orchestrator.GetRefreshedOrganisationDetails(accountLegalEntityId);
+        var viewModel = await _orchestrator.GetRefreshedOrganisationDetails(accountLegalEntityPublicHashedId);
 
         if ((viewModel.Data.UpdatesAvailable & OrganisationUpdatesAvailable.Any) != 0)
         {

@@ -70,7 +70,17 @@ public static class EmployerAuthenticationServiceRegistrations
 
                     return Task.CompletedTask;
                 };
-            });
+            }).AddCookie(options =>
+            {
+                options.AccessDeniedPath = new PathString("/error/403");
+                options.ExpireTimeSpan = TimeSpan.FromHours(1);
+                options.Cookie.Name = $"SFA.DAS.EmployerAccounts.Web.Auth";
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.SlidingExpiration = true;
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.CookieManager = new ChunkingCookieManager { ChunkSize = 3000 };
+            }); 
+
         services
             .AddOptions<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme)
             .Configure<ICustomClaims>((options, customClaims) =>
@@ -81,17 +91,6 @@ public static class EmployerAuthenticationServiceRegistrations
                     ctx.Principal.Identities.First().AddClaims(claims);
                 };
             });
-
-        services.AddAuthentication().AddCookie(options =>
-        {
-            options.AccessDeniedPath = new PathString("/error/403");
-            options.ExpireTimeSpan = TimeSpan.FromHours(1);
-            options.Cookie.Name = $"SFA.DAS.Forecasting.Web.Auth";
-            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-            options.SlidingExpiration = true;
-            options.Cookie.SameSite = SameSiteMode.None;
-            options.CookieManager = new ChunkingCookieManager { ChunkSize = 3000 };
-        });
 
         return services;
     }

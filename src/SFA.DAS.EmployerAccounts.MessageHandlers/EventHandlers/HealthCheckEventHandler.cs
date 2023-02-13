@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Data.Entity;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using NServiceBus;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Messages.Events;

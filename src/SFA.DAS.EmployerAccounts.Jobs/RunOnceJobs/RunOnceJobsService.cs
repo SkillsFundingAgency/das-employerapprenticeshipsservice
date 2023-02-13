@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Data.Entity;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Models;
@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs
         {
             _logger.LogInformation($"RunOnceJob '{jobName}' started");
 
-            if (await _db.Value.RunOnceJobs.AnyAsync(j=>j.Name == jobName))
+            if ((await _db.Value.RunOnceJobs.SingleOrDefaultAsync(j=>j.Name == jobName) != null))
             {
                 _logger.LogInformation($"Job '{jobName}' has already been run");
                 return;

@@ -188,8 +188,10 @@ public class OrganisationOrchestrator : UserVerificationOrchestratorBase, IOrche
         };
     }
 
-    public async Task<OrchestratorResponse<ReviewOrganisationAddressViewModel>> GetRefreshedOrganisationDetails(long accountLegalEntityId)
+    public async Task<OrchestratorResponse<ReviewOrganisationAddressViewModel>> GetRefreshedOrganisationDetails(string hashedAccountLegalEntityId)
     {
+        var accountLegalEntityId = _encodingService.Decode(hashedAccountLegalEntityId, EncodingType.AccountLegalEntityId);
+
         var currentDetails = await Mediator.Send(new GetAccountLegalEntityRequest
         {
             AccountLegalEntityId = accountLegalEntityId
@@ -210,6 +212,7 @@ public class OrganisationOrchestrator : UserVerificationOrchestratorBase, IOrche
                 OrganisationAddress = currentDetails.AccountLegalEntity.Address,
                 RefreshedName = refreshedDetails.Organisation.Name,
                 RefreshedAddress = refreshedDetails.Organisation.Address.FormatAddress(),
+                HashedAccountLegalEntityId = hashedAccountLegalEntityId
             }
         };
 
