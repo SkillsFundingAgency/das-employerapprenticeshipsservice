@@ -96,7 +96,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AddPayeToAccountTests
         public async Task ThenTheRepositoryIsCalledIfTheCommandIsValid()
         {
             //Arrange
-            var command = AddPayeToNewLegalEntityCommandObjectMother.Create();
+            var command = AddPayeToNewLegalEntityCommandObjectMother.Create(hashedAccountId: ExpectedHashedAccountId);
 
             //Act
             await _addPayeToAccountCommandHandler.Handle(command, CancellationToken.None);
@@ -110,7 +110,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AddPayeToAccountTests
         public async Task ThenAPaymentSchemeAddedEventIsPublished()
         {
             //Arrange
-            var command = AddPayeToNewLegalEntityCommandObjectMother.Create();
+            var command = AddPayeToNewLegalEntityCommandObjectMother.Create(hashedAccountId: ExpectedHashedAccountId);
 
             //Act
             await _addPayeToAccountCommandHandler.Handle(command, CancellationToken.None);
@@ -132,7 +132,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AddPayeToAccountTests
         public async Task ThenAnAccountLevyStatusCommandIsPublishedForAnAornPaye()
         {
             //Arrange
-            var command = AddPayeToNewLegalEntityCommandObjectMother.Create(aorn: "Aorn");
+            var command = AddPayeToNewLegalEntityCommandObjectMother.Create(aorn: "Aorn", hashedAccountId: ExpectedHashedAccountId);
 
             //Act
             await _addPayeToAccountCommandHandler.Handle(command, CancellationToken.None);
@@ -163,7 +163,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AddPayeToAccountTests
         public async Task ThenTheAuditCommandIsCalledWhenTheCreateInvitationCommandIsValid()
         {
             //Arrange
-            var command = AddPayeToNewLegalEntityCommandObjectMother.Create();
+            var command = AddPayeToNewLegalEntityCommandObjectMother.Create(hashedAccountId: ExpectedHashedAccountId);
 
             //Act
             await _addPayeToAccountCommandHandler.Handle(command, CancellationToken.None);
