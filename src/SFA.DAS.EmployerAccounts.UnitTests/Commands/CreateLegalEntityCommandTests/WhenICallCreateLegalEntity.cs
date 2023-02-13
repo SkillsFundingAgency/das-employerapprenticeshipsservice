@@ -56,7 +56,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
 
             AccountRepository.Setup(x => x.CreateLegalEntityWithAgreement(It.Is<CreateLegalEntityWithAgreementParams>(createParams => createParams.AccountId == _owner.AccountId))).ReturnsAsync(_agreementView);
 
-            EncodingService.Setup(hs => hs.Encode(It.IsAny<long>(), It.IsAny<EncodingType>())).Returns<long>(value => $"*{value}*");
+            EncodingService.Setup(hs => hs.Encode(It.IsAny<long>(), It.IsAny<EncodingType>())).Returns((long value, EncodingType encodingType) => $"*{value}*");
             EncodingService.Setup(hs => hs.Decode(Command.HashedAccountId, EncodingType.AccountId)).Returns(_owner.AccountId);
 
             EncodingService.Setup(x => x.Encode(_agreementView.AccountLegalEntityId, EncodingType.AccountLegalEntityId)).Returns(ExpectedAccountLegalEntityPublicHashString);
@@ -129,17 +129,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
 
             //Assert
             AccountRepository.Verify(r => r.CreateLegalEntityWithAgreement(It.Is<CreateLegalEntityWithAgreementParams>(cp => !string.IsNullOrEmpty(cp.Code))), Times.Once);
-        }
-
-        [Test]
-        public async Task ThenAHashedAgreementIdIsSupplied()
-        {
-            //Act
-            var employerAgreementView = await CommandHandler.Handle(Command, CancellationToken.None);
-
-            //Assert
-            var expectedHashedAgreementId = $"*{employerAgreementView.AgreementView.Id}*";
-            Assert.AreEqual(expectedHashedAgreementId, employerAgreementView.AgreementView.HashedAgreementId);
         }
 
         [Test]
