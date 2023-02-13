@@ -104,10 +104,12 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
             return teamMembers.TeamMembersWhichReceiveNotifications.Select(x => _mapper.Map<TeamMember>(x)).ToList();
         }
 
-        public async Task<IEnumerable<PayeView>> GetPayeSchemesForAccount(long accountId)
+        public async Task<IEnumerable<PayeView>> GetPayeSchemesForAccount(string hashedAccountId)
         {
             try
             {
+
+                var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
                 var response = await _mediator.Send(new GetAccountPayeSchemesQuery { AccountId = accountId });
 
                 return response.PayeSchemes;
