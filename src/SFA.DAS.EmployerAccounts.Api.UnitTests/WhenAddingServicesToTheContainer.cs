@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using AutoMapper;
+using FluentAssertions.Common;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -48,6 +49,8 @@ public class WhenAddingServicesToTheContainer
         serviceCollection.AddSingleton(mockHostingEnvironment.Object);
         serviceCollection.AddMediatR(typeof(GetUserAccountsQuery));
         serviceCollection.AddAutoMapper(typeof(Startup).Assembly);
+        serviceCollection.AddApplicationServices();
+        serviceCollection.AddApiConfigurationSections(config);
         serviceCollection.AddOrchestrators();
         serviceCollection.AddLogging();
         var provider = serviceCollection.BuildServiceProvider();
@@ -80,17 +83,13 @@ public class WhenAddingServicesToTheContainer
         var serviceCollection = new ServiceCollection();
         serviceCollection.AddSingleton(mockHostingEnvironment.Object);
         serviceCollection.AddSingleton(Mock.Of<IPayeSchemesService>());
-        serviceCollection.AddSingleton(Mock.Of<IPayeRepository>());
-        serviceCollection.AddSingleton(Mock.Of<IMembershipRepository>());
-        serviceCollection.AddSingleton(Mock.Of<IUserAccountRepository>());
-        serviceCollection.AddSingleton(Mock.Of<IEmployerAccountRepository>());
-        serviceCollection.AddSingleton(Mock.Of<IEmployerAgreementRepository>());
-        serviceCollection.AddSingleton(Mock.Of<IEmployerAccountTeamRepository>());
-        serviceCollection.AddSingleton(Mock.Of<IAccountLegalEntityRepository>());
         serviceCollection.AddSingleton(Mock.Of<IUserAornPayeLockService>());
         serviceCollection.AddSingleton(Mock.Of<IGenericEventFactory>());
         serviceCollection.AddSingleton(Mock.Of<IPayeSchemeEventFactory>());
         serviceCollection.AddSingleton(Mock.Of<IEventPublisher>());
+        serviceCollection.AddDatabaseRegistration(config["EmployerAccountsConfiguration:DatabaseConnectionString"]);
+        serviceCollection.AddDataRepositories();
+        serviceCollection.AddApplicationServices();
         serviceCollection.AddApiConfigurationSections(config);
         serviceCollection.AddMediatR(typeof(GetAccountPayeSchemesQuery));
         serviceCollection.AddMediatorValidators();
@@ -104,18 +103,12 @@ public class WhenAddingServicesToTheContainer
     
     private static IConfigurationRoot GenerateConfiguration()
     {
-        var configSource = new MemoryConfigurationSource
-        {
-            InitialData = new List<KeyValuePair<string, string>>
+    var configSource = new MemoryConfigurationSource
+    {
+        InitialData = new List<KeyValuePair<string, string>>
             {
-                new("EmployerAccountsConfiguration:DatabaseConnectionString", "test"),
-                new("AllowedHashstringCharacters", "ABCDEFGHJKLMN12345"),
-                new("PublicAllowedHashstringCharacters", "ABCDEFGHJKLMN12345"),
-                new("PublicHashstring", "ABCDEFGHJKLMN12345"),
-                new("PublicAllowedAccountLegalEntityHashstringCharacters", "ABCDEFGHJKLMN12345"),
-                new("PublicAllowedAccountLegalEntityHashstringSalt", "ABCDEFGHJKLMN12345"),
-                new("HashString", "ABC123"),
-                new("AllowedCharacters", "ABC123"),
+                new("SFA.DAS.Encoding", "{\"Encodings\": [{\"EncodingType\": \"AccountId\",\"Salt\": \"and vinegar\",\"MinHashLength\": 32,\"Alphabet\": \"46789BCDFGHJKLMNPRSTVWXY\"}]}"),
+                new("EmployerAccountsConfiguration:DatabaseConnectionString", "Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;"),
                 new("AccountApiConfiguration:ApiBaseUrl", "https://localhost:1"),
                 new("EmployerAccountsConfiguration:OuterApiApiBaseUri", "https://localhost:1"),
                 new("EmployerAccountsConfiguration:OuterApiSubscriptionKey", "test"),
