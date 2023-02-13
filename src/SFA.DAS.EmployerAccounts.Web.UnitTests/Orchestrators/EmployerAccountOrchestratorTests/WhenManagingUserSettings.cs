@@ -1,14 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using Microsoft.Extensions.Logging;
-using Moq;
-using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.UpdateUserNotificationSettings;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Queries.GetUserNotificationSettings;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTests;
 
@@ -17,17 +12,17 @@ public class WhenManagingUserSettings
 {
     private Web.Orchestrators.UserSettingsOrchestrator _orchestrator;
     private Mock<IMediator> _mediator;
-    private Mock<IHashingService> _hashingService;
+    private Mock<IEncodingService> _encodingService;
 
     [SetUp]
     public void Arrange()
     {
         _mediator = new Mock<IMediator>();
-        _hashingService = new Mock<IHashingService>();
+        _encodingService = new Mock<IEncodingService>();
 
-        _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>())).Returns(() => 123);
+        _encodingService.Setup(x => x.Decode(It.IsAny<string>(), It.IsAny<EncodingType>())).Returns(() => 123);
 
-        _orchestrator = new Web.Orchestrators.UserSettingsOrchestrator(_mediator.Object, _hashingService.Object, Mock.Of<ILogger<Web.Orchestrators.UserSettingsOrchestrator>>());
+        _orchestrator = new Web.Orchestrators.UserSettingsOrchestrator(_mediator.Object, Mock.Of<ILogger<Web.Orchestrators.UserSettingsOrchestrator>>(), _encodingService.Object);
 
         _mediator.Setup(x => x.Send(It.IsAny<GetUserNotificationSettingsQuery>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new GetUserNotificationSettingsQueryResponse
@@ -57,7 +52,7 @@ public class WhenManagingUserSettings
         var settings = new List<UserNotificationSetting>();
 
         //Act
-        await _orchestrator.UpdateNotificationSettings("USERREF", settings);
+        await _orchestrator.UpdateNotificationSettings("ABC123", "USERREF", settings);
 
         //Assert
         _mediator.Verify(x => x.Send(

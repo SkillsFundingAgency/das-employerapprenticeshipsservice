@@ -1,18 +1,11 @@
-﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
-using Moq;
-using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Client;
-using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Queries.GetMember;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
 {
@@ -21,6 +14,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         private const string ExternalUserId = "123ABC";
         private const string TeamMemberEmail = "test@test.com";
         private const string HashedAccountId = "ABC123";
+        private const long AccountId = 1231;
 
         private Mock<IMediator> _mediator;
         private Mock<IAccountApiClient> _accountApiClient;       
@@ -45,7 +39,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             _accountApiClient = new Mock<IAccountApiClient>();           
             _mapper = new Mock<IMapper>();
 
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, Mock.Of<ICurrentDateTime>(), _accountApiClient.Object, _mapper.Object, Mock.Of<EmployerAccountsConfiguration>());
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, Mock.Of<ICurrentDateTime>(), _accountApiClient.Object, _mapper.Object, Mock.Of<EmployerAccountsConfiguration>(), Mock.Of<IEncodingService>());
 
             _mediator.Setup(x => x.Send(It.IsAny<GetMemberRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(_teamMemberResponse);
@@ -61,11 +55,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                 .ReturnsAsync(new GetUserAccountRoleResponse {UserRole = userRole});
 
             //Act
-            var result = await _orchestrator.GetActiveTeamMember(HashedAccountId, TeamMemberEmail, ExternalUserId);
+            var result = await _orchestrator.GetActiveTeamMember(AccountId, TeamMemberEmail, ExternalUserId);
 
             //Assert
             _mediator.Verify(x => x.Send(It.Is<GetUserAccountRoleQuery>(q => 
-                        q.HashedAccountId.Equals(HashedAccountId) && 
+                        q.AccountId.Equals(AccountId) && 
                         q.ExternalUserId.Equals(ExternalUserId)), It.IsAny<CancellationToken>()), Times.Once);
 
             Assert.AreEqual(status, result.Status);
@@ -79,11 +73,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                 .ReturnsAsync(new GetUserAccountRoleResponse { UserRole = Role.Owner });
 
             //Act
-            var result = await _orchestrator.GetActiveTeamMember(HashedAccountId, TeamMemberEmail, ExternalUserId);
+            var result = await _orchestrator.GetActiveTeamMember(AccountId, TeamMemberEmail, ExternalUserId);
 
             //Assert
             _mediator.Verify(x => x.Send(It.Is<GetMemberRequest>(r => 
-                        r.HashedAccountId.Equals(HashedAccountId) &&
+                        r.AccountId.Equals(AccountId) &&
                         r.Email.Equals(TeamMemberEmail)), It.IsAny<CancellationToken>()), Times.Once);
 
             Assert.AreEqual(_teamMemberResponse.TeamMember, result.Data);
@@ -98,7 +92,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                 .ReturnsAsync(new GetUserAccountRoleResponse { UserRole = userRole });
 
             //Act
-            await _orchestrator.GetActiveTeamMember(HashedAccountId, TeamMemberEmail, ExternalUserId);
+            await _orchestrator.GetActiveTeamMember(AccountId, TeamMemberEmail, ExternalUserId);
 
             //Assert
             _mediator.Verify(x => x.Send(It.IsAny<GetMemberRequest>(), It.IsAny<CancellationToken>()), Times.Never);
@@ -117,7 +111,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                 });
 
             //Act
-            var result = await _orchestrator.GetActiveTeamMember(null, null, null);
+            var result = await _orchestrator.GetActiveTeamMember(0, null, null);
 
             //Asset
             Assert.AreEqual(HttpStatusCode.NotFound,result.Status);

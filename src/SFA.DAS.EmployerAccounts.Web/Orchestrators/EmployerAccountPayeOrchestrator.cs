@@ -25,8 +25,10 @@ public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorB
         _encodingService = encodingService;
     }
 
-    public async Task<OrchestratorResponse<EmployerAccountPayeListViewModel>> Get(long accountId, string externalUserId)
+    public async Task<OrchestratorResponse<EmployerAccountPayeListViewModel>> Get(string hashedAccountId, string externalUserId)
     {
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+
         var response = await Mediator.Send(new GetAccountPayeSchemesForAuthorisedUserQuery
         {
             AccountId = accountId,
@@ -244,8 +246,9 @@ public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorB
         return response;
     }
 
-    public async Task<OrchestratorResponse<PayeSchemeNextStepsViewModel>> GetNextStepsViewModel(string userId, long accountId)
+    public async Task<OrchestratorResponse<PayeSchemeNextStepsViewModel>> GetNextStepsViewModel(string userId, string hashedAccountId)
     {
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
         var response = new OrchestratorResponse<PayeSchemeNextStepsViewModel>();
 
         var userResponse = await Mediator.Send(new GetTeamMemberQuery { AccountId = accountId, TeamMemberId = userId });

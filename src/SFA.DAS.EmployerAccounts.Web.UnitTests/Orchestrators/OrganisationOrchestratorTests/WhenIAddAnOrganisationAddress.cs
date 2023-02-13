@@ -1,17 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Net;
-using System.Threading;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
-using Moq;
-using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.CreateOrganisationAddress;
 using SFA.DAS.EmployerAccounts.Exceptions;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.MarkerInterfaces;
-using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests;
 
@@ -20,7 +11,7 @@ class WhenIAddAnOrganisationAddress
     private OrganisationOrchestrator _orchestrator;
     private Mock<IMediator> _mediator;
     private Mock<IMapper> _mapper;
-    private Mock<IAccountLegalEntityPublicHashingService> _hashingService;
+    private Mock<IEncodingService> _encodingServiceMock;
 
     private CreateOrganisationAddressRequest _request;
     private AddOrganisationAddressViewModel _viewModel;
@@ -46,7 +37,7 @@ class WhenIAddAnOrganisationAddress
 
         _mediator = new Mock<IMediator>();
         _mapper = new Mock<IMapper>();
-        _hashingService = new Mock<IAccountLegalEntityPublicHashingService>();
+        _encodingServiceMock = new Mock<IEncodingService>();
 
         _mapper.Setup(x => x.Map<CreateOrganisationAddressRequest>(It.IsAny<AddOrganisationAddressViewModel>()))
             .Returns(_request);
@@ -57,7 +48,7 @@ class WhenIAddAnOrganisationAddress
         _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
 
 
-        _orchestrator = new OrganisationOrchestrator(_mediator.Object, _mapper.Object, _cookieService.Object, _hashingService.Object);
+        _orchestrator = new OrganisationOrchestrator(_mediator.Object, _mapper.Object, _cookieService.Object, _encodingServiceMock.Object);
     }
 
     [Test]

@@ -1,19 +1,9 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
-using Moq;
-using NUnit.Framework;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.MarkerInterfaces;
-using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.NLog.Logger;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
 {
@@ -22,7 +12,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.OrganisationOrche
         private OrganisationOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
         private Mock<IMapper> _mapper;
-        private Mock<IAccountLegalEntityPublicHashingService> _hashingService;
+        private Mock<IEncodingService> _encodingServiceMock;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
 
         [SetUp]
@@ -30,14 +20,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.OrganisationOrche
         {
             _mediator = new Mock<IMediator>();
             _mapper = new Mock<IMapper>();
-            _hashingService = new Mock<IAccountLegalEntityPublicHashingService>();
+            _encodingServiceMock = new Mock<IEncodingService>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
 
             _orchestrator = new OrganisationOrchestrator(
                 _mediator.Object, 
                 _mapper.Object,
                 _cookieService.Object, 
-                _hashingService.Object);
+                _encodingServiceMock.Object);
         }
 
         [Test]

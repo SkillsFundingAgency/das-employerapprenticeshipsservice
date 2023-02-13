@@ -1,13 +1,6 @@
-﻿using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.MarkerInterfaces;
-using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests;
 
@@ -17,7 +10,7 @@ public class WhenICreateALegalEntityOfOtherType
     private Mock<IMediator> _mediator;
     private Mock<IMapper> _mapper;
     private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
-    private Mock<IAccountLegalEntityPublicHashingService> _hashingService;
+    private Mock<IEncodingService> _encodingServiceMock;
 
     [SetUp]
     public void Arrange()
@@ -25,13 +18,13 @@ public class WhenICreateALegalEntityOfOtherType
         _mediator = new Mock<IMediator>();
         _mapper = new Mock<IMapper>();
         _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
-        _hashingService = new Mock<IAccountLegalEntityPublicHashingService>();
+        _encodingServiceMock = new Mock<IEncodingService>();
 
         _orchestrator = new OrganisationOrchestrator(
             _mediator.Object,
             _mapper.Object,
             _cookieService.Object,
-            _hashingService.Object);
+            _encodingServiceMock.Object);
     }
 
     [Test]

@@ -12,6 +12,7 @@ using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetGatewayInformation;
 using SFA.DAS.EmployerAccounts.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
+using SFA.DAS.Encoding;
 using SFA.DAS.Hmrc.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.HmrcOrchestratorTests;
@@ -37,7 +38,7 @@ public class WhenCallingHmrcService
             Hmrc = new HmrcConfiguration()
         };
 
-        _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration);   
+        _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration, Mock.Of<IEncodingService>());   
     }
 
     [Test]

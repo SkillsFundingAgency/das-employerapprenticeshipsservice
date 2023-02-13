@@ -6,4 +6,5 @@ public class AccountContext
 {
     public long AccountId { get; set; }
     public ApprenticeshipEmployerType ApprenticeshipEmployerType { get; set; }
+    public string HashedAccountId { get; set; }
 }

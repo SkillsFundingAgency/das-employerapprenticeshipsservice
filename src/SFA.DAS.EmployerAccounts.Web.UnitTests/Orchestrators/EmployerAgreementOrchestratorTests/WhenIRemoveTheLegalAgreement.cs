@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
-using Moq;
-using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity;
 using SFA.DAS.EmployerAccounts.Exceptions;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests;
 
@@ -21,6 +12,8 @@ public class WhenIRemoveTheLegalAgreement
     private Mock<IReferenceDataService> _referenceDataService;
     private EmployerAgreementOrchestrator _orchestrator;
 
+    private const long ExpectedAccountId = 456;
+    private const long ExpectedAccountLegalEntitytId = 56;
     private const string ExpectedHashedAccountId = "RT456";
     private const string ExpectedHashedAccountLegalEntitytId = "RRTE56";
     private const string ExpectedUserId = "TYG68UY";
@@ -32,7 +25,7 @@ public class WhenIRemoveTheLegalAgreement
             
         _referenceDataService = new Mock<IReferenceDataService>();
 
-        _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, Mock.Of<IMapper>(), _referenceDataService.Object);
+        _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, Mock.Of<IMapper>(), _referenceDataService.Object, Mock.Of<IEncodingService>());
     }
         
     [Test]
@@ -69,8 +62,8 @@ public class WhenIRemoveTheLegalAgreement
 
         //Assert
         _mediator.Verify(x => x.Send(It.Is<RemoveLegalEntityCommand>(
-            c => c.HashedAccountId.Equals(ExpectedHashedAccountId)
-                 && c.HashedAccountLegalEntityId.Equals(ExpectedHashedAccountLegalEntitytId)
+            c => c.AccountId.Equals(ExpectedHashedAccountId)
+                 && c.AccountLegalEntityId.Equals(ExpectedAccountLegalEntitytId)
                  && c.UserId.Equals(ExpectedUserId)), It.IsAny<CancellationToken>()), Times.Once);
         Assert.IsNotNull(actual);
         Assert.IsNotNull(actual.FlashMessage);

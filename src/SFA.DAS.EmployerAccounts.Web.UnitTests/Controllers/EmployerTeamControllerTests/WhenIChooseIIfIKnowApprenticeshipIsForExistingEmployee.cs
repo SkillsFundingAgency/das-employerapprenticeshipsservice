@@ -16,6 +16,7 @@ public class WhenIChooseIIfIKnowApprenticeshipIsForExistingEmployee
         _controller = new EmployerTeamController(
             _mockCookieStorageService.Object,
             _mockEmployerTeamOrchestrator.Object,
+            Mock.Of<IUrlActionHelper>(),
             Mock.Of<IMultiVariantTestingService>());
     }
 

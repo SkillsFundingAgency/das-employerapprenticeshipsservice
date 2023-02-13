@@ -12,6 +12,7 @@ using SFA.DAS.EmployerAccounts.Models.Levy;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerEnglishFractionHistory;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
+using SFA.DAS.Encoding;
 using SFA.DAS.Hmrc.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestratorTests
@@ -53,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
                     PayeScheme = _payeScheme
                 });
 
-            _orchestrator = new EmployerAccountPayeOrchestrator(_mediator.Object, _cookieService.Object, _configuration);
+            _orchestrator = new EmployerAccountPayeOrchestrator(_mediator.Object, _cookieService.Object, _configuration, Mock.Of<IEncodingService>());
         }
 
         [Test]

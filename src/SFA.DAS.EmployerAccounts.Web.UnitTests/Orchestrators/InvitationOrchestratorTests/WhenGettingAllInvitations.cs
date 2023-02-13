@@ -4,6 +4,7 @@ using SFA.DAS.EmployerAccounts.Exceptions;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
 using SFA.DAS.EmployerAccounts.Queries.GetUserInvitations;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.InvitationOrchestratorTests;
 
@@ -25,7 +26,7 @@ public class WhenGettingAllInvitations
 
         _logger = new Mock<ILogger<InvitationOrchestrator>>();
 
-        _invitationOrchestrator = new InvitationOrchestrator(_mediator.Object, _logger.Object);
+        _invitationOrchestrator = new InvitationOrchestrator(_mediator.Object, _logger.Object, Mock.Of<IEncodingService>());
     }
 
     [Test]

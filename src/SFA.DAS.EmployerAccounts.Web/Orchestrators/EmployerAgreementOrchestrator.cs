@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using Microsoft.Identity.Client;
+using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity;
 using SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Dtos;
@@ -35,10 +37,12 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
         _encodingService = encodingService;
     }
 
-    public virtual async Task<OrchestratorResponse<EmployerAgreementListViewModel>> Get(long accountId, string externalUserId)
+    public virtual async Task<OrchestratorResponse<EmployerAgreementListViewModel>> Get(string hashedAccountId, string externalUserId)
     {
         try
         {
+            var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+
             var response = await _mediator.Send(new GetAccountEmployerAgreementsRequest
             {
                 AccountId = accountId,
@@ -76,7 +80,7 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
             });
 
             var employerAgreementView =
-                _mapper.Map<AgreementDto, EmployerAgreementView>(response.EmployerAgreement);
+                _mapper.Map<AgreementDto, EmployerAccounts.Models.EmployerAgreement.EmployerAgreementView>(response.EmployerAgreement);
 
             var organisationLookupByIdPossible = await _referenceDataService.IsIdentifiableOrganisationType(employerAgreementView.LegalEntitySource);
 
@@ -192,16 +196,19 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
         return response;
     }
 
-    public async Task<OrchestratorResponse<EmployerAgreementPdfViewModel>> GetPdfEmployerAgreement(long accountId, long agreementId, string userId)
+    public async Task<OrchestratorResponse<EmployerAgreementPdfViewModel>> GetPdfEmployerAgreement(string hashedAccountId, string agreementId, string userId)
     {
         var pdfEmployerAgreement = new OrchestratorResponse<EmployerAgreementPdfViewModel>();
+
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+        var decodedAgreementId = _encodingService.Decode(agreementId, EncodingType.AccountId);
 
         try
         {
             var result = await _mediator.Send(new GetEmployerAgreementPdfRequest
             {
                 AccountId = accountId,
-                LegalAgreementId = agreementId,
+                LegalAgreementId = decodedAgreementId,
                 UserId = userId
             });
 
@@ -222,9 +229,10 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
         return pdfEmployerAgreement;
     }
 
-    public async Task<OrchestratorResponse<EmployerAgreementPdfViewModel>> GetSignedPdfEmployerAgreement(long accountId, long agreementId, string userId)
+    public async Task<OrchestratorResponse<EmployerAgreementPdfViewModel>> GetSignedPdfEmployerAgreement(string hashedAccountId, string agreementId, string userId)
     {
-
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+        var decodedAgreementId = _encodingService.Decode(agreementId, EncodingType.AccountId);
         var signedPdfEmployerAgreement = new OrchestratorResponse<EmployerAgreementPdfViewModel>();
 
         try
@@ -234,7 +242,7 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
                     _mediator.Send(new GetSignedEmployerAgreementPdfRequest
                     {
                         AccountId = accountId,
-                        LegalAgreementId = agreementId,
+                        LegalAgreementId = decodedAgreementId,
                         UserId = userId
                     });
 
@@ -342,6 +350,74 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
         catch (UnauthorizedAccessException)
         {
             return new OrchestratorResponse<OrganisationAgreementsViewModel>
+            {
+                Status = HttpStatusCode.Unauthorized
+            };
+        }
+
+        return response;
+    }
+
+    public virtual async Task<OrchestratorResponse<SignEmployerAgreementViewModel>> GetSignedAgreementViewModel(string hashedAccountId, string agreementId, string externalUserId)
+    {
+        var response = new OrchestratorResponse<SignEmployerAgreementViewModel>();  
+
+        try
+        {
+            var result = await _mediator.Send(new GetEmployerAgreementRequest { HashedAccountId = hashedAccountId, HashedAgreementId = agreementId, ExternalUserId = externalUserId });
+            var viewModel = _mapper.Map<GetEmployerAgreementResponse, SignEmployerAgreementViewModel>(result);
+
+            var signedAgreementResponse = await _mediator.Send(new GetLastSignedAgreementRequest { AccountLegalEntityId = result.EmployerAgreement.LegalEntity.AccountLegalEntityId });
+            viewModel.PreviouslySignedEmployerAgreement = _mapper.Map<EmployerAccounts.Models.EmployerAgreement.EmployerAgreementView>(signedAgreementResponse.LastSignedAgreement);
+
+            response.Data = viewModel;
+        }
+        catch (InvalidRequestException ex)
+        {
+            return new OrchestratorResponse<SignEmployerAgreementViewModel>
+            {
+                Status = HttpStatusCode.BadRequest,
+                Exception = ex
+            };
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return new OrchestratorResponse<SignEmployerAgreementViewModel>
+            {
+                Status = HttpStatusCode.Unauthorized
+            };
+        }
+
+        return response;
+    }
+
+    public virtual async Task<OrchestratorResponse<NextUnsignedAgreementViewModel>> GetNextUnsignedAgreement(string hashedAccountId, string externalUserId)
+    {
+        var response = new OrchestratorResponse<NextUnsignedAgreementViewModel>();
+
+        try
+        {
+            var result = await _mediator.Send(new GetNextUnsignedEmployerAgreementRequest { HashedAccountId = hashedAccountId, ExternalUserId = externalUserId });
+            
+            var hashedAgreementId = result.AgreementId.HasValue ? _encodingService.Encode(result.AgreementId.Value, EncodingType.AccountId) : string.Empty;
+
+            response.Data = new NextUnsignedAgreementViewModel
+            {
+                HasNextAgreement = !string.IsNullOrEmpty(hashedAgreementId),
+                NextAgreementHashedId = hashedAgreementId
+            };
+        }
+        catch (InvalidRequestException ex)
+        {
+            return new OrchestratorResponse<NextUnsignedAgreementViewModel>
+            {
+                Status = HttpStatusCode.BadRequest,
+                Exception = ex
+            };
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return new OrchestratorResponse<NextUnsignedAgreementViewModel>
             {
                 Status = HttpStatusCode.Unauthorized
             };

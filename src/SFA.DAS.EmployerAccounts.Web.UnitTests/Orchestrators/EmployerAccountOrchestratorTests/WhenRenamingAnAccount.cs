@@ -14,6 +14,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTests;
 
@@ -45,14 +46,14 @@ public class WhenRenamingAnAccount
         _mediator.Setup(x => x.Send(It.IsAny<GetUserAccountRoleQuery>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new GetUserAccountRoleResponse { UserRole = Role.Owner });
 
-        _orchestrator = new EmployerAccountOrchestrator(_mediator.Object, Mock.Of<ILogger<EmployerAccountOrchestrator>>(), _cookieService.Object, _configuration);
+        _orchestrator = new EmployerAccountOrchestrator(_mediator.Object, Mock.Of<ILogger<EmployerAccountOrchestrator>>(), _cookieService.Object, _configuration, Mock.Of<IEncodingService>());
     }
 
     [Test]
     public async Task ThenTheCorrectAccountDetailsShouldBeReturned()
     {
         //Act
-        var response = await _orchestrator.GetEmployerAccount("ABC123");
+        var response = await _orchestrator.GetEmployerAccount(1231);
 
         //Assert
         _mediator.Verify(x => x.Send(It.Is<GetEmployerAccountByIdQuery>(q => q.AccountId.Equals(_account.HashedId)), It.IsAny<CancellationToken>()));

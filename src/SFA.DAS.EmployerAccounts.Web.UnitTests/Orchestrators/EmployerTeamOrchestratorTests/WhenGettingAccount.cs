@@ -32,6 +32,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetApprenticeship;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 using System.Threading;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
 {
@@ -74,7 +75,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             };
 
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(m => m.Send(It.Is<GetEmployerAccountByIdQuery>(q => q.AccountId == HashedAccountId), It.IsAny<CancellationToken>()))
+            _mediator.Setup(m => m.Send(It.Is<GetEmployerAccountByIdQuery>(q => q.AccountId == AccountId), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetEmployerAccountByIdResponse
                 {
                     Account = new Account
@@ -106,7 +107,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                       }
                     });
 
-            _mediator.Setup(m => m.Send(It.Is<GetAccountEmployerAgreementsRequest>(q => q.HashedAccountId == HashedAccountId), It.IsAny<CancellationToken>()))
+            _mediator.Setup(m => m.Send(It.Is<GetAccountEmployerAgreementsRequest>(q => q.AccountId == AccountId), It.IsAny<CancellationToken>()))
                      .ReturnsAsync(new GetAccountEmployerAgreementsResponse
                      {
                          EmployerAgreements = new List<EmployerAgreementStatusDto>
@@ -160,7 +161,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             LastTermsAndConditionsUpdate = DateTime.Now.AddDays(-10);
             var employerAccountsConfiguration = new EmployerAccountsConfiguration { LastTermsAndConditionsUpdate = LastTermsAndConditionsUpdate };
 
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object, _accountApiClient.Object,  _mapper.Object, employerAccountsConfiguration);
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object, _accountApiClient.Object,  _mapper.Object, employerAccountsConfiguration, Mock.Of<IEncodingService>());
         }
         
         [Test]

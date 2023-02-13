@@ -16,6 +16,7 @@ using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTests.CreateAccountForSkipJourney.Given_User_Does_Already_Have_An_Account;
 public class WhenCreatingTheUserAccount
@@ -39,7 +40,8 @@ public class WhenCreatingTheUserAccount
             _mediator.Object, 
             _logger.Object,
             _cookieService.Object, 
-            _configuration);
+            _configuration,
+            Mock.Of<IEncodingService>());
 
 
         _mediator.Setup(x => x.Send(It.IsAny<GetUserAccountsQuery>(), It.IsAny<CancellationToken>()))

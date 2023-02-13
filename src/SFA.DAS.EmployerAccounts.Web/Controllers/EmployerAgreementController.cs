@@ -3,7 +3,6 @@ using AutoMapper;
 using SFA.DAS.Authorization.EmployerUserRoles.Options;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
@@ -15,7 +14,6 @@ public class EmployerAgreementController : BaseController
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
     private readonly IUrlActionHelper _urlActionHelper;
-    private readonly IEncodingService _encodingService;
     private const int ViewAgreementNow = 1;
     private const int ViewAgreementLater = 2;
 
@@ -25,15 +23,13 @@ public class EmployerAgreementController : BaseController
         IMediator mediator,
         IMapper mapper,
         IUrlActionHelper urlActionHelper,
-        IMultiVariantTestingService multiVariantTestingService,
-        IEncodingService encodingService)
+        IMultiVariantTestingService multiVariantTestingService)
         : base( flashMessage, multiVariantTestingService)
     {
         _orchestrator = orchestrator;
         _mediator = mediator;
         _mapper = mapper;
         _urlActionHelper = urlActionHelper;
-        _encodingService = encodingService;
     }
 
     [HttpGet]
@@ -41,8 +37,7 @@ public class EmployerAgreementController : BaseController
     [Route("agreements")]
     public async Task<IActionResult> Index(string hashedAccountId, bool agreementSigned = false)
     {
-        var accounId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
-        var model = await _orchestrator.Get(accounId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
+        var model = await _orchestrator.Get(hashedAccountId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
         var flashMessage = GetFlashMessageViewModelFromCookie();
         if (flashMessage != null)
@@ -58,8 +53,7 @@ public class EmployerAgreementController : BaseController
     [HttpGet]
     [DasAuthorize(EmployerUserRole.Any)]
     [Route("agreements/{agreementId}/details")]
-    public async Task<IActionResult> Details(string agreementId, string hashedAccountId,
-        FlashMessageViewModel flashMessage)
+    public async Task<IActionResult> Details(string agreementId, string hashedAccountId)
     {
         var agreement = await _orchestrator.GetById(
             agreementId,
@@ -73,10 +67,9 @@ public class EmployerAgreementController : BaseController
     [HttpGet]
     [DasAuthorize(EmployerUserRole.Any)]
     [Route("agreements/{agreementId}/view")]
-    public async Task<IActionResult> View(string agreementId, string hashedAccountId,
-        FlashMessageViewModel flashMessage)
+    public async Task<IActionResult> View(string agreementId, string hashedAccountId)
     {
-        var agreement = await GetSignedAgreementViewModel(new GetEmployerAgreementRequest { HashedAgreementId = agreementId, HashedAccountId = hashedAccountId, ExternalUserId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName) });
+        var agreement = await _orchestrator.GetSignedAgreementViewModel(hashedAccountId, agreementId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
         return View(agreement);
     }
 
@@ -84,14 +77,12 @@ public class EmployerAgreementController : BaseController
     [DasAuthorize(EmployerUserRole.Any)]
     [Route("agreements/unsigned/view")]
     public async Task<IActionResult> ViewUnsignedAgreements(string hashedAccountId)
-    {   
-        var unsignedAgreementResponse = await _mediator.Send(new GetNextUnsignedEmployerAgreementRequest { HashedAccountId = hashedAccountId, ExternalUserId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName) });
+    {
+        var unsignedAgeementResponse = await _orchestrator.GetNextUnsignedAgreement(hashedAccountId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
-        if (!unsignedAgreementResponse.AgreementId.HasValue) return RedirectToAction(ControllerConstants.IndexActionName);
+        if (!unsignedAgeementResponse.Data.HasNextAgreement) return RedirectToAction(ControllerConstants.IndexActionName);
 
-        var hashedAgreementId = _encodingService.Encode(unsignedAgreementResponse.AgreementId.Value, EncodingType.AccountId);
-
-        return RedirectToAction(ControllerConstants.AboutYourAgreementActionName, new { agreementId = hashedAgreementId });
+        return RedirectToAction(ControllerConstants.AboutYourAgreementActionName, new { agreementId = unsignedAgeementResponse.Data.NextAgreementHashedId });
     }
 
     [HttpGet]
@@ -113,16 +104,13 @@ public class EmployerAgreementController : BaseController
     [HttpGet]
     [DasAuthorize(EmployerUserRole.Any)]
     [Route("agreements/{agreementId}/sign-your-agreement")]
-    public async Task<IActionResult> SignAgreement(GetEmployerAgreementRequest request)
+    public async Task<IActionResult> SignAgreement(string hashedAccountId, string agreementId)
     {
-        request.ExternalUserId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+        var externalUserId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
 
-        var viewModel = await GetSignedAgreementViewModel(request);
-        var entities = await _mediator.Send(new GetAccountLegalEntitiesCountByHashedAccountIdRequest { HashedAccountId = request.HashedAccountId });
+        var viewModel = await _orchestrator.GetSignedAgreementViewModel(hashedAccountId, agreementId, externalUserId);
 
-        viewModel.LegalEntitiesCount = entities.LegalEntitiesCount;
-
-        return View(viewModel);
+        return View(viewModel.Data);
     }
 
     [HttpPost]
@@ -135,9 +123,9 @@ public class EmployerAgreementController : BaseController
 
         if (choice == null)
         {
-            var agreement = await GetSignedAgreementViewModel(new GetEmployerAgreementRequest { HashedAgreementId = agreementId, HashedAccountId = hashedAccountId, ExternalUserId = userInfo });
+            var agreement = await _orchestrator.GetSignedAgreementViewModel(hashedAccountId, agreementId, userInfo);
 
-            ModelState.AddModelError(nameof(agreement.Choice), "Select whether you accept the agreement");
+            ModelState.AddModelError(nameof(agreement.Data.Choice), "Select whether you accept the agreement");
 
             return View(ControllerConstants.SignAgreementViewName, agreement);
         }
@@ -185,10 +173,7 @@ public class EmployerAgreementController : BaseController
     [Route("agreements/{agreementId}/agreement-pdf")]
     public async Task<IActionResult> GetPdfAgreement(string agreementId, string hashedAccountId)
     {
-        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
-        var decodedAgreementId = _encodingService.Decode(agreementId, EncodingType.AccountId);
-
-        var stream = await _orchestrator.GetPdfEmployerAgreement(accountId, decodedAgreementId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
+        var stream = await _orchestrator.GetPdfEmployerAgreement(hashedAccountId, agreementId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
         if (stream.Data.PdfStream == null)
         {
@@ -204,10 +189,7 @@ public class EmployerAgreementController : BaseController
     [Route("agreements/{agreementId}/signed-agreement-pdf")]
     public async Task<IActionResult> GetSignedPdfAgreement(string agreementId, string hashedAccountId)
     {
-        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
-        var decodedAgreementId = _encodingService.Decode(agreementId, EncodingType.AccountId);
-
-        var stream = await _orchestrator.GetSignedPdfEmployerAgreement(decodedAgreementId, accountId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
+        var stream = await _orchestrator.GetSignedPdfEmployerAgreement(agreementId, hashedAccountId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
         if (stream.Data.PdfStream == null)
         {
@@ -250,17 +232,6 @@ public class EmployerAgreementController : BaseController
 
         AddFlashMessageToCookie(response.FlashMessage);
         return View(ControllerConstants.ConfirmRemoveOrganisationViewName, response);
-    }
-
-    private async Task<SignEmployerAgreementViewModel> GetSignedAgreementViewModel(GetEmployerAgreementRequest request)
-    {
-        var response = await _mediator.Send(request);
-        var viewModel = _mapper.Map<GetEmployerAgreementResponse, SignEmployerAgreementViewModel>(response);
-
-        var signedAgreementResponse = await _mediator.Send(new GetLastSignedAgreementRequest { AccountLegalEntityId = response.EmployerAgreement.LegalEntity.AccountLegalEntityId });
-        viewModel.PreviouslySignedEmployerAgreement = _mapper.Map<EmployerAgreementView>(signedAgreementResponse.LastSignedAgreement);
-
-        return viewModel;
     }
 
     [HttpGet]

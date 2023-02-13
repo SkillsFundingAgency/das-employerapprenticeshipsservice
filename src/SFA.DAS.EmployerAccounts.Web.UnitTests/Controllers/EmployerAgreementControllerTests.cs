@@ -102,11 +102,14 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
         return TestAsync(
             arrange: fixtures =>
             {
-                fixtures.Mediator.Setup(x => x.Send(It.Is<GetNextUnsignedEmployerAgreementRequest>(y => y.HashedAccountId == fixtures.HashedAccountId), It.IsAny<CancellationToken>()))
-                    .ReturnsAsync(new GetNextUnsignedEmployerAgreementResponse
+                fixtures.Orchestrator.Setup(x => x.GetNextUnsignedAgreement(fixtures.HashedAccountId, fixtures.UserId)).ReturnsAsync(new OrchestratorResponse<NextUnsignedAgreementViewModel>
+                {
+                    Data = new NextUnsignedAgreementViewModel
                     {
-                        HashedAgreementId = fixtures.HashedAgreementId
-                    });
+                        HasNextAgreement = true,
+                        NextAgreementHashedId = fixtures.HashedAgreementId
+                    }
+                });
             },
             act: fixtures => fixtures.ViewUnsignedAgreements(),
             assert: (fixtures, result) =>
@@ -389,7 +392,7 @@ public class EmployerAgreementControllerTestFixtures : FluentTest<EmployerAgreem
     public async Task<ViewResult> SignedAgreement()
     {
         var controller = CreateController();
-        ViewResult = await controller.SignAgreement(GetAgreementRequest) as ViewResult;
+        ViewResult = await controller.SignAgreement(HashedAccountId, HashedAgreementId) as ViewResult;
         return ViewResult;
     }
 

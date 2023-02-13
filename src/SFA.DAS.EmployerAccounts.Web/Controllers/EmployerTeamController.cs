@@ -1,7 +1,6 @@
 ﻿using System.Security.Claims;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerAccounts.Helpers;
-using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
@@ -15,10 +14,12 @@ public class EmployerTeamController : BaseController
     public EmployerTeamController(
         ICookieStorageService<FlashMessageViewModel> flashMessage,
         EmployerTeamOrchestrator employerTeamOrchestrator,
+        IUrlActionHelper urlActionHelper,
         IMultiVariantTestingService multiVariantTestingService)
         : base(flashMessage, multiVariantTestingService)
     {
         _employerTeamOrchestrator = employerTeamOrchestrator;
+        _urlActionHelper = urlActionHelper;
     }
 
     [HttpGet]
@@ -270,17 +271,6 @@ public class EmployerTeamController : BaseController
         var invitation = await _employerTeamOrchestrator.GetTeamMemberWhetherActiveOrNot(hashedAccountId, email, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
         return View(invitation);
-    }
-
-    [HttpGet]
-    [Route("hideWizard")]
-    public async Task<IActionResult> HideWizard(string hashedAccountId)
-    {
-        var externalUserId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
-
-        await _employerTeamOrchestrator.HideWizard(hashedAccountId, externalUserId);
-
-        return RedirectToAction(ControllerConstants.IndexActionName);
     }
 
     [HttpGet]

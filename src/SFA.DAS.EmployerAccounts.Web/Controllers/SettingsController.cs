@@ -1,6 +1,5 @@
 ﻿using System.Security.Claims;
 using SFA.DAS.Authorization.Mvc.Attributes;
-using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
@@ -9,17 +8,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 public class SettingsController : BaseController
 {
     private readonly UserSettingsOrchestrator _userSettingsOrchestrator;
-    private readonly IEncodingService _encodingService;
 
     public SettingsController(
         UserSettingsOrchestrator userSettingsOrchestrator,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
-        IMultiVariantTestingService multiVariantTestingService,
-        IEncodingService encodingService)
+        IMultiVariantTestingService multiVariantTestingService)
         : base(flashMessage, multiVariantTestingService)
     {
         _userSettingsOrchestrator = userSettingsOrchestrator;
-        _encodingService = encodingService;
     }
 
     [HttpGet]
@@ -42,9 +38,7 @@ public class SettingsController : BaseController
     {
         var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
 
-        var accountId = _encodingService.Decode(vm.HashedId, EncodingType.AccountId);
-
-        await _userSettingsOrchestrator.UpdateNotificationSettings(accountId, userIdClaim, vm.NotificationSettings);
+        await _userSettingsOrchestrator.UpdateNotificationSettings(vm.HashedId, userIdClaim, vm.NotificationSettings);
 
         var flashMessage = new FlashMessageViewModel
         {
@@ -62,10 +56,8 @@ public class SettingsController : BaseController
     public async Task<IActionResult> NotificationUnsubscribe(string hashedAccountId)
     {
         var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
-        
-        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
 
-        var model = await _userSettingsOrchestrator.Unsubscribe(userIdClaim, accountId);
+        var model = await _userSettingsOrchestrator.Unsubscribe(userIdClaim, hashedAccountId);
 
         return View(model);
     }

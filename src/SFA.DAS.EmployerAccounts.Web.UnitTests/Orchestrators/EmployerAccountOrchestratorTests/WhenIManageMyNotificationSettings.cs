@@ -32,10 +32,11 @@ public class WhenIManageMyNotificationSettings : ControllerTestBase
 
         _orchestrator.Setup(x => x.UpdateNotificationSettings(
                 It.IsAny<string>(),
+                It.IsAny<string>(),
                 It.IsAny<List<UserNotificationSetting>>()))
             .Returns(() => Task.FromResult(new Unit()));
 
-        _controller = new SettingsController( _orchestrator.Object, _flashMessage.Object, Mock.Of<IMultiVariantTestingService>())
+        _controller = new SettingsController(_orchestrator.Object, _flashMessage.Object, Mock.Of<IMultiVariantTestingService>())
         {
             ControllerContext = ControllerContext,
             Url = new UrlHelper(new ActionContext(MockHttpContext.Object, Routes, new ActionDescriptor()))
@@ -64,8 +65,9 @@ public class WhenIManageMyNotificationSettings : ControllerTestBase
 
         //Assert
         _orchestrator.Verify(x => x.UpdateNotificationSettings(
-                It.Is<string>(userRef => userRef == "TEST"),
-                It.IsAny<List<UserNotificationSetting>>()),
+            It.IsAny<string>(),
+            It.Is<string>(userRef => userRef == "TEST"),
+            It.IsAny<List<UserNotificationSetting>>()),
             Times.Once);
     }
 }

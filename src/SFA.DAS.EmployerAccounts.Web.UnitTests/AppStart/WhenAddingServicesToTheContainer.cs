@@ -168,7 +168,6 @@ public class WhenAddingServicesToTheContainer
         serviceCollection.AddAutoMapper(typeof(Startup).Assembly);
 
         var employerAccountsConfiguration = config.Get<EmployerAccountsConfiguration>();
-        serviceCollection.AddHashingServices(employerAccountsConfiguration);
 
         var provider = serviceCollection.BuildServiceProvider();
 
@@ -260,7 +259,6 @@ public class WhenAddingServicesToTheContainer
         serviceCollection.AddAutoMapper(typeof(Startup).Assembly);
 
         var employerAccountsConfiguration = config.Get<EmployerAccountsConfiguration>();
-        serviceCollection.AddHashingServices(employerAccountsConfiguration);
 
         var provider = serviceCollection.BuildServiceProvider();
 

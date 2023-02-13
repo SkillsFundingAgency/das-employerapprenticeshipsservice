@@ -13,11 +13,13 @@ using SFA.DAS.EmployerAccounts.Queries.GetReservations;
 using SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
 using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
 using SFA.DAS.EmployerAccounts.TestCommon;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorWithCallToActionTests
 {
     public class WhenGettingAccount
     {
+        private const long AccountId = 123789;
         private readonly string _hashedAccountId = Guid.NewGuid().ToString();
         private AccountDashboardViewModel _accountDashboardViewModel;
 
@@ -32,10 +34,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         private Mock<IMapper> _mockMapper;
         private Mock<ICookieStorageService<AccountContext>> _mockAccountContext;
         private Mock<ILogger<EmployerTeamOrchestratorWithCallToAction>> _mockLogger;
+        private Mock<IEncodingService> _encodingServiceMock;
 
         [SetUp]
         public void Arrange()
         {
+            _encodingServiceMock = new Mock<IEncodingService>();
             _mediator = new Mock<IMediator>();
             _employerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
             _mockAccountContext = new Mock<ICookieStorageService<AccountContext>>();
@@ -59,7 +63,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                     Vacancies = new List<Vacancy>()
                 });
 
-            _mediator.Setup(m => m.Send(It.Is<GetReservationsRequest>(q => q.AccountId == _hashedAccountId), It.IsAny<CancellationToken>()))
+            _mediator.Setup(m => m.Send(It.Is<GetReservationsRequest>(q => q.AccountId == AccountId), It.IsAny<CancellationToken>()))
                    .ReturnsAsync(new GetReservationsResponse
                    {
                        Reservations = new List<Reservation>
@@ -71,7 +75,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                        }
                    });
 
-            _mediator.Setup(m => m.Send(It.Is<GetApprenticeshipsRequest>(q => q.HashedAccountId == _hashedAccountId), It.IsAny<CancellationToken>()))
+            _mediator.Setup(m => m.Send(It.Is<GetApprenticeshipsRequest>(q => q.AccountId == AccountId), It.IsAny<CancellationToken>()))
                  .ReturnsAsync(new GetApprenticeshipsResponse
                  {
                      Apprenticeships = new List<Apprenticeship>
@@ -124,7 +128,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                 _mockMapper.Object,
                 _mockAccountContext.Object,
                 _mockLogger.Object,
-                Mock.Of<EmployerAccountsConfiguration>());
+                Mock.Of<EmployerAccountsConfiguration>(),
+                _encodingServiceMock.Object);
         }
 
         [Test]
@@ -427,7 +432,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         {
             //Arrange
             var apprenticeships = new List<Apprenticeship> { new Apprenticeship { FirstName = "FirstName" } };
-            _mediator.Setup(m => m.Send(It.Is<GetApprenticeshipsRequest>(q => q.HashedAccountId == _hashedAccountId), It.IsAny<CancellationToken>()))
+            _mediator.Setup(m => m.Send(It.Is<GetApprenticeshipsRequest>(q => q.AccountId == AccountId), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetApprenticeshipsResponse { Apprenticeships = apprenticeships });
             var expectedApprenticeship = new List<ApprenticeshipViewModel>() { new ApprenticeshipViewModel { ApprenticeshipFullName = "FullName" } };
             _mockMapper.Setup(m => m.Map<IEnumerable<Apprenticeship>, IEnumerable<ApprenticeshipViewModel>>(apprenticeships)).Returns(expectedApprenticeship);

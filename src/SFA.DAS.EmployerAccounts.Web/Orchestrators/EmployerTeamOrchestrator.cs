@@ -369,16 +369,6 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
         }
     }
 
-    public async Task HideWizard(string hashedAccountId, string externalUserId)
-    {
-        await _mediator.Send(new UpdateShowAccountWizardCommand
-        {
-            HashedAccountId = hashedAccountId,
-            ExternalUserId = externalUserId,
-            ShowWizard = false
-        });
-    }
-
     public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> InviteTeamMember(InviteTeamMemberViewModel model, string externalUserId)
     {
         try

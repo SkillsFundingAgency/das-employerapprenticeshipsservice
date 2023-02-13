@@ -2,6 +2,7 @@
 using SFA.DAS.EmployerAccounts.Commands.UpdateUserNotificationSettings;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerAccounts.Queries.GetUserNotificationSettings;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators;
 
@@ -9,14 +10,16 @@ public class UserSettingsOrchestrator
 {
     private readonly IMediator _mediator;
     private readonly ILogger<UserSettingsOrchestrator> _logger;
+    private readonly IEncodingService _encodingService;
 
     //Needed for tests
     protected UserSettingsOrchestrator() { }
 
-    public UserSettingsOrchestrator(IMediator mediator, ILogger<UserSettingsOrchestrator> logger)
+    public UserSettingsOrchestrator(IMediator mediator, ILogger<UserSettingsOrchestrator> logger, IEncodingService encodingService)
     {
         _mediator = mediator;
         _logger = logger;
+        _encodingService = encodingService;
     }
 
     public virtual async Task<OrchestratorResponse<NotificationSettingsViewModel>> GetNotificationSettingsViewModel(string userRef)
@@ -38,8 +41,9 @@ public class UserSettingsOrchestrator
         };
     }
 
-    public virtual async Task UpdateNotificationSettings(long accountId, string userRef, List<UserNotificationSetting> settings)
+    public virtual async Task UpdateNotificationSettings(string hashedAccountId, string userRef, List<UserNotificationSetting> settings)
     {
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
 
         _logger.LogInformation($"Updating user notification settings for user {userRef}");
 
@@ -54,8 +58,10 @@ public class UserSettingsOrchestrator
 
     public async Task<OrchestratorResponse<SummaryUnsubscribeViewModel>> Unsubscribe(
         string userRef,
-        long accountId)
+        string hashedAccountId)
     {
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+
         return await CheckUserAuthorization(
             async () =>
             {

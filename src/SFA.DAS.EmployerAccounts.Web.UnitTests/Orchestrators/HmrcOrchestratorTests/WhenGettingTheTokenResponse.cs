@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using SFA.DAS.EmployerAccounts.Queries.GetGatewayToken;
+using SFA.DAS.Encoding;
 using SFA.DAS.Hmrc.Configuration;
 using SFA.DAS.Hmrc.Models;
 using SFA.DAS.Testing.Builders;
@@ -29,7 +30,7 @@ public class WhenGettingTheTokenResponse
             Hmrc = new HmrcConfiguration()
         };
 
-        _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration);
+        _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration, Mock.Of<IEncodingService>());
     }
 
     [Test]

@@ -19,6 +19,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EmployerAccounts.Queries.GetMember;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.Encoding;
 using SFA.DAS.Hmrc.Configuration;
 using SFA.DAS.Hmrc.Models;
 using SFA.DAS.NLog.Logger;
@@ -64,7 +65,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
             _mediator.Setup(x => x.Send(It.Is<GetHmrcEmployerInformationQuery>(c => c.AuthToken.Equals("1")), It.IsAny<CancellationToken>())).ReturnsAsync(new GetHmrcEmployerInformationResponse { Empref = "123/ABC", EmployerLevyInformation = new EmpRefLevyInformation { Employer = new Employer { Name = new Name { EmprefAssociatedName = ExpectedEmprefName } } } });
             _mediator.Setup(x => x.Send(It.Is<GetHmrcEmployerInformationQuery>(c => c.AuthToken.Equals("2")), It.IsAny<CancellationToken>())).ReturnsAsync(new GetHmrcEmployerInformationResponse { Empref = "456/ABC", EmployerLevyInformation = new EmpRefLevyInformation { Employer = new Employer { Name = new Name { EmprefAssociatedName = ExpectedEmprefName } } } });
 
-            _employerAccountPayeOrchestrator = new EmployerAccountPayeOrchestrator(_mediator.Object, _cookieService.Object, _configuration);
+            _employerAccountPayeOrchestrator = new EmployerAccountPayeOrchestrator(_mediator.Object, _cookieService.Object, _configuration, Mock.Of<IEncodingService>());
         }
         
         [Test]
