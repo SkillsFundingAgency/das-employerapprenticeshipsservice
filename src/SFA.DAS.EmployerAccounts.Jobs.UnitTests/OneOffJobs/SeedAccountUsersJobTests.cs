@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -14,6 +16,7 @@ using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;
 using SFA.DAS.EmployerAccounts.ReadStore.Models;
 using SFA.DAS.EmployerAccounts.TestCommon;
+using SFA.DAS.EmployerAccounts.TestCommon.DatabaseMock;
 using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.Testing.Builders;
 
@@ -68,7 +71,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
 
         private readonly string _jobName = typeof(SeedAccountUsersJob).Name;
 
-        private readonly DbSetStub<Membership> _usersDbSet;
+        private readonly DbSet<Membership> _usersDbSet;
 
         public SeedAccountUsersJobTestsFixture()
         {
@@ -80,7 +83,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
             AccountUsersRepository.SetupInMemoryCollection(ReadStoreUsers);
 
             UsersToMigrate = new List<Membership> { UserOwnerRole, UserTranasactorRole, UserNoRole };
-            _usersDbSet = new DbSetStub<Membership>(UsersToMigrate);
+            _usersDbSet = UsersToMigrate.AsQueryable().BuildMockDbSet().Object; ;
             
 
             EmployerAccountsDbContext = new Mock<EmployerAccountsDbContext>();
