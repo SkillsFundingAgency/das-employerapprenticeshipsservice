@@ -5,7 +5,6 @@ using SFA.DAS.EmployerAccounts.Jobs.DependencyResolution;
 using SFA.DAS.EmployerAccounts.Jobs.Extensions;
 using SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
 using SFA.DAS.EmployerAccounts.Jobs.StartupJobs;
-using SFA.DAS.EmployerAccounts.MessageHandlers.Extensions;
 using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Jobs;

@@ -9,11 +9,22 @@ using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
 using SFA.DAS.EmployerAccounts.Jobs.StartupJobs;
 using SFA.DAS.UnitOfWork.DependencyResolution.Microsoft;
+using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.Extensions;
 
 public static class HostExtensions
 {
+    public static IHostBuilder UseStructureMap(this IHostBuilder builder)
+    {
+        return UseStructureMap(builder, registry: null);
+    }
+
+    public static IHostBuilder UseStructureMap(this IHostBuilder builder, Registry registry)
+    {
+        return builder.UseServiceProviderFactory(new StructureMapServiceProviderFactory(registry));
+    }
+
     public static IHostBuilder ConfigureDasLogging(this IHostBuilder builder)
     {
         builder.ConfigureLogging((context, builder) =>
