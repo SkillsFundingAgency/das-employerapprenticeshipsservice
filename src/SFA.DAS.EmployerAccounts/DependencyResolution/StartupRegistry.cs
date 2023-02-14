@@ -1,18 +1,15 @@
 ﻿using SFA.DAS.EmployerAccounts.Startup;
-using StructureMap;
 
+namespace SFA.DAS.EmployerAccounts.DependencyResolution;
 
-namespace SFA.DAS.EmployerAccounts.DependencyResolution
+public class StartupRegistry : Registry
 {
-    public class StartupRegistry : Registry
+    public StartupRegistry()
     {
-        public StartupRegistry()
+        Scan(s =>
         {
-            Scan(s =>
-            {
-                s.AssembliesAndExecutablesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS"));
-                s.Convention<CompositeDecorator<DefaultStartup, IStartup>>();
-            });
-        }
+            s.AssembliesAndExecutablesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS"));
+            s.Convention<CompositeDecorator<DefaultStartup, IStartup>>();
+        });
     }
 }

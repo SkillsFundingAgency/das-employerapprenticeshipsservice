@@ -4,28 +4,27 @@ using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.Messaging.Interfaces;
 
-namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers
+namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers;
+
+public class RemovedLegalEntityEventHandler : IHandleMessages<RemovedLegalEntityEvent>
 {
-    public class RemovedLegalEntityEventHandler : IHandleMessages<RemovedLegalEntityEvent>
+    private readonly IMessagePublisher _messagePublisher;
+
+    public RemovedLegalEntityEventHandler(IMessagePublisher messagePublisher)
     {
-        private readonly IMessagePublisher _messagePublisher;
+        _messagePublisher = messagePublisher;
+    }
 
-        public RemovedLegalEntityEventHandler(IMessagePublisher messagePublisher)
-        {
-            _messagePublisher = messagePublisher;
-        }
-
-        public async Task Handle(RemovedLegalEntityEvent message, IMessageHandlerContext context)
-        {
-            await _messagePublisher.PublishAsync(
-                new LegalEntityRemovedMessage(
-                    message.AccountId,
-                    message.AgreementId,
-                    message.AgreementSigned,
-                    message.LegalEntityId,
-                    message.OrganisationName,
-                    message.UserName,
-                    message.UserRef.ToString()));
-        }
+    public async Task Handle(RemovedLegalEntityEvent message, IMessageHandlerContext context)
+    {
+        await _messagePublisher.PublishAsync(
+            new LegalEntityRemovedMessage(
+                message.AccountId,
+                message.AgreementId,
+                message.AgreementSigned,
+                message.LegalEntityId,
+                message.OrganisationName,
+                message.UserName,
+                message.UserRef.ToString()));
     }
 }
