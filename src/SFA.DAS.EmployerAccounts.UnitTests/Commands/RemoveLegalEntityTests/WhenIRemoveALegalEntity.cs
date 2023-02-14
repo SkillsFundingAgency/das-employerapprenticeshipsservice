@@ -86,10 +86,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
             _repository.Setup(r => r.GetEmployerAgreement(ExpectedEmployerAgreementId)).ReturnsAsync(_expectedAgreement);
 
             _encodingService = new Mock<IEncodingService>();
-            _encodingService.Setup(x => x.Decode(ExpectedHashedAccountId, EncodingType.AccountId)).Returns(ExpectedAccountId);
-            _encodingService.Setup(x => x.Decode(ExpectedHashedEmployerAgreementId, EncodingType.AccountId)).Returns(ExpectedEmployerAgreementId);
+            _encodingService.Setup(x => x.Encode(ExpectedAccountId, EncodingType.AccountId)).Returns(ExpectedHashedAccountId);
             _encodingService.Setup(x => x.Encode(ExpectedEmployerAgreementId, EncodingType.AccountId)).Returns(ExpectedHashedEmployerAgreementId);
-            _encodingService.Setup(x => x.Decode(ExpectedHashedAccountLegalEntityId, EncodingType.AccountLegalEntityId)).Returns(ExpectedAccountLegalEntityId);
 
             _employerAgreementEventFactory = new Mock<IEmployerAgreementEventFactory>();
             _employerAgreementEventFactory.Setup(x => x.RemoveAgreementEvent(ExpectedHashedEmployerAgreementId)).Returns(new AgreementRemovedEvent { HashedAgreementId = ExpectedHashedEmployerAgreementId });
@@ -186,9 +184,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Status") && y.NewValue.Equals(EmployerAgreementStatus.Removed.ToString())) != null
                     ), It.IsAny<CancellationToken>()));
             _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
-                      c.EasAuditMessage.Description.Equals($"EmployerAgreement {ExpectedHashedEmployerAgreementId} removed from account {ExpectedAccountId}")), It.IsAny<CancellationToken>()));
+                      c.EasAuditMessage.Description.Equals($"EmployerAgreement {ExpectedHashedEmployerAgreementId} removed from account {ExpectedHashedAccountId}")), It.IsAny<CancellationToken>()));
             _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
-                      c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(ExpectedAccountId.ToString()) && y.Type.Equals("Account")) != null
+                      c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(ExpectedHashedAccountId.ToString()) && y.Type.Equals("Account")) != null
                     ), It.IsAny<CancellationToken>()));
             _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
                     c.EasAuditMessage.AffectedEntity.Id.Equals(ExpectedHashedEmployerAgreementId.ToString()) &&

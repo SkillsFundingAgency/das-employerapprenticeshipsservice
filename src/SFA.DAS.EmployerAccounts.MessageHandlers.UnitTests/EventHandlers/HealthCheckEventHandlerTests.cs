@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
@@ -10,6 +11,7 @@ using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.TestCommon;
+using SFA.DAS.EmployerAccounts.TestCommon.DatabaseMock;
 using SFA.DAS.Testing.Builders;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
@@ -40,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
                 ObjectActivator.CreateInstance<HealthCheck>().Set(x=>x.Id, 2)
             };
 
-            Db.Setup(d => d.HealthChecks).Returns(new DbSetStub<HealthCheck>(HealthChecks));
+            Db.Setup(d => d.HealthChecks).Returns(HealthChecks.AsQueryable().BuildMockDbSet().Object);
 
             Handler = new HealthCheckEventHandler(new Lazy<EmployerAccountsDbContext>(() => Db.Object));
         }

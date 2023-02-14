@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -9,6 +10,7 @@ using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.TestCommon;
+using SFA.DAS.EmployerAccounts.TestCommon.DatabaseMock;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
 {
@@ -48,12 +50,12 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
         private readonly string _jobName = typeof(SeedAccountUsersJob).Name;
 
         private readonly List<RunOnceJob> _jobsList = new List<RunOnceJob>();
-        private readonly DbSetStub<RunOnceJob> _jobsDbSet;
+        private readonly DbSet<RunOnceJob> _jobsDbSet;
 
         public RunOnceServiceTestsFixture()
         {
 
-            _jobsDbSet = new DbSetStub<RunOnceJob>(_jobsList);
+            _jobsDbSet = _jobsList.AsQueryable().BuildMockDbSet().Object;
             EmployerAccountsDbContext = new Mock<EmployerAccountsDbContext>();
             EmployerAccountsDbContext.Setup(x => x.RunOnceJobs).Returns(_jobsDbSet);
 
