@@ -1,5 +1,4 @@
-﻿using System.Web.Mvc;
-using SFA.DAS.Common.Domain.Types;
+﻿using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels;
 
@@ -9,7 +8,6 @@ public class OrganisationDetailsViewModel : NavigationViewModel
     public OrganisationType Type { get; set; }
     public short? PublicSectorDataSource { get; set; }
 
-    [AllowHtml]
     public string Name { get; set; }
     public string Address { get; set; }
     public DateTime? DateOfInception { get; set; }

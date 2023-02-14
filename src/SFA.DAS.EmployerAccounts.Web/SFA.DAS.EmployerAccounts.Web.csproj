@@ -97,15 +97,6 @@
     <None Update="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
-    <Content Update="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Update="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Update="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj" />
