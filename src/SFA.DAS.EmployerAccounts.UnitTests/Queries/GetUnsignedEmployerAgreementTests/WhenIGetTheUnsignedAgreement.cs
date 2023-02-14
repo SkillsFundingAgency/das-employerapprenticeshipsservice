@@ -17,7 +17,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUnsignedEmployerAgreemen
 public class WhenIGetTheUnsignedAgreement
 {
     private GetNextUnsignedEmployerAgreementQueryHandler _handler;
-    private Mock<IEncodingService> _encodingService;
     private Mock<IValidator<GetNextUnsignedEmployerAgreementRequest>> _validator;
     private Mock<EmployerAccountsDbContext> _db;
 
@@ -26,7 +25,6 @@ public class WhenIGetTheUnsignedAgreement
     [SetUp]
     public void Arrange()
     {
-        _encodingService = new Mock<IEncodingService>();
         _validator = new Mock<IValidator<GetNextUnsignedEmployerAgreementRequest>>();
         _validator.Setup(x => x.ValidateAsync(It.IsAny<GetNextUnsignedEmployerAgreementRequest>())).ReturnsAsync(new ValidationResult());
         _db = new Mock<EmployerAccountsDbContext>();
@@ -37,7 +35,7 @@ public class WhenIGetTheUnsignedAgreement
 
         _db.Setup(d => d.AccountLegalEntities).Returns(accountLegalEntityDbSet.Object);
 
-        _handler = new GetNextUnsignedEmployerAgreementQueryHandler(new Lazy<EmployerAccountsDbContext>(() => _db.Object), _encodingService.Object, _validator.Object);
+        _handler = new GetNextUnsignedEmployerAgreementQueryHandler(new Lazy<EmployerAccountsDbContext>(() => _db.Object), _validator.Object);
     }
 
     [Test]
@@ -61,22 +59,19 @@ public class WhenIGetTheUnsignedAgreement
     }
 
     [Test]
-    public async Task ThenTheHashedAgreementIdIsReturned()
+    public async Task ThenTheAgreementIdIsReturned()
     {
         var accountId = 1234;
         var agreementId = 324345;
-        var hashedAgreementId = "ABC345";
 
-        var request = new GetNextUnsignedEmployerAgreementRequest { HashedAccountId = "ABC123" };
-        _encodingService.Setup(x => x.Decode(request.HashedAccountId, EncodingType.AccountId)).Returns(accountId);
+        var request = new GetNextUnsignedEmployerAgreementRequest { AccountId = 1231 };
 
         _accountLegalEntity.AccountId = accountId;
         _accountLegalEntity.PendingAgreementId = agreementId;
-        _encodingService.Setup(x => x.Encode(agreementId, EncodingType.AccountId)).Returns(hashedAgreementId);
 
         var response = await _handler.Handle(request, CancellationToken.None);
 
-        Assert.AreEqual(hashedAgreementId, response.AgreementId);
+        Assert.AreEqual(agreementId, response.AgreementId);
     }
 
     [Test]
@@ -84,8 +79,7 @@ public class WhenIGetTheUnsignedAgreement
     {
         var accountId = 1234;
 
-        var request = new GetNextUnsignedEmployerAgreementRequest { HashedAccountId = "ABC123" };
-        _encodingService.Setup(x => x.Decode(request.HashedAccountId, EncodingType.AccountId)).Returns(accountId);
+        var request = new GetNextUnsignedEmployerAgreementRequest { AccountId = 1231 };
 
         _accountLegalEntity.AccountId = accountId;
 

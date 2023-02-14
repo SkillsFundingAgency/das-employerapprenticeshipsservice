@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementByIdTes
             await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
-            _employerAgreementRepository.Verify(x => x.GetEmployerAgreement(AgreementId), Times.Once);
+            _employerAgreementRepository.Verify(x => x.GetEmployerAgreement(Query.AgreementId), Times.Once);
         }
 
         [Test]
@@ -60,16 +60,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementByIdTes
 
             //Assert
             Assert.AreEqual(_agreement, response.EmployerAgreement);
-        }
-
-        [Test]
-        public async Task ThenIfTheMessageIsValidTheAgreementIdIsHashed()
-        {
-            //Act
-            var response = await RequestHandler.Handle(Query, CancellationToken.None);
-
-            //Assert
-            Assert.AreEqual(Query.AgreementId, response.EmployerAgreement.Id);
         }
 
         [Test]

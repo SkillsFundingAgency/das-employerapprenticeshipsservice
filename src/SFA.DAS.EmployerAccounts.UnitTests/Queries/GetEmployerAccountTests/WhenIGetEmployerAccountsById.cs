@@ -9,7 +9,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountTests
 {
-    public class WhenIGetEmployerAccountsByHashedId : QueryBaseTest<GetEmployerAccountByIdHandler, GetEmployerAccountByIdQuery, GetEmployerAccountByIdResponse>
+    public class WhenIGetEmployerAccountsById : QueryBaseTest<GetEmployerAccountByIdHandler, GetEmployerAccountByIdQuery, GetEmployerAccountByIdResponse>
     {
         private Mock<IEmployerAccountRepository> _employerAccountRepository;
         public override GetEmployerAccountByIdQuery Query { get; set; }

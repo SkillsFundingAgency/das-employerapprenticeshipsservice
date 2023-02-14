@@ -6,12 +6,12 @@ using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
-using SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUnsignedEmployerAgreementTests
+namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountTests
 {
-    public class WhenIValidateTheRequest
+    public class WhenIValidateTheGetAccountByIdRequest
     {
         [Test]
         [MoqInlineAutoData(0)]
@@ -19,8 +19,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUnsignedEmployerAgreemen
         [MoqInlineAutoData(-999)]
         public async Task ThenTheRequestIsNotValidIfAccountIdInvalidArentPopulatedAndTheRepositoryIsNotCalled(
             long accountId,
-            GetNextUnsignedEmployerAgreementRequest query,
-            GetNextUnsignedEmployerAgreementValidator validator)
+            GetEmployerAccountByIdQuery query,
+            GetEmployerAccountByIdValidator validator)
         {
             //Arrange
             query.AccountId = accountId;
@@ -30,30 +30,30 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUnsignedEmployerAgreemen
 
             //Assert
             Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string, string>("AccountId", "AccountId has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("AccountId", "Account ID has not been supplied"), actual.ValidationDictionary);
         }
 
         [Test, MoqAutoData]
         public async Task ThenTheRequestIsNotValidIfUserIdNotSupplied_TheRepositoryIsNotCalled(
-            GetNextUnsignedEmployerAgreementRequest query,
-            GetNextUnsignedEmployerAgreementValidator validator)
+            GetEmployerAccountByIdQuery query,
+            GetEmployerAccountByIdValidator validator)
         {
             //Arrange
-            query.ExternalUserId = string.Empty;
+            query.UserId = string.Empty;
 
             //Act
             var actual = await validator.ValidateAsync(query);
 
             //Assert
             Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string, string>("ExternalUserId", "ExternalUserId has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("UserId", "User ID has not been supplied"), actual.ValidationDictionary);
         }
 
         [Test, MoqAutoData]
-        public async Task WhenTheRequestHasValdAccountId_TheMembershipIsFetched(
+        public async Task WhenTheRequestHasValidAccountId_TheMembershipIsFetched(
            [Frozen] Mock<IMembershipRepository> membershipRepoMock,
-           GetNextUnsignedEmployerAgreementRequest query,
-           GetNextUnsignedEmployerAgreementValidator validator)
+           GetEmployerAccountByIdQuery query,
+           GetEmployerAccountByIdValidator validator)
         {
             //Arrange
 
@@ -61,7 +61,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUnsignedEmployerAgreemen
             var actual = await validator.ValidateAsync(query);
 
             //Assert
-            membershipRepoMock.Verify(mock => mock.GetCaller(It.Is<long>(l => l == query.AccountId), It.Is<string>(s => s == query.ExternalUserId)));
+            membershipRepoMock.Verify(mock => mock.GetCaller(It.Is<long>(l => l == query.AccountId), It.Is<string>(s => s == query.UserId)));
         }
 
         [Test]
@@ -71,11 +71,11 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUnsignedEmployerAgreemen
         public async Task WhenAccountMemberThenAuthorized(
             Role userRole,
             [Frozen] Mock<IMembershipRepository> membershipRepoMock,
-            GetNextUnsignedEmployerAgreementRequest query,
-            GetNextUnsignedEmployerAgreementValidator validator)
+            GetEmployerAccountByIdQuery query,
+            GetEmployerAccountByIdValidator validator)
         {
             //Arrange
-            membershipRepoMock.Setup(x => x.GetCaller(It.Is<long>(l => l == query.AccountId), It.Is<string>(s => s == query.ExternalUserId))).ReturnsAsync(new MembershipView { Role = userRole });
+            membershipRepoMock.Setup(x => x.GetCaller(It.Is<long>(l => l == query.AccountId), It.Is<string>(s => s == query.UserId))).ReturnsAsync(new MembershipView { Role = userRole });
 
             //Act
             var actual = await validator.ValidateAsync(query);
@@ -88,16 +88,18 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUnsignedEmployerAgreemen
         [Test, MoqAutoData]
         public async Task ThenTheRequestIsMarkedAsInvalidIfTheUserDoesNotExist(
             [Frozen] Mock<IMembershipRepository> membershipRepoMock,
-            GetNextUnsignedEmployerAgreementRequest query,
-            GetNextUnsignedEmployerAgreementValidator validator)
+            GetEmployerAccountByIdQuery query,
+            GetEmployerAccountByIdValidator validator)
         {
             //Arrange
-            membershipRepoMock.Setup(x => x.GetCaller(It.Is<long>(l => l == query.AccountId), It.Is<string>(s => s == query.ExternalUserId))).ReturnsAsync(() => null);
+            membershipRepoMock.Setup(x => x.GetCaller(It.Is<long>(l => l == query.AccountId), It.Is<string>(s => s == query.UserId))).ReturnsAsync(() => null);
 
             //Act
             var actual = await validator.ValidateAsync(query);
 
             //Assert
+            Assert.Contains(new KeyValuePair<string, string>("membership", "Unauthorised: User not connected to account"), actual.ValidationDictionary);
+            Assert.IsFalse(actual.IsValid());
             Assert.IsTrue(actual.IsUnauthorized);
         }
     }

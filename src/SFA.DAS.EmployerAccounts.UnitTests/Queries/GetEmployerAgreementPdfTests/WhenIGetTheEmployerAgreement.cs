@@ -31,7 +31,7 @@ public class WhenIGetTheEmployerAgreement : QueryBaseTest<GetEmployerAgreementPd
     {
         SetUp();
 
-        Query = new GetEmployerAgreementPdfRequest { AccountId = 12321, LegalAgreementId = 66864, UserId = "1234RFV" };
+        Query = new GetEmployerAgreementPdfRequest { AccountId = 12321, LegalAgreementId = ExpectedEmployerAgreementId, UserId = "1234RFV" };
 
         _db = new Mock<EmployerAccountsDbContext>();
         var employerAgreement = new EmployerAgreement { Id = ExpectedEmployerAgreementId, Template = new AgreementTemplate { PartialViewName = ExpectedAgreementFileName } };

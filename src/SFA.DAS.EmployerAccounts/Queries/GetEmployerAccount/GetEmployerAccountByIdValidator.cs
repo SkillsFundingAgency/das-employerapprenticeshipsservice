@@ -1,3 +1,4 @@
+using AutoMapper.Execution;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
@@ -22,12 +23,12 @@ public class GetEmployerAccountByIdValidator : IValidator<GetEmployerAccountById
 
         if (string.IsNullOrEmpty(item.UserId))
         {
-            result.AddError(nameof(item.UserId), "UserId has not been supplied");
+            result.AddError(nameof(item.UserId), "User ID has not been supplied");
         }
 
         if (item.AccountId <= 0)
         {
-            result.AddError(nameof(item.AccountId), "AccountId has not been supplied");
+            result.AddError(nameof(item.AccountId), "Account ID has not been supplied");
         }
 
         if (result.IsValid())
@@ -35,7 +36,10 @@ public class GetEmployerAccountByIdValidator : IValidator<GetEmployerAccountById
             var membership = await _membershipRepository.GetCaller(item.AccountId, item.UserId);
 
             if (membership == null)
+            {
+                result.AddError(nameof(membership), "Unauthorised: User not connected to account");
                 result.IsUnauthorized = true;
+            }
         }
 
         return result;
