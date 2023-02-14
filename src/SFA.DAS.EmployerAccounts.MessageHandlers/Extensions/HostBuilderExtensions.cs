@@ -26,7 +26,7 @@ public static class HostBuilderExtensions
                 .AddJsonFile("appsettings.json", true, true)
                 .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", true, true)
                 .AddEnvironmentVariables()
-                .AddCommandLine(args);
+                .AddCommandLine(args); ;
         });
     }
 }

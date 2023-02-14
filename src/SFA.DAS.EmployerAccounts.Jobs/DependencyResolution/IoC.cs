@@ -6,18 +6,10 @@ namespace SFA.DAS.EmployerAccounts.Jobs.DependencyResolution;
 
 public static class IoC
 {
-    public static IContainer Initialize()
+    public static void Initialize(Registry registry)
     {
-        var container = new Container(c =>
-        {
-            c.AddRegistry<ConfigurationRegistry>();
-            c.AddRegistry<DataRegistry>();
-            c.AddRegistry<ReadStoreDataRegistry>();
-            c.AddRegistry<LoggerRegistry>();
-            c.AddRegistry<DefaultRegistry>();
-        });
-
-        ServiceLocator.Initialize(container);
-        return container;
+        registry.IncludeRegistry<ConfigurationRegistry>();
+        registry.IncludeRegistry<DataRegistry>();
+        registry.IncludeRegistry<ReadStoreDataRegistry>();
     }
 }
