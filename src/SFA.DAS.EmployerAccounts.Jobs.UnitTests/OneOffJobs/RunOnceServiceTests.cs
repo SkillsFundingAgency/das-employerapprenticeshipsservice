@@ -50,14 +50,11 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
         private readonly string _jobName = typeof(SeedAccountUsersJob).Name;
 
         private readonly List<RunOnceJob> _jobsList = new List<RunOnceJob>();
-        private readonly DbSet<RunOnceJob> _jobsDbSet;
 
         public RunOnceServiceTestsFixture()
         {
-
-            _jobsDbSet = _jobsList.AsQueryable().BuildMockDbSet().Object;
             EmployerAccountsDbContext = new Mock<EmployerAccountsDbContext>();
-            EmployerAccountsDbContext.Setup(x => x.RunOnceJobs).Returns(_jobsDbSet);
+            EmployerAccountsDbContext.Setup(x => x.RunOnceJobs).Returns(_jobsList.AsQueryable().BuildMockDbSet().Object);
 
             Logger = new Mock<ILogger>();
 
