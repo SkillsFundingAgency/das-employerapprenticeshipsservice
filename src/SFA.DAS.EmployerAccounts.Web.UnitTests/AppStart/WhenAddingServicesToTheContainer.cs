@@ -29,7 +29,6 @@ using SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Extensions;
-using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Interfaces.OuterApi;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities;
@@ -69,10 +68,9 @@ using SFA.DAS.EmployerAccounts.Queries.GetUserInvitations;
 using SFA.DAS.EmployerAccounts.Queries.GetUserNotificationSettings;
 using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
 using SFA.DAS.EmployerAccounts.Queries.RemovePayeFromAccount;
-using SFA.DAS.EmployerAccounts.ServiceRegistration;
 using SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 using SFA.DAS.Hmrc;
-using SFA.DAS.NServiceBus.Services;
+using SFA.DAS.Testing.Builders;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.AppStart;
 
@@ -136,39 +134,11 @@ public class WhenAddingServicesToTheContainer
         var mockHostingEnvironment = new Mock<IHostingEnvironment>();
         mockHostingEnvironment.Setup(x => x.EnvironmentName).Returns("Test");
 
-        var config = GenerateConfiguration();
+        var startup = new Startup(GenerateConfiguration(), new Mock<IWebHostEnvironment>().Object);
         var serviceCollection = new ServiceCollection();
+        startup.ConfigureServices(serviceCollection);
 
-        serviceCollection.AddSingleton(mockHostingEnvironment.Object);
-        serviceCollection.AddSingleton(Mock.Of<IMembershipRepository>());
-        serviceCollection.AddSingleton(Mock.Of<IAccountRepository>());
-        serviceCollection.AddSingleton(Mock.Of<IEmployerAccountRepository>());
-        serviceCollection.AddSingleton(Mock.Of<IEmployerSchemesRepository>());
-        serviceCollection.AddSingleton(Mock.Of<IEmployerAgreementRepository>());
-        serviceCollection.AddSingleton(Mock.Of<IUserRepository>());
-        serviceCollection.AddSingleton(Mock.Of<IUserAccountRepository>());
-        serviceCollection.AddSingleton(Mock.Of<IPayeRepository>());
-        serviceCollection.AddSingleton(Mock.Of<IGenericEventFactory>());
-        serviceCollection.AddSingleton(Mock.Of<IEmployerAgreementEventFactory>());
-        serviceCollection.AddSingleton(Mock.Of<ILegalEntityEventFactory>());
-        serviceCollection.AddSingleton(Mock.Of<IPayeSchemeEventFactory>());
-        serviceCollection.AddSingleton(Mock.Of<IAccountEventFactory>());
-        serviceCollection.AddSingleton(Mock.Of<IEventPublisher>());
-        serviceCollection.AddSingleton(Mock.Of<ICommitmentsV2ApiClient>());
-        serviceCollection.AddSingleton(Mock.Of<ICommitmentV2Service>());
-        serviceCollection.AddSingleton(Mock.Of<IProviderRegistrationApiClient>());
-        serviceCollection.AddSingleton(Mock.Of<IInvitationRepository>());
-        serviceCollection.AddSingleton(Mock.Of<IAuditService>());
-        serviceCollection.AddSingleton(Mock.Of<ITaskService>());
-
-        serviceCollection.AddConfigurationOptions(config);
-        serviceCollection.AddMediatR(typeof(GetEmployerAccountByIdQuery));
-        serviceCollection.AddMediatorCommandValidators();
-        serviceCollection.AddLogging();
-        serviceCollection.AddAutoMapper(typeof(Startup).Assembly);
-
-        var employerAccountsConfiguration = config.Get<EmployerAccountsConfiguration>();
-
+        serviceCollection.AddSingleton(_ => mockHostingEnvironment.Object);
         var provider = serviceCollection.BuildServiceProvider();
 
         var type = provider.GetService(toResolve);
@@ -224,42 +194,11 @@ public class WhenAddingServicesToTheContainer
         var mockHostingEnvironment = new Mock<IHostingEnvironment>();
         mockHostingEnvironment.Setup(x => x.EnvironmentName).Returns("Test");
 
-        var config = GenerateConfiguration();
+        var startup = new Startup(GenerateConfiguration(), new Mock<IWebHostEnvironment>().Object);
         var serviceCollection = new ServiceCollection();
+        startup.ConfigureServices(serviceCollection);
 
-        serviceCollection.AddSingleton(mockHostingEnvironment.Object);
-        serviceCollection.AddSingleton(Mock.Of<IMembershipRepository>());
-        serviceCollection.AddSingleton(Mock.Of<IAccountRepository>());
-        serviceCollection.AddSingleton(Mock.Of<IEmployerAccountRepository>());
-        serviceCollection.AddSingleton(Mock.Of<IEmployerAgreementRepository>());
-        serviceCollection.AddSingleton(Mock.Of<IEmployerAccountTeamRepository>());
-        serviceCollection.AddSingleton(Mock.Of<IInvitationRepository>());
-        serviceCollection.AddSingleton(Mock.Of<IPayeRepository>());
-        serviceCollection.AddSingleton(Mock.Of<IUserRepository>());
-        serviceCollection.AddSingleton(Mock.Of<IUserAccountRepository>());
-        serviceCollection.AddSingleton(Mock.Of<IPayeSchemesWithEnglishFractionService>());
-        serviceCollection.AddSingleton(Mock.Of<IOuterApiClient>());
-        serviceCollection.AddSingleton(Mock.Of<ICommitmentsV2ApiClient>());
-        serviceCollection.AddSingleton(Mock.Of<IPdfService>());
-        serviceCollection.AddSingleton(Mock.Of<ITaskService>());
-        serviceCollection.AddSingleton(Mock.Of<IUserContext>());
-        serviceCollection.AddSingleton(Mock.Of<IReferenceDataService>());
-        serviceCollection.AddSingleton(Mock.Of<ICommitmentV2Service>());
-        serviceCollection.AddSingleton(Mock.Of<IReservationsService>());
-        serviceCollection.AddSingleton(Mock.Of<IRecruitService>());
-        serviceCollection.AddSingleton(Mock.Of<IHmrcService>());
-        serviceCollection.AddSingleton(Mock.Of<IPensionRegulatorService>());
-        serviceCollection.AddSingleton(Mock.Of<IProviderRegistrationApiClient>());
-        serviceCollection.AddSingleton(Mock.Of<Lazy<EmployerAccountsDbContext>>());
-
-        serviceCollection.AddConfigurationOptions(config);
-        serviceCollection.AddMediatR(typeof(GetEmployerAccountByIdQuery));
-        serviceCollection.AddMediatorQueryValidators();
-        serviceCollection.AddLogging();
-        serviceCollection.AddAutoMapper(typeof(Startup).Assembly);
-
-        var employerAccountsConfiguration = config.Get<EmployerAccountsConfiguration>();
-
+        serviceCollection.AddSingleton(_ => mockHostingEnvironment.Object);
         var provider = serviceCollection.BuildServiceProvider();
 
         var type = provider.GetService(toResolve);
@@ -267,7 +206,7 @@ public class WhenAddingServicesToTheContainer
     }
 
 
-    //[Test]
+    [Test]
     public void Then_Resolves_Authorization_Handlers()
     {
         var mockHostingEnvironment = new Mock<IHostingEnvironment>();
@@ -292,6 +231,7 @@ public class WhenAddingServicesToTheContainer
         {
             InitialData = new List<KeyValuePair<string, string>>
                 {
+                    new("SFA.DAS.Encoding", "{\"Encodings\": [{\"EncodingType\": \"AccountId\",\"Salt\": \"and vinegar\",\"MinHashLength\": 32,\"Alphabet\": \"46789BCDFGHJKLMNPRSTVWXY\"}]}"),
                     new("DatabaseConnectionString", "Server=(localdb)\\MSSQLLocalDB;Integrated Security=true"),
                     new("AllowedHashstringCharacters", "ABCDEFGHJKLMN12345"),
                     new("PublicAllowedHashstringCharacters", "ABCDEFGHJKLMN12345"),
@@ -313,11 +253,16 @@ public class WhenAddingServicesToTheContainer
                     new("ElasticUrl", "test"),
                     new("ElasticUsername", "test"),
                     new("ElasticPassword", "test"),
+                    new("CommitmentsApi:IdentifierUrl", "test"),
+                    new("CommitmentsApi:ApiBaseUrl", "test"),
+                    new("DefaultServiceTimeoutMilliseconds", "100"),
+                    new("EmployerAccountsOuterApiConfiguration:BaseUrl", "https://test.test"),
+                    new("EmployerAccountsOuterApiConfiguration:Key", "test")
                 }
         };
 
         var provider = new MemoryConfigurationProvider(configSource);
 
-        return new ConfigurationRoot(new List<Microsoft.Extensions.Configuration.IConfigurationProvider> { provider });
+        return new ConfigurationRoot(new List<IConfigurationProvider> { provider });
     }
 }

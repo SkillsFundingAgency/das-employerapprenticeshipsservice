@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi;
 using SFA.DAS.EmployerAccounts.Interfaces.OuterApi;
@@ -9,13 +7,8 @@ namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 
 public static class EmployerAccountsOuterApiServiceRegistrations
 {
-    public static IServiceCollection AddEmployerAccountsOuterApi(this IServiceCollection services, EmployerAccountsOuterApiConfiguration outerApiConfiguration, IConfiguration configuration)
+    public static IServiceCollection AddEmployerAccountsOuterApi(this IServiceCollection services, EmployerAccountsOuterApiConfiguration outerApiConfiguration)
     {
-        services.Configure<EmployerAccountsOuterApiConfiguration>(configuration.GetSection(nameof(EmployerAccountsOuterApiConfiguration)));
-        services.AddSingleton(cfg => cfg.GetService<IOptions<EmployerAccountsOuterApiConfiguration>>().Value);
-
-        services.AddScoped<IOuterApiClient, OuterApiClient>();
-
         services.AddHttpClient<IOuterApiClient, OuterApiClient>(x =>
         {
             x.BaseAddress = new Uri(outerApiConfiguration.BaseUrl);

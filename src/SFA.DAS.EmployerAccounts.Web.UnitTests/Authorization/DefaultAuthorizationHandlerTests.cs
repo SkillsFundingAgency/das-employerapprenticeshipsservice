@@ -31,7 +31,7 @@ public class DefaultAuthorizationHandlerTests
     private List<AuthorizationResource> ResourceList { get; set; }
     private AuthorizationResource _testAuthorizationResource;
     private EmployerAccountsConfiguration _configuration;
-    private Mock<IAuthenticationService> _mockAuthenticationService;
+    private Mock<IHttpContextAccessor> _mockHttpContextAccessor;
     private readonly string SupportConsoleUsers = "Tier1User,Tier2User";
     private IUserContext _userContext;
 
@@ -42,12 +42,12 @@ public class DefaultAuthorizationHandlerTests
         {
             SupportConsoleUsers = SupportConsoleUsers
         };
-        _mockAuthenticationService = new Mock<IAuthenticationService>();
+        _mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
         AuthorizationContextTestsFixture = new AuthorizationContextTestsFixture();
         MockIAuthorisationResourceRepository = new Mock<IAuthorisationResourceRepository>();
         Options = new List<string>();
-        _userContext = new UserContext(_mockAuthenticationService.Object,_configuration);
-       // SutDefaultAuthorizationHandler = new DefaultAuthorizationHandler(MockIAuthorisationResourceRepository.Object,_userContext);
+        _userContext = new UserContext(_mockHttpContextAccessor.Object,_configuration);
+
         SutDefaultAuthorizationHandler = new DefaultAuthorizationHandler();
         _testAuthorizationResource = new AuthorizationResource
         {
@@ -100,7 +100,7 @@ public class DefaultAuthorizationHandlerTests
         //Arrange
         AuthorizationContextTestsFixture.SetDataSupportConsoleUserNoResource(role);
 
-        _mockAuthenticationService.Setup(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role)).Returns(true);
+        _mockHttpContextAccessor.Setup(m => m.HttpContext.User.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role)).Returns(true);
             
         //Act
         AuthorizationContextTestsFixture.AuthorizationContext.ToString();

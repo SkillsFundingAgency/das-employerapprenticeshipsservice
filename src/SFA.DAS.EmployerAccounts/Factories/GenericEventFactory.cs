@@ -1,9 +1,8 @@
 ﻿using System;
 using Newtonsoft.Json;
-using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.Events.Api.Types;
 
-namespace SFA.DAS.EmployerAccounts.Events;
+namespace SFA.DAS.EmployerAccounts.Factories;
 
 public class GenericEventFactory : IGenericEventFactory
 {

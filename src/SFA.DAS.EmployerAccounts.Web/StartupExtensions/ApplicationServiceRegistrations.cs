@@ -1,7 +1,8 @@
-﻿using SFA.DAS.EAS.Account.Api.Client;
+﻿using Microsoft.AspNetCore.Authentication;
+using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
-using SFA.DAS.EmployerAccounts.Events;
+using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Policies;
 using SFA.DAS.EmployerAccounts.Services;
@@ -16,14 +17,13 @@ public static class ApplicationServiceRegistrations
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, EmployerAccountsConfiguration configuration)
     {
+        services.AddSingleton<IAccountEventFactory, AccountEventFactory>();
         services.AddScoped<IHtmlHelpers, HtmlHelpers>();
         services.AddScoped<ActivitiesHelper>();
         services.AddTransient<IRestClientFactory, RestClientFactory>();
         services.AddTransient<IRestServiceFactory, RestServiceFactory>();
         services.AddTransient<IHttpServiceFactory, HttpServiceFactory>();
         services.AddTransient<IUserAornPayeLockService, UserAornPayeLockService>();
-
-        services.AddScoped<IProviderRegistrationApiClient, ProviderRegistrationApiClient>();
 
         services.AddTransient<IReservationsService, ReservationsService>();
         services.Decorate<IReservationsService, ReservationsServiceWithTimeout>();
@@ -57,6 +57,11 @@ public static class ApplicationServiceRegistrations
 
         services.AddTransient<IGenericEventFactory, GenericEventFactory>();
         services.AddTransient<IPayeSchemeEventFactory, PayeSchemeEventFactory>();
+        services.AddTransient<ILegalEntityEventFactory, LegalEntityEventFactory>();
+        services.AddTransient<IEmployerAgreementEventFactory, EmployerAgreementEventFactory>();
+        services.AddScoped<IPayeSchemesWithEnglishFractionService, PayeSchemesWithEnglishFractionService>();
+
+        services.AddTransient<IUserContext, UserContext>();
 
         return services;
     }

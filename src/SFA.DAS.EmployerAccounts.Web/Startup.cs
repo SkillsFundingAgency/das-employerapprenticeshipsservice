@@ -101,11 +101,11 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddDasAuthorization();
             services.AddEmployerAccountsApi();
             services.AddExecutionPolicies();
-            services.AddEmployerAccountsOuterApi(_employerAccountsConfiguration.EmployerAccountsOuterApiConfiguration, _configuration);
-            services.AddCommittmentsV2Client();
+            services.AddEmployerAccountsOuterApi(_employerAccountsConfiguration.EmployerAccountsOuterApiConfiguration);
+            services.AddCommittmentsV2Client(_employerAccountsConfiguration.CommitmentsApi);
             services.AddPollyPolicy(_employerAccountsConfiguration);
             services.AddContentApiClient(_employerAccountsConfiguration, _configuration);
-            services.AddProviderRegistration(_employerAccountsConfiguration, _configuration);
+            services.AddProviderRegistration(_employerAccountsConfiguration);
             services.AddApprenticeshipLevyApi(_employerAccountsConfiguration);
 
             services.AddAuthenticationServices();
