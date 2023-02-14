@@ -28,8 +28,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
         public void Arrange()
         {
             _membershipRepository = new Mock<IMembershipRepository>();
-            _membershipRepository.Setup(x => x.GetCaller(ExpectedHashedAccountId, ExpectedUserId)).ReturnsAsync(new MembershipView { Role = Role.Owner });
-            _membershipRepository.Setup(x => x.GetCaller(ExpectedHashedAccountId, ExpectedNonOwnerUserId)).ReturnsAsync(new MembershipView { Role = Role.Transactor });
+            _membershipRepository.Setup(x => x.GetCaller(ExpectedAccountId, ExpectedUserId)).ReturnsAsync(new MembershipView { Role = Role.Owner });
+            _membershipRepository.Setup(x => x.GetCaller(ExpectedAccountId, ExpectedNonOwnerUserId)).ReturnsAsync(new MembershipView { Role = Role.Transactor });
 
             _employerAgreementRepository = new Mock<IEmployerAgreementRepository>();
             _employerAgreementRepository.Setup(
@@ -106,7 +106,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
 
             //Assert
             Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string, string>("HashedAccountLegalEntityId", "There must be at least one legal entity on the account"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("AccountLegalEntityId", "There must be at least one legal entity on the account"), actual.ValidationDictionary);
         }
     }
 }
