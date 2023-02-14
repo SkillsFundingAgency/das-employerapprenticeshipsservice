@@ -18,10 +18,10 @@ public class SeedAccountUsersJob
     private readonly IRunOnceJobsService _runOnceJobsService;
     private readonly IAccountUsersRepository _accountUsersRepository;
     private readonly Lazy<EmployerAccountsDbContext> _db;
-    private readonly ILogger _logger;
+    private readonly ILogger<SeedAccountUsersJob> _logger;
     private readonly string _jobName;
 
-    public SeedAccountUsersJob(IRunOnceJobsService runOnceJobsService, IAccountUsersRepository accountUsersRepository, Lazy<EmployerAccountsDbContext> db, ILogger logger)
+    public SeedAccountUsersJob(IRunOnceJobsService runOnceJobsService, IAccountUsersRepository accountUsersRepository, Lazy<EmployerAccountsDbContext> db, ILogger<SeedAccountUsersJob> logger)
     {
         _runOnceJobsService = runOnceJobsService;
         _accountUsersRepository = accountUsersRepository;

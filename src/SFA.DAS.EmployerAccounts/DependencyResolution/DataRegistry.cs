@@ -1,13 +1,11 @@
 ﻿using System.Configuration;
 using System.Data.Common;
-using Microsoft.Data.SqlClient;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Services.AppAuthentication;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using NServiceBus.Persistence;
 using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;
 using SFA.DAS.NServiceBus.Features.ClientOutbox.Data;
 using SFA.DAS.UnitOfWork.Context;

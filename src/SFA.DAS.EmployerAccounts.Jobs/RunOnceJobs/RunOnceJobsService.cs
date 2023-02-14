@@ -10,9 +10,9 @@ namespace SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
 public class RunOnceJobsService : IRunOnceJobsService
 {
     private readonly Lazy<EmployerAccountsDbContext> _db;
-    private readonly ILogger _logger;
+    private readonly ILogger<RunOnceJobsService> _logger;
 
-    public RunOnceJobsService(Lazy<EmployerAccountsDbContext> db, ILogger logger)
+    public RunOnceJobsService(Lazy<EmployerAccountsDbContext> db, ILogger<RunOnceJobsService> logger)
     {
         _db = db;
         _logger = logger;

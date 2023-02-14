@@ -1,12 +1,8 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using NLog.Extensions.Logging;
-using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerAccounts.Jobs.DependencyResolution;
+using SFA.DAS.EmployerAccounts.Jobs.Extensions;
 using SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
 using SFA.DAS.EmployerAccounts.Jobs.StartupJobs;
 using StructureMap;
@@ -17,53 +13,31 @@ public class Program
 {
     public static async Task Main()
     {
-        var container = IoC.Initialize();
+        using (var host = CreateHost())
+        {
+            await SeedData(host);
 
-        using var host = CreateHost(container);
-        
-        var startup = container.GetInstance<EndpointStartup>();
-        await startup.StartAsync();
-
-        var jobHost = host.Services.GetService(typeof(IJobHost)) as JobHost;
-        
-        await host.StartAsync();
-
-        await jobHost.CallAsync(typeof(CreateReadStoreDatabaseJob).GetMethod(nameof(CreateReadStoreDatabaseJob.Run)));
-        await jobHost.CallAsync(typeof(SeedAccountUsersJob).GetMethod(nameof(SeedAccountUsersJob.Run)));
-
-        await host.RunAsync();
-        
-        await host.StopAsync();
-        await startup.StopAsync();
+            await host.RunAsync();
+        }
     }
 
-    private static IHost CreateHost(IContainer container)
+    private static async Task SeedData(IHost host)
     {
-        var builder = new HostBuilder()
-             .ConfigureWebJobs(config =>
-             {
-                 config.AddTimers();
-             })
-             .ConfigureLogging((context, loggingBuilder) =>
-             {
-                 loggingBuilder.AddNLog(context.HostingEnvironment.IsDevelopment() ? "nlog.development.config" : "nlog.config");
-                 var appInsightsKey = context.Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"];
-                 if (!string.IsNullOrEmpty(appInsightsKey))
-                 {
-                     loggingBuilder.AddApplicationInsightsWebJobs(o => o.InstrumentationKey = appInsightsKey);
-                 }
-             }).ConfigureServices((context, services) =>
-             {
-                 services.AddScoped<IJobActivator, StructureMapJobActivator>();
-             });
+        var readStoreDatabaseJob = host.Services.GetService<CreateReadStoreDatabaseJob>();
+        var seedAccountUsersJob = host.Services.GetService<SeedAccountUsersJob>();
 
-        var isDevelopment = container.GetInstance<IEnvironmentService>().IsCurrent(DasEnv.LOCAL);
+        await readStoreDatabaseJob.Run();
+        await seedAccountUsersJob.Run();
+    }
 
-        if (isDevelopment)
-        {
-            builder.UseEnvironment("development");
-        }
-
-        return builder.Build();
+    private static IHost CreateHost()
+    {
+        return new HostBuilder()
+            .ConfigureDasWebJobs()
+            .ConfigureDasLogging()
+            .ConfigureDasServices()
+            .UseStructureMap()
+            .ConfigureContainer<Registry>(IoC.Initialize)
+            .Build();
     }
 }

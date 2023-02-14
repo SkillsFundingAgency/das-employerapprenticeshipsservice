@@ -12,9 +12,9 @@ namespace SFA.DAS.EmployerAccounts.Jobs.StartupJobs;
 public class CreateReadStoreDatabaseJob
 {
     private readonly IDocumentClient _documentClient;
-    private readonly ILogger _logger;
+    private readonly ILogger<CreateReadStoreDatabaseJob> _logger;
 
-    public CreateReadStoreDatabaseJob(IDocumentClient documentClient, ILogger logger)
+    public CreateReadStoreDatabaseJob(IDocumentClient documentClient, ILogger<CreateReadStoreDatabaseJob> logger)
     {
         _documentClient = documentClient;
         _logger = logger;

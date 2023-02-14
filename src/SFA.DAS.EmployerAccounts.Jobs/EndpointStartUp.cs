@@ -17,6 +17,8 @@ public class EndpointStartup
     private readonly IContainer _container;
     private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
     private IEndpointInstance _endpoint;
+    
+    private const string EndpointName = "SFA.DAS.EmployerAccounts.Jobs";
 
     public EndpointStartup(IContainer container, EmployerAccountsConfiguration employerAccountsConfiguration)
     {
@@ -26,8 +28,9 @@ public class EndpointStartup
 
     public async Task StartAsync()
     {
-        var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.Jobs")
-            .UseErrorQueue("SFA.DAS.EmployerAccounts.Jobs-errors")
+        
+        var endpointConfiguration = new EndpointConfiguration(EndpointName)
+            .UseErrorQueue($"{EndpointName}-errors")
             .UseAzureServiceBusTransport(() => _employerAccountsConfiguration.ServiceBusConnectionString, _container)
             .UseLicense(_employerAccountsConfiguration.NServiceBusLicense)
             .UseSqlServerPersistence(() => _container.GetInstance<DbConnection>())
