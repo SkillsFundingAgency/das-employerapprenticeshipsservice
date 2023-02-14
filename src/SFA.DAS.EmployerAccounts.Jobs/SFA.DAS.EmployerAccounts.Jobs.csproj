@@ -9,6 +9,7 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="NLog" Version="5.1.1" />
     <PackageReference Include="AzureFunc.ClassLibrary" Version="1.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
@@ -19,7 +20,7 @@
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.3.0" />
     <PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="3.1.66" />
     <PackageReference Include="Microsoft.Web.WebJobs.Publish" Version="17.1.361" />
-    <PackageReference Include="NLog.Extensions.Logging" Version="1.4.0" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.2.1" />
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
     <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.2.17" />
     <PackageReference Include="SFA.DAS.Authentication" Version="1.1.2" />
@@ -57,9 +58,16 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Remove="C:\Users\ADM_HarrisJo\.nuget\packages\nlog.schema\4.5.3\contentFiles\any\any\NLog.xsd" />
     <None Remove="SFA.DAS.EmployerAccounts.Jobs.csproj.DotSettings" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="nlog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="nlog.Development.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="settings.job">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
