@@ -1,76 +1,121 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoFixture.NUnit3;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf;
+using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSignedEmployerAgreementPdfTests
 {
     public class WhenIValidateTheRequest
     {
-        private GetSignedEmployerAgreementPdfValidator _validator;
-        private Mock<IMembershipRepository> _membershipRepository;
-
-        private const long ExpectedAccountId = 1231;
-        private const string ExpectedHashedAccountId = "123ASQ";
-        private const string ExpectedUserId = "123ASQ";
-
-        [SetUp]
-        public void Arrange()
-        {
-            _membershipRepository = new Mock<IMembershipRepository>();
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new MembershipView
-                {
-                    Role = Role.Transactor
-                });
-            _membershipRepository.Setup(x => x.GetCaller(ExpectedUserId, ExpectedHashedAccountId))
-                .ReturnsAsync(new MembershipView
-                {
-                    Role = Role.Owner
-                });
-
-            _validator = new GetSignedEmployerAgreementPdfValidator(_membershipRepository.Object);
-        }
-
         [Test]
-        public async Task ThenTheRequestIsValidWhenAllFieldsArePopulated()
+        [MoqInlineAutoData(0)]
+        [MoqInlineAutoData(-1)]
+        [MoqInlineAutoData(-999)]
+        public async Task ThenTheRequestIsNotValidIfAccountIdInvalidArentPopulatedAndTheRepositoryIsNotCalled(
+            long accountId,
+            GetSignedEmployerAgreementPdfRequest query,
+            GetSignedEmployerAgreementPdfValidator validator)
         {
-            //Act
-            var actual = await _validator.ValidateAsync(new GetSignedEmployerAgreementPdfRequest
-            {
-                AccountId = ExpectedAccountId,
-                UserId = ExpectedUserId,
-                LegalAgreementId = 1234
-            });
+            //Arrange
+            query.AccountId = accountId;
 
-            //Assert
-            Assert.IsTrue(actual.IsValid());
-            _membershipRepository.Verify(x => x.GetCaller(ExpectedHashedAccountId, ExpectedUserId), Times.Once);
-        }
-
-        [Test]
-        public async Task ThenTheRequestIsNotValidAndTheErrorDictionaryIsPopulatedWhenTheFieldsArentSupplied()
-        {
             //Act
-            var actual = await _validator.ValidateAsync(new GetSignedEmployerAgreementPdfRequest());
+            var actual = await validator.ValidateAsync(query);
 
             //Assert
             Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string, string>("HashedAccountId", "HashedAccountId has not been supplied"), actual.ValidationDictionary);
-            Assert.Contains(new KeyValuePair<string, string>("HashedLegalAgreementId", "HashedLegalAgreementId has not been supplied"), actual.ValidationDictionary);
-            Assert.Contains(new KeyValuePair<string, string>("UserId", "UserId has not been supplied"), actual.ValidationDictionary);
-            _membershipRepository.Verify(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            Assert.Contains(new KeyValuePair<string, string>("AccountId", "AccountId has not been supplied"), actual.ValidationDictionary);
         }
 
         [Test]
-        public async Task ThenIfTheUserIsNotAnOwnerThenTheUnAuhtorizedFlagIsSet()
+        [MoqInlineAutoData(0)]
+        [MoqInlineAutoData(-1)]
+        [MoqInlineAutoData(-999)]
+        public async Task ThenTheRequestIsNotValidIfLegalAgreementIdInvalidArentPopulatedAndTheRepositoryIsNotCalled(
+            long agreementId,
+            GetSignedEmployerAgreementPdfRequest query,
+            GetSignedEmployerAgreementPdfValidator validator)
         {
+            //Arrange
+            query.LegalAgreementId = agreementId;
+
             //Act
-            var actual = await _validator.ValidateAsync(new GetSignedEmployerAgreementPdfRequest { AccountId = 123, UserId = "123", LegalAgreementId = 1231 });
+            var actual = await validator.ValidateAsync(query);
+
+            //Assert
+            Assert.IsFalse(actual.IsValid());
+            Assert.Contains(new KeyValuePair<string, string>("LegalAgreementId", "LegalAgreementId has not been supplied"), actual.ValidationDictionary);
+        }
+
+        [Test, MoqAutoData]
+        public async Task ThenTheRequestIsNotValidIfUserIdNotSupplied_TheRepositoryIsNotCalled(
+            GetSignedEmployerAgreementPdfRequest query,
+            GetSignedEmployerAgreementPdfValidator validator)
+        {
+            //Arrange
+            query.UserId = string.Empty;
+
+            //Act
+            var actual = await validator.ValidateAsync(query);
+
+            //Assert
+            Assert.IsFalse(actual.IsValid());
+            Assert.Contains(new KeyValuePair<string, string>("UserId", "UserId has not been supplied"), actual.ValidationDictionary);
+        }
+
+        [Test, MoqAutoData]
+        public async Task WhenTheRequestHasValdAccountId_TheMembershipIsFetched(
+           [Frozen] Mock<IMembershipRepository> membershipRepoMock,
+           GetSignedEmployerAgreementPdfRequest query,
+           GetSignedEmployerAgreementPdfValidator validator)
+        {
+            //Arrange
+
+            //Act
+            var actual = await validator.ValidateAsync(query);
+
+            //Assert
+            membershipRepoMock.Verify(mock => mock.GetCaller(It.Is<long>(l => l == query.AccountId), It.Is<string>(s => s == query.UserId)));
+        }
+
+        [Test]
+        [MoqInlineAutoData(Role.Viewer)]
+        [MoqInlineAutoData(Role.Transactor)]
+        [MoqInlineAutoData(Role.Owner)]
+        public async Task WhenAccountMemberThenAuthorized(
+            Role userRole,
+            [Frozen] Mock<IMembershipRepository> membershipRepoMock,
+            GetSignedEmployerAgreementPdfRequest query,
+            GetSignedEmployerAgreementPdfValidator validator)
+        {
+            //Arrange
+            membershipRepoMock.Setup(x => x.GetCaller(It.Is<long>(l => l == query.AccountId), It.Is<string>(s => s == query.UserId))).ReturnsAsync(new MembershipView { Role = userRole });
+
+            //Act
+            var actual = await validator.ValidateAsync(query);
+
+            //Assert
+            Assert.IsTrue(actual.IsValid());
+            Assert.IsFalse(actual.IsUnauthorized);
+        }
+
+        [Test, MoqAutoData]
+        public async Task ThenTheRequestIsMarkedAsInvalidIfTheUserDoesNotExist(
+            [Frozen] Mock<IMembershipRepository> membershipRepoMock,
+            GetSignedEmployerAgreementPdfRequest query,
+            GetSignedEmployerAgreementPdfValidator validator)
+        {
+            //Arrange
+            membershipRepoMock.Setup(x => x.GetCaller(It.Is<long>(l => l == query.AccountId), It.Is<string>(s => s == query.UserId))).ReturnsAsync(() => null);
+
+            //Act
+            var actual = await validator.ValidateAsync(query);
 
             //Assert
             Assert.IsTrue(actual.IsUnauthorized);

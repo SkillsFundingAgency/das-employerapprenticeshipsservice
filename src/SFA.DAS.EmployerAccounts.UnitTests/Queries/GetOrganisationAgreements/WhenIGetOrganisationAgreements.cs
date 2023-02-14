@@ -70,20 +70,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetOrganisationAgreements
             };
         }
 
-        [Test, MoqAutoData]
-        public async Task Test1(
-            [Frozen]Mock<IEmployerAgreementRepository> employerAgreementRepo,
-            GetOrganisationAgreementsRequest request,
-            GetOrganisationAgreementsQueryHandler handler)
-        {
-            //Act
-            await handler.Handle(request, CancellationToken.None);
-
-            //Assert
-            employerAgreementRepo.Verify(x => x.GetOrganisationsAgreements(It.IsAny<long>()), Times.Once);
-        }
-
-
         [Test]
         public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {

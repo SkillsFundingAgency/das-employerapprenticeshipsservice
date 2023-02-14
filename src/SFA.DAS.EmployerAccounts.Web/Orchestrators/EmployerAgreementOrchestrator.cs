@@ -111,13 +111,14 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
         }
     }
 
-    public async Task<OrchestratorResponse<SignAgreementViewModel>> SignAgreement(string agreementid, string hashedId, string externalUserId, DateTime signedDate)
+    public async Task<OrchestratorResponse<SignAgreementViewModel>> SignAgreement(string agreementid, string hashedAccountId, string externalUserId, DateTime signedDate)
     {
         try
         {
+            var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
             var agreement = await _mediator.Send(new SignEmployerAgreementCommand
             {
-                HashedAccountId = hashedId,
+                HashedAccountId = hashedAccountId,
                 ExternalUserId = externalUserId,
                 SignedDate = signedDate,
                 HashedAgreementId = agreementid
@@ -126,7 +127,7 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
             var unsignedAgreement = await _mediator.Send(new GetNextUnsignedEmployerAgreementRequest
             { 
                 ExternalUserId = externalUserId,
-                HashedAccountId = hashedId
+                AccountId = accountId
             });
 
             return new OrchestratorResponse<SignAgreementViewModel>

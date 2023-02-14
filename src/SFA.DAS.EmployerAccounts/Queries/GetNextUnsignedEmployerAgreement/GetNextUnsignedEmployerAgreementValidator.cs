@@ -1,5 +1,4 @@
 ﻿using SFA.DAS.EmployerAccounts.Data.Contracts;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
 
@@ -24,11 +23,11 @@ public class GetNextUnsignedEmployerAgreementValidator : IValidator<GetNextUnsig
 
         if (string.IsNullOrEmpty(item.ExternalUserId))
         {
-            validationResult.AddError(nameof(item.ExternalUserId),"ExternalUserId has not been supplied");
+            validationResult.AddError(nameof(item.ExternalUserId));
         }
-        if (string.IsNullOrEmpty(item.HashedAccountId))
+        if (item.AccountId <= 0)
         {
-            validationResult.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
+            validationResult.AddError(nameof(item.AccountId));
         }
 
         if (!validationResult.IsValid())
@@ -36,7 +35,7 @@ public class GetNextUnsignedEmployerAgreementValidator : IValidator<GetNextUnsig
             return validationResult;
         }
 
-        var membership = await _membershipRepository.GetCaller(item.HashedAccountId, item.ExternalUserId);
+        var membership = await _membershipRepository.GetCaller(item.AccountId, item.ExternalUserId);
 
         if (membership == null)
         {

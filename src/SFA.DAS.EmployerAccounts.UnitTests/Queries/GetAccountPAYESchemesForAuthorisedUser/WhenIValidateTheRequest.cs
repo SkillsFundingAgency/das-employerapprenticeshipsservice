@@ -50,7 +50,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemesForAut
         }
 
         [Test, MoqAutoData]
-        public async Task WhenTheRequestHasValudAccountId_TheRepositoryIsCalled(
+        public async Task WhenTheRequestHasValidAccountId_TheMembershipIsFetched(
            [Frozen] Mock<IMembershipRepository> membershipRepoMock,
            GetAccountPayeSchemesForAuthorisedUserQuery query,
            GetAccountPayeSchemesForAuthorisedUserQueryValidator validator)

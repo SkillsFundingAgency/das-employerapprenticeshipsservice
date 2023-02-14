@@ -50,7 +50,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountTests
         }
 
         [Test, MoqAutoData]
-        public async Task WhenTheRequestHasValudAccountId_TheRepositoryIsCalled(
+        public async Task WhenTheRequestHasValidAccountId_TheMembershipIsFetched(
            [Frozen] Mock<IMembershipRepository> membershipRepoMock,
            GetEmployerAccountByIdQuery query,
            GetEmployerAccountByIdValidator validator)
