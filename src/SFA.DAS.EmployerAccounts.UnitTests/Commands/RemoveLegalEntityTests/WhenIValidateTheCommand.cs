@@ -16,8 +16,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
         private RemoveLegalEntityCommandValidator _removeLegalEntityCommandValidator;
         private Mock<IMembershipRepository> _membershipRepository;
         private Mock<IEmployerAgreementRepository> _employerAgreementRepository;
-
-        private const string ExpectedHashedAccountId = "12313";
         private const long ExpectedAccountId = 123123777;
         private const long ExpectedLegalEntityId = 46435;
         private const string ExpectedUserId = "AFGF456";
