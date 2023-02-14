@@ -54,6 +54,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="ScheduledJobs\**" />
+    <EmbeddedResource Remove="ScheduledJobs\**" />
+    <None Remove="ScheduledJobs\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="C:\Users\ADM_HarrisJo\.nuget\packages\nlog.schema\4.5.3\contentFiles\any\any\NLog.xsd" />
     <None Remove="SFA.DAS.EmployerAccounts.Jobs.csproj.DotSettings" />
   </ItemGroup>
@@ -70,7 +75,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
-    <Folder Include="ScheduledJobs\" />
   </ItemGroup>
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
