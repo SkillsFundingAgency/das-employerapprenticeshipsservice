@@ -4,6 +4,7 @@ using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
 using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerAccounts.Jobs.DependencyResolution;
 using SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
@@ -42,6 +43,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs
                  })
                  .ConfigureLogging((context, loggingBuilder) =>
                  {
+                     loggingBuilder.AddNLog(context.HostingEnvironment.IsDevelopment() ? "nlog.development.config" : "nlog.config");
                      var appInsightsKey = context.Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"];
                      if (!string.IsNullOrEmpty(appInsightsKey))
                      {

@@ -9,13 +9,17 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="FluentAssertions" Version="6.9.0" />
+		<PackageReference Include="Microsoft.Azure.WebJobs.Logging.ApplicationInsights" Version="3.0.33" />
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+		<PackageReference Include="NLog.Extensions.Logging" Version="5.2.1" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.EntityFrameworkCore" Version="9.0.28" />
+		<PackageReference Include="StructureMap.Microsoft.DependencyInjection" Version="2.0.0" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.1" />
 		<PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.3.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
 		<PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="3.1.66" />
+		<PackageReference Include="NLog" Version="5.1.1" />
 		<PackageReference Include="NLog.Schema" Version="4.5.3" />
 		<PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.2.17" />
 		<PackageReference Include="SFA.DAS.Authentication" Version="1.1.2" />
@@ -57,6 +61,17 @@
 		</None>
 	</ItemGroup>
 	<ItemGroup>
+	  <None Remove="C:\Users\ADM_HarrisJo\.nuget\packages\nlog.schema\4.5.3\contentFiles\any\any\NLog.xsd" />
+	</ItemGroup>
+	<ItemGroup>
 		<Content Include="appsettings.json" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="nlog.config">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="nlog.Development.config">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 </Project>

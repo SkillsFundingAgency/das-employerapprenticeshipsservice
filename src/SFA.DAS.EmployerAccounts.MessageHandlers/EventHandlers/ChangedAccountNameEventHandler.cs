@@ -4,25 +4,24 @@ using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.Messaging.Interfaces;
 using System.Threading.Tasks;
 
-namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers
+namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers;
+
+public class ChangedAccountNameEventHandler : IHandleMessages<ChangedAccountNameEvent>
 {
-    public class ChangedAccountNameEventHandler : IHandleMessages<ChangedAccountNameEvent>
+    private readonly IMessagePublisher _messagePublisher;
+
+    public ChangedAccountNameEventHandler(IMessagePublisher messagePublisher)
     {
-        private readonly IMessagePublisher _messagePublisher;
+        _messagePublisher = messagePublisher;
+    }
 
-        public ChangedAccountNameEventHandler(IMessagePublisher messagePublisher)
-        {
-            _messagePublisher = messagePublisher;
-        }
-
-        public async Task Handle(ChangedAccountNameEvent message, IMessageHandlerContext context)
-        {
-            await _messagePublisher.PublishAsync(new AccountNameChangedMessage(
-                message.PreviousName,
-                message.CurrentName,
-                message.AccountId,
-                message.UserName,
-                message.UserRef.ToString()));
-        }
+    public async Task Handle(ChangedAccountNameEvent message, IMessageHandlerContext context)
+    {
+        await _messagePublisher.PublishAsync(new AccountNameChangedMessage(
+            message.PreviousName,
+            message.CurrentName,
+            message.AccountId,
+            message.UserName,
+            message.UserRef.ToString()));
     }
 }
