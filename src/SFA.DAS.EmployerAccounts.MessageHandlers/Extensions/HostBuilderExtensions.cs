@@ -1,10 +1,7 @@
-﻿using System;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.MessageHandlers.Startup;
 using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.Extensions;
@@ -31,13 +28,5 @@ public static class HostBuilderExtensions
                 .AddEnvironmentVariables()
                 .AddCommandLine(args);
         });
-    }
-
-    public static IHostBuilder UseDasEnvironment(this IHostBuilder hostBuilder)
-    {
-        var environmentName = Environment.GetEnvironmentVariable(EnvironmentVariableNames.EnvironmentName);
-        var mappedEnvironmentName = DasEnvironmentName.Map[environmentName];
-
-        return hostBuilder.UseEnvironment(mappedEnvironmentName);
     }
 }

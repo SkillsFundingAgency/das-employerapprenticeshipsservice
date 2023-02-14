@@ -21,7 +21,6 @@ public class Program
     private static IHost CreateHost(string[] args)
     {
         var builder = new HostBuilder()
-             .UseDasEnvironment()
              .ConfigureDasAppConfiguration(args)
              .UseConsoleLifetime()
              .ConfigureLogging((context, loggingBuilder) =>
