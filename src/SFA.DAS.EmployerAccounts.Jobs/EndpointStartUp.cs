@@ -10,40 +10,39 @@ using SFA.DAS.NServiceBus.Configuration.StructureMap;
 using SFA.DAS.NServiceBus.SqlServer.Configuration;
 using StructureMap;
 
-namespace SFA.DAS.EmployerAccounts.Jobs
+namespace SFA.DAS.EmployerAccounts.Jobs;
+
+public class EndpointStartup 
 {
-    public class EndpointStartup 
+    private readonly IContainer _container;
+    private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
+    private IEndpointInstance _endpoint;
+
+    public EndpointStartup(IContainer container, EmployerAccountsConfiguration employerAccountsConfiguration)
     {
-        private readonly IContainer _container;
-        private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
-        private IEndpointInstance _endpoint;
+        _container = container;
+        _employerAccountsConfiguration = employerAccountsConfiguration;
+    }
 
-        public EndpointStartup(IContainer container, EmployerAccountsConfiguration employerAccountsConfiguration)
-        {
-            _container = container;
-            _employerAccountsConfiguration = employerAccountsConfiguration;
-        }
+    public async Task StartAsync()
+    {
+        var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.Jobs")
+            .UseErrorQueue("SFA.DAS.EmployerAccounts.Jobs-errors")
+            .UseAzureServiceBusTransport(() => _employerAccountsConfiguration.ServiceBusConnectionString, _container)
+            .UseLicense(_employerAccountsConfiguration.NServiceBusLicense)
+            .UseSqlServerPersistence(() => _container.GetInstance<DbConnection>())
+            .UseNewtonsoftJsonSerializer()
+            .UseNLogFactory()
+            .UseSendOnly()
+            .UseStructureMapBuilder(_container);
 
-        public async Task StartAsync()
-        {
-            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.Jobs")
-                .UseErrorQueue("SFA.DAS.EmployerAccounts.Jobs-errors")
-                .UseAzureServiceBusTransport(() => _employerAccountsConfiguration.ServiceBusConnectionString, _container)
-                .UseLicense(_employerAccountsConfiguration.NServiceBusLicense)
-                .UseSqlServerPersistence(() => _container.GetInstance<DbConnection>())
-                .UseNewtonsoftJsonSerializer()
-                .UseNLogFactory()
-                .UseSendOnly()
-                .UseStructureMapBuilder(_container);
+        _endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
-            _endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
+        _container.Configure(c => c.For<IMessageSession>().Use(_endpoint));
+    }
 
-            _container.Configure(c => c.For<IMessageSession>().Use(_endpoint));
-        }
-
-        public Task StopAsync()
-        {
-            return _endpoint.Stop();
-        }
+    public Task StopAsync()
+    {
+        return _endpoint.Stop();
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -14,39 +13,32 @@ public class Program
 {
     public static async Task Main(string[] args)
     {
-        try
-        {
-            var builder = CreateHostBuilder(args);
+        using var host = CreateHost(args);
 
-            using var host = builder.Build();
-            await host.RunAsync();
-        }
-        catch (Exception exception)
-        {
-            Console.WriteLine(exception);
-            throw;
-        }
+        await host.RunAsync();
     }
 
-    private static IHostBuilder CreateHostBuilder(string[] args)
+    private static IHost CreateHost(string[] args)
     {
-        return new HostBuilder()
-            .UseDasEnvironment()
-            .ConfigureDasAppConfiguration(args)
-            .UseConsoleLifetime()
-            .ConfigureLogging((context, loggingBuilder) =>
-            {
-                var appInsightsKey = context.Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"];
-                if (!string.IsNullOrEmpty(appInsightsKey))
-                {
-                    loggingBuilder.AddNLog(context.HostingEnvironment.IsDevelopment() ? "nlog.development.config" : "nlog.config");
-                    loggingBuilder.AddApplicationInsightsWebJobs(o => o.InstrumentationKey = appInsightsKey);
-                }
-            }).ConfigureServices((context, services) =>
-            {
-                services.AddMemoryCache();
-            })
-            .UseStructureMap()
-            .ConfigureContainer<Registry>(IoC.Initialize);
+        var builder = new HostBuilder()
+             .UseDasEnvironment()
+             .ConfigureDasAppConfiguration(args)
+             .UseConsoleLifetime()
+             .ConfigureLogging((context, loggingBuilder) =>
+             {
+                 var appInsightsKey = context.Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"];
+                 if (!string.IsNullOrEmpty(appInsightsKey))
+                 {
+                     loggingBuilder.AddNLog(context.HostingEnvironment.IsDevelopment() ? "nlog.development.config" : "nlog.config");
+                     loggingBuilder.AddApplicationInsightsWebJobs(o => o.InstrumentationKey = appInsightsKey);
+                 }
+             }).ConfigureServices((context, services) =>
+             {
+                 services.AddMemoryCache();
+             })
+             .UseStructureMap()
+             .ConfigureContainer<Registry>(IoC.Initialize);
+
+        return builder.Build();
     }
 }
