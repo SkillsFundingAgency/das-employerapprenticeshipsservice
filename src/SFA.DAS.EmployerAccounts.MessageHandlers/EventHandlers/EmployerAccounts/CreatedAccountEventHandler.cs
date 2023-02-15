@@ -1,8 +1,4 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using Microsoft.Extensions.Logging;
-using NServiceBus;
-using SFA.DAS.EmployerAccounts.Messages.Events;
+﻿using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
 using SFA.DAS.EmployerAccounts.Types.Models;
 

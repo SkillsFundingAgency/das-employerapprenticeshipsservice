@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using NServiceBus;
-using SFA.DAS.EmployerAccounts.Events.Messages;
+﻿using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.Messaging.Interfaces;
 

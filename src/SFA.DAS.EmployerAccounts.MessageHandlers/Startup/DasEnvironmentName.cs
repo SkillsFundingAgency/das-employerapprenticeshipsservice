@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace SFA.DAS.EmployerAccounts.MessageHandlers.Startup;
+﻿namespace SFA.DAS.EmployerAccounts.MessageHandlers.Startup;
 
 public static class DasEnvironmentName
 {
@@ -12,8 +9,7 @@ public static class DasEnvironmentName
     public static readonly string ModelOffice = nameof(ModelOffice);
     public static readonly string Demonstration = nameof(Demonstration);
 
-    public static readonly Dictionary<string, string> Map =
-        new Dictionary<string, string>(StringComparer.CurrentCultureIgnoreCase)
+    public static readonly Dictionary<string, string> Map = new(StringComparer.CurrentCultureIgnoreCase)
         {
             { "LOCAL", "Development" },
             { "AT", AcceptanceTest },

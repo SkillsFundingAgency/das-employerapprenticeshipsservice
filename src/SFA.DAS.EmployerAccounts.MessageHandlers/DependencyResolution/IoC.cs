@@ -1,6 +1,5 @@
 ﻿using SFA.DAS.EmployerAccounts.DependencyResolution;
 using SFA.DAS.UnitOfWork.NServiceBus.DependencyResolution.StructureMap;
-using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution;
 

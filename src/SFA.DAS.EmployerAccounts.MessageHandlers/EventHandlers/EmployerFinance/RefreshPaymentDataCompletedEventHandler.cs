@@ -1,8 +1,6 @@
-﻿using System.Threading.Tasks;
-using NServiceBus;
-using SFA.DAS.EmployerAccounts.Events.Messages;
+﻿using SFA.DAS.EmployerAccounts.Events.Messages;
+using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.Messaging.Interfaces;
-using RefreshPaymentDataCompletedEvent = SFA.DAS.EmployerFinance.Messages.Events.RefreshPaymentDataCompletedEvent;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.EmployerFinance;
 

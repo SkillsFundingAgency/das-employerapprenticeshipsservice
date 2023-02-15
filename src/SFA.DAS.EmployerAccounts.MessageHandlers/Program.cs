@@ -1,9 +1,5 @@
-﻿using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution;
+﻿using SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution;
 using SFA.DAS.EmployerAccounts.MessageHandlers.Extensions;
-using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers;
 

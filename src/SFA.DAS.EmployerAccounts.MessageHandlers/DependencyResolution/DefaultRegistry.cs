@@ -1,16 +1,13 @@
-﻿using StructureMap;
+﻿namespace SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution;
 
-namespace SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution
+public class DefaultRegistry : Registry
 {
-    public class DefaultRegistry : Registry
+    public DefaultRegistry()
     {
-        public DefaultRegistry()
+        Scan(s =>
         {
-            Scan(s =>
-            {
-                s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS"));
-                s.RegisterConcreteTypesAgainstTheFirstInterface();
-            });
-        }
+            s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS"));
+            s.RegisterConcreteTypesAgainstTheFirstInterface();
+        });
     }
 }

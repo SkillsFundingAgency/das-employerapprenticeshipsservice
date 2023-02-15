@@ -1,8 +1,4 @@
-﻿using System.Data.Common;
-using System.Net;
-using System.Threading.Tasks;
-using NServiceBus;
-using SFA.DAS.EmployerAccounts.Configuration;
+﻿using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Startup;
 using SFA.DAS.NServiceBus.Configuration;
@@ -11,7 +7,6 @@ using SFA.DAS.NServiceBus.Configuration.NLog;
 using SFA.DAS.NServiceBus.Configuration.StructureMap;
 using SFA.DAS.NServiceBus.SqlServer.Configuration;
 using SFA.DAS.UnitOfWork.NServiceBus.Configuration;
-using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.Startup;
 

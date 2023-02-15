@@ -1,7 +1,4 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using NServiceBus;
-using SFA.DAS.Common.Domain.Types;
+﻿using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.AccountLevyStatus;
 using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.EmployerFinance.Messages.Events;
