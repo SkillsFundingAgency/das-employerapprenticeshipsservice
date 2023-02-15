@@ -1,11 +1,7 @@
-﻿using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using SFA.DAS.EmployerAccounts.Jobs.DependencyResolution;
+﻿using SFA.DAS.EmployerAccounts.Jobs.DependencyResolution;
 using SFA.DAS.EmployerAccounts.Jobs.Extensions;
 using SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
 using SFA.DAS.EmployerAccounts.Jobs.StartupJobs;
-using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Jobs;
 

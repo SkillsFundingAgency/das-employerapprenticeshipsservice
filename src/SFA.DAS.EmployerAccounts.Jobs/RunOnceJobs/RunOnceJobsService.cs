@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using SFA.DAS.EmployerAccounts.Data;
+﻿using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Models;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;

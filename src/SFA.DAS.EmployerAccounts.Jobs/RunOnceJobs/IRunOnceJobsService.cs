@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
+﻿namespace SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
 
 public interface IRunOnceJobsService
 {

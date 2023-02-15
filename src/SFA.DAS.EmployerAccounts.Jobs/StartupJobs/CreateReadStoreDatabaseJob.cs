@@ -1,10 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Net;
-using System.Threading.Tasks;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.StartupJobs;

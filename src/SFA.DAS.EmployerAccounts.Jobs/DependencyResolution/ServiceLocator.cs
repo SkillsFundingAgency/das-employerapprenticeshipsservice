@@ -1,6 +1,4 @@
-﻿using StructureMap;
-
-namespace SFA.DAS.EmployerAccounts.Jobs.DependencyResolution;
+﻿namespace SFA.DAS.EmployerAccounts.Jobs.DependencyResolution;
 
 public static class ServiceLocator
 {

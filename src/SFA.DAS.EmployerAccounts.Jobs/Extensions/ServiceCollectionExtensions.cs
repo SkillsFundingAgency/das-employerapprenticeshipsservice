@@ -1,11 +1,5 @@
-﻿using System.Data.Common;
-using Microsoft.Azure.WebJobs.Host.Config;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using NServiceBus;
+﻿using NServiceBus;
 using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
-using SFA.DAS.EmployerAccounts.Jobs.StartupJobs;
 using SFA.DAS.NServiceBus.Configuration;
 using SFA.DAS.NServiceBus.Configuration.AzureServiceBus;
 using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
@@ -13,7 +7,6 @@ using SFA.DAS.NServiceBus.Configuration.NLog;
 using SFA.DAS.NServiceBus.Configuration.StructureMap;
 using SFA.DAS.NServiceBus.Hosting;
 using SFA.DAS.NServiceBus.SqlServer.Configuration;
-using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.Extensions
 {
