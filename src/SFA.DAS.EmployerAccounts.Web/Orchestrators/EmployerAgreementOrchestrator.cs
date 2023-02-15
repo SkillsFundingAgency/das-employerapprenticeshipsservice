@@ -398,7 +398,8 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
 
         try
         {
-            var result = await _mediator.Send(new GetNextUnsignedEmployerAgreementRequest { HashedAccountId = hashedAccountId, ExternalUserId = externalUserId });
+            var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+            var result = await _mediator.Send(new GetNextUnsignedEmployerAgreementRequest { AccountId = accountId, ExternalUserId = externalUserId });
             
             var hashedAgreementId = result.AgreementId.HasValue ? _encodingService.Encode(result.AgreementId.Value, EncodingType.AccountId) : string.Empty;
 

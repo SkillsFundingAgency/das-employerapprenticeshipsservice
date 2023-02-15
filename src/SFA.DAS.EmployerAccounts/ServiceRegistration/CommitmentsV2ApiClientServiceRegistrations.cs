@@ -1,17 +1,15 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SFA.DAS.NLog.Logger.Web.MessageHandlers;
+using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 
 public static class CommitmentsV2ApiClientServiceRegistrations
 {
-    public static IServiceCollection AddCommittmentsV2Client(this IServiceCollection services)
+    public static IServiceCollection AddCommittmentsV2Client(this IServiceCollection services, CommitmentsApiV2ClientConfiguration commitmentsApiV2ClientConfiguration)
     {
-        services.AddSingleton<ICommitmentsV2ApiClient, CommitmentsV2ApiClient>();
+        services.AddSingleton(commitmentsApiV2ClientConfiguration);
 
-        services.AddHttpClient<ICommitmentsV2ApiClient, CommitmentsV2ApiClient>()
-            .AddHttpMessageHandler<RequestIdMessageRequestHandler>()
-            .AddHttpMessageHandler<SessionIdMessageRequestHandler>();
+        services.AddHttpClient<ICommitmentsV2ApiClient, CommitmentsV2ApiClient>();
 
         return services;
     }

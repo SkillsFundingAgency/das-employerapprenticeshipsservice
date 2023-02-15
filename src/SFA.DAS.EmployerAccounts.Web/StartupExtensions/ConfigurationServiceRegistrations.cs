@@ -43,14 +43,11 @@ public static class ConfigurationServiceRegistrations
 
         services.Configure<ITokenServiceApiClientConfiguration>(configuration.GetSection(nameof(TokenServiceApiClientConfiguration)));
 
-        var employerAccountsConfiguration = configuration.GetSection(nameof(EmployerAccountsConfiguration)) as EmployerAccountsConfiguration;
+        var employerAccountsConfiguration = configuration.Get<EmployerAccountsConfiguration>();
 
         services.AddSingleton<IHmrcConfiguration>(_ => employerAccountsConfiguration.Hmrc);
         services.AddSingleton<ITokenServiceApiClientConfiguration>(_ => employerAccountsConfiguration.TokenServiceApi);
         services.AddSingleton<ITaskApiConfiguration>(_ => employerAccountsConfiguration.TasksApi);
-        services.AddSingleton<CommitmentsApiV2ClientConfiguration>(_ => employerAccountsConfiguration.CommitmentsApi);
-        services.AddSingleton<IProviderRegistrationClientApiConfiguration>(_ => employerAccountsConfiguration.ProviderRegistrationsApi);
-        services.AddSingleton<EmployerAccountsOuterApiConfiguration>(_ => employerAccountsConfiguration.EmployerAccountsOuterApiConfiguration);
 
         services.Configure<IEmployerAccountsApiClientConfiguration>(configuration.GetSection(ConfigurationKeys.EmployerAccountsApiClient));
         services.AddSingleton<IEmployerAccountsApiClientConfiguration>(cfg => cfg.GetService<IOptions<EmployerAccountsApiClientConfiguration>>().Value);

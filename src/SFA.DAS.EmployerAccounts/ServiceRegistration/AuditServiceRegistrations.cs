@@ -19,6 +19,7 @@ public static class AuditServiceRegistrations
                });
 
         services.AddSingleton<IAuditMessageFactory, AuditMessageFactory>();
+        services.AddScoped<IAuditService, AuditService>();
 
         return services;
     }

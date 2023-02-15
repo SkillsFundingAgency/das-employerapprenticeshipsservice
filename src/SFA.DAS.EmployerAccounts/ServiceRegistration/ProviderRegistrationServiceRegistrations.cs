@@ -1,25 +1,17 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.NLog.Logger.Web.MessageHandlers;
 
 namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 
 public static class ProviderRegistrationServiceRegistrations
 {
-    public static IServiceCollection AddProviderRegistration(this IServiceCollection services,
-        EmployerAccountsConfiguration employerAccountsConfiguration, IConfiguration configuration)
+    public static IServiceCollection AddProviderRegistration(this IServiceCollection services, EmployerAccountsConfiguration employerAccountsConfiguration)
     {
-        services.AddSingleton(employerAccountsConfiguration.ProviderRegistrationsApi);
-        
-        services.Configure<IProviderRegistrationClientApiConfiguration>(
-            configuration.GetSection(nameof(ProviderRegistrationClientApiConfiguration)));
+        services.AddSingleton<ProviderRegistrationClientApiConfiguration>(employerAccountsConfiguration.ProviderRegistrationsApi);
 
-        services.AddHttpClient<IProviderRegistrationApiClient, ProviderRegistrationApiClient>()
-            .AddHttpMessageHandler<RequestIdMessageRequestHandler>()
-            .AddHttpMessageHandler<SessionIdMessageRequestHandler>();
+        services.AddSingleton<IProviderRegistrationClientApiConfiguration>(_ => employerAccountsConfiguration.ProviderRegistrationsApi);
 
-        services.AddScoped<IProviderRegistrationApiClient, ProviderRegistrationApiClient>();
+        services.AddHttpClient<IProviderRegistrationApiClient, ProviderRegistrationApiClient>();
 
         return services;
     }
