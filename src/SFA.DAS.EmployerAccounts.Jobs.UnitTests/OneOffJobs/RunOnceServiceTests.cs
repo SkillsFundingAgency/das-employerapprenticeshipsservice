@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
     public class RunOnceServiceTestsFixture
     {
         internal Mock<EmployerAccountsDbContext> EmployerAccountsDbContext { get; set; }
-        public Mock<ILogger> Logger { get; set; }
+        public Mock<ILogger<RunOnceJobsService>> Logger { get; set; }
 
         internal RunOnceJobsService RunOnceJobsService { get; set; }
 
@@ -56,7 +56,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
             EmployerAccountsDbContext = new Mock<EmployerAccountsDbContext>();
             EmployerAccountsDbContext.Setup(x => x.RunOnceJobs).Returns(_jobsList.AsQueryable().BuildMockDbSet().Object);
 
-            Logger = new Mock<ILogger>();
+            Logger = new Mock<ILogger<RunOnceJobsService>>();
 
             RunOnceJobsService = new RunOnceJobsService(new Lazy<EmployerAccountsDbContext>(() => EmployerAccountsDbContext.Object), Logger.Object);
         }

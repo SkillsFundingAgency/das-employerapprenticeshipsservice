@@ -15,7 +15,6 @@ using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;
 using SFA.DAS.EmployerAccounts.ReadStore.Models;
-using SFA.DAS.EmployerAccounts.TestCommon;
 using SFA.DAS.EmployerAccounts.TestCommon.DatabaseMock;
 using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.Testing.Builders;
@@ -55,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
         internal Mock<IRunOnceJobsService> RunOnceService { get; set; }
         internal Mock<IAccountUsersRepository> AccountUsersRepository { get; set; }
         internal Mock<EmployerAccountsDbContext> EmployerAccountsDbContext { get; set; }
-        public Mock<ILogger> Logger { get; set; }
+        public Mock<ILogger<SeedAccountUsersJob>> Logger { get; set; }
 
         public ICollection<Membership> Users = new List<Membership>();
 
@@ -89,7 +88,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
             EmployerAccountsDbContext = new Mock<EmployerAccountsDbContext>();
             EmployerAccountsDbContext.Setup(x => x.Memberships).Returns(_usersDbSet);
 
-            Logger = new Mock<ILogger>();
+            Logger = new Mock<ILogger<SeedAccountUsersJob>>();
 
             SeedAccountUsersJob =
                 new SeedAccountUsersJob(RunOnceService.Object, AccountUsersRepository.Object, new Lazy<EmployerAccountsDbContext>(() => EmployerAccountsDbContext.Object), Logger.Object);
