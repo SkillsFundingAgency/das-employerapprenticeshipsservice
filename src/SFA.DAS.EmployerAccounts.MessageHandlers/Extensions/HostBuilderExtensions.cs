@@ -1,6 +1,11 @@
 ﻿using NLog.Extensions.Logging;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.EmployerAccounts.Commands.AcceptInvitation;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
+using SFA.DAS.Messaging.AzureServiceBus;
+using SFA.DAS.Messaging.Interfaces;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.Extensions;
 
@@ -16,6 +21,23 @@ public static class HostBuilderExtensions
         return builder.UseServiceProviderFactory(new StructureMapServiceProviderFactory(registry));
     }
 
+    public static IHostBuilder ConfigureDasServices(this IHostBuilder hostBuilder)
+    {
+        hostBuilder.ConfigureServices((context, services) =>
+        {
+            services.AddMemoryCache();
+            services.AddMediatR(
+                typeof(Program),
+                typeof(UpdateAccountUserCommand),
+                typeof(AcceptInvitationCommand)
+            );
+            services.AddTransient<IMessagePublisher>(x =>
+                new TopicMessagePublisher(context.Configuration["ServiceBusConnectionString"],
+                    new NLogLogger(typeof(TopicMessagePublisher))));
+        });
+
+        return hostBuilder;
+    }
     public static IHostBuilder ConfigureDasLogging(this IHostBuilder hostBuilder)
     {
         hostBuilder.ConfigureLogging((context, loggingBuilder) =>
@@ -34,8 +56,7 @@ public static class HostBuilderExtensions
 
         return hostBuilder;
     }
-
-
+    
     public static IHostBuilder ConfigureDasAppConfiguration(this IHostBuilder hostBuilder, string[] args)
         {
             return hostBuilder.ConfigureAppConfiguration((context, builder) =>
