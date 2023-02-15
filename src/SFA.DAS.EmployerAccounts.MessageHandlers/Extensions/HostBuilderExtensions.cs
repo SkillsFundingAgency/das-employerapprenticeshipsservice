@@ -20,6 +20,8 @@ public static class HostBuilderExtensions
     {
         hostBuilder.ConfigureLogging((context, loggingBuilder) =>
         {
+            loggingBuilder.AddConsole(x => { });
+
             var appInsightsKey = context.Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"];
             if (!string.IsNullOrEmpty(appInsightsKey))
             {
