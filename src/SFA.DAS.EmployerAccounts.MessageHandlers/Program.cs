@@ -1,5 +1,7 @@
-﻿using SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution;
+﻿using SFA.DAS.EmployerAccounts.Commands.AcceptInvitation;
+using SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution;
 using SFA.DAS.EmployerAccounts.MessageHandlers.Extensions;
+using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
 using SFA.DAS.EmployerAccounts.Startup;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers;
@@ -25,7 +27,15 @@ public class Program
              .ConfigureDasAppConfiguration(args)
              .UseConsoleLifetime()
              .ConfigureDasLogging()
-             .ConfigureServices(services => services.AddMemoryCache())
+             .ConfigureServices(services =>
+             {
+                 services.AddMemoryCache();
+                 services.AddMediatR(
+                     typeof(Program), 
+                     typeof(UpdateAccountUserCommand),
+                     typeof(AcceptInvitationCommand)
+                     );
+             })
              .UseStructureMap()
              .ConfigureContainer<Registry>(IoC.Initialize);
 

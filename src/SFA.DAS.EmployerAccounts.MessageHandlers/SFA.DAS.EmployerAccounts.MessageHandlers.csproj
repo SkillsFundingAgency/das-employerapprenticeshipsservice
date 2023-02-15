@@ -9,11 +9,13 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="FluentAssertions" Version="6.9.0" />
+		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
 		<PackageReference Include="Microsoft.Azure.WebJobs.Logging.ApplicationInsights" Version="3.0.33" />
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
 		<PackageReference Include="NLog.Extensions.Logging" Version="5.2.1" />
 		<PackageReference Include="SFA.DAS.Logging" Version="1.1.2" />
+		<PackageReference Include="SFA.DAS.Messaging.AzureServiceBus" Version="3.1.133" />
 		<PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.EntityFrameworkCore" Version="9.0.28" />
 		<PackageReference Include="StructureMap.Microsoft.DependencyInjection" Version="2.0.0" />

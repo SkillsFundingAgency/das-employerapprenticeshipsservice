@@ -16,7 +16,6 @@ public static class IoC
         registry.IncludeRegistry<ExecutionPoliciesRegistry>();
         registry.IncludeRegistry<LoggerRegistry>();
         registry.IncludeRegistry<MapperRegistry>();
-        registry.IncludeRegistry<MediatorRegistry>();
         registry.IncludeRegistry<MessagePublisherRegistry>();
         registry.IncludeRegistry<NotificationsRegistry>();
         registry.IncludeRegistry<NServiceBusUnitOfWorkRegistry>();

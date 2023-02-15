@@ -6,7 +6,8 @@ public class DefaultRegistry : Registry
     {
         Scan(s =>
         {
-            s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS"));
+            s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS.Messaging"));
+            s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS.EmployerAccounts"));
             s.RegisterConcreteTypesAgainstTheFirstInterface();
         });
     }
