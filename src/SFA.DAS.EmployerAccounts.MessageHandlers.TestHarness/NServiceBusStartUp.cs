@@ -1,6 +1,7 @@
 ﻿using System.Data.Common;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.VisualBasic;
 using NServiceBus;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
@@ -13,42 +14,41 @@ using StructureMap;
 using SFA.DAS.NServiceBus.Configuration;
 using SFA.DAS.UnitOfWork.NServiceBus.Configuration;
 
-namespace SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness
+namespace SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness;
+
+public class NServiceBusStartup //: IStartup
 {
-    public class NServiceBusStartup //: IStartup
+    private readonly IContainer _container;
+    private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
+    private IEndpointInstance _endpoint;
+
+    public NServiceBusStartup(IContainer container, EmployerAccountsConfiguration employerAccountsConfiguration)
     {
-        private readonly IContainer _container;
-        private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
-        private IEndpointInstance _endpoint;
+        _container = container;
+        _employerAccountsConfiguration = employerAccountsConfiguration;
+    }
 
-        public NServiceBusStartup(IContainer container, EmployerAccountsConfiguration employerAccountsConfiguration)
-        {
-            _container = container;
-            _employerAccountsConfiguration = employerAccountsConfiguration;
-        }
+    public async Task StartAsync()
+    {
+        var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.MessageHandlers")
+            .UseAzureServiceBusTransport(() => _employerAccountsConfiguration.ServiceBusConnectionString, _container)
+            .UseErrorQueue("SFA.DAS.EmployerAccounts.MessageHandlers-errors")
+            .UseInstallers()
+            .UseLicense(WebUtility.HtmlDecode(_employerAccountsConfiguration.NServiceBusLicense))
+            .UseSqlServerPersistence(() => _container.GetInstance<DbConnection>())
+            .UseNewtonsoftJsonSerializer()
+            .UseNLogFactory()
+            .UseOutbox()
+            .UseStructureMapBuilder(_container)
+            .UseUnitOfWork();
 
-        public async Task StartAsync()
-        {
-            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.MessageHandlers")
-                .UseAzureServiceBusTransport(() => _employerAccountsConfiguration.ServiceBusConnectionString, _container)
-                .UseErrorQueue("SFA.DAS.EmployerAccounts.MessageHandlers-errors")
-                .UseInstallers()
-                .UseLicense(WebUtility.HtmlDecode(_employerAccountsConfiguration.NServiceBusLicense))
-                .UseSqlServerPersistence(() => _container.GetInstance<DbConnection>())
-                .UseNewtonsoftJsonSerializer()
-                .UseNLogFactory()
-                .UseOutbox()
-                .UseStructureMapBuilder(_container)
-                .UseUnitOfWork();
+        _endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
-            _endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
+        _container.Configure(c => c.For<IMessageSession>().Use(_endpoint));
+    }
 
-            _container.Configure(c => c.For<IMessageSession>().Use(_endpoint));
-        }
-
-        public Task StopAsync()
-        {
-            return _endpoint.Stop();
-        }
+    public Task StopAsync()
+    {
+        return _endpoint.Stop();
     }
 }
