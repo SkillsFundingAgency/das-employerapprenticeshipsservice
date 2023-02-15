@@ -11,7 +11,7 @@ public class Program
         using var host = CreateHost(args);
 
         var startup = host.Services.GetService<IStartup>();
-        
+
         await startup.StartAsync();
 
         await host.RunAsync();
@@ -25,7 +25,7 @@ public class Program
              .ConfigureDasAppConfiguration(args)
              .UseConsoleLifetime()
              .ConfigureDasLogging()
-             .ConfigureServices((context, services) =>  services.AddMemoryCache())
+             .ConfigureServices(services => services.AddMemoryCache())
              .UseStructureMap()
              .ConfigureContainer<Registry>(IoC.Initialize);
 

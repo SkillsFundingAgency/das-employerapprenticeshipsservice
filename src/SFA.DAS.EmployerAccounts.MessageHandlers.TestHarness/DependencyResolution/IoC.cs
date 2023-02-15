@@ -1,7 +1,4 @@
-﻿using Microsoft.Win32;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.DependencyResolution;
-using SFA.DAS.UnitOfWork.EntityFrameworkCore.DependencyResolution.StructureMap;
+﻿using SFA.DAS.EmployerAccounts.DependencyResolution;
 using SFA.DAS.UnitOfWork.NServiceBus.DependencyResolution.StructureMap;
 using StructureMap;
 
@@ -17,15 +14,8 @@ public static class IoC
             c.AddRegistry<DataRegistry>();
             c.AddRegistry<StartupRegistry>();
             c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
-
-            //c.AddRegistry<CachesRegistry>();
-            //c.AddRegistry<ConfigurationRegistry>();
-            //c.AddRegistry<DataRegistry>();
-            //c.AddRegistry<EntityFrameworkCoreUnitOfWorkRegistry<EmployerAccountsDbContext>>();
             c.AddRegistry<EventsRegistry>();
             c.AddRegistry<ExecutionPoliciesRegistry>();
-            //c.AddRegistry<LoggerRegistry>();
-            //c.AddRegistry<MapperRegistry>();
             c.AddRegistry<MediatorRegistry>();
             c.AddRegistry<MessagePublisherRegistry>();
             c.AddRegistry<NotificationsRegistry>();
