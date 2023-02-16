@@ -10,6 +10,7 @@ using SFA.DAS.EmployerUsers.WebClientComponents;
 using System;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
+using Microsoft.AspNetCore.Http;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AuditApiClientForSupportUser
 {
@@ -19,7 +20,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AuditApiClientForSupportUs
         private AuditMessage _auditMessage;
         private string SupportConsoleUsers = "Tier1User,Tier2User";
         private Mock<IAuditApiClient> _mockInnerClient;
-        private Mock<IAuthenticationService> _mockAuthenticationService;
+        private Mock<IHttpContextAccessor> _httpContextAccessorMock;
         private EmployerAccountsConfiguration _config;
         private IUserContext _userContext;
 
@@ -36,8 +37,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AuditApiClientForSupportUs
             {
                 SupportConsoleUsers = SupportConsoleUsers
             };
-            _mockAuthenticationService = new Mock<IAuthenticationService>();
-            _userContext = new UserContext(_mockAuthenticationService.Object, _config);
+            _httpContextAccessorMock = new Mock<IHttpContextAccessor>();
+            _userContext = new UserContext(_httpContextAccessorMock.Object, _config);
             _impersonatedUser = Guid.NewGuid().ToString();
             _impersonatedUserEmail = $"{Guid.NewGuid().ToString()}@test.co.uk";
             _supportUserUpn = Guid.NewGuid().ToString();
@@ -49,20 +50,20 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AuditApiClientForSupportUs
             _mockInnerClient = new Mock<IAuditApiClient>();
             
             
-            _mockAuthenticationService
-                .Setup(m => m.GetClaimValue(DasClaimTypes.Id))
+            _httpContextAccessorMock
+                .Setup(m => m.HttpContext.User.FindFirstValue(DasClaimTypes.Id))
                 .Returns(_impersonatedUser);
 
-            _mockAuthenticationService
-                .Setup(m => m.GetClaimValue(DasClaimTypes.Email))
+            _httpContextAccessorMock
+                .Setup(m => m.HttpContext.User.FindFirstValue(DasClaimTypes.Email))
                 .Returns(_impersonatedUserEmail);
 
-            _mockAuthenticationService
-                .Setup(m => m.GetClaimValue(ClaimTypes.Upn))
+            _httpContextAccessorMock
+                .Setup(m => m.HttpContext.User.FindFirstValue(ClaimTypes.Upn))
                 .Returns(_supportUserUpn);
 
-            _mockAuthenticationService
-                .Setup(m => m.GetClaimValue(ClaimTypes.Email))
+            _httpContextAccessorMock
+                .Setup(m => m.HttpContext.User.FindFirstValue(ClaimTypes.Email))
                 .Returns(_supportUserEmail);
 
             _sut = new EmployerAccounts.Services.AuditApiClientForSupportUser(_mockInnerClient.Object, _userContext);
@@ -79,7 +80,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AuditApiClientForSupportUs
             await _sut.Audit(_auditMessage);
 
             // assert
-            _mockAuthenticationService.Verify(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role), Times.Once);
+            _httpContextAccessorMock.Verify(m => m.HttpContext.User.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role), Times.Once);
         }
 
         [Test]
@@ -105,8 +106,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AuditApiClientForSupportUs
         public async Task ThenTheInnerClientIsCalledWithModifiedFieldsForASupportUser(string role)
         {
             // arrange
-            _mockAuthenticationService
-                .Setup(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role))
+            _httpContextAccessorMock
+                .Setup(m => m.HttpContext.User.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role))
                 .Returns(true);
 
             // act
