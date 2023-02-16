@@ -1,21 +1,21 @@
 ﻿using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.EmployerAccounts.Messages.Events;
-using SFA.DAS.Messaging.Interfaces;
+using SFA.DAS.NServiceBus.Services;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers;
 
 public class AddedLegalEntityEventHandler : IHandleMessages<AddedLegalEntityEvent>
 {
-    private readonly IMessagePublisher _messagePublisher;
+    private readonly IEventPublisher _messagePublisher;
 
-    public AddedLegalEntityEventHandler(IMessagePublisher messagePublisher)
+    public AddedLegalEntityEventHandler(IEventPublisher messagePublisher)
     {
         _messagePublisher = messagePublisher;
     }
 
     public async Task Handle(AddedLegalEntityEvent message, IMessageHandlerContext context)
     {
-        await _messagePublisher.PublishAsync(
+        await _messagePublisher.Publish(
             new LegalEntityAddedMessage(
                 message.AccountId,
                 message.AgreementId,

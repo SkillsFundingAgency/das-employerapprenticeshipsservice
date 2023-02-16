@@ -2,16 +2,16 @@
 using SFA.DAS.EmployerAccounts.Commands.AccountLevyStatus;
 using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.EmployerFinance.Messages.Events;
-using SFA.DAS.Messaging.Interfaces;
+using SFA.DAS.NServiceBus.Services;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.EmployerFinance;
 
 public class RefreshEmployerLevyDataCompletedEventHandler : IHandleMessages<RefreshEmployerLevyDataCompletedEvent>
 {
-    private readonly IMessagePublisher _messagePublisher;
+    private readonly IEventPublisher _messagePublisher;
     private readonly IMediator _mediator;
 
-    public RefreshEmployerLevyDataCompletedEventHandler(IMessagePublisher messagePublisher, IMediator mediator)
+    public RefreshEmployerLevyDataCompletedEventHandler(IEventPublisher messagePublisher, IMediator mediator)
     {
         _messagePublisher = messagePublisher;
         _mediator = mediator;
@@ -19,7 +19,7 @@ public class RefreshEmployerLevyDataCompletedEventHandler : IHandleMessages<Refr
 
     public async Task Handle(RefreshEmployerLevyDataCompletedEvent message, IMessageHandlerContext context)
     {
-        await _messagePublisher.PublishAsync(new RefreshEmployerLevyDataCompletedMessage(
+        await _messagePublisher.Publish(new RefreshEmployerLevyDataCompletedMessage(
             message.AccountId,
             message.LevyImported,
             message.PeriodMonth,

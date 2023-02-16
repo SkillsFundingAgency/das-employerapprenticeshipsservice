@@ -1,20 +1,20 @@
 ﻿using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.EmployerAccounts.Messages.Events;
-using SFA.DAS.Messaging.Interfaces;
+using SFA.DAS.NServiceBus.Services;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers;
 
 public class CreatedAgreementEventHandler : IHandleMessages<CreatedAgreementEvent>
 {
-    private readonly IMessagePublisher _messagePublisher;
+    private readonly IEventPublisher _messagePublisher;
 
-    public CreatedAgreementEventHandler(IMessagePublisher messagePublisher)
+    public CreatedAgreementEventHandler(IEventPublisher messagePublisher)
     {
         _messagePublisher = messagePublisher;
     }
     public async Task Handle(CreatedAgreementEvent message, IMessageHandlerContext context)
     {
-        await _messagePublisher.PublishAsync(new AgreementCreatedMessage(
+        await _messagePublisher.Publish(new AgreementCreatedMessage(
             message.AccountId,
             message.AgreementId,
             message.OrganisationName,

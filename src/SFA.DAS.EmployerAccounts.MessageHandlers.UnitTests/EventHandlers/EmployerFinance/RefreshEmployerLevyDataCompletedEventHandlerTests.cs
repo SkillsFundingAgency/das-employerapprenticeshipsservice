@@ -9,7 +9,7 @@ using SFA.DAS.EmployerAccounts.Commands.AccountLevyStatus;
 using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.EmployerFinance;
 using SFA.DAS.EmployerFinance.Messages.Events;
-using SFA.DAS.Messaging.Interfaces;
+using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.Testing;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.EmployerFinance
@@ -70,15 +70,15 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Emplo
     public class RefreshEmployerLevyDataCompletedEventHandlerTestsFixture
     {
         private readonly RefreshEmployerLevyDataCompletedEventHandler _handler;
-        private readonly Mock<IMessagePublisher> _mockMessagePublisher;
+        private readonly Mock<IEventPublisher> _mockEventPublisher;
         private readonly Mock<IMediator> _mediator;
 
         public RefreshEmployerLevyDataCompletedEventHandlerTestsFixture()
         {
-            _mockMessagePublisher = new Mock<IMessagePublisher>();
+            _mockEventPublisher = new Mock<IEventPublisher>();
             _mediator = new Mock<IMediator>();
 
-            _handler = new RefreshEmployerLevyDataCompletedEventHandler(_mockMessagePublisher.Object, _mediator.Object);
+            _handler = new RefreshEmployerLevyDataCompletedEventHandler(_mockEventPublisher.Object, _mediator.Object);
         }
 
         public Task Handle(RefreshEmployerLevyDataCompletedEvent refreshEmployerLevyDataCompletedEvent)
@@ -88,8 +88,8 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Emplo
 
         public void VerifyRefreshEmployerLevyDataCompletedMessageIsPublished(long accountId, bool levyImported, short periodMonth, string periodYear, DateTime timestamp)
         {
-            _mockMessagePublisher.Verify(e =>
-                e.PublishAsync(It.Is<RefreshEmployerLevyDataCompletedMessage>(m =>
+            _mockEventPublisher.Verify(e =>
+                e.Publish(It.Is<RefreshEmployerLevyDataCompletedMessage>(m =>
                     m.AccountId.Equals(accountId)
                     && m.LevyImported.Equals(levyImported)
                     && m.PeriodMonth.Equals(periodMonth)

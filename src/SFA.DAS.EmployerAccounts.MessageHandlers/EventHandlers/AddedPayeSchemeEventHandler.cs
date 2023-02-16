@@ -1,21 +1,21 @@
 ﻿using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.EmployerAccounts.Messages.Events;
-using SFA.DAS.Messaging.Interfaces;
+using SFA.DAS.NServiceBus.Services;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers;
 
 public class AddedPayeSchemeEventHandler : IHandleMessages<AddedPayeSchemeEvent>
 {
-    private readonly IMessagePublisher _messagePublisher;
+    private readonly IEventPublisher _messagePublisher;
 
-    public AddedPayeSchemeEventHandler(IMessagePublisher messagePublisher)
+    public AddedPayeSchemeEventHandler(IEventPublisher messagePublisher)
     {
         _messagePublisher = messagePublisher;
     }
 
     public async Task Handle(AddedPayeSchemeEvent message, IMessageHandlerContext context)
     {
-        await _messagePublisher.PublishAsync(
+        await _messagePublisher.Publish(
             new PayeSchemeAddedMessage(
                 message.PayeRef,
                 message.AccountId,

@@ -41,6 +41,7 @@
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
     <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.2.37" />
     <PackageReference Include="SFA.DAS.Notifications.Messages" Version="3.0.0" />
+    <PackageReference Include="SFA.DAS.NServiceBus" Version="16.0.21" />
     <PackageReference Include="SFA.DAS.ReferenceData.Api.Client" Version="1.1.90" />
     <PackageReference Include="SFA.DAS.ReferenceData.Types" Version="1.1.90" />
     <PackageReference Include="SFA.DAS.TimeProvider" version="1.0.0.3956" />

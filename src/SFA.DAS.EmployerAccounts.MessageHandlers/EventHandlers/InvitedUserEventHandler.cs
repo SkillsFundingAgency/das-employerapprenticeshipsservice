@@ -1,21 +1,21 @@
 ﻿using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.EmployerAccounts.Messages.Events;
-using SFA.DAS.Messaging.Interfaces;
+using SFA.DAS.NServiceBus.Services;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers;
 
 public class InvitedUserEventHandler : IHandleMessages<InvitedUserEvent>
 {
-    private readonly IMessagePublisher _messagePublisher;
+    private readonly IEventPublisher _messagePublisher;
 
-    public InvitedUserEventHandler(IMessagePublisher messagePublisher)
+    public InvitedUserEventHandler(IEventPublisher messagePublisher)
     {
         _messagePublisher = messagePublisher;
     }
 
     public async Task Handle(InvitedUserEvent message, IMessageHandlerContext context)
     {
-        await _messagePublisher.PublishAsync(
+        await _messagePublisher.Publish(
             new UserInvitedMessage(
                 message.PersonInvited,
                 message.AccountId,

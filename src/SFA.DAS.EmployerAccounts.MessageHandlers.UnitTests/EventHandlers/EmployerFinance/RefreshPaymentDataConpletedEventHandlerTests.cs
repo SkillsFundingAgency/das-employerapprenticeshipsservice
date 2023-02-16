@@ -6,6 +6,7 @@ using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.EmployerFinance;
 using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.Messaging.Interfaces;
+using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.Testing;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.EmployerFinance
@@ -39,13 +40,13 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Emplo
     public class RefreshPaymentDataConpletedEventHandlerTestsFixture
     {
         private readonly RefreshPaymentDataCompletedEventHandler _handler;
-        private readonly Mock<IMessagePublisher> _mockMessagePublisher;
+        private readonly Mock<IEventPublisher> _mockEventPublisher;
 
         public RefreshPaymentDataConpletedEventHandlerTestsFixture()
         {
-            _mockMessagePublisher = new Mock<IMessagePublisher>();
+            _mockEventPublisher = new Mock<IEventPublisher>();
 
-            _handler = new RefreshPaymentDataCompletedEventHandler(_mockMessagePublisher.Object);
+            _handler = new RefreshPaymentDataCompletedEventHandler(_mockEventPublisher.Object);
         }
 
         public Task Handle(RefreshPaymentDataCompletedEvent refreshEmployerLevyDataCompletedEvent)
@@ -55,8 +56,8 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Emplo
 
         public void VerifyRefreshPaymentDataCompletedMessageIsPublished(long accountId, bool paymentsProcessed, string payrollPeriod, DateTime timestamp)
         {
-            _mockMessagePublisher.Verify(e =>
-                e.PublishAsync(It.Is<RefreshPaymentDataCompletedMessage>(m =>
+            _mockEventPublisher.Verify(e =>
+                e.Publish(It.Is<RefreshPaymentDataCompletedMessage>(m =>
                     m.AccountId.Equals(accountId)
                     && m.PaymentsProcessed.Equals(paymentsProcessed)
                     && m.PayrollPeriod.Equals(payrollPeriod)

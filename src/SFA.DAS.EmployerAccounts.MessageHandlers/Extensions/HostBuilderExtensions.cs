@@ -5,7 +5,6 @@ using SFA.DAS.EmployerAccounts.Commands.AcceptInvitation;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.MessageHandlers.Startup;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
-using SFA.DAS.Messaging.AzureServiceBus;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.NLog.Logger;
 
@@ -35,14 +34,13 @@ public static class HostBuilderExtensions
     {
         hostBuilder.ConfigureServices((context,services) =>
         {
+            services.AddNServiceBus();
             services.AddMemoryCache();
             services.AddMediatR(
                 typeof(Program),
                 typeof(UpdateAccountUserCommand),
                 typeof(AcceptInvitationCommand)
             );
-            services.AddTransient<NServiceBusStartup>();
-            services.AddTransient<IMessagePublisher>(_ => new TopicMessagePublisher(context.Configuration["ServiceBusConnectionString"], new NLogLogger(typeof(TopicMessagePublisher))));
         });
 
         return hostBuilder;
