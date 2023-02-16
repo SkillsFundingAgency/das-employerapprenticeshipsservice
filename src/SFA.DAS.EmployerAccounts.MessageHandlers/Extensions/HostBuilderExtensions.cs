@@ -1,7 +1,9 @@
 ﻿using NLog.Extensions.Logging;
+using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerAccounts.Commands.AcceptInvitation;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.MessageHandlers.Startup;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
 using SFA.DAS.Messaging.AzureServiceBus;
 using SFA.DAS.Messaging.Interfaces;
@@ -21,9 +23,17 @@ public static class HostBuilderExtensions
         return builder.UseServiceProviderFactory(new StructureMapServiceProviderFactory(registry));
     }
 
+    public static IHostBuilder UseDasEnvironment(this IHostBuilder hostBuilder)
+    {
+        var environmentName = Environment.GetEnvironmentVariable(EnvironmentVariableNames.EnvironmentName);
+        var mappedEnvironmentName = DasEnvironmentName.Map[environmentName];
+
+        return hostBuilder.UseEnvironment(mappedEnvironmentName);
+    }
+
     public static IHostBuilder ConfigureDasServices(this IHostBuilder hostBuilder)
     {
-        hostBuilder.ConfigureServices((context, services) =>
+        hostBuilder.ConfigureServices((context,services) =>
         {
             services.AddMemoryCache();
             services.AddMediatR(
@@ -31,9 +41,8 @@ public static class HostBuilderExtensions
                 typeof(UpdateAccountUserCommand),
                 typeof(AcceptInvitationCommand)
             );
-            services.AddTransient<IMessagePublisher>(x =>
-                new TopicMessagePublisher(context.Configuration["ServiceBusConnectionString"],
-                    new NLogLogger(typeof(TopicMessagePublisher))));
+            services.AddTransient<NServiceBusStartup>();
+            services.AddTransient<IMessagePublisher>(_ => new TopicMessagePublisher(context.Configuration["ServiceBusConnectionString"], new NLogLogger(typeof(TopicMessagePublisher))));
         });
 
         return hostBuilder;
@@ -56,16 +65,16 @@ public static class HostBuilderExtensions
 
         return hostBuilder;
     }
-    
+
     public static IHostBuilder ConfigureDasAppConfiguration(this IHostBuilder hostBuilder, string[] args)
+    {
+        return hostBuilder.ConfigureAppConfiguration((context, builder) =>
         {
-            return hostBuilder.ConfigureAppConfiguration((context, builder) =>
-            {
-                builder.AddAzureTableStorage(ConfigurationKeys.EmployerAccounts)
-                    .AddJsonFile("appsettings.json", true, true)
-                    .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", true, true)
-                    .AddEnvironmentVariables()
-                    .AddCommandLine(args); ;
-            });
-        }
+            builder.AddAzureTableStorage(ConfigurationKeys.EmployerAccounts)
+                .AddJsonFile("appsettings.json", true, true)
+                .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", true, true)
+                .AddEnvironmentVariables()
+                .AddCommandLine(args); ;
+        });
     }
+}

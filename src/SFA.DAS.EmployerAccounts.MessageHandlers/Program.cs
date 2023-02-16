@@ -1,11 +1,6 @@
-﻿using SFA.DAS.EmployerAccounts.Commands.AcceptInvitation;
-using SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution;
+﻿using SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution;
 using SFA.DAS.EmployerAccounts.MessageHandlers.Extensions;
-using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
-using SFA.DAS.EmployerAccounts.Startup;
-using SFA.DAS.Messaging.AzureServiceBus;
-using SFA.DAS.Messaging.Interfaces;
-using SFA.DAS.NLog.Logger;
+using SFA.DAS.EmployerAccounts.MessageHandlers.Startup;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers;
 
@@ -15,24 +10,26 @@ public class Program
     {
         using var host = CreateHost(args);
 
-        var startup = host.Services.GetService<IStartup>();
-
+        var startup = host.Services.GetService<NServiceBusStartup>();
+        
         await startup.StartAsync();
 
         await host.RunAsync();
 
         await startup.StopAsync();
-        }
+    }
 
     private static IHost CreateHost(string[] args)
     {
         var builder = new HostBuilder()
-             .ConfigureDasAppConfiguration(args)
-             .UseConsoleLifetime()
-             .ConfigureDasLogging()
-             .ConfigureDasServices()
-             .UseStructureMap()
-             .ConfigureContainer<Registry>(IoC.Initialize);
+            .UseDasEnvironment()
+            .ConfigureDasAppConfiguration(args)
+            .ConfigureContainer<Registry>(IoC.Initialize)
+            .UseConsoleLifetime()
+            .ConfigureDasLogging()
+            .ConfigureDasServices()
+            .UseStructureMap();
+             
 
         return builder.Build();
     }

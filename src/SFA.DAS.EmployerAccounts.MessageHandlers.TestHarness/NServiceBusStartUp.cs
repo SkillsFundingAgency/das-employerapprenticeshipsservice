@@ -14,11 +14,13 @@ using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness;
 
-public class NServiceBusStartup //: IStartup
+public class NServiceBusStartup
 {
     private readonly IContainer _container;
     private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
     private IEndpointInstance _endpoint;
+
+    private const string EndpointName = "SFA.DAS.EmployerAccounts.MessageHandlers";
 
     public NServiceBusStartup(IContainer container, EmployerAccountsConfiguration employerAccountsConfiguration)
     {
@@ -28,19 +30,19 @@ public class NServiceBusStartup //: IStartup
 
     public async Task StartAsync()
     {
-        var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.MessageHandlers")
-            .UseAzureServiceBusTransport(() => _employerAccountsConfiguration.ServiceBusConnectionString, _container)
-            .UseErrorQueue("SFA.DAS.EmployerAccounts.MessageHandlers-errors")
+        var endpointConfiguration = new EndpointConfiguration(EndpointName)
+            .UseErrorQueue($"{EndpointName}-errors")
             .UseInstallers()
             .UseLicense(WebUtility.HtmlDecode(_employerAccountsConfiguration.NServiceBusLicense))
-            .UseSqlServerPersistence(() => _container.GetInstance<DbConnection>())
+            .UseSqlServerPersistence(_container.GetInstance<DbConnection>)
             .UseNewtonsoftJsonSerializer()
             .UseNLogFactory()
             .UseOutbox()
             .UseStructureMapBuilder(_container)
-            .UseUnitOfWork();
+            .UseUnitOfWork()
+            .UseAzureServiceBusTransport(() => _employerAccountsConfiguration.ServiceBusConnectionString, _container);
 
-        _endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
+        _endpoint = await Endpoint.Start(endpointConfiguration);
 
         _container.Configure(c => c.For<IMessageSession>().Use(_endpoint));
     }
