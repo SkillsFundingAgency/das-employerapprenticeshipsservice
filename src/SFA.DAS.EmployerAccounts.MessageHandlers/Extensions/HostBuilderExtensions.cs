@@ -5,8 +5,7 @@ using SFA.DAS.EmployerAccounts.Commands.AcceptInvitation;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.MessageHandlers.Startup;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
-using SFA.DAS.Messaging.Interfaces;
-using SFA.DAS.NLog.Logger;
+using SFA.DAS.EmployerAccounts.ServiceRegistration;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.Extensions;
 
@@ -36,6 +35,7 @@ public static class HostBuilderExtensions
         {
             services.AddNServiceBus();
             services.AddMemoryCache();
+            services.AddCachesRegistrations();
             services.AddMediatR(
                 typeof(Program),
                 typeof(UpdateAccountUserCommand),

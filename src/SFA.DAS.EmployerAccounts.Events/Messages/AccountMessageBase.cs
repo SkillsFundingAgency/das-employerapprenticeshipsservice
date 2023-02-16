@@ -1,11 +1,12 @@
 ﻿using System;
+using NServiceBus;
 
 namespace SFA.DAS.EmployerAccounts.Events.Messages;
 
 [Serializable]
-public abstract class AccountMessageBase
+public abstract class AccountMessageBase : IEvent
 {
-    //We have protected setters to support json serialsation due to the empty constructor
+    //We have protected setters to support json serialization due to the empty constructor
     public long AccountId { get; protected set; }
     public DateTime CreatedAt { get; protected set; }
     public string CreatorName { get; protected set; }

@@ -21,8 +21,7 @@ public class Program
             .UseConsoleLifetime()
             .ConfigureDasLogging()
             .ConfigureDasServices()
-            .UseStructureMap()
-            ;
+            .UseStructureMap();
         
         
         return builder.Build();

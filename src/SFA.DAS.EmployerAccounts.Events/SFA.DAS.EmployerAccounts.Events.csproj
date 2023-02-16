@@ -5,6 +5,7 @@
     <Description>Events raised by SFA.DAS.EmployerAccounts</Description>
     <PackageLicense>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice/blob/master/LICENSE</PackageLicense>
     <PackageProjectUrl>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice</PackageProjectUrl>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   
   <ItemGroup>
