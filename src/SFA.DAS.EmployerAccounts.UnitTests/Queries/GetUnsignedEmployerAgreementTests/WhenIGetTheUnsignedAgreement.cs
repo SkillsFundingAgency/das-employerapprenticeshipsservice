@@ -10,7 +10,6 @@ using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetNextUnsignedEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
 using SFA.DAS.EmployerAccounts.TestCommon.DatabaseMock;
-using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUnsignedEmployerAgreementTests;
 
@@ -61,10 +60,10 @@ public class WhenIGetTheUnsignedAgreement
     [Test]
     public async Task ThenTheAgreementIdIsReturned()
     {
-        var accountId = 1234;
-        var agreementId = 324345;
+        const int accountId = 1234;
+        const int agreementId = 324345;
 
-        var request = new GetNextUnsignedEmployerAgreementRequest { AccountId = 1231 };
+        var request = new GetNextUnsignedEmployerAgreementRequest { AccountId = accountId };
 
         _accountLegalEntity.AccountId = accountId;
         _accountLegalEntity.PendingAgreementId = agreementId;
@@ -77,7 +76,7 @@ public class WhenIGetTheUnsignedAgreement
     [Test]
     public async Task WhenThereIsNoPendingAgreementThenNullIsReturned()
     {
-        var accountId = 1234;
+        const int accountId = 1234;
 
         var request = new GetNextUnsignedEmployerAgreementRequest { AccountId = 1231 };
 
