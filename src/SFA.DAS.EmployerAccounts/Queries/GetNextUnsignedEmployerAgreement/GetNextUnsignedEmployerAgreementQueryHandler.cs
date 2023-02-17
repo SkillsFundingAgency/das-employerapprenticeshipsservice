@@ -1,16 +1,17 @@
 ﻿using System.Threading;
 using Microsoft.EntityFrameworkCore;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetNextUnsignedEmployerAgreement;
 
 public class GetNextUnsignedEmployerAgreementQueryHandler : IRequestHandler<GetNextUnsignedEmployerAgreementRequest, GetNextUnsignedEmployerAgreementResponse>
 {
-    private readonly Lazy<EmployerAccountsDbContext> _db;
+    private readonly IEmployerAccountsDbContext _db;
     private readonly IValidator<GetNextUnsignedEmployerAgreementRequest> _validator;
 
     public GetNextUnsignedEmployerAgreementQueryHandler(
-        Lazy<EmployerAccountsDbContext> db,
+        IEmployerAccountsDbContext db,
         IValidator<GetNextUnsignedEmployerAgreementRequest> validator
     )
     {
@@ -32,7 +33,7 @@ public class GetNextUnsignedEmployerAgreementQueryHandler : IRequestHandler<GetN
             throw new UnauthorizedAccessException();
         }
 
-        var pendingAgreementId = await _db.Value.AccountLegalEntities
+        var pendingAgreementId = await _db.AccountLegalEntities
             .Where(x => x.AccountId == message.AccountId && x.PendingAgreementId != null)
             .Select(x => x.PendingAgreementId)
             .FirstOrDefaultAsync(cancellationToken);

@@ -30,6 +30,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Extensions.AuthenticationServiceExt
         [TestCase("Tier2User")]
         public void ThenTheAuthenticationServiceIsCalled(string role)
         {
+            //Arrange
+            _httpContextAccessorMock.Setup(m => m.HttpContext.User.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role)).Returns(true);
+
             //Act
             _userContext.IsSupportConsoleUser();
 
