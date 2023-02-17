@@ -133,6 +133,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
             await AddPayeToExistingAccount(model);
 
             var agreementId = await AddLegalEntityToExistingAccount(model);
+            var hashedAgreementId = _encodingService.Encode(agreementId, EncodingType.AccountId);
 
             await UpdateAccountNameToLegalEntityName(model);
 
@@ -143,6 +144,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
                     EmployerAgreement = new EmployerAgreementView
                     {
                         HashedAccountId = model.HashedAccountId.Value,
+                        HashedAgreementId = hashedAgreementId,
                         Id = agreementId
                     }
                 },

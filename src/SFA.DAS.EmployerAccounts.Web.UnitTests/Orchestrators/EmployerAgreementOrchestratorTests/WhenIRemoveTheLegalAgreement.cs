@@ -10,6 +10,7 @@ public class WhenIRemoveTheLegalAgreement
 {
     private Mock<IMediator> _mediator;
     private Mock<IReferenceDataService> _referenceDataService;
+    private Mock<IEncodingService> _encodingServiceMock;
     private EmployerAgreementOrchestrator _orchestrator;
 
     private const long ExpectedAccountId = 456;
@@ -25,7 +26,9 @@ public class WhenIRemoveTheLegalAgreement
             
         _referenceDataService = new Mock<IReferenceDataService>();
 
-        _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, Mock.Of<IMapper>(), _referenceDataService.Object, Mock.Of<IEncodingService>());
+        _encodingServiceMock = new Mock<IEncodingService>();
+
+        _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, Mock.Of<IMapper>(), _referenceDataService.Object, _encodingServiceMock.Object);
     }
         
     [Test]
@@ -57,12 +60,16 @@ public class WhenIRemoveTheLegalAgreement
     [Test]
     public async Task ThenIfTheCommandIsValidTheFlashMessageIsPopulated()
     {
+        //Arrange
+        _encodingServiceMock.Setup(e => e.Decode(ExpectedHashedAccountId, EncodingType.AccountId)).Returns(ExpectedAccountId);
+        _encodingServiceMock.Setup(e => e.Decode(ExpectedHashedAccountLegalEntitytId, EncodingType.AccountLegalEntityId)).Returns(ExpectedAccountLegalEntitytId);
+
         //Act
         var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmOrganisationToRemoveViewModel { Name = "TestName", HashedAccountId = ExpectedHashedAccountId, HashedAccountLegalEntitytId = ExpectedHashedAccountLegalEntitytId }, ExpectedUserId);
 
         //Assert
         _mediator.Verify(x => x.Send(It.Is<RemoveLegalEntityCommand>(
-            c => c.AccountId.Equals(ExpectedHashedAccountId)
+            c => c.AccountId.Equals(ExpectedAccountId)
                  && c.AccountLegalEntityId.Equals(ExpectedAccountLegalEntitytId)
                  && c.UserId.Equals(ExpectedUserId)), It.IsAny<CancellationToken>()), Times.Once);
         Assert.IsNotNull(actual);
