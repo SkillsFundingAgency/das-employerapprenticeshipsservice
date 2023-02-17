@@ -45,9 +45,7 @@ stages:
 - stage: Build
   jobs:
   - template: pipeline-templates/job/code-build.yml
-    parameters:
-      BuildConfiguration: $(BuildConfiguration)
-      SolutionBaseName: $(SolutionBaseName)
+  - template: pipeline-templates/job/dacpac-build.yml
 
 - stage: Deploy_AT
   dependsOn: Build
