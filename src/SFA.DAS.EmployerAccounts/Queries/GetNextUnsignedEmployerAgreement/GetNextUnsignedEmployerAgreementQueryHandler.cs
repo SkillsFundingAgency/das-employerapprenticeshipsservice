@@ -32,7 +32,7 @@ public class GetNextUnsignedEmployerAgreementQueryHandler : IRequestHandler<GetN
             throw new UnauthorizedAccessException();
         }
 
-        var pendingAgreementId = await _db.AccountLegalEntities
+        var pendingAgreementId = await _db.Value.AccountLegalEntities
             .Where(x => x.AccountId == message.AccountId && x.PendingAgreementId != null)
             .Select(x => x.PendingAgreementId)
             .FirstOrDefaultAsync(cancellationToken);
