@@ -15,7 +15,7 @@ using System.IdentityModel.Tokens;
 
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.ViewModels;
-using Karambolo.AspNetCore.Bundling.NUglify;
+//using Karambolo.AspNetCore.Bundling.NUglify;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using SFA.DAS.OidcMiddleware;
@@ -68,7 +68,7 @@ public class Startup
             app.UseDeveloperExceptionPage();
         }
 
-        app.UseBundling(bundles => BundleConfig.RegisterBundles(bundles));
+        //app.UseBundling(bundles => BundleConfig.RegisterBundles(bundles));
 
         app.UseStaticFiles();
         app.UseRouting();
