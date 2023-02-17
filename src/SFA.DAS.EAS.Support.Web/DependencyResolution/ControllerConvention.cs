@@ -24,8 +24,7 @@ namespace SFA.DAS.EAS.Support.Web.DependencyResolution
     using StructureMap;
     using StructureMap.Graph.Scanning;
     using System.Linq;
-    using WebGrease.Css.Extensions;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     [ExcludeFromCodeCoverage]
     public class ControllerConvention : IRegistrationConvention {
@@ -36,7 +35,8 @@ namespace SFA.DAS.EAS.Support.Web.DependencyResolution
         public void ScanTypes(TypeSet types, Registry registry)
         {
             types.FindTypes(TypeClassification.Concretes | TypeClassification.Closed)
-                  .Where(t => t.CanBeCastTo<Microsoft.AspNetCore.Mvc.Controller>())
+                  .Where(t => t.CanBeCastTo<Controller>())
+                  .ToList()
                   .ForEach(t => registry.For(t).LifecycleIs(new UniquePerRequestLifecycle()));
 
         }

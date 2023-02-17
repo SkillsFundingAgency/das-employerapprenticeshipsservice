@@ -23,7 +23,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             return Redirect(Url.EmployerFinanceAction("finance/employer-guidance"));
         }
 
-        [ImportModelStateFromTempData]
         [Route("finance/downloadtransactions")]
         public ActionResult TransactionsDownload(string hashedAccountId)
         {
@@ -41,7 +40,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("balance/transfer/details")]
         public ActionResult TransferDetail()
         {
-            return Redirect(Url.EmployerFinanceAction($"finance/transfer/details{Request?.Url?.Query}"));
+            return Redirect(Url.EmployerFinanceAction($"finance/transfer/details?{Request.QueryString}"));
         }
 
         [Route("finance/levyDeclaration/details")]

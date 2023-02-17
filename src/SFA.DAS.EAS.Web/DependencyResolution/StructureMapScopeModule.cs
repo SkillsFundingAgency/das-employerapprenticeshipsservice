@@ -1,24 +1,24 @@
-namespace SFA.DAS.EAS.Web.DependencyResolution {
-    using System.Web;
+//namespace SFA.DAS.EAS.Web.DependencyResolution {
+//    using System.Web;
 
-    using SFA.DAS.EAS.Web.App_Start;
+//    using SFA.DAS.EAS.Web.App_Start;
 
-    using StructureMap.Web.Pipeline;
+//    using StructureMap.Web.Pipeline;
 
-    public class StructureMapScopeModule : IHttpModule {
-        #region Public Methods and Operators
+//    public class StructureMapScopeModule : IHttpModule {
+//        #region Public Methods and Operators
 
-        public void Dispose() {
-        }
+//        public void Dispose() {
+//        }
 
-        public void Init(HttpApplication context) {
-            context.BeginRequest += (sender, e) => StructuremapMvc.StructureMapDependencyScope.CreateNestedContainer();
-            context.EndRequest += (sender, e) => {
-                HttpContextLifecycle.DisposeAndClearAll();
-                StructuremapMvc.StructureMapDependencyScope.DisposeNestedContainer();
-            };
-        }
+//        public void Init(HttpApplication context) {
+//            context.BeginRequest += (sender, e) => StructuremapMvc.StructureMapDependencyScope.CreateNestedContainer();
+//            context.EndRequest += (sender, e) => {
+//                HttpContextLifecycle.DisposeAndClearAll();
+//                StructuremapMvc.StructureMapDependencyScope.DisposeNestedContainer();
+//            };
+//        }
 
-        #endregion
-    }
-}
+//        #endregion
+//    }
+//}

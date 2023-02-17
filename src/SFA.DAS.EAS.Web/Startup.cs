@@ -15,6 +15,7 @@ using System.IdentityModel.Tokens;
 
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.ViewModels;
+using Karambolo.AspNetCore.Bundling.NUglify;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using SFA.DAS.OidcMiddleware;
@@ -44,6 +45,10 @@ public class Startup
                 options.UseMemberCasing();
             });
 
+        var idConfig = _configuration.GetSection("Identity")
+            .Get<IdentityServerConfiguration>();
+
+
         services.Configure<CookiePolicyOptions>(options =>
         {
             // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -62,6 +67,8 @@ public class Startup
         {
             app.UseDeveloperExceptionPage();
         }
+
+        app.UseBundling(bundles => BundleConfig.RegisterBundles(bundles));
 
         app.UseStaticFiles();
         app.UseRouting();

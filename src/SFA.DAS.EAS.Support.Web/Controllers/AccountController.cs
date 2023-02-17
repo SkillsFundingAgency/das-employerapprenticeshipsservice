@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using System.Web;
+using Microsoft.AspNetCore.Http;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
@@ -18,13 +18,13 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
         private readonly IPayeLevySubmissionsHandler _payeLevySubmissionsHandler;
         private readonly ILog _log;
         private readonly IPayeLevyMapper _payeLevyMapper;
-        private readonly HttpContextBase _httpContext;
+        private readonly HttpContext _httpContext;
 
         public AccountController(IAccountHandler accountHandler,
             IPayeLevySubmissionsHandler payeLevySubmissionsHandler,
             ILog log,
             IPayeLevyMapper payeLevyDeclarationMapper,
-            HttpContextBase httpContext)
+            HttpContext httpContext)
         {
             _accountHandler = accountHandler;
             _payeLevySubmissionsHandler = payeLevySubmissionsHandler;
@@ -50,7 +50,7 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
                 return View(vm);
             }
             
-            return HttpNotFound();
+            return NotFound();
         }
 
         [Route("account/payeschemes/{id}")]
@@ -78,7 +78,7 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
             var response = await _accountHandler.Find(id);            
 
             if (response.StatusCode != SearchResponseCodes.Success)
-                return HttpNotFound();
+                return NotFound();
 
             return View("SubHeader", response.Account);
         }
@@ -100,7 +100,7 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
                 return View(vm);
             }
 
-            return HttpNotFound();
+            return NotFound();
         }
 
         [Route("account/finance/{id}")]
@@ -119,7 +119,7 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
                 return View(vm);
             }
 
-            return HttpNotFound();
+            return NotFound();
         }
 
         [Route("account/levysubmissions/{id}/{payeSchemeId}")]
@@ -137,7 +137,7 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
                 return View(model);
             }
 
-            return HttpNotFound();
+            return NotFound();
         }
     }
 }

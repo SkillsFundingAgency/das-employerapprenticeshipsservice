@@ -15,23 +15,24 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace SFA.DAS.EAS.Web.DependencyResolution {
+namespace SFA.DAS.EAS.Web.DependencyResolution 
+{
     using System.Linq;
-    using System.Web.Mvc;
+    using Microsoft.AspNetCore.Mvc;
 
     using StructureMap;
     using StructureMap.Graph;
     using StructureMap.Graph.Scanning;
     using StructureMap.Pipeline;
     using StructureMap.TypeRules;
-    using WebGrease.Css.Extensions;
 
     public class ControllerConvention : IRegistrationConvention {
         #region Public Methods and Operators
 
         public void ScanTypes(TypeSet types, Registry registry) {
             types.FindTypes(TypeClassification.Concretes | TypeClassification.Closed)
-                .Where(t => t.CanBeCastTo<Microsoft.AspNetCore.Mvc.Controller>())
+                .Where(t => t.CanBeCastTo<Controller>())
+                .ToList()
                 .ForEach(t => registry.For(t).LifecycleIs(new UniquePerRequestLifecycle()));
         }
 

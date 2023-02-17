@@ -116,7 +116,7 @@
     <PackageReference Include="SpecFlow" Version="3.9.74" />
     <PackageReference Include="WindowsAzure.ServiceBus" Version="4.1.11" />
 	<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-	<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.5.0" />
+	<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.10.0" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="ScenarioCommonSteps\AccountSteps.cs" />

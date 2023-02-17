@@ -1,4 +1,7 @@
-﻿using SFA.DAS.NLog.Logger;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Headers;
+using SFA.DAS.NLog.Logger;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Application.Logging
 {
@@ -10,13 +13,14 @@ namespace SFA.DAS.EAS.Application.Logging
         public string UrlReferrer { get; set; }
         public string ServerMachineName { get; set; }
 
-        public LoggingContext(HttpContextBase context)
+        public LoggingContext(HttpContext context)
         {
-            HttpMethod = context?.Request.HttpMethod;
-            IsAuthenticated = context?.Request.IsAuthenticated;
-            Url = context?.Request.Url?.PathAndQuery;
-            UrlReferrer = context?.Request.UrlReferrer?.PathAndQuery;
-            ServerMachineName = context?.Server.MachineName;
+            HttpMethod = context.Request.Method;
+            IsAuthenticated = context.User.Identity.IsAuthenticated;
+            Url = context.Request.Path + context.Request.QueryString;
+            var header = context.Request.GetTypedHeaders();
+            UrlReferrer = header.Referer.PathAndQuery;
+            ServerMachineName = System.Environment.MachineName;
         }
     }
 }
