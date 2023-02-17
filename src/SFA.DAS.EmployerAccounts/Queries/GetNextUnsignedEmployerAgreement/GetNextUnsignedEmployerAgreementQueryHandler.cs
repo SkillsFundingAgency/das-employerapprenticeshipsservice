@@ -1,17 +1,16 @@
 ﻿using System.Threading;
 using Microsoft.EntityFrameworkCore;
-using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetNextUnsignedEmployerAgreement;
 
 public class GetNextUnsignedEmployerAgreementQueryHandler : IRequestHandler<GetNextUnsignedEmployerAgreementRequest, GetNextUnsignedEmployerAgreementResponse>
 {
-    private readonly IEmployerAccountsDbContext _db;
+    private readonly Lazy<EmployerAccountsDbContext> _db;
     private readonly IValidator<GetNextUnsignedEmployerAgreementRequest> _validator;
 
     public GetNextUnsignedEmployerAgreementQueryHandler(
-        IEmployerAccountsDbContext db,
+        Lazy<EmployerAccountsDbContext> db,
         IValidator<GetNextUnsignedEmployerAgreementRequest> validator
     )
     {
