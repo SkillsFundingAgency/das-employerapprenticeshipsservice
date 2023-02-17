@@ -1,10 +1,10 @@
 ﻿using System.IO;
-using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.Microsoft;
@@ -14,7 +14,6 @@ using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
-using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Filters;
 using SFA.DAS.EmployerAccounts.Web.Handlers;
 using SFA.DAS.EmployerAccounts.Web.StartupExtensions;
@@ -90,6 +89,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddDatabaseRegistration(_employerAccountsConfiguration.DatabaseConnectionString);
             services.AddDataRepositories();
             services.AddApplicationServices(_employerAccountsConfiguration);
+            services.AddHmrcServices(_configuration.Get<EmployerAccountsConfiguration>().Hmrc);
             services.AddAuditServices();
             services.AddCachesRegistrations();
             services.AddDateTimeServices(_configuration);

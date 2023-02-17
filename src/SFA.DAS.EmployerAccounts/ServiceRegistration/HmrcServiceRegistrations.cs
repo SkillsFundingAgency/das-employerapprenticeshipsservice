@@ -8,7 +8,7 @@ namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 
 public static class HmrcServiceRegistrations
 {
-    public static IServiceCollection AddHmrc(this IServiceCollection services, IHmrcConfiguration hmrcConfiguration)
+    public static IServiceCollection AddHmrcServices(this IServiceCollection services, IHmrcConfiguration hmrcConfiguration)
     {
         services.AddSingleton<IHmrcService, HmrcService>();
         services.AddSingleton<IHttpResponseLogger, HttpResponseLogger>();
