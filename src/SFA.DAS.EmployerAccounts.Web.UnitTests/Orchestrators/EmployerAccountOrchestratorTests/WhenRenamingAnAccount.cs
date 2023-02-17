@@ -53,10 +53,10 @@ public class WhenRenamingAnAccount
     public async Task ThenTheCorrectAccountDetailsShouldBeReturned()
     {
         //Act
-        var response = await _orchestrator.GetEmployerAccount(1231);
+        var response = await _orchestrator.GetEmployerAccount(_account.Id);
 
         //Assert
-        _mediator.Verify(x => x.Send(It.Is<GetEmployerAccountByIdQuery>(q => q.AccountId.Equals(_account.HashedId)), It.IsAny<CancellationToken>()));
+        _mediator.Verify(x => x.Send(It.Is<GetEmployerAccountByIdQuery>(q => q.AccountId.Equals(_account.Id)), It.IsAny<CancellationToken>()));
         Assert.AreEqual(_account.HashedId, response.Data.HashedId);
         Assert.AreEqual(_account.Name, response.Data.Name);
         Assert.AreEqual(HttpStatusCode.OK, response.Status);

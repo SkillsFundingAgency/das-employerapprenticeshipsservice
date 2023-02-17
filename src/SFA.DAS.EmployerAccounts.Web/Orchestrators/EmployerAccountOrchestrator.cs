@@ -45,7 +45,8 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
         {
             Data = new EmployerAccountViewModel
             {
-                Name = response.Account.Name
+                Name = response.Account.Name,
+                HashedId = response.Account.HashedId
             }
         };
     }
