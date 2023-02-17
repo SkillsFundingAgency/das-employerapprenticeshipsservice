@@ -7,13 +7,13 @@ using SFA.DAS.AutoConfiguration;
 
 namespace SFA.DAS.EmployerAccounts.Services;
 
-public class PdfService : AzureServiceBase<string>, IPdfService
+public class PdfService : AzureServiceBase<string, PdfService>, IPdfService
 {
     public override string ConfigurationName => "legal-agreements";
-    public sealed override ILogger Logger { get; set; }
+    public sealed override ILogger<PdfService> Logger { get; set; }
 
     public PdfService(
-        ILogger logger,
+        ILogger<PdfService> logger,
         IAutoConfigurationService autoConfigurationService, 
         IConfiguration configuration) 
         : base(autoConfigurationService, configuration)
