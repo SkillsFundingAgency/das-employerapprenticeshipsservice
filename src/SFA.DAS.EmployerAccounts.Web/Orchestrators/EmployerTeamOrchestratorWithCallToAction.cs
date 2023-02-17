@@ -43,10 +43,9 @@ public class EmployerTeamOrchestratorWithCallToAction : EmployerTeamOrchestrator
 
     public override async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string hashedAccountId, string externalUserId)
     {
-        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
         var accountResponseTask = _employerTeamOrchestrator.GetAccount(hashedAccountId, externalUserId);
 
-        if (TryGetAccountContext(accountId, out AccountContext accountContext))
+        if (TryGetAccountContext(hashedAccountId, out AccountContext accountContext))
         {
             if (accountContext.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
             {
@@ -68,7 +67,7 @@ public class EmployerTeamOrchestratorWithCallToAction : EmployerTeamOrchestrator
             }
             else
             {
-                _logger.LogError(callToActionResponse.Exception, $"An error occurred whilst trying to retrieve account CallToAction: {accountId}");
+                _logger.LogError(callToActionResponse.Exception, $"An error occurred whilst trying to retrieve account CallToAction: {hashedAccountId}");
             }
         }
 
@@ -85,18 +84,18 @@ public class EmployerTeamOrchestratorWithCallToAction : EmployerTeamOrchestrator
             _accountContext.Create(
                 new AccountContext
                 {
-                    AccountId = orchestratorResponse.Data.Account.Id,
+                    HashedAccountId = orchestratorResponse.Data.HashedAccountId,
                     ApprenticeshipEmployerType = orchestratorResponse.Data.ApprenticeshipEmployerType
                 }
                 , AccountContextCookieName);
         }
     }
 
-    private bool TryGetAccountContext(long accountId, out AccountContext accountContext)
+    private bool TryGetAccountContext(string hashedAccountId, out AccountContext accountContext)
     {
         if (_accountContext.Get(AccountContextCookieName) is AccountContext accountCookie)
         {
-            if (accountCookie.AccountId == accountId)
+            if (accountCookie.HashedAccountId.Equals(hashedAccountId, StringComparison.InvariantCultureIgnoreCase))
             {
                 accountContext = accountCookie;
                 return true;

@@ -20,10 +20,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
     public class WhenGettingAccount
     {
         private const long AccountId = 123789;
-        private readonly string _hashedAccountId = Guid.NewGuid().ToString();
+        private const string HashedAccountId = "GGHY556";
         private AccountDashboardViewModel _accountDashboardViewModel;
 
-        private readonly string _userId = Guid.NewGuid().ToString();
+        private const string UserId = "UserNumeroUno";
 
         private EmployerTeamOrchestratorWithCallToAction _sut;
         private Mock<IMediator> _mediator;
@@ -46,11 +46,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
 
             _accountDashboardViewModel = new AccountDashboardViewModel
             {
-                HashedAccountId = _hashedAccountId
+                HashedAccountId = HashedAccountId
             };
 
             _employerTeamOrchestrator
-                .Setup(m => m.GetAccount(_hashedAccountId, _userId))
+                .Setup(m => m.GetAccount(HashedAccountId, UserId))
                 .ReturnsAsync(new OrchestratorResponse<AccountDashboardViewModel>
                 {
                     Data = _accountDashboardViewModel,
@@ -113,12 +113,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
 
             _mockAccountApiClient = new Mock<IAccountApiClient>();
 
-            _mockAccountApiClient.Setup(c => c.GetAccount(_hashedAccountId)).ReturnsAsync(new AccountDetailViewModel
+            _mockAccountApiClient.Setup(c => c.GetAccount(HashedAccountId)).ReturnsAsync(new AccountDetailViewModel
             { ApprenticeshipEmployerType = "Levy" });
 
             _mockMapper = new Mock<IMapper>();
 
             _mockLogger = new Mock<ILogger<EmployerTeamOrchestratorWithCallToAction>>();
+
+            _encodingServiceMock.Setup(e => e.Decode(HashedAccountId, EncodingType.AccountId)).Returns(AccountId);
 
             _sut = new EmployerTeamOrchestratorWithCallToAction(
                 _employerTeamOrchestrator.Object,
@@ -136,17 +138,17 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         public async Task ThenAccountDataIsRetrievedFromTheTeamOrchestrator()
         {
             // Act
-            await _sut.GetAccount(_hashedAccountId, _userId);
+            await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
-            _employerTeamOrchestrator.Verify(m => m.GetAccount(_hashedAccountId, _userId), Times.Once);
+            _employerTeamOrchestrator.Verify(m => m.GetAccount(HashedAccountId, UserId), Times.Once);
         }
 
         [Test]
         public async Task ThenExpectedAccountDataIsReturnedFromTheTeamOrchestrator()
         {
             // Act
-            var result = await _sut.GetAccount(_hashedAccountId, _userId);
+            var result = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
             result.Data.Should().Be(_accountDashboardViewModel);
@@ -156,7 +158,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         public async Task ThenCallToActionDataIsRetrievedWhenAccountContextCookieIsNotSet()
         {
             // Act
-            var result = await _sut.GetAccount(_hashedAccountId, _userId);
+            var result = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
             result.Data.CallToActionViewModel.Should().NotBeNull();
@@ -168,10 +170,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             // arrange
             _mockAccountContext
                 .Setup(m => m.Get(EmployerTeamOrchestratorWithCallToAction.AccountContextCookieName))
-                .Returns(new AccountContext { HashedAccountId = _hashedAccountId, ApprenticeshipEmployerType = ApprenticeshipEmployerType.NonLevy });
+                .Returns(new AccountContext { HashedAccountId = HashedAccountId, ApprenticeshipEmployerType = ApprenticeshipEmployerType.NonLevy });
 
             // Act
-            var result = await _sut.GetAccount(_hashedAccountId, _userId);
+            var result = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
             result.Data.CallToActionViewModel.Should().NotBeNull();
@@ -183,10 +185,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             // arrange
             _mockAccountContext
                 .Setup(m => m.Get(EmployerTeamOrchestratorWithCallToAction.AccountContextCookieName))
-                .Returns(new AccountContext { HashedAccountId = _hashedAccountId, ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy });
+                .Returns(new AccountContext { HashedAccountId = HashedAccountId, ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy });
 
             // Act
-            var result = await _sut.GetAccount(_hashedAccountId, _userId);
+            var result = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
             result.Data.CallToActionViewModel.Should().BeNull();
@@ -199,12 +201,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             _accountDashboardViewModel.ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy;
 
             // Act
-            var result = await _sut.GetAccount(_hashedAccountId, _userId);
+            var result = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
             _mockAccountContext.Verify(m => m.Delete(EmployerTeamOrchestratorWithCallToAction.AccountContextCookieName), Times.Once);
             _mockAccountContext.Verify(m => m.Create(It.Is<AccountContext>(a =>
-                (a.HashedAccountId == _hashedAccountId) && (a.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)),
+                (a.HashedAccountId == HashedAccountId) && (a.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)),
                 EmployerTeamOrchestratorWithCallToAction.AccountContextCookieName,
                 It.IsAny<int>()),
                 Times.Once);
@@ -217,12 +219,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             _accountDashboardViewModel.ApprenticeshipEmployerType = ApprenticeshipEmployerType.NonLevy;
 
             // Act
-            var result = await _sut.GetAccount(_hashedAccountId, _userId);
+            var result = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
             _mockAccountContext.Verify(m => m.Delete(EmployerTeamOrchestratorWithCallToAction.AccountContextCookieName), Times.Once);
             _mockAccountContext.Verify(m => m.Create(It.Is<AccountContext>(a =>
-                (a.HashedAccountId == _hashedAccountId) && (a.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy)),
+                (a.HashedAccountId == HashedAccountId) && (a.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy)),
                 EmployerTeamOrchestratorWithCallToAction.AccountContextCookieName,
                 It.IsAny<int>()),
                 Times.Once);
@@ -237,7 +239,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                 .Returns(new AccountContext { HashedAccountId = Guid.NewGuid().ToString(), ApprenticeshipEmployerType = ApprenticeshipEmployerType.NonLevy });
 
             // Act
-            var result = await _sut.GetAccount(_hashedAccountId, _userId);
+            var result = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
             result.Data.CallToActionViewModel.Should().NotBeNull();
@@ -255,7 +257,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                });
 
             // Act
-            var result = await _sut.GetAccount(_hashedAccountId, _userId);
+            var result = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
             result.Data.CallToActionViewModel.Should().BeNull();
@@ -270,7 +272,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                .ThrowsAsync(new Exception());
 
             // Act
-            var result = await _sut.GetAccount(_hashedAccountId, _userId);
+            var result = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
             result.Data.CallToActionViewModel.Should().BeNull();
@@ -285,10 +287,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                .ThrowsAsync(exception);
 
             // Act
-            var result = await _sut.GetAccount(_hashedAccountId, _userId);
+            var result = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
-            _mockLogger.VerifyLogging($"An error occurred whilst trying to retrieve account CallToAction: {_hashedAccountId}", LogLevel.Error, Times.Once());
+            _mockLogger.VerifyLogging($"An error occurred whilst trying to retrieve account CallToAction: {HashedAccountId}", LogLevel.Error, Times.Once());
         }
 
         [Test]
@@ -312,7 +314,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                 .Returns(expectedVacancies);
 
             // Act
-            var actual = await _sut.GetAccount(_hashedAccountId, _userId);
+            var actual = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
             Assert.IsNotNull(actual.Data);
@@ -333,7 +335,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                });
 
             // Act
-            var result = await _sut.GetAccount(_hashedAccountId, _userId);
+            var result = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
             result.Data.CallToActionViewModel.Should().BeNull();
@@ -348,7 +350,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                .ThrowsAsync(new Exception());
 
             // Act
-            var result = await _sut.GetAccount(_hashedAccountId, _userId);
+            var result = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
             result.Data.CallToActionViewModel.Should().BeNull();
@@ -363,17 +365,17 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                .ThrowsAsync(exception);
 
             // Act
-            var result = await _sut.GetAccount(_hashedAccountId, _userId);
+            var result = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
-            _mockLogger.VerifyLogging($"An error occurred whilst trying to retrieve account CallToAction: {_hashedAccountId}", LogLevel.Error, Times.Once());
+            _mockLogger.VerifyLogging($"An error occurred whilst trying to retrieve account CallToAction: {HashedAccountId}", LogLevel.Error, Times.Once());
         }
 
         [Test]
         public async Task ThenShouldGetReservationsCount()
         {
             // Act
-            var result = await _sut.GetAccount(_hashedAccountId, _userId);
+            var result = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
             Assert.AreEqual(1, result.Data.CallToActionViewModel.ReservationsCount);
@@ -391,7 +393,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                });
 
             // Act
-            var result = await _sut.GetAccount(_hashedAccountId, _userId);
+            var result = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
             result.Data.CallToActionViewModel.Should().BeNull();
@@ -406,7 +408,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                .ThrowsAsync(new Exception());
 
             // Act
-            var result = await _sut.GetAccount(_hashedAccountId, _userId);
+            var result = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
             result.Data.CallToActionViewModel.Should().BeNull();
@@ -421,10 +423,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                .ThrowsAsync(exception);
 
             // Act
-            var result = await _sut.GetAccount(_hashedAccountId, _userId);
+            var result = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
-            _mockLogger.VerifyLogging($"An error occurred whilst trying to retrieve account CallToAction: {_hashedAccountId}", LogLevel.Error, Times.Once());
+            _mockLogger.VerifyLogging($"An error occurred whilst trying to retrieve account CallToAction: {HashedAccountId}", LogLevel.Error, Times.Once());
         }
 
         [Test]
@@ -438,7 +440,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             _mockMapper.Setup(m => m.Map<IEnumerable<Apprenticeship>, IEnumerable<ApprenticeshipViewModel>>(apprenticeships)).Returns(expectedApprenticeship);
 
             //Act
-            var result = await _sut.GetAccount(_hashedAccountId, _userId);
+            var result = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
             Assert.IsTrue(result.Data.CallToActionViewModel.Apprenticeships.Count().Equals(1));
@@ -456,7 +458,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                });
 
             // Act
-            var result = await _sut.GetAccount(_hashedAccountId, _userId);
+            var result = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
             result.Data.CallToActionViewModel.Should().BeNull();
@@ -471,7 +473,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                .ThrowsAsync(new Exception());
 
             // Act
-            var result = await _sut.GetAccount(_hashedAccountId, _userId);
+            var result = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
             result.Data.CallToActionViewModel.Should().BeNull();
@@ -486,10 +488,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                .ThrowsAsync(exception);
 
             // Act
-            var result = await _sut.GetAccount(_hashedAccountId, _userId);
+            var result = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert
-            _mockLogger.VerifyLogging($"An error occurred whilst trying to retrieve account CallToAction: {_hashedAccountId}", LogLevel.Error, Times.Once());
+            _mockLogger.VerifyLogging($"An error occurred whilst trying to retrieve account CallToAction: {HashedAccountId}", LogLevel.Error, Times.Once());
         }
 
         [Test]
@@ -506,7 +508,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             _mockMapper.Setup(m => m.Map<Cohort, CohortViewModel>(cohort)).Returns(expectedCohort);
 
             //Act
-            var result = await _sut.GetAccount(_hashedAccountId, _userId);
+            var result = await _sut.GetAccount(HashedAccountId, UserId);
 
             //Assert                    
             Assert.AreEqual(1, result.Data.CallToActionViewModel.CohortsCount);
