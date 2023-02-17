@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Policies.Hmrc;
 
-namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Hmrc;
+namespace SFA.DAS.EmployerAccounts.UnitTests.Policies.Hmrc;
 
 public class NoopExecutionPolicy : ExecutionPolicy
 {

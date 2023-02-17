@@ -6,7 +6,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Policies.Hmrc;
 
-namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Hmrc;
+namespace SFA.DAS.EmployerAccounts.UnitTests.Policies.Hmrc;
 
 [TestFixture]
 public class PolicyRetryTest

@@ -6,7 +6,7 @@ using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Exceptions.Hmrc;
 using SFA.DAS.EmployerAccounts.Policies.Hmrc;
 
-namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Hmrc;
+namespace SFA.DAS.EmployerAccounts.UnitTests.Policies.Hmrc;
 
 public class WhenIMakeABadRequest
 {
@@ -27,7 +27,7 @@ public class WhenIMakeABadRequest
         Task TestAction(ref int callCount)
         {
             callCount++;
-            throw new HttpException((int) HttpStatusCode.BadRequest, "A bad request");
+            throw new HttpException((int)HttpStatusCode.BadRequest, "A bad request");
         }
 
         // Act
