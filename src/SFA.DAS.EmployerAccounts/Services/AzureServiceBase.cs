@@ -7,7 +7,7 @@ using SFA.DAS.AutoConfiguration;
 
 namespace SFA.DAS.EmployerAccounts.Services;
 
-public abstract class AzureServiceBase<T>
+public abstract class AzureServiceBase<T, TLogger>
 {
     private readonly IAutoConfigurationService _autoConfigurationService;
     private readonly IConfiguration _configuration;
@@ -19,7 +19,7 @@ public abstract class AzureServiceBase<T>
     }
 
     public abstract string ConfigurationName { get; }
-    public abstract ILogger Logger { get; set; }
+    public abstract ILogger<TLogger> Logger { get; set; }
 
     public async Task<T> GetDataFromBlobStorage(string containerName, string blobName)
     {

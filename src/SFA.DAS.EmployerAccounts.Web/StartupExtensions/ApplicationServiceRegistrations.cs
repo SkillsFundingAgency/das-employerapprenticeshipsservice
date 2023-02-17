@@ -18,6 +18,7 @@ public static class ApplicationServiceRegistrations
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, EmployerAccountsConfiguration configuration)
     {
         services.AddSingleton<IAccountEventFactory, AccountEventFactory>();
+        services.AddSingleton<IPdfService, PdfService>();
         services.AddScoped<IHtmlHelpers, HtmlHelpers>();
         services.AddScoped<ActivitiesHelper>();
         services.AddTransient<IRestClientFactory, RestClientFactory>();

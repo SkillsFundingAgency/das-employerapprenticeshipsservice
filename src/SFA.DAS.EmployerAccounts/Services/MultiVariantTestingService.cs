@@ -6,16 +6,16 @@ using SFA.DAS.EmployerAccounts.Models.UserView;
 
 namespace SFA.DAS.EmployerAccounts.Services;
 
-public class MultiVariantTestingService : AzureServiceBase<MultiVariantViewLookup>, IMultiVariantTestingService
+public class MultiVariantTestingService : AzureServiceBase<MultiVariantViewLookup, MultiVariantTestingService>, IMultiVariantTestingService
 {
     private const int CacheExpirationMinutes = 30;
     private readonly IInProcessCache _inProcessCache;
     public override string ConfigurationName => "SFA.DAS.EmployerApprenticeshipsService.MultiVariantTesting";
-    public sealed override ILogger Logger { get; set; }
+    public sealed override ILogger<MultiVariantTestingService> Logger { get; set; }
 
     public MultiVariantTestingService(
         IInProcessCache inProcessCache, 
-        ILogger logger, 
+        ILogger<MultiVariantTestingService> logger, 
         IAutoConfigurationService autoConfigurationService, 
         IConfiguration configuration) 
         : base(autoConfigurationService, configuration)

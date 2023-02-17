@@ -67,6 +67,7 @@ namespace SFA.DAS.EmployerAccounts.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(_configuration);
             services.AddHttpContextAccessor();
 
             services.AddOptions();
