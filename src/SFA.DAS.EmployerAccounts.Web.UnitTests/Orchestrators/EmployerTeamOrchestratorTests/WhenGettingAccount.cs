@@ -43,6 +43,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         private const string UserId = "USER1";
 
         private Mock<IMediator> _mediator;
+        private Mock<IEncodingService> _encodingServiceMock;
         private EmployerTeamOrchestrator _orchestrator;        
         private AccountStats _accountStats;
         private Mock<ICurrentDateTime> _currentDateTime;
@@ -161,7 +162,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             LastTermsAndConditionsUpdate = DateTime.Now.AddDays(-10);
             var employerAccountsConfiguration = new EmployerAccountsConfiguration { LastTermsAndConditionsUpdate = LastTermsAndConditionsUpdate };
 
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object, _accountApiClient.Object,  _mapper.Object, employerAccountsConfiguration, Mock.Of<IEncodingService>());
+            _encodingServiceMock = new Mock<IEncodingService>();
+
+            _encodingServiceMock.Setup(e => e.Decode(HashedAccountId, EncodingType.AccountId)).Returns(AccountId);
+
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object, _accountApiClient.Object, _mapper.Object, employerAccountsConfiguration, _encodingServiceMock.Object);
         }
         
         [Test]

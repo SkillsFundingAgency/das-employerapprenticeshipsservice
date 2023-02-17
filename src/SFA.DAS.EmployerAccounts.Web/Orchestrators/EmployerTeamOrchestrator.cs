@@ -216,6 +216,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
                 TeamMemberCount = accountStatsResponse?.Stats?.TeamMemberCount ?? 0,
                 TeamMembersInvited = accountStatsResponse?.Stats?.TeamMembersInvited ?? 0,
                 ShowWizard = showWizard,
+                //TODO: Delete this?
                 ShowAcademicYearBanner = _currentDateTime.Now < new DateTime(2017, 10, 20),
                 Tasks = tasks,
                 RequiresAgreementSigning = pendingAgreements.Count(),
