@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Reflection;
-using System.Web;
-using System.Web.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.Support.Shared;
 using SFA.DAS.EAS.Support.Web;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers
 {
     [Authorize(Roles = "das-support-portal")]
-    [System.Web.Mvc.RoutePrefix("api/status")]
-    public class StatusController : Microsoft.AspNetCore.Mvc.ControllerBase
+    [Route("api/status")]
+    [ApiController]
+    public class StatusController : ControllerBase
     {
         // GET: Status
         [System.Web.Mvc.AllowAnonymous]
-        public IHttpActionResult Get()
+        public IActionResult Get()
         {
             return Ok(new
             {
@@ -39,7 +41,7 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
         {
             try
             {
-                return $" {HttpContextHelper.Current.Request.HttpMethod}: {HttpContextHelper.Current.Request.RawUrl}";
+                return $" {HttpContext.Request.Method}: {HttpContext.Request.GetDisplayUrl()}";
             }
             catch
             {

@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
             _log.Info($"ChallengeController-Index : Response : {response}");
 
             if (response.StatusCode != SearchResponseCodes.Success)
-                return HttpNotFound($"There was a problem finding the account {id}");
+                return NotFound($"There was a problem finding the account {id}");
 
             return View(new ChallengeViewModel
             {

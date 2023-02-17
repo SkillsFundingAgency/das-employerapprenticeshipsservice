@@ -144,7 +144,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
             return JsonConvert.DeserializeObject<TransferAllowance>(content);
         }
     
-        public async Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<string> Redirect(string url, CancellationToken cancellationToken = default(CancellationToken))
         {
             var response = await _httpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -152,8 +152,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
             if (!response.IsSuccessStatusCode)
                 throw new RestHttpClientException(response, content);
 
-            var x = Json.Decode(content);
-            return x;
+            return content;
         }
     }
 }

@@ -1,9 +1,11 @@
 ﻿using System.Threading.Tasks;
-using System.Web.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers
 {
+    [ApiController]
     [Authorize(Roles = "das-support-portal")]
     public class SearchController : Microsoft.AspNetCore.Mvc.ControllerBase
     {
@@ -14,20 +16,18 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
             _handler = handler;
         }
 
-        [HttpGet]
-        [Route("api/search/accounts/{pagesize}/{pagenumber}")]
-        public async Task<IHttpActionResult> Accounts(int pageSize, int pageNumber)
+        [HttpGet("api/search/accounts/{pagesize}/{pagenumber}")]
+        public async Task<IActionResult> Accounts(int pageSize, int pageNumber)
         {
             var accounts = await _handler.FindAllAccounts(pageSize, pageNumber);
-            return Json(accounts);
+            return Ok(accounts);
         }
 
-        [HttpGet]
-        [Route("api/search/accounts/totalCount/{pageSize}")]
-        public async Task<IHttpActionResult> AllAccountsTotalCount(int pageSize)
+        [HttpGet("api/search/accounts/totalCount/{pageSize}")]
+        public async Task<IActionResult> AllAccountsTotalCount(int pageSize)
         {
             var accounts = await _handler.TotalAccountRecords(pageSize);
-            return Json(accounts);
+            return Ok(accounts);
         }
     }
 }

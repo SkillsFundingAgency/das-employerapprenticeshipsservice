@@ -17,7 +17,6 @@
     <PackageReference Include="FluentValidation.Mvc5">
       <Version>6.2.1</Version>
     </PackageReference>
-    <PackageReference Include="Karambolo.AspNetCore.Bundling.NUglify" Version="3.6.1" />
     <PackageReference Include="Microsoft.ApplicationInsights.Web">
       <Version>2.11.2</Version>
     </PackageReference>
