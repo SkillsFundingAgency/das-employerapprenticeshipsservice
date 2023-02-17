@@ -1,16 +1,15 @@
-﻿using Moq;
+﻿using System;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.Audit.Client;
 using SFA.DAS.Audit.Types;
-using SFA.DAS.Authentication;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Linq;
-using SFA.DAS.EmployerUsers.WebClientComponents;
-using System;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
-using Microsoft.AspNetCore.Http;
+using SFA.DAS.EmployerUsers.WebClientComponents;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AuditApiClientForSupportUser
 {
@@ -51,20 +50,20 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AuditApiClientForSupportUs
             
             
             _httpContextAccessorMock
-                .Setup(m => m.HttpContext.User.FindFirstValue(DasClaimTypes.Id))
-                .Returns(_impersonatedUser);
+                .Setup(m => m.HttpContext.User.FindFirst(DasClaimTypes.Id))
+                .Returns(new Claim(DasClaimTypes.Id, _impersonatedUser));
 
             _httpContextAccessorMock
-                .Setup(m => m.HttpContext.User.FindFirstValue(DasClaimTypes.Email))
-                .Returns(_impersonatedUserEmail);
+                .Setup(m => m.HttpContext.User.FindFirst(DasClaimTypes.Email))
+                .Returns(new Claim(DasClaimTypes.Email, _impersonatedUserEmail));
 
             _httpContextAccessorMock
-                .Setup(m => m.HttpContext.User.FindFirstValue(ClaimTypes.Upn))
-                .Returns(_supportUserUpn);
+                .Setup(m => m.HttpContext.User.FindFirst(ClaimTypes.Upn))
+                .Returns(new Claim(ClaimTypes.Upn, _supportUserUpn));
 
             _httpContextAccessorMock
-                .Setup(m => m.HttpContext.User.FindFirstValue(ClaimTypes.Email))
-                .Returns(_supportUserEmail);
+                .Setup(m => m.HttpContext.User.FindFirst(ClaimTypes.Email))
+                .Returns(new Claim(ClaimTypes.Email, _supportUserEmail));
 
             _sut = new EmployerAccounts.Services.AuditApiClientForSupportUser(_mockInnerClient.Object, _userContext);
         }

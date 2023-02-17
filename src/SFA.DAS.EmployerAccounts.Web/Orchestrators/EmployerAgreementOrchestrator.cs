@@ -125,7 +125,7 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
             });
 
             var unsignedAgreement = await _mediator.Send(new GetNextUnsignedEmployerAgreementRequest
-            { 
+            {
                 ExternalUserId = externalUserId,
                 AccountId = accountId
             });
@@ -159,8 +159,8 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
 
     public virtual async Task<OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>> RemoveLegalAgreement(ConfirmOrganisationToRemoveViewModel model, string userId)
     {
-        var accountId = _encodingService.Decode(model.HashedAccountId, EncodingType.AccountId);
-        var accountLegalEntityId = _encodingService.Decode(model.HashedAccountLegalEntitytId, EncodingType.AccountLegalEntityId);
+            var accountId = _encodingService.Decode(model.HashedAccountId, EncodingType.AccountId);
+            var accountLegalEntityId = _encodingService.Decode(model.HashedAccountLegalEntitytId, EncodingType.AccountLegalEntityId);
         var response = new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>();
 
         try
@@ -238,14 +238,12 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
 
         try
         {
-            var result =
-                await
-                    _mediator.Send(new GetSignedEmployerAgreementPdfRequest
-                    {
-                        AccountId = accountId,
-                        LegalAgreementId = decodedAgreementId,
-                        UserId = userId
-                    });
+            var result = await _mediator.Send(new GetSignedEmployerAgreementPdfRequest
+            {
+                AccountId = accountId,
+                LegalAgreementId = decodedAgreementId,
+                UserId = userId
+            });
 
             signedPdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel { PdfStream = result.FileStream };
 
@@ -344,7 +342,7 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
         {
             return new OrchestratorResponse<OrganisationAgreementsViewModel>
             {
-                Status = HttpStatusCode.BadRequest,                    
+                Status = HttpStatusCode.BadRequest,
                 Exception = ex
             };
         }
@@ -361,7 +359,7 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
 
     public virtual async Task<OrchestratorResponse<SignEmployerAgreementViewModel>> GetSignedAgreementViewModel(string hashedAccountId, string agreementId, string externalUserId)
     {
-        var response = new OrchestratorResponse<SignEmployerAgreementViewModel>();  
+        var response = new OrchestratorResponse<SignEmployerAgreementViewModel>();
 
         try
         {
@@ -400,7 +398,7 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
         {
             var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
             var result = await _mediator.Send(new GetNextUnsignedEmployerAgreementRequest { AccountId = accountId, ExternalUserId = externalUserId });
-            
+
             var hashedAgreementId = result.AgreementId.HasValue ? _encodingService.Encode(result.AgreementId.Value, EncodingType.AccountId) : string.Empty;
 
             response.Data = new NextUnsignedAgreementViewModel

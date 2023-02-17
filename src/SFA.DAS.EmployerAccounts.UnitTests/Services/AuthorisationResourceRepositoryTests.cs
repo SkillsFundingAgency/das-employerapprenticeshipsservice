@@ -52,6 +52,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services
         [Test]
         public void AuthorisationResourceRepository_WhenTheUserInRoleIsNotTier2User_ThenAuthorisationResourcesDoNotExist()
         {
+            //Arrange
+            _httpContextAccessorMock.Setup(m => m.HttpContext.User.HasClaim(ClaimsIdentity.DefaultRoleClaimType, It.IsAny<string>())).Returns(false);
+
             //Act
             var result = _authorisationResourceRepository.Get(_claimsIdentity);
 
