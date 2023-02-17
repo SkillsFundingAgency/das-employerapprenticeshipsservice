@@ -4,10 +4,10 @@ using SFA.DAS.Audit.Client;
 using SFA.DAS.Authorization.EmployerFeatures.Configuration;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerAccounts.Api.Client;
+using SFA.DAS.EmployerAccounts.Interfaces.Hmrc;
 using SFA.DAS.EmployerAccounts.ReadStore.Configuration;
 using SFA.DAS.EmployerAccounts.TasksApi;
 using SFA.DAS.Encoding;
-using SFA.DAS.Hmrc.Configuration;
 using SFA.DAS.ReferenceData.Api.Client;
 using SFA.DAS.TokenService.Api.Client;
 

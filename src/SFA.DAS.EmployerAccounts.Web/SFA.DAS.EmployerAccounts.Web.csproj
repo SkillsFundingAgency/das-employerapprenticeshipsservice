@@ -63,9 +63,6 @@
     <PackageReference Include="SFA.DAS.Logging">
       <Version>1.0.5</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Hmrc">
-      <Version>1.0.30</Version>
-    </PackageReference>
     <PackageReference Include="SFA.DAS.MA.Shared.UI">
       <Version>1.2.7</Version>
     </PackageReference>

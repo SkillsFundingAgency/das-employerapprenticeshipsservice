@@ -1,15 +1,18 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using SFA.DAS.ActiveDirectory;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Factories;
-using SFA.DAS.EmployerAccounts.Policies;
+using SFA.DAS.EmployerAccounts.Interfaces.Hmrc;
+using SFA.DAS.EmployerAccounts.Policies.Hmrc;
 using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.EmployerAccounts.TasksApi;
 using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.ReferenceData.Api.Client;
+using SFA.DAS.TokenService.Api.Client;
 
 namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 
@@ -19,6 +22,7 @@ public static class ApplicationServiceRegistrations
     {
         services.AddSingleton<IAccountEventFactory, AccountEventFactory>();
         services.AddSingleton<IPdfService, PdfService>();
+       
         services.AddScoped<IHtmlHelpers, HtmlHelpers>();
         services.AddScoped<ActivitiesHelper>();
         services.AddTransient<IRestClientFactory, RestClientFactory>();

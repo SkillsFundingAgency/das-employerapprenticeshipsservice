@@ -1,9 +1,8 @@
 ﻿using System.Data;
 using System.Threading;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.EmployerAccounts.Interfaces.Hmrc;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeInUse;
-using SFA.DAS.Hmrc;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetHmrcEmployerInformation;
 

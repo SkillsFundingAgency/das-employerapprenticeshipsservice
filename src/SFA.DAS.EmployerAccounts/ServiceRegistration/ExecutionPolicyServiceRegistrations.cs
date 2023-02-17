@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SFA.DAS.Hmrc.ExecutionPolicy;
-using HmrcExecutionPolicy = SFA.DAS.EmployerAccounts.Policies.HmrcExecutionPolicy;
+using SFA.DAS.EmployerAccounts.Policies.Hmrc;
 
 namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 

@@ -3,9 +3,8 @@ using SFA.DAS.AutoConfiguration;
 using SFA.DAS.AutoConfiguration.DependencyResolution;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Interfaces.Hmrc;
 using SFA.DAS.EmployerAccounts.ReadStore.Configuration;
-using SFA.DAS.Encoding;
-using SFA.DAS.Hmrc.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.DependencyResolution;
 

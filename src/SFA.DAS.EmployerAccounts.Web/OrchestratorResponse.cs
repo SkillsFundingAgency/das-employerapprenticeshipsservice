@@ -1,8 +1,4 @@
-﻿using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using System;
-using System.Net;
-
-namespace SFA.DAS.EmployerAccounts.Web
+﻿namespace SFA.DAS.EmployerAccounts.Web
 {
     public class OrchestratorResponse
     {

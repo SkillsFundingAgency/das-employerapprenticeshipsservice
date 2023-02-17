@@ -1,5 +1,5 @@
 ﻿using System.Threading;
-using SFA.DAS.Hmrc;
+using SFA.DAS.EmployerAccounts.Interfaces.Hmrc;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetGatewayInformation;
 

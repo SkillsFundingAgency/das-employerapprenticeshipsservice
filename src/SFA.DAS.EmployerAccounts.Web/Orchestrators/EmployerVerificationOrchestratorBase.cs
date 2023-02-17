@@ -3,7 +3,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetGatewayInformation;
 using SFA.DAS.EmployerAccounts.Queries.GetGatewayToken;
 using SFA.DAS.EmployerAccounts.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
-using SFA.DAS.Hmrc.Models;
+
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators;
 

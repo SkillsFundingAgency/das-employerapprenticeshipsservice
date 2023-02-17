@@ -7,11 +7,11 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerAccounts.Interfaces.Hmrc;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeInUse;
 using SFA.DAS.EmployerAccounts.TestCommon;
-using SFA.DAS.Hmrc;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetHmrcEmployerInformationTests;
 
