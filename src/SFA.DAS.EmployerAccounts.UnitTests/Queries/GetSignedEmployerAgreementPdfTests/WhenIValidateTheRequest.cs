@@ -87,8 +87,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSignedEmployerAgreementP
         [Test]
         [MoqInlineAutoData(Role.Viewer)]
         [MoqInlineAutoData(Role.Transactor)]
-        [MoqInlineAutoData(Role.Owner)]
-        public async Task WhenAccountMemberThenAuthorized(
+        public async Task WhenAccountMember_IsNotOwner_ThenUnauthorized(
             Role userRole,
             [Frozen] Mock<IMembershipRepository> membershipRepoMock,
             GetSignedEmployerAgreementPdfRequest query,
@@ -96,6 +95,23 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSignedEmployerAgreementP
         {
             //Arrange
             membershipRepoMock.Setup(x => x.GetCaller(It.Is<long>(l => l == query.AccountId), It.Is<string>(s => s == query.UserId))).ReturnsAsync(new MembershipView { Role = userRole });
+
+            //Act
+            var actual = await validator.ValidateAsync(query);
+
+            //Assert
+            Assert.IsTrue(actual.IsValid());
+            Assert.IsTrue(actual.IsUnauthorized);
+        }
+
+        [Test, MoqAutoData]
+        public async Task WhenAccountMember_IsOwner_ThenAuthorized(
+            [Frozen] Mock<IMembershipRepository> membershipRepoMock,
+            GetSignedEmployerAgreementPdfRequest query,
+            GetSignedEmployerAgreementPdfValidator validator)
+        {
+            //Arrange
+            membershipRepoMock.Setup(x => x.GetCaller(It.Is<long>(l => l == query.AccountId), It.Is<string>(s => s == query.UserId))).ReturnsAsync(new MembershipView { Role = Role.Owner });
 
             //Act
             var actual = await validator.ValidateAsync(query);
