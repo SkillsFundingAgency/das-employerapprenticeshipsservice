@@ -88,7 +88,7 @@ public class WhenAddingServicesToTheContainer
         var mockHostingEnvironment = new Mock<IHostingEnvironment>();
         mockHostingEnvironment.Setup(x => x.EnvironmentName).Returns("Test");
 
-        var startup = new Startup(GenerateConfiguration(), new Mock<IWebHostEnvironment>().Object);
+        var startup = new Startup(GenerateStubConfiguration(), new Mock<IWebHostEnvironment>().Object);
         var serviceCollection = new ServiceCollection();
         startup.ConfigureServices(serviceCollection);
 
@@ -127,7 +127,7 @@ public class WhenAddingServicesToTheContainer
         var mockHostingEnvironment = new Mock<IHostingEnvironment>();
         mockHostingEnvironment.Setup(x => x.EnvironmentName).Returns("Test");
 
-        var startup = new Startup(GenerateConfiguration(), new Mock<IWebHostEnvironment>().Object);
+        var startup = new Startup(GenerateStubConfiguration(), new Mock<IWebHostEnvironment>().Object);
         var serviceCollection = new ServiceCollection();
         startup.ConfigureServices(serviceCollection);
 
@@ -187,7 +187,7 @@ public class WhenAddingServicesToTheContainer
         var mockHostingEnvironment = new Mock<IHostingEnvironment>();
         mockHostingEnvironment.Setup(x => x.EnvironmentName).Returns("Test");
 
-        var startup = new Startup(GenerateConfiguration(), new Mock<IWebHostEnvironment>().Object);
+        var startup = new Startup(GenerateStubConfiguration(), new Mock<IWebHostEnvironment>().Object);
         var serviceCollection = new ServiceCollection();
         startup.ConfigureServices(serviceCollection);
 
@@ -205,7 +205,7 @@ public class WhenAddingServicesToTheContainer
         var mockHostingEnvironment = new Mock<IHostingEnvironment>();
         mockHostingEnvironment.Setup(x => x.EnvironmentName).Returns("Test");
 
-        var startup = new Startup(GenerateConfiguration(), new Mock<IWebHostEnvironment>().Object);
+        var startup = new Startup(GenerateStubConfiguration(), new Mock<IWebHostEnvironment>().Object);
         var serviceCollection = new ServiceCollection();
         startup.ConfigureServices(serviceCollection);
         serviceCollection.AddSingleton(_ => mockHostingEnvironment.Object);
@@ -218,7 +218,7 @@ public class WhenAddingServicesToTheContainer
         type.Should().ContainSingle(c => c.GetType() == typeof(EmployerAccountAuthorizationHandler));
     }
 
-    private static IConfigurationRoot GenerateConfiguration()
+    private static IConfigurationRoot GenerateStubConfiguration()
     {
         var configSource = new MemoryConfigurationSource
         {
