@@ -127,7 +127,7 @@ public class EmployerAgreementController : BaseController
 
             ModelState.AddModelError(nameof(agreement.Data.Choice), "Select whether you accept the agreement");
 
-            return View(ControllerConstants.SignAgreementViewName, agreement);
+            return View(ControllerConstants.SignAgreementViewName, agreement.Data);
         }
 
         if (choice == SignEmployerAgreementViewModel.ReviewAgreementLater)

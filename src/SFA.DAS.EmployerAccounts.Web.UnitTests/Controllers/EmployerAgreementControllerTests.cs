@@ -1,85 +1,135 @@
 ﻿using System.Security.Claims;
+using Aspose.Pdf;
 using AutoMapper;
+using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Primitives;
+using Moq;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesCountByHashedAccountId;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetLastSignedAgreement;
-using SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
 using SFA.DAS.Testing;
+using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers;
 
 [TestFixture]
 public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementControllerTestFixtures>
 {
-    [Test]
-    public Task WhenRequestingConfirmRemoveOrganisationPage_AndUserIsUnauthorised_ThenAccessDeniedIsReturned()
+    private EmployerAgreementController _controller;
+    private Mock<EmployerAgreementOrchestrator> _orchestratorMock;
+    private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
+    private Mock<IMediator> _mediator;
+    private Mock<IMapper> _mapper;
+
+    private const string HashedAccountLegalEntityId = "AYT887";
+    private const string HashedAccountId = "ABC167";
+    private const string UserId = "UserNumeroUno";
+    private const string HashedAgreementId = "AGREE778";
+
+    [SetUp]
+    public void Setup()
     {
-        return TestAsync(
-            arrange: fixtures =>
-            {
-                fixtures.Orchestrator.Setup(x =>
-                        x.GetConfirmRemoveOrganisationViewModel(It.IsAny<string>(), It.IsAny<string>(),
-                            It.IsAny<string>()))
+        _orchestratorMock = new Mock<EmployerAgreementOrchestrator>();
+        _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
+        _mediator = new Mock<IMediator>();
+        _mapper = new Mock<IMapper>();
+
+        var httpRequestMock = new Mock<HttpRequest>();
+        var httpContextMock = new Mock<HttpContext>();
+
+        var store = new Dictionary<string, StringValues> { { ControllerConstants.AccountHashedIdRouteKeyName, HashedAccountId } };
+        var queryCollection = new QueryCollection(store);
+
+        httpRequestMock.Setup(x => x.Query).Returns(queryCollection);
+        httpContextMock.Setup(x => x.Request).Returns(httpRequestMock.Object);
+
+        var identity = new ClaimsIdentity(new[] { new Claim("sub", UserId) });
+
+        var principal = new ClaimsPrincipal(identity);
+
+        httpContextMock.Setup(x => x.User).Returns(principal);
+
+        _controller = new EmployerAgreementController(
+            _orchestratorMock.Object,
+            _flashMessage.Object,
+            _mediator.Object,
+            _mapper.Object,
+            Mock.Of<IUrlActionHelper>(),
+            Mock.Of<IMultiVariantTestingService>());
+
+        _controller.ControllerContext = new ControllerContext { HttpContext = httpContextMock.Object };
+    }
+
+    [Test]
+    public async Task WhenRequestingConfirmRemoveOrganisationPage_AndUserIsUnauthorised_ThenAccessDeniedIsReturned()
+    {
+        //Arrange
+        _orchestratorMock
+            .Setup(x => x.GetConfirmRemoveOrganisationViewModel(HashedAccountLegalEntityId, HashedAccountId, UserId))
                     .ReturnsAsync(new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>
                     {
                         Exception = new UnauthorizedAccessException(),
                         Status = HttpStatusCode.Unauthorized
                     });
-            },
 
-            act: fixtures => fixtures.ConfirmRemoveOrganisation(),
-            assert: (fixtures, result) =>
-            {
-                ViewResult viewResult = result as ViewResult;
-                Assert.AreEqual(ControllerConstants.AccessDeniedViewName, viewResult.ViewName);
-            });
+        //Act
+        var response = await _controller.ConfirmRemoveOrganisation(HashedAccountLegalEntityId, HashedAccountId);
+
+        //Assert
+        ViewResult viewResult = response as ViewResult;
+        Assert.AreEqual(ControllerConstants.AccessDeniedViewName, viewResult.ViewName);
     }
 
     [Test]
-    public Task WhenRequestingConfirmRemoveOrganisationPage_AndUserIsAuthorised_AndOrganisationCanBeRemoved_ThenConfirmRemoveViewIsReturned()
+    public async Task WhenRequestingConfirmRemoveOrganisationPage_AndOrganisationCanBeRemoved_ThenConfirmRemoveViewIsReturned()
     {
-        return TestAsync(
-            arrange: fixtures => fixtures.Orchestrator.Setup(x => x.GetConfirmRemoveOrganisationViewModel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>
-                {
-                    Data = new ConfirmOrganisationToRemoveViewModel()
+        //Arrange
+        _orchestratorMock
+            .Setup(x => x.GetConfirmRemoveOrganisationViewModel(HashedAccountLegalEntityId, HashedAccountId, UserId))
+                    .ReturnsAsync(new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>
                     {
-                        CanBeRemoved = true
-                    }
-                }),
-            act: fixtures => fixtures.ConfirmRemoveOrganisation(),
-            assert: (fixtures, result) =>
-            {
-                ViewResult viewResult = result as ViewResult;
-                Assert.AreEqual(ControllerConstants.ConfirmRemoveOrganisationViewName, viewResult.ViewName);
-            });
+                        Data = new ConfirmOrganisationToRemoveViewModel
+                        {
+                          CanBeRemoved = true  
+                        },
+                        Status = HttpStatusCode.OK
+                    });
+
+        //Act
+        var response = await _controller.ConfirmRemoveOrganisation(HashedAccountLegalEntityId, HashedAccountId);
+
+        //Assert
+        ViewResult viewResult = response as ViewResult;
+        Assert.AreEqual(ControllerConstants.ConfirmRemoveOrganisationActionName, viewResult.ViewName);
     }
 
     [Test]
-    public Task WhenRequestingConfirmRemoveOrganisationPage_AndUserIsAuthorised_AndOrganisationCannotBeRemoved_ThenCannotRemoveOrganisationViewIsReturned()
+    public async Task WhenRequestingConfirmRemoveOrganisationPage_AndOrganisationCannotBeRemoved_ThenCannotRemoveOrganisationViewIsReturned()
     {
-        return TestAsync(
-            arrange: fixtures => fixtures.Orchestrator.Setup(x => x.GetConfirmRemoveOrganisationViewModel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>
-                {
-                    Data = new ConfirmOrganisationToRemoveViewModel()
+        //Arrange
+        _orchestratorMock
+            .Setup(x => x.GetConfirmRemoveOrganisationViewModel(HashedAccountLegalEntityId, HashedAccountId, UserId))
+                    .ReturnsAsync(new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>
                     {
-                        CanBeRemoved = false
-                    }
-                }),
-            act: fixtures => fixtures.ConfirmRemoveOrganisation(),
-            assert: (fixtures, result) =>
-            {
-                ViewResult viewResult = result as ViewResult;
-                Assert.AreEqual(ControllerConstants.CannotRemoveOrganisationViewName, viewResult.ViewName);
-            });
+                        Data = new ConfirmOrganisationToRemoveViewModel
+                        {
+                            CanBeRemoved = false
+                        },
+                        Status = HttpStatusCode.OK
+                    });
+
+        //Act
+        var response = await _controller.ConfirmRemoveOrganisation(HashedAccountLegalEntityId, HashedAccountId);
+
+        //Assert
+        ViewResult viewResult = response as ViewResult;
+        Assert.AreEqual(ControllerConstants.CannotRemoveOrganisationViewName, viewResult.ViewName);
     }
 
     [Test]
@@ -97,36 +147,48 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
     }
 
     [Test]
-    public Task ViewUnsignedAgreements_WhenIViewUnsignedAgreements_ThenIShouldGoStraightToTheUnsignedAgreementIfThereIsOnlyOne()
+    public async Task ViewUnsignedAgreements_WhenIViewUnsignedAgreements_ThenIShouldGoStraightToTheUnsignedAgreementIfThereIsOnlyOne()
     {
-        return TestAsync(
-            arrange: fixtures =>
-            {
-                fixtures.Orchestrator.Setup(x => x.GetNextUnsignedAgreement(fixtures.HashedAccountId, fixtures.UserId)).ReturnsAsync(new OrchestratorResponse<NextUnsignedAgreementViewModel>
-                {
-                    Data = new NextUnsignedAgreementViewModel
+        //Arrange
+        _orchestratorMock
+            .Setup(x => x.GetNextUnsignedAgreement(HashedAccountId, UserId))
+                    .ReturnsAsync(new OrchestratorResponse<NextUnsignedAgreementViewModel>
                     {
-                        HasNextAgreement = true,
-                        NextAgreementHashedId = fixtures.HashedAgreementId
-                    }
-                });
-            },
-            act: fixtures => fixtures.ViewUnsignedAgreements(),
-            assert: (fixtures, result) =>
-            {
-                Assert.IsNotNull(result);
-                Assert.AreEqual(result.ActionName, "AboutYourAgreement");
-                Assert.AreEqual(result.RouteValues["agreementId"], fixtures.HashedAgreementId);
-            });
+                        Data = new NextUnsignedAgreementViewModel
+                        {
+                            HasNextAgreement = true,
+                            NextAgreementHashedId = HashedAgreementId
+                        },
+                        Status = HttpStatusCode.OK
+                    });
+
+        //Act
+        var response = await _controller.ViewUnsignedAgreements(HashedAccountId);
+
+        //Assert
+        var result = response as RedirectToActionResult;
+        Assert.IsNotNull(result);
+        Assert.AreEqual(result.ActionName, "AboutYourAgreement");
+        Assert.AreEqual(result.RouteValues["agreementId"], HashedAgreementId);
     }
 
-    [Test]
-    public Task ViewAgreementToSign_ShouldReturnAgreements()
+    [Test, MoqAutoData]
+    public async Task ViewAgreementToSign_ShouldReturnAgreements(SignEmployerAgreementViewModel viewModel)
     {
-        return TestAsync(arrange: fixtures => fixtures.WithUnsignedEmployerAgreement().WithPreviouslySignedAgreement(),
-            act: fixtures => fixtures.SignedAgreement(),
-            assert: (fixtures, result) =>
-                Assert.AreEqual(fixtures.GetSignAgreementViewModel, fixtures.ViewResult.Model));
+        //Arrange
+        _orchestratorMock
+            .Setup(x => x.GetSignedAgreementViewModel(HashedAccountId, HashedAgreementId, UserId))
+            .ReturnsAsync(new OrchestratorResponse<SignEmployerAgreementViewModel> 
+            { 
+                Data = viewModel
+            });
+
+        //Act
+        var response = await _controller.SignAgreement(HashedAccountId, HashedAgreementId);
+
+        //Assert
+        var result = response as ViewResult;
+        result.Model.Should().BeEquivalentTo(viewModel);
     }
 
     [Test]
@@ -181,22 +243,28 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
             });
     }
 
-    [Test]
-    public Task ViewAgreementToSign_WhenIHaveNotSelectedAnOption_ThenAnErrorIsDisplayed()
+    [Test, MoqAutoData]
+    public async Task ViewAgreementToSign_WhenIHaveNotSelectedAnOption_ThenAnErrorIsDisplayed(SignEmployerAgreementViewModel viewModel)
     {
-        return TestAsync(
-            fixtures => fixtures.WithUnsignedEmployerAgreement().WithPreviouslySignedAgreement(),
-            fixtures => fixtures.Sign(null),
-            (fixtures, result) =>
+        //Arrange
+        _orchestratorMock
+            .Setup(x => x.GetSignedAgreementViewModel(HashedAccountId, HashedAgreementId, UserId))
+            .ReturnsAsync(new OrchestratorResponse<SignEmployerAgreementViewModel>
             {
-                var viewResult = result.Item1 as ViewResult;
-                var model = viewResult.Model as SignEmployerAgreementViewModel;
-                var modelState = result.Item2 as ModelStateDictionary;
-
-                Assert.AreEqual(viewResult.ViewName, ControllerConstants.SignAgreementViewName);
-                Assert.AreEqual(fixtures.GetSignAgreementViewModel, model);
-                Assert.IsTrue(modelState[nameof(model.Choice)].Errors.Count == 1);
+                Data = viewModel
             });
+
+        //Act
+        var response = await _controller.Sign(HashedAgreementId, HashedAccountId, null);
+
+        //Assert
+        var viewResult = response as ViewResult;
+        var model = viewResult.Model as SignEmployerAgreementViewModel;
+        var modelState = _controller.ModelState;
+
+        Assert.AreEqual(viewResult.ViewName, ControllerConstants.SignAgreementViewName);
+        Assert.AreEqual(viewModel, model);
+        Assert.IsTrue(modelState[nameof(model.Choice)].Errors.Count == 1);
     }
 
     [Test]
@@ -329,7 +397,7 @@ public class EmployerAgreementControllerTestFixtures : FluentTest<EmployerAgreem
         Mapper.Setup(x => x.Map<GetEmployerAgreementResponse, SignEmployerAgreementViewModel>(agreementResponse))
             .Returns(GetSignAgreementViewModel);
 
-        Orchestrator.Setup(x => x.GetById(GetAgreementRequest.HashedAgreementId, GetAgreementRequest.HashedAccountId, GetAgreementRequest.ExternalUserId))
+        Orchestrator.Setup(x => x.GetById(HashedAgreementId, HashedAccountId, UserId))
             .ReturnsAsync(new OrchestratorResponse<EmployerAgreementViewModel> { Data = GetAgreementToSignViewModel });
 
         return this;
