@@ -15,7 +15,6 @@ using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.Api.Common.Infrastructure;
 using SFA.DAS.Authorization.DependencyResolution.Microsoft;
 using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.Microsoft;
-using SFA.DAS.Authorization.Mvc.Extensions;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerAccounts.Api.Authentication;
 using SFA.DAS.EmployerAccounts.Api.Authorization;
@@ -108,7 +107,7 @@ public class Startup
         services.AddEventsApi();
         services.AddExecutionPolicies();
 
-        services.AddAutoMapper(typeof(ActivityMappings), typeof(Startup));
+        services.AddAutoMapper(typeof(AccountMappings), typeof(Startup));
 
         services.AddMediatorValidators();
         services.AddMediatR(typeof(GetPayeSchemeByRefQuery));
@@ -124,7 +123,6 @@ public class Startup
                 if (!_configuration.IsDevOrLocal() && !_configuration.IsTest())
                 {
                     opt.Conventions.Add(new AuthorizeControllerModelConvention(new List<string>()));
-                    opt.AddAuthorization();
                 }
 
                 opt.AddValidation();
@@ -156,7 +154,6 @@ public class Startup
             .UseApiGlobalExceptionHandler(loggerFactory.CreateLogger("Startup"))
             .UseStaticFiles()
             .UseDasHealthChecks()
-            .UseUnauthorizedAccessExceptionHandler()
             .UseUnitOfWork()
             .UseRouting()
 

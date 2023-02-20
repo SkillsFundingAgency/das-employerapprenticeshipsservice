@@ -20,8 +20,6 @@ public class WhenAutoMapping
             c.AddProfile<HealthCheckMappings>();
             c.AddProfile<OrganisationMappings>();
             c.AddProfile<VacancyMappings>();
-
-            c.AddProfile<ActivityMappings>();
         });
         
         config.AssertConfigurationIsValid();
