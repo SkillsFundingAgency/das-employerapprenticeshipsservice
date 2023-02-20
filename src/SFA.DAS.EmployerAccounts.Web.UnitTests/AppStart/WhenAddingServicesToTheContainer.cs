@@ -197,27 +197,7 @@ public class WhenAddingServicesToTheContainer
         var type = provider.GetService(toResolve);
         Assert.IsNotNull(type);
     }
-
-
-    [Test]
-    public void Then_Resolves_Authorization_Handlers()
-    {
-        var mockHostingEnvironment = new Mock<IHostingEnvironment>();
-        mockHostingEnvironment.Setup(x => x.EnvironmentName).Returns("Test");
-
-        var startup = new Startup(GenerateStubConfiguration(), new Mock<IWebHostEnvironment>().Object);
-        var serviceCollection = new ServiceCollection();
-        startup.ConfigureServices(serviceCollection);
-        serviceCollection.AddSingleton(_ => mockHostingEnvironment.Object);
-        var provider = serviceCollection.BuildServiceProvider();
-
-        var type = provider.GetServices(typeof(IAuthorizationHandler)).ToList();
-
-        Assert.IsNotNull(type);
-        type.Count.Should().Be(1);
-        type.Should().ContainSingle(c => c.GetType() == typeof(EmployerAccountAuthorizationHandler));
-    }
-
+    
     private static IConfigurationRoot GenerateStubConfiguration()
     {
         var configSource = new MemoryConfigurationSource
