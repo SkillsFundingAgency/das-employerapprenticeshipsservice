@@ -1,37 +1,17 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
-using Moq;
-using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerAccounts.Dtos;
-using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
-using SFA.DAS.EmployerAccounts.Models.Recruit;
-using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
-using SFA.DAS.EmployerAccounts.Models.Reservations;
-using SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountStats;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountTasks;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
-using SFA.DAS.EmployerAccounts.Queries.GetReservations;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
-using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.EmployerAccounts.Queries.GetApprenticeship;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
-using System.Threading;
 using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
@@ -43,6 +23,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         private const string UserId = "USER1";
 
         private Mock<IMediator> _mediator;
+        private Mock<IEncodingService> _encodingServiceMock;
         private EmployerTeamOrchestrator _orchestrator;        
         private AccountStats _accountStats;
         private Mock<ICurrentDateTime> _currentDateTime;
@@ -161,7 +142,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             LastTermsAndConditionsUpdate = DateTime.Now.AddDays(-10);
             var employerAccountsConfiguration = new EmployerAccountsConfiguration { LastTermsAndConditionsUpdate = LastTermsAndConditionsUpdate };
 
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object, _accountApiClient.Object,  _mapper.Object, employerAccountsConfiguration, Mock.Of<IEncodingService>());
+            _encodingServiceMock = new Mock<IEncodingService>();
+
+            _encodingServiceMock.Setup(e => e.Decode(HashedAccountId, EncodingType.AccountId)).Returns(AccountId);
+
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object, _accountApiClient.Object, _mapper.Object, employerAccountsConfiguration, _encodingServiceMock.Object);
         }
         
         [Test]
