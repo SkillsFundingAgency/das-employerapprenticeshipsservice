@@ -4,11 +4,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.Microsoft;
-using SFA.DAS.Authorization.Mvc.Extensions;
 using SFA.DAS.AutoConfiguration.DependencyResolution;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerAccounts.Data;
@@ -67,7 +65,6 @@ namespace SFA.DAS.EmployerAccounts.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(_configuration);
-            services.AddHttpContextAccessor();
 
             services.AddOptions();
 
@@ -99,7 +96,6 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddEntityFrameworkUnitOfWork<EmployerAccountsDbContext>();
             services.AddNServiceBusClientUnitOfWork();
             services.AddEmployerFeaturesAuthorization();
-            services.AddDasAuthorization();
             services.AddEmployerAccountsApi();
             services.AddExecutionPolicies();
             services.AddEmployerAccountsOuterApi(_employerAccountsConfiguration.EmployerAccountsOuterApiConfiguration);
@@ -156,7 +152,6 @@ namespace SFA.DAS.EmployerAccounts.Web
 #if DEBUG
             services.AddControllersWithViews(o =>
             {
-                o.AddAuthorization();
             }).AddRazorRuntimeCompilation();
 #endif
 
@@ -174,8 +169,6 @@ namespace SFA.DAS.EmployerAccounts.Web
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseUnauthorizedAccessExceptionHandler();
 
             app.UseStaticFiles();
             app.UseRouting();

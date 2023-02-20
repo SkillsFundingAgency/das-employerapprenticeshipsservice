@@ -1,12 +1,13 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
-using SFA.DAS.Authorization.EmployerUserRoles.Options;
-using SFA.DAS.Authorization.Mvc.Attributes;
+using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerAccounts.Web.Authentication;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
 [Route("accounts/{HashedAccountId}")]
+[Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
 public class EmployerAgreementController : BaseController
 {
     private const int InvitationComplete = 4;
@@ -33,7 +34,6 @@ public class EmployerAgreementController : BaseController
     }
 
     [HttpGet]
-    [DasAuthorize(EmployerUserRole.Any)]
     [Route("agreements")]
     public async Task<IActionResult> Index(string hashedAccountId, bool agreementSigned = false)
     {
@@ -51,7 +51,6 @@ public class EmployerAgreementController : BaseController
     }
 
     [HttpGet]
-    [DasAuthorize(EmployerUserRole.Any)]
     [Route("agreements/{agreementId}/details")]
     public async Task<IActionResult> Details(string agreementId, string hashedAccountId)
     {
@@ -65,7 +64,6 @@ public class EmployerAgreementController : BaseController
     }
 
     [HttpGet]
-    [DasAuthorize(EmployerUserRole.Any)]
     [Route("agreements/{agreementId}/view")]
     public async Task<IActionResult> View(string agreementId, string hashedAccountId)
     {
@@ -74,7 +72,6 @@ public class EmployerAgreementController : BaseController
     }
 
     [HttpGet]
-    [DasAuthorize(EmployerUserRole.Any)]
     [Route("agreements/unsigned/view")]
     public async Task<IActionResult> ViewUnsignedAgreements(string hashedAccountId)
     {
@@ -86,7 +83,6 @@ public class EmployerAgreementController : BaseController
     }
 
     [HttpGet]
-    [DasAuthorize(EmployerUserRole.Any)]
     [Route("agreements/{agreementId}/about-your-agreement")]
     public async Task<IActionResult> AboutYourAgreement(string agreementId, string hashedAccountId)
     {
@@ -102,7 +98,6 @@ public class EmployerAgreementController : BaseController
     }
 
     [HttpGet]
-    [DasAuthorize(EmployerUserRole.Any)]
     [Route("agreements/{agreementId}/sign-your-agreement")]
     public async Task<IActionResult> SignAgreement(string hashedAccountId, string agreementId)
     {
@@ -114,7 +109,6 @@ public class EmployerAgreementController : BaseController
     }
 
     [HttpPost]
-    [DasAuthorize(EmployerUserRole.Any)]
     [Route("agreements/{agreementId}/sign")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Sign(string agreementId, string hashedAccountId, int? choice)
@@ -169,7 +163,6 @@ public class EmployerAgreementController : BaseController
     }
 
     [HttpGet]
-    [DasAuthorize(EmployerUserRole.Any)]
     [Route("agreements/{agreementId}/agreement-pdf")]
     public async Task<IActionResult> GetPdfAgreement(string agreementId, string hashedAccountId)
     {
@@ -185,7 +178,6 @@ public class EmployerAgreementController : BaseController
     }
 
     [HttpGet]
-    [DasAuthorize(EmployerUserRole.Any)]
     [Route("agreements/{agreementId}/signed-agreement-pdf")]
     public async Task<IActionResult> GetSignedPdfAgreement(string agreementId, string hashedAccountId)
     {
@@ -201,7 +193,6 @@ public class EmployerAgreementController : BaseController
     }
 
     [HttpGet]
-    [DasAuthorize(EmployerUserRole.Any)]
     [Route("agreements/{accountLegalEntityHashedId}/remove")]
     public async Task<IActionResult> ConfirmRemoveOrganisation(string accountLegalEntityHashedId, string hashedAccountId)
     {
@@ -211,7 +202,6 @@ public class EmployerAgreementController : BaseController
     }
 
     [HttpPost]
-    [DasAuthorize(EmployerUserRole.Any)]
     [Route("agreements/{accountLegalEntityHashedId}/remove")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> RemoveOrganisation(ConfirmOrganisationToRemoveViewModel model)
@@ -263,7 +253,6 @@ public class EmployerAgreementController : BaseController
     }
 
     [HttpGet]
-    [DasAuthorize(EmployerUserRole.Any)]
     [Route("organisations/{accountLegalEntityHashedId}/agreements")]
     public async Task<IActionResult> ViewAllAgreements(string hashedAccountId, string accountLegalEntityHashedId)
     {

@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using SFA.DAS.Authorization.Mvc.Attributes;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
@@ -32,7 +32,7 @@ public class InvitationController : BaseController
     }
 
     [HttpGet]
-    [DasAuthorize]
+    [Authorize]
     public async Task<IActionResult> All()
     {
         if (string.IsNullOrEmpty(HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName)))
@@ -46,7 +46,7 @@ public class InvitationController : BaseController
     }
 
     [HttpGet]
-    [DasAuthorize]
+    [Authorize]
     [Route("view")]
     public async Task<IActionResult> Details(string invitationId)
     {
@@ -61,7 +61,7 @@ public class InvitationController : BaseController
     }
 
     [HttpPost]
-    [DasAuthorize]
+    [Authorize]
     [ValidateAntiForgeryToken]
     [Route("accept")]
     public async Task<IActionResult> Accept(long invitation, UserInvitationsViewModel model)
@@ -93,7 +93,7 @@ public class InvitationController : BaseController
     }
 
     [HttpPost]
-    [DasAuthorize]
+    [Authorize]
     [ValidateAntiForgeryToken]
     [Route("create")]
     public async Task<IActionResult> Create(InviteTeamMemberViewModel model)

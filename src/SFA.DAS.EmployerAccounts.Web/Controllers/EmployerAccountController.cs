@@ -1,16 +1,16 @@
 ﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Routing;
 using Newtonsoft.Json;
-using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
-using SFA.DAS.Encoding;
+using SFA.DAS.EmployerAccounts.Web.Authentication;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
 [Route("accounts")]
-[DasAuthorize]
+[Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
 public class EmployerAccountController : BaseController
 {
     private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
@@ -210,7 +210,7 @@ public class EmployerAccountController : BaseController
         var returnUrlCookie = _returnUrlCookieStorageService.Get(ReturnUrlCookieName);
 
         _returnUrlCookieStorageService.Delete(ReturnUrlCookieName);
-        
+
         if (returnUrlCookie != null && !string.IsNullOrWhiteSpace(returnUrlCookie.Value))
         {
             return Redirect(returnUrlCookie.Value);

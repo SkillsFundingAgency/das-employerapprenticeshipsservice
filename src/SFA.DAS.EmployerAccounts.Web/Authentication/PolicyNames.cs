@@ -2,6 +2,6 @@
 
 public static class PolicyNames
 {
-    public static string HasEmployerAccount => nameof(HasEmployerAccount);
-    public static string HasEmployerViewerTransactorAccount => nameof(HasEmployerViewerTransactorAccount);
+    public static string HasEmployerOwnerAccount => nameof(HasEmployerOwnerAccount);
+    public static string HasEmployerViewerTransactorOwnerAccount => nameof(HasEmployerViewerTransactorOwnerAccount);
 }

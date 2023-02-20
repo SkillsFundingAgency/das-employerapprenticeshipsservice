@@ -1,6 +1,6 @@
-﻿using SFA.DAS.EmployerAccounts.EmployerUsers.ApiResponse;
+﻿using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Responses.UserAccounts;
 
-namespace SFA.DAS.EmployerAccounts.EmployerUsers;
+namespace SFA.DAS.EmployerAccounts.Models.UserAccounts;
 
 public class EmployerUserAccounts
 {

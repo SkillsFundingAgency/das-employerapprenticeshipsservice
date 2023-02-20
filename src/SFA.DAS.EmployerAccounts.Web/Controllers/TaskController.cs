@@ -1,9 +1,10 @@
 ﻿using System.Security.Claims;
-using SFA.DAS.Authorization.Mvc.Attributes;
+using Microsoft.AspNetCore.Authorization;
+using SFA.DAS.EmployerAccounts.Web.Authentication;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
-[DasAuthorize]
+[Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
 [Route("tasks/{hashedAccountId}")]
 public class TaskController : BaseController
 {
@@ -21,7 +22,6 @@ public class TaskController : BaseController
     }
 
     [HttpPost]
-    [DasAuthorize]
     [Route("dismissTask", Name = "DismissTask")]
     public async Task<IActionResult> DismissTask(DismissTaskViewModel viewModel)
     {

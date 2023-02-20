@@ -1,27 +1,28 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Newtonsoft.Json;
-using SFA.DAS.EmployerAccounts.EmployerUsers;
 using SFA.DAS.EmployerAccounts.Infrastructure;
+using SFA.DAS.EmployerAccounts.Models.UserAccounts;
+using SFA.DAS.EmployerAccounts.Services;
+using SFA.DAS.EmployerAccounts.Web.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.Web.Authentication;
 
 public interface IEmployerAccountAuthorisationHandler
 {
-    bool IsEmployerAuthorised(AuthorizationHandlerContext context, bool allowAllUserRoles);
+    Task<bool> IsEmployerAuthorised(AuthorizationHandlerContext context, bool allowAllUserRoles);
 }
 
-public class EmployerAccountAuthorizationHandler : AuthorizationHandler<EmployerAccountRequirement>, IEmployerAccountAuthorisationHandler
+public class EmployerAccountAuthorisationHandler : IEmployerAccountAuthorisationHandler
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IEmployerAccountService _accountsService;
-    private readonly ILogger<EmployerAccountAuthorizationHandler> _logger;
+    private readonly IUserAccountService _accountsService;
+    private readonly ILogger<EmployerAccountOwnerAuthorizationHandler> _logger;
     private readonly EmployerAccountsConfiguration _configuration;
 
-    public EmployerAccountAuthorizationHandler(IHttpContextAccessor httpContextAccessor, IEmployerAccountService accountsService, ILogger<EmployerAccountAuthorizationHandler> logger, IOptions<EmployerAccountsConfiguration> configuration)
+    public EmployerAccountAuthorisationHandler(IHttpContextAccessor httpContextAccessor, IUserAccountService accountsService, ILogger<EmployerAccountOwnerAuthorizationHandler> logger, IOptions<EmployerAccountsConfiguration> configuration)
     {
         _httpContextAccessor = httpContextAccessor;
         _accountsService = accountsService;
@@ -29,25 +30,13 @@ public class EmployerAccountAuthorizationHandler : AuthorizationHandler<Employer
         _configuration = configuration.Value;
     }
 
-    protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, EmployerAccountRequirement requirement)
+    public async Task<bool> IsEmployerAuthorised(AuthorizationHandlerContext context, bool allowAllUserRoles)
     {
-        if (!IsEmployerAuthorised(context, false))
-        {
-            return Task.CompletedTask;
-        }
-
-        context.Succeed(requirement);
-
-        return Task.CompletedTask;
-    }
-
-    public bool IsEmployerAuthorised(AuthorizationHandlerContext context, bool allowAllUserRoles)
-    {
-        if (!_httpContextAccessor.HttpContext.Request.RouteValues.ContainsKey(RouteValues.EmployerAccountId))
+        if (!_httpContextAccessor.HttpContext.Request.RouteValues.ContainsKey(RouteValueKeys.AccountHashedId))
         {
             return false;
         }
-        var accountIdFromUrl = _httpContextAccessor.HttpContext.Request.RouteValues[RouteValues.EmployerAccountId].ToString().ToUpper();
+        var accountIdFromUrl = _httpContextAccessor.HttpContext.Request.RouteValues[RouteValueKeys.AccountHashedId].ToString().ToUpper();
         var employerAccountClaim = context.User.FindFirst(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier));
 
         if (employerAccountClaim?.Value == null)
@@ -61,7 +50,7 @@ public class EmployerAccountAuthorizationHandler : AuthorizationHandler<Employer
         }
         catch (JsonSerializationException e)
         {
-            _logger.LogError(e, "Could not deserialize employer account claim for user {claim}", employerAccountClaim.Value);
+            _logger.LogError(e, "Could not deserialize employer account claim for user");
             return false;
         }
 
@@ -81,12 +70,14 @@ public class EmployerAccountAuthorizationHandler : AuthorizationHandler<Employer
             if (!context.User.HasClaim(c => c.Type.Equals(requiredIdClaim)))
                 return false;
 
-            var userClaim = context.User.Claims.First(c => c.Type.Equals(requiredIdClaim));
+            var userClaim = context.User.Claims
+                .First(c => c.Type.Equals(requiredIdClaim));
+
             var email = context.User.Claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.Email))?.Value;
-            
+
             var userId = userClaim.Value;
 
-            var result = _accountsService.GetUserAccounts(userId, email).Result;
+            var result = await _accountsService.GetUserAccounts(userId, email);
 
             var accountsAsJson = JsonConvert.SerializeObject(result.EmployerAccounts.ToDictionary(k => k.AccountId));
             var associatedAccountsClaim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, accountsAsJson, JsonClaimValueTypes.Json);
@@ -99,7 +90,6 @@ public class EmployerAccountAuthorizationHandler : AuthorizationHandler<Employer
             {
                 return false;
             }
-
             employerIdentifier = updatedEmployerAccounts[accountIdFromUrl];
         }
 
@@ -115,14 +105,13 @@ public class EmployerAccountAuthorizationHandler : AuthorizationHandler<Employer
 
         return true;
     }
-
     private static bool CheckUserRoleForAccess(EmployerUserAccountItem employerIdentifier, bool allowAllUserRoles)
     {
-        if (!Enum.TryParse<Role>(employerIdentifier.Role, true, out var userRole))
+        if (!Enum.TryParse<EmployerUserRole>(employerIdentifier.Role, true, out var userRole))
         {
             return false;
         }
 
-        return allowAllUserRoles || userRole == Role.Owner;
+        return allowAllUserRoles || userRole == EmployerUserRole.Owner;
     }
 }
