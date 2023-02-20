@@ -250,7 +250,11 @@ public class WhenAddingServicesToTheContainer
                     new("CommitmentsApi:ApiBaseUrl", "test"),
                     new("DefaultServiceTimeoutMilliseconds", "100"),
                     new("EmployerAccountsOuterApiConfiguration:BaseUrl", "https://test.test"),
-                    new("EmployerAccountsOuterApiConfiguration:Key", "test")
+                    new("EmployerAccountsOuterApiConfiguration:Key", "test"),
+                    new("Hmrc:BaseUrl", "test"),
+                    new("PensionRegulatorApi:IdentifierUri", "test"),
+                    new("PensionRegulatorApi:BaseUrl", "test"),
+                    new("RecruitApi:IdentifierUri", "test"),
                 }
         };
 
