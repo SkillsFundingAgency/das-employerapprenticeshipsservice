@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerAccounts.Commands.RunHealthCheckCommand;
 using SFA.DAS.EmployerAccounts.Queries.GetHealthCheck;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
-[DasAuthorize]
 [Route("healthcheck")]
 public class HealthCheckController : Controller
 {

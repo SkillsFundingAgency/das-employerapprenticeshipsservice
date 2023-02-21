@@ -1,16 +1,17 @@
 ﻿using System.Security.Claims;
 using System.Text.RegularExpressions;
-using SFA.DAS.Authorization.Mvc.Attributes;
+using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.OrganisationAndPayeRefData;
 using SFA.DAS.EmployerAccounts.Commands.OrganisationData;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeInUse;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAornLock;
 using SFA.DAS.EmployerAccounts.Queries.UpdateUserAornLock;
+using SFA.DAS.EmployerAccounts.Web.Authentication;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
-[DasAuthorize]
+[Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
 [Route("accounts")]
 public class SearchPensionRegulatorController : BaseController
 {

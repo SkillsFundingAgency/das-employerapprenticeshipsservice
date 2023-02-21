@@ -1,10 +1,11 @@
 ﻿using System.Security.Claims;
-using SFA.DAS.Authorization.Mvc.Attributes;
+using Microsoft.AspNetCore.Authorization;
+using SFA.DAS.EmployerAccounts.Web.Authentication;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
 [Route("settings")]
-[DasAuthorize]
+[Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
 public class SettingsController : BaseController
 {
     private readonly UserSettingsOrchestrator _userSettingsOrchestrator;

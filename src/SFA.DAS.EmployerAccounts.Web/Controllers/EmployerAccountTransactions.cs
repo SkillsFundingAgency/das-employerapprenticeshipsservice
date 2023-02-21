@@ -1,8 +1,9 @@
-﻿using SFA.DAS.Authorization.Mvc.Attributes;
+﻿using Microsoft.AspNetCore.Authorization;
+using SFA.DAS.EmployerAccounts.Web.Authentication;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
-[DasAuthorize]
+[Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
 [Route("accounts/{HashedAccountId}")]
 public class EmployerAccountTransactionsController : Controller
 {

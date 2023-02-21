@@ -2,7 +2,7 @@ using System.Net;
 using AutoFixture.NUnit3;
 using FluentAssertions;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Requests.EmployerUsers;
+using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Requests.UserAccounts;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Infrastructure.OuterApi.Requests.EmployerUsers;
 
@@ -13,7 +13,7 @@ public class WhenBuildingGetEmployerAccountsRequest
     {
         email = email + "'test @+£@$" + email;
 
-        var actual = new GetEmployerAccountsRequest(email, userId);
+        var actual = new GetUserAccountsRequest(email, userId);
 
         actual.GetUrl.Should().Be($"accountusers/{userId}/accounts?email={WebUtility.UrlEncode(email)}");
     }

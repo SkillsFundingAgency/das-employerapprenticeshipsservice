@@ -1,12 +1,13 @@
 ﻿using System.Security.Claims;
-using SFA.DAS.Authorization.Mvc.Attributes;
+using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.OrganisationData;
 using SFA.DAS.EmployerAccounts.Models.ReferenceData;
+using SFA.DAS.EmployerAccounts.Web.Authentication;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
-[DasAuthorize]
+[Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
 [Route("accounts")]
 public class SearchOrganisationController : BaseController
 {

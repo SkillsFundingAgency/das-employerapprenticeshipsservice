@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using AutoFixture.NUnit3;
 using FluentAssertions;
 using Microsoft.AspNetCore.Authentication;
@@ -10,12 +6,10 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
-using Moq;
 using Newtonsoft.Json;
-using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.EmployerUsers;
 using SFA.DAS.EmployerAccounts.Infrastructure;
+using SFA.DAS.EmployerAccounts.Models.UserAccounts;
+using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.EmployerAccounts.Web.Handlers;
 using SFA.DAS.Testing.AutoFixture;
 
@@ -25,7 +19,7 @@ public class WhenPopulatingAccountClaims
 {
     [Test, MoqAutoData]
     public async Task Then_The_Claims_Are_Populated_For_Stubbed_User(
-        [Frozen] Mock<IEmployerAccountService> accountService,
+        [Frozen] Mock<IUserAccountService> accountService,
         [Frozen] Mock<IConfiguration> configuration,
         EmployerAccountPostAuthenticationClaimsHandler handler)
     {
@@ -45,12 +39,11 @@ public class WhenPopulatingAccountClaims
         string idamsIdentifier,
         string emailAddress,
         EmployerUserAccounts accountData,
-        [Frozen] Mock<IEmployerAccountService> accountService,
-        [Frozen] Mock<IConfiguration> configuration,
-        [Frozen] Mock<IOptions<EmployerAccountsConfiguration>> forecastingConfiguration,
+        [Frozen] Mock<IUserAccountService> accountService,
+        [Frozen] Mock<IOptions<EmployerAccountsConfiguration>> accountsConfiguration,
         EmployerAccountPostAuthenticationClaimsHandler handler)
     {
-        forecastingConfiguration.Object.Value.UseGovSignIn = true;
+        accountsConfiguration.Object.Value.UseGovSignIn = true;
         var tokenValidatedContext = ArrangeTokenValidatedContext(nameIdentifier, idamsIdentifier, emailAddress);
         accountService.Setup(x => x.GetUserAccounts(nameIdentifier, emailAddress)).ReturnsAsync(accountData);
 
@@ -71,14 +64,13 @@ public class WhenPopulatingAccountClaims
         string nameIdentifier,
         string idamsIdentifier,
         EmployerUserAccounts accountData,
-        [Frozen] Mock<IEmployerAccountService> accountService,
-        [Frozen] Mock<IConfiguration> configuration,
-        [Frozen] Mock<IOptions<EmployerAccountsConfiguration>> forecastingConfiguration,
+        [Frozen] Mock<IUserAccountService> accountService,
+        [Frozen] Mock<IOptions<EmployerAccountsConfiguration>> accountsConfiguration,
         EmployerAccountPostAuthenticationClaimsHandler handler)
     {
         var tokenValidatedContext = ArrangeTokenValidatedContext(nameIdentifier, idamsIdentifier, string.Empty);
         accountService.Setup(x => x.GetUserAccounts(idamsIdentifier, "")).ReturnsAsync(accountData);
-        forecastingConfiguration.Object.Value.UseGovSignIn = false;
+        accountsConfiguration.Object.Value.UseGovSignIn = false;
 
         var actual = await handler.GetClaims(tokenValidatedContext);
 

@@ -14,5 +14,4 @@ public static class ConfigurationKeys
     public const string AuditApi = "SFA.DAS.AuditApiClient";
     public const string ReferenceDataApiClient = "SFA.DAS.ReferenceDataApiClient";
     public const string EncodingConfig = "SFA.DAS.Encoding";
-    public const string ActivitiesApiClient = "SFA.DAS.Activities.Client";
 }

@@ -1,8 +1,10 @@
 ﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using SFA.DAS.Authorization.Mvc.Attributes;
+using Microsoft.AspNetCore.Authorization;
+using Polly;
+using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
@@ -107,7 +109,7 @@ public class HomeController : BaseController
 
 
     [HttpGet]
-    [DasAuthorize]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     [Route("termsAndConditions")]
     public IActionResult TermsAndConditions(string returnUrl, string hashedAccountId)
     {
@@ -116,7 +118,7 @@ public class HomeController : BaseController
     }
 
     [HttpPost]
-    [DasAuthorize]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     [Route("termsAndConditions")]
     public async Task<IActionResult> TermsAndConditions(TermsAndConditionsNewViewModel termsAndConditionViewModel)
     {
@@ -130,7 +132,7 @@ public class HomeController : BaseController
         return RedirectToAction(nameof(Index));
     }
 
-    [DasAuthorize]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     [Route("SaveAndSearch")]
     public async Task<IActionResult> SaveAndSearch(string returnUrl)
     {
@@ -153,7 +155,7 @@ public class HomeController : BaseController
         return RedirectToAction(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName);
     }
 
-    [DasAuthorize]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     [HttpGet]
     [Route("accounts")]
     public async Task<IActionResult> ViewAccounts()
@@ -162,7 +164,7 @@ public class HomeController : BaseController
         return View(ControllerConstants.IndexActionName, accounts);
     }
 
-    [DasAuthorize]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     [HttpGet]
     [Route("register/new/{correlationId?}")]
     public async Task<IActionResult> HandleNewRegistration(string correlationId = null)
@@ -201,7 +203,7 @@ public class HomeController : BaseController
             : new RedirectResult($"{appConstants.RegisterLink()}{schema}://{authority}/service/register/new");
     }
 
-    [DasAuthorize]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     [HttpGet]
     [Route("password/change")]
     public IActionResult HandlePasswordChanged(bool userCancelled = false)
@@ -219,7 +221,7 @@ public class HomeController : BaseController
         return RedirectToAction(ControllerConstants.IndexActionName);
     }
 
-    [DasAuthorize]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     [HttpGet]
     [Route("email/change")]
     public async Task<IActionResult> HandleEmailChanged(bool userCancelled = false)
@@ -245,7 +247,6 @@ public class HomeController : BaseController
         return RedirectToAction(ControllerConstants.IndexActionName);
     }
 
-    [DasAuthorize]
     [Route("signIn")]
     public IActionResult SignIn()
     {

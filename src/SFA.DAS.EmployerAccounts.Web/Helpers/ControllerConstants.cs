@@ -9,7 +9,6 @@ public static class ControllerConstants
     public const string AccountHashedIdRouteKeyName = "HashedAccountId";
     public const string AcceptedEmployerAgreementViewName = "AcceptedEmployerAgreement";
     public const string ActionKeyName = "Action";
-    public const string ActivitiesUnavailableMessage = "Activities are currently unavailable.";
     public const string AmendOrganisationActionName = "AmendOrganisation";
     public const string AmendPayeActionName = "AmendPaye";
     public const string CannotRemoveOrganisationViewName = "CannotRemoveOrganisation";

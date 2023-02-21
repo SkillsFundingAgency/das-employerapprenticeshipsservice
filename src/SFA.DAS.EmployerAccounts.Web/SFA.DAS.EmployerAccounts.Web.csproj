@@ -1,477 +1,468 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="12.0.1" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
-    <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.13" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.13" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.WsFederation" Version="6.0.13" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.13" />
-    <PackageReference Include="NLog" Version="5.1.1" />
-    <PackageReference Include="NLog.Web.AspNetCore" Version="5.2.1" />
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions">
-      <Version>2.2.0</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Azure.DocumentDB.Core">
-      <Version>2.4.0</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Azure.KeyVault.Core">
-      <Version>2.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Azure.Services.AppAuthentication" Version="1.6.2" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.0.1" />
-    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">
-      <Version>5.3.0</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.IdentityModel.Protocols">
-      <Version>6.21.0</Version>
-    </PackageReference>
-    <PackageReference Include="NETStandard.Library">
-      <Version>2.0.0</Version>
-    </PackageReference>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-    <PackageReference Include="NServiceBus.MSDependencyInjection" Version="0.1.4" />
-    <PackageReference Include="Scrutor.AspNetCore" Version="3.3.0" />
-    <PackageReference Include="SFA.DAS.Audit.Client.Web" Version="1.0.0.20553" />
-    <PackageReference Include="SFA.DAS.Authorization.EmployerFeatures">
-      <Version>6.0.97</Version>
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles">
-      <Version>6.0.97</Version>
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.Authorization.Mvc">
-      <Version>6.0.97</Version>
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.Authentication">
-      <Version>1.1.2</Version>
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.283" />
-    <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
-    <PackageReference Include="SFA.DAS.EmployerAccounts.ReadStore">
-      <Version>1.6.2978</Version>
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.GovUK.Auth" Version="0.2.203" />
-    <PackageReference Include="SFA.DAS.Http">
-      <Version>3.2.28</Version>
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.Logging">
-      <Version>1.0.5</Version>
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.MA.Shared.UI">
-      <Version>1.2.7</Version>
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
-    <PackageReference Include="SFA.DAS.NServiceBus.Mvc" Version="1.0.46" />
-    <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="16.0.20" />
-    <PackageReference Include="SFA.DAS.OidcMiddleware" Version="2.0.0.61553" />
-    <PackageReference Include="SFA.DAS.Reservations.Messages">
-      <Version>0.1.0</Version>
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.UnitOfWork.EntityFrameworkCore" Version="9.0.28" />
-    <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="9.0.28" />
-    <PackageReference Include="StructureMap" Version="4.7.1" />
-    <PackageReference Include="StructureMap.MVC5" Version="3.1.1.134" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.1" />
-    <PackageReference Include="WebEssentials.AspNetCore.CdnTagHelpers">
-      <Version>1.0.16</Version>
-    </PackageReference>
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
-    <PackageReference Include="SFA.DAS.Web.Policy" Version="1.1.0.63777" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.12" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Global.asax.cs">
-      <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="NLog.xsd">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj" />
-    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Messages\SFA.DAS.EmployerAccounts.Messages.csproj" />
-    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore.csproj" />
-    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Types\SFA.DAS.EmployerAccounts.Types.csproj" />
-    <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj" />
-  </ItemGroup>
-  <PropertyGroup>
-    <WebProjectOutputDir Condition="$(WebProjectOutputDir) == '' AND $(OS) == 'Unix' ">./</WebProjectOutputDir>
-  </PropertyGroup>
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <OutputPath>bin\</OutputPath>
-  </PropertyGroup>
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="wwwroot\dist\css\accordion.css" />
-    <None Include="wwwroot\dist\css\external-links\external-link-24x24.png" />
-    <None Include="wwwroot\dist\css\external-links\external-link-black-12x12.png" />
-    <None Include="wwwroot\dist\css\external-links\external-link-black-24x24.png" />
-    <None Include="wwwroot\dist\css\external-links\external-link.png" />
-    <None Include="wwwroot\dist\css\fonts-ie8.css" />
-    <None Include="wwwroot\dist\css\fonts.css" />
-    <None Include="wwwroot\dist\css\fonts\GDSTransportTabular-Bold.eot" />
-    <None Include="wwwroot\dist\css\fonts\GDSTransportTabular-Light.eot" />
-    <None Include="wwwroot\dist\css\fonts\GDSTransportWebsite-Bold.eot" />
-    <None Include="wwwroot\dist\css\fonts\GDSTransportWebsite.eot" />
-    <None Include="wwwroot\dist\css\govuk-template-ie6.css" />
-    <None Include="wwwroot\dist\css\govuk-template-ie7.css" />
-    <None Include="wwwroot\dist\css\govuk-template-ie8.css" />
-    <None Include="wwwroot\dist\css\govuk-template-print.css" />
-    <None Include="wwwroot\dist\css\govuk-template.css" />
-    <None Include="wwwroot\dist\css\images\close.png" />
-    <None Include="wwwroot\dist\css\images\gov.uk_logotype_crown-1x.png" />
-    <None Include="wwwroot\dist\css\images\gov.uk_logotype_crown.png" />
-    <None Include="wwwroot\dist\css\images\govuk-crest-2x.png" />
-    <None Include="wwwroot\dist\css\images\govuk-crest-ie.png" />
-    <None Include="wwwroot\dist\css\images\govuk-crest.png" />
-    <None Include="wwwroot\dist\css\images\open-government-licence.png" />
-    <None Include="wwwroot\dist\css\images\open-government-licence_2x.png" />
-    <None Include="wwwroot\dist\css\images\option-select-toggle-sprite.png" />
-    <None Include="wwwroot\dist\css\images\pagination-arrow-sprite.png" />
-    <None Include="wwwroot\dist\css\legal\legal-agreement.css" />
-    <None Include="wwwroot\dist\css\screen-ie6.css" />
-    <None Include="wwwroot\dist\css\screen-ie7.css" />
-    <None Include="wwwroot\dist\css\screen-ie8.css" />
-    <None Include="wwwroot\dist\css\screen.css" />
-    <None Include="wwwroot\dist\css\select2.min.css" />
-    <None Include="wwwroot\dist\css\site.css" />
-    <None Include="wwwroot\dist\images\apple-touch-icon-120x120.png" />
-    <None Include="wwwroot\dist\images\apple-touch-icon-152x152.png" />
-    <None Include="wwwroot\dist\images\apple-touch-icon-60x60.png" />
-    <None Include="wwwroot\dist\images\apple-touch-icon-76x76.png" />
-    <None Include="wwwroot\dist\images\arrow-sprite.png" />
-    <None Include="wwwroot\dist\images\favicon.ico" />
-    <None Include="wwwroot\dist\images\gov.uk_logotype_crown.svg" />
-    <None Include="wwwroot\dist\images\gov.uk_logotype_crown_invert.png" />
-    <None Include="wwwroot\dist\images\gov.uk_logotype_crown_invert_trans.png" />
-    <None Include="wwwroot\dist\images\icon-green-tick.png" />
-    <None Include="wwwroot\dist\images\icon-important-2x.png" />
-    <None Include="wwwroot\dist\images\icon-important.png" />
-    <None Include="wwwroot\dist\images\icon-pointer-2x.png" />
-    <None Include="wwwroot\dist\images\icon-pointer-black-2x.png" />
-    <None Include="wwwroot\dist\images\icon-pointer-black.png" />
-    <None Include="wwwroot\dist\images\icon-pointer-indexed.png" />
-    <None Include="wwwroot\dist\images\icon-pointer.png" />
-    <None Include="wwwroot\dist\images\icon-search-2x.png" />
-    <None Include="wwwroot\dist\images\icon-search.png" />
-    <None Include="wwwroot\dist\images\opengraph-image.png" />
-    <None Include="wwwroot\dist\images\org_crest_13px.png" />
-    <None Include="wwwroot\dist\images\org_crest_13px_x2.png" />
-    <None Include="wwwroot\dist\images\org_crest_18px.png" />
-    <None Include="wwwroot\dist\images\org_crest_18px_x2.png" />
-    <None Include="wwwroot\dist\images\org_crest_27px.png" />
-    <None Include="wwwroot\dist\images\org_crest_27px_x2.png" />
-    <None Include="wwwroot\dist\images\pub-cover-html.png" />
-    <None Include="wwwroot\dist\images\separator-2x.png" />
-    <None Include="wwwroot\dist\images\separator.png" />
-    <None Include="wwwroot\dist\javascripts\accordion.js" />
-    <None Include="wwwroot\dist\javascripts\app.js" />
-    <None Include="wwwroot\dist\javascripts\apprentice\dropdown.js" />
-    <None Include="wwwroot\dist\javascripts\apprentice\select2.min.js" />
-    <None Include="wwwroot\dist\javascripts\character-limit.js" />
-    <None Include="wwwroot\dist\javascripts\cookiebanner.js" />
-    <None Include="wwwroot\dist\javascripts\govuk-template.js" />
-    <None Include="wwwroot\dist\javascripts\ie.js" />
-    <None Include="wwwroot\dist\javascripts\jquery-1.11.0.min.js" />
-    <None Include="wwwroot\dist\javascripts\length-limit.js" />
-    <None Include="wwwroot\dist\javascripts\lodash.js" />
-    <None Include="wwwroot\dist\javascripts\payment-order.js" />
-    <None Include="wwwroot\dist\javascripts\respond.min.js" />
-    <None Include="wwwroot\dist\javascripts\selection-buttons.js" />
-    <None Include="wwwroot\dist\javascripts\sfa-modernizr.js" />
-    <None Include="wwwroot\dist\javascripts\showhide-content.js" />
-    <None Include="wwwroot\dist\javascripts\stacker.js" />
-    <None Include="wwwroot\public\images\icon-important.png" />
-    <None Include="wwwroot\public\js\dataLayerPushes.js" />
-    <None Include="wwwroot\src\govuk_elements\sass\elements-page-ie6.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\elements-page-ie7.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\elements-page-ie8.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\elements-page.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\elements\forms\_form-block-labels.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\elements\forms\_form-date.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\elements\forms\_form-multiple-choice.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\elements\forms\_form-validation.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\elements\_breadcrumbs.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\elements\_buttons.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\elements\_components.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\elements\_details.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\elements\_elements-typography.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\elements\_forms.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\elements\_govuk-template-base.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\elements\_helpers.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\elements\_icons.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\elements\_layout.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\elements\_lists.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\elements\_panels.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\elements\_phase-banner.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\elements\_reset.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\elements\_shame.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\elements\_tables.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\main-ie6.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\main-ie7.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\main-ie8.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\main.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\prism.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\vendor\prism.scss" />
-    <None Include="wwwroot\src\govuk_elements\sass\_govuk-elements.scss" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\CHANGELOG.md" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\CONTRIBUTING.md" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\accordian-arrow-2x.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\accordian-arrow.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\arrow-sprite.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\bis_crest_13px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\bis_crest_13px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\bis_crest_18px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\bis_crest_18px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\bis_crest_27px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\bis_crest_27px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\coastguard_13px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\coastguard_13px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\coastguard_18px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\coastguard_18px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\coastguard_27px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\coastguard_27px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\dit_crest_13px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\dit_crest_13px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\dit_crest_18px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\dit_crest_18px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\dit_crest_27px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\dit_crest_27px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\hmrc_crest_13px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\hmrc_crest_13px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\hmrc_crest_18px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\hmrc_crest_18px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\hmrc_crest_27px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\hmrc_crest_27px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ho_crest_13px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ho_crest_13px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ho_crest_18px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ho_crest_18px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ho_crest_27px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ho_crest_27px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\mod_crest_13px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\mod_crest_13px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\mod_crest_18px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\mod_crest_18px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\mod_crest_27px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\mod_crest_27px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\org_crest_13px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\org_crest_13px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\org_crest_18px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\org_crest_18px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\org_crest_27px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\org_crest_27px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\portcullis_13px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\portcullis_13px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\portcullis_18px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\portcullis_18px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\portcullis_27px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\portcullis_27px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\so_crest_13px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\so_crest_13px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\so_crest_18px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\so_crest_18px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\so_crest_27px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\so_crest_27px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ukaea_crest_13px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ukaea_crest_13px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ukaea_crest_18px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ukaea_crest_18px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ukaea_crest_27px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ukaea_crest_27px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ukho_13px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ukho_13px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ukho_18px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ukho_18px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ukho_27px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ukho_27px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\wales_crest_13px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\wales_crest_13px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\wales_crest_18px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\wales_crest_18px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\wales_crest_27px.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\wales_crest_27px_x2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\external-links\external-link-24x24.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\external-links\external-link-black-12x12.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\external-links\external-link-black-24x24.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\external-links\external-link.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-arrow-left.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-calendar-2x.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-calendar.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-file-download-2x.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-file-download.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-important-2x.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-important.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-information-2x.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-information.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-locator-2x.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-locator.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-pointer-2x.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-pointer-black-2x.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-pointer-black.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-pointer-indexed.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-pointer.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-search-2x.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-search.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-1-2x.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-1.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-10-2x.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-10.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-11-2x.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-11.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-12-2x.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-12.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-13-2x.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-13.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-14-2x.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-14.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-2-2x.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-2.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-3-2x.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-3.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-4-2x.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-4.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-5-2x.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-5.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-6-2x.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-6.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-7-2x.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-7.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-8-2x.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-8.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-9-2x.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-9.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\player-icon-forward.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\player-icon-pause.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\player-icon-play.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\player-icon-rewind.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\player-icon-volume.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\separator-2x.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\images\separator.png" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\analytics\analytics.js" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\analytics\download-link-tracker.js" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\analytics\error-tracking.js" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\analytics\external-link-tracker.js" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\analytics\google-analytics-universal-tracker.js" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\analytics\mailto-link-tracker.js" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\analytics\print-intent.js" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\anchor-buttons.js" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\modules.js" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\modules\auto-track-event.js" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\multivariate-test.js" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\primary-links.js" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\selection-buttons.js" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\shim-links-with-button-role.js" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\show-hide-content.js" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\stick-at-top-when-scrolling.js" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\stop-scrolling-at-footer.js" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk_toolkit.js" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\stageprompt.js" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\vendor\jquery\jquery.player.min.js" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\vendor\polyfills\bind.js" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\LICENCE" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\README.md" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\colours\_organisation.scss" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\colours\_palette.scss" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\design-patterns\_alpha-beta.scss" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\design-patterns\_breadcrumbs.scss" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\design-patterns\_buttons.scss" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\design-patterns\_media-player.scss" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\_colours.scss" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\_conditionals.scss" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\_css3.scss" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\_device-pixels.scss" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\_font_stack.scss" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\_grid_layout.scss" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\_helpers.scss" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\_measurements.scss" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\_shims.scss" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\_typography.scss" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\_url-helpers.scss" />
-    <None Include="wwwroot\src\govuk_frontend_toolkit\VERSION.txt" />
-    <None Include="wwwroot\src\govuk_template\assets\images\apple-touch-icon-120x120.png" />
-    <None Include="wwwroot\src\govuk_template\assets\images\apple-touch-icon-152x152.png" />
-    <None Include="wwwroot\src\govuk_template\assets\images\apple-touch-icon-60x60.png" />
-    <None Include="wwwroot\src\govuk_template\assets\images\apple-touch-icon-76x76.png" />
-    <None Include="wwwroot\src\govuk_template\assets\images\favicon.ico" />
-    <None Include="wwwroot\src\govuk_template\assets\images\gov.uk_logotype_crown.svg" />
-    <None Include="wwwroot\src\govuk_template\assets\images\gov.uk_logotype_crown_invert.png" />
-    <None Include="wwwroot\src\govuk_template\assets\images\gov.uk_logotype_crown_invert_trans.png" />
-    <None Include="wwwroot\src\govuk_template\assets\images\opengraph-image.png" />
-    <None Include="wwwroot\src\govuk_template\assets\javascripts\govuk-template.js" />
-    <None Include="wwwroot\src\govuk_template\assets\javascripts\ie.js" />
-    <None Include="wwwroot\src\govuk_template\assets\stylesheets\external-links\external-link-24x24.png" />
-    <None Include="wwwroot\src\govuk_template\assets\stylesheets\external-links\external-link-black-12x12.png" />
-    <None Include="wwwroot\src\govuk_template\assets\stylesheets\external-links\external-link-black-24x24.png" />
-    <None Include="wwwroot\src\govuk_template\assets\stylesheets\external-links\external-link.png" />
-    <None Include="wwwroot\src\govuk_template\assets\stylesheets\fonts-ie8.css" />
-    <None Include="wwwroot\src\govuk_template\assets\stylesheets\fonts.css" />
-    <None Include="wwwroot\src\govuk_template\assets\stylesheets\fonts\GDSTransportTabular-Bold.eot" />
-    <None Include="wwwroot\src\govuk_template\assets\stylesheets\fonts\GDSTransportTabular-Light.eot" />
-    <None Include="wwwroot\src\govuk_template\assets\stylesheets\fonts\GDSTransportWebsite-Bold.eot" />
-    <None Include="wwwroot\src\govuk_template\assets\stylesheets\fonts\GDSTransportWebsite.eot" />
-    <None Include="wwwroot\src\govuk_template\assets\stylesheets\govuk-template-ie6.css" />
-    <None Include="wwwroot\src\govuk_template\assets\stylesheets\govuk-template-ie7.css" />
-    <None Include="wwwroot\src\govuk_template\assets\stylesheets\govuk-template-ie8.css" />
-    <None Include="wwwroot\src\govuk_template\assets\stylesheets\govuk-template-print.css" />
-    <None Include="wwwroot\src\govuk_template\assets\stylesheets\govuk-template.css" />
-    <None Include="wwwroot\src\govuk_template\assets\stylesheets\images\close.png" />
-    <None Include="wwwroot\src\govuk_template\assets\stylesheets\images\gov.uk_logotype_crown-1x.png" />
-    <None Include="wwwroot\src\govuk_template\assets\stylesheets\images\gov.uk_logotype_crown.png" />
-    <None Include="wwwroot\src\govuk_template\assets\stylesheets\images\govuk-crest-2x.png" />
-    <None Include="wwwroot\src\govuk_template\assets\stylesheets\images\govuk-crest-ie.png" />
-    <None Include="wwwroot\src\govuk_template\assets\stylesheets\images\govuk-crest.png" />
-    <None Include="wwwroot\src\govuk_template\assets\stylesheets\images\open-government-licence.png" />
-    <None Include="wwwroot\src\govuk_template\assets\stylesheets\images\open-government-licence_2x.png" />
-    <None Include="wwwroot\src\govuk_template\README.md" />
-    <None Include="wwwroot\src\govuk_template\VERSION" />
-    <None Include="wwwroot\src\govuk_template\views\layouts\govuk_template.html" />
-    <None Include="wwwroot\src\sass\screen-ie6.scss" />
-    <None Include="wwwroot\src\sass\screen-ie7.scss" />
-    <None Include="wwwroot\src\sass\screen-ie8.scss" />
-    <None Include="wwwroot\src\sass\screen.scss" />
-    <None Include="wwwroot\src\sass\_accordions.scss" />
-    <None Include="wwwroot\src\sass\_agreement.scss" />
-    <None Include="wwwroot\src\sass\_all.scss" />
-    <None Include="wwwroot\src\sass\_commitments.scss" />
-    <None Include="wwwroot\src\sass\_cookiebanner.scss" />
-    <None Include="wwwroot\src\sass\_custom.scss" />
-    <None Include="wwwroot\src\sass\_forms.scss" />
-    <None Include="wwwroot\src\sass\_header.scss" />
-    <None Include="wwwroot\src\sass\_helpers.scss" />
-    <None Include="wwwroot\src\sass\_icons.scss" />
-    <None Include="wwwroot\src\sass\_interim-homepage.scss" />
-    <None Include="wwwroot\src\sass\_layouts.scss" />
-    <None Include="wwwroot\src\sass\_mixins.scss" />
-    <None Include="wwwroot\src\sass\_navigation.scss" />
-    <None Include="wwwroot\src\sass\_notifications.scss" />
-    <None Include="wwwroot\src\sass\_panels.scss" />
-    <None Include="wwwroot\src\sass\_search.scss" />
-    <None Include="wwwroot\src\sass\_tables.scss" />
-    <None Include="wwwroot\src\sass\_tabs.scss" />
-    <None Include="wwwroot\src\sass\_tag.scss" />
-    <None Include="wwwroot\src\sass\_tasks.scss" />
-    <None Include="wwwroot\src\sass\_type.scss" />
-    <None Include="wwwroot\src\sass\_welcome.scss" />
-    <None Include="wwwroot\src\svg\arrows.svg" />
-    <None Include="wwwroot\src\svg\chevron-left.svg" />
-    <None Include="wwwroot\src\svg\chevron-right.svg" />
-    <None Include="wwwroot\src\svg\cross.svg" />
-    <None Include="wwwroot\src\svg\favourite-unchecked-black.svg" />
-    <None Include="wwwroot\src\svg\favourite-unchecked-white.svg" />
-    <None Include="wwwroot\src\svg\important.svg" />
-    <None Include="wwwroot\src\svg\tick.svg" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="12.0.1" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+		<PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
+		<PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.13" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.13" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.WsFederation" Version="6.0.13" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.13" />
+		<PackageReference Include="NLog" Version="5.1.1" />
+		<PackageReference Include="NLog.Web.AspNetCore" Version="5.2.1" />
+		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions">
+			<Version>2.2.0</Version>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Azure.DocumentDB.Core">
+			<Version>2.4.0</Version>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Azure.Services.AppAuthentication" Version="1.6.2" />
+		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="5.0.1" />
+		<PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">
+			<Version>5.3.0</Version>
+		</PackageReference>
+		<PackageReference Include="Microsoft.IdentityModel.Protocols">
+			<Version>6.21.0</Version>
+		</PackageReference>
+		<PackageReference Include="NETStandard.Library">
+			<Version>2.0.0</Version>
+		</PackageReference>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+		<PackageReference Include="NServiceBus.MSDependencyInjection" Version="0.1.4" />
+		<PackageReference Include="Scrutor.AspNetCore" Version="3.3.0" />
+		<PackageReference Include="SFA.DAS.Audit.Client.Web" Version="1.0.0.20553" />
+		<PackageReference Include="SFA.DAS.Authorization.EmployerFeatures">
+			<Version>6.0.97</Version>
+		</PackageReference>
+		<PackageReference Include="SFA.DAS.Authentication">
+			<Version>1.1.2</Version>
+		</PackageReference>
+		<PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.283" />
+		<PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
+		<PackageReference Include="SFA.DAS.EmployerAccounts.ReadStore">
+			<Version>1.6.2978</Version>
+		</PackageReference>
+		<PackageReference Include="SFA.DAS.GovUK.Auth" Version="0.2.203" />
+		<PackageReference Include="SFA.DAS.Http">
+			<Version>3.2.28</Version>
+		</PackageReference>
+		<PackageReference Include="SFA.DAS.Logging">
+			<Version>1.0.5</Version>
+		</PackageReference>
+		<PackageReference Include="SFA.DAS.MA.Shared.UI">
+			<Version>1.2.7</Version>
+		</PackageReference>
+		<PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
+		<PackageReference Include="SFA.DAS.NServiceBus.Mvc" Version="1.0.46" />
+		<PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="16.0.20" />
+		<PackageReference Include="SFA.DAS.OidcMiddleware" Version="2.0.0.61553" />
+		<PackageReference Include="SFA.DAS.Reservations.Messages">
+			<Version>0.1.0</Version>
+		</PackageReference>
+		<PackageReference Include="SFA.DAS.UnitOfWork.EntityFrameworkCore" Version="9.0.28" />
+		<PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="9.0.28" />
+		<PackageReference Include="StructureMap" Version="4.7.1" />
+		<PackageReference Include="StructureMap.MVC5" Version="3.1.1.134" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.1" />
+		<PackageReference Include="WebEssentials.AspNetCore.CdnTagHelpers">
+			<Version>1.0.16</Version>
+		</PackageReference>
+		<PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
+		<PackageReference Include="SFA.DAS.Web.Policy" Version="1.1.0.63777" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.12" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Update="Global.asax.cs">
+			<DependentUpon>Global.asax</DependentUpon>
+		</Compile>
+	</ItemGroup>
+	<ItemGroup>
+		<None Update="NLog.xsd">
+			<SubType>Designer</SubType>
+		</None>
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj" />
+		<ProjectReference Include="..\SFA.DAS.EmployerAccounts.Messages\SFA.DAS.EmployerAccounts.Messages.csproj" />
+		<ProjectReference Include="..\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore.csproj" />
+		<ProjectReference Include="..\SFA.DAS.EmployerAccounts.Types\SFA.DAS.EmployerAccounts.Types.csproj" />
+		<ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj" />
+	</ItemGroup>
+	<PropertyGroup>
+		<WebProjectOutputDir Condition="$(WebProjectOutputDir) == '' AND $(OS) == 'Unix' ">./</WebProjectOutputDir>
+	</PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<OutputPath>bin\</OutputPath>
+	</PropertyGroup>
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="wwwroot\dist\css\accordion.css" />
+		<None Include="wwwroot\dist\css\external-links\external-link-24x24.png" />
+		<None Include="wwwroot\dist\css\external-links\external-link-black-12x12.png" />
+		<None Include="wwwroot\dist\css\external-links\external-link-black-24x24.png" />
+		<None Include="wwwroot\dist\css\external-links\external-link.png" />
+		<None Include="wwwroot\dist\css\fonts-ie8.css" />
+		<None Include="wwwroot\dist\css\fonts.css" />
+		<None Include="wwwroot\dist\css\fonts\GDSTransportTabular-Bold.eot" />
+		<None Include="wwwroot\dist\css\fonts\GDSTransportTabular-Light.eot" />
+		<None Include="wwwroot\dist\css\fonts\GDSTransportWebsite-Bold.eot" />
+		<None Include="wwwroot\dist\css\fonts\GDSTransportWebsite.eot" />
+		<None Include="wwwroot\dist\css\govuk-template-ie6.css" />
+		<None Include="wwwroot\dist\css\govuk-template-ie7.css" />
+		<None Include="wwwroot\dist\css\govuk-template-ie8.css" />
+		<None Include="wwwroot\dist\css\govuk-template-print.css" />
+		<None Include="wwwroot\dist\css\govuk-template.css" />
+		<None Include="wwwroot\dist\css\images\close.png" />
+		<None Include="wwwroot\dist\css\images\gov.uk_logotype_crown-1x.png" />
+		<None Include="wwwroot\dist\css\images\gov.uk_logotype_crown.png" />
+		<None Include="wwwroot\dist\css\images\govuk-crest-2x.png" />
+		<None Include="wwwroot\dist\css\images\govuk-crest-ie.png" />
+		<None Include="wwwroot\dist\css\images\govuk-crest.png" />
+		<None Include="wwwroot\dist\css\images\open-government-licence.png" />
+		<None Include="wwwroot\dist\css\images\open-government-licence_2x.png" />
+		<None Include="wwwroot\dist\css\images\option-select-toggle-sprite.png" />
+		<None Include="wwwroot\dist\css\images\pagination-arrow-sprite.png" />
+		<None Include="wwwroot\dist\css\legal\legal-agreement.css" />
+		<None Include="wwwroot\dist\css\screen-ie6.css" />
+		<None Include="wwwroot\dist\css\screen-ie7.css" />
+		<None Include="wwwroot\dist\css\screen-ie8.css" />
+		<None Include="wwwroot\dist\css\screen.css" />
+		<None Include="wwwroot\dist\css\select2.min.css" />
+		<None Include="wwwroot\dist\css\site.css" />
+		<None Include="wwwroot\dist\images\apple-touch-icon-120x120.png" />
+		<None Include="wwwroot\dist\images\apple-touch-icon-152x152.png" />
+		<None Include="wwwroot\dist\images\apple-touch-icon-60x60.png" />
+		<None Include="wwwroot\dist\images\apple-touch-icon-76x76.png" />
+		<None Include="wwwroot\dist\images\arrow-sprite.png" />
+		<None Include="wwwroot\dist\images\favicon.ico" />
+		<None Include="wwwroot\dist\images\gov.uk_logotype_crown.svg" />
+		<None Include="wwwroot\dist\images\gov.uk_logotype_crown_invert.png" />
+		<None Include="wwwroot\dist\images\gov.uk_logotype_crown_invert_trans.png" />
+		<None Include="wwwroot\dist\images\icon-green-tick.png" />
+		<None Include="wwwroot\dist\images\icon-important-2x.png" />
+		<None Include="wwwroot\dist\images\icon-important.png" />
+		<None Include="wwwroot\dist\images\icon-pointer-2x.png" />
+		<None Include="wwwroot\dist\images\icon-pointer-black-2x.png" />
+		<None Include="wwwroot\dist\images\icon-pointer-black.png" />
+		<None Include="wwwroot\dist\images\icon-pointer-indexed.png" />
+		<None Include="wwwroot\dist\images\icon-pointer.png" />
+		<None Include="wwwroot\dist\images\icon-search-2x.png" />
+		<None Include="wwwroot\dist\images\icon-search.png" />
+		<None Include="wwwroot\dist\images\opengraph-image.png" />
+		<None Include="wwwroot\dist\images\org_crest_13px.png" />
+		<None Include="wwwroot\dist\images\org_crest_13px_x2.png" />
+		<None Include="wwwroot\dist\images\org_crest_18px.png" />
+		<None Include="wwwroot\dist\images\org_crest_18px_x2.png" />
+		<None Include="wwwroot\dist\images\org_crest_27px.png" />
+		<None Include="wwwroot\dist\images\org_crest_27px_x2.png" />
+		<None Include="wwwroot\dist\images\pub-cover-html.png" />
+		<None Include="wwwroot\dist\images\separator-2x.png" />
+		<None Include="wwwroot\dist\images\separator.png" />
+		<None Include="wwwroot\dist\javascripts\accordion.js" />
+		<None Include="wwwroot\dist\javascripts\app.js" />
+		<None Include="wwwroot\dist\javascripts\apprentice\dropdown.js" />
+		<None Include="wwwroot\dist\javascripts\apprentice\select2.min.js" />
+		<None Include="wwwroot\dist\javascripts\character-limit.js" />
+		<None Include="wwwroot\dist\javascripts\cookiebanner.js" />
+		<None Include="wwwroot\dist\javascripts\govuk-template.js" />
+		<None Include="wwwroot\dist\javascripts\ie.js" />
+		<None Include="wwwroot\dist\javascripts\jquery-1.11.0.min.js" />
+		<None Include="wwwroot\dist\javascripts\length-limit.js" />
+		<None Include="wwwroot\dist\javascripts\lodash.js" />
+		<None Include="wwwroot\dist\javascripts\payment-order.js" />
+		<None Include="wwwroot\dist\javascripts\respond.min.js" />
+		<None Include="wwwroot\dist\javascripts\selection-buttons.js" />
+		<None Include="wwwroot\dist\javascripts\sfa-modernizr.js" />
+		<None Include="wwwroot\dist\javascripts\showhide-content.js" />
+		<None Include="wwwroot\dist\javascripts\stacker.js" />
+		<None Include="wwwroot\public\images\icon-important.png" />
+		<None Include="wwwroot\public\js\dataLayerPushes.js" />
+		<None Include="wwwroot\src\govuk_elements\sass\elements-page-ie6.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\elements-page-ie7.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\elements-page-ie8.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\elements-page.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\elements\forms\_form-block-labels.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\elements\forms\_form-date.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\elements\forms\_form-multiple-choice.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\elements\forms\_form-validation.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\elements\_breadcrumbs.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\elements\_buttons.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\elements\_components.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\elements\_details.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\elements\_elements-typography.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\elements\_forms.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\elements\_govuk-template-base.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\elements\_helpers.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\elements\_icons.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\elements\_layout.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\elements\_lists.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\elements\_panels.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\elements\_phase-banner.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\elements\_reset.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\elements\_shame.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\elements\_tables.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\main-ie6.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\main-ie7.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\main-ie8.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\main.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\prism.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\vendor\prism.scss" />
+		<None Include="wwwroot\src\govuk_elements\sass\_govuk-elements.scss" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\CHANGELOG.md" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\CONTRIBUTING.md" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\accordian-arrow-2x.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\accordian-arrow.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\arrow-sprite.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\bis_crest_13px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\bis_crest_13px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\bis_crest_18px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\bis_crest_18px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\bis_crest_27px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\bis_crest_27px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\coastguard_13px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\coastguard_13px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\coastguard_18px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\coastguard_18px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\coastguard_27px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\coastguard_27px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\dit_crest_13px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\dit_crest_13px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\dit_crest_18px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\dit_crest_18px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\dit_crest_27px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\dit_crest_27px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\hmrc_crest_13px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\hmrc_crest_13px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\hmrc_crest_18px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\hmrc_crest_18px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\hmrc_crest_27px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\hmrc_crest_27px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ho_crest_13px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ho_crest_13px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ho_crest_18px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ho_crest_18px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ho_crest_27px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ho_crest_27px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\mod_crest_13px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\mod_crest_13px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\mod_crest_18px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\mod_crest_18px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\mod_crest_27px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\mod_crest_27px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\org_crest_13px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\org_crest_13px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\org_crest_18px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\org_crest_18px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\org_crest_27px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\org_crest_27px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\portcullis_13px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\portcullis_13px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\portcullis_18px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\portcullis_18px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\portcullis_27px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\portcullis_27px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\so_crest_13px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\so_crest_13px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\so_crest_18px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\so_crest_18px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\so_crest_27px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\so_crest_27px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ukaea_crest_13px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ukaea_crest_13px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ukaea_crest_18px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ukaea_crest_18px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ukaea_crest_27px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ukaea_crest_27px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ukho_13px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ukho_13px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ukho_18px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ukho_18px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ukho_27px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\ukho_27px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\wales_crest_13px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\wales_crest_13px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\wales_crest_18px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\wales_crest_18px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\wales_crest_27px.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\crests\wales_crest_27px_x2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\external-links\external-link-24x24.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\external-links\external-link-black-12x12.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\external-links\external-link-black-24x24.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\external-links\external-link.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-arrow-left.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-calendar-2x.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-calendar.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-file-download-2x.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-file-download.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-important-2x.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-important.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-information-2x.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-information.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-locator-2x.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-locator.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-pointer-2x.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-pointer-black-2x.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-pointer-black.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-pointer-indexed.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-pointer.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-search-2x.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-search.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-1-2x.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-1.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-10-2x.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-10.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-11-2x.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-11.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-12-2x.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-12.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-13-2x.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-13.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-14-2x.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-14.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-2-2x.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-2.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-3-2x.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-3.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-4-2x.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-4.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-5-2x.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-5.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-6-2x.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-6.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-7-2x.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-7.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-8-2x.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-8.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-9-2x.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\icon-steps\icon-step-9.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\player-icon-forward.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\player-icon-pause.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\player-icon-play.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\player-icon-rewind.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\player-icon-volume.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\separator-2x.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\images\separator.png" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\analytics\analytics.js" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\analytics\download-link-tracker.js" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\analytics\error-tracking.js" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\analytics\external-link-tracker.js" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\analytics\google-analytics-universal-tracker.js" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\analytics\mailto-link-tracker.js" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\analytics\print-intent.js" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\anchor-buttons.js" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\modules.js" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\modules\auto-track-event.js" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\multivariate-test.js" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\primary-links.js" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\selection-buttons.js" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\shim-links-with-button-role.js" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\show-hide-content.js" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\stick-at-top-when-scrolling.js" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk\stop-scrolling-at-footer.js" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\govuk_toolkit.js" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\stageprompt.js" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\vendor\jquery\jquery.player.min.js" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\javascripts\vendor\polyfills\bind.js" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\LICENCE" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\README.md" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\colours\_organisation.scss" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\colours\_palette.scss" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\design-patterns\_alpha-beta.scss" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\design-patterns\_breadcrumbs.scss" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\design-patterns\_buttons.scss" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\design-patterns\_media-player.scss" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\_colours.scss" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\_conditionals.scss" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\_css3.scss" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\_device-pixels.scss" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\_font_stack.scss" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\_grid_layout.scss" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\_helpers.scss" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\_measurements.scss" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\_shims.scss" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\_typography.scss" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\stylesheets\_url-helpers.scss" />
+		<None Include="wwwroot\src\govuk_frontend_toolkit\VERSION.txt" />
+		<None Include="wwwroot\src\govuk_template\assets\images\apple-touch-icon-120x120.png" />
+		<None Include="wwwroot\src\govuk_template\assets\images\apple-touch-icon-152x152.png" />
+		<None Include="wwwroot\src\govuk_template\assets\images\apple-touch-icon-60x60.png" />
+		<None Include="wwwroot\src\govuk_template\assets\images\apple-touch-icon-76x76.png" />
+		<None Include="wwwroot\src\govuk_template\assets\images\favicon.ico" />
+		<None Include="wwwroot\src\govuk_template\assets\images\gov.uk_logotype_crown.svg" />
+		<None Include="wwwroot\src\govuk_template\assets\images\gov.uk_logotype_crown_invert.png" />
+		<None Include="wwwroot\src\govuk_template\assets\images\gov.uk_logotype_crown_invert_trans.png" />
+		<None Include="wwwroot\src\govuk_template\assets\images\opengraph-image.png" />
+		<None Include="wwwroot\src\govuk_template\assets\javascripts\govuk-template.js" />
+		<None Include="wwwroot\src\govuk_template\assets\javascripts\ie.js" />
+		<None Include="wwwroot\src\govuk_template\assets\stylesheets\external-links\external-link-24x24.png" />
+		<None Include="wwwroot\src\govuk_template\assets\stylesheets\external-links\external-link-black-12x12.png" />
+		<None Include="wwwroot\src\govuk_template\assets\stylesheets\external-links\external-link-black-24x24.png" />
+		<None Include="wwwroot\src\govuk_template\assets\stylesheets\external-links\external-link.png" />
+		<None Include="wwwroot\src\govuk_template\assets\stylesheets\fonts-ie8.css" />
+		<None Include="wwwroot\src\govuk_template\assets\stylesheets\fonts.css" />
+		<None Include="wwwroot\src\govuk_template\assets\stylesheets\fonts\GDSTransportTabular-Bold.eot" />
+		<None Include="wwwroot\src\govuk_template\assets\stylesheets\fonts\GDSTransportTabular-Light.eot" />
+		<None Include="wwwroot\src\govuk_template\assets\stylesheets\fonts\GDSTransportWebsite-Bold.eot" />
+		<None Include="wwwroot\src\govuk_template\assets\stylesheets\fonts\GDSTransportWebsite.eot" />
+		<None Include="wwwroot\src\govuk_template\assets\stylesheets\govuk-template-ie6.css" />
+		<None Include="wwwroot\src\govuk_template\assets\stylesheets\govuk-template-ie7.css" />
+		<None Include="wwwroot\src\govuk_template\assets\stylesheets\govuk-template-ie8.css" />
+		<None Include="wwwroot\src\govuk_template\assets\stylesheets\govuk-template-print.css" />
+		<None Include="wwwroot\src\govuk_template\assets\stylesheets\govuk-template.css" />
+		<None Include="wwwroot\src\govuk_template\assets\stylesheets\images\close.png" />
+		<None Include="wwwroot\src\govuk_template\assets\stylesheets\images\gov.uk_logotype_crown-1x.png" />
+		<None Include="wwwroot\src\govuk_template\assets\stylesheets\images\gov.uk_logotype_crown.png" />
+		<None Include="wwwroot\src\govuk_template\assets\stylesheets\images\govuk-crest-2x.png" />
+		<None Include="wwwroot\src\govuk_template\assets\stylesheets\images\govuk-crest-ie.png" />
+		<None Include="wwwroot\src\govuk_template\assets\stylesheets\images\govuk-crest.png" />
+		<None Include="wwwroot\src\govuk_template\assets\stylesheets\images\open-government-licence.png" />
+		<None Include="wwwroot\src\govuk_template\assets\stylesheets\images\open-government-licence_2x.png" />
+		<None Include="wwwroot\src\govuk_template\README.md" />
+		<None Include="wwwroot\src\govuk_template\VERSION" />
+		<None Include="wwwroot\src\govuk_template\views\layouts\govuk_template.html" />
+		<None Include="wwwroot\src\sass\screen-ie6.scss" />
+		<None Include="wwwroot\src\sass\screen-ie7.scss" />
+		<None Include="wwwroot\src\sass\screen-ie8.scss" />
+		<None Include="wwwroot\src\sass\screen.scss" />
+		<None Include="wwwroot\src\sass\_accordions.scss" />
+		<None Include="wwwroot\src\sass\_agreement.scss" />
+		<None Include="wwwroot\src\sass\_all.scss" />
+		<None Include="wwwroot\src\sass\_commitments.scss" />
+		<None Include="wwwroot\src\sass\_cookiebanner.scss" />
+		<None Include="wwwroot\src\sass\_custom.scss" />
+		<None Include="wwwroot\src\sass\_forms.scss" />
+		<None Include="wwwroot\src\sass\_header.scss" />
+		<None Include="wwwroot\src\sass\_helpers.scss" />
+		<None Include="wwwroot\src\sass\_icons.scss" />
+		<None Include="wwwroot\src\sass\_interim-homepage.scss" />
+		<None Include="wwwroot\src\sass\_layouts.scss" />
+		<None Include="wwwroot\src\sass\_mixins.scss" />
+		<None Include="wwwroot\src\sass\_navigation.scss" />
+		<None Include="wwwroot\src\sass\_notifications.scss" />
+		<None Include="wwwroot\src\sass\_panels.scss" />
+		<None Include="wwwroot\src\sass\_search.scss" />
+		<None Include="wwwroot\src\sass\_tables.scss" />
+		<None Include="wwwroot\src\sass\_tabs.scss" />
+		<None Include="wwwroot\src\sass\_tag.scss" />
+		<None Include="wwwroot\src\sass\_tasks.scss" />
+		<None Include="wwwroot\src\sass\_type.scss" />
+		<None Include="wwwroot\src\sass\_welcome.scss" />
+		<None Include="wwwroot\src\svg\arrows.svg" />
+		<None Include="wwwroot\src\svg\chevron-left.svg" />
+		<None Include="wwwroot\src\svg\chevron-right.svg" />
+		<None Include="wwwroot\src\svg\cross.svg" />
+		<None Include="wwwroot\src\svg\favourite-unchecked-black.svg" />
+		<None Include="wwwroot\src\svg\favourite-unchecked-white.svg" />
+		<None Include="wwwroot\src\svg\important.svg" />
+		<None Include="wwwroot\src\svg\tick.svg" />
+	</ItemGroup>
 </Project>

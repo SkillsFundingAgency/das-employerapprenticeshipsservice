@@ -1,8 +1,8 @@
 using AutoFixture.NUnit3;
 using FluentAssertions;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.EmployerUsers;
-using SFA.DAS.EmployerAccounts.EmployerUsers.ApiResponse;
+using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Responses.UserAccounts;
+using SFA.DAS.EmployerAccounts.Models.UserAccounts;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Infrastructure.OuterApi.Response;
 

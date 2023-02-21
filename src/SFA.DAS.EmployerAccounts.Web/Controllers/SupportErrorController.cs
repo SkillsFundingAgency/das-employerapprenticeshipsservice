@@ -1,10 +1,11 @@
-﻿using SFA.DAS.Authorization.Mvc.Attributes;
+﻿using Microsoft.AspNetCore.Authorization;
+using SFA.DAS.EmployerAccounts.Web.Authentication;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
 public class SupportErrorController : Controller
 {
-    [DasAuthorize]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     [Route("error/accessdenied/{HashedAccountId}")]
     public IActionResult AccessDenied(string hashedAccountId)
     {

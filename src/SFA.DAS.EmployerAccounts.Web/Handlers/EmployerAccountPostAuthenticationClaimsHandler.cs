@@ -3,21 +3,22 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using SFA.DAS.EmployerAccounts.EmployerUsers;
 using SFA.DAS.EmployerAccounts.Infrastructure;
+using SFA.DAS.EmployerAccounts.Models.UserAccounts;
+using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.GovUK.Auth.Services;
 
 namespace SFA.DAS.EmployerAccounts.Web.Handlers;
 
 public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
 {
-    private readonly IEmployerAccountService _accountsSvc;
+    private readonly IUserAccountService _userAccountService;
     private readonly IConfiguration _configuration;
     private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
 
-    public EmployerAccountPostAuthenticationClaimsHandler(IEmployerAccountService accountsSvc, IConfiguration configuration, IOptions<EmployerAccountsConfiguration> forecastingConfiguration)
+    public EmployerAccountPostAuthenticationClaimsHandler(IUserAccountService userAccountService, IConfiguration configuration, IOptions<EmployerAccountsConfiguration> forecastingConfiguration)
     {
-        _accountsSvc = accountsSvc;
+        _userAccountService = userAccountService;
         _configuration = configuration;
         _employerAccountsConfiguration = forecastingConfiguration.Value;
     }
@@ -63,7 +64,7 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
                 .Value;
         }
 
-        var result = await _accountsSvc.GetUserAccounts(userId, email);
+        var result = await _userAccountService.GetUserAccounts(userId, email);
 
         var accountsAsJson = JsonConvert.SerializeObject(result.EmployerAccounts.ToDictionary(k => k.AccountId));
         var associatedAccountsClaim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, accountsAsJson, JsonClaimValueTypes.Json);

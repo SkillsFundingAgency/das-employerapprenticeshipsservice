@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
-using SFA.DAS.EmployerAccounts.Authorisation;
-using SFA.DAS.EmployerAccounts.EmployerUsers;
 using SFA.DAS.EmployerAccounts.Infrastructure;
+using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
+using SFA.DAS.EmployerAccounts.Web.Authorization;
+using SFA.DAS.EmployerAccounts.Web.Handlers;
 using SFA.DAS.GovUK.Auth.Services;
 
 namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
@@ -14,18 +15,30 @@ public static class EmployerAuthenticationServiceRegistrations
 {
     public static IServiceCollection AddAuthenticationServices(this IServiceCollection services)
     {
-        services.AddTransient<IEmployerAccountAuthorisationHandler, EmployerAccountAuthorizationHandler>();
-        services.AddSingleton<IAuthorizationHandler, EmployerAccountAuthorizationHandler>();
-        services.AddSingleton<IAuthenticationServiceWrapper, AuthenticationServiceWrapper>();
-        services.AddTransient<IEmployerAccountService, EmployerAccountService>();
+        services.AddHttpContextAccessor();
+
+        services.AddTransient<ICustomClaims, EmployerAccountPostAuthenticationClaimsHandler>();
+        services.AddTransient<IEmployerAccountAuthorisationHandler, EmployerAccountAuthorisationHandler>();
+        services.AddSingleton<IAuthorizationHandler, EmployerAccountAllRolesAuthorizationHandler>();
+        services.AddSingleton<IAuthorizationHandler, EmployerAccountOwnerAuthorizationHandler>();
+        services.AddTransient<IUserAccountService, UserAccountService>();
+
         services.AddAuthorization(options =>
         {
             options.AddPolicy(
-                PolicyNames.HasEmployerAccount
+                PolicyNames.HasEmployerOwnerAccount
                 , policy =>
                 {
                     policy.RequireClaim(EmployerClaims.AccountsClaimsTypeIdentifier);
-                    policy.Requirements.Add(new EmployerAccountRequirement());
+                    policy.Requirements.Add(new EmployerAccountOwnerRequirement());
+                    policy.RequireAuthenticatedUser();
+                });
+            options.AddPolicy(
+                PolicyNames.HasEmployerViewerTransactorOwnerAccount
+                , policy =>
+                {
+                    policy.RequireClaim(EmployerClaims.AccountsClaimsTypeIdentifier);
+                    policy.Requirements.Add(new EmployerAccountAllRolesRequirement());
                     policy.RequireAuthenticatedUser();
                 });
         });
