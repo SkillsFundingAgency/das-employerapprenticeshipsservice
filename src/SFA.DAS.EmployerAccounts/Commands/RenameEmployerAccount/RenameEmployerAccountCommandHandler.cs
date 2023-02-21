@@ -1,12 +1,10 @@
 ﻿using System.Threading;
-using SFA.DAS.Audit.Types;
+using SFA.DAS.EmployerAccounts.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
-using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Services;
-using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
 
@@ -101,7 +99,7 @@ public class RenameEmployerAccountCommandHandler : IRequestHandler<RenameEmploye
     {
         await _mediator.Send(new CreateAuditCommand
         {
-            EasAuditMessage = new EasAuditMessage
+            EasAuditMessage = new AuditMessage
             {
                 Category = "UPDATED",
                 Description = $"User {ownerEmail} has renamed account {accountId} to {name}",
@@ -110,8 +108,8 @@ public class RenameEmployerAccountCommandHandler : IRequestHandler<RenameEmploye
                     new PropertyUpdate {PropertyName = "AccountId", NewValue = accountId.ToString()},
                     new PropertyUpdate {PropertyName = "Name", NewValue = name},
                 },
-                RelatedEntities = new List<Entity> { new Entity { Id = accountId.ToString(), Type = "Account" } },
-                AffectedEntity = new Entity { Type = "Account", Id = accountId.ToString() }
+                RelatedEntities = new List<AuditEntity> { new AuditEntity { Id = accountId.ToString(), Type = "Account" } },
+                AffectedEntity = new AuditEntity { Type = "Account", Id = accountId.ToString() }
             }
         });
     }

@@ -235,6 +235,8 @@ public class WhenAddingServicesToTheContainer
                     new("PensionRegulatorApi:IdentifierUri", "test"),
                     new("PensionRegulatorApi:BaseUrl", "test"),
                     new("RecruitApi:IdentifierUri", "test"),
+                    new("AuditApi:BaseUrl", "https://test.test"),
+                    new("AuditApi:IdentifierUri", "test"),
                 }
         };
 

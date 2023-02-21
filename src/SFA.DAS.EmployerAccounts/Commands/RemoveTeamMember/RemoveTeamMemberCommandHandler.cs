@@ -1,10 +1,9 @@
 ﻿using System.Threading;
-using SFA.DAS.Audit.Types;
+using SFA.DAS.EmployerAccounts.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.NServiceBus.Services;
-using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Commands.RemoveTeamMember;
 
@@ -58,7 +57,7 @@ public class RemoveTeamMemberCommandHandler : IRequestHandler<RemoveTeamMemberCo
     {
         await _mediator.Send(new CreateAuditCommand
         {
-            EasAuditMessage = new EasAuditMessage
+            EasAuditMessage = new AuditMessage
             {
                 Category = "DELETED",
                 Description = $"User {owner.Email} with role {owner.Role} has removed user {teamMember.Email ?? teamMember.Id.ToString()} with role {teamMember.Role} from account {owner.AccountId}",
@@ -68,8 +67,8 @@ public class RemoveTeamMemberCommandHandler : IRequestHandler<RemoveTeamMemberCo
                     new PropertyUpdate {PropertyName = "UserId", NewValue = teamMember.Id.ToString()},
                     new PropertyUpdate {PropertyName = "Role", NewValue = teamMember.Role.ToString()}
                 },
-                RelatedEntities = new List<Entity> { new Entity { Id = owner.AccountId.ToString(), Type = "Account" } },
-                AffectedEntity = new Entity { Type = "Membership", Id = teamMember.Id.ToString() }
+                RelatedEntities = new List<AuditEntity> { new AuditEntity { Id = owner.AccountId.ToString(), Type = "Account" } },
+                AffectedEntity = new AuditEntity { Type = "Membership", Id = teamMember.Id.ToString() }
             }
         });
     }

@@ -1,10 +1,8 @@
 ﻿using System.Threading;
-using SFA.DAS.Audit.Types;
+using SFA.DAS.EmployerAccounts.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.Validation;
-using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Commands.DeleteInvitation;
 
@@ -50,7 +48,7 @@ public class DeleteInvitationCommandHandler : IRequestHandler<DeleteInvitationCo
 
         await _mediator.Send(new CreateAuditCommand
         {
-            EasAuditMessage = new EasAuditMessage
+            EasAuditMessage = new AuditMessage
             {
                 Category = "DELETED",
                 Description = $"Invitation to {message.Email} deleted from account {existing.AccountId}",
@@ -58,8 +56,8 @@ public class DeleteInvitationCommandHandler : IRequestHandler<DeleteInvitationCo
                 {
                     new PropertyUpdate {PropertyName = "Status",NewValue = existing.Status.ToString()}
                 },
-                RelatedEntities = new List<Entity> { new Entity { Id = existing.AccountId.ToString(), Type = "Account" } },
-                AffectedEntity = new Entity { Type = "Invitation", Id = existing.Id.ToString() }
+                RelatedEntities = new List<AuditEntity> { new AuditEntity { Id = existing.AccountId.ToString(), Type = "Account" } },
+                AffectedEntity = new AuditEntity { Type = "Invitation", Id = existing.Id.ToString() }
             }
         }, cancellationToken);
 

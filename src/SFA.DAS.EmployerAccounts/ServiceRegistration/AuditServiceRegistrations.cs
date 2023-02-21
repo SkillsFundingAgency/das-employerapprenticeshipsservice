@@ -1,24 +1,16 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SFA.DAS.Audit.Client;
-using SFA.DAS.AutoConfiguration;
+using SFA.DAS.EmployerAccounts.Audit;
+using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 
 public static class AuditServiceRegistrations
 {
-    public static IServiceCollection AddAuditServices(this IServiceCollection services)
+    public static IServiceCollection AddAuditServices(this IServiceCollection services, AuditApiClientConfiguration auditApiClientConfiguration)
     {
-        services.AddScoped(s =>
-               {
-                   var environment = s.GetService<IEnvironmentService>();
-                   var client = environment.IsCurrent(DasEnv.LOCAL)
-                        ? new StubAuditApiClient()
-                        : new AuditApiClient(s.GetService<IAuditApiConfiguration>()) as IAuditApiClient;
+        services.AddSingleton<IAuditApiClientConfiguration>(auditApiClientConfiguration);
 
-                   return client;
-               });
-
-        services.AddSingleton<IAuditMessageFactory, AuditMessageFactory>();
+        services.AddHttpClient<IAuditApiClient, AuditApiClient>();
         services.AddScoped<IAuditService, AuditService>();
 
         return services;

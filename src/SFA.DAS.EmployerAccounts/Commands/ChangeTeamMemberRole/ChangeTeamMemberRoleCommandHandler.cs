@@ -1,12 +1,10 @@
 ﻿using System.Threading;
-using SFA.DAS.Audit.Types;
+using SFA.DAS.EmployerAccounts.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.NServiceBus.Services;
-using SFA.DAS.Validation;
-using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole;
 
@@ -53,7 +51,7 @@ public class ChangeTeamMemberRoleCommandHandler : IRequestHandler<ChangeTeamMemb
 
         await _mediator.Send(new CreateAuditCommand
         {
-            EasAuditMessage = new EasAuditMessage
+            EasAuditMessage = new AuditMessage
             {
                 Category = "UPDATED",
                 Description = $"Member {message.Email} on account {caller.AccountId} role has changed to {message.Role}",
@@ -61,8 +59,8 @@ public class ChangeTeamMemberRoleCommandHandler : IRequestHandler<ChangeTeamMemb
                 {
                     new PropertyUpdate {PropertyName = "Role",NewValue = message.Role.ToString()}
                 },
-                RelatedEntities = new List<Entity> { new Entity { Id = caller.AccountId.ToString(), Type = "Account" } },
-                AffectedEntity = new Entity { Type = "Membership", Id = existing.Id.ToString() }
+                RelatedEntities = new List<AuditEntity> { new AuditEntity { Id = caller.AccountId.ToString(), Type = "Account" } },
+                AffectedEntity = new AuditEntity { Type = "Membership", Id = existing.Id.ToString() }
             }
         }, cancellationToken);
 

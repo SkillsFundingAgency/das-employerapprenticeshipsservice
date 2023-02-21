@@ -1,9 +1,8 @@
 ﻿using System.Threading;
-using SFA.DAS.Audit.Types;
+using SFA.DAS.EmployerAccounts.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
-using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Commands.UpdateUserNotificationSettings;
 
@@ -42,7 +41,7 @@ public class UpdateUserNotificationSettingsCommandHandler : IRequestHandler<Upda
     {
         await _mediator.Send(new CreateAuditCommand
         {
-            EasAuditMessage = new EasAuditMessage
+            EasAuditMessage = new AuditMessage
             {
                 Category = "UPDATED",
                 Description =
@@ -55,8 +54,8 @@ public class UpdateUserNotificationSettingsCommandHandler : IRequestHandler<Upda
                         NewValue = setting.ReceiveNotifications.ToString()
                     }
                 },
-                RelatedEntities = new List<Entity> {new Entity {Id = setting.UserId.ToString(), Type = "User"}},
-                AffectedEntity = new Entity {Type = "UserAccountSetting", Id = setting.Id.ToString()}
+                RelatedEntities = new List<AuditEntity> { new AuditEntity { Id = setting.UserId.ToString(), Type = "User" } },
+                AffectedEntity = new AuditEntity { Type = "UserAccountSetting", Id = setting.Id.ToString() }
             }
         });
     }

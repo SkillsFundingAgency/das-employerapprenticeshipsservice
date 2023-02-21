@@ -1,5 +1,5 @@
 ﻿using System.Threading;
-using SFA.DAS.Audit.Types;
+using SFA.DAS.EmployerAccounts.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
@@ -8,7 +8,6 @@ using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Services;
-using Entity = SFA.DAS.Audit.Types.Entity;
 
 
 namespace SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
@@ -116,7 +115,7 @@ public class
         //Account
         await _mediator.Send(new CreateAuditCommand
         {
-            EasAuditMessage = new EasAuditMessage
+            EasAuditMessage = new AuditMessage
             {
                 Category = "CREATED",
                 Description = $"Account {message.OrganisationName} created with id {returnValue.AccountId}",
@@ -127,15 +126,15 @@ public class
                     PropertyUpdate.FromString("Name", message.OrganisationName),
                     PropertyUpdate.FromDateTime("CreatedDate", DateTime.UtcNow),
                 },
-                AffectedEntity = new Entity { Type = "Account", Id = returnValue.AccountId.ToString() },
-                RelatedEntities = new List<Entity>()
+                AffectedEntity = new AuditEntity { Type = "Account", Id = returnValue.AccountId.ToString() },
+                RelatedEntities = new List<AuditEntity>()
             }
         });
 
         //Membership Account
         await _mediator.Send(new CreateAuditCommand
         {
-            EasAuditMessage = new EasAuditMessage
+            EasAuditMessage = new AuditMessage
             {
                 Category = "CREATED",
                 Description = $"User {message.ExternalUserId} added to account {returnValue.AccountId} as owner",
@@ -146,12 +145,12 @@ public class
                     PropertyUpdate.FromString("Role", Role.Owner.ToString()),
                     PropertyUpdate.FromDateTime("CreatedDate", DateTime.UtcNow)
                 },
-                RelatedEntities = new List<Entity>
+                RelatedEntities = new List<AuditEntity>
                 {
-                    new Entity { Id = returnValue.AccountId.ToString(), Type = "Account" },
-                    new Entity { Id = user.Id.ToString(), Type = "User" }
+                    new AuditEntity { Id = returnValue.AccountId.ToString(), Type = "Account" },
+                    new AuditEntity { Id = user.Id.ToString(), Type = "User" }
                 },
-                AffectedEntity = new Entity { Type = "Membership", Id = message.ExternalUserId }
+                AffectedEntity = new AuditEntity { Type = "Membership", Id = message.ExternalUserId }
             }
         });
     }

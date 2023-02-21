@@ -86,8 +86,8 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddDatabaseRegistration(_employerAccountsConfiguration.DatabaseConnectionString);
             services.AddDataRepositories();
             services.AddApplicationServices(_employerAccountsConfiguration);
-            services.AddHmrcServices(_configuration.Get<EmployerAccountsConfiguration>().Hmrc);
-            services.AddAuditServices();
+            services.AddHmrcServices(_employerAccountsConfiguration.Hmrc);
+            services.AddAuditServices(_employerAccountsConfiguration.AuditApi);
             services.AddCachesRegistrations();
             services.AddDateTimeServices(_configuration);
             services.AddEventsApi();
@@ -124,6 +124,7 @@ namespace SFA.DAS.EmployerAccounts.Web
                 services.AddAndConfigureEmployerAuthentication(identityServerConfiguration);
             }
 
+            // TODO: Support sign in 
             //services.AddAndConfigureSupportUserAuthentications(new SupportConsoleAuthenticationOptions());
 
             services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });

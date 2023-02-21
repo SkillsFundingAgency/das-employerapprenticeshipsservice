@@ -6,6 +6,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerAccounts.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AcceptInvitation;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Interfaces;
@@ -96,7 +97,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AcceptInvitationTests
             await _handler.Handle(new AcceptInvitationCommand(), CancellationToken.None);
 
             //Assert
-            _auditService.Verify(x => x.SendAuditMessage(It.IsAny<EasAuditMessage>()), Times.Once);
+            _auditService.Verify(x => x.SendAuditMessage(It.IsAny<AuditMessage>()), Times.Once);
         }
 
         [Test]

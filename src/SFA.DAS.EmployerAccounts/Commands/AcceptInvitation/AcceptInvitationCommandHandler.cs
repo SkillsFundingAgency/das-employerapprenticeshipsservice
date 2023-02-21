@@ -1,13 +1,11 @@
 using System.Threading;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.Audit.Types;
+using SFA.DAS.EmployerAccounts.Audit.Types;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
-using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.TimeProvider;
-using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Commands.AcceptInvitation;
 
@@ -101,7 +99,7 @@ public class AcceptInvitationCommandHandler : IRequestHandler<AcceptInvitationCo
 
     private async Task CreateAuditEntry(AcceptInvitationCommand message, User user, Invitation existing)
     {
-        await _auditService.SendAuditMessage(new EasAuditMessage
+        await _auditService.SendAuditMessage(new AuditMessage
         {
             Category = "UPDATED",
             Description =
@@ -110,11 +108,11 @@ public class AcceptInvitationCommandHandler : IRequestHandler<AcceptInvitationCo
             {
                 PropertyUpdate.FromString("Status", InvitationStatus.Accepted.ToString())
             },
-            RelatedEntities = new List<Entity>
+            RelatedEntities = new List<AuditEntity>
             {
-                new Entity {Id = $"Account Id [{existing.AccountId}], User Id [{user.Id}]", Type = "Membership"}
+                new AuditEntity {Id = $"Account Id [{existing.AccountId}], User Id [{user.Id}]", Type = "Membership"}
             },
-            AffectedEntity = new Entity { Type = "Invitation", Id = message.Id.ToString() }
+            AffectedEntity = new AuditEntity { Type = "Invitation", Id = message.Id.ToString() }
         });
     }
 

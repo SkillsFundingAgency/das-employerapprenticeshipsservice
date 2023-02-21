@@ -17,7 +17,7 @@ namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 
 public static class NServiceBusServiceRegistrations
 {
-    private const string EndPointName = "SFA.DAS.EmployerAccounts";
+    private const string EndPointName = "SFA.DAS.EmployerAccounts.Web";
 
     public static void StartNServiceBus(this UpdateableServiceProvider services, IConfiguration configuration, bool isDevOrLocal)
     {

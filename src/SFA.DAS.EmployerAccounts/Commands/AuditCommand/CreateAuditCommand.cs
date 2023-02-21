@@ -1,8 +1,8 @@
-﻿using SFA.DAS.EmployerAccounts.Models;
+﻿using SFA.DAS.EmployerAccounts.Audit.Types;
 
 namespace SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 
 public class CreateAuditCommand : IRequest
 {
-    public EasAuditMessage EasAuditMessage { get; set; }
+    public AuditMessage EasAuditMessage { get; set; }
 }

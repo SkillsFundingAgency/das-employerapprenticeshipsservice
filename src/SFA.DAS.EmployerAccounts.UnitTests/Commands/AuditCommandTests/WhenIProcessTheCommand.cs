@@ -3,13 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Audit.Types;
+using SFA.DAS.EmployerAccounts.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
-using SFA.DAS.EmployerAccounts.Exceptions;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.Validation;
-using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AuditCommandTests
 {
@@ -53,13 +49,13 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AuditCommandTests
         public async Task ThenTheCommandIfValidIsPassedToTheService()
         {
             //Arrange
-            var auditCommand = new CreateAuditCommand {EasAuditMessage = new EasAuditMessage {ChangedProperties = new List<PropertyUpdate> {new PropertyUpdate()},Description = "test", RelatedEntities = new List<Entity> {new Entity()} } };
+            var auditCommand = new CreateAuditCommand {EasAuditMessage = new AuditMessage {ChangedProperties = new List<PropertyUpdate> {new PropertyUpdate()},Description = "test", RelatedEntities = new List<AuditEntity> {new AuditEntity()} } };
 
             //Act
             await _createAuditCommandHandler.Handle(auditCommand, CancellationToken.None);
 
             //Assert
-            _auditService.Verify(x=>x.SendAuditMessage(It.Is<EasAuditMessage>(c=>
+            _auditService.Verify(x=>x.SendAuditMessage(It.Is<AuditMessage>(c=>
                         c.Description.Equals(auditCommand.EasAuditMessage.Description) &&
                         c.ChangedProperties.Count == 1 &&
                         c.RelatedEntities.Count == 1 

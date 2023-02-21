@@ -1,13 +1,11 @@
 ﻿using System.Threading;
-using SFA.DAS.Audit.Types;
 using SFA.DAS.EmployerAccounts.Attributes;
+using SFA.DAS.EmployerAccounts.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
-using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Services;
-using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Queries.RemovePayeFromAccount;
 
@@ -104,7 +102,7 @@ public class RemovePayeFromAccountCommandHandler : IRequestHandler<RemovePayeFro
     {
         await _mediator.Send(new CreateAuditCommand
         {
-            EasAuditMessage = new EasAuditMessage
+            EasAuditMessage = new AuditMessage
             {
                 Category = "DELETED",
                 Description = $"User {userId} has removed PAYE schema {payeRef} from account {accountId}",
@@ -114,8 +112,8 @@ public class RemovePayeFromAccountCommandHandler : IRequestHandler<RemovePayeFro
                     new PropertyUpdate {PropertyName = "UserId", NewValue = userId},
                     new PropertyUpdate {PropertyName = "PayeRef", NewValue = payeRef}
                 },
-                RelatedEntities = new List<Entity> { new Entity { Id = accountId, Type = "Account" } },
-                AffectedEntity = new Entity { Type = "Paye", Id = payeRef }
+                RelatedEntities = new List<AuditEntity> { new AuditEntity { Id = accountId, Type = "Account" } },
+                AffectedEntity = new AuditEntity { Type = "Paye", Id = payeRef }
             }
         });
     }
