@@ -1,5 +1,5 @@
-﻿using System.Net.Http.Headers;
-using System.Web;
+﻿using System.Net;
+using System.Net.Http.Headers;
 using HMRC.ESFA.Levy.Api.Client;
 using HMRC.ESFA.Levy.Api.Types;
 using Microsoft.Extensions.Logging;
@@ -54,7 +54,7 @@ public class HmrcService : IHmrcService
 
     public string GenerateAuthRedirectUrl(string redirectUrl)
     {
-        var urlFriendlyRedirectUrl = HttpUtility.UrlEncode(redirectUrl);
+        var urlFriendlyRedirectUrl = WebUtility.UrlEncode(redirectUrl);
         return $"{_configuration.BaseUrl}oauth/authorize?response_type=code&client_id={_configuration.ClientId}&scope={_configuration.Scope}&redirect_uri={urlFriendlyRedirectUrl}";
     }
 
