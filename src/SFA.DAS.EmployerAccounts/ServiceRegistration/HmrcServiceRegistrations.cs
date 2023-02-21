@@ -8,13 +8,13 @@ namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 
 public static class HmrcServiceRegistrations
 {
-    public static IServiceCollection AddHmrcServices(this IServiceCollection services, IHmrcConfiguration hmrcConfiguration)
+    public static IServiceCollection AddHmrcServices(this IServiceCollection services)
     {
         services.AddSingleton<IHmrcService, HmrcService>();
         services.AddSingleton<IHttpResponseLogger, HttpResponseLogger>();
         services.AddSingleton<ITokenServiceApiClient, TokenServiceApiClient>();
         services.AddSingleton<IAzureAdAuthenticationService, AzureAdAuthenticationService>();
-        services.AddSingleton<IHttpClientWrapper, Infrastructure.Data.HttpClientWrapper>();
+        services.AddSingleton<IHttpClientWrapper, HttpClientWrapper>();
 
         return services;
     }
