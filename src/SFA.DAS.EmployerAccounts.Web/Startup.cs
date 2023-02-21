@@ -86,7 +86,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddDatabaseRegistration(_employerAccountsConfiguration.DatabaseConnectionString);
             services.AddDataRepositories();
             services.AddApplicationServices(_employerAccountsConfiguration);
-            services.AddHmrcServices(_employerAccountsConfiguration.Hmrc);
+            services.AddHmrcServices();
             services.AddAuditServices(_employerAccountsConfiguration.AuditApi);
             services.AddCachesRegistrations();
             services.AddDateTimeServices(_configuration);
