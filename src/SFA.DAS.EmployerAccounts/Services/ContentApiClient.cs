@@ -37,7 +37,7 @@ public class ContentApiClient : IContentApiClient
 
     private async Task AddAuthenticationHeader(HttpRequestMessage httpRequestMessage)
     {
-        if (ConfigurationManager.AppSettings["EnvironmentName"].ToUpper() != "LOCAL")
+        if (!string.IsNullOrEmpty(_identifierUri))
         {
             var azureServiceTokenProvider = new AzureServiceTokenProvider();
             var accessToken = await azureServiceTokenProvider.GetAccessTokenAsync(_identifierUri);

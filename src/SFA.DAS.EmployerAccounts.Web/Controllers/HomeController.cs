@@ -247,6 +247,7 @@ public class HomeController : BaseController
         return RedirectToAction(ControllerConstants.IndexActionName);
     }
 
+    [Authorize]
     [Route("signIn")]
     public IActionResult SignIn()
     {

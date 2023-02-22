@@ -9,6 +9,7 @@ public static class CachesServiceRegistrations
 {
     public static IServiceCollection AddCachesRegistrations(this IServiceCollection services)
     {
+        services.AddSingleton<ICacheStorageService, CacheStorageService>();
         services.AddSingleton<IInProcessCache, InProcessCache>();
 
         services.AddSingleton(s =>

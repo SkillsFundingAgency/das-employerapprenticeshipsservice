@@ -99,7 +99,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddEmployerAccountsOuterApi(_employerAccountsConfiguration.EmployerAccountsOuterApiConfiguration);
             services.AddCommittmentsV2Client(_employerAccountsConfiguration.CommitmentsApi);
             services.AddPollyPolicy(_employerAccountsConfiguration);
-            services.AddContentApiClient(_employerAccountsConfiguration, _configuration);
+            services.AddContentApiClient(_employerAccountsConfiguration);
             services.AddProviderRegistration(_employerAccountsConfiguration);
             services.AddApprenticeshipLevyApi(_employerAccountsConfiguration);
 
@@ -170,6 +170,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             }
 
             app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
