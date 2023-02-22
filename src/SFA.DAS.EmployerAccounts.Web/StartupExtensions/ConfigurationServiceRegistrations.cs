@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using SFA.DAS.Audit.Client;
 using SFA.DAS.Authorization.EmployerFeatures.Configuration;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerAccounts.Api.Client;
@@ -34,8 +33,6 @@ public static class ConfigurationServiceRegistrations
         services.Configure<IdentityServerConfiguration>(configuration.GetSection("Identity"));
         services.AddSingleton(cfg => cfg.GetService<IOptions<IdentityServerConfiguration>>().Value);
 
-        services.Configure<IAuditApiConfiguration>(configuration.GetSection(ConfigurationKeys.AuditApi));
-        services.AddSingleton(cfg => cfg.GetService<IOptions<IAuditApiConfiguration>>().Value);
 
         var encodingConfigJson = configuration.GetSection("SFA.DAS.Encoding").Value;
         var encodingConfig = JsonConvert.DeserializeObject<EncodingConfig>(encodingConfigJson);

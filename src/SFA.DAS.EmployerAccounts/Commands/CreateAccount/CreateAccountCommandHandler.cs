@@ -1,6 +1,6 @@
 ﻿using System.Threading;
-using SFA.DAS.Audit.Types;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerAccounts.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AccountLevyStatus;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
@@ -10,7 +10,6 @@ using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Services;
-using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount;
 
@@ -211,7 +210,7 @@ public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand,
         //Account
         await _mediator.Send(new CreateAuditCommand
         {
-            EasAuditMessage = new EasAuditMessage
+            EasAuditMessage = new AuditMessage
             {
                 Category = "CREATED",
                 Description = $"Account {message.OrganisationName} created with id {returnValue.AccountId}",
@@ -222,8 +221,8 @@ public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand,
                     PropertyUpdate.FromString("Name", message.OrganisationName),
                     PropertyUpdate.FromDateTime("CreatedDate", DateTime.UtcNow),
                 },
-                AffectedEntity = new Entity { Type = "Account", Id = returnValue.AccountId.ToString() },
-                RelatedEntities = new List<Entity>()
+                AffectedEntity = new AuditEntity { Type = "Account", Id = returnValue.AccountId.ToString() },
+                RelatedEntities = new List<AuditEntity>()
             }
         });
         //LegalEntity
@@ -244,20 +243,20 @@ public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand,
 
         await _mediator.Send(new CreateAuditCommand
         {
-            EasAuditMessage = new EasAuditMessage
+            EasAuditMessage = new AuditMessage
             {
                 Category = "CREATED",
                 Description = $"Legal Entity {message.OrganisationName} created of type {message.OrganisationType} with id {returnValue.LegalEntityId}",
                 ChangedProperties = changedProperties,
-                AffectedEntity = new Entity { Type = "LegalEntity", Id = returnValue.LegalEntityId.ToString() },
-                RelatedEntities = new List<Entity>()
+                AffectedEntity = new AuditEntity { Type = "LegalEntity", Id = returnValue.LegalEntityId.ToString() },
+                RelatedEntities = new List<AuditEntity>()
             }
         });
 
         //EmployerAgreement 
         await _mediator.Send(new CreateAuditCommand
         {
-            EasAuditMessage = new EasAuditMessage
+            EasAuditMessage = new AuditMessage
             {
                 Category = "CREATED",
                 Description = $"Employer Agreement Created for {message.OrganisationName} legal entity id {returnValue.LegalEntityId}",
@@ -268,15 +267,15 @@ public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand,
                     PropertyUpdate.FromString("TemplateId", hashedAccountId),
                     PropertyUpdate.FromInt("StatusId", 2),
                 },
-                RelatedEntities = new List<Entity> { new Entity { Id = returnValue.EmployerAgreementId.ToString(), Type = "LegalEntity" } },
-                AffectedEntity = new Entity { Type = "EmployerAgreement", Id = returnValue.EmployerAgreementId.ToString() }
+                RelatedEntities = new List<AuditEntity> { new AuditEntity { Id = returnValue.EmployerAgreementId.ToString(), Type = "LegalEntity" } },
+                AffectedEntity = new AuditEntity { Type = "EmployerAgreement", Id = returnValue.EmployerAgreementId.ToString() }
             }
         });
 
         //AccountEmployerAgreement Account Employer Agreement
         await _mediator.Send(new CreateAuditCommand
         {
-            EasAuditMessage = new EasAuditMessage
+            EasAuditMessage = new AuditMessage
             {
                 Category = "CREATED",
                 Description = $"Employer Agreement Created for {message.OrganisationName} legal entity id {returnValue.LegalEntityId}",
@@ -285,19 +284,19 @@ public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand,
                     PropertyUpdate.FromLong("AccountId", returnValue.AccountId),
                     PropertyUpdate.FromLong("EmployerAgreementId", returnValue.EmployerAgreementId),
                 },
-                RelatedEntities = new List<Entity>
+                RelatedEntities = new List<AuditEntity>
                 {
-                    new Entity { Id = returnValue.EmployerAgreementId.ToString(), Type = "LegalEntity" },
-                    new Entity { Id = returnValue.AccountId.ToString(), Type = "Account" }
+                    new AuditEntity { Id = returnValue.EmployerAgreementId.ToString(), Type = "LegalEntity" },
+                    new AuditEntity { Id = returnValue.AccountId.ToString(), Type = "Account" }
                 },
-                AffectedEntity = new Entity { Type = "AccountEmployerAgreement", Id = returnValue.EmployerAgreementId.ToString() }
+                AffectedEntity = new AuditEntity { Type = "AccountEmployerAgreement", Id = returnValue.EmployerAgreementId.ToString() }
             }
         });
 
         //Paye 
         await _mediator.Send(new CreateAuditCommand
         {
-            EasAuditMessage = new EasAuditMessage
+            EasAuditMessage = new AuditMessage
             {
                 Category = "CREATED",
                 Description = $"Paye scheme {message.PayeReference} added to account {returnValue.AccountId}",
@@ -309,15 +308,15 @@ public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand,
                     PropertyUpdate.FromString("Name", message.EmployerRefName),
                     PropertyUpdate.FromString("Aorn", message.Aorn)
                 },
-                RelatedEntities = new List<Entity> { new Entity { Id = returnValue.AccountId.ToString(), Type = "Account" } },
-                AffectedEntity = new Entity { Type = "Paye", Id = message.PayeReference }
+                RelatedEntities = new List<AuditEntity> { new AuditEntity { Id = returnValue.AccountId.ToString(), Type = "Account" } },
+                AffectedEntity = new AuditEntity { Type = "Paye", Id = message.PayeReference }
             }
         });
 
         //Membership Account
         await _mediator.Send(new CreateAuditCommand
         {
-            EasAuditMessage = new EasAuditMessage
+            EasAuditMessage = new AuditMessage
             {
                 Category = "CREATED",
                 Description = $"User {message.ExternalUserId} added to account {returnValue.AccountId} as owner",
@@ -328,12 +327,12 @@ public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand,
                     PropertyUpdate.FromString("Role", Role.Owner.ToString()),
                     PropertyUpdate.FromDateTime("CreatedDate", DateTime.UtcNow)
                 },
-                RelatedEntities = new List<Entity>
+                RelatedEntities = new List<AuditEntity>
                 {
-                    new Entity { Id = returnValue.AccountId.ToString(), Type = "Account" },
-                    new Entity { Id = user.Id.ToString(), Type = "User" }
+                    new AuditEntity { Id = returnValue.AccountId.ToString(), Type = "Account" },
+                    new AuditEntity { Id = user.Id.ToString(), Type = "User" }
                 },
-                AffectedEntity = new Entity { Type = "Membership", Id = message.ExternalUserId }
+                AffectedEntity = new AuditEntity { Type = "Membership", Id = message.ExternalUserId }
             }
         });
     }

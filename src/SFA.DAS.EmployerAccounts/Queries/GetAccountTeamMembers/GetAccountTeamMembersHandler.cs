@@ -1,10 +1,8 @@
 ﻿using System.Threading;
-using SFA.DAS.Validation;
+using SFA.DAS.EmployerAccounts.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
-using SFA.DAS.EmployerAccounts.Models;
-using Entity = SFA.DAS.Audit.Types.Entity;
-using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
+using SFA.DAS.EmployerAccounts.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers;
 
@@ -59,11 +57,11 @@ public class GetAccountTeamMembersHandler : IRequestHandler<GetAccountTeamMember
 
         await _mediator.Send(new CreateAuditCommand
         {
-            EasAuditMessage = new EasAuditMessage
+            EasAuditMessage = new AuditMessage
             {
                 Category = "VIEW",
                 Description = $"Account {caller.AccountId} team members viewed",
-                AffectedEntity = new Entity { Type = "TeamMembers", Id = caller.AccountId.ToString() }
+                AffectedEntity = new AuditEntity { Type = "TeamMembers", Id = caller.AccountId.ToString() }
             }
         });
     }

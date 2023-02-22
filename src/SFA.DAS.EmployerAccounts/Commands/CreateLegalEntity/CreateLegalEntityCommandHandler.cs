@@ -1,16 +1,14 @@
 ﻿using System.Threading;
-using SFA.DAS.Audit.Types;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerAccounts.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Extensions;
-using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Services;
-using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 
@@ -150,7 +148,7 @@ public class CreateLegalEntityCommandHandler : IRequestHandler<CreateLegalEntity
     {
         await _mediator.Send(new CreateAuditCommand
         {
-            EasAuditMessage = new EasAuditMessage
+            EasAuditMessage = new AuditMessage
             {
                 Category = "UPDATED",
                 Description = $"User {owner.Email} added legal entity {agreementView.LegalEntityId} to account {owner.AccountId}",
@@ -165,14 +163,14 @@ public class CreateLegalEntityCommandHandler : IRequestHandler<CreateLegalEntity
                     new PropertyUpdate { PropertyName = "Address", NewValue = agreementView.LegalEntityAddress },
                     new PropertyUpdate { PropertyName = "DateOfInception", NewValue = agreementView.LegalEntityInceptionDate.GetDateString("G") },
                 },
-                RelatedEntities = new List<Entity> { new Entity { Id = agreementView.AccountId.ToString(), Type = "Account" } },
-                AffectedEntity = new Entity { Type = "LegalEntity", Id = agreementView.LegalEntityId.ToString() }
+                RelatedEntities = new List<AuditEntity> { new AuditEntity { Id = agreementView.AccountId.ToString(), Type = "Account" } },
+                AffectedEntity = new AuditEntity { Type = "LegalEntity", Id = agreementView.LegalEntityId.ToString() }
             }
         });
 
         await _mediator.Send(new CreateAuditCommand
         {
-            EasAuditMessage = new EasAuditMessage
+            EasAuditMessage = new AuditMessage
             {
                 Category = "UPDATED",
                 Description = $"User {owner.Email} added signed agreement {agreementView.Id} to account {owner.AccountId}",
@@ -182,8 +180,8 @@ public class CreateLegalEntityCommandHandler : IRequestHandler<CreateLegalEntity
                     new PropertyUpdate { PropertyName = "SignedDate", NewValue = agreementView.SignedDate.GetDateString("G") },
                     new PropertyUpdate { PropertyName = "SignedBy", NewValue = $"{owner.FirstName} {owner.LastName}" }
                 },
-                RelatedEntities = new List<Entity> { new Entity { Id = agreementView.AccountId.ToString(), Type = "Account" } },
-                AffectedEntity = new Entity { Type = "EmployerAgreement", Id = agreementView.Id.ToString() }
+                RelatedEntities = new List<AuditEntity> { new AuditEntity { Id = agreementView.AccountId.ToString(), Type = "Account" } },
+                AffectedEntity = new AuditEntity { Type = "EmployerAgreement", Id = agreementView.Id.ToString() }
             }
         });
     }

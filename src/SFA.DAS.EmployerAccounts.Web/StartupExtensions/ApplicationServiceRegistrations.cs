@@ -1,4 +1,6 @@
-﻿using SFA.DAS.EAS.Account.Api.Client;
+﻿using SFA.DAS.Api.Common.Infrastructure;
+using SFA.DAS.Api.Common.Interfaces;
+using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Extensions;
@@ -16,6 +18,8 @@ public static class ApplicationServiceRegistrations
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, EmployerAccountsConfiguration configuration)
     {
+        services.AddTransient<IAzureClientCredentialHelper, AzureClientCredentialHelper>();
+
         services.AddSingleton<IAccountEventFactory, AccountEventFactory>();
         services.AddSingleton<IPdfService, PdfService>();
        

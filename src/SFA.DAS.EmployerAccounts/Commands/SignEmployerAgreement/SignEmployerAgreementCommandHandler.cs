@@ -1,6 +1,6 @@
 ﻿using System.Threading;
-using SFA.DAS.Audit.Types;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerAccounts.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
@@ -9,7 +9,6 @@ using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Services;
-using Entity = SFA.DAS.Audit.Types.Entity;
 using IGenericEventFactory = SFA.DAS.EmployerAccounts.Factories.IGenericEventFactory;
 
 namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement;
@@ -157,7 +156,7 @@ public class SignEmployerAgreementCommandHandler : IRequestHandler<SignEmployerA
     {
         await _mediator.Send(new CreateAuditCommand
         {
-            EasAuditMessage = new EasAuditMessage
+            EasAuditMessage = new AuditMessage
             {
                 Category = "UPDATED",
                 Description = $"Agreement {agreementId} added to account {accountId}",
@@ -166,8 +165,8 @@ public class SignEmployerAgreementCommandHandler : IRequestHandler<SignEmployerA
                     PropertyUpdate.FromString("UserId", message.ExternalUserId),
                     PropertyUpdate.FromString("SignedDate", message.SignedDate.ToString("U"))
                 },
-                RelatedEntities = new List<Entity> { new Entity { Id = accountId.ToString(), Type = "Account" } },
-                AffectedEntity = new Entity { Type = "Agreement", Id = agreementId.ToString() }
+                RelatedEntities = new List<AuditEntity> { new AuditEntity { Id = accountId.ToString(), Type = "Account" } },
+                AffectedEntity = new AuditEntity { Type = "Agreement", Id = agreementId.ToString() }
             }
         });
     }

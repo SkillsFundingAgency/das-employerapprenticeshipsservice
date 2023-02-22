@@ -1,21 +1,21 @@
 ﻿using System.Security.Claims;
-using SFA.DAS.Audit.Client;
-using SFA.DAS.Audit.Types;
+using SFA.DAS.EmployerAccounts.Audit.Types;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 
-namespace SFA.DAS.EmployerAccounts.Services;
+namespace SFA.DAS.EmployerAccounts.Audit;
 
 public class AuditApiClientForSupportUser : IAuditApiClient
 {
     private readonly IAuditApiClient _client;
     private readonly IUserContext _userContext;
-       
-    public AuditApiClientForSupportUser(IAuditApiClient client,IUserContext userContext)
+
+    public AuditApiClientForSupportUser(IAuditApiClient client, IUserContext userContext)
     {
         _client = client;
         _userContext = userContext;
     }
+    
     public Task Audit(AuditMessage message)
     {
         if (_userContext.IsSupportConsoleUser())
@@ -25,15 +25,15 @@ public class AuditApiClientForSupportUser : IAuditApiClient
             message.ChangedBy.Id = _userContext.GetClaimValue(ClaimTypes.Upn); // support user user principal name
             message.ChangedBy.EmailAddress = _userContext.GetClaimValue(ClaimTypes.Email); // support user Email
 
-            if(message.RelatedEntities == null)
+            if (message.RelatedEntities == null)
             {
-                message.RelatedEntities = new List<Entity>();
+                message.RelatedEntities = new List<AuditEntity>();
             }
 
-            message.RelatedEntities.Add(new Entity { Type = "UserImpersonatedId", Id = impersonatedUser});
-            message.RelatedEntities.Add(new Entity { Type = "UserImpersonatedEmail", Id = impersonatedUserEmail });
+            message.RelatedEntities.Add(new AuditEntity { Type = "UserImpersonatedId", Id = impersonatedUser });
+            message.RelatedEntities.Add(new AuditEntity { Type = "UserImpersonatedEmail", Id = impersonatedUserEmail });
         }
-            
+
         return _client.Audit(message);
     }
 }

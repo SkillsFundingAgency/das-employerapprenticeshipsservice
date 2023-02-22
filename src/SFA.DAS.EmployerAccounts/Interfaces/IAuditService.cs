@@ -1,8 +1,8 @@
-using SFA.DAS.EmployerAccounts.Models;
+using SFA.DAS.EmployerAccounts.Audit.Types;
 
 namespace SFA.DAS.EmployerAccounts.Interfaces;
 
 public interface IAuditService
 {
-    Task SendAuditMessage(EasAuditMessage message);
+    Task SendAuditMessage(AuditMessage message);
 }

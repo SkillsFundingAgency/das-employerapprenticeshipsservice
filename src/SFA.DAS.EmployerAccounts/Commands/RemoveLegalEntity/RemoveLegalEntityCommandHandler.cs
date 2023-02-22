@@ -1,15 +1,12 @@
 ﻿using System.Threading;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.Audit.Types;
+using SFA.DAS.EmployerAccounts.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
-using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Services;
-using Entity = SFA.DAS.Audit.Types.Entity;
-using ValidationResult = SFA.DAS.EmployerAccounts.Validation.ValidationResult;
 
 namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity;
 
@@ -144,7 +141,7 @@ public class RemoveLegalEntityCommandHandler : IRequestHandler<RemoveLegalEntity
     {
         await _mediator.Send(new CreateAuditCommand
         {
-            EasAuditMessage = new EasAuditMessage
+            EasAuditMessage = new AuditMessage
             {
                 Category = "UPDATED",
                 Description = $"EmployerAgreement {employerAgreementId} removed from account {hashedAccountId}",
@@ -152,8 +149,8 @@ public class RemoveLegalEntityCommandHandler : IRequestHandler<RemoveLegalEntity
                 {
                     PropertyUpdate.FromString("Status", EmployerAgreementStatus.Removed.ToString())
                 },
-                RelatedEntities = new List<Entity> { new Entity { Id = hashedAccountId.ToString(), Type = "Account" } },
-                AffectedEntity = new Entity { Type = "EmployerAgreement", Id = employerAgreementId }
+                RelatedEntities = new List<AuditEntity> { new AuditEntity { Id = hashedAccountId.ToString(), Type = "Account" } },
+                AffectedEntity = new AuditEntity { Type = "EmployerAgreement", Id = employerAgreementId }
             }
         });
     }

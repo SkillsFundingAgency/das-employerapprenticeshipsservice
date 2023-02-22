@@ -1,16 +1,14 @@
 ﻿using System.Threading;
-using SFA.DAS.Audit.Types;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerAccounts.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AccountLevyStatus;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
-using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Services;
-using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount;
 
@@ -123,7 +121,7 @@ public class AddPayeToAccountCommandHandler : IRequestHandler<AddPayeToAccountCo
     {
         await _mediator.Send(new CreateAuditCommand
         {
-            EasAuditMessage = new EasAuditMessage
+            EasAuditMessage = new AuditMessage
             {
                 Category = "CREATED",
                 Description = $"Paye scheme {message.Empref} added to account {accountId}",
@@ -135,8 +133,8 @@ public class AddPayeToAccountCommandHandler : IRequestHandler<AddPayeToAccountCo
                     PropertyUpdate.FromString("Name", message.EmprefName),
                     PropertyUpdate.FromString("Aorn", message.Aorn)
                 },
-                RelatedEntities = new List<Entity> { new Entity { Id = accountId.ToString(), Type = "Account" } },
-                AffectedEntity = new Entity { Type = "Paye", Id = message.Empref }
+                RelatedEntities = new List<AuditEntity> { new AuditEntity { Id = accountId.ToString(), Type = "Account" } },
+                AffectedEntity = new AuditEntity { Type = "Paye", Id = message.Empref }
             }
         });
     }

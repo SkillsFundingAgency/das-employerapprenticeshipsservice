@@ -1,15 +1,12 @@
 ﻿using System.Threading;
-using SFA.DAS.Audit.Types;
+using SFA.DAS.EmployerAccounts.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.SendNotification;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
-using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.TimeProvider;
-using SFA.DAS.Validation;
-using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.Commands.CreateInvitation;
 
@@ -86,7 +83,7 @@ public class CreateInvitationCommandHandler : IRequestHandler<CreateInvitationCo
 
         await _mediator.Send(new CreateAuditCommand
         {
-            EasAuditMessage = new EasAuditMessage
+            EasAuditMessage = new AuditMessage
             {
                 Category = "CREATED",
                 Description = $"Member {message.EmailOfPersonBeingInvited} added to account {caller.AccountId} as {message.RoleOfPersonBeingInvited}",
@@ -100,8 +97,8 @@ public class CreateInvitationCommandHandler : IRequestHandler<CreateInvitationCo
                     PropertyUpdate.FromString("Status",InvitationStatus.Pending.ToString()),
                     PropertyUpdate.FromDateTime("ExpiryDate",expiryDate)
                 },
-                RelatedEntities = new List<Entity> { new Entity { Id = caller.AccountId.ToString(), Type = "Account" } },
-                AffectedEntity = new Entity { Type = "Invitation", Id = invitationId.ToString() }
+                RelatedEntities = new List<AuditEntity> { new AuditEntity { Id = caller.AccountId.ToString(), Type = "Account" } },
+                AffectedEntity = new AuditEntity { Type = "Invitation", Id = invitationId.ToString() }
             }
         }, cancellationToken);
 

@@ -44,9 +44,6 @@
 		<PackageReference Include="NUnit3TestAdapter">
 			<Version>4.3.1</Version>
 		</PackageReference>
-		<PackageReference Include="SFA.DAS.Audit.Client">
-			<Version>1.0.0.20553</Version>
-		</PackageReference>
 		<PackageReference Include="SFA.DAS.Authentication">
 			<Version>1.1.2</Version>
 		</PackageReference>

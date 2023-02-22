@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Audit.Client;
-using SFA.DAS.Audit.Types;
+using SFA.DAS.EmployerAccounts.Audit;
+using SFA.DAS.EmployerAccounts.Audit.Types;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerUsers.WebClientComponents;
@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AuditApiClientForSupportUs
 {
     public class WhenIAuditTheAuditMessage
     {
-        private EmployerAccounts.Services.AuditApiClientForSupportUser _sut;
+        private Audit.AuditApiClientForSupportUser _sut;
         private AuditMessage _auditMessage;
         private string SupportConsoleUsers = "Tier1User,Tier2User";
         private Mock<IAuditApiClient> _mockInnerClient;
@@ -65,7 +65,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AuditApiClientForSupportUs
                 .Setup(m => m.HttpContext.User.FindFirst(ClaimTypes.Email))
                 .Returns(new Claim(ClaimTypes.Email, _supportUserEmail));
 
-            _sut = new EmployerAccounts.Services.AuditApiClientForSupportUser(_mockInnerClient.Object, _userContext);
+            _sut = new Audit.AuditApiClientForSupportUser(_mockInnerClient.Object, _userContext);
         }
 
         [Test]
