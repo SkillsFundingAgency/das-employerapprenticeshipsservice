@@ -21,15 +21,15 @@ public static class HostExtensions
 
     public static IHostBuilder ConfigureDasLogging(this IHostBuilder builder)
     {
-        builder.ConfigureLogging((context, builder) =>
+        builder.ConfigureLogging((context, loggingBuilder) =>
         {
             var appInsightsKey = context.Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"];
             if (!string.IsNullOrEmpty(appInsightsKey))
             {
-                builder.AddNLog(context.HostingEnvironment.IsDevelopment() ? "nlog.development.config" : "nlog.config");
-                builder.AddApplicationInsightsWebJobs(o => o.InstrumentationKey = appInsightsKey);
+                loggingBuilder.AddNLog(context.HostingEnvironment.IsDevelopment() ? "nlog.development.config" : "nlog.config");
+                loggingBuilder.AddApplicationInsightsWebJobs(o => o.InstrumentationKey = appInsightsKey);
             }
-            builder.AddConsole();
+            loggingBuilder.AddConsole();
         });
 
         return builder;
