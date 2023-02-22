@@ -2,17 +2,16 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.Azure.Services.AppAuthentication;
-using SFA.DAS.Authentication.Extensions.Legacy;
 
 namespace SFA.DAS.EmployerAccounts.Services;
 
-public class ContentApiClient : ApiClientBase, IContentApiClient
+public class ContentApiClient : IContentApiClient
 {
     private readonly string _apiBaseUrl;        
     private readonly string _identifierUri;
     private readonly HttpClient _client;
 
-    public ContentApiClient(HttpClient client, IContentClientApiConfiguration configuration) : base(client)
+    public ContentApiClient(HttpClient client, IContentClientApiConfiguration configuration)
     {
         _apiBaseUrl = configuration.ApiBaseUrl.EndsWith("/")
             ? configuration.ApiBaseUrl
@@ -24,22 +23,25 @@ public class ContentApiClient : ApiClientBase, IContentApiClient
 
     public async Task<string> Get(string type, string applicationId)
     {
-        await AddAuthenticationHeader();
-
         var uri = $"{_apiBaseUrl}api/content?applicationId={applicationId}&type={type}";
-        var content = await GetAsync(uri);
+        var requestMessage = new HttpRequestMessage(HttpMethod.Get, uri);
+        await AddAuthenticationHeader(requestMessage);
+
+        var response = await _client.SendAsync(requestMessage).ConfigureAwait(false);
+        response.EnsureSuccessStatusCode();
+
+        var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
         return content;
     }
 
-    private async Task AddAuthenticationHeader()
+    private async Task AddAuthenticationHeader(HttpRequestMessage httpRequestMessage)
     {
         if (ConfigurationManager.AppSettings["EnvironmentName"].ToUpper() != "LOCAL")
         {
             var azureServiceTokenProvider = new AzureServiceTokenProvider();
             var accessToken = await azureServiceTokenProvider.GetAccessTokenAsync(_identifierUri);
-
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         }
     }
 }

@@ -31,17 +31,7 @@
         <p class="govuk-body">
             Transfers status:&nbsp;
             <span>
-                @{
-                    var authorizationResult = HtmlHelpers.GetAuthorizationResult("EmployerFeature.TransferConnectionRequests");
-                    if (authorizationResult.IsAuthorized)
-                    {
-                        @:enabled.
-                    }
-                    else
-                    {
-                        @:disabled.
-                    }
-                }
+                enabled
             </span>
         </p>
         <p class="govuk-!-margin-bottom-8">

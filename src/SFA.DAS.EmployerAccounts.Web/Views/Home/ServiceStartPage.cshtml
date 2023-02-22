@@ -16,7 +16,7 @@
             @ViewBag.Title
         </h1>
         <p class="govuk-body">
-            You need to create or <a href="@Url.Action("SignIn", "Home")" class="govuk-link govuk-link--no-visited-state">sign in</a> to an apprenticeship account, then you'll be able to get funding to pay for apprenticeship training and assessment costs.
+            You need to create or <a asp-controller="Home" asp-action="SignIn" class="govuk-link govuk-link--no-visited-state">sign in</a> to an apprenticeship account, then you'll be able to get funding to pay for apprenticeship training and assessment costs.
         </p>
         <p class="govuk-body">
             You’ll use your account to:

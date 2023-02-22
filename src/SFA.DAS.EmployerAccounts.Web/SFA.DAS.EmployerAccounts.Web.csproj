@@ -35,9 +35,6 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
 		<PackageReference Include="NServiceBus.MSDependencyInjection" Version="0.1.4" />
 		<PackageReference Include="Scrutor.AspNetCore" Version="3.3.0" />
-		<PackageReference Include="SFA.DAS.Authorization.EmployerFeatures">
-			<Version>6.0.97</Version>
-		</PackageReference>
 		<PackageReference Include="SFA.DAS.Authentication">
 			<Version>1.1.2</Version>
 		</PackageReference>

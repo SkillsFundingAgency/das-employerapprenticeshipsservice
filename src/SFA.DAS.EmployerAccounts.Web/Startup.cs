@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Hosting;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
-using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.Microsoft;
 using SFA.DAS.AutoConfiguration.DependencyResolution;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerAccounts.Data;
@@ -95,7 +94,6 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             services.AddEntityFrameworkUnitOfWork<EmployerAccountsDbContext>();
             services.AddNServiceBusClientUnitOfWork();
-            services.AddEmployerFeaturesAuthorization();
             services.AddEmployerAccountsApi();
             services.AddExecutionPolicies();
             services.AddEmployerAccountsOuterApi(_employerAccountsConfiguration.EmployerAccountsOuterApiConfiguration);

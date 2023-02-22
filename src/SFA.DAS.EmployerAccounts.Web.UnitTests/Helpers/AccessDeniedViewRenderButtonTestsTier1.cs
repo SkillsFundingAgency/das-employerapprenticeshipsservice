@@ -57,7 +57,6 @@ public class AccessDeniedViewRenderButtonTestsTier1
             Mock.Of<IMediator>(),
             _mockHttpContextAccessor.Object,
             Mock.Of<ILogger<HtmlHelpers>>(),
-            Mock.Of<DAS.Authorization.Services.IAuthorizationService>(),
             Mock.Of<ICompositeViewEngine>()
         );
 
@@ -78,7 +77,6 @@ public class AccessDeniedViewRenderButtonTestsTier1
             Mock.Of<IMediator>(),
             _mockHttpContextAccessor.Object,
             Mock.Of<ILogger<HtmlHelpers>>(),
-            Mock.Of<DAS.Authorization.Services.IAuthorizationService>(),
             Mock.Of<ICompositeViewEngine>()
         );
 
@@ -101,7 +99,6 @@ public class AccessDeniedViewRenderButtonTestsTier1
             Mock.Of<IMediator>(),
             _mockHttpContextAccessor.Object,
             Mock.Of<ILogger<HtmlHelpers>>(),
-            Mock.Of<DAS.Authorization.Services.IAuthorizationService>(),
             Mock.Of<ICompositeViewEngine>()
         );
 
@@ -122,7 +119,6 @@ public class AccessDeniedViewRenderButtonTestsTier1
             Mock.Of<IMediator>(),
             _mockHttpContextAccessor.Object,
             Mock.Of<ILogger<HtmlHelpers>>(),
-            Mock.Of<DAS.Authorization.Services.IAuthorizationService>(),
             Mock.Of<ICompositeViewEngine>()
         );
 
@@ -145,7 +141,6 @@ public class AccessDeniedViewRenderButtonTestsTier1
             Mock.Of<IMediator>(),
             _mockHttpContextAccessor.Object,
             Mock.Of<ILogger<HtmlHelpers>>(),
-            Mock.Of<DAS.Authorization.Services.IAuthorizationService>(),
             Mock.Of<ICompositeViewEngine>()
         );
 
@@ -167,7 +162,6 @@ public class AccessDeniedViewRenderButtonTestsTier1
             Mock.Of<IMediator>(),
             _mockHttpContextAccessor.Object,
             Mock.Of<ILogger<HtmlHelpers>>(),
-            Mock.Of<DAS.Authorization.Services.IAuthorizationService>(),
             Mock.Of<ICompositeViewEngine>()
         );
 
@@ -191,7 +185,6 @@ public class AccessDeniedViewRenderButtonTestsTier1
             Mock.Of<IMediator>(),
             _mockHttpContextAccessor.Object,
             Mock.Of<ILogger<HtmlHelpers>>(),
-            Mock.Of<DAS.Authorization.Services.IAuthorizationService>(),
             Mock.Of<ICompositeViewEngine>()
         );
 
@@ -213,7 +206,6 @@ public class AccessDeniedViewRenderButtonTestsTier1
             Mock.Of<IMediator>(),
             _mockHttpContextAccessor.Object,
             Mock.Of<ILogger<HtmlHelpers>>(),
-            Mock.Of<DAS.Authorization.Services.IAuthorizationService>(),
             Mock.Of<ICompositeViewEngine>()
         );
 
@@ -234,7 +226,6 @@ public class AccessDeniedViewRenderButtonTestsTier1
             Mock.Of<IMediator>(),
             _mockHttpContextAccessor.Object,
             Mock.Of<ILogger<HtmlHelpers>>(),
-            Mock.Of<DAS.Authorization.Services.IAuthorizationService>(),
             Mock.Of<ICompositeViewEngine>()
         );
 

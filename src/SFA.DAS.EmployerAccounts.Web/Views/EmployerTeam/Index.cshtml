@@ -136,15 +136,13 @@ else
                         <p class="govuk-body govuk-!-font-size-16">View your financial transactions, connect with other employers and @(Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy ? "send or " : "")receive transfer funds.</p>
                     </div>
 
-                    @if (HtmlHelpers.IsAuthorized("EmployerFeature.EmployerIncentives"))
-                    {
-                        <div class="das-card">
-                            <h3 class="govuk-heading-m das-card__heading">
-                                <a href="@UrlHelpers.EmployerIncentivesAction()" class="govuk-link govuk-link--no-visited-state">Your hire a new apprentice payments</a>
-                            </h3>
-                            <p class="govuk-body govuk-!-font-size-16">View applications and change your payment details.</p>
-                        </div>
-                    }
+                    <div class="das-card">
+                        <h3 class="govuk-heading-m das-card__heading">
+                            <a href="@UrlHelpers.EmployerIncentivesAction()" class="govuk-link govuk-link--no-visited-state">Your hire a new apprentice payments</a>
+                        </h3>
+                        <p class="govuk-body govuk-!-font-size-16">View applications and change your payment details.</p>
+                    </div>
+
 
                     @if (Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
                     {

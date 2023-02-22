@@ -1,7 +1,6 @@
 ﻿using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using SFA.DAS.Authentication.Extensions.Legacy;
 using SFA.DAS.CommitmentsV2.Api.Types.Requests;
 using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.EmployerAccounts.Configuration;
@@ -11,13 +10,13 @@ using System.Net.Http.Headers;
 
 namespace SFA.DAS.EmployerAccounts.Services;
 
-public class CommitmentsV2ApiClient : ApiClientBase, ICommitmentsV2ApiClient
+public class CommitmentsV2ApiClient : ICommitmentsV2ApiClient
 {
     private readonly HttpClient _httpClient;
     private readonly CommitmentsApiV2ClientConfiguration _config;
     private readonly ILogger<CommitmentsV2ApiClient> _logger;        
 
-    public CommitmentsV2ApiClient(HttpClient httpClient, CommitmentsApiV2ClientConfiguration config, ILogger<CommitmentsV2ApiClient> logger) : base(httpClient)
+    public CommitmentsV2ApiClient(HttpClient httpClient, CommitmentsApiV2ClientConfiguration config, ILogger<CommitmentsV2ApiClient> logger)
     {
         _httpClient = httpClient;
         _config = config;            
