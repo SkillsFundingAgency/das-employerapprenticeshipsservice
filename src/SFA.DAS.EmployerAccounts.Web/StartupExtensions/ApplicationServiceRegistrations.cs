@@ -40,7 +40,7 @@ public static class ApplicationServiceRegistrations
 
         services.AddScoped<IAccountApiClient, AccountApiClient>();
         services.AddTransient<IReferenceDataService, ReferenceDataService>();
-        services.AddScoped<ITaskApiClient, TaskApiClient>();
+        services.AddHttpClient<ITaskApiClient, TaskApiClient>();
         services.AddTransient<ITaskService, TaskService>();
         services.AddTransient<IPensionRegulatorService, PensionRegulatorService>();
 
@@ -55,7 +55,7 @@ public static class ApplicationServiceRegistrations
 
         services.AddScoped(typeof(ICookieService<>), typeof(HttpCookieService<>));
         services.AddScoped(typeof(ICookieStorageService<>), typeof(CookieStorageService<>));
-        services.AddScoped<IUrlActionHelper, UrlActionHelper>();
+        services.AddSingleton<IUrlActionHelper, UrlActionHelper>();
 
         services.AddTransient<HmrcExecutionPolicy>();
 
