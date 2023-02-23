@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
-using Polly;
+using SFA.DAS.EmployerAccounts.Infrastructure;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 
@@ -38,7 +38,7 @@ public class HomeController : BaseController
     [Route("Index")]
     public async Task<IActionResult> Index()
     {
-        var userIdClaim = HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals(ControllerConstants.UserRefClaimKeyName));
+        var userIdClaim = HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals(EmployerClaims.IdamsUserIdClaimTypeIdentifier));
 
         OrchestratorResponse<UserAccountsViewModel> accounts;
 
@@ -51,8 +51,8 @@ public class HomeController : BaseController
                 return Redirect(ConfigurationFactory.Current.Get().AccountActivationUrl);
             }
 
-            var userRef = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
-            var email = HttpContext.User.FindFirstValue(ControllerConstants.EmailClaimKeyName);
+            var userRef = HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserIdClaimTypeIdentifier);
+            var email = HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserEmailClaimTypeIdentifier);
             var firstName = HttpContext.User.FindFirstValue(DasClaimTypes.GivenName);
             var lastName = HttpContext.User.FindFirstValue(DasClaimTypes.FamilyName);
 
