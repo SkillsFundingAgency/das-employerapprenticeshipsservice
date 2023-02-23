@@ -79,7 +79,7 @@ public class WhenPopulatingAccountClaims
         actual.Should().ContainSingle(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier));
         var actualClaimValue = actual.First(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier)).Value;
         JsonConvert.SerializeObject(accountData.EmployerAccounts.ToDictionary(k => k.AccountId)).Should().Be(actualClaimValue);
-        actual.FirstOrDefault(c => c.Type.Equals(EmployerClaims.IdamsUserIdClaimTypeIdentifier)).Should().BeNull();
+        actual.FirstOrDefault(c => c.Type.Equals(EmployerClaims.IdamsUserIdClaimTypeIdentifier)).Should().NotBeNull();
         actual.FirstOrDefault(c => c.Type.Equals(EmployerClaims.IdamsUserDisplayNameClaimTypeIdentifier)).Should().BeNull();
     }
 
@@ -89,7 +89,8 @@ public class WhenPopulatingAccountClaims
         {
             new Claim(ClaimTypes.NameIdentifier, nameIdentifier),
             new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, idamsIdentifier),
-            new Claim(ClaimTypes.Email, emailAddress)
+            new Claim(ClaimTypes.Email, emailAddress),
+            new Claim(EmployerClaims.IdamsUserEmailClaimTypeIdentifier, emailAddress)
         });
 
         var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(identity));

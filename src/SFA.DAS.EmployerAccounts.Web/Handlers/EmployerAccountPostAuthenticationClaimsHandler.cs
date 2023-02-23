@@ -65,6 +65,9 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
 
             email = tokenValidatedContext.Principal.Claims
                 .First(c => c.Type.Equals(EmployerClaims.IdamsUserEmailClaimTypeIdentifier)).Value;
+
+            claims.AddRange(tokenValidatedContext.Principal.Claims);
+            claims.Add(new Claim("sub", userId));
         }
 
         var result = await _userAccountService.GetUserAccounts(userId, email);
@@ -72,8 +75,6 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
         var accountsAsJson = JsonConvert.SerializeObject(result.EmployerAccounts.ToDictionary(k => k.AccountId));
         var associatedAccountsClaim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, accountsAsJson, JsonClaimValueTypes.Json);
         claims.Add(associatedAccountsClaim);
-        claims.Add(new Claim("sub", userId));
-        claims.AddRange(tokenValidatedContext.Principal.Claims);
 
         if (!_employerAccountsConfiguration.UseGovSignIn)
         {
