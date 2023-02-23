@@ -7,7 +7,6 @@ using SFA.DAS.EmployerAccounts.Commands.CreateInvitation;
 using SFA.DAS.EmployerAccounts.Commands.DeleteInvitation;
 using SFA.DAS.EmployerAccounts.Commands.RemoveTeamMember;
 using SFA.DAS.EmployerAccounts.Commands.ResendInvitation;
-using SFA.DAS.EmployerAccounts.Commands.UpdateShowWizard;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
 using SFA.DAS.EmployerAccounts.Models.Recruit;
@@ -149,46 +148,38 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
         {
             var apiGetAccountTask = _accountApiClient.GetAccount(hashedAccountId);
 
-            var accountResponseTask = _mediator.Send(new GetEmployerAccountByIdQuery
+            var accountResponse = await _mediator.Send(new GetEmployerAccountByIdQuery
             {
                 AccountId = accountId,
                 UserId = externalUserId
             });
 
-            var userRoleResponseTask = GetUserAccountRole(accountId, externalUserId);
+            var userRoleResponse = await GetUserAccountRole(accountId, externalUserId);
 
-            var userResponseTask = _mediator.Send(new GetTeamMemberQuery
+            var userResponse = await _mediator.Send(new GetTeamMemberQuery
             {
                 AccountId = accountId,
                 TeamMemberId = externalUserId
             });
 
-            var accountStatsResponseTask = _mediator.Send(new GetAccountStatsQuery
+            var accountStatsResponse = await _mediator.Send(new GetAccountStatsQuery
             {
                 AccountId = accountId,
                 ExternalUserId = externalUserId
             });
 
-            var agreementsResponseTask = _mediator.Send(new GetAccountEmployerAgreementsRequest
+            var agreementsResponse = await _mediator.Send(new GetAccountEmployerAgreementsRequest
             {
                 AccountId = accountId,
                 ExternalUserId = externalUserId
             });
 
-            var userQueryResponseTask = _mediator.Send(new GetUserByRefQuery
+            var userQueryResponse = await _mediator.Send(new GetUserByRefQuery
             {
                 UserRef = externalUserId
             });
 
-            await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask, userQueryResponseTask).ConfigureAwait(false);
-
-            var accountResponse = accountResponseTask.Result;
-            var userRoleResponse = userRoleResponseTask.Result;
-            var userResponse = userResponseTask.Result;
-            var accountStatsResponse = accountStatsResponseTask.Result;
-            var agreementsResponse = agreementsResponseTask.Result;
             var accountDetailViewModel = apiGetAccountTask.Result;
-            var userQueryResponse = userQueryResponseTask.Result;
 
             var apprenticeshipEmployerType = (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), accountDetailViewModel.ApprenticeshipEmployerType, true);
 
