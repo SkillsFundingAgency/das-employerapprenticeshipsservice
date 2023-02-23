@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Commands.ResendInvitation;
+﻿namespace SFA.DAS.EmployerAccounts.Commands.ResendInvitation;
 
 public class ResendInvitationCommandValidator : IValidator<ResendInvitationCommand>
 {
@@ -22,6 +20,6 @@ public class ResendInvitationCommandValidator : IValidator<ResendInvitationComma
 
     public Task<ValidationResult> ValidateAsync(ResendInvitationCommand item)
     {
-        throw new System.NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

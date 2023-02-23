@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Queries.GetPensionRegulator;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetPensionRegulator;
 
 public class GetPensionRegulatorValidator : IValidator<GetPensionRegulatorRequest>
 {
@@ -18,6 +16,6 @@ public class GetPensionRegulatorValidator : IValidator<GetPensionRegulatorReques
 
     public Task<ValidationResult> ValidateAsync(GetPensionRegulatorRequest item)
     {
-        throw new System.NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

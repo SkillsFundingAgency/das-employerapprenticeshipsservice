@@ -21,6 +21,6 @@ public class GetUserAccountRoleValidator : IValidator<GetUserAccountRoleQuery>
 
     public Task<ValidationResult> ValidateAsync(GetUserAccountRoleQuery item)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

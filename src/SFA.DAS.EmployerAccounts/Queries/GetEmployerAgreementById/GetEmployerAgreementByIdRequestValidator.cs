@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementById;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementById;
 
 public class GetEmployerAgreementByIdRequestValidator : IValidator<GetEmployerAgreementByIdRequest>
 {
@@ -21,6 +19,6 @@ public class GetEmployerAgreementByIdRequestValidator : IValidator<GetEmployerAg
 
     public Task<ValidationResult> ValidateAsync(GetEmployerAgreementByIdRequest item)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

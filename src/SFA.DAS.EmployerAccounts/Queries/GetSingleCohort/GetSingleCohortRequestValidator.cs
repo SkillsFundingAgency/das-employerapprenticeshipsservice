@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
 
 public class GetSingleCohortRequestValidator : IValidator<GetSingleCohortRequest>
 {
@@ -18,6 +16,6 @@ public class GetSingleCohortRequestValidator : IValidator<GetSingleCohortRequest
 
     public Task<ValidationResult> ValidateAsync(GetSingleCohortRequest item)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

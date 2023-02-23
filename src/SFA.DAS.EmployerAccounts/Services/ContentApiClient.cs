@@ -1,7 +1,6 @@
-﻿using System.Configuration;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
-using Microsoft.Azure.Services.AppAuthentication;
+using SFA.DAS.Api.Common.Interfaces;
 
 namespace SFA.DAS.EmployerAccounts.Services;
 
@@ -10,8 +9,9 @@ public class ContentApiClient : IContentApiClient
     private readonly string _apiBaseUrl;        
     private readonly string _identifierUri;
     private readonly HttpClient _client;
+    private readonly IAzureClientCredentialHelper _azureClientCredentialHelper;
 
-    public ContentApiClient(HttpClient client, IContentClientApiConfiguration configuration)
+    public ContentApiClient(HttpClient client, IContentClientApiConfiguration configuration, IAzureClientCredentialHelper azureClientCredentialHelper)
     {
         _apiBaseUrl = configuration.ApiBaseUrl.EndsWith("/")
             ? configuration.ApiBaseUrl
@@ -19,6 +19,7 @@ public class ContentApiClient : IContentApiClient
 
         _identifierUri = configuration.IdentifierUri;
         _client = client;
+        _azureClientCredentialHelper = azureClientCredentialHelper;
     }
 
     public async Task<string> Get(string type, string applicationId)
@@ -39,8 +40,7 @@ public class ContentApiClient : IContentApiClient
     {
         if (!string.IsNullOrEmpty(_identifierUri))
         {
-            var azureServiceTokenProvider = new AzureServiceTokenProvider();
-            var accessToken = await azureServiceTokenProvider.GetAccessTokenAsync(_identifierUri);
+            var accessToken = await _azureClientCredentialHelper.GetAccessTokenAsync(_identifierUri);
             httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         }
     }

@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Queries.GetUserNotificationSettings;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetUserNotificationSettings;
 
 public class GetUserNotificationSettingsQueryValidator: IValidator<GetUserNotificationSettingsQuery>
 {
@@ -18,6 +16,6 @@ public class GetUserNotificationSettingsQueryValidator: IValidator<GetUserNotifi
 
     public Task<ValidationResult> ValidateAsync(GetUserNotificationSettingsQuery item)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

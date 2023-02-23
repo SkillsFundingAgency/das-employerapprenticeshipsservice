@@ -25,9 +25,6 @@ public class GetNumberOfUserInvitationsValidator : IValidator<GetNumberOfUserInv
 
     public Task<ValidationResult> ValidateAsync(GetNumberOfUserInvitationsQuery item)
     {
-        return Task.Run(() =>
-        {
-            return Validate(item);
-        });
+        return Task.FromResult(Validate(item));
     }
 }

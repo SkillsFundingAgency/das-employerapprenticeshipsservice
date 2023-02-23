@@ -13,8 +13,7 @@ public class GetNextUnsignedEmployerAgreementValidator : IValidator<GetNextUnsig
 
     public ValidationResult Validate(GetNextUnsignedEmployerAgreementRequest item)
     {
-        var task = Task.Run(async () => await ValidateAsync(item));
-        return task.Result;
+        return ValidateAsync(item).Result;
     }
 
     public async Task<ValidationResult> ValidateAsync(GetNextUnsignedEmployerAgreementRequest item)

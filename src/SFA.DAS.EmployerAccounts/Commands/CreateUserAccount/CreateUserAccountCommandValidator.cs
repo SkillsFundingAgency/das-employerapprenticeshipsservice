@@ -1,12 +1,10 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
+﻿namespace SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
 
 public class CreateUserAccountCommandValidator : IValidator<CreateUserAccountCommand>
 {
     public Task<ValidationResult> ValidateAsync(CreateUserAccountCommand item)
     {
-        throw new System.NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 
     public ValidationResult Validate(CreateUserAccountCommand item)

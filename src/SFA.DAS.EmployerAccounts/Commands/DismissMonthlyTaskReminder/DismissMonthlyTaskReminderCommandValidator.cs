@@ -1,34 +1,33 @@
 ﻿using SFA.DAS.EmployerAccounts.TasksApi;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Commands.DismissMonthlyTaskReminder;
 
 public class DismissMonthlyTaskReminderCommandValidator : IValidator<DismissMonthlyTaskReminderCommand>
 {
-    public ValidationResult Validate(DismissMonthlyTaskReminderCommand command)
+    public ValidationResult Validate(DismissMonthlyTaskReminderCommand item)
     {
         var validationResult = new ValidationResult();
 
-        if (string.IsNullOrEmpty(command.HashedAccountId))
+        if (string.IsNullOrEmpty(item.HashedAccountId))
         {
-            validationResult.AddError(nameof(command.HashedAccountId), "Hashed account Id cannot be null or empty");
+            validationResult.AddError(nameof(item.HashedAccountId), "Hashed account Id cannot be null or empty");
         }
 
-        if (string.IsNullOrEmpty(command.ExternalUserId))
+        if (string.IsNullOrEmpty(item.ExternalUserId))
         {
-            validationResult.AddError(nameof(command.ExternalUserId), "Hashed user Id cannot be null or empty");
+            validationResult.AddError(nameof(item.ExternalUserId), "Hashed user Id cannot be null or empty");
         }
 
-        if (command.TaskType == TaskType.None)
+        if (item.TaskType == TaskType.None)
         {
-            validationResult.AddError(nameof(command.TaskType), "Task type must be set");
+            validationResult.AddError(nameof(item.TaskType), "Task type must be set");
         }
 
         return validationResult;
     }
 
-    public Task<ValidationResult> ValidateAsync(DismissMonthlyTaskReminderCommand command)
+    public Task<ValidationResult> ValidateAsync(DismissMonthlyTaskReminderCommand item)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Commands.UpdateShowWizard;
+﻿namespace SFA.DAS.EmployerAccounts.Commands.UpdateShowWizard;
 
 public class UpdateShowAccountWizardCommandValidator : IValidator<UpdateShowAccountWizardCommand>
 {
@@ -19,6 +17,6 @@ public class UpdateShowAccountWizardCommandValidator : IValidator<UpdateShowAcco
 
     public Task<ValidationResult> ValidateAsync(UpdateShowAccountWizardCommand item)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

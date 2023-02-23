@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesCountByHashedAccountId;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesCountByHashedAccountId;
 
 public class GetAccountLegalEntitiesCountByHashedAccountIdValidator : IValidator<GetAccountLegalEntitiesCountByHashedAccountIdRequest>
 {

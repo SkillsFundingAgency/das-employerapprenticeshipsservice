@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Commands.UpdateOrganisationDetails;
+﻿namespace SFA.DAS.EmployerAccounts.Commands.UpdateOrganisationDetails;
 
 public class UpdateOrganisationDetailsCommandValidator : IValidator<UpdateOrganisationDetailsCommand>
 {

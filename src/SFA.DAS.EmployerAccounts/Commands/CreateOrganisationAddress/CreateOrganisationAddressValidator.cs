@@ -1,5 +1,4 @@
 ﻿using System.Text.RegularExpressions;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Commands.CreateOrganisationAddress;
 
@@ -49,6 +48,6 @@ public class CreateOrganisationAddressValidator : IValidator<CreateOrganisationA
 
     public Task<ValidationResult> ValidateAsync(CreateOrganisationAddressRequest item)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Commands.DeleteInvitation;
+﻿namespace SFA.DAS.EmployerAccounts.Commands.DeleteInvitation;
 
 public class DeleteInvitationCommandValidator : IValidator<DeleteInvitationCommand>
 {
@@ -22,6 +20,6 @@ public class DeleteInvitationCommandValidator : IValidator<DeleteInvitationComma
 
     public Task<ValidationResult> ValidateAsync(DeleteInvitationCommand item)
     {
-        throw new System.NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 
 public class GetEmployerAgreementQueryValidator : IValidator<GetEmployerAgreementRequest>
 {

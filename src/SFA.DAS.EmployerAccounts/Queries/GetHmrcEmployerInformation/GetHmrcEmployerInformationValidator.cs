@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Queries.GetHmrcEmployerInformation;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetHmrcEmployerInformation;
 
 public class GetHmrcEmployerInformationValidator : IValidator<GetHmrcEmployerInformationQuery>
 {
@@ -18,6 +16,6 @@ public class GetHmrcEmployerInformationValidator : IValidator<GetHmrcEmployerInf
 
     public Task<ValidationResult> ValidateAsync(GetHmrcEmployerInformationQuery item)
     {
-        throw new System.NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

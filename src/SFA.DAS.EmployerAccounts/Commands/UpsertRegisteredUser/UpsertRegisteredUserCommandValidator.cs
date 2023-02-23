@@ -1,5 +1,3 @@
-using SFA.DAS.Validation;
-
 namespace SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser;
 
 public class UpsertRegisteredUserCommandValidator : IValidator<UpsertRegisteredUserCommand>
@@ -22,6 +20,6 @@ public class UpsertRegisteredUserCommandValidator : IValidator<UpsertRegisteredU
 
     public Task<ValidationResult> ValidateAsync(UpsertRegisteredUserCommand item)
     {
-        throw new System.NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

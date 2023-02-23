@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntity;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntity;
 
 public class GetAccountLegalEntityValidator : IValidator<GetAccountLegalEntityRequest>
 {
@@ -13,6 +11,6 @@ public class GetAccountLegalEntityValidator : IValidator<GetAccountLegalEntityRe
 
     public Task<ValidationResult> ValidateAsync(GetAccountLegalEntityRequest item)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }
