@@ -81,7 +81,7 @@ public class CreateLegalEntityCommandHandler : IRequestHandler<CreateLegalEntity
         var agreementView = await _accountRepository.CreateLegalEntityWithAgreement(createParams);
 
         var accountId = _encodingService.Decode(message.HashedAccountId, EncodingType.AccountId);
-        agreementView.AccountLegalEntityPublicHashedId = _encodingService.Encode(agreementView.AccountLegalEntityId, EncodingType.AccountLegalEntityId);
+        agreementView.AccountLegalEntityPublicHashedId = _encodingService.Encode(agreementView.AccountLegalEntityId, EncodingType.PublicAccountLegalEntityId);
 
         await Task.WhenAll(
             CreateAuditEntries(owner, agreementView),

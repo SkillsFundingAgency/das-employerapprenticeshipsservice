@@ -1,12 +1,11 @@
-﻿using Microsoft.Azure.Services.AppAuthentication;
+﻿using System.Net.Http;
+using System.Net.Http.Headers;
+using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SFA.DAS.CommitmentsV2.Api.Types.Requests;
 using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.EmployerAccounts.Configuration;
-using System.Configuration;
-using System.Net.Http;
-using System.Net.Http.Headers;
 
 namespace SFA.DAS.EmployerAccounts.Services;
 
@@ -105,7 +104,7 @@ public class CommitmentsV2ApiClient : ICommitmentsV2ApiClient
       
     private async Task AddAuthenticationHeader(HttpRequestMessage httpRequestMessage)
     {
-        if (ConfigurationManager.AppSettings["EnvironmentName"].ToUpper() != "LOCAL")
+        if (!string.IsNullOrEmpty(_config.IdentifierUri))
         {
             var azureServiceTokenProvider = new AzureServiceTokenProvider();
             var accessToken = await azureServiceTokenProvider.GetAccessTokenAsync(_config.IdentifierUri);

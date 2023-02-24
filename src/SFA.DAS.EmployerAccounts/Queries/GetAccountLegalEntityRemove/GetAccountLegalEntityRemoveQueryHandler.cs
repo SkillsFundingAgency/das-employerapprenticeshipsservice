@@ -39,7 +39,7 @@ public class GetAccountLegalEntityRemoveQueryHandler : IRequestHandler<GetAccoun
         }
 
         var accountId = _encodingService.Decode(message.HashedAccountId, EncodingType.AccountId);
-        var accountLegalEntityId = _encodingService.Decode(message.HashedAccountLegalEntityId, EncodingType.AccountLegalEntityId);
+        var accountLegalEntityId = _encodingService.Decode(message.HashedAccountLegalEntityId, EncodingType.PublicAccountLegalEntityId);
         var accountLegalEntity = await _employerAgreementRepository.GetAccountLegalEntity(accountLegalEntityId);
 
         var result = await _employerAgreementRepository.GetAccountLegalEntityAgreements(accountLegalEntityId);

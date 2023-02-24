@@ -62,7 +62,7 @@ public class WhenIRemoveTheLegalAgreement
     {
         //Arrange
         _encodingServiceMock.Setup(e => e.Decode(ExpectedHashedAccountId, EncodingType.AccountId)).Returns(ExpectedAccountId);
-        _encodingServiceMock.Setup(e => e.Decode(ExpectedHashedAccountLegalEntitytId, EncodingType.AccountLegalEntityId)).Returns(ExpectedAccountLegalEntitytId);
+        _encodingServiceMock.Setup(e => e.Decode(ExpectedHashedAccountLegalEntitytId, EncodingType.PublicAccountLegalEntityId)).Returns(ExpectedAccountLegalEntitytId);
 
         //Act
         var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmOrganisationToRemoveViewModel { Name = "TestName", HashedAccountId = ExpectedHashedAccountId, HashedAccountLegalEntitytId = ExpectedHashedAccountLegalEntitytId }, ExpectedUserId);

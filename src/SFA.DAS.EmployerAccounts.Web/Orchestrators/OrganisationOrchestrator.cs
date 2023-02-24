@@ -190,7 +190,7 @@ public class OrganisationOrchestrator : UserVerificationOrchestratorBase, IOrche
 
     public async Task<OrchestratorResponse<ReviewOrganisationAddressViewModel>> GetRefreshedOrganisationDetails(string hashedAccountLegalEntityId)
     {
-        var accountLegalEntityId = _encodingService.Decode(hashedAccountLegalEntityId, EncodingType.AccountLegalEntityId);
+        var accountLegalEntityId = _encodingService.Decode(hashedAccountLegalEntityId, EncodingType.PublicAccountLegalEntityId);
 
         var currentDetails = await Mediator.Send(new GetAccountLegalEntityRequest
         {
@@ -230,7 +230,7 @@ public class OrganisationOrchestrator : UserVerificationOrchestratorBase, IOrche
         string userId)
     {
         var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
-        var accountLegalEntityId = _encodingService.Decode(accountLegalEntityPublicHashedId, EncodingType.AccountLegalEntityId);    
+        var accountLegalEntityId = _encodingService.Decode(accountLegalEntityPublicHashedId, EncodingType.PublicAccountLegalEntityId);    
 
         var result = new OrchestratorResponse<OrganisationUpdatedNextStepsViewModel>
         {

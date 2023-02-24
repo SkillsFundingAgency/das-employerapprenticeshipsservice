@@ -160,7 +160,7 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
     public virtual async Task<OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>> RemoveLegalAgreement(ConfirmOrganisationToRemoveViewModel model, string userId)
     {
             var accountId = _encodingService.Decode(model.HashedAccountId, EncodingType.AccountId);
-            var accountLegalEntityId = _encodingService.Decode(model.HashedAccountLegalEntitytId, EncodingType.AccountLegalEntityId);
+            var accountLegalEntityId = _encodingService.Decode(model.HashedAccountLegalEntitytId, EncodingType.PublicAccountLegalEntityId);
         var response = new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>();
 
         try

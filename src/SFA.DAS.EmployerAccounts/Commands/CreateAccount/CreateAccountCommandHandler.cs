@@ -140,7 +140,7 @@ public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand,
 
     private Task PublishLegalEntityAddedMessage(long accountId, long legalEntityId, long employerAgreementId, long accountLegalEntityId, string organisationName, string organisationReferenceNumber, string organisationAddress, OrganisationType organisationType, string userName, Guid userRef)
     {
-        var accountLegalEntityPublicHashedId = _encodingService.Encode(accountLegalEntityId, EncodingType.AccountLegalEntityId);
+        var accountLegalEntityPublicHashedId = _encodingService.Encode(accountLegalEntityId, EncodingType.PublicAccountLegalEntityId);
 
         return _eventPublisher.Publish(new AddedLegalEntityEvent
         {

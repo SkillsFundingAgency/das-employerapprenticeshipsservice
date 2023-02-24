@@ -72,7 +72,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             _encodingService = new Mock<IEncodingService>();
             _encodingService.Setup(x => x.Encode(ExpectedAccountId, EncodingType.AccountId)).Returns(ExpectedHashString);
             _encodingService.Setup(x => x.Encode(ExpectedAccountId, EncodingType.PublicAccountId)).Returns(ExpectedPublicHashString);
-            _encodingService.Setup(x => x.Encode(ExpectedAccountLegalEntityId, EncodingType.AccountLegalEntityId)).Returns(ExpectedAccountLegalEntityPublicHashString);
+            _encodingService.Setup(x => x.Encode(ExpectedAccountLegalEntityId, EncodingType.PublicAccountLegalEntityId)).Returns(ExpectedAccountLegalEntityPublicHashString);
 
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _accountEventFactory = new Mock<IAccountEventFactory>();
