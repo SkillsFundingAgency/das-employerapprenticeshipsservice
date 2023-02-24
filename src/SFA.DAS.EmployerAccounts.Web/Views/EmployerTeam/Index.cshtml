@@ -49,7 +49,7 @@
             <dd class="das-definition-list__definition">
                 @if (string.IsNullOrEmpty(Model.Data.SingleAccountLegalEntityId))
                 {
-                    <a asp-controller="EmployerAgreement" asp-action="Index" asp-route-HashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" class="govuk-link govuk-link--no-visited-state">View your agreement IDs</a>
+                    <a asp-controller="@ControllerConstants.EmployerAgreementControllerName" asp-action="@ControllerConstants.IndexActionName" asp-route-HashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" class="govuk-link govuk-link--no-visited-state">View your agreement IDs</a>
                 }
                 else
                 {
