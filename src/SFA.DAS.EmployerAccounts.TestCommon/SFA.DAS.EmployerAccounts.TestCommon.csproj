@@ -59,9 +59,6 @@
 		<PackageReference Include="SFA.DAS.Messaging.AzureServiceBus">
 			<Version>3.0.0.53181</Version>
 		</PackageReference>
-		<PackageReference Include="SFA.DAS.Messaging.AzureServiceBus.StructureMap">
-			<Version>3.0.0.63765</Version>
-		</PackageReference>
 		<PackageReference Include="SFA.DAS.NLog.Logger">
 			<Version>1.2.1</Version>
 		</PackageReference>
@@ -70,9 +67,6 @@
 		</PackageReference>
 		<PackageReference Include="SFA.DAS.Sql.Client">
 			<Version>1.0.0.32930</Version>
-		</PackageReference>
-		<PackageReference Include="StructureMap">
-			<Version>4.7.1</Version>
 		</PackageReference>
 		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
 		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />

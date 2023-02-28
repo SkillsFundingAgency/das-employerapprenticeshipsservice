@@ -7,24 +7,12 @@ using SFA.DAS.EmployerAccounts.MessageHandlers.ServiceRegistrations;
 using SFA.DAS.EmployerAccounts.MessageHandlers.Startup;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
-using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.UnitOfWork.DependencyResolution.Microsoft;
-using SFA.DAS.UnitOfWork.NServiceBus.Services;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.Extensions;
 
 public static class HostBuilderExtensions
 {
-    public static IHostBuilder UseStructureMap(this IHostBuilder builder)
-    {
-        return UseStructureMap(builder, registry: null);
-    }
-
-    public static IHostBuilder UseStructureMap(this IHostBuilder builder, Registry registry)
-    {
-        return builder.UseServiceProviderFactory(new StructureMapServiceProviderFactory(registry));
-    }
-
     public static IHostBuilder UseDasEnvironment(this IHostBuilder hostBuilder)
     {
         var environmentName = Environment.GetEnvironmentVariable(EnvironmentVariableNames.EnvironmentName);

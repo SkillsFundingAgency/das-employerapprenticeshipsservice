@@ -21,7 +21,6 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
     <PackageReference Include="SFA.DAS.CosmosDb" Version="1.0.47" />
-    <PackageReference Include="StructureMap" Version="4.6.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,16 +1,14 @@
-﻿using SFA.DAS.EmployerAccounts.Api.Client;
-using StructureMap;
+﻿using StructureMap;
 
-namespace SFA.DAS.EmployerAccounts.ApiClient.TestHarness.DependencyResolution
+namespace SFA.DAS.EmployerAccounts.ApiClient.TestHarness.DependencyResolution;
+
+public static class IoC
 {
-    public static class IoC
+    public static IContainer Initialize()
     {
-        public static IContainer Initialize()
+        return new Container(c =>
         {
-            return new Container(c =>
-            {
-                c.AddRegistry<EmployerAccountsApiClientRegistry>();
-            });
-        }
+            c.AddRegistry<EmployerAccountsApiClientRegistry>();
+        });
     }
 }

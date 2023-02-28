@@ -16,7 +16,6 @@
     <PackageReference Include="SFA.DAS.UnitOfWork.EntityFrameworkCore" Version="9.0.28" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.1" />
     <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="9.0.28" />
-    <PackageReference Include="StructureMap" Version="4.7.1" />
     <PackageReference Include="SFA.DAS.Commitments.Events" Version="100.0.1" />
   </ItemGroup>
   <ItemGroup>

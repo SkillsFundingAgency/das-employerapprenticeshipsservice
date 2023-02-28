@@ -5,7 +5,7 @@ using SFA.DAS.EmployerAccounts.ReadStore.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.ReadStore.Data;
 
-internal class DocumentClientFactory : IDocumentClientFactory
+public class DocumentClientFactory : IDocumentClientFactory
 {
     private readonly EmployerAccountsReadStoreConfiguration _configuration;
 
