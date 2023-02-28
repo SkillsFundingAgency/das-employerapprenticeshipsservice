@@ -1,10 +1,11 @@
-﻿using SFA.DAS.EmployerAccounts.Configuration;
+﻿using NServiceBus.ObjectBuilder.MSDependencyInjection;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.NServiceBus.Configuration;
 using SFA.DAS.NServiceBus.Configuration.AzureServiceBus;
+using SFA.DAS.NServiceBus.Configuration.MicrosoftDependencyInjection;
 using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.Configuration.NLog;
-using SFA.DAS.NServiceBus.Configuration.StructureMap;
 using SFA.DAS.NServiceBus.Hosting;
 using SFA.DAS.NServiceBus.SqlServer.Configuration;
 using SFA.DAS.UnitOfWork.NServiceBus.Configuration;
@@ -34,7 +35,7 @@ public static class ServiceCollectionExtensions
                     .UseNLogFactory()
                     .UseOutbox()
                     .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
-                    .UseStructureMapBuilder(container)
+                    .UseServicesBuilder(new UpdateableServiceProvider(services))
                     .UseUnitOfWork();
 
                 if (isDevelopment)
@@ -46,9 +47,7 @@ public static class ServiceCollectionExtensions
                     endpointConfiguration.UseAzureServiceBusTransport(configuration.ServiceBusConnectionString, s => s.AddRouting());
                 }
 
-                var endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
-
-                return endpoint;
+                return Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
             })
             .AddHostedService<NServiceBusHostedService>();
     }
