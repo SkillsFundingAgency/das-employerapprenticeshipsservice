@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
 
 public class GetAccountPayeSchemesQueryValidator : IValidator<GetAccountPayeSchemesQuery>
 {

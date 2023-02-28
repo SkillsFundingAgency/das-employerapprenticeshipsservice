@@ -1,13 +1,7 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Queries.GetMinimumSignedAgreementVersion;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetMinimumSignedAgreementVersion;
 
 public class GetMinimumSignedAgreementVersionQueryValidator : IValidator<GetMinimumSignedAgreementVersionQuery>
 {
-    public GetMinimumSignedAgreementVersionQueryValidator()
-    {
-    }
-
     public ValidationResult Validate(GetMinimumSignedAgreementVersionQuery item)
     {
         var validationResult = new ValidationResult();

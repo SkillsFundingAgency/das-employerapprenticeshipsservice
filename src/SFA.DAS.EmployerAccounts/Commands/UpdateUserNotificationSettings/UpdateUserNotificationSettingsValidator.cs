@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Commands.UpdateUserNotificationSettings;
+﻿namespace SFA.DAS.EmployerAccounts.Commands.UpdateUserNotificationSettings;
 
 public class UpdateUserNotificationSettingsValidator : IValidator<UpdateUserNotificationSettingsCommand>
 {
@@ -19,6 +17,6 @@ public class UpdateUserNotificationSettingsValidator : IValidator<UpdateUserNoti
 
     public Task<ValidationResult> ValidateAsync(UpdateUserNotificationSettingsCommand item)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

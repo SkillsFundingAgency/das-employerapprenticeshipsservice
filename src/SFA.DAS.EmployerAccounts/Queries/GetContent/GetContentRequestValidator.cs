@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Queries.GetContent;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetContent;
 
 public class GetContentRequestValidator : IValidator<GetContentRequest>
 {

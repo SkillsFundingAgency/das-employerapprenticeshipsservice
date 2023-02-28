@@ -1,22 +1,17 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 
 public static class ContentApiClientServiceRegistrations
 {
-    public static IServiceCollection AddContentApiClient(this IServiceCollection services,
-        EmployerAccountsConfiguration employerAccountsConfiguration, IConfiguration configuration)
+    public static IServiceCollection AddContentApiClient(this IServiceCollection services, EmployerAccountsConfiguration employerAccountsConfiguration)
     {
-        services.AddSingleton(employerAccountsConfiguration.ContentApi);
+        services.AddSingleton<ContentClientApiConfiguration>(employerAccountsConfiguration.ContentApi);
 
-        services.Configure<IContentClientApiConfiguration>(
-            configuration.GetSection(nameof(ContentClientApiConfiguration)));
+        services.AddSingleton<IContentClientApiConfiguration>(employerAccountsConfiguration.ContentApi);
 
         services.AddHttpClient<IContentApiClient, ContentApiClient>();
-
-        services.AddScoped<IContentApiClient, ContentApiClient>();
         services.Decorate<IContentApiClient, ContentApiClientWithCaching>();
 
         return services;

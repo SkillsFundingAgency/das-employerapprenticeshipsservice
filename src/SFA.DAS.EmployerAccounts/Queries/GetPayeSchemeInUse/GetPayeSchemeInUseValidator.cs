@@ -1,5 +1,3 @@
-using SFA.DAS.Validation;
-
 namespace SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeInUse;
 
 public class GetPayeSchemeInUseValidator : IValidator<GetPayeSchemeInUseQuery>
@@ -18,6 +16,6 @@ public class GetPayeSchemeInUseValidator : IValidator<GetPayeSchemeInUseQuery>
 
     public Task<ValidationResult> ValidateAsync(GetPayeSchemeInUseQuery item)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

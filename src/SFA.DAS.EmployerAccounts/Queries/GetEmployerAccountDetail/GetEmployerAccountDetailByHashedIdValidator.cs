@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountDetail;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountDetail;
 
 public class GetEmployerAccountDetailByHashedIdValidator : IValidator<GetEmployerAccountDetailByHashedIdQuery>
 {
@@ -18,6 +16,6 @@ public class GetEmployerAccountDetailByHashedIdValidator : IValidator<GetEmploye
 
     public Task<ValidationResult> ValidateAsync(GetEmployerAccountDetailByHashedIdQuery item)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

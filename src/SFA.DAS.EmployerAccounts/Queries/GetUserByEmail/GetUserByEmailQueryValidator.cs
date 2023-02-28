@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Queries.GetUserByEmail;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetUserByEmail;
 
 public class GetUserByEmailQueryValidator : IValidator<GetUserByEmailQuery>
 {
@@ -18,6 +16,6 @@ public class GetUserByEmailQueryValidator : IValidator<GetUserByEmailQuery>
 
     public Task<ValidationResult> ValidateAsync(GetUserByEmailQuery item)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

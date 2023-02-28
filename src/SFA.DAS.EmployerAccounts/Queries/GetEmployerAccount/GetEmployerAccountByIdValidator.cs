@@ -1,4 +1,3 @@
-using AutoMapper.Execution;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;

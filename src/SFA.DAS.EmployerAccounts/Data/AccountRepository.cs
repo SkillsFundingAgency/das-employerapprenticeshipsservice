@@ -327,7 +327,7 @@ public class AccountRepository : BaseRepository, IAccountRepository
     {
         var parameters = new DynamicParameters();
 
-        var publicHash = _encodingService.Encode(accountLegalEntityId, EncodingType.AccountLegalEntityId);
+        var publicHash = _encodingService.Encode(accountLegalEntityId, EncodingType.PublicAccountLegalEntityId);
 
         parameters.Add("@AccountLegalEntityId", accountLegalEntityId, DbType.Int64);
         parameters.Add("@PublicHashedId", publicHash, DbType.String);

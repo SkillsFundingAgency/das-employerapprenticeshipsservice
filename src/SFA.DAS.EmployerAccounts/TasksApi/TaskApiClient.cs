@@ -1,6 +1,8 @@
 ﻿using System.Net.Http;
+using System.Net.Http.Headers;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using SFA.DAS.Api.Common.Interfaces;
 using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EmployerAccounts.TasksApi;
@@ -15,14 +17,16 @@ public interface ITaskApiClient
 public class TaskApiClient : ITaskApiClient
 {
     private readonly ITaskApiConfiguration _configuration;
-    private readonly SecureHttpClient _httpClient;
+    private readonly HttpClient _httpClient;
     private readonly ILogger<TaskApiClient> _logger;
+    private readonly IAzureClientCredentialHelper _azureClientCredentialHelper;
 
-    public TaskApiClient(ITaskApiConfiguration configuration, ILogger<TaskApiClient> logger)
+    public TaskApiClient(HttpClient httpClient, ITaskApiConfiguration configuration, ILogger<TaskApiClient> logger, IAzureClientCredentialHelper azureClientCredentialHelper)
     {
         _configuration = configuration;
         _logger = logger;
-        _httpClient = new SecureHttpClient(configuration);
+        _httpClient = httpClient;
+        _azureClientCredentialHelper = azureClientCredentialHelper;
     }
 
     public async Task<IEnumerable<TaskDto>> GetTasks(string employerAccountId, string userId, ApprenticeshipEmployerType applicableToApprenticeshipEmployerType)
@@ -30,9 +34,17 @@ public class TaskApiClient : ITaskApiClient
         var baseUrl = GetBaseUrl();
         var url = $"{baseUrl}api/tasks/{employerAccountId}/{userId}?{nameof(applicableToApprenticeshipEmployerType)}={(int)applicableToApprenticeshipEmployerType}";
 
+        var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
+        await AddAuthenticationHeader(requestMessage);
+
         _logger.LogInformation($"Get: {url}");
-        var json = await _httpClient.GetAsync(url);
-        return JsonConvert.DeserializeObject<IEnumerable<TaskDto>>(json);
+        var response = await _httpClient.SendAsync(requestMessage);
+
+        response.EnsureSuccessStatusCode();
+
+        var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+        return JsonConvert.DeserializeObject<IEnumerable<TaskDto>>(content);
     }
 
     public async Task AddUserReminderSupression(string employerAccountId, string userId, string taskType)
@@ -40,8 +52,12 @@ public class TaskApiClient : ITaskApiClient
         var baseUrl = GetBaseUrl();
         var url = $"{baseUrl}api/tasks/{employerAccountId}/supressions/{userId}/add/{taskType}";
 
+        var requestMessage = new HttpRequestMessage(HttpMethod.Post, url);
+        requestMessage.Content = new StringContent(string.Empty);
+        await AddAuthenticationHeader(requestMessage);
+
         _logger.LogInformation($"Post: {url}");
-        await _httpClient.PostAsync(url, new StringContent(string.Empty));
+        await _httpClient.SendAsync(requestMessage);
     }
 
     private string GetBaseUrl()
@@ -49,5 +65,14 @@ public class TaskApiClient : ITaskApiClient
         return _configuration.ApiBaseUrl.EndsWith("/")
             ? _configuration.ApiBaseUrl
             : _configuration.ApiBaseUrl + "/";
+    }
+
+    private async Task AddAuthenticationHeader(HttpRequestMessage httpRequestMessage)
+    {
+        if (!string.IsNullOrEmpty(_configuration.IdentifierUri))
+        {
+            var accessToken = await _azureClientCredentialHelper.GetAccessTokenAsync(_configuration.IdentifierUri);
+            httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        }
     }
 }

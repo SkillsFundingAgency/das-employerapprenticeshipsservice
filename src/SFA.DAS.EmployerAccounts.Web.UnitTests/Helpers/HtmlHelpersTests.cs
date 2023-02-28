@@ -52,9 +52,7 @@ class HtmlHelpersTests
             _mockMediator.Object,
             _mockHttpContextAccessor.Object,
             Mock.Of<ILogger<HtmlHelpers>>(),
-            Mock.Of<DAS.Authorization.Services.IAuthorizationService>(),
-            Mock.Of<ICompositeViewEngine>()
-            );
+            Mock.Of<ICompositeViewEngine>());
 
         var serviceProviderMock = new Mock<IServiceProvider>();
         serviceProviderMock.Setup(provider => provider.GetService(typeof(EmployerAccountsConfiguration)))

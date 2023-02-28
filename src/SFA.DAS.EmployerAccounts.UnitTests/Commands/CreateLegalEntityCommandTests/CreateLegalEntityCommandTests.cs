@@ -1,7 +1,6 @@
 ﻿using System;
 using MediatR;
 using Moq;
-using SFA.DAS.Authorization.Services;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
@@ -28,7 +27,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
         protected Mock<IEncodingService> EncodingService;
         protected Mock<IEmployerAgreementRepository> EmployerAgreementRepository;
         protected Mock<IValidator<CreateLegalEntityCommand>> Validator;
-        protected Mock<IAuthorizationService> AuthorizationService;
         protected Mock<IEventPublisher> EventPublisher;
         protected const long AccountId = 123435;
 
@@ -53,7 +51,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
             MembershipRepository.Setup(x => x.GetCaller(Command.HashedAccountId, Command.ExternalUserId)).ReturnsAsync(new MembershipView { UserRef = Guid.Parse(Command.ExternalUserId), AccountId = AccountId });
 
             Mediator = new Mock<IMediator>();
-            AuthorizationService = new Mock<IAuthorizationService>();
             GenericEventFactory = new Mock<IGenericEventFactory>();
             LegalEntityEventFactory = new Mock<ILegalEntityEventFactory>();
             EncodingService = new Mock<IEncodingService>();

@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountTasks;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetAccountTasks;
 
 public class GetAccountTasksQueryValidator : IValidator<GetAccountTasksQuery>
 {
@@ -25,6 +23,6 @@ public class GetAccountTasksQueryValidator : IValidator<GetAccountTasksQuery>
 
     public Task<ValidationResult> ValidateAsync(GetAccountTasksQuery item)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

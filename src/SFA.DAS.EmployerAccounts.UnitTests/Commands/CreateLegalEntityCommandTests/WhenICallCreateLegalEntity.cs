@@ -59,7 +59,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
             EncodingService.Setup(hs => hs.Encode(It.IsAny<long>(), It.IsAny<EncodingType>())).Returns((long value, EncodingType encodingType) => $"*{value}*");
             EncodingService.Setup(hs => hs.Decode(Command.HashedAccountId, EncodingType.AccountId)).Returns(_owner.AccountId);
 
-            EncodingService.Setup(x => x.Encode(_agreementView.AccountLegalEntityId, EncodingType.AccountLegalEntityId)).Returns(ExpectedAccountLegalEntityPublicHashString);
+            EncodingService.Setup(x => x.Encode(_agreementView.AccountLegalEntityId, EncodingType.PublicAccountLegalEntityId)).Returns(ExpectedAccountLegalEntityPublicHashString);
         }
 
         [Test]

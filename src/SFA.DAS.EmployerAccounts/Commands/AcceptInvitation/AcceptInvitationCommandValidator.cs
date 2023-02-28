@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Commands.AcceptInvitation;
+﻿namespace SFA.DAS.EmployerAccounts.Commands.AcceptInvitation;
 
 public class AcceptInvitationCommandValidator : IValidator<AcceptInvitationCommand>
 {
@@ -16,6 +14,6 @@ public class AcceptInvitationCommandValidator : IValidator<AcceptInvitationComma
 
     public Task<ValidationResult> ValidateAsync(AcceptInvitationCommand item)
     {
-        throw new System.NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

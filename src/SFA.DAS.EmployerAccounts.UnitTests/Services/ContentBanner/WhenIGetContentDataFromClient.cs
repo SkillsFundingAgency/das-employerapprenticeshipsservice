@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Moq;
 using Moq.Protected;
 using NUnit.Framework;
+using SFA.DAS.Api.Common.Interfaces;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Services;
@@ -57,7 +58,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.ContentBanner
 
             var httpClient = new HttpClient(_mockHttpMessageHandler.Object);
 
-            _sut = new ContentApiClient(httpClient, _configuration);
+            _sut = new ContentApiClient(httpClient, _configuration, Mock.Of<IAzureClientCredentialHelper>());
         }
 
         [Test]

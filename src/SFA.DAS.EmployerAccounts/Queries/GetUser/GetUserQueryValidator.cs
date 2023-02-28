@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Queries.GetUser;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetUser;
 
 public class GetUserQueryValidator : IValidator<GetUserQuery>
 {
@@ -18,6 +16,6 @@ public class GetUserQueryValidator : IValidator<GetUserQuery>
 
     public Task<ValidationResult> ValidateAsync(GetUserQuery item)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

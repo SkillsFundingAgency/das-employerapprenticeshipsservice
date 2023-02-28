@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Hosting;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
-using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.Microsoft;
 using SFA.DAS.AutoConfiguration.DependencyResolution;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Mappings;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
 using SFA.DAS.EmployerAccounts.Web.Filters;
@@ -81,7 +81,7 @@ namespace SFA.DAS.EmployerAccounts.Web
                 .Get<IdentityServerConfiguration>();
 
             services.AddOrchestrators();
-            services.AddAutoMapper(typeof(Startup).Assembly);
+            services.AddAutoMapper(typeof(Startup).Assembly, typeof(AccountMappings).Assembly);
             services.AddAutoConfiguration();
             services.AddDatabaseRegistration(_employerAccountsConfiguration.DatabaseConnectionString);
             services.AddDataRepositories();
@@ -95,13 +95,12 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             services.AddEntityFrameworkUnitOfWork<EmployerAccountsDbContext>();
             services.AddNServiceBusClientUnitOfWork();
-            services.AddEmployerFeaturesAuthorization();
             services.AddEmployerAccountsApi();
             services.AddExecutionPolicies();
             services.AddEmployerAccountsOuterApi(_employerAccountsConfiguration.EmployerAccountsOuterApiConfiguration);
             services.AddCommittmentsV2Client(_employerAccountsConfiguration.CommitmentsApi);
             services.AddPollyPolicy(_employerAccountsConfiguration);
-            services.AddContentApiClient(_employerAccountsConfiguration, _configuration);
+            services.AddContentApiClient(_employerAccountsConfiguration);
             services.AddProviderRegistration(_employerAccountsConfiguration);
             services.AddApprenticeshipLevyApi(_employerAccountsConfiguration);
 
@@ -172,6 +171,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             }
 
             app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>

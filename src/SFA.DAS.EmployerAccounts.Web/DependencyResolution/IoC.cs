@@ -1,7 +1,3 @@
-using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.StructureMap;
-using SFA.DAS.EmployerAccounts.DependencyResolution;
-using SFA.DAS.UnitOfWork.NServiceBus.DependencyResolution.StructureMap;
-using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.StructureMap;
 using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution

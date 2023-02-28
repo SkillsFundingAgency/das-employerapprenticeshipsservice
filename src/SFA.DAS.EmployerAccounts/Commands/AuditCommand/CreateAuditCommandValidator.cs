@@ -1,5 +1,3 @@
-using SFA.DAS.Validation;
-
 namespace SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 
 public class CreateAuditCommandValidator : IValidator<CreateAuditCommand>
@@ -38,6 +36,6 @@ public class CreateAuditCommandValidator : IValidator<CreateAuditCommand>
 
     public Task<ValidationResult> ValidateAsync(CreateAuditCommand item)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

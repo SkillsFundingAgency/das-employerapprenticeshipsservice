@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Queries.GetCharity;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetCharity;
 
 public class GetCharityQueryValidator : IValidator<GetCharityQueryRequest>
 {
@@ -18,6 +16,6 @@ public class GetCharityQueryValidator : IValidator<GetCharityQueryRequest>
 
     public Task<ValidationResult> ValidateAsync(GetCharityQueryRequest item)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

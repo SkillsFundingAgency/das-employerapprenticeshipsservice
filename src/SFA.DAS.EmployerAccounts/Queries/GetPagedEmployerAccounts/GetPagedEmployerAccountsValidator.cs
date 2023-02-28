@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Queries.GetPagedEmployerAccounts;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetPagedEmployerAccounts;
 
 public class GetPagedEmployerAccountsValidator : IValidator<GetPagedEmployerAccountsQuery>
 {
@@ -28,6 +26,6 @@ public class GetPagedEmployerAccountsValidator : IValidator<GetPagedEmployerAcco
 
     public Task<ValidationResult> ValidateAsync(GetPagedEmployerAccountsQuery item)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

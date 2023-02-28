@@ -17,6 +17,6 @@ public class GetTeamMembersRequestValidator : IValidator<GetTeamMembersRequest>
 
     public Task<ValidationResult> ValidateAsync(GetTeamMembersRequest item)
     {
-        throw new System.NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

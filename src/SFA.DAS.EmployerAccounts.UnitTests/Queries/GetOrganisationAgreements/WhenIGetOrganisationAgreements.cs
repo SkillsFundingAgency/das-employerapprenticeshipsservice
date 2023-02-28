@@ -37,7 +37,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetOrganisationAgreements
             SetUp();
             
             _encodingServiceMock = new Mock<IEncodingService>();
-            _encodingServiceMock.Setup(m => m.Decode(HashedAccountLegalEntity, EncodingType.AccountLegalEntityId)).Returns(AccountLegalEntityId);
+            _encodingServiceMock.Setup(m => m.Decode(HashedAccountLegalEntity, EncodingType.PublicAccountLegalEntityId)).Returns(AccountLegalEntityId);
             _encodingServiceMock.Setup(m => m.Encode(It.IsAny<long>(), It.IsAny<EncodingType>())).Returns(hashedId);
 
             _mockEmployerAgreementRepository = new Mock<IEmployerAgreementRepository>();

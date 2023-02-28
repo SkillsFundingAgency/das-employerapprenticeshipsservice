@@ -1,10 +1,7 @@
 ﻿using System.Security.Claims;
-using System.Threading;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
-using SFA.DAS.Authorization.Results;
-using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Helpers;
 using SFA.DAS.EmployerAccounts.Queries.GetContent;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
@@ -25,8 +22,6 @@ public interface IHtmlHelpers
     IFooterViewModel GetFooterViewModel(IHtmlHelper html, bool useLegacyStyles = false);
     ICookieBannerViewModel GetCookieBannerViewModel(IHtmlHelper html);
     HtmlString GetContentByType(string type, bool useLegacyStyles = false);
-    AuthorizationResult GetAuthorizationResult(string featureType);
-    bool IsAuthorized(string featureType);
     bool ViewExists(IHtmlHelper html, string viewName);
     string ReturnToHomePageButtonHref(string accountId);
     string ReturnToHomePageButtonText(string accountId);
@@ -41,7 +36,6 @@ public class HtmlHelpers : IHtmlHelpers
     private readonly IMediator _mediator;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly ILogger<HtmlHelpers> _logger;
-    private readonly IAuthorizationService _authorisationService;
     private readonly ICompositeViewEngine _compositeViewEngine;
 
 
@@ -50,14 +44,12 @@ public class HtmlHelpers : IHtmlHelpers
         IMediator mediator,
         IHttpContextAccessor httpContextAccessor,
         ILogger<HtmlHelpers> logger,
-        IAuthorizationService authorisationService,
         ICompositeViewEngine compositeViewEngine)
     {
         _configuration = configuration;
         _mediator = mediator;
         _httpContextAccessor = httpContextAccessor;
         _logger = logger;
-        _authorisationService = authorisationService;
         _compositeViewEngine = compositeViewEngine;
     }
 
@@ -196,15 +188,15 @@ public class HtmlHelpers : IHtmlHelpers
         return new HtmlString(userResponse.Content);
     }
 
-    public AuthorizationResult GetAuthorizationResult(string featureType)
-    {
-        return _authorisationService.GetAuthorizationResult(featureType);
-    }
+    //public AuthorizationResult GetAuthorizationResult(string featureType)
+    //{
+    //    return _authorisationService.GetAuthorizationResult(featureType);
+    //}
 
-    public bool IsAuthorized(string featureType)
-    {
-        return _authorisationService.IsAuthorized(featureType);
-    }
+    //public bool IsAuthorized(string featureType)
+    //{
+    //    return _authorisationService.IsAuthorized(featureType);
+    //}
     
     private string GetHashedAccountId(string accountId, out bool isConsoleUser, out bool isAccountIdSet)
     {

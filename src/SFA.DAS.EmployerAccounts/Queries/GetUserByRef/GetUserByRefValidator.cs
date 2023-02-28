@@ -1,23 +1,21 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 
 public class GetUserByRefQueryValidator : IValidator<GetUserByRefQuery>
 {
-    public ValidationResult Validate(GetUserByRefQuery query)
+    public ValidationResult Validate(GetUserByRefQuery item)
     {
         var validationResult = new ValidationResult();
 
-        if (string.IsNullOrEmpty(query.UserRef))
+        if (string.IsNullOrEmpty(item.UserRef))
         {
-            validationResult.AddError(nameof(query.UserRef), "User ref must not be empty or null");
+            validationResult.AddError(nameof(item.UserRef), "User ref must not be empty or null");
         }
 
         return validationResult;
     }
 
-    public Task<ValidationResult> ValidateAsync(GetUserByRefQuery query)
+    public Task<ValidationResult> ValidateAsync(GetUserByRefQuery item)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

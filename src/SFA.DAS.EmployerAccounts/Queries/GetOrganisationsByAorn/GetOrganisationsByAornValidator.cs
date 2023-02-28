@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationsByAorn;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationsByAorn;
 
 public class GetOrganisationsByAornValidator : IValidator<GetOrganisationsByAornRequest>
 {
@@ -23,6 +21,6 @@ public class GetOrganisationsByAornValidator : IValidator<GetOrganisationsByAorn
 
     public Task<ValidationResult> ValidateAsync(GetOrganisationsByAornRequest item)
     {
-        throw new System.NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

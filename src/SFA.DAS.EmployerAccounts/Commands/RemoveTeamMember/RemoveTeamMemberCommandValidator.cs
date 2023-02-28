@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Commands.RemoveTeamMember;
+﻿namespace SFA.DAS.EmployerAccounts.Commands.RemoveTeamMember;
 
 public class RemoveTeamMemberCommandValidator : IValidator<RemoveTeamMemberCommand>
 {
@@ -22,6 +20,6 @@ public class RemoveTeamMemberCommandValidator : IValidator<RemoveTeamMemberComma
 
     public Task<ValidationResult> ValidateAsync(RemoveTeamMemberCommand item)
     {
-        throw new System.NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

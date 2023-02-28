@@ -1,5 +1,3 @@
-using SFA.DAS.Validation;
-
 namespace SFA.DAS.EmployerAccounts.Commands.UnsubscribeNotification;
 
 public class UnsubscribeNotificationValidator : IValidator<UnsubscribeNotificationCommand>
@@ -23,6 +21,6 @@ public class UnsubscribeNotificationValidator : IValidator<UnsubscribeNotificati
 
     public Task<ValidationResult> ValidateAsync(UnsubscribeNotificationCommand item)
     {
-        throw new System.NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

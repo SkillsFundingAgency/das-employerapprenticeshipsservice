@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Commands.SendNotification;
+﻿namespace SFA.DAS.EmployerAccounts.Commands.SendNotification;
 
 public class SendNotificationCommandValidator : IValidator<SendNotificationCommand>
 {
@@ -29,6 +27,6 @@ public class SendNotificationCommandValidator : IValidator<SendNotificationComma
 
     public Task<ValidationResult> ValidateAsync(SendNotificationCommand item)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

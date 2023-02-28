@@ -17,6 +17,6 @@ public class GetTeamMembersWhichReceiveNotificationsQueryValidator : IValidator<
 
     public Task<ValidationResult> ValidateAsync(GetTeamMembersWhichReceiveNotificationsQuery item)
     {
-        throw new System.NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

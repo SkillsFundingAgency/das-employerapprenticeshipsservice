@@ -1,5 +1,4 @@
 ﻿using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole;
 
@@ -26,6 +25,6 @@ public class ChangeTeamMemberRoleCommandValidator : IValidator<ChangeTeamMemberR
 
     public Task<ValidationResult> ValidateAsync(ChangeTeamMemberRoleCommand item)
     {
-        throw new System.NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

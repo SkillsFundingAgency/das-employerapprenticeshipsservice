@@ -1,15 +1,8 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements;
 
 public class GetOrganisationAgreementsValidator : IValidator<GetOrganisationAgreementsRequest>
 {
     public ValidationResult Validate(GetOrganisationAgreementsRequest item)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<ValidationResult> ValidateAsync(GetOrganisationAgreementsRequest item)
     {
         var validationResult = new ValidationResult();
 
@@ -19,5 +12,10 @@ public class GetOrganisationAgreementsValidator : IValidator<GetOrganisationAgre
         }
 
         return validationResult;
+    }
+
+    public Task<ValidationResult> ValidateAsync(GetOrganisationAgreementsRequest item)
+    {
+        return Task.FromResult(Validate(item));
     }
 }

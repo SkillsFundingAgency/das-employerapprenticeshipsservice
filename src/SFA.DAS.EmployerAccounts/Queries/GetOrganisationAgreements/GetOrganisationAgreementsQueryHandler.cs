@@ -40,7 +40,7 @@ public class GetOrganisationAgreementsQueryHandler : IRequestHandler<GetOrganisa
             throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        var accountLegalEntityId = _encodingService.Decode(message.AccountLegalEntityHashedId, EncodingType.AccountLegalEntityId);
+        var accountLegalEntityId = _encodingService.Decode(message.AccountLegalEntityHashedId, EncodingType.PublicAccountLegalEntityId);
 
         var accountLegalEntity = await _employerAgreementRepository.GetOrganisationsAgreements(accountLegalEntityId);          
         if (accountLegalEntity == null) return new GetOrganisationAgreementsResponse();

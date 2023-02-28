@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using System.Web;
+﻿using System.Net;
+using System.Threading.Tasks;
 using HMRC.ESFA.Levy.Api.Client;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -58,7 +58,7 @@ public class WhenICallTheHmrcServiceForAuthentication
     {
         //Arrange
         var redirectUrl = "http://mytestUrl.to.redirectto?a=564kjg";
-        var urlFriendlyRedirectUrl = HttpUtility.UrlEncode(redirectUrl);
+        var urlFriendlyRedirectUrl = WebUtility.UrlEncode(redirectUrl);
 
         //Assert
         var actual = _hmrcService.GenerateAuthRedirectUrl(redirectUrl);

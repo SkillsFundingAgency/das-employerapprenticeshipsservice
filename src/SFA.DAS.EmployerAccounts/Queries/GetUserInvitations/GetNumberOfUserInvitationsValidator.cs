@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Validation;
-
-namespace SFA.DAS.EmployerAccounts.Queries.GetUserInvitations;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetUserInvitations;
 
 public class GetNumberOfUserInvitationsValidator : IValidator<GetNumberOfUserInvitationsQuery>
 {
@@ -27,6 +25,6 @@ public class GetNumberOfUserInvitationsValidator : IValidator<GetNumberOfUserInv
 
     public Task<ValidationResult> ValidateAsync(GetNumberOfUserInvitationsQuery item)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(Validate(item));
     }
 }

@@ -13,8 +13,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.Api.Common.Infrastructure;
-using SFA.DAS.Authorization.DependencyResolution.Microsoft;
-using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.Microsoft;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerAccounts.Api.Authentication;
 using SFA.DAS.EmployerAccounts.Api.Authorization;
@@ -81,8 +79,6 @@ public class Startup
         services
             .AddApiAuthentication(_configuration, isDevelopment)
             .AddApiAuthorization(isDevelopment);
-
-        services.AddEmployerFeaturesAuthorization();
 
         services.AddSwaggerGen(c =>
         {

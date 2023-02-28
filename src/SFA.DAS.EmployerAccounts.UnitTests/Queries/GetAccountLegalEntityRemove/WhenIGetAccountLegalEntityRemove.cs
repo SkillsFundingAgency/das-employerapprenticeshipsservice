@@ -60,8 +60,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntityRemove
 
             _encodingService = new Mock<IEncodingService>();
             _encodingService.Setup(x => x.Decode(ExpectedHashedAccountId, EncodingType.AccountId)).Returns(ExpectedAccountId);
-            _encodingService.Setup(x => x.Decode(ExpectedHashedAgreementId, EncodingType.AccountLegalEntityId)).Returns(ExpectedAgreementId);
-            _encodingService.Setup(x => x.Decode(ExpectedHashedAccountLegalEntityId, EncodingType.AccountLegalEntityId)).Returns(ExpectedAccountLegalEntityId);
+            _encodingService.Setup(x => x.Decode(ExpectedHashedAgreementId, EncodingType.PublicAccountLegalEntityId)).Returns(ExpectedAgreementId);
+            _encodingService.Setup(x => x.Decode(ExpectedHashedAccountLegalEntityId, EncodingType.PublicAccountLegalEntityId)).Returns(ExpectedAccountLegalEntityId);
 
             _commitmentsV2ApiClient = new Mock<ICommitmentsV2ApiClient>();
             _commitmentsV2ApiClient.Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
