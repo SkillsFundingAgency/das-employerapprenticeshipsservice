@@ -4,12 +4,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Jobs.Extensions;
 using SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
 using SFA.DAS.EmployerAccounts.Jobs.ServiceRegistrations;
 using SFA.DAS.EmployerAccounts.Jobs.StartupJobs;
-using SFA.DAS.EmployerAccounts.ServiceRegistration;
+using SFA.DAS.EmployerAccounts.ReadStore.ServiceRegistrations;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests;
 

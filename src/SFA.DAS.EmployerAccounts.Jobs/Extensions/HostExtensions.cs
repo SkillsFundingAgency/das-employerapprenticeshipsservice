@@ -4,6 +4,7 @@ using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
 using SFA.DAS.EmployerAccounts.Jobs.ServiceRegistrations;
 using SFA.DAS.EmployerAccounts.Jobs.StartupJobs;
+using SFA.DAS.EmployerAccounts.ReadStore.ServiceRegistrations;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
 using SFA.DAS.UnitOfWork.DependencyResolution.Microsoft;
 
@@ -53,10 +54,6 @@ public static class HostExtensions
     {
         hostBuilder.ConfigureServices((context, services) =>
             {
-                var accountsConfiguration = context.Configuration
-                    .GetSection(ConfigurationKeys.EmployerAccounts)
-                    .Get<EmployerAccountsConfiguration>();
-
                 services.AddConfigurationOptions(context.Configuration);
                 services.AddLogging();
                 services.AddApplicationServices();
