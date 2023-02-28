@@ -1,10 +1,11 @@
 ﻿using NServiceBus;
+using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.NServiceBus.Configuration;
 using SFA.DAS.NServiceBus.Configuration.AzureServiceBus;
+using SFA.DAS.NServiceBus.Configuration.MicrosoftDependencyInjection;
 using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.Configuration.NLog;
-using SFA.DAS.NServiceBus.Configuration.StructureMap;
 using SFA.DAS.NServiceBus.Hosting;
 using SFA.DAS.NServiceBus.SqlServer.Configuration;
 
@@ -34,7 +35,7 @@ public static class ServiceCollectionExtensions
                     .UseOutbox(true)
                     .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
                     .UseSendOnly()
-                    .UseStructureMapBuilder(container);
+                    .UseServicesBuilder(new UpdateableServiceProvider(services));
 
                 if (isDevelopment)
                 {
@@ -44,10 +45,8 @@ public static class ServiceCollectionExtensions
                 {
                     endpointConfiguration.UseAzureServiceBusTransport(configuration.ServiceBusConnectionString);
                 }
-                    
-                var endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
 
-                return endpoint;
+                return Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
             })
             .AddSingleton<IMessageSession>(s => s.GetService<IEndpointInstance>())
             .AddHostedService<NServiceBusHostedService>();

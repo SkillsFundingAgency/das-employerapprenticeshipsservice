@@ -1,7 +1,7 @@
-﻿using SFA.DAS.EmployerAccounts.Jobs.DependencyResolution;
-using SFA.DAS.EmployerAccounts.Jobs.Extensions;
+﻿using SFA.DAS.EmployerAccounts.Jobs.Extensions;
 using SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
 using SFA.DAS.EmployerAccounts.Jobs.StartupJobs;
+using SFA.DAS.NServiceBus.Configuration.MicrosoftDependencyInjection;
 
 namespace SFA.DAS.EmployerAccounts.Jobs;
 
@@ -32,8 +32,7 @@ public class Program
             .ConfigureDasWebJobs()
             .ConfigureDasLogging()
             .ConfigureDasServices()
-            .UseStructureMap()
-            .ConfigureContainer<Registry>(IoC.Initialize)
+            .UseNServiceBusContainer()
             .Build();
     }
 }
