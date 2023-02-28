@@ -8,7 +8,6 @@
 		<WebJobType>Continuous</WebJobType>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="FluentAssertions" Version="6.9.0" />
 		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
 		<PackageReference Include="Microsoft.Azure.WebJobs.Logging.ApplicationInsights" Version="3.0.33" />
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
