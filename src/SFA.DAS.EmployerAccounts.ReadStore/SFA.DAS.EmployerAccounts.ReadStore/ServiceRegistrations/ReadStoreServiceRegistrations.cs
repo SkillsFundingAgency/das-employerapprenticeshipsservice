@@ -5,7 +5,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.ServiceRegistrations;
 
 public static class ReadStoreServiceRegistrations
 {
-    public static IServiceCollection AddReadStore(this IServiceCollection services)
+    public static IServiceCollection AddReadStoreServices(this IServiceCollection services)
     {
         services.AddTransient<IDocumentClientFactory, DocumentClientFactory>();
 
