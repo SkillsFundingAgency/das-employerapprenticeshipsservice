@@ -30,17 +30,14 @@ public class WhenAddingServicesToTheContainer
     private static void SetupServiceCollection(IServiceCollection services)
     {
         var configuration = GenerateStubConfiguration();
-        var accountsConfiguration = configuration
-            .GetSection(ConfigurationKeys.EmployerAccounts)
-            .Get<EmployerAccountsConfiguration>();
-
+   
         services.AddConfigurationOptions(configuration);
         services.AddLogging();
         services.AddSingleton<IConfiguration>(configuration);
         services.AddNServiceBus();
         services.AddApplicationServices();
         services.AddReadStoreServices();
-        services.AddDatabaseRegistration(accountsConfiguration.DatabaseConnectionString);
+        services.AddEmployerFinanceDbContext();
         services.AddScoped<CreateReadStoreDatabaseJob>();
         services.AddScoped<SeedAccountUsersJob>();
         services.AddTransient<IRunOnceJobsService, RunOnceJobsService>();

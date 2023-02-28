@@ -52,7 +52,7 @@ public static class HostExtensions
     {
         return hostBuilder.ConfigureAppConfiguration((context, builder) =>
         {
-            builder.AddAzureTableStorage(ConfigurationKeys.EmployerAccounts)
+            builder.AddAzureTableStorage(ConfigurationKeys.EmployerAccounts, ConfigurationKeys.EmployerAccountsReadStore)
                 .AddJsonFile("appsettings.json", true, true)
                 .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", true, true)
                 .AddEnvironmentVariables();
@@ -69,18 +69,19 @@ public static class HostExtensions
 
                 services.AddConfigurationOptions(context.Configuration);
                 services.AddLogging();
-                services.AddNServiceBus();
                 services.AddApplicationServices();
                 services.AddReadStoreServices();
-                services.AddDatabaseRegistration(accountsConfiguration.DatabaseConnectionString);
-                services.AddScoped<CreateReadStoreDatabaseJob>();
-                services.AddScoped<SeedAccountUsersJob>();
+                services.AddTransient<CreateReadStoreDatabaseJob>();
+                services.AddTransient<SeedAccountUsersJob>();
                 services.AddTransient<IRunOnceJobsService, RunOnceJobsService>();
                 services.AddTransient<IRetryStrategy>(_ => new ExponentialBackoffRetryAttribute(5, "00:00:10", "00:00:20"));
                 services.AddUnitOfWork();
 #pragma warning disable 618
                 services.AddSingleton<IWebHookProvider>(p => null);
 #pragma warning restore 618}
+                services.AddEmployerFinanceDbContext();
+                services.AddNServiceBus();
+                services.BuildServiceProvider();
             });
 
 
