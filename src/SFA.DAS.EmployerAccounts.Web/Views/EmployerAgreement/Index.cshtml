@@ -35,7 +35,7 @@
             </span>
         </p>
         <p class="govuk-!-margin-bottom-8">
-            <a href="@Url.Action(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName)" class="govuk-button govuk-!-margin-bottom-0">Add an organisation</a>
+            <a asp-controller="@ControllerConstants.SearchOrganisationControllerName" asp-action="@ControllerConstants.SearchForOrganisationActionName" asp-route-HashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" class="govuk-button govuk-!-margin-bottom-0">Add an organisation</a>
         </p>
     </div>
 </div>
@@ -54,6 +54,7 @@
                 @foreach (var employerAgreement in Model.Data.EmployerAgreementsData.EmployerAgreements)
                 {
                     var routeData = new Dictionary<string, string>() { { RouteValueKeys.HashedAccountId, ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId].ToString() }, { RouteValueKeys.HashedAccountLegalEntityId, employerAgreement.LegalEntity.AccountLegalEntityPublicHashedId } };
+
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">
                             @employerAgreement.LegalEntity.Name
@@ -100,7 +101,7 @@
     <div class="govuk-breadcrumbs">
         <ol class="govuk-breadcrumbs__list">
             <li class="govuk-breadcrumbs__list-item">
-                <a class="govuk-breadcrumbs__link" href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName)">Home</a>
+                <a class="govuk-breadcrumbs__link" asp-controller="@ControllerConstants.EmployerTeamControllerName" asp-action="@ControllerConstants.IndexActionName" asp-route-HashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]">Home</a>
             </li>
             <li class="govuk-breadcrumbs__list-item" aria-current="page">Your organisations and agreements</li>
         </ol>
