@@ -152,7 +152,6 @@ public class Startup
             .UseDasHealthChecks()
             .UseUnitOfWork()
             .UseRouting()
-
             .UseAuthorization()
             .UseEndpoints(endpoints =>
             {
@@ -166,7 +165,5 @@ public class Startup
               opt.SwaggerEndpoint("/swagger/v1/swagger.json", "Employer Accounts API");
               opt.RoutePrefix = string.Empty;
           });
-
-
     }
 }
