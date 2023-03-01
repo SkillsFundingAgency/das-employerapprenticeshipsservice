@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.EmployerAccounts.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
+using SFA.DAS.EmployerAccounts.Web.RouteValues;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
@@ -24,6 +25,7 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpGet]
+    [Route("", Name = RouteNames.EmployerTeamIndex)]
     public async Task<IActionResult> Index(string hashedAccountId)
     {
         PopulateViewBagWithExternalUserId();
