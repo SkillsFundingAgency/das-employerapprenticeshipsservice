@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
-using SFA.DAS.EmployerAccounts.Infrastructure;
+using SFA.DAS.EmployerAccounts.Web.RouteValues;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.Web.Filters
 {
-    public class AnalyticsFilter : Microsoft.AspNetCore.Mvc.Filters.ActionFilterAttribute
+    public class AnalyticsFilter : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Filters
                 controller.ViewBag.GaData = new GaData
                 {
                     UserId = userId,
-                    Acc = controller.RouteData.Values[RouteValues.EncodedAccountId]?.ToString().ToUpper()
+                    Acc = controller.RouteData.Values[RouteValueKeys.HashedAccountId]?.ToString().ToUpper()
                 };
             }
             base.OnActionExecuting(filterContext);

@@ -9,7 +9,6 @@ using SFA.DAS.EmployerAccounts.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EmployerAccounts.Queries.GetMember;
 using SFA.DAS.Encoding;
 using SFA.DAS.NLog.Logger;
-using Employer = HMRC.ESFA.Levy.Api.Types.Employer;
 using EmpRefLevyInformation = HMRC.ESFA.Levy.Api.Types.EmpRefLevyInformation;
 using Name = HMRC.ESFA.Levy.Api.Types.Name;
 
@@ -19,7 +18,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
     {
         private EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
         private Mock<IMediator> _mediator;
-        private Mock<ILog> _logger;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
         private ConfirmNewPayeSchemeViewModel _model;
         private EmployerAccountsConfiguration _configuration;
@@ -42,14 +40,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
 
             _configuration = new EmployerAccountsConfiguration { Hmrc = new HmrcConfiguration() };
 
-            _logger = new Mock<ILog>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             
             _mediator = new Mock<IMediator>();
             _mediator.Setup(x => x.Send(It.IsAny<GetAccountLegalEntitiesRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(new GetAccountLegalEntitiesResponse { LegalEntities = new List<AccountSpecificLegalEntity>() });
             _mediator.Setup(x => x.Send(It.Is<GetGatewayTokenQuery>(c => c.AccessCode.Equals("1")), It.IsAny<CancellationToken>())).ReturnsAsync(new GetGatewayTokenQueryResponse { HmrcTokenResponse = new HmrcTokenResponse { AccessToken = "1" } });
-            _mediator.Setup(x => x.Send(It.Is<GetHmrcEmployerInformationQuery>(c => c.AuthToken.Equals("1")), It.IsAny<CancellationToken>())).ReturnsAsync(new GetHmrcEmployerInformationResponse { Empref = "123/ABC", EmployerLevyInformation = new EmpRefLevyInformation { Employer = new Employer { Name = new Name { EmprefAssociatedName = ExpectedEmprefName } } } });
-            _mediator.Setup(x => x.Send(It.Is<GetHmrcEmployerInformationQuery>(c => c.AuthToken.Equals("2")), It.IsAny<CancellationToken>())).ReturnsAsync(new GetHmrcEmployerInformationResponse { Empref = "456/ABC", EmployerLevyInformation = new EmpRefLevyInformation { Employer = new Employer { Name = new Name { EmprefAssociatedName = ExpectedEmprefName } } } });
+            _mediator.Setup(x => x.Send(It.Is<GetHmrcEmployerInformationQuery>(c => c.AuthToken.Equals("1")), It.IsAny<CancellationToken>())).ReturnsAsync(new GetHmrcEmployerInformationResponse { Empref = "123/ABC", EmployerLevyInformation = new EmpRefLevyInformation { Employer = new HMRC.ESFA.Levy.Api.Types.Employer { Name = new Name { EmprefAssociatedName = ExpectedEmprefName } } } });
+            _mediator.Setup(x => x.Send(It.Is<GetHmrcEmployerInformationQuery>(c => c.AuthToken.Equals("2")), It.IsAny<CancellationToken>())).ReturnsAsync(new GetHmrcEmployerInformationResponse { Empref = "456/ABC", EmployerLevyInformation = new EmpRefLevyInformation { Employer = new HMRC.ESFA.Levy.Api.Types.Employer { Name = new Name { EmprefAssociatedName = ExpectedEmprefName } } } });
 
             _employerAccountPayeOrchestrator = new EmployerAccountPayeOrchestrator(_mediator.Object, _cookieService.Object, _configuration, Mock.Of<IEncodingService>());
         }

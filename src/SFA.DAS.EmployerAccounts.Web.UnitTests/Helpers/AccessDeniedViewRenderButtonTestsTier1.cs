@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.EmployerAccounts.Infrastructure;
+using SFA.DAS.EmployerAccounts.Web.RouteValues;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Helpers;
@@ -34,7 +34,7 @@ public class AccessDeniedViewRenderButtonTestsTier1
             SupportConsoleUsers = _supportConsoleUsers
         };
 
-        _claims.Add(new Claim(RouteValues.EncodedAccountId, HashedAccountId));
+        _claims.Add(new Claim(RouteValueKeys.HashedAccountId, HashedAccountId));
         _mockIPrincipal = new Mock<ClaimsPrincipal>();
         _mockClaimsIdentity = new Mock<ClaimsIdentity>();
         _mockClaimsIdentity.Setup(m => m.Claims).Returns(_claims);
