@@ -7,7 +7,6 @@ using SFA.DAS.EmployerAccounts.Queries.GetContent;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.MA.Shared.UI.Configuration;
 using SFA.DAS.MA.Shared.UI.Models;
-using SFA.DAS.MA.Shared.UI.Models.Links;
 
 namespace SFA.DAS.EmployerAccounts.Web.Helpers;
 
@@ -18,8 +17,6 @@ public interface IHtmlHelpers
     string GetZenDeskSnippetKey();
     string GetZenDeskSnippetSectionId();
     string GetZenDeskCobrowsingSnippetKey();
-    IHeaderViewModel GetHeaderViewModel(IHtmlHelper html, bool useLegacyStyles = false);
-    IFooterViewModel GetFooterViewModel(IHtmlHelper html, bool useLegacyStyles = false);
     ICookieBannerViewModel GetCookieBannerViewModel(IHtmlHelper html);
     HtmlString GetContentByType(string type, bool useLegacyStyles = false);
     bool ViewExists(IHtmlHelper html, string viewName);
@@ -104,63 +101,6 @@ public class HtmlHelpers : IHtmlHelpers
     public string GetZenDeskCobrowsingSnippetKey()
     {
         return _configuration.ZenDeskCobrowsingSnippetKey;
-    }
-
-    public IHeaderViewModel GetHeaderViewModel(IHtmlHelper html, bool useLegacyStyles = false)
-    {
-        var employerAccountsBaseUrl = _configuration.EmployerAccountsBaseUrl + (_configuration.EmployerAccountsBaseUrl.EndsWith("/") ? "" : "/");
-
-        var headerModel = new HeaderViewModel(new HeaderConfiguration
-        {
-            ManageApprenticeshipsBaseUrl = _configuration.EmployerAccountsBaseUrl,
-            ApplicationBaseUrl = _configuration.EmployerAccountsBaseUrl,
-            EmployerCommitmentsBaseUrl = _configuration.EmployerCommitmentsBaseUrl,
-            EmployerCommitmentsV2BaseUrl = _configuration.EmployerCommitmentsV2BaseUrl,
-            EmployerFinanceBaseUrl = _configuration.EmployerFinanceBaseUrl,
-            AuthenticationAuthorityUrl = _configuration.Identity.BaseAddress,
-            ClientId = _configuration.Identity.ClientId,
-            EmployerRecruitBaseUrl = _configuration.EmployerRecruitBaseUrl,
-            SignOutUrl = new Uri($"{employerAccountsBaseUrl}service/signOut"),
-            ChangeEmailReturnUrl = new Uri($"{employerAccountsBaseUrl}service/email/change"),
-            ChangePasswordReturnUrl = new Uri($"{employerAccountsBaseUrl}service/password/change")
-        },
-            new UserContext
-            {
-                User = html.ViewContext.HttpContext.User,
-                HashedAccountId = html.ViewContext.RouteData.Values["HashedAccountId"]?.ToString()
-            },
-            useLegacyStyles: useLegacyStyles
-        );
-
-        headerModel.SelectMenu(html.ViewContext.RouteData.Values["Controller"].ToString() == "EmployerCommitments" ? "EmployerCommitments" : html.ViewBag.Section);
-
-        if (html.ViewBag.HideNav != null && html.ViewBag.HideNav)
-        {
-            headerModel.HideMenu();
-        }
-
-        if (html.ViewData.Model?.GetType().GetProperty("HideHeaderSignInLink") != null)
-        {
-            headerModel.RemoveLink<SignIn>();
-        }
-
-        return headerModel;
-    }
-
-    public IFooterViewModel GetFooterViewModel(IHtmlHelper html, bool useLegacyStyles = false)
-    {
-        return new FooterViewModel(new FooterConfiguration
-        {
-            ManageApprenticeshipsBaseUrl = _configuration.EmployerAccountsBaseUrl,
-            AuthenticationAuthorityUrl = _configuration.Identity.BaseAddress
-        },
-               new UserContext
-               {
-                   User = html.ViewContext.HttpContext.User,
-                   HashedAccountId = html.ViewContext.RouteData.Values["HashedAccountId"]?.ToString()
-               },
-               useLegacyStyles: useLegacyStyles
-           );
     }
 
     public ICookieBannerViewModel GetCookieBannerViewModel(IHtmlHelper html)

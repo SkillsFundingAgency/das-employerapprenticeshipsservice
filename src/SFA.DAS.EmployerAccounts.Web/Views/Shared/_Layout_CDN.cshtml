@@ -1,4 +1,5 @@
 @using Microsoft.ApplicationInsights.Extensibility
+@using SFA.DAS.Employer.Shared.UI.Models;
 @using SFA.DAS.EmployerAccounts.Web.Helpers
 
 @inject IHtmlHelpers HtmlHelpers;
@@ -6,6 +7,8 @@
 
 @{
     ViewBag.UseCDN = true;
+    string accountId = (string)this.ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId] ?? "";
+    var footerModel = new FooterModel { AccountId = accountId, UsePrivacyV2 = true };
 }
 <!DOCTYPE html>
 <html lang="en" class="govuk-template ">
@@ -138,8 +141,10 @@
     <script>
         document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
     </script>
-    @await Html.PartialAsync("_CookieBanner", HtmlHelpers.GetCookieBannerViewModel(Html))
+    @*@await Html.PartialAsync("_CookieBanner", HtmlHelpers.GetCookieBannerViewModel(Html))*@
     <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+
+
 
     <!--[if lt IE 8]>
         <div id="unsupported-browser-message" aria-hidden="true">
@@ -149,11 +154,14 @@
     @if (HtmlHelpers.IsSupportUser())
     {
         @(await Component.InvokeAsync("SupportUserBanner", new { model = Model is OrchestratorResponse ? Model?.Data : Model }))
-        ;
     }
 
-
-    @await Html.PartialAsync("_Header", HtmlHelpers.GetHeaderViewModel(Html))
+    @* ReSharper disable once Mvc.PartialViewNotResolved *@
+    <partial name="_Header">
+        @* ReSharper disable once Mvc.PartialViewNotResolved *@
+        <partial name="_Menu" model="@accountId">
+        </partial>
+    </partial>
 
     <div class="govuk-width-container">
         @await RenderSectionAsync("breadcrumb", required: false)
@@ -169,7 +177,8 @@
         </main>
     </div>
 
-    @await Html.PartialAsync("_Footer", HtmlHelpers.GetFooterViewModel(Html))
+    @* ReSharper disable once Mvc.PartialViewNotResolved *@
+    <partial name="_Footer" model="@footerModel" />
 
     @if (!string.IsNullOrWhiteSpace(SystemDetailsViewModel.EnvironmentName))
     {

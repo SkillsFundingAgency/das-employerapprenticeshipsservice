@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.AutoConfiguration.DependencyResolution;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.Employer.Shared.UI;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Mappings;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
@@ -87,6 +88,9 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddDataRepositories();
             services.AddApplicationServices(_employerAccountsConfiguration);
             services.AddHmrcServices();
+
+            services.AddMaMenuConfiguration("SignOut", identityServerConfiguration.ClientId, _configuration["ResourceEnvironmentName"]);
+
             services.AddAuditServices(_employerAccountsConfiguration.AuditApi);
             services.AddCachesRegistrations();
             services.AddDateTimeServices(_configuration);

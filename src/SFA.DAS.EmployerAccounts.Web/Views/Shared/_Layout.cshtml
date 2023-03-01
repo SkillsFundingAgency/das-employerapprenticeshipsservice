@@ -1,8 +1,13 @@
 @using Microsoft.ApplicationInsights.Extensibility
+@using SFA.DAS.Employer.Shared.UI.Models;
 @using SFA.DAS.EmployerAccounts.Web.Helpers
 @inject IHtmlHelpers HtmlHelpers;
 @inject IHttpContextAccessor HtmlContextAccessor
 
+@{
+    string accountId = (string)this.ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId] ?? "";
+    var footerModel = new FooterModel { AccountId = accountId, UsePrivacyV2 = true };
+}
 
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
@@ -109,7 +114,7 @@
             </p>
         </div>
     <![endif]-->
-    @await Html.PartialAsync("_CookieBanner", HtmlHelpers.GetCookieBannerViewModel(Html))
+    @*@await Html.PartialAsync("_CookieBanner", HtmlHelpers.GetCookieBannerViewModel(Html))*@
     <div id="svg-defs" aria-hidden="true">
         @await Html.PartialAsync("_SVGSprite")
     </div>
@@ -121,7 +126,12 @@
     }
 
 
-    @await Html.PartialAsync("_Header", HtmlHelpers.GetHeaderViewModel(Html, useLegacyStyles: true))
+    @* ReSharper disable once Mvc.PartialViewNotResolved *@
+    <partial name="_Header">
+        @* ReSharper disable once Mvc.PartialViewNotResolved *@
+        <partial name="_Menu" model="@accountId">
+        </partial>
+    </partial>
 
     <main role="main" id="content">
         @await RenderSectionAsync("breadcrumb", required: false)
@@ -135,7 +145,8 @@
         @RenderBody()
     </main>
 
-    @await Html.PartialAsync("_Footer", HtmlHelpers.GetFooterViewModel(Html, useLegacyStyles: true))
+    @* ReSharper disable once Mvc.PartialViewNotResolved *@
+    <partial name="_Footer" model="@footerModel" />
 
     <div id="global-app-error" class="app-error hidden"></div>
     <script src="/bundles/sfajs.js"></script>
