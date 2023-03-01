@@ -67,8 +67,6 @@
 		</PackageReference>
 		<PackageReference Include="SFA.DAS.UnitOfWork.EntityFrameworkCore" Version="9.0.28" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="9.0.28" />
-		<PackageReference Include="StructureMap" Version="4.7.1" />
-		<PackageReference Include="StructureMap.MVC5" Version="3.1.1.134" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.1" />
 		<PackageReference Include="WebEssentials.AspNetCore.CdnTagHelpers">
 			<Version>1.0.16</Version>

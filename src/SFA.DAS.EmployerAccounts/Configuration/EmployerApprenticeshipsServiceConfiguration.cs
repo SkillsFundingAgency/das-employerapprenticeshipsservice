@@ -1,9 +1,8 @@
 ﻿using SFA.DAS.Authentication;
-using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Configuration;
 
-public class EmployerApprenticeshipsServiceConfiguration : ITopicMessagePublisherConfiguration, ITopicMessageSubscriberConfiguration
+public class EmployerApprenticeshipsServiceConfiguration
 {
     public string AllowedHashstringCharacters { get; set; }
     public ApprenticeshipInfoServiceConfiguration ApprenticeshipInfoService { get; set; }

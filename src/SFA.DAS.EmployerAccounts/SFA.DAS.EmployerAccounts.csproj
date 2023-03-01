@@ -51,13 +51,11 @@
     <PackageReference Include="SFA.DAS.Events.Api.Client" Version="1.20.0.26497" />
     <PackageReference Include="SFA.DAS.Messaging" Version="3.0.0.63765" />
     <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus" Version="3.0.0.53181" />
-    <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus.StructureMap" Version="3.0.0.63765" />
     <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="16.0.20" />
     <PackageReference Include="SFA.DAS.TokenService.Api.Client" Version="2.3.0" />
     <PackageReference Include="SFA.DAS.UnitOfWork" Version="9.0.13" />
     <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="9.0.13" />
     <PackageReference Include="SFA.DAS.Validation" Version="6.0.30" />
-    <PackageReference Include="StructureMap" Version="4.7.1" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.1" />
     <PackageReference Include="System.Runtime" Version="4.3.1" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />

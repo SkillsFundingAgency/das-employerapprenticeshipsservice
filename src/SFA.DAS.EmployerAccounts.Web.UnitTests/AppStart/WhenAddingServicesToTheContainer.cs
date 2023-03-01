@@ -237,6 +237,13 @@ public class WhenAddingServicesToTheContainer
                     new("RecruitApi:IdentifierUri", "test"),
                     new("AuditApi:BaseUrl", "https://test.test"),
                     new("AuditApi:IdentifierUri", "test"),
+                    new("TokenServiceApi:ApiBaseUrl", "https://test.test"),
+                    new("TokenServiceApi:ClientId", "test"),
+                    new("TokenServiceApi:ClientSecret", "test"),
+                    new("TokenServiceApi:IdentifierUrl", "https://test.test"),
+                    new("TokenServiceApi:Tenant", "test"),
+                    new("TasksApi:ApiBaseUrl", "https://test.test"),
+                    new("TasksApi:IdentifierUrl", "https://test.test"),
                 }
         };
 

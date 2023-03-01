@@ -1,5 +1,5 @@
-﻿using SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution;
-using SFA.DAS.EmployerAccounts.MessageHandlers.Extensions;
+﻿using SFA.DAS.EmployerAccounts.MessageHandlers.Extensions;
+using SFA.DAS.NServiceBus.Configuration.MicrosoftDependencyInjection;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers;
 
@@ -14,16 +14,13 @@ public class Program
 
     private static IHost CreateHost(string[] args)
     {
-        var builder = new HostBuilder()
-            .UseDasEnvironment()
+        return new HostBuilder()
             .ConfigureDasAppConfiguration(args)
-            .ConfigureContainer<Registry>(IoC.Initialize)
+            .UseDasEnvironment()
             .UseConsoleLifetime()
             .ConfigureDasLogging()
             .ConfigureDasServices()
-            .UseStructureMap();
-        
-        
-        return builder.Build();
+            .UseNServiceBusContainer()
+            .Build();
     }
 }

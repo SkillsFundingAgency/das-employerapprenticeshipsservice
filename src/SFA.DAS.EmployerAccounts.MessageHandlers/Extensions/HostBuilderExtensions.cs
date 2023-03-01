@@ -3,24 +3,16 @@ using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerAccounts.Commands.AcceptInvitation;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.MessageHandlers.ServiceRegistrations;
 using SFA.DAS.EmployerAccounts.MessageHandlers.Startup;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
+using SFA.DAS.UnitOfWork.DependencyResolution.Microsoft;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.Extensions;
 
 public static class HostBuilderExtensions
 {
-    public static IHostBuilder UseStructureMap(this IHostBuilder builder)
-    {
-        return UseStructureMap(builder, registry: null);
-    }
-
-    public static IHostBuilder UseStructureMap(this IHostBuilder builder, Registry registry)
-    {
-        return builder.UseServiceProviderFactory(new StructureMapServiceProviderFactory(registry));
-    }
-
     public static IHostBuilder UseDasEnvironment(this IHostBuilder hostBuilder)
     {
         var environmentName = Environment.GetEnvironmentVariable(EnvironmentVariableNames.EnvironmentName);
@@ -33,11 +25,17 @@ public static class HostBuilderExtensions
     {
         hostBuilder.ConfigureServices((context,services) =>
         {
+            var accountsConfiguration = context.Configuration
+                .GetSection(ConfigurationKeys.EmployerAccounts)
+                .Get<EmployerAccountsConfiguration>();
+
+            services.AddApplicationServices();
+            services.AddUnitOfWork();
             services.AddNServiceBus();
             services.AddMemoryCache();
             services.AddCachesRegistrations();
+            services.AddDatabaseRegistration(accountsConfiguration.DatabaseConnectionString);
             services.AddMediatR(
-                typeof(Program),
                 typeof(UpdateAccountUserCommand),
                 typeof(AcceptInvitationCommand)
             );
