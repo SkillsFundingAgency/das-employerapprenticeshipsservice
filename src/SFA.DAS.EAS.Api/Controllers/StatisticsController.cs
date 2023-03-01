@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetStatistics()
+        public async Task<ActionResult<Types.StatisticsViewModel>> GetStatistics()
         {
             return Ok(await _statisticsOrchestrator.Get());
         }

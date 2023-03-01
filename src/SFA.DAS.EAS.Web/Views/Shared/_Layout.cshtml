@@ -2,7 +2,6 @@
 @using Microsoft.ApplicationInsights.Extensibility
 @using SFA.DAS.Authorization
 @using SFA.DAS.Authorization.Mvc
-@using SFA.DAS.EAS.Web
 @using SFA.DAS.EAS.Web.Extensions
 @using SFA.DAS.EAS.Web.Helpers
 @using SFA.DAS.EAS.Web.ViewModels
@@ -52,11 +51,11 @@
     <meta property="og:image" content="/dist/images/opengraph-image.png">
     <meta name="msapplication-config" content="none" />
     <link href="~/dist/css/select2.min.css" media="all" rel="stylesheet" />
-    <!--[if IE 6]><link href="@Styles.Url("~/bundles/screenie6")" media="screen" rel="stylesheet" /><![endif]-->
+@*    <!--[if IE 6]><link href="@Styles.Url("~/bundles/screenie6")" media="screen" rel="stylesheet" /><![endif]-->
     <!--[if IE 7]><link href="@Styles.Url("~/bundles/screenie7")" media="screen" rel="stylesheet" /><![endif]-->
     <!--[if IE 8]><link href="@Styles.Url("~/bundles/screenie8")" media="screen" rel="stylesheet" /><![endif]-->
     <!--[if gt IE 8]><!-->
-    <link href="@Styles.Url("~/bundles/screen")" media="all" rel="stylesheet" />
+    <link href="@Styles.Url("~/bundles/screen")" media="all" rel="stylesheet" />*@
     <!--<![endif]-->
 
     @*@Html.Partial("GoogleAnalyticsInfo")*@
@@ -216,7 +215,7 @@
         </div>
     </footer>
     <div id="global-app-error" class="app-error hidden"></div>
-    @Scripts.Render("~/bundles/sfajs")
+@*    @Scripts.Render("~/bundles/sfajs")*@
     @RenderSection("pageSpecificJS", required: false)
     @if (!string.IsNullOrWhiteSpace(SystemDetailsViewModel.EnvironmentName))
     {

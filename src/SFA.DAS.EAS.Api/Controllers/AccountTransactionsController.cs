@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
         }
 
         [HttpGet(Name = "GetTransactionSummary")]
-        public async Task<IActionResult> Index(string hashedAccountId)
+        public async Task<ActionResult> Index(string hashedAccountId)
         {
             var result = await _orchestrator.GetAccountTransactionSummary(hashedAccountId);
 
@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
 
         [Authorize(Policy = "LoopBack", Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet("{year?}/{month?}", Name = "GetTransactions")]
-        public async Task<IActionResult> GetTransactions(string hashedAccountId, int year = 0, int month = 0)
+        public async Task<ActionResult<TransactionsViewModel>> GetTransactions(string hashedAccountId, int year = 0, int month = 0)
         {
             var result = await GetAccountTransactions(hashedAccountId, year, month);
 

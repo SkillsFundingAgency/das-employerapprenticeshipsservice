@@ -1,15 +1,16 @@
 ﻿@using SFA.DAS.EAS.Web.ViewModels.Interfaces
+@using System.Web
 @model IPaginationViewModel
 
 @functions
 {
     public string GetLinkForPage(int pageNumber)
     {
-        var queryStringValues = HttpUtility.ParseQueryString(Request.QueryString.ToString());
+        var queryStringValues = HttpUtility.ParseQueryString(Context.Request.QueryString.ToString());
 
         queryStringValues.Set("pageNumber", pageNumber.ToString());
-
-        return $"{Request.Url.AbsolutePath}?{queryStringValues}";
+        
+        return $"{Context.Request.Path}?{queryStringValues}";
     }
 
     public Tuple<int, int> GetPreviousLinkApprenticeshipCounts()

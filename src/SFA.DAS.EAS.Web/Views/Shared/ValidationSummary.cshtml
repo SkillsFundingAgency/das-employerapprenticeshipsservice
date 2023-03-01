@@ -1,4 +1,5 @@
-﻿@model ModelStateDictionary
+﻿@using Microsoft.AspNetCore.Mvc.ModelBinding
+@model ModelStateDictionary
 
 <div class='@(Html.ViewData.ModelState.IsValid ? "validation-summary-valid" : "validation-summary-errors") error-summary' role="group" data-valmsg-summary="true" >
     <h1 id="error-summary" class="heading-medium error-summary-heading">
@@ -9,7 +10,7 @@
 
         @foreach (var stateItem in ViewContext.ViewData.ModelState)
         {
-            var elementId = ViewData.TemplateInfo.GetFullHtmlFieldId(stateItem.Key) ?? stateItem.Key;
+            var elementId = Html.GenerateIdFromName(ViewData.TemplateInfo.GetFullHtmlFieldName(stateItem.Key)) ?? stateItem.Key;
 
             foreach (var error in stateItem.Value.Errors)
             {

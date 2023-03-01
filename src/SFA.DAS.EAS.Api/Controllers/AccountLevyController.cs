@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
 
         [Authorize(Policy = "LoopBack", Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet(Name = "GetLevy")]
-        public async Task<IActionResult> Index(string hashedAccountId)
+        public async Task<ActionResult<Types.AccountResourceList<Types.LevyDeclarationViewModel>>> Index(string hashedAccountId)
         {
             var result = await _orchestrator.GetLevy(hashedAccountId);
 
@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
 
         [Authorize(Policy = "LoopBack", Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet("{payrollYear}/{payrollMonth}", Name = "GetLevyForPeriod")]
-        public async Task<IActionResult> GetLevy(string hashedAccountId, string payrollYear, short payrollMonth)
+        public async Task<ActionResult<Types.AccountResourceList<Types.LevyDeclarationViewModel>>> GetLevy(string hashedAccountId, string payrollYear, short payrollMonth)
         {
             var result = await _orchestrator.GetLevy(hashedAccountId, payrollYear, payrollMonth);
 

@@ -1,4 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Content Update="Web.config">
       <SubType>Designer</SubType>
@@ -64,11 +69,6 @@
   </ItemGroup>
   <PropertyGroup>
     <WebProjectOutputDir Condition="$(WebProjectOutputDir) == '' AND $(OS) == 'Unix' ">./</WebProjectOutputDir>
-  </PropertyGroup>
-  <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <OutputPath>bin\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />

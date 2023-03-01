@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
 
         [Authorize(Policy = "LoopBack", Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet(Name = "AccountsIndex")]   
-        public async Task<IActionResult> GetAccounts(string toDate = null, int pageSize = 1000, int pageNumber = 1)
+        public async Task<ActionResult<Types.PagedApiResponseViewModel<Types.AccountWithBalanceViewModel>>> GetAccounts(string toDate = null, int pageSize = 1000, int pageNumber = 1)
         {
             var result = await _orchestrator.GetAllAccountsWithBalances(toDate, pageSize, pageNumber);
             
@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
 
         [Authorize(Policy = "LoopBack", Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet("{hashedAccountId}", Name = "GetAccount")]
-        public async Task<IActionResult> GetAccount(string hashedAccountId)
+        public async Task<ActionResult<Types.AccountDetailViewModel>> GetAccount(string hashedAccountId)
         {
             var result = await _orchestrator.GetAccount(hashedAccountId);
 
