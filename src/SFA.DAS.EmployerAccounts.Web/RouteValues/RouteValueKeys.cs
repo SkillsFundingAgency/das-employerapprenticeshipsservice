@@ -1,7 +1,7 @@
-﻿namespace SFA.DAS.EmployerAccounts.Web.Authorization;
+﻿namespace SFA.DAS.EmployerAccounts.Web.RouteValues;
 
 public static class RouteValueKeys
 {
-    public const string  HashedAccountId = "HashedAccountId";
+    public const string HashedAccountId = "HashedAccountId";
     public const string HashedAccountLegalEntityId = "accountLegalEntityHashedId";
 }
