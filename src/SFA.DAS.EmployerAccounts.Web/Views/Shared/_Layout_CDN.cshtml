@@ -6,7 +6,7 @@
 
 
 @{
-    ViewBag.UseCDN = true;
+    ViewBag.HideHeaderBorder = true;
     string accountId = (string)this.ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId] ?? "";
     var footerModel = new FooterModel { AccountId = accountId, UsePrivacyV2 = true };
 }
