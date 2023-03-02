@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Mvc.ViewEngines;
 using SFA.DAS.EmployerAccounts.Helpers;
 using SFA.DAS.EmployerAccounts.Queries.GetContent;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
-using SFA.DAS.MA.Shared.UI.Configuration;
-using SFA.DAS.MA.Shared.UI.Models;
 
 namespace SFA.DAS.EmployerAccounts.Web.Helpers;
 
@@ -17,7 +15,7 @@ public interface IHtmlHelpers
     string GetZenDeskSnippetKey();
     string GetZenDeskSnippetSectionId();
     string GetZenDeskCobrowsingSnippetKey();
-    ICookieBannerViewModel GetCookieBannerViewModel(IHtmlHelper html);
+    //ICookieBannerViewModel GetCookieBannerViewModel(IHtmlHelper html);
     HtmlString GetContentByType(string type, bool useLegacyStyles = false);
     bool ViewExists(IHtmlHelper html, string viewName);
     string ReturnToHomePageButtonHref(string accountId);
@@ -103,19 +101,19 @@ public class HtmlHelpers : IHtmlHelpers
         return _configuration.ZenDeskCobrowsingSnippetKey;
     }
 
-    public ICookieBannerViewModel GetCookieBannerViewModel(IHtmlHelper html)
-    {
-        return new CookieBannerViewModel(new CookieBannerConfiguration
-        {
-            ManageApprenticeshipsBaseUrl = _configuration.EmployerAccountsBaseUrl
-        },
-            new UserContext
-            {
-                User = html.ViewContext.HttpContext.User,
-                HashedAccountId = html.ViewContext.RouteData.Values["accountHashedId"]?.ToString()
-            }
-        );
-    }
+    //public ICookieBannerViewModel GetCookieBannerViewModel(IHtmlHelper html)
+    //{
+    //    return new CookieBannerViewModel(new CookieBannerConfiguration
+    //    {
+    //        ManageApprenticeshipsBaseUrl = _configuration.EmployerAccountsBaseUrl
+    //    },
+    //        new UserContext
+    //        {
+    //            User = html.ViewContext.HttpContext.User,
+    //            HashedAccountId = html.ViewContext.RouteData.Values["accountHashedId"]?.ToString()
+    //        }
+    //    );
+    //}
 
     public HtmlString GetContentByType(string type, bool useLegacyStyles = false)
     {
