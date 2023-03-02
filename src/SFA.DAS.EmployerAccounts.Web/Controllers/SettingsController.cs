@@ -12,9 +12,8 @@ public class SettingsController : BaseController
 
     public SettingsController(
         UserSettingsOrchestrator userSettingsOrchestrator,
-        ICookieStorageService<FlashMessageViewModel> flashMessage,
-        IMultiVariantTestingService multiVariantTestingService)
-        : base(flashMessage, multiVariantTestingService)
+        ICookieStorageService<FlashMessageViewModel> flashMessage)
+        : base(flashMessage)
     {
         _userSettingsOrchestrator = userSettingsOrchestrator;
     }

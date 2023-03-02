@@ -48,8 +48,7 @@ class WhenISkipRegistration : ControllerTestBase
             Mock.Of<IMediator>(),
             Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
             Mock.Of<ICookieStorageService<HashedAccountIdModel>>(),
-            Mock.Of<LinkGenerator>(),
-            Mock.Of<IMultiVariantTestingService>())
+            Mock.Of<LinkGenerator>())
         {   
             ControllerContext = ControllerContext,
             Url = new UrlHelper(new ActionContext(MockHttpContext.Object, Routes, new ActionDescriptor()))

@@ -1,19 +1,14 @@
-﻿using System.Security.Claims;
-using System.Text.RegularExpressions;
-
-namespace SFA.DAS.EmployerAccounts.Web.Controllers;
+﻿namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
 public class BaseController : Controller
 {
     private const string FlashMessageCookieName = "sfa-das-employerapprenticeshipsservice-flashmessage";
 
     private readonly ICookieStorageService<FlashMessageViewModel> _flashMessage;
-    private readonly IMultiVariantTestingService _multiVariantTestingService;
 
-    public BaseController(ICookieStorageService<FlashMessageViewModel> flashMessage, IMultiVariantTestingService multiVariantTestingService)
+    public BaseController(ICookieStorageService<FlashMessageViewModel> flashMessage)
     {
         _flashMessage = flashMessage;
-        _multiVariantTestingService = multiVariantTestingService;
     }
 
     public BaseController() { }
@@ -33,12 +28,12 @@ public class BaseController : Controller
                 ModelState.AddModelError(errorMessageItem.Key, errorMessageItem.Value);
             }
 
-            return ReturnViewResult(viewName, orchestratorResponse);
+            return base.View(viewName, orchestratorResponse);
         }
 
         if (orchestratorResponse.Status == HttpStatusCode.BadRequest)
         {
-            return ReturnViewResult(viewName, orchestratorResponse);
+            return base.View(viewName, orchestratorResponse);
         }
 
         if (orchestratorResponse.Status == HttpStatusCode.NotFound)
@@ -48,7 +43,7 @@ public class BaseController : Controller
 
         if (orchestratorResponse.Status == HttpStatusCode.OK)
         {
-            return ReturnViewResult(viewName, orchestratorResponse);
+            return base.View(viewName, orchestratorResponse);
         }
 
         if (orchestratorResponse.Status == HttpStatusCode.Unauthorized)
@@ -69,47 +64,6 @@ public class BaseController : Controller
         }
 
         throw new Exception($"Orchestrator response of type '{model.GetType()}' could not be handled.");
-    }
-
-    private ViewResult ReturnViewResult(string viewName, OrchestratorResponse orchestratorResponse)
-    {
-        var userViews = _multiVariantTestingService.GetMultiVariantViews();
-
-        if (userViews == null)
-        {
-            return base.View(viewName, orchestratorResponse);
-        }
-
-        var controllerName = ControllerContext.RouteData.Values[ControllerConstants.ControllerKeyName].ToString();
-        var actionName = ControllerContext.RouteData.Values[ControllerConstants.ActionKeyName].ToString();
-        var userView = userViews.Data.SingleOrDefault(c => c.Controller.Equals(controllerName, StringComparison.CurrentCultureIgnoreCase)
-                        && c.Action.Equals(actionName, StringComparison.CurrentCultureIgnoreCase));
-
-        if (userView == null)
-        {
-            return base.View(viewName, orchestratorResponse);
-        }
-
-        if (!userView.SplitAccessAcrossUsers)
-        {
-            var userEmail = HttpContext.User.FindFirstValue(ControllerConstants.EmailClaimKeyName);
-
-            foreach (var view in userView.Views)
-            {
-                if (view.EmailAddresses.Any(pattern => Regex.IsMatch(userEmail, pattern, RegexOptions.IgnoreCase)))
-                {
-                    return base.View(view.ViewName, orchestratorResponse);
-                }
-            }
-        }
-        else
-        {
-            var randomViewName = _multiVariantTestingService.GetRandomViewNameToShow(userView.Views);
-
-            return base.View(string.IsNullOrEmpty(randomViewName) ? viewName : randomViewName, orchestratorResponse);
-        }
-
-        return base.View(viewName, orchestratorResponse);
     }
 
     public void AddFlashMessageToCookie(FlashMessageViewModel model)

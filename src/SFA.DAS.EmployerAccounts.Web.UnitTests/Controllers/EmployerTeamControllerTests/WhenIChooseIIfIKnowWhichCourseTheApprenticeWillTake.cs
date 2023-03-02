@@ -16,8 +16,7 @@ public class WhenIChooseIIfIKnowWhichCourseTheApprenticeWillTake
         _controller = new EmployerTeamController(
             _mockCookieStorageService.Object,
             _mockEmployerTeamOrchestrator.Object,
-            Mock.Of<IUrlActionHelper>(),
-            Mock.Of<IMultiVariantTestingService>());
+            Mock.Of<IUrlActionHelper>());
     }
 
     [Test]

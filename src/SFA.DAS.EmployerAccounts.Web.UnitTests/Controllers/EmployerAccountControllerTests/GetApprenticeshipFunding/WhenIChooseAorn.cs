@@ -14,7 +14,6 @@ class WhenIChooseAorn : ControllerTestBase
     private EmployerAccountController _employerAccountController;
     private Mock<EmployerAccountOrchestrator> _orchestrator;
     private Mock<IAuthenticationService> _owinWrapper;
-    private Mock<IMultiVariantTestingService> _userViewTestingService;
     private const string ExpectedRedirectUrl = "http://redirect.local.test";
     private OrchestratorResponse<EmployerAccountViewModel> _response;
     private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
@@ -30,7 +29,6 @@ class WhenIChooseAorn : ControllerTestBase
 
         _owinWrapper = new Mock<IAuthenticationService>();
         _owinWrapper.Setup(x => x.GetClaimValue(ControllerConstants.UserRefClaimKeyName)).Returns(ExpectedUserId);
-        _userViewTestingService = new Mock<IMultiVariantTestingService>();
         var logger = new Mock<ILog>();
         _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
@@ -53,8 +51,7 @@ class WhenIChooseAorn : ControllerTestBase
             Mock.Of<IMediator>(),
             Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
             Mock.Of<ICookieStorageService<HashedAccountIdModel>>(),
-            Mock.Of<LinkGenerator>(),
-            Mock.Of<IMultiVariantTestingService>())
+            Mock.Of<LinkGenerator>())
         {
             ControllerContext = ControllerContext,
             Url = new UrlHelper(new ActionContext(MockHttpContext.Object, Routes, new ActionDescriptor()))

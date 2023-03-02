@@ -47,7 +47,6 @@ public static class ApplicationServiceRegistrations
         services.AddScoped<IReferenceDataApiClient, ReferenceDataApiClient>();
 
         services.AddTransient<IDateTimeService, DateTimeService>();
-        services.AddTransient<IMultiVariantTestingService, MultiVariantTestingService>();
 
         services.AddSingleton<IEncodingService, EncodingService>();
 

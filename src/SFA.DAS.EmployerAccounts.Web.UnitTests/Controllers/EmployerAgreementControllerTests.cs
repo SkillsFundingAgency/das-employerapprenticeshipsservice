@@ -1,12 +1,10 @@
 ﻿using System.Security.Claims;
-using Aspose.Pdf;
 using AutoMapper;
 using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Primitives;
-using Moq;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
@@ -60,8 +58,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
             _flashMessage.Object,
             _mediator.Object,
             _mapper.Object,
-            Mock.Of<IUrlActionHelper>(),
-            Mock.Of<IMultiVariantTestingService>());
+            Mock.Of<IUrlActionHelper>());
 
         _controller.ControllerContext = new ControllerContext { HttpContext = httpContextMock.Object };
     }
@@ -321,7 +318,6 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
 public class EmployerAgreementControllerTestFixtures : FluentTest<EmployerAgreementControllerTestFixtures>
 {
     public Mock<EmployerAgreementOrchestrator> Orchestrator;
-    public Mock<IMultiVariantTestingService> UserViewTestingService;
     public Mock<ICookieStorageService<FlashMessageViewModel>> FlashMessage;
     public Mock<IMediator> Mediator;
     public Mock<IMapper> Mapper;
@@ -329,7 +325,6 @@ public class EmployerAgreementControllerTestFixtures : FluentTest<EmployerAgreem
     public EmployerAgreementControllerTestFixtures()
     {
         Orchestrator = new Mock<EmployerAgreementOrchestrator>();
-        UserViewTestingService = new Mock<IMultiVariantTestingService>();
         FlashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
         Mediator = new Mock<IMediator>();
         Mapper = new Mock<IMapper>();
@@ -436,8 +431,7 @@ public class EmployerAgreementControllerTestFixtures : FluentTest<EmployerAgreem
             FlashMessage.Object,
             Mediator.Object,
             Mapper.Object,
-            Mock.Of<IUrlActionHelper>(),
-            Mock.Of<IMultiVariantTestingService>());
+            Mock.Of<IUrlActionHelper>());
 
         controller.ControllerContext = new ControllerContext { HttpContext = httpContextMock.Object };
 

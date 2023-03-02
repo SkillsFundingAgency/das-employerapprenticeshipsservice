@@ -13,9 +13,8 @@ public class OrganisationController : BaseController
 
     public OrganisationController(
         OrganisationOrchestrator orchestrator,
-        ICookieStorageService<FlashMessageViewModel> flashMessage,
-        IMultiVariantTestingService multiVariantTestingService)
-        : base(flashMessage, multiVariantTestingService)
+        ICookieStorageService<FlashMessageViewModel> flashMessage)
+        : base(flashMessage)
     {
         _orchestrator = orchestrator;
     }

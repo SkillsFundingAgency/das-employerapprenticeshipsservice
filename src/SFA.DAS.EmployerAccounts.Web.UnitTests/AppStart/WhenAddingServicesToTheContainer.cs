@@ -1,6 +1,4 @@
-using FluentAssertions;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Memory;
@@ -244,6 +242,8 @@ public class WhenAddingServicesToTheContainer
                     new("TokenServiceApi:Tenant", "test"),
                     new("TasksApi:ApiBaseUrl", "https://test.test"),
                     new("TasksApi:IdentifierUrl", "https://test.test"),
+                    new("ResourceEnvironmentName", "TEST"),
+                    new("Identity:ClientId", "clientId")
                 }
         };
 

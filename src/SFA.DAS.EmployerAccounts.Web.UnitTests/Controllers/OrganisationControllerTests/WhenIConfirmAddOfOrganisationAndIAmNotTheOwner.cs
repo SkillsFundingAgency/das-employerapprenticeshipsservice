@@ -22,8 +22,7 @@ public class WhenIConfirmAddOfOrganisationAndIAmNotTheOwner : ControllerTestBase
 
         _controller = new OrganisationController(
             _orchestrator.Object,
-            _flashMessage.Object,
-            Mock.Of<IMultiVariantTestingService>())
+            _flashMessage.Object)
         {
             ControllerContext = ControllerContext
         };

@@ -13,9 +13,8 @@ public class EmployerAccountPayeController : BaseController
 
     public EmployerAccountPayeController(
         EmployerAccountPayeOrchestrator employerAccountPayeOrchestrator,
-        ICookieStorageService<FlashMessageViewModel> flashMessage,
-        IMultiVariantTestingService multiVariantTestingService) 
-        : base( flashMessage, multiVariantTestingService)
+        ICookieStorageService<FlashMessageViewModel> flashMessage) 
+        : base(flashMessage)
     {
         _employerAccountPayeOrchestrator = employerAccountPayeOrchestrator;
     }

@@ -20,8 +20,7 @@ public class WhenIRemoveAPayeScheme : ControllerTestBase
 
         _controller = new EmployerAccountPayeController(
             _employerAccountPayeOrchestrator.Object,
-            _flashMessage.Object,
-            Mock.Of<IMultiVariantTestingService>())
+            _flashMessage.Object)
         {
             ControllerContext = ControllerContext
         };

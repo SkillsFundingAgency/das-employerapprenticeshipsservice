@@ -50,8 +50,7 @@ class WhenISearchThePensionRegulator : ControllerTestBase
             orchestrator.Object,            
             Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
             _mediator.Object,
-            Mock.Of<ICookieStorageService<HashedAccountIdModel>>(),
-            Mock.Of<IMultiVariantTestingService>())
+            Mock.Of<ICookieStorageService<HashedAccountIdModel>>())
         {
             ControllerContext = ControllerContext
         };

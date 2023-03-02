@@ -43,8 +43,7 @@ public class WhenIAcceptAnInvitation : ControllerTestBase
 
         _controller = new InvitationController(
             _invitationOrchestrator.Object,
-            _configuration, _flashMessage.Object,
-            Mock.Of<IMultiVariantTestingService>())
+            _configuration, _flashMessage.Object)
         {
             ControllerContext = ControllerContext
         };

@@ -25,8 +25,7 @@ public class WhenIViewTermsAndCondition : ControllerTestBase
             _configuration,
             _flashMessage.Object,
             Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
-            Mock.Of<ILogger<HomeController>>(),
-            Mock.Of<IMultiVariantTestingService>())
+            Mock.Of<ILogger<HomeController>>())
         {
             ControllerContext = ControllerContext
         };

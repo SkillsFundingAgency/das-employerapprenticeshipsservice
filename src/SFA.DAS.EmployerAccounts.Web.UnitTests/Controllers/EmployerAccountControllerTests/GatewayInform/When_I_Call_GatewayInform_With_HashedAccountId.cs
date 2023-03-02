@@ -41,8 +41,7 @@ public class When_I_Call_GatewayInform_With_HashedAccountId : ControllerTestBase
             Mock.Of<IMediator>(),
             Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
             _mockAccountCookieStorage.Object,
-            Mock.Of<LinkGenerator>(),
-            Mock.Of<IMultiVariantTestingService>())
+            Mock.Of<LinkGenerator>())
         {
             ControllerContext = ControllerContext,
             Url = new UrlHelper(new ActionContext(MockHttpContext.Object, Routes, new ActionDescriptor()))

@@ -72,8 +72,7 @@ public class WhenSupportUserBannerIsRendered
         _controller = new EmployerTeamController(
             _mockCookieStorageService.Object,
             _mockEmployerTeamOrchestrator.Object,
-            Mock.Of<IUrlActionHelper>(),
-            Mock.Of<IMultiVariantTestingService>())
+            Mock.Of<IUrlActionHelper>())
         {
             ControllerContext = new ControllerContext { HttpContext = _mockHttpContext.Object },
         };

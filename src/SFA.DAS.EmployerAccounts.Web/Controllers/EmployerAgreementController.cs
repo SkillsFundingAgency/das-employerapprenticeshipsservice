@@ -23,9 +23,8 @@ public class EmployerAgreementController : BaseController
         ICookieStorageService<FlashMessageViewModel> flashMessage,
         IMediator mediator,
         IMapper mapper,
-        IUrlActionHelper urlActionHelper,
-        IMultiVariantTestingService multiVariantTestingService)
-        : base( flashMessage, multiVariantTestingService)
+        IUrlActionHelper urlActionHelper)
+        : base( flashMessage)
     {
         _orchestrator = orchestrator;
         _mediator = mediator;

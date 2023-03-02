@@ -26,8 +26,7 @@ public class WhenIAmendTheOrganisation
             Mock.Of<IMediator>(),
             Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
             Mock.Of<ICookieStorageService<HashedAccountIdModel>>(),
-            Mock.Of<LinkGenerator>(),
-            Mock.Of<IMultiVariantTestingService>());
+            Mock.Of<LinkGenerator>());
     }
 
     [Test]

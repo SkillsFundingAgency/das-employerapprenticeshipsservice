@@ -14,8 +14,7 @@ class WhenIDontProvideAValidAorn
             Mock.Of<SearchPensionRegulatorOrchestrator>(),
             Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
             Mock.Of<IMediator>(),
-            Mock.Of<ICookieStorageService<HashedAccountIdModel>>(),
-            Mock.Of<IMultiVariantTestingService>());
+            Mock.Of<ICookieStorageService<HashedAccountIdModel>>());
     }
 
     [Test]

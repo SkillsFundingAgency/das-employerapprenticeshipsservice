@@ -12,9 +12,8 @@ public class InvitationController : BaseController
     
     public InvitationController(InvitationOrchestrator invitationOrchestrator,
         EmployerAccountsConfiguration configuration,
-        ICookieStorageService<FlashMessageViewModel> flashMessage,
-        IMultiVariantTestingService multiVariantTestingService)
-        : base(flashMessage, multiVariantTestingService)
+        ICookieStorageService<FlashMessageViewModel> flashMessage)
+        : base(flashMessage)
     {
         _invitationOrchestrator = invitationOrchestrator ?? throw new ArgumentNullException(nameof(invitationOrchestrator));
         _configuration = configuration;

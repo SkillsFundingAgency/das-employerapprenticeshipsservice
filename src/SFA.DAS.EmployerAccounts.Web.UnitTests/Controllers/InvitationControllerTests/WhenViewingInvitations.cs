@@ -22,8 +22,7 @@ public class WhenViewingInvitations : ControllerTestBase
        _controller = new InvitationController(
             _invitationOrchestrator.Object,
             _configuration,
-            _flashMessage.Object,
-            Mock.Of<IMultiVariantTestingService>())
+            _flashMessage.Object)
        {
            ControllerContext = ControllerContext
        };

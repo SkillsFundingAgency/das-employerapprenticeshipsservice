@@ -26,9 +26,8 @@ public class SearchPensionRegulatorController : BaseController
         SearchPensionRegulatorOrchestrator searchPensionRegulatorOrchestrator,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
         IMediator mediatr,
-        ICookieStorageService<HashedAccountIdModel> accountCookieStorage,
-        IMultiVariantTestingService multiVariantTestingService)
-        : base(flashMessage, multiVariantTestingService)
+        ICookieStorageService<HashedAccountIdModel> accountCookieStorage)
+        : base(flashMessage)
     {
         _searchPensionRegulatorOrchestrator = searchPensionRegulatorOrchestrator;
         _mediatr = mediatr;

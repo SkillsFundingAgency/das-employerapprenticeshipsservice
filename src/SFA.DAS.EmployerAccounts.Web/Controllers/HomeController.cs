@@ -24,9 +24,8 @@ public class HomeController : BaseController
         EmployerAccountsConfiguration configuration,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
         ICookieStorageService<ReturnUrlModel> returnUrlCookieStorageService,
-        ILogger<HomeController> logger,
-        IMultiVariantTestingService multiVariantTestingService)
-        : base(flashMessage, multiVariantTestingService)
+        ILogger<HomeController> logger)
+        : base(flashMessage)
     {
         _homeOrchestrator = homeOrchestrator;
         _configuration = configuration;
