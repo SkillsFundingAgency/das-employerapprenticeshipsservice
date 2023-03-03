@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
+using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.EmployerAccounts.Queries.GetMinimumSignedAgreementVersion;
 using SFA.DAS.Encoding;
 using SFA.DAS.Testing.AutoFixture;
@@ -34,8 +35,9 @@ public class WhenGettingMinimumSignedAgreement
         
         //Act
         var actual = await controller.GetMinimumSignedAgreementVersionByHashedId(hashedAccountId) as OkObjectResult;
-        
+        var model = actual.Value as MinimumSignedAgreementResponse;
+
         //Assert
-        Assert.AreEqual(response.MinimumSignedAgreementVersion,(int)actual.Value);
+        Assert.AreEqual(response.MinimumSignedAgreementVersion,model.MinimumSignedAgreementVersion);
     }
 }

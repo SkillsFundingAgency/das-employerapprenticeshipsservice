@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EmployerAccounts.Api.Authorization;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
+using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers;
@@ -51,6 +52,9 @@ public class EmployerAgreementController : ControllerBase
     {
         var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
         var result = await _orchestrator.GetMinimumSignedAgreemmentVersion(accountId);
-        return Ok(result);
+        return Ok(new MinimumSignedAgreementResponse
+        {
+            MinimumSignedAgreementVersion = result
+        });
     }
 }
