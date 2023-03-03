@@ -43,4 +43,14 @@ public class EmployerAgreementController : ControllerBase
         var result = await _orchestrator.GetMinimumSignedAgreemmentVersion(accountId);
         return Ok(result);
     }
+    
+    [Route("{hashedAccountId}/signed-agreement-version", Name = "GetMinimumSignedAgreemmentVersion")]
+    [Authorize(Policy = ApiRoles.ReadAllEmployerAgreements)]
+    [HttpGet]
+    public async Task<IActionResult> GetMinimumSignedAgreementVersionByHashedId(string hashedAccountId)
+    {
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+        var result = await _orchestrator.GetMinimumSignedAgreemmentVersion(accountId);
+        return Ok(result);
+    }
 }
