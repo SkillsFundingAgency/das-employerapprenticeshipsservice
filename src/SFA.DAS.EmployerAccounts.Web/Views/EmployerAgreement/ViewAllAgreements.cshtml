@@ -1,6 +1,4 @@
-﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
-@using ViewDataDictionary = Microsoft.AspNetCore.Mvc.ViewFeatures.ViewDataDictionary
-@model OrganisationAgreementsViewModel
+﻿@model OrganisationAgreementsViewModel
 
 @{
     Layout = "~/Views/Shared/_Layout_CDN.cshtml";
@@ -22,7 +20,7 @@
 
 @if (Model.HasUnsignedAgreement)
 {
-    @Html.Partial("_AwaitingAcceptance", Model.UnsignedAgreement, new ViewDataDictionary(ViewData) {{ ControllerConstants.InsetText, Model.UnsignedAgreement.Template.InsetText(Model.Agreements)}})
+    @(await Html.PartialAsync("_AwaitingAcceptance", Model.UnsignedAgreement, new ViewDataDictionary(ViewData) {{ ControllerConstants.InsetText, Model.UnsignedAgreement.Template.InsetText(Model.Agreements)}}))
 }
 
 <div class="govuk-grid-row">
@@ -33,7 +31,7 @@
             <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
                 @foreach (var agreement in Model.SignedAgreements)
                 {
-                    @Html.Partial("_AcceptedAgreement", agreement, new ViewDataDictionary(ViewData){{ControllerConstants.InsetText, agreement.Template.InsetText(Model.Agreements) } })
+                    @(await Html.PartialAsync("_AcceptedAgreement", agreement, new ViewDataDictionary(ViewData){{ControllerConstants.InsetText, agreement.Template.InsetText(Model.Agreements) } }))
                 }
             </div>
         }
