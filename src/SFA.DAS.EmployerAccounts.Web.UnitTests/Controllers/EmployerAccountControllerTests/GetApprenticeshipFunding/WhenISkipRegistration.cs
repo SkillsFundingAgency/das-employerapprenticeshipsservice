@@ -52,10 +52,10 @@ class WhenISkipRegistration : ControllerTestBase
     }
 
     [Test]
-    public async Task ThenIShouldGoToSkipRegistration()
+    public void ThenIShouldGoToSkipRegistration()
     {
         //Act
-        var result = await _employerAccountController.GetApprenticeshipFunding(1) as RedirectToActionResult;
+        var result =  _employerAccountController.GetApprenticeshipFunding(1) as RedirectToActionResult;
 
         //Assert
         Assert.AreEqual(ControllerConstants.SkipRegistrationActionName, result.ActionName);
