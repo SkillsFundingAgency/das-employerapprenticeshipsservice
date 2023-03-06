@@ -1,6 +1,8 @@
 @using Microsoft.ApplicationInsights.Extensibility
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using SFA.DAS.Employer.Shared.UI.Models;
 @using SFA.DAS.EmployerAccounts.Web.Helpers
+@using SFA.DAS.EmployerAccounts.Web.ViewComponents
 
 @inject IHtmlHelpers HtmlHelpers;
 
@@ -153,7 +155,7 @@
     <![endif]-->
     @if (HtmlHelpers.IsSupportUser())
     {
-        @(await Component.InvokeAsync("SupportUserBanner", new { model = Model is OrchestratorResponse ? Model?.Data : Model }))
+        @(await Component.InvokeAsync(ComponentContstants.SupportUserBanner, new { model = Model is OrchestratorResponse ? Model?.Data : Model }))
     }
 
     @* ReSharper disable once Mvc.PartialViewNotResolved *@

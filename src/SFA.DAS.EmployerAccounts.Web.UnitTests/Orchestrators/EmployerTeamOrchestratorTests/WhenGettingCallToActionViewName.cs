@@ -1,18 +1,15 @@
-﻿using System.Collections.Generic;
-using FluentAssertions;
-using NUnit.Framework;
+﻿using FluentAssertions;
 using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
 using SFA.DAS.EmployerAccounts.Models.Recruit;
 using SFA.DAS.EmployerAccounts.Models.Reservations;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.EmployerAccounts.Web.ViewComponents;
 using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
 {
     public class WhenGettingCallToActionViewName
     {
-        const string EmptyViewName = "Empty";
+        private const string EmptyViewName = ComponentContstants.Empty;
 
         [Test, RecursiveMoqAutoData]
         public void WhenMultipleReservation_ThenShouldGetCheckFundingViewNameNotDisplayCallToAction(
@@ -28,7 +25,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().Be(EmptyViewName);
+            panelViewModel.ComponentName.Should().Be(EmptyViewName);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -45,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().Be(EmptyViewName);
+            panelViewModel.ComponentName.Should().Be(EmptyViewName);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -71,7 +68,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().Be(EmptyViewName);
+            panelViewModel.ComponentName.Should().Be(EmptyViewName);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -88,7 +85,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().Be(EmptyViewName);
+            panelViewModel.ComponentName.Should().Be(EmptyViewName);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -104,7 +101,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().Be("SignAgreement");
+            panelViewModel.ComponentName.Should().Be(ComponentContstants.SignAgreement);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -119,7 +116,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().Be(EmptyViewName);
+            panelViewModel.ComponentName.Should().Be(EmptyViewName);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -134,7 +131,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().Be(EmptyViewName);
+            panelViewModel.ComponentName.Should().Be(EmptyViewName);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -152,7 +149,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().Be("CheckFunding");
+            panelViewModel.ComponentName.Should().Be(ComponentContstants.CheckFunding);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -171,7 +168,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().Be("ContinueSetupForSingleReservation");
+            panelViewModel.ComponentName.Should().Be(ComponentContstants.ContinueSetupForSingleReservation);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -196,7 +193,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().Be("SingleApprenticeshipContinueSetup");
+            panelViewModel.ComponentName.Should().Be(ComponentContstants.SingleApprenticeshipContinueSetup);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -221,7 +218,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().Be("SingleApprenticeshipWithTrainingProvider");
+            panelViewModel.ComponentName.Should().Be(ComponentContstants.SingleApprenticeshipWithTrainingProvider);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -246,7 +243,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().Be("SingleApprenticeshipReadyForReview");
+            panelViewModel.ComponentName.Should().Be(ComponentContstants.SingleApprenticeshipReadyForReview);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -271,7 +268,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().Be(EmptyViewName);
+            panelViewModel.ComponentName.Should().Be(EmptyViewName);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -296,7 +293,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().Be("ContinueSetupForSingleReservation");
+            panelViewModel.ComponentName.Should().Be(ComponentContstants.ContinueSetupForSingleReservation);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -321,7 +318,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().Be("SingleApprenticeshipApproved");
+            panelViewModel.ComponentName.Should().Be(ComponentContstants.SingleApprenticeshipApproved);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -343,7 +340,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().Be("VacancyDraft");
+            panelViewModel.ComponentName.Should().Be(ComponentContstants.VacancyDraft);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -365,7 +362,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().Be("VacancyPendingReview");
+            panelViewModel.ComponentName.Should().Be(ComponentContstants.VacancyPendingReview);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -387,7 +384,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().Be("VacancyLive");
+            panelViewModel.ComponentName.Should().Be(ComponentContstants.VacancyLive);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -409,7 +406,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().Be("VacancyRejected");
+            panelViewModel.ComponentName.Should().Be(ComponentContstants.VacancyRejected);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -431,7 +428,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ViewName.Should().Be("VacancyClosed");
+            panelViewModel.ComponentName.Should().Be(ComponentContstants.VacancyClosed);
         }
     }
 }

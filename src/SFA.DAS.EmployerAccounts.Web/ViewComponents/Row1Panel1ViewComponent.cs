@@ -11,11 +11,11 @@ public class Row1Panel1ViewComponent: ViewComponent
 
     public IViewComponentResult Invoke(AccountDashboardViewModel model)
     {
-        var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "Empty", Data = model };
+        var viewModel = new PanelViewModel<AccountDashboardViewModel> { ComponentName = ComponentContstants.Empty, Data = model };
 
         if (model.PayeSchemeCount == 0)
         {
-            viewModel.ViewName = "AddPAYE";
+            viewModel.ComponentName = ComponentContstants.AddPAYE;
         }
         else
         {
