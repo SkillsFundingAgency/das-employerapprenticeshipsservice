@@ -9,8 +9,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
 {
     public class WhenGettingCallToActionViewName
     {
-        private const string EmptyViewName = ComponentContstants.Empty;
-
         [Test, RecursiveMoqAutoData]
         public void WhenMultipleReservation_ThenShouldGetCheckFundingViewNameNotDisplayCallToAction(
             [NonLevyPanelView] PanelViewModel<AccountDashboardViewModel> panelViewModel,
@@ -25,7 +23,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ComponentName.Should().Be(EmptyViewName);
+            panelViewModel.ComponentName.Should().Be(ComponentConstants.Empty);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -42,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ComponentName.Should().Be(EmptyViewName);
+            panelViewModel.ComponentName.Should().Be(ComponentConstants.Empty);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -68,7 +66,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ComponentName.Should().Be(EmptyViewName);
+            panelViewModel.ComponentName.Should().Be(ComponentConstants.Empty);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -85,7 +83,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ComponentName.Should().Be(EmptyViewName);
+            panelViewModel.ComponentName.Should().Be(ComponentConstants.Empty);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -101,7 +99,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ComponentName.Should().Be(ComponentContstants.SignAgreement);
+            panelViewModel.ComponentName.Should().Be(ComponentConstants.SignAgreement);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -116,7 +114,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ComponentName.Should().Be(EmptyViewName);
+            panelViewModel.ComponentName.Should().Be(ComponentConstants.Empty);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -131,7 +129,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ComponentName.Should().Be(EmptyViewName);
+            panelViewModel.ComponentName.Should().Be(ComponentConstants.Empty);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -149,7 +147,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ComponentName.Should().Be(ComponentContstants.CheckFunding);
+            panelViewModel.ComponentName.Should().Be(ComponentConstants.CheckFunding);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -168,7 +166,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ComponentName.Should().Be(ComponentContstants.ContinueSetupForSingleReservation);
+            panelViewModel.ComponentName.Should().Be(ComponentConstants.ContinueSetupForSingleReservation);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -193,7 +191,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ComponentName.Should().Be(ComponentContstants.SingleApprenticeshipContinueSetup);
+            panelViewModel.ComponentName.Should().Be(ComponentConstants.SingleApprenticeshipContinueSetup);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -218,7 +216,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ComponentName.Should().Be(ComponentContstants.SingleApprenticeshipWithTrainingProvider);
+            panelViewModel.ComponentName.Should().Be(ComponentConstants.SingleApprenticeshipWithTrainingProvider);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -243,7 +241,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ComponentName.Should().Be(ComponentContstants.SingleApprenticeshipReadyForReview);
+            panelViewModel.ComponentName.Should().Be(ComponentConstants.SingleApprenticeshipReadyForReview);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -268,7 +266,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ComponentName.Should().Be(EmptyViewName);
+            panelViewModel.ComponentName.Should().Be(ComponentConstants.Empty);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -293,7 +291,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ComponentName.Should().Be(ComponentContstants.ContinueSetupForSingleReservation);
+            panelViewModel.ComponentName.Should().Be(ComponentConstants.ContinueSetupForSingleReservation);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -318,7 +316,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ComponentName.Should().Be(ComponentContstants.SingleApprenticeshipApproved);
+            panelViewModel.ComponentName.Should().Be(ComponentConstants.SingleApprenticeshipApproved);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -340,7 +338,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ComponentName.Should().Be(ComponentContstants.VacancyDraft);
+            panelViewModel.ComponentName.Should().Be(ComponentConstants.VacancyDraft);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -362,7 +360,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ComponentName.Should().Be(ComponentContstants.VacancyPendingReview);
+            panelViewModel.ComponentName.Should().Be(ComponentConstants.VacancyPendingReview);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -384,7 +382,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ComponentName.Should().Be(ComponentContstants.VacancyLive);
+            panelViewModel.ComponentName.Should().Be(ComponentConstants.VacancyLive);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -406,7 +404,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ComponentName.Should().Be(ComponentContstants.VacancyRejected);
+            panelViewModel.ComponentName.Should().Be(ComponentConstants.VacancyRejected);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -428,7 +426,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             sut.GetCallToActionViewName(panelViewModel);
 
             //Assert
-            panelViewModel.ComponentName.Should().Be(ComponentContstants.VacancyClosed);
+            panelViewModel.ComponentName.Should().Be(ComponentConstants.VacancyClosed);
         }
     }
 }

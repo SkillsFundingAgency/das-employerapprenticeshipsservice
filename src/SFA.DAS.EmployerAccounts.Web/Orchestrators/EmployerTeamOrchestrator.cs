@@ -653,7 +653,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
 
         if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.Vacancies.First().Status.Equals(VacancyStatus.Draft))
         {
-            viewModel.ComponentName = ComponentContstants.VacancyDraft;
+            viewModel.ComponentName = ComponentConstants.VacancyDraft;
             viewModel.PanelType = PanelType.Summary;
             viewModel.Data.HideTasksBar = true;
             return true;
@@ -672,7 +672,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
 
         if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.Vacancies.First().Status.Equals(VacancyStatus.Submitted))
         {
-            viewModel.ComponentName = ComponentContstants.VacancyPendingReview;
+            viewModel.ComponentName = ComponentConstants.VacancyPendingReview;
             viewModel.PanelType = PanelType.Summary;
             viewModel.Data.HideTasksBar = true;
             return true;
@@ -691,7 +691,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
 
         if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.Vacancies.First().Status.Equals(VacancyStatus.Live))
         {
-            viewModel.ComponentName = ComponentContstants.VacancyLive;
+            viewModel.ComponentName = ComponentConstants.VacancyLive;
             viewModel.PanelType = PanelType.Summary;
             viewModel.Data.HideTasksBar = true;
             return true;
@@ -709,7 +709,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
 
         if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.Vacancies.First().Status.Equals(VacancyStatus.Closed))
         {
-            viewModel.ComponentName = ComponentContstants.VacancyClosed;
+            viewModel.ComponentName = ComponentConstants.VacancyClosed;
             viewModel.PanelType = PanelType.Summary;
             viewModel.Data.HideTasksBar = true;
             return true;
@@ -728,7 +728,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
 
         if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.Vacancies.First().Status.Equals(VacancyStatus.Referred))
         {
-            viewModel.ComponentName = ComponentContstants.VacancyRejected;
+            viewModel.ComponentName = ComponentConstants.VacancyRejected;
             viewModel.PanelType = PanelType.Summary;
             viewModel.Data.HideTasksBar = true;
             return true;
@@ -741,7 +741,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
     {
         if (viewModel.Data.PendingAgreements?.Count() > 0)
         {
-            viewModel.ComponentName = ComponentContstants.SignAgreement;
+            viewModel.ComponentName = ComponentConstants.SignAgreement;
             return true;
         }
 
@@ -753,7 +753,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
         if (viewModel.Data.CallToActionViewModel.ReservationsCount == 1
             && viewModel.Data.CallToActionViewModel.PendingReservationsCount == 1)
         {
-            viewModel.ComponentName = ComponentContstants.ContinueSetupForSingleReservation;
+            viewModel.ComponentName = ComponentConstants.ContinueSetupForSingleReservation;
             viewModel.PanelType = PanelType.Summary;
             viewModel.Data.HideTasksBar = true;
             return true;
@@ -768,7 +768,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
             && viewModel.Data.CallToActionViewModel.CohortsCount == 0
             && viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount == 0)
         {
-            viewModel.ComponentName = ComponentContstants.CheckFunding;
+            viewModel.ComponentName = ComponentConstants.CheckFunding;
             viewModel.PanelType = PanelType.Action;
             viewModel.Data.HideTasksBar = true;
             return true;
@@ -782,7 +782,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
         if (viewModel.Data.CallToActionViewModel.ReservationsCount == 1
             && viewModel.Data.CallToActionViewModel?.ApprenticeshipsCount == 1)
         {
-            viewModel.ComponentName = ComponentContstants.SingleApprenticeshipApproved;
+            viewModel.ComponentName = ComponentConstants.SingleApprenticeshipApproved;
             viewModel.PanelType = PanelType.Summary;
             viewModel.Data.HideTasksBar = true;
             return true;
@@ -801,7 +801,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
             && viewModel.Data.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single().HasSingleDraftApprenticeship.Equals(true)
             && viewModel.Data.CallToActionViewModel.Cohorts.Single().CohortStatus.Equals(CohortStatus.Draft))
         {
-            viewModel.ComponentName = ComponentContstants.SingleApprenticeshipContinueSetup;
+            viewModel.ComponentName = ComponentConstants.SingleApprenticeshipContinueSetup;
             viewModel.PanelType = PanelType.Summary;
             viewModel.Data.HideTasksBar = true;
             return true;
@@ -820,7 +820,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
             && viewModel.Data.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single().HasSingleDraftApprenticeship.Equals(true)
             && viewModel.Data.CallToActionViewModel.Cohorts.Single().CohortStatus.Equals(CohortStatus.WithTrainingProvider))
         {
-            viewModel.ComponentName = ComponentContstants.SingleApprenticeshipWithTrainingProvider;
+            viewModel.ComponentName = ComponentConstants.SingleApprenticeshipWithTrainingProvider;
             viewModel.PanelType = PanelType.Summary;
             viewModel.Data.HideTasksBar = true;
             return true;
@@ -837,7 +837,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
             && viewModel.Data.CallToActionViewModel.Cohorts.Single().NumberOfDraftApprentices == 1
             && viewModel.Data.CallToActionViewModel.Cohorts.Single().CohortStatus.Equals(CohortStatus.WithTrainingProvider))
         {
-            viewModel.ComponentName = ComponentContstants.SingleApprenticeshipContinueWithProvider;
+            viewModel.ComponentName = ComponentConstants.SingleApprenticeshipContinueWithProvider;
             viewModel.PanelType = PanelType.Summary;
             viewModel.Data.HideTasksBar = true;
             return true;
@@ -856,7 +856,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
             && viewModel.Data.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single().HasSingleDraftApprenticeship.Equals(true)
             && viewModel.Data.CallToActionViewModel.Cohorts.Single().CohortStatus.Equals(CohortStatus.Review))
         {
-            viewModel.ComponentName = ComponentContstants.SingleApprenticeshipReadyForReview;
+            viewModel.ComponentName = ComponentConstants.SingleApprenticeshipReadyForReview;
             viewModel.PanelType = PanelType.Summary;
             viewModel.Data.HideTasksBar = true;
             return true;

@@ -123,7 +123,7 @@
 
     @if (HtmlHelpers.IsSupportUser())
     {
-        @(await Component.InvokeAsync(ComponentContstants.SupportUserBanner, new { model = Model is OrchestratorResponse ? Model?.Data : Model }))
+        @(await Component.InvokeAsync(ComponentConstants.SupportUserBanner, new { model = Model is OrchestratorResponse ? Model?.Data : Model }))
     }
 
 

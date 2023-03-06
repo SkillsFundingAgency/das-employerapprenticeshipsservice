@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests
         public void Customize(IFixture fixture)
         {
             fixture.Customize<PanelViewModel<AccountDashboardViewModel>>(composer => composer
-                .With(panel => panel.ComponentName, ComponentContstants.Empty));
+                .With(panel => panel.ComponentName, ComponentConstants.Empty));
             fixture.Customize<AccountDashboardViewModel>(composer => composer
                 .With(dash => dash.ApprenticeshipEmployerType, ApprenticeshipEmployerType.NonLevy)
                 .With(dash => dash.PendingAgreements, new List<PendingAgreementsViewModel>()));
