@@ -25,7 +25,6 @@ public class HealthCheckController : Controller
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Index(RunHealthCheckCommand command)
     {
         await _mediator.Send(command);

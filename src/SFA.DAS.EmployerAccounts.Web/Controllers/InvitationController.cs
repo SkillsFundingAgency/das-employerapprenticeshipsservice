@@ -61,7 +61,6 @@ public class InvitationController : BaseController
 
     [HttpPost]
     [Authorize]
-    [ValidateAntiForgeryToken]
     [Route("accept")]
     public async Task<IActionResult> Accept(long invitation, UserInvitationsViewModel model)
     {
@@ -93,7 +92,6 @@ public class InvitationController : BaseController
 
     [HttpPost]
     [Authorize]
-    [ValidateAntiForgeryToken]
     [Route("create")]
     public async Task<IActionResult> Create(InviteTeamMemberViewModel model)
     {

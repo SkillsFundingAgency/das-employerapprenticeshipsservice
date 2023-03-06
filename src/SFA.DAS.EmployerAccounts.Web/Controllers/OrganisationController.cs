@@ -46,7 +46,6 @@ public class OrganisationController : BaseController
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     [Route("confirm")]
     public async Task<IActionResult> Confirm(
         string hashedAccountId, string name, string code, string address, DateTime? incorporated,

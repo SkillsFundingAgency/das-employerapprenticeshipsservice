@@ -82,7 +82,6 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     [Route("invite")]
     public async Task<IActionResult> Invite(InviteTeamMemberViewModel model)
     {
@@ -134,7 +133,6 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     [Route("invite/next")]
     public async Task<IActionResult> NextSteps(int? choice, string hashedAccountId)
     {
@@ -170,7 +168,6 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     [Route("{invitationId}/cancel")]
     public async Task<IActionResult> Cancel(string invitationId, string email, string hashedAccountId, int cancel)
     {
@@ -183,7 +180,6 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     [Route("resend")]
     public async Task<IActionResult> Resend(string hashedAccountId, string email, string name)
     {
@@ -202,7 +198,6 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     [Route("{email}/remove")]
     public async Task<IActionResult> Remove(long userId, string hashedAccountId, string email, int remove)
     {
@@ -246,7 +241,6 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     [Route("{email}/role/change")]
     public async Task<IActionResult> ChangeRole(string hashedAccountId, string email, Role role)
     {
@@ -283,7 +277,6 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     [Route("continuesetupcreateadvert")]
     public IActionResult ContinueSetupCreateAdvert(string hashedAccountId, bool? requiresAdvert)
     {
@@ -309,7 +302,6 @@ public class EmployerTeamController : BaseController
 
     [HttpPost]
     [Route("triagewhichcourseyourapprenticewilltake")]
-    [ValidateAntiForgeryToken]
     public IActionResult TriageWhichCourseYourApprenticeWillTake(TriageViewModel model)
     {
         if (!ModelState.IsValid)
@@ -352,7 +344,6 @@ public class EmployerTeamController : BaseController
 
     [HttpPost]
     [Route("triagehaveyouchosenatrainingprovider")]
-    [ValidateAntiForgeryToken]
     public IActionResult TriageHaveYouChosenATrainingProvider(TriageViewModel model)
     {
         if (!ModelState.IsValid)
@@ -395,7 +386,6 @@ public class EmployerTeamController : BaseController
 
     [HttpPost]
     [Route("triagewillapprenticeshiptrainingstart")]
-    [ValidateAntiForgeryToken]
     public IActionResult TriageWillApprenticeshipTrainingStart(TriageViewModel model)
     {
         if (!ModelState.IsValid)
@@ -450,7 +440,6 @@ public class EmployerTeamController : BaseController
 
     [HttpPost]
     [Route("triageapprenticeforexistingemployee")]
-    [ValidateAntiForgeryToken]
     public IActionResult TriageApprenticeForExistingEmployee(TriageViewModel model)
     {
         if (!ModelState.IsValid)

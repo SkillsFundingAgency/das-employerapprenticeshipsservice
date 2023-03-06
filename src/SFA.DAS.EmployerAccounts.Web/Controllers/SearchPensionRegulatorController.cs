@@ -67,7 +67,6 @@ public class SearchPensionRegulatorController : BaseController
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     [Route("{HashedAccountId}/pensionregulator", Order = 0)]
     [Route("pensionregulator", Order = 1)]
     public async Task<IActionResult> SearchPensionRegulator(string hashedAccountId, SearchPensionRegulatorResultsViewModel viewModel)
@@ -134,7 +133,6 @@ public class SearchPensionRegulatorController : BaseController
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     [Route("{HashedAccountId}/pensionregulator/aorn", Order = 0)]
     [Route("pensionregulator/aorn", Order = 1)]
     public async Task<IActionResult> SearchPensionRegulatorByAorn(SearchPensionRegulatorByAornViewModel viewModel)

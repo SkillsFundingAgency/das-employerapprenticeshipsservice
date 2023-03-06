@@ -109,7 +109,6 @@ public class EmployerAgreementController : BaseController
 
     [HttpPost]
     [Route("agreements/{agreementId}/sign")]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Sign(string agreementId, string hashedAccountId, int? choice)
     {
         var userInfo = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
@@ -202,7 +201,6 @@ public class EmployerAgreementController : BaseController
 
     [HttpPost]
     [Route("agreements/{accountLegalEntityHashedId}/remove")]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> RemoveOrganisation(ConfirmOrganisationToRemoveViewModel model)
     {
         if (!ModelState.IsValid)
@@ -234,7 +232,6 @@ public class EmployerAgreementController : BaseController
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     [Route("agreements/{agreementId}/whenDoYouWantToView")]
     public async Task<IActionResult> WhenDoYouWantToView(int? choice, string agreementId, string hashedAccountId)
     {

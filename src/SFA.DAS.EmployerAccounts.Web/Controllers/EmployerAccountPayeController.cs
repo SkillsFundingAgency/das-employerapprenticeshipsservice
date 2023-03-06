@@ -46,7 +46,6 @@ public class EmployerAccountPayeController : BaseController
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     [Route("{HashedAccountId}/schemes/next")]
     public IActionResult NextSteps(int? choice)
     {
@@ -127,7 +126,6 @@ public class EmployerAccountPayeController : BaseController
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     [Route("{HashedAccountId}/schemes/confirm")]
     public async Task<IActionResult> ConfirmPayeScheme(string hashedAccountId, AddNewPayeSchemeViewModel model)
     {
@@ -166,7 +164,6 @@ public class EmployerAccountPayeController : BaseController
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     [Route("{HashedAccountId}/schemes/remove")]
     public async Task<IActionResult> RemovePaye(string hashedAccountId, RemovePayeSchemeViewModel model)
     {

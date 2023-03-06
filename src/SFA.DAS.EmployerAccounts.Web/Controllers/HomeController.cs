@@ -316,7 +316,6 @@ public class HomeController : BaseController
 
     [HttpPost]
     [Route("unsubscribe/{correlationId}")]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Unsubscribe(bool? unsubscribe, string correlationId)
     {
         if (unsubscribe == null || unsubscribe == false)

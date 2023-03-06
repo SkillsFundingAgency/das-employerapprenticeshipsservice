@@ -172,10 +172,9 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     [Route("{HashedAccountId}/getApprenticeshipFunding", Order = 0)]
     [Route("getApprenticeshipFunding", Order = 1)]
-    public async Task<IActionResult> GetApprenticeshipFunding(int? choice)
+    public IActionResult GetApprenticeshipFunding(int? choice)
     {
         switch (choice ?? 0)
         {
@@ -242,7 +241,6 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     [Route("create")]
     public async Task<IActionResult> CreateAccount()
     {
@@ -307,7 +305,6 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     [Route("{HashedAccountId}/rename")]
     public async Task<IActionResult> RenameAccount(RenameEmployerAccountViewModel vm)
     {
