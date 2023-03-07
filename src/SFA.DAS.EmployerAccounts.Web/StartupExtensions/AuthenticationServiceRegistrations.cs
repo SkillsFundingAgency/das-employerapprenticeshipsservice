@@ -26,6 +26,14 @@ public static class EmployerAuthenticationServiceRegistrations
         services.AddAuthorization(options =>
         {
             options.AddPolicy(
+                PolicyNames.HasUserAccount
+                , policy =>
+                {
+                    policy.RequireClaim(EmployerClaims.IdamsUserIdClaimTypeIdentifier);
+                    policy.RequireAuthenticatedUser();
+                });
+
+            options.AddPolicy(
                 PolicyNames.HasEmployerOwnerAccount
                 , policy =>
                 {

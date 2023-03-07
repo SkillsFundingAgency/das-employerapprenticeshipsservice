@@ -33,6 +33,7 @@ public static class ControllerConstants
     public const string GateWayResponseActionName = "GateWayResponse";
     public const string GetGatewayActionName = "GetGateway";
     public const string GetApprenticeshipFundingActionName = "GetApprenticeshipFunding";
+    public const string PostApprenticeshipFundingActionName = "PostApprenticeshipFunding";
     public const string GetSignedPdfAgreementActionName = "GetSignedPdfAgreement";
     public const string HomeControllerName = "Home";
     public const string HelpActionName = "Help";
