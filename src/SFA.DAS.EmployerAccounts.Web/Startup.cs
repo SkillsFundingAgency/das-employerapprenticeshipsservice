@@ -13,6 +13,7 @@ using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Mappings;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Filters;
 using SFA.DAS.EmployerAccounts.Web.Handlers;
 using SFA.DAS.EmployerAccounts.Web.StartupExtensions;
@@ -114,9 +115,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddMediatorQueryValidators();
             services.AddMediatR(typeof(GetEmployerAccountByIdQuery));
 
-            if (_configuration["EmployerAccountsConfiguration:UseGovSignIn"] != null &&
-                _configuration["EmployerAccountsConfiguration:UseGovSignIn"]
-                    .Equals("true", StringComparison.CurrentCultureIgnoreCase))
+            if (_configuration.UseGovUkSignIn())
             {
                 services.AddAndConfigureGovUkAuthentication(_configuration,
                     $"{typeof(Startup).Assembly.GetName().Name}.Auth",
