@@ -21,9 +21,6 @@
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Web\SFA.DAS.EmployerAccounts.Web.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-  <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 </Project>
