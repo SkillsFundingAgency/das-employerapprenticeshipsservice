@@ -16,7 +16,10 @@ using SFA.DAS.EmployerAccounts.Web.Filters;
 using SFA.DAS.EmployerAccounts.Web.Handlers;
 using SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 using SFA.DAS.GovUK.Auth.AppStart;
+using SFA.DAS.NServiceBus.Features.ClientOutbox.Data;
+using SFA.DAS.UnitOfWork.DependencyResolution.Microsoft;
 using SFA.DAS.UnitOfWork.EntityFrameworkCore.DependencyResolution.Microsoft;
+using SFA.DAS.UnitOfWork.Mvc.Extensions;
 using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.Microsoft;
 
 namespace SFA.DAS.EmployerAccounts.Web
@@ -43,9 +46,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddLogging();
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-
             services.AddConfigurationOptions(_configuration);
-
             _employerAccountsConfiguration = _configuration.Get<EmployerAccountsConfiguration>();
 
             var identityServerConfiguration = _configuration
@@ -68,7 +69,10 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddEventsApi();
             services.AddNotifications(_configuration);
 
-            services.AddEntityFrameworkUnitOfWork<EmployerAccountsDbContext>();
+            services
+                .AddUnitOfWork()
+                .AddEntityFramework(_employerAccountsConfiguration)
+                .AddEntityFrameworkUnitOfWork<EmployerAccountsDbContext>();
             services.AddNServiceBusClientUnitOfWork();
             services.AddEmployerAccountsApi();
             services.AddExecutionPolicies();
@@ -134,6 +138,13 @@ namespace SFA.DAS.EmployerAccounts.Web
         public void ConfigureContainer(UpdateableServiceProvider serviceProvider)
         {
             serviceProvider.StartNServiceBus(_configuration, _configuration.IsDevOrLocal() || _configuration.IsTest());
+
+            // Replacing ClientOutboxPersisterV2 with a local version to fix unit of work issue due to propogating Task up the chain rathert than awaiting on DB Command.
+            // not clear why this fixes the issue. Attempted to make the change in SFA.DAS.Nservicebus.SqlServer however it conflicts when upgraded with SFA.DAS.UnitOfWork.Nservicebus
+            // which would require upgrading to NET6 to resolve.
+            var serviceDescriptor = serviceProvider.FirstOrDefault(serv => serv.ServiceType == typeof(IClientOutboxStorageV2));
+            serviceProvider.Remove(serviceDescriptor);
+            serviceProvider.AddScoped<IClientOutboxStorageV2, AppStart.ClientOutboxPersisterV2>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -143,7 +154,7 @@ namespace SFA.DAS.EmployerAccounts.Web
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseUnitOfWork
+            app.UseUnitOfWork();
 
             app.UseStaticFiles();
             app.UseAuthentication();
