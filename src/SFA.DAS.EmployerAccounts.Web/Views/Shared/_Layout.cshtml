@@ -1,6 +1,7 @@
 @using Microsoft.ApplicationInsights.Extensibility
 @using SFA.DAS.Employer.Shared.UI.Models;
 @using SFA.DAS.EmployerAccounts.Web.Helpers
+@using SFA.DAS.EmployerAccounts.Web.ViewComponents
 @inject IHtmlHelpers HtmlHelpers;
 @inject IHttpContextAccessor HtmlContextAccessor
 
@@ -122,7 +123,7 @@
 
     @if (HtmlHelpers.IsSupportUser())
     {
-        @(await Component.InvokeAsync("SupportUserBanner", new { model = Model is OrchestratorResponse ? Model?.Data : Model }))
+        @(await Component.InvokeAsync(ComponentConstants.SupportUserBanner, new { model = Model is OrchestratorResponse ? Model?.Data : Model }))
     }
 
 

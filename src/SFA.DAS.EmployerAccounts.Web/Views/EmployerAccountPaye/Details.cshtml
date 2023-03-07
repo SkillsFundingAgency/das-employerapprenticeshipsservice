@@ -1,5 +1,4 @@
 ﻿@using System.Linq
-@using SFA.DAS.EmployerAccounts.Web.Extensions
 @model SFA.DAS.EmployerAccounts.Web.OrchestratorResponse<SFA.DAS.EmployerAccounts.Web.ViewModels.PayeSchemeDetailViewModel>
 
 @{
@@ -69,7 +68,7 @@
             </tbody>
         </table>
 
-        @Html.Partial("_WhatIsEnglishPercentage")
+        @await Html.PartialAsync("_WhatIsEnglishPercentage")
 
     </div>
     <div class="govuk-grid-column-one-third">

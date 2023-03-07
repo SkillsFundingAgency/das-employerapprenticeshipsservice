@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using SFA.DAS.EmployerAccounts.Infrastructure;
 using SFA.DAS.EmployerAccounts.Models.UserAccounts;
 using SFA.DAS.EmployerAccounts.Services;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.GovUK.Auth.Services;
 
 namespace SFA.DAS.EmployerAccounts.Web.Handlers;
@@ -25,8 +26,7 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
     public async Task<IEnumerable<Claim>> GetClaims(TokenValidatedContext tokenValidatedContext)
     {
         var claims = new List<Claim>();
-        if (_configuration["StubAuth"] != null && _configuration["StubAuth"]
-                .Equals("true", StringComparison.CurrentCultureIgnoreCase))
+        if (_configuration.UseStubAuth())
         {
             var accountClaims = new Dictionary<string, EmployerUserAccountItem>();
             accountClaims.Add("", new EmployerUserAccountItem

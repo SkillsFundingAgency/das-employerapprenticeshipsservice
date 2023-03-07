@@ -27,7 +27,7 @@
         }
         else
         {
-        @Html.Partial("_PayeNotFound", @Url.Action("Gateway", "EmployerAccount"))
+            @await Html.PartialAsync("_PayeNotFound", @Url.Action("Gateway", "EmployerAccount"))
         }
     </div>
 </div>

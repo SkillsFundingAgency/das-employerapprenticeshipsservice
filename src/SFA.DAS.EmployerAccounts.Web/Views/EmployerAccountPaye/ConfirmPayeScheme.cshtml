@@ -48,7 +48,7 @@
         }
         else if (Model.Data.EmprefNotFound)
         {
-            @Html.Partial("_PayeNotFound", Url.Action("Getgateway", "EmployerAccountPaye", new { confirmPayeVisibility = true }))
+            @await Html.PartialAsync("_PayeNotFound", Url.Action("Getgateway", "EmployerAccountPaye", new { confirmPayeVisibility = true }))
         }
         else
         {
