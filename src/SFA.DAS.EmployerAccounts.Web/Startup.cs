@@ -143,6 +143,8 @@ namespace SFA.DAS.EmployerAccounts.Web
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseUnitOfWork
+
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseRouting();
