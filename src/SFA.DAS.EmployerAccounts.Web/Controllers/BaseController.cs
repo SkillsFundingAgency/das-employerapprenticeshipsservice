@@ -14,6 +14,7 @@ public class BaseController : Controller
     public BaseController() { }
 
 
+    [NonAction]
     public override ViewResult View(string viewName, object model)
     {
         if (!(model is OrchestratorResponse orchestratorResponse))
@@ -66,6 +67,7 @@ public class BaseController : Controller
         throw new Exception($"Orchestrator response of type '{model.GetType()}' could not be handled.");
     }
 
+    [NonAction]
     public void AddFlashMessageToCookie(FlashMessageViewModel model)
     {
         _flashMessage.Delete(FlashMessageCookieName);
@@ -73,6 +75,7 @@ public class BaseController : Controller
         _flashMessage.Create(model, FlashMessageCookieName);
     }
 
+    [NonAction]
     public FlashMessageViewModel GetFlashMessageViewModelFromCookie()
     {
         var flashMessageViewModelFromCookie = _flashMessage.Get(FlashMessageCookieName);
@@ -83,6 +86,7 @@ public class BaseController : Controller
     /// <summary>
     /// Default implementation for the SupportUserBanner.  Can be overridden to render based on the available IAccountIdentifier model.
     /// </summary>
+    [NonAction]
     public virtual IActionResult SupportUserBanner(IAccountIdentifier model = null)
     {
         return ViewComponent("SupportUserBanner", new SupportUserBannerViewModel());

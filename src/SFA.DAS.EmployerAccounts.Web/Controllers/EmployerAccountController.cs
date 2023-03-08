@@ -6,11 +6,11 @@ using Newtonsoft.Json;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
+using SFA.DAS.EmployerAccounts.Web.RouteValues;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
 [Route("accounts")]
-[Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
 public class EmployerAccountController : BaseController
 {
     private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
@@ -158,8 +158,8 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpGet]
-    [Route("{HashedAccountId}/getApprenticeshipFunding", Order = 0)]
-    [Route("getApprenticeshipFunding", Order = 1)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    [Route("{HashedAccountId}/getApprenticeshipFunding", Order = 0, Name = RouteNames.EmployerAccountGetApprenticeshipFundingInAccount)]
     public IActionResult GetApprenticeshipFunding()
     {
         PopulateViewBagWithExternalUserId();
@@ -168,17 +168,18 @@ public class EmployerAccountController : BaseController
             HideHeaderSignInLink = true
         };
 
-        return View(model);
+        return View("~/Views/EmployerAccount/GetApprenticeshipFunding.cshtml", model);
+
     }
 
     [HttpPost]
-    [Route("{HashedAccountId}/getApprenticeshipFunding", Order = 0)]
-    [Route("getApprenticeshipFunding", Order = 1)]
-    public IActionResult GetApprenticeshipFunding(int? choice)
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    [Route("{HashedAccountId}/getApprenticeshipFunding", Order = 0, Name = RouteNames.EmployerAccountPostApprenticeshipFundingInAccount)]
+    public IActionResult PostGetApprenticeshipFunding(int? choice)
     {
         switch (choice ?? 0)
         {
-            case AddPayeLater: return RedirectToAction(ControllerConstants.SkipRegistrationActionName);
+            case AddPayeLater: return RedirectToRoute(RouteNames.SkipRegistration);
             case AddPayeNow: return RedirectToAction(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName);
             case AddPayeNowAorn: return RedirectToAction(ControllerConstants.SearchUsingAornActionName, ControllerConstants.SearchPensionRegulatorControllerName);
             default:
@@ -192,29 +193,6 @@ public class EmployerAccountController : BaseController
                     return View(model);
                 }
         }
-    }
-
-    [HttpGet]
-    [Route("skipRegistration")]
-    public async Task<IActionResult> SkipRegistration()
-    {
-        var request = new CreateUserAccountViewModel
-        {
-            UserId = GetUserId(),
-            OrganisationName = "MY ACCOUNT"
-        };
-
-        var response = await _employerAccountOrchestrator.CreateMinimalUserAccountForSkipJourney(request, HttpContext);
-        var returnUrlCookie = _returnUrlCookieStorageService.Get(ReturnUrlCookieName);
-
-        _returnUrlCookieStorageService.Delete(ReturnUrlCookieName);
-
-        if (returnUrlCookie != null && !string.IsNullOrWhiteSpace(returnUrlCookie.Value))
-        {
-            return Redirect(returnUrlCookie.Value);
-        }
-
-        return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId = response.Data.HashedId });
     }
 
     [HttpGet]

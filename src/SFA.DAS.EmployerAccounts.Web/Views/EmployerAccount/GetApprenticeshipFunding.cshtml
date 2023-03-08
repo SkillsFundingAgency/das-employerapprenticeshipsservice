@@ -9,6 +9,9 @@
     ViewBag.GaData.Vpv = "/service/getApprenticeshipFunding/get-government-funding";
     var hiddenClass = Model?.GetType().GetProperty("InError") != null ? "" : "das-hidden";
     var errorClass = Model?.GetType().GetProperty("InError") != null ? "govuk-form-group--error" : "";
+
+    string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]?.ToString();
+    var postEndpointName = string.IsNullOrEmpty(hashedAccountId) ? RouteNames.EmployerAccountPostApprenticeshipFunding : RouteNames.EmployerAccountPostApprenticeshipFundingInAccount;
 }
 
 <div class="govuk-grid-row">
@@ -51,8 +54,7 @@
         </details>
 
 
-        <form method="POST" action="@Url.Action(ControllerConstants.GetApprenticeshipFundingActionName)">
-            @Html.AntiForgeryToken()
+        <form method="POST" asp-route="@postEndpointName" asp-route-hashedAccountId="@hashedAccountId">
             <div class="govuk-form-group @errorClass" id="do-you-want-to-add-paye-scheme-form">
 
                 <fieldset class="govuk-fieldset" aria-describedby="have-not-got-everything">

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.EmployerAccounts.Web.RouteValues;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.GetApprenticeshipFunding;
 
@@ -55,9 +56,9 @@ class WhenISkipRegistration : ControllerTestBase
     public void ThenIShouldGoToSkipRegistration()
     {
         //Act
-        var result =  _employerAccountController.GetApprenticeshipFunding(1) as RedirectToActionResult;
+        var result = _employerAccountController.PostGetApprenticeshipFunding(1) as RedirectToRouteResult;
 
         //Assert
-        Assert.AreEqual(ControllerConstants.SkipRegistrationActionName, result.ActionName);
+        Assert.AreEqual(RouteNames.SkipRegistration, result.RouteName);
     }
 }

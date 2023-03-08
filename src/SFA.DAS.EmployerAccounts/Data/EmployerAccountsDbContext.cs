@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Services.AppAuthentication;
+﻿using System.Data;
+using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -16,6 +17,7 @@ public class EmployerAccountsDbContext : DbContext, IEmployerAccountsDbContext
     private readonly AzureServiceTokenProvider _azureServiceTokenProvider;
 
     private const string AzureResource = "https://database.windows.net/";
+    private readonly IDbConnection _connection;
 
     public virtual DbSet<AccountLegalEntity> AccountLegalEntities { get; set; }
     public virtual DbSet<Account> Accounts { get; set; }
@@ -35,10 +37,11 @@ public class EmployerAccountsDbContext : DbContext, IEmployerAccountsDbContext
 
     public EmployerAccountsDbContext(DbContextOptions options) : base(options) { }
 
-    public EmployerAccountsDbContext(IOptions<EmployerAccountsConfiguration> configuration, DbContextOptions options, AzureServiceTokenProvider azureServiceTokenProvider) : base(options)
+    public EmployerAccountsDbContext(IDbConnection connection, EmployerAccountsConfiguration configuration, DbContextOptions options, AzureServiceTokenProvider azureServiceTokenProvider) : base(options)
     {
-        _configuration = configuration.Value;
+        _configuration = configuration;
         _azureServiceTokenProvider = azureServiceTokenProvider;
+        _connection = connection;
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -49,13 +52,13 @@ public class EmployerAccountsDbContext : DbContext, IEmployerAccountsDbContext
             return;
         }
 
-        var connection = new SqlConnection
-        {
-            ConnectionString = _configuration.DatabaseConnectionString,
-            AccessToken = _azureServiceTokenProvider.GetAccessTokenAsync(AzureResource).Result,
-        };
+        //var connection = new SqlConnection
+        //{
+        //    ConnectionString = _configuration.DatabaseConnectionString,
+        //    AccessToken = _azureServiceTokenProvider.GetAccessTokenAsync(AzureResource).Result,
+        //};
 
-        optionsBuilder.UseSqlServer(connection, options =>
+        optionsBuilder.UseSqlServer(_connection as SqlConnection, options =>
             options.EnableRetryOnFailure(
                 5,
                 TimeSpan.FromSeconds(20),
