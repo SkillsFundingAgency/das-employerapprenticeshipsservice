@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,10 +11,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.Api.Common.Infrastructure;
-using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerAccounts.Api.Authentication;
 using SFA.DAS.EmployerAccounts.Api.Authorization;
 using SFA.DAS.EmployerAccounts.Api.ErrorHandler;
+using SFA.DAS.EmployerAccounts.Api.Extensions;
 using SFA.DAS.EmployerAccounts.Api.Filters;
 using SFA.DAS.EmployerAccounts.Api.ServiceRegistrations;
 using SFA.DAS.EmployerAccounts.Authorisation;
@@ -29,7 +27,6 @@ using SFA.DAS.UnitOfWork.EntityFrameworkCore.DependencyResolution.Microsoft;
 using SFA.DAS.UnitOfWork.Mvc.Extensions;
 using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.Microsoft;
 using SFA.DAS.Validation.Mvc.Extensions;
-using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace SFA.DAS.EmployerAccounts.Api;
 
@@ -41,34 +38,7 @@ public class Startup
     public Startup(IConfiguration configuration, IHostEnvironment environment)
     {
         _environment = environment;
-
-        var config = new ConfigurationBuilder()
-            .AddConfiguration(configuration)
-            .SetBasePath(Directory.GetCurrentDirectory());
-
-#if DEBUG
-        if (!configuration.IsDev())
-        {
-            config.AddJsonFile("appsettings.json", false)
-                .AddJsonFile("appsettings.Development.json", true);
-        }
-#endif
-
-        config.AddEnvironmentVariables();
-
-        if (!configuration.IsTest())
-        {
-            config.AddAzureTableStorage(options =>
-                {
-                    options.ConfigurationKeys = configuration["ConfigNames"].Split(",");
-                    options.StorageConnectionString = configuration["ConfigurationStorageConnectionString"];
-                    options.EnvironmentName = configuration["EnvironmentName"];
-                    options.PreFixConfigurationKeys = false;
-                    options.ConfigurationKeysRawJsonResult = new[] { "SFA.DAS.Encoding" };
-                }
-            );
-        }
-        _configuration = config.Build();
+        _configuration = configuration.BuildDasConfiguration();
     }
 
     public void ConfigureServices(IServiceCollection services)
