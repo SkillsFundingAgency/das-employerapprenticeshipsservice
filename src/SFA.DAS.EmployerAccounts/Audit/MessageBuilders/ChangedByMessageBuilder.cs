@@ -1,14 +1,12 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using SFA.DAS.EmployerAccounts.Audit.Types;
+using SFA.DAS.EmployerAccounts.Infrastructure;
 
 namespace SFA.DAS.EmployerAccounts.Audit.MessageBuilders;
 
 public class ChangedByMessageBuilder : IAuditMessageBuilder
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private const string _userIdClaim = ClaimTypes.NameIdentifier;
-    private const string _userEmailClaim = ClaimTypes.Email;
 
     public ChangedByMessageBuilder(IHttpContextAccessor httpContextAccessor)
     {
@@ -37,19 +35,21 @@ public class ChangedByMessageBuilder : IAuditMessageBuilder
             return;
         }
 
-        var userIdClaim = user.Claims.FirstOrDefault(c => c.Type.Equals(_userIdClaim, System.StringComparison.CurrentCultureIgnoreCase));
+        var userIdClaim = user.Claims.FirstOrDefault(c => c.Type.Equals(EmployerClaims.IdamsUserIdClaimTypeIdentifier, System.StringComparison.CurrentCultureIgnoreCase));
         if (userIdClaim == null)
         {
-            throw new InvalidContextException($"User does not have claim {_userIdClaim} to populate AuditMessage.ChangedBy.Id");
+            throw new InvalidContextException($"User does not have claim {EmployerClaims.IdamsUserIdClaimTypeIdentifier} to populate AuditMessage.ChangedBy.Id");
         }
+
         actor.Id = userIdClaim.Value;
 
 
-        var userEmailClaim = user.Claims.FirstOrDefault(c => c.Type.Equals(_userEmailClaim, System.StringComparison.CurrentCultureIgnoreCase));
+        var userEmailClaim = user.Claims.FirstOrDefault(c => c.Type.Equals(EmployerClaims.IdamsUserEmailClaimTypeIdentifier, System.StringComparison.CurrentCultureIgnoreCase));
         if (userEmailClaim == null)
         {
-            throw new InvalidContextException($"User does not have claim {_userEmailClaim} to populate AuditMessage.ChangedBy.EmailAddress");
+            throw new InvalidContextException($"User does not have claim {EmployerClaims.IdamsUserEmailClaimTypeIdentifier} to populate AuditMessage.ChangedBy.EmailAddress");
         }
+
         actor.EmailAddress = userEmailClaim.Value;
     }
 }

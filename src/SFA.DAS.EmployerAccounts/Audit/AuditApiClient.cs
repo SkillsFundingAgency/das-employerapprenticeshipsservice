@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Headers;
+using Newtonsoft.Json;
 using SFA.DAS.Api.Common.Interfaces;
 using SFA.DAS.EmployerAccounts.Audit.Types;
 
@@ -29,7 +30,8 @@ namespace SFA.DAS.EmployerAccounts.Audit
 
         public async Task Audit(AuditMessage request)
         {
-            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, "");
+            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, "api/audit");
+            httpRequestMessage.Content = new StringContent(JsonConvert.SerializeObject(request), System.Text.Encoding.UTF8, "application/json");
 
             await AddAuthenticationHeader(httpRequestMessage);
 
@@ -45,6 +47,9 @@ namespace SFA.DAS.EmployerAccounts.Audit
                 var accessToken = await _azureClientCredentialHelper.GetAccessTokenAsync(_configuration.IdentifierUri);
                 httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             }
+
+            httpRequestMessage.Headers.Add("api-version", "1");
+            httpRequestMessage.Headers.Add("accept", "application/json");
         }
     }
 }

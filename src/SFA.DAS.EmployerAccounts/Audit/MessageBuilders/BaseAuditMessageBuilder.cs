@@ -1,12 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
+using SFA.DAS.EmployerAccounts.Audit.Types;
 
 namespace SFA.DAS.EmployerAccounts.Audit.MessageBuilders
 {
-    internal class BaseAuditMessageBuilder
+    public class BaseAuditMessageBuilder : IAuditMessageBuilder
     {
+        public void Build(AuditMessage message)
+        {
+            var name = Assembly.GetExecutingAssembly();
+
+            message.Source = new Source
+            {
+                System = "EmployerAccounts",
+                Component = "EmployerAccounts-Web",
+                Version = name.GetName().Version.ToString()
+            };
+
+            message.ChangeAt = DateTime.UtcNow;
+        }
     }
 }

@@ -1,6 +1,4 @@
-﻿using Microsoft.Azure.Amqp.Framing;
-
-namespace SFA.DAS.EmployerAccounts.Audit.Types;
+﻿namespace SFA.DAS.EmployerAccounts.Audit.Types;
 
 public class AuditMessage
 {
