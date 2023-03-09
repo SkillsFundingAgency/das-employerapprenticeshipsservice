@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.EntityFrameworkCore.Storage;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
@@ -45,20 +45,6 @@ public class EmployerAccountRepository : IEmployerAccountRepository
             AccountsCount = countResult.First(),
             AccountList = result
         };
-    }
-
-    public async Task<Account> GetAccountByHashedId(string hashedAccountId)
-    {
-        var parameters = new DynamicParameters();
-
-        parameters.Add("@HashedAccountId", hashedAccountId, DbType.String);
-
-        var result = await _db.Value.Database.GetDbConnection().QueryAsync<Account>(
-            sql: "select a.* from [employer_account].[Account] a where a.HashedId = @HashedAccountId;",
-            param: parameters,
-            commandType: CommandType.Text);
-
-        return result.SingleOrDefault();
     }
 
     public async Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId)
@@ -135,6 +121,7 @@ public class EmployerAccountRepository : IEmployerAccountRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<AccountStats>(
             sql: "[employer_account].[GetAccountStats]",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
 
         return result.SingleOrDefault();
@@ -150,6 +137,7 @@ public class EmployerAccountRepository : IEmployerAccountRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[UpdateAccount_SetAccountName]",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
     }
 
@@ -163,6 +151,7 @@ public class EmployerAccountRepository : IEmployerAccountRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[UpdateAccount_SetAccountApprenticeshipEmployerType]",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
     }
 }

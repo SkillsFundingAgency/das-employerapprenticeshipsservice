@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.EmployerAccounts.Audit;
+using SFA.DAS.EmployerAccounts.Audit.MessageBuilders;
 using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
@@ -10,8 +11,11 @@ public static class AuditServiceRegistrations
     {
         services.AddSingleton<IAuditApiClientConfiguration>(auditApiClientConfiguration);
 
+        services.AddTransient<IAuditMessageBuilder, BaseAuditMessageBuilder>();
+        services.AddTransient<IAuditMessageBuilder, ChangedByMessageBuilder>();
+
         services.AddHttpClient<IAuditApiClient, AuditApiClient>();
-        services.AddScoped<IAuditService, AuditService>();
+        services.AddTransient<IAuditService, AuditService>();
 
         return services;
     }

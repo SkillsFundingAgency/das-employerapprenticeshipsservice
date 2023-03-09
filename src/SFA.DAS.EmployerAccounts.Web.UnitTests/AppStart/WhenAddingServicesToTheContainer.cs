@@ -243,7 +243,9 @@ public class WhenAddingServicesToTheContainer
                     new("TasksApi:ApiBaseUrl", "https://test.test"),
                     new("TasksApi:IdentifierUrl", "https://test.test"),
                     new("ResourceEnvironmentName", "TEST"),
-                    new("Identity:ClientId", "clientId")
+                    new("Identity:ClientId", "clientId"),
+                    new("EventsApi:BaseUrl", "https://test.test"),
+                    new("EventsApi:ClientToken", "CLIENT_TOKEN")
                 }
         };
 

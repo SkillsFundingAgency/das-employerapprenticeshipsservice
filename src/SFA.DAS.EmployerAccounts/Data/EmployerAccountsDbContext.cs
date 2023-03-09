@@ -58,12 +58,8 @@ public class EmployerAccountsDbContext : DbContext, IEmployerAccountsDbContext
         //    AccessToken = _azureServiceTokenProvider.GetAccessTokenAsync(AzureResource).Result,
         //};
 
-        optionsBuilder.UseSqlServer(_connection as SqlConnection, options =>
-            options.EnableRetryOnFailure(
-                5,
-                TimeSpan.FromSeconds(20),
-                null
-            )).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+        optionsBuilder.UseSqlServer(_connection as SqlConnection)
+            .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 
     }
 

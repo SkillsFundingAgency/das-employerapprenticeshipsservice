@@ -100,7 +100,7 @@ public class Startup
 
         services.AddDatabaseRegistration(employerAccountsConfiguration.DatabaseConnectionString);
         services.AddDataRepositories();
-        services.AddEventsApi();
+        //services.AddEventsApi(employerAccountsConfiguration);
         services.AddExecutionPolicies();
 
         services.AddAutoMapper(typeof(AccountMappings), typeof(Startup));

@@ -61,7 +61,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 return Redirect(returnUrlCookie.Value);
             }
 
-            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId = response.Data.HashedId });
+            return RedirectToRoute(RouteNames.EmployerTeamIndex, new { hashedAccountId = response.Data.HashedId });
         }
 
         private string GetUserId()

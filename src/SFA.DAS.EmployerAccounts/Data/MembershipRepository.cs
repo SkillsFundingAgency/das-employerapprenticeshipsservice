@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
@@ -28,6 +29,7 @@ public class MembershipRepository : BaseRepository, IMembershipRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<TeamMember>(
             sql: "SELECT * FROM [employer_account].[GetTeamMembers] WHERE AccountId = @accountId AND Email = @email;",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.Text);
 
         return result.SingleOrDefault();
@@ -43,6 +45,7 @@ public class MembershipRepository : BaseRepository, IMembershipRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<TeamMember>(
             sql: "SELECT * FROM [employer_account].[GetTeamMembers] WHERE AccountId = @accountId AND Id = @userId",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.Text);
 
         return result.SingleOrDefault();
@@ -58,6 +61,7 @@ public class MembershipRepository : BaseRepository, IMembershipRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[RemoveMembership]",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
     }
 
@@ -72,6 +76,7 @@ public class MembershipRepository : BaseRepository, IMembershipRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "UPDATE [employer_account].[Membership] SET Role = @role WHERE AccountId = @accountId AND UserId = @userId;",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.Text);
     }
 
@@ -85,6 +90,7 @@ public class MembershipRepository : BaseRepository, IMembershipRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<MembershipView>(
             sql: "SELECT * FROM [employer_account].[MembershipView] m WHERE m.AccountId = @AccountId AND UserRef = @externalUserId;",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.Text);
 
         return result.SingleOrDefault();
@@ -100,24 +106,10 @@ public class MembershipRepository : BaseRepository, IMembershipRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<MembershipView>(
             sql: "[employer_account].[GetTeamMember]",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
 
         return result.SingleOrDefault();
-    }
-
-    public Task Create(long userId, long accountId, Role role)
-    {
-        var parameters = new DynamicParameters();
-
-        parameters.Add("@userId", userId, DbType.Int64);
-        parameters.Add("@accountId", accountId, DbType.Int64);
-        parameters.Add("@role", role, DbType.Int16);
-        parameters.Add("@createdDate", DateTime.UtcNow, DbType.DateTime);
-
-        return _db.Value.Database.GetDbConnection().ExecuteAsync(
-            sql: "INSERT INTO [employer_account].[Membership] ([AccountId], [UserId], [Role], [CreatedDate]) VALUES(@accountId, @userId, @role, @createdDate); ",
-            param: parameters,
-            commandType: CommandType.Text);
     }
 
     public Task SetShowAccountWizard(string hashedAccountId, string externalUserId, bool showWizard)
@@ -131,6 +123,7 @@ public class MembershipRepository : BaseRepository, IMembershipRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[UpdateShowWizard]",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
     }
 }

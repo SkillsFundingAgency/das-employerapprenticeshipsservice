@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
@@ -27,11 +28,12 @@ public class UserAccountRepository : BaseRepository, IUserAccountRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<Account>(
             sql: @"[employer_account].[GetAccounts_ByUserRef]",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
 
         return new Accounts<Account>
         {
-            AccountList = (List<Account>) result
+            AccountList = (List<Account>)result
         };
     }
 
@@ -72,10 +74,10 @@ public class UserAccountRepository : BaseRepository, IUserAccountRepository
     public async Task<Accounts<Account>> GetAccounts()
     {
         var accountList = await _db.Value.Accounts.ToListAsync();
-            
+
         return new Accounts<Account>
         {
-            AccountList = accountList,                
+            AccountList = accountList,
             AccountsCount = accountList.Count()
         };
     }
@@ -108,6 +110,7 @@ public class UserAccountRepository : BaseRepository, IUserAccountRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[UpsertUser] @userRef, @email, @firstName, @lastName, @correlationId",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.Text);
     }
 }

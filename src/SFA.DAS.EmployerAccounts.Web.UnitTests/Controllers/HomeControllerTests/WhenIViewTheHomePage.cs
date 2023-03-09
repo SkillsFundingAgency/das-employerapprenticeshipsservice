@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.Authentication;
+using SFA.DAS.EmployerAccounts.Web.RouteValues;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests;
 
@@ -161,10 +162,9 @@ public class WhenIViewTheHomePage : ControllerTestBase
 
         //Assert
         Assert.IsNotNull(actual);
-        var actualViewResult = actual as RedirectToActionResult;
+        var actualViewResult = actual as RedirectToRouteResult;
         Assert.IsNotNull(actualViewResult);
-        Assert.AreEqual("Index", actualViewResult.ActionName);
-        Assert.AreEqual("EmployerTeam", actualViewResult.ControllerName);
+        Assert.AreEqual(RouteNames.EmployerTeamIndex, actualViewResult.RouteName);
     }
 
 

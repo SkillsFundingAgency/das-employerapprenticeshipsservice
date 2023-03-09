@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Identity.Client;
 using SFA.DAS.EmployerAccounts.Infrastructure;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerAccounts.Web.RouteValues;
@@ -38,6 +39,7 @@ public class HomeController : BaseController
     [Route("Index")]
     public async Task<IActionResult> Index()
     {
+        
         var userIdClaim = HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals(ControllerConstants.UserRefClaimKeyName));
 
         OrchestratorResponse<UserAccountsViewModel> accounts;
@@ -81,7 +83,8 @@ public class HomeController : BaseController
 
             if (account != null)
             {
-                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { HashedAccountId = account.HashedId });
+                return RedirectToRoute(RouteNames.EmployerTeamIndex, new { HashedAccountId = account.HashedId });
+                //return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { HashedAccountId = account.HashedId });
             }
         }
 

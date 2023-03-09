@@ -11,7 +11,6 @@ using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.Encoding;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Data;
 
@@ -30,24 +29,6 @@ public class AccountRepository : BaseRepository, IAccountRepository
         _encodingService = encodingService;
     }
 
-    public Task AddPayeToAccount(Paye payeScheme)
-    {
-        var parameters = new DynamicParameters();
-
-        parameters.Add("@accountId", payeScheme.AccountId, DbType.Int64);
-        parameters.Add("@employerRef", payeScheme.EmpRef, DbType.String);
-        parameters.Add("@accessToken", payeScheme.AccessToken, DbType.String);
-        parameters.Add("@refreshToken", payeScheme.RefreshToken, DbType.String);
-        parameters.Add("@addedDate", DateTime.UtcNow, DbType.DateTime);
-        parameters.Add("@employerRefName", payeScheme.RefName, DbType.String);
-        parameters.Add("@aorn", payeScheme.Aorn, DbType.String);
-
-        return _db.Value.Database.GetDbConnection().ExecuteAsync(
-            sql: "[employer_account].[AddPayeToAccount]",
-            param: parameters,
-            commandType: CommandType.StoredProcedure);
-    }
-
     public async Task<CreateUserAccountResult> CreateUserAccount(long userId, string employerName)
     {
         var parameters = new DynamicParameters();
@@ -61,7 +42,7 @@ public class AccountRepository : BaseRepository, IAccountRepository
         await _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[CreateUserAccount]",
             param: parameters,
-
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
 
         return new CreateUserAccountResult
@@ -170,20 +151,6 @@ public class AccountRepository : BaseRepository, IAccountRepository
         };
     }
 
-    public async Task<AccountStats> GetAccountStats(long accountId)
-    {
-        var parameters = new DynamicParameters();
-
-        parameters.Add("@accountId", accountId, DbType.Int64);
-
-        var result = await _db.Value.Database.GetDbConnection().QueryAsync<AccountStats>(
-            sql: "[employer_account].[GetAccountStats]",
-            param: parameters,
-            commandType: CommandType.StoredProcedure);
-
-        return result.SingleOrDefault();
-    }
-
     public async Task<List<PayeView>> GetPayeSchemesByAccountId(long accountId)
     {
         var parameters = new DynamicParameters();
@@ -193,6 +160,7 @@ public class AccountRepository : BaseRepository, IAccountRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<PayeView>(
             sql: "[employer_account].[GetPayeSchemes_ByAccountId]",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
 
         return result.ToList();
@@ -207,23 +175,10 @@ public class AccountRepository : BaseRepository, IAccountRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<UserNotificationSetting>(
             sql: "[employer_account].[GetUserAccountSettings]",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
 
         return result.ToList();
-    }
-
-    public Task RemovePayeFromAccount(long accountId, string payeRef)
-    {
-        var parameters = new DynamicParameters();
-
-        parameters.Add("@AccountId", accountId, DbType.Int64);
-        parameters.Add("@PayeRef", payeRef, DbType.String);
-        parameters.Add("@RemovedDate", DateTime.UtcNow, DbType.DateTime);
-
-        return _db.Value.Database.GetDbConnection().ExecuteAsync(
-            sql: "[employer_account].[UpdateAccountHistory]",
-            param: parameters,
-            commandType: CommandType.StoredProcedure);
     }
 
     public Task UpdateAccountHashedIds(long accountId, string hashedId, string publicHashedId)
@@ -261,31 +216,8 @@ public class AccountRepository : BaseRepository, IAccountRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[UpdateUserAccountSettings]",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
-    }
-
-    public async Task<string> GetAccountName(long accountId)
-    {
-        var parameters = new DynamicParameters();
-
-        parameters.Add("@accountId", accountId, DbType.Int64);
-
-        var result = await _db.Value.Database.GetDbConnection().QueryAsync<string>(
-            sql: "SELECT Name FROM [employer_account].[Account] WHERE Id = @accountId",
-            param: parameters,
-            commandType: CommandType.Text);
-
-        return result.SingleOrDefault();
-    }
-
-    public async Task<Dictionary<long, string>> GetAccountNames(IEnumerable<long> accountIds)
-    {
-        var result = await _db.Value.Database.GetDbConnection().QueryAsync<AccountNameItem>(
-            sql: "SELECT Id, Name FROM [employer_account].[Account] WHERE Id IN @accountIds",
-            param: new { accountIds = accountIds },
-            commandType: CommandType.Text);
-
-        return result.ToDictionary(d => d.Id, d => d.Name);
     }
 
     public Task UpdateLegalEntityDetailsForAccount(long accountLegalEntityId, string name, string address)
@@ -299,28 +231,8 @@ public class AccountRepository : BaseRepository, IAccountRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[UpdateAccountLegalEntity_SetNameAndAddress]",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
-    }
-
-    public Task UpdateAccountLegalEntityPublicHashedId(long accountLegalEntityId)
-    {
-        return UpdateAccountLegalEntityPublicHashedIdInternal(_db.Value.Database.GetDbConnection(), accountLegalEntityId);
-    }
-
-    public async Task<long[]> GetAccountLegalEntitiesWithoutPublicHashId(long firstId, int count)
-    {
-        var query = await _db.Value.Database.GetDbConnection().QueryAsync<long>(
-            sql: @"
-                    SELECT  TOP (@count) Id 
-                    FROM    [employer_account].[AccountLegalEntity] 
-                    WHERE   PublicHashedId IS NULL 
-                            AND Id >= @firstId 
-                    ORDER BY Id ASC",
-            param: new { @count, @firstId },
-
-            commandType: CommandType.Text);
-
-        return query.ToArray();
     }
 
     private Task UpdateAccountLegalEntityPublicHashedIdInternal(IDbConnection connection, long accountLegalEntityId)
@@ -337,27 +249,5 @@ public class AccountRepository : BaseRepository, IAccountRepository
             param: parameters,
             commandType: CommandType.StoredProcedure,
             transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction());
-    }
-
-    public Task UpdateLegalEntityDetailsForAccount(long accountId, long legalEntityId, string address, string name)
-    {
-        var parameters = new DynamicParameters();
-
-        parameters.Add("@AccountId", accountId, DbType.Int64);
-        parameters.Add("@LegalEntityId", legalEntityId, DbType.Int64);
-        parameters.Add("@Name", name, DbType.String);
-        parameters.Add("@Address", address, DbType.String);
-
-        return _db.Value.Database.GetDbConnection().ExecuteAsync(
-            sql: "[employer_account].[UpdateAccountLegalEntity_SetNameAndAddress]",
-            param: parameters,
-            commandType: CommandType.StoredProcedure,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction());
-    }
-
-    private class AccountNameItem
-    {
-        public long Id { get; set; }
-        public string Name { get; set; }
     }
 }

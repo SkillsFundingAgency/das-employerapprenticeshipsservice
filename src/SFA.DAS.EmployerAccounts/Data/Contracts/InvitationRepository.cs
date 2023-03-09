@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Models;
@@ -147,6 +148,7 @@ public class InvitationRepository : BaseRepository, IInvitationRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<int>(
             sql: "[employer_account].[GetNumberOfInvitations_ByUserRef]",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
 
         return result.SingleOrDefault();

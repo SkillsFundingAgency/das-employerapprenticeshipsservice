@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.EmployerAccounts.Web.RouteValues;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.SkipRegistration;
 
@@ -59,7 +60,7 @@ class WhenISkipRegistration : ControllerTestBase
     public async Task ThenTheAccountIsCreated()
     {
         //Act
-        var result = await _employerAccountController.SkipRegistration() as RedirectToActionResult;
+        var result = await _employerAccountController.SkipRegistration() as RedirectToRouteResult;
 
         //Assert
         _orchestrator.Verify(x => x.CreateMinimalUserAccountForSkipJourney(It.Is<CreateUserAccountViewModel>(vm => vm.UserId == ExpectedUserId && vm.OrganisationName == "MY ACCOUNT"), It.IsAny<HttpContext>()), Times.Once);
@@ -69,18 +70,17 @@ class WhenISkipRegistration : ControllerTestBase
     public async Task ThenIShouldGoToTheHomePage()
     {
         //Act
-        var result = await _employerAccountController.SkipRegistration() as RedirectToActionResult;
+        var result = await _employerAccountController.SkipRegistration() as RedirectToRouteResult;
 
         //Assert
-        Assert.AreEqual(ControllerConstants.IndexActionName, result.ActionName);
-        Assert.AreEqual(ControllerConstants.EmployerTeamControllerName, result.ControllerName);
+        Assert.AreEqual(RouteNames.EmployerTeamIndex, result.RouteName);
     }
 
     [Test]
     public async Task ThenIShouldGetBackTheAccountId()
     {
         //Act
-        var result = await _employerAccountController.SkipRegistration() as RedirectToActionResult;
+        var result = await _employerAccountController.SkipRegistration() as RedirectToRouteResult;
 
         //Assert
         Assert.IsNotNull(result);

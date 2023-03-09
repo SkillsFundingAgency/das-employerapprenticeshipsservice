@@ -66,7 +66,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddAuditServices(_employerAccountsConfiguration.AuditApi);
             services.AddCachesRegistrations();
             services.AddDateTimeServices(_configuration);
-            services.AddEventsApi();
+            services.AddEventsApi(_employerAccountsConfiguration);
             services.AddNotifications(_configuration);
 
             services
