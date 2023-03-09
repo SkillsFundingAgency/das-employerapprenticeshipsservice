@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Account.Api.Types;
 
 namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
 {
+    [TestFixture]
     public class WhenGettingAccountDetails : ApiClientTestBase
     {
         private AccountDetailViewModel _expectedAccount;

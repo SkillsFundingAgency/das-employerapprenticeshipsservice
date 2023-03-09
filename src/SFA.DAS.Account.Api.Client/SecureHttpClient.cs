@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Account.Api.Client
 {
-    internal class SecureHttpClient
+    public class SecureHttpClient
     {
         private readonly IAccountApiConfiguration _configuration;
 

@@ -58,13 +58,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Certificates", "Certificate
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EAS.TestCommon2", "SFA.DAS.EAS.TestCommon2\SFA.DAS.EAS.TestCommon2.csproj", "{1750C6D7-89DF-4CDD-BCAF-7725115DA907}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Account.Api.UnitTests2", "SFA.DAS.EAS.Account.Api.UnitTests2\SFA.DAS.EAS.Account.Api.UnitTests2.csproj", "{A1AD0BBB-4AB5-407E-9393-B4245790EF14}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EAS.Account.Api.UnitTests2", "SFA.DAS.EAS.Account.Api.UnitTests2\SFA.DAS.EAS.Account.Api.UnitTests2.csproj", "{A1AD0BBB-4AB5-407E-9393-B4245790EF14}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Application.UnitTests2", "SFA.DAS.EAS.Application.UnitTests2\SFA.DAS.EAS.Application.UnitTests2.csproj", "{E7A16DDA-A725-4317-9046-23A46CD5D8F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EAS.Application.UnitTests2", "SFA.DAS.EAS.Application.UnitTests2\SFA.DAS.EAS.Application.UnitTests2.csproj", "{E7A16DDA-A725-4317-9046-23A46CD5D8F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Support.Web.Tests2", "SFA.DAS.EAS.Support.Web.Tests2\SFA.DAS.EAS.Support.Web.Tests2.csproj", "{A8EFA51B-5E6A-4D88-9CE0-857DBEC867FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EAS.Support.Web.Tests2", "SFA.DAS.EAS.Support.Web.Tests2\SFA.DAS.EAS.Support.Web.Tests2.csproj", "{A8EFA51B-5E6A-4D88-9CE0-857DBEC867FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Web.UnitTests2", "SFA.DAS.EAS.Web.UnitTests2\SFA.DAS.EAS.Web.UnitTests2.csproj", "{124B38B6-98ED-4DFA-A42B-BB76C4D9B81B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EAS.Web.UnitTests2", "SFA.DAS.EAS.Web.UnitTests2\SFA.DAS.EAS.Web.UnitTests2.csproj", "{124B38B6-98ED-4DFA-A42B-BB76C4D9B81B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
