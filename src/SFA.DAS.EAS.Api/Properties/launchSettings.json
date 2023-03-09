@@ -3,10 +3,10 @@
     "SFA.DAS.EAS.Account.Api": {
       "commandName": "Project",
       "launchBrowser": true,
+      "applicationUrl": "https://localhost:64172;http://localhost:64173",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "https://localhost:64172;http://localhost:64173"
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <OutputPath>bin\</OutputPath>
@@ -11,48 +11,34 @@
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.ApplicationInsights.Web">
-      <Version>2.11.2</Version>
+    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.11.2">
     </PackageReference>
-    <PackageReference Include="Microsoft.AspNet.WebApi.Client">
-      <Version>5.2.9</Version>
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.9">
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory">
-      <Version>5.0.0</Version>
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="5.0.0">
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Logging">
-      <Version>5.0.0</Version>
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0">
     </PackageReference>
     <PackageReference Include="Microsoft.Identity.Web" Version="1.25.10" />
-    <PackageReference Include="Microsoft.Owin.Security.ActiveDirectory">
-      <Version>3.0.1</Version>
+    <PackageReference Include="Microsoft.Owin.Security.ActiveDirectory" Version="3.0.1">
     </PackageReference>
-    <PackageReference Include="NLog.Schema">
-      <Version>4.5.3</Version>
+    <PackageReference Include="NLog.Schema" Version="4.5.3">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Authorization.WebApi">
-      <Version>6.0.52</Version>
+    <PackageReference Include="SFA.DAS.Authorization.WebApi" Version="6.0.52">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.EmployerAccounts.Api.Types">
-      <Version>1.6.3195</Version>
+    <PackageReference Include="SFA.DAS.EmployerAccounts.Api.Types" Version="1.6.3195">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Logging">
-      <Version>1.0.5</Version>
+    <PackageReference Include="SFA.DAS.Logging" Version="1.0.5">
     </PackageReference>
-    <PackageReference Include="Swagger-Net">
-      <Version>8.3.10.4</Version>
+    <PackageReference Include="Swagger-Net" Version="8.3.10.4">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.NLog.Logger">
-      <Version>1.2.1</Version>
+    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.NLog.Targets.Redis">
-      <Version>1.2.1</Version>
+    <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1">
     </PackageReference>
-    <PackageReference Include="System.Memory">
-      <Version>4.5.4</Version>
+    <PackageReference Include="System.Memory" Version="4.5.4">
     </PackageReference>
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe">
-      <Version>6.0.0</Version>
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0">
     </PackageReference>
 	<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.21" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <OutputPath>bin\</OutputPath>
   </PropertyGroup>
@@ -32,29 +32,21 @@
     <ProjectReference Include="..\SFA.DAS.EAS.Support.Infrastructure\SFA.DAS.EAS.Support.Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.ApplicationInsights.Web">
-      <Version>2.11.2</Version>
+    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.11.2">
     </PackageReference>
-    <PackageReference Include="Microsoft.Azure.KeyVault.Core">
-      <Version>2.0.4</Version>
+    <PackageReference Include="Microsoft.Azure.KeyVault.Core" Version="2.0.4">
     </PackageReference>
-    <PackageReference Include="Microsoft.Owin.Security.ActiveDirectory">
-      <Version>3.0.1</Version>
+    <PackageReference Include="Microsoft.Owin.Security.ActiveDirectory" Version="3.0.1">
     </PackageReference>
-    <PackageReference Include="Microsoft.WindowsAzure.SDK">
-      <Version>2.9.0</Version>
+    <PackageReference Include="Microsoft.WindowsAzure.SDK" Version="2.9.0">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.NLog.Targets.Redis">
-      <Version>1.2.1</Version>
+    <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1">
     </PackageReference>
-    <PackageReference Include="structuremap">
-      <Version>4.7.1</Version>
+    <PackageReference Include="structuremap" Version="4.7.1">
     </PackageReference>
-    <PackageReference Include="StructureMap.MVC5">
-      <Version>3.1.1.134</Version>
+    <PackageReference Include="StructureMap.MVC5" Version="3.1.1.134">
     </PackageReference>
-    <PackageReference Include="StructureMap.WebApi2">
-      <Version>3.0.4.125</Version>
+    <PackageReference Include="StructureMap.WebApi2" Version="3.0.4.125">
     </PackageReference>
     <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.355802">
       <PrivateAssets>all</PrivateAssets>
