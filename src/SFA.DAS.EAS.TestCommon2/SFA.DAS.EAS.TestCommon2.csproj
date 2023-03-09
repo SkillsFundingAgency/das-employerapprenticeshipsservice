@@ -5,85 +5,59 @@
     <OutputType>Library</OutputType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AutoMapper">
-      <Version>5.1.1</Version>
+    <PackageReference Include="AutoMapper" Version="5.1.1">
     </PackageReference>
-    <PackageReference Include="Dapper">
-      <Version>2.0.123</Version>
+    <PackageReference Include="Dapper" Version="2.0.123">
     </PackageReference>
-    <PackageReference Include="FluentAssertions">
-      <Version>4.17.0</Version>
+    <PackageReference Include="FluentAssertions" Version="4.17.0">
     </PackageReference>
-    <PackageReference Include="MediatR">
-      <Version>2.1.0</Version>
+    <PackageReference Include="MediatR" Version="2.1.0">
     </PackageReference>
-    <PackageReference Include="Microsoft.Azure.KeyVault.Core">
-      <Version>2.0.4</Version>
+    <PackageReference Include="Microsoft.Azure.KeyVault.Core" Version="2.0.4">
     </PackageReference>
-    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">
-      <Version>5.2.6</Version>
+    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.6">
     </PackageReference>
-    <PackageReference Include="Moq">
-      <Version>4.18.4</Version>
+    <PackageReference Include="Moq" Version="4.18.4">
     </PackageReference>
-    <PackageReference Include="NLog">
-      <Version>4.6.8</Version>
+    <PackageReference Include="NLog" Version="4.6.8">
     </PackageReference>
-    <PackageReference Include="NUnit">
-      <Version>3.13.2</Version>
+    <PackageReference Include="NUnit" Version="3.13.2">
     </PackageReference>
-    <PackageReference Include="NUnit3TestAdapter">
-      <Version>4.2.1</Version>
+    <PackageReference Include="NUnit3TestAdapter" Version="4.2.1">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Audit.Client">
-      <Version>1.0.0.20553</Version>
+    <PackageReference Include="SFA.DAS.Audit.Client" Version="1.0.0.20553">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Authentication">
-      <Version>1.1.2</Version>
+    <PackageReference Include="SFA.DAS.Authentication" Version="1.1.2">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Commitments.Api.Client">
-      <Version>4.1.355</Version>
+    <PackageReference Include="SFA.DAS.Commitments.Api.Client" Version="4.1.355">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.CommitmentsV2.Api.Types">
-      <Version>8.2.0</Version>
+    <PackageReference Include="SFA.DAS.CommitmentsV2.Api.Types" Version="8.2.0">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Common.Domain">
-      <Version>1.4.283</Version>
+    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.283">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Configuration.FileStorage">
-      <Version>1.0.0.49931</Version>
+    <PackageReference Include="SFA.DAS.Configuration.FileStorage" Version="1.0.0.49931">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Events.Api.Client">
-      <Version>1.20.0.26497</Version>
+    <PackageReference Include="SFA.DAS.Events.Api.Client" Version="1.20.0.26497">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.HashingService">
-      <Version>1.0.183</Version>
+    <PackageReference Include="SFA.DAS.HashingService" Version="1.0.183">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Messaging">
-      <Version>3.0.0.63765</Version>
+    <PackageReference Include="SFA.DAS.Messaging" Version="3.0.0.63765">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus">
-      <Version>3.0.0.53181</Version>
+    <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus" Version="3.0.0.53181">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus.StructureMap">
-      <Version>3.0.0.63765</Version>
+    <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus.StructureMap" Version="3.0.0.63765">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.NLog.Logger">
-      <Version>1.2.1</Version>
+    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Notifications.Api.Client">
-      <Version>2.2.37</Version>
+    <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.2.37">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Sql.Client">
-      <Version>1.0.0.32930</Version>
+    <PackageReference Include="SFA.DAS.Sql.Client" Version="1.0.0.32930">
     </PackageReference>
-    <PackageReference Include="StructureMap">
-      <Version>4.7.1</Version>
+    <PackageReference Include="StructureMap" Version="4.7.1">
     </PackageReference>
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <PackageReference Include="System.ValueTuple">
-      <Version>4.4.0</Version>
+    <PackageReference Include="System.ValueTuple" Version="4.4.0">
     </PackageReference>
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
     <PackageReference Include="System.ServiceModel.Duplex" Version="4.9.0" />

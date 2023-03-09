@@ -17,29 +17,21 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">
-      <Version>5.2.6</Version>
+    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.6">
     </PackageReference>
-    <PackageReference Include="NLog">
-      <Version>4.6.8</Version>
+    <PackageReference Include="NLog" Version="4.6.8">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.AutoConfiguration">
-      <Version>2.0.1</Version>
+    <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.EmployerAccounts.Api.Types">
-      <Version>1.6.1254</Version>
+    <PackageReference Include="SFA.DAS.EmployerAccounts.Api.Types" Version="1.6.1254">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.HashingService">
-      <Version>1.0.183</Version>
+    <PackageReference Include="SFA.DAS.HashingService" Version="1.0.183">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.NLog.Logger">
-      <Version>1.2.1</Version>
+    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.TokenService.Api.Client">
-      <Version>2.3.0</Version>
+    <PackageReference Include="SFA.DAS.TokenService.Api.Client" Version="2.3.0">
     </PackageReference>
-    <PackageReference Include="StructureMap">
-      <Version>4.7.1</Version>
+    <PackageReference Include="StructureMap" Version="4.7.1">
     </PackageReference>
     <PackageReference Include="System.ServiceModel.Federation" Version="4.8.1" />
     <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.355802">
