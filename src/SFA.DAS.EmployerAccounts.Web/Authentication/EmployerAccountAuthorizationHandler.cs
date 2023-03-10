@@ -14,6 +14,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Authentication;
 public interface IEmployerAccountAuthorisationHandler
 {
     Task<bool> IsEmployerAuthorised(AuthorizationHandlerContext context, bool allowAllUserRoles);
+    Task<bool> IsUserCreatingAccount(AuthorizationHandlerContext context);
 }
 
 public class EmployerAccountAuthorisationHandler : IEmployerAccountAuthorisationHandler
@@ -106,6 +107,30 @@ public class EmployerAccountAuthorisationHandler : IEmployerAccountAuthorisation
 
         return true;
     }
+
+    public async Task<bool> IsUserCreatingAccount(AuthorizationHandlerContext context)
+    {
+        if (_httpContextAccessor.HttpContext.Request.RouteValues.ContainsKey(RouteValueKeys.HashedAccountId))
+        {
+            return false;
+        }
+
+        var requiredIdClaim = _configuration.UseGovSignIn ? ClaimTypes.NameIdentifier : EmployerClaims.IdamsUserIdClaimTypeIdentifier;
+
+        if (!context.User.HasClaim(c => c.Type.Equals(requiredIdClaim)))
+            return false;
+
+        var email = context.User.Claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.Email))?.Value;
+
+        var userClaim = context.User.Claims.First(c => c.Type.Equals(requiredIdClaim));
+
+        var userId = userClaim.Value;
+
+        var result = await _accountsService.GetUserAccounts(userId, email);
+
+        return result.EmployerAccounts.Count() == 0;
+    }
+
     private static bool CheckUserRoleForAccess(EmployerUserAccountItem employerIdentifier, bool allowAllUserRoles)
     {
         if (!Enum.TryParse<EmployerUserRole>(employerIdentifier.Role, true, out var userRole))

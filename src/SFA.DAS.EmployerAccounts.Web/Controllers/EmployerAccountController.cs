@@ -11,6 +11,7 @@ using SFA.DAS.EmployerAccounts.Web.RouteValues;
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
 [Route("accounts")]
+[Authorize(Policy = nameof(PolicyNames.HasUserAccount))]
 public class EmployerAccountController : BaseController
 {
     private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
@@ -158,8 +159,9 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpGet]
-    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerOwnerAccount))]
     [Route("{HashedAccountId}/getApprenticeshipFunding", Order = 0, Name = RouteNames.EmployerAccountGetApprenticeshipFundingInAccount)]
+    [Route("getApprenticeshipFunding", Order = 1, Name = RouteNames.EmployerAccountGetApprenticeshipFunding)]
     public IActionResult GetApprenticeshipFunding()
     {
         PopulateViewBagWithExternalUserId();
@@ -173,9 +175,10 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpPost]
-    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerOwnerAccount))]
     [Route("{HashedAccountId}/getApprenticeshipFunding", Order = 0, Name = RouteNames.EmployerAccountPostApprenticeshipFundingInAccount)]
-    public IActionResult PostGetApprenticeshipFunding(int? choice)
+    [Route("getApprenticeshipFunding", Order = 1, Name = RouteNames.EmployerAccountPostApprenticeshipFunding)]
+    public IActionResult PostGetApprenticeshipFunding(string hashedAccountId, int? choice)
     {
         switch (choice ?? 0)
         {
@@ -193,6 +196,29 @@ public class EmployerAccountController : BaseController
                     return View(model);
                 }
         }
+    }
+
+    [HttpGet]
+    [Route("skipRegistration", Name = RouteNames.SkipRegistration)]
+    public async Task<IActionResult> SkipRegistration()
+    {
+        var request = new CreateUserAccountViewModel
+        {
+            UserId = GetUserId(),
+            OrganisationName = "MY ACCOUNT"
+        };
+
+        var response = await _employerAccountOrchestrator.CreateMinimalUserAccountForSkipJourney(request, HttpContext);
+        var returnUrlCookie = _returnUrlCookieStorageService.Get(ReturnUrlCookieName);
+
+        _returnUrlCookieStorageService.Delete(ReturnUrlCookieName);
+
+        if (returnUrlCookie != null && !string.IsNullOrWhiteSpace(returnUrlCookie.Value))
+        {
+            return Redirect(returnUrlCookie.Value);
+        }
+
+        return RedirectToRoute(RouteNames.EmployerTeamIndex, new { hashedAccountId = response.Data.HashedId });
     }
 
     [HttpGet]

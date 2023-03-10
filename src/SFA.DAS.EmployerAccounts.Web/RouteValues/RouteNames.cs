@@ -8,5 +8,7 @@
         public const string EmployerAccountGetApprenticeshipFunding = "employer-account-get-apprentice-funding";
         public const string EmployerAccountPostApprenticeshipFunding = "post-employer-account-get-apprentice-funding";
         public const string SkipRegistration = "skip-registration";
+        public const string SearchPensionRegulatorAddOrganisation = "search-pension-regulator-add-org";
+        public const string SearchPensionRegulatorCreateAccount = "search-pension-regulator-create-account";
     }
 }

@@ -10,7 +10,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
 class WhenISkipRegistration : ControllerTestBase
 {
-    private CreateEmployerAccountController _employerAccountController;
+    private EmployerAccountController _employerAccountController;
     private Mock<EmployerAccountOrchestrator> _orchestrator;
     private const string ExpectedRedirectUrl = "http://redirect.local.test";
     private OrchestratorResponse<EmployerAccountViewModel> _response;
@@ -42,7 +42,7 @@ class WhenISkipRegistration : ControllerTestBase
             .Setup(x => x.CreateMinimalUserAccountForSkipJourney(It.Is<CreateUserAccountViewModel>(vm => vm.UserId == ExpectedUserId && vm.OrganisationName == "MY ACCOUNT"), It.IsAny<HttpContext>()))
             .ReturnsAsync(_response);
 
-        _employerAccountController = new CreateEmployerAccountController(
+        _employerAccountController = new EmployerAccountController(
             _orchestrator.Object,
             Mock.Of<ILogger<EmployerAccountController>>(),
             _flashMessage.Object,

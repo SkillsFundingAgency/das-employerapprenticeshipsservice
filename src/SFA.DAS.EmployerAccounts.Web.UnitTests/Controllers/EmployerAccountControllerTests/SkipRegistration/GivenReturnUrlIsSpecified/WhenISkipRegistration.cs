@@ -9,7 +9,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
 class WhenISkipRegistration : ControllerTestBase
 {
-    private CreateEmployerAccountController _employerAccountController;
+    private EmployerAccountController _employerAccountController;
     private Mock<EmployerAccountOrchestrator> _orchestrator;
     private const string ExpectedRedirectUrl = "http://redirect.local.test";
     private OrchestratorResponse<EmployerAccountViewModel> _response;
@@ -45,7 +45,7 @@ class WhenISkipRegistration : ControllerTestBase
         _returnUrlCookieStorage.Setup(x => x.Get(EmployerAccountController.ReturnUrlCookieName))
             .Returns(new ReturnUrlModel() {Value = ExpectedReturnUrl});
 
-        _employerAccountController = new CreateEmployerAccountController(
+        _employerAccountController = new EmployerAccountController(
             _orchestrator.Object,
             Mock.Of<ILogger<EmployerAccountController>>(),
             _flashMessage.Object,

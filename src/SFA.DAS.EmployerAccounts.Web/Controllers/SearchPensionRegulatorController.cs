@@ -8,6 +8,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeInUse;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAornLock;
 using SFA.DAS.EmployerAccounts.Queries.UpdateUserAornLock;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
+using SFA.DAS.EmployerAccounts.Web.RouteValues;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
@@ -34,8 +35,8 @@ public class SearchPensionRegulatorController : BaseController
         _accountCookieStorage = accountCookieStorage;
      }
 
-    [Route("{HashedAccountId}/pensionregulator", Order = 0)]
-    [Route("pensionregulator", Order = 1)]
+    [Route("{HashedAccountId}/pensionregulator", Order = 0, Name = RouteNames.SearchPensionRegulatorAddOrganisation)]
+    [Route("pensionregulator", Order = 1, Name = RouteNames.SearchPensionRegulatorCreateAccount)]
     public async Task<IActionResult> SearchPensionRegulator(string hashedAccountId)
     {
         var payeRef = _searchPensionRegulatorOrchestrator.GetCookieData().EmployerAccountPayeRefData.PayeReference;

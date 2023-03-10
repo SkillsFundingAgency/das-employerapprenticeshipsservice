@@ -20,6 +20,7 @@ public static class EmployerAuthenticationServiceRegistrations
         services.AddTransient<ICustomClaims, EmployerAccountPostAuthenticationClaimsHandler>();
         services.AddTransient<IEmployerAccountAuthorisationHandler, EmployerAccountAuthorisationHandler>();
         services.AddSingleton<IAuthorizationHandler, EmployerAccountAllRolesAuthorizationHandler>();
+        services.AddSingleton<IAuthorizationHandler, EmployerUserHasNoAccountAuthorizationHandler>();
         services.AddSingleton<IAuthorizationHandler, EmployerAccountOwnerAuthorizationHandler>();
         services.AddTransient<IUserAccountService, UserAccountService>();
 
