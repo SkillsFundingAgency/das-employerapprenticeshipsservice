@@ -1,6 +1,7 @@
 ﻿using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.EAS.Domain.Configuration;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -8,45 +9,50 @@ namespace SFA.DAS.EAS.Web.Controllers
     [AuthoriseActiveUser]
     public class EmployerAccountController : Controller
     {
+        public EmployerApprenticeshipsServiceConfiguration Configuration { get; set; }
+        public EmployerAccountController(EmployerApprenticeshipsServiceConfiguration _configuration)
+        {
+            Configuration = _configuration;
+        }
         [HttpGet]
         [Route("gatewayInform")]
         public ActionResult GatewayInform()
         {
-            return Redirect(Url.EmployerAccountsAction("gatewayInform"));
+            return Redirect(Url.EmployerAccountsAction("gatewayInform", Configuration));
         }
 
         [HttpGet]
         [Route("gateway")]
         public ActionResult Gateway()
         {
-            return Redirect(Url.EmployerAccountsAction("gateway"));
+            return Redirect(Url.EmployerAccountsAction("gateway", Configuration));
         }
 
         [Route("gatewayResponse")]
         public ActionResult GateWayResponse()
         {
-            return Redirect(Url.EmployerAccountsAction($"gatewayResponse{Request.QueryString}"));
+            return Redirect(Url.EmployerAccountsAction($"gatewayResponse{Request.QueryString}", Configuration));
         }
 
         [HttpGet]
         [Route("summary")]
         public ActionResult Summary()
         {
-            return Redirect(Url.EmployerAccountsAction("summary"));
+            return Redirect(Url.EmployerAccountsAction("summary", Configuration));
         }
 
         [HttpGet]
         [Route("create")]
         public ActionResult Create()
         {
-            return Redirect(Url.EmployerAccountsAction("create"));
+            return Redirect(Url.EmployerAccountsAction("create", Configuration));
         }
 
         [HttpGet]
         [Route("{HashedAccountId}/rename")]
         public ActionResult RenameAccount(string hashedAccountId)
         {
-            return Redirect(Url.EmployerAccountsAction("rename"));
+            return Redirect(Url.EmployerAccountsAction("rename", Configuration));
         }
     }
 }

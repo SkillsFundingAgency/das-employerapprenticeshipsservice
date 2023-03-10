@@ -1,9 +1,4 @@
-﻿// This Startup file is based on ASP.NET Core new project templates and is included
-// as a starting point for DI registration and HTTP request processing pipeline configuration.
-// This file will need updated according to the specific scenario of the application being upgraded.
-// For more information on ASP.NET Core startup files, see https://docs.microsoft.com/aspnet/core/fundamentals/startup
-
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
@@ -11,15 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Mvc.Routing;
-using System.IdentityModel.Tokens;
 
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.ViewModels;
-//using Karambolo.AspNetCore.Bundling.NUglify;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using SFA.DAS.OidcMiddleware;
-using SFA.DAS.Authorization.DependencyResolution.Microsoft;
 
 
 namespace SFA.DAS.EAS.Web;
@@ -67,8 +56,6 @@ public class Startup
         {
             app.UseDeveloperExceptionPage();
         }
-
-        //app.UseBundling(bundles => BundleConfig.RegisterBundles(bundles));
 
         app.UseStaticFiles();
         app.UseRouting();

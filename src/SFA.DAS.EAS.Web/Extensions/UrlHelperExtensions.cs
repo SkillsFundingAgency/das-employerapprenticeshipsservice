@@ -3,46 +3,43 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.Helpers;
 using System.Web.Mvc;
 
+using EASConfig = SFA.DAS.EAS.Domain.Configuration.EmployerApprenticeshipsServiceConfiguration;
+
 namespace SFA.DAS.EAS.Web.Extensions
 {
     public static class UrlHelperExtensions
     {
-        public static string EmployerAccountsAction(this IUrlHelper helper, string path, bool includedAccountId = true)
+        public static string EmployerAccountsAction(this IUrlHelper helper, string path, EASConfig config, bool includedAccountId = true)
         {
-            var configuration = DependencyResolver.Current.GetService<EmployerApprenticeshipsServiceConfiguration>();
-            var baseUrl = configuration.EmployerAccountsBaseUrl;
+            var baseUrl = config.EmployerAccountsBaseUrl;
 
             return includedAccountId ? AccountAction(helper, baseUrl, path) : Action(baseUrl, path);
         }
 
-        public static string EmployerCommitmentsAction(this IUrlHelper helper, string path)
+        public static string EmployerCommitmentsAction(this IUrlHelper helper, string path, EASConfig config)
         {
-            var configuration = DependencyResolver.Current.GetService<EmployerApprenticeshipsServiceConfiguration>();
-            var baseUrl = configuration.EmployerCommitmentsBaseUrl;
+            var baseUrl = config.EmployerCommitmentsBaseUrl;
 
             return AccountAction(helper, baseUrl, path);
         }
 
-        public static string EmployerFinanceAction(this IUrlHelper helper, string path)
+        public static string EmployerFinanceAction(this IUrlHelper helper, string path, EASConfig config)
         {
-            var configuration = DependencyResolver.Current.GetService<EmployerApprenticeshipsServiceConfiguration>();
-            var baseUrl = configuration.EmployerFinanceBaseUrl;
+            var baseUrl = config.EmployerFinanceBaseUrl;
 
             return AccountAction(helper, baseUrl, path);
         }
 
-        public static string EmployerProjectionsAction(this IUrlHelper helper, string path)
+        public static string EmployerProjectionsAction(this IUrlHelper helper, string path, EmployerApprenticeshipsServiceConfiguration config)
         {
-            var configuration = DependencyResolver.Current.GetService<EmployerApprenticeshipsServiceConfiguration>();
-            var baseUrl = configuration.EmployerProjectionsBaseUrl;
+            var baseUrl = config.EmployerProjectionsBaseUrl;
 
             return AccountAction(helper, baseUrl, path);
         }
 
-        public static string EmployerRecruitAction(this IUrlHelper helper)
+        public static string EmployerRecruitAction(this IUrlHelper helper, EmployerApprenticeshipsServiceConfiguration config)
         {
-            var configuration = DependencyResolver.Current.GetService<EmployerApprenticeshipsServiceConfiguration>();
-            var baseUrl = configuration.EmployerRecruitBaseUrl;
+            var baseUrl = config.EmployerRecruitBaseUrl;
 
             return AccountAction(helper, baseUrl, "");
         }

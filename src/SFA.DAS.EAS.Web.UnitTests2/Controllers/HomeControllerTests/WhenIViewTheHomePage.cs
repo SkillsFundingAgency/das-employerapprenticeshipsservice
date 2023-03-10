@@ -1,13 +1,14 @@
-﻿/*using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.Controllers;
-using System;
-using System.Collections.Specialized;
+using Microsoft.AspNetCore.Routing;
 using System.ServiceModel.Channels;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.Extensions.Primitives;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
 {
@@ -15,56 +16,39 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
     {
         private HomeController _homeController;
         private Mock<ControllerContext> _mockControllerContext;
-        private Mock<HttpContext> _mockHttpContextBase;
-        private Mock<HttpRequest> _mockHttpRequestBase;
+        private Mock<HttpContext> _mockHttpContext;
+        private Mock<HttpRequest> _mockHttpRequest;
         private Mock<RequestContext> _mockRequestContext;
-        private Mock<IDependencyResolver> _mockDependencyResolver;
-        private NameValueCollection _queryString;
+        private QueryCollection _queryString;
         private EmployerApprenticeshipsServiceConfiguration _config;
+        private string gaValue;
 
         [SetUp]
         public void Arrange()
         {
+            gaValue = Guid.NewGuid().ToString();
             _mockControllerContext = new Mock<ControllerContext>();
-            _mockHttpContextBase = new Mock<HttpContext>();
-            _mockHttpRequestBase = new Mock<HttpRequest>();
+            _mockHttpContext = new Mock<HttpContext>();
+            _mockHttpRequest = new Mock<HttpRequest>();
             _mockRequestContext = new Mock<RequestContext>();
-            _mockDependencyResolver = new Mock<IDependencyResolver>();
-            _queryString = new NameValueCollection();
+            _queryString = new QueryCollection(new Dictionary<string, StringValues>() { { "_ga", gaValue } });
             _config = new EmployerApprenticeshipsServiceConfiguration();
 
-            _mockHttpContextBase
+            _mockHttpContext
                 .Setup(m => m.Request)
-                .Returns(_mockHttpRequestBase.Object);
+                .Returns(_mockHttpRequest.Object);
 
-            _mockHttpRequestBase
-                .Setup(m => m.QueryString)
+            _mockHttpRequest
+                .Setup(m => m.Query)
                 .Returns(_queryString);
 
-            _mockControllerContext
-                .Setup(m => m.HttpContext)
-                .Returns(_mockHttpContextBase.Object);
+            _mockControllerContext.Object.HttpContext = _mockHttpContext.Object;
 
-            _homeController = new HomeController
+            _homeController = new HomeController(_config)
             {
                 ControllerContext = _mockControllerContext.Object,
-                Url = new UrlHelper(new RequestContext(_mockHttpContextBase.Object, new RouteData()))
+                Url = new UrlHelper(new ActionContext(_mockHttpContext.Object, new RouteData(), new ActionDescriptor()))
             };
-            _homeController.Url.RequestContext.HttpContext = _mockHttpContextBase.Object;
-
-            DependencyResolver.SetResolver(_mockDependencyResolver.Object);
-
-            _mockDependencyResolver
-                .Setup(m => m.GetService(It.IsAny<Type>()))
-                .Returns<Type>(t =>
-                {
-                    if (t.IsAssignableFrom(typeof(EmployerApprenticeshipsServiceConfiguration)))
-                    {
-                        return _config;
-                    }
-
-                    return null;
-                });
 
             _config.EmployerAccountsBaseUrl = @"http://localhost";
         }
@@ -72,10 +56,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         [Test]
         public void ThenTheGoogleTagQueryStringIsPreservedWhenRedirecting()
         {
-            // Arrange
-            var gaValue = Guid.NewGuid().ToString();
-            _queryString.Add("_ga", gaValue);
-
             //Act
             var result = new Uri((_homeController.Index() as RedirectResult).Url);
 
@@ -83,4 +63,4 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
             Assert.IsTrue(result.Query.Contains($"_ga={gaValue}"));
         }
     }
-}*/
+}
