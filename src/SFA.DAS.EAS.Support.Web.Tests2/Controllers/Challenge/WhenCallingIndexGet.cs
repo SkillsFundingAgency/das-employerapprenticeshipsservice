@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Challenge
 
             var actual = await Unit.Index(id);
 
-            Assert.IsInstanceOf<NotFoundResult>(actual);
+            Assert.IsInstanceOf<NotFoundObjectResult>(actual);
         }
 
         [Test]
@@ -45,7 +45,7 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Challenge
 
             var actual = await Unit.Index(id);
 
-            Assert.IsInstanceOf<NotFoundResult>(actual);
+            Assert.IsInstanceOf<NotFoundObjectResult>(actual);
         }
 
         [Test]

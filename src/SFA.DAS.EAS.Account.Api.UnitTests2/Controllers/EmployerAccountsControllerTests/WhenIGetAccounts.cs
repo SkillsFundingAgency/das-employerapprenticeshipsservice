@@ -48,9 +48,18 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             result.Should().NotBeNull();
             result.Should().BeOfType<ActionResult<PagedApiResponseViewModel<AccountWithBalanceViewModel>>>();
 
-            var okResult = (ActionResult<PagedApiResponseViewModel<AccountWithBalanceViewModel>>) result;
-            okResult.Value.Should().NotBeNull();
-            okResult.Value.ShouldBeEquivalentTo(accountsResponse);
+            Assert.IsNotNull(result.Result);
+            Assert.IsInstanceOf<OkObjectResult>(result.Result);
+
+            var oKResult = result.Result as OkObjectResult;
+
+            Assert.IsNotNull(oKResult.Value);
+            Assert.IsInstanceOf<PagedApiResponseViewModel<AccountWithBalanceViewModel>>(oKResult.Value);
+
+            var value = oKResult.Value as PagedApiResponseViewModel<AccountWithBalanceViewModel>;
+
+            value.Should().NotBeNull();
+            value.ShouldBeEquivalentTo(accountsResponse);
         }
     }
 }

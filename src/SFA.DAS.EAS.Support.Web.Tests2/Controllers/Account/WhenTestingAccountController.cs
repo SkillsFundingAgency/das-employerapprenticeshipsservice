@@ -63,7 +63,7 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Account
             Assert.IsNotNull(actual);
             Assert.IsNotNull(actual);
             Assert.IsInstanceOf<ViewResult>(actual);
-            Assert.AreEqual("", ((ViewResult)actual).ViewName);
+            Assert.AreEqual(true, String.IsNullOrEmpty(((ViewResult)actual).ViewName));
             Assert.IsInstanceOf<AccountDetailViewModel>(((ViewResult)actual).Model);
             Assert.AreEqual(reponse.Account, ((AccountDetailViewModel)((ViewResult)actual).Model).Account);
             Assert.IsNull(((AccountDetailViewModel)((ViewResult)actual).Model).SearchUrl);

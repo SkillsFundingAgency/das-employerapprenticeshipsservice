@@ -31,9 +31,18 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
             Assert.IsInstanceOf<ActionResult<AccountResourceList<LevyDeclarationViewModel>>>(response);
             var model = response as ActionResult<AccountResourceList<LevyDeclarationViewModel>>;
 
-            model?.Value.Should().NotBeNull();
-            Assert.IsTrue(model?.Value.TrueForAll(x => x.HashedAccountId == hashedAccountId));
-            model?.Value.ShouldAllBeEquivalentTo(apiResponse, options => options.Excluding(x => x.HashedAccountId).Excluding(x => x.PayeSchemeReference));
+            Assert.IsNotNull(model.Result);
+            Assert.IsInstanceOf<OkObjectResult>(model.Result);
+
+            var result = (OkObjectResult)model.Result;
+
+            result?.Value.Should().NotBeNull();
+            Assert.IsInstanceOf<AccountResourceList<LevyDeclarationViewModel>>(result.Value);
+            
+            var value = result.Value as AccountResourceList<LevyDeclarationViewModel>;
+
+            Assert.IsTrue(value.TrueForAll(x => x.HashedAccountId == hashedAccountId));
+            value.ShouldAllBeEquivalentTo(apiResponse, options => options.Excluding(x => x.HashedAccountId).Excluding(x => x.PayeSchemeReference));
         }
 
         [Test]
@@ -45,9 +54,11 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
             //Act
             var response = await Controller.Index(hashedAccountId);
 
+            var result = response.Result;
+
             //Assert
-            Assert.IsNotNull(response);
-            Assert.IsInstanceOf<NotFoundResult>(response);
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf<NotFoundResult>(result);
         }
     }
 }

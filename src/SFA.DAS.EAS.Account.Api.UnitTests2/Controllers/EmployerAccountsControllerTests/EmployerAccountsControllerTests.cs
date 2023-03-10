@@ -8,6 +8,7 @@ using SFA.DAS.NLog.Logger;
 using SFA.DAS.HashingService;
 using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControllerTests
 {
@@ -15,7 +16,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
     {
         protected EmployerAccountsController _controller;
         protected Mock<ILog> Logger;
-        protected Mock<UrlHelper> _urlHelper;
+        protected Mock<IUrlHelper> _urlHelper;
         protected Mock<IMapper> _mapper;
         protected Mock<IHashingService> _hashingService;
         protected Mock<IEmployerAccountsApiService> _employerAccountsApiService;
@@ -33,7 +34,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             var orchestrator = new AccountsOrchestrator(Logger.Object, _mapper.Object, _hashingService.Object, _employerAccountsApiService.Object, _employerFinanceApiService.Object);
             _controller = new EmployerAccountsController(orchestrator, _employerAccountsApiService.Object);
 
-            _urlHelper = new Mock<UrlHelper>();
+            _urlHelper = new Mock<IUrlHelper>();
             _controller.Url = _urlHelper.Object;
         }
     }

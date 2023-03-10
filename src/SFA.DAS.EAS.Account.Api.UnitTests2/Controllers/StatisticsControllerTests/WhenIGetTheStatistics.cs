@@ -45,7 +45,13 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.StatisticsControllerTest
             result.Should().NotBeNull();
             result.Should().BeOfType<ActionResult<StatisticsViewModel>>();
 
-            var okResult = (ActionResult<StatisticsViewModel>)result;
+            var actResult = (ActionResult<StatisticsViewModel>)result;
+
+            actResult.Result.Should().NotBeNull();
+            actResult.Result.Should().BeOfType<OkObjectResult>();
+
+            var okResult = (OkObjectResult)actResult.Result;
+
             okResult.Value.Should().NotBeNull();
             okResult.Value.ShouldBeEquivalentTo(_statisticsViewModel);
         }

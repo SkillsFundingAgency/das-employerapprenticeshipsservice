@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
     {
         private AccountTransactionsController _controller;        
         private Mock<ILog> _logger;
-        private Mock<UrlHelper> _urlHelper;        
+        private Mock<IUrlHelper> _urlHelper;        
         private Mock<IEmployerFinanceApiService> _financeApiService;
         protected IMapper _mapper;
         private TransactionsViewModel transactionsViewModel;
@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
         public void Arrange()
         {           
             _logger = new Mock<ILog>();
-            _urlHelper = new Mock<UrlHelper>();
+            _urlHelper = new Mock<IUrlHelper>();
             _urlHelper.Setup(x => x.Link(It.IsAny<string>(), It.IsAny<object>())).Returns("dummyurl");            
             _financeApiService = new Mock<IEmployerFinanceApiService>();
             _mapper = ConfigureMapper();
@@ -61,7 +61,18 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             Assert.IsNotNull(response);
             Assert.IsInstanceOf<ActionResult<TransactionsViewModel>>(response);
             var model = response as ActionResult<TransactionsViewModel>;
-            model?.Value.Should().NotBeNull();
+
+            Assert.IsNotNull(model.Result);
+            Assert.IsInstanceOf<OkObjectResult>(model.Result);
+
+            var oKResult = model.Result as OkObjectResult;
+
+            Assert.IsNotNull(oKResult.Value);
+            Assert.IsInstanceOf<TransactionsViewModel>(oKResult.Value);
+
+            var value = oKResult.Value as TransactionsViewModel;
+
+            value.Should().NotBeNull();
         }
 
         [Test]
@@ -81,8 +92,18 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             Assert.IsInstanceOf<ActionResult<TransactionsViewModel>>(response);
             var model = response as ActionResult<TransactionsViewModel>;
 
-            model?.Value.Should().NotBeNull();
-            model?.Value.PreviousMonthUri.Should().BeNullOrEmpty();
+            Assert.IsNotNull(model.Result);
+            Assert.IsInstanceOf<OkObjectResult>(model.Result);
+
+            var oKObject = model.Result as OkObjectResult;
+
+            Assert.IsNotNull(oKObject.Value);
+            Assert.IsInstanceOf<TransactionsViewModel>(oKObject.Value);
+
+            var value = oKObject.Value as TransactionsViewModel;
+
+            value.Should().NotBeNull();
+            value.PreviousMonthUri.Should().BeNullOrEmpty();
             _urlHelper.Verify(x => x.Link("GetTransactions", It.IsAny<object>()), Times.Never);
         }
 
@@ -105,9 +126,19 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             //Act
             var response = await _controller.GetTransactions(hashedAccountId, year, month);
             var model = response as ActionResult<TransactionsViewModel>;
-            
+
+            Assert.IsNotNull(model.Result);
+            Assert.IsInstanceOf<OkObjectResult>(model.Result);
+
+            var oKResult = model.Result as OkObjectResult;
+
+            Assert.IsNotNull(oKResult.Value);
+            Assert.IsInstanceOf<TransactionsViewModel>(oKResult.Value);
+
+            var value = oKResult.Value as TransactionsViewModel;
+
             //Assert
-            model?.Value.PreviousMonthUri.Should().Be(expectedUri);
+            value.PreviousMonthUri.Should().Be(expectedUri);
         }
 
         [Test]
@@ -129,8 +160,18 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             Assert.IsInstanceOf<ActionResult<TransactionsViewModel>>(response);
             var model = response as ActionResult<TransactionsViewModel>;
 
-            model?.Value.Should().NotBeNull();            
-            model?.Value.PreviousMonthUri.Should().BeNullOrEmpty();
+            Assert.IsNotNull(model.Result);
+            Assert.IsInstanceOf<OkObjectResult>(model.Result);
+
+            var okResult = model.Result as OkObjectResult;
+
+            Assert.IsNotNull(okResult.Value);
+            Assert.IsInstanceOf<TransactionsViewModel>(okResult.Value);
+
+            var value = okResult.Value as TransactionsViewModel;
+
+            value.Should().NotBeNull();
+            value.PreviousMonthUri.Should().BeNullOrEmpty();
             _urlHelper.Verify(x => x.Link("GetTransactions", It.IsAny<object>()), Times.Never);
         }
 
@@ -164,9 +205,18 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             var response = await _controller.GetTransactions(hashedAccountId, year, month);
             var model = response as ActionResult<TransactionsViewModel>;
 
-            
+            Assert.IsNotNull(model.Result);
+            Assert.IsInstanceOf<OkObjectResult>(model.Result);
+
+            var oKResult = model.Result as OkObjectResult;
+
+            Assert.IsNotNull(oKResult.Value);
+            Assert.IsInstanceOf<TransactionsViewModel>(oKResult.Value);
+
+            var value = oKResult.Value as TransactionsViewModel;
+
             //Assert
-            model?.Value[0].ResourceUri.Should().Be(expectedUri);
+            value[0].ResourceUri.Should().Be(expectedUri);
         }
 
         [Test]
@@ -183,7 +233,17 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             Assert.IsInstanceOf<ActionResult<TransactionsViewModel>>(response);
             var model = response as ActionResult<TransactionsViewModel>;
 
-            model?.Value.Should().NotBeNull();
+            Assert.IsNotNull(model.Result);
+            Assert.IsInstanceOf<OkObjectResult>(model.Result);
+
+            var okResult = model.Result as OkObjectResult;
+
+            Assert.IsNotNull(okResult.Value);
+            Assert.IsInstanceOf<TransactionsViewModel>(okResult.Value);
+
+            var value = okResult.Value as TransactionsViewModel;
+
+            value.Should().NotBeNull();
         }
     }
 }

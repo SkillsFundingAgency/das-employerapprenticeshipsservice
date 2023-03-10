@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
     {
         private AccountTransactionsController _controller;             
         private Mock<ILog> _logger;
-        private Mock<UrlHelper> _urlHelper;
+        private Mock<IUrlHelper> _urlHelper;
         private  Mock<IEmployerFinanceApiService> _financeApiService;
         protected IMapper _mapper;        
 
@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
         public void Arrange()
         {
             _logger = new Mock<ILog>();
-            _urlHelper = new Mock<UrlHelper>();            
+            _urlHelper = new Mock<IUrlHelper>();            
             _financeApiService = new Mock<IEmployerFinanceApiService>();
             _mapper = ConfigureMapper();
             var orchestrator = new AccountTransactionsOrchestrator(_mapper, _logger.Object, _financeApiService.Object);
@@ -76,7 +76,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             Assert.IsInstanceOf<OkObjectResult>(response);
             var okModel = response as OkObjectResult;
 
-            Assert.IsInstanceOf<AccountResourceList<TransactionSummaryViewModel>>(okModel);
+            Assert.IsInstanceOf<AccountResourceList<TransactionSummaryViewModel>>(okModel.Value);
             var model = okModel.Value as AccountResourceList<TransactionSummaryViewModel>;
 
             model?.Should().NotBeNull();

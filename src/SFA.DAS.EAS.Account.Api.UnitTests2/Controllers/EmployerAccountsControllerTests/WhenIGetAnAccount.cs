@@ -50,14 +50,24 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             Assert.IsInstanceOf<ActionResult<AccountDetailViewModel>>(response);
             var model = response as ActionResult<AccountDetailViewModel>;
 
-            model?.Value.Should().NotBeNull();
-            model?.Value?.DasAccountId.Should().Be(hashedAccountId);
-            model?.Value?.HashedAccountId.Should().Be(hashedAccountId);
-            model?.Value?.AccountId.Should().Be(account.AccountId);
-            model?.Value?.DasAccountName.Should().Be(account.DasAccountName);
-            model?.Value?.DateRegistered.Should().Be(account.DateRegistered);
-            model?.Value?.OwnerEmail.Should().Be(account.OwnerEmail);          
-            model?.Value?.Balance.Should().Be(accountBalancesResponse.Single().Balance);
+            Assert.IsNotNull(model.Result);
+            Assert.IsInstanceOf<OkObjectResult>(model.Result);
+
+            var oKResult = model.Result as OkObjectResult;
+
+            Assert.IsNotNull(oKResult.Value);
+            Assert.IsInstanceOf<AccountDetailViewModel>(oKResult.Value);
+
+            AccountDetailViewModel value = oKResult.Value as AccountDetailViewModel;
+
+            value.Should().NotBeNull();
+            value.DasAccountId.Should().Be(hashedAccountId);
+            value.HashedAccountId.Should().Be(hashedAccountId);
+            value.AccountId.Should().Be(account.AccountId);
+            value.DasAccountName.Should().Be(account.DasAccountName);
+            value.DateRegistered.Should().Be(account.DateRegistered);
+            value.OwnerEmail.Should().Be(account.OwnerEmail);          
+            value.Balance.Should().Be(accountBalancesResponse.Single().Balance);
         }
 
         [Test]
@@ -71,8 +81,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             var response = await _controller.GetAccount(hashedAccountId);
 
             //Assert
-            Assert.IsNotNull(response);
-            Assert.IsInstanceOf<NotFoundResult>(response);
+            Assert.IsNotNull(response.Result);
+            Assert.IsInstanceOf<NotFoundResult>(response.Result);
         }
 
         [Test]
@@ -92,7 +102,12 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
 
             //Assert
             Assert.IsNotNull(response);
-            Assert.IsInstanceOf<ActionResult<AccountDetailViewModel>>(response);
+            Assert.IsInstanceOf<OkObjectResult>(response);
+
+            var okResult = (OkObjectResult)response;
+
+            Assert.IsNotNull(okResult.Value);
+            Assert.IsInstanceOf<AccountDetailViewModel>(okResult.Value);
         }
     }
 }
