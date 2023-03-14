@@ -167,7 +167,7 @@ public class HomeController : BaseController
         return View(ControllerConstants.IndexActionName, accounts);
     }
 
-    [Authorize(Policy = nameof(PolicyNames.HasEmployerOwnerAccount))]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     [HttpGet]
     [Route("register/new/{correlationId?}")]
     public async Task<IActionResult> HandleNewRegistration(string correlationId = null)

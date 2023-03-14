@@ -159,7 +159,7 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpGet]
-    [Authorize(Policy = nameof(PolicyNames.HasEmployerOwnerAccount))]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     [Route("{HashedAccountId}/getApprenticeshipFunding", Order = 0, Name = RouteNames.EmployerAccountGetApprenticeshipFundingInAccount)]
     [Route("getApprenticeshipFunding", Order = 1, Name = RouteNames.EmployerAccountGetApprenticeshipFunding)]
     public IActionResult GetApprenticeshipFunding()
@@ -175,7 +175,7 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpPost]
-    [Authorize(Policy = nameof(PolicyNames.HasEmployerOwnerAccount))]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     [Route("{HashedAccountId}/getApprenticeshipFunding", Order = 0, Name = RouteNames.EmployerAccountPostApprenticeshipFundingInAccount)]
     [Route("getApprenticeshipFunding", Order = 1, Name = RouteNames.EmployerAccountPostApprenticeshipFunding)]
     public IActionResult PostGetApprenticeshipFunding(string hashedAccountId, int? choice)
