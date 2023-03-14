@@ -103,18 +103,15 @@ public class ReferenceDataService : IReferenceDataService
         return false;
     }
 
-    private Task<CommonOrganisationType[]> InitialiseOrganisationTypes()
+    private async Task<CommonOrganisationType[]> InitialiseOrganisationTypes()
     {
-        return _client.GetIdentifiableOrganisationTypes()
-            .ContinueWith(t =>
-            {
-                // switch the organisation types provided by the API back to the organisation type used locally
-                var filteredOrganisationTypes = t.Result
+        var result = await _client.GetIdentifiableOrganisationTypes();
+
+        var filteredOrganisationTypes = result
                     .Select(referenceDataOrganisationType => referenceDataOrganisationType.ToCommonOrganisationType())
                     .ToArray();
 
-                return filteredOrganisationTypes;
-            });
+        return filteredOrganisationTypes;
     }
 
     private List<OrganisationName> SortOrganisations(IEnumerable<OrganisationName> result, string searchTerm)
