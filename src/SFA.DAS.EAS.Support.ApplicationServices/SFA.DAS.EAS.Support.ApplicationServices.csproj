@@ -15,9 +15,6 @@
     <ProjectReference Include="..\SFA.DAS.EAS.Support.Infrastructure\SFA.DAS.EAS.Support.Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.6">
-    </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1">
     </PackageReference>
     <PackageReference Include="NLog" Version="4.6.8">
@@ -28,16 +25,6 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.Support.Shared" Version="2.1.70">
     </PackageReference>
-    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
-    <PackageReference Include="System.ServiceModel.Duplex" Version="4.9.0" />
-    <PackageReference Include="System.ServiceModel.NetTcp" Version="4.9.0" />
-    <PackageReference Include="System.ServiceModel.Federation" Version="4.8.1" />
-    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.355802">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="HMRC.ESFA.Levy.Api.Client" Version="2.0.4" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.10.1" />
   </ItemGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />

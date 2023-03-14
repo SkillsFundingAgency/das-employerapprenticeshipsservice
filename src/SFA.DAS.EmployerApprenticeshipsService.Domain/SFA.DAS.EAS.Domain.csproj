@@ -13,62 +13,27 @@
   <ItemGroup>
     <PackageReference Include="SFA.DAS.Provider.Events.Api.Client" Version="3.0.1-prerelease-5">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.ReferenceData.Types" Version="1.1.90">
-    </PackageReference>
-    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <PackageReference Include="Microsoft.AspNet.WebApi" Version="5.2.3">
-    </PackageReference>
     <PackageReference Include="Microsoft.Azure.KeyVault.Core" Version="2.0.4">
     </PackageReference>
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.6">
     </PackageReference>
-    <PackageReference Include="NServiceBus.Persistence.Sql" Version="4.1.1">
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.Audit.Client" Version="1.0.0.20553">
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.Commitments.Api.Client" Version="4.1.355">
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.283">
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.Configuration.FileStorage" Version="1.0.0.49931">
-    </PackageReference>
+	<PackageReference Include="SFA.DAS.Audit.Client" Version="1.0.0.20553">
+	</PackageReference>
+	<PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.283">
+	</PackageReference>
+	<PackageReference Include="SFA.DAS.Commitments.Api.Client" Version="4.1.355">
+	</PackageReference>
     <PackageReference Include="SFA.DAS.Events.Api.Client" Version="1.20.0.26497">
     </PackageReference>
     <PackageReference Include="SFA.DAS.Messaging" Version="3.0.0.63765">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus" Version="3.0.0.53181">
-    </PackageReference>
     <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus.StructureMap" Version="3.0.0.63765">
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1">
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.2.37">
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.NServiceBus" Version="15.0.25">
     </PackageReference>
     <PackageReference Include="SFA.DAS.ReferenceData.Api.Client" Version="1.1.90">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Tasks.Api.Types" Version="1.8.44">
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.TokenService.Api.Client" Version="2.3.0">
-    </PackageReference>
     <PackageReference Include="SFA.DAS.UnitOfWork" Version="9.0.13">
     </PackageReference>
-    <PackageReference Include="StructureMap" Version="4.7.1">
-    </PackageReference>
-    <PackageReference Include="WebApi.StructureMap" Version="1.0.23">
-    </PackageReference>
-    <PackageReference Include="System.ServiceModel.Federation" Version="4.8.1" />
-    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.355802">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="CommonServiceLocator" Version="1.4.0" />
     <PackageReference Include="EntityFramework" Version="6.4.4" />
-    <PackageReference Include="HMRC.ESFA.Levy.Api.Types" Version="2.0.4" />
-    <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
-    <PackageReference Include="SFA.DAS.Events.Api.Types" Version="2.1.31" />
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.0" />
 	<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
   <ItemGroup>
