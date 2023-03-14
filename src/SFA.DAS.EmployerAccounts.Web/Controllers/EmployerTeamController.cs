@@ -1,11 +1,14 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using SFA.DAS.Employer.Shared.UI.Attributes;
+using SFA.DAS.Employer.Shared.UI;
 using SFA.DAS.EmployerAccounts.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerAccounts.Web.RouteValues;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
+[SetNavigationSection(NavigationSection.AccountsHome)]
 [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
 [Route("accounts/{HashedAccountId}/teams")]
 public class EmployerTeamController : BaseController
