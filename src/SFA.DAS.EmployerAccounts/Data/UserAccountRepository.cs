@@ -46,6 +46,7 @@ public class UserAccountRepository : BaseRepository, IUserAccountRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<User>(
             sql: "SELECT Id, CONVERT(NVARCHAR(50), UserRef) AS UserRef, Email, FirstName, LastName, CorrelationId FROM [employer_account].[User] WHERE Email = @email;",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.Text);
 
         return result.SingleOrDefault();
@@ -60,6 +61,7 @@ public class UserAccountRepository : BaseRepository, IUserAccountRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<User>(
             sql: "SELECT Id, CONVERT(NVARCHAR(50), UserRef) AS UserRef, Email, FirstName, LastName, CorrelationId FROM [employer_account].[User] WHERE Id = @id;",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.Text);
 
         return result.SingleOrDefault();
@@ -91,6 +93,7 @@ public class UserAccountRepository : BaseRepository, IUserAccountRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<User>(
             sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName, CorrelationId FROM [employer_account].[User] WHERE Email = @email",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.Text);
 
         return result.SingleOrDefault();

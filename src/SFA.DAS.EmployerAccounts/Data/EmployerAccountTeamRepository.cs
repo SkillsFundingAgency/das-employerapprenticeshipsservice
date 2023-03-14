@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
@@ -32,6 +33,7 @@ public class EmployerAccountTeamRepository : BaseRepository, IEmployerAccountTea
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<TeamMember>(
             sql: sql,
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.Text);
 
         return result.ToList();
@@ -52,6 +54,7 @@ public class EmployerAccountTeamRepository : BaseRepository, IEmployerAccountTea
                  "AND (@onlyIfMemberIsActive = 0 OR IsUser = 1) " +
                  "ORDER BY IsUser DESC;",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.Text);
 
         return result.SingleOrDefault();
@@ -66,6 +69,7 @@ public class EmployerAccountTeamRepository : BaseRepository, IEmployerAccountTea
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<TeamMember>(
             sql: "[employer_account].[GetEmployerAccountMembers]",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
 
         return result.ToList();
