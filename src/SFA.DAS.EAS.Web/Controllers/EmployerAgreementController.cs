@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Domain.Configuration;
@@ -9,8 +10,8 @@ namespace SFA.DAS.EAS.Web.Controllers
     [Route("accounts/{HashedAccountId}")]
     public class EmployerAgreementController : Controller
     {
-        public EmployerApprenticeshipsServiceConfiguration Configuration { get; set; }
-        public EmployerAgreementController(EmployerApprenticeshipsServiceConfiguration _configuration)
+        public IConfiguration Configuration { get; set; }
+        public EmployerAgreementController(IConfiguration _configuration)
         {
             Configuration = _configuration;
         }

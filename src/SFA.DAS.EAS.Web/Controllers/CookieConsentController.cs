@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Domain.Configuration;
+using Microsoft.Extensions.Configuration;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
     public class CookieConsentController : Controller
     {
-        public EmployerApprenticeshipsServiceConfiguration Configuration { get; set; }
-        public CookieConsentController(EmployerApprenticeshipsServiceConfiguration _configuration) 
+        public IConfiguration Configuration { get; set; }
+        public CookieConsentController(IConfiguration _configuration) 
         {
             Configuration = _configuration;
         }

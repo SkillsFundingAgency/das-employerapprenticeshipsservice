@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using SFA.DAS.EAS.Web.Extensions;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Builder;
 
 namespace SFA.DAS.EAS.Web
 {

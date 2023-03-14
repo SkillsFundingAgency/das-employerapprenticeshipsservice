@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.EAS.Domain.Configuration;
@@ -9,8 +10,8 @@ namespace SFA.DAS.EAS.Web.Controllers
     [AuthoriseActiveUser]
     public class SettingsController : Controller
     {
-        public EmployerApprenticeshipsServiceConfiguration Configuration { get; set; }
-        public SettingsController(EmployerApprenticeshipsServiceConfiguration _configuration)
+        public IConfiguration Configuration { get; set; }
+        public SettingsController(IConfiguration _configuration)
         {
             Configuration = _configuration;
         }

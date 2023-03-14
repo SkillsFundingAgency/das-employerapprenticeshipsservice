@@ -9,6 +9,7 @@ using System.ServiceModel.Channels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.Extensions.Primitives;
+using Microsoft.Extensions.Configuration;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
 {
@@ -20,7 +21,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         private Mock<HttpRequest> _mockHttpRequest;
         private Mock<RequestContext> _mockRequestContext;
         private QueryCollection _queryString;
-        private EmployerApprenticeshipsServiceConfiguration _config;
+        private IConfiguration _config;
         private string gaValue;
 
         [SetUp]
@@ -32,7 +33,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
             _mockHttpRequest = new Mock<HttpRequest>();
             _mockRequestContext = new Mock<RequestContext>();
             _queryString = new QueryCollection(new Dictionary<string, StringValues>() { { "_ga", gaValue } });
-            _config = new EmployerApprenticeshipsServiceConfiguration();
+            _config = new ConfigurationManager();
+            _config["EmployerAccountsBaseUrl"] = @"http://localhost";
 
             _mockHttpContext
                 .Setup(m => m.Request)
@@ -44,13 +46,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
 
             _mockControllerContext.Object.HttpContext = _mockHttpContext.Object;
 
+
             _homeController = new HomeController(_config)
             {
                 ControllerContext = _mockControllerContext.Object,
                 Url = new UrlHelper(new ActionContext(_mockHttpContext.Object, new RouteData(), new ActionDescriptor()))
             };
-
-            _config.EmployerAccountsBaseUrl = @"http://localhost";
         }
 
         [Test]

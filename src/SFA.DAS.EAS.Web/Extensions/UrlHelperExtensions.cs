@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.Helpers;
-using System.Web.Mvc;
+using Microsoft.Extensions.Configuration;
 
 using EASConfig = SFA.DAS.EAS.Domain.Configuration.EmployerApprenticeshipsServiceConfiguration;
 
@@ -9,37 +9,37 @@ namespace SFA.DAS.EAS.Web.Extensions
 {
     public static class UrlHelperExtensions
     {
-        public static string EmployerAccountsAction(this IUrlHelper helper, string path, EASConfig config, bool includedAccountId = true)
+        public static string EmployerAccountsAction(this IUrlHelper helper, string path, IConfiguration config, bool includedAccountId = true)
         {
-            var baseUrl = config.EmployerAccountsBaseUrl;
+            var baseUrl = config["EmployerAccountsBaseUrl"] as string;
 
             return includedAccountId ? AccountAction(helper, baseUrl, path) : Action(baseUrl, path);
         }
 
-        public static string EmployerCommitmentsAction(this IUrlHelper helper, string path, EASConfig config)
+        public static string EmployerCommitmentsAction(this IUrlHelper helper, string path, IConfiguration config)
         {
-            var baseUrl = config.EmployerCommitmentsBaseUrl;
+            var baseUrl = config.GetConnectionString("EmployerCommitmentsBaseUrl");
 
             return AccountAction(helper, baseUrl, path);
         }
 
-        public static string EmployerFinanceAction(this IUrlHelper helper, string path, EASConfig config)
+        public static string EmployerFinanceAction(this IUrlHelper helper, string path, IConfiguration config)
         {
-            var baseUrl = config.EmployerFinanceBaseUrl;
+            var baseUrl = config.GetConnectionString("EmployerFinanceBaseUrl");
 
             return AccountAction(helper, baseUrl, path);
         }
 
-        public static string EmployerProjectionsAction(this IUrlHelper helper, string path, EmployerApprenticeshipsServiceConfiguration config)
+        public static string EmployerProjectionsAction(this IUrlHelper helper, string path, IConfiguration config)
         {
-            var baseUrl = config.EmployerProjectionsBaseUrl;
+            var baseUrl = config.GetConnectionString("EmployerProjectionsBaseUrl");
 
             return AccountAction(helper, baseUrl, path);
         }
 
-        public static string EmployerRecruitAction(this IUrlHelper helper, EmployerApprenticeshipsServiceConfiguration config)
+        public static string EmployerRecruitAction(this IUrlHelper helper, IConfiguration config)
         {
-            var baseUrl = config.EmployerRecruitBaseUrl;
+            var baseUrl = config.GetConnectionString("EmployerRecruitBaseUrl");
 
             return AccountAction(helper, baseUrl, "");
         }

@@ -5,21 +5,16 @@
     <OutputPath>bin\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Content Update="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
+    <Compile Remove="App_Data\**" />
+    <Compile Remove="Content\**" />
+    <Content Remove="App_Data\**" />
+    <Content Remove="Content\**" />
+    <EmbeddedResource Remove="App_Data\**" />
+    <EmbeddedResource Remove="Content\**" />
+    <None Remove="App_Data\**" />
+    <None Remove="Content\**" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-    <Folder Include="Content\" />
     <Folder Include="Views\Search\" />
     <Folder Include="Views\Shared\" />
     <Folder Include="Views\Status\" />

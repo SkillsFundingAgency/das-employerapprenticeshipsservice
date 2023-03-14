@@ -1,6 +1,7 @@
 ﻿using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EAS.Domain.Configuration;
 
@@ -9,8 +10,8 @@ namespace SFA.DAS.EAS.Web.Controllers
     [Route("invitations")]
     public class InvitationController : Controller
     {
-        public EmployerApprenticeshipsServiceConfiguration Configuration { get; set; }
-        public InvitationController(EmployerApprenticeshipsServiceConfiguration _configuration)
+        public IConfiguration Configuration { get; set; }
+        public InvitationController(IConfiguration _configuration)
         {
             Configuration = _configuration;
         }
