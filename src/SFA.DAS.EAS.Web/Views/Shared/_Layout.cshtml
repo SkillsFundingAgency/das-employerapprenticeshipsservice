@@ -123,7 +123,8 @@
             </div>
         </div>
     </header>
-    @if (HttpContextHelper.Current.User.Identity.IsAuthenticated || Model?.GetType().GetProperty("HideHeaderSignInLink") == null)
+    @if (Context.User.Identity.IsAuthenticated)
+        @if (Context.User.Identity.IsAuthenticated || Model?.GetType().GetProperty("HideHeaderSignInLink") == null)
     {
         <div id="floating-menu-holder">
             <div class="account-information floating-menu" role="navigation">
@@ -132,7 +133,7 @@
                     <nav id="user-nav">
                         <ul>
                             <li><a href="@Url.Action("Help", "Home")" target="_blank">Help</a></li>
-                            @if (HttpContextHelper.Current.User.Identity.IsAuthenticated)
+                            @if (Context.User.Identity.IsAuthenticated)
                             {
                                 <li class="has-sub-menu">
                                     <a href="/" role="menuitem">Settings</a>
@@ -152,7 +153,7 @@
                                 </li>
                                 <li><a href="@Url.Action("SignOut", "Home")" role="menuitem">Sign out</a></li>
                             }
-                            else if (HttpContextHelper.Current.User.Identity.IsAuthenticated || Model?.GetType().GetProperty("HideHeaderSignInLink") == null)
+                            else if (Context.User.Identity.IsAuthenticated || Model?.GetType().GetProperty("HideHeaderSignInLink") == null)
                             {
                                 {
 
@@ -165,7 +166,7 @@
             </div>
         </div> <!--/floating-menu-holder-->
     }
-    @if (HttpContextHelper.Current.User.Identity.IsAuthenticated)
+    @if (Context.User.Identity.IsAuthenticated)
     {
         var controllerString = ViewContext.RouteData.Values["Controller"].ToString();
 

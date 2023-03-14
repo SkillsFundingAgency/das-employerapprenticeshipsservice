@@ -3,8 +3,6 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.Helpers;
 using Microsoft.Extensions.Configuration;
 
-using EASConfig = SFA.DAS.EAS.Domain.Configuration.EmployerApprenticeshipsServiceConfiguration;
-
 namespace SFA.DAS.EAS.Web.Extensions
 {
     public static class UrlHelperExtensions
