@@ -48,9 +48,9 @@
                         aria_describedby = !string.IsNullOrEmpty(Model.Data.NewNameError) ? "error-message-newname" : ""
                     })
             </div>
-            <div class="govuk-form-group">
+            <div class="govuk-button-group">
                 <button type="submit" class="govuk-button" id="accept">Save and continue</button>
-                <a href="@Url.Action("Index", "EmployerTeam")" class="govuk-link das-link--button-aligned">Cancel</a>
+                <a href="@Url.Action("Index", "EmployerTeam")" class="govuk-link">Cancel</a>
             </div>
 
         </div>
@@ -60,9 +60,9 @@
 
 @section breadcrumb {
     <div class="govuk-breadcrumbs">
-        <ol class="govuk-breadcrumbs__list" role="navigation">
+        <ol class="govuk-breadcrumbs__list">
             <li class="govuk-breadcrumbs__list-item">
-                <a href="@Url.Action("Index", "EmployerTeam")">Home</a>
+                <a href="@Url.Action("Index", "EmployerTeam")" class="govuk-breadcrumbs__link">Home</a>
             </li>
             <li class="govuk-breadcrumbs__list-item">@ViewBag.Title</li>
         </ol>
