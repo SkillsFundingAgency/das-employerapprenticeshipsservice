@@ -3,7 +3,7 @@ using SFA.DAS.EmployerAccounts.Web.Authentication;
 
 namespace SFA.DAS.EmployerAccounts.Web.Authorization;
 
-public class EmployerUserHasNoAccountAuthorizationHandler : AuthorizationHandler<EmployerAccountOwnerRequirement>
+public class EmployerUserHasNoAccountAuthorizationHandler : AuthorizationHandler<EmployerAccountAllRolesRequirement>
 {
     private readonly IEmployerAccountAuthorisationHandler _handler;
 
@@ -12,7 +12,7 @@ public class EmployerUserHasNoAccountAuthorizationHandler : AuthorizationHandler
         _handler = handler;
     }
 
-    protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, EmployerAccountOwnerRequirement requirement)
+    protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, EmployerAccountAllRolesRequirement requirement)
     {
         if (!(await _handler.IsUserCreatingAccount(context)))
         {
