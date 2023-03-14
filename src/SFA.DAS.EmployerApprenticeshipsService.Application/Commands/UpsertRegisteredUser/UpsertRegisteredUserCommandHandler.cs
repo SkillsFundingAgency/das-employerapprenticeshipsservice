@@ -3,6 +3,7 @@ using MediatR;
 using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
+using System;
 
 namespace SFA.DAS.EAS.Application.Commands.UpsertRegisteredUser
 {
@@ -26,7 +27,7 @@ namespace SFA.DAS.EAS.Application.Commands.UpsertRegisteredUser
 
             await _userRepository.Upsert(new User
             {
-                UserRef = message.UserRef,
+                Ref = Guid.Parse(message.UserRef),
                 Email = message.EmailAddress,
                 FirstName = message.FirstName,
                 LastName = message.LastName
