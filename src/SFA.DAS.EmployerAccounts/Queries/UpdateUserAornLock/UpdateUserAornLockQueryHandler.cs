@@ -15,6 +15,6 @@ public class UpdateUserAornLockQueryHandler : IRequestHandler<UpdateUserAornLock
     {
         await _userAornPayeLockService.UpdateUserAornPayeAttempt(request.UserRef, request.Success);
 
-        return default;
+        return Unit.Value;
     }
 }

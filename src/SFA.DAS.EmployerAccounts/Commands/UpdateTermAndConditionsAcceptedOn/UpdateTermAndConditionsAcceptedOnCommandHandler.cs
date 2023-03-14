@@ -15,6 +15,6 @@ public class UpdateTermAndConditionsAcceptedOnCommandHandler : IRequestHandler<U
     {
         await _userRepository.UpdateTermAndConditionsAcceptedOn(request.UserRef);
 
-        return default;
+        return Unit.Value;
     }
 }

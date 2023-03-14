@@ -30,6 +30,6 @@ public class UpdateShowAccountWizardCommandHandler : IRequestHandler<UpdateShowA
 
         await _membershipRepository.SetShowAccountWizard(message.HashedAccountId, message.ExternalUserId, message.ShowWizard);
 
-        return default;
+        return Unit.Value;
     }
 }

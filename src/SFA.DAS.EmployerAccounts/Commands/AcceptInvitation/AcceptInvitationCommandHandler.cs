@@ -66,7 +66,7 @@ public class AcceptInvitationCommandHandler : IRequestHandler<AcceptInvitationCo
 
         await PublishUserJoinedMessage(invitation.AccountId, user, invitation);
 
-        return default;
+        return Unit.Value;
     }
 
     private async Task CheckIfUserIsAlreadyAMember(Invitation invitation, User user)

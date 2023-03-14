@@ -29,6 +29,6 @@ public class RunHealthCheckCommandHandler : IRequestHandler<RunHealthCheckComman
 
         _db.Value.HealthChecks.Add(healthCheck);
 
-        return default;
+        return Unit.Value;
     }
 }

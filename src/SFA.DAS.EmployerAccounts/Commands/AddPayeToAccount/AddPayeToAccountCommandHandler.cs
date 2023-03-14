@@ -66,7 +66,7 @@ public class AddPayeToAccountCommandHandler : IRequestHandler<AddPayeToAccountCo
 
         await NotifyPayeSchemeAdded(message.HashedAccountId, message.Empref);
 
-        return default;
+        return Unit.Value;
     }
 
     private async Task ValidateMessage(AddPayeToAccountCommand message)

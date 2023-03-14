@@ -100,7 +100,7 @@ public class RemoveLegalEntityCommandHandler : IRequestHandler<RemoveLegalEntity
                 message.UserId);
         }
 
-        return default;
+        return Unit.Value;
     }
 
     private async Task ValidateLegalEntityHasNoCommitments(EmployerAgreementView agreement, long accountId, ValidationResult validationResult)

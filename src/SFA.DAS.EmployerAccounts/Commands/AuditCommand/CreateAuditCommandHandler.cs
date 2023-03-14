@@ -24,6 +24,6 @@ public class CreateAuditCommandHandler : IRequestHandler<CreateAuditCommand>
 
         await _auditService.SendAuditMessage(message.EasAuditMessage);
 
-        return default;
+        return Unit.Value;
     }
 }

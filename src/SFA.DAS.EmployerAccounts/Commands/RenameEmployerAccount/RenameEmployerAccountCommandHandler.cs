@@ -69,7 +69,7 @@ public class RenameEmployerAccountCommandHandler : IRequestHandler<RenameEmploye
 
         await PublishAccountRenamedMessage(accountId, accountPreviousName, message.NewName, owner.FullName(), owner.UserRef);
 
-        return default;
+        return Unit.Value;
     }
 
     private Task PublishAccountRenamedMessage(

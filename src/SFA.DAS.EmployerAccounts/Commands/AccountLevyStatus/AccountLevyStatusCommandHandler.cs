@@ -55,7 +55,7 @@ public class AccountLevyStatusCommandHandler : IRequestHandler<AccountLevyStatus
             _logger.LogError(ex, UpdateErrorMessage(command));
         }
 
-        return default;
+        return Unit.Value;
     }
 
     private static string UpdatedStartedMessage(AccountLevyStatusCommand updateCommand)

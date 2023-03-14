@@ -31,6 +31,6 @@ public class UnsubscribeNotificationHandler : IRequestHandler<UnsubscribeNotific
         setting.ReceiveNotifications = false;
         await _accountRepository.UpdateUserAccountSettings(command.UserRef, settings);
 
-        return default;
+        return Unit.Value;
     }
 }

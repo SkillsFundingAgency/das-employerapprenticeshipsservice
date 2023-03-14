@@ -34,7 +34,7 @@ public class UpdateUserNotificationSettingsCommandHandler : IRequestHandler<Upda
             await AddAuditEntry(setting);
         }
 
-        return default;
+        return Unit.Value;
     }
 
     private async Task AddAuditEntry(UserNotificationSetting setting)

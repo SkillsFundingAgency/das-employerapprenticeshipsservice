@@ -39,6 +39,6 @@ public class SendNotificationCommandHandler : IRequestHandler<SendNotificationCo
             _logger.LogError(ex, "Error sending email to notifications api");
         }
 
-        return default;
+        return Unit.Value;
     }
 }

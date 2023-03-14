@@ -43,6 +43,6 @@ public class ReportTrainingProviderCommandHandler : IRequestHandler<ReportTraini
 
         await _publisher.Send(new SendEmailCommand(ReportTrainingProviderTemplateId, _configuration.ReportTrainingProviderEmailAddress, tokens));
 
-        return default;
+        return Unit.Value;
     }
 }

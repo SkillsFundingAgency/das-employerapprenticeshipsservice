@@ -125,7 +125,7 @@ public class CreateInvitationCommandHandler : IRequestHandler<CreateInvitationCo
 
         await PublishUserInvitedEvent(caller.AccountId, message.NameOfPersonBeingInvited, caller.FullName(), callerExternalUserId);
 
-        return default;
+        return Unit.Value;
     }
 
     private Task PublishUserInvitedEvent(long accountId, string personInvited, string invitedByUserName, Guid invitedByUserRef)

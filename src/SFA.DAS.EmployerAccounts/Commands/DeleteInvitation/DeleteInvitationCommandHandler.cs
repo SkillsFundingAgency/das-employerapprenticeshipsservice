@@ -61,7 +61,7 @@ public class DeleteInvitationCommandHandler : IRequestHandler<DeleteInvitationCo
             }
         }, cancellationToken);
 
-        return default;
+        return Unit.Value;
     }
 
     private static bool IsWrongStatusToDelete(InvitationStatus status)

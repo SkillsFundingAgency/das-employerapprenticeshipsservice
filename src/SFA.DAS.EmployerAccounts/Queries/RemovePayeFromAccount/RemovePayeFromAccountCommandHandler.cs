@@ -57,7 +57,7 @@ public class RemovePayeFromAccountCommandHandler : IRequestHandler<RemovePayeFro
 
         await NotifyPayeSchemeRemoved(message.HashedAccountId, message.PayeRef);
 
-        return default;
+        return Unit.Value;
     }
 
     private async Task ValidateMessage(RemovePayeFromAccountCommand message)

@@ -37,6 +37,6 @@ public class UpsertRegisteredUserCommandHandler : IRequestHandler<UpsertRegister
 
         await _eventPublisher.Publish(new UpsertedUserEvent { Created = DateTime.UtcNow, UserRef = message.UserRef, CorrelationId = message.CorrelationId });
 
-        return default;
+        return Unit.Value;
     }
 }

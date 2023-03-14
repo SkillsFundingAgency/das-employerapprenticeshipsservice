@@ -19,6 +19,6 @@ public class UnsubscribeProviderEmailCommandHandler : IRequestHandler<Unsubscrib
         await _providerRegistrationApiClient.Unsubscribe(message.CorrelationId.ToString());
         _logger.LogInformation($"Sent ProviderEmail to Unsubscribe {message.CorrelationId}");
 
-        return default;
+        return Unit.Value;
     }
 }

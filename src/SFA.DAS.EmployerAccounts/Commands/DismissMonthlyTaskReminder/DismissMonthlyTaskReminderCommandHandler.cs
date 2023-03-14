@@ -32,6 +32,6 @@ public class DismissMonthlyTaskReminderCommandHandler : IRequestHandler<DismissM
           
         await _taskService.DismissMonthlyTaskReminder(accountId, request.ExternalUserId, request.TaskType);
 
-        return default;
+        return Unit.Value;
     }
 }

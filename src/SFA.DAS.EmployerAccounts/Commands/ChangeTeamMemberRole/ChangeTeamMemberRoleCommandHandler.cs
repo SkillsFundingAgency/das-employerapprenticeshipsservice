@@ -64,6 +64,6 @@ public class ChangeTeamMemberRoleCommandHandler : IRequestHandler<ChangeTeamMemb
             }
         }, cancellationToken);
 
-        return default;
+        return Unit.Value;
     }
 }

@@ -50,7 +50,7 @@ public class RemoveTeamMemberCommandHandler : IRequestHandler<RemoveTeamMemberCo
 
         await _eventPublisher.Publish(new AccountUserRemovedEvent(teamMember.AccountId, message.UserRef, DateTime.UtcNow));
 
-        return default;
+        return Unit.Value;
     }
 
     private async Task AddAuditEntry(MembershipView owner, TeamMember teamMember)

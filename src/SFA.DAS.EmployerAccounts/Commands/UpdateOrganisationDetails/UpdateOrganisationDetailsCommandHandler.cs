@@ -38,7 +38,7 @@ public class UpdateOrganisationDetailsCommandHandler : IRequestHandler<UpdateOrg
 
         await PublishLegalEntityUpdatedMessage(command.AccountId, command.AccountLegalEntityId, command.Name, command.Address, command.UserId);
 
-        return default;
+        return Unit.Value;
     }
 
     private async Task PublishLegalEntityUpdatedMessage(

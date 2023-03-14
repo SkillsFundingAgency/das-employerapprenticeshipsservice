@@ -92,6 +92,6 @@ public class ResendInvitationCommandHandler : IRequestHandler<ResendInvitationCo
             }
         }, cancellationToken);
 
-        return default;
+        return Unit.Value;
     }
 }

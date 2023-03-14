@@ -28,7 +28,7 @@ public sealed class CookieBasedOrganisationAndPayeDataSaver : IRequestHandler<Sa
             UpdateExistingCookieWithNewData(existingCookie, message.OrganisationData, message.PayeRefData);
         }
 
-        return default;
+        return Task.FromResult(Unit.Value);
     }
 
     private void UpdateExistingCookieWithNewData(EmployerAccountData existingCookie, EmployerAccountOrganisationData organisationData, EmployerAccountPayeRefData payeRefData)
