@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Identity.Client;
 using SFA.DAS.EmployerAccounts.Infrastructure;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerAccounts.Web.RouteValues;
@@ -257,8 +256,8 @@ public class HomeController : BaseController
         return RedirectToAction(ControllerConstants.IndexActionName);
     }
 
-    [Route("signOut")]
-    public async Task<IActionResult> SignOut()
+    [Route("signOut", Name = RouteNames.SignOut)]
+    new public async Task<IActionResult> SignOut()
     {
         var idToken = await HttpContext.GetTokenAsync("id_token");
 
