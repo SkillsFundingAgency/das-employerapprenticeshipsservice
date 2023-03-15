@@ -15,9 +15,9 @@ public static class ApprenticeshipLevyApiServiceRegistrations
                 employerAccountsConfiguration.Hmrc.BaseUrl += "/";
             }
             client.BaseAddress = new Uri(employerAccountsConfiguration.Hmrc.BaseUrl);
-        });
 
-        services.AddScoped<IApprenticeshipLevyApiClient, ApprenticeshipLevyApiClient>();
+            return new ApprenticeshipLevyApiClient(client);
+        });
 
         return services;
     }

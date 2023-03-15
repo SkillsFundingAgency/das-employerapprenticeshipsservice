@@ -10,7 +10,7 @@ public static class HmrcServiceRegistrations
 {
     public static IServiceCollection AddHmrcServices(this IServiceCollection services)
     {
-        services.AddSingleton<IHmrcService, HmrcService>();
+        services.AddScoped<IHmrcService, HmrcService>();
         services.AddSingleton<IHttpResponseLogger, HttpResponseLogger>();
         services.AddSingleton<ITokenServiceApiClient, TokenServiceApiClient>();
         services.AddSingleton<IAzureAdAuthenticationService, AzureAdAuthenticationService>();
