@@ -20,7 +20,7 @@
                         @Model.Data.OrganisationName
                     </td>
                     <td class="govuk-table__cell govuk-table__cell--numeric">
-                        <a href="@Url.Action(ControllerConstants.AmendOrganisationActionName, ControllerConstants.EmployerAccountControllerName)" class="govuk-link">Change</a>
+                        <a href="@Url.Action(ControllerConstants.AmendOrganisationActionName, ControllerConstants.EmployerAccountControllerName)" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> organisation</span></a>
                     </td>
                 </tr>
                 <tr class="govuk-table__row">
@@ -62,7 +62,7 @@
                         @Model.Data.AORN
                     </td>
                     <td class="govuk-table__cell govuk-table__cell--numeric">
-                        <a href="@Url.Action(ControllerConstants.SearchUsingAornActionName, ControllerConstants.SearchPensionRegulatorControllerName)" class="govuk-link">Change</a>
+                        <a href="@Url.Action(ControllerConstants.SearchUsingAornActionName, ControllerConstants.SearchPensionRegulatorControllerName)" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> account office reference number</span></a>
                     </td>
                 </tr>
                 }
@@ -80,7 +80,7 @@
                         </dl>
                     </td>
                     <td class="govuk-table__cell govuk-table__cell--numeric">
-                        <a href="@Url.Action(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName)" class="govuk-link">Change</a>
+                        <a href="@Url.Action(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName)" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> PAYE scheme</span></a>
                     </td>
                 </tr>
             </tbody>
