@@ -1,11 +1,10 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
-@{ViewBag.PageID = "get-apprenticeship-funding"; }
-@{ViewBag.Title = "Add a PAYE Scheme"; }
-@{ViewBag.HideNav = true; }
-@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
-
-
 @{
+    ViewBag.PageID = "get-apprenticeship-funding";
+    ViewBag.Title = "Add a PAYE Scheme";
+    ViewBag.ShowNav = false;
+    Layout = "~/Views/Shared/_Layout_CDN.cshtml";
+
     ViewBag.GaData.Vpv = "/service/getApprenticeshipFunding/get-government-funding";
     var hiddenClass = Model?.GetType().GetProperty("InError") != null ? "" : "das-hidden";
     var errorClass = Model?.GetType().GetProperty("InError") != null ? "govuk-form-group--error" : "";
@@ -109,20 +108,20 @@
 
 @section pageSpecificJS {
     <script type="text/javascript">
-      $(function () {
-        var pageTitle = $('h1.govuk-heading-xl').text().trim();
-        $('.govuk-radios').each(function () {
-          var dataLayerObj
-          var radios = $(this).find('input:radio');
-          radios.on('change', function () {
-            dataLayerObj = {
-              event: 'radio button selected',
-              page: pageTitle,
-              radio: this.id
-            }
-            window.dataLayer.push(dataLayerObj)
-          })
+        $(function () {
+            var pageTitle = $('h1.govuk-heading-xl').text().trim();
+            $('.govuk-radios').each(function () {
+                var dataLayerObj
+                var radios = $(this).find('input:radio');
+                radios.on('change', function () {
+                    dataLayerObj = {
+                        event: 'radio button selected',
+                        page: pageTitle,
+                        radio: this.id
+                    }
+                    window.dataLayer.push(dataLayerObj)
+                })
+            });
         });
-      });
     </script>
 }

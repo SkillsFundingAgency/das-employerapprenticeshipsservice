@@ -4,7 +4,7 @@
     ViewBag.PageID = "search-for-organisation";
     ViewBag.Title = "Search for your organisation";
     ViewBag.Section = "organisations";
-    ViewBag.HideNav = !Model.Data.IsExistingAccount;
+    ViewBag.ShowNav = Model.Data.IsExistingAccount;
     ViewBag.ZenDeskLabel = "eas-search-for-your-organisation";
     Layout = "~/Views/Shared/_Layout_CDN.cshtml";
 }

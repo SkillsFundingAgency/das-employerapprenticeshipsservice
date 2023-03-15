@@ -2,11 +2,13 @@
 @using SFA.DAS.EmployerAccounts.Web.Helpers
 @model OrchestratorResponse<SummaryViewModel>
 
-@{ViewBag.PageID = "page-onboard-paye-check-details"; }
-@{ViewBag.Title = "Check Details"; }
-@{ViewBag.HideNav = true; }
-@{ViewBag.GaData.Vpv = "/onboarding/address/update/page-extra-confirm-organisation";}
-@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
+@{
+    ViewBag.PageID = "page-onboard-paye-check-details";
+    ViewBag.Title = "Check Details";
+    ViewBag.ShowNav = false;
+    ViewBag.GaData.Vpv = "/onboarding/address/update/page-extra-confirm-organisation";
+    Layout = "~/Views/Shared/_Layout_CDN.cshtml";
+}
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -37,35 +39,35 @@
                 </tr>
                 @if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse || Model.Data.OrganisationType == OrganisationType.Charities)
                 {
-                <tr class="govuk-table__row">
-                    <th scope="row" class="govuk-table__header">
-                        @if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse)
-                        {
-                            <span>Companies House number</span>
-                        }
-                        else
-                        {
-                            <span>Charity number</span>
-                        }
-                    </th>
-                    <td colspan="2" class="govuk-table__cell">
-                        <span>@Model.Data.OrganisationReferenceNumber</span>
-                    </td>
-                </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">
+                            @if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse)
+                            {
+                                <span>Companies House number</span>
+                            }
+                            else
+                            {
+                                <span>Charity number</span>
+                            }
+                        </th>
+                        <td colspan="2" class="govuk-table__cell">
+                            <span>@Model.Data.OrganisationReferenceNumber</span>
+                        </td>
+                    </tr>
                 }
                 @if (!string.IsNullOrWhiteSpace(Model.Data.AORN))
                 {
-                <tr class="govuk-table__row">
-                    <th scope="row" class="govuk-table__header">
-                        Account office reference number
-                    </th>
-                    <td class="govuk-table__cell">
-                        @Model.Data.AORN
-                    </td>
-                    <td class="govuk-table__cell govuk-table__cell--numeric">
-                        <a href="@Url.Action(ControllerConstants.SearchUsingAornActionName, ControllerConstants.SearchPensionRegulatorControllerName)" class="govuk-link">Change</a>
-                    </td>
-                </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">
+                            Account office reference number
+                        </th>
+                        <td class="govuk-table__cell">
+                            @Model.Data.AORN
+                        </td>
+                        <td class="govuk-table__cell govuk-table__cell--numeric">
+                            <a href="@Url.Action(ControllerConstants.SearchUsingAornActionName, ControllerConstants.SearchPensionRegulatorControllerName)" class="govuk-link">Change</a>
+                        </td>
+                    </tr>
                 }
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">

@@ -40,7 +40,7 @@ public class EmployerTeamController : BaseController
 
         if (!response.Data.HasPayeScheme)
         {
-            ViewBag.HideNav = true;
+            ViewBag.ShowNav = false;
         }
 
         return View(response);
