@@ -6,7 +6,6 @@
     ViewBag.Section = "organisations";
     ViewBag.ShowNav = Model.Data.IsExistingAccount;
     ViewBag.ZenDeskLabel = "eas-search-for-your-organisation";
-    Layout = "~/Views/Shared/_Layout_CDN.cshtml";
 }
 
 @{
@@ -27,6 +26,5 @@
 </div>
 
 @section breadcrumb {
-    <div class="govuk-breadcrumbs" id="js-breadcrumbs">
-    </div>
+    <div class="das-js-back-link"></div>
 }

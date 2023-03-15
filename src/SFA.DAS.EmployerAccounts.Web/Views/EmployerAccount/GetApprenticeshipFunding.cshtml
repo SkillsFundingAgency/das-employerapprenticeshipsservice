@@ -3,7 +3,6 @@
     ViewBag.PageID = "get-apprenticeship-funding";
     ViewBag.Title = "Add a PAYE Scheme";
     ViewBag.ShowNav = false;
-    Layout = "~/Views/Shared/_Layout_CDN.cshtml";
 
     ViewBag.GaData.Vpv = "/service/getApprenticeshipFunding/get-government-funding";
     var hiddenClass = Model?.GetType().GetProperty("InError") != null ? "" : "das-hidden";

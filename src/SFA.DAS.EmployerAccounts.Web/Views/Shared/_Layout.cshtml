@@ -1,65 +1,65 @@
 @using Microsoft.ApplicationInsights.Extensibility
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using SFA.DAS.Employer.Shared.UI.Models;
 @using SFA.DAS.EmployerAccounts.Web.Helpers
 @using SFA.DAS.EmployerAccounts.Web.ViewComponents
+
 @inject IHtmlHelpers HtmlHelpers;
-@inject IHttpContextAccessor HtmlContextAccessor
+
 
 @{
+    ViewBag.HideHeaderBorder = true;
     string accountId = (string)this.ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId] ?? "";
     var footerModel = new FooterModel { AccountId = accountId, UsePrivacyV2 = true };
 }
-
 <!DOCTYPE html>
-<!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
-<!--[if gt IE 8]><!-->
-<html lang="en">
-<!--<![endif]-->
+<html lang="en" class="govuk-template ">
 <head>
-    @if (ViewBag.UserId != null)
-    {
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push({ 'userID': '@ViewBag.UserId' });
-        </script>
-    }
-
-    @await Html.PartialAsync("_GoogleTagManager")
+    <!-- Google Tag Manager -->
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({
+                'gtm.start':
+                    new Date().getTime(),
+                event: 'gtm.js'
+            });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s),
+                dl = l !== 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-KWQBWGJ');
+    </script>
+    <!-- End Google Tag Manager -->
     <meta charset="utf-8" />
     <title>@ViewBag.Title - Manage apprentices</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#0b0c0c">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     @if (!string.IsNullOrWhiteSpace(ViewBag.MetaDesc))
     {
         <meta name="description" content="@ViewBag.MetaDesc">
     }
-    <!--[if gt IE 8]><!-->
-    <link href="~/dist/css/govuk-template.css" media="screen" rel="stylesheet" /><!--<![endif]-->
-    <!--[if IE 6]><link href="/dist/css/govuk-template-ie6.css" media="screen" rel="stylesheet" /><![endif]-->
-    <!--[if IE 7]><link href="/dist/css/govuk-template-ie7.css" media="screen" rel="stylesheet" /><![endif]-->
-    <!--[if IE 8]><link href="/dist/css/govuk-template-ie8.css" media="screen" rel="stylesheet" /><![endif]-->
-    <link href="~/dist/css/govuk-template-print.css" media="print" rel="stylesheet" />
-    <!--[if IE 8]><link href="/dist/css/fonts-ie8.css" media="all" rel="stylesheet" /><![endif]-->
-    <!--[if gte IE 9]><!-->
-    <link href="~/dist/css/fonts.css" media="all" rel="stylesheet" /><!--<![endif]-->
-    <!--[if lt IE 9]><script src="/dist/javascripts/ie.js"></script><![endif]-->
-    <link rel="shortcut icon" href="/dist/images/favicon.ico" type="image/x-icon" />
-    <link rel="mask-icon" href="/dist/images/gov.uk_logotype_crown.svg" color="#0b0c0c">
-    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/dist/images/apple-touch-icon-152x152.png">
-    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/dist/images/apple-touch-icon-120x120.png">
-    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/dist/images/apple-touch-icon-76x76.png">
-    <link rel="apple-touch-icon-precomposed" href="/dist/images/apple-touch-icon-60x60.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta property="og:image" content="/dist/images/opengraph-image.png">
-    <meta name="msapplication-config" content="none" />
-    <link href="~/dist/css/select2.min.css" media="all" rel="stylesheet" />
+    <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon" />
+    <link rel="mask-icon" href="assets/images/govuk-mask-icon.svg" color="#0b0c0c"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/govuk-apple-touch-icon-180x180.png"/>
+    <link rel="apple-touch-icon" sizes="167x167" href="assets/images/govuk-apple-touch-icon-167x167.png"/>
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/images/govuk-apple-touch-icon-152x152.png"/>
+    <link rel="apple-touch-icon" href="assets/images/govuk-apple-touch-icon.png"/>
 
-    <!--[if IE 6]><link href="~/dist/css/screen-ie6.css" media="screen" rel="stylesheet" /><![endif]-->
-    <!--[if IE 7]><link href="~/dist/css/screen-ie7.css" media="screen" rel="stylesheet" /><![endif]-->
-    <!--[if IE 8]><link href="~/dist/css/screen-ie8.css" media="screen" rel="stylesheet" /><![endif]-->
-    <!--[if gt IE 8]><!-->
-    <link href="~/dist/css/screen.css" media="all" rel="stylesheet" />
+    <!--[if !IE 8]><!-->
+    <link href="css/main.css" rel="stylesheet" />
+    <link href="/css/app.css" rel="stylesheet" no-cdn />
+
+    @RenderSection("styles", required: false)
+
     <!--<![endif]-->
-    <link href="~/dist/css/site.css" media="all" rel="stylesheet" />
+
+    <meta property="og:image" content="assets/images/govuk-opengraph-image.png">
 
     @await Html.PartialAsync("GoogleAnalyticsInfo")
     <!-- This is from individual pages -->
@@ -96,36 +96,24 @@
         window.appInsights = appInsights;
         appInsights.trackPageView();
     </script>
-    <!--[if lt IE 9]><script src="/dist/javascripts/respond.min.js"></script><![endif]-->
     @await Html.PartialAsync("_ZenDeskWidget")
     @await Html.PartialAsync("_ZenDeskApiPush")
 </head>
-<body id="@ViewBag.PageID">
-    @await Html.PartialAsync("_GoogleTagManagerNoScript")
-    <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
-    <div id="skiplink-container">
-        <div>
-            <a href="#content" class="skiplink">Skip to main content</a>
-        </div>
-    </div>
-    <!--[if lt IE 8]>
-        <div id="unsupported-browser-message" aria-hidden="true">
-            <p>
-                You're using a web browser that we don't support. Upgrade to one of the <a href="https://www.gov.uk/help/browsers" target="_blank">browsers that we do support</a> to access all the site's features.
-            </p>
-        </div>
-    <![endif]-->
+<body id="@ViewBag.PageID" class="govuk-template__body">
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWQBWGJ" height="0" width="0" style="display: none; visibility: hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <script>
+        document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
+    </script>
     @*@await Html.PartialAsync("_CookieBanner", HtmlHelpers.GetCookieBannerViewModel(Html))*@
-    <div id="svg-defs" aria-hidden="true">
-        @await Html.PartialAsync("_SVGSprite")
-    </div>
-
-
+    <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
     @if (HtmlHelpers.IsSupportUser())
     {
         @(await Component.InvokeAsync(ComponentConstants.SupportUserBanner, new { model = Model is OrchestratorResponse ? Model?.Data : Model }))
     }
-
 
     @* ReSharper disable once Mvc.PartialViewNotResolved *@
     <partial name="_Header">
@@ -134,29 +122,41 @@
         </partial>
     </partial>
 
-    <main role="main" id="content">
+    <div class="govuk-width-container">
         @await RenderSectionAsync("breadcrumb", required: false)
-
-        @if (HtmlContextAccessor.HttpContext.User.Identity.IsAuthenticated)
-        {
-            @HtmlHelpers.GetContentByType("banner", useLegacyStyles: true)
-        }
-
-        @await Html.PartialAsync(@"_SuccessMessage", Model as OrchestratorResponse)
-        @RenderBody()
-    </main>
+        <main class="govuk-main-wrapper" id="main-content" role="main">
+            @if (User.Identity.IsAuthenticated)
+            {
+                @HtmlHelpers.GetContentByType("banner")
+            }
+            @await Html.PartialAsync(@"_SuccessMessage_CDN", Model as OrchestratorResponse)
+            @RenderBody()
+        </main>
+    </div>
 
     @* ReSharper disable once Mvc.PartialViewNotResolved *@
     <partial name="_Footer" model="@footerModel" />
 
-    <div id="global-app-error" class="app-error hidden"></div>
-    <script src="/bundles/sfajs.js"></script>
-    @await RenderSectionAsync("pageSpecificJS", required: false)
     @if (!string.IsNullOrWhiteSpace(SystemDetailsViewModel.EnvironmentName))
     {
-        <div class="about">
+        <p class="govuk-body">
             Environment: @SystemDetailsViewModel.EnvironmentName ● Version: @SystemDetailsViewModel.VersionNumber
-        </div>
+        </p>
     }
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+    <script src="/libs/govuk-frontend/all.js"></script>
+    <script src="/js/das-all.min.js"></script>
+    <script src="/js/app.min.js"></script>
+    
+    @await RenderSectionAsync("pageSpecificJS", required: false)
+
+    <script src="/js/app.js" no-cdn></script>
+
+    <script>
+        window.GOVUKFrontend.initAll();
+        window.DASFrontend.initAll();
+    </script>
+
 </body>
 </html>
