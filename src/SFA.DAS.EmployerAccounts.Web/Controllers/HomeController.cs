@@ -83,7 +83,6 @@ public class HomeController : BaseController
             if (account != null)
             {
                 return RedirectToRoute(RouteNames.EmployerTeamIndex, new { HashedAccountId = account.HashedId });
-                //return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { HashedAccountId = account.HashedId });
             }
         }
 
