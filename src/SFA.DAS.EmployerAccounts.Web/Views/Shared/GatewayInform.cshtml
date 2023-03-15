@@ -1,13 +1,14 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
 @model OrchestratorResponse<GatewayInformViewModel>
 
-@{ViewBag.PageID = "page-onboard-gov-gateway-inform"; }
 @{
+    ViewBag.PageID = "page-onboard-gov-gateway-inform";
     ViewBag.Title = "Check details";
     ViewBag.ZenDeskLabel = "eas-use-your-government-gateway-details";
+
+    ViewBag.Section = "paye";
+    ViewBag.ShowNav = false;
 }
-@{ViewBag.Section = "paye"; }
-@{ViewBag.HideNav = true; }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">

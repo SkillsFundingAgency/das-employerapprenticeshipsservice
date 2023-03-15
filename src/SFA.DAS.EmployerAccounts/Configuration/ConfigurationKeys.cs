@@ -7,6 +7,7 @@ public static class ConfigurationKeys
     public static string EmployerAccounts => ServiceName;
     public const string EmployerAccountsApiClient = $"{ServiceName}.Api.Client";
     public const string EmployerAccountsReadStore = $"{ServiceName}.ReadStore";
+    public const string Identity = $"{ServiceName}:Identity";
     public const string NotificationsApiClient = $"{ServiceName}.Notifications";
     public const string Features = $"{ServiceName}.Features";
     public const string AzureActiveDirectoryApiConfiguration = "AzureADApiAuthentication";

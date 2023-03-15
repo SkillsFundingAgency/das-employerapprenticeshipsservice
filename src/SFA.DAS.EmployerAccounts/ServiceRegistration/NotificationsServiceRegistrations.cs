@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Notifications.Api.Client;
@@ -13,7 +14,7 @@ public static class NotificationsServiceRegistrations
 {
     public static IServiceCollection AddNotifications(this IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<INotificationsApiClientConfiguration>(configuration.GetSection(nameof(NotificationsApiClientConfiguration)));
+        services.Configure<INotificationsApiClientConfiguration>(configuration.GetSection(ConfigurationKeys.NotificationsApiClient));
         services.AddSingleton(cfg => cfg.GetService<IOptions<NotificationsApiClientConfiguration>>().Value);
 
         services.AddTransient<INotificationsApi>(s =>

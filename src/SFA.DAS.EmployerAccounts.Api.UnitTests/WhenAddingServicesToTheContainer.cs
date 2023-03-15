@@ -83,7 +83,7 @@ public class WhenAddingServicesToTheContainer
         serviceCollection.AddSingleton(Mock.Of<IGenericEventFactory>());
         serviceCollection.AddSingleton(Mock.Of<IPayeSchemeEventFactory>());
         serviceCollection.AddSingleton(Mock.Of<IEventPublisher>());
-        serviceCollection.AddDatabaseRegistration(config["EmployerAccountsConfiguration:DatabaseConnectionString"]);
+        serviceCollection.AddDatabaseRegistration();
         serviceCollection.AddDataRepositories();
         serviceCollection.AddApplicationServices();
         serviceCollection.AddApiConfigurationSections(config);

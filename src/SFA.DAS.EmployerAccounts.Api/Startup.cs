@@ -68,7 +68,7 @@ public class Startup
         services.AddEntityFrameworkUnitOfWork<EmployerAccountsDbContext>();
         services.AddNServiceBusClientUnitOfWork();
 
-        services.AddDatabaseRegistration(employerAccountsConfiguration.DatabaseConnectionString);
+        services.AddDatabaseRegistration();
         services.AddDataRepositories();
         //services.AddEventsApi(employerAccountsConfiguration);
         services.AddExecutionPolicies();
@@ -101,7 +101,7 @@ public class Startup
 
     public void ConfigureContainer(UpdateableServiceProvider serviceProvider)
     {
-        serviceProvider.StartNServiceBus(_configuration, _configuration.IsDevOrLocal() || _configuration.IsTest());
+        serviceProvider.StartNServiceBus(_configuration.IsDevOrLocal() || _configuration.IsTest());
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)

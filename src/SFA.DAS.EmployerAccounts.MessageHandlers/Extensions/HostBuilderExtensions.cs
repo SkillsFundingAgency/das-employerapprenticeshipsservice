@@ -1,4 +1,6 @@
-﻿using NLog.Extensions.Logging;
+﻿using System.Configuration;
+using Microsoft.Extensions.Options;
+using NLog.Extensions.Logging;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerAccounts.Commands.AcceptInvitation;
@@ -25,16 +27,15 @@ public static class HostBuilderExtensions
     {
         hostBuilder.ConfigureServices((context,services) =>
         {
-            var accountsConfiguration = context.Configuration
-                .GetSection(ConfigurationKeys.EmployerAccounts)
-                .Get<EmployerAccountsConfiguration>();
+            services.Configure<EmployerAccountsConfiguration>(context.Configuration.GetSection(ConfigurationKeys.EmployerAccounts));
+            services.AddSingleton(cfg => cfg.GetService<IOptions<EmployerAccountsConfiguration>>().Value);
 
             services.AddApplicationServices();
             services.AddUnitOfWork();
             services.AddNServiceBus();
             services.AddMemoryCache();
             services.AddCachesRegistrations();
-            services.AddDatabaseRegistration(accountsConfiguration.DatabaseConnectionString);
+            services.AddDatabaseRegistration();
             services.AddMediatR(
                 typeof(UpdateAccountUserCommand),
                 typeof(AcceptInvitationCommand)

@@ -7,9 +7,9 @@ namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 
 public static class EventsApiServiceRegistrations
 {
-    public static IServiceCollection AddEventsApi(this IServiceCollection services, EmployerAccountsConfiguration employerAccountsConfiguration)
+    public static IServiceCollection AddEventsApi(this IServiceCollection services)
     {
-        services.AddSingleton<IEventsApiClientConfiguration>(employerAccountsConfiguration.EventsApi);
+        services.AddSingleton<IEventsApiClientConfiguration>(cfg => cfg.GetService<EmployerAccountsConfiguration>().EventsApi);
 
         services.AddTransient<IEventsApi>(s =>
         {

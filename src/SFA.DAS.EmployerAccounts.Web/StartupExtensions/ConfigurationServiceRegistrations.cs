@@ -18,8 +18,7 @@ public static class ConfigurationServiceRegistrations
         services.AddOptions();
         services.Configure<EmployerAccountsConfiguration>(configuration.GetSection(ConfigurationKeys.EmployerAccounts));
 
-        var employerAccountsConfiguration = configuration.Get<EmployerAccountsConfiguration>();
-        services.AddSingleton(employerAccountsConfiguration);
+        services.AddSingleton(cfg => cfg.GetService<IOptions<EmployerAccountsConfiguration>>().Value);
 
         services.Configure<EmployerAccountsReadStoreConfiguration>(configuration.GetSection(ConfigurationKeys.EmployerAccountsReadStore));
         services.AddSingleton(cfg => cfg.GetService<IOptions<EmployerAccountsReadStoreConfiguration>>().Value);
@@ -27,7 +26,7 @@ public static class ConfigurationServiceRegistrations
         services.Configure<ReferenceDataApiClientConfiguration>(configuration.GetSection(ConfigurationKeys.ReferenceDataApiClient));
         services.AddSingleton<IReferenceDataApiConfiguration>(cfg => cfg.GetService<IOptions<ReferenceDataApiClientConfiguration>>().Value);
 
-        services.AddSingleton<IAccountApiConfiguration>(c => c.GetService<EmployerAccountsConfiguration>().AccountApi);
+        services.AddSingleton<IAccountApiConfiguration>(cfg => cfg.GetService<EmployerAccountsConfiguration>().AccountApi);
 
         services.Configure<IdentityServerConfiguration>(configuration.GetSection("Identity"));
         services.AddSingleton(cfg => cfg.GetService<IOptions<IdentityServerConfiguration>>().Value);
@@ -37,9 +36,9 @@ public static class ConfigurationServiceRegistrations
         var encodingConfig = JsonConvert.DeserializeObject<EncodingConfig>(encodingConfigJson);
         services.AddSingleton(encodingConfig);
 
-        services.AddSingleton<IHmrcConfiguration>(employerAccountsConfiguration.Hmrc);
-        services.AddSingleton<ITokenServiceApiClientConfiguration>(employerAccountsConfiguration.TokenServiceApi);
-        services.AddSingleton<ITaskApiConfiguration>(employerAccountsConfiguration.TasksApi);
+        services.AddSingleton<IHmrcConfiguration>(cfg => cfg.GetService<EmployerAccountsConfiguration>().Hmrc);
+        services.AddSingleton<ITokenServiceApiClientConfiguration>(cfg => cfg.GetService<EmployerAccountsConfiguration>().TokenServiceApi);
+        services.AddSingleton<ITaskApiConfiguration>(cfg => cfg.GetService<EmployerAccountsConfiguration>().TasksApi);
 
         services.Configure<IEmployerAccountsApiClientConfiguration>(configuration.GetSection(ConfigurationKeys.EmployerAccountsApiClient));
         services.AddSingleton<IEmployerAccountsApiClientConfiguration>(cfg => cfg.GetService<IOptions<EmployerAccountsApiClientConfiguration>>().Value);

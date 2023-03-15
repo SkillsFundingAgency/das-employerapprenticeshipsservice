@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.AutoConfiguration.DependencyResolution;
 using SFA.DAS.Employer.Shared.UI;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Mappings;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
@@ -29,7 +30,6 @@ namespace SFA.DAS.EmployerAccounts.Web
     {
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
-        private EmployerAccountsConfiguration _employerAccountsConfiguration;
 
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
@@ -48,26 +48,26 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddConfigurationOptions(_configuration);
-            _employerAccountsConfiguration = _configuration.Get<EmployerAccountsConfiguration>();
-
             var identityServerConfiguration = _configuration
-                .GetSection("Identity")
+                .GetSection(ConfigurationKeys.Identity)
                 .Get<IdentityServerConfiguration>();
+
+            var _employerAccountsConfiguration = services.BuildServiceProvider().GetService<EmployerAccountsConfiguration>();
 
             services.AddOrchestrators();
             services.AddAutoMapper(typeof(Startup).Assembly, typeof(AccountMappings).Assembly);
             services.AddAutoConfiguration();
-            services.AddDatabaseRegistration(_employerAccountsConfiguration.DatabaseConnectionString);
+            services.AddDatabaseRegistration();
             services.AddDataRepositories();
             services.AddApplicationServices(_employerAccountsConfiguration);
             services.AddHmrcServices();
 
             services.AddMaMenuConfiguration(RouteNames.SignOut, identityServerConfiguration.ClientId, _configuration["ResourceEnvironmentName"]);
 
-            services.AddAuditServices(_employerAccountsConfiguration.AuditApi);
+            services.AddAuditServices();
             services.AddCachesRegistrations();
             services.AddDateTimeServices(_configuration);
-            services.AddEventsApi(_employerAccountsConfiguration);
+            services.AddEventsApi();
             services.AddNotifications(_configuration);
 
             services
@@ -83,6 +83,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             services.AddContentApiClient(_employerAccountsConfiguration);
             services.AddProviderRegistration(_employerAccountsConfiguration);
             services.AddApprenticeshipLevyApi(_employerAccountsConfiguration);
+            services.AddReferenceDataApi();
 
             services.AddAuthenticationServices();
 
@@ -138,7 +139,7 @@ namespace SFA.DAS.EmployerAccounts.Web
 
         public void ConfigureContainer(UpdateableServiceProvider serviceProvider)
         {
-            serviceProvider.StartNServiceBus(_configuration, _configuration.IsDevOrLocal() || _configuration.IsTest());
+            serviceProvider.StartNServiceBus(_configuration.IsDevOrLocal() || _configuration.IsTest());
 
             // Replacing ClientOutboxPersisterV2 with a local version to fix unit of work issue due to propogating Task up the chain rathert than awaiting on DB Command.
             // not clear why this fixes the issue. Attempted to make the change in SFA.DAS.Nservicebus.SqlServer however it conflicts when upgraded with SFA.DAS.UnitOfWork.Nservicebus

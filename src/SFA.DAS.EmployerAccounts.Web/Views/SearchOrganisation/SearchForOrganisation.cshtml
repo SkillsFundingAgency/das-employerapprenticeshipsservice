@@ -15,7 +15,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">@ViewBag.Title</h1>
-        <form action="@Url.Action("SearchForOrganisation")" method="POST">
+        <form asp-controller="@ControllerConstants.SearchOrganisationControllerName" asp-action="@ControllerConstants.SearchForOrganisationActionName" method="POST">
             <div class="govuk-form-group">
                 <label class="govuk-label" for="searchTerm">Enter organisation name</label>
                 <input type="text" id="searchTerm" name="searchTerm" value="" class="govuk-input" />
