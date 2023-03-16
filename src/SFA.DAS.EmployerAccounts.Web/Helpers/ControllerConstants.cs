@@ -61,7 +61,8 @@ public static class ControllerConstants
     public const string SearchForOrganisationActionName = "SearchForOrganisation";
     public const string SearchForOrganisationViewName = "SearchForOrganisation";
     public const string SearchForOrganisationResultsActionName = "SearchForOrganisationResults";
-    public const string SearchForOrganisationResultsViewName = "SearchForOrganisationResults";
+    public const string SearchForOrganisationResultsViewName = "SearchForOrganisationResults"; 
+    public const string SearchForOrganisationResultsConfirmActionName = "Confirm";
     public const string SearchPensionRegulatorControllerName = "SearchPensionRegulator";
     public const string SearchPensionRegulatorActionName = "SearchPensionRegulator";
     public const string SearchPensionRegulatorResultsViewName = "SearchPensionRegulatorResults";
