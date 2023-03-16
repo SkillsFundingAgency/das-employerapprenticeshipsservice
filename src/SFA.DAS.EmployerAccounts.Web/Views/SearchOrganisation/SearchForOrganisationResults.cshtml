@@ -4,19 +4,17 @@
 @{
     ViewBag.PageID = "select-your-organisation";
     ViewBag.Title = "Select your organisation";
-    ViewBag.HideNav = !Model.Data.IsExistingAccount;
+    ViewBag.ShowNav = Model.Data.IsExistingAccount;
     ViewBag.Section = "organisations";
     ViewBag.ZenDeskLabel = "eas-select-your-organisation";
-}
 
-@{
     ViewBag.GaData.Vpv = Model.Data.IsExistingAccount ? "/accounts/organisations/search/results/select-your-organisation" : "/onboarding/search/results/select-your-organisation";
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">@ViewBag.Title</h1>
-        <form action="@Url.Action("SearchForOrganisationResults")" method="POST" role="search" aria-label="On this page">
+        <form asp-controller="@ControllerConstants.SearchOrganisationControllerName" asp-action="@ControllerConstants.SearchForOrganisationActionName" method="POST" role="search" aria-label="On this page">
             <div class="govuk-form-group">
                 <label for="searchTerm" class="govuk-label">
                     Search results
@@ -34,7 +32,8 @@
 
 <div class="govuk-grid-row">
     <section class="govuk-grid-column-one-third">
-        <form id="filter" action="@Url.Action("SearchForOrganisationResults")?searchTerm=@(WebUtility.UrlEncode(Model.Data.SearchTerm))" method="POST">
+        <form id="filter" asp-controller="@ControllerConstants.SearchOrganisationControllerName" asp-action="@ControllerConstants.SearchForOrganisationActionName" asp-route-searchTerm="@(Uri.EscapeDataString(Model.Data.SearchTerm))" method="POST">
+
             <div class="das-filter">
                 <div class="das-filter__header">
                     <h2 class="govuk-heading-m das-filter__heading">Filter results</h2>

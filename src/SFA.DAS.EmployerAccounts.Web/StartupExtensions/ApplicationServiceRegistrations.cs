@@ -39,12 +39,10 @@ public static class ApplicationServiceRegistrations
         services.Decorate<IRecruitService, RecruitServiceWithTimeout>();
 
         services.AddScoped<IAccountApiClient, AccountApiClient>();
-        services.AddTransient<IReferenceDataService, ReferenceDataService>();
+
         services.AddHttpClient<ITaskApiClient, TaskApiClient>();
         services.AddTransient<ITaskService, TaskService>();
         services.AddTransient<IPensionRegulatorService, PensionRegulatorService>();
-
-        services.AddScoped<IReferenceDataApiClient, ReferenceDataApiClient>();
 
         services.AddTransient<IDateTimeService, DateTimeService>();
 

@@ -1,9 +1,10 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
-@{ViewBag.PageID = "page-paye-scheme-ways-to-add"; }
-@{ViewBag.Title = "Ways to add your PAYE scheme"; }
-@{ViewBag.Section = "paye";}
-@{ViewBag.HideNav = true; }
 @{
+    ViewBag.PageID = "page-paye-scheme-ways-to-add";
+    ViewBag.Title = "Ways to add your PAYE scheme";
+    ViewBag.Section = "paye";
+    ViewBag.ShowNav = false;
+
     ViewBag.GaData.Vpv = "/accounts/pensionregulator/search-by-aorn";
 }
 
@@ -33,7 +34,7 @@
                 </div>
             }
 
-            if (!string.IsNullOrEmpty(Model.AornError) || !string.IsNullOrEmpty(Model.PayeRefError)) 
+            if (!string.IsNullOrEmpty(Model.AornError) || !string.IsNullOrEmpty(Model.PayeRefError))
             {
                 <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
                     <h2 class="govuk-error-summary__title" id="error-summary-title" id="error-summary-heading">
@@ -102,24 +103,24 @@
 
 @section pageSpecificJS {
     <script type="text/javascript">
-      // DataLayer pushes when form validation message is shown
-      $(function () {
-        var errorSummary = $('.govuk-error-summary');
-        var pageTitle = $('h1.govuk-heading-xl').text();
-        errorSummary.each(function () {
-          var dataLayerObj
-          var numberOfErrors = $(this).find('ul.govuk-error-summary__list li').length;
-          var validationMessage = "Form validation";
-          if (numberOfErrors === 1) {
-            validationMessage = $(this).find('a').eq(0).text();
-          }
-          dataLayerObj = {
-            event: 'form submission error',
-            page: pageTitle,
-            message: validationMessage
-          }
-          window.dataLayer.push(dataLayerObj)
+        // DataLayer pushes when form validation message is shown
+        $(function () {
+            var errorSummary = $('.govuk-error-summary');
+            var pageTitle = $('h1.govuk-heading-xl').text();
+            errorSummary.each(function () {
+                var dataLayerObj
+                var numberOfErrors = $(this).find('ul.govuk-error-summary__list li').length;
+                var validationMessage = "Form validation";
+                if (numberOfErrors === 1) {
+                    validationMessage = $(this).find('a').eq(0).text();
+                }
+                dataLayerObj = {
+                    event: 'form submission error',
+                    page: pageTitle,
+                    message: validationMessage
+                }
+                window.dataLayer.push(dataLayerObj)
+            });
         });
-      });
     </script>
 }

@@ -19,9 +19,9 @@ public static class NServiceBusServiceRegistrations
 {
     private const string EndPointName = "SFA.DAS.EmployerAccounts.Web";
 
-    public static void StartNServiceBus(this UpdateableServiceProvider services, IConfiguration configuration, bool isDevOrLocal)
+    public static void StartNServiceBus(this UpdateableServiceProvider services, bool isDevOrLocal)
     {
-        var employerAccountsConfiguration = configuration.Get<EmployerAccountsConfiguration>();
+        var employerAccountsConfiguration = services.GetService<EmployerAccountsConfiguration>();
 
         var databaseConnectionString = employerAccountsConfiguration.DatabaseConnectionString;
 

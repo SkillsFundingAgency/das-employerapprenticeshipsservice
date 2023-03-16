@@ -63,7 +63,7 @@ public class WhenAddingServicesToTheContainer
         services.AddNServiceBus();
         services.AddMemoryCache();
         services.AddCachesRegistrations();
-        services.AddDatabaseRegistration(accountsConfiguration.DatabaseConnectionString);
+        services.AddDatabaseRegistration();
         services.AddMediatR(
             typeof(UpdateAccountUserCommand),
             typeof(AcceptInvitationCommand)

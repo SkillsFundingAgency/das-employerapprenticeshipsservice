@@ -4,11 +4,9 @@
 @{ 
     ViewBag.PageID = "select-your-pension-regulator-organisation";
     ViewBag.Title = "Select your organisation";
-    ViewBag.HideNav = !Model.IsExistingAccount;
+    ViewBag.ShowNav = Model.IsExistingAccount;
     ViewBag.Section = "pensionregulator";
-}
 
-@{
     ViewBag.GaData.Vpv = Model.IsExistingAccount ? "/accounts/pensionregulator/search/results/select-your-pension-regulator-organisation" : "/onboarding/search/results/select-your-pension-regulator-organisation";
     var errorClass = ViewBag.InError != null && ViewBag.InError ? "govuk-form-group--error" : "";
 }
