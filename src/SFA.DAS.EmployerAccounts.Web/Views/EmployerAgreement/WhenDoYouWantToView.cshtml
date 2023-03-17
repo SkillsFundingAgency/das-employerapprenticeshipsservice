@@ -33,8 +33,11 @@
         }
 
         
-        <form method="POST" action="@Url.Action(ControllerConstants.WhenDoYouWantToView)">
-            @Html.AntiForgeryToken()
+        <form method="POST" 
+            asp-controller="@ControllerConstants.EmployerAgreementControllerName" 
+            asp-action="@ControllerConstants.WhenDoYouWantToView"
+            asp-route-HashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]"
+            asp-route-hashedAgreementId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAgreementId]">
             <fieldset class="govuk-fieldset" aria-describedby="intro-hint">
 
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">

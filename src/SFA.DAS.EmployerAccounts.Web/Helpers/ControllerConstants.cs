@@ -101,4 +101,5 @@ public static class ControllerConstants
     public const string ViewApprenticeBeforeApprove = "ViewApprenticeBeforeApprove";
     public const string ViewAllAgreementActionName = "ViewAllAgreements";
     public const string InsetText = "Inset";
+    public const string CreateAccountActionName = "CreateAccount";
 }

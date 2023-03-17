@@ -11,6 +11,10 @@
         public const string SearchPensionRegulatorAddOrganisation = "search-pension-regulator-add-org";
         public const string SearchPensionRegulatorCreateAccount = "search-pension-regulator-create-account";
         public const string SignOut = "SignOut";
-
+        public const string EmployerAgreementIndex = "employer-agreement-index";
+        public const string EmployerAccountCreate = "employer-account-create";
+        public const string GetSignedPdfAgreement = "get-signed-pdf-agreement";
+        public const string OrganisationConfirm = "organisation-confirm";
+        public const string OrganisationGoToNextStep = "organisation-go-to-next-step";
     }
 }

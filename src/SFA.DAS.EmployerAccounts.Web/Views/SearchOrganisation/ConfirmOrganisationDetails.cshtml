@@ -1,10 +1,15 @@
 ﻿﻿@using SFA.DAS.Common.Domain.Types
 @model OrchestratorResponse<OrganisationDetailsViewModel>
-@{ ViewBag.PageID = "page-extra-confirm-organisation"; }
-@{ ViewBag.Title = "Confirm details";
-                ViewBag.Section = "organisations";
-                ViewBag.ZenDeskLabel = "eas-check-your-details"; }
-@{ ViewBag.GaData.Vpv = "/onboarding/address/update/page-extra-confirm-organisation"; }
+@{
+    ViewBag.PageID = "page-extra-confirm-organisation";
+    ViewBag.Title = "Confirm details";
+    ViewBag.Section = "organisations";
+    ViewBag.ZenDeskLabel = "eas-check-your-details";
+    ViewBag.GaData.Vpv = "/onboarding/address/update/page-extra-confirm-organisation";
+
+    var hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId];
+}
+
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">
@@ -22,14 +27,14 @@
 
             @if (Model.Data.Type != OrganisationType.PublicBodies && Model.Data.Type != OrganisationType.Other && Model.Data.Type != OrganisationType.PensionsRegulator)
             {
-<tr>
-    <th role="row">Organisation number</th>
-    <td class="responsive-td">@Model.Data.ReferenceNumber</td>
-</tr>            }
+                <tr>
+                    <th role="row">Organisation number</th>
+                    <td class="responsive-td">@Model.Data.ReferenceNumber</td>
+                </tr>
+            }
         </table>
 
-        <form action="@Url.Action("Confirm", "Organisation")" method="POST">
-            @Html.AntiForgeryToken()
+        <form asp-route="@RouteNames.OrganisationConfirm" asp-route-HashedAccountId="@hashedAccountId" method="POST">
             <input type="hidden" id="legalEntityName" name="name" value="@Model.Data.Name" />
             <input type="hidden" id="legalEntityCode" name="code" value="@Model.Data.ReferenceNumber" />
             <input type="hidden" id="legalEntityAddress" name="address" value="@Model.Data.Address" />
@@ -42,7 +47,10 @@
             <p class="heading-medium">Is this correct?</p>
             <span>
                 <input class="button" type="submit" value="Yes, continue" />
-                <a class="button button-link" href="@Url.Action("SearchForOrganisation", "SearchOrganisation", new {AccountId = Model.Data.HashedId})">No, search again</a>
+                <a class="button button-link"
+                   asp-controller="@ControllerConstants.SearchOrganisationControllerName"
+                   asp-action="@ControllerConstants.SearchForOrganisationActionName"
+                   asp-route-HashedAccountId="@hashedAccountId">No, search again</a>
             </span>
         </form>
 

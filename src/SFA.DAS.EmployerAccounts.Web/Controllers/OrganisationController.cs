@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
+using SFA.DAS.EmployerAccounts.Web.RouteValues;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
@@ -46,7 +47,7 @@ public class OrganisationController : BaseController
     }
 
     [HttpPost]
-    [Route("confirm")]
+    [Route("confirm", Name = RouteNames.OrganisationConfirm)]
     public async Task<IActionResult> Confirm(
         string hashedAccountId, string name, string code, string address, DateTime? incorporated,
         string legalEntityStatus, OrganisationType organisationType, byte? publicSectorDataSource, string sector, bool newSearch)
@@ -91,12 +92,8 @@ public class OrganisationController : BaseController
 
     [HttpPost]
     [Route("nextStep")]
-    public async Task<IActionResult> GoToNextStep(string nextStep, string hashedAccountId, string organisationName, string hashedAgreementId)
+    public IActionResult GoToNextStep(string nextStep, string hashedAccountId, string organisationName, string hashedAgreementId)
     {
-        var userId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
-
-        var userShownWizard = await _orchestrator.UserShownWizard(userId, hashedAccountId);
-
         switch (nextStep)
         {
             case "agreement": return RedirectToAction(ControllerConstants.AboutYourAgreementActionName, ControllerConstants.EmployerAgreementControllerName, new { agreementid = hashedAgreementId });
@@ -111,7 +108,7 @@ public class OrganisationController : BaseController
                 var errorMessage = "Please select one of the next steps below";
                 return View(ControllerConstants.OrganisationAddedNextStepsViewName, new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
                 {
-                    Data = new OrganisationAddedNextStepsViewModel { ErrorMessage = errorMessage, OrganisationName = organisationName, ShowWizard = userShownWizard, HashedAgreementId = hashedAgreementId },
+                    Data = new OrganisationAddedNextStepsViewModel { ErrorMessage = errorMessage, OrganisationName = organisationName, HashedAgreementId = hashedAgreementId },
                     FlashMessage = new FlashMessageViewModel
                     {
                         Headline = "Invalid next step chosen",

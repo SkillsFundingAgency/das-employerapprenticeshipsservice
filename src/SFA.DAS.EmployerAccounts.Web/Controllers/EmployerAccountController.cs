@@ -245,7 +245,7 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpPost]
-    [Route("create")]
+    [Route("create", Name = RouteNames.EmployerAccountCreate)]
     public async Task<IActionResult> CreateAccount()
     {
         var enteredData = _employerAccountOrchestrator.GetCookieData();
@@ -296,7 +296,7 @@ public class EmployerAccountController : BaseController
         if (returnUrlCookie != null && !string.IsNullOrWhiteSpace(returnUrlCookie.Value))
             return Redirect(returnUrlCookie.Value);
 
-        return RedirectToAction(ControllerConstants.WhenDoYouWantToView, ControllerConstants.EmployerAgreementControllerName, new { hashedAccountId = response.Data.EmployerAgreement.HashedAccountId, agreementId = response.Data.EmployerAgreement.HashedAgreementId });
+        return RedirectToAction(ControllerConstants.WhenDoYouWantToView, ControllerConstants.EmployerAgreementControllerName, new { hashedAccountId = response.Data.EmployerAgreement.HashedAccountId, hashedAgreementId = response.Data.EmployerAgreement.HashedAgreementId });
     }
 
     [HttpGet]
