@@ -2,6 +2,8 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.Employer.Shared.UI;
+using SFA.DAS.Employer.Shared.UI.Attributes;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerAccounts.Web.RouteValues;
 
@@ -9,6 +11,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
 [Route("accounts/{HashedAccountId}")]
 [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+[SetNavigationSection(NavigationSection.AccountsAgreements)]
 public class EmployerAgreementController : BaseController
 {
     private const int InvitationComplete = 4;
@@ -83,7 +86,7 @@ public class EmployerAgreementController : BaseController
     }
 
     [HttpGet]
-    [Route("agreements/{hashedAgreementId}/about-your-agreement")]
+    [Route("agreements/{hashedAgreementId}/about-your-agreement", Name = RouteNames.AboutYourAgreement)]
     public async Task<IActionResult> AboutYourAgreement(string hashedAgreementId, string hashedAccountId)
     {
         var agreement = await _orchestrator.GetById(
@@ -109,7 +112,7 @@ public class EmployerAgreementController : BaseController
     }
 
     [HttpPost]
-    [Route("agreements/{hashedAgreementId}/sign")]
+    [Route("agreements/{hashedAgreementId}/sign", Name = RouteNames.EmployerAgreementSign)]
     public async Task<IActionResult> Sign(string hashedAgreementId, string hashedAccountId, int? choice)
     {
         var userInfo = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);

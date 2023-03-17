@@ -1489,8 +1489,11 @@
                 </strong>
             </div>
 
-            <form method="post" action="@Url.Action("Sign", "EmployerAgreement")">
-                @Html.AntiForgeryToken()
+            <form method="post" 
+                asp-route="@RouteNames.EmployerAgreementSign";
+                asp-hashedAgreementId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAgreementId]"
+                asp-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]">
+
 
                 <div>
                     <div class="@("govuk-form-group " + (!ViewData.ModelState.IsValid ? "govuk-form-group--error" : string.Empty))">

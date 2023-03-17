@@ -174,17 +174,13 @@ public class OrganisationOrchestrator : UserVerificationOrchestratorBase, IOrche
         return userResponse.User.ShowWizard && userResponse.User.Role == Role.Owner;
     }
 
-    public virtual async Task<OrchestratorResponse<OrganisationAddedNextStepsViewModel>> GetOrganisationAddedNextStepViewModel(
+    public virtual OrchestratorResponse<OrganisationAddedNextStepsViewModel> GetOrganisationAddedNextStepViewModel(
         string organisationName,
-        string userId,
-        string hashedAccountId,
         string hashedAgreementId)
     {
-        var showWizard = await UserShownWizard(userId, hashedAccountId);
-
         return new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
         {
-            Data = new OrganisationAddedNextStepsViewModel { OrganisationName = organisationName, ShowWizard = showWizard, HashedAgreementId = hashedAgreementId }
+            Data = new OrganisationAddedNextStepsViewModel { OrganisationName = organisationName, HashedAgreementId = hashedAgreementId }
         };
     }
 

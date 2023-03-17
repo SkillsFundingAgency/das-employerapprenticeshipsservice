@@ -1,12 +1,15 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.Employer.Shared.UI;
+using SFA.DAS.Employer.Shared.UI.Attributes;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerAccounts.Web.RouteValues;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
 [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+[SetNavigationSection(NavigationSection.AccountsAgreements)]
 [Route("accounts/{HashedAccountId}/organisations")]
 public class OrganisationController : BaseController
 {
@@ -26,7 +29,7 @@ public class OrganisationController : BaseController
     {
         var userId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
 
-        var viewModel = await _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName, userId, hashedAccountId, hashedAgreementId);
+        var viewModel = _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName, hashedAgreementId);
 
         viewModel.FlashMessage = GetFlashMessageViewModelFromCookie();
 
@@ -39,7 +42,7 @@ public class OrganisationController : BaseController
     {
         var userId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
 
-        var viewModel = await _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName, userId, hashedAccountId, hashedAgreementId);
+        var viewModel = _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName, hashedAgreementId);
 
         viewModel.FlashMessage = GetFlashMessageViewModelFromCookie();
 
@@ -91,12 +94,12 @@ public class OrganisationController : BaseController
     }
 
     [HttpPost]
-    [Route("nextStep")]
+    [Route("nextStep", Name = RouteNames.OrganisationGoToNextStep)]
     public IActionResult GoToNextStep(string nextStep, string hashedAccountId, string organisationName, string hashedAgreementId)
     {
         switch (nextStep)
         {
-            case "agreement": return RedirectToAction(ControllerConstants.AboutYourAgreementActionName, ControllerConstants.EmployerAgreementControllerName, new { agreementid = hashedAgreementId });
+            case "agreement": return RedirectToRoute(RouteNames.AboutYourAgreement, new { HashedAccountId = hashedAccountId, hashedAgreementId });
 
             case "teamMembers": return RedirectToAction(ControllerConstants.ViewTeamActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId });
 

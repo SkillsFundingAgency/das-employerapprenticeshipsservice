@@ -12,7 +12,7 @@
     <div class="column-two-thirds">
         <h1 class="heading-large">What's next?</h1>
 
-        <form asp-route="@RouteNames.OrganisationGoToNextStep" asp-route-HashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" method="post">
+        <form asp-route="@RouteNames.OrganisationGoToNextStep" asp-route-HashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" method="POST">
             <fieldset>
 
                 <legend>
@@ -47,6 +47,7 @@
                 </div>
 
                 <input type="hidden" name="organisationName" value="@Model.Data.OrganisationName" />
+                <input type="hidden" name="hashedAgreementId" value="@Model.Data.HashedAgreementId" />
 
                 <div class="form-group">
                     <button type="submit" class="button">Continue</button>
