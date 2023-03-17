@@ -149,7 +149,7 @@ public class EmployerAgreementRepository : BaseRepository, IEmployerAgreementRep
 
     public async Task SetAccountLegalEntityAgreementDetails(long accountLegalEntityId, long? pendingAgreementId, int? pendingAgreementVersion, long? signedAgreementId, int? signedAgreementVersion)
     {
-        var legalEntity = await _db.Value.AccountLegalEntities.AsTracking().SingleAsync(x => x.Id == accountLegalEntityId);
+        var legalEntity = await _db.Value.AccountLegalEntities.SingleAsync(x => x.Id == accountLegalEntityId);
         legalEntity.PendingAgreementId = pendingAgreementId;
         legalEntity.PendingAgreementVersion = pendingAgreementVersion;
         legalEntity.SignedAgreementId = signedAgreementId;
