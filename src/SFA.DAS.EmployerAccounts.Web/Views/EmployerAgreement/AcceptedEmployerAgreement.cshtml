@@ -17,7 +17,7 @@
         </div>
 
         <p class="govuk-body">
-            <a class="govuk-link" href="@Url.Action(ControllerConstants.GetSignedPdfAgreementActionName, ControllerConstants.EmployerAgreementControllerName)" target="_blank">
+            <a class="govuk-link" asp-route="@RouteNames.GetSignedPdfAgreement" asp-route-HashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" asp-route-hashedAgreementId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAgreementId]" target="_blank">
                 Download your accepted agreement
             </a>
             &nbsp;(<abbr>PDF</abbr>, 225<abbr>KB</abbr>)
@@ -38,6 +38,6 @@
             </div>
         }
 
-        <a class="govuk-button" href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName)">View your account</a>
+        <a class="govuk-button" asp-route="@RouteNames.EmployerTeamIndex" asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]">View your account</a>
     </div>
 </div>

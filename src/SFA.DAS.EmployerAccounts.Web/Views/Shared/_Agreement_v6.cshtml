@@ -1531,7 +1531,9 @@
 
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
-        <p class="govuk-body"><a href="@Url.Action("GetPdfAgreement","EmployerAgreement")" class="govuk-link" target="_blank">Download the agreement</a> (<abbr>PDF</abbr>, 239<abbr>KB</abbr>)</p>
+        <p class="govuk-body">
+            <a asp-route="@RouteNames.GetPdfAgreement" asp-route-HashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" asp-route-hashedAgreementId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAgreementId]" target="_blank" class="govuk-link download">Download the agreement</a> (<abbr>PDF</abbr>, 239<abbr>KB</abbr>)
+        </p>
         
     </div>
 </div>

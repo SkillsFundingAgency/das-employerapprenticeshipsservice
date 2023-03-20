@@ -23,7 +23,7 @@
         {
             <h1 class="govuk-heading-xl">Do you accept the employer agreement on behalf of @Model.EmployerAgreement.LegalEntityName<span>?</span></h1>
         }
-        
+
         <p class="govuk-body govuk-!-margin-bottom-6">The points to note and guidance notes are not part of the employer agreement.</p>
 
         <div id="agreement-header" class="grey-background call-to-action">
@@ -1499,7 +1499,9 @@
 
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
-        <p class="govuk-body"><a href="@Url.Action("GetPdfAgreement","EmployerAgreement")" class="govuk-link" target="_blank">Download the agreement</a> (<abbr>PDF</abbr>, 637<abbr>KB</abbr>)</p>
-        
+        <p class="govuk-body">
+            <a asp-route="@RouteNames.GetPdfAgreement" asp-route-HashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" asp-route-hashedAgreementId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAgreementId]" target="_blank" class="govuk-link download">Download the agreement</a> (<abbr>PDF</abbr>, 637<abbr>KB</abbr>)
+        </p>
+
     </div>
 </div>

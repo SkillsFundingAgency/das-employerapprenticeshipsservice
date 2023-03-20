@@ -165,7 +165,7 @@ public class EmployerAgreementController : BaseController
     }
 
     [HttpGet]
-    [Route("agreements/{hashedAgreementId}/agreement-pdf")]
+    [Route("agreements/{hashedAgreementId}/agreement-pdf", Name = RouteNames.GetPdfAgreement)]
     public async Task<IActionResult> GetPdfAgreement(string hashedAgreementId, string hashedAccountId)
     {
         var stream = await _orchestrator.GetPdfEmployerAgreement(hashedAccountId, hashedAgreementId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
