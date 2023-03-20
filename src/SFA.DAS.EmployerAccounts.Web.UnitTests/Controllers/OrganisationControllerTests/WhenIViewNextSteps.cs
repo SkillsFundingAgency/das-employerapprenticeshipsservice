@@ -32,8 +32,8 @@ class WhenIViewNextSteps : ControllerTestBase
 
         AddUserToContext(userId);
 
-        _orchestrator.Setup(x => x.GetOrganisationAddedNextStepViewModel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-            .ReturnsAsync(new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
+        _orchestrator.Setup(x => x.GetOrganisationAddedNextStepViewModel(It.IsAny<string>(), It.IsAny<string>()))
+            .Returns(new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
             {
                 Data = new OrganisationAddedNextStepsViewModel { ShowWizard = true }
             });
@@ -45,7 +45,7 @@ class WhenIViewNextSteps : ControllerTestBase
         //Assert
         Assert.IsNotNull(model);
         Assert.IsTrue(model.Data.ShowWizard);
-        _orchestrator.Verify(x => x.GetOrganisationAddedNextStepViewModel(It.IsAny<string>(), userId, hashedAccountId, hashedAgreementId), Times.Once);
+        _orchestrator.Verify(x => x.GetOrganisationAddedNextStepViewModel(It.IsAny<string>(), hashedAgreementId), Times.Once);
     }
 
     [Test]
@@ -58,8 +58,8 @@ class WhenIViewNextSteps : ControllerTestBase
         
         AddUserToContext(userId);
 
-        _orchestrator.Setup(x => x.GetOrganisationAddedNextStepViewModel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-            .ReturnsAsync(new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
+        _orchestrator.Setup(x => x.GetOrganisationAddedNextStepViewModel(It.IsAny<string>(), It.IsAny<string>()))
+            .Returns(new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
             {
                 Data = new OrganisationAddedNextStepsViewModel { ShowWizard = true }
             });
@@ -71,7 +71,7 @@ class WhenIViewNextSteps : ControllerTestBase
         //Assert
         Assert.IsNotNull(model);
         Assert.IsTrue(model.Data.ShowWizard);
-        _orchestrator.Verify(x => x.GetOrganisationAddedNextStepViewModel(It.IsAny<string>(), userId, hashedAccountId, hashedAgreementId), Times.Once);
+        _orchestrator.Verify(x => x.GetOrganisationAddedNextStepViewModel(It.IsAny<string>(), hashedAgreementId), Times.Once);
     }
 
     [Test]
@@ -88,7 +88,7 @@ class WhenIViewNextSteps : ControllerTestBase
             .ReturnsAsync(true);
 
         //Act
-        var result = _controller.GoToNextStep("Not A Step", hashedAccountId, hashedAgreementId, "test").Result as ViewResult;
+        var result = _controller.GoToNextStep("Not A Step", hashedAccountId, hashedAgreementId, "test") as ViewResult;
         var model = result?.Model as OrchestratorResponse<OrganisationAddedNextStepsViewModel>;
 
         //Assert
