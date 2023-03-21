@@ -41,13 +41,15 @@ public class UserSettingsOrchestrator
         };
     }
 
-    public virtual async Task UpdateNotificationSettings(string hashedAccountId, string userRef, List<UserNotificationSetting> settings)
+    public virtual async Task UpdateNotificationSettings(string userRef, List<UserNotificationSetting> settings)
     {
-        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
-
         _logger.LogInformation($"Updating user notification settings for user {userRef}");
 
-        settings.ForEach(s => s.AccountId = accountId);
+        settings.ForEach(s =>
+        {
+            var accountId = _encodingService.Decode(s.HashedAccountId, EncodingType.AccountId);
+            s.AccountId = accountId;
+        });
 
         await _mediator.Send(new UpdateUserNotificationSettingsCommand
         {

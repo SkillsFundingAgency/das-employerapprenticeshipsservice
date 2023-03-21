@@ -38,7 +38,7 @@ public class SettingsController : BaseController
     {
         var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
 
-        await _userSettingsOrchestrator.UpdateNotificationSettings(vm.HashedId, userIdClaim, vm.NotificationSettings);
+        await _userSettingsOrchestrator.UpdateNotificationSettings(userIdClaim, vm.NotificationSettings);
 
         var flashMessage = new FlashMessageViewModel
         {
