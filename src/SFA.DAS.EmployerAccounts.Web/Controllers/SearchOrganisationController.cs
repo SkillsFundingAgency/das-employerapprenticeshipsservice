@@ -1,6 +1,8 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.Employer.Shared.UI;
+using SFA.DAS.Employer.Shared.UI.Attributes;
 using SFA.DAS.EmployerAccounts.Commands.OrganisationData;
 using SFA.DAS.EmployerAccounts.Models.ReferenceData;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
@@ -8,6 +10,7 @@ using SFA.DAS.EmployerAccounts.Web.Authentication;
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
 [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+[SetNavigationSection(NavigationSection.AccountsAgreements)]
 [Route("accounts")]
 public class SearchOrganisationController : BaseController
 {
