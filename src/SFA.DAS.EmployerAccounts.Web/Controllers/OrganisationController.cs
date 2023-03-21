@@ -168,16 +168,16 @@ public class OrganisationController : BaseController
     }
 
     [HttpPost]
-    [Route("PostUpdateSelection")]
+    [Route("PostUpdateSelection", Name = RouteNames.OrganisationPostUpdateSelection)]
     public IActionResult GoToPostUpdateSelection(string nextStep, string hashedAccountId)
     {
         switch (nextStep)
         {
             case "dashboard":
-                return RedirectToAction("Index", "EmployerAgreement");
+                return RedirectToRoute(RouteNames.EmployerAgreementIndex, new { hashedAccountId });
 
             case "homepage":
-                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { HashedAccountId = hashedAccountId });
+                return RedirectToRoute(RouteNames.EmployerTeamIndex, new { hashedAccountId });
 
             default:
                 var errorMessage = "Please select one of the next steps below";

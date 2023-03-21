@@ -24,7 +24,7 @@
             </div>
         }
 
-        <form action="@Url.Action("GoToPostUpdateSelection")" method="post">
+        <form asp-route="@RouteNames.OrganisationPostUpdateSelection" asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" method="post">
             <div class="form-group">
                 <h2 class="heading-large">What's next?</h2>
 
