@@ -4,6 +4,7 @@ using SFA.DAS.Employer.Shared.UI;
 using SFA.DAS.Employer.Shared.UI.Attributes;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
+using SFA.DAS.EmployerAccounts.Web.RouteValues;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
@@ -68,7 +69,7 @@ public class EmployerAccountPayeController : BaseController
     }
 
     [HttpGet]
-    [Route("{HashedAccountId}/schemes/{empRef}/details")]
+    [Route("{HashedAccountId}/schemes/{empRef}/details", Name = RouteNames.PayeDetails)]
     public async Task<IActionResult> Details(string hashedAccountId, string empRef)
     {
         empRef = empRef.FormatPayeFromUrl();
