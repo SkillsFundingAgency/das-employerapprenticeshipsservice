@@ -1,6 +1,6 @@
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels;
 
-public class RemovePayeSchemeViewModel :ViewModelBase
+public class RemovePayeSchemeViewModel : ViewModelBase
 {
     public string UserId { get; set; }
     public string HashedAccountId { get; set; }

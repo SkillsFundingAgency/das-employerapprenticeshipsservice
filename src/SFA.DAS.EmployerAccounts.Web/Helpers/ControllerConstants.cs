@@ -18,8 +18,7 @@ public static class ControllerConstants
     public const string ConfirmPayeSchemeActionName = "ConfirmPayeScheme";
     public const string ConfirmRemoveOrganisationActionName = "ConfirmRemoveOrganisation";
     public const string ConfirmRemoveOrganisationViewName = "ConfirmRemoveOrganisation";
-    public const string DetailsActionName = "Details";
-    public const string EmailClaimKeyName = "email";      
+    public const string DetailsActionName = "Details";  
     public const string EmployerAccountControllerName = "EmployerAccount";
     public const string EmployerAccountTransactionsControllerName = "EmployerAccountTransactions";
     public const string EmployerAccountPayeControllerName = "EmployerAccountPaye";

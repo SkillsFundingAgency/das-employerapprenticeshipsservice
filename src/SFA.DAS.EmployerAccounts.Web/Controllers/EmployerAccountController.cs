@@ -7,6 +7,7 @@ using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.Employer.Shared.UI;
 using SFA.DAS.Employer.Shared.UI.Attributes;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
+using SFA.DAS.EmployerAccounts.Infrastructure;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerAccounts.Web.RouteValues;
 
@@ -125,10 +126,10 @@ public class EmployerAccountController : BaseController
                 return RedirectToAction(ControllerConstants.GatewayInformActionName);
             }
 
-            var externalUserId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+            var externalUserId = HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserIdClaimTypeIdentifier);
             _logger.LogInformation($"Gateway response is for user identity ID {externalUserId}");
 
-            var email = HttpContext.User.FindFirstValue(ControllerConstants.EmailClaimKeyName);
+            var email = HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserEmailClaimTypeIdentifier);
             var empref = await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.Data.AccessToken, email);
             _logger.LogInformation($"Gateway response is for empref {empref.Empref} \n {JsonConvert.SerializeObject(empref)}");
 

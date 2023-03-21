@@ -26,7 +26,7 @@
         <p class="govuk-body">You'll need to add all the <abbr>PAYE</abbr> schemes you intend to use to pay for apprenticeship training.</p>
     </div>
     <div class="govuk-grid-column-one-third">
-        <form asp-controller="@ControllerConstants.EmployerAccountControllerName"
+        <form asp-controller="@ControllerConstants.EmployerAccountPayeControllerName"
               asp-action="@ControllerConstants.GatewayInformActionName"
               asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]"
               method="GET">

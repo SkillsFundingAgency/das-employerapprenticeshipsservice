@@ -3,6 +3,7 @@ using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using SFA.DAS.EmployerAccounts.Infrastructure;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers;
@@ -75,7 +76,7 @@ public abstract class ControllerTestBase
         {
             new Claim(ClaimTypes.Name, $"{givenName} {familyName}"),
             new Claim(ClaimTypes.Email, email),
-            new Claim(ControllerConstants.EmailClaimKeyName, email),
+            new Claim(EmployerClaims.IdamsUserEmailClaimTypeIdentifier, email),
             new Claim(DasClaimTypes.GivenName, givenName),
             new Claim(DasClaimTypes.FamilyName, familyName),
             new Claim(ControllerConstants.UserRefClaimKeyName, id),

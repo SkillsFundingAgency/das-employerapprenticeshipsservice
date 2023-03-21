@@ -1,7 +1,9 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Routing;
 using SFA.DAS.Employer.Shared.UI;
 using SFA.DAS.Employer.Shared.UI.Attributes;
+using SFA.DAS.EmployerAccounts.Infrastructure;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.RouteValues;
@@ -14,13 +16,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 public class EmployerAccountPayeController : BaseController
 {
     private readonly EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
+    private readonly LinkGenerator _linkGenerator;
 
     public EmployerAccountPayeController(
         EmployerAccountPayeOrchestrator employerAccountPayeOrchestrator,
-        ICookieStorageService<FlashMessageViewModel> flashMessage) 
+        ICookieStorageService<FlashMessageViewModel> flashMessage,
+        LinkGenerator linkGenerator)
         : base(flashMessage)
     {
         _employerAccountPayeOrchestrator = employerAccountPayeOrchestrator;
+        _linkGenerator = linkGenerator;
     }
 
     [HttpGet]
@@ -85,7 +90,7 @@ public class EmployerAccountPayeController : BaseController
     {
         var response = await _employerAccountPayeOrchestrator.CheckUserIsOwner(
             hashedAccountId,
-            HttpContext.User.FindFirstValue(ControllerConstants.EmailClaimKeyName),
+            HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserEmailClaimTypeIdentifier),
             Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerAccountPayeControllerName, new { hashedAccountId }),
             Url.Action(ControllerConstants.GetGatewayActionName, ControllerConstants.EmployerAccountPayeControllerName, new { hashedAccountId }));
 
@@ -96,12 +101,14 @@ public class EmployerAccountPayeController : BaseController
     [Route("{HashedAccountId}/schemes/gateway")]
     public async Task<IActionResult> GetGateway(string hashedAccountId)
     {
-        var url = await _employerAccountPayeOrchestrator.GetGatewayUrl(
-            Url.Action(
-                ControllerConstants.ConfirmPayeSchemeActionName,
-                ControllerConstants.EmployerAccountPayeControllerName,
-                null,
-                HttpContext.Request.Scheme));
+        var redirectUrl = _linkGenerator.GetUriByAction(
+            HttpContext,
+            action: ControllerConstants.ConfirmPayeSchemeActionName,
+            controller: ControllerConstants.EmployerAccountPayeControllerName,
+            values: new { hashedAccountId },
+            scheme: HttpContext.Request.Scheme);
+
+        var url = await _employerAccountPayeOrchestrator.GetGatewayUrl(redirectUrl);
 
         return Redirect(url);
     }
@@ -111,9 +118,9 @@ public class EmployerAccountPayeController : BaseController
     public async Task<IActionResult> ConfirmPayeScheme(string hashedAccountId)
     {
         var gatewayResponseModel = await _employerAccountPayeOrchestrator.GetPayeConfirmModel(
-            hashedAccountId, 
-            Request.Query[ControllerConstants.CodeKeyName], 
-            Url.Action(ControllerConstants.ConfirmPayeSchemeActionName, ControllerConstants.EmployerAccountPayeControllerName, new { hashedAccountId }, Request.Scheme), 
+            hashedAccountId,
+            Request.Query[ControllerConstants.CodeKeyName],
+            Url.Action(ControllerConstants.ConfirmPayeSchemeActionName, ControllerConstants.EmployerAccountPayeControllerName, new { hashedAccountId }, Request.Scheme),
             Request.Query);
 
         if (gatewayResponseModel.Status == HttpStatusCode.NotAcceptable)
@@ -168,7 +175,7 @@ public class EmployerAccountPayeController : BaseController
     }
 
     [HttpPost]
-    [Route("{HashedAccountId}/schemes/remove")]
+    [Route("{HashedAccountId}/schemes/remove", Name = RouteNames.PayePostRemove)]
     public async Task<IActionResult> RemovePaye(string hashedAccountId, RemovePayeSchemeViewModel model)
     {
         model.UserId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
