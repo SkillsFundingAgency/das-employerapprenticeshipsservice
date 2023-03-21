@@ -47,17 +47,15 @@ public class EmployerAccountsDbContext : DbContext, IEmployerAccountsDbContext
     {
         if (_configuration == null || _azureServiceTokenProvider == null)
         {
-            optionsBuilder.UseSqlServer().UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            optionsBuilder
+                .UseSqlServer()
+                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             return;
         }
 
-        //var connection = new SqlConnection
-        //{
-        //    ConnectionString = _configuration.DatabaseConnectionString,
-        //    AccessToken = _azureServiceTokenProvider.GetAccessTokenAsync(AzureResource).Result,
-        //};
-
-        optionsBuilder.UseSqlServer(_connection as SqlConnection);
+        optionsBuilder
+            .UseLazyLoadingProxies()
+            .UseSqlServer(_connection as SqlConnection);
 
     }
 
