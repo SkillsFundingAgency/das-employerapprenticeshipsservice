@@ -138,7 +138,7 @@ public class OrganisationController : BaseController
     }
 
     [HttpPost]
-    [Route("review")]
+    [Route("review", Name = RouteNames.ProcessOrganisationReview)]
     public async Task<IActionResult> ProcessReviewSelection(
         string updateChoice,
         string hashedAccountId,
