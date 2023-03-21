@@ -1,11 +1,4 @@
-﻿using System.Net;
-using System.Threading.Tasks;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Web.Controllers;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
+﻿using Microsoft.AspNetCore.Routing;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountPayeControllerTests;
 
@@ -30,7 +23,8 @@ public class WhenIAddAPayeScheme : ControllerTestBase
 
         _controller = new EmployerAccountPayeController(
             _employerAccountPayeOrchestrator.Object,
-            _flashMessage.Object)
+            _flashMessage.Object,
+            Mock.Of<LinkGenerator>())
         {
             ControllerContext = ControllerContext
         };

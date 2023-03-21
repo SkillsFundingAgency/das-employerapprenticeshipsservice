@@ -13,7 +13,6 @@
             What's next
         </h1>
         <form method="POST" action="@Url.Action("NextSteps")">
-            @Html.AntiForgeryToken()
             <div class="form-group  @(!string.IsNullOrEmpty(Model.Data.ErrorMessage) ? "error" : "")">
                 <fieldset>
                     <legend>

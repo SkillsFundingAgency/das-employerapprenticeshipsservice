@@ -5,7 +5,6 @@ using SFA.DAS.EmployerAccounts.Commands.UpdateOrganisationDetails;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntity;
 using SFA.DAS.EmployerAccounts.Queries.GetOrganisationById;
-using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Validation;
 using SFA.DAS.Encoding;
@@ -165,13 +164,6 @@ public class OrganisationOrchestrator : UserVerificationOrchestratorBase, IOrche
     public virtual void CreateCookieData(HttpContext context, EmployerAccountData data)
     {
         _cookieService.Create(data, CookieName, 365);
-    }
-
-    public virtual async Task<bool> UserShownWizard(string userId, string hashedAccountId)
-    {
-        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
-        var userResponse = await Mediator.Send(new GetTeamMemberQuery { AccountId = accountId, TeamMemberId = userId });
-        return userResponse.User.ShowWizard && userResponse.User.Role == Role.Owner;
     }
 
     public virtual OrchestratorResponse<OrganisationAddedNextStepsViewModel> GetOrganisationAddedNextStepViewModel(

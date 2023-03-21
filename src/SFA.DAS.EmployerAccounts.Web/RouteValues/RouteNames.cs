@@ -22,6 +22,8 @@
         public const string ProcessOrganisationReview = "process-organisation-review";
         public const string OrganisationPostUpdateSelection = "organisation-post-update-selection";
         public const string PayeDetails = "paye-details";
-        public const string PayePostRemove = "paye-remove";
+        public const string PayePostRemove = "paye-post-remove";
+        public const string PostConfirmRemoveOrganisation = "post-confirm-remove-organisation";
+        public const string EmployerAgreementSignYourAgreement = "sign-your-agreement";
     }
 }

@@ -58,6 +58,7 @@ public class WhenAddingServicesToTheContainer
 
         services.AddLogging();
         services.AddSingleton<IConfiguration>(configuration);
+        services.AddSingleton(accountsConfiguration);
         services.AddApplicationServices();
         services.AddUnitOfWork();
         services.AddNServiceBus();

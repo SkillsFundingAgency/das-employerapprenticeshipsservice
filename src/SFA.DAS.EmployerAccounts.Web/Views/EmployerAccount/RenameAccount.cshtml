@@ -13,8 +13,6 @@
 
             <h1 class="govuk-heading-xl">Rename account</h1>
 
-            @Html.AntiForgeryToken()
-
             <input type="hidden" value="@Model.Data.HashedId" name="HashedId" />
             <input type="hidden" value="@Model.Data.CurrentName" name="CurrentName" />
 

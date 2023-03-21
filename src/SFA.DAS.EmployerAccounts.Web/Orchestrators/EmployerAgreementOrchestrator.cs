@@ -1,7 +1,4 @@
 ﻿using AutoMapper;
-using Azure.Core;
-using Microsoft.Identity.Client;
-using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity;
 using SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Dtos;
@@ -159,8 +156,8 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
 
     public virtual async Task<OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>> RemoveLegalAgreement(ConfirmOrganisationToRemoveViewModel model, string userId)
     {
-            var accountId = _encodingService.Decode(model.HashedAccountId, EncodingType.AccountId);
-            var accountLegalEntityId = _encodingService.Decode(model.HashedAccountLegalEntitytId, EncodingType.PublicAccountLegalEntityId);
+        var accountId = _encodingService.Decode(model.HashedAccountId, EncodingType.AccountId);
+        var accountLegalEntityId = _encodingService.Decode(model.HashedAccountLegalEntitytId, EncodingType.PublicAccountLegalEntityId);
         var response = new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>();
 
         try

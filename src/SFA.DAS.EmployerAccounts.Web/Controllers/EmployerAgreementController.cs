@@ -87,21 +87,19 @@ public class EmployerAgreementController : BaseController
 
     [HttpGet]
     [Route("agreements/{hashedAgreementId}/about-your-agreement", Name = RouteNames.AboutYourAgreement)]
-    public async Task<IActionResult> AboutYourAgreement(string hashedAgreementId, string hashedAccountId)
+    public async Task<ViewResult> AboutYourAgreement(string hashedAgreementId, string hashedAccountId)
     {
         var agreement = await _orchestrator.GetById(
             hashedAgreementId,
             hashedAccountId,
             HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
-        return View(agreement.Data.EmployerAgreement.AgreementType == AgreementType.Levy ||
-                    agreement.Data.EmployerAgreement.AgreementType == AgreementType.Combined
-            ? ControllerConstants.AboutYourAgreementViewName
-            : ControllerConstants.AboutYourDocumentViewName, agreement);
+        var view = View(agreement);
+        return view;
     }
 
     [HttpGet]
-    [Route("agreements/{hashedAgreementId}/sign-your-agreement")]
+    [Route("agreements/{hashedAgreementId}/sign-your-agreement", Name = RouteNames.EmployerAgreementSignYourAgreement)]
     public async Task<IActionResult> SignAgreement(string hashedAccountId, string hashedAgreementId)
     {
         var externalUserId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
@@ -204,21 +202,21 @@ public class EmployerAgreementController : BaseController
     }
 
     [HttpPost]
-    [Route("agreements/{accountLegalEntityHashedId}/remove")]
+    [Route("agreements/{accountLegalEntityHashedId}/remove", Name = RouteNames.PostConfirmRemoveOrganisation)]
     public async Task<IActionResult> RemoveOrganisation(ConfirmOrganisationToRemoveViewModel model)
     {
         if (!ModelState.IsValid)
         {
             return View(ControllerConstants.ConfirmRemoveOrganisationViewName, new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel> { Data = model });
         }
-        if (!model.Remove.HasValue || !model.Remove.Value) return RedirectToAction(ControllerConstants.IndexActionName);
+        if (!model.Remove.HasValue || !model.Remove.Value) return RedirectToRoute(RouteNames.EmployerAgreementIndex, new { model.HashedAccountId });
 
         var response = await _orchestrator.RemoveLegalAgreement(model, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
         if (response.Status == HttpStatusCode.OK)
         {
             AddFlashMessageToCookie(response.FlashMessage);
-            return RedirectToAction(ControllerConstants.IndexActionName);
+            return RedirectToRoute(RouteNames.EmployerAgreementIndex, new { model.HashedAccountId });
         }
 
         AddFlashMessageToCookie(response.FlashMessage);
@@ -241,7 +239,7 @@ public class EmployerAgreementController : BaseController
     {
         switch (choice ?? 0)
         {
-            case ViewAgreementNow: return RedirectToAction(ControllerConstants.SignAgreementActionName, new { hashedAccountId, hashedAgreementId });
+            case ViewAgreementNow: return RedirectToRoute(RouteNames.EmployerAgreementSignYourAgreement, new { hashedAccountId, hashedAgreementId });
             case ViewAgreementLater: return RedirectToRoute(RouteNames.EmployerTeamIndex, new { hashedAccountId });
             default:
             {

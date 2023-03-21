@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountPayeControllerTests;
+﻿using Microsoft.AspNetCore.Routing;
+
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountPayeControllerTests;
 
 public class WhenIRemoveAPayeScheme : ControllerTestBase
 {
@@ -20,7 +22,8 @@ public class WhenIRemoveAPayeScheme : ControllerTestBase
 
         _controller = new EmployerAccountPayeController(
             _employerAccountPayeOrchestrator.Object,
-            _flashMessage.Object)
+            _flashMessage.Object,
+            Mock.Of<LinkGenerator>())
         {
             ControllerContext = ControllerContext
         };

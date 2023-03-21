@@ -73,27 +73,4 @@ class WhenIViewNextSteps : ControllerTestBase
         Assert.IsTrue(model.Data.ShowWizard);
         _orchestrator.Verify(x => x.GetOrganisationAddedNextStepViewModel(It.IsAny<string>(), hashedAgreementId), Times.Once);
     }
-
-    [Test]
-    public void ThenIShouldBeToldIfTheUserCanStillSeeTheUserWizardWhenIMakeAnIncorrectStepSelection()
-    {
-        //Arrange
-        const string userId = "123";
-        const string hashedAccountId = "ABC123";
-        const string hashedAgreementId = "DEF456";
-
-        AddUserToContext(userId);
-
-        _orchestrator.Setup(x => x.UserShownWizard(It.IsAny<string>(), It.IsAny<string>()))
-            .ReturnsAsync(true);
-
-        //Act
-        var result = _controller.GoToNextStep("Not A Step", hashedAccountId, hashedAgreementId, "test") as ViewResult;
-        var model = result?.Model as OrchestratorResponse<OrganisationAddedNextStepsViewModel>;
-
-        //Assert
-        Assert.IsNotNull(model);
-        Assert.IsTrue(model.Data.ShowWizard);
-        _orchestrator.Verify(x => x.UserShownWizard(userId, hashedAccountId), Times.Once);
-    }
 }

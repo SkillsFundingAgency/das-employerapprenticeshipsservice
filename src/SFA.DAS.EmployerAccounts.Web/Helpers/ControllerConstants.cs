@@ -4,7 +4,6 @@ public static class ControllerConstants
 {
     public const string AboutYourAgreementActionName = "AboutYourAgreement";
     public const string AboutYourAgreementViewName = "AboutYourAgreement";
-    public const string AboutYourDocumentViewName = "AboutYourDocument";
     public const string AccessDeniedViewName = "AccessDenied";     
     public const string AccountHashedIdRouteKeyName = "HashedAccountId";
     public const string AcceptedEmployerAgreementViewName = "AcceptedEmployerAgreement";

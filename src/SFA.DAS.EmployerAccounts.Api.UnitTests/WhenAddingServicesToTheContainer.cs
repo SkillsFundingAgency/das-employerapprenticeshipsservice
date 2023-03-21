@@ -104,10 +104,10 @@ public class WhenAddingServicesToTheContainer
         InitialData = new List<KeyValuePair<string, string>>
             {
                 new("SFA.DAS.Encoding", "{\"Encodings\": [{\"EncodingType\": \"AccountId\",\"Salt\": \"and vinegar\",\"MinHashLength\": 32,\"Alphabet\": \"46789BCDFGHJKLMNPRSTVWXY\"}]}"),
-                new("EmployerAccountsConfiguration:DatabaseConnectionString", "Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;"),
+                new("DatabaseConnectionString", "Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;"),
                 new("AccountApiConfiguration:ApiBaseUrl", "https://localhost:1"),
-                new("EmployerAccountsConfiguration:OuterApiApiBaseUri", "https://localhost:1"),
-                new("EmployerAccountsConfiguration:OuterApiSubscriptionKey", "test"),
+                new("OuterApiApiBaseUri", "https://localhost:1"),
+                new("OuterApiSubscriptionKey", "test"),
                 new("ContentApi:ApiBaseUrl", "test"),
                 new("ContentApi:IdentifierUrl", "test"),
                 new("ProviderRegistrationsApi:BaseUrl", "test"),

@@ -32,8 +32,10 @@
         {
             <p class="govuk-body">This will end @Model.Data.Name’s agreement with ESFA.</p>
         }
-        <form method="POST" asp-route-HashedAccountId="@Model.Data.HashedAccountId" asp-route-accountLegalEntityHashedId="@Model.Data.HashedAccountLegalEntitytId" asp-action="ControllerConstants.ConfirmRemoveOrganisationActionName">
-            @Html.AntiForgeryToken()
+        <form method="POST" 
+            asp-route-hashedAccountId="@Model.Data.HashedAccountId" 
+            asp-route-accountLegalEntityHashedId="@Model.Data.HashedAccountLegalEntitytId" 
+            asp-route="@RouteNames.PostConfirmRemoveOrganisation">
             <input type="hidden" value="@Model.Data.Name" name="Name" />
             <input type="hidden" value="@Model.Data.CanBeRemoved.ToString()" name="CanBeRemoved" />
             <input type="hidden" value="@Model.Data.HasSignedAgreement.ToString()" name="HasSignedAgreement" />
