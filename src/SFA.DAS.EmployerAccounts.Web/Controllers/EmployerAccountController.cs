@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Routing;
 using Newtonsoft.Json;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.Employer.Shared.UI;
+using SFA.DAS.Employer.Shared.UI.Attributes;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerAccounts.Web.RouteValues;
@@ -12,6 +14,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
 [Route("accounts")]
 [Authorize(Policy = nameof(PolicyNames.HasUserAccount))]
+[SetNavigationSection(NavigationSection.AccountsHome)]
 public class EmployerAccountController : BaseController
 {
     private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
