@@ -6,10 +6,9 @@
     ViewBag.PageID = "page-review-team-member";
     ViewBag.Title = Model.Data.Name;
     ViewBag.Section = "team";
-}
-
-@{
     ViewBag.GaData.Vpv = "/accounts/teams/review/page-review-team-member";
+
+    string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId].ToString();
 }
 
 <div class="grid-row">
@@ -37,7 +36,10 @@
                     @if (Model.Data.IsUser)
                     {
                         <td class="link-right">
-                            <a href="@Url.Action("ChangeRole","EmployerTeam", new { Model.Data.Email })">Change <span class="vh">role for @Model.Data.Name</span></a>
+                            <a 
+                                asp-route="@RouteNames.EmployerTeamGetChangeRole"
+                                asp-route-hashedAccountId="@hashedAccountId"
+                                asp-route-email="@Model.Data.Email">Change <span class="vh">role for @Model.Data.Name</span></a>
                         </td>
                     }
                 </tr>

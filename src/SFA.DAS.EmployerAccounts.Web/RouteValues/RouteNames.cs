@@ -26,5 +26,6 @@
         public const string PostConfirmRemoveOrganisation = "post-confirm-remove-organisation";
         public const string EmployerAgreementSignYourAgreement = "sign-your-agreement";
         public const string EmployerTeamReview = "employer-team-review";
+        public const string EmployerTeamGetChangeRole = "employer-team-change-role";
     }
 }
