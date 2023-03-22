@@ -264,7 +264,7 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpGet]
-    [Route("{email}/review")]
+    [Route("{email}/review", Name = RouteNames.EmployerTeamReview)]
     public async Task<IActionResult> Review(string hashedAccountId, string email)
     {
         var invitation = await _employerTeamOrchestrator.GetTeamMemberWhetherActiveOrNot(hashedAccountId, email, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));

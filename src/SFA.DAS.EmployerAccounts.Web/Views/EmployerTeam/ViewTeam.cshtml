@@ -63,7 +63,9 @@
                             <td data-label="Status">@InvitationStatusStrings.ToString(teamMember.Status)</td>
                             <td class="link-right">
                                 <a aria-label="View details for @teamMember.Name"
-                                   href="@Url.Action("Review", new { email = teamMember.Email })">View<span class="vh"> details for @teamMember.Name</span></a>
+                                asp-route="@RouteNames.EmployerTeamReview"
+                                asp-route-hashedAccountId="@hashedAccountId"
+                                asp-route-email="@teamMember.Email">View<span class="vh"> details for @teamMember.Name</span></a>
                             </td>
                         </tr>
                     }
