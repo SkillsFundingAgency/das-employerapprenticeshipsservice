@@ -47,7 +47,7 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpGet]
-    [Route("view")]
+    [Route("view", Name = RouteNames.EmployerTeamView)]
     public async Task<IActionResult> ViewTeam(string hashedAccountId)
     {
         var response = await _employerTeamOrchestrator.GetTeamMembers(hashedAccountId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
