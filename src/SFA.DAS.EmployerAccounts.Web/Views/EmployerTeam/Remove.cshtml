@@ -5,10 +5,9 @@
     ViewBag.PageID = "page-remove-team-member";
     ViewBag.Title = "Remove team member";
     ViewBag.Section = "team";
-}
-
-@{
     ViewBag.GaData.Vpv = "/accounts/teams/remove/page-remove-team-member";
+
+    string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId].ToString();
 }
    
 <div class="grid-row">
@@ -28,14 +27,15 @@
         }
         <p class="lede">Are you sure you want to remove @name?</p>
         <div class="form-group">
-            <form action="@Url.Action("Remove")" method="POST">
-                @Html.AntiForgeryToken()
+            <form asp-route="@RouteNames.ConfirmRemoveTeamMember"
+                  asp-route-hashedAccountId="@hashedAccountId"
+                  asp-route-email="@Model.Data.Email" method="POST">
                 <input type="hidden" id="remove" name="remove" value="1" />
                 <input type="hidden" id="UserId" name="UserId" value="@Model.Data.Id" />
                 <input type="hidden" id="Email" name="Email" value="@Model.Data.Email" />
                 <button type="submit" class="button" id="remove_team_member">Yes, remove now</button>
             </form>
-            <a href="@Url.Action("Viewteam", "EmployerTeam")" class="button button-link">No, cancel</a>
+            <a asp-route="@RouteNames.EmployerTeamView" asp-route-hashedAccountId="@hashedAccountId" class="button button-link">No, cancel</a>
         </div>
     </div>
 </div>
@@ -43,6 +43,6 @@
 @section breadcrumb {
 
     <div class="breadcrumbs">
-        <a href="@Url.Action("ViewTeam", "EmployerTeam")" class="back-link">Back to your team</a>
+        <a asp-route="@RouteNames.EmployerTeamView" asp-route-hashedAccountId="@hashedAccountId" class="govuk-back-link">Back to your team</a>
     </div>
 }
