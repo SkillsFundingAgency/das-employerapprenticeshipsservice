@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.EmployerAccounts.Web.Models;
+using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests;
 
@@ -23,7 +25,7 @@ public class WhenIRenameAnAccount : ControllerTestBase
         _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
         _orchestrator.Setup(x =>
-                x.RenameEmployerAccount(It.IsAny<RenameEmployerAccountViewModel>(), It.IsAny<string>()))
+                x.RenameEmployerAccount(It.IsAny<string>(), It.IsAny<RenameEmployerAccountViewModel>(), It.IsAny<string>()))
             .ReturnsAsync(new OrchestratorResponse<RenameEmployerAccountViewModel>
             {
                 Status = HttpStatusCode.OK,
@@ -47,22 +49,21 @@ public class WhenIRenameAnAccount : ControllerTestBase
         };
     }
 
-    [Test]
-    public async Task ThenTheAccountIsRenamed()
+    [Test, MoqAutoData]
+    public async Task ThenTheAccountIsRenamed(string hashedAccountId)
     {
         //Arrange
         var model = new RenameEmployerAccountViewModel
         {
             CurrentName = "Test Account",
-            NewName = "New Account Name",
-            HashedId = "ABC123"
+            NewName = "New Account Name"
         };
 
         //Act
-        await _employerAccountController.RenameAccount(model);
+        await _employerAccountController.RenameAccount(hashedAccountId, model);
 
         //Assert
-        _orchestrator.Verify(x => x.RenameEmployerAccount(It.Is<RenameEmployerAccountViewModel>(r =>
+        _orchestrator.Verify(x => x.RenameEmployerAccount(hashedAccountId, It.Is<RenameEmployerAccountViewModel>(r =>
             r.CurrentName == "Test Account"
             && r.NewName == "New Account Name"
         ), It.IsAny<string>()));

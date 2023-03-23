@@ -70,9 +70,9 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
         };
     }
 
-    public virtual async Task<OrchestratorResponse<RenameEmployerAccountViewModel>> RenameEmployerAccount(RenameEmployerAccountViewModel model, string userId)
+    public virtual async Task<OrchestratorResponse<RenameEmployerAccountViewModel>> RenameEmployerAccount(string hashedAccountId, RenameEmployerAccountViewModel model, string userId)
     {
-        var accountId = _encodingService.Decode(model.HashedId, EncodingType.AccountId);
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
         var response = new OrchestratorResponse<RenameEmployerAccountViewModel> { Data = model };
 
         var userRoleResponse = await GetUserAccountRole(accountId, userId);
@@ -89,7 +89,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
         {
             await _mediator.Send(new RenameEmployerAccountCommand
             {
-                HashedAccountId = model.HashedId,
+                HashedAccountId = hashedAccountId,
                 ExternalUserId = userId,
                 NewName = (model.NewName ?? string.Empty).Trim()
             });

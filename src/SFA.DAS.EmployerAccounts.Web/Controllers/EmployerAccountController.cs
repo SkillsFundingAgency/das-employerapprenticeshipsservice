@@ -314,10 +314,10 @@ public class EmployerAccountController : BaseController
 
     [HttpPost]
     [Route("{HashedAccountId}/rename")]
-    public async Task<IActionResult> RenameAccount(RenameEmployerAccountViewModel vm)
+    public async Task<IActionResult> RenameAccount(string hashedAccountId, RenameEmployerAccountViewModel vm)
     {
         var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
-        var response = await _employerAccountOrchestrator.RenameEmployerAccount(vm, userIdClaim);
+        var response = await _employerAccountOrchestrator.RenameEmployerAccount(hashedAccountId, vm, userIdClaim);
 
         if (response.Status == HttpStatusCode.OK)
         {
@@ -330,7 +330,7 @@ public class EmployerAccountController : BaseController
 
             AddFlashMessageToCookie(flashmessage);
 
-            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
+            return RedirectToRoute(RouteNames.EmployerTeamIndex, new { hashedAccountId });
         }
 
         var errorResponse = new OrchestratorResponse<RenameEmployerAccountViewModel>();

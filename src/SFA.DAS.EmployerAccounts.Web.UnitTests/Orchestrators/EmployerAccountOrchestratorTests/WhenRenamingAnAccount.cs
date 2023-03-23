@@ -15,6 +15,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Encoding;
+using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTests;
 
@@ -62,11 +63,11 @@ public class WhenRenamingAnAccount
         Assert.AreEqual(HttpStatusCode.OK, response.Status);
     }
 
-    [Test]
-    public async Task ThenTheAccountNameShouldBeUpdated()
+    [Test, MoqAutoData]
+    public async Task ThenTheAccountNameShouldBeUpdated(string hashedAccountId)
     {
         //Act
-        var response = await _orchestrator.RenameEmployerAccount(new RenameEmployerAccountViewModel
+        var response = await _orchestrator.RenameEmployerAccount(hashedAccountId, new RenameEmployerAccountViewModel
         {
             NewName = "New Account Name"
         }, "ABC123");

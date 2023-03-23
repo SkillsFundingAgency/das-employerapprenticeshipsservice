@@ -21,7 +21,7 @@ public class When_I_Call_GatewayInform_Without_HashedAccountId : ControllerTestB
 
         _orchestrator = new Mock<EmployerAccountOrchestrator>();
             
-        _orchestrator.Setup(x => x.RenameEmployerAccount(It.IsAny<RenameEmployerAccountViewModel>(), It.IsAny<string>()))
+        _orchestrator.Setup(x => x.RenameEmployerAccount(It.IsAny<string>(), It.IsAny<RenameEmployerAccountViewModel>(), It.IsAny<string>()))
             .ReturnsAsync(new OrchestratorResponse<RenameEmployerAccountViewModel>
             {
                 Status = HttpStatusCode.OK,
