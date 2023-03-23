@@ -11,34 +11,33 @@
     string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId].ToString();
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">@Model.Data.Name</h1>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">@Model.Data.Name</h1>
     </div>
 </div>
-<div class="grid-row">
-    <div class="column-full">
-        <table class="responsive">
-            <thead>
-                <tr>
-                    <th scope="col">Email</th>
-                    <th scope="col">What they can do</th>
+
+         <table class="govuk-table das-table--responsive">
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">Email</th>
+                    <th scope="col" class="govuk-table__header">What they can do</th>
                     @if (Model.Data.IsUser)
                     {
-                        <th><span class="vh">Action</span></th>
+                        <th class="govuk-table__header"><span class="govuk-visually-hidden">Action</span></th>
                     }
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td data-label="Email">@Model.Data.Email</td>
-                    <td data-label="What they can do">@RoleStrings.GetRoleDescription(@Model.Data.Role)</td>
+                <tr class="govuk-table__row">
+                    <td data-label="Email" class="govuk-table__cell">@Model.Data.Email</td>
+                    <td data-label="What they can do" class="govuk-table__cell">@RoleStrings.GetRoleDescription(@Model.Data.Role)</td>
                     @if (Model.Data.IsUser)
                     {
-                        <td class="link-right">
+                        <td class="govuk-table__cell govuk-table__cell--numeric">
                             <a asp-route="@RouteNames.EmployerTeamGetChangeRole"
                            asp-route-hashedAccountId="@hashedAccountId"
-                           asp-route-email="@Model.Data.Email">Change <span class="vh">role for @Model.Data.Name</span></a>
+                           asp-route-email="@Model.Data.Email" class="govuk-link">Change <span class="govuk-visually-hidden">role for @Model.Data.Name</span></a>
                         </td>
                     }
                 </tr>
@@ -65,15 +64,12 @@
         {
             <form action="@Url.Action("Remove")" method="GET">
                 <input type="hidden" id="Email" name="Email" value="@Model.Data.Email" />
-                <button type="submit" class="button" id="delete_user">Remove team member</button>
+                <button type="submit" class="govuk-button govuk-button--warning" id="delete_user">Remove team member</button>
             </form>
 
         }
-    </div>
-</div>
+
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <a asp-route="@RouteNames.EmployerTeamView" asp-route-hashedAccountId="@hashedAccountId" class="back-link">Back to your team</a>
-    </div>
+    <a asp-route="@RouteNames.EmployerTeamView" asp-route-hashedAccountId="@hashedAccountId" class="govuk-back-link">Back to your team</a>
 }
