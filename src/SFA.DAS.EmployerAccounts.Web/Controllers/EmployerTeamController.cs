@@ -184,7 +184,7 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpGet]
-    [Route("{email}/remove")]
+    [Route("{email}/remove", Name = RouteNames.RemoveTeamMember)]
     public async Task<IActionResult> Remove(string hashedAccountId, string email)
     {
         var response = await _employerTeamOrchestrator.Review(hashedAccountId, email);
@@ -193,7 +193,7 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpPost]
-    [Route("{email}/remove")]
+    [Route("{email}/remove", Name = RouteNames.ConfirmRemoveTeamMember)]
     public async Task<IActionResult> Remove(long userId, string hashedAccountId, string email, int remove)
     {
         Exception exception;
