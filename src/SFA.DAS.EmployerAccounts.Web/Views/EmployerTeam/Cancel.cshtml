@@ -26,6 +26,6 @@
 </div>
 @section breadcrumb {
     <div class="breadcrumbs">
-        <a href="@Url.Action("ViewTeam", "EmployerTeam")", class="back-link">Back to your team</a>
+        <a asp-route ="@RouteNames.EmployerTeamView" asp-route-hashedAccountId="@hashedAccountId" class="back-link">Back to your team</a>
     </div>
 }
