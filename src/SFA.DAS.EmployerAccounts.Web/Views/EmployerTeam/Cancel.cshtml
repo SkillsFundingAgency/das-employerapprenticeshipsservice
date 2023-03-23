@@ -14,8 +14,7 @@
         <h1 class="heading-xlarge">Cancel invitation</h1>
         <p class="lede">Are you sure you want to cancel @Model.Data.Name's invitation?</p>
         <div class="form-group">
-            <form action="@Url.Action("Cancel")" method="POST">
-                @Html.AntiForgeryToken()
+            <form asp-route="@RouteNames.EmployerTeamCancelInvitationPost" asp-route-hashedAccountId="@hashedAccountId" method="POST">
                 <input type="hidden" id="cancel" name="cancel" value="1" />
                 <input type="hidden" id="Email" name="Email" value="@Model.Data.Email" />
                 <button type="submit" class="button" id="cancel_invitation">Yes, cancel invitation</button>

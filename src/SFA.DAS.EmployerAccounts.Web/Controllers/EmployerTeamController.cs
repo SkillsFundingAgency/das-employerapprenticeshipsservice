@@ -163,7 +163,7 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpPost]
-    [Route("{hashedInvitationId}/cancel")]
+    [Route("{hashedInvitationId}/cancel", Name = RouteNames.EmployerTeamCancelInvitationPost)]
     public async Task<IActionResult> Cancel(string hashedInvitationId, string email, string hashedAccountId, int cancel)
     {
         if (cancel != 1)
@@ -175,7 +175,7 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpPost]
-    [Route("resend")]
+    [Route("resend", Name = RouteNames.EmployerTeamResendInvite)]
     public async Task<IActionResult> Resend(string hashedAccountId, string email, string name)
     {
         var response = await _employerTeamOrchestrator.Resend(email, hashedAccountId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName), name);
