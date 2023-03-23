@@ -31,5 +31,6 @@
         public const string EmployerTeamInvite = "employer-team-invite";
         public const string EmployerTeamInvitePost = "employer-team-invite-post";
         public const string EmployerTeamInviteNextPost = "employer-team-invite-next-post";
+        public const string EmployerTeamCancelInvitation = "employer-team-cacel-invite";
     }
 }

@@ -154,17 +154,17 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpGet]
-    [Route("{invitationId}/cancel")]
-    public async Task<IActionResult> Cancel(string email, string invitationId, string hashedAccountId)
+    [Route("{hashedInvitationId}/cancel", Name = RouteNames.EmployerTeamCancelInvitation)]
+    public async Task<IActionResult> Cancel(string hashedInvitationId)
     {
-        var invitation = await _employerTeamOrchestrator.GetInvitation(invitationId);
+        var invitation = await _employerTeamOrchestrator.GetInvitation(hashedInvitationId);
 
         return View(invitation);
     }
 
     [HttpPost]
-    [Route("{invitationId}/cancel")]
-    public async Task<IActionResult> Cancel(string invitationId, string email, string hashedAccountId, int cancel)
+    [Route("{hashedInvitationId}/cancel")]
+    public async Task<IActionResult> Cancel(string hashedInvitationId, string email, string hashedAccountId, int cancel)
     {
         if (cancel != 1)
             return RedirectToAction(ControllerConstants.ViewTeamViewName, new { HashedAccountId = hashedAccountId });

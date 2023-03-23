@@ -27,7 +27,7 @@
                     {
                         <th><span class="vh">Action</span></th>
                     }
-                    </tr>
+                </tr>
             </thead>
             <tbody>
                 <tr>
@@ -36,10 +36,9 @@
                     @if (Model.Data.IsUser)
                     {
                         <td class="link-right">
-                            <a 
-                                asp-route="@RouteNames.EmployerTeamGetChangeRole"
-                                asp-route-hashedAccountId="@hashedAccountId"
-                                asp-route-email="@Model.Data.Email">Change <span class="vh">role for @Model.Data.Name</span></a>
+                            <a asp-route="@RouteNames.EmployerTeamGetChangeRole"
+                           asp-route-hashedAccountId="@hashedAccountId"
+                           asp-route-email="@Model.Data.Email">Change <span class="vh">role for @Model.Data.Name</span></a>
                         </td>
                     }
                 </tr>
@@ -54,7 +53,11 @@
                     <input type="hidden" id="Name" name="Name" value="@Model.Data.Name" />
                     <button type="submit" class="button" id="resend_invitation">Resend Invitation</button>
                 </form>
-                <a href="@Url.Action("Cancel", "EmployerTeam",new {email = Model.Data.Email, invitationId = Model.Data.HashedInvitationId })" class="button button-link">Cancel Invitation</a>
+                <a asp-route="@RouteNames.EmployerTeamCancelInvitation"
+                asp-route-hashedAccountId="@hashedAccountId"
+               asp-route-email="@Model.Data.Email"
+               asp-route-hashedInvitationId="@Model.Data.HashedInvitationId"
+                   class="button button-link">Cancel Invitation</a>
 
             </div>
         }
