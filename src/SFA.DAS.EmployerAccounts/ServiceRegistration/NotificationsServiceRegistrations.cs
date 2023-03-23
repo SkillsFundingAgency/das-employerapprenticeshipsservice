@@ -14,12 +14,12 @@ public static class NotificationsServiceRegistrations
 {
     public static IServiceCollection AddNotifications(this IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<INotificationsApiClientConfiguration>(configuration.GetSection(ConfigurationKeys.NotificationsApiClient));
-        services.AddSingleton(cfg => cfg.GetService<IOptions<NotificationsApiClientConfiguration>>().Value);
+        services.Configure<NotificationsApiClientConfiguration>(configuration.GetSection(ConfigurationKeys.NotificationsApiClient));
+        services.AddSingleton<INotificationsApiClientConfiguration>(cfg => cfg.GetService<IOptions<NotificationsApiClientConfiguration>>().Value);
 
         services.AddTransient<INotificationsApi>(s =>
         {
-            var config = s.GetService<NotificationsApiClientConfiguration>();
+            var config = s.GetService<INotificationsApiClientConfiguration>();
             var httpClient = GetHttpClient(config);
             return new NotificationsApi(httpClient, config);
         });
