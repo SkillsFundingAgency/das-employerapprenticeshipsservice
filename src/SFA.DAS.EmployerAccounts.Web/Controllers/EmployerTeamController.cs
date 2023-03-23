@@ -236,7 +236,7 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpPost]
-    [Route("{email}/role/change")]
+    [Route("{email}/role/change", Name = RouteNames.EmployerTeamChangeRolePost)]
     public async Task<IActionResult> ChangeRole(string hashedAccountId, string email, Role role)
     {
         var response = await _employerTeamOrchestrator.ChangeRole(hashedAccountId, email, role, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));

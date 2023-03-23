@@ -44,7 +44,7 @@
         <h1 class="govuk-heading-xl">@name</h1>
         <p class="govuk-body-l">Choose what you allow this team member to do.</p>
        
-        <form method="POST" action="@Url.Action("ChangeRole")">
+        <form method="POST" asp-route="@RouteNames.EmployerTeamChangeRolePost" asp-route-hashedAccountId="@hashedAccountId">
             <div class="govuk-form-group @(!ViewContext.ViewData.ModelState.IsValid ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset">
                     <legend id="change-role-selection" class="govuk-fieldset__legend">

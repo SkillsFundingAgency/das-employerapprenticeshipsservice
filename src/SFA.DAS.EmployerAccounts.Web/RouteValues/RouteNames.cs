@@ -34,5 +34,6 @@
         public const string EmployerTeamCancelInvitation = "employer-team-cacel-invite";
         public const string EmployerTeamCancelInvitationPost = "employer-team-cacel-invite-post";
         public const string EmployerTeamResendInvite = "employer-team-resend-invite";
+        public const string EmployerTeamChangeRolePost = "employer-team-change-role-post";
     }
 }
