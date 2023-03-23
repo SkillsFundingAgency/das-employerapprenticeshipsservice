@@ -18,8 +18,7 @@ public static class PollyPolicyServiceRegistrations
             var policyRegistry = new PolicyRegistry();
 
             var timeout = Policy
-                //.TimeoutAsync(TimeSpan.FromMilliseconds(configuration.DefaultServiceTimeoutMilliseconds), TimeoutStrategy.Pessimistic
-                .TimeoutAsync(TimeSpan.FromMilliseconds(30000), TimeoutStrategy.Pessimistic
+                .TimeoutAsync(TimeSpan.FromMilliseconds(configuration.DefaultServiceTimeoutMilliseconds), TimeoutStrategy.Pessimistic
                     , (pollyContext, timeSpan, task) =>
                     {
                         logger.LogWarning($"Error executing command for method {pollyContext.ExecutionGuid} " +
