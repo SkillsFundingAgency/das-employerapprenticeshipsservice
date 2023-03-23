@@ -28,5 +28,7 @@
         public const string EmployerTeamReview = "employer-team-review";
         public const string EmployerTeamGetChangeRole = "employer-team-change-role";
         public const string EmployerTeamView = "employer-team-view";
+        public const string EmployerTeamInvite = "employer-team-invite";
+        public const string EmployerTeamInvitePost = "employer-team-invite-post";
     }
 }

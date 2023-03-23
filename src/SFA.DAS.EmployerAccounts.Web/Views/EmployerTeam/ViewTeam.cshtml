@@ -32,7 +32,7 @@
         }
     </div>
     <div class="column-one-third">
-        <form action="@Url.Action("Invite")" method="get">
+        <form asp-route="@RouteNames.EmployerTeamInvite" asp-route-hashedAccountId="@hashedAccountId" method="get">
             <input class="button action-add" id="addNewUser" type="submit" value="Invite a new member">
         </form>
     </div>

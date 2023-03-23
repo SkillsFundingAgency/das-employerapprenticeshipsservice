@@ -76,7 +76,7 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpGet]
-    [Route("invite")]
+    [Route("invite", Name = RouteNames.EmployerTeamInvite)]
     public async Task<IActionResult> Invite(string hashedAccountId)
     {
         var response = await _employerTeamOrchestrator.GetNewInvitation(hashedAccountId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
@@ -85,7 +85,7 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpPost]
-    [Route("invite")]
+    [Route("invite", Name = RouteNames.EmployerTeamInvitePost)]
     public async Task<IActionResult> Invite(InviteTeamMemberViewModel model)
     {
         var response = await _employerTeamOrchestrator.InviteTeamMember(model, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
@@ -101,7 +101,7 @@ public class EmployerTeamController : BaseController
             };
             AddFlashMessageToCookie(flashMessage);
 
-            return RedirectToAction(ControllerConstants.NextStepsActionName);
+            return RedirectToAction(ControllerConstants.NextStepsActionName, new { model.HashedAccountId });
         }
 
 
@@ -127,7 +127,6 @@ public class EmployerTeamController : BaseController
             FlashMessage = GetFlashMessageViewModelFromCookie(),
             Data = new InviteTeamMemberNextStepsViewModel
             {
-                UserShownWizard = userShownWizard,
                 HashedAccountId = hashedAccountId
             }
         };
@@ -139,12 +138,9 @@ public class EmployerTeamController : BaseController
     [Route("invite/next")]
     public async Task<IActionResult> NextSteps(int? choice, string hashedAccountId)
     {
-        var userId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
-        var userShownWizard = await _employerTeamOrchestrator.UserShownWizard(userId, hashedAccountId);
-
         switch (choice ?? 0)
         {
-            case 1: return RedirectToAction(ControllerConstants.InviteActionName);
+            case 1: return RedirectToAction(ControllerConstants.InviteActionName, new { hashedAccountId });
             case 2: return RedirectToAction(ControllerConstants.ViewTeamActionName);
             case 3: return RedirectToAction(ControllerConstants.IndexActionName);
             default:
@@ -154,7 +150,6 @@ public class EmployerTeamController : BaseController
                     Data = new InviteTeamMemberNextStepsViewModel
                     {
                         ErrorMessage = "You must select an option to continue.",
-                        UserShownWizard = userShownWizard
                     }
                 };
                 return View(model); //No option entered
@@ -475,7 +470,7 @@ public class EmployerTeamController : BaseController
 
         if (model != null && model.HashedAccountId != null)
         {
-            var externalUserId = HttpContext.User.Claims.First(x=> x.Type.Equals(ControllerConstants.UserRefClaimKeyName)).Value;
+            var externalUserId = HttpContext.User.Claims.First(x => x.Type.Equals(ControllerConstants.UserRefClaimKeyName)).Value;
             var response = AsyncHelper.RunSync(() => _employerTeamOrchestrator.GetAccountSummary(model.HashedAccountId, externalUserId));
             account = response.Status != HttpStatusCode.OK ? null : response.Data.Account;
         }
