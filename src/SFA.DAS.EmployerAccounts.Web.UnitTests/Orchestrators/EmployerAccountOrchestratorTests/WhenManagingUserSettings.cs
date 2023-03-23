@@ -52,7 +52,7 @@ public class WhenManagingUserSettings
         var settings = new List<UserNotificationSetting>();
 
         //Act
-        await _orchestrator.UpdateNotificationSettings("ABC123", "USERREF", settings);
+        await _orchestrator.UpdateNotificationSettings("USERREF", settings);
 
         //Assert
         _mediator.Verify(x => x.Send(
