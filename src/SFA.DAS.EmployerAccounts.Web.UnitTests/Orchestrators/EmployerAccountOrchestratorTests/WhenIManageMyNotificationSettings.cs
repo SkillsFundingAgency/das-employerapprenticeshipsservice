@@ -32,7 +32,6 @@ public class WhenIManageMyNotificationSettings : ControllerTestBase
 
         _orchestrator.Setup(x => x.UpdateNotificationSettings(
                 It.IsAny<string>(),
-                It.IsAny<string>(),
                 It.IsAny<List<UserNotificationSetting>>()))
             .Returns(() => Task.FromResult(new Unit()));
 
@@ -65,7 +64,6 @@ public class WhenIManageMyNotificationSettings : ControllerTestBase
 
         //Assert
         _orchestrator.Verify(x => x.UpdateNotificationSettings(
-            It.IsAny<string>(),
             It.Is<string>(userRef => userRef == "TEST"),
             It.IsAny<List<UserNotificationSetting>>()),
             Times.Once);

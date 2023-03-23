@@ -1,4 +1,5 @@
 ﻿@using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+@using SFA.DAS.EmployerAccounts.Models;
 @model OrchestratorResponse<SFA.DAS.EmployerAccounts.Web.ViewModels.EmployerTeamMembersViewModel>
 
 @{
@@ -6,16 +7,14 @@
     ViewBag.Title = "Manage team members";
     ViewBag.Section = "team";
     ViewBag.ZenDeskLabel = "eas-view-team-member";
+    ViewBag.GaData.Vpv = "/accounts/teams/view/page-manage-team";
 
     if (!string.IsNullOrEmpty(Model.FlashMessage?.HiddenFlashMessageInformation))
     {
         ViewBag.PageID = Model.FlashMessage.HiddenFlashMessageInformation;
     }
 
-}
-
-@{
-    ViewBag.GaData.Vpv = "/accounts/teams/view/page-manage-team";
+    string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId].ToString();
 }
 
 <div class="grid-row header-index">
@@ -33,7 +32,7 @@
         }
     </div>
     <div class="column-one-third">
-        <form action="@Url.Action("Invite")" method="get">
+        <form asp-route="@RouteNames.EmployerTeamInvite" asp-route-hashedAccountId="@hashedAccountId" method="get">
             <input class="button action-add" id="addNewUser" type="submit" value="Invite a new member">
         </form>
     </div>
@@ -64,7 +63,9 @@
                             <td data-label="Status">@InvitationStatusStrings.ToString(teamMember.Status)</td>
                             <td class="link-right">
                                 <a aria-label="View details for @teamMember.Name"
-                                   href="@Url.Action("Review", new { email = teamMember.Email })">View<span class="vh"> details for @teamMember.Name</span></a>
+                                asp-route="@RouteNames.EmployerTeamReview"
+                                asp-route-hashedAccountId="@hashedAccountId"
+                                asp-route-email="@teamMember.Email">View<span class="vh"> details for @teamMember.Name</span></a>
                             </td>
                         </tr>
                     }
@@ -78,7 +79,7 @@
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
+            <li><a asp-route="@RouteNames.EmployerTeamIndex" asp-route-hashedAccountId="@hashedAccountId">Home</a></li>
             <li>Your team</li>
         </ol>
     </div>

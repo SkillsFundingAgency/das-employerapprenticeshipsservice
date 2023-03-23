@@ -1,13 +1,12 @@
 @model OrchestratorResponse<SFA.DAS.EmployerAccounts.Web.ViewModels.InviteTeamMemberViewModel>
+@using SFA.DAS.EmployerAccounts.Models;
 
 @{
     ViewBag.PageID = "page-invite-team-member";
     ViewBag.Title = "Create invitation";
     ViewBag.Section = "team";
-}
-
-@{
     ViewBag.GaData.Vpv = "/accounts/teams/invite/page-invite-team-member";
+    string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId].ToString();
 }
         <div class="grid-row">
             <div class="column-two-thirds">
@@ -15,8 +14,7 @@
                     Create invitation
                 </h1>
                 <p class="lede">Invite somebody from your organisation to access this account.</p>
-                <form method="POST" action="@Url.Action("Invite")">
-                    @Html.AntiForgeryToken()
+                <form method="POST" asp-route="@RouteNames.EmployerTeamInvitePost" asp-route-hashedAccountId="@hashedAccountId">
                     <div class="form-group @(!string.IsNullOrEmpty(Model.Data.EmailError) || !string.IsNullOrEmpty(Model.Data.ExistingMemberError) ? "error" : "")">
 
                         <label for="Email">
@@ -80,6 +78,6 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <a href="@Url.Action("ViewTeam", "EmployerTeam")", class="back-link">Back to your team</a>
+        <a asp-route="@RouteNames.EmployerTeamView" asp-route-hashedAccountId="@hashedAccountId" class="back-link">Back to your team</a>
     </div>
 }

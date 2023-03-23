@@ -34,7 +34,7 @@
 
             <p>If you have done this and the updated information is still not displayed here, please <a href="@Url.Action("Help", "Home")">contact support</a> for further help.</p>
 
-            <form action="@Url.Action("GoToPostUpdateSelection", "Organisation")" method="post">
+            <form asp-route="@RouteNames.OrganisationPostUpdateSelection" asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" method="post">
                 <div class="form-group">
                     <h2 class="heading-large">
                         What's next?

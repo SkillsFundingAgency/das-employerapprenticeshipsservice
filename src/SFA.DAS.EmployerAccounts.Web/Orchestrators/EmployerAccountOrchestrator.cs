@@ -236,7 +236,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
                     EmployerAgreement = new EmployerAgreementView
                     {
                         HashedAccountId = result.HashedAccountId,
-                        HashedAgreementId = result.HashedAccountId
+                        HashedAgreementId = result.HashedAgreementId
                     }
                 },
                 Status = HttpStatusCode.OK

@@ -27,6 +27,7 @@ public class InvitationRepository : BaseRepository, IInvitationRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<InvitationView>(
             sql: "SELECT * FROM [employer_account].[GetInvitations] WHERE ExternalUserId = @userId AND Status = 1;",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.Text);
 
         return result.ToList();
@@ -41,6 +42,7 @@ public class InvitationRepository : BaseRepository, IInvitationRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<InvitationView>(
             sql: "SELECT * FROM [employer_account].[GetInvitations] WHERE Id = @id;",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.Text);
 
         return result.SingleOrDefault();
@@ -62,6 +64,7 @@ public class InvitationRepository : BaseRepository, IInvitationRepository
         await _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[CreateInvitation]",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
 
         return parameters.Get<long>("@invitationId");
@@ -76,6 +79,7 @@ public class InvitationRepository : BaseRepository, IInvitationRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<Invitation>(
             sql: "SELECT * FROM [employer_account].[Invitation] WHERE Id = @id;",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.Text);
 
         return result.SingleOrDefault();
@@ -91,6 +95,7 @@ public class InvitationRepository : BaseRepository, IInvitationRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<Invitation>(
             sql: "SELECT * FROM [employer_account].[Invitation] WHERE AccountId = @accountId AND Email = @email;",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.Text);
 
         return result.SingleOrDefault();
@@ -106,6 +111,7 @@ public class InvitationRepository : BaseRepository, IInvitationRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "UPDATE [employer_account].[Invitation] SET Status = CASE WHEN @statusId = 1 AND ExpiryDate < GETDATE() THEN 3 ELSE @statusId END WHERE Id = @id;",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.Text);
     }
 
@@ -122,6 +128,7 @@ public class InvitationRepository : BaseRepository, IInvitationRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "UPDATE [employer_account].[Invitation] SET Name = @name, Role = @role, Status = @statusId, ExpiryDate = @expiryDate WHERE Id = @id;",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.Text);
     }
 
@@ -136,6 +143,7 @@ public class InvitationRepository : BaseRepository, IInvitationRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[AcceptInvitation]",
             param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
     }
 

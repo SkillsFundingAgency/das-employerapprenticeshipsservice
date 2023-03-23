@@ -83,6 +83,7 @@ public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand,
 
         var hashedAccountId = _encodingService.Encode(createAccountResult.AccountId, EncodingType.AccountId);
         var publicHashedAccountId = _encodingService.Encode(createAccountResult.AccountId, EncodingType.PublicAccountId);
+        var hashedAgreementId = _encodingService.Encode(createAccountResult.EmployerAgreementId, EncodingType.AccountId);
 
         await Task.WhenAll(
             _accountRepository.UpdateAccountHashedIds(createAccountResult.AccountId, hashedAccountId, publicHashedAccountId),
@@ -115,7 +116,7 @@ public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand,
         return new CreateAccountCommandResponse
         {
             HashedAccountId = hashedAccountId,
-            AgreementId = createAccountResult.EmployerAgreementId
+            HashedAgreementId = hashedAgreementId
         };
     }
 

@@ -1,11 +1,15 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.Employer.Shared.UI;
+using SFA.DAS.Employer.Shared.UI.Attributes;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
+using SFA.DAS.EmployerAccounts.Web.RouteValues;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
 [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+[SetNavigationSection(NavigationSection.AccountsAgreements)]
 [Route("accounts/{HashedAccountId}/organisations")]
 public class OrganisationController : BaseController
 {
@@ -25,7 +29,7 @@ public class OrganisationController : BaseController
     {
         var userId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
 
-        var viewModel = await _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName, userId, hashedAccountId, hashedAgreementId);
+        var viewModel = _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName, hashedAgreementId);
 
         viewModel.FlashMessage = GetFlashMessageViewModelFromCookie();
 
@@ -38,7 +42,7 @@ public class OrganisationController : BaseController
     {
         var userId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
 
-        var viewModel = await _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName, userId, hashedAccountId, hashedAgreementId);
+        var viewModel = _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName, hashedAgreementId);
 
         viewModel.FlashMessage = GetFlashMessageViewModelFromCookie();
 
@@ -46,7 +50,7 @@ public class OrganisationController : BaseController
     }
 
     [HttpPost]
-    [Route("confirm")]
+    [Route("confirm", Name = RouteNames.OrganisationConfirm)]
     public async Task<IActionResult> Confirm(
         string hashedAccountId, string name, string code, string address, DateTime? incorporated,
         string legalEntityStatus, OrganisationType organisationType, byte? publicSectorDataSource, string sector, bool newSearch)
@@ -90,16 +94,12 @@ public class OrganisationController : BaseController
     }
 
     [HttpPost]
-    [Route("nextStep")]
-    public async Task<IActionResult> GoToNextStep(string nextStep, string hashedAccountId, string organisationName, string hashedAgreementId)
+    [Route("nextStep", Name = RouteNames.OrganisationGoToNextStep)]
+    public IActionResult GoToNextStep(string nextStep, string hashedAccountId, string organisationName, string hashedAgreementId)
     {
-        var userId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
-
-        var userShownWizard = await _orchestrator.UserShownWizard(userId, hashedAccountId);
-
         switch (nextStep)
         {
-            case "agreement": return RedirectToAction(ControllerConstants.AboutYourAgreementActionName, ControllerConstants.EmployerAgreementControllerName, new { agreementid = hashedAgreementId });
+            case "agreement": return RedirectToRoute(RouteNames.AboutYourAgreement, new { HashedAccountId = hashedAccountId, hashedAgreementId });
 
             case "teamMembers": return RedirectToAction(ControllerConstants.ViewTeamActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId });
 
@@ -111,7 +111,7 @@ public class OrganisationController : BaseController
                 var errorMessage = "Please select one of the next steps below";
                 return View(ControllerConstants.OrganisationAddedNextStepsViewName, new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
                 {
-                    Data = new OrganisationAddedNextStepsViewModel { ErrorMessage = errorMessage, OrganisationName = organisationName, ShowWizard = userShownWizard, HashedAgreementId = hashedAgreementId },
+                    Data = new OrganisationAddedNextStepsViewModel { ErrorMessage = errorMessage, OrganisationName = organisationName, HashedAgreementId = hashedAgreementId },
                     FlashMessage = new FlashMessageViewModel
                     {
                         Headline = "Invalid next step chosen",
@@ -138,7 +138,7 @@ public class OrganisationController : BaseController
     }
 
     [HttpPost]
-    [Route("review")]
+    [Route("review", Name = RouteNames.ProcessOrganisationReview)]
     public async Task<IActionResult> ProcessReviewSelection(
         string updateChoice,
         string hashedAccountId,
@@ -168,16 +168,16 @@ public class OrganisationController : BaseController
     }
 
     [HttpPost]
-    [Route("PostUpdateSelection")]
+    [Route("PostUpdateSelection", Name = RouteNames.OrganisationPostUpdateSelection)]
     public IActionResult GoToPostUpdateSelection(string nextStep, string hashedAccountId)
     {
         switch (nextStep)
         {
             case "dashboard":
-                return RedirectToAction("Index", "EmployerAgreement");
+                return RedirectToRoute(RouteNames.EmployerAgreementIndex, new { hashedAccountId });
 
             case "homepage":
-                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { HashedAccountId = hashedAccountId });
+                return RedirectToRoute(RouteNames.EmployerTeamIndex, new { hashedAccountId });
 
             default:
                 var errorMessage = "Please select one of the next steps below";

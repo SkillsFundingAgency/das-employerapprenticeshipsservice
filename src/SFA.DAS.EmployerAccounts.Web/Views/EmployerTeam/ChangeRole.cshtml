@@ -1,4 +1,5 @@
 @model OrchestratorResponse<SFA.DAS.EmployerAccounts.Models.AccountTeam.TeamMember>
+@using SFA.DAS.EmployerAccounts.Models;
 
 @{
     ViewBag.PageID = "page-team-member-change-role";
@@ -7,10 +8,9 @@
     ViewBag.Section = "team";
     var errorMessage = string.Empty;
     ViewBag.ZenDeskLabel = "eas-change-team-member";
-}
-
-@{
     ViewBag.GaData.Vpv = "/accounts/teams/role/change/page-team-member-change-role";
+
+    string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId].ToString();
 }
 
 @if (!ViewContext.ViewData.ModelState.IsValid)
@@ -41,7 +41,6 @@
         <p class="lede">Choose what you allow this team member to do.</p>
        
         <form method="POST" action="@Url.Action("ChangeRole")">
-            @Html.AntiForgeryToken()
             <div class="form-group @(!ViewContext.ViewData.ModelState.IsValid ? "error" : "")">
                 <fieldset>
                     <legend id="change-role-selection">
@@ -73,7 +72,7 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <a href="@Url.Action("ViewTeam", "EmployerTeam")", class="back-link">Back to your team</a>
+        <a asp-route="@RouteNames.EmployerTeamView" asp-route-hashedAccountId="@hashedAccountId" class="back-link">Back to your team</a>
     </div>
 }
 

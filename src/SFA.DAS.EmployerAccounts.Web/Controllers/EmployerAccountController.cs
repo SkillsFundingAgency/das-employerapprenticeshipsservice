@@ -4,7 +4,10 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Routing;
 using Newtonsoft.Json;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.Employer.Shared.UI;
+using SFA.DAS.Employer.Shared.UI.Attributes;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
+using SFA.DAS.EmployerAccounts.Infrastructure;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerAccounts.Web.RouteValues;
 
@@ -12,6 +15,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
 [Route("accounts")]
 [Authorize(Policy = nameof(PolicyNames.HasUserAccount))]
+[SetNavigationSection(NavigationSection.AccountsHome)]
 public class EmployerAccountController : BaseController
 {
     private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
@@ -122,10 +126,10 @@ public class EmployerAccountController : BaseController
                 return RedirectToAction(ControllerConstants.GatewayInformActionName);
             }
 
-            var externalUserId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+            var externalUserId = HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserIdClaimTypeIdentifier);
             _logger.LogInformation($"Gateway response is for user identity ID {externalUserId}");
 
-            var email = HttpContext.User.FindFirstValue(ControllerConstants.EmailClaimKeyName);
+            var email = HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserEmailClaimTypeIdentifier);
             var empref = await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.Data.AccessToken, email);
             _logger.LogInformation($"Gateway response is for empref {empref.Empref} \n {JsonConvert.SerializeObject(empref)}");
 
@@ -245,7 +249,7 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpPost]
-    [Route("create")]
+    [Route("create", Name = RouteNames.EmployerAccountCreate)]
     public async Task<IActionResult> CreateAccount()
     {
         var enteredData = _employerAccountOrchestrator.GetCookieData();
@@ -296,7 +300,7 @@ public class EmployerAccountController : BaseController
         if (returnUrlCookie != null && !string.IsNullOrWhiteSpace(returnUrlCookie.Value))
             return Redirect(returnUrlCookie.Value);
 
-        return RedirectToAction(ControllerConstants.WhenDoYouWantToView, ControllerConstants.EmployerAgreementControllerName, new { hashedAccountId = response.Data.EmployerAgreement.HashedAccountId, agreementId = response.Data.EmployerAgreement.HashedAgreementId });
+        return RedirectToAction(ControllerConstants.WhenDoYouWantToView, ControllerConstants.EmployerAgreementControllerName, new { hashedAccountId = response.Data.EmployerAgreement.HashedAccountId, hashedAgreementId = response.Data.EmployerAgreement.HashedAgreementId });
     }
 
     [HttpGet]

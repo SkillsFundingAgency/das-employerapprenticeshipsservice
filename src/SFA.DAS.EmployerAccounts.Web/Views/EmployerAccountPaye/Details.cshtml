@@ -71,8 +71,13 @@
 
     </div>
     <div class="govuk-grid-column-one-third">
-        <a href="@Url.Action("Remove", new {empRef = Model.Data.EmpRef.FormatPayeForUrl()})" class="govuk-button das-float-right" aria-label="Remove PAYE scheme @Model.Data.EmpRef"
-           title="Remove PAYE scheme @Model.Data.EmpRef">Remove <abbr>PAYE</abbr> scheme</a>
+        <a asp-controller="@ControllerConstants.EmployerAccountPayeControllerName"
+        asp-action="Remove"
+        asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" 
+        asp-route-empRef="@Model.Data.EmpRef.FormatPayeForUrl()" 
+        class="govuk-button das-float-right" 
+        aria-label="Remove PAYE scheme @Model.Data.EmpRef"
+        title="Remove PAYE scheme @Model.Data.EmpRef">Remove <abbr>PAYE</abbr> scheme</a>
     </div>
 </div>
 

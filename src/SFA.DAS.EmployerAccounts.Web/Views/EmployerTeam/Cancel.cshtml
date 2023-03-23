@@ -4,10 +4,9 @@
     ViewBag.PageID = "page-team-member-cancel-invite";
     ViewBag.Title = "Cancel invitation";
     ViewBag.Section = "team";
-}
-
-@{
     ViewBag.GaData.Vpv = "/accounts/teams/role/change/page-team-member-cancel-invite";
+
+    string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId].ToString();
 }
 
 <div class="grid-row">
@@ -21,12 +20,12 @@
                 <input type="hidden" id="Email" name="Email" value="@Model.Data.Email" />
                 <button type="submit" class="button" id="cancel_invitation">Yes, cancel invitation</button>
             </form>
-            <a href="@Url.Action("Viewteam", "EmployerTeam")" class="button button-link">No, don't cancel invitation</a>
+            <a asp-route="@RouteNames.EmployerTeamView" asp-route-hashedAccountId="@hashedAccountId" class="button button-link">No, don't cancel invitation</a>
         </div>
     </div>
 </div>
 @section breadcrumb {
     <div class="breadcrumbs">
-        <a href="@Url.Action("ViewTeam", "EmployerTeam")", class="back-link">Back to your team</a>
+        <a asp-route ="@RouteNames.EmployerTeamView" asp-route-hashedAccountId="@hashedAccountId" class="back-link">Back to your team</a>
     </div>
 }

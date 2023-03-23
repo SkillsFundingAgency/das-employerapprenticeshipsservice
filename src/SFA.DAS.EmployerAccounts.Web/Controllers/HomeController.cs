@@ -145,7 +145,7 @@ public class HomeController : BaseController
         }
 
         var userRef = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
-        var email = HttpContext.User.FindFirstValue(ControllerConstants.EmailClaimKeyName);
+        var email = HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserEmailClaimTypeIdentifier);
         var firstName = HttpContext.User.FindFirstValue(DasClaimTypes.GivenName);
         var lastName = HttpContext.User.FindFirstValue(DasClaimTypes.FamilyName);
 
@@ -173,7 +173,7 @@ public class HomeController : BaseController
         if (!string.IsNullOrWhiteSpace(correlationId))
         {
             var userRef = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
-            var email = HttpContext.User.FindFirstValue(ControllerConstants.EmailClaimKeyName);
+            var email = HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserEmailClaimTypeIdentifier);
             var firstName = HttpContext.User.FindFirstValue(DasClaimTypes.GivenName);
             var lastName = HttpContext.User.FindFirstValue(DasClaimTypes.FamilyName);
 
@@ -238,7 +238,7 @@ public class HomeController : BaseController
             AddFlashMessageToCookie(flashMessage);
 
             var userRef = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
-            var email = HttpContext.User.FindFirstValue(ControllerConstants.EmailClaimKeyName);
+            var email = HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserEmailClaimTypeIdentifier);
             var firstName = HttpContext.User.FindFirstValue(DasClaimTypes.GivenName);
             var lastName = HttpContext.User.FindFirstValue(DasClaimTypes.FamilyName);
 

@@ -154,7 +154,7 @@ public class EmployerAgreementRepository : BaseRepository, IEmployerAgreementRep
         legalEntity.PendingAgreementVersion = pendingAgreementVersion;
         legalEntity.SignedAgreementId = signedAgreementId;
         legalEntity.SignedAgreementVersion = signedAgreementVersion;
-        await _db.Value.SaveChangesAsync();
+        await _db.Value.SaveChangesAsync().ConfigureAwait(false);
     }
 
     public async Task<AccountLegalEntity> GetOrganisationsAgreements(long accountLegalEntityId)

@@ -92,9 +92,11 @@
                         if (!organisation.AddedToAccount)
                         {
                             <li class="das-search-results__list-item">
-                                <form asp-action="@ControllerConstants.SearchForOrganisationResultsConfirmActionName"
-                          asp-controller="@ControllerConstants.SearchOrganisationControllerName"
-                                      method="post">
+                                <form 
+                                    asp-action="@ControllerConstants.SearchForOrganisationResultsConfirmActionName"
+                                    asp-controller="@ControllerConstants.SearchOrganisationControllerName"
+                                    asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]"
+                                    method="post">
                                     <input type="hidden" name="DateOfInception" value="@organisation.DateOfInception" />
                                     <input type="hidden" name="ReferenceNumber" value="@organisation.ReferenceNumber" />
                                     <input type="hidden" name="Sector" value="@organisation.Sector" />
@@ -124,7 +126,7 @@
                                     <dd class="das-definition-list__definition">@organisation.Type.GetDescription()</dd>
                                 </dl>
                                 <p class="govuk-body govuk-!-margin-bottom-0">
-                                    Already added - <a href="@Url.Action("Index", "EmployerAgreement")" class="govuk-link">view my organisations</a>
+                                    Already added - <a asp-route="@RouteNames.EmployerAgreementIndex" asp-route-HashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" class="govuk-link">view my organisations</a>
                                 </p>
                             </li>
                         }

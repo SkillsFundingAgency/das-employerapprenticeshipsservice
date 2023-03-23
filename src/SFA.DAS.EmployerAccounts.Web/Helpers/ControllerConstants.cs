@@ -4,7 +4,6 @@ public static class ControllerConstants
 {
     public const string AboutYourAgreementActionName = "AboutYourAgreement";
     public const string AboutYourAgreementViewName = "AboutYourAgreement";
-    public const string AboutYourDocumentViewName = "AboutYourDocument";
     public const string AccessDeniedViewName = "AccessDenied";     
     public const string AccountHashedIdRouteKeyName = "HashedAccountId";
     public const string AcceptedEmployerAgreementViewName = "AcceptedEmployerAgreement";
@@ -18,8 +17,7 @@ public static class ControllerConstants
     public const string ConfirmPayeSchemeActionName = "ConfirmPayeScheme";
     public const string ConfirmRemoveOrganisationActionName = "ConfirmRemoveOrganisation";
     public const string ConfirmRemoveOrganisationViewName = "ConfirmRemoveOrganisation";
-    public const string DetailsActionName = "Details";
-    public const string EmailClaimKeyName = "email";      
+    public const string DetailsActionName = "Details";  
     public const string EmployerAccountControllerName = "EmployerAccount";
     public const string EmployerAccountTransactionsControllerName = "EmployerAccountTransactions";
     public const string EmployerAccountPayeControllerName = "EmployerAccountPaye";
@@ -101,4 +99,5 @@ public static class ControllerConstants
     public const string ViewApprenticeBeforeApprove = "ViewApprenticeBeforeApprove";
     public const string ViewAllAgreementActionName = "ViewAllAgreements";
     public const string InsetText = "Inset";
+    public const string CreateAccountActionName = "CreateAccount";
 }

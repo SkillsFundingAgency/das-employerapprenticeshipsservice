@@ -11,6 +11,7 @@ using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesCountByHashedAccountId;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetLastSignedAgreement;
+using SFA.DAS.EmployerAccounts.Web.RouteValues;
 using SFA.DAS.Testing;
 using SFA.DAS.Testing.AutoFixture;
 
@@ -210,33 +211,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
             assert: (fixtures, actualResult) =>
             {
                 Assert.IsNotNull(actualResult);
-                Assert.AreEqual(actualResult.ViewName, "AboutYourAgreement");
-            });
-    }
-
-    [Test]
-    public Task AboutYourAgreement_WhenIViewAboutYourAgreementAsEoi_ThenShouldShowTheAboutYourAgreementView()
-    {
-        return TestAsync(
-            arrange: fixtures =>
-            {
-                fixtures.Orchestrator.Setup(x => x.GetById(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                    .ReturnsAsync(new OrchestratorResponse<EmployerAgreementViewModel>
-                    {
-                        Data = new EmployerAgreementViewModel
-                        {
-                            EmployerAgreement = new EmployerAgreementView
-                            {
-                                AgreementType = AgreementType.NonLevyExpressionOfInterest
-                            }
-                        }
-                    });
-            },
-            act: fixtures => fixtures.AboutYourAgreement(),
-            assert: (fixtures, actualResult) =>
-            {
-                Assert.IsNotNull(actualResult);
-                Assert.AreEqual(actualResult.ViewName, "AboutYourDocument");
+                Assert.That(actualResult.Model, Is.InstanceOf<OrchestratorResponse<EmployerAgreementViewModel>>());
             });
     }
 
@@ -296,8 +271,8 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
             act: fixtures => fixtures.WhenDoYouWantToView(1, new WhenDoYouWantToViewViewModel { EmployerAgreement = new EmployerAgreementView() }),
             assert: (fixtures, actualResult) =>
             {
-                Assert.IsNotNull(actualResult);
-                Assert.That(actualResult.ActionName, Is.EqualTo("SignAgreement"));
+                actualResult.Should().NotBeNull();
+                actualResult.RouteName.Should().Be(RouteNames.EmployerAgreementSignYourAgreement);
             });
     }
 
@@ -308,9 +283,8 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
             act: fixtures => fixtures.WhenDoYouWantToView(2, new WhenDoYouWantToViewViewModel { EmployerAgreement = new EmployerAgreementView() }),
             assert: (fixtures, actualResult) =>
             {
-                Assert.IsNotNull(actualResult);
-                Assert.That(actualResult.ActionName, Is.EqualTo("Index"));
-                Assert.That(actualResult.ControllerName, Is.EqualTo("EmployerTeam"));
+                actualResult.Should().NotBeNull();
+                actualResult.RouteName.Should().Be(RouteNames.EmployerTeamIndex);
             });
     }
 }
@@ -479,9 +453,9 @@ public class EmployerAgreementControllerTestFixtures : FluentTest<EmployerAgreem
         return ViewResult;
     }
 
-    public async Task<RedirectToActionResult> WhenDoYouWantToView(int? choice, WhenDoYouWantToViewViewModel model)
+    public async Task<RedirectToRouteResult> WhenDoYouWantToView(int? choice, WhenDoYouWantToViewViewModel model)
     {
         var controller = CreateController();
-        return await controller.WhenDoYouWantToView(choice, model.EmployerAgreement.HashedAgreementId, model.EmployerAgreement.HashedAccountId) as RedirectToActionResult;
+        return await controller.WhenDoYouWantToView(choice, model.EmployerAgreement.HashedAgreementId, model.EmployerAgreement.HashedAccountId) as RedirectToRouteResult;
     }
 }

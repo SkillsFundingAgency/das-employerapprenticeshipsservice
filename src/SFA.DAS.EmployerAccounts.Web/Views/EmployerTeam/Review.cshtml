@@ -1,14 +1,14 @@
 ﻿@using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+@using SFA.DAS.EmployerAccounts.Models;
 @model OrchestratorResponse<SFA.DAS.EmployerAccounts.Models.AccountTeam.TeamMember>
 
 @{
     ViewBag.PageID = "page-review-team-member";
     ViewBag.Title = Model.Data.Name;
     ViewBag.Section = "team";
-}
-
-@{
     ViewBag.GaData.Vpv = "/accounts/teams/review/page-review-team-member";
+
+    string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId].ToString();
 }
 
 <div class="grid-row">
@@ -27,7 +27,7 @@
                     {
                         <th><span class="vh">Action</span></th>
                     }
-                    </tr>
+                </tr>
             </thead>
             <tbody>
                 <tr>
@@ -36,7 +36,9 @@
                     @if (Model.Data.IsUser)
                     {
                         <td class="link-right">
-                            <a href="@Url.Action("ChangeRole","EmployerTeam", new { Model.Data.Email })">Change <span class="vh">role for @Model.Data.Name</span></a>
+                            <a asp-route="@RouteNames.EmployerTeamGetChangeRole"
+                           asp-route-hashedAccountId="@hashedAccountId"
+                           asp-route-email="@Model.Data.Email">Change <span class="vh">role for @Model.Data.Name</span></a>
                         </td>
                     }
                 </tr>
@@ -47,12 +49,15 @@
         {
             <div class="form-group">
                 <form action="@Url.Action("Resend")" method="POST">
-                    @Html.AntiForgeryToken()
                     <input type="hidden" id="Email" name="Email" value="@Model.Data.Email" />
                     <input type="hidden" id="Name" name="Name" value="@Model.Data.Name" />
                     <button type="submit" class="button" id="resend_invitation">Resend Invitation</button>
                 </form>
-                <a href="@Url.Action("Cancel", "EmployerTeam",new {email = Model.Data.Email, invitationId = Model.Data.HashedInvitationId })" class="button button-link">Cancel Invitation</a>
+                <a asp-route="@RouteNames.EmployerTeamCancelInvitation"
+                asp-route-hashedAccountId="@hashedAccountId"
+               asp-route-email="@Model.Data.Email"
+               asp-route-hashedInvitationId="@Model.Data.HashedInvitationId"
+                   class="button button-link">Cancel Invitation</a>
 
             </div>
         }
@@ -69,6 +74,6 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <a href="@Url.Action("ViewTeam", "EmployerTeam")" class="back-link">Back to your team</a>
+        <a asp-route="@RouteNames.EmployerTeamView" asp-route-hashedAccountId="@hashedAccountId" class="back-link">Back to your team</a>
     </div>
 }

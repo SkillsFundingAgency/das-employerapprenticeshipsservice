@@ -2,7 +2,6 @@
 using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
@@ -48,18 +47,15 @@ public class EmployerAccountsDbContext : DbContext, IEmployerAccountsDbContext
     {
         if (_configuration == null || _azureServiceTokenProvider == null)
         {
-            optionsBuilder.UseSqlServer().UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            optionsBuilder
+                .UseSqlServer()
+                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             return;
         }
 
-        //var connection = new SqlConnection
-        //{
-        //    ConnectionString = _configuration.DatabaseConnectionString,
-        //    AccessToken = _azureServiceTokenProvider.GetAccessTokenAsync(AzureResource).Result,
-        //};
-
-        optionsBuilder.UseSqlServer(_connection as SqlConnection)
-            .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+        optionsBuilder
+            .UseLazyLoadingProxies()
+            .UseSqlServer(_connection as SqlConnection);
 
     }
 

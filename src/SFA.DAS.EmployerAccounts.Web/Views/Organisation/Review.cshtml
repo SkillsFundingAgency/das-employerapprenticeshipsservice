@@ -27,8 +27,9 @@
                 </tbody>
             </table>
 
-            <form method="POST" action="@Url.Action("ProcessReviewSelection","Organisation")">
-                @Html.AntiForgeryToken()
+            <form method="POST" 
+                asp-route="@RouteNames.ProcessOrganisationReview" 
+                asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]">
                 <input type="hidden" name="organisationName" value="@Model.Data.RefreshedName" />
                 <input type="hidden" name="organisationAddress" value="@Model.Data.RefreshedAddress" />
                 <input type="hidden" name="accountLegalEntityPublicHashedId" value="@Model.Data.HashedAccountLegalEntityId" />

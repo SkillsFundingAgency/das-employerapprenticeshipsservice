@@ -26,7 +26,10 @@
         <p class="govuk-body">You'll need to add all the <abbr>PAYE</abbr> schemes you intend to use to pay for apprenticeship training.</p>
     </div>
     <div class="govuk-grid-column-one-third">
-        <form action="@Url.Action("GatewayInform")" method="GET">
+        <form asp-controller="@ControllerConstants.EmployerAccountPayeControllerName"
+              asp-action="@ControllerConstants.GatewayInformActionName"
+              asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]"
+              method="GET">
             <input class="govuk-button das-float-right" id="addNewPaye" type="submit" value="Add new scheme">
         </form>
     </div>
@@ -69,8 +72,12 @@
                             }
 
                             <td class="govuk-table__cell">
-                                <a href="@Url.Action("Details", new {empRef = scheme.Ref.FormatPayeForUrl()})" class="govuk-link"
-                                   aria-label="Details for PAYE scheme @scheme.Ref" title="Details for PAYE scheme @scheme.Ref">
+                                <a asp-route="@RouteNames.PayeDetails"
+                                   asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]"
+                                   asp-route-empRef="@scheme.Ref.FormatPayeForUrl()"
+                                   class="govuk-link"
+                                   aria-label="Details for PAYE scheme @scheme.Ref"
+                                   title="Details for PAYE scheme @scheme.Ref">
                                     Details <span class="govuk-visually-hidden">for <abbr>PAYE</abbr> scheme @scheme.Ref</span>
                                 </a>
                             </td>
