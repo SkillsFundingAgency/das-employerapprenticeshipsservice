@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using SFA.DAS.Employer.Shared.UI.Attributes;
 using SFA.DAS.Employer.Shared.UI;
+using SFA.DAS.Employer.Shared.UI.Attributes;
 using SFA.DAS.EmployerAccounts.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerAccounts.Web.RouteValues;
@@ -117,11 +117,8 @@ public class EmployerTeamController : BaseController
 
     [HttpGet]
     [Route("invite/next")]
-    public async Task<IActionResult> NextSteps(string hashedAccountId)
+    public IActionResult NextSteps(string hashedAccountId)
     {
-        var userId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
-        var userShownWizard = await _employerTeamOrchestrator.UserShownWizard(userId, hashedAccountId);
-
         var model = new OrchestratorResponse<InviteTeamMemberNextStepsViewModel>
         {
             FlashMessage = GetFlashMessageViewModelFromCookie(),
@@ -135,14 +132,14 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpPost]
-    [Route("invite/next")]
-    public async Task<IActionResult> NextSteps(int? choice, string hashedAccountId)
+    [Route("invite/next", Name = RouteNames.EmployerTeamInviteNextPost)]
+    public IActionResult NextSteps(int? choice, string hashedAccountId)
     {
         switch (choice ?? 0)
         {
             case 1: return RedirectToAction(ControllerConstants.InviteActionName, new { hashedAccountId });
-            case 2: return RedirectToAction(ControllerConstants.ViewTeamActionName);
-            case 3: return RedirectToAction(ControllerConstants.IndexActionName);
+            case 2: return RedirectToAction(ControllerConstants.ViewTeamActionName, new { hashedAccountId });
+            case 3: return RedirectToAction(ControllerConstants.IndexActionName, new { hashedAccountId });
             default:
                 var model = new OrchestratorResponse<InviteTeamMemberNextStepsViewModel>
                 {

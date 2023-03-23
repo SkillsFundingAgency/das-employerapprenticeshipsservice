@@ -1,8 +1,9 @@
 ﻿@model OrchestratorResponse<SFA.DAS.EmployerAccounts.Web.ViewModels.InviteTeamMemberNextStepsViewModel>
-@{ViewBag.PageID = "page-invite-team-member-next-steps";}
-@{ViewBag.Title = "What's next";}
-@{ViewBag.Section = "team";}
 @{
+    ViewBag.PageID = "page-invite-team-member-next-steps";
+    ViewBag.PageID = "page-invite-team-member-next-steps";
+    ViewBag.Title = "What's next";
+    ViewBag.Section = "team";
     ViewBag.GaData.Vpv = "/accounts/teams/invite/next/page-invite-team-member-next-steps";
 }
 <div class="grid-row">
@@ -10,8 +11,9 @@
         <h1 class="heading-large">
             What's next
         </h1>
-        <form method="POST" action="@Url.Action("NextSteps")">
-            @Html.AntiForgeryToken()
+        <form method="POST" 
+            asp-route="@RouteNames.EmployerTeamInviteNextPost"
+            asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]">
             <div class="form-group  @(!string.IsNullOrEmpty(Model.Data.ErrorMessage) ? "error" : "")">
                 <fieldset>
                     <legend>
@@ -25,16 +27,13 @@
                         <input id="choice1" type="radio" name="choice" value="1" />
                         Add another team member
                     </label>
-                    @if (!Model.Data.UserShownWizard)
-                    {
                     <label for="choice2" class="block-label">
                         <input id="choice2" type="radio" name="choice" value="2" />
                         View all team members
                     </label>
-                    }
                     <label for="choice3" class="block-label">
                         <input id="choice3" type="radio" name="choice" value="3" />
-                        @(Model.Data.UserShownWizard ? "Continue account setup" : "Return to homepage")
+                        Return to homepage
                     </label>
                 </fieldset>
             </div>
