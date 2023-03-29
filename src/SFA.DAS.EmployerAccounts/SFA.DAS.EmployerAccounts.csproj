@@ -78,7 +78,4 @@
     <Folder Include="Queries\GetEmployerAgreementById\" />
     <Folder Include="Queries\GetLegalEntity\" />
   </ItemGroup>
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
 </Project>

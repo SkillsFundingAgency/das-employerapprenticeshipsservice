@@ -35,15 +35,6 @@
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="App.config">
       <TransformOnBuild>true</TransformOnBuild>
     </None>
@@ -56,10 +47,6 @@
     <Compile Remove="ScheduledJobs\**" />
     <EmbeddedResource Remove="ScheduledJobs\**" />
     <None Remove="ScheduledJobs\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="C:\Users\ADM_HarrisJo\.nuget\packages\nlog.schema\4.5.3\contentFiles\any\any\NLog.xsd" />
-    <None Remove="SFA.DAS.EmployerAccounts.Jobs.csproj.DotSettings" />
   </ItemGroup>
   <ItemGroup>
     <None Update="nlog.config">
