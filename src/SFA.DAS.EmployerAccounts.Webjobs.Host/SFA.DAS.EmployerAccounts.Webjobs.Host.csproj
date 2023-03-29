@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <TargetFramework>net6.0</TargetFramework>
+    <MSDeployPackagePublishDependsOn>CopyWebJobs</MSDeployPackagePublishDependsOn>
+    <WebJobProjects>
+      $(MSBuildProjectDirectory)\..\SFA.DAS.EmployerAccounts.Jobs\SFA.DAS.EmployerAccounts.Jobs.csproj;
+      $(MSBuildProjectDirectory)\..\SFA.DAS.EmployerAccounts.MessageHandlers\SFA.DAS.CommitmentsV2.Jobs.csproj;
+    </WebJobProjects>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebJobs.Publish" Version="17.1.361" />
+  </ItemGroup>
+  <Target Name="CopyWebJobs">
+    <MSBuild Projects="$(WebJobProjects)" Targets="Restore;Build" Properties="DeployOnBuild=true;Configuration=$(Configuration);WebPublishMethod=FileSystem;PublishUrl=$(PublishIntermediateOutputPath)" RunEachTargetSeparately="true" StopOnFirstFailure="true" />
+  </Target>
+
+</Project>
