@@ -86,7 +86,7 @@ jobs:
             ServerName: $(SharedSQLServerFQDN)
             SqlUsername: $(SharedSQLServerUsername)
             SqlPassword: $(SharedSQLServerPassword)
-            DacpacFile: $(Pipeline.Workspace)/DacpacArtifact/src/SFA.DAS.EmployerAccount.Database/bin/Output/SFA.DAS.EmployerAccount.Database.dacpac
+            DacpacFile: $(Pipeline.Workspace)/DacpacArtifact/src/SFA.DAS.EmployerAccounts.Database/bin/Output/SFA.DAS.EmployerAccounts.Database.dacpac
             DatabaseName: $(DatabaseName)
             OverrideBlockOnPossibleDataLoss: ${{ parameters.OverrideBlockOnPossibleDataLoss }}
             Environment: ${{ parameters.Environment }}
