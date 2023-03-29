@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.EAS.Employer_Account.Database", "SFA.DAS.EAS.Employer_Account.Database\SFA.DAS.EAS.Employer_Account.Database.sqlproj", "{927A0BEA-B043-4A03-9311-F49CB60541D5}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PreReqs", "PreReqs", "{15DE899B-AD05-470D-B0F8-E5696141CA9A}"
 	ProjectSection(SolutionItems) = preProject
 		DevInstall.ps1 = DevInstall.ps1
@@ -19,8 +17,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AzureConfiguration", "Azure
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Jobs", "SFA.DAS.EmployerAccounts.Jobs\SFA.DAS.EmployerAccounts.Jobs.csproj", "{C129093D-7F7E-4D89-92BF-55407553B191}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Host", "SFA.DAS.EmployerAccounts.Host\SFA.DAS.EmployerAccounts.Host.csproj", "{6D84017B-D6A3-433A-B66B-DCECAC37741E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.MessageHandlers", "SFA.DAS.EmployerAccounts.MessageHandlers\SFA.DAS.EmployerAccounts.MessageHandlers.csproj", "{41E84BA4-A174-4DD8-89A1-7F0B4E470E97}"
 EndProject
@@ -74,7 +70,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Ap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Api.IntegrationTests", "SFA.DAS.EmployerAccounts.Api.IntegrationTests\SFA.DAS.EmployerAccounts.Api.IntegrationTests.csproj", "{BD68EB2C-A486-42B2-8685-776B164FD860}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.Webjobs.Host", "SFA.DAS.EmployerAccounts.Webjobs.Host\SFA.DAS.EmployerAccounts.Webjobs.Host.csproj", "{9F64758B-428F-42F4-AB6D-7B6F0CD57260}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Webjobs.Host", "SFA.DAS.EmployerAccounts.Webjobs.Host\SFA.DAS.EmployerAccounts.Webjobs.Host.csproj", "{9F64758B-428F-42F4-AB6D-7B6F0CD57260}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.EmployerAccount.Database", "SFA.DAS.EmployerAccount.Database\SFA.DAS.EmployerAccount.Database.sqlproj", "{927A0BEA-B043-4A03-9311-F49CB60541D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -82,11 +80,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{927A0BEA-B043-4A03-9311-F49CB60541D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{927A0BEA-B043-4A03-9311-F49CB60541D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{927A0BEA-B043-4A03-9311-F49CB60541D5}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{927A0BEA-B043-4A03-9311-F49CB60541D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{927A0BEA-B043-4A03-9311-F49CB60541D5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0E46510C-0D06-4B63-8E17-B9037DB7C7ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0E46510C-0D06-4B63-8E17-B9037DB7C7ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E46510C-0D06-4B63-8E17-B9037DB7C7ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -95,10 +88,6 @@ Global
 		{C129093D-7F7E-4D89-92BF-55407553B191}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C129093D-7F7E-4D89-92BF-55407553B191}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C129093D-7F7E-4D89-92BF-55407553B191}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6D84017B-D6A3-433A-B66B-DCECAC37741E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6D84017B-D6A3-433A-B66B-DCECAC37741E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6D84017B-D6A3-433A-B66B-DCECAC37741E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6D84017B-D6A3-433A-B66B-DCECAC37741E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{41E84BA4-A174-4DD8-89A1-7F0B4E470E97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{41E84BA4-A174-4DD8-89A1-7F0B4E470E97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41E84BA4-A174-4DD8-89A1-7F0B4E470E97}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -187,6 +176,12 @@ Global
 		{9F64758B-428F-42F4-AB6D-7B6F0CD57260}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F64758B-428F-42F4-AB6D-7B6F0CD57260}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F64758B-428F-42F4-AB6D-7B6F0CD57260}.Release|Any CPU.Build.0 = Release|Any CPU
+		{927A0BEA-B043-4A03-9311-F49CB60541D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{927A0BEA-B043-4A03-9311-F49CB60541D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{927A0BEA-B043-4A03-9311-F49CB60541D5}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{927A0BEA-B043-4A03-9311-F49CB60541D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{927A0BEA-B043-4A03-9311-F49CB60541D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{927A0BEA-B043-4A03-9311-F49CB60541D5}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
