@@ -43,11 +43,6 @@
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.1" />
 	</ItemGroup>
 	<ItemGroup>
-		<Compile Update="Global.asax.cs">
-			<DependentUpon>Global.asax</DependentUpon>
-		</Compile>
-	</ItemGroup>
-	<ItemGroup>
 		<None Update="NLog.xsd">
 			<SubType>Designer</SubType>
 		</None>
