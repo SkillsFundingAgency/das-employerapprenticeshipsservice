@@ -38,11 +38,11 @@ jobs:
         zipAfterPublish: true
     
     - task: DotNetCoreCLI@2
-      displayName: Publish - dotnet publish ${{ parameters.SolutionBaseName }}.Host
+      displayName: Publish - dotnet publish ${{ parameters.SolutionBaseName }}.Webjobs.Host
       inputs:
         command: publish
         publishWebProjects: false #set to false as this setting (which defaults to true) will parse the entire repo for web projects
-        projects: src/${{ parameters.SolutionBaseName }}.Host/${{ parameters.SolutionBaseName }}.Host.csproj
+        projects: src/${{ parameters.SolutionBaseName }}.Webjobs.Host/${{ parameters.SolutionBaseName }}.Webjobs.Host.csproj
         arguments: -o $(build.artifactstagingdirectory)/publish -c ${{ parameters.BuildConfiguration }} --no-build
         modifyOutputPath: true
         zipAfterPublish: true
