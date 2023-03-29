@@ -72,7 +72,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Ap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Webjobs.Host", "SFA.DAS.EmployerAccounts.Webjobs.Host\SFA.DAS.EmployerAccounts.Webjobs.Host.csproj", "{9F64758B-428F-42F4-AB6D-7B6F0CD57260}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.EmployerAccount.Database", "SFA.DAS.EmployerAccount.Database\SFA.DAS.EmployerAccount.Database.sqlproj", "{927A0BEA-B043-4A03-9311-F49CB60541D5}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.EmployerAccounts.Database", "SFA.DAS.EmployerAccounts.Database\SFA.DAS.EmployerAccounts.Database.sqlproj", "{927A0BEA-B043-4A03-9311-F49CB60541D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -156,7 +156,7 @@
     <None Include="Scripts\Manual\MAC-127-ExpireLegalAgreements.sql" />
   </ItemGroup>
   <ItemGroup>
-    <RefactorLog Include="SFA.DAS.EmployerAccount.Database.refactorlog" />
+    <RefactorLog Include="SFA.DAS.EmployerAccounts.Database.refactorlog" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
