@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using NServiceBus;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.EmployerAccounts.Configuration;
@@ -46,7 +45,7 @@ public static class NServiceBusServiceRegistrations
         }
         else
         {
-            endpointConfiguration.UseAzureServiceBusTransport(employerAccountsConfiguration.MessageServiceBusConnectionString, r => { });
+            endpointConfiguration.UseAzureServiceBusTransport(employerAccountsConfiguration.ServiceBusConnectionString, r => { });
         }
 
         if (!string.IsNullOrEmpty(employerAccountsConfiguration.NServiceBusLicense))
