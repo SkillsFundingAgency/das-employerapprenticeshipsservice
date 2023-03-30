@@ -309,6 +309,10 @@
                         "value": {
                             "array": [
                                 {
+                                    "name": "ResourceEnvironmentName",
+                                    "value": "[parameters('resourceEnvironmentName')]"
+                                },
+                                {
                                     "name": "LoggingRedisConnectionString",
                                     "value": "[parameters('loggingRedisConnectionString')]"
                                 },
