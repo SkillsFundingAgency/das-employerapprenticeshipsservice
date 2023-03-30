@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Web.Helpers;
@@ -8,21 +8,23 @@ using SFA.DAS.EAS.Support.Web.Models;
 using SFA.DAS.EAS.Support.Web.Services;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Support.Shared.Discovery;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers
 {
     [Authorize(Roles = "das-support-portal")]
-    public class AccountController : Microsoft.AspNetCore.Mvc.Controller
+    public class AccountController : Controller
     {
         private readonly IAccountHandler _accountHandler;
         private readonly IPayeLevySubmissionsHandler _payeLevySubmissionsHandler;
-        private readonly ILog _log;
+        private readonly ILogger<AccountController> _log;
         private readonly IPayeLevyMapper _payeLevyMapper;
         private readonly HttpContext _httpContext;
 
         public AccountController(IAccountHandler accountHandler,
             IPayeLevySubmissionsHandler payeLevySubmissionsHandler,
-            ILog log,
+            ILogger<AccountController> log,
             IPayeLevyMapper payeLevyDeclarationMapper,
             HttpContext httpContext)
         {

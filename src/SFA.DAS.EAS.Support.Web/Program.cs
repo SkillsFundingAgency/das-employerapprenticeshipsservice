@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.EAS.Support.Web.Extensions;
 
 namespace SFA.DAS.EAS.Support.Web
 {
@@ -25,6 +26,7 @@ namespace SFA.DAS.EAS.Support.Web
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.ConfigureDasAppConfiguration();
                     webBuilder.UseStartup<Startup>();
                 });
     }

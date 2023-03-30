@@ -7,7 +7,7 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
 {
     [ApiController]
     [Route("api/accounts/{hashedAccountId}/legalentities")]
-    public class LegalEntitiesController : Microsoft.AspNetCore.Mvc.ControllerBase
+    public class LegalEntitiesController : ControllerBase
     {
         private readonly IEmployerAccountsApiService _apiService;
 

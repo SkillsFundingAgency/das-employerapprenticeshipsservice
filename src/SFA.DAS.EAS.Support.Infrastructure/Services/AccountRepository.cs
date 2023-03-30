@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
@@ -18,14 +19,14 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
     {
         private readonly IAccountApiClient _accountApiClient;
         private readonly IDatetimeService _datetimeService;
-        private readonly ILog _logger;
+        private readonly ILogger<AccountRepository> _logger;
         private readonly IPayeSchemeObfuscator _payeSchemeObfuscator;
         private readonly IHashingService _hashingService;
 
         public AccountRepository(IAccountApiClient accountApiClient,
             IPayeSchemeObfuscator payeSchemeObfuscator,
             IDatetimeService datetimeService,
-            ILog logger,
+            ILogger<AccountRepository> logger,
             IHashingService hashingService)
         {
             _accountApiClient = accountApiClient;
@@ -39,7 +40,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
         {
             try
             {
-                _logger.Debug(
+                _logger.LogDebug(
                     $"{nameof(IAccountApiClient)}.{nameof(IAccountApiClient.GetResource)}<{nameof(AccountDetailViewModel)}>(\"/api/accounts/{id.ToUpper()}\");");
 
                 var response = await _accountApiClient.GetResource<AccountDetailViewModel>($"/api/accounts/{id.ToUpper()}");
@@ -48,7 +49,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
             }
             catch (Exception e)
             {
-                _logger.Error(e, $"Account with id {id} not found");
+                _logger.LogError(e, $"Account with id {id} not found");
                 return null;
             }
         }
@@ -68,13 +69,13 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
             }
             catch (HttpRequestException e)
             {
-                _logger.Warn($"The Account API Http request threw an exception while fetching Page {pageNumber} - Exception :\r\n{e}");
+                _logger.LogWarning($"The Account API Http request threw an exception while fetching Page {pageNumber} - Exception :\r\n{e}");
             }
             catch (Exception e)
             {
-                _logger.Error(e, $"A general exception has been thrown while requesting employer account details");
+                _logger.LogError(e, $"A general exception has been thrown while requesting employer account details");
             }
-            _logger.Debug($"Account Details data Page ({pageNumber} Size {pagesize}) : {(JsonConvert.SerializeObject(results))}");
+            _logger.LogDebug($"Account Details data Page ({pageNumber} Size {pagesize}) : {(JsonConvert.SerializeObject(results))}");
             return results;
         }
 
@@ -93,7 +94,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Exception while loading all account details");
+                _logger.LogError(ex, "Exception while loading all account details");
 
                 throw;
             }
@@ -105,14 +106,14 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
             {
                 var response = await _accountApiClient.GetResource<AccountWithBalanceViewModel>($"/api/accounts/{id}");
 
-                _logger.Debug(
+                _logger.LogDebug(
                     $"{nameof(IAccountApiClient)}.{nameof(_accountApiClient.GetResource)}<{nameof(AccountWithBalanceViewModel)}>(\"/api/accounts/{id}\"); {response.Balance}");
 
                 return response.Balance;
             }
             catch (Exception e)
             {
-                _logger.Error(e, $"Account Balance with id {id} not found");
+                _logger.LogError(e, $"Account Balance with id {id} not found");
                 return 0;
             }
         }
@@ -128,13 +129,13 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
             {
                 try
                 {
-                    _logger.Info($"GetAdditionalFields for account ID {account.HashedAccountId}");
+                    _logger.LogInformation($"GetAdditionalFields for account ID {account.HashedAccountId}");
                     var accountWithDetails = await GetAdditionalFields(account, AccountFieldsSelection.PayeSchemes);
                     accountsWithDetails.Add(accountWithDetails);
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(e, $"Exception while retrieving details for account ID {account.HashedAccountId}");
+                    _logger.LogError(e, $"Exception while retrieving details for account ID {account.HashedAccountId}");
                 }
             }
 
@@ -148,21 +149,21 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
             switch (selection)
             {
                 case AccountFieldsSelection.Organisations:
-                    _logger.Info($"Getting Organisations for the account {result.AccountId}");
+                    _logger.LogInformation($"Getting Organisations for the account {result.AccountId}");
                     var legalEntities = await GetLegalEntities(response.LegalEntities ?? new ResourceList(new List<ResourceViewModel>()));
                     result.LegalEntities = legalEntities;
                     break;
                 case AccountFieldsSelection.TeamMembers:
-                    _logger.Info($"Getting TeamMembers for the account {result.AccountId}");
+                    _logger.LogInformation($"Getting TeamMembers for the account {result.AccountId}");
                     var teamMembers = await GetAccountTeamMembers(result.HashedAccountId);
                     result.TeamMembers = teamMembers;
                     break;
                 case AccountFieldsSelection.PayeSchemes:
-                    _logger.Info($"Getting PayeSchemes for the account {result.AccountId}");
+                    _logger.LogInformation($"Getting PayeSchemes for the account {result.AccountId}");
                     result.PayeSchemes = await MapToDomainPayeSchemeAsync(response);
                     return result;
                 case AccountFieldsSelection.Finance:
-                    _logger.Info($"Getting PayeSchemes and Transactions for the account {result.AccountId}");
+                    _logger.LogInformation($"Getting PayeSchemes and Transactions for the account {result.AccountId}");
                     result.PayeSchemes = await MapToDomainPayeSchemeAsync(response);
                     result.Transactions = await GetAccountTransactions(response.HashedAccountId);
                     return result;
@@ -187,7 +188,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(e, $"Exception occured in Account API type of {nameof(TransactionsViewModel)} for period {financialYearIterator.Year}.{financialYearIterator.Month} id {accountId}");
+                    _logger.LogError(e, $"Exception occured in Account API type of {nameof(TransactionsViewModel)} for period {financialYearIterator.Year}.{financialYearIterator.Month} id {accountId}");
                 }
                 financialYearIterator = financialYearIterator.AddMonths(1);
             }
@@ -214,7 +215,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
                 {
                     var obscured = _payeSchemeObfuscator.ObscurePayeScheme(payeScheme.Id).Replace("/", "%252f");
                     var paye = payeScheme.Id.Replace("/", "%252f");
-                    _logger.Debug(
+                    _logger.LogDebug(
                         $"IAccountApiClient.GetResource<PayeSchemeViewModel>(\"{payeScheme.Href.Replace(paye, obscured)}\");");
 
                     return _accountApiClient.GetResource<PayeSchemeViewModel>(payeScheme.Href).ContinueWith(payeTask =>
@@ -225,7 +226,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
                         }
                         else
                         {
-                            _logger.Error(payeTask.Exception, $"Exception occured in Account API type of {nameof(PayeSchemeViewModel)} at {payeScheme.Href} id {payeScheme.Id}");
+                            _logger.LogError(payeTask.Exception, $"Exception occured in Account API type of {nameof(PayeSchemeViewModel)} at {payeScheme.Href} id {payeScheme.Id}");
                             return new PayeSchemeViewModel();
                         }
                     });
@@ -267,7 +268,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
         {
             try
             {
-                _logger.Debug(
+                _logger.LogDebug(
                     $"{nameof(IAccountApiClient)}.{nameof(_accountApiClient.GetAccountUsers)}(\"{resultHashedAccountId}\");");
                 var teamMembers = await _accountApiClient.GetAccountUsers(resultHashedAccountId);
 
@@ -275,7 +276,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
             }
             catch (Exception e)
             {
-                _logger.Error(e, $"Account Team Member with id {resultHashedAccountId} not found");
+                _logger.LogError(e, $"Account Team Member with id {resultHashedAccountId} not found");
                 return new List<TeamMemberViewModel>();
             }
         }
@@ -286,7 +287,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
 
             foreach (var legalEntity in responseLegalEntities)
             {
-                _logger.Debug(
+                _logger.LogDebug(
                     $"{nameof(IAccountApiClient)}.{nameof(_accountApiClient.GetResource)}<{nameof(LegalEntityViewModel)}>(\"{legalEntity.Href}\");");
                 try
                 {
@@ -299,7 +300,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error(ex, $"Exception occured calling Account API for type of {nameof(LegalEntityViewModel)} at {legalEntity.Href} id {legalEntity.Id}");
+                    _logger.LogError(ex, $"Exception occured calling Account API for type of {nameof(LegalEntityViewModel)} at {legalEntity.Href} id {legalEntity.Id}");
                 }
             }
 

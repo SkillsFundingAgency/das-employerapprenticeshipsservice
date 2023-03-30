@@ -7,7 +7,7 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
 {
     [ApiController]
     [Route("api/user/{userRef}")]
-    public class EmployerUserController : Microsoft.AspNetCore.Mvc.ControllerBase
+    public class EmployerUserController : ControllerBase
     {
         private readonly IEmployerAccountsApiService _apiService;
 

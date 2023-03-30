@@ -18,8 +18,16 @@ namespace SFA.DAS.EAS.Application.Services.EmployerAccountsApi.Http
 
         public HttpClient CreateHttpClient()
         {
+            string accessToken = "";
             var azureServiceTokenProvider = new AzureServiceTokenProvider();
-            var accessToken = azureServiceTokenProvider.GetAccessTokenAsync(_employerAccountsApiConfig.IdentifierUri).Result;
+            try
+            {
+                accessToken = azureServiceTokenProvider.GetAccessTokenAsync(_employerAccountsApiConfig.IdentifierUri).Result;
+            } 
+            catch (Exception ex) 
+            { 
+                
+            }
 
             var httpClient = new HttpClientBuilder()
                 .WithDefaultHeaders()

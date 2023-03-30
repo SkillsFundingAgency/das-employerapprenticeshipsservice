@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using HMRC.ESFA.Levy.Api.Client;
 using HMRC.ESFA.Levy.Api.Types;
 using HMRC.ESFA.Levy.Api.Types.Exceptions;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Support.Infrastructure.Services
@@ -13,10 +14,10 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
     public sealed class LevySubmissionsRepository : ILevySubmissionsRepository
     {
         private IApprenticeshipLevyApiClient _levyApiClient;
-        private readonly ILog _logger;
+        private readonly ILogger<LevySubmissionsRepository> _logger;
         private readonly ILevyTokenHttpClientFactory _levyTokenHttpClientFactory;
 
-        public LevySubmissionsRepository(ILog logger, ILevyTokenHttpClientFactory levyTokenHttpClientFactory)
+        public LevySubmissionsRepository(ILogger<LevySubmissionsRepository> logger, ILevyTokenHttpClientFactory levyTokenHttpClientFactory)
         {
             _logger = logger;
             _levyTokenHttpClientFactory = levyTokenHttpClientFactory;
@@ -25,7 +26,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
 
         public async Task<LevyDeclarations> Get(string payeScheme)
         {
-            _logger.Debug($"IApprenticeshipLevyApiClient.GetEmployerLevyDeclarations(\"{payeScheme}\");");
+            _logger.LogDebug($"IApprenticeshipLevyApiClient.GetEmployerLevyDeclarations(\"{payeScheme}\");");
 
             try
             {
@@ -48,7 +49,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
                 {
                     {"RequestCtx.StatusCode", ex.HttpCode}
                 };
-                _logger.Error(ex, "Issue retrieving levy declarations", properties);
+                _logger.LogError(ex, "Issue retrieving levy declarations", properties);
                 throw;
             }
         }

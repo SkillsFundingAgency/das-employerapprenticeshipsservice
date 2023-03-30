@@ -10,6 +10,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace SFA.DAS.EAS.Support.ApplicationServices.Services
 {
@@ -18,13 +19,13 @@ namespace SFA.DAS.EAS.Support.ApplicationServices.Services
         private readonly IAccountRepository _accountRepository;
         private readonly ILevySubmissionsRepository _levySubmissionsRepository;
         private readonly IPayeSchemeObfuscator _payeSchemeObfuscator;
-        private readonly ILog _log;
+        private readonly ILogger<PayeLevySubmissionsHandler> _log;
         private readonly IHashingService _hashingService;
 
         public PayeLevySubmissionsHandler(IAccountRepository accountRepository,
             ILevySubmissionsRepository levySubmissionsRepository,
             IPayeSchemeObfuscator payeSchemeObfuscator,
-            ILog log,
+            ILogger<PayeLevySubmissionsHandler> log,
             IHashingService hashingService)
         {
             _accountRepository = accountRepository;

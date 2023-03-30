@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc;
 using System.Data.Entity.Core.Objects;
 using HtmlTags.Reflection;
+using Microsoft.Extensions.Logging;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsControllerTests
 {
@@ -23,7 +24,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
     public class WhenIGetTheTransactionSummaryForAnAccount : AccountTransactionsControllerTests
     {
         private AccountTransactionsController _controller;             
-        private Mock<ILog> _logger;
+        private Mock<ILogger<AccountTransactionsOrchestrator>> _logger;
         private Mock<IUrlHelper> _urlHelper;
         private  Mock<IEmployerFinanceApiService> _financeApiService;
         protected IMapper _mapper;        
@@ -31,7 +32,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
         [SetUp]
         public void Arrange()
         {
-            _logger = new Mock<ILog>();
+            _logger = new Mock<ILogger<AccountTransactionsOrchestrator>>();
             _urlHelper = new Mock<IUrlHelper>();            
             _financeApiService = new Mock<IEmployerFinanceApiService>();
             _mapper = ConfigureMapper();

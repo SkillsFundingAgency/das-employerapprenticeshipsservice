@@ -1,20 +1,23 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Http.Routing;
 using AutoMapper;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
 using SFA.DAS.NLog.Logger;
+using Microsoft.Extensions.Logging;
 
 namespace SFA.DAS.EAS.Account.Api.Orchestrators
 {
     public class AccountTransactionsOrchestrator
     {        
         private readonly IMapper _mapper;
-        private readonly ILog _logger;
+        private readonly ILogger<AccountTransactionsOrchestrator> _logger;
         private readonly IEmployerFinanceApiService _employerFinanceApiService;
 
-        public AccountTransactionsOrchestrator(IMapper mapper, ILog logger, IEmployerFinanceApiService employerFinanceApiService)
+        public AccountTransactionsOrchestrator(IMapper mapper, 
+            ILogger<AccountTransactionsOrchestrator> logger, 
+            IEmployerFinanceApiService employerFinanceApiService
+        )
         {            
             _mapper = mapper;
             _logger = logger;
@@ -23,11 +26,11 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
 
         public async Task<OrchestratorResponse<TransactionsViewModel>> GetAccountTransactions(string hashedAccountId, int year, int month)
         {
-            _logger.Info($"Requesting GetAccountTransactions for account {hashedAccountId} from employerFinanceApiService");
+            _logger.LogInformation($"Requesting GetAccountTransactions for account {hashedAccountId} from employerFinanceApiService");
 
             var data = await _employerFinanceApiService.GetTransactions(hashedAccountId, year, month);
 
-            var transactionLists = data.Select(x => _mapper.Map<TransactionViewModel>(x)).ToList();
+            var transactionLists = data.Select(x => x).ToList();
             var transactionsViewModel = new TransactionsViewModel()
             {
                 HasPreviousTransactions = data.HasPreviousTransactions, 
@@ -47,7 +50,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
 
         public async Task<OrchestratorResponse<AccountResourceList<TransactionSummaryViewModel>>> GetAccountTransactionSummary(string hashedAccountId)
         {
-            _logger.Info($"Requesting AccountTransactionSummary for account {hashedAccountId} from employerFinanceApiService");
+            _logger.LogInformation($"Requesting AccountTransactionSummary for account {hashedAccountId} from employerFinanceApiService");
 
             var data = await _employerFinanceApiService.GetTransactionSummary(hashedAccountId);
 

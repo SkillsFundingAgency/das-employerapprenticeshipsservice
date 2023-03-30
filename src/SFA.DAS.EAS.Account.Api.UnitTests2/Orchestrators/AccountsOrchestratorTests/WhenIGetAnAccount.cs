@@ -15,14 +15,14 @@ using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.HashingService;
-using SFA.DAS.NLog.Logger;
+using Microsoft.Extensions.Logging;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTests
 {
     internal class WhenIGetAnAccount
     {
         private AccountsOrchestrator _orchestrator;
-        private Mock<ILog> _log;
+        private Mock<ILogger<AccountsOrchestrator>> _log;
         private Mock<IHashingService> _hashingService;
         private Mock<IEmployerAccountsApiService> _apiService;
         private Mock<IEmployerFinanceApiService> _financeApiService;
@@ -41,7 +41,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
         {
             _transferAllowance = new TransferAllowance { RemainingTransferAllowance = 123.45M, StartingTransferAllowance = 234.56M };            
             _mapper = ConfigureMapper();
-            _log = new Mock<ILog>();
+            _log = new Mock<ILogger<AccountsOrchestrator>>();
             _hashingService = new Mock<IHashingService>();
             _apiService = new Mock<IEmployerAccountsApiService>();
             _financeApiService = new Mock<IEmployerFinanceApiService>();

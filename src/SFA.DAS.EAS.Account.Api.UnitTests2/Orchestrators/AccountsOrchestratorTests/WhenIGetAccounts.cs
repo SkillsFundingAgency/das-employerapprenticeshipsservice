@@ -15,13 +15,14 @@ using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
+using Microsoft.Extensions.Logging;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTests
 {
     internal class WhenIGetAccounts
     {
         private AccountsOrchestrator _orchestrator;        
-        private Mock<ILog> _log;
+        private Mock<ILogger<AccountsOrchestrator>> _log;
         private Mock<IHashingService> _hashingService;
         private Mock<IEmployerAccountsApiService> _apiService;
         private Mock<IEmployerFinanceApiService> _financeApiService;
@@ -33,7 +34,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
         public void Arrange()
         {
             _mapper = new Mock<IMapper>();
-            _log = new Mock<ILog>();
+            _log = new Mock<ILogger<AccountsOrchestrator>>();
             _hashingService = new Mock<IHashingService>();
             _apiService = new Mock<IEmployerAccountsApiService>();
             _financeApiService = new Mock<IEmployerFinanceApiService>();

@@ -14,6 +14,9 @@ using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SFA.DAS.HashingService;
+
+using HashService = SFA.DAS.HashingService.HashingService;
 
 namespace SFA.DAS.EAS.Support.Web
 {
@@ -26,22 +29,21 @@ namespace SFA.DAS.EAS.Support.Web
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews(ConfigureMvcOptions)
-                // Newtonsoft.Json is added for compatibility reasons
-                // The recommended approach is to use System.Text.Json for serialization
-                // Visit the following link for more guidance about moving away from Newtonsoft.Json to System.Text.Json
-                // https://docs.microsoft.com/dotnet/standard/serialization/system-text-json-migrate-from-newtonsoft-how-to
                 .AddNewtonsoftJson(options =>
                 {
                     options.UseMemberCasing();
                 });
 
+            var hashstringChars = Configuration.GetValue<string>("AllowedHashstringCharacters");
+            var hashstring = Configuration.GetValue<string>("Hashstring");
+            services.AddSingleton<IHashingService, HashService>(c => new HashService(hashstringChars, hashstring));
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

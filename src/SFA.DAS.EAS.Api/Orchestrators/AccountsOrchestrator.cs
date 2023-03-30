@@ -10,19 +10,20 @@ using System.Threading.Tasks;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
+using Microsoft.Extensions.Logging;
 
 namespace SFA.DAS.EAS.Account.Api.Orchestrators
 {
     public class AccountsOrchestrator
     {   
-        private readonly ILog _logger;
+        private readonly ILogger<AccountsOrchestrator> _logger;
         private readonly IMapper _mapper;
         private readonly IHashingService _hashingService;
         private readonly IEmployerAccountsApiService _employerAccountsApiService;
         private readonly IEmployerFinanceApiService _employerFinanceApiService;
 
-        public AccountsOrchestrator(            
-            ILog logger, 
+        public AccountsOrchestrator(
+            ILogger<AccountsOrchestrator> logger, 
             IMapper mapper, 
             IHashingService hashingService,
             IEmployerAccountsApiService employerAccountsApiService,
@@ -37,14 +38,14 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
 
         public async Task<OrchestratorResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>>> GetAllAccountsWithBalances(string toDate, int pageSize, int pageNumber)
         {
-            _logger.Info("Getting all account balances.");
+            _logger.LogInformation("Getting all account balances.");
             
             var accountsResult = await _employerAccountsApiService.GetAccounts(toDate, pageSize, pageNumber);
 
-            _logger.Info("calling finance api service to GetAccountBalances");
+            _logger.LogInformation("calling finance api service to GetAccountBalances");
             var transactionResult = await _employerFinanceApiService.GetAccountBalances(accountsResult.Data.Select(account => account.AccountHashId).ToList());
             var accountBalanceHash = BuildAccountBalanceHash(transactionResult);
-            _logger.Info($"received response from finance api service to GetAccountBalances {transactionResult.Count()} ");
+            _logger.LogInformation($"received response from finance api service to GetAccountBalances {transactionResult.Count()} ");
 
             accountsResult.Data.ForEach(account =>
             {
@@ -111,7 +112,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
 
         public async Task<OrchestratorResponse<AccountDetailViewModel>> GetAccount(string hashedAccountId)
         {
-            _logger.Info($"Getting account {hashedAccountId}");
+            _logger.LogInformation($"Getting account {hashedAccountId}");
         
             var accountResult = await _employerAccountsApiService.GetAccount(hashedAccountId);
 
@@ -139,7 +140,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
 
         public async Task<OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>> GetLevy(string hashedAccountId)
         {
-            _logger.Info($"Requesting levy declaration for account {hashedAccountId} from employerFinanceApiService");
+            _logger.LogInformation($"Requesting levy declaration for account {hashedAccountId} from employerFinanceApiService");
 
             var levyDeclarations = await _employerFinanceApiService.GetLevyDeclarations(hashedAccountId);            
             if (levyDeclarations == null)
@@ -147,7 +148,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
                 return new OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>> { Data = null };
             }
 
-            _logger.Info($"Received response for levy declaration for account {hashedAccountId} from employerFinanceApiService");
+            _logger.LogInformation($"Received response for levy declaration for account {hashedAccountId} from employerFinanceApiService");
 
             return new OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>
             {
@@ -158,7 +159,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
 
         public async Task<OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>> GetLevy(string hashedAccountId, string payrollYear, short payrollMonth)
         {
-            _logger.Info($"Requesting levy declaration for account {hashedAccountId}, year {payrollYear} and month {payrollMonth} from employerFinanceApiService");
+            _logger.LogInformation($"Requesting levy declaration for account {hashedAccountId}, year {payrollYear} and month {payrollMonth} from employerFinanceApiService");
 
             var levyDeclarations = await _employerFinanceApiService.GetLevyForPeriod(hashedAccountId, payrollYear, payrollMonth);
             if (levyDeclarations == null)
@@ -169,7 +170,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             var levyViewModels = levyDeclarations.Select(x => _mapper.Map<LevyDeclarationViewModel>(x)).ToList();
             levyViewModels.ForEach(x => x.HashedAccountId = hashedAccountId);
 
-            _logger.Info($"Received response for levy declaration for account {hashedAccountId}, year {payrollYear} and month {payrollMonth} from employerFinanceApiService");
+            _logger.LogInformation($"Received response for levy declaration for account {hashedAccountId}, year {payrollYear} and month {payrollMonth} from employerFinanceApiService");
 
             return new OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>
             {
