@@ -55,9 +55,6 @@
 		<PackageReference Include="SFA.DAS.Messaging">
 			<Version>3.0.0.63765</Version>
 		</PackageReference>
-		<PackageReference Include="SFA.DAS.Messaging.AzureServiceBus">
-			<Version>3.0.0.53181</Version>
-		</PackageReference>
 		<PackageReference Include="SFA.DAS.NLog.Logger">
 			<Version>1.2.1</Version>
 		</PackageReference>
