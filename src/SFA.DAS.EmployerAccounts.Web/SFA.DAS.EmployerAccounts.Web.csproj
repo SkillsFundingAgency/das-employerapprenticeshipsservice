@@ -33,7 +33,6 @@
 		<PackageReference Include="SFA.DAS.GovUK.Auth" Version="17.1.39" />
 		<PackageReference Include="SFA.DAS.Http" Version="3.2.28" />
 		<PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
-		<PackageReference Include="SFA.DAS.NServiceBus.Mvc" Version="1.0.46" />
 		<PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="16.0.20" />
 		<PackageReference Include="SFA.DAS.Reservations.Messages" Version="0.1.0" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.EntityFrameworkCore" Version="9.0.28" />
