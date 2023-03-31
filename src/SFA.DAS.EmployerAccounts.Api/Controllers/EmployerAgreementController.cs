@@ -36,7 +36,7 @@ public class EmployerAgreementController : ControllerBase
         return Ok(response);
     }
 
-    [Route("internal/{accountId}/minimum-signed-agreement-version", Name = "GetMinimumSignedAgreemmentVersion")]
+    [Route("internal/{accountId}/minimum-signed-agreement-version", Name = "InternalGetMinimumSignedAgreemmentVersion")]
     [Authorize(Policy = ApiRoles.ReadAllEmployerAgreements)]
     [HttpGet]
     public async Task<IActionResult> GetMinimumSignedAgreemmentVersion(long accountId)

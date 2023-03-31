@@ -279,3 +279,5 @@ SonarQube.Analysis.xml
 /src/SFA.DAS.EmployerAccounts.Web/internal-nlog.txt
 /src/SFA.DAS.EmployerAccounts.Api/**nlog.txt
 /src/SFA.DAS.EmployerAccounts.Web/appsettings.Development.json
+
+src/SFA.DAS.EmployerAccounts.Api/appsettings.Development.json

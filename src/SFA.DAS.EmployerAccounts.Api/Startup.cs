@@ -65,8 +65,8 @@ public class Startup
         services.AddDasHealthChecks(employerAccountsConfiguration);
         services.AddOrchestrators();
 
-        services.AddEntityFrameworkUnitOfWork<EmployerAccountsDbContext>();
-        services.AddNServiceBusClientUnitOfWork();
+        // services.AddEntityFrameworkUnitOfWork<EmployerAccountsDbContext>();
+        // services.AddNServiceBusClientUnitOfWork();
 
         services.AddDatabaseRegistration();
         services.AddDataRepositories();
@@ -101,7 +101,7 @@ public class Startup
 
     public void ConfigureContainer(UpdateableServiceProvider serviceProvider)
     {
-        serviceProvider.StartNServiceBus(_configuration.IsDevOrLocal() || _configuration.IsTest());
+        //serviceProvider.StartNServiceBus(_configuration.IsDevOrLocal() || _configuration.IsTest());
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
@@ -120,7 +120,7 @@ public class Startup
             .UseApiGlobalExceptionHandler(loggerFactory.CreateLogger("Startup"))
             .UseStaticFiles()
             .UseDasHealthChecks()
-            .UseUnitOfWork()
+            //.UseUnitOfWork()
             .UseRouting()
             .UseAuthorization()
             .UseEndpoints(endpoints =>
