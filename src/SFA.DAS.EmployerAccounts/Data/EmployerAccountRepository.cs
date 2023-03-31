@@ -121,7 +121,7 @@ public class EmployerAccountRepository : IEmployerAccountRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<AccountStats>(
             sql: "[employer_account].[GetAccountStats]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
 
         return result.SingleOrDefault();
@@ -137,7 +137,7 @@ public class EmployerAccountRepository : IEmployerAccountRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[UpdateAccount_SetAccountName]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
     }
 
@@ -151,7 +151,7 @@ public class EmployerAccountRepository : IEmployerAccountRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[UpdateAccount_SetAccountApprenticeshipEmployerType]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
     }
 }

@@ -36,7 +36,7 @@ public class UserRepository : BaseRepository, IUserRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<User>(
             sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName, CorrelationId,TermAndConditionsAcceptedOn FROM [employer_account].[User] WHERE UserRef = @userRef",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.Text);
 
         return result.SingleOrDefault();
@@ -51,7 +51,7 @@ public class UserRepository : BaseRepository, IUserRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<User>(
             sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName, CorrelationId FROM [employer_account].[User] WHERE Email = @email",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.Text);
 
         return result.SingleOrDefault();
@@ -70,7 +70,7 @@ public class UserRepository : BaseRepository, IUserRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "INSERT INTO [employer_account].[User] (UserRef, Email, FirstName, LastName, CorrelationId) VALUES (@userRef, @email, @firstName, @lastName, @correlationId)",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.Text);
     }
 
@@ -86,7 +86,7 @@ public class UserRepository : BaseRepository, IUserRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "UPDATE [employer_account].[User] set Email = @email, FirstName = @firstName, LastName = @lastName where UserRef = @userRef",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.Text);
     }
 
@@ -100,7 +100,7 @@ public class UserRepository : BaseRepository, IUserRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "UPDATE [employer_account].[User] set TermAndConditionsAcceptedOn = @termAndConditionsAcceptedOn where UserRef = @userRef",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.Text);
     }
 
@@ -119,7 +119,7 @@ public class UserRepository : BaseRepository, IUserRepository
             sql: "[employer_account].[UpsertUser] @userRef, @email, @firstName, @lastName, @correlationId",
             param: parameters,
             commandType: CommandType.Text,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction());
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction());
     }
 
     public async Task<Users> GetAllUsers()
@@ -129,7 +129,7 @@ public class UserRepository : BaseRepository, IUserRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<User>(
             sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName, CorrelationId FROM [employer_account].[User];",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.Text);
 
         return new Users
@@ -146,7 +146,7 @@ public class UserRepository : BaseRepository, IUserRepository
         var query = await _db.Value.Database.GetDbConnection().QueryAsync<DateTime>(
             sql: "[employer_account].[GetUserAornAttempts]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
 
         return query.ToList();
@@ -162,7 +162,7 @@ public class UserRepository : BaseRepository, IUserRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[UpdateUserAornAttempts]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
     }
 }
