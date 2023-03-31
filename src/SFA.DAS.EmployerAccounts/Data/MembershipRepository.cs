@@ -29,7 +29,7 @@ public class MembershipRepository : BaseRepository, IMembershipRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<TeamMember>(
             sql: "SELECT * FROM [employer_account].[GetTeamMembers] WHERE AccountId = @accountId AND Email = @email;",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.Text);
 
         return result.SingleOrDefault();
@@ -45,7 +45,7 @@ public class MembershipRepository : BaseRepository, IMembershipRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<TeamMember>(
             sql: "SELECT * FROM [employer_account].[GetTeamMembers] WHERE AccountId = @accountId AND Id = @userId",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.Text);
 
         return result.SingleOrDefault();
@@ -61,7 +61,7 @@ public class MembershipRepository : BaseRepository, IMembershipRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[RemoveMembership]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
     }
 
@@ -76,7 +76,7 @@ public class MembershipRepository : BaseRepository, IMembershipRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "UPDATE [employer_account].[Membership] SET Role = @role WHERE AccountId = @accountId AND UserId = @userId;",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.Text);
     }
 
@@ -90,7 +90,7 @@ public class MembershipRepository : BaseRepository, IMembershipRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<MembershipView>(
             sql: "SELECT * FROM [employer_account].[MembershipView] m WHERE m.AccountId = @AccountId AND UserRef = @externalUserId;",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.Text);
 
         return result.SingleOrDefault();
@@ -106,7 +106,7 @@ public class MembershipRepository : BaseRepository, IMembershipRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<MembershipView>(
             sql: "[employer_account].[GetTeamMember]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
 
         return result.SingleOrDefault();
@@ -123,7 +123,7 @@ public class MembershipRepository : BaseRepository, IMembershipRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[UpdateShowWizard]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
     }
 }

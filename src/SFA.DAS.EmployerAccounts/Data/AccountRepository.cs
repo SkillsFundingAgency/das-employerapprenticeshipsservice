@@ -42,7 +42,7 @@ public class AccountRepository : BaseRepository, IAccountRepository
         await _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[CreateUserAccount]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
 
         return new CreateUserAccountResult
@@ -82,7 +82,7 @@ public class AccountRepository : BaseRepository, IAccountRepository
             sql: "[employer_account].[CreateAccount]",
             param: parameters,
             commandType: CommandType.StoredProcedure,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction());
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction());
 
         var accountLegalEntityId = parameters.Get<long>("@accountLegalentityId");
 
@@ -122,7 +122,7 @@ public class AccountRepository : BaseRepository, IAccountRepository
             sql: "[employer_account].[CreateLegalEntityWithAgreement]",
             param: parameters,
             commandType: CommandType.StoredProcedure,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction());
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction());
 
         var legalEntityId = parameters.Get<long>("@legalEntityId");
         var agreementId = parameters.Get<long>("@employerAgreementId");
@@ -160,7 +160,7 @@ public class AccountRepository : BaseRepository, IAccountRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<PayeView>(
             sql: "[employer_account].[GetPayeSchemes_ByAccountId]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
 
         return result.ToList();
@@ -175,7 +175,7 @@ public class AccountRepository : BaseRepository, IAccountRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<UserNotificationSetting>(
             sql: "[employer_account].[GetUserAccountSettings]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
 
         return result.ToList();
@@ -193,7 +193,7 @@ public class AccountRepository : BaseRepository, IAccountRepository
             sql: "[employer_account].[UpdateAccountHashedIds]",
             param: parameters,
             commandType: CommandType.StoredProcedure,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction());
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction());
     }
 
     public Task UpdateUserAccountSettings(string userRef, List<UserNotificationSetting> settings)
@@ -216,7 +216,7 @@ public class AccountRepository : BaseRepository, IAccountRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[UpdateUserAccountSettings]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
     }
 
@@ -231,7 +231,7 @@ public class AccountRepository : BaseRepository, IAccountRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[UpdateAccountLegalEntity_SetNameAndAddress]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
     }
 
@@ -248,6 +248,6 @@ public class AccountRepository : BaseRepository, IAccountRepository
             sql: "[employer_account].[UpdateAccountLegalEntity_SetPublicHashedId]",
             param: parameters,
             commandType: CommandType.StoredProcedure,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction());
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction());
     }
 }

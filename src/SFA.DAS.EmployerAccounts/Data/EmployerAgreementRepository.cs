@@ -43,7 +43,7 @@ public class EmployerAgreementRepository : BaseRepository, IEmployerAgreementRep
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<AccountSpecificLegalEntity>(
             sql: sql,
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.Text);
 
         return result.ToList();
@@ -58,7 +58,7 @@ public class EmployerAgreementRepository : BaseRepository, IEmployerAgreementRep
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<EmployerAgreementView>(
             sql: "[employer_account].[GetEmployerAgreement]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
 
         return result.SingleOrDefault();
@@ -76,7 +76,7 @@ public class EmployerAgreementRepository : BaseRepository, IEmployerAgreementRep
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[SignEmployerAgreement]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
     }
 
@@ -89,7 +89,7 @@ public class EmployerAgreementRepository : BaseRepository, IEmployerAgreementRep
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[RemoveLegalEntityFromAccount]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
     }
         
@@ -114,7 +114,7 @@ public class EmployerAgreementRepository : BaseRepository, IEmployerAgreementRep
                             ON LE.Id = ALE.LegalEntityId
                     WHERE ALE.Id = @Id;",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.Text);
 
         return result.SingleOrDefault();

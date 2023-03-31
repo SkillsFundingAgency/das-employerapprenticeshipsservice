@@ -26,7 +26,7 @@ public class PayeRepository : IPayeRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<PayeView>(
             sql: "[employer_account].[GetPayeSchemes_ByAccountId]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
 
         return result.ToList();
@@ -47,7 +47,7 @@ public class PayeRepository : IPayeRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[AddPayeToAccount]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
     }
 
@@ -62,7 +62,7 @@ public class PayeRepository : IPayeRepository
         return _db.Value.Database.GetDbConnection().ExecuteAsync(
             sql: "[employer_account].[UpdateAccountHistory]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
     }
 
@@ -76,7 +76,7 @@ public class PayeRepository : IPayeRepository
         var result = await _db.Value.Database.GetDbConnection().QueryAsync<PayeSchemeView>(
             sql: "[employer_account].[GetPayeForAccount_ByRef]",
             param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction.GetDbTransaction(),
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
             commandType: CommandType.StoredProcedure);
 
         return result.SingleOrDefault();
