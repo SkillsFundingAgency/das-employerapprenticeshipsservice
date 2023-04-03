@@ -40,7 +40,6 @@ public class EmployerAccountsConfiguration
     public string PublicHashstring { get; set; }
     public string ServiceBusConnectionString { get; set; }
     public string RedisConnectionString { get; set; }
-    public bool CanSkipRegistrationSteps { get; set; }
     public AccountApiConfiguration AccountApi { get; set; }
     public TokenServiceApiClientConfiguration TokenServiceApi { get; set; }
     public UserAornPayeLockConfiguration UserAornPayeLock { get; set; }
