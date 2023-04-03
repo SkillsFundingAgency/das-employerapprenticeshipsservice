@@ -1,5 +1,6 @@
 ﻿using HMRC.ESFA.Levy.Api.Client;
 using HMRC.ESFA.Levy.Api.Types;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Support.Infrastructure.Services;
@@ -15,7 +16,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.LevySubmissionsRepository
     public class WhenTestingLevySubmissionsRepository
     {
         private Mock<IApprenticeshipLevyApiClient> _levyApiClient;
-        private Mock<ILog> _logger;
+        private Mock<ILogger<Services.LevySubmissionsRepository>> _logger;
         private Mock<ILevyTokenHttpClientFactory> _levyTokenHttpClientFactory;
 
         private string _testPayeScheme;
@@ -50,7 +51,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.LevySubmissionsRepository
             };
 
             _levyApiClient = new Mock<IApprenticeshipLevyApiClient>();
-            _logger = new Mock<ILog>();
+            _logger = new Mock<ILogger<Services.LevySubmissionsRepository>>();
             _levyTokenHttpClientFactory = new Mock<ILevyTokenHttpClientFactory>();
         }
 

@@ -3,11 +3,10 @@
     "SFA.DAS.EAS.Account.Api": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:44368;http://localhost:44369",
-      "launchUrl": "swagger/index.html",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "applicationUrl": "https://localhost:49756;http://localhost:49757"
     }
   }
 }

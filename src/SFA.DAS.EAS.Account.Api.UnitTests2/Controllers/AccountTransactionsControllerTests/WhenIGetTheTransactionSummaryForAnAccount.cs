@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             _urlHelper = new Mock<IUrlHelper>();            
             _financeApiService = new Mock<IEmployerFinanceApiService>();
             _mapper = ConfigureMapper();
-            var orchestrator = new AccountTransactionsOrchestrator(_mapper, _logger.Object, _financeApiService.Object);
+            var orchestrator = new AccountTransactionsOrchestrator(_logger.Object, _financeApiService.Object);
             _controller = new AccountTransactionsController(orchestrator);
             _controller.Url = _urlHelper.Object; 
         }

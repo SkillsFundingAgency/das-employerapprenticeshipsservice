@@ -2,9 +2,8 @@
 using Microsoft.Extensions.Hosting;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EAS.Domain.Configuration;
-using Microsoft.AspNetCore.Builder;
 
-namespace SFA.DAS.EAS.Support.Web.Extensions;
+namespace SFA.DAS.EAS.Account.Api.Extensions;
 
 public static class WebHostBuilderExtensions
 {
@@ -15,7 +14,7 @@ public static class WebHostBuilderExtensions
             {
                 options.ConfigurationKeys = new[]
                 {
-                    "SFA.DAS.Support.EAS"
+                    ConfigurationKeys.EmployerApprenticeshipsService
                 };
                 options.PreFixConfigurationKeys = false;
             })

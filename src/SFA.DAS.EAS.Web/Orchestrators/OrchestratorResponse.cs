@@ -2,13 +2,13 @@
 using System.Net;
 using SFA.DAS.EAS.Web.ViewModels;
 
-namespace SFA.DAS.EAS.Web
+namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public class OrchestratorResponse
     {
         public OrchestratorResponse()
         {
-            this.Status = HttpStatusCode.OK;
+            Status = HttpStatusCode.OK;
         }
         public HttpStatusCode Status { get; set; }
         public Exception Exception { get; set; }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Client;
@@ -45,7 +46,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
             var actual = await _sut.Get(id, AccountFieldsSelection.Organisations);
 
 
-            Logger.Verify(x => x.Debug(It.IsAny<string>()), Times.Exactly(accountResponse.LegalEntities.Count + 1));
+            Logger.Verify(x => x.LogDebug(It.IsAny<string>()), Times.Exactly(accountResponse.LegalEntities.Count + 1));
 
             AccountApiClient.Verify(x => x.GetResource<LegalEntityViewModel>(It.IsAny<string>()),
                 Times.Exactly(accountResponse.LegalEntities.Count));
@@ -92,11 +93,11 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
 
 
             Logger.Verify(
-                x => x.Debug(
+                x => x.LogDebug(
                     $"{nameof(IAccountApiClient)}.{nameof(IAccountApiClient.GetResource)}<{nameof(AccountDetailViewModel)}>(\"/api/accounts/{id}\");"),
                 Times.Once);
             Logger.Verify(
-                x => x.Debug(
+                x => x.LogDebug(
                     $"{nameof(IAccountApiClient)}.{nameof(IAccountApiClient.GetResource)}<{nameof(LegalEntityViewModel)}>(\"{legalEntity.Href}\");"),
                 Times.Once);
 
@@ -125,8 +126,8 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
             var actual = await _sut.Get(id, AccountFieldsSelection.Organisations);
 
 
-            Logger.Verify(x => x.Debug(It.IsAny<string>()), Times.Once);
-            Logger.Verify(x => x.Error(It.IsAny<Exception>(), It.IsAny<string>()), Times.Once);
+            Logger.Verify(x => x.LogDebug(It.IsAny<string>()), Times.Once);
+            Logger.Verify(x => x.LogError(It.IsAny<Exception>(), It.IsAny<string>()), Times.Once);
 
 
             AccountApiClient.Verify(x => x.GetResource<AccountDetailViewModel>(It.IsAny<string>()), Times.Once);
@@ -162,8 +163,8 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
             var actual = await _sut.Get(id, AccountFieldsSelection.Organisations);
 
 
-            Logger.Verify(x => x.Debug(It.IsAny<string>()), Times.Exactly(2));
-            Logger.Verify(x => x.Error(It.IsAny<Exception>(), It.IsAny<string>()), Times.Once);
+            Logger.Verify(x => x.LogDebug(It.IsAny<string>()), Times.Exactly(2));
+            Logger.Verify(x => x.LogError(It.IsAny<Exception>(), It.IsAny<string>()), Times.Once);
 
 
             AccountApiClient.Verify(x => x.GetResource<LegalEntityViewModel>(It.IsAny<string>()),

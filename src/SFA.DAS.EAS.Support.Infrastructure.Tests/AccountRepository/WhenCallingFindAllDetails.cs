@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
@@ -77,7 +78,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
             AccountApiClient.Verify(x => x.GetPageOfAccounts(It.IsAny<int>(), It.IsAny<int>(), null), Times.AtLeastOnce);
             AccountApiClient.Verify(x => x.GetAccount(It.IsAny<string>()), Times.AtLeastOnce);
 
-            Logger.Verify(x => x.Error(e, $"A general exception has been thrown while requesting employer account details"));
+            Logger.Verify(x => x.LogError(e, $"A general exception has been thrown while requesting employer account details"));
 
             Assert.IsNotNull(actual);
             var list = actual.ToList();
@@ -107,7 +108,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
 
             AccountApiClient.Verify(x => x.GetPageOfAccounts(It.IsAny<int>(), It.IsAny<int>(), null), Times.AtLeastOnce);
             AccountApiClient.Verify(x => x.GetAccount(It.IsAny<string>()), Times.AtLeastOnce);
-            Logger.Verify(x => x.Warn(It.Is<string>(s => s.Contains("The Account API Http request threw an exception while fetching Page 1"))), Times.Once);
+            Logger.Verify(x => x.LogWarning(It.Is<string>(s => s.Contains("The Account API Http request threw an exception while fetching Page 1"))), Times.Once);
             Assert.IsNotNull(actual);
             CollectionAssert.IsEmpty(actual.ToList());
         }

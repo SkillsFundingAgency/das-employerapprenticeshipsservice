@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
@@ -36,7 +37,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
             var actual = await _sut.Get(id, AccountFieldsSelection.TeamMembers);
 
 
-            Logger.Verify(x => x.Debug(It.IsAny<string>()), Times.Exactly(2));
+            Logger.Verify(x => x.LogDebug(It.IsAny<string>()), Times.Exactly(2));
 
 
             Assert.IsNotNull(actual);
@@ -71,7 +72,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
             var actual = await _sut.Get(id, AccountFieldsSelection.TeamMembers);
 
 
-            Logger.Verify(x => x.Debug(It.IsAny<string>()), Times.Exactly(2));
+            Logger.Verify(x => x.LogDebug(It.IsAny<string>()), Times.Exactly(2));
 
 
             Assert.IsNotNull(actual);

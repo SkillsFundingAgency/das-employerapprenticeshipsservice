@@ -10,16 +10,13 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
 {
     public class AccountTransactionsOrchestrator
     {        
-        private readonly IMapper _mapper;
         private readonly ILogger<AccountTransactionsOrchestrator> _logger;
         private readonly IEmployerFinanceApiService _employerFinanceApiService;
 
-        public AccountTransactionsOrchestrator(IMapper mapper, 
-            ILogger<AccountTransactionsOrchestrator> logger, 
+        public AccountTransactionsOrchestrator(ILogger<AccountTransactionsOrchestrator> logger, 
             IEmployerFinanceApiService employerFinanceApiService
         )
-        {            
-            _mapper = mapper;
+        {
             _logger = logger;
             _employerFinanceApiService = employerFinanceApiService;
         }

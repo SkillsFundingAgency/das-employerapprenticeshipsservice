@@ -7,17 +7,24 @@
   <ItemGroup>
     <Compile Remove="App_Data\**" />
     <Compile Remove="Content\**" />
+    <Compile Remove="Views\Search\**" />
+    <Compile Remove="Views\Shared\**" />
+    <Compile Remove="Views\Status\**" />
     <Content Remove="App_Data\**" />
     <Content Remove="Content\**" />
+    <Content Remove="Views\Search\**" />
+    <Content Remove="Views\Shared\**" />
+    <Content Remove="Views\Status\**" />
     <EmbeddedResource Remove="App_Data\**" />
     <EmbeddedResource Remove="Content\**" />
+    <EmbeddedResource Remove="Views\Search\**" />
+    <EmbeddedResource Remove="Views\Shared\**" />
+    <EmbeddedResource Remove="Views\Status\**" />
     <None Remove="App_Data\**" />
     <None Remove="Content\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Search\" />
-    <Folder Include="Views\Shared\" />
-    <Folder Include="Views\Status\" />
+    <None Remove="Views\Search\**" />
+    <None Remove="Views\Shared\**" />
+    <None Remove="Views\Status\**" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj" />
@@ -28,6 +35,8 @@
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
+    <PackageReference Include="SFA.DAS.EmployerAccounts.Api.Client" Version="1.6.3195" />
     <PackageReference Include="structuremap" Version="4.7.1">
     </PackageReference>
     <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.355802">

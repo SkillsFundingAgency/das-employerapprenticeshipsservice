@@ -65,7 +65,7 @@ namespace SFA.DAS.EAS.Support.ApplicationServices.Services
             }
             catch (Exception ex)
             {
-                _log.Error(ex, $"Unable to load Levy Declarations for Account Id {accountId} ");
+                _log.LogError(ex, $"Unable to load Levy Declarations for Account Id {accountId} ");
 
 
                 return new PayeLevySubmissionsResponse

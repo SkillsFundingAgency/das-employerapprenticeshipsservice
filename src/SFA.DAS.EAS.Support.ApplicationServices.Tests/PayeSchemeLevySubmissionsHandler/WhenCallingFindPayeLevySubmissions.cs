@@ -1,4 +1,5 @@
 ﻿using HMRC.ESFA.Levy.Api.Types;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
@@ -23,7 +24,7 @@ namespace SFA.DAS.EAS.Support.ApplicationServices.Tests.PayeSchemeLevySubmission
         private Mock<IAccountRepository> _accountRepository;
         private Mock<ILevySubmissionsRepository> _levySubmissionsRepository;
         private Mock<IPayeSchemeObfuscator> _payeSchemeObfuscator;
-        private Mock<ILog> _log;
+        private Mock<ILogger<PayeLevySubmissionsHandler>> _log;
         private Mock<IHashingService> _hashingService;
 
         private const string _accountId = "45789456123";
@@ -36,7 +37,7 @@ namespace SFA.DAS.EAS.Support.ApplicationServices.Tests.PayeSchemeLevySubmission
             _accountRepository = new Mock<IAccountRepository>();
             _levySubmissionsRepository = new Mock<ILevySubmissionsRepository>();
             _payeSchemeObfuscator = new Mock<IPayeSchemeObfuscator>();
-            _log = new Mock<ILog>();
+            _log = new Mock<ILogger<PayeLevySubmissionsHandler>>();
             _hashingService = new Mock<IHashingService>();
 
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
@@ -20,7 +21,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
 
             var actual = await _sut.Get(id, AccountFieldsSelection.None);
 
-            Logger.Verify(x => x.Debug(It.IsAny<string>()), Times.Once);
+            Logger.Verify(x => x.LogDebug(It.IsAny<string>()), Times.Once);
 
             Assert.IsNotNull(actual);
             Assert.IsNull(actual.PayeSchemes);
@@ -39,8 +40,8 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
 
             var actual = await _sut.Get(id, AccountFieldsSelection.None);
 
-            Logger.Verify(x => x.Debug(It.IsAny<string>()), Times.Once);
-            Logger.Verify(x => x.Error(It.IsAny<Exception>(), $"Account with id {id} not found"));
+            Logger.Verify(x => x.LogDebug(It.IsAny<string>()), Times.Once);
+            Logger.Verify(x => x.LogError(It.IsAny<Exception>(), $"Account with id {id} not found"));
 
             Assert.IsNull(actual);
         }
