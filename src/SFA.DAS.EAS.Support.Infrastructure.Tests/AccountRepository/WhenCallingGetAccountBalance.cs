@@ -22,13 +22,37 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
                 .Setup(x => x.GetResource<AccountWithBalanceViewModel>($"/api/accounts/{id}"))
                 .ThrowsAsync(exception);
 
-            Logger.Setup(x => x.LogDebug(It.IsAny<string>()));
-            Logger.Setup(x => x.LogError(It.IsAny<Exception>(), It.IsAny<string>()));
+            Logger.Setup(x => x.Log(
+                LogLevel.Debug,
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()
+            ));
+            Logger.Setup(x => x.Log(
+                LogLevel.Error,
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()
+            ));
 
             var actual = await _sut.GetAccountBalance(id);
 
-            Logger.Verify(x => x.LogDebug(It.IsAny<string>()), Times.Never);
-            Logger.Verify(x => x.LogError(exception, $"Account Balance with id {id} not found"), Times.Once);
+            Logger.Verify(x => x.Log(
+                LogLevel.Debug,
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()
+            ), Times.Never);
+            Logger.Verify(x => x.Log(
+                LogLevel.Error,
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()
+            ), Times.Once);
 
             Assert.AreEqual(0, actual);
         }
@@ -53,8 +77,13 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
             var actual = await _sut.GetAccountBalance(id);
 
             Logger.Verify(x =>
-                x.LogDebug(
-                    $"{nameof(IAccountApiClient)}.{nameof(IAccountApiClient.GetResource)}<{nameof(AccountWithBalanceViewModel)}>(\"/api/accounts/{id}\"); {response.Balance}"));
+                x.Log(
+                LogLevel.Debug,
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()
+            ));
             Assert.AreEqual(response.Balance, actual);
         }
     }

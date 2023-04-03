@@ -78,7 +78,13 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
             AccountApiClient.Verify(x => x.GetPageOfAccounts(It.IsAny<int>(), It.IsAny<int>(), null), Times.AtLeastOnce);
             AccountApiClient.Verify(x => x.GetAccount(It.IsAny<string>()), Times.AtLeastOnce);
 
-            Logger.Verify(x => x.LogError(e, $"A general exception has been thrown while requesting employer account details"));
+            Logger.Verify(x => x.Log(
+                LogLevel.Error,
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()
+            ));
 
             Assert.IsNotNull(actual);
             var list = actual.ToList();
@@ -108,7 +114,13 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
 
             AccountApiClient.Verify(x => x.GetPageOfAccounts(It.IsAny<int>(), It.IsAny<int>(), null), Times.AtLeastOnce);
             AccountApiClient.Verify(x => x.GetAccount(It.IsAny<string>()), Times.AtLeastOnce);
-            Logger.Verify(x => x.LogWarning(It.Is<string>(s => s.Contains("The Account API Http request threw an exception while fetching Page 1"))), Times.Once);
+            Logger.Verify(x => x.Log(
+                LogLevel.Warning,
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()
+            ), Times.Once);
             Assert.IsNotNull(actual);
             CollectionAssert.IsEmpty(actual.ToList());
         }

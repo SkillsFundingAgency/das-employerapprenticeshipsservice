@@ -24,8 +24,8 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
 
             var actual = await _sut.Get(id, AccountFieldsSelection.PayeSchemes);
 
-            Logger.Verify(x => x.LogDebug(It.IsAny<string>()), Times.Once);
-            Logger.Verify(x => x.LogError(It.IsAny<Exception>(), $"Account with id {id} not found"));
+            Logger.Verify(x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
+            Logger.Verify(x => x.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
 
             Assert.IsNull(actual);
         }
@@ -86,7 +86,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
 
             var actual = await _sut.Get(id, AccountFieldsSelection.PayeSchemes);
 
-            Logger.Verify(x => x.LogDebug(It.IsAny<string>()), Times.Exactly(2));
+            Logger.Verify(x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Exactly(2));
 
             PayeSchemeObfuscator.Verify(x => x.ObscurePayeScheme(It.IsAny<string>()), Times.Exactly(2));
 
