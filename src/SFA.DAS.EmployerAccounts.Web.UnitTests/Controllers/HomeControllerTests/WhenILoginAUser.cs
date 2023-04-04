@@ -21,7 +21,7 @@ public class WhenILoginAUser
             _configuration.Object, 
             _flashMessage.Object,
             Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
-            Mock.Of<ILogger<HomeController>>());
+            Mock.Of<ILogger<HomeController>>(), null, null);
     }
 
     [Test]

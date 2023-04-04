@@ -8,6 +8,8 @@ using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerAccounts.Web.Cookies;
 using SFA.DAS.EmployerAccounts.Web.RouteValues;
 using SFA.DAS.EmployerUsers.WebClientComponents;
+using SFA.DAS.GovUK.Auth.Models;
+using SFA.DAS.GovUK.Auth.Services;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
@@ -18,6 +20,8 @@ public class HomeController : BaseController
     private readonly EmployerAccountsConfiguration _configuration;
     private readonly ICookieStorageService<ReturnUrlModel> _returnUrlCookieStorageService;
     private readonly ILogger<HomeController> _logger;
+    private readonly IConfiguration _config;
+    private readonly IStubAuthenticationService _stubAuthenticationService;
 
     public const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
 
@@ -26,13 +30,17 @@ public class HomeController : BaseController
         EmployerAccountsConfiguration configuration,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
         ICookieStorageService<ReturnUrlModel> returnUrlCookieStorageService,
-        ILogger<HomeController> logger)
+        ILogger<HomeController> logger,
+        IConfiguration config,
+        IStubAuthenticationService stubAuthenticationService)
         : base(flashMessage)
     {
         _homeOrchestrator = homeOrchestrator;
         _configuration = configuration;
         _returnUrlCookieStorageService = returnUrlCookieStorageService;
         _logger = logger;
+        _config = config;
+        _stubAuthenticationService = stubAuthenticationService;
     }
 
     [Route("~/")]
@@ -338,6 +346,33 @@ public class HomeController : BaseController
     public IActionResult ShowLegalAgreement(bool showSubFields) //call this  with false
     {
         return View(ControllerConstants.LegalAgreementViewName, showSubFields);
+    }
+    
+    [HttpGet]
+    [Route("SignIn-Stub")]
+    public IActionResult SigninStub()
+    {
+        return View("SigninStub", new List<string>{_config["StubId"],_config["StubEmail"]});
+    }
+    [HttpPost]
+    [Route("SignIn-Stub")]
+    public IActionResult SigninStubPost()
+    {
+        _stubAuthenticationService?.AddStubEmployerAuth(Response.Cookies, new StubAuthUserDetails
+        {
+            Email = _config["StubEmail"],
+            Id = _config["StubId"]
+        }, true);
+
+        return RedirectToRoute("Signed-in-stub");
+    }
+
+    [Authorize]
+    [HttpGet]
+    [Route("signed-in-stub", Name = "Signed-in-stub")]
+    public IActionResult SignedInStub()
+    {
+        return View();
     }
 #endif
 }

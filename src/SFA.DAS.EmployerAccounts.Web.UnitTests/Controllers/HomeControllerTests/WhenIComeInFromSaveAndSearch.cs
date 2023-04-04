@@ -32,7 +32,7 @@ public class WhenIComeInFromSaveAndSearch : ControllerTestBase
             _configuration,
             Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
             _returnUrlCookieStorageService.Object,
-                Mock.Of<ILogger<HomeController>>())
+                Mock.Of<ILogger<HomeController>>(), null, null)
         {
             ControllerContext = ControllerContext
         };
