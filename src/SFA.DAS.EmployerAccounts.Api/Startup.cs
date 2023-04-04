@@ -86,7 +86,7 @@ public class Startup
             .Configure<ApiBehaviorOptions>(opt => { opt.SuppressModelStateInvalidFilter = true; })
             .AddMvc(opt =>
             {
-                if (!_configuration.IsDevOrLocal() && !_configuration.IsTest())
+                if (!_configuration.IsDevOrLocal())
                 {
                     opt.Conventions.Add(new AuthorizeControllerModelConvention(new List<string>()));
                 }

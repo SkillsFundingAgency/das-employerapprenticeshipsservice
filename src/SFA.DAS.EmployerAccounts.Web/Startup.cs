@@ -31,11 +31,11 @@ namespace SFA.DAS.EmployerAccounts.Web
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
 
-        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment, bool buildConfig = true)
         {
             _environment = environment;
 
-            _configuration = configuration.BuildDasConfiguration();
+            _configuration = buildConfig ? configuration.BuildDasConfiguration() : configuration;
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -139,7 +139,7 @@ namespace SFA.DAS.EmployerAccounts.Web
 
         public void ConfigureContainer(UpdateableServiceProvider serviceProvider)
         {
-            serviceProvider.StartNServiceBus(_configuration.IsDevOrLocal() || _configuration.IsTest());
+            serviceProvider.StartNServiceBus(_configuration.IsDevOrLocal());
 
             // Replacing ClientOutboxPersisterV2 with a local version to fix unit of work issue due to propogating Task up the chain rathert than awaiting on DB Command.
             // not clear why this fixes the issue. Attempted to make the change in SFA.DAS.Nservicebus.SqlServer however it conflicts when upgraded with SFA.DAS.UnitOfWork.Nservicebus

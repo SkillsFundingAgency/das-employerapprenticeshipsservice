@@ -86,7 +86,7 @@ public class WhenAddingServicesToTheContainer
         var mockHostingEnvironment = new Mock<IHostingEnvironment>();
         mockHostingEnvironment.Setup(x => x.EnvironmentName).Returns("Test");
 
-        var startup = new Startup(GenerateStubConfiguration(), new Mock<IWebHostEnvironment>().Object);
+        var startup = new Startup(GenerateStubConfiguration(), new Mock<IWebHostEnvironment>().Object, false);
         var serviceCollection = new ServiceCollection();
         startup.ConfigureServices(serviceCollection);
 
@@ -125,7 +125,7 @@ public class WhenAddingServicesToTheContainer
         var mockHostingEnvironment = new Mock<IHostingEnvironment>();
         mockHostingEnvironment.Setup(x => x.EnvironmentName).Returns("Test");
 
-        var startup = new Startup(GenerateStubConfiguration(), new Mock<IWebHostEnvironment>().Object);
+        var startup = new Startup(GenerateStubConfiguration(), new Mock<IWebHostEnvironment>().Object, false);
         var serviceCollection = new ServiceCollection();
         startup.ConfigureServices(serviceCollection);
 
@@ -185,7 +185,7 @@ public class WhenAddingServicesToTheContainer
         var mockHostingEnvironment = new Mock<IHostingEnvironment>();
         mockHostingEnvironment.Setup(x => x.EnvironmentName).Returns("Test");
 
-        var startup = new Startup(GenerateStubConfiguration(), new Mock<IWebHostEnvironment>().Object);
+        var startup = new Startup(GenerateStubConfiguration(), new Mock<IWebHostEnvironment>().Object, false);
         var serviceCollection = new ServiceCollection();
         startup.ConfigureServices(serviceCollection);
 
