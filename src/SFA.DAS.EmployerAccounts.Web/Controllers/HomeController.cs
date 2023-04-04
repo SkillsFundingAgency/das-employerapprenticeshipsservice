@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.EmployerAccounts.Infrastructure;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
+using SFA.DAS.EmployerAccounts.Web.Cookies;
 using SFA.DAS.EmployerAccounts.Web.RouteValues;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 
@@ -255,6 +256,8 @@ public class HomeController : BaseController
         return RedirectToAction(ControllerConstants.IndexActionName);
     }
 
+   
+
     [Route("signOut", Name = RouteNames.SignOut)]
     new public async Task<IActionResult> SignOut()
     {
@@ -263,23 +266,18 @@ public class HomeController : BaseController
         var authenticationProperties = new AuthenticationProperties();
         authenticationProperties.Parameters.Clear();
         authenticationProperties.Parameters.Add("id_token", idToken);
-        SignOut(authenticationProperties, CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = "/", Parameters = { { "id_token", idToken } } }); SignOut(authenticationProperties, CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
 
         var constants = new Constants(_configuration.Identity);
 
         return new RedirectResult(string.Format(constants.LogoutEndpoint(), idToken));
     }
 
-    [Route("SignOutCleanup")]
-    public async Task SignOutCleanup()
+    [Route("signoutcleanup")]
+    public void SignOutCleanup()
     {
-        var idToken = await HttpContext.GetTokenAsync("id_token");
-
-        var authenticationProperties = new AuthenticationProperties();
-        authenticationProperties.Parameters.Clear();
-        authenticationProperties.Parameters.Add("id_token", idToken);
-
-        SignOut(authenticationProperties, CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
+        Response.Cookies.Delete(CookieNames.Authentication);
     }
 
     [HttpGet]

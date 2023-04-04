@@ -6,6 +6,7 @@ using SFA.DAS.EmployerAccounts.Infrastructure;
 using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
+using SFA.DAS.EmployerAccounts.Web.Cookies;
 using SFA.DAS.EmployerAccounts.Web.Handlers;
 using SFA.DAS.GovUK.Auth.Services;
 
@@ -96,7 +97,7 @@ public static class EmployerAuthenticationServiceRegistrations
             {
                 options.AccessDeniedPath = new PathString("/error/403");
                 options.ExpireTimeSpan = TimeSpan.FromHours(1);
-                options.Cookie.Name = $"SFA.DAS.EmployerAccounts.Web.Auth";
+                options.Cookie.Name = CookieNames.Authentication;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.SlidingExpiration = true;
                 options.Cookie.SameSite = SameSiteMode.None;
