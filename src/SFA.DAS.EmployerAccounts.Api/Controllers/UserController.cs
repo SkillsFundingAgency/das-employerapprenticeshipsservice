@@ -1,8 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Net;
+using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EmployerAccounts.Api.Authorization;
+using SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByEmail;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers;
@@ -26,5 +29,20 @@ public class UserController : ControllerBase
 
         if (response.User == null) return NotFound();
         return Ok(response.User);
+    }
+    
+    [HttpPut]
+    [Route("upsert")]
+    public async Task<IActionResult> Upsert([FromBody] UpsertRegisteredUserCommand command)
+    {
+        try
+        {
+            await _mediator.Send(command);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+        }
     }
 }
