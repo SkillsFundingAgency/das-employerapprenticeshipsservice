@@ -13,7 +13,6 @@ public class EmployerAccountsConfiguration
     public EmployerAccountsOuterApiConfiguration EmployerAccountsOuterApiConfiguration { get; set; }
     public string DatabaseConnectionString { get; set; }
     public string EmployerAccountsBaseUrl { get; set; }
-    public string EmployerCommitmentsBaseUrl { get; set; }
     public string EmployerCommitmentsV2BaseUrl { get; set; }
     public string EmployerFinanceBaseUrl { get; set; }
     public string EmployerIncentivesBaseUrl { get; set; }
