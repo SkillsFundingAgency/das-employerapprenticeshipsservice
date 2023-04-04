@@ -25,7 +25,7 @@ public static class DataProtectionServiceRegistrations
                 .Connect($"{redisConnectionString},{dataProtectionKeysDatabase}");
 
             services.AddDataProtection()
-                .SetApplicationName("das-forecasting-web")
+                .SetApplicationName("das-employer-accounts-web")
                 .PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys");
         }
 
