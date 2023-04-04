@@ -26,7 +26,6 @@ namespace SFA.DAS.EAS.Support.Web
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.ConfigureDasAppConfiguration();
                     webBuilder.UseStartup<Startup>();
                 });
     }

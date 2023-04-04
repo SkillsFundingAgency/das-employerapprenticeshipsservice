@@ -8,6 +8,7 @@ using SFA.DAS.HashingService;
 using SFA.DAS.EmployerAccounts.Api.Client;
 using SFA.DAS.EAS.Account.Api.Clients;
 using SFA.DAS.TokenService.Api.Client;
+using SFA.DAS.EAS.Support.Web.Extensions;
 
 using HashService = SFA.DAS.HashingService.HashingService;
 using SFA.DAS.EAS.Support.Infrastructure.Settings;
@@ -18,6 +19,8 @@ using SFA.DAS.EAS.Support.Core.Services;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Support.ApplicationServices;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.EAS.Support.Web.Configuration;
+using System.Text.Json;
 
 namespace SFA.DAS.EAS.Support.Web
 {
@@ -25,7 +28,7 @@ namespace SFA.DAS.EAS.Support.Web
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            Configuration = configuration.BuildDasConfiguration();
         }
 
         public IConfiguration Configuration { get; }
@@ -39,17 +42,22 @@ namespace SFA.DAS.EAS.Support.Web
                     options.UseMemberCasing();
                 });
 
-            var hashstringChars = Configuration.GetValue<string>("HashingService:AllowedHashstringCharacters");
-            var hashstring = Configuration.GetValue<string>("HashingService:Hashstring");
-            var employerAccApiClientConfig = Configuration.GetValue<EmployerAccountsApiClientConfiguration>("EmployerAccountsApiClientConfiguration");
-            var tokenServiceApiClientConfig = Configuration.GetValue<TokenServiceApiClientConfiguration>("TokenServiceApiClientConfiguration");
-            var hmrcApiClientConfig = Configuration.GetValue<HmrcApiClientConfiguration>("LevySubmission:HmrcApi");
-            var accApiConfig = Configuration.GetValue<AccountApiConfiguration>("AccountApiConfiguration");
+            var supportEasStr = Configuration.GetValue<string>("SFA.DAS.Support.EAS");
+            var supportEas = JsonSerializer.Deserialize<WebConfiguration>(supportEasStr);
 
-            services.AddSingleton<IHashingService, HashService>(c => new HashService(hashstringChars, hashstring));
+            var employerAccApiClientConfigStr = Configuration.GetValue<string>("SFA.DAS.EmployerAccounts.Api.Client");
+            var employerAccApiClientConfig = JsonSerializer.Deserialize<EmployerAccountsApiClientConfiguration>(employerAccApiClientConfigStr);
+
+            var tokenServiceApiClientConfigStr = Configuration.GetValue<string>("SFA.DAS.TokenServiceApiClient");
+            var tokenServiceApiClientConfig = JsonSerializer.Deserialize<TokenServiceApiClientConfiguration>(tokenServiceApiClientConfigStr);
+
+            var accApiConfigStr = Configuration.GetValue<string>("SFA.DAS.EmployerAccountAPI");
+            var accApiConfig = JsonSerializer.Deserialize<AccountApiConfiguration>(accApiConfigStr);
+
+            services.AddSingleton<IHashingService, HashService>(c => new HashService(supportEas.HashingService.AllowedCharacters, supportEas.HashingService.Hashstring));
             services.AddSingleton<IEmployerAccountsApiClientConfiguration, EmployerAccountsApiClientConfiguration>(c => employerAccApiClientConfig);
             services.AddSingleton<ITokenServiceApiClientConfiguration, TokenServiceApiClientConfiguration>(c => tokenServiceApiClientConfig);
-            services.AddSingleton<IHmrcApiClientConfiguration, HmrcApiClientConfiguration>(c => hmrcApiClientConfig);
+            services.AddSingleton<IHmrcApiClientConfiguration, HmrcApiClientConfiguration>(c => supportEas.LevySubmission.HmrcApi);
             services.AddSingleton<IAccountApiConfiguration, AccountApiConfiguration>(c => accApiConfig);
 
             services.AddSingleton<ISecureHttpClient, EmployerAccountsSecureHttpClient>();

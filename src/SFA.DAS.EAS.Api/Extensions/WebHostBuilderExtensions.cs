@@ -18,6 +18,6 @@ public static class WebHostBuilderExtensions
                 };
                 options.PreFixConfigurationKeys = false;
             })
-            .AddAzureTableStorage("SFA.DAS.Support.EAS"));
+            .AddAzureTableStorage(ConfigurationKeys.EmployerApprenticeshipsService));
     }
 }
