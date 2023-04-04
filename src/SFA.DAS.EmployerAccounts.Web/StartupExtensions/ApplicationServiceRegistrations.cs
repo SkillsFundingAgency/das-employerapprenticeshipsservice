@@ -9,6 +9,7 @@ using SFA.DAS.EmployerAccounts.Policies.Hmrc;
 using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.EmployerAccounts.TasksApi;
 using SFA.DAS.Encoding;
+using SFA.DAS.GovUK.Auth.Services;
 using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.ReferenceData.Api.Client;
 
@@ -64,6 +65,8 @@ public static class ApplicationServiceRegistrations
 
         services.AddTransient<IUserContext, UserContext>();
 
+        services.AddTransient<IStubAuthenticationService, StubAuthenticationService>();//TODO remove once gov login live
+        
         return services;
     }
 }
