@@ -1,7 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Microsoft.Extensions.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
-using System;
 
 namespace SFA.DAS.EAS.Support.Web.Extensions;
 
@@ -32,7 +32,8 @@ public static class ConfigurationExtensions
             options.PreFixConfigurationKeys = false;
             options.ConfigurationKeysRawJsonResult = new[]
             {
-                    "SFA.DAS.Support.EAS", "SFA.DAS.EmployerAccountAPI", "SFA.DAS.TokenServiceApiClient", "SFA.DAS.EmployerAccounts.Api.Client" };
+                    "SFA.DAS.Support.EAS", "SFA.DAS.EmployerAccountAPI", "SFA.DAS.TokenServiceApiClient", "SFA.DAS.EmployerAccounts.Api.Client" 
+            };
         });
 
         return config.Build();
