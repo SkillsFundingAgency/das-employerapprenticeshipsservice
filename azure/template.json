@@ -138,6 +138,9 @@
         "utcValue": {
             "type": "string",
             "defaultValue": "[utcNow()]"
+        },
+        "cdnUrl": {
+            "type": "string"
         }
     },
     "variables": {
@@ -349,6 +352,10 @@
                                 {
                                     "name": "ConfigNames",
                                     "value": "[variables('configNames')]"
+                                },
+                                {
+                                    "name": "Cdn:Url",
+                                    "value": "[parameters('cdnUrl')]"
                                 }
                             ]
                         }
