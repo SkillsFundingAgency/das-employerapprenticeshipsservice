@@ -31,7 +31,6 @@
 		<PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.355802">
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="SFA.DAS.Events.Api.Types" Version="2.1.31" />
 	</ItemGroup>
 
 	<ItemGroup>
