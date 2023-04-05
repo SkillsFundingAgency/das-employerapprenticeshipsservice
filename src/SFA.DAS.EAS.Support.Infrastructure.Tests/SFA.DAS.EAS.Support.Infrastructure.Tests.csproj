@@ -7,13 +7,6 @@
 
 		<IsPackable>false</IsPackable>
 	</PropertyGroup>
-	<ItemGroup>
-		<Reference Include="System.IdentityModel" />
-		<Reference Include="System.IO.Compression" />
-		<Reference Include="System.Security" />
-		<Reference Include="System.Threading.Tasks" />
-		<Reference Include="System.Transactions" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
@@ -39,32 +32,11 @@
 		</PackageReference>
 		<PackageReference Include="Moq" Version="4.18.4">
 		</PackageReference>
-		<PackageReference Include="NServiceBus.Persistence.Sql" Version="4.1.1">
-		</PackageReference>
 		<PackageReference Include="SFA.DAS.EmployerAccounts.Api.Types" Version="1.6.1254">
-		</PackageReference>
-		<PackageReference Include="SFA.DAS.HashingService" Version="1.0.183">
-		</PackageReference>
-		<PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1">
-		</PackageReference>
-		<PackageReference Include="StructureMap" Version="4.7.1">
-		</PackageReference>
-		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-		<PackageReference Include="System.ComponentModel.Composition" Version="7.0.0" />
-		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-		<PackageReference Include="System.Memory" Version="4.5.4">
 		</PackageReference>
 		<PackageReference Include="System.Net.Http" Version="4.3.4">
 		</PackageReference>
-		<PackageReference Include="System.Runtime.Caching" Version="7.0.0" />
-		<PackageReference Include="WebApi.StructureMap" Version="1.0.23">
-		</PackageReference>
-		<PackageReference Include="System.ServiceModel.Duplex" Version="4.9.0" />
-		<PackageReference Include="System.ServiceModel.NetTcp" Version="4.9.0" />
 		<PackageReference Include="System.ServiceModel.Federation" Version="4.8.1" />
-		<PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.355802">
-			<PrivateAssets>all</PrivateAssets>
-		</PackageReference>
 		<PackageReference Include="EntityFramework" Version="6.4.4" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.6" />
@@ -75,9 +47,7 @@
 
 		<PackageReference Include="NLog" Version="4.6.8">
 		</PackageReference>
-		<PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
 		<PackageReference Include="HMRC.ESFA.Levy.Api.Client" Version="2.0.4" />
-		<PackageReference Include="System.Diagnostics.PerformanceCounter" Version="7.0.0" />
 		<PackageReference Include="CommonServiceLocator" Version="1.4.0" />
 
 
