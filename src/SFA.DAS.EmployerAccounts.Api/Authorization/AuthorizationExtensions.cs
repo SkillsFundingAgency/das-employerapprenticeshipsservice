@@ -51,6 +51,17 @@ namespace SFA.DAS.EmployerAccounts.Api.Authorization
                             policy.RequireRole(ApiRoles.ReadAllAccountUsers);
                         }
                     });
+                    
+                    x.AddPolicy(ApiRoles.ReadAllEmployerAgreements, policy =>
+                    {
+                        if (isDevelopment)
+                            policy.AllowAnonymousUser();
+                        else
+                        {
+                            policy.RequireAuthenticatedUser();
+                            policy.RequireRole(ApiRoles.ReadAllEmployerAgreements);
+                        }
+                    });
 
                     x.DefaultPolicy = x.GetPolicy("default");
                 }
