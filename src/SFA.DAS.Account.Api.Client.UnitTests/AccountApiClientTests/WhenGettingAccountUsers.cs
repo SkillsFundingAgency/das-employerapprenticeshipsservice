@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
+using FluentAssertions;
 using FluentAssertions.Common;
 using Moq;
 using Newtonsoft.Json;
@@ -40,7 +41,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
             // Assert
             Assert.IsNotNull(response);
             Assert.IsNotNull(viewModel);
-            viewModel.IsSameOrEqualTo(_teamMember);
+            viewModel.Should().BeEquivalentTo(_teamMember);
         }
     }
 }

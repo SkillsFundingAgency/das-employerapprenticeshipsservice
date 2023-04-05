@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using AutoFixture;
+﻿using AutoFixture;
 using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
-using Microsoft.AspNetCore.Mvc;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTests
 {
@@ -42,7 +40,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
             var value = result.Value as AccountResourceList<LevyDeclarationViewModel>;
 
             Assert.IsTrue(value.TrueForAll(x => x.HashedAccountId == hashedAccountId));
-            value.ShouldAllBeEquivalentTo(apiResponse, options => options.Excluding(x => x.HashedAccountId).Excluding(x => x.PayeSchemeReference));
+            value.Should().BeEquivalentTo(apiResponse);
         }
 
         [Test]

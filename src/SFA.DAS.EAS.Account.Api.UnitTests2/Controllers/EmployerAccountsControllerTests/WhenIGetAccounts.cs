@@ -1,12 +1,9 @@
 ﻿using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Domain.Models.Account;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using AccountWithBalanceViewModel = SFA.DAS.EAS.Account.Api.Types.AccountWithBalanceViewModel;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControllerTests
@@ -59,7 +56,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             var value = oKResult.Value as PagedApiResponseViewModel<AccountWithBalanceViewModel>;
 
             value.Should().NotBeNull();
-            value.ShouldBeEquivalentTo(accountsResponse);
+            value.Should().BeEquivalentTo(accountsResponse);
         }
     }
 }

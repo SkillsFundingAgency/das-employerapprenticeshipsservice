@@ -1,11 +1,10 @@
-﻿using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Controllers;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.Account.Api.Types;
-using Microsoft.AspNetCore.Mvc;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.StatisticsControllerTests
 {
@@ -53,7 +52,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.StatisticsControllerTest
             var okResult = (OkObjectResult)actResult.Result;
 
             okResult.Value.Should().NotBeNull();
-            okResult.Value.ShouldBeEquivalentTo(_statisticsViewModel);
+            okResult.Value.Should().BeEquivalentTo(_statisticsViewModel);
         }
     }
 }

@@ -45,7 +45,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
 
             value.Should().NotBeNull();
             Assert.IsTrue(value.TrueForAll(x => x.HashedAccountId == hashedAccountId));
-            value.ShouldAllBeEquivalentTo(apiResponse, options => options.Excluding(x => x.HashedAccountId).Excluding(x => x.PayeSchemeReference));
+            value.Should().BeEquivalentTo(apiResponse);
         }
 
         [Test]

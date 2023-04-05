@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Types;
@@ -35,7 +34,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
             Assert.IsNotNull(response);
             Assert.IsAssignableFrom<PayeSchemeViewModel>(response);
             response.Should().NotBeNull();
-            response.ShouldBeEquivalentTo(_expectedPayeScheme);
+            response.Should().BeEquivalentTo(_expectedPayeScheme);
         }
     }
 }

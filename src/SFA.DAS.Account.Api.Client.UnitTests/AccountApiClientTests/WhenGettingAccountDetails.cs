@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
@@ -43,7 +41,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
             Assert.IsNotNull(response);
             Assert.IsAssignableFrom<AccountDetailViewModel>(response);
             response.Should().NotBeNull();
-            response.ShouldBeEquivalentTo(_expectedAccount);
+            response.Should().BeEquivalentTo(_expectedAccount);
         }
     }
 }

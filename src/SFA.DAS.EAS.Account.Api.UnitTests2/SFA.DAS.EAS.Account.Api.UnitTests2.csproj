@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
@@ -29,7 +29,7 @@
 		</PackageReference>
 		<PackageReference Include="AutoMapper" Version="5.1.1">
 		</PackageReference>
-		<PackageReference Include="FluentAssertions" Version="4.17.0">
+		<PackageReference Include="FluentAssertions" Version="6.10.0">
 		</PackageReference>
 		<PackageReference Include="MediatR" Version="2.1.0">
 		</PackageReference>
@@ -88,7 +88,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj" />
 		<ProjectReference Include="..\SFA.DAS.EAS.Api\SFA.DAS.EAS.Account.Api.csproj" />
-		<ProjectReference Include="..\SFA.DAS.EAS.TestCommon2\SFA.DAS.EAS.TestCommon2.csproj" />
 		<ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj" />
 		<ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj" />
 		<ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EAS.Infrastructure.csproj" />
