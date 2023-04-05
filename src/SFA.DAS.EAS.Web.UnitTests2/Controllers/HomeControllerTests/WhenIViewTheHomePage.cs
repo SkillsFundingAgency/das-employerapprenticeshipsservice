@@ -1,15 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.ServiceModel.Channels;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Primitives;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.Controllers;
-using Microsoft.AspNetCore.Routing;
-using System.ServiceModel.Channels;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Abstractions;
-using Microsoft.Extensions.Primitives;
-using Microsoft.Extensions.Configuration;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
 {
