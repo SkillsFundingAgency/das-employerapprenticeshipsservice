@@ -23,19 +23,18 @@ public static class ConfigurationExtensions
 
         config.AddEnvironmentVariables();
 
-        if (!configuration.IsTest())
+
+        config.AddAzureTableStorage(options =>
         {
-            config.AddAzureTableStorage(options =>
+            options.ConfigurationKeys = configuration["ConfigNames"].Split(",");
+            options.StorageConnectionString = configuration["ConfigurationStorageConnectionString"];
+            options.EnvironmentName = configuration["EnvironmentName"];
+            options.PreFixConfigurationKeys = false;
+            options.ConfigurationKeysRawJsonResult = new[]
             {
-                options.ConfigurationKeys = configuration["ConfigNames"].Split(",");
-                options.StorageConnectionString = configuration["ConfigurationStorageConnectionString"];
-                options.EnvironmentName = configuration["EnvironmentName"];
-                options.PreFixConfigurationKeys = false;
-                options.ConfigurationKeysRawJsonResult = new[] 
-                { 
                     "SFA.DAS.Support.EAS", "SFA.DAS.EmployerAccountAPI", "SFA.DAS.TokenServiceApiClient", "SFA.DAS.EmployerAccounts.Api.Client" };
-            });
-        }
+        });
+
         return config.Build();
     }
     public static bool IsDev(this IConfiguration configuration)
@@ -46,11 +45,6 @@ public static class ConfigurationExtensions
     public static bool IsLocal(this IConfiguration configuration)
     {
         return configuration["EnvironmentName"].StartsWith("LOCAL", StringComparison.CurrentCultureIgnoreCase);
-    }
-
-    public static bool IsTest(this IConfiguration configuration)
-    {
-        return configuration["EnvironmentName"].StartsWith("Test", StringComparison.CurrentCultureIgnoreCase);
     }
 
     public static bool IsDevOrLocal(this IConfiguration configuration)
