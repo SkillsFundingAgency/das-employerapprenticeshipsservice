@@ -6,9 +6,6 @@
     <OutputPath>bin\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="C:\Users\jayas\.nuget\packages\nlog.schema\4.5.3\contentFiles\any\any\NLog.xsd" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj" />
@@ -19,8 +16,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Identity.Web" Version="1.25.10" />
     <PackageReference Include="NLog.Schema" Version="4.5.3">
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.Logging" Version="1.0.5">
     </PackageReference>
     <PackageReference Include="Swagger-Net" Version="8.3.10.4">
     </PackageReference>
