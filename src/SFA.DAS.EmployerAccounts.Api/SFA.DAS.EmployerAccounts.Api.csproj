@@ -60,4 +60,12 @@
 	<PropertyGroup>
 		<WebProjectOutputDir Condition="$(WebProjectOutputDir) == '' AND $(OS) == 'Unix' ">./</WebProjectOutputDir>
 	</PropertyGroup>
+	<ItemGroup>
+		<Content Update="appsettings.json">
+			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
+		</Content>
+		<Content Update="appsettings.Development.json">
+			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
 </Project>

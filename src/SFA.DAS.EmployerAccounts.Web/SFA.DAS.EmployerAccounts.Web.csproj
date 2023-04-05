@@ -50,5 +50,12 @@
 		<ProjectReference Include="..\SFA.DAS.EmployerAccounts.Types\SFA.DAS.EmployerAccounts.Types.csproj" />
 		<ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj" />
 	</ItemGroup>
-	
+	<ItemGroup>
+		<Content Update="appsettings.json">
+			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
+		</Content>
+		<Content Update="appsettings.Development.json">
+			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
 </Project>

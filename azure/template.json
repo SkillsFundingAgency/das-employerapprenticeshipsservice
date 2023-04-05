@@ -148,7 +148,9 @@
         "workerAppServiceName": "[concat(variables('resourceNamePrefix'), 'wkr-as')]",
         "workerAppServicePlanName": "[concat(variables('resourceNamePrefix'), 'wkr-asp')]",
         "resourceGroupName": "[concat(variables('resourceNamePrefix'), '-rg')]",
-        "cosmosDbName": "[concat(variables('resourceNamePrefix'), '-cdb')]"
+        "cosmosDbName": "[concat(variables('resourceNamePrefix'), '-cdb')]",
+        "configNames": "SFA.DAS.EmployerAccounts,SFA.DAS.EmployerAccounts.ReadStore,SFA.DAS.EmployerAccounts.Notifications,SFA.DAS.ReferenceDataApiClient,SFA.DAS.Encoding",
+        "configNamesApi": "SFA.DAS.EmployerAccounts,SFA.DAS.Encoding"
     },
     "resources": [
         {
@@ -343,6 +345,10 @@
                                 {
                                     "name": "TokenCertificateThumbprint",
                                     "value": "[parameters('employerUsersTokenSigningCertificateThumbprint')]"
+                                },
+                                {
+                                    "name": "ConfigNames",
+                                    "value": "[variables('configNames')]"
                                 }
                             ]
                         }
@@ -438,6 +444,10 @@
                                 {
                                     "name": "AccountsApiIdentifierUri",
                                     "value": "[parameters('accountsApiIdentifierUri')]"
+                                },
+                                {
+                                    "name": "ConfigNames",
+                                    "value": "[variables('configNamesApi')]"
                                 }
                             ]
                         }
