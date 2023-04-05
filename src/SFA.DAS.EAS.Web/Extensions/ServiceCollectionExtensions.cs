@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Hosting;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EAS.Domain.Configuration;
-using Microsoft.AspNetCore.Builder;
 
 namespace SFA.DAS.EAS.Web.Extensions;
 
