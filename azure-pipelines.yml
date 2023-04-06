@@ -2,226 +2,149 @@ trigger:
   batch: true
   branches:
     include:
-      - "master"
-
-workspace:
-    clean: all
+      - "main"
 
 variables:
-- group: BUILD Management Resources
+- name: SolutionBaseName
+  value: SFA.DAS.EAS
+- name: BuildConfiguration
+  value: release
+- name: BuildPlatform
+  value: any cpu
+- group: RELEASE Management Resources
+- group: RELEASE das-employerapprenticeshipsservice
+- name: Deploy
+  value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.Reason'], 'PullRequest'))]
 
-pool:
-  name: 'DAS - Continuous Integration'
-  demands:
-    - Agent.OS -equals Windows_NT
+resources:
+  repositories:
+  - repository: self
+  - repository: das-platform-building-blocks
+    type: github
+    name: SkillsFundingAgency/das-platform-building-blocks
+    ref: refs/tags/2.1.7
+    endpoint: SkillsFundingAgency
+  - repository: das-platform-automation
+    type: github
+    name: SkillsFundingAgency/das-platform-automation
+    ref: refs/tags/5.1.5
+    endpoint: SkillsFundingAgency
+  pipelines:
+  - pipeline: das-employer-config
+    project: Digital Apprenticeship Service
+    source: das-employer-config
+    branch: master
 
-steps:
-- task: gittools.gitversion.gitversion-task.GitVersion@5
-  displayName: GitVersion
-  inputs:
-    configFilePath: GitVersion.yml
-    updateAssemblyInfo: true
+stages:
+- stage: Build
+  jobs:
+  - template: pipeline-templates/job/code-build.yml
+    parameters:
+      BuildConfiguration: $(BuildConfiguration)
+      SolutionBaseName: $(SolutionBaseName)
 
-- task: SonarCloudPrepare@1
-  displayName: Prepare SonarCloud analysis configuration
-  condition: and(succeeded(), or(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/main'), eq(variables['Build.Reason'], 'PullRequest')))
-  inputs:
-    SonarCloud: ESFA - SonarCloud
-    organization: $(SonarCloudOrganisationKey)
-    scannerMode: MSBuild
-    projectName: "$(Build.DefinitionName)"
-    projectKey: SkillsFundingAgency_das-employerapprenticeshipsservice
-    extraProperties: |
-      sonar.cs.opencover.reportsPaths=$(Agent.TempDirectory)/CoverageResults/coverage.opencover.xml
+- stage: Deploy_AT
+  dependsOn: Build
+  displayName: Deploy to AT
+  condition: and(succeeded(), eq(variables.Deploy, 'true'))
+  variables:
+  - group: DevTest Management Resources
+  - group: AT DevTest Shared Resources
+  - group: AT das-employerapprenticeshipsservice
+  jobs:
+  - template: pipeline-templates/job/deploy.yml
+    parameters:
+      Environment: AT
+      SolutionBaseName: $(SolutionBaseName)
+      ServiceConnection: SFA-DAS-DevTest-ARM
+      AppRoleAssignmentsServiceConnection: das-app-role-assignments-CDS
 
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet restore all'
-  inputs:
-    command: restore
-    projects: "src/**/*.csproj"
-    noCache: true
+- stage: Deploy_TEST
+  dependsOn: Build
+  displayName: Deploy to TEST
+  variables:
+  - group: DevTest Management Resources
+  - group: TEST DevTest Shared Resources
+  - group: TEST das-employerapprenticeshipsservice
+  jobs:
+  - template: pipeline-templates/job/deploy.yml
+    parameters:
+      Environment: TEST
+      SolutionBaseName: $(SolutionBaseName)
+      ServiceConnection: SFA-DAS-DevTest-ARM
+      AppRoleAssignmentsServiceConnection: das-app-role-assignments-CDS
 
-- task: VSBuild@1
-  displayName: 'Build solution EAS'
-  inputs:
-    solution: 'src/SFA.DAS.EAS.sln'
-    vsVersion: 16.0
-    platform: 'any cpu'
-    configuration: 'release'
+- stage: Deploy_TEST2
+  dependsOn: Build
+  displayName: Deploy to TEST2
+  variables:
+  - group: DevTest Management Resources
+  - group: TEST2 DevTest Shared Resources
+  - group: TEST2 das-employerapprenticeshipsservice
+  jobs:
+  - template: pipeline-templates/job/deploy.yml
+    parameters:
+      Environment: TEST2
+      SolutionBaseName: $(SolutionBaseName)
+      ServiceConnection: SFA-DAS-DevTest-ARM
+      AppRoleAssignmentsServiceConnection: das-app-role-assignments-CDS
 
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet pack'
-  inputs:
-    command: pack
-    packagesToPack: 'src/SFA.DAS.Account.Api.Client/SFA.DAS.EAS.Account.Api.Client.csproj;src/SFA.DAS.EAS.Account.Api.Types/SFA.DAS.EAS.Account.Api.Types.csproj;src/SFA.DAS.EmployerAccounts.Api.Client/SFA.DAS.EmployerAccounts.Api.Client.csproj;src/SFA.DAS.EmployerAccounts.Api.Types/SFA.DAS.EmployerAccounts.Api.Types.csproj;src/SFA.DAS.EmployerAccounts.Events/SFA.DAS.EmployerAccounts.Events.csproj;src/SFA.DAS.EmployerAccounts.Messages/SFA.DAS.EmployerAccounts.Messages.csproj;src/SFA.DAS.EmployerAccounts.ReadStore/SFA.DAS.EmployerAccounts.ReadStore/SFA.DAS.EmployerAccounts.ReadStore.csproj;src/SFA.DAS.EmployerAccounts.Types/SFA.DAS.EmployerAccounts.Types.csproj;src/SFA.DAS.EmployerFinance.Api.Client/SFA.DAS.EmployerFinance.Api.Client.csproj;src/SFA.DAS.EmployerFinance.Api.Types/SFA.DAS.EmployerFinance.Api.Types.csproj;src/SFA.DAS.EmployerFinance.Events/SFA.DAS.EmployerFinance.Events.csproj;src/SFA.DAS.EmployerFinance.Messages/SFA.DAS.EmployerFinance.Messages.csproj;src/SFA.DAS.EmployerFinance.Types/SFA.DAS.EmployerFinance.Types.csproj'
-    packDirectory: '$(build.artifactstagingdirectory)/publish'
-    versioningScheme: byBuildNumber
+- stage: Deploy_PP
+  dependsOn: Build
+  displayName: Deploy to PP
+  variables:
+  - group: PreProd Management Resources
+  - group: PreProd Shared Resources
+  - group: PreProd das-employerapprenticeshipsservice
+  jobs:
+  - template: pipeline-templates/job/deploy.yml
+    parameters:
+      Environment: PP
+      SolutionBaseName: $(SolutionBaseName)
+      ServiceConnection: SFA-DIG-PreProd-ARM
+      AppRoleAssignmentsServiceConnection: das-app-role-assignments-FCS
 
-- task: VSBuild@1
-  displayName: 'Publish SFA.DAS.EmployerAccounts.Api'
-  inputs:
-    solution: 'src/SFA.DAS.EmployerAccounts.Api/SFA.DAS.EmployerAccounts.Api.csproj'
-    vsVersion: 16.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/SFA.DAS.EmployerAccounts.Api"'
-    platform: 'anycpu'
-    configuration: 'release'
-    clean: true
+- stage: Deploy_PROD
+  dependsOn: Build
+  displayName: Deploy to PROD
+  variables:
+  - group: PROD Management Resources
+  - group: PROD Shared Resources
+  - group: PROD das-employerapprenticeshipsservice
+  jobs:
+  - template: pipeline-templates/job/deploy.yml
+    parameters:
+      Environment: PROD
+      SolutionBaseName: $(SolutionBaseName)
+      ServiceConnection: SFA-DIG-Prod-ARM
+      AppRoleAssignmentsServiceConnection: das-app-role-assignments-FCS
 
-- task: ArchiveFiles@2
-  displayName: 'Archive SFA.DAS.Account.Api'
-  inputs:
-    includeRootFolder: false
-    rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EmployerAccounts.Api'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EmployerAccounts.Api.zip'
+- stage: Deploy_MO
+  dependsOn: Build
+  displayName: Deploy to MO
+  variables:
+  - group: MO Management Resources
+  - group: MO Shared Resources
+  - group: MO das-employerapprenticeshipsservice
+  jobs:
+  - template: pipeline-templates/job/deploy.yml
+    parameters:
+      Environment: MO
+      SolutionBaseName: $(SolutionBaseName)
+      ServiceConnection: SFA-ASM-ModelOffice-ARM
+      AppRoleAssignmentsServiceConnection: das-app-role-assignments-FCS
 
-- task: VSBuild@1
-  displayName: 'Publish SFA.DAS.EmployerAccounts.Web'
-  inputs:
-    solution: 'src/SFA.DAS.EmployerAccounts.Web/SFA.DAS.EmployerAccounts.Web.csproj'
-    vsVersion: 16.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/SFA.DAS.EmployerAccounts.Web"'
-    platform: 'anycpu'
-    configuration: 'release'
-    clean: true
-
-- task: ArchiveFiles@2
-  displayName: 'Archive SFA.DAS.EmployerAccounts.Web'
-  inputs:
-    includeRootFolder: false
-    rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EmployerAccounts.Web'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EmployerAccounts.Web.zip'
-
-- task: VSBuild@1
-  displayName: 'Publish SFA.DAS.EmployerAccounts.Host'
-  inputs:
-    solution: 'src/SFA.DAS.EmployerAccounts.Host/SFA.DAS.EmployerAccounts.Host.csproj'
-    vsVersion: 16.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
-    platform: 'anycpu'
-    configuration: 'release'
-    clean: true
-
-- task: VSBuild@1
-  displayName: 'Publish SFA.DAS.EmployerFinance.Api'
-  inputs:
-    solution: 'src/SFA.DAS.EmployerFinance.Api/SFA.DAS.EmployerFinance.Api.csproj'
-    vsVersion: 16.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/SFA.DAS.EmployerFinance.Api"'
-    platform: 'anycpu'
-    configuration: 'release'
-    clean: true
-
-- task: ArchiveFiles@2
-  displayName: 'Archive SFA.DAS.EmployerFinance.Api'
-  inputs:
-    includeRootFolder: false
-    rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EmployerFinance.Api'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EmployerFinance.Api.zip'
-
-- task: VSBuild@1
-  displayName: 'Publish SFA.DAS.EmployerFinance.Web'
-  inputs:
-    solution: 'src/SFA.DAS.EmployerFinance.Web/SFA.DAS.EmployerFinance.Web.csproj'
-    vsVersion: 16.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/SFA.DAS.EmployerFinance.Web"'
-    platform: 'anycpu'
-    configuration: 'release'
-    clean: true
-
-- task: ArchiveFiles@2
-  displayName: 'Archive SFA.DAS.EmployerFinance.Web'
-  inputs:
-    includeRootFolder: false
-    rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EmployerFinance.Web'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EmployerFinance.Web.zip'
-
-- task: VSBuild@1
-  displayName: 'Publish SFA.DAS.EmployerFinance.Host'
-  inputs:
-    solution: 'src/SFA.DAS.EmployerFinance.Host/SFA.DAS.EmployerFinance.Host.csproj'
-    vsVersion: 16.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
-    platform: 'anycpu'
-    configuration: 'release'
-    clean: true
-
-- task: VSBuild@1
-  displayName: 'Publish SFA.DAS.EAS.Account.Api'
-  inputs:
-    solution: 'src/SFA.DAS.EAS.Api/SFA.DAS.EAS.Account.Api.csproj'
-    vsVersion: 16.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/SFA.DAS.EAS.Account.Api"'
-    platform: 'anycpu'
-    configuration: 'release'
-    clean: true
-
-- task: ArchiveFiles@2
-  displayName: 'Archive SFA.DAS.EAS.Account.Api'
-  inputs:
-    includeRootFolder: false
-    rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EAS.Account.Api'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EAS.Account.Api.zip'
-
-- task: VSBuild@1
-  displayName: 'Publish SFA.DAS.EAS.Web'
-  inputs:
-    solution: 'src/SFA.DAS.EAS.Web/SFA.DAS.EAS.Web.csproj'
-    vsVersion: 16.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/SFA.DAS.EAS.Web"'
-    platform: 'anycpu'
-    configuration: 'release'
-    clean: true
-
-- task: ArchiveFiles@2
-  displayName: 'Archive SFA.DAS.EAS.Web'
-  inputs:
-    includeRootFolder: false
-    rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EAS.Web'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EAS.Web.zip'
-
-- task: VSBuild@1
-  displayName: 'Publish SFA.DAS.EAS.Support.Web'
-  inputs:
-    solution: 'src/SFA.DAS.EAS.Support.Web/SFA.DAS.EAS.Support.Web.csproj'
-    vsVersion: 16.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactstagingdirectory)/SFA.DAS.EAS.Support.Web"'
-    platform: 'anycpu'
-    configuration: 'release'
-    clean: true
-
-- task: ArchiveFiles@2
-  displayName: 'Archive SFA.DAS.EAS.Support.Web'
-  inputs:
-    includeRootFolder: false
-    rootFolderOrFile: '$(build.artifactstagingdirectory)/SFA.DAS.EAS.Support.Web'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/publish/SFA.DAS.EAS.Support.Web.zip'
-
-- task: VSTest@2
-  displayName: 'VsTest - testAssemblies'
-  inputs:
-    testAssemblyVer2: '**/bin/**/*UnitTests.dll'
-    platform: 'any cpu'
-    configuration: 'release'
-
-- task: SonarCloudAnalyze@1
-  displayName: 'Run SonarCloud analysis'
-  condition: and(succeeded(), or(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/main'), eq(variables['Build.Reason'], 'PullRequest')))
-
-- task: SonarCloudPublish@1
-  displayName: 'Publish results on build summary'
-  condition: and(succeeded(), or(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/main'), eq(variables['Build.Reason'], 'PullRequest')))
-  inputs:
-    pollingTimeoutSec: '300'
-
-- task: CopyFiles@2
-  displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
-  inputs:
-    Contents: |
-     azure/**
-     src/**/bin/**/*.dacpac
-    TargetFolder: '$(build.artifactstagingdirectory)/publish'
-
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact'
-  inputs:
-    PathtoPublish: '$(build.artifactstagingdirectory)/publish'
+- stage: Deploy_DEMO
+  dependsOn: Build
+  displayName: Deploy to DEMO
+  variables:
+  - group: DevTest Management Resources
+  - group: DEMO DevTest Shared Resources
+  - group: DEMO das-employerapprenticeshipsservice
+  jobs:
+  - template: pipeline-templates/job/deploy.yml
+    parameters:
+      Environment: DEMO
+      SolutionBaseName: $(SolutionBaseName)
+      ServiceConnection: SFA-DAS-DevTest-ARM
+      AppRoleAssignmentsServiceConnection: das-app-role-assignments-CDS
