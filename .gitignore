@@ -270,7 +270,3 @@ src/Tools/PhantomJS/tools/phantomjs/ChangeLog
 .learningtransport/
 App_Data/
 src/SFA.DAS.EmployerAccounts.ReadStore/SFA.DAS.EmployerAccounts.ReadStore/SFA.DAS.EmployerAccounts.ReadStore.csproj.DotSettings
-
-.sonarqube/
-SonarQube.Analysis.xml
-**/*.slconfig
