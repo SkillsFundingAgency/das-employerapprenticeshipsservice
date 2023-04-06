@@ -23,7 +23,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.14" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.14" />
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="6.0.13" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="MediatR" Version="11.1.0" />
     <PackageReference Include="microsoft.data.sqlclient" Version="5.0.1" />

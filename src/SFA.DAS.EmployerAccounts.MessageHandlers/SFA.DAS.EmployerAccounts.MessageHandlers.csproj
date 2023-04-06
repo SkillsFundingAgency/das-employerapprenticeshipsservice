@@ -11,7 +11,7 @@
 		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
 		<PackageReference Include="Microsoft.Azure.WebJobs.Logging.ApplicationInsights" Version="3.0.33" />
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="NLog.Extensions.Logging" Version="5.2.1" />
 		<PackageReference Include="SFA.DAS.Logging" Version="1.1.2" />
 		<PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
@@ -30,7 +30,7 @@
 		<PackageReference Include="SFA.DAS.Testing" Version="3.0.22" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="9.0.28" />
 		<PackageReference Include="System.Net.Http" Version="4.3.4" />
-		<PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.36" />
+		<PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.37" />
 		<PackageReference Include="SFA.DAS.Commitments.Events" Version="8.29.1" />
 	</ItemGroup>
 	<ItemGroup>

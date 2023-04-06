@@ -20,7 +20,7 @@ class Program
 
         var license = new License();
         licenseStream.Position = 0;
-        license.SetLicense(licenseStream);
+        //license.SetLicense(licenseStream);
 
         var httpsLocalhostServiceCreatelegalagreementTrue = withSubFields
             ? "https://localhost:44344/service/CreateLegalAgreement/true"
