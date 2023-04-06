@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementsByAccountId;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetMinimumSignedAgreementVersion;
 
