@@ -12,7 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="1.2.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.11.2">
+    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.21.0">
     </PackageReference>
     <PackageReference Include="Microsoft.Identity.Web" Version="1.25.10" />
     <PackageReference Include="NLog.Schema" Version="4.5.3">
@@ -27,7 +27,8 @@
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.13" />
 	<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.1" />
-	<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	<PackageReference Include="System.Net.Security" Version="4.3.2" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>
