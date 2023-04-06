@@ -123,6 +123,7 @@ public class EmployerAgreementRepository : BaseRepository, IEmployerAgreementRep
     public async Task<IEnumerable<EmployerAgreement>> GetAccountAgreements(long accountId)
     {
         var legalEntities = await _db.Value.AccountLegalEntities
+            .Include(ale => ale.Agreements)
             .Where(ale => ale.AccountId == accountId
                           && ale.Deleted == null
                           && ale.Agreements.Any(ea =>
