@@ -33,7 +33,6 @@
 		<PackageReference Include="SFA.DAS.UnitOfWork.EntityFrameworkCore" Version="9.0.28" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.Mvc" Version="9.0.28" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="9.0.28" />
-		<PackageReference Include="SFA.DAS.Validation" Version="6.0.30" />
 		<PackageReference Include="SFA.DAS.Validation.Mvc" Version="6.0.30" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
 		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />

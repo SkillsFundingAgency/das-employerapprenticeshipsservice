@@ -1,19 +1,17 @@
-﻿using Moq;
-using NUnit.Framework;
-using SFA.DAS.Validation;
-using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers;
-using SFA.DAS.Authentication;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
-using System.Collections.Generic;
-using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+﻿using System.Collections.Generic;
 using System.Security.Claims;
-using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Extensions;
 using System.Threading;
-using SFA.DAS.EmployerAccounts.Data.Contracts;
+using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Http;
+using Moq;
+using NUnit.Framework;
+using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
+using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
+using SFA.DAS.EmployerAccounts.Extensions;
+using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTeamMembersQuery
 {

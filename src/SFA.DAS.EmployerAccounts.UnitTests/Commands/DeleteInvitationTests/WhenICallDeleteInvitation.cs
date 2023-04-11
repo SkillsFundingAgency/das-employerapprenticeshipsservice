@@ -9,7 +9,6 @@ using SFA.DAS.EmployerAccounts.Commands.DeleteInvitation;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.DeleteInvitationTests
 {
