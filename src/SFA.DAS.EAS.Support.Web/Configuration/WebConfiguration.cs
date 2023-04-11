@@ -16,5 +16,7 @@ namespace SFA.DAS.EAS.Support.Web.Configuration
         [JsonRequired] public HashingServiceConfig HashingService { get; set; }
 
         [JsonRequired] public EmployerAccountsConfiguration EmployerAccountsConfiguration { get; set; }
+
+        [JsonRequired] public bool UseDfESignIn { get; set; } = false;
     }
 }

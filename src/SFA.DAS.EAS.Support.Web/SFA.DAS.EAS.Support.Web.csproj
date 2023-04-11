@@ -8,22 +8,18 @@
     <Compile Remove="App_Data\**" />
     <Compile Remove="Content\**" />
     <Compile Remove="Views\Search\**" />
-    <Compile Remove="Views\Shared\**" />
     <Compile Remove="Views\Status\**" />
     <Content Remove="App_Data\**" />
     <Content Remove="Content\**" />
     <Content Remove="Views\Search\**" />
-    <Content Remove="Views\Shared\**" />
     <Content Remove="Views\Status\**" />
     <EmbeddedResource Remove="App_Data\**" />
     <EmbeddedResource Remove="Content\**" />
     <EmbeddedResource Remove="Views\Search\**" />
-    <EmbeddedResource Remove="Views\Shared\**" />
     <EmbeddedResource Remove="Views\Status\**" />
     <None Remove="App_Data\**" />
     <None Remove="Content\**" />
     <None Remove="Views\Search\**" />
-    <None Remove="Views\Shared\**" />
     <None Remove="Views\Status\**" />
   </ItemGroup>
   <ItemGroup>
@@ -52,5 +48,8 @@
   </PropertyGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 </Project>

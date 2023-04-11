@@ -21,6 +21,7 @@ using SFA.DAS.EAS.Support.ApplicationServices;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EAS.Support.Web.Configuration;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Support.Web
 {
@@ -32,6 +33,7 @@ namespace SFA.DAS.EAS.Support.Web
         }
 
         public IConfiguration Configuration { get; }
+        private bool _useDfESignIn;
 
 
         public void ConfigureServices(IServiceCollection services)
@@ -44,6 +46,7 @@ namespace SFA.DAS.EAS.Support.Web
 
             var supportEasStr = Configuration.GetValue<string>("SFA.DAS.Support.EAS");
             var supportEas = JsonSerializer.Deserialize<WebConfiguration>(supportEasStr);
+            _useDfESignIn = supportEas?.UseDfESignIn ?? false;
 
             var employerAccApiClientConfigStr = Configuration.GetValue<string>("SFA.DAS.EmployerAccounts.Api.Client");
             var employerAccApiClientConfig = JsonSerializer.Deserialize<EmployerAccountsApiClientConfiguration>(employerAccApiClientConfigStr);
@@ -75,12 +78,14 @@ namespace SFA.DAS.EAS.Support.Web
             services.AddSingleton<IChallengeService, ChallengeService>();
             services.AddSingleton<IChallengeRepository, ChallengeRepository>();
             services.AddSingleton<IChallengeHandler, ChallengeHandler>();
-
         }
 
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var defaultRoute = "/account";
+            if (_useDfESignIn) defaultRoute = "/home";
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -91,9 +96,11 @@ namespace SFA.DAS.EAS.Support.Web
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapDefaultControllerRoute();
+                endpoints.MapGet("/", context =>
+                {
+                    return Task.Run(() => context.Response.Redirect(defaultRoute));
+                });
             });
         }
 
