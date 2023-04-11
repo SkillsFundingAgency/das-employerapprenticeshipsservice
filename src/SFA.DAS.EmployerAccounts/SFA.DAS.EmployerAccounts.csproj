@@ -27,9 +27,7 @@
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="MediatR" Version="11.1.0" />
     <PackageReference Include="microsoft.data.sqlclient" Version="5.0.1" />
-    <PackageReference Include="NServiceBus.MSDependencyInjection" Version="0.1.4" />
     <PackageReference Include="Polly" Version="5.7.0" />
-    <PackageReference Include="RestSharp" Version="106.12.0" />
     <PackageReference Include="Scrutor" Version="4.2.1" />
     <PackageReference Include="SFA.DAS.Account.Api.Client" Version="1.6.3195" />
     <PackageReference Include="SFA.DAS.ActiveDirectory" Version="1.0.3" />
@@ -41,7 +39,6 @@
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.52781" />
     <PackageReference Include="SFA.DAS.Encoding" Version="1.1.76" />
     <PackageReference Include="SFA.DAS.EmployerFinance.Messages" Version="1.6.2933" />
-    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
     <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.2.37" />
     <PackageReference Include="SFA.DAS.Notifications.Messages" Version="3.0.0" />
@@ -57,7 +54,6 @@
     <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="9.0.28" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.1" />
     <PackageReference Include="System.Runtime" Version="4.3.1" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
     <PackageReference Include="Aspose.Pdf" Version="17.12.0" />
     <PackageReference Include="SFA.DAS.Commitments.Events" Version="8.29.1" />
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
