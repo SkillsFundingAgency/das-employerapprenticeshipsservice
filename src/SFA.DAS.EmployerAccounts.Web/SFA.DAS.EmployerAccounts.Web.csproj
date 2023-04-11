@@ -38,6 +38,7 @@
 		<PackageReference Include="SFA.DAS.UnitOfWork.EntityFrameworkCore" Version="9.0.28" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="9.0.28" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.Mvc" Version="9.0.28" />
+		<PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.1" />
 		<PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.12" />
