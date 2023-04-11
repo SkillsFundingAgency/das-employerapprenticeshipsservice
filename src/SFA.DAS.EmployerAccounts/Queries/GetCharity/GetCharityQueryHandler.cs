@@ -1,5 +1,4 @@
 ﻿using System.Threading;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetCharity;
 

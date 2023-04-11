@@ -1,10 +1,9 @@
 ﻿using System.Threading;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetUserNotificationSettings;
 
-public class GetUserNotificationSettingsQueryHandler: IRequestHandler<GetUserNotificationSettingsQuery,GetUserNotificationSettingsQueryResponse>
+public class GetUserNotificationSettingsQueryHandler : IRequestHandler<GetUserNotificationSettingsQuery, GetUserNotificationSettingsQueryResponse>
 {
     private readonly IValidator<GetUserNotificationSettingsQuery> _validator;
     private readonly IAccountRepository _accountRepository;

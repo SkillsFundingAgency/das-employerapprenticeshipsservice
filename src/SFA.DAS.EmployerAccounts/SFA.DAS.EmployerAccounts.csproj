@@ -55,7 +55,6 @@
     <PackageReference Include="SFA.DAS.TokenService.Api.Client" Version="2.3.0" />
     <PackageReference Include="SFA.DAS.UnitOfWork" Version="9.0.28" />
     <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="9.0.28" />
-    <PackageReference Include="SFA.DAS.Validation" Version="6.0.30" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.1" />
     <PackageReference Include="System.Runtime" Version="4.3.1" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />

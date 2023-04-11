@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 
