@@ -2,7 +2,8 @@
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Azure.Services.AppAuthentication;
+using Azure.Core;
+using Azure.Identity;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 
 namespace SFA.DAS.EmployerAccounts.Api.Client
@@ -49,8 +50,9 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
 
         private static async Task<string> GetManagedIdentityAuthenticationResult(string resource)
         {
-            var azureServiceTokenProvider = new AzureServiceTokenProvider();
-            return await azureServiceTokenProvider.GetAccessTokenAsync(resource);
+            var credential = new DefaultAzureCredential();
+            var accessToken = await credential.GetTokenAsync(new TokenRequestContext(new[] { resource }));
+            return accessToken.Token;
         }
 
         private static bool IsClientCredentialConfiguration(string clientId, string clientSecret, string tenant)
