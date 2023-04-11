@@ -5,7 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
     <PackageReference Include="Moq" Version="4.18.4" />
     <PackageReference Include="NLog" Version="4.6.8" />
     <PackageReference Include="NUnit" Version="3.13.3" />
@@ -13,6 +13,7 @@
 	  <PackageReference Include="SFA.DAS.Testing" Version="3.0.169" />
     <PackageReference Include="SFA.DAS.NServiceBus.Testing" Version="15.0.25" />
 	  <PackageReference Include="SFA.DAS.Testing.AutoFixture" Version="3.0.169" />
+	  <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Types\SFA.DAS.EmployerAccounts.Api.Types.csproj" />
