@@ -1,10 +1,9 @@
 ﻿using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 
-public class CreateLegalEntityValidator: IValidator<CreateLegalEntityCommand>
+public class CreateLegalEntityValidator : IValidator<CreateLegalEntityCommand>
 {
     private readonly IMembershipRepository _membershipRepository;
 

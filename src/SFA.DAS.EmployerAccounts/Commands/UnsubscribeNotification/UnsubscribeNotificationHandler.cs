@@ -1,6 +1,5 @@
 using System.Threading;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Commands.UnsubscribeNotification;
 
@@ -11,7 +10,7 @@ public class UnsubscribeNotificationHandler : IRequestHandler<UnsubscribeNotific
 
     public UnsubscribeNotificationHandler(
         IValidator<UnsubscribeNotificationCommand> validator,
-        IAccountRepository accountRepository )
+        IAccountRepository accountRepository)
     {
         _validator = validator;
         _accountRepository = accountRepository;
@@ -20,12 +19,12 @@ public class UnsubscribeNotificationHandler : IRequestHandler<UnsubscribeNotific
     public async Task<Unit> Handle(UnsubscribeNotificationCommand command, CancellationToken cancellationToken)
     {
         _validator.Validate(command);
-            
+
         var settings = await _accountRepository.GetUserAccountSettings(command.UserRef);
         var setting = settings.SingleOrDefault(m => m.AccountId == command.AccountId);
         if (setting == null)
             throw new Exception($"Missing settings for account {command.AccountId} and user with ref {command.UserRef}");
-        if(!setting.ReceiveNotifications)
+        if (!setting.ReceiveNotifications)
             throw new Exception($"Trying to unsubscribe from an already unsubscribed account, {command.AccountId}");
 
         setting.ReceiveNotifications = false;

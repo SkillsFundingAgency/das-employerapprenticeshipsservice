@@ -1,7 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Commands.CreateInvitation;
 
@@ -12,7 +11,7 @@ public class CreateInvitationCommandValidator : IValidator<CreateInvitationComma
     public CreateInvitationCommandValidator(IMembershipRepository membershipRepository)
     {
         _membershipRepository = membershipRepository;
-            
+
     }
 
     public ValidationResult Validate(CreateInvitationCommand item)
