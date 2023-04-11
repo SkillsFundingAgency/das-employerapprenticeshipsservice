@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Azure.Core;
 using Azure.Identity;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
 
 namespace SFA.DAS.EmployerAccounts.Api.Client
 {
@@ -41,11 +40,9 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
 
         private static async Task<string> GetClientCredentialAuthenticationResult(string clientId, string clientSecret, string resource, string tenant)
         {
-            var authority = $"https://login.microsoftonline.com/{tenant}";
-            var clientCredential = new ClientCredential(clientId, clientSecret);
-            var context = new AuthenticationContext(authority, true);
-            var result = await context.AcquireTokenAsync(resource, clientCredential);
-            return result.AccessToken;
+            var credential = new ClientSecretCredential(tenantId: tenant, clientId: clientId, clientSecret: clientSecret);
+            var accessToken = await credential.GetTokenAsync(new TokenRequestContext(scopes: new[] { $"{resource}/.default" }));
+            return accessToken.Token;
         }
 
         private static async Task<string> GetManagedIdentityAuthenticationResult(string resource)
