@@ -17,23 +17,23 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 public class SearchPensionRegulatorController : BaseController
 {
     private readonly SearchPensionRegulatorOrchestrator _searchPensionRegulatorOrchestrator;
-    private readonly IMediator _mediatr;
+    private readonly IMediator _mediator;
     private readonly ICookieStorageService<HashedAccountIdModel> _accountCookieStorage;
 
     private const int OrgNotListed = 0;
 
-    private Regex _aornRegex = new("^[A-Z0-9]{13}$", RegexOptions.None, TimeSpan.FromMilliseconds(EmployerAccounts.Constants.RegexTimeoutMilliseconds));
-    private Regex _payeRegex = new("^[0-9]{3}/?[A-Z0-9]{1,7}$", RegexOptions.None, TimeSpan.FromMilliseconds(EmployerAccounts.Constants.RegexTimeoutMilliseconds));
+    private readonly Regex _aornRegex = new("^[A-Z0-9]{13}$", RegexOptions.None, TimeSpan.FromMilliseconds(EmployerAccounts.Constants.RegexTimeoutMilliseconds));
+    private readonly Regex _payeRegex = new("^[0-9]{3}/?[A-Z0-9]{1,7}$", RegexOptions.None, TimeSpan.FromMilliseconds(EmployerAccounts.Constants.RegexTimeoutMilliseconds));
 
     public SearchPensionRegulatorController(
          SearchPensionRegulatorOrchestrator searchPensionRegulatorOrchestrator,
          ICookieStorageService<FlashMessageViewModel> flashMessage,
-         IMediator mediatr,
+         IMediator mediator,
          ICookieStorageService<HashedAccountIdModel> accountCookieStorage)
          : base(flashMessage)
     {
         _searchPensionRegulatorOrchestrator = searchPensionRegulatorOrchestrator;
-        _mediatr = mediatr;
+        _mediator = mediator;
         _accountCookieStorage = accountCookieStorage;
     }
 
@@ -108,7 +108,7 @@ public class SearchPensionRegulatorController : BaseController
         }
 
         var userRef = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
-        var aornLock = await _mediatr.Send(new GetUserAornLockRequest
+        var aornLock = await _mediator.Send(new GetUserAornLockRequest
         {
             UserRef = userRef
         });
@@ -155,7 +155,7 @@ public class SearchPensionRegulatorController : BaseController
         var userRef = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
         var model = await _searchPensionRegulatorOrchestrator.GetOrganisationsByAorn(viewModel.Aorn, viewModel.PayeRef);
 
-        await _mediatr.Send(new UpdateUserAornLockRequest
+        await _mediator.Send(new UpdateUserAornLockRequest
         {
             UserRef = userRef,
             Success = model.Data.Results.Count > 0
@@ -165,7 +165,7 @@ public class SearchPensionRegulatorController : BaseController
         {
             case 0:
                 {
-                    var aornLock = await _mediatr.Send(new GetUserAornLockRequest
+                    var aornLock = await _mediator.Send(new GetUserAornLockRequest
                     {
                         UserRef = userRef
                     });
@@ -232,14 +232,14 @@ public class SearchPensionRegulatorController : BaseController
 
     private async Task<bool> CheckIfPayeSchemeAlreadyInUse(string empRef)
     {
-        var schemeCheck = await _mediatr.Send(new GetPayeSchemeInUseQuery { Empref = empRef });
+        var schemeCheck = await _mediator.Send(new GetPayeSchemeInUseQuery { Empref = empRef });
 
         return schemeCheck.PayeScheme != null;
     }
 
     private async Task SavePayeDetails(string aorn, string payeRef)
     {
-        await _mediatr.Send(new SavePayeRefData(new EmployerAccountPayeRefData
+        await _mediator.Send(new SavePayeRefData(new EmployerAccountPayeRefData
         {
             PayeReference = payeRef,
             AORN = aorn
@@ -251,7 +251,7 @@ public class SearchPensionRegulatorController : BaseController
     {
         if (viewModel?.Name != null)
         {
-            await _mediatr
+            await _mediator
                 .Send(new SaveOrganisationData
                 (
                     new EmployerAccountOrganisationData
@@ -272,7 +272,7 @@ public class SearchPensionRegulatorController : BaseController
     {
         if (viewModel?.Name != null)
         {
-            await _mediatr
+            await _mediator
                 .Send(new SaveOrganisationAndPayeData
                 (
                     new EmployerAccountOrganisationData

@@ -211,7 +211,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
                 //TODO: Delete this?
                 ShowAcademicYearBanner = _currentDateTime.Now < new DateTime(2017, 10, 20),
                 Tasks = tasks,
-                RequiresAgreementSigning = pendingAgreements.Count(),
+                RequiresAgreementSigning = pendingAgreements.Count,
                 SignedAgreementCount = agreementsResponse.EmployerAgreements.Count(x => x.HasSignedAgreement),
                 PendingAgreements = pendingAgreements,
                 ApprenticeshipEmployerType = apprenticeshipEmployerType,
@@ -290,6 +290,13 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
     public Task<OrchestratorResponse<TeamMember>> GetActiveTeamMember(long accountId, string email, string externalUserId)
     {
         return GetTeamMember(accountId, email, externalUserId, true);
+    }
+
+    public virtual Task<OrchestratorResponse<TeamMember>> GetTeamMemberWhetherActiveOrNot(string hashedAccountId, string email, string externalUserId)
+    {
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+     
+        return GetTeamMemberWhetherActiveOrNot(accountId, email, externalUserId);
     }
 
     public Task<OrchestratorResponse<TeamMember>> GetTeamMemberWhetherActiveOrNot(long accountId, string email, string externalUserId)
@@ -603,12 +610,6 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
         }
     }
 
-    public virtual Task<OrchestratorResponse<TeamMember>> GetTeamMemberWhetherActiveOrNot(string hashedAccountId, string email, string externalUserId)
-    {
-        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
-        return GetTeamMemberWhetherActiveOrNot(accountId, email, externalUserId);
-    }
-
     public void GetCallToActionViewName(PanelViewModel<AccountDashboardViewModel> viewModel)
     {
         var rules = new Dictionary<int, EvaluateCallToActionRuleDelegate>
@@ -739,7 +740,7 @@ public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
 
     private static bool EvaluateSignAgreementCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
     {
-        if (viewModel.Data.PendingAgreements?.Count() > 0)
+        if (viewModel.Data.PendingAgreements?.Count > 0)
         {
             viewModel.ComponentName = ComponentConstants.SignAgreement;
             return true;

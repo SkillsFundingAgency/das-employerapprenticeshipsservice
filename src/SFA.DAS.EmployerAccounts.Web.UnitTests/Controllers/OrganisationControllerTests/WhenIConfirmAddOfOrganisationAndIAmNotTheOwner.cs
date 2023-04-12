@@ -29,9 +29,9 @@ public class WhenIConfirmAddOfOrganisationAndIAmNotTheOwner : ControllerTestBase
     }
 
     [Test]
-    public async Task ThenIAmRedirectedToAccessDenied()
+    public void ThenIAmRedirectedToAccessDenied()
     {
-        //Act & Asert
+        //Act & Assert
         Assert.ThrowsAsync<UnauthorizedAccessException>(async () =>
             await _controller.Confirm("", "", "", "", null, "", OrganisationType.Other, 1, null, false));
     }

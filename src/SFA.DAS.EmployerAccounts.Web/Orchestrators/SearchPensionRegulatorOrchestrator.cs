@@ -43,7 +43,7 @@ public class SearchPensionRegulatorOrchestrator : UserVerificationOrchestratorBa
 
     public virtual async Task<OrchestratorResponse<SearchPensionRegulatorResultsViewModel>> GetOrganisationsByAorn(string aorn, string payeRef)
     {
-        var response = new OrchestratorResponse<SearchPensionRegulatorResultsViewModel>() { Data = new SearchPensionRegulatorResultsViewModel { Aorn = aorn, PayeRef = payeRef } };
+        var response = new OrchestratorResponse<SearchPensionRegulatorResultsViewModel> { Data = new SearchPensionRegulatorResultsViewModel { Aorn = aorn, PayeRef = payeRef } };
 
         try
         {

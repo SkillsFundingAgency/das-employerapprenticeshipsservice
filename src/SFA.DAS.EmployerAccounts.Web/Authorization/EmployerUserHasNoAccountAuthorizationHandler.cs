@@ -14,13 +14,11 @@ public class EmployerUsersIsOutsideAccountAuthorizationHandler : AuthorizationHa
 
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, EmployerAccountAllRolesRequirement requirement)
     {
-        if (!(await _handler.IsOutsideAccount(context)))
+        if (!await _handler.IsOutsideAccount(context))
         {
             return;
         }
 
         context.Succeed(requirement);
-
-        return;
     }
 }

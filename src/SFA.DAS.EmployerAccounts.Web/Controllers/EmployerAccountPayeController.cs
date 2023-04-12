@@ -147,8 +147,6 @@ public class EmployerAccountPayeController : BaseController
             return View(result);
         }
 
-        var payeSchemeName = string.IsNullOrEmpty(model.PayeName) ? "this PAYE scheme" : model.PayeName;
-
         var flashMessage = new FlashMessageViewModel
         {
             Severity = FlashMessageSeverityLevel.Success,

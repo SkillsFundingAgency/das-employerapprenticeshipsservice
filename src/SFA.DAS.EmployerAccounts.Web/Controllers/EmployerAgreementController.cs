@@ -1,7 +1,5 @@
 ﻿using System.Security.Claims;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.Employer.Shared.UI;
 using SFA.DAS.Employer.Shared.UI.Attributes;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
@@ -17,7 +15,6 @@ public class EmployerAgreementController : BaseController
     private const int InvitationComplete = 4;
     private readonly EmployerAgreementOrchestrator _orchestrator;
     private readonly IMediator _mediator;
-    private readonly IMapper _mapper;
     private readonly IUrlActionHelper _urlActionHelper;
     private const int ViewAgreementNow = 1;
     private const int ViewAgreementLater = 2;
@@ -26,13 +23,11 @@ public class EmployerAgreementController : BaseController
         EmployerAgreementOrchestrator orchestrator,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
         IMediator mediator,
-        IMapper mapper,
         IUrlActionHelper urlActionHelper)
         : base( flashMessage)
     {
         _orchestrator = orchestrator;
         _mediator = mediator;
-        _mapper = mapper;
         _urlActionHelper = urlActionHelper;
     }
 

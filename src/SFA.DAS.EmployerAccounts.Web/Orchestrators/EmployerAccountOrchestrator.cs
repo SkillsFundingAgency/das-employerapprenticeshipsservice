@@ -13,7 +13,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
 {
     private readonly IMediator _mediator;
     private readonly ILogger<EmployerAccountOrchestrator> _logger;
-    private IEncodingService _encodingService;
+    private readonly IEncodingService _encodingService;
     private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
     //Needed for tests

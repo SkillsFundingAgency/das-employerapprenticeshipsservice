@@ -14,7 +14,7 @@ public class WhenIComeInFromSaveAndSearch : ControllerTestBase
     private const string ExpectedFirstName = "Test";
     private const string ExpectedLastName = "tester";
     private const string ExpectedReturnUrl = "campaign page";
-    private string _expectedCorrelationId;
+    private readonly string _expectedCorrelationId = null;
     private IActionResult _actualResult;
 
     [SetUp]

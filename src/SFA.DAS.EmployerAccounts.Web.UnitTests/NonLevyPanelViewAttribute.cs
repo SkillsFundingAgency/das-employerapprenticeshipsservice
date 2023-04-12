@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests
 
             if (parameter.ParameterType != typeof(PanelViewModel<AccountDashboardViewModel>))
             {
-                throw new ArgumentException(nameof(parameter));
+                throw new ArgumentException("Parameter.ParameterType is not the correct type.", nameof(parameter));
             }
 
             return new ArrangeNonLevyPanelViewCustomisation();

@@ -1,6 +1,5 @@
 ﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels;
 
-[Obsolete]
 public class ViewModelBase
 {
     public string PublicHashedAccountId { get; set; }

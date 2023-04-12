@@ -4,7 +4,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountPaye
 
 public class WhenIRemoveAPayeScheme : ControllerTestBase
 {
-    private Mock<Web.Orchestrators.EmployerAccountPayeOrchestrator> _employerAccountPayeOrchestrator;
+    private Mock<EmployerAccountPayeOrchestrator> _employerAccountPayeOrchestrator;
     private EmployerAccountPayeController _controller;
     private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
 

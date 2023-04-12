@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using AutoMapper;
 using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -24,8 +23,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
     private Mock<EmployerAgreementOrchestrator> _orchestratorMock;
     private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
     private Mock<IMediator> _mediator;
-    private Mock<IMapper> _mapper;
-
+    
     private const string HashedAccountLegalEntityId = "AYT887";
     private const string HashedAccountId = "ABC167";
     private const string UserId = "UserNumeroUno";
@@ -37,7 +35,6 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
         _orchestratorMock = new Mock<EmployerAgreementOrchestrator>();
         _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
         _mediator = new Mock<IMediator>();
-        _mapper = new Mock<IMapper>();
 
         var httpRequestMock = new Mock<HttpRequest>();
         var httpContextMock = new Mock<HttpContext>();
@@ -58,7 +55,6 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
             _orchestratorMock.Object,
             _flashMessage.Object,
             _mediator.Object,
-            _mapper.Object,
             Mock.Of<IUrlActionHelper>());
 
         _controller.ControllerContext = new ControllerContext { HttpContext = httpContextMock.Object };
@@ -294,15 +290,13 @@ public class EmployerAgreementControllerTestFixtures : FluentTest<EmployerAgreem
     public Mock<EmployerAgreementOrchestrator> Orchestrator;
     public Mock<ICookieStorageService<FlashMessageViewModel>> FlashMessage;
     public Mock<IMediator> Mediator;
-    public Mock<IMapper> Mapper;
 
     public EmployerAgreementControllerTestFixtures()
     {
         Orchestrator = new Mock<EmployerAgreementOrchestrator>();
         FlashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
         Mediator = new Mock<IMediator>();
-        Mapper = new Mock<IMapper>();
-
+        
         GetAgreementRequest = new GetEmployerAgreementRequest
         {
             ExternalUserId = UserId,
@@ -350,12 +344,6 @@ public class EmployerAgreementControllerTestFixtures : FluentTest<EmployerAgreem
         Mediator.Setup(x => x.Send(It.IsAny<GetAccountLegalEntitiesCountByHashedAccountIdRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(entitiesCountResponse);
 
-        Mapper.Setup(x => x.Map<GetEmployerAgreementResponse, EmployerAgreementViewModel>(agreementResponse))
-            .Returns(GetAgreementToSignViewModel);
-
-        Mapper.Setup(x => x.Map<GetEmployerAgreementResponse, SignEmployerAgreementViewModel>(agreementResponse))
-            .Returns(GetSignAgreementViewModel);
-
         Orchestrator.Setup(x => x.GetById(HashedAgreementId, HashedAccountId, UserId))
             .ReturnsAsync(new OrchestratorResponse<EmployerAgreementViewModel> { Data = GetAgreementToSignViewModel });
 
@@ -394,7 +382,6 @@ public class EmployerAgreementControllerTestFixtures : FluentTest<EmployerAgreem
             Orchestrator.Object,
             FlashMessage.Object,
             Mediator.Object,
-            Mapper.Object,
             Mock.Of<IUrlActionHelper>());
 
         controller.ControllerContext = new ControllerContext { HttpContext = httpContextMock.Object };

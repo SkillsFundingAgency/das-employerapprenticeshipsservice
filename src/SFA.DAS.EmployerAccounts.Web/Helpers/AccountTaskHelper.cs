@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerAccounts.Web.Helpers;
 
-public class AccountTaskHelper
+public static class AccountTaskHelper
 {
     public static int GetTaskPriority(AccountTask task)
     {

@@ -46,7 +46,7 @@ public class ReportController : BaseController
                         invitation.Result.ProviderUserFullName,
                         invitation.Result.SentDate
                     )
-                ); ;
+                );
             }
         }
 

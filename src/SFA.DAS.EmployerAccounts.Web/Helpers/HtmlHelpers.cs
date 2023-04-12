@@ -10,12 +10,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers;
 
 public interface IHtmlHelpers
 {
-    HtmlString CdnLink(string folderName, string fileName);
     bool IsSupportUser();
-    string GetZenDeskSnippetKey();
-    string GetZenDeskSnippetSectionId();
-    string GetZenDeskCobrowsingSnippetKey();
-    //ICookieBannerViewModel GetCookieBannerViewModel(IHtmlHelper html);
     HtmlString GetContentByType(string type, bool useLegacyStyles = false);
     bool ViewExists(IHtmlHelper html, string viewName);
     string ReturnToHomePageButtonHref(string accountId);
@@ -48,14 +43,6 @@ public class HtmlHelpers : IHtmlHelpers
         _compositeViewEngine = compositeViewEngine;
     }
 
-    public HtmlString CdnLink(string folderName, string fileName)
-    {
-        var cdnLocation = _configuration.CdnBaseUrl;
-
-        var trimCharacters = new char[] { '/' };
-        return new HtmlString($"{cdnLocation.Trim(trimCharacters)}/{folderName.Trim(trimCharacters)}/{fileName.Trim(trimCharacters)}");
-    }
-
     public bool IsSupportUser()
     {
         var requiredRoles = _configuration.SupportConsoleUsers.Split(',');
@@ -86,35 +73,6 @@ public class HtmlHelpers : IHtmlHelpers
         return input.Replace("'", @"\'");
     }
 
-    public string GetZenDeskSnippetKey()
-    {
-        return _configuration.ZenDeskSnippetKey;
-    }
-
-    public string GetZenDeskSnippetSectionId()
-    {
-        return _configuration.ZenDeskSectionId;
-    }
-
-    public string GetZenDeskCobrowsingSnippetKey()
-    {
-        return _configuration.ZenDeskCobrowsingSnippetKey;
-    }
-
-    //public ICookieBannerViewModel GetCookieBannerViewModel(IHtmlHelper html)
-    //{
-    //    return new CookieBannerViewModel(new CookieBannerConfiguration
-    //    {
-    //        ManageApprenticeshipsBaseUrl = _configuration.EmployerAccountsBaseUrl
-    //    },
-    //        new UserContext
-    //        {
-    //            User = html.ViewContext.HttpContext.User,
-    //            HashedAccountId = html.ViewContext.RouteData.Values["accountHashedId"]?.ToString()
-    //        }
-    //    );
-    //}
-
     public HtmlString GetContentByType(string type, bool useLegacyStyles = false)
     {
         var userResponse = AsyncHelper.RunSync(() => _mediator.Send(new GetContentRequest
@@ -126,16 +84,6 @@ public class HtmlHelpers : IHtmlHelpers
         return new HtmlString(userResponse.Content);
     }
 
-    //public AuthorizationResult GetAuthorizationResult(string featureType)
-    //{
-    //    return _authorisationService.GetAuthorizationResult(featureType);
-    //}
-
-    //public bool IsAuthorized(string featureType)
-    //{
-    //    return _authorisationService.IsAuthorized(featureType);
-    //}
-    
     private string GetHashedAccountId(string accountId, out bool isConsoleUser, out bool isAccountIdSet)
     {
         isConsoleUser = IsSupportConsoleUser();

@@ -10,5 +10,5 @@ public static class Constants
 
     public const string ScopeClaimType = "http://schemas.microsoft.com/identity/claims/scope";
 
-    public const int RegexTimeoutMilliseconds = 100;
+    public const int RegexTimeoutMilliseconds = 250;
 }

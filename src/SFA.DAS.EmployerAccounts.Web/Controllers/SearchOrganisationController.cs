@@ -16,7 +16,7 @@ public class SearchOrganisationController : BaseController
 {
     private readonly SearchOrganisationOrchestrator _orchestrator;
     //This is temporary until the existing add org function is replaced, at which point the method used can be moved to the org search orchestrator
-    private IMediator _mediator;
+    private readonly IMediator _mediator;
     
 
     public SearchOrganisationController(

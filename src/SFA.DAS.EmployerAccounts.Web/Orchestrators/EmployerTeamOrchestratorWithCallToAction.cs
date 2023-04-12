@@ -45,14 +45,11 @@ public class EmployerTeamOrchestratorWithCallToAction : EmployerTeamOrchestrator
     {
         var accountResponseTask = _employerTeamOrchestrator.GetAccount(hashedAccountId, externalUserId);
 
-        if (TryGetAccountContext(hashedAccountId, out AccountContext accountContext))
+        if (TryGetAccountContext(hashedAccountId, out var accountContext) && accountContext.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
         {
-            if (accountContext.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
-            {
-                var levyResponse = await accountResponseTask;
-                SaveContext(levyResponse);
-                return levyResponse;
-            }
+            var levyResponse = await accountResponseTask;
+            SaveContext(levyResponse);
+            return levyResponse;
         }
 
         // here we are either non levy or unknown caller context
@@ -93,13 +90,10 @@ public class EmployerTeamOrchestratorWithCallToAction : EmployerTeamOrchestrator
 
     private bool TryGetAccountContext(string hashedAccountId, out AccountContext accountContext)
     {
-        if (_accountContext.Get(AccountContextCookieName) is AccountContext accountCookie)
+        if (_accountContext.Get(AccountContextCookieName) is AccountContext accountCookie && accountCookie.HashedAccountId.Equals(hashedAccountId, StringComparison.InvariantCultureIgnoreCase))
         {
-            if (accountCookie.HashedAccountId.Equals(hashedAccountId, StringComparison.InvariantCultureIgnoreCase))
-            {
-                accountContext = accountCookie;
-                return true;
-            }
+            accountContext = accountCookie;
+            return true;
         }
 
         accountContext = null;

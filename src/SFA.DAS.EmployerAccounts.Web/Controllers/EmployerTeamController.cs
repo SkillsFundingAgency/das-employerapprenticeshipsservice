@@ -63,7 +63,7 @@ public class EmployerTeamController : BaseController
 
     [HttpGet]
     [Route("AddedProvider/{providerName}")]
-    public async Task<IActionResult> AddedProvider(string providerName)
+    public IActionResult AddedProvider(string providerName)
     {
         AddFlashMessageToCookie(new FlashMessageViewModel
         {
@@ -280,7 +280,8 @@ public class EmployerTeamController : BaseController
             ViewData.ModelState.AddModelError("Choice", "You must select an option to continue.");
             return View();
         }
-        else if (requiresAdvert.Value == true)
+
+        if (requiresAdvert.Value)
         {
             return Redirect(_urlActionHelper.EmployerRecruitAction());
         }

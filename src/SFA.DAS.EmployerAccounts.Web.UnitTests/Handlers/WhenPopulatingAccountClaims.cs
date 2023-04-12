@@ -83,14 +83,14 @@ public class WhenPopulatingAccountClaims
         actual.FirstOrDefault(c => c.Type.Equals(EmployerClaims.IdamsUserDisplayNameClaimTypeIdentifier)).Should().BeNull();
     }
 
-    private TokenValidatedContext ArrangeTokenValidatedContext(string nameIdentifier, string idamsIdentifier, string emailAddress)
+    private static TokenValidatedContext ArrangeTokenValidatedContext(string nameIdentifier, string idamsIdentifier, string emailAddress)
     {
         var identity = new ClaimsIdentity(new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, nameIdentifier),
-            new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, idamsIdentifier),
-            new Claim(ClaimTypes.Email, emailAddress),
-            new Claim(EmployerClaims.IdamsUserEmailClaimTypeIdentifier, emailAddress)
+            new(ClaimTypes.NameIdentifier, nameIdentifier),
+            new(EmployerClaims.IdamsUserIdClaimTypeIdentifier, idamsIdentifier),
+            new(ClaimTypes.Email, emailAddress),
+            new(EmployerClaims.IdamsUserEmailClaimTypeIdentifier, emailAddress)
         });
 
         var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(identity));

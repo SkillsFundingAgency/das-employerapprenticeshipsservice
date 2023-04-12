@@ -65,7 +65,7 @@ public class SearchOrganisationOrchestrator : UserVerificationOrchestratorBase, 
         _cookieService.Create(data, CookieName, 365);
     }
 
-    private PagedResponse<OrganisationDetailsViewModel> CreateResult(PagedResponse<OrganisationName> organisations)
+    private static PagedResponse<OrganisationDetailsViewModel> CreateResult(PagedResponse<OrganisationName> organisations)
     {
         return new PagedResponse<OrganisationDetailsViewModel>
         {
