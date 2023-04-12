@@ -71,7 +71,7 @@ public class EmployerAgreementController : BaseController
     public async Task<IActionResult> View(string hashedAgreementId, string hashedAccountId)
     {
         var agreement = await _orchestrator.GetSignedAgreementViewModel(hashedAccountId, hashedAgreementId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
-        return View(agreement);
+        return View(agreement.Data);
     }
 
     [HttpGet]
