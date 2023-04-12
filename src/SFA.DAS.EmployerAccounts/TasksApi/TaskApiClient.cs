@@ -9,7 +9,7 @@ namespace SFA.DAS.EmployerAccounts.TasksApi;
 
 public interface ITaskApiClient
 {
-    Task<IEnumerable<TaskDto>> GetTasks(string employerAccountId, string userid, ApprenticeshipEmployerType applicableToApprenticeshipEmployerType);
+    Task<IEnumerable<TaskDto>> GetTasks(string employerAccountId, string userId, ApprenticeshipEmployerType applicableToApprenticeshipEmployerType);
 
     Task AddUserReminderSupression(string employerAccountId, string userId, string taskType);
 }

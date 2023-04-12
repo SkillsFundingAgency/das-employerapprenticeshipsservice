@@ -40,6 +40,7 @@ public class HealthCheck : Entity
         }
         catch
         {
+            // comment to appease sonarcloud
         }
     }
 

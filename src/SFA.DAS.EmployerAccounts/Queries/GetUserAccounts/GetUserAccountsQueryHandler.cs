@@ -17,7 +17,7 @@ public class GetUserAccountsQueryHandler : IRequestHandler<GetUserAccountsQuery,
     {
         //TODO add validator.
         var userRef = message.UserRef;
-        var accounts = new Accounts<Account>();
+        Accounts<Account> accounts;
 
         if (!string.IsNullOrEmpty(userRef))
         {

@@ -150,8 +150,6 @@ public class ReferenceDataService : IReferenceDataService
             outputList.Add(item);
         }
 
-
-
         return outputList;
     }
 
@@ -161,7 +159,7 @@ public class ReferenceDataService : IReferenceDataService
     /// <param name="rawOrganisations">The list of matching organisations</param>
     /// <param name="searchTerm">The search term used</param>
     /// <param name="outputList">The output list</param>
-    private void AddOrganisationsLooselyMatchingSearchByPosition(IEnumerable<OrganisationName> rawOrganisations, string searchTerm, List<OrganisationName> outputList)
+    private static void AddOrganisationsLooselyMatchingSearchByPosition(IEnumerable<OrganisationName> rawOrganisations, string searchTerm, List<OrganisationName> outputList)
     {
         var priorityRegEx = $"({searchTerm})";
 

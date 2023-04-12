@@ -77,7 +77,7 @@ public class UserAccountRepository :  IUserAccountRepository
         return new Accounts<Account>
         {
             AccountList = accountList,
-            AccountsCount = accountList.Count()
+            AccountsCount = accountList.Count
         };
     }
 

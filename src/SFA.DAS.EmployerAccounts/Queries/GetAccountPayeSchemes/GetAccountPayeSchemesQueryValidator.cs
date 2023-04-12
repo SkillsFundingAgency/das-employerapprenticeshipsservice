@@ -7,7 +7,7 @@ public class GetAccountPayeSchemesQueryValidator : IValidator<GetAccountPayeSche
         throw new System.NotImplementedException();
     }
 
-    public async Task<ValidationResult> ValidateAsync(GetAccountPayeSchemesQuery query)
+    public Task<ValidationResult> ValidateAsync(GetAccountPayeSchemesQuery query)
     {
         var validationResult = new ValidationResult();
 
@@ -16,6 +16,6 @@ public class GetAccountPayeSchemesQueryValidator : IValidator<GetAccountPayeSche
             validationResult.ValidationDictionary.Add(nameof(query.AccountId), "Account ID has not been supplied");
         }
 
-        return validationResult;
+        return Task.FromResult(validationResult);
     }
 }

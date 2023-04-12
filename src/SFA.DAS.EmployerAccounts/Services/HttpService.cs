@@ -35,12 +35,9 @@ public class HttpService : IHttpService
 
             var response = await client.GetAsync(url);
 
-            if (responseChecker != null)
+            if (responseChecker != null && !responseChecker(response))
             {
-                if (!responseChecker(response))
-                {
-                    return null;
-                }
+                return null;
             }
 
             response.EnsureSuccessStatusCode();
@@ -58,7 +55,7 @@ public class HttpService : IHttpService
         return accessToken;
     }
 
-    private async Task<string> GetClientCredentialAuthenticationResult(string clientId, string clientSecret, string resource, string tenant)
+    private static async Task<string> GetClientCredentialAuthenticationResult(string clientId, string clientSecret, string resource, string tenant)
     {
         var authority = $"https://login.microsoftonline.com/{tenant}";
         var clientCredential = new ClientCredential(clientId, clientSecret);
@@ -67,13 +64,13 @@ public class HttpService : IHttpService
         return result.AccessToken;
     }
 
-    private async Task<string> GetManagedIdentityAuthenticationResult(string resource)
+    private static async Task<string> GetManagedIdentityAuthenticationResult(string resource)
     {
         var azureServiceTokenProvider = new AzureServiceTokenProvider();
         return await azureServiceTokenProvider.GetAccessTokenAsync(resource);
     }
 
-    private bool IsClientCredentialConfiguration(string clientId, string clientSecret, string tenant)
+    private static bool IsClientCredentialConfiguration(string clientId, string clientSecret, string tenant)
     {
         return !string.IsNullOrEmpty(clientId) && !string.IsNullOrEmpty(clientSecret) && !string.IsNullOrEmpty(tenant);
     }

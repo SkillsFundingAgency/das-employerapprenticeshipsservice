@@ -19,9 +19,9 @@ public class EmployerAccountRepository : IEmployerAccountRepository
         _db = db;
     }
 
-    public Task<Account> GetAccountById(long id)
+    public Task<Account> GetAccountById(long accountId)
     {
-        return _db.Value.Accounts.SingleOrDefaultAsync(a => a.Id == id);
+        return _db.Value.Accounts.SingleOrDefaultAsync(a => a.Id == accountId);
     }
 
     public async Task<Accounts<Account>> GetAccounts(string toDate, int pageNumber, int pageSize)
