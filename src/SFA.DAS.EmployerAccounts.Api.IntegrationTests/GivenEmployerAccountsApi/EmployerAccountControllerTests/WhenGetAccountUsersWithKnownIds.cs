@@ -11,13 +11,12 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.GivenEmployerAccountsApi
 [TestFixture]
 public class WhenGetAccountUsersWithKnownIds : GivenEmployerAccountsApi
 {
-
     private Guid _userRef;
 
     [SetUp]
     public async Task SetUp()
     {
-        string hashedAccountId = null;
+        string? hashedAccountId = null;
         _userRef = Guid.Empty;
 
         await InitialiseEmployerAccountData(async builder =>

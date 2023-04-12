@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -40,7 +39,7 @@ public class UserController : ControllerBase
             await _mediator.Send(command);
             return Ok();
         }
-        catch (Exception e)
+        catch
         {
             return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
         }

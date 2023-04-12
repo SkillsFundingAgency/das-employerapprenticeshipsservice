@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerAccounts.Api.Authorization;
 
-public class ApiRoles
+public static class ApiRoles
 {
     public const string ReadAllEmployerAccountBalances = "ReadAllEmployerAccountBalances";
     public const string ReadAllAccountUsers = "ReadAllAccountUsers";

@@ -5,7 +5,6 @@ using SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
 using SFA.DAS.EmployerAccounts.Jobs.ServiceRegistrations;
 using SFA.DAS.EmployerAccounts.Jobs.StartupJobs;
 using SFA.DAS.EmployerAccounts.ReadStore.ServiceRegistrations;
-using SFA.DAS.EmployerAccounts.ServiceRegistration;
 using SFA.DAS.UnitOfWork.DependencyResolution.Microsoft;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.Extensions;
@@ -65,7 +64,7 @@ public static class HostExtensions
                 services.AddUnitOfWork();
 #pragma warning disable 618
                 services.AddSingleton<IWebHookProvider>(p => null);
-#pragma warning restore 618}
+#pragma warning restore 618
                 services.AddEmployerFinanceDbContext();
                 services.AddNServiceBus();
                 services.BuildServiceProvider();

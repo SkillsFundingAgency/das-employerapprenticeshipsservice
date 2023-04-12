@@ -120,7 +120,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
             }
         }
 
-        private PayeScheme ConvertToPayeScheme(string hashedAccountId, GetPayeSchemeByRefResponse payeSchemeResult)
+        private static PayeScheme ConvertToPayeScheme(string hashedAccountId, GetPayeSchemeByRefResponse payeSchemeResult)
         {
             return new PayeScheme
             {

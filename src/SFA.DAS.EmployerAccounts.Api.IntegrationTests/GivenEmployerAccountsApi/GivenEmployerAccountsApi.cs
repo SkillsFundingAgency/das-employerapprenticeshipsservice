@@ -17,10 +17,8 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.GivenEmployerAccountsApi
     public abstract class GivenEmployerAccountsApi
     {
         private readonly WebApplicationFactory<Program> _factory;
-        protected HttpResponseMessage Response;
-
+        protected HttpResponseMessage? Response;
         
-
         protected GivenEmployerAccountsApi()
         {
             _factory = new WebApplicationFactory<Program>()

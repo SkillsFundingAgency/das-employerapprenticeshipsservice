@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
         private const string ServiceName = "SFA.DAS.EmployerAccounts";
 
         private readonly IServiceProvider _serviceProvider;
-        private readonly IEncodingService _encodingService;
+        private readonly IEncodingService? _encodingService;
         private readonly EmployerAccountsDbContext _dbContext;
         private readonly Lazy<IAccountRepository> _lazyAccountRepository;
         private readonly Lazy<IUserRepository> _lazyUserRepository;
@@ -40,13 +40,13 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
             optionsBuilder.UseSqlServer(sqlConnection);
             _dbContext = new EmployerAccountsDbContext(optionsBuilder.Options);
 
-            _lazyAccountRepository = new  Lazy<IAccountRepository>(BuildAccountRepository);
+            _lazyAccountRepository = new Lazy<IAccountRepository>(BuildAccountRepository);
             _lazyUserRepository = new Lazy<IUserRepository>(BuildUserRepository);
         }
 
         private IUserRepository BuildUserRepository()
         {
-            return 
+            return
                 new UserRepository(
                     _configuration,
                     _serviceProvider.GetService<ILogger<UserRepository>>(),
@@ -97,32 +97,34 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
             return output;
         }
 
-        public async Task<EmployerAccountOutput> CreateAccountAsync(EmployerAccountInput input)
+        public async Task<EmployerAccountOutput?> CreateAccountAsync(EmployerAccountInput input)
         {
             var createResult = await _lazyAccountRepository.Value.CreateAccount(
-                new CreateAccountParams { 
-                UserId = input.UserId(),
-                EmployerNumber = input.OrganisationReferenceNumber,
-                EmployerName = input.OrganisationName,
-                EmployerRegisteredAddress = input.OrganisationRegisteredAddress,
-                EmployerDateOfIncorporation = input.OrganisationDateOfInception,
-                EmployerRef = input.PayeReference,
-                AccessToken = input.AccessToken,
-                RefreshToken = input.RefreshToken,
-                CompanyStatus = input.OrganisationStatus,
-                EmployerRefName = input.EmployerRefName,
-                Source = input.Source,
-                PublicSectorDataSource = input.PublicSectorDataSource,
-                Sector = input.Sector,
-                Aorn = input.Aorn,
-                AgreementType = input.AgreementType});
+                new CreateAccountParams
+                {
+                    UserId = input.UserId(),
+                    EmployerNumber = input.OrganisationReferenceNumber,
+                    EmployerName = input.OrganisationName,
+                    EmployerRegisteredAddress = input.OrganisationRegisteredAddress,
+                    EmployerDateOfIncorporation = input.OrganisationDateOfInception,
+                    EmployerRef = input.PayeReference,
+                    AccessToken = input.AccessToken,
+                    RefreshToken = input.RefreshToken,
+                    CompanyStatus = input.OrganisationStatus,
+                    EmployerRefName = input.EmployerRefName,
+                    Source = input.Source,
+                    PublicSectorDataSource = input.PublicSectorDataSource,
+                    Sector = input.Sector,
+                    Aorn = input.Aorn,
+                    AgreementType = input.AgreementType
+                });
 
             var output = new EmployerAccountOutput
             {
                 AccountId = createResult.AccountId,
                 HashedAccountId = _encodingService.Encode(createResult.AccountId, EncodingType.AccountId),
                 PublicHashedAccountId = _encodingService.Encode(createResult.AccountId, EncodingType.PublicAccountId),
-                LegalEntityId =  createResult.LegalEntityId
+                LegalEntityId = createResult.LegalEntityId
             };
 
             await _lazyAccountRepository.Value.UpdateAccountHashedIds(output.AccountId, output.HashedAccountId, output.PublicHashedAccountId);
@@ -181,7 +183,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
                 throw new InvalidOperationException("Cannot commit a transaction because a transaction has not been started");
             }
 
-            _dbContext.Database.CurrentTransaction.Commit();
+            _dbContext.Database.CurrentTransaction?.Commit();
         }
 
         public void RollbackTransaction()
@@ -191,14 +193,14 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
                 throw new InvalidOperationException("Cannot rollback a transaction because a transaction has not been started");
             }
 
-            _dbContext.Database.CurrentTransaction.Rollback();
+            _dbContext.Database.CurrentTransaction?.Rollback();
         }
 
         public void Dispose()
         {
             if (!HasTransaction) return;
 
-            _dbContext.Database.CurrentTransaction.Dispose();
+            _dbContext.Database.CurrentTransaction?.Dispose();
         }
     }
 }

@@ -94,7 +94,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
                     {
                         Data = new ConfirmOrganisationToRemoveViewModel
                         {
-                          CanBeRemoved = true  
+                            CanBeRemoved = true
                         },
                         Status = HttpStatusCode.OK
                     });
@@ -166,8 +166,8 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
         //Assert
         var result = response as RedirectToActionResult;
         Assert.IsNotNull(result);
-        Assert.AreEqual(result.ActionName, "AboutYourAgreement");
-        Assert.AreEqual(result.RouteValues["agreementId"], HashedAgreementId);
+        Assert.AreEqual("AboutYourAgreement", result.ActionName);
+        Assert.AreEqual(HashedAgreementId, result.RouteValues["agreementId"]);
     }
 
     [Test, MoqAutoData]
@@ -176,8 +176,8 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
         //Arrange
         _orchestratorMock
             .Setup(x => x.GetSignedAgreementViewModel(HashedAccountId, HashedAgreementId, UserId))
-            .ReturnsAsync(new OrchestratorResponse<SignEmployerAgreementViewModel> 
-            { 
+            .ReturnsAsync(new OrchestratorResponse<SignEmployerAgreementViewModel>
+            {
                 Data = viewModel
             });
 
@@ -234,8 +234,8 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
         var model = viewResult.Model as SignEmployerAgreementViewModel;
         var modelState = _controller.ModelState;
 
-        Assert.AreEqual(viewResult.ViewName, ControllerConstants.SignAgreementViewName);
-        Assert.AreEqual(viewModel, model);
+        Assert.AreEqual(ControllerConstants.SignAgreementViewName, viewResult.ViewName);
+        Assert.AreEqual(model, viewModel);
         Assert.IsTrue(modelState[nameof(model.Choice)].Errors.Count == 1);
     }
 
@@ -318,22 +318,12 @@ public class EmployerAgreementControllerTestFixtures : FluentTest<EmployerAgreem
         GetSignAgreementViewModel = new SignEmployerAgreementViewModel();
     }
 
-    public static class Constants
-    {
-        public const string HashedAccountId = "ABC123";
-        public const string UserId = "AFV456TGF";
-        public const string HashedAgreementId = "789UHY";
-        public const long AccountLegalEntityId = 1234;
-        public const string HashedAccountLegalEntityId = "THGHFH";
-        public const string LegalEntityName = "FIFTEEN LIMITED";
-    }
-
-    public string HashedAccountId => Constants.HashedAccountId;
-    public string UserId => Constants.UserId;
-    public string HashedAgreementId => Constants.HashedAgreementId;
-    public long AccountLegalEntityId => Constants.AccountLegalEntityId;
-    public string LegalEntityName => Constants.LegalEntityName;
-    public string HashedAccountLegalEntityId => Constants.HashedAccountLegalEntityId;
+    public string HashedAccountId => "ABC123";
+    public string UserId => "AFV456TGF";
+    public string HashedAgreementId => "789UHY";
+    public long AccountLegalEntityId => 1234;
+    public string LegalEntityName => "FIFTEEN LIMITED";
+    public string HashedAccountLegalEntityId => "THGHFH";
 
     public GetEmployerAgreementRequest GetAgreementRequest { get; }
 
@@ -394,7 +384,7 @@ public class EmployerAgreementControllerTestFixtures : FluentTest<EmployerAgreem
         httpRequestMock.Setup(x => x.Query).Returns(queryCollection);
         httpContextMock.Setup(x => x.Request).Returns(httpRequestMock.Object);
 
-        var identity = new ClaimsIdentity(new[] { new Claim("sub", isAuthenticatedUser ? Constants.UserId : string.Empty) });
+        var identity = new ClaimsIdentity(new[] { new Claim("sub", isAuthenticatedUser ? "AFV456TGF" : string.Empty) });
 
         var principal = new ClaimsPrincipal(identity);
 

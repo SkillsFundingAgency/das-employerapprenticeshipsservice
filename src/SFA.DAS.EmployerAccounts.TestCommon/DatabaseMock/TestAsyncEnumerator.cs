@@ -10,7 +10,7 @@ public class TestAsyncEnumerator<T> : IAsyncEnumerator<T>
 
     public TestAsyncEnumerator(IEnumerator<T> enumerator)
     {
-        _enumerator = enumerator ?? throw new ArgumentNullException();
+        _enumerator = enumerator ?? throw new ArgumentNullException(nameof(enumerator));
     }
 
     public T Current => _enumerator.Current;

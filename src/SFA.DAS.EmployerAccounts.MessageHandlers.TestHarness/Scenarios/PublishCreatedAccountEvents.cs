@@ -18,7 +18,6 @@ public class PublishCreatedAccountEvents
         var newEvent = new CreatedAccountEvent();
         _messageSession.Publish(newEvent);
 
-        // TODO: assert the document is updated
         return Task.CompletedTask;
     }
 }

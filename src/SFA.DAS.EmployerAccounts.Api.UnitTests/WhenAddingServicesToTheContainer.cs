@@ -37,7 +37,7 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(UsersOrchestrator))]
     public void Then_The_Dependencies_Are_Correctly_Resolved_For_Orchestrators(Type toResolve)
     {
-        var mockHostingEnvironment = new Mock<IHostingEnvironment>();
+        var mockHostingEnvironment = new Mock<IWebHostEnvironment>();
         mockHostingEnvironment.Setup(x => x.EnvironmentName).Returns("Test");
 
         var config = GenerateConfiguration();
@@ -72,7 +72,7 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IRequestHandler<RemovePayeFromAccountCommand, Unit>))]
     public void Then_The_Dependencies_Are_Correctly_Resolved_For_Handlers(Type toResolve)
     {
-        var mockHostingEnvironment = new Mock<IHostingEnvironment>();
+        var mockHostingEnvironment = new Mock<IWebHostEnvironment>();
         mockHostingEnvironment.Setup(x => x.EnvironmentName).Returns("Test");
 
         var config = GenerateConfiguration();
@@ -123,6 +123,6 @@ public class WhenAddingServicesToTheContainer
 
         var provider = new MemoryConfigurationProvider(configSource);
 
-        return new ConfigurationRoot(new List<Microsoft.Extensions.Configuration.IConfigurationProvider> { provider });
+        return new ConfigurationRoot(new List<IConfigurationProvider> { provider });
     }
 }

@@ -5,7 +5,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess.Dto
     public class EmployerAccountSetup
     {
         public EmployerAccountInput AccountInput { get; set; }
-        public EmployerAccountOutput AccountOutput { get; set; }
+        public EmployerAccountOutput? AccountOutput { get; set; }
         public List<LegalEntityWithAgreementSetup> LegalEntities { get; } = new List<LegalEntityWithAgreementSetup>();
     }
 }

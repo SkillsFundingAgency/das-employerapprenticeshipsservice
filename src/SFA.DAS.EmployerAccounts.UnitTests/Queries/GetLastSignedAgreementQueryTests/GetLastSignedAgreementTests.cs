@@ -9,7 +9,6 @@ using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Mappings;
 using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Queries.GetLastSignedAgreement;
 using SFA.DAS.EmployerAccounts.TestCommon;
 using SFA.DAS.Encoding;
@@ -24,9 +23,6 @@ class GetLastSignedAgreementTests : Testing.FluentTest<GetLastSignedAgreementTes
     [Test]
     public Task GetLastSignedAgreement_IfRequestIsNotValid_DoNotGetAgreement()
     {
-        User user = null;
-        EmployerAgreement signedAgreement = null;
-
         return TestExceptionAsync(
             arrange:fixtures => fixtures.WithInvalidRequest(),  
             act:fixtures => fixtures.Handle(AccountLegalEntityId),
@@ -37,8 +33,6 @@ class GetLastSignedAgreementTests : Testing.FluentTest<GetLastSignedAgreementTes
     public Task GetLastSignedAgreement_ShouldReturnLatestSignedAgreement()
     {
         EmployerAgreement latestSignedAgreement = null;
-        EmployerAgreement pendingAgreement = null;
-        User user = null;
 
         return TestAsync(
             arrange: fixtures => fixtures.WithSignedAgreement(123354, 2, AccountLegalEntityId, 1, DateTime.Now.AddDays(-30), out latestSignedAgreement),
@@ -100,7 +94,7 @@ internal class GetLastSignedAgreementTestFixtures : FluentTestFixture
         Response = await handler.Handle(request, CancellationToken.None);
     }
 
-    public GetLastSignedAgreementRequest BuildRequest(long accountLegalEntityId)
+    public static GetLastSignedAgreementRequest BuildRequest(long accountLegalEntityId)
     {
         var request = new GetLastSignedAgreementRequest
         {

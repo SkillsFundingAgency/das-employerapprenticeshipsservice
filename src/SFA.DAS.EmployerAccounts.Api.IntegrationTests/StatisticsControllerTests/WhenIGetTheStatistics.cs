@@ -9,7 +9,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.StatisticsControllerTest
 [TestFixture]
 public class WhenIGetTheStatistics : GivenEmployerAccountsApi.GivenEmployerAccountsApi
 {
-    private Statistics _expectedStatisticsViewModel;
+    private Statistics? _expectedStatisticsViewModel;
 
     [SetUp]
     public async Task SetUp()

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using NServiceBus;
 using SFA.DAS.EmployerAccounts.Messages.Events;

@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Orchestrators.AgreementOrchestr
             result.Should().BeEquivalentTo(_agreement, option => option.ExcludingMissingMembers());
         }
 
-        private IMapper ConfigureMapper()
+        private static IMapper ConfigureMapper()
         {
             var profiles = Assembly.Load("SFA.DAS.EmployerAccounts.Api")
                 .GetTypes()

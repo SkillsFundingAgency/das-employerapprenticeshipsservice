@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.Helpers;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.ModelBuilders;
@@ -12,7 +11,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.GivenEmployerAccountsApi
 [ExcludeFromCodeCoverage]
 public class WhenIGetASingleLegalEntityWithKnownIds : GivenEmployerAccountsApi
 {
-    private EmployerAccountOutput _employerAccount;
+    private EmployerAccountOutput? _employerAccount;
 
     [SetUp]
     public async Task Setup()
@@ -29,7 +28,7 @@ public class WhenIGetASingleLegalEntityWithKnownIds : GivenEmployerAccountsApi
             _employerAccount = data.CurrentAccount.AccountOutput;
         });
 
-        WhenControllerActionIsCalled($"https://localhost:44330/api/accounts/{_employerAccount.HashedAccountId}/legalentities");
+        WhenControllerActionIsCalled($"https://localhost:44330/api/accounts/{_employerAccount?.HashedAccountId}/legalentities");
     }
 
     [Test]

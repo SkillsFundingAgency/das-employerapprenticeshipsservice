@@ -76,7 +76,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
         /// Microsoft are working on making ResourceResponse mockable, but until then we can use this monstrosity...
         /// See https://github.com/Azure/azure-cosmos-dotnet-v2/issues/393
         /// </remarks>
-        public ResourceResponse<TResource> CreateResourceResponseWithStatusCode<TResource>(HttpStatusCode statusCode)
+        public static ResourceResponse<TResource> CreateResourceResponseWithStatusCode<TResource>(HttpStatusCode statusCode)
             where TResource : Resource, new()
         {
             const BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Instance;

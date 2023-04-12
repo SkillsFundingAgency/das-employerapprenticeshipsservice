@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using NLog.Extensions.Logging;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
@@ -71,7 +70,7 @@ public static class HostBuilderExtensions
                 .AddJsonFile("appsettings.json", true, true)
                 .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", true, true)
                 .AddEnvironmentVariables()
-                .AddCommandLine(args); ;
+                .AddCommandLine(args);
         });
     }
 }

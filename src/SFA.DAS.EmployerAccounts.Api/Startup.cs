@@ -89,7 +89,7 @@ public class Startup
 
                 opt.AddValidation();
 
-                opt.Filters.Add<StopwatchFilter>();
+                opt.Filters.Add<StopwatchFilterAttribute>();
             });
 
         services.AddApplicationInsightsTelemetry();
