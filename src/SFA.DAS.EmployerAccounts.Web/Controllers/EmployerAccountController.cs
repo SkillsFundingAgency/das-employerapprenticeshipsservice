@@ -182,7 +182,7 @@ public class EmployerAccountController : BaseController
     [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     [Route("{HashedAccountId}/getApprenticeshipFunding", Order = 0, Name = RouteNames.EmployerAccountPostApprenticeshipFundingInAccount)]
     [Route("getApprenticeshipFunding", Order = 1, Name = RouteNames.EmployerAccountPostApprenticeshipFunding)]
-    public IActionResult PostGetApprenticeshipFunding(int? choice)
+    public IActionResult GetApprenticeshipFunding(int? choice)
     {
         switch (choice ?? 0)
         {
