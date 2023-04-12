@@ -6,7 +6,7 @@ public class EmployerAgreementStatusDto
     public string HashedAccountId { get; set; }
     public AccountSpecificLegalEntityDto LegalEntity { get; set; }
     public SignedEmployerAgreementDetailsDto Signed { get; set; }
-    public PendingEmployerAgreementDetailsDto Pending { get; set; }
+    public EmployerAgreementDetailsDto Pending { get; set; }
     public bool HasPendingAgreement => Pending != null;
     public bool HasSignedAgreement => Signed!= null;
 }

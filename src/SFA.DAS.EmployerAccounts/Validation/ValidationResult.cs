@@ -20,14 +20,6 @@ public class ValidationResult
         ValidationDictionary.Add(propertyName, validationError);
     }
 
-    public List<string> ErrorList => ValidationDictionary.Select(c => c.Key + "|" + c.Value).ToList();
-    public bool FailedRuleValidation { get; set; }
-    public bool FailedAuthorisationValidation { get; set; }
-    public bool FailedGlobalRuleValidation { get; set; }
-    public bool FailedTransferReceiverCheck { get; set; }
-    public bool FailedAutoReservationCheck { get; set; }
-    public bool FailedAgreementSignedCheck { get ; set ; }
-
     public bool IsValid()
     {
         if (ValidationDictionary == null)

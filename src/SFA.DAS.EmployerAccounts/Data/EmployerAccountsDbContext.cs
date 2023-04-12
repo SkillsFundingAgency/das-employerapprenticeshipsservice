@@ -15,7 +15,6 @@ public class EmployerAccountsDbContext : DbContext, IEmployerAccountsDbContext
     private readonly EmployerAccountsConfiguration _configuration;
     private readonly AzureServiceTokenProvider _azureServiceTokenProvider;
 
-    private const string AzureResource = "https://database.windows.net/";
     private readonly IDbConnection _connection;
 
     public virtual DbSet<AccountLegalEntity> AccountLegalEntities { get; set; }

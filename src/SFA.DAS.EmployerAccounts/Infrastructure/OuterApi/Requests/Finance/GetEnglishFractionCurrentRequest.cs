@@ -14,7 +14,7 @@ public class GetEnglishFractionCurrentRequest : IGetApiRequest
         _hashedAccountId = hashedAccountId;
         _baseUri = new UriBuilder();
 
-        foreach (string empRef in empRefs)
+        foreach (var empRef in empRefs)
         {
             if (!string.IsNullOrEmpty(_baseUri.Query))
                 _baseUri.Query = _baseUri.Query.Substring(1) + $"&empRefs={empRef}";

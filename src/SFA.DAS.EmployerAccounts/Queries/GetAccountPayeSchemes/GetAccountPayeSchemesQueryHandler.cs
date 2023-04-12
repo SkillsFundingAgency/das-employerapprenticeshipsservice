@@ -5,11 +5,11 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
 public class GetAccountPayeSchemesQueryHandler : IRequestHandler<GetAccountPayeSchemesQuery, GetAccountPayeSchemesResponse>
 {
     private readonly IValidator<GetAccountPayeSchemesQuery> _validator;
-    private IPayeSchemesService _payeSchemesService;
+    private readonly IPayeSchemesService _payeSchemesService;
 
     public GetAccountPayeSchemesQueryHandler(
         IPayeSchemesService payeSchemesService,
-        IValidator<GetAccountPayeSchemesQuery> validator )
+        IValidator<GetAccountPayeSchemesQuery> validator)
     {
         _validator = validator;
         _payeSchemesService = payeSchemesService;
@@ -25,11 +25,10 @@ public class GetAccountPayeSchemesQueryHandler : IRequestHandler<GetAccountPayeS
         }
 
         var payeSchemes = await _payeSchemesService.GetPayeSchemes(message.AccountId);
-           
 
         return new GetAccountPayeSchemesResponse
         {
             PayeSchemes = payeSchemes.ToList()
-    };
+        };
     }
 }

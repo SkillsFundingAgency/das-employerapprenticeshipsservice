@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerAccounts.Infrastructure;
 
-public class RouteValues
+public static class RouteValues
 {
     public const string EmployerAccountId = "employerAccountId";
 

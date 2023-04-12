@@ -52,7 +52,6 @@ public class AgreementMappings : Profile
             .ForMember(
                 d => d.SignedByEmail, 
                 o => o.Ignore());
-        ;
 
         CreateMap<EmployerAgreement, EmployerAgreementDto>()
             .ForMember(

@@ -95,19 +95,19 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                          {
                              new EmployerAgreementStatusDto
                              {
-                                 Pending = new PendingEmployerAgreementDetailsDto { Id = 123 }
+                                 Pending = new EmployerAgreementDetailsDto { Id = 123 }
                              },
                              new EmployerAgreementStatusDto
                              {
-                                 Pending = new PendingEmployerAgreementDetailsDto { Id = 124 }
+                                 Pending = new EmployerAgreementDetailsDto { Id = 124 }
                              },
                              new EmployerAgreementStatusDto
                              {
-                                 Pending = new PendingEmployerAgreementDetailsDto { Id = 125 }
+                                 Pending = new EmployerAgreementDetailsDto { Id = 125 }
                              },
                              new EmployerAgreementStatusDto
                              {
-                                 Pending = new PendingEmployerAgreementDetailsDto { Id = 126 }
+                                 Pending = new EmployerAgreementDetailsDto { Id = 126 }
                              },
                              new EmployerAgreementStatusDto
                              {

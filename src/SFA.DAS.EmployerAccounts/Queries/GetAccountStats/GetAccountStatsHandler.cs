@@ -1,19 +1,16 @@
 ﻿using System.Threading;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
-using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountStats;
 
 public class GetAccountStatsHandler : IRequestHandler<GetAccountStatsQuery, GetAccountStatsResponse>
 {
     private readonly IEmployerAccountRepository _repository;
-    private readonly IEncodingService _encodingService;
     private readonly IValidator<GetAccountStatsQuery> _validator;
 
-    public GetAccountStatsHandler(IEmployerAccountRepository repository, IEncodingService encodingService, IValidator<GetAccountStatsQuery> validator)
+    public GetAccountStatsHandler(IEmployerAccountRepository repository, IValidator<GetAccountStatsQuery> validator)
     {
         _repository = repository;
-        _encodingService = encodingService;
         _validator = validator;
     }
 
