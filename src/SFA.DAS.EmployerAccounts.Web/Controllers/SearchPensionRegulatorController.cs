@@ -18,22 +18,24 @@ public class SearchPensionRegulatorController : BaseController
 {
     private readonly SearchPensionRegulatorOrchestrator _searchPensionRegulatorOrchestrator;
     private readonly IMediator _mediatr;
+    private readonly ICookieStorageService<HashedAccountIdModel> _accountCookieStorage;
+
     private const int OrgNotListed = 0;
-    private Regex _aornRegex = new("^[A-Z0-9]{13}$");
-    private Regex _payeRegex = new("^[0-9]{3}/?[A-Z0-9]{1,7}$");
-    private ICookieStorageService<HashedAccountIdModel> _accountCookieStorage;
+
+    private Regex _aornRegex = new("^[A-Z0-9]{13}$", RegexOptions.None, TimeSpan.FromMilliseconds(EmployerAccounts.Constants.RegexTimeoutMilliseconds));
+    private Regex _payeRegex = new("^[0-9]{3}/?[A-Z0-9]{1,7}$", RegexOptions.None, TimeSpan.FromMilliseconds(EmployerAccounts.Constants.RegexTimeoutMilliseconds));
 
     public SearchPensionRegulatorController(
-        SearchPensionRegulatorOrchestrator searchPensionRegulatorOrchestrator,
-        ICookieStorageService<FlashMessageViewModel> flashMessage,
-        IMediator mediatr,
-        ICookieStorageService<HashedAccountIdModel> accountCookieStorage)
-        : base(flashMessage)
+         SearchPensionRegulatorOrchestrator searchPensionRegulatorOrchestrator,
+         ICookieStorageService<FlashMessageViewModel> flashMessage,
+         IMediator mediatr,
+         ICookieStorageService<HashedAccountIdModel> accountCookieStorage)
+         : base(flashMessage)
     {
         _searchPensionRegulatorOrchestrator = searchPensionRegulatorOrchestrator;
         _mediatr = mediatr;
         _accountCookieStorage = accountCookieStorage;
-     }
+    }
 
     [Route("{HashedAccountId}/pensionregulator", Order = 0, Name = RouteNames.SearchPensionRegulatorAddOrganisation)]
     [Route("pensionregulator", Order = 1, Name = RouteNames.SearchPensionRegulatorCreateAccount)]
@@ -52,18 +54,18 @@ public class SearchPensionRegulatorController : BaseController
         switch (model.Data.Results.Count)
         {
             case 0:
-            {
-                return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
-            }
+                {
+                    return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
+                }
             case 1:
-            {
-                await SavePensionRegulatorOrganisationDataIfItHasAValidName(model.Data.Results.First(), true, false);
-                return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
-            }
+                {
+                    await SavePensionRegulatorOrganisationDataIfItHasAValidName(model.Data.Results.First(), true, false);
+                    return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
+                }
             default:
-            {
-                return View(ControllerConstants.SearchPensionRegulatorResultsViewName, model.Data);
-            }
+                {
+                    return View(ControllerConstants.SearchPensionRegulatorResultsViewName, model.Data);
+                }
         }
     }
 
@@ -162,37 +164,37 @@ public class SearchPensionRegulatorController : BaseController
         switch (model.Data.Results.Count)
         {
             case 0:
-            {
-                var aornLock = await _mediatr.Send(new GetUserAornLockRequest
                 {
-                    UserRef = userRef
-                });
+                    var aornLock = await _mediatr.Send(new GetUserAornLockRequest
+                    {
+                        UserRef = userRef
+                    });
 
-                viewModel.IsLocked = aornLock.UserAornStatus.IsLocked;
-                viewModel.RemainingAttempts = aornLock.UserAornStatus.RemainingAttempts;
-                viewModel.AllowedAttempts = aornLock.UserAornStatus.AllowedAttempts;
-                viewModel.RemainingLock = aornLock.UserAornStatus.RemainingLock;
+                    viewModel.IsLocked = aornLock.UserAornStatus.IsLocked;
+                    viewModel.RemainingAttempts = aornLock.UserAornStatus.RemainingAttempts;
+                    viewModel.AllowedAttempts = aornLock.UserAornStatus.AllowedAttempts;
+                    viewModel.RemainingLock = aornLock.UserAornStatus.RemainingLock;
 
-                return View(ControllerConstants.SearchUsingAornViewName, viewModel);
-            }
+                    return View(ControllerConstants.SearchUsingAornViewName, viewModel);
+                }
             case 1:
-            {
-                if (await CheckIfPayeSchemeAlreadyInUse(viewModel.PayeRef))
                 {
-                    return RedirectToAction(ControllerConstants.PayeErrorActionName, ControllerConstants.EmployerAccountControllerName, new { NotFound = false });
+                    if (await CheckIfPayeSchemeAlreadyInUse(viewModel.PayeRef))
+                    {
+                        return RedirectToAction(ControllerConstants.PayeErrorActionName, ControllerConstants.EmployerAccountControllerName, new { NotFound = false });
+                    }
+                    await SavePensionRegulatorDataIfItHasAValidName(model.Data.Results.First(), true, false, viewModel.Aorn, viewModel.PayeRef);
+                    return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
                 }
-                await SavePensionRegulatorDataIfItHasAValidName(model.Data.Results.First(), true, false, viewModel.Aorn, viewModel.PayeRef);
-                return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
-            }
             default:
-            {
-                if (await CheckIfPayeSchemeAlreadyInUse(viewModel.PayeRef))
                 {
-                    return RedirectToAction(ControllerConstants.PayeErrorActionName, ControllerConstants.EmployerAccountControllerName, new { NotFound = false });
+                    if (await CheckIfPayeSchemeAlreadyInUse(viewModel.PayeRef))
+                    {
+                        return RedirectToAction(ControllerConstants.PayeErrorActionName, ControllerConstants.EmployerAccountControllerName, new { NotFound = false });
+                    }
+                    await SavePayeDetails(viewModel.Aorn, viewModel.PayeRef);
+                    return View(ControllerConstants.SearchPensionRegulatorResultsViewName, model.Data);
                 }
-                await SavePayeDetails(viewModel.Aorn, viewModel.PayeRef);
-                return View(ControllerConstants.SearchPensionRegulatorResultsViewName, model.Data);
-            }
         }
     }
 
