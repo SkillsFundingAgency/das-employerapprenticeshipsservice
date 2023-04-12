@@ -1,4 +1,4 @@
-﻿using System.Net.Http;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
@@ -47,9 +47,13 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
 
         private static async Task<string> GetManagedIdentityAuthenticationResult(string resource)
         {
-            var credential = new DefaultAzureCredential();
-            var accessToken = await credential.GetTokenAsync(new TokenRequestContext(new[] { resource }));
-            return accessToken.Token;
+            var azureServiceTokenProvider = new ChainedTokenCredential(
+                new ManagedIdentityCredential(),
+                new AzureCliCredential(),
+                new VisualStudioCodeCredential(),
+                new VisualStudioCredential()
+                 );
+            return (await azureServiceTokenProvider.GetTokenAsync(new TokenRequestContext(scopes: new string[] { resource }))).Token;
         }
 
         private static bool IsClientCredentialConfiguration(string clientId, string clientSecret, string tenant)

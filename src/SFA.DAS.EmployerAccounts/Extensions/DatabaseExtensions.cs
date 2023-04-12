@@ -1,5 +1,6 @@
 ﻿using System.Data.Common;
-using Microsoft.Azure.Services.AppAuthentication;
+using Azure.Core;
+using Azure.Identity;
 using Microsoft.Data.SqlClient;
 
 namespace SFA.DAS.EmployerAccounts.Extensions;
@@ -23,12 +24,16 @@ public static class DatabaseExtensions
             return new SqlConnection(connectionString);
         }
 
-        var azureServiceTokenProvider = new AzureServiceTokenProvider();
+        var azureServiceTokenProvider = new ChainedTokenCredential(
+            new ManagedIdentityCredential(),
+            new AzureCliCredential(),
+            new VisualStudioCodeCredential(),
+            new VisualStudioCredential());
 
         return new SqlConnection
         {
             ConnectionString = connectionString,
-            AccessToken = azureServiceTokenProvider.GetAccessTokenAsync(AzureResource).Result
+            AccessToken = azureServiceTokenProvider.GetToken(new TokenRequestContext(scopes: new string[] { AzureResource })).Token
         };
     }
 }
