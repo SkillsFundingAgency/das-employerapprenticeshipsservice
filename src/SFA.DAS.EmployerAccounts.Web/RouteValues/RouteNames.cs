@@ -19,6 +19,7 @@
         public const string OrganisationGoToNextStep = "organisation-go-to-next-step";
         public const string AboutYourAgreement = "about-your-agreement";
         public const string EmployerAgreementSign = "sign";
+        public const string AgreementView = "agreement-view";
         public const string ProcessOrganisationReview = "process-organisation-review";
         public const string OrganisationPostUpdateSelection = "organisation-post-update-selection";
         
