@@ -76,12 +76,18 @@
                     <div class="govuk-grid-column-two-thirds">
                         <div class="govuk-grid-row">
                             <div class="govuk-grid-column-one-third">
-                                <a href="@UrlHelper.EmployerAccountsAction($"agreements/{Model.HashedAgreementId}/view")" aria-hidden="true">
+                                <a asp-route="@RouteNames.AgreementView" 
+                                   asp-route-hashedAccountId="@Model.HashedAccountId" 
+                                   asp-route-hashedAgreementId="@Model.HashedAgreementId" 
+                                   aria-hidden="true">
                                     <img src="/dist/images/pub-cover-html.png" alt="" />
                                 </a>
                             </div>
                             <div class="govuk-grid-column-two-thirds">
-                                <a href="@UrlHelper.EmployerAccountsAction($"agreements/{Model.HashedAgreementId}/view")" class="govuk-link">View your agreement</a>
+                                <a asp-route="@RouteNames.AgreementView"
+                                   asp-route-hashedAccountId="@Model.HashedAccountId"
+                                   asp-route-hashedAgreementId="@Model.HashedAgreementId" 
+                                   class="govuk-link">View your agreement</a>
                                 <p class="govuk-body">HTML</p>
                                 <p></p>
                             </div>

@@ -67,7 +67,7 @@ public class EmployerAgreementController : BaseController
     }
 
     [HttpGet]
-    [Route("agreements/{hashedAgreementId}/view")]
+    [Route("agreements/{hashedAgreementId}/view", Name = RouteNames.AgreementView)]
     public async Task<IActionResult> View(string hashedAgreementId, string hashedAccountId)
     {
         var agreement = await _orchestrator.GetSignedAgreementViewModel(hashedAccountId, hashedAgreementId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
