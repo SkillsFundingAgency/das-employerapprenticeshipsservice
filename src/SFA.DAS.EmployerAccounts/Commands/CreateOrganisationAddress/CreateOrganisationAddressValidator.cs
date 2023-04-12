@@ -39,8 +39,8 @@ public class CreateOrganisationAddressValidator : IValidator<CreateOrganisationA
             results.ValidationDictionary.Add(nameof(item.Postcode), "Enter a valid postcode");
 
         if (!results.ValidationDictionary.ContainsKey(nameof(item.Postcode)) &&
-            (!string.IsNullOrEmpty(item.Postcode) &&
-             !Regex.IsMatch(item.Postcode.ToUpper(), PostcodeRegExPattern)))
+            !string.IsNullOrEmpty(item.Postcode) &&
+            !Regex.IsMatch(item.Postcode.ToUpper(), PostcodeRegExPattern, RegexOptions.None, TimeSpan.FromMilliseconds(Constants.RegexTimeoutMilliseconds)))
             results.ValidationDictionary.Add(nameof(item.Postcode), "Enter a valid postcode");
 
         return results;

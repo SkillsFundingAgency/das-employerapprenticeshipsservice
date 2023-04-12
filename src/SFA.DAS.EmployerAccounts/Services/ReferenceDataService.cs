@@ -165,7 +165,7 @@ public class ReferenceDataService : IReferenceDataService
     {
         var priorityRegEx = $"({searchTerm})";
 
-        var rgx = new Regex(priorityRegEx, RegexOptions.IgnoreCase);
+        var rgx = new Regex(priorityRegEx, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(Constants.RegexTimeoutMilliseconds));
 
         var locationAwareMatches = FindLocationAwareMatches(rawOrganisations, rgx);
 
@@ -208,7 +208,7 @@ public class ReferenceDataService : IReferenceDataService
 
     private static void AddResultsMatchingRegEx(IEnumerable<OrganisationName> result, string priorityRegEx, List<OrganisationName> sortedList)
     {
-        var rgx = new Regex(priorityRegEx, RegexOptions.IgnoreCase);
+        var rgx = new Regex(priorityRegEx, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(EmployerAccounts.Constants.RegexTimeoutMilliseconds));
 
         var priorityItems = result.Where(o => rgx.Matches(o.Name).Count > 0);
         var outList = priorityItems.OrderBy(o => o.Name).ToList();
