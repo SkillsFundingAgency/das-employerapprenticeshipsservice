@@ -46,22 +46,12 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
 
         private IUserRepository BuildUserRepository()
         {
-            return
-                new UserRepository(
-                    _configuration,
-                    _serviceProvider.GetService<ILogger<UserRepository>>(),
-                    new Lazy<EmployerAccountsDbContext>(() => _dbContext)
-                    );
+            return new UserRepository(new Lazy<EmployerAccountsDbContext>(() => _dbContext));
         }
 
         private IAccountRepository BuildAccountRepository()
         {
-            return
-                new AccountRepository(
-                    _configuration,
-                    _serviceProvider.GetService<ILogger<AccountRepository>>(),
-                    new Lazy<EmployerAccountsDbContext>(() => _dbContext),
-                    _encodingService);
+            return new AccountRepository(new Lazy<EmployerAccountsDbContext>(() => _dbContext), _encodingService);
         }
 
         public bool HasTransaction => _dbContext.Database.CurrentTransaction != null;

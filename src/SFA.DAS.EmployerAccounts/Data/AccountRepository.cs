@@ -2,9 +2,7 @@
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.Logging;
 using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
@@ -14,16 +12,12 @@ using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Data;
 
-public class AccountRepository : BaseRepository, IAccountRepository
+public class AccountRepository : IAccountRepository
 {
     private readonly Lazy<EmployerAccountsDbContext> _db;
     private readonly IEncodingService _encodingService;
 
-    public AccountRepository(
-        EmployerAccountsConfiguration configuration,
-        ILogger<AccountRepository> logger, Lazy<EmployerAccountsDbContext> db,
-        IEncodingService encodingService)
-        : base(configuration.DatabaseConnectionString, logger)
+   public AccountRepository(Lazy<EmployerAccountsDbContext> db, IEncodingService encodingService)
     {
         _db = db;
         _encodingService = encodingService;

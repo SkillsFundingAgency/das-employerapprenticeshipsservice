@@ -146,39 +146,35 @@ internal class EmployerAccountTeamRepositoryTestFixtures
     public Task CheckEmployerAccountTeamRepository(Func<EmployerAccountTeamRepository, Task> action)
     {
         return RunWithTransaction(
-            repositoryCreator: db => new EmployerAccountTeamRepository(EmployerAccountsConfiguration, EmployerAccountTeamRepositoryLogger,
-                new Lazy<EmployerAccountsDbContext>(() => db)),
+            repositoryCreator: db => new EmployerAccountTeamRepository(new Lazy<EmployerAccountsDbContext>(() => db)),
             action: action);
     }
 
     public Task CheckInvitationRepository(Func<InvitationRepository, Task> action)
     {
         return RunWithTransaction(
-            repositoryCreator: db => new InvitationRepository(EmployerAccountsConfiguration, InvitationRepositoryLogger,
-                new Lazy<EmployerAccountsDbContext>(() => db)),
+            repositoryCreator: db => new InvitationRepository(new Lazy<EmployerAccountsDbContext>(() => db)),
             action: action);
     }
 
     private async Task RunWithTransaction<TRepository>(
         Func<EmployerAccountsDbContext, TRepository> repositoryCreator,
-        Func<TRepository, Task> action) where TRepository : BaseRepository
+        Func<TRepository, Task> action)
     {
-        await using (var db = CreateDbContext())
+        await using var db = CreateDbContext();
+        await db.Database.BeginTransactionAsync();
+
+        try
         {
-            await db.Database.BeginTransactionAsync();
+            var repo = repositoryCreator(db);
+            await action(repo);
 
-            try
-            {
-                var repo = repositoryCreator(db);
-                await action(repo);
-
-                await db.Database.CurrentTransaction.CommitAsync();
-            }
-            catch (Exception)
-            {
-                await db.Database.CurrentTransaction.RollbackAsync();
-                throw;
-            }
+            await db.Database.CurrentTransaction.CommitAsync();
+        }
+        catch (Exception)
+        {
+            await db.Database.CurrentTransaction.RollbackAsync();
+            throw;
         }
     }
 

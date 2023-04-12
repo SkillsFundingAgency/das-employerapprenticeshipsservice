@@ -2,19 +2,16 @@
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.Logging;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
 
 namespace SFA.DAS.EmployerAccounts.Data;
 
-public class MembershipRepository : BaseRepository, IMembershipRepository
+public class MembershipRepository :  IMembershipRepository
 {
     private readonly Lazy<EmployerAccountsDbContext> _db;
 
-    public MembershipRepository(EmployerAccountsConfiguration configuration, ILogger<MembershipRepository> logger, Lazy<EmployerAccountsDbContext> db)
-        : base(configuration.DatabaseConnectionString, logger)
+    public MembershipRepository(Lazy<EmployerAccountsDbContext> db)
     {
         _db = db;
     }

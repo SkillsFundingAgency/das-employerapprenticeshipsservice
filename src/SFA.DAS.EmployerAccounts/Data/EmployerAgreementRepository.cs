@@ -2,8 +2,6 @@
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.Logging;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
@@ -11,12 +9,11 @@ using SFA.DAS.EmployerAccounts.Models.Organisation;
 
 namespace SFA.DAS.EmployerAccounts.Data;
 
-public class EmployerAgreementRepository : BaseRepository, IEmployerAgreementRepository
+public class EmployerAgreementRepository : IEmployerAgreementRepository
 {
     private readonly Lazy<EmployerAccountsDbContext> _db;
 
-    public EmployerAgreementRepository(EmployerAccountsConfiguration configuration, ILogger<EmployerAgreementRepository> logger, Lazy<EmployerAccountsDbContext> db) 
-        : base(configuration.DatabaseConnectionString, logger)
+    public EmployerAgreementRepository(Lazy<EmployerAccountsDbContext> db) 
     {
         _db = db;
     }
