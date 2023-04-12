@@ -18,6 +18,8 @@
     {
         ViewBag.PageID = $"page-employer-account-created-{Model.Data.EmployerAccountType}";
     }
+
+    var hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId];
 }
 
 
@@ -49,7 +51,7 @@
             <dd class="das-definition-list__definition">
                 @if (string.IsNullOrEmpty(Model.Data.SingleAccountLegalEntityId))
                 {
-                    <a asp-controller="@ControllerConstants.EmployerAgreementControllerName" asp-action="@ControllerConstants.IndexActionName" asp-route-HashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" class="govuk-link govuk-link--no-visited-state">View your agreement IDs</a>
+                    <a asp-controller="@ControllerConstants.EmployerAgreementControllerName" asp-action="@ControllerConstants.IndexActionName" asp-route-HashedAccountId="@hashedAccountId" class="govuk-link govuk-link--no-visited-state">View your agreement IDs</a>
                 }
                 else
                 {
@@ -169,15 +171,15 @@ else
                 <p class="govuk-caption-m govuk-!-width-two-thirds govuk-!-margin-bottom-6">Manage your account details and team</p>
                 <div class="das-cards">
                     <div class="das-card">
-                        <h3 class="govuk-heading-m das-card__heading"><a href="@Url.Action("Index", "EmployerAgreement")" class="govuk-link govuk-link--no-visited-state">Your organisations and agreements</a></h3>
+                        <h3 class="govuk-heading-m das-card__heading"><a asp-route="@RouteNames.EmployerAgreementIndex" asp-route-hashedAccountId="@hashedAccountId" class="govuk-link govuk-link--no-visited-state">Your organisations and agreements</a></h3>
                         <p class="govuk-body govuk-!-font-size-16">Add your organisations that will make contracts with training providers.</p>
                     </div>
                     <div class="das-card">
-                        <h3 class="govuk-heading-m das-card__heading"><a href="@Url.Action("ViewTeam")" class="govuk-link govuk-link--no-visited-state">Your team</a></h3>
+                        <h3 class="govuk-heading-m das-card__heading"><a asp-route="@RouteNames.EmployerTeamView" asp-route-hashedAccountId="@hashedAccountId" class="govuk-link govuk-link--no-visited-state">Your team</a></h3>
                         <p class="govuk-body govuk-!-font-size-16">Control what your team can do and invite new team members.</p>
                     </div>
                     <div class="das-card">
-                        <h3 class="govuk-heading-m das-card__heading"><a href="@Url.Action("Index", "EmployerAccountPaye")" class="govuk-link govuk-link--no-visited-state">PAYE schemes</a></h3>
+                        <h3 class="govuk-heading-m das-card__heading"><a asp-route="@RouteNames.EmployerAccountPaye" asp-route-hashedAccountId="@hashedAccountId" class="govuk-link govuk-link--no-visited-state">PAYE schemes</a></h3>
                         <p class="govuk-body govuk-!-font-size-16">Add or remove PAYE schemes.</p>
                     </div>
                 </div>
