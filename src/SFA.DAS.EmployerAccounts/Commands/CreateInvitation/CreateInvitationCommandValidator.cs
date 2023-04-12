@@ -28,12 +28,9 @@ public class CreateInvitationCommandValidator : IValidator<CreateInvitationComma
 
         if (string.IsNullOrWhiteSpace(item.EmailOfPersonBeingInvited))
             validationResult.AddError(nameof(item.EmailOfPersonBeingInvited), "Enter email address");
-        else
+        else if (!IsValidEmailFormat(item.EmailOfPersonBeingInvited))
         {
-            if (!IsValidEmailFormat(item.EmailOfPersonBeingInvited))
-            {
-                validationResult.AddError(nameof(item.EmailOfPersonBeingInvited), "Enter a valid email address");
-            }
+            validationResult.AddError(nameof(item.EmailOfPersonBeingInvited), "Enter a valid email address");
         }
 
         if (string.IsNullOrWhiteSpace(item.NameOfPersonBeingInvited))
@@ -43,34 +40,38 @@ public class CreateInvitationCommandValidator : IValidator<CreateInvitationComma
             validationResult.AddError(nameof(item.RoleOfPersonBeingInvited), "Select team member role");
 
 
-        if (validationResult.IsValid())
+        if (!validationResult.IsValid())
         {
-            var caller = await _membershipRepository.GetCaller(item.HashedAccountId, item.ExternalUserId);
-
-            if (caller == null)
-            {
-                validationResult.AddError("Membership", "User is not a member of this Account");
-                validationResult.IsUnauthorized = true;
-            }
-            else if (caller.Role != Role.Owner)
-            {
-                validationResult.AddError("Membership", "User is not an Owner");
-                validationResult.IsUnauthorized = true;
-            }
-
-            if (validationResult.IsValid() && caller != null)
-            {
-                var existingTeamMember = await _membershipRepository.Get(caller.AccountId, item.EmailOfPersonBeingInvited);
-
-                if (existingTeamMember != null && existingTeamMember.IsUser)
-                    validationResult.AddError(nameof(item.EmailOfPersonBeingInvited), $"{item.EmailOfPersonBeingInvited} is already invited");
-            }
+            return validationResult;
         }
+
+        var caller = await _membershipRepository.GetCaller(item.HashedAccountId, item.ExternalUserId);
+
+        if (caller == null)
+        {
+            validationResult.AddError("Membership", "User is not a member of this Account");
+            validationResult.IsUnauthorized = true;
+        }
+        else if (caller.Role != Role.Owner)
+        {
+            validationResult.AddError("Membership", "User is not an Owner");
+            validationResult.IsUnauthorized = true;
+        }
+
+        if (!validationResult.IsValid() || caller == null)
+        {
+            return validationResult;
+        }
+
+        var existingTeamMember = await _membershipRepository.Get(caller.AccountId, item.EmailOfPersonBeingInvited);
+
+        if (existingTeamMember != null && existingTeamMember.IsUser)
+            validationResult.AddError(nameof(item.EmailOfPersonBeingInvited), $"{item.EmailOfPersonBeingInvited} is already invited");
 
         return validationResult;
     }
 
-    private bool IsValidEmailFormat(string email)
+    private static bool IsValidEmailFormat(string email)
     {
         return Regex.IsMatch(email,
             @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +

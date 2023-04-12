@@ -13,11 +13,5 @@ public class CreateLegalEntityCommand : IRequest<CreateLegalEntityCommandRespons
     public string Status { get; set; }
     public string Name { get; set; }
     public string Address { get; set; }
-
-    //TODO: the two signed fields don't appear to be used?
-    public bool SignAgreement { get; set; }
-
-    public DateTime SignedDate { get; set; }
-
     public string ExternalUserId { get; set; }
 }

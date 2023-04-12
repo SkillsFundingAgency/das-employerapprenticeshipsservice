@@ -12,9 +12,7 @@ using SFA.DAS.NServiceBus.Services;
 
 namespace SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
 
-//TODO this needs changing to be a facade and calling individual commands for each component
-public class
-    CreateUserAccountCommandHandler : IRequestHandler<CreateUserAccountCommand, CreateUserAccountCommandResponse>
+public class CreateUserAccountCommandHandler : IRequestHandler<CreateUserAccountCommand, CreateUserAccountCommandResponse>
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IMediator _mediator;

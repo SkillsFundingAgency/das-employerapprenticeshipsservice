@@ -36,7 +36,7 @@ public class ReportTrainingProviderCommandHandler : IRequestHandler<ReportTraini
 
         if (string.IsNullOrWhiteSpace(_configuration.ReportTrainingProviderEmailAddress))
         {
-            var exception = new ArgumentNullException("reportTrainingProviderEmailAddress", "ReportTrainingProviderEmailAddress configuration value can not be blank.");
+            var exception = new InvalidConfigurationValueException(nameof(_configuration.ReportTrainingProviderEmailAddress));
             _logger.LogError(exception, "Report Training Provider Email must be provided in configuration");
             throw exception;
         }

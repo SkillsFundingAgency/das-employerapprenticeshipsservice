@@ -22,10 +22,16 @@ public class UnsubscribeNotificationHandler : IRequestHandler<UnsubscribeNotific
 
         var settings = await _accountRepository.GetUserAccountSettings(command.UserRef);
         var setting = settings.SingleOrDefault(m => m.AccountId == command.AccountId);
+
         if (setting == null)
-            throw new Exception($"Missing settings for account {command.AccountId} and user with ref {command.UserRef}");
+        {
+            throw new UnsubscribeNotificationException($"Missing settings for account {command.AccountId} and user with ref {command.UserRef}");
+        }
+
         if (!setting.ReceiveNotifications)
-            throw new Exception($"Trying to unsubscribe from an already unsubscribed account, {command.AccountId}");
+        {
+            throw new UnsubscribeNotificationException($"Trying to unsubscribe from an already unsubscribed account, {command.AccountId}");
+        }
 
         setting.ReceiveNotifications = false;
         await _accountRepository.UpdateUserAccountSettings(command.UserRef, settings);

@@ -14,7 +14,7 @@ public class RemovePayeFromAccountCommandHandler : IRequestHandler<RemovePayeFro
     private readonly IMediator _mediator;
     private readonly IValidator<RemovePayeFromAccountCommand> _validator;
     private readonly IPayeRepository _payeRepository;
-    private readonly IEncodingService __encodingService;
+    private readonly IEncodingService _encodingService;
     private readonly IGenericEventFactory _genericEventFactory;
     private readonly IPayeSchemeEventFactory _payeSchemeEventFactory;
     private readonly IEventPublisher _eventPublisher;
@@ -34,7 +34,7 @@ public class RemovePayeFromAccountCommandHandler : IRequestHandler<RemovePayeFro
         _mediator = mediator;
         _validator = validator;
         _payeRepository = payeRepository;
-        __encodingService = encodingService;
+        _encodingService = encodingService;
         _genericEventFactory = genericEventFactory;
         _payeSchemeEventFactory = payeSchemeEventFactory;
         _eventPublisher = eventPublisher;
@@ -45,7 +45,7 @@ public class RemovePayeFromAccountCommandHandler : IRequestHandler<RemovePayeFro
     {
         await ValidateMessage(message);
 
-        var accountId = __encodingService.Decode(message.HashedAccountId, EncodingType.AccountId);
+        var accountId = _encodingService.Decode(message.HashedAccountId, EncodingType.AccountId);
 
         await AddAuditEntry(message.UserId, message.PayeRef, accountId.ToString());
 

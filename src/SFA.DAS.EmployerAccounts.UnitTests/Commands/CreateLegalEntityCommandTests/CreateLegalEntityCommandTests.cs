@@ -35,8 +35,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
             Command = new CreateLegalEntityCommand
             {
                 HashedAccountId = "ABC123",
-                SignAgreement = true,
-                SignedDate = DateTime.Now.AddDays(-10),
                 ExternalUserId = Guid.NewGuid().ToString(),
                 Name = "Org Ltd",
                 Code = "3476782638",

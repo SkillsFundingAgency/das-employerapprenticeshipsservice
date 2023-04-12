@@ -3,5 +3,5 @@
 namespace SFA.DAS.EmployerAccounts.Audit;
 public interface IAuditApiClient
 {
-    Task Audit(AuditMessage request);
+    Task Audit(AuditMessage message);
 }

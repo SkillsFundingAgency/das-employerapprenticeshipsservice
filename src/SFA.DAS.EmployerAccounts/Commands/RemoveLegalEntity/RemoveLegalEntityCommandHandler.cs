@@ -63,7 +63,7 @@ public class RemoveLegalEntityCommandHandler : IRequestHandler<RemoveLegalEntity
         }
 
         var agreements = await _employerAgreementRepository.GetAccountLegalEntityAgreements(message.AccountLegalEntityId);
-        var legalAgreement = agreements.ToList().OrderByDescending(a => a.TemplateId).First();
+        var legalAgreement = agreements.OrderByDescending(a => a.TemplateId).First();
 
         var hashedAccountId = _encodingService.Encode(message.AccountId, EncodingType.AccountId);
         var hashedLegalAgreementId = _encodingService.Encode(legalAgreement.Id, EncodingType.AccountId);
@@ -83,22 +83,24 @@ public class RemoveLegalEntityCommandHandler : IRequestHandler<RemoveLegalEntity
         );
 
         // it appears that an agreement is created whenever we create a legal entity, so there should always be an agreement associated with a legal entity
-        if (agreement != null)
+        if (agreement == null)
         {
-            var agreementSigned = agreement.Status == EmployerAgreementStatus.Signed;
-            var caller = await _membershipRepository.GetCaller(message.AccountId, message.UserId);
-            var createdByName = caller.FullName();
-
-            await PublishLegalEntityRemovedMessage(
-                message.AccountId,
-                legalAgreement.Id,
-                agreementSigned,
-                createdByName,
-                agreement.LegalEntityId,
-                agreement.LegalEntityName,
-                agreement.AccountLegalEntityId,
-                message.UserId);
+            return Unit.Value;
         }
+
+        var agreementSigned = agreement.Status == EmployerAgreementStatus.Signed;
+        var caller = await _membershipRepository.GetCaller(message.AccountId, message.UserId);
+        var createdByName = caller.FullName();
+
+        await PublishLegalEntityRemovedMessage(
+            message.AccountId,
+            legalAgreement.Id,
+            agreementSigned,
+            createdByName,
+            agreement.LegalEntityId,
+            agreement.LegalEntityName,
+            agreement.AccountLegalEntityId,
+            message.UserId);
 
         return Unit.Value;
     }
@@ -149,7 +151,7 @@ public class RemoveLegalEntityCommandHandler : IRequestHandler<RemoveLegalEntity
                 {
                     PropertyUpdate.FromString("Status", EmployerAgreementStatus.Removed.ToString())
                 },
-                RelatedEntities = new List<AuditEntity> { new AuditEntity { Id = hashedAccountId.ToString(), Type = "Account" } },
+                RelatedEntities = new List<AuditEntity> { new() { Id = hashedAccountId, Type = "Account" } },
                 AffectedEntity = new AuditEntity { Type = "EmployerAgreement", Id = employerAgreementId }
             }
         });
