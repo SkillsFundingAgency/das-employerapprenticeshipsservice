@@ -4,15 +4,14 @@
     ViewBag.Title = "PAYE schemes";
     ViewBag.Section = "paye";
     ViewBag.ZenDeskLabel = "eas-paye-schemes";
+    ViewBag.GaData.Vpv = "/accounts/schemes/page-paye-schemes-index";
 
     if (!string.IsNullOrEmpty(Model.FlashMessage?.HiddenFlashMessageInformation))
     {
         ViewBag.PageID = Model.FlashMessage.HiddenFlashMessageInformation;
     }
-}
 
-@{
-    ViewBag.GaData.Vpv = "/accounts/schemes/page-paye-schemes-index";
+    var hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId];
 }
 
 <div class="govuk-grid-row">
@@ -73,7 +72,7 @@
 
                             <td class="govuk-table__cell">
                                 <a asp-route="@RouteNames.PayeDetails"
-                                   asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]"
+                                   asp-route-hashedAccountId="@hashedAccountId"
                                    asp-route-empRef="@scheme.Ref.FormatPayeForUrl()"
                                    class="govuk-link"
                                    aria-label="Details for PAYE scheme @scheme.Ref"
@@ -116,7 +115,7 @@
     <div class="govuk-breadcrumbs">
         <ol class="govuk-breadcrumbs__list" role="navigation">
             <li class="govuk-breadcrumbs__list-item">
-                <a href="@Url.Action("Index", "EmployerTeam")" class="govuk-breadcrumbs__link">Home</a>
+                <a asp-route="@RouteNames.EmployerTeamIndex" asp-route-hashedAccountId="@hashedAccountId" class="govuk-breadcrumbs__link">Home</a>
             </li>
             <li class="govuk-breadcrumbs__list-item">
                 <abbr>PAYE</abbr> schemes
