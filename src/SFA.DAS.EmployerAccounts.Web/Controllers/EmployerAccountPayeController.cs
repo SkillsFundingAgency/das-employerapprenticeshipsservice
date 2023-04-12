@@ -29,7 +29,7 @@ public class EmployerAccountPayeController : BaseController
     }
 
     [HttpGet]
-    [Route("{HashedAccountId}/schemes")]
+    [Route("{HashedAccountId}/schemes", Name = RouteNames.EmployerAccountPaye)]
     public async Task<IActionResult> Index(string hashedAccountId)
     {
         var model = await _employerAccountPayeOrchestrator.Get(hashedAccountId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
