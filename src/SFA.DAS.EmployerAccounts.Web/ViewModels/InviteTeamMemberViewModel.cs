@@ -9,5 +9,5 @@ public class InviteTeamMemberViewModel : ViewModelBase , IAccountIdentifier
     public Role Role { get; set; }
     public string EmailError => GetErrorMessage(nameof(Email));
     public string NameError => GetErrorMessage(nameof(Name));
-    public string RoleError => GetErrorMessage("Role");
+    public string RoleError => GetErrorMessage(nameof(Role));
 }

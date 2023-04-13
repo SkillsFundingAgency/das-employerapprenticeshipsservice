@@ -15,7 +15,7 @@ public class GetContentRequestHandler : IRequestHandler<GetContentRequest, GetCo
     public GetContentRequestHandler(
         IValidator<GetContentRequest> validator,
         ILogger<GetContentRequestHandler> logger,
-        IContentApiClient contentApiClient,  EmployerAccountsConfiguration employerAccountsConfiguration)
+        IContentApiClient contentApiClient, EmployerAccountsConfiguration employerAccountsConfiguration)
     {
         _validator = validator;
         _logger = logger;
@@ -32,10 +32,10 @@ public class GetContentRequestHandler : IRequestHandler<GetContentRequest, GetCo
             throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        var applicationId = message.UseLegacyStyles? _employerAccountsConfiguration.ApplicationId + "-legacy" : _employerAccountsConfiguration.ApplicationId;            
+        var applicationId = message.UseLegacyStyles ? _employerAccountsConfiguration.ApplicationId + "-legacy" : _employerAccountsConfiguration.ApplicationId;
 
         try
-        {                
+        {
             var contentBanner = await _contentApiClient.Get(message.ContentType, applicationId);
 
             return new GetContentResponse
@@ -45,7 +45,7 @@ public class GetContentRequestHandler : IRequestHandler<GetContentRequest, GetCo
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Failed to get Content {message.ContentType} for {applicationId}");
+            _logger.LogError(ex, "Failed to get Content {ContentType} for {ApplicationId}", message.ContentType, applicationId);
 
             return new GetContentResponse
             {

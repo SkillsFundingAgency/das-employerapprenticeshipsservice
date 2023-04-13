@@ -31,7 +31,7 @@ public class TaskController : BaseController
 
         var externalUserId = HttpContext.User.FindFirstValue("sub");
 
-        _logger.LogDebug($"Task dismiss requested for account id '{viewModel.HashedAccountId}', user id '{externalUserId}' and task '{viewModel.TaskType}'");
+        _logger.LogDebug("Task dismiss requested for account id '{HashedAccountId}', user id '{ExternalUserId}' and task '{TaskType}'", viewModel.HashedAccountId, externalUserId, viewModel.TaskType);
 
         var result = await _orchestrator.DismissMonthlyReminderTask(viewModel.HashedAccountId, externalUserId, viewModel.TaskType);
 
@@ -39,7 +39,7 @@ public class TaskController : BaseController
         {
             //Curently we are not telling the user of the error and are instead just logging the issue
             //The error log will be done at a lower level
-            _logger.LogDebug($"Task dismiss requested failed for account id '{viewModel.HashedAccountId}', user id '{externalUserId}' and task '{viewModel.TaskType}'");
+            _logger.LogDebug("Task dismiss requested failed for account id '{HashedAccountId}', user id '{ExternalUserId}' and task '{TaskType}'", viewModel.HashedAccountId, externalUserId, viewModel.TaskType);
         }
 
         return RedirectToAction("Index", "EmployerTeam");

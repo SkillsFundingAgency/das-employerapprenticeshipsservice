@@ -28,7 +28,7 @@ public class GetReservationsRequestHandler : IRequestHandler<GetReservationsRequ
             throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        _logger.LogInformation($"Getting reservations for hashed account id {message.AccountId}");
+        _logger.LogInformation("Getting reservations for hashed account id {AccountId}", message.AccountId);
 
         try
         {
@@ -39,7 +39,7 @@ public class GetReservationsRequestHandler : IRequestHandler<GetReservationsRequ
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Failed to get Reservations for {message.AccountId}");
+            _logger.LogError(ex, "Failed to get Reservations for {AccountId}", message.AccountId);
             return new GetReservationsResponse
             {
                 HasFailed = true

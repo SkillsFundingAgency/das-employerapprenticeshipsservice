@@ -23,7 +23,7 @@ public class ReservationsService : IReservationsService
 
         try
         {
-            _logger.LogInformation($"Getting reservations for account ID: {accountId}");
+            _logger.LogInformation("Getting reservations for account ID: {AccountId}", accountId);
 
             var reservationsResponse = await _outerApiClient.Get<GetReservationsResponse>(new GetReservationsRequest(accountId));
 
@@ -34,7 +34,7 @@ public class ReservationsService : IReservationsService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Could not find reservations for account ID: {accountId} when calling reservations API");
+            _logger.LogError(ex, "Could not find reservations for account ID: {AccountId} when calling reservations API", accountId);
         }
 
         return reservation;

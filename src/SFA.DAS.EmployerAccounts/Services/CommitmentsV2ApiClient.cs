@@ -25,7 +25,9 @@ public class CommitmentsV2ApiClient : ICommitmentsV2ApiClient
     public async Task<GetApprenticeshipResponse> GetApprenticeship(long apprenticeshipId)
     {
         var url = $"{BaseUrl()}api/apprenticeships/{apprenticeshipId}";
-        _logger.LogInformation($"Getting GetApprenticeship {url}");
+
+        _logger.LogInformation("Getting GetApprenticeship {Url}", url);
+
         var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
         await AddAuthenticationHeader(requestMessage);
             
@@ -33,13 +35,16 @@ public class CommitmentsV2ApiClient : ICommitmentsV2ApiClient
         response.EnsureSuccessStatusCode();
 
         var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
         return JsonConvert.DeserializeObject<GetApprenticeshipResponse>(json);
     }
 
     public async Task<GetApprenticeshipsResponse> GetApprenticeships(GetApprenticeshipsRequest request)
     {
         var url = $"{BaseUrl()}api/apprenticeships/?accountId={request.AccountId}&reverseSort={request.ReverseSort}{request.SortField}{request.SortField}{request.SearchTerm}";
-        _logger.LogInformation($"Getting GetApprenticeships {url}");
+
+        _logger.LogInformation("Getting GetApprenticeships {Url}", url);
+
         var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
         await AddAuthenticationHeader(requestMessage);            
 
@@ -53,7 +58,9 @@ public class CommitmentsV2ApiClient : ICommitmentsV2ApiClient
     public async Task<GetCohortsResponse> GetCohorts(GetCohortsRequest request)
     {
         var url = $"{BaseUrl()}api/cohorts/?accountId={request.AccountId}";
-        _logger.LogInformation($"Getting GetCohorts {url}");
+
+        _logger.LogInformation("Getting GetCohorts {Url}", url);
+
         var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
         await AddAuthenticationHeader(requestMessage);
 
@@ -67,7 +74,9 @@ public class CommitmentsV2ApiClient : ICommitmentsV2ApiClient
     public async Task<GetDraftApprenticeshipsResponse> GetDraftApprenticeships(long cohortId)
     {
         var url = $"{BaseUrl()}api/cohorts/{cohortId}/draft-apprenticeships";
-        _logger.LogInformation($"Getting GetDraftApprenticeships {url}");
+
+        _logger.LogInformation("Getting GetDraftApprenticeships {Url}", url);
+
         var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
         await AddAuthenticationHeader(requestMessage);
 
@@ -81,7 +90,9 @@ public class CommitmentsV2ApiClient : ICommitmentsV2ApiClient
     public async Task<GetApprenticeshipStatusSummaryResponse> GetEmployerAccountSummary(long accountId)
     {
         var url = $"{BaseUrl()}api/accounts/{accountId}/summary";
-        _logger.LogInformation($"Getting GetEmployerAccountSummary {url}");
+
+        _logger.LogInformation("Getting GetEmployerAccountSummary {Url}", url);
+
         var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
         await AddAuthenticationHeader(requestMessage);
             

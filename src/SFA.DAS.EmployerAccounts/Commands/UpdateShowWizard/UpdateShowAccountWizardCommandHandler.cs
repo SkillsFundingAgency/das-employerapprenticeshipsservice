@@ -26,7 +26,7 @@ public class UpdateShowAccountWizardCommandHandler : IRequestHandler<UpdateShowA
             throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        _logger.LogInformation($"User {message.ExternalUserId} has set the show wizard toggle to {message.ShowWizard} for account {message.HashedAccountId}");
+        _logger.LogInformation("User {ExternalUserId} has set the show wizard toggle to {ShowWizard} for account {HashedAccountId}", message.ExternalUserId, message.ShowWizard, message.HashedAccountId);
 
         await _membershipRepository.SetShowAccountWizard(message.HashedAccountId, message.ExternalUserId, message.ShowWizard);
 

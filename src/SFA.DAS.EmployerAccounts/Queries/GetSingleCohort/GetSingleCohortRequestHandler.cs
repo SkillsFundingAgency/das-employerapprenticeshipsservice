@@ -46,7 +46,8 @@ public class GetSingleCohortRequestHandler : IRequestHandler<GetSingleCohortRequ
         }
         catch(Exception ex)
         {
-            _logger.LogError(ex, $"Failed to get Cohorts for {message.AccountId}");
+            _logger.LogError(ex, "Failed to get Cohorts for {AccountId}", message.AccountId);
+
             return new GetSingleCohortResponse
             {
                 HasFailed = true

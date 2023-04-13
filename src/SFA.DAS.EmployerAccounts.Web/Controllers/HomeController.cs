@@ -149,7 +149,7 @@ public class HomeController : BaseController
         var userId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
         if (string.IsNullOrWhiteSpace(userId))
         {
-            _logger.LogWarning($"UserId not found on OwinWrapper. Redirecting back to passed in returnUrl: {returnUrl}");
+            _logger.LogWarning("UserId not found on OwinWrapper. Redirecting back to passed in returnUrl: {ReturnUrl}", returnUrl);
             return Redirect(returnUrl);
         }
 

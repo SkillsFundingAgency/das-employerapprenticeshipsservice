@@ -220,7 +220,7 @@ public class ReferenceDataService : IReferenceDataService
         }
     }
 
-    private List<OrganisationName> FilterOrganisationsByType(IEnumerable<OrganisationName> result, CommonOrganisationType organisationType)
+    private static List<OrganisationName> FilterOrganisationsByType(IEnumerable<OrganisationName> result, CommonOrganisationType organisationType)
     {
         if (organisationType == CommonOrganisationType.Other || organisationType == CommonOrganisationType.PublicBodies)
         {

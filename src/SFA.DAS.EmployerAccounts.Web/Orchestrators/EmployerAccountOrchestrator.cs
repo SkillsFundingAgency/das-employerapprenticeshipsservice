@@ -17,9 +17,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
     private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
     //Needed for tests
-    protected EmployerAccountOrchestrator()
-    {
-    }
+    protected EmployerAccountOrchestrator() { }
 
     public EmployerAccountOrchestrator(
         IMediator mediator, 
@@ -151,14 +149,14 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
                 Status = HttpStatusCode.OK
             };
         }
-        catch (Exception e)
+        catch (Exception exception)
         {
-            _logger.LogError(e,$"Create Account Validation Error: {e.Message}");
+            _logger.LogError(exception,"Create Account Validation Error: {Message}", exception.Message);
             return new OrchestratorResponse<EmployerAgreementViewModel>
             {
                 Data = new EmployerAgreementViewModel(),
                 Status = HttpStatusCode.BadRequest,
-                Exception = e,
+                Exception = exception,
                 FlashMessage = new FlashMessageViewModel()
             };
         }
@@ -244,7 +242,8 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
         }
         catch (InvalidRequestException ex)
         {
-            _logger.LogError(ex, $"Create Account Validation Error: {ex.Message}");
+            _logger.LogError(ex, "Create Account Validation Error: {Message}", ex.Message);
+
             return new OrchestratorResponse<EmployerAgreementViewModel>
             {
                 Data = new EmployerAgreementViewModel(),
@@ -289,7 +288,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
         }
         catch (InvalidRequestException ex)
         {
-            _logger.LogError(ex, $"Create User Account Validation Error: {ex.Message}");
+            _logger.LogError(ex, "Create User Account Validation Error: {Message}", ex.Message);
             return new OrchestratorResponse<EmployerAccountViewModel>
             {
                 Data = new EmployerAccountViewModel(),
