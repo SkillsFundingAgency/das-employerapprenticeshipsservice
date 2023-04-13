@@ -36,11 +36,11 @@ public class WhenIGetMultipleLegalEntitiesWithKnownIds : GivenEmployerAccountsAp
     [Ignore("The test fails as a Pending/SignedAgreementId is missing from AccountLegalEntity test setup which is required")]
     public void ThenTheStatusShouldBeFound_ByHashedAccountId()
     {
-        var resources = Response.GetContent<ResourceList>();
+        var resources = Response?.GetContent<ResourceList>();
 
         // Assert
         Assert.IsNotNull(resources);
-        Assert.AreEqual(2, resources.Count);
+        Assert.AreEqual(2, resources?.Count);
             
         var idsFromApi = resources.Select(a => long.Parse(a.Id, NumberStyles.None)).ToArray();
 
