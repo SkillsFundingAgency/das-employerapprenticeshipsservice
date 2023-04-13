@@ -61,7 +61,16 @@ public class Startup
         services.AddApplicationServices(_employerAccountsConfiguration);
         services.AddHmrcServices();
 
-        services.AddMaMenuConfiguration(RouteNames.SignOut, identityServerConfiguration.ClientId, _configuration["ResourceEnvironmentName"]);
+        if (_employerAccountsConfiguration.UseGovSignIn)
+        {
+            services.AddMaMenuConfiguration(RouteNames.SignOut,  _configuration["ResourceEnvironmentName"]);
+        }
+        else
+        {
+            services.AddMaMenuConfiguration(RouteNames.SignOut, identityServerConfiguration.ClientId, _configuration["ResourceEnvironmentName"]);
+        }
+
+        
 
         services.AddAuditServices();
         services.AddCachesRegistrations();
