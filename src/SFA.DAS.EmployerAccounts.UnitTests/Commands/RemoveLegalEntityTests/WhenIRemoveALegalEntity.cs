@@ -152,7 +152,13 @@ public class WhenIRemoveALegalEntity
         _validator.Setup(x => x.ValidateAsync(It.IsAny<RemoveLegalEntityCommand>())).ReturnsAsync(new ValidationResult { IsUnauthorized = true });
 
         //Act Assert
-        var command = new RemoveLegalEntityCommand();
+        var command = new RemoveLegalEntityCommand
+        {
+            AccountId = -1,
+            AccountLegalEntityId = -2,
+            UserId = "ABC123"
+        };
+
         Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _handler.Handle(command, CancellationToken.None));
         _logger.VerifyLogging($"User {command.UserId} tried to remove {command.AccountLegalEntityId} from Account {command.AccountId}", LogLevel.Information);
     }
