@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
-
-namespace SFA.DAS.EAS.Domain.Configuration
+﻿namespace SFA.DAS.EAS.Domain.Configuration
 {
     public class EmployerApprenticeshipsServiceConfiguration
     {
+        public string DashboardUrl { get; set; }
         public string DatabaseConnectionString { get; set; }
         public string EmployerAccountsBaseUrl { get; set; }
         public string EmployerCommitmentsBaseUrl { get; set; }
