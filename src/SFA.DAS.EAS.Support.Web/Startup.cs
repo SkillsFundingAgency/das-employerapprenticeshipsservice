@@ -7,7 +7,6 @@ using Microsoft.Extensions.Hosting;
 using SFA.DAS.HashingService;
 using SFA.DAS.EmployerAccounts.Api.Client;
 using SFA.DAS.EAS.Account.Api.Clients;
-using SFA.DAS.TokenService.Api.Client;
 using SFA.DAS.EAS.Support.Web.Extensions;
 
 using HashService = SFA.DAS.HashingService.HashingService;

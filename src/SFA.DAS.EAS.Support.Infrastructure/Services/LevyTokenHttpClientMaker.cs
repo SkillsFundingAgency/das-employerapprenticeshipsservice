@@ -1,6 +1,5 @@
 ﻿using HMRC.ESFA.Levy.Api.Client;
 using SFA.DAS.EAS.Support.Infrastructure.Settings;
-using SFA.DAS.TokenService.Api.Client;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Support.Infrastructure.Services

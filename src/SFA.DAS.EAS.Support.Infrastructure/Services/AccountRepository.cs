@@ -12,6 +12,7 @@ using SFA.DAS.EAS.Support.Core.Services;
 using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EAS.Support.Infrastructure.Services
 {

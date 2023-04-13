@@ -29,7 +29,7 @@
 		</PackageReference>
 		<PackageReference Include="MediatR" Version="2.1.0">
 		</PackageReference>
-		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="5.0.0">
+		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="7.0.0">
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0">
 		</PackageReference>
@@ -52,7 +52,6 @@
 		</PackageReference>
 		<PackageReference Include="EntityFramework" Version="6.4.4" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.3.0" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.26.0" />
 		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
 	</ItemGroup>

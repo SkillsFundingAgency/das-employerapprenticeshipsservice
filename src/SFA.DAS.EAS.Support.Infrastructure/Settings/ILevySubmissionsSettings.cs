@@ -1,5 +1,4 @@
-﻿using SFA.DAS.TokenService.Api.Client;
-
+﻿
 namespace SFA.DAS.EAS.Support.Infrastructure.Settings
 {
     public interface ILevySubmissionsSettings

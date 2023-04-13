@@ -33,7 +33,8 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
                 PayeSchemeObfuscator.Object,
                 DatetimeService.Object,
                 Logger.Object,
-                HashingService.Object);
+                HashingService.Object
+            );
         }
     }
 }

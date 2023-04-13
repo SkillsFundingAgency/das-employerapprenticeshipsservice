@@ -9,7 +9,7 @@ using SFA.DAS.EAS.Account.Api.Controllers;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 using Microsoft.Extensions.Logging;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTests
@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
         protected AccountLevyController Controller;        
         protected Mock<ILogger<AccountsOrchestrator>> Logger;
         protected IMapper Mapper;
-        protected Mock<IHashingService> HashingService;
+        protected Mock<IEncodingService> HashingService;
         protected Mock<IEmployerAccountsApiService> ApiService;
         protected Mock<IEmployerFinanceApiService> FinanceApiService;
 
@@ -28,7 +28,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
         {   
 
             Logger = new Mock<ILogger<AccountsOrchestrator>>();
-            HashingService = new Mock<IHashingService>();
+            HashingService = new Mock<IEncodingService>();
             ApiService = new Mock<IEmployerAccountsApiService>();
             FinanceApiService = new Mock<IEmployerFinanceApiService>();
             Mapper = ConfigureMapper();

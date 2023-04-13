@@ -7,7 +7,6 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
-using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using System.Threading.Tasks;
 using SFA.DAS.Common.Domain.Types;
@@ -16,6 +15,7 @@ using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTests
 {
@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
     {
         private AccountsOrchestrator _orchestrator;        
         private Mock<ILogger<AccountsOrchestrator>> _log;
-        private Mock<IHashingService> _hashingService;
+        private Mock<IEncodingService> _hashingService;
         private Mock<IEmployerAccountsApiService> _apiService;
         private Mock<IEmployerFinanceApiService> _financeApiService;
         private Mock<IMapper> _mapper;
@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
         {
             _mapper = new Mock<IMapper>();
             _log = new Mock<ILogger<AccountsOrchestrator>>();
-            _hashingService = new Mock<IHashingService>();
+            _hashingService = new Mock<IEncodingService>();
             _apiService = new Mock<IEmployerAccountsApiService>();
             _financeApiService = new Mock<IEmployerFinanceApiService>();
             _orchestrator = new AccountsOrchestrator(_log.Object, _mapper.Object, _hashingService.Object, _apiService.Object, _financeApiService.Object);

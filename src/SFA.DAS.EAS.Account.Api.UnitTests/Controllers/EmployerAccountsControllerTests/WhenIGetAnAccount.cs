@@ -92,7 +92,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             var accountId = 1923701937;
             var hashedAccountId = "ABC123";
             
-            _hashingService.Setup(x => x.HashValue(accountId)).Returns(hashedAccountId);
+            _hashingService.Setup(x => x.Encode(accountId, Encoding.EncodingType.AccountId)).Returns(hashedAccountId);
             _employerAccountsApiService.Setup(x => x.GetAccount(hashedAccountId, It.IsAny<CancellationToken>())).ReturnsAsync(new AccountDetailViewModel { AccountId = accountId, ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy.ToString(), LegalEntities = new ResourceList(new List<ResourceViewModel>()), PayeSchemes = new ResourceList(new List<ResourceViewModel>()) });
             _employerFinanceApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>())).ReturnsAsync( new List<AccountBalance> { new AccountBalance() });
             _employerFinanceApiService.Setup(x => x.GetTransferAllowance(It.IsAny<string>())).ReturnsAsync( new TransferAllowance());

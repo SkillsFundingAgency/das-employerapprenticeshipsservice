@@ -5,7 +5,6 @@ using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Support.Infrastructure.Settings;
 using SFA.DAS.EAS.Support.Web.Configuration;
 using SFA.DAS.Support.Shared.SiteConnection;
-using SFA.DAS.TokenService.Api.Client;
 using System;
 using System.IO;
 

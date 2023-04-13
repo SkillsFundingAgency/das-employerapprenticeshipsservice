@@ -16,11 +16,8 @@ using SFA.DAS.EAS.Application.Services.EmployerFinanceApi.Http;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
-using SFA.DAS.HashingService;
-using System;
-
-using HashService = SFA.DAS.HashingService.HashingService;
-using Microsoft.Extensions.Logging;
+using SFA.DAS.Encoding;
+using System.Collections.Generic;
 
 namespace SFA.DAS.EAS.Account.Api;
 
@@ -65,7 +62,20 @@ public class Startup
         var hashstringChars = Configuration.GetValue<string>("AllowedHashstringCharacters");
         var hashstring = Configuration.GetValue<string>("Hashstring");
 
-        services.AddSingleton<IHashingService, HashService>(c => new HashService(hashstringChars, hashstring));
+        services.AddSingleton<EncodingConfig>(new EncodingConfig
+        {
+            Encodings = new List<Encoding.Encoding>()
+            {
+                new Encoding.Encoding()
+                {
+                    EncodingType = "AccountId",
+                    Salt = hashstring,
+                    Alphabet = hashstringChars
+                }
+            }
+        });
+
+        services.AddSingleton<IEncodingService, EncodingService>();
 
 
         services.AddSwaggerGen();
