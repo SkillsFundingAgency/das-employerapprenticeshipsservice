@@ -281,3 +281,6 @@ SonarQube.Analysis.xml
 /src/SFA.DAS.EmployerAccounts.Web/appsettings.Development.json
 
 src/SFA.DAS.EmployerAccounts.Api/appsettings.Development.json
+
+# ignore azurite files
+__azurite*
