@@ -392,7 +392,7 @@ public class EmployerAgreementControllerTestFixtures : FluentTest<EmployerAgreem
     public Task<IActionResult> ConfirmRemoveOrganisation()
     {
         var controller = CreateController();
-        return controller.ConfirmRemoveOrganisation(HashedAccountLegalEntityId, HashedAccountId);
+        return controller.ConfirmRemoveOrganisation(HashedAccountId, HashedAccountLegalEntityId);
     }
 
     public async Task<RedirectToActionResult> ViewUnsignedAgreements()
