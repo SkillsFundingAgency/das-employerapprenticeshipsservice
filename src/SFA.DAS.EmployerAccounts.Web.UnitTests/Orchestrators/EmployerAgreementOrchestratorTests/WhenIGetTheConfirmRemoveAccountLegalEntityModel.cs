@@ -21,7 +21,7 @@ public class WhenIGetTheConfirmRemoveAccountLegalEntityModel
     private Mock<IReferenceDataService> _referenceDataService;
     private EmployerAgreementOrchestrator _orchestrator;
 
-    private const string ExpectedHahsedAccountId = "RT456";
+    private const string ExpectedHashedAccountId = "RT456";
     private const string ExpectedHashedAccountLegalEntityId = "RRTE56";
     private const string ExpectedUserId = "TYG68UY";
     private const string ExpectedName = "Test Name";
@@ -49,12 +49,11 @@ public class WhenIGetTheConfirmRemoveAccountLegalEntityModel
     {
 
         //Act
-        await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAccountLegalEntityId,
-            ExpectedHahsedAccountId, ExpectedUserId);
+        await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAccountId, ExpectedHashedAccountLegalEntityId, ExpectedUserId);
 
         //Assert
         _mediator.Verify(x => x.Send(It.Is<GetAccountLegalEntityRemoveRequest>(
-            c => c.HashedAccountId.Equals(ExpectedHahsedAccountId)
+            c => c.HashedAccountId.Equals(ExpectedHashedAccountId)
                  && c.UserId.Equals(ExpectedUserId)
                  && c.HashedAccountLegalEntityId.Equals(ExpectedHashedAccountLegalEntityId)
         ), It.IsAny<CancellationToken>()), Times.Once);
@@ -70,7 +69,7 @@ public class WhenIGetTheConfirmRemoveAccountLegalEntityModel
 
         //Act
         var actual = await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAccountLegalEntityId,
-            ExpectedHahsedAccountId, ExpectedUserId);
+            ExpectedHashedAccountId, ExpectedUserId);
 
         //Assert
         Assert.AreEqual(HttpStatusCode.BadRequest, actual.Status);
@@ -85,7 +84,7 @@ public class WhenIGetTheConfirmRemoveAccountLegalEntityModel
 
         //Act
         var actual = await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAccountLegalEntityId,
-            ExpectedHahsedAccountId, ExpectedUserId);
+            ExpectedHashedAccountId, ExpectedUserId);
 
         //Assert
         Assert.AreEqual(HttpStatusCode.Unauthorized, actual.Status);
@@ -95,12 +94,11 @@ public class WhenIGetTheConfirmRemoveAccountLegalEntityModel
     public async Task ThenTheValuesAreReturnedInTheResponseFromTheMediatorCall()
     {
         //Act
-        var actual = await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAccountLegalEntityId,
-            ExpectedHahsedAccountId, ExpectedUserId);
+        var actual = await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAccountId, ExpectedHashedAccountLegalEntityId, ExpectedUserId);
 
         //Assert
         Assert.AreEqual(ExpectedHashedAccountLegalEntityId, actual.Data.HashedAccountLegalEntitytId);
-        Assert.AreEqual(ExpectedHahsedAccountId, actual.Data.HashedAccountId);
+        Assert.AreEqual(ExpectedHashedAccountId, actual.Data.HashedAccountId);
         Assert.AreEqual(ExpectedName, actual.Data.Name);
     }
 }

@@ -85,7 +85,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
     {
         //Arrange
         _orchestratorMock
-            .Setup(x => x.GetConfirmRemoveOrganisationViewModel(HashedAccountLegalEntityId, HashedAccountId, UserId))
+            .Setup(x => x.GetConfirmRemoveOrganisationViewModel(HashedAccountId, HashedAccountLegalEntityId, UserId))
                     .ReturnsAsync(new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>
                     {
                         Data = new ConfirmOrganisationToRemoveViewModel
@@ -96,7 +96,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
                     });
 
         //Act
-        var response = await _controller.ConfirmRemoveOrganisation(HashedAccountLegalEntityId, HashedAccountId);
+        var response = await _controller.ConfirmRemoveOrganisation(HashedAccountId, HashedAccountLegalEntityId);
 
         //Assert
         ViewResult viewResult = response as ViewResult;
@@ -108,7 +108,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
     {
         //Arrange
         _orchestratorMock
-            .Setup(x => x.GetConfirmRemoveOrganisationViewModel(HashedAccountLegalEntityId, HashedAccountId, UserId))
+            .Setup(x => x.GetConfirmRemoveOrganisationViewModel(HashedAccountId, HashedAccountLegalEntityId, UserId))
                     .ReturnsAsync(new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>
                     {
                         Data = new ConfirmOrganisationToRemoveViewModel
@@ -119,7 +119,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
                     });
 
         //Act
-        var response = await _controller.ConfirmRemoveOrganisation(HashedAccountLegalEntityId, HashedAccountId);
+        var response = await _controller.ConfirmRemoveOrganisation(HashedAccountId, HashedAccountLegalEntityId);
 
         //Assert
         ViewResult viewResult = response as ViewResult;
@@ -137,7 +137,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
                 }),
             act: fixtures => fixtures.ConfirmRemoveOrganisation(),
             assert: (fixtures, result) => fixtures.Orchestrator.Verify(
-                x => x.GetConfirmRemoveOrganisationViewModel(fixtures.HashedAccountLegalEntityId, fixtures.HashedAccountId, fixtures.UserId), Times.Once));
+                x => x.GetConfirmRemoveOrganisationViewModel(fixtures.HashedAccountId, fixtures.HashedAccountLegalEntityId, fixtures.UserId), Times.Once));
     }
 
     [Test]
@@ -223,7 +223,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
             });
 
         //Act
-        var response = await _controller.Sign(HashedAgreementId, HashedAccountId, null);
+        var response = await _controller.Sign(HashedAccountId, HashedAgreementId, null);
 
         //Assert
         var viewResult = response as ViewResult;
@@ -242,7 +242,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
             arrange: fixtures =>
             {
                 fixtures.Orchestrator
-                    .Setup(x => x.GetById(fixtures.HashedAgreementId, fixtures.HashedAccountId, fixtures.UserId))
+                    .Setup(x => x.GetById(fixtures.HashedAccountId, fixtures.HashedAgreementId, fixtures.UserId))
                     .ReturnsAsync(new OrchestratorResponse<EmployerAgreementViewModel>
                     {
                         Data = new EmployerAgreementViewModel { EmployerAgreement = new EmployerAgreementView { LegalEntityName = fixtures.LegalEntityName } }
@@ -392,7 +392,7 @@ public class EmployerAgreementControllerTestFixtures : FluentTest<EmployerAgreem
     public Task<IActionResult> ConfirmRemoveOrganisation()
     {
         var controller = CreateController();
-        return controller.ConfirmRemoveOrganisation(HashedAccountLegalEntityId, HashedAccountId);
+        return controller.ConfirmRemoveOrganisation(HashedAccountId, HashedAccountLegalEntityId);
     }
 
     public async Task<RedirectToActionResult> ViewUnsignedAgreements()
