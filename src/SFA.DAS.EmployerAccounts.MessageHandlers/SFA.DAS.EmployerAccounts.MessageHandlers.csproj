@@ -17,7 +17,6 @@
 		<PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
 		<PackageReference Include="SFA.DAS.UnitOfWork.EntityFrameworkCore" Version="9.0.28" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.1" />
-		<PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
 		<PackageReference Include="NLog" Version="5.1.1" />
 		<PackageReference Include="NLog.Schema" Version="4.5.3" />
 		<PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.2.17" />

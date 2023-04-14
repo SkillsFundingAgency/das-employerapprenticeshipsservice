@@ -18,8 +18,6 @@
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-		<PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0">
-		</PackageReference>
 		<PackageReference Include="NLog.Web.AspNetCore" Version="5.2.1" />
 		<PackageReference Include="SFA.DAS.Api.Common" Version="1.0.28" />
 		<PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.283" />

@@ -9,10 +9,10 @@ public class SignEmployerAgreementCommandValidator : IValidator<SignEmployerAgre
     private readonly IEmployerAgreementRepository _employerAgreementRepository;
     private readonly IEncodingService _encodingService;
 
-    public SignEmployerAgreementCommandValidator(IEmployerAgreementRepository employerAgreementRepository, IEncodingService hashingService)
+    public SignEmployerAgreementCommandValidator(IEmployerAgreementRepository employerAgreementRepository, IEncodingService encodingService)
     {
         _employerAgreementRepository = employerAgreementRepository;
-        _encodingService = hashingService;
+        _encodingService = encodingService;
     }
 
     public ValidationResult Validate(SignEmployerAgreementCommand item)
