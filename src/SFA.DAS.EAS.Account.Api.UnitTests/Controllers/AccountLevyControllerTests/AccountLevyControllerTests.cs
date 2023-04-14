@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
         protected AccountLevyController Controller;        
         protected Mock<ILogger<AccountsOrchestrator>> Logger;
         protected IMapper Mapper;
-        protected Mock<IEncodingService> HashingService;
+        protected Mock<IEncodingService> EncodingService;
         protected Mock<IEmployerAccountsApiService> ApiService;
         protected Mock<IEmployerFinanceApiService> FinanceApiService;
 
@@ -28,11 +28,11 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
         {   
 
             Logger = new Mock<ILogger<AccountsOrchestrator>>();
-            HashingService = new Mock<IEncodingService>();
+            EncodingService = new Mock<IEncodingService>();
             ApiService = new Mock<IEmployerAccountsApiService>();
             FinanceApiService = new Mock<IEmployerFinanceApiService>();
             Mapper = ConfigureMapper();
-            var orchestrator = new AccountsOrchestrator(Logger.Object, Mapper, HashingService.Object, ApiService.Object, FinanceApiService.Object);
+            var orchestrator = new AccountsOrchestrator(Logger.Object, Mapper, EncodingService.Object, ApiService.Object, FinanceApiService.Object);
             Controller = new AccountLevyController(orchestrator);
         }
 
