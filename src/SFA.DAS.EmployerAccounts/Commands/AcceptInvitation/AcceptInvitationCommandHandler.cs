@@ -41,7 +41,7 @@ public class AcceptInvitationCommandHandler : IRequestHandler<AcceptInvitationCo
 
     public async Task<Unit> Handle(AcceptInvitationCommand message, CancellationToken cancellationToken)
     {
-        _logger.LogInformation($"Accepting Invitation '{message.Id}'");
+        _logger.LogInformation("Accepting Invitation '{Id}'", message.Id);
 
         var validationResult = _validator.Validate(message);
 
@@ -60,7 +60,7 @@ public class AcceptInvitationCommandHandler : IRequestHandler<AcceptInvitationCo
         if (invitation.ExpiryDate < DateTimeProvider.Current.UtcNow)
             throw new InvalidOperationException("Invitation has expired");
 
-        await _invitationRepository.Accept(invitation.Email, invitation.AccountId,invitation.Role);
+        await _invitationRepository.Accept(invitation.Email, invitation.AccountId, invitation.Role);
 
         await CreateAuditEntry(message, user, invitation);
 
@@ -128,5 +128,4 @@ public class AcceptInvitationCommandHandler : IRequestHandler<AcceptInvitationCo
             Created = DateTime.UtcNow
         });
     }
-
-    }
+}

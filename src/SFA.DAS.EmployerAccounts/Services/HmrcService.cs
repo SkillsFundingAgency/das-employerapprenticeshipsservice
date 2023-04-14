@@ -49,7 +49,7 @@ public class HmrcService : IHmrcService
 
         _httpClientWrapper.BaseUrl = _configuration.BaseUrl;
         _httpClientWrapper.AuthScheme = "Bearer";
-        _httpClientWrapper.MediaTypeWithQualityHeaderValueList = new List<MediaTypeWithQualityHeaderValue> { new MediaTypeWithQualityHeaderValue("application/vnd.hmrc.1.0+json") };
+        _httpClientWrapper.MediaTypeWithQualityHeaderValueList = new List<MediaTypeWithQualityHeaderValue> { new ("application/vnd.hmrc.1.0+json") };
     }
 
     public string GenerateAuthRedirectUrl(string redirectUrl)
@@ -118,7 +118,8 @@ public class HmrcService : IHmrcService
 
             var levyDeclartions = await _apprenticeshipLevyApiClient.GetEmployerLevyDeclarations(accessToken, empRef, fromDate);
 
-            _log.LogDebug($"Received {levyDeclartions?.Declarations?.Count} levy declarations empRef:{empRef} fromDate:{fromDate}");
+            _log.LogDebug("Received {DeclarationsCount} levy declarations empRef:{EmpRef} fromDate:{FromDate}", levyDeclartions?.Declarations?.Count, empRef, fromDate);
+
             return levyDeclartions;
         });
     }

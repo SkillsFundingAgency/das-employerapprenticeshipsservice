@@ -31,23 +31,22 @@ public class HmrcExecutionPolicy : ExecutionPolicy
     {
         if (ex is ApiHttpException exception)
         {
-            _logger.LogInformation($"ApiHttpException - {ex}");
+            _logger.LogInformation("ApiHttpException - {Ex}", ex);
 
             switch (exception.HttpCode)
             {
                 case 404:
-                    _logger.LogInformation($"Resource not found - {ex}");
+                    _logger.LogInformation("Resource not found - {Ex}", ex);
                     return default;
             }
         }
 
-        _logger.LogError(ex, $"Exceeded retry limit - {ex}");
+        _logger.LogError(ex, "Exceeded retry limit - {Ex}", ex);
         throw ex;
     }
 
     private void OnRetryableFailure(Exception ex)
     {
-        _logger.LogInformation($"Error calling HMRC - {ex} - Will retry");
+        _logger.LogInformation("Error calling HMRC - {Ex} - Will retry", ex);
     }
 }
-

@@ -4,7 +4,6 @@ using System.Net.Http.Headers;
 using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.Authentication.Extensions.Legacy;
-using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.Services;
 
@@ -31,7 +30,9 @@ public class ProviderRegistrationApiClient : ApiClientBase, IProviderRegistratio
         await AddAuthenticationHeader();           
 
         var url = $"{_apiBaseUrl}api/unsubscribe/{CorrelationId}";
-        _logger.LogInformation($"Getting Unsubscribe {url}");
+
+        _logger.LogInformation("Getting Unsubscribe {Url}", url);
+
         await _client.GetAsync(url);
     }
 
@@ -40,7 +41,7 @@ public class ProviderRegistrationApiClient : ApiClientBase, IProviderRegistratio
         await AddAuthenticationHeader();
             
         var url = $"{_apiBaseUrl}api/invitations/{CorrelationId}";
-        _logger.LogInformation($"Getting Invitations {url}");
+        _logger.LogInformation("Getting Invitations {Url}", url);
         var response = await _client.GetAsync(url);
         response.EnsureSuccessStatusCode();
 

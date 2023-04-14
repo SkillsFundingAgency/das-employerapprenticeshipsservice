@@ -58,7 +58,7 @@ public class RemoveLegalEntityCommandHandler : IRequestHandler<RemoveLegalEntity
 
         if (validationResult.IsUnauthorized)
         {
-            _logger.LogInformation($"User {message.UserId} tried to remove {message.AccountLegalEntityId} from Account {message.AccountId}");
+            _logger.LogInformation("User {UserId} tried to remove {AccountLegalEntityId} from Account {AccountId}", message.UserId, message.AccountLegalEntityId, message.AccountId);
             throw new UnauthorizedAccessException();
         }
 

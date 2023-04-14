@@ -19,7 +19,7 @@ public class WhenPingIsCalled : GivenEmployerAccountsApi
     [Test]
     public void ThenOkResponseIsReturn()
     {
-        Response
+        Response?
             .StatusCode
             .Should()
             .Be(HttpStatusCode.OK);

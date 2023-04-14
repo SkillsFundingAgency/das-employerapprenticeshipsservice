@@ -18,12 +18,12 @@ public class TaskOrchestrator
     {
         try
         {
-            _logger.LogDebug($"Dismissing task reminder {taskTypeName} for account id {hashedAccountId} and user id {externalUserId}");
+            _logger.LogDebug("Dismissing task reminder {TaskTypeName} for account id {HashedAccountId} and user id {ExternalUserId}", taskTypeName, hashedAccountId, externalUserId);
 
             if (!Enum.TryParse(taskTypeName, out TaskType taskType))
             {
-                _logger.LogWarning(
-                    $"Invalid task name for account (account id: {hashedAccountId}, user id: {externalUserId}, Task type: {taskTypeName}");
+                _logger.LogWarning("Invalid task name for account (account id: {HashedAccountId}, user id: {ExternalUserId}, Task type: {TaskTypeName}", hashedAccountId, externalUserId, taskType);
+
                 return new OrchestratorResponse { Status = HttpStatusCode.BadRequest };
             }
 
@@ -36,12 +36,12 @@ public class TaskOrchestrator
         }
         catch (InvalidRequestException ire)
         {
-            _logger.LogWarning(ire, $"Invalid request for account (account id: {hashedAccountId}, user id: {externalUserId}, Task type: {taskTypeName}");
+            _logger.LogWarning(ire, "Invalid request for account (account id: {HashedAccountId}, user id: {ExternalUserId}, Task type: {TaskTypeName}", hashedAccountId, externalUserId, taskTypeName);
             return new OrchestratorResponse { Status = HttpStatusCode.BadRequest};
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Error occurred when dismissing a task reminder (account id: {hashedAccountId}, user id: {externalUserId}, Task type: {taskTypeName}");
+            _logger.LogError(ex, "Error occurred when dismissing a task reminder (account id: {HashedAccountId}, user id: {ExternalUserId}, Task type: {TaskTypeName}", hashedAccountId, externalUserId, taskTypeName);
             return new OrchestratorResponse { Status = HttpStatusCode.InternalServerError, Exception = ex};
         }
 

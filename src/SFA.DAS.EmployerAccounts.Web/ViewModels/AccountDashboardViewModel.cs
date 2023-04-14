@@ -26,22 +26,7 @@ public class AccountDashboardViewModel
     public bool HideTasksBar { get; set; }
     public DateTime? TermAndConditionsAcceptedOn { get; set; }
     public DateTime? LastTermsAndConditionsUpdate { get; set; }
-    public bool ShowTermsAndConditionBanner
-    {
-        get
-        {
-            if (LastTermsAndConditionsUpdate.HasValue)
-            {
-                if (!TermAndConditionsAcceptedOn.HasValue ||
-                    (TermAndConditionsAcceptedOn.Value < LastTermsAndConditionsUpdate.Value))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-    }
+    public bool ShowTermsAndConditionBanner => LastTermsAndConditionsUpdate.HasValue && (!TermAndConditionsAcceptedOn.HasValue || (TermAndConditionsAcceptedOn.Value < LastTermsAndConditionsUpdate.Value));
 
     public string SingleAccountLegalEntityId { get; set; }
     public string HashedAccountId { get; set; }

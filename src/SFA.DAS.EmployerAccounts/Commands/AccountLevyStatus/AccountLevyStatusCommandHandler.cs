@@ -29,8 +29,8 @@ public class AccountLevyStatusCommandHandler : IRequestHandler<AccountLevyStatus
         // 1. Prevent setting status to same status
         // 2. Prevent status being changed from Levy to any other status
         // 3. Prevent status being changed to Unknown
-        if ((ApprenticeshipEmployerType) account.ApprenticeshipEmployerType == command.ApprenticeshipEmployerType ||
-            (ApprenticeshipEmployerType) account.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy ||
+        if ((ApprenticeshipEmployerType)account.ApprenticeshipEmployerType == command.ApprenticeshipEmployerType ||
+            (ApprenticeshipEmployerType)account.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy ||
             command.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Unknown)
         {
             return default;
@@ -48,11 +48,11 @@ public class AccountLevyStatusCommandHandler : IRequestHandler<AccountLevyStatus
                 ApprenticeshipEmployerType = command.ApprenticeshipEmployerType
             });
 
-            _logger.LogInformation(UpdateCompleteMessage(command));
+            _logger.LogInformation("{Message}", UpdateCompleteMessage(command));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, UpdateErrorMessage(command));
+            _logger.LogError(ex, "{Message}", UpdateErrorMessage(command));
         }
 
         return Unit.Value;

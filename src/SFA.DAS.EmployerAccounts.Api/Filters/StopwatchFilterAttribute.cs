@@ -29,6 +29,6 @@ public class StopwatchFilterAttribute : ActionFilterAttribute
 
         var controllerName = context.RouteData.Values["controller"];
         var actionName = context.RouteData.Values["action"];
-        _logger.LogWarning($"Controller action took {_stopWatch.ElapsedMilliseconds} to complete: {controllerName}.{actionName}");
+        _logger.LogWarning("Controller action took {ElapsedMilliseconds} to complete: {ControllerName}.{ActionName}", _stopWatch.ElapsedMilliseconds, controllerName, actionName);
     }
 }

@@ -56,7 +56,7 @@ public class TaskApiClient : ITaskApiClient
         requestMessage.Content = new StringContent(string.Empty);
         await AddAuthenticationHeader(requestMessage);
 
-        _logger.LogInformation($"Post: {url}");
+        _logger.LogInformation("Post: {Url}", url);
         await _httpClient.SendAsync(requestMessage);
     }
 

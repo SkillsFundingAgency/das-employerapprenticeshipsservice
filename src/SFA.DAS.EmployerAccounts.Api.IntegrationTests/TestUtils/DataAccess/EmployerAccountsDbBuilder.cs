@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.ModelBuilders;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess.Adapters;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess.Dtos;
@@ -112,8 +111,8 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
             var output = new EmployerAccountOutput
             {
                 AccountId = createResult.AccountId,
-                HashedAccountId = _encodingService.Encode(createResult.AccountId, EncodingType.AccountId),
-                PublicHashedAccountId = _encodingService.Encode(createResult.AccountId, EncodingType.PublicAccountId),
+                HashedAccountId = _encodingService?.Encode(createResult.AccountId, EncodingType.AccountId),
+                PublicHashedAccountId = _encodingService?.Encode(createResult.AccountId, EncodingType.PublicAccountId),
                 LegalEntityId = createResult.LegalEntityId
             };
 

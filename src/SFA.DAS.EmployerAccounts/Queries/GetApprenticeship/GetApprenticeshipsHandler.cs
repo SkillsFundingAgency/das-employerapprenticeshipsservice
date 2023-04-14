@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetApprenticeship;
 
@@ -38,7 +37,7 @@ public class GetApprenticeshipsHandler : IRequestHandler<GetApprenticeshipsReque
         }
         catch(Exception ex)
         {
-            _logger.LogError(ex, $"Failed to get Cohorts for AccountId: {message.AccountId}");
+            _logger.LogError(ex, "Failed to get Cohorts for AccountId: {AccountId}", message.AccountId);
             return new GetApprenticeshipsResponse
             {
                 HasFailed = true

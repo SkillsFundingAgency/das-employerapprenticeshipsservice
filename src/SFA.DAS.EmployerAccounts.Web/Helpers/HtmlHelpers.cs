@@ -112,7 +112,7 @@ public class HtmlHelpers : IHtmlHelpers
     {
         accountId = GetHashedAccountId(accountId, out bool isConsoleUser, out bool isAccountIdSet);
 
-        _logger.LogDebug($"ReturnToHomePageButtonHref :: Accountid : {accountId} IsConsoleUser : {isConsoleUser}  IsAccountIdSet : {isAccountIdSet} ");
+        _logger.LogDebug("ReturnToHomePageButtonHref :: Accountid : {AccountId} IsConsoleUser : {IsConsoleUser}  IsAccountIdSet : {IsAccountIdSet} ", accountId, isConsoleUser, isAccountIdSet);
 
         return isConsoleUser && isAccountIdSet ? $"/accounts/{accountId}/teams/view" : isAccountIdSet ? $"/accounts/{accountId}/teams" : "/";
     }
@@ -121,7 +121,7 @@ public class HtmlHelpers : IHtmlHelpers
     {
         accountId = GetHashedAccountId(accountId, out bool isConsoleUser, out bool isAccountIdSet);
 
-        _logger.LogDebug($"ReturnToHomePageButtonText :: Accountid : {accountId} IsConsoleUser : {isConsoleUser}  IsAccountIdSet : {isAccountIdSet} ");
+        _logger.LogDebug("ReturnToHomePageButtonText :: Accountid : {AccountId} IsConsoleUser : {IsConsoleUser}  IsAccountIdSet : {IsAccountIdSet} ", accountId, isConsoleUser, isAccountIdSet);
 
         return isConsoleUser && isAccountIdSet ? "Return to your team" : isAccountIdSet ? "Go back to the account home page" : "Go back to the service home page";
     }
@@ -130,7 +130,7 @@ public class HtmlHelpers : IHtmlHelpers
     {
         accountId = GetHashedAccountId(accountId, out bool isConsoleUser, out bool isAccountIdSet);
 
-        _logger.LogDebug($"ReturnToHomePageLinkHref :: Accountid : {accountId} IsConsoleUser : {isConsoleUser}  IsAccountIdSet : {isAccountIdSet} ");
+        _logger.LogDebug("ReturnToHomePageLinkHref :: Accountid : {AccountId} IsConsoleUser : {IsConsoleUser}  IsAccountIdSet : {IsAccountIdSet} ", accountId, isConsoleUser, isAccountIdSet);
 
         return isConsoleUser && isAccountIdSet ? $"/accounts/{accountId}/teams/view" : "/";
     }
@@ -139,7 +139,7 @@ public class HtmlHelpers : IHtmlHelpers
     {
         accountId = GetHashedAccountId(accountId, out bool isConsoleUser, out bool isAccountIdSet);
 
-        _logger.LogDebug($"ReturnToHomePageLinkText :: Accountid : {accountId} IsConsoleUser : {isConsoleUser}  IsAccountIdSet : {isAccountIdSet} ");
+        _logger.LogDebug("ReturnToHomePageLinkText :: Accountid : {AccountId} IsConsoleUser : {IsConsoleUser}  IsAccountIdSet : {IsAccountIdSet} ", accountId, isConsoleUser, isAccountIdSet);
 
         return isConsoleUser && isAccountIdSet ? "Back" : isAccountIdSet ? "Back to the homepage" : "Back";
     }

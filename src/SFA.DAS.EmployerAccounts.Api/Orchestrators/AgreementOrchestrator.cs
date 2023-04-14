@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
 
         public async Task<int> GetMinimumSignedAgreemmentVersion(long accountId)
         {
-            _logger.LogInformation($"Requesting minimum signed agreement version for account {accountId}");
+            _logger.LogInformation("Requesting minimum signed agreement version for account {AccountId}", accountId);
 
             var response = await _mediator.Send(new GetMinimumSignedAgreementVersionQuery { AccountId = accountId });
             return response.MinimumSignedAgreementVersion;

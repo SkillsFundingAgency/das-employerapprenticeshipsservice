@@ -7,7 +7,6 @@ using Microsoft.Extensions.Hosting;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.AutoConfiguration.DependencyResolution;
 using SFA.DAS.Employer.Shared.UI;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Mappings;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
@@ -24,154 +23,158 @@ using SFA.DAS.UnitOfWork.EntityFrameworkCore.DependencyResolution.Microsoft;
 using SFA.DAS.UnitOfWork.Mvc.Extensions;
 using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.Microsoft;
 
-namespace SFA.DAS.EmployerAccounts.Web
+namespace SFA.DAS.EmployerAccounts.Web;
+
+public class Startup
 {
-    public class Startup
+    private readonly IConfiguration _configuration;
+    private readonly IWebHostEnvironment _environment;
+
+    public Startup(IConfiguration configuration, IWebHostEnvironment environment, bool buildConfig = true)
     {
-        private readonly IConfiguration _configuration;
-        private readonly IWebHostEnvironment _environment;
+        _environment = environment;
 
-        public Startup(IConfiguration configuration, IWebHostEnvironment environment, bool buildConfig = true)
+        _configuration = buildConfig ? configuration.BuildDasConfiguration() : configuration;
+    }
+
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddSingleton(_configuration);
+
+        services.AddOptions();
+
+        services.AddLogging();
+
+        services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+        services.AddConfigurationOptions(_configuration);
+        var identityServerConfiguration = _configuration
+            .GetSection(ConfigurationKeys.Identity)
+            .Get<IdentityServerConfiguration>();
+
+        var _employerAccountsConfiguration = services.BuildServiceProvider().GetService<EmployerAccountsConfiguration>();
+
+        services.AddOrchestrators();
+        services.AddAutoMapper(typeof(Startup).Assembly, typeof(AccountMappings).Assembly);
+        services.AddAutoConfiguration();
+        services.AddDatabaseRegistration();
+        services.AddDataRepositories();
+        services.AddApplicationServices(_employerAccountsConfiguration);
+        services.AddHmrcServices();
+
+        if (_employerAccountsConfiguration.UseGovSignIn)
         {
-            _environment = environment;
-
-            _configuration = buildConfig ? configuration.BuildDasConfiguration() : configuration;
+            services.AddMaMenuConfiguration(RouteNames.SignOut,  _configuration["ResourceEnvironmentName"]);
+        }
+        else
+        {
+            services.AddMaMenuConfiguration(RouteNames.SignOut, identityServerConfiguration.ClientId, _configuration["ResourceEnvironmentName"]);
         }
 
-        public void ConfigureServices(IServiceCollection services)
+        
+
+        services.AddAuditServices();
+        services.AddCachesRegistrations();
+        services.AddDateTimeServices(_configuration);
+        services.AddEventsApi();
+        services.AddNotifications(_configuration);
+
+        services
+            .AddUnitOfWork()
+            .AddEntityFramework(_employerAccountsConfiguration)
+            .AddEntityFrameworkUnitOfWork<EmployerAccountsDbContext>();
+        services.AddNServiceBusClientUnitOfWork();
+        services.AddEmployerAccountsApi();
+        services.AddExecutionPolicies();
+        services.AddEmployerAccountsOuterApi(_employerAccountsConfiguration.EmployerAccountsOuterApiConfiguration);
+        services.AddCommittmentsV2Client(_employerAccountsConfiguration.CommitmentsApi);
+        services.AddPollyPolicy(_employerAccountsConfiguration);
+        services.AddContentApiClient(_employerAccountsConfiguration);
+        services.AddProviderRegistration(_employerAccountsConfiguration);
+        services.AddApprenticeshipLevyApi(_employerAccountsConfiguration);
+        services.AddReferenceDataApi();
+
+        services.AddAuthenticationServices();
+
+        services.AddMediatorCommandValidators();
+        services.AddMediatorQueryValidators();
+        services.AddMediatR(typeof(GetEmployerAccountByIdQuery));
+
+        if (_configuration.UseGovUkSignIn())
         {
-            services.AddSingleton(_configuration);
+            services.AddAndConfigureGovUkAuthentication(_configuration,
+                $"{typeof(Startup).Assembly.GetName().Name}.Auth",
+                typeof(EmployerAccountPostAuthenticationClaimsHandler));
+        }
+        else
+        {
+            services.AddAndConfigureEmployerAuthentication(identityServerConfiguration);
+        }
 
-            services.AddOptions();
+        // TODO: Support sign in 
+        //services.AddAndConfigureSupportUserAuthentications(new SupportConsoleAuthenticationOptions());
 
-            services.AddLogging();
+        services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
 
-            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-            services.AddConfigurationOptions(_configuration);
-            var identityServerConfiguration = _configuration
-                .GetSection(ConfigurationKeys.Identity)
-                .Get<IdentityServerConfiguration>();
+        services.Configure<RouteOptions>(options =>
+        {
 
-            var _employerAccountsConfiguration = services.BuildServiceProvider().GetService<EmployerAccountsConfiguration>();
-
-            services.AddOrchestrators();
-            services.AddAutoMapper(typeof(Startup).Assembly, typeof(AccountMappings).Assembly);
-            services.AddAutoConfiguration();
-            services.AddDatabaseRegistration();
-            services.AddDataRepositories();
-            services.AddApplicationServices(_employerAccountsConfiguration);
-            services.AddHmrcServices();
-
-            services.AddMaMenuConfiguration(RouteNames.SignOut, identityServerConfiguration.ClientId, _configuration["ResourceEnvironmentName"]);
-
-            services.AddAuditServices();
-            services.AddCachesRegistrations();
-            services.AddDateTimeServices(_configuration);
-            services.AddEventsApi();
-            services.AddNotifications(_configuration);
-
-            services
-                .AddUnitOfWork()
-                .AddEntityFramework(_employerAccountsConfiguration)
-                .AddEntityFrameworkUnitOfWork<EmployerAccountsDbContext>();
-            services.AddNServiceBusClientUnitOfWork();
-            services.AddEmployerAccountsApi();
-            services.AddExecutionPolicies();
-            services.AddEmployerAccountsOuterApi(_employerAccountsConfiguration.EmployerAccountsOuterApiConfiguration);
-            services.AddCommittmentsV2Client(_employerAccountsConfiguration.CommitmentsApi);
-            services.AddPollyPolicy(_employerAccountsConfiguration);
-            services.AddContentApiClient(_employerAccountsConfiguration);
-            services.AddProviderRegistration(_employerAccountsConfiguration);
-            services.AddApprenticeshipLevyApi(_employerAccountsConfiguration);
-            services.AddReferenceDataApi();
-
-            services.AddAuthenticationServices();
-
-            services.AddMediatorCommandValidators();
-            services.AddMediatorQueryValidators();
-            services.AddMediatR(typeof(GetEmployerAccountByIdQuery));
-
-            if (_configuration.UseGovUkSignIn())
+        }).AddMvc(options =>
+        {
+            options.Filters.Add(new AnalyticsFilterAttribute());
+            if (!_configuration.IsDev())
             {
-                services.AddAndConfigureGovUkAuthentication(_configuration,
-                    $"{typeof(Startup).Assembly.GetName().Name}.Auth",
-                    typeof(EmployerAccountPostAuthenticationClaimsHandler));
-            }
-            else
-            {
-                services.AddAndConfigureEmployerAuthentication(identityServerConfiguration);
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             }
 
-            // TODO: Support sign in 
-            //services.AddAndConfigureSupportUserAuthentications(new SupportConsoleAuthenticationOptions());
+        });
 
-            services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
+        services.AddApplicationInsightsTelemetry();
 
-            services.Configure<RouteOptions>(options =>
-            {
-
-            }).AddMvc(options =>
-            {
-                options.Filters.Add(new AnalyticsFilterAttribute());
-                if (!_configuration.IsDev())
-                {
-                    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-                }
-
-            });
-
-            services.AddApplicationInsightsTelemetry();
-
-            if (!_environment.IsDevelopment())
-            {
-                services.AddHealthChecks();
-                services.AddDataProtection(_configuration);
-            }
+        if (!_environment.IsDevelopment())
+        {
+            services.AddHealthChecks();
+            services.AddDataProtection(_configuration);
+        }
 
 #if DEBUG
-            services.AddControllersWithViews(o =>
-            {
-            }).AddRazorRuntimeCompilation();
+        services.AddControllersWithViews(o =>
+        {
+        }).AddRazorRuntimeCompilation();
 #endif
 
-            services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
-        }
+        services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
+    }
 
-        public void ConfigureContainer(UpdateableServiceProvider serviceProvider)
+    public void ConfigureContainer(UpdateableServiceProvider serviceProvider)
+    {
+        serviceProvider.StartNServiceBus(_configuration.IsDevOrLocal());
+
+        // Replacing ClientOutboxPersisterV2 with a local version to fix unit of work issue due to propogating Task up the chain rathert than awaiting on DB Command.
+        // not clear why this fixes the issue. Attempted to make the change in SFA.DAS.Nservicebus.SqlServer however it conflicts when upgraded with SFA.DAS.UnitOfWork.Nservicebus
+        // which would require upgrading to NET6 to resolve.
+        var serviceDescriptor = serviceProvider.FirstOrDefault(serv => serv.ServiceType == typeof(IClientOutboxStorageV2));
+        serviceProvider.Remove(serviceDescriptor);
+        serviceProvider.AddScoped<IClientOutboxStorageV2, AppStart.ClientOutboxPersisterV2>();
+    }
+
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
         {
-            serviceProvider.StartNServiceBus(_configuration.IsDevOrLocal());
-
-            // Replacing ClientOutboxPersisterV2 with a local version to fix unit of work issue due to propogating Task up the chain rathert than awaiting on DB Command.
-            // not clear why this fixes the issue. Attempted to make the change in SFA.DAS.Nservicebus.SqlServer however it conflicts when upgraded with SFA.DAS.UnitOfWork.Nservicebus
-            // which would require upgrading to NET6 to resolve.
-            var serviceDescriptor = serviceProvider.FirstOrDefault(serv => serv.ServiceType == typeof(IClientOutboxStorageV2));
-            serviceProvider.Remove(serviceDescriptor);
-            serviceProvider.AddScoped<IClientOutboxStorageV2, AppStart.ClientOutboxPersisterV2>();
+            app.UseDeveloperExceptionPage();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        app.UseUnitOfWork();
+
+        app.UseStaticFiles();
+        app.UseAuthentication();
+        app.UseRouting();
+        app.UseAuthorization();
+        app.UseEndpoints(endpoints =>
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseUnitOfWork();
-
-            app.UseStaticFiles();
-            app.UseAuthentication();
-            app.UseRouting();
-            app.UseAuthorization();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
-        }
-
-        private void ConfigureMvcOptions(MvcOptions mvcOptions)
-        {
-        }
+            endpoints.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+        });
     }
 }

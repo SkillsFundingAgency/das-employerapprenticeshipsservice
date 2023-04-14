@@ -64,7 +64,7 @@ public class EmployerTeamOrchestratorWithCallToAction : EmployerTeamOrchestrator
             }
             else
             {
-                _logger.LogError(callToActionResponse.Exception, $"An error occurred whilst trying to retrieve account CallToAction: {hashedAccountId}");
+                _logger.LogError(callToActionResponse.Exception, "An error occurred whilst trying to retrieve account CallToAction: {HashedAccountId}", hashedAccountId);
             }
         }
 

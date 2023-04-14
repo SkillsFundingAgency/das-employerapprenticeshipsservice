@@ -17,7 +17,7 @@ public class UnsubscribeProviderEmailCommandHandler : IRequestHandler<Unsubscrib
     public async Task<Unit> Handle(UnsubscribeProviderEmailCommand message, CancellationToken cancellationToken)
     {
         await _providerRegistrationApiClient.Unsubscribe(message.CorrelationId.ToString());
-        _logger.LogInformation($"Sent ProviderEmail to Unsubscribe {message.CorrelationId}");
+        _logger.LogInformation("Sent ProviderEmail to Unsubscribe {CorrelationId}", message.CorrelationId);
 
         return Unit.Value;
     }
