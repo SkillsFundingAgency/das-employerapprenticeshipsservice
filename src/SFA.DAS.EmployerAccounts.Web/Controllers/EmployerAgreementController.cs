@@ -50,7 +50,7 @@ public class EmployerAgreementController : BaseController
 
     [HttpGet]
     [Route("agreements/{hashedAgreementId}/details")]
-    public async Task<IActionResult> Details(string hashedAgreementId, string hashedAccountId)
+    public async Task<IActionResult> Details(string hashedAccountId, string hashedAgreementId)
     {
         var agreement = await _orchestrator.GetById(
             hashedAgreementId,
@@ -63,7 +63,7 @@ public class EmployerAgreementController : BaseController
 
     [HttpGet]
     [Route("agreements/{hashedAgreementId}/view", Name = RouteNames.AgreementView)]
-    public async Task<IActionResult> View(string hashedAgreementId, string hashedAccountId)
+    public async Task<IActionResult> View(string hashedAccountId, string hashedAgreementId)
     {
         var agreement = await _orchestrator.GetSignedAgreementViewModel(hashedAccountId, hashedAgreementId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
         return View(agreement.Data);
@@ -82,7 +82,7 @@ public class EmployerAgreementController : BaseController
 
     [HttpGet]
     [Route("agreements/{hashedAgreementId}/about-your-agreement", Name = RouteNames.AboutYourAgreement)]
-    public async Task<ViewResult> AboutYourAgreement(string hashedAgreementId, string hashedAccountId)
+    public async Task<ViewResult> AboutYourAgreement(string hashedAccountId, string hashedAgreementId)
     {
         var agreement = await _orchestrator.GetById(
             hashedAgreementId,
@@ -106,7 +106,7 @@ public class EmployerAgreementController : BaseController
 
     [HttpPost]
     [Route("agreements/{hashedAgreementId}/sign", Name = RouteNames.EmployerAgreementSign)]
-    public async Task<IActionResult> Sign(string hashedAgreementId, string hashedAccountId, int? choice)
+    public async Task<IActionResult> Sign( string hashedAccountId, string hashedAgreementId, int? choice)
     {
         var userInfo = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
 
@@ -159,7 +159,7 @@ public class EmployerAgreementController : BaseController
 
     [HttpGet]
     [Route("agreements/{hashedAgreementId}/agreement-pdf", Name = RouteNames.GetPdfAgreement)]
-    public async Task<IActionResult> GetPdfAgreement(string hashedAgreementId, string hashedAccountId)
+    public async Task<IActionResult> GetPdfAgreement(string hashedAccountId, string hashedAgreementId)
     {
         var stream = await _orchestrator.GetPdfEmployerAgreement(hashedAccountId, hashedAgreementId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
@@ -174,9 +174,9 @@ public class EmployerAgreementController : BaseController
 
     [HttpGet]
     [Route("agreements/{hashedAgreementId}/signed-agreement-pdf", Name = RouteNames.GetSignedPdfAgreement)]
-    public async Task<IActionResult> GetSignedPdfAgreement(string hashedAgreementId, string hashedAccountId)
+    public async Task<IActionResult> GetSignedPdfAgreement(string hashedAccountId, string hashedAgreementId)
     {
-        var stream = await _orchestrator.GetSignedPdfEmployerAgreement(hashedAgreementId, hashedAccountId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
+        var stream = await _orchestrator.GetSignedPdfEmployerAgreement(hashedAccountId, hashedAgreementId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
         if (stream.Data.PdfStream == null)
         {
@@ -189,9 +189,9 @@ public class EmployerAgreementController : BaseController
 
     [HttpGet]
     [Route("agreements/{accountLegalEntityHashedId}/remove")]
-    public async Task<IActionResult> ConfirmRemoveOrganisation(string accountLegalEntityHashedId, string hashedAccountId)
+    public async Task<IActionResult> ConfirmRemoveOrganisation(string hashedAccountId, string accountLegalEntityHashedId)
     {
-        var model = await _orchestrator.GetConfirmRemoveOrganisationViewModel(accountLegalEntityHashedId, hashedAccountId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
+        var model = await _orchestrator.GetConfirmRemoveOrganisationViewModel(hashedAccountId, accountLegalEntityHashedId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
         return View(model.Data != null && model.Data.CanBeRemoved ? ControllerConstants.ConfirmRemoveOrganisationActionName : ControllerConstants.CannotRemoveOrganisationViewName, model);
     }
@@ -220,7 +220,7 @@ public class EmployerAgreementController : BaseController
 
     [HttpGet]
     [Route("agreements/{hashedAgreementId}/whenDoYouWantToView")]
-    public async Task<IActionResult> WhenDoYouWantToView(string hashedAgreementId, string hashedAccountId)
+    public async Task<IActionResult> WhenDoYouWantToView(string hashedAccountId, string hashedAgreementId)
     {
         var userInfo = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
         var agreement = await _orchestrator.GetById(hashedAgreementId, hashedAccountId, userInfo);
@@ -230,7 +230,7 @@ public class EmployerAgreementController : BaseController
 
     [HttpPost]
     [Route("agreements/{hashedAgreementId}/whenDoYouWantToView")]
-    public async Task<IActionResult> WhenDoYouWantToView(int? choice, string hashedAgreementId, string hashedAccountId)
+    public async Task<IActionResult> WhenDoYouWantToView(int? choice, string hashedAccountId, string hashedAgreementId)
     {
         switch (choice ?? 0)
         {
