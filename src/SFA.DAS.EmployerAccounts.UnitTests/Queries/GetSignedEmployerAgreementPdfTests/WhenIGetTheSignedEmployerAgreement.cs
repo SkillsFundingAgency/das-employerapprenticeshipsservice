@@ -36,7 +36,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSignedEmployerAgreementP
 
             _pdfService = new Mock<IPdfService>();
             _pdfService.Setup(
-                x => x.SubsituteValuesForPdf($"{ExpectedLegalAgreementTemplateName}_Sub.pdf", It.IsAny<Dictionary<string, string>>()))
+                x => x.SubstituteValuesForPdf($"{ExpectedLegalAgreementTemplateName}_Sub.pdf", It.IsAny<Dictionary<string, string>>()))
                 .ReturnsAsync(new MemoryStream());
 
             _employerAgreementRepository = new Mock<IEmployerAgreementRepository>();
@@ -84,7 +84,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSignedEmployerAgreementP
 
             //Assert
             _employerAgreementRepository.Verify(x => x.GetEmployerAgreement(ExpectedLegalAgreementId), Times.Once);
-            _pdfService.Verify(x => x.SubsituteValuesForPdf($"{ExpectedLegalAgreementTemplateName}_Sub.pdf", It.Is<Dictionary<string, string>>(
+            _pdfService.Verify(x => x.SubstituteValuesForPdf($"{ExpectedLegalAgreementTemplateName}_Sub.pdf", It.Is<Dictionary<string, string>>(
                                                                                                 c => c.ContainsValue(ExpectedSignedByName)
                                                                                             && c.ContainsValue(ExpectedLegalEntityName)
                                                                                             && c.ContainsValue(_expectedSignedDate.ToString("d MMMM yyyy"))
@@ -113,7 +113,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSignedEmployerAgreementP
             //Assert
             _pdfService.Verify(
                 x =>
-                    x.SubsituteValuesForPdf($"{ExpectedLegalAgreementTemplateName}_Sub.pdf",
+                    x.SubstituteValuesForPdf($"{ExpectedLegalAgreementTemplateName}_Sub.pdf",
                         It.Is<Dictionary<string, string>>(
                             c => c.ContainsKey("LegalEntityAddress_0")
                             && c.ContainsKey("LegalEntityAddress_1")

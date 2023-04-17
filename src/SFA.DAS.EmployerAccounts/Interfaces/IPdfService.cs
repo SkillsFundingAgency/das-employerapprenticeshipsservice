@@ -4,7 +4,7 @@ namespace SFA.DAS.EmployerAccounts.Interfaces;
 
 public interface IPdfService
 {
-    Task<MemoryStream> SubsituteValuesForPdf(string fileName, Dictionary<string, string> valuesToSubsitute);
+    Task<MemoryStream> SubstituteValuesForPdf(string fileName, Dictionary<string, string> valuesToSubstitute);
 
-    Task<MemoryStream> SubsituteValuesForPdf(string fileName);
+    Task<MemoryStream> SubstituteValuesForPdf(string fileName);
 }

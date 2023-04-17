@@ -35,7 +35,7 @@ public class GetEmployerAgreementPdfQueryHandler : IRequestHandler<GetEmployerAg
             .Select(x => x.Template.PartialViewName)
             .SingleAsync(cancellationToken);
 
-        var file = await _pdfService.SubsituteValuesForPdf($"{templatePartialViewName}.pdf");
+        var file = await _pdfService.SubstituteValuesForPdf($"{templatePartialViewName}.pdf");
 
 
         return new GetEmployerAgreementPdfResponse {FileStream = file};
