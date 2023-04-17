@@ -15,6 +15,7 @@
     <Reference Include="System.Transactions" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Hashids.net" Version="1.7.0" />
     <PackageReference Include="SFA.DAS.EmployerFinance.Messages" Version="1.6.3195" />
     <PackageReference Include="SFA.DAS.Encoding" Version="1.1.76" />
     <PackageReference Include="SFA.DAS.ReferenceData.Types" Version="1.1.90">

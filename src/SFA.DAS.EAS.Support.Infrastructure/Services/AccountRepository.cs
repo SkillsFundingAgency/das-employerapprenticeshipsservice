@@ -10,7 +10,6 @@ using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Support.Core.Models;
 using SFA.DAS.EAS.Support.Core.Services;
 using SFA.DAS.EmployerAccounts.Api.Types;
-using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Encoding;
 
@@ -22,13 +21,13 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
         private readonly IDatetimeService _datetimeService;
         private readonly ILogger<AccountRepository> _logger;
         private readonly IPayeSchemeObfuscator _payeSchemeObfuscator;
-        private readonly IHashingService _hashingService;
+        private readonly IPayRefHashingService _hashingService;
 
         public AccountRepository(IAccountApiClient accountApiClient,
             IPayeSchemeObfuscator payeSchemeObfuscator,
             IDatetimeService datetimeService,
             ILogger<AccountRepository> logger,
-            IHashingService hashingService)
+            IPayRefHashingService hashingService)
         {
             _accountApiClient = accountApiClient;
             _payeSchemeObfuscator = payeSchemeObfuscator;
