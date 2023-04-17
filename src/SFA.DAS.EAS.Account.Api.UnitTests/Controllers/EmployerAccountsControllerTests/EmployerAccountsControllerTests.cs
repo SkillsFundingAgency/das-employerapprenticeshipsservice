@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
         protected Mock<ILogger<AccountsOrchestrator>> Logger;
         protected Mock<IUrlHelper> _urlHelper;
         protected Mock<IMapper> _mapper;
-        protected Mock<IEncodingService> _hashingService;
+        protected Mock<IEncodingService> _encodingService;
         protected Mock<IEmployerAccountsApiService> _employerAccountsApiService;
         protected Mock<IEmployerFinanceApiService> _employerFinanceApiService;
 
@@ -29,11 +29,11 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
         {
              Logger = new Mock<ILogger<AccountsOrchestrator>>();
             _mapper = new Mock<IMapper>();
-            _hashingService = new Mock<IEncodingService>();
+            _encodingService = new Mock<IEncodingService>();
             _employerAccountsApiService = new Mock<IEmployerAccountsApiService>();
             _employerFinanceApiService = new Mock<IEmployerFinanceApiService>();
           
-            var orchestrator = new AccountsOrchestrator(Logger.Object, _mapper.Object, _hashingService.Object, _employerAccountsApiService.Object, _employerFinanceApiService.Object);
+            var orchestrator = new AccountsOrchestrator(Logger.Object, _mapper.Object, _encodingService.Object, _employerAccountsApiService.Object, _employerFinanceApiService.Object);
             _controller = new EmployerAccountsController(orchestrator, _employerAccountsApiService.Object);
 
             _urlHelper = new Mock<IUrlHelper>();
