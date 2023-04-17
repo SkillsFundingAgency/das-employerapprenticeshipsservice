@@ -12,12 +12,6 @@ public static class ConfigurationExtensions
                   .Equals("true", StringComparison.CurrentCultureIgnoreCase);
     }
 
-    public static bool UseStubAuth(this IConfiguration configuration)
-    {
-        return configuration["StubAuth"] != null && configuration["StubAuth"]
-            .Equals("true", StringComparison.CurrentCultureIgnoreCase);
-    }
-
     public static IConfiguration BuildDasConfiguration(this IConfiguration configuration)
     {
         var configurationBuilder = new ConfigurationBuilder()

@@ -26,23 +26,6 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
     public async Task<IEnumerable<Claim>> GetClaims(TokenValidatedContext tokenValidatedContext)
     {
         var claims = new List<Claim>();
-        if (_configuration.UseStubAuth())
-        {
-            var accountClaims = new Dictionary<string, EmployerUserAccountItem>();
-            accountClaims.Add("", new EmployerUserAccountItem
-            {
-                Role = "Owner",
-                AccountId = "ABC123",
-                EmployerName = "Stub Employer"
-            });
-            claims.AddRange(new[]
-            {
-                new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, JsonConvert.SerializeObject(accountClaims)),
-                new Claim(EmployerClaims.IdamsUserEmailClaimTypeIdentifier, _configuration["NoAuthEmail"]),
-                new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, Guid.NewGuid().ToString())
-            });
-            return claims.ToList();
-        }
 
         string userId;
         var email = string.Empty;
