@@ -2,7 +2,6 @@
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <TargetFramework>net6.0</TargetFramework>
-    <RuntimeIdentifier>win</RuntimeIdentifier>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="coverlet.msbuild" Version="3.2.0">
