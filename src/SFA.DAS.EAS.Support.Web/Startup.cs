@@ -4,12 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SFA.DAS.HashingService;
 using SFA.DAS.EmployerAccounts.Api.Client;
 using SFA.DAS.EAS.Account.Api.Clients;
 using SFA.DAS.EAS.Support.Web.Extensions;
 
-using HashService = SFA.DAS.HashingService.HashingService;
 using SFA.DAS.EAS.Support.Infrastructure.Settings;
 using SFA.DAS.EAS.Support.Infrastructure.Services;
 using SFA.DAS.EAS.Support.Web.Services;
@@ -53,7 +51,7 @@ namespace SFA.DAS.EAS.Support.Web
             var accApiConfigStr = Configuration.GetValue<string>("SFA.DAS.EmployerAccountAPI");
             var accApiConfig = JsonSerializer.Deserialize<AccountApiConfiguration>(accApiConfigStr);
 
-            services.AddSingleton<IHashingService, HashService>(c => new HashService(supportEas.HashingService.AllowedCharacters, supportEas.HashingService.Hashstring));
+            services.AddSingleton<IPayRefHashingService, PayRefHashingService>(c => new PayRefHashingService(supportEas.HashingService.AllowedCharacters, supportEas.HashingService.Hashstring));
             services.AddSingleton<IEmployerAccountsApiClientConfiguration, EmployerAccountsApiClientConfiguration>(c => employerAccApiClientConfig);
             services.AddSingleton<ITokenServiceApiClientConfiguration, TokenServiceApiClientConfiguration>(c => tokenServiceApiClientConfig);
             services.AddSingleton<IHmrcApiClientConfiguration, HmrcApiClientConfiguration>(c => supportEas.LevySubmission.HmrcApi);

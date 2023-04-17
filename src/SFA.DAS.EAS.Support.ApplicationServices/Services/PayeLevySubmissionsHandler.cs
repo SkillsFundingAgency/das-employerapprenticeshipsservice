@@ -4,7 +4,6 @@ using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.Core.Models;
 using SFA.DAS.EAS.Support.Core.Services;
 using SFA.DAS.EAS.Support.Infrastructure.Services;
-using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using System;
 using System.Globalization;
@@ -20,13 +19,13 @@ namespace SFA.DAS.EAS.Support.ApplicationServices.Services
         private readonly ILevySubmissionsRepository _levySubmissionsRepository;
         private readonly IPayeSchemeObfuscator _payeSchemeObfuscator;
         private readonly ILogger<PayeLevySubmissionsHandler> _log;
-        private readonly IHashingService _hashingService;
+        private readonly IPayRefHashingService _hashingService;
 
         public PayeLevySubmissionsHandler(IAccountRepository accountRepository,
             ILevySubmissionsRepository levySubmissionsRepository,
             IPayeSchemeObfuscator payeSchemeObfuscator,
             ILogger<PayeLevySubmissionsHandler> log,
-            IHashingService hashingService)
+            IPayRefHashingService hashingService)
         {
             _accountRepository = accountRepository;
             _levySubmissionsRepository = levySubmissionsRepository;

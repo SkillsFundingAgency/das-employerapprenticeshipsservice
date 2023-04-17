@@ -7,7 +7,6 @@ using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Core.Models;
 using SFA.DAS.EAS.Support.Core.Services;
 using SFA.DAS.EAS.Support.Infrastructure.Services;
-using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using System;
 using System.Collections.Generic;
@@ -25,7 +24,7 @@ namespace SFA.DAS.EAS.Support.ApplicationServices.Tests.PayeSchemeLevySubmission
         private Mock<ILevySubmissionsRepository> _levySubmissionsRepository;
         private Mock<IPayeSchemeObfuscator> _payeSchemeObfuscator;
         private Mock<ILogger<PayeLevySubmissionsHandler>> _log;
-        private Mock<IHashingService> _hashingService;
+        private Mock<IPayRefHashingService> _hashingService;
 
         private const string _accountId = "45789456123";
         private const string _hashedPayeRef = "HASHPAYEID";
@@ -38,7 +37,7 @@ namespace SFA.DAS.EAS.Support.ApplicationServices.Tests.PayeSchemeLevySubmission
             _levySubmissionsRepository = new Mock<ILevySubmissionsRepository>();
             _payeSchemeObfuscator = new Mock<IPayeSchemeObfuscator>();
             _log = new Mock<ILogger<PayeLevySubmissionsHandler>>();
-            _hashingService = new Mock<IHashingService>();
+            _hashingService = new Mock<IPayRefHashingService>();
 
         }
 
