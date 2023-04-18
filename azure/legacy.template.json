@@ -63,7 +63,7 @@
             "type": "string",
             "defaultValue": ""
         },
-        "keyVaultResourceGroupName": {
+        "sharedManagementResourceGroup": {
             "type": "string"
         },
         "keyVaultName": {
@@ -180,7 +180,7 @@
                         "value": "[parameters('keyVaultName')]"
                     },
                     "keyVaultResourceGroup": {
-                        "value": "[parameters('keyVaultResourceGroupName')]"
+                        "value": "[parameters('sharedManagementResourceGroup')]"
                     }
                 }
             }
@@ -204,7 +204,7 @@
                         "value": "[parameters('keyVaultName')]"
                     },
                     "keyVaultResourceGroup": {
-                        "value": "[parameters('keyVaultResourceGroupName')]"
+                        "value": "[parameters('sharedManagementResourceGroup')]"
                     }
                 }
             }
@@ -303,7 +303,7 @@
                         "value": "[parameters('keyVaultName')]"
                     },
                     "keyVaultResourceGroup": {
-                        "value": "[parameters('keyVaultResourceGroupName')]"
+                        "value": "[parameters('sharedManagementResourceGroup')]"
                     }
                 }
             }
@@ -420,7 +420,7 @@
                         "value": "[parameters('keyVaultName')]"
                     },
                     "keyVaultResourceGroup": {
-                        "value": "[parameters('keyVaultResourceGroupName')]"
+                        "value": "[parameters('sharedManagementResourceGroup')]"
                     }
                 }
             }
