@@ -16,7 +16,7 @@ public class ConfigurationExtensionsTests
     {
         // Arrange
         var configuration = new Mock<IConfiguration>();
-        configuration.Setup(x => x["EmployerAccountsConfiguration:UseGovSignIn"]).Returns(configValue);
+        configuration.Setup(x => x["SFA.DAS.EmployerAccounts:UseGovSignIn"]).Returns(configValue);
 
         // Act
         var result = configuration.Object.UseGovUkSignIn();
