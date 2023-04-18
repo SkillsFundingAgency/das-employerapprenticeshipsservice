@@ -8,7 +8,7 @@ using SFA.DAS.EmployerAccounts.Web.RouteValues;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
-[SetNavigationSection(NavigationSection.AccountsHome)]
+[SetNavigationSection(NavigationSection.AccountsTeamsView)]
 [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
 [Route("accounts/{HashedAccountId}/teams")]
 public class EmployerTeamController : BaseController
@@ -27,6 +27,7 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpGet]
+    [SetNavigationSection(NavigationSection.AccountsHome)]
     [Route("", Name = RouteNames.EmployerTeamIndex)]
     public async Task<IActionResult> Index(string hashedAccountId)
     {
