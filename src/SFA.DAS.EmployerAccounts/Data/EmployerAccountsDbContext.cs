@@ -44,17 +44,19 @@ public class EmployerAccountsDbContext : DbContext, IEmployerAccountsDbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        optionsBuilder.UseLazyLoadingProxies();
+
         if (_configuration == null || _azureServiceTokenProvider == null)
         {
-            optionsBuilder
-                .UseSqlServer()
-                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             return;
         }
 
-        optionsBuilder
-            .UseLazyLoadingProxies()
-            .UseSqlServer(_connection as SqlConnection);
+        optionsBuilder.UseSqlServer(_connection as SqlConnection, options =>
+            options.EnableRetryOnFailure(
+                5,
+                TimeSpan.FromSeconds(20),
+                null
+            ));
 
     }
 
