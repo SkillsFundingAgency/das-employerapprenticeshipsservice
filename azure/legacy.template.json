@@ -76,10 +76,10 @@
         "tokenCertificateName": {
             "type": "string"
         },
-        "apiIdaAudience": {
+        "idaAudience": {
             "type": "string"
         },
-        "apiIdaTenant": {
+        "Tenant": {
             "type": "string"
         },
         "appServiceAllowedIPs": {
@@ -357,11 +357,11 @@
                                 },
                                 {
                                     "name": "idaAudience",
-                                    "value": "[parameters('apiIdaAudience')]"
+                                    "value": "[parameters('idaAudience')]"
                                 },
                                 {
                                     "name": "idaTenant",
-                                    "value": "[parameters('apiIdaTenant')]"
+                                    "value": "[parameters('Tenant')]"
                                 }
                             ]
                         }
