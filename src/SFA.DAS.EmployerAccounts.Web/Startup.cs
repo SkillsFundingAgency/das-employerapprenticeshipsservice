@@ -101,7 +101,9 @@ public class Startup
 
         if (_configuration.UseGovUkSignIn())
         {
-            services.AddAndConfigureGovUkAuthentication(_configuration,
+            var govConfig = _configuration.GetSection("SFA.DAS.Employer.GovSignIn");
+            govConfig["ResourceEnvironmentName"] = _configuration["ResourceEnvironmentName"];
+            services.AddAndConfigureGovUkAuthentication(govConfig,
                 $"{typeof(Startup).Assembly.GetName().Name}.Auth",
                 typeof(EmployerAccountPostAuthenticationClaimsHandler));
         }

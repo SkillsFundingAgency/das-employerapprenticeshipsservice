@@ -7,8 +7,8 @@ public static class ConfigurationExtensions
 {
     public static bool UseGovUkSignIn(this IConfiguration configuration)
     {
-        return configuration["EmployerAccountsConfiguration:UseGovSignIn"] != null &&
-               configuration["EmployerAccountsConfiguration:UseGovSignIn"]
+        return configuration["SFA.DAS.EmployerAccounts:UseGovSignIn"] != null &&
+               configuration["SFA.DAS.EmployerAccounts:UseGovSignIn"]
                   .Equals("true", StringComparison.CurrentCultureIgnoreCase);
     }
 
