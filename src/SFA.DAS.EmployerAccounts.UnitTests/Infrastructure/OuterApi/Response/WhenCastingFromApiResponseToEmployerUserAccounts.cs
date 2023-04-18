@@ -45,5 +45,6 @@ public class WhenCastingFromApiResponseToEmployerUserAccounts
         actual.Email.Should().BeNullOrEmpty();
         actual.EmployerUserId.Should().BeNullOrEmpty();
         actual.EmployerAccounts.Should().BeEmpty();
+        actual.IsSuspended.Should().BeFalse();
     }
 }
