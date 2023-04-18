@@ -526,19 +526,19 @@
         }
     ],
     "outputs": {
-        "LegacyResourceGroupName": {
+        "ResourceGroupName": {
             "type": "string",
             "value": "[variables('resourceGroupName')]"
         },
-        "LegacyUIAppServiceName": {
+        "UIAppServiceName": {
             "type": "string",
             "value": "[variables('uiAppServiceName')]"
         },
-        "LegacyApiAppServiceName": {
+        "ApiAppServiceName": {
             "type": "string",
             "value": "[variables('apiAppServiceName')]"
         },
-        "LegacySupportAppServiceName": {
+        "SupportAppServiceName": {
             "type": "string",
             "value": "[variables('supportAppServiceName')]"
         }

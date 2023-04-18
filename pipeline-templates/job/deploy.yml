@@ -57,27 +57,27 @@ jobs:
         - template: azure-pipelines-templates/deploy/step/app-role-assignments.yml@das-platform-building-blocks
           parameters:
             ServiceConnection: ${{ parameters.AppRoleAssignmentsServiceConnection }}
-            ResourceName: $(LegacyApiAppServiceName)
+            ResourceName: $(ApiAppServiceName)
             Tenant: $(Tenant)
             IsMultiRepoCheckout: true
         - template: azure-pipelines-templates/deploy/step/app-role-assignments.yml@das-platform-building-blocks
           parameters:
             ServiceConnection: ${{ parameters.AppRoleAssignmentsServiceConnection }}
-            ResourceName: $(LegacySupportAppServiceName)
+            ResourceName: $(SupportAppServiceName)
             Tenant: $(Tenant)
             IsMultiRepoCheckout: true
         - template: azure-pipelines-templates/deploy/step/app-deploy.yml@das-platform-building-blocks
           parameters:
             ServiceConnection: ${{ parameters.ServiceConnection }}
-            AppServiceName: $(LegacyUIAppServiceName)
+            AppServiceName: $(UIAppServiceName)
             DeploymentPackagePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/${{ parameters.SolutionBaseName }}.Web.zip
         - template: azure-pipelines-templates/deploy/step/app-deploy.yml@das-platform-building-blocks
           parameters:
             ServiceConnection: ${{ parameters.ServiceConnection }}
-            AppServiceName: $(LegacyApiAppServiceName)
+            AppServiceName: $(ApiAppServiceName)
             DeploymentPackagePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/${{ parameters.SolutionBaseName }}.Account.Api.zip
         - template: azure-pipelines-templates/deploy/step/app-deploy.yml@das-platform-building-blocks
           parameters:
             ServiceConnection: ${{ parameters.ServiceConnection }}
-            AppServiceName: $(LegacySupportAppServiceName)
+            AppServiceName: $(SupportAppServiceName)
             DeploymentPackagePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/${{ parameters.SolutionBaseName }}.Support.Web.zip
