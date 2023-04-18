@@ -155,7 +155,7 @@
         "workerAppServicePlanName": "[concat(variables('resourceNamePrefix'), 'wkr-asp')]",
         "resourceGroupName": "[concat(variables('resourceNamePrefix'), '-rg')]",
         "cosmosDbName": "[concat(variables('resourceNamePrefix'), '-cdb')]",
-        "configNames": "SFA.DAS.EmployerAccounts,SFA.DAS.EmployerAccounts.ReadStore,SFA.DAS.EmployerAccounts.Notifications,SFA.DAS.ReferenceDataApiClient,SFA.DAS.Encoding",
+        "configNames": "SFA.DAS.EmployerAccounts,SFA.DAS.EmployerAccounts.ReadStore,SFA.DAS.EmployerAccounts.Notifications,SFA.DAS.ReferenceDataApiClient,SFA.DAS.Encoding,SFA.DAS.Employer.GovSignIn",
         "configNamesApi": "SFA.DAS.EmployerAccounts,SFA.DAS.Encoding"
     },
     "resources": [
