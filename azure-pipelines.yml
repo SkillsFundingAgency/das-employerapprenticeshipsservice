@@ -2,7 +2,8 @@ trigger:
   batch: true
   branches:
     include:
-      - "main"
+      - "master"
+      - "MAC-193_NET6"
 
 variables:
 - name: SolutionBaseName
