@@ -51,12 +51,7 @@ public class EmployerAccountsDbContext : DbContext, IEmployerAccountsDbContext
             return;
         }
 
-        optionsBuilder.UseSqlServer(_connection as SqlConnection, options =>
-            options.EnableRetryOnFailure(
-                5,
-                TimeSpan.FromSeconds(20),
-                null
-            ));
+        optionsBuilder.UseSqlServer(_connection as SqlConnection);
 
     }
 
