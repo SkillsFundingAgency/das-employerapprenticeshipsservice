@@ -4,7 +4,7 @@ namespace SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Responses.UserAccount
 
 public class GetUserAccountsResponse
 {
-    [JsonProperty(PropertyName = "employerUsedId")]
+    [JsonProperty(PropertyName = "employerUserId")]
     public string EmployerUserId { get; set; }
     [JsonProperty(PropertyName = "firstName")]
     public string FirstName { get; set; }
