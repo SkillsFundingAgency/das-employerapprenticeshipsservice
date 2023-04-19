@@ -63,6 +63,11 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
         {
             return claims;
         }
+        
+        if (result.IsSuspended)
+        {
+            claims.Add(new Claim(ClaimTypes.AuthorizationDecision, "Suspended"));
+        }
 
         claims.Add(new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, result.EmployerUserId));
         claims.Add(new Claim(EmployerClaims.IdamsUserDisplayNameClaimTypeIdentifier, result.FirstName + " " + result.LastName));
