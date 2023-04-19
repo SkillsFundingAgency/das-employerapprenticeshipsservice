@@ -131,6 +131,7 @@ public class Startup
         });
 
         services.AddApplicationInsightsTelemetry();
+        services.AddDataProtection(_configuration);
 
         if (!_environment.IsDevelopment())
         {
