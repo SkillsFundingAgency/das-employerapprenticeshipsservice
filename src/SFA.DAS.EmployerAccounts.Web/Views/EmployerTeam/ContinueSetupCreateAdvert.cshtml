@@ -19,7 +19,6 @@
         </h1>
 
         <form method="POST" action="@Url.Action("ContinueSetupCreateAdvert")">
-            @Html.AntiForgeryToken()
             <div class="form-group  @(!ViewData.ModelState.IsValid ? "error" : "")">
                 <fieldset>
                     <legend>

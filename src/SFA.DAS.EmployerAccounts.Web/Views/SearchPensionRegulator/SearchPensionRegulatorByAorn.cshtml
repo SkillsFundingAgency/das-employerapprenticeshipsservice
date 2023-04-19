@@ -63,8 +63,6 @@
             <p class="govuk-body">Enter your accounts office reference number and employer PAYE scheme reference. These details will be checked against the Pensions Regulator.</p>
 
             <form method="POST" action="@Url.Action(ControllerConstants.SearchUsingAornActionName)">
-                @Html.AntiForgeryToken()
-
                 <fieldset class="govuk-fieldset" id="aorn-details-form">
                     <div class="govuk-form-group @(!string.IsNullOrEmpty(Model.AornError) ? "govuk-form-group--error" : "")">
                         <label class="govuk-label govuk-!-font-weight-bold" for="aorn">Accounts office reference number</label>

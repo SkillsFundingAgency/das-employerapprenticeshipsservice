@@ -14,8 +14,6 @@
             <p>Choose which accounts you want to receive cohort and apprentice updates from.</p>
             <p>Changes to these settings won't affect service emails, such as password resets.</p>
 
-            @Html.AntiForgeryToken()
-
             <input type="hidden" value="@Model.Data.HashedId" name="HashedId" />
 
             <table>

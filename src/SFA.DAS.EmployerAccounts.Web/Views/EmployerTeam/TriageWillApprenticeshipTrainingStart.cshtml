@@ -34,7 +34,6 @@
         </span>
 
         <form method="POST" action="@Url.Action(ControllerConstants.TriageWillApprenticeshipTrainingStartActionName)">
-            @Html.AntiForgeryToken()
             <div class="govuk-form-group @(ViewData.ModelState.IsValid ? "" : "govuk-form-group--error")" id="will-apprenticeship-training-start">
                 <fieldset class="govuk-fieldset" aria-describedby="will-apprenticeship-training-start">
                     @if (!ViewData.ModelState.IsValid)

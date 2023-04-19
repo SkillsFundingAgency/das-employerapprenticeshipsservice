@@ -13,8 +13,7 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form method="POST" action="@Url.Action(ControllerConstants.SearchPensionRegulatorActionName)" >
-            @Html.AntiForgeryToken()      
+        <form method="POST" action="@Url.Action(ControllerConstants.SearchPensionRegulatorActionName)" >  
             @Html.HiddenFor(m => m.IsExistingAccount)
             @Html.HiddenFor(m => m.PayeRef)
             <div class="govuk-form-group @errorClass" id="pension-regulator-form">

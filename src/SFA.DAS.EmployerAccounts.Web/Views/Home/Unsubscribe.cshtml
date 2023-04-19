@@ -14,7 +14,6 @@
         <p class="govuk-body">If you would like to unsubscribe, please select the option below.</p>
         @using (Html.BeginForm("Unsubscribe", "Home", FormMethod.Post))
         {
-            @Html.AntiForgeryToken()
             <div class="govuk-form-group @(inError ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset">
                     @if (inError)

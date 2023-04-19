@@ -10,7 +10,6 @@
         <p>Running a health check will test the availability of each application. Please note that this can take a few minutes to complete.</p>
         @using (Html.BeginForm())
         {
-            @Html.AntiForgeryToken()
             <div class="form-group">
                 @if (Model.HealthCheck != null)
                 {
