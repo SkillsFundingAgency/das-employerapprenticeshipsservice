@@ -85,6 +85,7 @@ public class HomeController : BaseController
             return RedirectToAction(ControllerConstants.InvitationIndexName, ControllerConstants.InvitationControllerName);
         }
 
+        // condition to check if the user has only one account, then redirect to home page/dashboard.
         if (accounts.Data.Accounts.AccountList.Count == 1)
         {
             var account = accounts.Data.Accounts.AccountList.FirstOrDefault();
@@ -102,6 +103,7 @@ public class HomeController : BaseController
             accounts.FlashMessage = flashMessage;
         }
 
+        // condition to check if the user has more than one account, then redirect to accounts page.
         if (accounts.Data.Accounts.AccountList.Count > 1)
         {
             return View(accounts);
@@ -197,20 +199,33 @@ public class HomeController : BaseController
     [Route("register/{correlationId}")]
     public async Task<IActionResult> RegisterUser(Guid? correlationId)
     {
-        var schema = Request.Scheme;
-        var authority = HttpContext?.Request.Host.Value;
-        var appConstants = new Constants(_configuration.Identity);
-
-        if (!correlationId.HasValue)
+        if (_configuration.UseGovSignIn)
         {
-            return new RedirectResult($"{appConstants.RegisterLink()}{schema}://{authority}/service/register/new");
+            #region GovUK Register
+
+            return new RedirectResult($"{_configuration.GovSignInIdentity.BaseUrl}/{_configuration.GovSignInIdentity.RegisterLink}");
+
+            #endregion
         }
+        else
+        {
+            #region IDAMS Register
+            var schema = Request.Scheme;
+            var authority = HttpContext?.Request.Host.Value;
+            var appConstants = new Constants(_configuration.Identity);
 
-        var invitation = await _homeOrchestrator.GetProviderInvitation(correlationId.Value);
+            if (!correlationId.HasValue)
+            {
+                return new RedirectResult($"{appConstants.RegisterLink()}{schema}://{authority}/service/register/new");
+            }
 
-        return invitation.Data != null
-            ? new RedirectResult($"{appConstants.RegisterLink()}{schema}://{authority}/service/register/new/{correlationId}&firstname={WebUtility.UrlEncode(invitation.Data.EmployerFirstName)}&lastname={WebUtility.UrlEncode(invitation.Data.EmployerLastName)}&email={WebUtility.UrlEncode(invitation.Data.EmployerEmail)}")
-            : new RedirectResult($"{appConstants.RegisterLink()}{schema}://{authority}/service/register/new");
+            var invitation = await _homeOrchestrator.GetProviderInvitation(correlationId.Value);
+
+            return invitation.Data != null
+                ? new RedirectResult($"{appConstants.RegisterLink()}{schema}://{authority}/service/register/new/{correlationId}&firstname={WebUtility.UrlEncode(invitation.Data.EmployerFirstName)}&lastname={WebUtility.UrlEncode(invitation.Data.EmployerLastName)}&email={WebUtility.UrlEncode(invitation.Data.EmployerEmail)}")
+                : new RedirectResult($"{appConstants.RegisterLink()}{schema}://{authority}/service/register/new");
+            #endregion
+        }
     }
 
     [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
@@ -257,13 +272,29 @@ public class HomeController : BaseController
         return RedirectToAction(ControllerConstants.IndexActionName);
     }
 
-    [Authorize]
+    [AllowAnonymous]
     [Route("signIn")]
     public IActionResult SignIn()
     {
-        return RedirectToAction(ControllerConstants.IndexActionName);
+        if (_configuration.UseGovSignIn)
+        {
+            #region GovUK SignIn
+            return new RedirectResult($"{_configuration.GovSignInIdentity.BaseUrl}/{_configuration.GovSignInIdentity.SignInLink}");
+            #endregion
+        }
+        else
+        {
+            #region IDAMS SignIn
+            return RedirectToAction("LoginIn");
+            #endregion
+        }
     }
 
+    [Authorize]
+    public IActionResult LoginIn()
+    {
+        return RedirectToAction(ControllerConstants.IndexActionName);
+    }
    
 
     [Route("signOut", Name = RouteNames.SignOut)]
@@ -275,7 +306,8 @@ public class HomeController : BaseController
         authenticationProperties.Parameters.Clear();
         authenticationProperties.Parameters.Add("id_token", idToken);
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = "/", Parameters = { { "id_token", idToken } } }); SignOut(authenticationProperties, CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
+        await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = "/", Parameters = { { "id_token", idToken } } }); 
+        SignOut(authenticationProperties, CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
 
         var constants = new Constants(_configuration.Identity);
 
