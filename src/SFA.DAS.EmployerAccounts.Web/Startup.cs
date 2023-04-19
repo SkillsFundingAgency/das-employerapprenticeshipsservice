@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -51,17 +51,17 @@ public class Startup
             .GetSection(ConfigurationKeys.Identity)
             .Get<IdentityServerConfiguration>();
 
-        var _employerAccountsConfiguration = services.BuildServiceProvider().GetService<EmployerAccountsConfiguration>();
+        var employerAccountsConfiguration = _configuration.GetSection(ConfigurationKeys.EmployerAccounts).Get<EmployerAccountsConfiguration>();
 
         services.AddOrchestrators();
         services.AddAutoMapper(typeof(Startup).Assembly, typeof(AccountMappings).Assembly);
         services.AddAutoConfiguration();
         services.AddDatabaseRegistration();
         services.AddDataRepositories();
-        services.AddApplicationServices(_employerAccountsConfiguration);
+        services.AddApplicationServices(employerAccountsConfiguration);
         services.AddHmrcServices();
 
-        if (_employerAccountsConfiguration.UseGovSignIn)
+        if (employerAccountsConfiguration.UseGovSignIn)
         {
             services.AddMaMenuConfiguration(RouteNames.SignOut,  _configuration["ResourceEnvironmentName"]);
         }
@@ -80,17 +80,17 @@ public class Startup
 
         services
             .AddUnitOfWork()
-            .AddEntityFramework(_employerAccountsConfiguration)
+            .AddEntityFramework(employerAccountsConfiguration)
             .AddEntityFrameworkUnitOfWork<EmployerAccountsDbContext>();
         services.AddNServiceBusClientUnitOfWork();
         services.AddEmployerAccountsApi();
         services.AddExecutionPolicies();
-        services.AddEmployerAccountsOuterApi(_employerAccountsConfiguration.EmployerAccountsOuterApiConfiguration);
-        services.AddCommittmentsV2Client(_employerAccountsConfiguration.CommitmentsApi);
-        services.AddPollyPolicy(_employerAccountsConfiguration);
-        services.AddContentApiClient(_employerAccountsConfiguration);
-        services.AddProviderRegistration(_employerAccountsConfiguration);
-        services.AddApprenticeshipLevyApi(_employerAccountsConfiguration);
+        services.AddEmployerAccountsOuterApi(employerAccountsConfiguration.EmployerAccountsOuterApiConfiguration);
+        services.AddCommittmentsV2Client(employerAccountsConfiguration.CommitmentsApi);
+        services.AddPollyPolicy(employerAccountsConfiguration);
+        services.AddContentApiClient(employerAccountsConfiguration);
+        services.AddProviderRegistration(employerAccountsConfiguration);
+        services.AddApprenticeshipLevyApi(employerAccountsConfiguration);
         services.AddReferenceDataApi();
 
         services.AddAuthenticationServices();
@@ -103,6 +103,7 @@ public class Startup
         {
             var govConfig = _configuration.GetSection("SFA.DAS.Employer.GovSignIn");
             govConfig["ResourceEnvironmentName"] = _configuration["ResourceEnvironmentName"];
+            govConfig["StubAuth"] = _configuration["StubAuth"];
             services.AddAndConfigureGovUkAuthentication(govConfig,
                 $"{typeof(Startup).Assembly.GetName().Name}.Auth",
                 typeof(EmployerAccountPostAuthenticationClaimsHandler));
