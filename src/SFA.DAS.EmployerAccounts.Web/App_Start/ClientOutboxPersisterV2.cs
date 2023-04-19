@@ -15,18 +15,6 @@ namespace SFA.DAS.EmployerAccounts.Web.AppStart
 {
     public class ClientOutboxPersisterV2 : IClientOutboxStorageV2
     {
-        public const string GetCommandText = "SELECT EndpointName, Operations FROM dbo.ClientOutboxData WHERE MessageId = @MessageId";
-
-        public const string SetAsDispatchedCommandText = "UPDATE dbo.ClientOutboxData SET Dispatched = 1, DispatchedAt = @DispatchedAt, Operations = '[]' WHERE MessageId = @MessageId";
-
-        public const string GetAwaitingDispatchCommandText = "SELECT MessageId, EndpointName FROM dbo.ClientOutboxData WHERE Dispatched = 0 AND CreatedAt <= @CreatedAt AND PersistenceVersion = '2.0.0' ORDER BY CreatedAt";
-
-        public const string StoreCommandText = "INSERT INTO dbo.ClientOutboxData (MessageId, EndpointName, CreatedAt, PersistenceVersion, Operations) VALUES (@MessageId, @EndpointName, @CreatedAt, '2.0.0', @Operations)";
-
-        public const string RemoveEntriesOlderThanCommandText = "DELETE TOP(@BatchSize) FROM dbo.ClientOutboxData WHERE Dispatched = 1 AND DispatchedAt < @DispatchedBefore AND PersistenceVersion = '2.0.0'";
-
-        public const int CleanupBatchSize = 10000;
-
         private readonly IDateTimeService _dateTimeService;
 
         private readonly Func<DbConnection> _connectionBuilder;
@@ -39,8 +27,8 @@ namespace SFA.DAS.EmployerAccounts.Web.AppStart
 
         public async Task<IClientOutboxTransaction> BeginTransactionAsync()
         {
-            DbConnection obj = await _connectionBuilder.OpenConnectionAsync().ConfigureAwait(continueOnCapturedContext: false);
-            DbTransaction transaction = obj.BeginTransaction();
+            var obj = await _connectionBuilder.OpenConnectionAsync().ConfigureAwait(continueOnCapturedContext: false);
+            var transaction = await obj.BeginTransactionAsync();
             return new SqlClientOutboxTransaction(obj, transaction);
         }
 
