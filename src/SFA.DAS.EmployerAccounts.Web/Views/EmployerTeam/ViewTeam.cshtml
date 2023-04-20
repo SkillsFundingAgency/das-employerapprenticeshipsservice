@@ -14,7 +14,7 @@
         ViewBag.PageID = Model.FlashMessage.HiddenFlashMessageInformation;
     }
 
-    string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId].ToString();
+    string hashedAccountId = Model.Data.HashedAccountId;
 }
 
 <div class="govuk-grid-row">
