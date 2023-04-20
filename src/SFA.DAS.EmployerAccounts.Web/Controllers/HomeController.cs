@@ -54,12 +54,16 @@ public class HomeController : BaseController
 
         if (userIdClaim != null)
         {
-            var partialLogin = HttpContext.User.FindFirstValue(DasClaimTypes.RequiresVerification);
-
-            if (partialLogin.Equals("true", StringComparison.CurrentCultureIgnoreCase))
+            if (!_configuration.UseGovSignIn)
             {
-                return Redirect(ConfigurationFactory.Current.Get().AccountActivationUrl);
+                var partialLogin = HttpContext.User.FindFirstValue(DasClaimTypes.RequiresVerification);
+
+                if (partialLogin.Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    return Redirect(ConfigurationFactory.Current.Get().AccountActivationUrl);
+                }    
             }
+            
 
             var userRef = HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserIdClaimTypeIdentifier);
             var email = HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserEmailClaimTypeIdentifier);

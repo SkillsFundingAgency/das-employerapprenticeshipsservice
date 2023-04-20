@@ -85,7 +85,6 @@ public class WhenIViewTheHomePage : ControllerTestBase
             {
                 Identity = new IdentityServerConfiguration { BaseAddress = "http://test.local/identity", AccountActivationUrl = "/confirm" }
             });
-
         AddUserToContext(new Claim(ControllerConstants.UserRefClaimKeyName, ExpectedUserId), new Claim(DasClaimTypes.RequiresVerification, "true"));
 
         //Act
@@ -96,6 +95,23 @@ public class WhenIViewTheHomePage : ControllerTestBase
         var actualRedirect = actual as RedirectResult;
         Assert.IsNotNull(actualRedirect);
         Assert.AreEqual("http://test.local/confirm", actualRedirect.Url);
+    }
+    
+    [Test]
+    public async Task ThenIfMyAccountIsAuthenticatedButNotActivatedForGovThenIgnoredAndGoesToIndex()
+    {
+        //Arrange
+        _configuration.UseGovSignIn = true;
+        AddUserToContext(ExpectedUserId, string.Empty, string.Empty,new Claim(ControllerConstants.UserRefClaimKeyName, ExpectedUserId), new Claim(DasClaimTypes.RequiresVerification, "true"));
+
+        //Act
+        var actual = await _homeController.Index();
+
+        //Assert
+        Assert.IsNotNull(actual);
+        var actualRedirect = actual as RedirectToRouteResult;
+        Assert.IsNotNull(actualRedirect);
+        Assert.AreEqual("employer-team-index", actualRedirect.RouteName);
     }
 
     [Test]
