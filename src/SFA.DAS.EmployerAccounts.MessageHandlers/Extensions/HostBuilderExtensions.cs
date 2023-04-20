@@ -2,11 +2,12 @@
 using NLog.Extensions.Logging;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
-using SFA.DAS.EmployerAccounts.Commands.AcceptInvitation;
+using SFA.DAS.EmployerAccounts.Commands.AccountLevyStatus;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.MessageHandlers.ServiceRegistrations;
 using SFA.DAS.EmployerAccounts.MessageHandlers.Startup;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
+using SFA.DAS.EmployerAccounts.ReadStore.ServiceRegistrations;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
 using SFA.DAS.UnitOfWork.DependencyResolution.Microsoft;
 
@@ -24,21 +25,21 @@ public static class HostBuilderExtensions
 
     public static IHostBuilder ConfigureDasServices(this IHostBuilder hostBuilder)
     {
-        hostBuilder.ConfigureServices((context,services) =>
+        hostBuilder.ConfigureServices((context, services) =>
         {
-            services.Configure<EmployerAccountsConfiguration>(context.Configuration.GetSection(ConfigurationKeys.EmployerAccounts));
-            services.AddSingleton(cfg => cfg.GetService<IOptions<EmployerAccountsConfiguration>>().Value);
+        services.Configure<EmployerAccountsConfiguration>(context.Configuration.GetSection(ConfigurationKeys.EmployerAccounts));
+        services.AddSingleton(cfg => cfg.GetService<IOptions<EmployerAccountsConfiguration>>().Value);
 
+        services.AddConfigurationSections(context.Configuration);
             services.AddApplicationServices();
+            services.AddReadStoreServices();
             services.AddUnitOfWork();
             services.AddNServiceBus();
             services.AddMemoryCache();
             services.AddCachesRegistrations();
             services.AddDatabaseRegistration();
-            services.AddMediatR(
-                typeof(UpdateAccountUserCommand),
-                typeof(AcceptInvitationCommand)
-            );
+            services.AddMediatR(typeof(CreateAccountUserCommandHandler).Assembly)
+                    .AddScoped<AccountLevyStatusCommandHandler>();
         });
 
         return hostBuilder;
@@ -66,7 +67,7 @@ public static class HostBuilderExtensions
     {
         return hostBuilder.ConfigureAppConfiguration((context, builder) =>
         {
-            builder.AddAzureTableStorage(ConfigurationKeys.EmployerAccounts)
+            builder.AddAzureTableStorage(ConfigurationKeys.EmployerAccounts, ConfigurationKeys.EmployerAccountsReadStore)
                 .AddJsonFile("appsettings.json", true, true)
                 .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", true, true)
                 .AddEnvironmentVariables()

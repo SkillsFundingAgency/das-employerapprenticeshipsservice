@@ -5,10 +5,8 @@ using SFA.DAS.NServiceBus.Configuration;
 using SFA.DAS.NServiceBus.Configuration.AzureServiceBus;
 using SFA.DAS.NServiceBus.Configuration.MicrosoftDependencyInjection;
 using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
-using SFA.DAS.NServiceBus.Configuration.NLog;
 using SFA.DAS.NServiceBus.Hosting;
 using SFA.DAS.NServiceBus.SqlServer.Configuration;
-using SFA.DAS.UnitOfWork.NServiceBus.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.Extensions;
 
@@ -21,7 +19,6 @@ public static class ServiceCollectionExtensions
         return services
             .AddSingleton(p =>
             {
-                var container = p.GetService<IContainer>();
                 var hostingEnvironment = p.GetService<IHostEnvironment>();
                 var configuration = p.GetService<EmployerAccountsConfiguration>();
                 var isDevelopment = hostingEnvironment.IsDevelopment();
@@ -29,26 +26,23 @@ public static class ServiceCollectionExtensions
                 var endpointConfiguration = new EndpointConfiguration(EndpointName)
                     .UseErrorQueue($"{EndpointName}-errors")
                     .UseInstallers()
-                    .UseLicense(configuration.NServiceBusLicense)
+                    .UseOutbox()
                     .UseMessageConventions()
                     .UseNewtonsoftJsonSerializer()
-                    .UseNLogFactory()
-                    .UseOutbox()
-                    .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
-                    .UseServicesBuilder(new UpdateableServiceProvider(services))
-                    .UseUnitOfWork();
+                    .UseSqlServerPersistence(() => DatabaseExtensions.GetSqlConnection(configuration.DatabaseConnectionString))
+                    .UseAzureServiceBusTransport(() => configuration.ServiceBusConnectionString, isDevelopment)
+                    .UseServicesBuilder(new UpdateableServiceProvider(services));
 
-                if (isDevelopment)
+                if (!string.IsNullOrEmpty(configuration.NServiceBusLicense))
                 {
-                    endpointConfiguration.UseLearningTransport(s => s.AddRouting());
-                }
-                else
-                {
-                    endpointConfiguration.UseAzureServiceBusTransport(configuration.ServiceBusConnectionString, s => s.AddRouting());
+                    endpointConfiguration.UseLicense(configuration.NServiceBusLicense);
                 }
 
-                return Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
+                var endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
+
+                return endpoint;
             })
+            .AddSingleton<IMessageSession>(s => s.GetService<IEndpointInstance>())
             .AddHostedService<NServiceBusHostedService>();
     }
 }
