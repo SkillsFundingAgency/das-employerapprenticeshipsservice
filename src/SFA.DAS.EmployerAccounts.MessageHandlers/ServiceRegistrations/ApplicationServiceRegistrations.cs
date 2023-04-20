@@ -7,7 +7,7 @@ public static class ApplicationServiceRegistrations
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        services.AddSingleton<IEventPublisher, EventPublisher>();
+        services.AddScoped<IEventPublisher, EventPublisher>();
 
         return services;
     }

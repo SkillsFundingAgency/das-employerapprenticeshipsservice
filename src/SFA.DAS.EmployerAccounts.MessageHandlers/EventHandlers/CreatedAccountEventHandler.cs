@@ -15,7 +15,7 @@ public class CreatedAccountEventHandler : IHandleMessages<CreatedAccountEvent>
 
     public async Task Handle(CreatedAccountEvent message, IMessageHandlerContext context)
     {
-        await _messagePublisher.Publish(
+         await _messagePublisher.Publish(
             new AccountCreatedMessage(
                 message.AccountId,
                 message.UserName,
