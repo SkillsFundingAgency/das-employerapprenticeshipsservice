@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests;
 
@@ -28,7 +29,7 @@ public class WhenILoginAUser
     }
 
     [Test]
-    public void When_GovSignIn_False_ThenTheUserIsRedirectedToTheIndex()
+    public void When_GovSignIn_False_ThenTheUserIsRedirectedToPreAuth()
     {
         //arrange
         _configuration.Object.UseGovSignIn = false;
@@ -40,15 +41,15 @@ public class WhenILoginAUser
         Assert.IsNotNull(actual);
         var actualRedirectResult = actual as RedirectToActionResult;
         Assert.IsNotNull(actualRedirectResult);
-        Assert.AreEqual("Index", actualRedirectResult.ActionName);
+        Assert.AreEqual(ControllerConstants.PreAuthActionName, actualRedirectResult.ActionName);
     }
 
-    [Test]
-    public void When_GovSignIn_True_ThenTheUserIsRedirectedToTheGov()
+    [Test, MoqAutoData]
+    public void When_GovSignIn_True_ThenTheUserIsRedirectedToTheGov(string baseUrl)
     {
         //arrange
         _configuration.Object.UseGovSignIn = true;
-        _govSignInIdentityConfiguration.Object.BaseUrl = "https://test-hyperlink.com";
+        _govSignInIdentityConfiguration.Object.BaseUrl = baseUrl;
         _govSignInIdentityConfiguration.Object.SignInLink = "Sign-in";
         _configuration.Object.GovSignInIdentity = _govSignInIdentityConfiguration.Object;
 
@@ -60,5 +61,18 @@ public class WhenILoginAUser
         var actualRedirectResult = actual as RedirectResult;
         Assert.IsNotNull(actualRedirectResult);
         Assert.AreEqual($"{_configuration.Object.GovSignInIdentity.BaseUrl}/{_configuration.Object.GovSignInIdentity.SignInLink}", actualRedirectResult.Url);
+    }
+
+    [Test]
+    public void When_Route_To_PreAuth_ThenTheUserIsRedirectedToIndex()
+    {
+        //Act
+        var actual = _homeController.PreAuth();
+
+        //Assert
+        Assert.IsNotNull(actual);
+        var actualRedirectResult = actual as RedirectToActionResult;
+        Assert.IsNotNull(actualRedirectResult);
+        Assert.AreEqual("Index", actualRedirectResult.ActionName);
     }
 }

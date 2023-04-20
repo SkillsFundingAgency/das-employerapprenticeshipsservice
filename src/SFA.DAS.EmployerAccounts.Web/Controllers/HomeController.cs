@@ -285,13 +285,14 @@ public class HomeController : BaseController
         else
         {
             #region IDAMS SignIn
-            return RedirectToAction("LoginIn");
+            return RedirectToAction(ControllerConstants.PreAuthActionName);
             #endregion
         }
     }
 
     [Authorize]
-    public IActionResult LoginIn()
+    [Route("pre-auth")]
+    public IActionResult PreAuth()
     {
         return RedirectToAction(ControllerConstants.IndexActionName);
     }

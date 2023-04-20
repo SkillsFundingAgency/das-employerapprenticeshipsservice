@@ -78,4 +78,5 @@ public static class ControllerConstants
     public const string Tier2UserClaim = "Tier2User";
     public const string ViewAllAgreementActionName = "ViewAllAgreements";
     public const string InsetText = "Inset";
+    public const string PreAuthActionName = "PreAuth";
 }
