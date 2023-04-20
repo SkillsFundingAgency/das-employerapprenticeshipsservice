@@ -42,6 +42,8 @@ public class WhenPopulatingAccountClaims
         actual.First(c => c.Type.Equals(EmployerClaims.IdamsUserIdClaimTypeIdentifier)).Value.Should().Be(accountData.EmployerUserId);
         actual.First(c => c.Type.Equals(EmployerClaims.IdamsUserDisplayNameClaimTypeIdentifier)).Value.Should().Be(accountData.FirstName + " " + accountData.LastName);
         actual.First(c => c.Type.Equals(EmployerClaims.IdamsUserEmailClaimTypeIdentifier)).Value.Should().Be(emailAddress);
+        actual.First(c => c.Type.Equals(DasClaimTypes.GivenName)).Value.Should().Be(accountData.FirstName);
+        actual.First(c => c.Type.Equals(DasClaimTypes.FamilyName)).Value.Should().Be(accountData.LastName);
         actual.First(c => c.Type.Equals(ClaimTypes.AuthorizationDecision)).Value.Should().Be("Suspended");
     }
     [Test, MoqAutoData]

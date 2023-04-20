@@ -7,6 +7,7 @@ using SFA.DAS.EmployerAccounts.Infrastructure;
 using SFA.DAS.EmployerAccounts.Models.UserAccounts;
 using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
+using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.GovUK.Auth.Services;
 
 namespace SFA.DAS.EmployerAccounts.Web.Handlers;
@@ -71,6 +72,8 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
 
         claims.Add(new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, result.EmployerUserId));
         claims.Add(new Claim(EmployerClaims.IdamsUserDisplayNameClaimTypeIdentifier, result.FirstName + " " + result.LastName));
+        claims.Add(new Claim(DasClaimTypes.GivenName, result.FirstName));
+        claims.Add(new Claim(DasClaimTypes.FamilyName, result.LastName));
 
         return claims;
     }
