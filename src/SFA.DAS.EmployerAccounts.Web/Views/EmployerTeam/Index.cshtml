@@ -19,7 +19,7 @@
         ViewBag.PageID = $"page-employer-account-created-{Model.Data.EmployerAccountType}";
     }
 
-    var hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId];
+    var hashedAccountId = Model.Data.HashedAccountId;
 }
 
 
