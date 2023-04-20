@@ -71,7 +71,7 @@ public static class ControllerConstants
     public const string TriageYouCannotSetupAnApprenticeshipYetProviderActionName = "TriageYouCannotSetupAnApprenticeshipYetProvider";
     public const string TriageYouCannotSetupAnApprenticeshipYetStartDateActionName = "TriageYouCannotSetupAnApprenticeshipYetStartDate";
     public const string TriageYouCannotSetupAnApprenticeshipYetApproximateStartDateActionName = "TriageYouCannotSetupAnApprenticeshipYetApproximateStartDate";
-    public const string UserRefClaimKeyName = "sub";
+    public const string UserRefClaimKeyName = "http://das/employer/identity/claims/id";
     public const string WhenDoYouWantToView = "WhenDoYouWantToView";
     public const string SearchUsingAornViewName = "SearchPensionRegulatorByAorn";
     public const string Settings = "Settings";
