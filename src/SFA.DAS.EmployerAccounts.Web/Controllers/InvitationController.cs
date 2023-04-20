@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using SFA.DAS.EmployerAccounts.Infrastructure;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
@@ -39,7 +40,7 @@ public class InvitationController : BaseController
             return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
         }
 
-        var model = await _invitationOrchestrator.GetAllInvitationsForUser(HttpContext.User.FindFirstValue("sub"));
+        var model = await _invitationOrchestrator.GetAllInvitationsForUser(HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserIdClaimTypeIdentifier));
 
         return View(model);
     }

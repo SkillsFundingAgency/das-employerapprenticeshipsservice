@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Primitives;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Dtos;
+using SFA.DAS.EmployerAccounts.Infrastructure;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesCountByHashedAccountId;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
@@ -45,7 +46,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
         httpRequestMock.Setup(x => x.Query).Returns(queryCollection);
         httpContextMock.Setup(x => x.Request).Returns(httpRequestMock.Object);
 
-        var identity = new ClaimsIdentity(new[] { new Claim("sub", UserId) });
+        var identity = new ClaimsIdentity(new[] { new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, UserId) });
 
         var principal = new ClaimsPrincipal(identity);
 
@@ -372,7 +373,7 @@ public class EmployerAgreementControllerTestFixtures : FluentTest<EmployerAgreem
         httpRequestMock.Setup(x => x.Query).Returns(queryCollection);
         httpContextMock.Setup(x => x.Request).Returns(httpRequestMock.Object);
 
-        var identity = new ClaimsIdentity(new[] { new Claim("sub", isAuthenticatedUser ? "AFV456TGF" : string.Empty) });
+        var identity = new ClaimsIdentity(new[] { new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, isAuthenticatedUser ? "AFV456TGF" : string.Empty) });
 
         var principal = new ClaimsPrincipal(identity);
 

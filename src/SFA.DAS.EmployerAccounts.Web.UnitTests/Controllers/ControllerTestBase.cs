@@ -57,7 +57,7 @@ public abstract class ControllerTestBase
         {
             new Claim(ClaimTypes.Name, name),
             new Claim(ClaimTypes.Email, email),
-            new Claim("sub", id),
+            new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, id),
         });
 
         if (claims != null && claims.Any())
@@ -80,7 +80,7 @@ public abstract class ControllerTestBase
             new Claim(DasClaimTypes.GivenName, givenName),
             new Claim(DasClaimTypes.FamilyName, familyName),
             new Claim(ControllerConstants.UserRefClaimKeyName, id),
-            new Claim("sub", id),
+            new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, id),
         });
 
         var principal = new ClaimsPrincipal(identity);

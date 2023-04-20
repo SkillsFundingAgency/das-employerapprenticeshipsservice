@@ -50,7 +50,7 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
                 .First(c => c.Type.Equals(EmployerClaims.IdamsUserEmailClaimTypeIdentifier)).Value;
 
             claims.AddRange(tokenValidatedContext.Principal.Claims);
-            claims.Add(new Claim("sub", userId));
+            claims.Add(new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, userId));
         }
 
         var result = await _userAccountService.GetUserAccounts(userId, email);
