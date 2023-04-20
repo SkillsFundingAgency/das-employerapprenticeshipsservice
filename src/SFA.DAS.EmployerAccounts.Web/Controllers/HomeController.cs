@@ -267,18 +267,23 @@ public class HomeController : BaseController
    
 
     [Route("signOut", Name = RouteNames.SignOut)]
-    new public async Task<IActionResult> SignOut()
+    public async Task<IActionResult> SignOutUser()
     {
         var idToken = await HttpContext.GetTokenAsync("id_token");
 
         var authenticationProperties = new AuthenticationProperties();
         authenticationProperties.Parameters.Clear();
         authenticationProperties.Parameters.Add("id_token", idToken);
+        if (_configuration.UseGovSignIn)
+        {
+            return SignOut(authenticationProperties, CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);    
+        }
+        
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = "/", Parameters = { { "id_token", idToken } } }); SignOut(authenticationProperties, CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
-
+        
         var constants = new Constants(_configuration.Identity);
-
+        
         return new RedirectResult(string.Format(constants.LogoutEndpoint(), idToken));
     }
 
