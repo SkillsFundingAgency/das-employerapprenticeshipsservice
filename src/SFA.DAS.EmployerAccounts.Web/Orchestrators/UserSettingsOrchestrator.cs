@@ -11,15 +11,17 @@ public class UserSettingsOrchestrator
     private readonly IMediator _mediator;
     private readonly ILogger<UserSettingsOrchestrator> _logger;
     private readonly IEncodingService _encodingService;
+    private readonly EmployerAccountsConfiguration _configuration;
 
     //Needed for tests
     protected UserSettingsOrchestrator() { }
 
-    public UserSettingsOrchestrator(IMediator mediator, ILogger<UserSettingsOrchestrator> logger, IEncodingService encodingService)
+    public UserSettingsOrchestrator(IMediator mediator, ILogger<UserSettingsOrchestrator> logger, IEncodingService encodingService, EmployerAccountsConfiguration configuration)
     {
         _mediator = mediator;
         _logger = logger;
         _encodingService = encodingService;
+        _configuration = configuration;
     }
 
     public virtual async Task<OrchestratorResponse<NotificationSettingsViewModel>> GetNotificationSettingsViewModel(string userRef)
@@ -36,7 +38,8 @@ public class UserSettingsOrchestrator
             Data = new NotificationSettingsViewModel
             {
                 HashedId = userRef,
-                NotificationSettings = response.NotificationSettings
+                NotificationSettings = response.NotificationSettings,
+                UseGovSignIn = _configuration.UseGovSignIn
             },
         };
     }
