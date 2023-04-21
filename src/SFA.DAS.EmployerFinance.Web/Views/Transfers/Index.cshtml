@@ -18,7 +18,7 @@
 
     @if (Model.Data.IsLevyEmployer)
     {
-        <div class="column-two-thirds">
+        <div class="column-one-half">
             <h2 class="heading-medium">Transfer allowance information.</h2>
             <div class="finance-highlight">
                 <span class="bold-small">
@@ -26,21 +26,20 @@
                 </span>
                 <span class="data-item bold-xlarge">@Model.Data.StartingTransferAllowance.ToString("C0", culture)</span>
             </div>
-            <span>
-                <br>This is calculated at 25% of the previous financial year’s apprenticeship levy funds. This is shown in your account after 20 April.
-            </span>
-        </div>
-        <div class="column-two-thirds">
+            <p>
+                This is calculated at 25% of the previous financial year’s apprenticeship levy funds. This is shown in your account after 20 April.
+            </p>
+
             <h2 class="heading-medium">Estimated remaining transfer balance.</h2>
-            <div class="finance-highlight">
+            <div class="finance-highlight finance-highlight--estimate">
                 <span class="bold-small">
                     Estimated remaining transfer balance
                 </span>
                 <span class="data-item bold-xlarge">@Model.Data.StartingTransferAllowance.ToString("C0", culture)</span>
             </div>
-            <span>
-                <br>This is an estimate of your transfer balance, minus any funds that may already be committed such as existing pledges.
-            </span>
+            <p>
+                This is an estimate of your transfer balance, minus any funds that may already be committed such as existing pledges.
+            </p>
         </div>
 
         if (Html.IsAuthorized("EmployerFeature.FinanceDetails"))

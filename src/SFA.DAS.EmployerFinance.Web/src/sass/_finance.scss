@@ -40,8 +40,13 @@
     background: $panel-colour;
     padding: 20px;
     display: inline-block;
+    margin-bottom: 20px;
 }
 
+.finance-highlight--estimate {
+    background: $govuk-blue;
+    color: $white;
+}
 
 .finance-data {
     margin: 10px 0;

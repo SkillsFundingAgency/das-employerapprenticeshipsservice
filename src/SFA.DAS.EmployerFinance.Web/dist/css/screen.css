@@ -4835,7 +4835,12 @@ tr.total td {
 .finance-highlight {
   background: #dee0e2;
   padding: 20px;
-  display: inline-block; }
+  display: inline-block;
+  margin-bottom: 20px; }
+
+.finance-highlight--estimate {
+  background: #005ea5;
+  color: #fff; }
 
 .finance-data {
   margin: 10px 0; }
