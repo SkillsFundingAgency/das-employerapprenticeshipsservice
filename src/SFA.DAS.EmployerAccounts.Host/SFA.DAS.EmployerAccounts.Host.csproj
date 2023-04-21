@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<OutputType>Library</OutputType>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Content Include="..\SFA.DAS.EmployerAccounts.Jobs\bin\**\*" CopyToOutputDirectory="PreserveNewest" Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+			<Link>App_Data\jobs\continuous\SFA.DAS.EmployerAccounts.Jobs\%(RecursiveDir)%(Filename)%(Extension)</Link>
+		</Content>
+		<Content Include="..\SFA.DAS.EmployerAccounts.MessageHandlers\bin\**\*" CopyToOutputDirectory="PreserveNewest" Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+			<Link>App_Data\jobs\continuous\SFA.DAS.EmployerAccounts.MessageHandlers\%(RecursiveDir)%(Filename)%(Extension)</Link>
+		</Content>
+	</ItemGroup>
+</Project>
