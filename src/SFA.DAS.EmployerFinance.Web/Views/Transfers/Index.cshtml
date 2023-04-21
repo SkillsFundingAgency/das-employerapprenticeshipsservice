@@ -19,25 +19,36 @@
     @if (Model.Data.IsLevyEmployer)
     {
         <div class="column-two-thirds">
-            <h2 class="heading-medium">My transfer finances</h2>
-            <p>This is a financial snapshot of what is available.</p>
+            <h2 class="heading-medium">Transfer allowance information.</h2>
             <div class="finance-highlight">
                 <span class="bold-small">
-                    Transfer allowance for @Model.Data.FinancialYearString
+                    Transfer allowance information
                 </span>
                 <span class="data-item bold-xlarge">@Model.Data.StartingTransferAllowance.ToString("C0", culture)</span>
             </div>
-            <h2 class="heading-medium">Transfers allowance information</h2>
-            <p><strong>Your transfer allowance for this financial year (FY)</strong></p>
-            <p>This is calculated every year on 6 April and shows in your account after 20 April.</p>
+            <span>
+                <br>This is calculated at 25% of the previous financial year’s apprenticeship levy funds. This is shown in your account after 20 April.
+            </span>
+        </div>
+        <div class="column-two-thirds">
+            <h2 class="heading-medium">Estimated remaining transfer balance.</h2>
+            <div class="finance-highlight">
+                <span class="bold-small">
+                    Estimated remaining transfer balance
+                </span>
+                <span class="data-item bold-xlarge">@Model.Data.StartingTransferAllowance.ToString("C0", culture)</span>
+            </div>
+            <span>
+                <br>This is an estimate of your transfer balance, minus any funds that may already be committed such as existing pledges.
+            </span>
         </div>
 
-         if (Html.IsAuthorized("EmployerFeature.FinanceDetails"))
-         {
+        if (Html.IsAuthorized("EmployerFeature.FinanceDetails"))
+        {
             <div class="column-two-thirds">
                 <a href="/accounts/@Model.Data.HashedAccountID/transfers/financial-breakdown" class="button button-secondary">View my transfer finances</a>
             </div>
-         }
+        }
 
         <div class="column-two-thirds">
             <h2 class="heading-medium">My pledges</h2>
@@ -53,28 +64,28 @@
         </div>
     }
 
-        <div class="column-two-thirds">
-            <h2 class="heading-medium">Apply for transfers funding</h2>
-            <p>Search transfers funding opportunities and apply for a transfer of funds.</p>
-            <div class="panel panel-border-wide">
-                You have <strong>@Model.Data.ApplicationsCount</strong> transfer applications.
-            </div>
-            <div class="button-group">
-                <a class="button" href="@Url.LevyTransfersMatchingAction("")" id="ApplyForTransfersButton">Apply for transfer opportunities</a>                
-                <a href="@Url.LevyTransfersMatchingAccountAction("applications")" class="button button-secondary">View applications I've submitted</a>                
-            </div>
+    <div class="column-two-thirds">
+        <h2 class="heading-medium">Apply for transfers funding</h2>
+        <p>Search transfers funding opportunities and apply for a transfer of funds.</p>
+        <div class="panel panel-border-wide">
+            You have <strong>@Model.Data.ApplicationsCount</strong> transfer applications.
+        </div>
+        <div class="button-group">
+            <a class="button" href="@Url.LevyTransfersMatchingAction("")" id="ApplyForTransfersButton">Apply for transfer opportunities</a>
+            <a href="@Url.LevyTransfersMatchingAccountAction("applications")" class="button button-secondary">View applications I've submitted</a>
         </div>
     </div>
+</div>
 
-    @section breadcrumb {
-        <div class="breadcrumbs">
-            <ol role="navigation">
-                <li><a href="@Url.EmployerAccountsAction("teams")">Home</a></li>
-                <li><a href="@Url.EmployerFinanceAction("finance")">Finance</a></li>
-                <li>Transfers</li>
-            </ol>
-        </div>
-    }
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.EmployerAccountsAction("teams")">Home</a></li>
+            <li><a href="@Url.EmployerFinanceAction("finance")">Finance</a></li>
+            <li>Transfers</li>
+        </ol>
+    </div>
+}
 
-    @section pageSpecificJS {
-    }
+@section pageSpecificJS {
+}
