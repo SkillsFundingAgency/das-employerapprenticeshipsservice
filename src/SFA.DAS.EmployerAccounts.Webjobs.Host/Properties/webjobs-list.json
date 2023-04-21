@@ -1,0 +1,11 @@
+{
+  "$schema": "http://schemastore.org/schemas/json/webjobs-list.json",
+  "WebJobs": [
+    {
+      "filePath": "../SFA.DAS.EmployerAccounts.Jobs/SFA.DAS.EmployerAccounts.Jobs.csproj"
+    },
+    {
+      "filePath": "../SFA.DAS.EmployerAccounts.MessageHandlers/SFA.DAS.EmployerAccounts.MessageHandlers.csproj"
+    }
+  ]
+}

@@ -9,6 +9,7 @@
     </WebJobProjects>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform" Version="4.1.0" />
     <PackageReference Include="Microsoft.Web.WebJobs.Publish" Version="17.1.361" />
   </ItemGroup>
   <Target Name="CopyWebJobs">
