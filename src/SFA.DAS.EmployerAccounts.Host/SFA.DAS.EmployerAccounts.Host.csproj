@@ -6,11 +6,11 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<Content Include="..\SFA.DAS.EmployerAccounts.Jobs\bin\**\*" CopyToOutputDirectory="PreserveNewest">
-			<Link>App_Data\jobs\continuous\SFA.DAS.EmployerAccounts.Jobs\%(RecursiveDir)%(Filename)%(Extension)</Link>
+			<Link>app_data\Jobs\Continuous\SFA.DAS.EmployerAccounts.Jobs\%(RecursiveDir)%(Filename)%(Extension)</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 		<Content Include="..\SFA.DAS.EmployerAccounts.MessageHandlers\bin\**\*" CopyToOutputDirectory="PreserveNewest">
-			<Link>App_Data\jobs\continuous\SFA.DAS.EmployerAccounts.MessageHandlers\%(RecursiveDir)%(Filename)%(Extension)</Link>
+			<Link>app_data\Jobs\Continuous\SFA.DAS.EmployerAccounts.MessageHandlers\%(RecursiveDir)%(Filename)%(Extension)</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
