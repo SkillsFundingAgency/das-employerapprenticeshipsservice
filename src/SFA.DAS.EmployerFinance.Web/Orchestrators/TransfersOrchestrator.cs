@@ -41,10 +41,11 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var indexTask = _transfersService.GetCounts(accountId);
             var accountDetail = _accountApiClient.GetAccount(hashedAccountId);
+            var financialBreakdownTask = _transfersService.GetFinancialBreakdown(accountId);
 
             var renderCreateTransfersPledgeButtonTask = _authorizationService.IsAuthorizedAsync(EmployerUserRole.OwnerOrTransactor);            
 
-            await Task.WhenAll(indexTask, renderCreateTransfersPledgeButtonTask, accountDetail);
+            await Task.WhenAll(indexTask, renderCreateTransfersPledgeButtonTask, accountDetail, financialBreakdownTask);
 
             Enum.TryParse(accountDetail.Result.ApprenticeshipEmployerType, true, out ApprenticeshipEmployerType employerType);
 
@@ -57,8 +58,9 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     ApplicationsCount = indexTask.Result.ApplicationsCount,
                     RenderCreateTransfersPledgeButton = renderCreateTransfersPledgeButtonTask.Result,                    
                     StartingTransferAllowance = accountDetail.Result.StartingTransferAllowance,
-                    FinancialYearString = DateTime.UtcNow.ToFinancialYearString(),
-                    HashedAccountID = hashedAccountId
+                    FinancialYearString = DateTime.UtcNow.Year.ToString(),
+                    HashedAccountID = hashedAccountId,
+                    CurrentYearEstimatedSpend = financialBreakdownTask.Result.CurrentYearEstimatedCommittedSpend,
                 }
             };
         }

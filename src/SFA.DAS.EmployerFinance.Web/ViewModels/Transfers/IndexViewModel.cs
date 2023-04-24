@@ -7,6 +7,8 @@
         public int PledgesCount { get; set; }
         public int ApplicationsCount { get; set; }
         public decimal StartingTransferAllowance { get; set; }
+        public decimal CurrentYearEstimatedSpend { get; set; }
+        public decimal EstimatedRemainingAllowance { get { return StartingTransferAllowance - CurrentYearEstimatedSpend; } }
         public string FinancialYearString { get; set; }
         public string HashedAccountID { get; set; }
     }

@@ -22,7 +22,7 @@
             <h2 class="heading-medium">Transfer allowance information.</h2>
             <div class="finance-highlight">
                 <span class="bold-small">
-                    Transfer allowance information
+                    Travel allowance as at 6 April @Model.Data.FinancialYearString
                 </span>
                 <span class="data-item bold-xlarge">@Model.Data.StartingTransferAllowance.ToString("C0", culture)</span>
             </div>
@@ -35,7 +35,7 @@
                 <span class="bold-small">
                     Estimated remaining transfer balance
                 </span>
-                <span class="data-item bold-xlarge">@Model.Data.StartingTransferAllowance.ToString("C0", culture)</span>
+                <span class="data-item bold-xlarge">@Model.Data.EstimatedRemainingAllowance.ToString("C0", culture)</span>
             </div>
             <p>
                 This is an estimate of your transfer balance, minus any funds that may already be committed such as existing pledges.

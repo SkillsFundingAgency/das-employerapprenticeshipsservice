@@ -26,16 +26,16 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
 
         private const string HashedAccountId = "123ABC";
         private const long AccountId = 1234;
-        
+
         [SetUp]
         public void Setup()
         {
             _authorisationService = new Mock<IAuthorizationService>();
             _hashingService = new Mock<IHashingService>();
             _transfersService = new Mock<ITransfersService>();
-            _accountApiClient = new Mock<IAccountApiClient>();            
+            _accountApiClient = new Mock<IAccountApiClient>();
 
-            _hashingService.Setup(h => h.DecodeValue(HashedAccountId)).Returns(AccountId);            
+            _hashingService.Setup(h => h.DecodeValue(HashedAccountId)).Returns(AccountId);
 
             _orchestrator = new TransfersOrchestrator(_authorisationService.Object, _hashingService.Object, _transfersService.Object, _accountApiClient.Object);
         }
@@ -47,7 +47,9 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
             _transfersService.Setup(o => o.GetCounts(AccountId)).ReturnsAsync(new GetCountsResponse());
 
             SetupTheAccountApiClient(isLevyPayer);
-            
+
+            _transfersService.Setup(o => o.GetFinancialBreakdown(AccountId)).ReturnsAsync(new GetFinancialBreakdownResponse());
+
             var actual = await _orchestrator.GetIndexViewModel(HashedAccountId);
 
             Assert.AreEqual(expectIsLevyEmployer, actual.Data.IsLevyEmployer);
@@ -61,6 +63,8 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
 
             SetupTheAccountApiClient(true);
 
+            _transfersService.Setup(o => o.GetFinancialBreakdown(AccountId)).ReturnsAsync(new GetFinancialBreakdownResponse());
+
             _authorisationService.Setup(o => o.IsAuthorizedAsync(EmployerUserRole.OwnerOrTransactor)).ReturnsAsync(isAuthorised);
 
             var actual = await _orchestrator.GetIndexViewModel(HashedAccountId);
@@ -70,12 +74,12 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
 
         private void SetupTheAccountApiClient(bool isLevy = false)
         {
-           var modelToReturn = new AccountDetailViewModel
-           {
-               ApprenticeshipEmployerType = isLevy ? "Levy" : "NonLevy"
-           };
-           
-           _accountApiClient.Setup(o => o.GetAccount(HashedAccountId)).ReturnsAsync(modelToReturn);
+            var modelToReturn = new AccountDetailViewModel
+            {
+                ApprenticeshipEmployerType = isLevy ? "Levy" : "NonLevy"
+            };
+
+            _accountApiClient.Setup(o => o.GetAccount(HashedAccountId)).ReturnsAsync(modelToReturn);
         }
     }
 }
