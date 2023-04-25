@@ -16,7 +16,7 @@
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">You cannot remove @Model.Data.Name</h1>
         <p class="govuk-body">This is because @Model.Data.Name has apprenticeships in progress.</p>
-        <p class="govuk-body"><a href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerAgreementControllerName)" class="govuk-button">Return to your organisations and agreements</a></p>
+        <p class="govuk-body"><a asp-route="@RouteNames.EmployerAgreementIndex" asp-route-hashedAccountId="@Model.Data.HashedAccountId" class="govuk-button">Return to your organisations and agreements</a></p>
     </div>
 </div>
 
@@ -25,10 +25,10 @@
     <div class="govuk-breadcrumbs">
         <ol class="govuk-breadcrumbs__list">
             <li class="govuk-breadcrumbs__list-item">
-                <a class="govuk-breadcrumbs__link" href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName)">Home</a>
+                <a class="govuk-breadcrumbs__link" asp-route="@RouteNames.EmployerTeamIndex" asp-route-hashedAccountId="@Model.Data.HashedAccountId">Home</a>
             </li>
             <li class="govuk-breadcrumbs__list-item">
-                <a class="govuk-breadcrumbs__link" href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerAgreementControllerName)">Your organisations and agreements</a>
+                <a class="govuk-breadcrumbs__link" asp-route="@RouteNames.EmployerAgreementIndex" asp-route-hashedAccountId="@Model.Data.HashedAccountId">Your organisations and agreements</a>
             </li>
             <li class="govuk-breadcrumbs__list-item" aria-current="page">Remove organisation</li>
         </ol>
