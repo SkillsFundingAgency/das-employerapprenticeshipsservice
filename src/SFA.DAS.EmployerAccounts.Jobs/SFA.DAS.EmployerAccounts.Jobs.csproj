@@ -52,6 +52,9 @@
 		<None Update="nlog.Development.config">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Update="run.cmd">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="settings.job">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
