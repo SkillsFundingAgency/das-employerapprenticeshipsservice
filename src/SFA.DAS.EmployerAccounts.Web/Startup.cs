@@ -107,7 +107,7 @@ public class Startup
             services.AddAndConfigureGovUkAuthentication(govConfig,
                 typeof(EmployerAccountPostAuthenticationClaimsHandler),
                 "",
-                "/SignIn-Stub");
+                "/service/SignIn-Stub");
         }
         else
         {
