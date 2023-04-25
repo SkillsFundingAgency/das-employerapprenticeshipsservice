@@ -27,10 +27,7 @@ public static class HostBuilderExtensions
     {
         hostBuilder.ConfigureServices((context, services) =>
         {
-        services.Configure<EmployerAccountsConfiguration>(context.Configuration.GetSection(ConfigurationKeys.EmployerAccounts));
-        services.AddSingleton(cfg => cfg.GetService<IOptions<EmployerAccountsConfiguration>>().Value);
-
-        services.AddConfigurationSections(context.Configuration);
+            services.AddConfigurationSections(context.Configuration);
             services.AddApplicationServices();
             services.AddReadStoreServices();
             services.AddUnitOfWork();

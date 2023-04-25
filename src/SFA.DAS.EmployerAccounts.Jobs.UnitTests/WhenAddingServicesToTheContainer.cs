@@ -4,11 +4,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Jobs.Extensions;
 using SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
 using SFA.DAS.EmployerAccounts.Jobs.ServiceRegistrations;
 using SFA.DAS.EmployerAccounts.Jobs.StartupJobs;
 using SFA.DAS.EmployerAccounts.ReadStore.ServiceRegistrations;
+using SFA.DAS.EmployerAccounts.ServiceRegistration;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests;
 
@@ -33,10 +33,9 @@ public class WhenAddingServicesToTheContainer
         services.AddConfigurationOptions(configuration);
         services.AddLogging();
         services.AddSingleton<IConfiguration>(configuration);
-        services.AddNServiceBus();
         services.AddApplicationServices();
         services.AddReadStoreServices();
-        services.AddEmployerFinanceDbContext();
+        services.AddDatabaseRegistration();
         services.AddScoped<CreateReadStoreDatabaseJob>();
         services.AddScoped<SeedAccountUsersJob>();
         services.AddTransient<IRunOnceJobsService, RunOnceJobsService>();
