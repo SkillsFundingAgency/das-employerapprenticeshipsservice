@@ -105,8 +105,9 @@ public class Startup
             govConfig["ResourceEnvironmentName"] = _configuration["ResourceEnvironmentName"];
             govConfig["StubAuth"] = _configuration["StubAuth"];
             services.AddAndConfigureGovUkAuthentication(govConfig,
-                $"{typeof(Startup).Assembly.GetName().Name}.Auth",
-                typeof(EmployerAccountPostAuthenticationClaimsHandler));
+                typeof(EmployerAccountPostAuthenticationClaimsHandler),
+                "",
+                "/SignIn-Stub");
         }
         else
         {

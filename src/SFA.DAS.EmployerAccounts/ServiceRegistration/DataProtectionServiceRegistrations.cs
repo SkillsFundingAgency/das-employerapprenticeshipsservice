@@ -23,7 +23,7 @@ public static class DataProtectionServiceRegistrations
                 .Connect($"{redisConnectionString},{dataProtectionKeysDatabase}");
 
             services.AddDataProtection()
-                .SetApplicationName("das-employer-accounts-web")
+                .SetApplicationName("das-employer")
                 .PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys");
         }
 
