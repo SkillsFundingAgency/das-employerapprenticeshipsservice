@@ -31,20 +31,29 @@ public class EmployerTeamController : BaseController
     [Route("", Name = RouteNames.EmployerTeamIndex)]
     public async Task<IActionResult> Index(string hashedAccountId)
     {
-        PopulateViewBagWithExternalUserId();
-        var response = await GetAccountInformation(hashedAccountId);
-
-        if (response.Status != HttpStatusCode.OK)
+        try
         {
+            PopulateViewBagWithExternalUserId();
+            var response = await GetAccountInformation(hashedAccountId);
+
+            if (response.Status != HttpStatusCode.OK)
+            {
+                return View(response);
+            }
+
+            if (!response.Data.HasPayeScheme)
+            {
+                ViewBag.ShowNav = false;
+            }
+
             return View(response);
         }
-
-        if (!response.Data.HasPayeScheme)
+        catch (Exception e)
         {
-            ViewBag.ShowNav = false;
+            Console.WriteLine(e);
+            throw;
         }
-
-        return View(response);
+        
     }
 
     [HttpGet]
