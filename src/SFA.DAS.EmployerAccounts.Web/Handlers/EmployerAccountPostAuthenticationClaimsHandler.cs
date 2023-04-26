@@ -40,7 +40,6 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
                 .First(c => c.Type.Equals(ClaimTypes.Email))
                 .Value;
             claims.Add(new Claim(EmployerClaims.IdamsUserEmailClaimTypeIdentifier, email));
-            claims.Add(new Claim("authType","gov"));
         }
         else
         {
@@ -53,7 +52,6 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
 
             claims.AddRange(tokenValidatedContext.Principal.Claims);
             claims.Add(new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, userId));
-            claims.Add(new Claim("authType", "employer"));
         }
 
         var result = await _userAccountService.GetUserAccounts(userId, email);

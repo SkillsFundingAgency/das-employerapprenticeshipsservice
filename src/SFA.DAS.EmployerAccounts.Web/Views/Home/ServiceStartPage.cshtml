@@ -37,24 +37,3 @@
 
     </div>
 </div>
-
-<div>
-    <p>user claims</p>
-    <ul>
-        @foreach (var claim in User.Claims)
-        {
-            <li>@claim.Type : @claim.Value</li>
-        }    
-    </ul>
-
-
-    <p>first identity claim</p>
-    <ul>
-        @foreach (var claim in User.Identities.FirstOrDefault()?.Claims)
-        {
-            <li>@claim.Type : @claim.Value</li>
-        }
-    </ul>
-    <p>Is Authenticated @User.Identity?.IsAuthenticated</p>
-    <p>Auth Type : @User.Identity?.AuthenticationType</p>    
-</div>
