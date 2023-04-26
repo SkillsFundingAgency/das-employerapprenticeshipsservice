@@ -14,7 +14,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="1.2.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.15.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0-beta3" />
     <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.21.0">
     </PackageReference>
     <PackageReference Include="Microsoft.Identity.Web" Version="1.25.10" />
