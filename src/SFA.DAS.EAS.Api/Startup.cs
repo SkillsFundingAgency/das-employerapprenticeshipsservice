@@ -48,6 +48,8 @@ public class Startup
             );
         });
 
+        services.AddApplicationInsightsTelemetry();
+
         AutoMapper.ServiceCollectionExtensions.AddAutoMapper(services, typeof(Startup));
         services.AddSingleton(Configuration.GetSection("EmployerAccountsApi").Get<EmployerAccountsApiConfiguration>());
         services.AddSingleton(Configuration.GetSection("EmployerFinanceApi").Get<EmployerFinanceApiConfiguration>());

@@ -4,6 +4,8 @@
     <LangVersion>latest</LangVersion>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <OutputPath>bin\</OutputPath>
+    <ApplicationInsightsResourceId>/subscriptions/68208b91-0105-498e-a1bc-40d75596c01a/resourceGroups/das-at-eas-rg/providers/microsoft.insights/components/das-at-easapi-as</ApplicationInsightsResourceId>
+    <UserSecretsId>db26f280-6f78-4459-b0a3-801e3be133c4</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj" />
@@ -12,6 +14,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="1.2.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.15.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.21.0">
     </PackageReference>
     <PackageReference Include="Microsoft.Identity.Web" Version="1.25.10" />
