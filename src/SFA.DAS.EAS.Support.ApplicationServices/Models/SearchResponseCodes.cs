@@ -1,9 +1,8 @@
-﻿namespace SFA.DAS.EAS.Support.ApplicationServices.Models
+﻿namespace SFA.DAS.EAS.Support.ApplicationServices.Models;
+
+public enum SearchResponseCodes
 {
-    public enum SearchResponseCodes
-    {
-        NoSearchResultsFound = 0,
-        Success = 1,
-        SearchFailed = 2
-    }
+    NoSearchResultsFound = 0,
+    Success = 1,
+    SearchFailed = 2
 }

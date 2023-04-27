@@ -1,9 +1,8 @@
-﻿namespace SFA.DAS.EAS.Support.ApplicationServices.Models
+﻿namespace SFA.DAS.EAS.Support.ApplicationServices.Models;
+
+public enum PayeLevySubmissionsResponseCodes
 {
-    public enum PayeLevySubmissionsResponseCodes
-    {
-        Success,
-        AccountNotFound,
-        UnexpectedError
-    }
+    Success,
+    AccountNotFound,
+    UnexpectedError
 }
