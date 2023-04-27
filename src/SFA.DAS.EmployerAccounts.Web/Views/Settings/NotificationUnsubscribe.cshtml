@@ -6,12 +6,12 @@
     ViewBag.ShowNav = false;
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
 
         @if (Model.Data.AlreadyUnsubscribed)
         {
-            <h1 class="heading-xlarge">You've already unsubscribed</h1>
+            <h1 class="govuk-heading-xl">You've already unsubscribed</h1>
 
             <p>You've already unsubscribed from notifications for @{@Model.Data.AccountName}.</p>
 
@@ -19,13 +19,13 @@
                 }
                 else
                 {
-            <h1 class="heading-xlarge">Unsubscribe successful</h1>
+            <h1 class="govuk-heading-xl">Unsubscribe successful</h1>
             <p>You've unsubscribed from any further email notifications for @{@Model.Data.AccountName}.</p>
 
             <p>You'll continue to receive important service emails, such as password resets.</p>
         }
 
-        @Html.ActionLink("View notification settings","NotificationSettings", null, new { @class = "button" })
+        @Html.ActionLink("View notification settings","NotificationSettings", null, new { @class = "govuk-button" })
 
     </div>
 </div>

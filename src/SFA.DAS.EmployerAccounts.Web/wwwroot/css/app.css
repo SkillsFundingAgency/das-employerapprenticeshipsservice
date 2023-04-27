@@ -1,0 +1,33 @@
+/* Agreement content */
+
+#agreement-list .call-to-action,
+#agreement-header.call-to-action {
+    margin: 10px 0 40px 0;
+    background-color: #f3f2f1;
+    padding: 30px;
+}
+
+#agreement-list .clause-column-content {
+    padding-left: 50px;
+}
+
+#agreement-list .clause-column-fig h4.govuk-body {
+    float: left;
+}
+
+#agreement-list section > h3.govuk-heading-m span {
+    display: inline-block;
+    min-width: 50px;
+}
+
+.das-list-lower-alpha {
+    list-style-type: lower-alpha;
+}
+
+.das-list-lower-roman {
+    list-style-type: lower-roman;
+}
+
+.govuk-tabs__list-item--selected {
+    padding-bottom: 11px !important
+        }

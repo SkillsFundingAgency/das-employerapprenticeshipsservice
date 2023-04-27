@@ -4,39 +4,39 @@
     ViewBag.ShowNav = false;
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-medium">Accept invitation</h1>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-m">Accept invitation</h1>
         <form method="POST" action="@Url.Action("Accept")">
-            <table class="th-nopadding">
-                <thead>
-                    <tr>
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
                         <th scope="col" style="padding-top: 0"></th>
                         <th scope="col" class="" style="padding-top: 0"></th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>Account</td>
-                        <td>@Model.Data.AccountName</td>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">Account</td>
+                        <td class="govuk-table__cell">@Model.Data.AccountName</td>
                     </tr>
-                    <tr>
-                        <td>Email</td>
-                        <td>@Model.Data.Email</td>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">Email</td>
+                        <td class="govuk-table__cell">@Model.Data.Email</td>
                     </tr>
-                    <tr>
-                        <td>What you can do</td>
-                        <td>@RoleStrings.GetRoleDescription(Model.Data.Role)</td>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">What you can do</td>
+                        <td class="govuk-table__cell">@RoleStrings.GetRoleDescription(Model.Data.Role)</td>
                     </tr>
-                    <tr>
-                        <td>Status</td>
-                        <td>@Model.Status.ToString()</td>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">Status</td>
+                        <td class="govuk-table__cell">@Model.Status.ToString()</td>
                     </tr>
                 </tbody>
             </table>
             <p></p>
             <input type="hidden" id="invitationId" name="invitationId" value="@Model.Data.Id" />
-            <button type="submit" class="button" id="accept">Accept</button>
+            <button type="submit" class="govuk-button" id="accept">Accept</button>
         </form>
     </div>
 </div>

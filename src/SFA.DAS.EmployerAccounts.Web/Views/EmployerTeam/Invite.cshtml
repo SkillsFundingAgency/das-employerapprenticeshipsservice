@@ -15,7 +15,7 @@
                 </h1>
                 <p class="govuk-body-l">Invite somebody from your organisation to access this account.</p>
                 <form method="POST" asp-route="@RouteNames.EmployerTeamInvitePost" asp-route-hashedAccountId="@hashedAccountId">
-                    <div class="govuk-form-group @(!string.IsNullOrEmpty(Model.Data.EmailError) || !string.IsNullOrEmpty(Model.Data.ExistingMemberError) ? "error" : "")">
+                    <div class="govuk-form-group @(!string.IsNullOrEmpty(Model.Data.EmailError) || !string.IsNullOrEmpty(Model.Data.ExistingMemberError) ? "govuk-form-group--error" : "")">
                         <label for="Email" class="govuk-label">
                             <span>Email</span>
                         </label>

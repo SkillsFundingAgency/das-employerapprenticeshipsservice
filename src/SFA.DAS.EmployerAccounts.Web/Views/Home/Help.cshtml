@@ -5,9 +5,9 @@
     ViewBag.GaData.Vpv = "/page-help";
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">
             @ViewBag.Title
         </h1>
         <p><a class="govuk-link" href="mailto:helpdesk@manage-apprenticeships.service.gov.uk">helpdesk@manage-apprenticeships.service.gov.uk</a></p>
@@ -21,10 +21,10 @@
 </div>
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="/">Your accounts</a></li>
-            <li>@ViewBag.Title</li>
+    <div class="govuk-breadcrumbs">
+        <ol class="govuk-breadcrumbs__list">
+            <li class="govuk-breadcrumbs__list-item"><a href="/" class="govuk-breadcrumbs__link">Your accounts</a></li>
+            <li class="govuk-breadcrumbs__list-item">@ViewBag.Title</li>
         </ol>
     </div>
 }

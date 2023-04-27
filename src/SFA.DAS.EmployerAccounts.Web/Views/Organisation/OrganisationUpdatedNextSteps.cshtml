@@ -6,8 +6,8 @@
     ViewBag.Section = "organisations";
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
 
         @if (string.IsNullOrEmpty(Model.Data.ErrorMessage))
         {
@@ -20,13 +20,13 @@
         {
             <div class="error-summary" tabindex="-1">
                 <h1 class="bold-large">Details could not be updated</h1>
-                <p class="error-message">@Model.Data.ErrorMessage</p>
+                <p class="govuk-error-message">@Model.Data.ErrorMessage</p>
             </div>
         }
 
         <form asp-route="@RouteNames.OrganisationPostUpdateSelection" asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" method="post">
-            <div class="form-group">
-                <h2 class="heading-large">What's next?</h2>
+            <div class="govuk-form-group">
+                <h2 class="govuk-heading-l">What's next?</h2>
 
                 <div class="multiple-choice">
                     <input type="radio" name="nextStep" value="dashboard" />
@@ -37,7 +37,7 @@
                     <label for="teamMembers">Go to the homepage</label>
                 </div>
             </div>
-            <button type="submit" class="button">Continue</button>
+            <button type="submit" class="govuk-button">Continue</button>
         </form>
     </div>
 </div>
@@ -45,7 +45,7 @@
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
-            <li><a href="@Url.Action("ViewTeam", "EmployerTeam")" class="back-link">Back to your team</a></li>
+            <li><a href="@Url.Action("ViewTeam", "EmployerTeam")" class="govuk-back-link">Back to your team</a></li>
         </ol>
     </div>
 }

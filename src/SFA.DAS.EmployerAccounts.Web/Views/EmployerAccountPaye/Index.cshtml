@@ -70,7 +70,7 @@
                                 <td class="govuk-table__cell">@englishFractionPercentage.ToString("P3")</td>
                             }
 
-                            <td class="govuk-table__cell">
+                            <td class="govuk-table__cell govuk-table__cell--numeric">
                                 <a asp-route="@RouteNames.PayeDetails"
                                    asp-route-hashedAccountId="@hashedAccountId"
                                    asp-route-empRef="@scheme.Ref.FormatPayeForUrl()"

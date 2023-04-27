@@ -24,27 +24,27 @@
     <div class="govuk-grid-column-two-thirds">
         <table class="govuk-table">
             <tbody class="govuk-table__body">
-                <tr>
+                <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">
-                        <span class="no-wrap">Accepted by:</span>
+                        <span class="das-no-wrap">Accepted by:</span>
                     </th>
                     <td class="govuk-table__cell">@Model.EmployerAgreement.SignedByName</td>
                 </tr>
-                <tr>
+                <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">
-                        <span class="no-wrap">On behalf of:</span>
+                        <span class="das-no-wrap">On behalf of:</span>
                     </th>
                     <td class="govuk-table__cell">@Model.EmployerAgreement.LegalEntityName</td>
                 </tr>
-                <tr>
+                <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">Address:</th>
                     <td class="govuk-table__cell">
                         <span class="table-address">@Model.EmployerAgreement.LegalEntityAddress</span>
                     </td>
                 </tr>
-                <tr>
+                <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">
-                        <span class="no-wrap">Accepted on:</span>
+                        <span class="das-no-wrap">Accepted on:</span>
                     </th>
                     <td class="govuk-table__cell">@Model.EmployerAgreement.SignedDate.Value.ToString("d MMMM yyyy")</td>
                 </tr>

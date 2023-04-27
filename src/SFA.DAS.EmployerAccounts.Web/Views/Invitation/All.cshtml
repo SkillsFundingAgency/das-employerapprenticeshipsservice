@@ -7,50 +7,50 @@
 
 
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Invitations</h1>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Invitations</h1>
         @if (Model.Data.Invitations.Count == 0)
         {
             <p>You have no invitations. Invitations expire after 7 days.</p>
-            <p><a class="button" href="@Url.Action("Index","Home")">Return to your profile</a></p>
+            <p><a class="govuk-button" href="@Url.Action("Index","Home")">Return to your profile</a></p>
         }
         else
         {
             <form method="post" action="@Url.Action("Accept","Invitation")">
-                <table>
-                    <thead>
-                        <tr>
-                            <th scope="col">Account name</th>
-                            <th scope="col">What you can do</th>
-                            <th scope="col">Expires in</th>
-                            <th scope="col"><span class="vh">Action</span></th>
+                <table class="govuk-table">
+                    <thead class="govuk-table__head">
+                        <tr class="govuk-table__row">
+                            <th class="govuk-table__header" scope="col">Account name</th>
+                            <th class="govuk-table__header" scope="col">What you can do</th>
+                            <th class="govuk-table__header" scope="col">Expires in</th>
+                            <th class="govuk-table__header" scope="col"><span class="vh">Action</span></th>
                         </tr>
                     </thead>
 
-                    <tbody>
+                    <tbody class="govuk-table__body">
                         @for (var index = 0; index < Model.Data.Invitations.Count; index++)
                         {
                             var invitation = Model.Data.Invitations[index];
-                            <tr>
-                                <td>
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">
                                     <div>@invitation.AccountName</div>
                                 </td>
-                                <td>
+                                <td class="govuk-table__cell">
 
                                     <div>@RoleStrings.GetRoleDescription(invitation.Role)</div>
                                 </td>
-                                <td>
+                                <td class="govuk-table__cell">
 
                                     <div>@invitation.ExpiryDays()</div>
                                 </td>
-                                <td class="link-right">
+                                <td class="govuk-table__cell govuk-table__cell--numeric">
 
                                     <div>
                                         <input type="hidden" name="Invitations[@index].AccountName" value="@invitation.AccountName" />
                                         <input type="hidden" name="Invitations[@index].Id" value="@invitation.Id" />
                                         <input type="hidden" name="invitation" value="@invitation.Id" />
-                                        <button type="submit" id="invitationId" class="link-button" title="Accept invite to @invitation.AccountName">Accept invite</button>
+                                        <button type="submit" id="invitationId" class="das-button--inline-link" title="Accept invite to @invitation.AccountName">Accept invite</button>
                                     </div>
                                 </td>
                             </tr>
@@ -65,12 +65,11 @@
 @if (Model.Data.ShowBreadCrumbs)
 {
     @section breadcrumb {
-        <div class="breadcrumbs">
-            <ol role="navigation">
-                <li><a href="/">Your accounts</a></li>
-                <li>Invitations</li>
+        <div class="govuk-breadcrumbs">
+            <ol class="govuk-breadcrumbs__list">
+                <li class="govuk-breadcrumbs__list-item" class="govuk-breadcrumbs__link"><a href="/">Your accounts</a></li>
+                <li class="govuk-breadcrumbs__list-item">Invitations</li>
             </ol>
         </div>
     }
 }
-

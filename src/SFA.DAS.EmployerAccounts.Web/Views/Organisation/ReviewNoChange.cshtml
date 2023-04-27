@@ -5,25 +5,25 @@
     ViewBag.Section = "organisations";
     ViewBag.PageID = "update-organisation-details";
 }
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Review your details</h1>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Review your details</h1>
         <p>Here are the most up-to-date details we found for your organisation. These details are the same as those previously held.</p>
 
-        <div class="form-group">
-            <table class="details-list">
-                <tbody>
-                    <tr>
-                        <td>Information from</td>
-                        <td>@Model.Data.DataSourceFriendlyName</td>
+        <div class="govuk-form-group">
+            <table class="govuk-table">
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">Information from</td>
+                        <td class="govuk-table__cell">@Model.Data.DataSourceFriendlyName</td>
                     </tr>
-                    <tr>
-                        <td>Organisation name</td>
-                        <td>@Model.Data.RefreshedName</td>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">Organisation name</td>
+                        <td class="govuk-table__cell">@Model.Data.RefreshedName</td>
                     </tr>
-                    <tr>
-                        <td>Organisation address</td>
-                        <td>@Html.CommaSeperatedAddressToHtml(@Model.Data.RefreshedAddress)</td>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">Organisation address</td>
+                        <td class="govuk-table__cell">@Html.CommaSeperatedAddressToHtml(@Model.Data.RefreshedAddress)</td>
                     </tr>
                 </tbody>
             </table>
@@ -35,8 +35,8 @@
             <p>If you have done this and the updated information is still not displayed here, please <a href="@Url.Action("Help", "Home")">contact support</a> for further help.</p>
 
             <form asp-route="@RouteNames.OrganisationPostUpdateSelection" asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" method="post">
-                <div class="form-group">
-                    <h2 class="heading-large">
+                <div class="govuk-form-group">
+                    <h2 class="govuk-heading-l">
                         What's next?
                     </h2>
 
@@ -49,7 +49,7 @@
                         <label for="teamMembers">Go to the homepage</label>
                     </div>
                 </div>
-                <button type="submit" class="button">Continue</button>
+                <button type="submit" class="govuk-button">Continue</button>
             </form>
         </div>
     </div>
@@ -58,9 +58,5 @@
 
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to your organisations</a></li>
-        </ol>
-    </div>
+    <a href="@Url.Action("Index", "EmployerAgreement")" class="govuk-back-link">Back to your organisations</a>
 }
