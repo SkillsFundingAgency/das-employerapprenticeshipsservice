@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using SFA.DAS.EAS.Domain.Models.Payments;
+﻿using SFA.DAS.EAS.Domain.Models.Payments;
 
 namespace SFA.DAS.EAS.Web.Models
 {

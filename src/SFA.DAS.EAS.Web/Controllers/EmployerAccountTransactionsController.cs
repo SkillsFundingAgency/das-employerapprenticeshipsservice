@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EAS.Web.Extensions;
 

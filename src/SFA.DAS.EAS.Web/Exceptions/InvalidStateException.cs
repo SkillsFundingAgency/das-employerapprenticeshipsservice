@@ -1,7 +1,4 @@
-﻿using System;
-using System.Runtime.Serialization;
-
-namespace SFA.DAS.EAS.Web.Exceptions;
+﻿namespace SFA.DAS.EAS.Web.Exceptions;
 
 [Serializable]
 public class InvalidStateException : Exception

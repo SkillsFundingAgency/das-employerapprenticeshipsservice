@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using SFA.DAS.EAS.Web.Extensions;
 
 namespace SFA.DAS.EAS.Web.Controllers;

@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SFA.DAS.EAS.Domain.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using SFA.DAS.EAS.Web.Helpers;
-using Microsoft.Extensions.Configuration;
 
 namespace SFA.DAS.EAS.Web.Extensions
 {
