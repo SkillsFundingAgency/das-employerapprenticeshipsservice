@@ -10,7 +10,7 @@
         <h1 class="govuk-heading-xl">Update your organisation's details</h1>
 
         <div class="panel panel-border-wide">
-             Please ensure you've updated your organisation's details at <span>@Model.DataSourceFriendlyName</span>. This update can take up to 7 working days to process.
+            Please ensure you've updated your organisation's details at <span>@Model.DataSourceFriendlyName</span>. This update can take up to 7 working days to process.
         </div>
 
         <p>If you have done this and the updated information is still not displayed here, please <a href="@Url.Action("Help", "Home")">contact support</a> for further help.</p>
@@ -38,5 +38,7 @@
 </div>
 
 
-@section breadcrumb {
+@section breadcrumb
+{
     <a href="@Url.Action("Index", "EmployerAgreement")" class="govuk-back-link">Back to your organisations</a>
+}
