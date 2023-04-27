@@ -15,11 +15,11 @@ public static class HostExtensions
     {
         builder.ConfigureLogging((context, loggingBuilder) =>
         {
-            var appInsightsKey = context.Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"];
-            if (!string.IsNullOrEmpty(appInsightsKey))
+            var connectionString = context.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"];
+            if (!string.IsNullOrEmpty(connectionString))
             {
                 loggingBuilder.AddNLog(context.HostingEnvironment.IsDevelopment() ? "nlog.development.config" : "nlog.config");
-                loggingBuilder.AddApplicationInsightsWebJobs(o => o.InstrumentationKey = appInsightsKey);
+                loggingBuilder.AddApplicationInsightsWebJobs(o => o.ConnectionString = connectionString);
             }
             loggingBuilder.AddConsole();
         });
