@@ -1,59 +1,59 @@
-﻿using SFA.DAS.EAS.Web.Extensions;
-using SFA.DAS.EmployerUsers.WebClientComponents;
-using Microsoft.AspNetCore.Mvc;
-using SFA.DAS.EAS.Domain.Configuration;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using SFA.DAS.EAS.Web.Extensions;
+using SFA.DAS.EmployerUsers.WebClientComponents;
 
-namespace SFA.DAS.EAS.Web.Controllers
+namespace SFA.DAS.EAS.Web.Controllers;
+
+[Route("accounts")]
+[AuthoriseActiveUser]
+public class EmployerAccountController : Controller
 {
-    [Route("accounts")]
-    [AuthoriseActiveUser]
-    public class EmployerAccountController : Controller
+    public IConfiguration Configuration { get; set; }
+
+    public EmployerAccountController(IConfiguration _configuration)
     {
-        public IConfiguration Configuration { get; set; }
-        public EmployerAccountController(IConfiguration _configuration)
-        {
-            Configuration = _configuration;
-        }
-        [HttpGet]
-        [Route("gatewayInform")]
-        public ActionResult GatewayInform()
-        {
-            return Redirect(Url.EmployerAccountsAction("gatewayInform", Configuration));
-        }
+        Configuration = _configuration;
+    }
 
-        [HttpGet]
-        [Route("gateway")]
-        public ActionResult Gateway()
-        {
-            return Redirect(Url.EmployerAccountsAction("gateway", Configuration));
-        }
+    [HttpGet]
+    [Route("gatewayInform")]
+    public IActionResult GatewayInform()
+    {
+        return Redirect(Url.EmployerAccountsAction("gatewayInform", Configuration));
+    }
 
-        [Route("gatewayResponse")]
-        public ActionResult GateWayResponse()
-        {
-            return Redirect(Url.EmployerAccountsAction($"gatewayResponse{Request.QueryString}", Configuration));
-        }
+    [HttpGet]
+    [Route("gateway")]
+    public IActionResult Gateway()
+    {
+        return Redirect(Url.EmployerAccountsAction("gateway", Configuration));
+    }
 
-        [HttpGet]
-        [Route("summary")]
-        public ActionResult Summary()
-        {
-            return Redirect(Url.EmployerAccountsAction("summary", Configuration));
-        }
+    [Route("gatewayResponse")]
+    public IActionResult GateWayResponse()
+    {
+        return Redirect(Url.EmployerAccountsAction($"gatewayResponse{Request.QueryString}", Configuration));
+    }
 
-        [HttpGet]
-        [Route("create")]
-        public ActionResult Create()
-        {
-            return Redirect(Url.EmployerAccountsAction("create", Configuration));
-        }
+    [HttpGet]
+    [Route("summary")]
+    public IActionResult Summary()
+    {
+        return Redirect(Url.EmployerAccountsAction("summary", Configuration));
+    }
 
-        [HttpGet]
-        [Route("{HashedAccountId}/rename")]
-        public ActionResult RenameAccount(string hashedAccountId)
-        {
-            return Redirect(Url.EmployerAccountsAction("rename", Configuration));
-        }
+    [HttpGet]
+    [Route("create")]
+    public IActionResult Create()
+    {
+        return Redirect(Url.EmployerAccountsAction("create", Configuration));
+    }
+
+    [HttpGet]
+    [Route("{HashedAccountId}/rename")]
+    public IActionResult RenameAccount(string hashedAccountId)
+    {
+        return Redirect(Url.EmployerAccountsAction("rename", Configuration));
     }
 }
