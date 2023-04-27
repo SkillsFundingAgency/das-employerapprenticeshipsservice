@@ -1,7 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using SFA.DAS.EAS.Support.ApplicationServices;
+﻿using SFA.DAS.EAS.Support.ApplicationServices;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.Core.Models;
 using SFA.DAS.EAS.Support.Infrastructure.Models;
@@ -25,7 +22,7 @@ public class ChallengeController : Controller
 
     [HttpGet]
     [Route("challenge/{id}")]
-    public async Task<ActionResult> Index(string id)
+    public async Task<IActionResult> Index(string id)
     {
         _log.Info($"ChallengeController-Index : Getting Response for id : {id}");
 
@@ -45,7 +42,7 @@ public class ChallengeController : Controller
 
     [HttpPost]
     [Route("challenge/{id}")]
-    public async Task<ActionResult> Index(string id, ChallengeEntry challengeEntry)
+    public async Task<IActionResult> Index(string id, ChallengeEntry challengeEntry)
     {
         var response = await _handler.Handle(Map(challengeEntry));
 
@@ -69,7 +66,7 @@ public class ChallengeController : Controller
         return View(model);
     }
 
-    private ChallengePermissionQuery Map(ChallengeEntry challengeEntry)
+    private static ChallengePermissionQuery Map(ChallengeEntry challengeEntry)
     {
         return new ChallengePermissionQuery
         {

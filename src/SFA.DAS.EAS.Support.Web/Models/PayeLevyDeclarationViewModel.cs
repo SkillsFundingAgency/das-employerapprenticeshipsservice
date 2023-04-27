@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace SFA.DAS.EAS.Support.Web.Models;
+﻿namespace SFA.DAS.EAS.Support.Web.Models;
 
 public class PayeSchemeLevyDeclarationViewModel
 {

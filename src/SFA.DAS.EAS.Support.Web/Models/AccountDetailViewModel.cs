@@ -1,13 +1,12 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace SFA.DAS.EAS.Support.Web.Models
+namespace SFA.DAS.EAS.Support.Web.Models;
+
+[ExcludeFromCodeCoverage]
+public class AccountDetailViewModel
 {
-    [ExcludeFromCodeCoverage]
-    public class AccountDetailViewModel
-    {
-        public Core.Models.Account Account { get; set; }
-        public string SearchUrl { get; set; }
-        public string AccountUri { get; set; }
-        public bool IsTier2User { get; set; }
-    }
+    public Core.Models.Account Account { get; set; }
+    public string SearchUrl { get; set; }
+    public string AccountUri { get; set; }
+    public bool IsTier2User { get; set; }
 }

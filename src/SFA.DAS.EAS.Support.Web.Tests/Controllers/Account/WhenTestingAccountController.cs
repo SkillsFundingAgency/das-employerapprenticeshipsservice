@@ -1,7 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
@@ -9,8 +7,6 @@ using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Web.Controllers;
 using SFA.DAS.EAS.Support.Web.Models;
 using SFA.DAS.EAS.Support.Web.Services;
-using SFA.DAS.NLog.Logger;
-using Microsoft.Extensions.Logging;
 
 namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Account
 {
@@ -18,7 +14,6 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Account
     {
         protected Mock<IAccountHandler> AccountHandler;
         protected Mock<IPayeLevySubmissionsHandler> _payeLevySubmissionsHandler;
-        protected Mock<ILogger<AccountController>> _logger;
         protected Mock<IPayeLevyMapper> _payeLevyDeclarationMapper;
         protected AccountController Unit;
         protected Mock<HttpContext> _httpContextMock;
@@ -29,13 +24,11 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Account
         {
             AccountHandler = new Mock<IAccountHandler>();
             _payeLevySubmissionsHandler = new Mock<IPayeLevySubmissionsHandler>();
-            _logger = new Mock<ILogger<AccountController>>();
             _payeLevyDeclarationMapper = new Mock<IPayeLevyMapper>();
             _httpContextMock = new Mock<HttpContext>();
 
             Unit = new AccountController(AccountHandler.Object,
                 _payeLevySubmissionsHandler.Object,
-                _logger.Object,
                 _payeLevyDeclarationMapper.Object, _httpContextMock.Object);
         }
     }

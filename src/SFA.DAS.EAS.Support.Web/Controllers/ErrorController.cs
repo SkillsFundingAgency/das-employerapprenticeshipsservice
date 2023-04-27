@@ -3,20 +3,20 @@
 namespace SFA.DAS.EAS.Support.Web.Controllers;
 
 [ExcludeFromCodeCoverage]
-public class ErrorController : Microsoft.AspNetCore.Mvc.Controller
+public class ErrorController : Controller
 {
-    public Microsoft.AspNetCore.Mvc.ActionResult Error()
+    public IActionResult Error()
     {
         return View();
     }
 
 
-    public Microsoft.AspNetCore.Mvc.ActionResult NotFound()
+    public IActionResult NotFound()
     {
         return View("Error");
     }
 
-    public Microsoft.AspNetCore.Mvc.ActionResult BadRequest()
+    public IActionResult BadRequest()
     {
         return View("Error");
     }

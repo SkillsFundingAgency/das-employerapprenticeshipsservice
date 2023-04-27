@@ -1,8 +1,5 @@
-﻿using System;
-using System.Reflection;
-using Microsoft.AspNetCore.Authorization;
+﻿using System.Reflection;
 using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.Support.Shared;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers;
@@ -24,7 +21,7 @@ public class StatusController : ControllerBase
         });
     }
 
-    private string AddServiceVersion()
+    private static string AddServiceVersion()
     {
         try
         {
