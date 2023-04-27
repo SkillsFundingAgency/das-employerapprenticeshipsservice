@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using System.Web.Http.Routing;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -83,10 +82,14 @@ public class HomeController : BaseController
             return View(ControllerConstants.ServiceStartPageViewName, model);
         }
 
-        // check if the user account is found, if not re-direct the user to the EmployerProfile Add User Details Page.
-        if (accounts.Data.Accounts.AccountList == null || accounts.Data.Accounts.AccountList.Count == 0)
+        // check if the GovSignIn is enabled
+        if (_configuration.UseGovSignIn)
         {
-            return Redirect(_urlHelper.EmployerProfileAddUserDetails("/user/add-user-details"));
+            // check if the user account is found, if not re-direct the user to the EmployerProfile Add User Details Page.
+            if (accounts.Data.Accounts.AccountList == null || accounts.Data.Accounts.AccountList.Count == 0)
+            {
+                return Redirect(_urlHelper.EmployerProfileAddUserDetails("/user/add-user-details"));
+            }
         }
 
         if (accounts.Data.Invitations > 0)

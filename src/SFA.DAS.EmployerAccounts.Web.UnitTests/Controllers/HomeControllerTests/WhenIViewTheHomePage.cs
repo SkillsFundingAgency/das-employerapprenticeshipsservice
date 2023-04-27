@@ -282,9 +282,10 @@ public class WhenIViewTheHomePage : ControllerTestBase
     }
 
     [Test]
-    public async Task ThenIfIHaveNoAccountsIAmRedirectedToTheProfilePage()
+    public async Task ThenIfIHaveNoAccountsAndGovSignInTrueIAmRedirectedToTheProfilePage()
     {
         //Arrange
+        _configuration.UseGovSignIn = true;
         AddUserToContext(ExpectedUserId, string.Empty, string.Empty,
             new Claim(ControllerConstants.UserRefClaimKeyName, ExpectedUserId),
             new Claim(DasClaimTypes.RequiresVerification, "false")
