@@ -101,30 +101,26 @@
                             This agreement has been accepted
                         </h3>
                         <table class="govuk-table">
-                            <thead class="govuk-table__head">
-                                <tr class="govuk-table__row">
-                                    <th scope="col" class="govuk-table__header">Accepted by:</th>
-                                    <td class="govuk-table__cell">@Model.SignedByName</td>
-                                </tr>
-                            </thead>
-                            <tbody class="govuk-table__body">
-                                <tr class="govuk-table__row">
-                                    <th scope="row" class="govuk-table__header">On behalf of:</th>
-                                    <td class="govuk-table__cell">@Model.AccountLegalEntity.Name</td>
-                                </tr>
-                                <tr class="govuk-table__row">
-                                    <th scope="row" class="govuk-table__header">Address: </th>
-                                    <td class="govuk-table__cell">@Model.AccountLegalEntity.Address</td>
-                                </tr>
-                                <tr class="govuk-table__row">
-                                    <th scope="row" class="govuk-table__header">Accepted on:</th>
-                                    <td class="govuk-table__cell">@Model.SignedDateText</td>
-                                </tr>
-                                <tr class="govuk-table__row">
-                                    <th scope="row" class="govuk-table__header">Agreement ID:</th>
-                                    <td class="govuk-table__cell">@Model.AccountLegalEntityPublicHashedId</td>
-                                </tr>
-                            </tbody>
+                            <tr class="govuk-table__row">
+                                <th scope="col" class="govuk-table__header">Accepted by:</th>
+                                <td class="govuk-table__cell">@Model.SignedByName</td>
+                            </tr>
+                            <tr class="govuk-table__row">
+                                <th scope="row" class="govuk-table__header"><span class="das-no-wrap">On behalf of:</span></th>
+                                <td class="govuk-table__cell">@Model.AccountLegalEntity.Name</td>
+                            </tr>
+                            <tr class="govuk-table__row">
+                                <th scope="row" class="govuk-table__header">Address: </th>
+                                <td class="govuk-table__cell">@Model.AccountLegalEntity.Address</td>
+                            </tr>
+                            <tr class="govuk-table__row">
+                                <th scope="row" class="govuk-table__header">Accepted on:</th>
+                                <td class="govuk-table__cell">@Model.SignedDateText</td>
+                            </tr>
+                            <tr class="govuk-table__row">
+                                <th scope="row" class="govuk-table__header"><span class="das-no-wrap">Agreement ID:</span></th>
+                                <td class="govuk-table__cell">@Model.AccountLegalEntityPublicHashedId</td>
+                            </tr>
                         </table>
                     </div>
                 </div>

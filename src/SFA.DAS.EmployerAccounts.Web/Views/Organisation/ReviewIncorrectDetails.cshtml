@@ -18,15 +18,18 @@
 
         <form asp-route="@RouteNames.OrganisationPostUpdateSelection" asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" method="post">
             <div class="govuk-form-group">
-                <h2 class="govuk-heading-l">What's next?</h2>
-                <div class="multiple-choice">
-                    <input type="radio" name="nextStep" value="dashboard" />
-                    <label for="acceptAgreement">Go to your organisations and agreements</label>
-                </div>
-                
-                <div class="multiple-choice">
-                    <input type="radio" name="nextStep" value="homepage" />
-                    <label for="teamMembers">Go to the homepage</label>
+                <h2 class="govuk-heading-l">
+                    What's next?
+                </h2>
+                <div class="govuk-radios" data-module="govuk-radios">
+                    <div class="govuk-radios__item">
+                        <input type="radio" id="goToOrg" name="nextStep" value="dashboard" class="govuk-radios__input" />
+                        <label for="goToOrg" class="govuk-label govuk-radios__label">Go to your organisations and agreements</label>
+                    </div>
+                    <div class="govuk-radios__item">
+                        <input type="radio" id="goToHome" name="nextStep" value="homepage" class="govuk-radios__input" />
+                        <label for="goToHome" class="govuk-label govuk-radios__label">Go to the homepage</label>
+                    </div>
                 </div>
             </div>
             <button type="submit" class="govuk-button">Continue</button>

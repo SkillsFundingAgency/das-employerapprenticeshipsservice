@@ -28,11 +28,11 @@
                             <span class="govuk-error-message" id="select-option">@ViewData.ModelState["Choice"].Errors[0].ErrorMessage</span>
                         }
                     </legend>
-                    <label for="choice1" class="block-label" id="choice1-yes">
+                    <label for="choice1" class="govuk-label govuk-radios__label" id="choice1-yes">
                         <input id="choice1" type="radio" name="requiresAdvert" value="@bool.TrueString" />
                         Yes
                     </label>
-                    <label for="choice2" class="block-label" id="choice2-no">
+                    <label for="choice2" class="govuk-label govuk-radios__label" id="choice2-no">
                         <input id="choice2" type="radio" name="requiresAdvert" value="@bool.FalseString" />
                         No
                     </label>

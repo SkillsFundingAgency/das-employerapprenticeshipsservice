@@ -25,8 +25,8 @@
                 }
             }
         }
-        <p class="lede">Are you sure you want to remove @name?</p>
-        <div class="govuk-form-group">
+        <p class="govuk-body-l">Are you sure you want to remove @name?</p>
+        <div class="govuk-button-group">
             <form asp-route="@RouteNames.ConfirmRemoveTeamMember"
                   asp-route-hashedAccountId="@hashedAccountId"
                   asp-route-email="@Model.Data.Email" method="POST">
@@ -35,7 +35,7 @@
                 <input type="hidden" id="Email" name="Email" value="@Model.Data.Email" />
                 <button type="submit" class="govuk-button" id="remove_team_member">Yes, remove now</button>
             </form>
-            <a asp-route="@RouteNames.EmployerTeamView" asp-route-hashedAccountId="@hashedAccountId" class="govuk-button button-link">No, cancel</a>
+            <a asp-route="@RouteNames.EmployerTeamView" asp-route-hashedAccountId="@hashedAccountId" class="govuk-link">No, cancel</a>
         </div>
     </div>
 </div>
