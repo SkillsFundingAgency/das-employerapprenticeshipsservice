@@ -3,13 +3,13 @@ using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.Core.Models;
 using SFA.DAS.EAS.Support.Core.Services;
-using SFA.DAS.EAS.Support.Infrastructure.Services;
 using SFA.DAS.NLog.Logger;
 using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.EAS.Support.Infrastructure.Services.Contracts;
 
 namespace SFA.DAS.EAS.Support.ApplicationServices.Services
 {

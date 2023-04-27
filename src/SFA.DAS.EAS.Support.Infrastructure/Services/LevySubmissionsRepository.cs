@@ -1,62 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using HMRC.ESFA.Levy.Api.Client;
-using HMRC.ESFA.Levy.Api.Types;
+﻿using HMRC.ESFA.Levy.Api.Types;
 using HMRC.ESFA.Levy.Api.Types.Exceptions;
-using Microsoft.Extensions.Logging;
-using SFA.DAS.NLog.Logger;
+using SFA.DAS.EAS.Support.Infrastructure.Services.Contracts;
 
-namespace SFA.DAS.EAS.Support.Infrastructure.Services
+namespace SFA.DAS.EAS.Support.Infrastructure.Services;
+
+public sealed class LevySubmissionsRepository : ILevySubmissionsRepository
 {
-    public sealed class LevySubmissionsRepository : ILevySubmissionsRepository
+    private readonly ILogger<LevySubmissionsRepository> _logger;
+    private readonly ILevyTokenHttpClientFactory _levyTokenHttpClientFactory;
+
+    public LevySubmissionsRepository(ILogger<LevySubmissionsRepository> logger, ILevyTokenHttpClientFactory levyTokenHttpClientFactory)
     {
-        private IApprenticeshipLevyApiClient _levyApiClient;
-        private readonly ILogger<LevySubmissionsRepository> _logger;
-        private readonly ILevyTokenHttpClientFactory _levyTokenHttpClientFactory;
+        _logger = logger;
+        _levyTokenHttpClientFactory = levyTokenHttpClientFactory;
+    }
 
-        public LevySubmissionsRepository(ILogger<LevySubmissionsRepository> logger, ILevyTokenHttpClientFactory levyTokenHttpClientFactory)
+
+    public async Task<LevyDeclarations> Get(string payeScheme)
+    {
+        _logger.LogDebug("IApprenticeshipLevyApiClient.GetEmployerLevyDeclarations(\"{PayeScheme}\");", payeScheme);
+
+        try
         {
-            _logger = logger;
-            _levyTokenHttpClientFactory = levyTokenHttpClientFactory;
-        }
+            var levyApiClient = await _levyTokenHttpClientFactory.GetLevyHttpClient();
 
+            var response = await levyApiClient.GetEmployerLevyDeclarations(payeScheme);
 
-        public async Task<LevyDeclarations> Get(string payeScheme)
-        {
-            _logger.LogDebug($"IApprenticeshipLevyApiClient.GetEmployerLevyDeclarations(\"{payeScheme}\");");
-
-            try
+            if (response != null)
             {
-
-                _levyApiClient = await _levyTokenHttpClientFactory.GetLevyHttpClient();
-
-                var response = await _levyApiClient.GetEmployerLevyDeclarations(payeScheme);
-
-                if (response != null)
-                {
-                    var filteredDeclarations = GetFilteredDeclarations(response.Declarations);
-                    response.Declarations = filteredDeclarations.OrderByDescending(x => x.SubmissionTime).ThenByDescending(x => x.Id).ToList();
-                }
-
-                return response;
+                var filteredDeclarations = GetFilteredDeclarations(response.Declarations);
+                response.Declarations = filteredDeclarations.OrderByDescending(x => x.SubmissionTime).ThenByDescending(x => x.Id).ToList();
             }
-            catch (ApiHttpException ex)
-            {
-                var properties = new Dictionary<string, object>
-                {
-                    {"RequestCtx.StatusCode", ex.HttpCode}
-                };
-                _logger.LogError(ex, "Issue retrieving levy declarations", properties);
-                throw;
-            }
+
+            return response;
         }
-
-        private List<Declaration> GetFilteredDeclarations(List<Declaration> resultDeclarations)
+        catch (ApiHttpException ex)
         {
-            return resultDeclarations?.Where(x => x.SubmissionTime >= new DateTime(2017, 4, 1)).ToList();
+            var properties = new Dictionary<string, object>
+            {
+                {"RequestCtx.StatusCode", ex.HttpCode}
+            };
+            _logger.LogError(ex, "Issue retrieving levy declarations", properties);
+            throw;
         }
+    }
+
+    private static List<Declaration> GetFilteredDeclarations(List<Declaration> resultDeclarations)
+    {
+        return resultDeclarations?.Where(x => x.SubmissionTime >= new DateTime(2017, 4, 1)).ToList();
     }
 }

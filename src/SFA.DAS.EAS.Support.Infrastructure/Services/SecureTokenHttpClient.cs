@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using SFA.DAS.EAS.Support.Infrastructure.Settings;
-using Microsoft.Identity.Client;
 using Azure.Core;
 using Azure.Identity;
+using Microsoft.Identity.Client;
+using SFA.DAS.EAS.Support.Infrastructure.Services.Contracts;
+using SFA.DAS.EAS.Support.Infrastructure.Settings;
 
 namespace SFA.DAS.EAS.Support.Infrastructure.Services;
 
@@ -26,15 +22,18 @@ internal class SecureTokenHttpClient: ISecureTokenHttpClient
         string text = !IsClientCredentialConfiguration(_configuration.ClientId, _configuration.ClientSecret, _configuration.Tenant) 
             ? await GetManagedIdentityAuthenticationResult(_configuration.IdentifierUri) 
             : await GetClientCredentialAuthenticationResult(_configuration.ClientId, _configuration.ClientSecret, _configuration.IdentifierUri, _configuration.Tenant);
+
         string parameter = text;
-        using HttpClient client = new HttpClient();
+        using HttpClient client = new();
+
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", parameter);
         HttpResponseMessage obj = await client.GetAsync(url);
         obj.EnsureSuccessStatusCode();
+
         return await obj.Content.ReadAsStringAsync();
     }
 
-    private async Task<string> GetClientCredentialAuthenticationResult(string clientId, string clientSecret, string resource, string tenant)
+    private static async Task<string> GetClientCredentialAuthenticationResult(string clientId, string clientSecret, string resource, string tenant)
     {
         string authority = "https://login.microsoftonline.com/" + tenant;
         var app = ConfidentialClientApplicationBuilder.Create(clientId)
@@ -53,7 +52,7 @@ internal class SecureTokenHttpClient: ISecureTokenHttpClient
         return authResult.AccessToken;
     }
 
-    private async Task<string> GetManagedIdentityAuthenticationResult(string resource)
+    private static async Task<string> GetManagedIdentityAuthenticationResult(string resource)
     {
         var tokenCredential = new DefaultAzureCredential();
         var accessToken = await tokenCredential.GetTokenAsync(
@@ -62,7 +61,7 @@ internal class SecureTokenHttpClient: ISecureTokenHttpClient
         return accessToken.Token;
     }
 
-    private bool IsClientCredentialConfiguration(string clientId, string clientSecret, string tenant)
+    private static bool IsClientCredentialConfiguration(string clientId, string clientSecret, string tenant)
     {
         if (!string.IsNullOrEmpty(clientId) && !string.IsNullOrEmpty(clientSecret))
         {

@@ -1,13 +1,12 @@
-﻿using System.Security.Principal;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
-using NUnit.Framework;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Logging;
 using Moq;
+using NUnit.Framework;
 using SFA.DAS.EAS.Support.ApplicationServices;
 using SFA.DAS.EAS.Support.Web.Controllers;
-using SFA.DAS.NLog.Logger;
-using System.Security.Claims;
 
 namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Challenge
 {
@@ -18,7 +17,7 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Challenge
         protected Mock<HttpRequest> MockRequestBase;
         protected Mock<HttpResponse> MockResponseBase;
         protected Mock<ClaimsPrincipal> MockUser;
-        protected Mock<ILog> _logger;
+        protected Mock<ILogger<ChallengeController>> _logger;
         protected RouteData RouteData;
         protected ChallengeController Unit;
         protected ControllerContext UnitControllerContext;
@@ -27,7 +26,7 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Challenge
         public void Setup()
         {
             MockChallengeHandler = new Mock<IChallengeHandler>();
-            _logger = new Mock<ILog>();
+            _logger = new Mock<ILogger<ChallengeController>>();
             Unit = new ChallengeController(MockChallengeHandler.Object, _logger.Object);
 
             RouteData = new RouteData();

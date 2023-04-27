@@ -6,7 +6,7 @@ using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Core.Models;
 using SFA.DAS.EAS.Support.Core.Services;
-using SFA.DAS.EAS.Support.Infrastructure.Services;
+using SFA.DAS.EAS.Support.Infrastructure.Services.Contracts;
 using SFA.DAS.NLog.Logger;
 using System;
 using System.Collections.Generic;

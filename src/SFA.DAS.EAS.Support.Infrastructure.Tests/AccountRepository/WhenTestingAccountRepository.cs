@@ -3,8 +3,8 @@ using NUnit.Framework;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Support.Core.Services;
-using SFA.DAS.EAS.Support.Infrastructure.Services;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.EAS.Support.Infrastructure.Services.Contracts;
 
 namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
 {

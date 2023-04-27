@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EAS.Support.Infrastructure.Settings
+﻿namespace SFA.DAS.EAS.Support.Infrastructure.Settings;
+
+public interface IHmrcApiClientConfiguration
 {
-    public interface IHmrcApiClientConfiguration
-    {
-         string ApiBaseUrl { get; set; }
-    }
+     string ApiBaseUrl { get; set; }
 }

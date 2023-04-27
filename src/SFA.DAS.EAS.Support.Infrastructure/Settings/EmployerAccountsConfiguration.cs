@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EAS.Support.Infrastructure.Settings
+﻿namespace SFA.DAS.EAS.Support.Infrastructure.Settings;
+
+public class EmployerAccountsConfiguration 
 {
-    public class EmployerAccountsConfiguration 
-    {
-        public string EmployerAccountsBaseUrl { get; set; }
-    }
+    public string EmployerAccountsBaseUrl { get; set; }
 }
