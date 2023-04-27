@@ -33,7 +33,7 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAd"));
+            .AddMicrosoftIdentityWebApi(Configuration.GetSection("Identity"));
 
         services.AddControllersWithViews()
            .AddNewtonsoftJson(opts => opts.UseMemberCasing());
@@ -80,15 +80,15 @@ public class Startup
         services.AddSingleton<IEncodingService, EncodingService>();
 
 
-        services.AddSwaggerGen();
+        //services.AddSwaggerGen();
     }
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
-            app.UseSwagger();
-            app.UseSwaggerUI();
+            //app.UseSwagger();
+            //app.UseSwaggerUI();
         }
 
         app.UseStaticFiles();
