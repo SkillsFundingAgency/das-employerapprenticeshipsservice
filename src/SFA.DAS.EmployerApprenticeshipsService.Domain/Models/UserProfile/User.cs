@@ -2,33 +2,32 @@
 using System.Collections.Generic;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 
-namespace SFA.DAS.EAS.Domain.Models.UserProfile
+namespace SFA.DAS.EAS.Domain.Models.UserProfile;
+
+public class User
 {
-    public class User
+    public virtual long Id { get; set; }
+
+    public virtual Guid Ref
     {
-        public virtual long Id { get; set; }
-
-        public virtual Guid Ref
-        {
-            get => _ref ?? Guid.Parse(_userRef);
-            set => _ref = value;
-        }
-
-        [Obsolete("Please use 'Ref' instead.")]
-        public string UserRef
-        {
-            get => _userRef ?? _ref.Value.ToString();
-            set => _userRef = value;
-        }
-
-        public virtual string Email { get; set; }
-        public virtual string FirstName { get; set; }
-        public virtual string LastName { get; set; }
-        public string FullName => $"{FirstName} {LastName}";
-        public virtual ICollection<Membership> Memberships { get; protected set; } = new List<Membership>();
-        public virtual ICollection<UserAccountSetting> UserAccountSettings { get;  protected set; } = new List<UserAccountSetting>();
-        
-        private Guid? _ref;
-        private string _userRef;
+        get => _ref ?? Guid.Parse(_userRef);
+        set => _ref = value;
     }
+
+    [Obsolete("Please use 'Ref' instead.")]
+    public string UserRef
+    {
+        get => _userRef ?? _ref.Value.ToString();
+        set => _userRef = value;
+    }
+
+    public virtual string Email { get; set; }
+    public virtual string FirstName { get; set; }
+    public virtual string LastName { get; set; }
+    public string FullName => $"{FirstName} {LastName}";
+    public virtual ICollection<Membership> Memberships { get; protected set; } = new List<Membership>();
+    public virtual ICollection<UserAccountSetting> UserAccountSettings { get;  protected set; } = new List<UserAccountSetting>();
+    
+    private Guid? _ref;
+    private string _userRef;
 }

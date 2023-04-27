@@ -1,15 +1,14 @@
-﻿namespace SFA.DAS.EAS.Domain.Models.Transfers
+﻿namespace SFA.DAS.EAS.Domain.Models.Transfers;
+
+public class TransferAllowance
 {
-    public class TransferAllowance
+    private decimal? _remainingAllowance;
+
+    public decimal? StartingTransferAllowance { get; set; }
+
+    public decimal? RemainingTransferAllowance
     {
-        private decimal? _remainingAllowance;
-
-        public decimal? StartingTransferAllowance { get; set; }
-
-        public decimal? RemainingTransferAllowance
-        {
-            get => _remainingAllowance < 0 ? 0 : _remainingAllowance;
-            set => _remainingAllowance = value;
-        }
+        get => _remainingAllowance < 0 ? 0 : _remainingAllowance;
+        set => _remainingAllowance = value;
     }
 }

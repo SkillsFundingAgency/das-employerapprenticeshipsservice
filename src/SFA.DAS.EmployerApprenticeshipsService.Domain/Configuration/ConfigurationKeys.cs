@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EAS.Domain.Configuration
+﻿namespace SFA.DAS.EAS.Domain.Configuration;
+
+public static class ConfigurationKeys
 {
-    public static class ConfigurationKeys
-    {
-        public const string EmployerApprenticeshipsService = "SFA.DAS.EmployerApprenticeshipsService";
-    }
+    public const string EmployerApprenticeshipsService = "SFA.DAS.EmployerApprenticeshipsService";
 }
