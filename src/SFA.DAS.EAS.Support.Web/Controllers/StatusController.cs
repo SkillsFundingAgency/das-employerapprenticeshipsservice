@@ -1,53 +1,50 @@
 ﻿using System;
 using System.Reflection;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.Support.Shared;
-using SFA.DAS.EAS.Support.Web;
-using Microsoft.AspNetCore.Http.Extensions;
 
-namespace SFA.DAS.EAS.Support.Web.Controllers
+namespace SFA.DAS.EAS.Support.Web.Controllers;
+
+[Authorize(Roles = "das-support-portal")]
+[Route("api/status")]
+[ApiController]
+public class StatusController : ControllerBase
 {
-    [Authorize(Roles = "das-support-portal")]
-    [Route("api/status")]
-    [ApiController]
-    public class StatusController : ControllerBase
+    [AllowAnonymous]
+    public IActionResult Get()
     {
-        // GET: Status
-        [System.Web.Mvc.AllowAnonymous]
-        public IActionResult Get()
+        return Ok(new
         {
-            return Ok(new
-            {
-                ServiceName = "SFA DAS Employer Apprenticeship Service Support Site",
-                ServiceVersion = AddServiceVersion(),
-                ServiceTime = DateTimeOffset.UtcNow,
-                Request = AddRequestContext()
-            });
-        }
+            ServiceName = "SFA DAS Employer Apprenticeship Service Support Site",
+            ServiceVersion = AddServiceVersion(),
+            ServiceTime = DateTimeOffset.UtcNow,
+            Request = AddRequestContext()
+        });
+    }
 
-        private string AddServiceVersion()
+    private string AddServiceVersion()
+    {
+        try
         {
-            try
-            {
-                return Assembly.GetExecutingAssembly().Version();
-            }
-            catch (Exception)
-            {
-                return "Unknown";
-            }
+            return Assembly.GetExecutingAssembly().Version();
         }
-        private string AddRequestContext()
+        catch (Exception)
         {
-            try
-            {
-                return $" {HttpContext.Request.Method}: {HttpContext.Request.GetDisplayUrl()}";
-            }
-            catch
-            {
-                return "Unknown";
-            }
+            return "Unknown";
         }
+    }
 
+    private string AddRequestContext()
+    {
+        try
+        {
+            return $" {HttpContext.Request.Method}: {HttpContext.Request.GetDisplayUrl()}";
+        }
+        catch
+        {
+            return "Unknown";
+        }
     }
 }
