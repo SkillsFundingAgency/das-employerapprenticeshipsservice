@@ -3,6 +3,7 @@
     ViewBag.Title = "Update an organisation";
     ViewBag.Section = "organisations";
     ViewBag.PageID = "update-organisation-details";
+    string hashedAccountId = @ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]?.ToString();
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -27,7 +28,7 @@
 
         <form method="POST"
               asp-route="@RouteNames.ProcessOrganisationReview"
-              asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]">
+              asp-route-hashedAccountId="@hashedAccountId">
             <input type="hidden" name="organisationName" value="@Model.Data.RefreshedName" />
             <input type="hidden" name="organisationAddress" value="@Model.Data.RefreshedAddress" />
             <input type="hidden" name="accountLegalEntityPublicHashedId" value="@Model.Data.HashedAccountLegalEntityId" />
@@ -62,5 +63,5 @@
 </div>
 
 @section breadcrumb {
-    <a href="@Url.Action("Index", "EmployerAgreement")" class="govuk-back-link">Back to your organisations</a>
+    <a class="govuk-breadcrumbs__link" asp-route="@RouteNames.EmployerAgreementIndex" asp-route-hashedAccountId="@hashedAccountId">Your organisations and agreements</a>
 }
