@@ -23,37 +23,35 @@
                     </legend>
                     <div class="govuk-radios" data-module="govuk-radios">
                         <div class="govuk-radios__item">
-                            <input type="radio" name="nextStep" value="agreement" id="acceptAgreement" />
+                            <input type="radio" name="nextStep" value="agreement" id="acceptAgreement" class="govuk-radios__input" />
                             <label for="acceptAgreement" class="govuk-label govuk-radios__label">
                                 <span class="form-label">Sign an agreement to allow @Model.Data.OrganisationName to spend funds</span>
                             </label>
                         </div>
                         <div class="govuk-radios__item">
-                            <input type="radio" name="nextStep" value="teamMembers" id="teamMembers" />
+                            <input type="radio" name="nextStep" value="teamMembers" id="teamMembers" class="govuk-radios__input" />
                             <label for="teamMembers" class="govuk-label govuk-radios__label">
                                 <span class="form-label">Check which team members can sign the agreement</span>
                             </label>
                         </div>
                         <div class="govuk-radios__item">
-                            <input type="radio" name="nextStep" value="addOrganisation" id="addAnotherOrganisation" />
+                            <input type="radio" name="nextStep" value="addOrganisation" id="addAnotherOrganisation" class="govuk-radios__input" />
                             <label for="addAnotherOrganisation" class="govuk-label govuk-radios__label">
                                 <span class="form-label">Add another organisation</span>
                             </label>
                         </div>
                         <div class="govuk-radios__item">
-                            <input type="radio" name="nextStep" value="dashboard" id="GoToDashboard" />
+                            <input type="radio" name="nextStep" value="dashboard" id="GoToDashboard" class="govuk-radios__input" />
                             <label for="GoToDashboard" class="govuk-label govuk-radios__label">
-                                <span class="form-label">"Return to homepage"</span>
+                                <span class="form-label">Return to homepage</span>
                             </label>
                         </div>
                     </div>
                     <input type="hidden" name="organisationName" value="@Model.Data.OrganisationName" />
                     <input type="hidden" name="hashedAgreementId" value="@Model.Data.HashedAgreementId" />
-                    <div class="govuk-form-group">
-                        <button type="submit" class="govuk-button">Continue</button>
-                    </div>
                 </fieldset>
             </div>
+            <button type="submit" class="govuk-button">Continue</button>
         </form>
     </div>
 </div>
