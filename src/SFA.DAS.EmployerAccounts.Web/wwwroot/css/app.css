@@ -30,4 +30,34 @@
 
 .govuk-tabs__list-item--selected {
     padding-bottom: 11px !important
-        }
+}
+
+.app-document {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.app-document__icon {
+    position: relative;
+}
+
+.app-document__icon-text {
+    position: absolute;
+    color: #fff;
+    font-weight: 700;
+    left: 0;
+    margin: 0;
+    right: 0;
+    text-align: center;
+    top: 13px;
+}
+
+.app-document__icon-image {
+    color: #b1b4b6;
+    width: 90px;
+    height: 126px;
+    box-shadow: 0 0 0 4px #e2e2e2;
+    border-bottom: 1px solid #777;
+    outline: 1px solid #ccc;
+}
