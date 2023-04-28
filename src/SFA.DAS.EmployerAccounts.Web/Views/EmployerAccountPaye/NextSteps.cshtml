@@ -12,7 +12,7 @@
 		<h1 class="govuk-heading-l">
 			What's next
 		</h1>
-		<form method="POST" action="@Url.Action("NextSteps")">
+		<form method="POST" asp-route="@RouteNames.PayePostNextSteps" asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]">
             <div class="govuk-form-group  @(!string.IsNullOrEmpty(Model.Data.ErrorMessage) ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset">
                     <legend class="govuk-fieldset__legend">
@@ -29,19 +29,17 @@
                             Add another PAYE scheme
                             </label>
                         </div>
-                        @if (!Model.Data.ShowWizard)
-                        {
+
                         <div class="govuk-radios__item">
                             <input id="choice2" type="radio" name="choice" value="2" class="govuk-radios__input" />
                             <label for="choice2" class="govuk-label govuk-radios__label">
                             Check finances
                             </label>
                         </div>
-                        }
                         <div class="govuk-radios__item">
                             <input id="choice3" type="radio" name="choice" value="3" class="govuk-radios__input" />
                             <label for="choice3" class="govuk-label govuk-radios__label">
-                            @(Model.Data.ShowWizard ? "Continue account setup" : "Return to homepage")
+                            Return to homepage
                             </label>
                         </div>
                     </div>
