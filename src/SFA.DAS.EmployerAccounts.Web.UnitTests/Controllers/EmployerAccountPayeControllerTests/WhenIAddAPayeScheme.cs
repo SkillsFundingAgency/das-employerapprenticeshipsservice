@@ -22,6 +22,7 @@ public class WhenIAddAPayeScheme : ControllerTestBase
         _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
         _controller = new EmployerAccountPayeController(
+            Mock.Of<IUrlActionHelper>(),
             _employerAccountPayeOrchestrator.Object,
             _flashMessage.Object,
             Mock.Of<LinkGenerator>())
