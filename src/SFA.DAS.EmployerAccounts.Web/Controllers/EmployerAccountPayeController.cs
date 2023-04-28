@@ -98,7 +98,7 @@ public class EmployerAccountPayeController : BaseController
     }
 
     [HttpGet]
-    [Route("{HashedAccountId}/schemes/gateway")]
+    [Route("{HashedAccountId}/schemes/gateway", Name = RouteNames.EmployerAccountPayeGateway)]
     public async Task<IActionResult> GetGateway(string hashedAccountId)
     {
         var redirectUrl = _linkGenerator.GetUriByAction(
