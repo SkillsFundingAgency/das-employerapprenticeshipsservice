@@ -21,7 +21,6 @@ using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUser;
 using SFA.DAS.EmployerAccounts.Web.ViewComponents;
 using SFA.DAS.Encoding;
-using ResourceNotFoundException = SFA.DAS.EmployerAccounts.Web.Exceptions.ResourceNotFoundException;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators;
 
