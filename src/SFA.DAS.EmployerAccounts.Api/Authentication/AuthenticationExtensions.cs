@@ -21,12 +21,29 @@ public static class AuthenticationExtensions
         }
         else
         {
-            var azureAdConfiguration = config
-                   .GetSection(ConfigurationKeys.AzureActiveDirectoryApiConfiguration)
-                   .Get<AzureActiveDirectoryConfiguration>();
+            //var azureAdConfiguration = config
+            //       .GetSection(ConfigurationKeys.AzureActiveDirectoryApiConfiguration)
+            //       .Get<AzureActiveDirectoryConfiguration>();
 
-            var policies = new Dictionary<string, string> { { PolicyNames.Default, RoleNames.Default } };
-            services.AddAuthentication(azureAdConfiguration, policies);
+            //var policies = new Dictionary<string, string> { { PolicyNames.Default, RoleNames.Default } };
+            //services.AddAuthentication(azureAdConfiguration, policies);
+
+            var azureAdConfiguration = config
+                .GetSection(ConfigurationKeys.AzureActiveDirectoryApiConfiguration)
+                .Get<AzureActiveDirectoryApiConfiguration>();
+            
+            services.AddAuthentication(auth =>
+            {
+                auth.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(auth =>
+            {
+                auth.Authority = $"https://login.microsoftonline.com/{azureAdConfiguration.Tenant}";
+                auth.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidAudiences = azureAdConfiguration.Identifier.Split(",")
+                };
+            });
         }
 
         services.AddSingleton<IClaimsTransformation, AzureAdScopeClaimTransformation>();
