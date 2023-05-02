@@ -11,18 +11,18 @@
         <p>We've retrieved the most up-to-date details we could find for your organisation.</p>
         <table class="govuk-table">
             <tbody class="govuk-table__body">
-            <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="row">Information from</th>
-                <td class="govuk-table__cell">@Model.Data.DataSourceFriendlyName</td>
-            </tr>
-            <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="row">Organisation name</th>
-                <td class="govuk-table__cell">@Model.Data.RefreshedName</td>
-            </tr>
-            <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="row">Organisation address</th>
-                <td class="govuk-table__cell">@Html.(@Model.Data.RefreshedAddress)</td>
-            </tr>
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="row">Information from</th>
+                    <td class="govuk-table__cell">@Model.Data.DataSourceFriendlyName</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="row">Organisation name</th>
+                    <td class="govuk-table__cell">@Model.Data.RefreshedName</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="row">Organisation address</th>
+                    <td class="govuk-table__cell">@Html.CommaSeperatedAddressToHtml(@Model.Data.RefreshedAddress)</td>
+                </tr>
             </tbody>
         </table>
 
