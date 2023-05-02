@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.Api.Common.AppStart;
@@ -25,7 +26,7 @@ public static class AuthenticationExtensions
                    .Get<AzureActiveDirectoryConfiguration>();
 
             var policies = new Dictionary<string, string> { { PolicyNames.Default, RoleNames.Default } };
-            services.AddAuthentication(azureAdConfiguration, policies)                   ;
+            services.AddAuthentication(azureAdConfiguration, policies);
         }
 
         services.AddSingleton<IClaimsTransformation, AzureAdScopeClaimTransformation>();
