@@ -116,6 +116,7 @@ public class Startup
             .UseApiGlobalExceptionHandler(loggerFactory.CreateLogger("Startup"))
             .UseStaticFiles()
             .UseDasHealthChecks()
+            .UseAuthentication()
             //.UseUnitOfWork()
             .UseRouting()
             .UseAuthorization()
