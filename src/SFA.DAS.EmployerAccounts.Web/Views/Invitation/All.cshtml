@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Invitations";
     ViewBag.ShowNav = false;
+    string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]?.ToString();
 }
 
 
@@ -13,11 +14,11 @@
         @if (Model.Data.Invitations.Count == 0)
         {
             <p>You have no invitations. Invitations expire after 7 days.</p>
-            <p><a class="govuk-button" href="@Url.Action("Index","Home")">Return to your profile</a></p>
+            <p><a class="govuk-button" asp-controller="@ControllerConstants.HomeControllerName" asp-action="@ControllerConstants.IndexActionName" asp-route-hashedAccountId="@hashedAccountId">Return to your profile</a></p>
         }
         else
         {
-            <form method="post" action="@Url.Action("Accept","Invitation")">
+            <form method="post" asp-route="@RouteNames.InvitationAcceptPost" asp-route-hashedAccountId="@hashedAccountId">
                 <table class="govuk-table">
                     <thead class="govuk-table__head">
                         <tr class="govuk-table__row">
@@ -65,11 +66,11 @@
 @if (Model.Data.ShowBreadCrumbs)
 {
     @section breadcrumb {
-        <div class="govuk-breadcrumbs">
-            <ol class="govuk-breadcrumbs__list">
-                <li class="govuk-breadcrumbs__list-item" class="govuk-breadcrumbs__link"><a href="/">Your accounts</a></li>
-                <li class="govuk-breadcrumbs__list-item">Invitations</li>
-            </ol>
-        </div>
+    <div class="govuk-breadcrumbs">
+        <ol class="govuk-breadcrumbs__list">
+            <li class="govuk-breadcrumbs__list-item" class="govuk-breadcrumbs__link"><a href="/">Your accounts</a></li>
+            <li class="govuk-breadcrumbs__list-item">Invitations</li>
+        </ol>
+    </div>
     }
 }
