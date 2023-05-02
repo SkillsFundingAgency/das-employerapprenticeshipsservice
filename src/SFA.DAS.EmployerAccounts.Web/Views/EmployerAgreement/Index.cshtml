@@ -30,7 +30,16 @@
         <p class="govuk-body">
             Transfers status:&nbsp;
             <span>
-                enabled
+                @{
+                    if (@Model.Data.EmployerAgreementsData.MinimumSignedAgreementVersion >= 3)
+                    {
+                        @:enabled.
+                    }
+                    else
+                    {
+                        @:disabled.
+                    }
+                }
             </span>
         </p>
         <p class="govuk-!-margin-bottom-8">
