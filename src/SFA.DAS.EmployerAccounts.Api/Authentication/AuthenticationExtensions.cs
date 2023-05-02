@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.Api.Common.AppStart;
@@ -21,32 +20,13 @@ public static class AuthenticationExtensions
         }
         else
         {
-            //var azureAdConfiguration = config
-            //       .GetSection(ConfigurationKeys.AzureActiveDirectoryApiConfiguration)
-            //       .Get<AzureActiveDirectoryConfiguration>();
-
-            //var policies = new Dictionary<string, string> { { PolicyNames.Default, RoleNames.Default } };
-            //services.AddAuthentication(azureAdConfiguration, policies);
-
             var azureAdConfiguration = config
-                .GetSection(ConfigurationKeys.AzureActiveDirectoryApiConfiguration)
-                .Get<AzureActiveDirectoryApiConfiguration>();
-            
-            services.AddAuthentication(auth =>
-            {
-                auth.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                   .GetSection(ConfigurationKeys.AzureActiveDirectoryApiConfiguration)
+                   .Get<AzureActiveDirectoryConfiguration>();
 
-            }).AddJwtBearer(auth =>
-            {
-                auth.Authority = $"https://login.microsoftonline.com/{azureAdConfiguration.Tenant}";
-                auth.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-                {
-                    ValidAudiences = azureAdConfiguration.Identifier.Split(",")
-                };
-            });
+            var policies = new Dictionary<string, string> { { PolicyNames.Default, RoleNames.Default } };
+            services.AddAuthentication(azureAdConfiguration, policies);
         }
-
-        services.AddSingleton<IClaimsTransformation, AzureAdScopeClaimTransformation>();
 
         return services;
     }
