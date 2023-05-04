@@ -9,10 +9,6 @@ using Microsoft.OpenApi.Models;
 using SFA.DAS.EAS.Account.Api.Authentication;
 using SFA.DAS.EAS.Account.Api.Authorization;
 using SFA.DAS.EAS.Account.Api.ServiceRegistrations;
-using SFA.DAS.EAS.Application.Services.EmployerAccountsApi.Http;
-using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
-using SFA.DAS.EAS.Application.Services.EmployerFinanceApi.Http;
-using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.Encoding;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
@@ -39,15 +35,8 @@ public class Startup
         services.AddControllersWithViews()
                 .AddNewtonsoftJson(opts => opts.UseMemberCasing());
 
-        services.AddApplicationInsightsTelemetry();
-
         services.AddAutoMapper(typeof(Startup));
-
-        services.AddSingleton<IEmployerAccountsApiHttpClientFactory, EmployerAccountsApiHttpClientFactory>();
-        services.AddSingleton<IEmployerAccountsApiService, EmployerAccountsApiService>();
-        services.AddSingleton<IEmployerFinanceApiHttpClientFactory, EmployerFinanceApiHttpClientFactory>();
-        services.AddSingleton<IEmployerFinanceApiService, EmployerFinanceApiService>();
-
+        services.AddClientServices();
         services.AddOrchestrators();
 
         var hashstringChars = _configuration.GetValue<string>("AllowedHashstringCharacters");
@@ -77,6 +66,8 @@ public class Startup
                 Title = "EAS API"
             });
         });
+
+        services.AddApplicationInsightsTelemetry();
     }
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {

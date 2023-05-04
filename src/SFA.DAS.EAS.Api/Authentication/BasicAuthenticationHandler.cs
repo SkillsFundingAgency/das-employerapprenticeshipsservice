@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SFA.DAS.EAS.Account.Api.Authorization;
 
 namespace SFA.DAS.EAS.Account.Api.Authentication;
 
@@ -23,10 +24,10 @@ public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSc
         var claims = new[] {
             new Claim(ClaimTypes.NameIdentifier, "username"),
             new Claim(ClaimTypes.Name, "username"),
-            //new Claim(ClaimTypes.Role, ApiRoles.ReadUserAccounts),
-            //new Claim(ClaimTypes.Role, ApiRoles.ReadAllAccountUsers),
-            //new Claim(ClaimTypes.Role, ApiRoles.ReadAllEmployerAccountBalances),
-            //new Claim(ClaimTypes.Role, ApiRoles.ReadAllEmployerAgreements)
+            new Claim(ClaimTypes.Role, ApiRoles.ReadUserAccounts),
+            new Claim(ClaimTypes.Role, ApiRoles.ReadAllAccountUsers),
+            new Claim(ClaimTypes.Role, ApiRoles.ReadAllEmployerAccountBalances),
+            new Claim(ClaimTypes.Role, ApiRoles.ReadAllEmployerAgreements)
         };
 
         var identity = new ClaimsIdentity(claims, Scheme.Name);

@@ -1,26 +1,26 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.EAS.Account.Api.Authorization;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
-namespace SFA.DAS.EAS.Account.Api.Controllers
+namespace SFA.DAS.EAS.Account.Api.Controllers;
+
+[ApiController]
+[Route("api/user/{userRef}")]
+public class EmployerUserController : ControllerBase
 {
-    [ApiController]
-    [Route("api/user/{userRef}")]
-    public class EmployerUserController : ControllerBase
+    private readonly IEmployerAccountsApiService _apiService;
+
+    public EmployerUserController(IEmployerAccountsApiService apiService)
     {
-        private readonly IEmployerAccountsApiService _apiService;
+        _apiService = apiService;
+    }
 
-        public EmployerUserController(IEmployerAccountsApiService apiService)
-        {
-            _apiService = apiService;
-        }
-
-        [Authorize(Policy = "LoopBack", Roles = "ReadUserAccounts")]
-        [HttpGet("accounts", Name = "Accounts")]
-        public async Task<IActionResult> GetUserAccounts(string userRef)
-        {
-            return Ok(await _apiService.Redirect($"/api/user/{userRef}/accounts"));
-        }
+    [Authorize(Policy = "LoopBack", Roles = ApiRoles.ReadUserAccounts)]
+    [HttpGet("accounts", Name = "Accounts")]
+    public async Task<IActionResult> GetUserAccounts(string userRef)
+    {
+        return Ok(await _apiService.Redirect($"/api/user/{userRef}/accounts"));
     }
 }
