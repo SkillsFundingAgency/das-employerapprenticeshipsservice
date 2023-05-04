@@ -2,9 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using SFA.DAS.EAS.Account.Api.Extensions;
 
-
 namespace SFA.DAS.EAS.Account.Api;
-
 
 public class Program
 {

@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Microsoft.Extensions.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.EAS.Domain.Configuration;
 
 namespace SFA.DAS.EAS.Support.Web.Extensions;
 
@@ -36,19 +37,5 @@ public static class ConfigurationExtensions
         });
 
         return config.Build();
-    }
-    public static bool IsDev(this IConfiguration configuration)
-    {
-        return configuration["EnvironmentName"].Equals("Development", StringComparison.CurrentCultureIgnoreCase);
-    }
-
-    public static bool IsLocal(this IConfiguration configuration)
-    {
-        return configuration["EnvironmentName"].StartsWith("LOCAL", StringComparison.CurrentCultureIgnoreCase);
-    }
-
-    public static bool IsDevOrLocal(this IConfiguration configuration)
-    {
-        return IsDev(configuration) || IsLocal(configuration);
     }
 }
