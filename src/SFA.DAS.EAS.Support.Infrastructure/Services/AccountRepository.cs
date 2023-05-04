@@ -5,7 +5,7 @@ using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Support.Core.Models;
 using SFA.DAS.EAS.Support.Core.Services;
 using SFA.DAS.EAS.Support.Infrastructure.Services.Contracts;
-using SFA.DAS.EmployerAccounts.Api.Types;
+using ResourceList = SFA.DAS.EAS.Account.Api.Types.ResourceList;
 
 namespace SFA.DAS.EAS.Support.Infrastructure.Services;
 
@@ -195,9 +195,10 @@ public sealed class AccountRepository : IAccountRepository
         return response.Where(x => x.Description != null && x.Amount != 0).OrderByDescending(x => x.DateCreated).ToList();
     }
 
-    private async Task<IEnumerable<PayeSchemeViewModel>> GetPayeSchemes(AccountDetailViewModel response)
+    private async Task<IEnumerable<PayeSchemeModel>> GetPayeSchemes(AccountDetailViewModel response)
     {
-        var payes = new List<PayeSchemeViewModel>();
+        var payes = new List<PayeSchemeModel>();
+        
         var payesBatches = response.PayeSchemes
                 .Select((item, inx) => new { item, inx })
                 .GroupBy(x => x.inx / 50)
@@ -211,7 +212,7 @@ public sealed class AccountRepository : IAccountRepository
                 var paye = payeScheme.Id.Replace("/", "%252f");
                 _logger.LogDebug("IAccountApiClient.GetResource<PayeSchemeViewModel>(\"{Obscured}\");", payeScheme.Href.Replace(paye, obscured));
 
-                return _accountApiClient.GetResource<PayeSchemeViewModel>(payeScheme.Href).ContinueWith(payeTask =>
+                return _accountApiClient.GetResource<PayeSchemeModel>(payeScheme.Href).ContinueWith(payeTask =>
                 {
                     if (!payeTask.IsFaulted)
                     {
@@ -219,8 +220,8 @@ public sealed class AccountRepository : IAccountRepository
                     }
                     else
                     {
-                        _logger.LogError(payeTask.Exception, "Exception occured in Account API type of {PayeSchemeViewModelName} at {PayeSchemeHref} id {PayeSchemeId}", nameof(PayeSchemeViewModel), payeScheme.Href, payeScheme.Id);
-                        return new PayeSchemeViewModel();
+                        _logger.LogError(payeTask.Exception, "Exception occured in Account API type of {PayeSchemeViewModelName} at {PayeSchemeHref} id {PayeSchemeId}", nameof(PayeSchemeModel), payeScheme.Href, payeScheme.Id);
+                        return new PayeSchemeModel();
                     }
                 });
             });
@@ -232,7 +233,7 @@ public sealed class AccountRepository : IAccountRepository
         {
             if (IsValidPayeScheme(payeSchemeViewModel))
             {
-                var item = new PayeSchemeViewModel
+                var item = new PayeSchemeModel
                 {
                     Ref = payeSchemeViewModel.Ref,
                     DasAccountId = payeSchemeViewModel.DasAccountId,
@@ -249,7 +250,7 @@ public sealed class AccountRepository : IAccountRepository
           .OrderBy(x => x.Ref);
     }
 
-    private static bool IsValidPayeScheme(PayeSchemeViewModel result)
+    private static bool IsValidPayeScheme(PayeSchemeModel result)
     {
         return result.AddedDate <= DateTime.UtcNow &&
                (result.RemovedDate == null || result.RemovedDate > DateTime.UtcNow);
@@ -282,9 +283,9 @@ public sealed class AccountRepository : IAccountRepository
             {
                 var legalResponse = await _accountApiClient.GetResource<LegalEntityViewModel>(legalEntity.Href);
 
-                if (legalResponse.AgreementStatus == EmployerAgreementStatus.Signed ||
-                    legalResponse.AgreementStatus == EmployerAgreementStatus.Pending ||
-                    legalResponse.AgreementStatus == EmployerAgreementStatus.Superseded)
+                if (legalResponse.AgreementStatus == Account.Api.Types.EmployerAgreementStatus.Signed ||
+                    legalResponse.AgreementStatus == Account.Api.Types.EmployerAgreementStatus.Pending ||
+                    legalResponse.AgreementStatus == Account.Api.Types.EmployerAgreementStatus.Superseded)
                     legalEntitiesList.Add(legalResponse);
             }
             catch (Exception ex)

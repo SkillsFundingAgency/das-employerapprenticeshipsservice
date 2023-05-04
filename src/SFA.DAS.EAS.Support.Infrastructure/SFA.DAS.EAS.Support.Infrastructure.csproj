@@ -15,7 +15,7 @@
     <ProjectReference Include="..\SFA.DAS.EAS.Support.Core\SFA.DAS.EAS.Support.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="SFA.DAS.EmployerAccounts.Api.Types" Version="1.6.1254">
+    <PackageReference Include="SFA.DAS.EmployerAccounts.Api.Types" Version="1.6.3195">
     </PackageReference>
     <PackageReference Include="SFA.DAS.Encoding" Version="1.1.76" />
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1">

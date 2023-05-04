@@ -9,6 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.30.0" />
 		<PackageReference Include="coverlet.msbuild" Version="3.2.0">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -16,7 +17,10 @@
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
 		<PackageReference Include="NUnit" Version="3.13.3" />
 		<PackageReference Include="NUnit3TestAdapter" Version="4.3.0" />
-		<PackageReference Include="NUnit.Analyzers" Version="3.5.0" />
+		<PackageReference Include="NUnit.Analyzers" Version="3.6.1">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="coverlet.collector" Version="3.2.0">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -35,7 +39,7 @@
 		</PackageReference>
 		<PackageReference Include="NUnit" Version="3.13.2">
 		</PackageReference>
-		<PackageReference Include="NUnit3TestAdapter" Version="4.2.1">
+		<PackageReference Include="NUnit3TestAdapter" Version="4.4.2">
 		</PackageReference>
 		<PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles" Version="6.0.52">
 		</PackageReference>
@@ -49,7 +53,7 @@
 		<PackageReference Include="System.Net.Http" Version="4.3.4">
 		</PackageReference>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.26.0" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.30.0" />
 		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
 	</ItemGroup>
 

@@ -19,8 +19,11 @@
 		</PackageReference>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
 		<PackageReference Include="NUnit" Version="3.13.3" />
-		<PackageReference Include="NUnit3TestAdapter" Version="4.3.0" />
-		<PackageReference Include="NUnit.Analyzers" Version="3.5.0" />
+		<PackageReference Include="NUnit3TestAdapter" Version="4.4.2" />
+		<PackageReference Include="NUnit.Analyzers" Version="3.6.1">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="AutoFixture" Version="4.18.0">
 		</PackageReference>
 		<PackageReference Include="AutoMapper" Version="5.1.1">
@@ -44,7 +47,7 @@
 		</PackageReference>
 		<PackageReference Include="System.ServiceModel.Federation" Version="4.8.1" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.26.0" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.30.0" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
 

@@ -26,7 +26,7 @@
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1">
     </PackageReference>
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
-	<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.10.0" />
+	<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.30.0" />
 	<PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.21.0">
 	</PackageReference>
 	<PackageReference Include="SFA.DAS.Validation.Mvc" Version="5.1.167">

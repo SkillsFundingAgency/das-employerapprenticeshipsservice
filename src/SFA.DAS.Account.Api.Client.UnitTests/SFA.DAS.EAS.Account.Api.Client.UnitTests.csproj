@@ -15,8 +15,11 @@
 		</PackageReference>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
 		<PackageReference Include="NUnit" Version="3.13.3" />
-		<PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
-		<PackageReference Include="NUnit.Analyzers" Version="3.3.0" />
+		<PackageReference Include="NUnit3TestAdapter" Version="4.4.2" />
+		<PackageReference Include="NUnit.Analyzers" Version="3.6.1">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="coverlet.collector" Version="3.2.0">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -32,7 +35,7 @@
 		</PackageReference>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3">
 		</PackageReference>
-		<PackageReference Include="SFA.DAS.EmployerAccounts.Api.Types" Version="1.6.1254">
+		<PackageReference Include="SFA.DAS.EmployerAccounts.Api.Types" Version="1.6.3195">
 		</PackageReference>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
@@ -41,6 +44,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj" />
 		<ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj" />
+		<ProjectReference Include="..\SFA.DAS.EAS.Support.Core\SFA.DAS.EAS.Support.Core.csproj" />
 	</ItemGroup>
 
 </Project>
