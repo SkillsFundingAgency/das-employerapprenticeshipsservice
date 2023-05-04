@@ -1,6 +1,4 @@
-﻿using System;
-using System.Net.Http.Headers;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -21,7 +19,7 @@ public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSc
     {
     }
 
-    protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
+    protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
         var claims = new[] {
             new Claim(ClaimTypes.NameIdentifier, "username"),
@@ -36,6 +34,6 @@ public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSc
         var principal = new ClaimsPrincipal(identity);
         var ticket = new AuthenticationTicket(principal, Scheme.Name);
 
-        return await Task.FromResult(AuthenticateResult.Success(ticket));
+        return Task.FromResult(AuthenticateResult.Success(ticket));
     }
 }
