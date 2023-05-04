@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using SFA.DAS.EAS.Account.Api.Authentication;
 using SFA.DAS.EAS.Account.Api.Authorization;
+using SFA.DAS.EAS.Account.Api.Extensions;
 using SFA.DAS.EAS.Account.Api.ServiceRegistrations;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.Encoding;
@@ -21,7 +22,7 @@ public class Startup
 
     public Startup(IConfiguration configuration)
     {
-        _configuration = configuration;
+        _configuration = configuration.BuildDasConfiguration();
     }
 
     public void ConfigureServices(IServiceCollection services)
