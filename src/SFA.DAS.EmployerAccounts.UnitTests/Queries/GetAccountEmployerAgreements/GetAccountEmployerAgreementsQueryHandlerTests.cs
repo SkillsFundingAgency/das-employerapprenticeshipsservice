@@ -114,9 +114,21 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
             // Arrange
             var request = _fixture.Create<GetAccountEmployerAgreementsRequest>();
 
+            var signedTemplate = _fixture
+                .Build<AgreementTemplate>()
+                .With(at => at.VersionNumber, 2)
+                .Create();
+
+            var pendingTemplate = _fixture
+                .Build<AgreementTemplate>()
+                .With(at => at.VersionNumber, 5)
+                .Create();
+
             var accountLegalEntity = _fixture
                 .Build<AccountLegalEntity>()
                 .With(ale => ale.AccountId, request.AccountId)
+                .With(ale => ale.SignedAgreement, _fixture.Build<EmployerAgreement>().With(ea => ea.Template, signedTemplate).Create())
+                .With(ale => ale.PendingAgreement, _fixture.Build<EmployerAgreement>().With(ea => ea.Template, pendingTemplate).Create())
                 .Without(ale => ale.Deleted)
                 .Create();
 
