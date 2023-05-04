@@ -9,6 +9,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="C:\Users\ADM_HarrisJo\.nuget\packages\nlog.schema\4.5.3\contentFiles\any\any\NLog.xsd" />
+    <None Remove="C:\Users\ADM_HarrisJo\.nuget\packages\nlog.schema\5.1.4\contentFiles\any\any\NLog.xsd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj" />
