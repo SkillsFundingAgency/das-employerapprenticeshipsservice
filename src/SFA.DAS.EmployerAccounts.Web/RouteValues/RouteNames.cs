@@ -44,5 +44,7 @@
         public const string EmployerTeamChangeRolePost = "employer-team-change-role-post";
         public const string RemoveTeamMember = "remove-team-member";
         public const string ConfirmRemoveTeamMember = "cofirm-remove-team-member";
+
+        public const string InvitationAcceptPost = "invitation-accept";
     }
 }

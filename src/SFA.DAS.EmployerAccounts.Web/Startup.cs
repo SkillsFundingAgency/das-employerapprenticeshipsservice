@@ -95,8 +95,8 @@ public class Startup
 
         services.AddAuthenticationServices();
 
-        services.AddMediatorCommandValidators();
-        services.AddMediatorQueryValidators();
+
+        services.AddMediatorValidators();
         services.AddMediatR(typeof(GetEmployerAccountByIdQuery));
 
         if (_configuration.UseGovUkSignIn())
