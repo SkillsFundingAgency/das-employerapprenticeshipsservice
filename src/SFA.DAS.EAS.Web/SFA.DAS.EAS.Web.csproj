@@ -15,7 +15,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.8.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.16" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0">
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.Mvc" Version="6.0.52">
@@ -31,7 +31,7 @@
 	</PackageReference>
 	<PackageReference Include="SFA.DAS.Validation.Mvc" Version="5.1.167">
 	</PackageReference>
-	<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.13" />
+	<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.16" />
 	<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	<PackageReference Include="System.Net.Security" Version="4.3.2" />
 	<PackageReference Include="System.Security.Cryptography.Xml" Version="7.0.1" />
