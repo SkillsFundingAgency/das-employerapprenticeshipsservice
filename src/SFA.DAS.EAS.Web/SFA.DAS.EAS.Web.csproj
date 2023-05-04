@@ -18,18 +18,18 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.16" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Authorization.Mvc" Version="6.0.52">
+    <PackageReference Include="SFA.DAS.Authorization.Mvc" Version="6.0.97">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.4388">
+    <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.1.338">
     </PackageReference>
-    <PackageReference Include="SFA.DAS.GovUK.Auth" Version="0.2.203" />
+    <PackageReference Include="SFA.DAS.GovUK.Auth" Version="17.1.41" />
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1">
     </PackageReference>
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
 	<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.30.0" />
 	<PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.21.0">
 	</PackageReference>
-	<PackageReference Include="SFA.DAS.Validation.Mvc" Version="5.1.167">
+	<PackageReference Include="SFA.DAS.Validation.Mvc" Version="6.0.30">
 	</PackageReference>
 	<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.16" />
 	<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
