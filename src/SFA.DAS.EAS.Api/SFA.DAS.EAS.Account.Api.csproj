@@ -24,8 +24,6 @@
     <PackageReference Include="NLog.Schema" Version="4.5.3">
     </PackageReference>
     <PackageReference Include="SFA.DAS.Api.Common" Version="1.0.28" />
-    <PackageReference Include="Swagger-Net" Version="8.3.10.4">
-    </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="System.Memory" Version="4.5.4">
     </PackageReference>

@@ -14,7 +14,6 @@
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
-		<PackageReference Include="Microsoft.NETCore.App" Version="2.2.8" />
 		<PackageReference Include="Microsoft.NETCore.Jit" Version="2.0.8" />
 		<PackageReference Include="NUnit" Version="3.13.3" />
 		<PackageReference Include="NUnit3TestAdapter" Version="4.3.0" />
@@ -47,7 +46,6 @@
 		</PackageReference>
 		<PackageReference Include="System.Security.Cryptography.Xml" Version="7.0.1" />
 		<PackageReference Include="System.ServiceModel.Federation" Version="4.8.1" />
-		<PackageReference Include="EntityFramework" Version="6.4.4" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.26.0" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
