@@ -7,7 +7,7 @@ using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
 namespace SFA.DAS.EAS.Account.Api.Controllers;
 
 [ApiController]
-[Authorize(Policy = "LoopBack", Roles = ApiRoles.ReadUserAccounts)]
+[Authorize(Roles = ApiRoles.ReadUserAccounts)]
 [Route("api/accounts/{hashedAccountId}/transfers/connections")]
 public class TransferConnectionsController : ControllerBase
 {

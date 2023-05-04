@@ -17,7 +17,7 @@ public class AccountLevyController : ControllerBase
         _orchestrator = orchestrator;
     }
 
-    [Authorize(Policy = "LoopBack", Roles = ApiRoles.ReadAllEmployerAccountBalances)]
+    [Authorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet(Name = "GetLevy")]
     public async Task<ActionResult<Types.AccountResourceList<Types.LevyDeclarationViewModel>>> Index(string hashedAccountId)
     {
@@ -31,7 +31,7 @@ public class AccountLevyController : ControllerBase
         return Ok(result.Data);
     }
 
-    [Authorize(Policy = "LoopBack", Roles = ApiRoles.ReadAllEmployerAccountBalances)]
+    [Authorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet("{payrollYear}/{payrollMonth}", Name = "GetLevyForPeriod")]
     public async Task<ActionResult<Types.AccountResourceList<Types.LevyDeclarationViewModel>>> GetLevy(string hashedAccountId, string payrollYear, short payrollMonth)
     {

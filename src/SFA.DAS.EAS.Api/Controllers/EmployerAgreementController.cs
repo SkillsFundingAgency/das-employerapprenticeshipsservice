@@ -17,7 +17,7 @@ public class EmployerAgreementController : ControllerBase
         _apiService = apiService;
     }
 
-    [Authorize(Policy = "LoopBack", Roles = ApiRoles.ReadAllEmployerAgreements)]
+    [Authorize(Roles = ApiRoles.ReadAllEmployerAgreements)]
     [HttpGet("{hashedAgreementId}", Name = "AgreementById")]
     public async Task<IActionResult> GetAgreement(
         string hashedAccountId,

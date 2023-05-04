@@ -7,7 +7,7 @@ using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 namespace SFA.DAS.EAS.Account.Api.Controllers;
 
 [ApiController]
-[Authorize(Policy = "LoopBack", Roles = ApiRoles.ReadUserAccounts)]
+[Authorize(Roles = ApiRoles.ReadUserAccounts)]
 [Route("api/user")]
 public class UserController : ControllerBase
 {

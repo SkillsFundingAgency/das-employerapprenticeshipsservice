@@ -34,7 +34,7 @@ public class AccountTransactionsController : Microsoft.AspNetCore.Mvc.Controller
         return Ok(result.Data);
     }
 
-    [Authorize(Policy = "LoopBack", Roles = ApiRoles.ReadAllEmployerAccountBalances)]
+    [Authorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet("{year?}/{month?}", Name = "GetTransactions")]
     public async Task<ActionResult<TransactionsViewModel>> GetTransactions(string hashedAccountId, int year = 0, int month = 0)
     {

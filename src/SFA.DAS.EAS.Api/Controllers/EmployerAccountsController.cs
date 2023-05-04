@@ -21,7 +21,7 @@ public class EmployerAccountsController : ControllerBase
         _apiService = apiService;
     }
 
-    [Authorize(Policy = "LoopBack", Roles = ApiRoles.ReadAllEmployerAccountBalances)]
+    [Authorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet(Name = "AccountsIndex")]   
     public async Task<ActionResult<Types.PagedApiResponseViewModel<Types.AccountWithBalanceViewModel>>> GetAccounts(string toDate = null, int pageSize = 1000, int pageNumber = 1)
     {
@@ -37,7 +37,7 @@ public class EmployerAccountsController : ControllerBase
     }
 
 
-    [Authorize(Policy = "LoopBack", Roles = ApiRoles.ReadAllEmployerAccountBalances)]
+    [Authorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet("{hashedAccountId}", Name = "GetAccount")]
     public async Task<ActionResult<Types.AccountDetailViewModel>> GetAccount(string hashedAccountId)
     {
@@ -51,7 +51,7 @@ public class EmployerAccountsController : ControllerBase
         return Ok(result.Data);
     }
 
-    [Authorize(Policy = "LoopBack", Roles = ApiRoles.ReadAllEmployerAccountBalances)]
+    [Authorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet("internal/{accountId}", Name = "GetAccountByInternalId")]
     public async Task<IActionResult> GetAccount(long accountId)
     {
@@ -65,14 +65,14 @@ public class EmployerAccountsController : ControllerBase
         return Ok(result.Data);
     }
 
-    [Authorize(Policy = "LoopBack", Roles = ApiRoles.ReadAllAccountUsers)]
+    [Authorize(Roles = ApiRoles.ReadAllAccountUsers)]
     [HttpGet("{hashedAccountId}/users", Name = "GetAccountUsers")]
     public async Task<IActionResult> GetAccountUsers(string hashedAccountId)
     {
         return Ok(await _apiService.Redirect($"/api/accounts/{hashedAccountId}/users"));
     }
 
-    [Authorize(Policy = "LoopBack", Roles = ApiRoles.ReadAllAccountUsers)]
+    [Authorize(Roles = ApiRoles.ReadAllAccountUsers)]
     [HttpGet("internal/{accountId}/users", Name = "GetAccountUsersByInternalAccountId")]
     public async Task<IActionResult> GetAccountUsers(long accountId)
     {

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
-using SFA.DAS.EAS.Account.Api.AuthPolicies;
 
 namespace SFA.DAS.EAS.Account.Api.Authorization;
 
@@ -19,11 +18,6 @@ public static class AuthorizationExtensions
     {
         services.AddAuthorization(options =>
         {
-            options.AddPolicy("LoopBack", policy =>
-            {
-                policy.Requirements.Add(new LoopBackRequirement());
-            });
-
             AddDefaultPolicy(isDevelopment, options);
 
             AddRolePolicies(isDevelopment, options);
@@ -33,7 +27,7 @@ public static class AuthorizationExtensions
 
         if (isDevelopment)
         {
-            services.AddSingleton<IAuthorizationHandler, LoopBackHandler>();
+            services.AddSingleton<IAuthorizationHandler, LocalAuthorizationHandler>();
         }
 
         return services;

@@ -17,14 +17,14 @@ public class LegalEntitiesController : ControllerBase
         _apiService = apiService;
     }
 
-    [Authorize(Policy = "LoopBack", Roles = ApiRoles.ReadAllEmployerAccountBalances)]
+    [Authorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet(Name = "GetLegalEntities")]
     public async Task<IActionResult> GetLegalEntities(string hashedAccountId)
     {
         return Ok(await _apiService.Redirect($"/api/accounts/{hashedAccountId}/legalentities"));
     }
 
-    [Authorize(Policy = "LoopBack", Roles = ApiRoles.ReadAllEmployerAccountBalances)]
+    [Authorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet("{legalEntityId}", Name = "GetLegalEntity")]
     public async Task<IActionResult> GetLegalEntity(
         string hashedAccountId,

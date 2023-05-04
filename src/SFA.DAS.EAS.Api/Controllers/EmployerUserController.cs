@@ -17,7 +17,7 @@ public class EmployerUserController : ControllerBase
         _apiService = apiService;
     }
 
-    [Authorize(Policy = "LoopBack", Roles = ApiRoles.ReadUserAccounts)]
+    [Authorize(Roles = ApiRoles.ReadUserAccounts)]
     [HttpGet("accounts", Name = "Accounts")]
     public async Task<IActionResult> GetUserAccounts(string userRef)
     {
