@@ -1,9 +1,9 @@
-﻿using System.Net.Http;
+﻿using SFA.DAS.Http;
 
 namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi.Http
 {
     public interface IEmployerFinanceApiHttpClientFactory
     {
-        HttpClient CreateHttpClient();
+        IRestHttpClient CreateHttpClient();
     }
 }

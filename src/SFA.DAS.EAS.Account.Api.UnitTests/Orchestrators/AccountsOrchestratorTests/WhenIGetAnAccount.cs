@@ -55,11 +55,11 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
                 .Verifiable("Get account was not called");
 
             var transferAllowance = _transferAllowance;            
-            _financeApiService.Setup(x => x.GetTransferAllowance(It.IsAny<string>())).ReturnsAsync(transferAllowance);
+            _financeApiService.Setup(x => x.GetTransferAllowance(It.IsAny<string>(), CancellationToken.None)).ReturnsAsync(transferAllowance);
 
             _accountBalanceResult = new AccountBalance { Balance = AccountBalance };
             var accountBalances = new List<AccountBalance> { _accountBalanceResult };
-            _financeApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>())).ReturnsAsync(accountBalances);
+            _financeApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>(), CancellationToken.None)).ReturnsAsync(accountBalances);
         }
 
         [Test]

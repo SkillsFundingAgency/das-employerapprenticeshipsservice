@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
             var apiResponse = new List<LevyDeclarationViewModel>() { fixture.Create<LevyDeclarationViewModel>(), fixture.Create<LevyDeclarationViewModel>() };
             apiResponse[0].HashedAccountId = hashedAccountId;
             apiResponse[1].HashedAccountId = hashedAccountId;
-            FinanceApiService.Setup(x => x.GetLevyDeclarations(hashedAccountId)).ReturnsAsync(apiResponse);
+            FinanceApiService.Setup(x => x.GetLevyDeclarations(hashedAccountId, CancellationToken.None)).ReturnsAsync(apiResponse);
 
             //Act
             var response = await Controller.Index(hashedAccountId);

@@ -46,7 +46,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             var hashedAccountId = "ABC123";
             var year = 2017;
             var month = 3;            
-            _financeApiService.Setup(x => x.GetTransactions(hashedAccountId, year, month)).ReturnsAsync(transactionsViewModel);
+            _financeApiService.Setup(x => x.GetTransactions(hashedAccountId, year, month, CancellationToken.None)).ReturnsAsync(transactionsViewModel);
 
             //Act
             var response = await _controller.GetTransactions(hashedAccountId, year, month);
@@ -76,7 +76,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             var hashedAccountId = "ABC123";
             var year = 2017;
             var month = 3;          
-            _financeApiService.Setup(x => x.GetTransactions(hashedAccountId, year, month)).ReturnsAsync(transactionsViewModel);
+            _financeApiService.Setup(x => x.GetTransactions(hashedAccountId, year, month, CancellationToken.None)).ReturnsAsync(transactionsViewModel);
             
             //Act
             var response = await _controller.GetTransactions(hashedAccountId, year, month);
@@ -144,7 +144,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             transactionsViewModel.HasPreviousTransactions = false;
             transactionsViewModel.Year = year;            
 
-            _financeApiService.Setup(x => x.GetTransactions(hashedAccountId, year, DateTime.Now.Month)).ReturnsAsync(transactionsViewModel);
+            _financeApiService.Setup(x => x.GetTransactions(hashedAccountId, year, DateTime.Now.Month, CancellationToken.None)).ReturnsAsync(transactionsViewModel);
 
             //Act
             var response = await _controller.GetTransactions(hashedAccountId, year);
@@ -216,7 +216,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
         public async Task AndNoYearIsProvidedThenTheCurrentYearIsUsed()
         {
             var hashedAccountId = "ABC123";          
-            _financeApiService.Setup(x => x.GetTransactions(hashedAccountId, DateTime.Now.Year, DateTime.Now.Month)).ReturnsAsync(transactionsViewModel);
+            _financeApiService.Setup(x => x.GetTransactions(hashedAccountId, DateTime.Now.Year, DateTime.Now.Month, CancellationToken.None)).ReturnsAsync(transactionsViewModel);
 
             //Act
             var response = await _controller.GetTransactions(hashedAccountId);

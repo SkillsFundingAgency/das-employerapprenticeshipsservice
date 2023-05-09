@@ -1,6 +1,8 @@
-﻿namespace SFA.DAS.EAS.Domain.Configuration;
+﻿using SFA.DAS.Http.Configuration;
 
-public class EmployerFinanceApiConfiguration
+namespace SFA.DAS.EAS.Domain.Configuration;
+
+public class EmployerFinanceApiConfiguration : IManagedIdentityClientConfiguration
 {
     public string IdentifierUri { get; set; }
     public string ApiBaseUrl { get; set; }

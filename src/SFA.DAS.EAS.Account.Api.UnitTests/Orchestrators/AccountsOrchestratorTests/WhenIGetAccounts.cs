@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
 {
     internal class WhenIGetAccounts
     {
-        private AccountsOrchestrator _orchestrator;        
+        private AccountsOrchestrator _orchestrator;
         private Mock<ILogger<AccountsOrchestrator>> _log;
         private Mock<IEncodingService> _encodingService;
         private Mock<IEmployerAccountsApiService> _apiService;
@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
             _financeApiService = new Mock<IEmployerFinanceApiService>();
             _orchestrator = new AccountsOrchestrator(_log.Object, _mapper.Object, _encodingService.Object, _apiService.Object, _financeApiService.Object);
 
-            _expectedAccount = new AccountWithBalanceViewModel {  AccountId = 124343 };
+            _expectedAccount = new AccountWithBalanceViewModel { AccountId = 124343 };
             _expectedAccountBalance = new AccountBalance { AccountId = _expectedAccount.AccountId };
 
             _apiService
@@ -43,8 +43,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
                     Data = new List<AccountWithBalanceViewModel> { _expectedAccount }
                 });
 
-            _financeApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>()))
-                 .ReturnsAsync( new List<AccountBalance> { _expectedAccountBalance });
+            _financeApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>(), CancellationToken.None))
+                 .ReturnsAsync(new List<AccountBalance> { _expectedAccountBalance });
 
         }
 
