@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
@@ -39,22 +37,6 @@ public class Startup
         services.AddAutoMapper(typeof(Startup));
         services.AddClientServices();
         services.AddOrchestrators();
-
-        var hashstringChars = _configuration.GetValue<string>("AllowedHashstringCharacters");
-        var hashstring = _configuration.GetValue<string>("Hashstring");
-
-        services.AddSingleton(new EncodingConfig
-        {
-            Encodings = new List<Encoding.Encoding>()
-            {
-                new Encoding.Encoding()
-                {
-                    EncodingType = "AccountId",
-                    Salt = hashstring,
-                    Alphabet = hashstringChars
-                }
-            }
-        });
 
         services.AddSingleton<IEncodingService, EncodingService>();
 
