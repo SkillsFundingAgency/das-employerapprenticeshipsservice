@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Http.Configuration;
-
-namespace SFA.DAS.EAS.Domain.Configuration;
+﻿namespace SFA.DAS.EAS.Domain.Configuration;
 
 public class EmployerAccountsApiConfiguration: IManagedIdentityClientConfiguration
 {

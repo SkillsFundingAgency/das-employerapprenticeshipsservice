@@ -1,5 +1,6 @@
-﻿using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.Http;
+﻿using System.Net.Http;
+using SFA.DAS.EAS.Application.Http;
+using SFA.DAS.EAS.Domain.Configuration;
 
 namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi.Http;
 
@@ -12,8 +13,5 @@ public class EmployerFinanceApiHttpClientFactory : IEmployerFinanceApiHttpClient
         _employerFinanceApiConfig = employerFinanceApiConfig;
     }
 
-    public IRestHttpClient CreateHttpClient()
-    {
-        return new RestHttpClient(new ManagedIdentityHttpClientFactory(_employerFinanceApiConfig).CreateHttpClient());
-    }
+    public HttpClient CreateHttpClient() => new ManagedIdentityHttpClientFactory(_employerFinanceApiConfig).CreateHttpClient();
 }

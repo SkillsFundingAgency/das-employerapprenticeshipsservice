@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SFA.DAS.EAS.Application.Services.EmployerAccountsApi.Http;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
-using SFA.DAS.EAS.Application.Services.EmployerFinanceApi.Http;
+using SFA.DAS.EAS.Application.Services.EmployerAccountsApi.Http;
 using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
+using SFA.DAS.EAS.Application.Services.EmployerFinanceApi.Http;
 
 namespace SFA.DAS.EAS.Account.Api.ServiceRegistrations;
 

@@ -1,60 +1,61 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <OutputType>Library</OutputType>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="Commands\**" />
-    <EmbeddedResource Remove="Commands\**" />
-    <None Remove="Commands\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.IdentityModel" />
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.Security" />
-    <Reference Include="System.Threading.Tasks" />
-    <Reference Include="System.Transactions" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj" />
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj" />
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EAS.Infrastructure.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.8.2" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="SFA.DAS.Activities.Client" Version="1.2.71">
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.EmployerAccounts.Api.Types" Version="1.6.3195" />
-    <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.2.37">
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.Validation" Version="5.1.167">
-    </PackageReference>
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
-    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="7.0.0">
-    </PackageReference>
-    <PackageReference Include="System.Net.Security" Version="4.3.2" />
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="7.0.1" />
-    <PackageReference Include="System.ServiceModel.Duplex" Version="4.9.0" />
-    <PackageReference Include="System.ServiceModel.NetTcp" Version="4.9.0" />
-    <PackageReference Include="System.ServiceModel.Federation" Version="4.8.1" />
-	<PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-	<PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1">
-	</PackageReference>
-	<PackageReference Include="SFA.DAS.Messaging.AzureServiceBus">
-		<Version>3.0.0.53181</Version>
-	</PackageReference>
-	<PackageReference Include="SFA.DAS.Messaging.AzureServiceBus.StructureMap">
-		<Version>3.0.0.63765</Version>
-	</PackageReference>
-	<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="MarkerInterfaces\" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<OutputType>Library</OutputType>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Remove="Commands\**" />
+		<Compile Remove="MarkerInterfaces\**" />
+		<EmbeddedResource Remove="Commands\**" />
+		<EmbeddedResource Remove="MarkerInterfaces\**" />
+		<None Remove="Commands\**" />
+		<None Remove="MarkerInterfaces\**" />
+	</ItemGroup>
+	<ItemGroup>
+		<Reference Include="System.IdentityModel" />
+		<Reference Include="System.IO.Compression" />
+		<Reference Include="System.Security" />
+		<Reference Include="System.Threading.Tasks" />
+		<Reference Include="System.Transactions" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj" />
+		<ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj" />
+		<ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EAS.Infrastructure.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Azure.Services.AppAuthentication" Version="1.6.2" />
+		<PackageReference Include="Azure.Identity" Version="1.8.2" />
+		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+		<PackageReference Include="SFA.DAS.Activities.Client" Version="1.2.71">
+		</PackageReference>
+		<PackageReference Include="SFA.DAS.EmployerAccounts.Api.Types" Version="1.6.3195" />
+		<PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.2.37">
+		</PackageReference>
+		<PackageReference Include="SFA.DAS.Validation" Version="5.1.167">
+		</PackageReference>
+		<PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+		<PackageReference Include="System.Diagnostics.PerformanceCounter" Version="7.0.0">
+		</PackageReference>
+		<PackageReference Include="System.Net.Security" Version="4.3.2" />
+		<PackageReference Include="System.Security.Cryptography.Xml" Version="7.0.1" />
+		<PackageReference Include="System.ServiceModel.Duplex" Version="4.9.0" />
+		<PackageReference Include="System.ServiceModel.NetTcp" Version="4.9.0" />
+		<PackageReference Include="System.ServiceModel.Federation" Version="4.8.1" />
+		<PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1">
+		</PackageReference>
+		<PackageReference Include="SFA.DAS.Messaging.AzureServiceBus">
+			<Version>3.0.0.53181</Version>
+		</PackageReference>
+		<PackageReference Include="SFA.DAS.Messaging.AzureServiceBus.StructureMap">
+			<Version>3.0.0.63765</Version>
+		</PackageReference>
+		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+	</ItemGroup>
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
 </Project>
