@@ -58,7 +58,6 @@
 		</PackageReference>
 		<PackageReference Include="StructureMap" Version="4.7.1">
 		</PackageReference>
-		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
 		<PackageReference Include="System.ComponentModel.Composition" Version="7.0.0" />
 		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
 		<PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
