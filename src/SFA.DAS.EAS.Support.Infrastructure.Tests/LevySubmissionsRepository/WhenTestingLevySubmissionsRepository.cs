@@ -3,7 +3,7 @@ using HMRC.ESFA.Levy.Api.Types;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Support.Infrastructure.Services;
+using SFA.DAS.EAS.Support.Infrastructure.Services.Contracts;
 using SFA.DAS.NLog.Logger;
 using System;
 using System.Collections.Generic;

@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EAS.Support.Core.Services
+﻿namespace SFA.DAS.EAS.Support.Core.Services;
+
+public interface IPayeSchemeObfuscator
 {
-    public interface IPayeSchemeObfuscator
-    {
-        string ObscurePayeScheme(string payeSchemeId);
-    }
+    string ObscurePayeScheme(string payeSchemeId);
 }

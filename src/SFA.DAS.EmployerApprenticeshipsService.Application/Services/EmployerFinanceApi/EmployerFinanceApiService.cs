@@ -114,7 +114,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi
 
             var url = $"api/accounts/balances";
             var data = JsonConvert.SerializeObject(accountIds);
-            var stringContent = new StringContent(data, Encoding.UTF8, "application/json");
+            var stringContent = new StringContent(data, System.Text.Encoding.UTF8, "application/json");
 
             _log.LogInformation($"Getting EmployerFinanceApiService : GetAccountBalances url : {url}");
             _log.LogInformation($"stringContent {stringContent}");

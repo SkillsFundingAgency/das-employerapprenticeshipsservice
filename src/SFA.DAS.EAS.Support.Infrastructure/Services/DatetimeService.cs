@@ -1,20 +1,18 @@
-﻿using System;
+﻿using SFA.DAS.EAS.Support.Infrastructure.Services.Contracts;
 
-namespace SFA.DAS.EAS.Support.Infrastructure.Services
+namespace SFA.DAS.EAS.Support.Infrastructure.Services;
+
+public class DatetimeService : IDatetimeService
 {
-    public class DatetimeService : IDatetimeService
+    private const int FirstFiscalYearMonth = 4;
+
+    public int GetYear(DateTime date)
     {
-        private const int FirstFiscalYearMonth = 4;
-        private const int MonthsPerYear = 12;
+        return date.Month >= FirstFiscalYearMonth ? date.Year : date.Year - 1;
+    }
 
-        public int GetYear(DateTime date)
-        {
-            return date.Month >= FirstFiscalYearMonth ? date.Year : date.Year - 1;
-        }
-
-        public DateTime GetBeginningFinancialYear(DateTime endDate)
-        {
-            return new DateTime(GetYear(endDate), FirstFiscalYearMonth, 1);
-        }
+    public DateTime GetBeginningFinancialYear(DateTime endDate)
+    {
+        return new DateTime(GetYear(endDate), FirstFiscalYearMonth, 1);
     }
 }

@@ -1,85 +1,66 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Identity.Web;
-using SFA.DAS.EAS.Account.Api.AuthPolicies;
+using Microsoft.OpenApi.Models;
+using SFA.DAS.EAS.Account.Api.Authentication;
+using SFA.DAS.EAS.Account.Api.Authorization;
+using SFA.DAS.EAS.Account.Api.Extensions;
+using SFA.DAS.EAS.Account.Api.ServiceRegistrations;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Application.Services.EmployerAccountsApi.Http;
-using SFA.DAS.EAS.Application.Services.EmployerFinanceApi.Http;
-using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
-using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
-using SFA.DAS.EAS.Account.Api.Orchestrators;
-using SFA.DAS.HashingService;
-using System;
-
-using HashService = SFA.DAS.HashingService.HashingService;
-using Microsoft.Extensions.Logging;
+using SFA.DAS.Encoding;
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace SFA.DAS.EAS.Account.Api;
 
 public class Startup
 {
+    private readonly IConfiguration _configuration;
+
     public Startup(IConfiguration configuration)
     {
-        Configuration = configuration;
+        _configuration = configuration.BuildDasConfiguration();
     }
-
-    public IConfiguration Configuration { get; }
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAd"));
+        services.AddApiConfigurationSections(_configuration);
+
+        services
+            .AddApiAuthentication(_configuration, _configuration.IsDevOrLocal())
+            .AddApiAuthorization();
 
         services.AddControllersWithViews()
-           .AddNewtonsoftJson(opts => opts.UseMemberCasing());
+                .AddNewtonsoftJson(opts => opts.UseMemberCasing());
 
-        services.AddSingleton<IAuthorizationHandler, LoopBackHandler>();
-        services.AddAuthorization(options =>
+        services.AddAutoMapper(typeof(Startup));
+        services.AddClientServices();
+        services.AddOrchestrators();
+
+        services.AddSingleton<IEncodingService, EncodingService>();
+
+        services.AddSwaggerGen(c =>
         {
-            options.AddPolicy("LoopBack", policy =>
+            //c.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
+            c.SwaggerDoc("v1", new OpenApiInfo
             {
-                policy.Requirements.Add(new LoopBackRequirement());
-            }
-            );
+                Version = "v1",
+                Title = "EAS API"
+            });
         });
 
-        AutoMapper.ServiceCollectionExtensions.AddAutoMapper(services, typeof(Startup));
-        services.AddSingleton(Configuration.GetSection("EmployerAccountsApi").Get<EmployerAccountsApiConfiguration>());
-        services.AddSingleton(Configuration.GetSection("EmployerFinanceApi").Get<EmployerFinanceApiConfiguration>());
-        services.AddSingleton<IEmployerAccountsApiHttpClientFactory, EmployerAccountsApiHttpClientFactory>();
-        services.AddSingleton<IEmployerAccountsApiService, EmployerAccountsApiService>();
-        services.AddSingleton<IEmployerFinanceApiHttpClientFactory, EmployerFinanceApiHttpClientFactory>();
-        services.AddSingleton<IEmployerFinanceApiService, EmployerFinanceApiService>();
-        services.AddScoped<StatisticsOrchestrator>();
-        services.AddScoped<AccountsOrchestrator>();
-        services.AddScoped<AccountTransactionsOrchestrator>();
-
-        var hashstringChars = Configuration.GetValue<string>("AllowedHashstringCharacters");
-        var hashstring = Configuration.GetValue<string>("Hashstring");
-
-        services.AddSingleton<IHashingService, HashService>(c => new HashService(hashstringChars, hashstring));
-
-
-        services.AddSwaggerGen();
+        services.AddApplicationInsightsTelemetry();
     }
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
-            app.UseSwagger();
-            app.UseSwaggerUI();
         }
 
         app.UseStaticFiles();
+        app.UseAuthentication();
         app.UseRouting();
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>
@@ -87,6 +68,11 @@ public class Startup
             endpoints.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
-        });
+        }).UseSwagger()
+          .UseSwaggerUI(opt =>
+          {
+              opt.SwaggerEndpoint("/swagger/v1/swagger.json", "EAS API");
+              opt.RoutePrefix = string.Empty;
+          }); ;
     }
 }

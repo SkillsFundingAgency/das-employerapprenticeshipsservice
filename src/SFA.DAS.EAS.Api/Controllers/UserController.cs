@@ -1,33 +1,33 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.EAS.Account.Api.Authorization;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
-namespace SFA.DAS.EAS.Account.Api.Controllers
+namespace SFA.DAS.EAS.Account.Api.Controllers;
+
+[ApiController]
+[Authorize(Roles = ApiRoles.ReadUserAccounts)]
+[Route("api/user")]
+public class UserController : ControllerBase
 {
-    [ApiController]
-    [Authorize(Policy = "LoopBack", Roles = "ReadUserAccounts")]
-    [Route("api/user")]
-    public class UserController : ControllerBase
+    private readonly IEmployerAccountsApiService _apiService;
+
+    public UserController(IEmployerAccountsApiService apiService)
     {
-        private readonly IEmployerAccountsApiService _apiService;
+        _apiService = apiService;
+    }
 
-        public UserController(IEmployerAccountsApiService apiService)
+    [HttpGet]
+    public async Task<IActionResult> Get(string email)
+    {
+        try
         {
-            _apiService = apiService;
+            return Ok(await _apiService.Redirect($"/api/user?email={email}"));
         }
-
-        [HttpGet]
-        public async Task<IActionResult> Get(string email)
+        catch
         {
-            try
-            {
-                return Ok(await _apiService.Redirect($"/api/user?email={email}"));
-            }
-            catch
-            {
-                return NotFound();
-            }
+            return NotFound();
         }
     }
 }

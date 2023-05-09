@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Moq;
+﻿using FluentAssertions;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
@@ -42,7 +39,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
             Assert.IsNotNull(response);
             Assert.IsAssignableFrom<LegalEntityViewModel>(response);
             response.Should().NotBeNull();
-            response.ShouldBeEquivalentTo(_expectedLegalEntity);
+            response.Should().BeEquivalentTo(_expectedLegalEntity);
         }
     }
 }

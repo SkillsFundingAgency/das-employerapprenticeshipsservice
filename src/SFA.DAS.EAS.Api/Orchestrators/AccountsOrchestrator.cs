@@ -2,7 +2,7 @@
 using AutoMapper;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 using SFA.DAS.NLog.Logger;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,20 +18,20 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
     {   
         private readonly ILogger<AccountsOrchestrator> _logger;
         private readonly IMapper _mapper;
-        private readonly IHashingService _hashingService;
+        private readonly IEncodingService _encodingService;
         private readonly IEmployerAccountsApiService _employerAccountsApiService;
         private readonly IEmployerFinanceApiService _employerFinanceApiService;
 
         public AccountsOrchestrator(
             ILogger<AccountsOrchestrator> logger, 
-            IMapper mapper, 
-            IHashingService hashingService,
+            IMapper mapper,
+            IEncodingService encodingService,
             IEmployerAccountsApiService employerAccountsApiService,
             IEmployerFinanceApiService employerFinanceApiService)
         {   
             _logger = logger;
             _mapper = mapper;
-            _hashingService = hashingService;
+            _encodingService = encodingService;
             _employerAccountsApiService = employerAccountsApiService;
             _employerFinanceApiService = employerFinanceApiService;
         }
@@ -99,7 +99,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
 
         public async Task<OrchestratorResponse<AccountDetailViewModel>> GetAccount(long accountId)
         {
-            var hashedAccountId = _hashingService.HashValue(accountId);
+            var hashedAccountId = _encodingService.Encode(accountId, EncodingType.AccountId);
 
             if (string.IsNullOrWhiteSpace(hashedAccountId))
             {

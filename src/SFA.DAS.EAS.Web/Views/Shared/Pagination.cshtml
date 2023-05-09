@@ -1,15 +1,15 @@
 ﻿@using SFA.DAS.EAS.Web.ViewModels.Interfaces
-@using System.Web
+@using Microsoft.AspNetCore.WebUtilities;
 @model IPaginationViewModel
 
 @functions
 {
     public string GetLinkForPage(int pageNumber)
     {
-        var queryStringValues = HttpUtility.ParseQueryString(Context.Request.QueryString.ToString());
+        var queryStringValues = QueryHelpers.ParseQuery(Context.Request.QueryString.ToString());
 
-        queryStringValues.Set("pageNumber", pageNumber.ToString());
-        
+        queryStringValues["pageNumber"] = pageNumber.ToString();
+
         return $"{Context.Request.Path}?{queryStringValues}";
     }
 

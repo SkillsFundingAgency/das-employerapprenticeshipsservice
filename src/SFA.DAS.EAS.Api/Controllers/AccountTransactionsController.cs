@@ -1,73 +1,72 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EAS.Account.Api.Authorization;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
+using SFA.DAS.EAS.Account.Api.Types;
 
-namespace SFA.DAS.EAS.Account.Api.Controllers
+namespace SFA.DAS.EAS.Account.Api.Controllers;
+
+[ApiController]
+[Route("api/accounts/{hashedAccountId}/transactions")]
+public class AccountTransactionsController : Microsoft.AspNetCore.Mvc.ControllerBase
 {
-    [ApiController]
-    [Route("api/accounts/{hashedAccountId}/transactions")]
-    public class AccountTransactionsController : Microsoft.AspNetCore.Mvc.ControllerBase
+    private readonly AccountTransactionsOrchestrator _orchestrator;
+
+    public AccountTransactionsController(AccountTransactionsOrchestrator orchestrator)
     {
-        private readonly AccountTransactionsOrchestrator _orchestrator;
+        _orchestrator = orchestrator;
+    }
 
-        public AccountTransactionsController(AccountTransactionsOrchestrator orchestrator)
+    [HttpGet(Name = "GetTransactionSummary")]
+    public async Task<ActionResult> Index(string hashedAccountId)
+    {
+        var result = await _orchestrator.GetAccountTransactionSummary(hashedAccountId);
+
+        if (result.Data == null)
         {
-            _orchestrator = orchestrator;
+            return NotFound();
         }
 
-        [HttpGet(Name = "GetTransactionSummary")]
-        public async Task<ActionResult> Index(string hashedAccountId)
+        result.Data.ForEach(x => x.Href = Url.Link("GetTransactions", new { hashedAccountId, year = x.Year, month = x.Month }));
+
+        return Ok(result.Data);
+    }
+
+    [Authorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
+    [HttpGet("{year?}/{month?}", Name = "GetTransactions")]
+    public async Task<ActionResult<TransactionsViewModel>> GetTransactions(string hashedAccountId, int year = 0, int month = 0)
+    {
+        var result = await GetAccountTransactions(hashedAccountId, year, month);
+
+        if (result.Data == null)
         {
-            var result = await _orchestrator.GetAccountTransactionSummary(hashedAccountId);
-
-            if (result.Data == null)
-            {
-                return NotFound();
-            }
-
-            result.Data.ForEach(x => x.Href = Url.Link("GetTransactions", new { hashedAccountId, year = x.Year, month = x.Month }));
-
-            return Ok(result.Data);
+            return NotFound();
         }
 
-        [Authorize(Policy = "LoopBack", Roles = "ReadAllEmployerAccountBalances")]
-        [HttpGet("{year?}/{month?}", Name = "GetTransactions")]
-        public async Task<ActionResult<TransactionsViewModel>> GetTransactions(string hashedAccountId, int year = 0, int month = 0)
+        if (result.Data.HasPreviousTransactions)
         {
-            var result = await GetAccountTransactions(hashedAccountId, year, month);
-
-            if (result.Data == null)
-            {
-                return NotFound();
-            }
-
-            if (result.Data.HasPreviousTransactions)
-            {
-                var previousMonth = new DateTime(result.Data.Year, result.Data.Month, 1).AddMonths(-1);
-                result.Data.PreviousMonthUri = Url.Link("GetTransactions", new { hashedAccountId, year = previousMonth.Year, month = previousMonth.Month });
-            }
-
-            return Ok(result.Data);
+            var previousMonth = new DateTime(result.Data.Year, result.Data.Month, 1).AddMonths(-1);
+            result.Data.PreviousMonthUri = Url.Link("GetTransactions", new { hashedAccountId, year = previousMonth.Year, month = previousMonth.Month });
         }
 
-        private async Task<OrchestratorResponse<TransactionsViewModel>> GetAccountTransactions(string hashedAccountId, int year, int month)
+        return Ok(result.Data);
+    }
+
+    private async Task<OrchestratorResponse<TransactionsViewModel>> GetAccountTransactions(string hashedAccountId, int year, int month)
+    {
+        if (year == 0)
         {
-            if (year == 0)
-            {
-                year = DateTime.Now.Year;
-            }
-
-            if (month == 0)
-            {
-                month = DateTime.Now.Month;
-            }
-
-            var result = await _orchestrator.GetAccountTransactions(hashedAccountId, year, month);
-            return result;
+            year = DateTime.Now.Year;
         }
+
+        if (month == 0)
+        {
+            month = DateTime.Now.Month;
+        }
+
+        var result = await _orchestrator.GetAccountTransactions(hashedAccountId, year, month);
+        return result;
     }
 }

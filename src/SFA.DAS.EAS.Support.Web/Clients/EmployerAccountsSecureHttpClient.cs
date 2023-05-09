@@ -2,8 +2,9 @@
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Azure.Services.AppAuthentication;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Azure.Core;
+using Azure.Identity;
+using Microsoft.Identity.Client;
 using SFA.DAS.EmployerAccounts.Api.Client;
 
 namespace SFA.DAS.EAS.Account.Api.Clients;
@@ -42,16 +43,31 @@ public class EmployerAccountsSecureHttpClient : ISecureHttpClient
     private async Task<string> GetClientCredentialAuthenticationResult(string clientId, string clientSecret, string resource, string tenant)
     {
         var authority = $"https://login.microsoftonline.com/{tenant}";
-        var clientCredential = new ClientCredential(clientId, clientSecret);
-        var context = new AuthenticationContext(authority, true);
-        var result = await context.AcquireTokenAsync(resource, clientCredential);
-        return result.AccessToken;
+        var app = ConfidentialClientApplicationBuilder.Create(clientId)
+            .WithAuthority(authority)
+            .Build();
+
+        var userAssertion = new UserAssertion(clientSecret);
+
+        var authResult = await app.AcquireTokenOnBehalfOf(
+                new string[] { $"{resource}/.default" },
+                userAssertion
+            )
+            .ExecuteAsync()
+            .ConfigureAwait(false);
+
+
+
+        return authResult.AccessToken;
     }
 
     private async Task<string> GetManagedIdentityAuthenticationResult(string resource)
     {
-        var azureServiceTokenProvider = new AzureServiceTokenProvider();
-        return await azureServiceTokenProvider.GetAccessTokenAsync(resource);
+        var tokenCredential = new DefaultAzureCredential();
+        var accessToken = await tokenCredential.GetTokenAsync(
+            new TokenRequestContext(scopes: new string[] { resource + "/.default" }) { }
+        );
+        return accessToken.Token;
     }
 
     private bool IsClientCredentialConfiguration(string clientId, string clientSecret, string tenant)

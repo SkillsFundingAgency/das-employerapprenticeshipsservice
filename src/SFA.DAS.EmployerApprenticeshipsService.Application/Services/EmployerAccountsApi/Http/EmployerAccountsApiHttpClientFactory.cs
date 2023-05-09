@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using Microsoft.Azure.Services.AppAuthentication;
+using Azure.Core;
+using Azure.Identity;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.Http;
 
 namespace SFA.DAS.EAS.Application.Services.EmployerAccountsApi.Http
@@ -19,10 +21,12 @@ namespace SFA.DAS.EAS.Application.Services.EmployerAccountsApi.Http
         public HttpClient CreateHttpClient()
         {
             string accessToken = "";
-            var azureServiceTokenProvider = new AzureServiceTokenProvider();
+            var tokenCredential = new DefaultAzureCredential();
             try
             {
-                accessToken = azureServiceTokenProvider.GetAccessTokenAsync(_employerAccountsApiConfig.IdentifierUri).Result;
+                accessToken = tokenCredential.GetToken(
+                    new TokenRequestContext(scopes: new string[] { _employerAccountsApiConfig.IdentifierUri + "/.default" }) { }
+                ).Token;
             } 
             catch (Exception ex) 
             { 

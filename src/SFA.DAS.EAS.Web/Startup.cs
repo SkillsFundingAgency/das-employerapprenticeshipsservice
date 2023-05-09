@@ -1,15 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Mvc.Routing;
-
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web;
 
@@ -29,13 +24,11 @@ public class Startup
             .Get<IdentityServerConfiguration>();
         var constants = new Constants(idConfig);
 
-        services.AddControllersWithViews(ConfigureMvcOptions)
+        services.AddControllersWithViews()
             .AddNewtonsoftJson(options =>
             {
                 options.UseMemberCasing();
             });
-
-
 
         services.Configure<CookiePolicyOptions>(options =>
         {
@@ -65,9 +58,5 @@ public class Startup
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
         });
-    }
-
-    private void ConfigureMvcOptions(MvcOptions mvcOptions)
-    { 
     }
 }

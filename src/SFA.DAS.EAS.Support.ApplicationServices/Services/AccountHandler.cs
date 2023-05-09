@@ -3,136 +3,135 @@ using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.Core.Models;
-using SFA.DAS.EAS.Support.Infrastructure.Services;
+using SFA.DAS.EAS.Support.Infrastructure.Services.Contracts;
 using SFA.DAS.Support.Shared.SearchIndexModel;
 
-namespace SFA.DAS.EAS.Support.ApplicationServices.Services
+namespace SFA.DAS.EAS.Support.ApplicationServices.Services;
+
+public class AccountHandler : IAccountHandler
 {
-    public class AccountHandler : IAccountHandler
+    private readonly IAccountRepository _accountRepository;
+
+    public AccountHandler(IAccountRepository accountRepository)
     {
-        private readonly IAccountRepository _accountRepository;
+        _accountRepository = accountRepository;
+    }
 
-        public AccountHandler(IAccountRepository accountRepository)
+    public async Task<AccountDetailOrganisationsResponse> FindOrganisations(string id)
+    {
+        var response = new AccountDetailOrganisationsResponse
         {
-            _accountRepository = accountRepository;
+            StatusCode = SearchResponseCodes.NoSearchResultsFound
+        };
+
+        var record = await _accountRepository.Get(id, AccountFieldsSelection.Organisations);
+
+        if (record != null)
+        {
+            response.StatusCode = SearchResponseCodes.Success;
+            response.Account = record;
         }
 
-        public async Task<AccountDetailOrganisationsResponse> FindOrganisations(string id)
+        return response;
+    }
+
+    public async Task<AccountPayeSchemesResponse> FindPayeSchemes(string id)
+    {
+        var response = new AccountPayeSchemesResponse
         {
-            var response = new AccountDetailOrganisationsResponse
-            {
-                StatusCode = SearchResponseCodes.NoSearchResultsFound
-            };
+            StatusCode = SearchResponseCodes.NoSearchResultsFound
+        };
 
-            var record = await _accountRepository.Get(id, AccountFieldsSelection.Organisations);
+        var record = await _accountRepository.Get(id, AccountFieldsSelection.PayeSchemes);
 
-            if (record != null)
-            {
-                response.StatusCode = SearchResponseCodes.Success;
-                response.Account = record;
-            }
-
-            return response;
+        if (record != null)
+        {
+            response.StatusCode = SearchResponseCodes.Success;
+            response.Account = record;
         }
 
-        public async Task<AccountPayeSchemesResponse> FindPayeSchemes(string id)
+        return response;
+    }
+
+    public async Task<AccountFinanceResponse> FindFinance(string id)
+    {
+        var response = new AccountFinanceResponse
         {
-            var response = new AccountPayeSchemesResponse
-            {
-                StatusCode = SearchResponseCodes.NoSearchResultsFound
-            };
+            StatusCode = SearchResponseCodes.NoSearchResultsFound
+        };
 
-            var record = await _accountRepository.Get(id, AccountFieldsSelection.PayeSchemes);
+        var getAccountTask = _accountRepository.Get(id, AccountFieldsSelection.Finance);
+        var getBalanceTask = _accountRepository.GetAccountBalance(id);
 
-            if (record != null)
-            {
-                response.StatusCode = SearchResponseCodes.Success;
-                response.Account = record;
-            }
+        await Task.WhenAll(getAccountTask, getBalanceTask);
 
-            return response;
+        var account = getAccountTask.Result;
+        var balance = getBalanceTask.Result;
+
+        if (account != null)
+        {
+            response.StatusCode = SearchResponseCodes.Success;
+            response.Account = account;
+            response.Balance = balance;
         }
 
-        public async Task<AccountFinanceResponse> FindFinance(string id)
+        return response;
+    }
+
+    public async Task<IEnumerable<AccountSearchModel>> FindAllAccounts(int pagesize, int pageNumber)
+    {
+        var models = await _accountRepository.FindAllDetails(pagesize, pageNumber);
+        return models.Select(x => Map(x));
+    }
+
+    public async Task<AccountReponse> Find(string id)
+    {
+        var response = new AccountReponse
         {
-            var response = new AccountFinanceResponse
-            {
-                StatusCode = SearchResponseCodes.NoSearchResultsFound
-            };
+            StatusCode = SearchResponseCodes.NoSearchResultsFound
+        };
 
-            var getAccountTask = _accountRepository.Get(id, AccountFieldsSelection.Finance);
-            var getBalanceTask = _accountRepository.GetAccountBalance(id);
+        var account = await _accountRepository.Get(id, AccountFieldsSelection.None);
 
-            await Task.WhenAll(getAccountTask, getBalanceTask);
-
-            var account = getAccountTask.Result;
-            var balance = getBalanceTask.Result;
-
-            if (account != null)
-            {
-                response.StatusCode = SearchResponseCodes.Success;
-                response.Account = account;
-                response.Balance = balance;
-            }
-
-            return response;
+        if (account != null)
+        {
+            response.StatusCode = SearchResponseCodes.Success;
+            response.Account = account;
         }
 
-        public async Task<IEnumerable<AccountSearchModel>> FindAllAccounts(int pagesize, int pageNumber)
+        return response;
+    }
+    public async Task<AccountReponse> FindTeamMembers(string id)
+    {
+        var response = new AccountReponse
         {
-            var models = await _accountRepository.FindAllDetails(pagesize, pageNumber);
-            return models.Select(x => Map(x));
+            StatusCode = SearchResponseCodes.NoSearchResultsFound
+        };
+
+        var account = await _accountRepository.Get(id, AccountFieldsSelection.TeamMembers);
+
+        if (account != null)
+        {
+            response.StatusCode = SearchResponseCodes.Success;
+            response.Account = account;
         }
 
-        public async Task<AccountReponse> Find(string id)
+        return response;
+    }
+    private static AccountSearchModel Map(Core.Models.Account account)
+    {
+        return new AccountSearchModel
         {
-            var response = new AccountReponse
-            {
-                StatusCode = SearchResponseCodes.NoSearchResultsFound
-            };
+            Account = account.DasAccountName,
+            AccountID = account.HashedAccountId,
+            PublicAccountID = account.PublicHashedAccountId,
+            SearchType = SearchCategory.Account,
+            PayeSchemeIds = account.PayeSchemes?.Select(p => p.PayeRefWithOutSlash).ToList()
+        };
+    }
 
-            var account = await _accountRepository.Get(id, AccountFieldsSelection.None);
-
-            if (account != null)
-            {
-                response.StatusCode = SearchResponseCodes.Success;
-                response.Account = account;
-            }
-
-            return response;
-        }
-        public async Task<AccountReponse> FindTeamMembers(string id)
-        {
-            var response = new AccountReponse
-            {
-                StatusCode = SearchResponseCodes.NoSearchResultsFound
-            };
-
-            var account = await _accountRepository.Get(id, AccountFieldsSelection.TeamMembers);
-
-            if (account != null)
-            {
-                response.StatusCode = SearchResponseCodes.Success;
-                response.Account = account;
-            }
-
-            return response;
-        }
-        private AccountSearchModel Map(Core.Models.Account account)
-        {
-            return new AccountSearchModel
-            {
-                Account = account.DasAccountName,
-                AccountID = account.HashedAccountId,
-                PublicAccountID = account.PublicHashedAccountId,
-                SearchType = SearchCategory.Account,
-                PayeSchemeIds = account.PayeSchemes?.Select(p => p.PayeRefWithOutSlash).ToList()
-            };
-        }
-
-        public async Task<int> TotalAccountRecords(int pagesize)
-        {
-            return await _accountRepository.TotalAccountRecords(pagesize);
-        }
+    public Task<int> TotalAccountRecords(int pagesize)
+    {
+        return _accountRepository.TotalAccountRecords(pagesize);
     }
 }

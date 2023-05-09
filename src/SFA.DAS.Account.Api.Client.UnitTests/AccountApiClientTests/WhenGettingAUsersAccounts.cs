@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FluentAssertions.Common;
-using Moq;
+﻿using FluentAssertions;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
@@ -44,7 +39,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
             // Assert
             Assert.IsNotNull(response);
             Assert.IsNotNull(account);
-            account.IsSameOrEqualTo(_accountViewModel);
+            account.Should().BeEquivalentTo(_accountViewModel);
         }
     }
 }
