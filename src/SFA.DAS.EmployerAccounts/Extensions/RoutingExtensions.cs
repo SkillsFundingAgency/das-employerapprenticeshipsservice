@@ -1,5 +1,4 @@
 ﻿using NServiceBus;
-using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.Notifications.Messages.Commands;
 
 namespace SFA.DAS.EmployerAccounts.Extensions;
