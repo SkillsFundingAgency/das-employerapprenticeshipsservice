@@ -10,13 +10,9 @@ using SFA.DAS.EAS.Support.Infrastructure.Services;
 using SFA.DAS.EAS.Support.Infrastructure.Services.Contracts;
 using SFA.DAS.EAS.Support.Infrastructure.Settings;
 using SFA.DAS.EAS.Support.Web.Configuration;
-using System.Text.Json;
-using System.Threading.Tasks;
 using SFA.DAS.EAS.Support.Web.Extensions;
 using SFA.DAS.EAS.Support.Web.Services;
 using SFA.DAS.EmployerAccounts.Api.Client;
-
-namespace SFA.DAS.EAS.Support.Web;
 
 namespace SFA.DAS.EAS.Support.Web
 {

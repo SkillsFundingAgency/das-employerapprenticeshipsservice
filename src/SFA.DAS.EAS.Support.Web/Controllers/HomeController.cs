@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-
-namespace SFA.DAS.EAS.Support.Web.Controllers
+﻿namespace SFA.DAS.EAS.Support.Web.Controllers
 {
     [AllowAnonymous]
     public class HomeController : Controller
