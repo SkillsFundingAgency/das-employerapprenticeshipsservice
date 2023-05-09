@@ -22,7 +22,7 @@
             <h2 class="heading-medium">Transfer allowance information.</h2>
             <div class="finance-highlight">
                 <span class="bold-small">
-                    Travel allowance as at 6 April @Model.Data.FinancialYearString
+                    Transfer allowance as at 6 April @Model.Data.FinancialYearString
                 </span>
                 <span class="data-item bold-xlarge">@Model.Data.StartingTransferAllowance.ToString("C0", culture)</span>
             </div>
@@ -42,12 +42,9 @@
             </p>
         </div>
 
-        if (Html.IsAuthorized("EmployerFeature.FinanceDetails"))
-        {
-            <div class="column-two-thirds">
-                <a href="/accounts/@Model.Data.HashedAccountID/transfers/financial-breakdown" class="button button-secondary">View my transfer finances</a>
-            </div>
-        }
+        <div class="column-two-thirds">
+            <a href="/accounts/@Model.Data.HashedAccountID/transfers/financial-breakdown" class="button button-secondary">View my transfer finances</a>
+        </div>
 
         <div class="column-two-thirds">
             <h2 class="heading-medium">My pledges</h2>
