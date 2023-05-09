@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.Azure.Services.AppAuthentication;
+using Azure.Core;
+using Azure.Identity;
 using SFA.DAS.EAS.Domain.Configuration;
 
 namespace SFA.DAS.EAS.Application.Http;
@@ -7,15 +8,21 @@ namespace SFA.DAS.EAS.Application.Http;
 public class ManagedIdentityTokenGenerator : IManagedIdentityTokenGenerator
 {
     private readonly IManagedIdentityClientConfiguration _config;
+
     public ManagedIdentityTokenGenerator(IManagedIdentityClientConfiguration config)
     {
         _config = config;
     }
 
-    public Task<string> Generate()
+    public async Task<string> Generate()
     {
-        var azureServiceTokenProvider = new AzureServiceTokenProvider();
-        return azureServiceTokenProvider.GetAccessTokenAsync(_config.IdentifierUri);
+        var tokenCredential = new DefaultAzureCredential();
+        
+        var accessToken = await tokenCredential.GetTokenAsync(
+            new TokenRequestContext(scopes: new string[] { _config.IdentifierUri + "/.default" }) { }
+        );
+
+        return accessToken.Token;
     }
 }
 
