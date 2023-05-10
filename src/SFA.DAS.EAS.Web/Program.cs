@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using SFA.DAS.EAS.Web.Extensions;
 
 namespace SFA.DAS.EAS.Web;
 
@@ -14,7 +13,6 @@ public class Program
         Host.CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(webBuilder =>
             {
-                webBuilder.ConfigureDasAppConfiguration();
                 webBuilder.UseStartup<Startup>();
             });
 }

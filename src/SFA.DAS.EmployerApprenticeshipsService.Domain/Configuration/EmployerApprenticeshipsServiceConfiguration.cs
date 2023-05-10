@@ -13,4 +13,5 @@ public class EmployerApprenticeshipsServiceConfiguration
     public IdentityServerConfiguration Identity { get; set; }
     public EmployerAccountsApiConfiguration EmployerAccountsApi { get; set; }
     public EmployerFinanceApiConfiguration EmployerFinanceApi { get; set; }
+    public bool UseGovSignIn { get; set; }
 }

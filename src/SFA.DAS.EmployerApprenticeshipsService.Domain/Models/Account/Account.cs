@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 

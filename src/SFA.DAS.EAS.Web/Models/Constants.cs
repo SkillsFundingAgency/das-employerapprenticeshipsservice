@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EAS.Domain.Configuration;
+﻿using SFA.DAS.Authentication;
 
 namespace SFA.DAS.EAS.Web.Models;
 

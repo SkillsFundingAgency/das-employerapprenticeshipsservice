@@ -2,9 +2,17 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using SFA.DAS.Authentication;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Web.Extensions;
+using SFA.DAS.EAS.Web.Handlers;
 using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.RouteValues;
+using SFA.DAS.EAS.Web.StartupExtensions;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.Employer.Shared.UI;
+using SFA.DAS.GovUK.Auth.AppStart;
 
 namespace SFA.DAS.EAS.Web;
 
@@ -14,7 +22,7 @@ public class Startup
 
     public Startup(IConfiguration configuration)
     {
-        _configuration = configuration;
+        _configuration = configuration.BuildDasConfiguration();
     }
 
     public void ConfigureServices(IServiceCollection services)
@@ -23,6 +31,43 @@ public class Startup
             .Get<IdentityServerConfiguration>();
 
         var constants = new Constants(idConfig);
+
+        var identityServerConfiguration = _configuration
+            .GetSection(ConfigurationKeys.Identity)
+            .Get<IdentityServerConfiguration>();
+       
+        services.AddHttpContextAccessor();
+
+        services.Configure<IdentityServerConfiguration>(_configuration.GetSection("Identity"));
+        services.AddSingleton(cfg => cfg.GetService<IOptions<IdentityServerConfiguration>>().Value);
+
+        var easConfiguration = _configuration.GetSection(ConfigurationKeys.EmployerApprenticeshipsService).Get<EmployerApprenticeshipsServiceConfiguration>();
+
+        if (easConfiguration.UseGovSignIn)
+        {
+            services.AddMaMenuConfiguration(RouteNames.SignOut, _configuration["ResourceEnvironmentName"]);
+        }
+        else
+        {
+            services.AddMaMenuConfiguration(RouteNames.SignOut, identityServerConfiguration.ClientId, _configuration["ResourceEnvironmentName"]);
+        }
+
+        services.AddAuthenticationServices();
+
+        if (_configuration.UseGovUkSignIn())
+        {
+            var govConfig = _configuration.GetSection("SFA.DAS.Employer.GovSignIn");
+            govConfig["ResourceEnvironmentName"] = _configuration["ResourceEnvironmentName"];
+            govConfig["StubAuth"] = _configuration["StubAuth"];
+            services.AddAndConfigureGovUkAuthentication(govConfig,
+                typeof(EmployerAccountPostAuthenticationClaimsHandler),
+                "",
+                "/service/SignIn-Stub");
+        }
+        else
+        {
+            services.AddAndConfigureEmployerAuthentication(identityServerConfiguration);
+        }
 
         services.AddControllersWithViews()
             .AddNewtonsoftJson(options =>
@@ -39,6 +84,9 @@ public class Startup
 
         UserLinksViewModel.ChangePasswordLink = $"{constants.ChangePasswordLink()}{"https://" + _configuration.GetValue<string>("DashboardUrl") + "/service/password/change"}";
         UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{"https://" + _configuration.GetValue<string>("DashboardUrl") + "/service/email/change"}";
+
+
+        services.AddApplicationInsightsTelemetry();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -49,6 +97,7 @@ public class Startup
         }
 
         app.UseStaticFiles();
+        app.UseAuthentication();
         app.UseRouting();
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>

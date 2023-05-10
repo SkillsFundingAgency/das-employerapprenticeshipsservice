@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Extensions.DependencyInjection;
-using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.Authentication;
 using SFA.DAS.GovUK.Auth.Services;
 
 namespace SFA.DAS.EAS.Web.Extensions;

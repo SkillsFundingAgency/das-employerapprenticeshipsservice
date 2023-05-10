@@ -24,7 +24,7 @@
 		<ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="AutoMapper" Version="5.1.1"/>
+		<PackageReference Include="AutoMapper" Version="5.1.1" />
 		<PackageReference Include="Azure.Identity" Version="1.8.2" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 		<PackageReference Include="SFA.DAS.Activities.Client" Version="1.2.71">
@@ -56,5 +56,8 @@
 	</ItemGroup>
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Contracts\" />
 	</ItemGroup>
 </Project>
