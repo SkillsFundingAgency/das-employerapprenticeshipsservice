@@ -45,16 +45,14 @@ public static class HostBuilderExtensions
     {
         hostBuilder.ConfigureLogging((context, loggingBuilder) =>
         {
-            loggingBuilder.AddConsole(x => { });
-
             var connectionString = context.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"];
             if (!string.IsNullOrEmpty(connectionString))
             {
-                loggingBuilder.AddNLog(context.HostingEnvironment.IsDevelopment()
-                    ? "nlog.development.config"
-                    : "nlog.config");
-                loggingBuilder.AddApplicationInsightsWebJobs(o => o.InstrumentationKey = connectionString);
+                loggingBuilder.AddNLog(context.HostingEnvironment.IsDevelopment() ? "nlog.development.config" : "nlog.config");
+                loggingBuilder.AddApplicationInsightsWebJobs(o => o.ConnectionString = connectionString);
             }
+
+            loggingBuilder.AddConsole();
         });
 
         return hostBuilder;
