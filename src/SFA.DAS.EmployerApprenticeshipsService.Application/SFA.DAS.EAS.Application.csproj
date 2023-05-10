@@ -22,9 +22,9 @@
 	<ItemGroup>
 		<ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj" />
 		<ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj" />
-		<ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EAS.Infrastructure.csproj" />
 	</ItemGroup>
 	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="5.1.1"/>
 		<PackageReference Include="Azure.Identity" Version="1.8.2" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 		<PackageReference Include="SFA.DAS.Activities.Client" Version="1.2.71">
