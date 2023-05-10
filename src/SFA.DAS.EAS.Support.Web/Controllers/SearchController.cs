@@ -1,10 +1,11 @@
 ﻿using SFA.DAS.EAS.Support.ApplicationServices.Services;
+using SFA.DAS.EAS.Support.Web.Helpers;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers;
 
 [ApiController]
-[Authorize(Roles = "das-support-portal")]
-public class SearchController : Microsoft.AspNetCore.Mvc.ControllerBase
+[Authorize(Roles = Roles.DasSupportPoral)]
+public class SearchController : ControllerBase
 {
     private readonly IAccountHandler _handler;
 

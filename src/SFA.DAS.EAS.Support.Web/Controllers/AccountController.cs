@@ -7,29 +7,26 @@ using SFA.DAS.Support.Shared.Discovery;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers;
 
-[Authorize(Roles = "das-support-portal")]
+[Authorize(Roles = Roles.DasSupportPoral)]
 public class AccountController : Controller
 {
     private readonly IAccountHandler _accountHandler;
     private readonly IPayeLevySubmissionsHandler _payeLevySubmissionsHandler;
     private readonly IPayeLevyMapper _payeLevyMapper;
-    private readonly HttpContext _httpContext;
 
     public AccountController(IAccountHandler accountHandler,
         IPayeLevySubmissionsHandler payeLevySubmissionsHandler,
-        IPayeLevyMapper payeLevyDeclarationMapper,
-        HttpContext httpContext)
+        IPayeLevyMapper payeLevyDeclarationMapper)
     {
         _accountHandler = accountHandler;
         _payeLevySubmissionsHandler = payeLevySubmissionsHandler;
         _payeLevyMapper = payeLevyDeclarationMapper;
-        _httpContext = httpContext;
     }
 
     [Route("account/{id}")]
     public async Task<IActionResult> Index(string id)
     {
-        var response = await _accountHandler.FindOrganisations(id);            
+        var response = await _accountHandler.FindOrganisations(id);
 
         if (response.StatusCode == SearchResponseCodes.Success)
         {
@@ -42,13 +39,13 @@ public class AccountController : Controller
 
             return View(vm);
         }
-        
+
         return NotFound();
     }
 
     [Route("account/payeschemes/{id}")]
     public async Task<IActionResult> PayeSchemes(string id)
-    {            
+    {
         var response = await _accountHandler.FindPayeSchemes(id);
 
         if (response.StatusCode == SearchResponseCodes.Success)
@@ -61,14 +58,14 @@ public class AccountController : Controller
 
             return View(vm);
         }
-        
+
         return new NotFoundResult();
     }
 
     [Route("account/header/{id}")]
     public async Task<IActionResult> Header(string id)
     {
-        var response = await _accountHandler.Find(id);            
+        var response = await _accountHandler.Find(id);
 
         if (response.StatusCode != SearchResponseCodes.Success)
             return NotFound();
@@ -87,7 +84,7 @@ public class AccountController : Controller
             {
                 Account = response.Account,
                 AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}",
-                IsTier2User = _httpContext.User.IsInRole(AuthorizationConstants.Tier2User)
+                IsTier2User = User.IsInRole(AuthorizationConstants.Tier2User)
             };
 
             return View(vm);

@@ -2,12 +2,13 @@
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.Core.Models;
 using SFA.DAS.EAS.Support.Infrastructure.Models;
+using SFA.DAS.EAS.Support.Web.Helpers;
 using SFA.DAS.EAS.Support.Web.Models;
 using SFA.DAS.Support.Shared.Authentication;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers;
 
-[Authorize(Roles = "das-support-portal")]
+[Authorize(Roles = Roles.DasSupportPoral)]
 public class ChallengeController : Controller
 {
     private readonly IChallengeHandler _handler;

@@ -1,10 +1,11 @@
 ﻿using System.Reflection;
 using Microsoft.AspNetCore.Http.Extensions;
+using SFA.DAS.EAS.Support.Web.Helpers;
 using SFA.DAS.Support.Shared;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers;
 
-[Authorize(Roles = "das-support-portal")]
+[Authorize(Roles = Roles.DasSupportPoral)]
 [Route("api/status")]
 [ApiController]
 public class StatusController : ControllerBase
