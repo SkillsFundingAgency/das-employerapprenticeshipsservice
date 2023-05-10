@@ -14,12 +14,12 @@ namespace SFA.DAS.EAS.Web.Handlers;
 public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
 {
     private readonly IUserAccountService _userAccountService;
-    private readonly EmployerApprenticeshipsServiceConfiguration _employerAccountsConfiguration;
+    private readonly EmployerApprenticeshipsServiceConfiguration _easConfiguration;
 
-    public EmployerAccountPostAuthenticationClaimsHandler(IUserAccountService userAccountService, IOptions<EmployerApprenticeshipsServiceConfiguration> employerAccountsConfiguration)
+    public EmployerAccountPostAuthenticationClaimsHandler(IUserAccountService userAccountService, IOptions<EmployerApprenticeshipsServiceConfiguration> easConfiguration)
     {
         _userAccountService = userAccountService;
-        _employerAccountsConfiguration = employerAccountsConfiguration.Value;
+        _easConfiguration = easConfiguration.Value;
     }
 
     public async Task<IEnumerable<Claim>> GetClaims(TokenValidatedContext tokenValidatedContext)
@@ -29,7 +29,7 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
         string userId;
         var email = string.Empty;
 
-        if (_employerAccountsConfiguration.UseGovSignIn)
+        if (_easConfiguration.UseGovSignIn)
         {
             userId = tokenValidatedContext.Principal.Claims
                 .First(c => c.Type.Equals(ClaimTypes.NameIdentifier))
@@ -58,7 +58,7 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
         var associatedAccountsClaim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, accountsAsJson, JsonClaimValueTypes.Json);
         claims.Add(associatedAccountsClaim);
 
-        if (!_employerAccountsConfiguration.UseGovSignIn)
+        if (!_easConfiguration.UseGovSignIn)
         {
             return claims;
         }

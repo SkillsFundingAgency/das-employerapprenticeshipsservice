@@ -29,6 +29,7 @@
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 		<PackageReference Include="SFA.DAS.Activities.Client" Version="1.2.71">
 		</PackageReference>
+		<PackageReference Include="SFA.DAS.Authentication" Version="1.1.2" />
 		<PackageReference Include="SFA.DAS.EmployerAccounts.Api.Types" Version="1.6.3195" />
 		<PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.2.37">
 		</PackageReference>

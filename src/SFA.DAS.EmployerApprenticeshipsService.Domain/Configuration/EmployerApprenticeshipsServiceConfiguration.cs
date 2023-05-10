@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EAS.Domain.Configuration;
+﻿using SFA.DAS.Authentication;
+
+namespace SFA.DAS.EAS.Domain.Configuration;
 
 public class EmployerApprenticeshipsServiceConfiguration
 {
@@ -14,4 +16,5 @@ public class EmployerApprenticeshipsServiceConfiguration
     public EmployerAccountsApiConfiguration EmployerAccountsApi { get; set; }
     public EmployerFinanceApiConfiguration EmployerFinanceApi { get; set; }
     public bool UseGovSignIn { get; set; }
+    public OuterApiConfiguration EmployerAccountsOuterApiConfiguration { get; set; }
 }

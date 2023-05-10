@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using SFA.DAS.Authentication;
+using SFA.DAS.EAS.Application.ServiceRegistrations;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Web.Handlers;
@@ -20,28 +21,31 @@ public class Startup
 {
     private readonly IConfiguration _configuration;
 
-    public Startup(IConfiguration configuration)
+    public Startup(IConfiguration configuration, bool buildConfig = true)
     {
-        _configuration = configuration.BuildDasConfiguration();
+        _configuration = buildConfig ? configuration.BuildDasConfiguration() : configuration;
     }
 
     public void ConfigureServices(IServiceCollection services)
     {
-        var idConfig = _configuration.GetSection("Identity")
-            .Get<IdentityServerConfiguration>();
-
-        var constants = new Constants(idConfig);
+        services.AddSingleton(_configuration);
+        services.AddOptions();
 
         var identityServerConfiguration = _configuration
-            .GetSection(ConfigurationKeys.Identity)
-            .Get<IdentityServerConfiguration>();
-       
+               .GetSection("Identity")
+               .Get<IdentityServerConfiguration>();
+
+        var constants = new Constants(identityServerConfiguration);
+
         services.AddHttpContextAccessor();
 
         services.Configure<IdentityServerConfiguration>(_configuration.GetSection("Identity"));
         services.AddSingleton(cfg => cfg.GetService<IOptions<IdentityServerConfiguration>>().Value);
 
-        var easConfiguration = _configuration.GetSection(ConfigurationKeys.EmployerApprenticeshipsService).Get<EmployerApprenticeshipsServiceConfiguration>();
+        services.Configure<EmployerApprenticeshipsServiceConfiguration>(_configuration);
+        services.AddSingleton(cfg => cfg.GetService<IOptions<EmployerApprenticeshipsServiceConfiguration>>().Value);
+
+        var easConfiguration = _configuration.Get<EmployerApprenticeshipsServiceConfiguration>();
 
         if (easConfiguration.UseGovSignIn)
         {
@@ -52,6 +56,7 @@ public class Startup
             services.AddMaMenuConfiguration(RouteNames.SignOut, identityServerConfiguration.ClientId, _configuration["ResourceEnvironmentName"]);
         }
 
+        services.AddOuterApi(easConfiguration.EmployerAccountsOuterApiConfiguration);
         services.AddAuthenticationServices();
 
         if (_configuration.UseGovUkSignIn())
@@ -84,7 +89,6 @@ public class Startup
 
         UserLinksViewModel.ChangePasswordLink = $"{constants.ChangePasswordLink()}{"https://" + _configuration.GetValue<string>("DashboardUrl") + "/service/password/change"}";
         UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{"https://" + _configuration.GetValue<string>("DashboardUrl") + "/service/email/change"}";
-
 
         services.AddApplicationInsightsTelemetry();
     }

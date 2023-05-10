@@ -12,6 +12,7 @@
 		<Reference Include="System.Transactions" />
 	</ItemGroup>
 	<ItemGroup>
+		<PackageReference Include="SFA.DAS.Authentication" Version="1.1.2" />
 		<PackageReference Include="SFA.DAS.Provider.Events.Api.Client" Version="3.0.1-prerelease-5">
 		</PackageReference>
 		<PackageReference Include="SFA.DAS.Audit.Client" Version="1.0.0.20553">

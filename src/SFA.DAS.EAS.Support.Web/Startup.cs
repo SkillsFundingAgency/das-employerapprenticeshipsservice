@@ -1,17 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SFA.DAS.EAS.Account.Api.Client;
-using SFA.DAS.EAS.Account.Api.Clients;
-using SFA.DAS.EAS.Support.ApplicationServices;
-using SFA.DAS.EAS.Support.ApplicationServices.Services;
-using SFA.DAS.EAS.Support.Core.Services;
-using SFA.DAS.EAS.Support.Infrastructure.Services;
-using SFA.DAS.EAS.Support.Infrastructure.Services.Contracts;
 using SFA.DAS.EAS.Support.Web.Extensions;
 using SFA.DAS.EAS.Support.Web.ServiceRegistrations;
-using SFA.DAS.EAS.Support.Web.Services;
-using SFA.DAS.EmployerAccounts.Api.Client;
 
 namespace SFA.DAS.EAS.Support.Web;
 

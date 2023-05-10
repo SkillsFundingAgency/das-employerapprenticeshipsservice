@@ -9,10 +9,11 @@ namespace SFA.DAS.EAS.Web.Controllers;
 public class HomeController : Controller
 {
     private const string GoogleTag = "_ga";
-    public IConfiguration Configuration { get; set; }
-    public HomeController(IConfiguration _configuration)
+    private readonly IConfiguration _configuration;
+
+    public HomeController(IConfiguration configuration)
     {
-        Configuration = _configuration;
+        _configuration = configuration;
     }
 
     [Route("~/")]
@@ -20,7 +21,7 @@ public class HomeController : Controller
     [Route("Index")]
     public IActionResult Index()
     {
-        return Redirect(Url.EmployerAccountsAction($"service/index?{GetTrackerQueryString()}", Configuration, false));
+        return Redirect(Url.EmployerAccountsAction($"service/index?{GetTrackerQueryString()}", _configuration, false));
     }        
 
     [AuthoriseActiveUser]
@@ -28,14 +29,14 @@ public class HomeController : Controller
     [Route("accounts")]
     public IActionResult ViewAccounts()
     {
-        return Redirect(Url.EmployerAccountsAction("service/accounts", Configuration, false));
+        return Redirect(Url.EmployerAccountsAction("service/accounts", _configuration, false));
     }
 
     [HttpGet]
     [Route("register")]
     public IActionResult RegisterUser()
     {
-        return Redirect(Url.EmployerAccountsAction("service/register", Configuration, false));
+        return Redirect(Url.EmployerAccountsAction("service/register", _configuration, false));
     }
 
     [DasAuthorize]
@@ -43,7 +44,7 @@ public class HomeController : Controller
     [Route("register/new")]
     public IActionResult HandleNewRegistration()
     {
-        return Redirect(Url.EmployerAccountsAction("service/register/new", Configuration, false));
+        return Redirect(Url.EmployerAccountsAction("service/register/new", _configuration, false));
     }
 
     [DasAuthorize]
@@ -51,7 +52,7 @@ public class HomeController : Controller
     [Route("password/change")]
     public IActionResult HandlePasswordChanged(bool userCancelled = false)
     {
-        return Redirect(Url.EmployerAccountsAction("service/password/change", Configuration, false));
+        return Redirect(Url.EmployerAccountsAction("service/password/change", _configuration, false));
     }
 
     [DasAuthorize]
@@ -59,20 +60,20 @@ public class HomeController : Controller
     [Route("email/change")]
     public IActionResult HandleEmailChanged(bool userCancelled = false)
     {
-        return Redirect(Url.EmployerAccountsAction("service/email/change", Configuration, false));
+        return Redirect(Url.EmployerAccountsAction("service/email/change", _configuration, false));
     }
 
     [DasAuthorize]
     [Route("signIn")]
     public IActionResult SignIn()
     {
-        return Redirect(Url.EmployerAccountsAction("service/signIn", Configuration, false));
+        return Redirect(Url.EmployerAccountsAction("service/signIn", _configuration, false));
     }
 
     [Route("signOut")]
     public IActionResult SignOut()
     {
-        return Redirect(Url.EmployerAccountsAction("service/signOut", Configuration, false));
+        return Redirect(Url.EmployerAccountsAction("service/signOut", _configuration, false));
     }
 
     [HttpGet]
@@ -80,35 +81,35 @@ public class HomeController : Controller
     [Route("privacy", Order = 1)]
     public IActionResult Privacy()
     {
-        return Redirect(Url.EmployerAccountsAction("service/privacy", Configuration, false));
+        return Redirect(Url.EmployerAccountsAction("service/privacy", _configuration, false));
     }
 
     [HttpGet]
     [Route("cookieConsent")]
     public IActionResult CookieConsent()
     {
-        return Redirect(Url.EmployerAccountsAction("cookieConsent/settings", Configuration, false));
+        return Redirect(Url.EmployerAccountsAction("cookieConsent/settings", _configuration, false));
     }
 
     [HttpGet]
     [Route("help")]
     public IActionResult Help()
     {
-        return Redirect(Url.EmployerAccountsAction("service/help", Configuration, false));
+        return Redirect(Url.EmployerAccountsAction("service/help", _configuration, false));
     }
 
     [HttpGet]
     [Route("start")]
     public IActionResult ServiceStartPage()
     {
-        return Redirect(Url.EmployerAccountsAction("service/start", Configuration, false));
+        return Redirect(Url.EmployerAccountsAction("service/start", _configuration, false));
     }
 
     [HttpGet]
     [Route("termsAndConditions/overview")]
     public IActionResult TermsAndConditionsOverview()
     {
-        return Redirect(Url.EmployerAccountsAction("service/termsAndConditions/overview", Configuration, false));
+        return Redirect(Url.EmployerAccountsAction("service/termsAndConditions/overview", _configuration, false));
     }
 
     private string GetTrackerQueryString()
