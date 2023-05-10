@@ -1,7 +1,6 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
-using System.Threading.Tasks;
 using Azure.Core;
 using Azure.Identity;
 using Microsoft.Identity.Client;
@@ -25,53 +24,50 @@ public class EmployerAccountsSecureHttpClient : ISecureHttpClient
 
     public virtual async Task<string> GetAsync(string url, CancellationToken cancellationToken = default)
     {
-        var accessToken = IsClientCredentialConfiguration(_configuration.ClientId, _configuration.ClientSecret, _configuration.Tenant)
-            ? await GetClientCredentialAuthenticationResult(_configuration.ClientId, _configuration.ClientSecret, _configuration.IdentifierUri, _configuration.Tenant)
-            : await GetManagedIdentityAuthenticationResult(_configuration.IdentifierUri);
+        var accessToken = IsClientCredentialConfiguration()
+            ? await GetClientCredentialAuthenticationResult()
+            : await GetManagedIdentityAuthenticationResult();
 
-        using (var client = new HttpClient())
-        {
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        using var client = new HttpClient();
 
-            var response = await client.GetAsync(url);
-            response.EnsureSuccessStatusCode();
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-            return await response.Content.ReadAsStringAsync();
-        }
+        var response = await client.GetAsync(url, cancellationToken);
+        response.EnsureSuccessStatusCode();
+
+        return await response.Content.ReadAsStringAsync(cancellationToken);
     }
 
-    private async Task<string> GetClientCredentialAuthenticationResult(string clientId, string clientSecret, string resource, string tenant)
+    private async Task<string> GetClientCredentialAuthenticationResult()
     {
-        var authority = $"https://login.microsoftonline.com/{tenant}";
-        var app = ConfidentialClientApplicationBuilder.Create(clientId)
+        var authority = $"https://login.microsoftonline.com/{_configuration.Tenant}";
+        var app = ConfidentialClientApplicationBuilder.Create(_configuration.ClientId)
             .WithAuthority(authority)
             .Build();
 
-        var userAssertion = new UserAssertion(clientSecret);
+        var userAssertion = new UserAssertion(_configuration.ClientSecret);
 
         var authResult = await app.AcquireTokenOnBehalfOf(
-                new string[] { $"{resource}/.default" },
+                new string[] { $"{_configuration.IdentifierUri}/.default" },
                 userAssertion
             )
             .ExecuteAsync()
             .ConfigureAwait(false);
 
-
-
         return authResult.AccessToken;
     }
 
-    private async Task<string> GetManagedIdentityAuthenticationResult(string resource)
+    private async Task<string> GetManagedIdentityAuthenticationResult()
     {
         var tokenCredential = new DefaultAzureCredential();
         var accessToken = await tokenCredential.GetTokenAsync(
-            new TokenRequestContext(scopes: new string[] { resource + "/.default" }) { }
+            new TokenRequestContext(scopes: new string[] { _configuration.IdentifierUri + "/.default" }) { }
         );
         return accessToken.Token;
     }
 
-    private bool IsClientCredentialConfiguration(string clientId, string clientSecret, string tenant)
+    private bool IsClientCredentialConfiguration()
     {
-        return !string.IsNullOrEmpty(clientId) && !string.IsNullOrEmpty(clientSecret) && !string.IsNullOrEmpty(tenant);
+        return !string.IsNullOrEmpty(_configuration.ClientId) && !string.IsNullOrEmpty(_configuration.ClientSecret) && !string.IsNullOrEmpty(_configuration.Tenant);
     }
 }
