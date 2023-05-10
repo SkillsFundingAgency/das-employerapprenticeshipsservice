@@ -1,11 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
+using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Extensions;
-using SFA.DAS.EmployerUsers.WebClientComponents;
 
 namespace SFA.DAS.EAS.Web.Controllers;
 
 [Route("accounts")]
-[AuthoriseActiveUser]
+[Authorize(Policy = nameof(PolicyNames.HasUserAccount))]
 public class EmployerAccountController : Controller
 {
     public IConfiguration Configuration { get; set; }

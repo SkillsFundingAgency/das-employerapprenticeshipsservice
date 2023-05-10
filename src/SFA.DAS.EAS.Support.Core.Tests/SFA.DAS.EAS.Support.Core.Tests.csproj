@@ -36,8 +36,6 @@
 		</PackageReference>
 		<PackageReference Include="Moq" Version="4.18.4">
 		</PackageReference>
-		<PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles" Version="6.0.52">
-		</PackageReference>
 		<PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.283">
 		</PackageReference>
 		<PackageReference Include="SFA.DAS.EmployerAccounts.Api.Types" Version="1.6.3195">

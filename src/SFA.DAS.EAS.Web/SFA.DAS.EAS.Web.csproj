@@ -19,8 +19,6 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0">
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authentication" Version="1.1.2" />
-    <PackageReference Include="SFA.DAS.Authorization.Mvc" Version="6.0.97">
-    </PackageReference>
     <PackageReference Include="SFA.DAS.Employer.Shared.UI" Version="17.1.44" />
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.1.338">
     </PackageReference>

@@ -1,11 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
-using SFA.DAS.Authorization.Mvc.Attributes;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
+using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Extensions;
-using SFA.DAS.EmployerUsers.WebClientComponents;
+using SFA.DAS.EAS.Web.RouteValues;
 
 namespace SFA.DAS.EAS.Web.Controllers;
 
-[Route("service")]
+[Route(RouteNames.Service)]
 public class HomeController : Controller
 {
     private const string GoogleTag = "_ga";
@@ -22,9 +23,9 @@ public class HomeController : Controller
     public IActionResult Index()
     {
         return Redirect(Url.EmployerAccountsAction($"service/index?{GetTrackerQueryString()}", _configuration, false));
-    }        
+    }
 
-    [AuthoriseActiveUser]
+    [Authorize(Policy = nameof(PolicyNames.HasUserAccount))]
     [HttpGet]
     [Route("accounts")]
     public IActionResult ViewAccounts()
@@ -39,7 +40,7 @@ public class HomeController : Controller
         return Redirect(Url.EmployerAccountsAction("service/register", _configuration, false));
     }
 
-    [DasAuthorize]
+    [Authorize(Policy = nameof(PolicyNames.HasUserAccount))]
     [HttpGet]
     [Route("register/new")]
     public IActionResult HandleNewRegistration()
@@ -47,7 +48,7 @@ public class HomeController : Controller
         return Redirect(Url.EmployerAccountsAction("service/register/new", _configuration, false));
     }
 
-    [DasAuthorize]
+    [Authorize(Policy = nameof(PolicyNames.HasUserAccount))]
     [HttpGet]
     [Route("password/change")]
     public IActionResult HandlePasswordChanged(bool userCancelled = false)
@@ -55,7 +56,7 @@ public class HomeController : Controller
         return Redirect(Url.EmployerAccountsAction("service/password/change", _configuration, false));
     }
 
-    [DasAuthorize]
+    [Authorize(Policy = nameof(PolicyNames.HasUserAccount))]
     [HttpGet]
     [Route("email/change")]
     public IActionResult HandleEmailChanged(bool userCancelled = false)
@@ -63,7 +64,7 @@ public class HomeController : Controller
         return Redirect(Url.EmployerAccountsAction("service/email/change", _configuration, false));
     }
 
-    [DasAuthorize]
+    [Authorize(Policy = nameof(PolicyNames.HasUserAccount))]
     [Route("signIn")]
     public IActionResult SignIn()
     {

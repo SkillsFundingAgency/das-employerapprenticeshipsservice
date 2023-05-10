@@ -1,10 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
-using SFA.DAS.Authorization.Mvc.Attributes;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
+using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Extensions;
 
 namespace SFA.DAS.EAS.Web.Controllers;
 
-[DasAuthorize]
+[Authorize(Policy = nameof(PolicyNames.HasUserAccount))]
 [Route("accounts/{HashedAccountId}")]
 public class EmployerAccountPayeController : Controller
 {

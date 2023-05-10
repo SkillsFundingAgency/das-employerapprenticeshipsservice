@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
-using SFA.DAS.Authorization.Mvc.Attributes;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
+using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Extensions;
-using SFA.DAS.EmployerUsers.WebClientComponents;
 
 namespace SFA.DAS.EAS.Web.Controllers;
 
@@ -20,14 +20,14 @@ public class InvitationController : Controller
     }
 
     [HttpGet("")]
-    [AuthoriseActiveUser]
+    [Authorize(Policy = nameof(PolicyNames.HasUserAccount))]
     public IActionResult All()
     {
         return Redirect(Url.EmployerAccountsAction("invitations", Configuration, false));
     }
 
     [HttpGet]
-    [DasAuthorize]
+    [Authorize(Policy = nameof(PolicyNames.HasUserAccount))]
     [Route("view")]
     public IActionResult Details(string invitationId)
     {
@@ -40,7 +40,6 @@ public class InvitationController : Controller
     {
         return Redirect(Url.EmployerAccountsAction("invitations/register-and-accept", Configuration, false));
     }
-
 
     [HttpGet]
     [Route("accept")]
