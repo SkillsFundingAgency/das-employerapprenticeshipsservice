@@ -30,7 +30,6 @@ public static class EmployerAuthenticationServiceRegistrations
         services.AddSingleton<IAuthorizationHandler, AccountActiveAuthorizationHandler>();//TODO remove after gov login enabled
         services.AddTransient<IUserAccountService, UserAccountService>();
 
-
         services.AddAuthorization(options =>
         {
             options.AddPolicy(
@@ -40,25 +39,6 @@ public static class EmployerAuthenticationServiceRegistrations
                     policy.RequireClaim(EmployerClaims.IdamsUserIdClaimTypeIdentifier);
                     policy.RequireAuthenticatedUser();
                     policy.Requirements.Add(new AccountActiveRequirement());
-                });
-
-            options.AddPolicy(
-                PolicyNames.HasEmployerOwnerAccount
-                , policy =>
-                {
-                    policy.RequireClaim(EmployerClaims.AccountsClaimsTypeIdentifier);
-                    policy.Requirements.Add(new EmployerAccountOwnerRequirement());
-                    policy.Requirements.Add(new AccountActiveRequirement());
-                    policy.RequireAuthenticatedUser();
-                });
-            options.AddPolicy(
-                PolicyNames.HasEmployerViewerTransactorOwnerAccount
-                , policy =>
-                {
-                    policy.RequireClaim(EmployerClaims.AccountsClaimsTypeIdentifier);
-                    policy.Requirements.Add(new EmployerAccountAllRolesRequirement());
-                    policy.Requirements.Add(new AccountActiveRequirement());
-                    policy.RequireAuthenticatedUser();
                 });
         });
 
