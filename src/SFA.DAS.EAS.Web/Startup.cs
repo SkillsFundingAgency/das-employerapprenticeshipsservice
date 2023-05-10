@@ -10,18 +10,18 @@ namespace SFA.DAS.EAS.Web;
 
 public class Startup
 {
+    private readonly IConfiguration _configuration;
+
     public Startup(IConfiguration configuration)
     {
         _configuration = configuration;
     }
 
-    public IConfiguration _configuration { get; }
-
-    // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
         var idConfig = _configuration.GetSection("Identity")
             .Get<IdentityServerConfiguration>();
+
         var constants = new Constants(idConfig);
 
         services.AddControllersWithViews()
@@ -41,7 +41,6 @@ public class Startup
         UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{"https://" + _configuration.GetValue<string>("DashboardUrl") + "/service/email/change"}";
     }
 
-    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         if (env.IsDevelopment())
