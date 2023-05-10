@@ -16,7 +16,6 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Account
         protected Mock<IPayeLevySubmissionsHandler> _payeLevySubmissionsHandler;
         protected Mock<IPayeLevyMapper> _payeLevyDeclarationMapper;
         protected AccountController Unit;
-        protected Mock<HttpContext> _httpContextMock;
 
 
         [SetUp]
@@ -25,11 +24,10 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Account
             AccountHandler = new Mock<IAccountHandler>();
             _payeLevySubmissionsHandler = new Mock<IPayeLevySubmissionsHandler>();
             _payeLevyDeclarationMapper = new Mock<IPayeLevyMapper>();
-            _httpContextMock = new Mock<HttpContext>();
 
             Unit = new AccountController(AccountHandler.Object,
                 _payeLevySubmissionsHandler.Object,
-                _payeLevyDeclarationMapper.Object, _httpContextMock.Object);
+                _payeLevyDeclarationMapper.Object);
         }
     }
 
