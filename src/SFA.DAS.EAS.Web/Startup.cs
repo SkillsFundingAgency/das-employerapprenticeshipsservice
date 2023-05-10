@@ -87,8 +87,8 @@ public class Startup
             options.MinimumSameSitePolicy = SameSiteMode.None;
         });
 
-        UserLinksViewModel.ChangePasswordLink = $"{constants.ChangePasswordLink()}{"https://" + _configuration.GetValue<string>("DashboardUrl") + "/service/password/change"}";
-        UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{"https://" + _configuration.GetValue<string>("DashboardUrl") + "/service/email/change"}";
+        UserLinksViewModel.ChangePasswordLink = $"{constants.ChangePasswordLink()}{$"https://{_configuration.GetValue<string>("DashboardUrl")}/service/password/change"}";
+        UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{$"https://{_configuration.GetValue<string>("DashboardUrl")}/service/email/change"}";
 
         services.AddApplicationInsightsTelemetry();
     }

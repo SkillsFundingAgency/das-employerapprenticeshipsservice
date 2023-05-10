@@ -2,11 +2,10 @@
 using Microsoft.Extensions.Configuration;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Extensions;
-using SFA.DAS.EAS.Web.RouteValues;
 
 namespace SFA.DAS.EAS.Web.Controllers;
 
-[Route(RouteNames.Service)]
+[Route("service")]
 public class HomeController : Controller
 {
     private const string GoogleTag = "_ga";

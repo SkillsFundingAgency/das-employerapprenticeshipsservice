@@ -3,5 +3,4 @@
 public static class RouteNames
 {
     public const string SignOut = "SignOut";
-    public const string Service = "service";
 }
