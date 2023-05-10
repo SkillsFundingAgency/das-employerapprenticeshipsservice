@@ -4,12 +4,12 @@ using SFA.DAS.EAS.Support.Infrastructure.Settings;
 
 namespace SFA.DAS.EAS.Support.Infrastructure.Services;
 
-public class LevyTokenHttpClientMaker: ILevyTokenHttpClientFactory
+public class LevyTokenHttpClientFactory: ILevyTokenHttpClientFactory
 {
     private readonly IHmrcApiClientConfiguration _hmrcApiBaseUrlConfig;
     private readonly ITokenServiceApiClient _tokenServiceApiClient;
 
-    public LevyTokenHttpClientMaker(ITokenServiceApiClient tokenServiceApiClient, IHmrcApiClientConfiguration hmrcApiBaseUrlConfig)
+    public LevyTokenHttpClientFactory(ITokenServiceApiClient tokenServiceApiClient, IHmrcApiClientConfiguration hmrcApiBaseUrlConfig)
     {
         _hmrcApiBaseUrlConfig = hmrcApiBaseUrlConfig;
         _tokenServiceApiClient = tokenServiceApiClient;
