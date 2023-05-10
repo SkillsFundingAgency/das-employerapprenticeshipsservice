@@ -70,8 +70,7 @@ public class SearchPensionRegulatorController : BaseController
     }
 
     [HttpPost]
-    [Route("{HashedAccountId}/pensionregulator", Order = 0)]
-    [Route("pensionregulator", Order = 1)]
+    [Route("{HashedAccountId?}/pensionregulator", Name = RouteNames.PostSearchPensionRegulator)]
     public async Task<IActionResult> SearchPensionRegulator(string hashedAccountId, SearchPensionRegulatorResultsViewModel viewModel)
     {
         if (!viewModel.SelectedOrganisation.HasValue)
@@ -82,7 +81,10 @@ public class SearchPensionRegulatorController : BaseController
 
         if (viewModel.SelectedOrganisation == OrgNotListed)
         {
-            return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
+            return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName, new
+            {
+                hashedAccountId
+            });
         }
 
         var item = viewModel.Results.SingleOrDefault(m => m.ReferenceNumber == viewModel.SelectedOrganisation);

@@ -13,7 +13,9 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form method="POST" action="@Url.Action(ControllerConstants.SearchPensionRegulatorActionName)" >  
+        <form method="POST" 
+            asp-route="@RouteNames.PostSearchPensionRegulator" 
+            asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]">  
             @Html.HiddenFor(m => m.IsExistingAccount)
             @Html.HiddenFor(m => m.PayeRef)
             <div class="govuk-form-group @errorClass" id="pension-regulator-form">
