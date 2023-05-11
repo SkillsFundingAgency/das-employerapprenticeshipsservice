@@ -22,6 +22,7 @@ public class HomeController : BaseController
     private readonly ILogger<HomeController> _logger;
     private readonly IConfiguration _config;
     private readonly IStubAuthenticationService _stubAuthenticationService;
+    private readonly IUrlActionHelper _urlHelper;
 
     public const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
 
@@ -32,7 +33,7 @@ public class HomeController : BaseController
         ICookieStorageService<ReturnUrlModel> returnUrlCookieStorageService,
         ILogger<HomeController> logger,
         IConfiguration config,
-        IStubAuthenticationService stubAuthenticationService)
+        IStubAuthenticationService stubAuthenticationService, IUrlActionHelper urlHelper)
         : base(flashMessage)
     {
         _homeOrchestrator = homeOrchestrator;
@@ -41,6 +42,7 @@ public class HomeController : BaseController
         _logger = logger;
         _config = config;
         _stubAuthenticationService = stubAuthenticationService;
+        _urlHelper = urlHelper;
     }
 
     [Route("~/")]
@@ -82,6 +84,16 @@ public class HomeController : BaseController
             };
 
             return View(ControllerConstants.ServiceStartPageViewName, model);
+        }
+
+        // check if the GovSignIn is enabled
+        if (_configuration.UseGovSignIn)
+        {
+            // check if the user account is found, if not re-direct the user to the EmployerProfile Add User Details Page.
+            if (accounts.Data.Accounts.AccountList == null || accounts.Data.Accounts.AccountList.Count == 0)
+            {
+                return Redirect(_urlHelper.EmployerProfileAddUserDetails("/user/add-user-details"));
+            }
         }
 
         if (accounts.Data.Invitations > 0)

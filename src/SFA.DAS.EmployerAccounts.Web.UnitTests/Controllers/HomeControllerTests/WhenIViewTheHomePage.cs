@@ -17,6 +17,8 @@ public class WhenIViewTheHomePage : ControllerTestBase
     private EmployerAccountsConfiguration _configuration;
     private const string ExpectedUserId = "123ABC";
     private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
+    private Mock<IUrlActionHelper> _urlActionHelper;
+    private const string ProfileAddUserDetailsRoute = "https://test.com";
 
     [SetUp]
     public void Arrange()
@@ -26,6 +28,7 @@ public class WhenIViewTheHomePage : ControllerTestBase
         _homeOrchestrator = new Mock<HomeOrchestrator>();
         _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
         _homeOrchestrator = new Mock<HomeOrchestrator>();
+        _urlActionHelper = new Mock<IUrlActionHelper>();
 
         _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId, null)).ReturnsAsync(
             new OrchestratorResponse<UserAccountsViewModel>
@@ -56,7 +59,8 @@ public class WhenIViewTheHomePage : ControllerTestBase
             _configuration,
             _flashMessage.Object,
             Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
-            Mock.Of<ILogger<HomeController>>(), null, null)
+            Mock.Of<ILogger<HomeController>>(), null, null,
+            _urlActionHelper.Object)
         {
             ControllerContext = new ControllerContext { HttpContext = MockHttpContext.Object },
             Url = new UrlHelper(new ActionContext(Mock.Of<HttpContext>(), new RouteData(), new ActionDescriptor()))
@@ -291,5 +295,35 @@ public class WhenIViewTheHomePage : ControllerTestBase
         var userAccountsViewModel = (OrchestratorResponse<UserAccountsViewModel>)viewModel;
 
         Assert.AreEqual(false, userAccountsViewModel.Data.ShowTermsAndConditionBanner);
+    }
+
+    [Test]
+    public async Task ThenIfIHaveNoAccountsAndGovSignInTrueIAmRedirectedToTheProfilePage()
+    {
+        //Arrange
+        _configuration.UseGovSignIn = true;
+        AddUserToContext(ExpectedUserId, string.Empty, string.Empty,
+            new Claim(ControllerConstants.UserRefClaimKeyName, ExpectedUserId),
+            new Claim(DasClaimTypes.RequiresVerification, "false")
+        );
+
+        _urlActionHelper.Setup(x => x.EmployerProfileAddUserDetails(It.IsAny<string>())).Returns(ProfileAddUserDetailsRoute);
+
+        _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId, It.IsAny<DateTime?>())).ReturnsAsync(
+            new OrchestratorResponse<UserAccountsViewModel>
+            {
+                Data = new UserAccountsViewModel
+                {
+                    Accounts = new Accounts<Account>()
+                }
+            });
+
+        //Act
+        var actual = await _homeController.Index();
+
+        //Assert
+        Assert.IsNotNull(actual);
+        var actualViewResult = actual as RedirectResult;
+        Assert.AreEqual(actualViewResult.Url, ProfileAddUserDetailsRoute);
     }
 }
