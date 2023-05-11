@@ -16,6 +16,7 @@ public class WhenIRegisterAUser
     private const string Schema = "http";
     private const string Authority = "test.local";
     private const string BaseUrl = "https://baseaddress-hyperlink.com";
+    private Mock<IUrlActionHelper> _urlActionHelper;
 
     [SetUp]
     public void Arrange()
@@ -26,13 +27,14 @@ public class WhenIRegisterAUser
         _homeOrchestrator = new Mock<HomeOrchestrator>();
         _configuration = new Mock<EmployerAccountsConfiguration>();
         _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-        
+        _urlActionHelper = new Mock<IUrlActionHelper>();
+
         _homeController = new HomeController(
             _homeOrchestrator.Object,
             _configuration.Object,
             _flashMessage.Object,
             Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
-            Mock.Of<ILogger<HomeController>>(), null, null)
+            Mock.Of<ILogger<HomeController>>(), null, null, _urlActionHelper.Object)
         {
             ControllerContext = new ControllerContext()
             {
