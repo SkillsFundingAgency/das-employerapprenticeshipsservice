@@ -10,16 +10,14 @@ public class WhenILoginAUser
     private Mock<EmployerAccountsConfiguration> _configuration;
     private HomeController _homeController;    
     private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
-    private Mock<GovSignInIdentityConfiguration> _govSignInIdentityConfiguration;
-
+    
     [SetUp]
     public void Arrange()
     {
         _homeOrchestrator = new Mock<HomeOrchestrator>();
         _configuration = new Mock<EmployerAccountsConfiguration>();          
         _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-        _govSignInIdentityConfiguration = new Mock<GovSignInIdentityConfiguration>();
-
+        
         _homeController = new HomeController(
             _homeOrchestrator.Object, 
             _configuration.Object, 
@@ -49,10 +47,7 @@ public class WhenILoginAUser
     {
         //arrange
         _configuration.Object.UseGovSignIn = true;
-        _govSignInIdentityConfiguration.Object.BaseUrl = baseUrl;
-        _govSignInIdentityConfiguration.Object.SignInLink = "Sign-in";
-        _configuration.Object.GovSignInIdentity = _govSignInIdentityConfiguration.Object;
-
+        
         //Act
         var actual = _homeController.SignIn();
 
@@ -60,7 +55,7 @@ public class WhenILoginAUser
         Assert.IsNotNull(actual);
         var actualRedirectResult = actual as RedirectResult;
         Assert.IsNotNull(actualRedirectResult);
-        Assert.AreEqual($"{_configuration.Object.GovSignInIdentity.BaseUrl}/{_configuration.Object.GovSignInIdentity.SignInLink}", actualRedirectResult.Url);
+        Assert.AreEqual($"{GovSignInIdentityConfiguration.BaseUrl}/{GovSignInIdentityConfiguration.SignInLink}", actualRedirectResult.Url);
     }
 
     [Test]

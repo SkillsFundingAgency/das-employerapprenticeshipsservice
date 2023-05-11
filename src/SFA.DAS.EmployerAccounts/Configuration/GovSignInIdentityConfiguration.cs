@@ -3,19 +3,21 @@
     /// <summary>
     /// Class to Read the GovUk SignIn Configuration.
     /// </summary>
-    public class GovSignInIdentityConfiguration
+    public static class GovSignInIdentityConfiguration
     {
         /// <summary>
-        /// Property to get or set the BaseUrl
+        /// Property to get the BaseUrl
         /// </summary>
-        public string BaseUrl { get; set; }
+        public const string BaseUrl = "https://www.gov.uk";
+
         /// <summary>
-        /// Property to get or set the User Registration link.
+        /// Property to get the User Registration link.
         /// </summary>
-        public string RegisterLink { get; set; }
+        public const string RegisterLink = "/employing-an-apprentice/create-an-account";
+
         /// <summary>
-        /// Property to get or set the User SignIn Link.
+        /// Property to get the User SignIn Link.
         /// </summary>
-        public string SignInLink { get; set; }
+        public const string SignInLink = "/sign-in-apprenticeship-service-account";
     }
 }

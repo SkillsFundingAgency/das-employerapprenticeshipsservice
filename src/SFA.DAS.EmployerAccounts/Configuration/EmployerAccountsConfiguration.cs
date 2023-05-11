@@ -60,5 +60,4 @@ public class EmployerAccountsConfiguration
     public TaskApiConfiguration TasksApi { get; set; }
     public bool UseGovSignIn { get; set; }
     public string DataProtectionKeysDatabase { get; set; }
-    public GovSignInIdentityConfiguration GovSignInIdentity { get; set; }
 }

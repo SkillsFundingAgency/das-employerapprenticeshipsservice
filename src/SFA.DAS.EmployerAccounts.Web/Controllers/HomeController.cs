@@ -203,7 +203,7 @@ public class HomeController : BaseController
         {
             #region GovUK Register
 
-            return new RedirectResult($"{_configuration.GovSignInIdentity.BaseUrl}/{_configuration.GovSignInIdentity.RegisterLink}");
+            return new RedirectResult($"{GovSignInIdentityConfiguration.BaseUrl}/{GovSignInIdentityConfiguration.RegisterLink}");
 
             #endregion
         }
@@ -279,7 +279,7 @@ public class HomeController : BaseController
         if (_configuration.UseGovSignIn)
         {
             #region GovUK SignIn
-            return new RedirectResult($"{_configuration.GovSignInIdentity.BaseUrl}/{_configuration.GovSignInIdentity.SignInLink}");
+            return new RedirectResult($"{GovSignInIdentityConfiguration.BaseUrl}/{GovSignInIdentityConfiguration.SignInLink}");
             #endregion
         }
         else
