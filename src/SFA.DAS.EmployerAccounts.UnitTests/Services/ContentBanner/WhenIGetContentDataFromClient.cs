@@ -29,7 +29,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.ContentBanner
         [SetUp]
         public void Arrange()
         {
-            ConfigurationManager.AppSettings["EnvironmentName"] = "LOCAL";
             _apiBaseUrl = $"http://{Guid.NewGuid().ToString()}/";            
             _identifierUri = Guid.NewGuid().ToString();
 

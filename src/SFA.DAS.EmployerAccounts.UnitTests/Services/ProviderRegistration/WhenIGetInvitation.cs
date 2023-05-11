@@ -28,7 +28,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.ProviderRegistration
         [SetUp]
         public void Arrange()
         {
-            ConfigurationManager.AppSettings["EnvironmentName"] = "LOCAL";
             _apiBaseUrl = $"http://{Guid.NewGuid().ToString()}/";
             _identifierUri = Guid.NewGuid().ToString();
             _correlationId = Guid.NewGuid().ToString();
