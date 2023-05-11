@@ -1,22 +1,19 @@
 ﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Application.Infrastructure;
 using SFA.DAS.EAS.Application.Services;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Web.Authorization;
-using SFA.DAS.EAS.Web.RouteValues;
+using SFA.DAS.EAS.Support.Web.Authorization;
+using SFA.DAS.EAS.Support.Web.RouteValues;
 
-namespace SFA.DAS.EAS.Web.Authentication;
+namespace SFA.DAS.EAS.Support.Web.Authentication;
 
 public interface IEmployerAccountAuthorisationHandler
 {
     Task<bool> IsEmployerAuthorised(AuthorizationHandlerContext context, bool allowAllUserRoles);
-    Task<bool> IsOutsideAccount(AuthorizationHandlerContext context);
+    bool CheckUserAccountAccess(ClaimsPrincipal user, EmployerUserRole userRoleRequired);
 }
 
 public class EmployerAccountAuthorisationHandler : IEmployerAccountAuthorisationHandler
@@ -110,19 +107,53 @@ public class EmployerAccountAuthorisationHandler : IEmployerAccountAuthorisation
         return true;
     }
 
-    public Task<bool> IsOutsideAccount(AuthorizationHandlerContext context)
+    public bool CheckUserAccountAccess(ClaimsPrincipal user, EmployerUserRole userRoleRequired)
     {
-        if (_httpContextAccessor.HttpContext.Request.RouteValues.ContainsKey(RouteValueKeys.HashedAccountId))
+        if (!_httpContextAccessor.HttpContext.Request.RouteValues.ContainsKey(RouteValueKeys.HashedAccountId))
         {
-            return Task.FromResult(false);
+            return false;
         }
 
-        var requiredIdClaim = _configuration.UseGovSignIn ? ClaimTypes.NameIdentifier : EmployerClaims.IdamsUserIdClaimTypeIdentifier;
+        Dictionary<string, EmployerUserAccountItem> employerAccounts;
+        var accountIdFromUrl = _httpContextAccessor.HttpContext.Request.RouteValues[RouteValueKeys.HashedAccountId].ToString().ToUpper();
+        var employerAccountClaim = user.FindFirst(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier));
+        try
+        {
+            employerAccounts = JsonConvert.DeserializeObject<Dictionary<string, EmployerUserAccountItem>>(employerAccountClaim.Value);
+        }
+        catch (JsonSerializationException e)
+        {
+            _logger.LogError(e, "Could not deserialize employer account claim for user");
+            return false;
+        }
 
-        if (!context.User.HasClaim(c => c.Type.Equals(requiredIdClaim)))
-            return Task.FromResult(false);
+        if (employerAccounts == null)
+        {
+            return false;
+        }
 
-        return Task.FromResult(true);
+        var employerIdentifier = employerAccounts.ContainsKey(accountIdFromUrl)
+            ? employerAccounts[accountIdFromUrl] : null;
+
+        if (employerIdentifier == null)
+        {
+            return false;
+        }
+
+        if (!Enum.TryParse<EmployerUserRole>(employerIdentifier.Role, true, out var claimUserRole))
+        {
+            return false;
+        }
+
+        switch (userRoleRequired)
+        {
+            case EmployerUserRole.Owner when claimUserRole == EmployerUserRole.Owner:
+            case EmployerUserRole.Transactor when claimUserRole is EmployerUserRole.Owner or EmployerUserRole.Transactor:
+            case EmployerUserRole.Viewer when claimUserRole is EmployerUserRole.Owner or EmployerUserRole.Transactor or EmployerUserRole.Viewer:
+                return true;
+            default:
+                return false;
+        }
     }
 
     private static bool CheckUserRoleForAccess(EmployerUserAccountItem employerIdentifier, bool allowAllUserRoles)

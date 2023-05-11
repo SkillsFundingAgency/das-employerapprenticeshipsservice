@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.Authentication;
+using SFA.DAS.EAS.Application.ServiceRegistrations;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Support.Web.Extensions;
 using SFA.DAS.EAS.Support.Web.ServiceRegistrations;
 
@@ -17,16 +20,25 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddControllersWithViews()
-            .AddNewtonsoftJson(options =>
-            {
-                options.UseMemberCasing();
-            });
+        var easConfiguration = _configuration.Get<EmployerApprenticeshipsServiceConfiguration>();
+        var identityServerConfiguration = _configuration
+               .GetSection("Identity")
+               .Get<IdentityServerConfiguration>();
+
+        services.AddOuterApi(easConfiguration.EmployerAccountsOuterApiConfiguration);
+        services.AddAuthenticationServices();
+        services.AddAndConfigureEmployerAuthentication(identityServerConfiguration);
 
         services.AddConfigurationSections(_configuration);
         services.AddApiClientServices();
         services.AddRepositories();
         services.AddApplicationServices();
+
+        services.AddControllersWithViews()
+            .AddNewtonsoftJson(options =>
+            {
+                options.UseMemberCasing();
+            });
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -37,6 +49,7 @@ public class Startup
         }
 
         app.UseStaticFiles();
+        app.UseAuthentication();
         app.UseRouting();
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>

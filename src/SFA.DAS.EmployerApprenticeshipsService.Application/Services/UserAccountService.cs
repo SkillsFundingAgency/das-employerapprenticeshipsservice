@@ -1,9 +1,10 @@
-﻿using SFA.DAS.EAS.Application.Contracts.OuterApi;
+﻿using System.Threading.Tasks;
+using SFA.DAS.EAS.Application.Contracts.OuterApi;
 using SFA.DAS.EAS.Application.Infrastructure;
 using SFA.DAS.EAS.Application.Infrastructure.OuterApi.Requests;
 using SFA.DAS.EAS.Application.Infrastructure.OuterApi.Responses;
 
-namespace SFA.DAS.EAS.Web.Services;
+namespace SFA.DAS.EAS.Application.Services;
 
 public interface IUserAccountService
 {

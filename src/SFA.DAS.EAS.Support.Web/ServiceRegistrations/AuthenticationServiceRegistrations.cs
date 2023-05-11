@@ -1,20 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.Authentication;
 using SFA.DAS.EAS.Application.Infrastructure;
 using SFA.DAS.EAS.Application.Services;
-using SFA.DAS.EAS.Web.Authentication;
-using SFA.DAS.EAS.Web.Authorization;
-using SFA.DAS.EAS.Web.Cookies;
-using SFA.DAS.EAS.Web.Handlers;
-using SFA.DAS.GovUK.Auth.Authentication;
-using SFA.DAS.GovUK.Auth.Services;
+using SFA.DAS.EAS.Support.Web.Authentication;
+using SFA.DAS.EAS.Support.Web.Authorization;
+using SFA.DAS.EAS.Support.Web.Cookies;
 
-namespace SFA.DAS.EAS.Web.StartupExtensions;
+namespace SFA.DAS.EAS.Support.Web.ServiceRegistrations;
 
 public static class AuthenticationServiceRegistrations
 {
@@ -22,23 +17,19 @@ public static class AuthenticationServiceRegistrations
     {
         services.AddHttpContextAccessor();
 
-        services.AddTransient<ICustomClaims, EmployerAccountPostAuthenticationClaimsHandler>();
         services.AddTransient<IEmployerAccountAuthorisationHandler, EmployerAccountAuthorisationHandler>();
-        services.AddSingleton<IAuthorizationHandler, EmployerAccountAllRolesAuthorizationHandler>();
-        services.AddSingleton<IAuthorizationHandler, EmployerUsersIsOutsideAccountAuthorizationHandler>();
-        services.AddSingleton<IAuthorizationHandler, EmployerAccountOwnerAuthorizationHandler>();
-        services.AddSingleton<IAuthorizationHandler, AccountActiveAuthorizationHandler>();//TODO remove after gov login enabled
+        services.AddSingleton<IAuthorizationHandler, EmployerAccountSupportRoleAuthorizationHandler>();
         services.AddTransient<IUserAccountService, UserAccountService>();
 
         services.AddAuthorization(options =>
         {
             options.AddPolicy(
-                PolicyNames.HasUserAccount
+                PolicyNames.IsSupportPortalUser
                 , policy =>
                 {
                     policy.RequireClaim(EmployerClaims.IdamsUserIdClaimTypeIdentifier);
                     policy.RequireAuthenticatedUser();
-                    policy.Requirements.Add(new AccountActiveRequirement());
+                    policy.Requirements.Add(new EmployerAccountSupportUserRoleRequirement());
                 });
         });
 
@@ -93,16 +84,15 @@ public static class AuthenticationServiceRegistrations
                 options.CookieManager = new ChunkingCookieManager { ChunkSize = 3000 };
             });
 
-        services
-            .AddOptions<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme)
-            .Configure<ICustomClaims>((options, customClaims) =>
-            {
-                options.Events.OnTokenValidated = async (ctx) =>
-                {
-                    var claims = await customClaims.GetClaims(ctx);
-                    ctx.Principal.Identities.First().AddClaims(claims);
-                };
-            });
+        services.AddOptions<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme);
+        //.Configure<ICustomClaims>((options, customClaims) =>
+        //{
+        //    options.Events.OnTokenValidated = async (ctx) =>
+        //    {
+        //        var claims = await customClaims.GetClaims(ctx);
+        //        ctx.Principal.Identities.First().AddClaims(claims);
+        //    };
+        //});
 
         return services;
     }

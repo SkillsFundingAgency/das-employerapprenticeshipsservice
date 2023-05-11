@@ -32,6 +32,7 @@
     <ProjectReference Include="..\SFA.DAS.EAS.Support.ApplicationServices\SFA.DAS.EAS.Support.ApplicationServices.csproj" />
     <ProjectReference Include="..\SFA.DAS.EAS.Support.Core\SFA.DAS.EAS.Support.Core.csproj" />
     <ProjectReference Include="..\SFA.DAS.EAS.Support.Infrastructure\SFA.DAS.EAS.Support.Infrastructure.csproj" />
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>

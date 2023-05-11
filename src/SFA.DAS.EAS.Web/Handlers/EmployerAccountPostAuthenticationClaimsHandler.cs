@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Application.Infrastructure;
+using SFA.DAS.EAS.Application.Services;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Web.Services;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.GovUK.Auth.Services;
 
