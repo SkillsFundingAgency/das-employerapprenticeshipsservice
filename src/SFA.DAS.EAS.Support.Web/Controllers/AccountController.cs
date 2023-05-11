@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
+using SFA.DAS.EAS.Support.Web.Authorization;
 using SFA.DAS.EAS.Support.Web.Helpers;
 using SFA.DAS.EAS.Support.Web.Models;
 using SFA.DAS.EAS.Support.Web.Services;
@@ -7,7 +8,7 @@ using SFA.DAS.Support.Shared.Discovery;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers;
 
-[Authorize(Roles = Roles.DasSupportPoral)]
+[Authorize(Policy = PolicyNames.IsSupportPortalUser)]
 public class AccountController : Controller
 {
     private readonly IAccountHandler _accountHandler;

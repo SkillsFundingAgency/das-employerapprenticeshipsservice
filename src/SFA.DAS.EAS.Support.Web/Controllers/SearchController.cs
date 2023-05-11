@@ -1,10 +1,10 @@
 ﻿using SFA.DAS.EAS.Support.ApplicationServices.Services;
-using SFA.DAS.EAS.Support.Web.Helpers;
+using SFA.DAS.EAS.Support.Web.Authorization;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers;
 
 [ApiController]
-[Authorize(Roles = Roles.DasSupportPoral)]
+[Authorize(Policy = PolicyNames.IsSupportPortalUser)]
 public class SearchController : ControllerBase
 {
     private readonly IAccountHandler _handler;
