@@ -60,7 +60,7 @@ public class GetSignedEmployerAgreementPdfQueryHandler : IRequestHandler<GetSign
             substituteValues.Add($"{nameof(legalAgreement.LegalEntityAddress)}_{i}", addressLine.Trim());
         }
             
-        var pdfStream = await _pdfService.SubsituteValuesForPdf($"{legalAgreement.TemplatePartialViewName}_Sub.pdf", substituteValues);
+        var pdfStream = await _pdfService.SubstituteValuesForPdf($"{legalAgreement.TemplatePartialViewName}_Sub.pdf", substituteValues);
 
         return new GetSignedEmployerAgreementPdfResponse { FileStream = pdfStream };
     }

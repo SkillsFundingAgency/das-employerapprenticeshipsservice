@@ -7,29 +7,27 @@ using SFA.DAS.Api.Common.Configuration;
 using SFA.DAS.Api.Common.Infrastructure;
 using SFA.DAS.EmployerAccounts.Configuration;
 
-namespace SFA.DAS.EmployerAccounts.Api.Authentication
+namespace SFA.DAS.EmployerAccounts.Api.Authentication;
+
+public static class AuthenticationExtensions
 {
-    public static class AuthenticationExtensions
+    public static IServiceCollection AddApiAuthentication(this IServiceCollection services, IConfiguration config, bool isDevelopment = false)
     {
-        public static IServiceCollection AddApiAuthentication(this IServiceCollection services, IConfiguration config, bool isDevelopment = false)
+        if (isDevelopment)
         {
-            if (isDevelopment)
-            {
-                services.AddAuthentication("BasicAuthentication")
-                       .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
-            }
-            else
-            {
-                var azureAdConfiguration = config
-                       .GetSection(ConfigurationKeys.AzureActiveDirectoryApiConfiguration)
-                       .Get<AzureActiveDirectoryConfiguration>();
-
-                var policies = new Dictionary<string, string> { { PolicyNames.Default, RoleNames.Default } };
-                services.AddAuthentication(azureAdConfiguration, policies);
-                services.AddSingleton<IClaimsTransformation, AzureAdScopeClaimTransformation>();
-            }
-
-            return services;
+            services.AddAuthentication("BasicAuthentication")
+                   .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
         }
+        else
+        {
+            var azureAdConfiguration = config
+                   .GetSection(ConfigurationKeys.AzureActiveDirectoryApiConfiguration)
+                   .Get<AzureActiveDirectoryConfiguration>();
+
+            var policies = new Dictionary<string, string> { { PolicyNames.Default, RoleNames.Default } };
+            services.AddAuthentication(azureAdConfiguration, policies);
+        }
+
+        return services;
     }
 }

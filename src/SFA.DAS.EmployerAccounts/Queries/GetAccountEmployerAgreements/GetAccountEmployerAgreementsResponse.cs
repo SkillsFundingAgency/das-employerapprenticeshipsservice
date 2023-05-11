@@ -9,6 +9,9 @@ public class GetAccountEmployerAgreementsResponse
     public bool HasPendingAgreements =>
         EmployerAgreements != null && EmployerAgreements.Any(ag => ag.HasPendingAgreement);
 
+    public int MinimumSignedAgreementVersion => EmployerAgreements == null ? 0 : EmployerAgreements.Min(ea => ea.Signed?.VersionNumber ?? 0);
+
+
     public EmployerAgreementStatusDto TryGetSinglePendingAgreement()
     {
         var onlyPendingAgreement = EmployerAgreements?.Where(x => x.HasPendingAgreement)

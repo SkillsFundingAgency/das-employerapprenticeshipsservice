@@ -64,7 +64,7 @@ public class BaseController : Controller
             throw orchestratorResponse.Exception;
         }
 
-        throw new Exception($"Orchestrator response of type '{model.GetType()}' could not be handled.");
+        throw new OrchestratorResponseTypeException(model.GetType());
     }
 
     [NonAction]
@@ -91,4 +91,10 @@ public class BaseController : Controller
     {
         return ViewComponent("SupportUserBanner", new SupportUserBannerViewModel());
     }
+}
+
+[Serializable]
+public class OrchestratorResponseTypeException : Exception
+{
+    public OrchestratorResponseTypeException(Type modelType) : base($"Orchestrator response of type '{modelType}' could not be handled.") { }
 }

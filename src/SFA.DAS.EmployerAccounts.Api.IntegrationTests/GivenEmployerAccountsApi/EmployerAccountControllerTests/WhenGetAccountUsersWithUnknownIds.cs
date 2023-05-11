@@ -17,8 +17,8 @@ public class WhenGetAccountUsersWithUnknownIds : GivenEmployerAccountsApi
     [Test]
     public void ThenTheStatusShouldBeOK_AndDataShouldContainZeroUsers()
     {
-        Response.ExpectStatusCodes(HttpStatusCode.OK);
-        Assert.AreEqual(0, Response.GetContent<List<TeamMember>>().Count);
+        Response?.ExpectStatusCodes(HttpStatusCode.OK);
+        Assert.AreEqual(0, Response?.GetContent<List<TeamMember>>().Count);
 
         Assert.Pass("Verified we got http status OK");
     }

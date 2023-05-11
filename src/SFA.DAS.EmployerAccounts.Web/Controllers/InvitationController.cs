@@ -1,5 +1,7 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using SFA.DAS.EmployerAccounts.Infrastructure;
+using SFA.DAS.EmployerAccounts.Web.RouteValues;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
@@ -39,7 +41,7 @@ public class InvitationController : BaseController
             return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
         }
 
-        var model = await _invitationOrchestrator.GetAllInvitationsForUser(HttpContext.User.FindFirstValue("sub"));
+        var model = await _invitationOrchestrator.GetAllInvitationsForUser(HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserIdClaimTypeIdentifier));
 
         return View(model);
     }
@@ -61,7 +63,7 @@ public class InvitationController : BaseController
 
     [HttpPost]
     [Authorize]
-    [Route("accept")]
+    [Route("accept", Name = RouteNames.InvitationAcceptPost)]
     public async Task<IActionResult> Accept(long invitation, UserInvitationsViewModel model)
     {
         if (string.IsNullOrEmpty(HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName)))

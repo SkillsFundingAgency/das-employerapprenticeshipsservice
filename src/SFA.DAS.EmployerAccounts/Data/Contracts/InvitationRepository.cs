@@ -2,18 +2,15 @@
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.Logging;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Models;
 
 namespace SFA.DAS.EmployerAccounts.Data.Contracts;
 
-public class InvitationRepository : BaseRepository, IInvitationRepository
+public class InvitationRepository :  IInvitationRepository
 {
     private readonly Lazy<EmployerAccountsDbContext> _db;
 
-    public InvitationRepository(EmployerAccountsConfiguration configuration, ILogger<InvitationRepository> logger, Lazy<EmployerAccountsDbContext> db)
-        : base(configuration.DatabaseConnectionString, logger)
+    public InvitationRepository(Lazy<EmployerAccountsDbContext> db)
     {
         _db = db;
     }
@@ -31,6 +28,37 @@ public class InvitationRepository : BaseRepository, IInvitationRepository
             commandType: CommandType.Text);
 
         return result.ToList();
+    }
+
+    public async Task<Invitation> Get(long id)
+    {
+        var parameters = new DynamicParameters();
+
+        parameters.Add("@id", id, DbType.Int64);
+
+        var result = await _db.Value.Database.GetDbConnection().QueryAsync<Invitation>(
+            sql: "SELECT * FROM [employer_account].[Invitation] WHERE Id = @id;",
+            param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
+            commandType: CommandType.Text);
+
+        return result.SingleOrDefault();
+    }
+
+    public async Task<Invitation> Get(long accountId, string email)
+    {
+        var parameters = new DynamicParameters();
+
+        parameters.Add("@accountId", accountId, DbType.Int64);
+        parameters.Add("@email", email, DbType.String);
+
+        var result = await _db.Value.Database.GetDbConnection().QueryAsync<Invitation>(
+            sql: "SELECT * FROM [employer_account].[Invitation] WHERE AccountId = @accountId AND Email = @email;",
+            param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
+            commandType: CommandType.Text);
+
+        return result.SingleOrDefault();
     }
 
     public async Task<InvitationView> GetView(long id)
@@ -69,38 +97,7 @@ public class InvitationRepository : BaseRepository, IInvitationRepository
 
         return parameters.Get<long>("@invitationId");
     }
-
-    public async Task<Invitation> Get(long id)
-    {
-        var parameters = new DynamicParameters();
-
-        parameters.Add("@id", id, DbType.Int64);
-
-        var result = await _db.Value.Database.GetDbConnection().QueryAsync<Invitation>(
-            sql: "SELECT * FROM [employer_account].[Invitation] WHERE Id = @id;",
-            param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
-            commandType: CommandType.Text);
-
-        return result.SingleOrDefault();
-    }
-
-    public async Task<Invitation> Get(long accountId, string email)
-    {
-        var parameters = new DynamicParameters();
-
-        parameters.Add("@accountId", accountId, DbType.Int64);
-        parameters.Add("@email", email, DbType.String);
-
-        var result = await _db.Value.Database.GetDbConnection().QueryAsync<Invitation>(
-            sql: "SELECT * FROM [employer_account].[Invitation] WHERE AccountId = @accountId AND Email = @email;",
-            param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
-            commandType: CommandType.Text);
-
-        return result.SingleOrDefault();
-    }
-
+    
     public Task ChangeStatus(Invitation invitation)
     {
         var parameters = new DynamicParameters();

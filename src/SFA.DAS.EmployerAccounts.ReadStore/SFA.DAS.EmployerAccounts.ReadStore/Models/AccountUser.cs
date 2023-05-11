@@ -152,12 +152,4 @@ public class AccountUser : Document
             throw new InvalidOperationException("User has already been removed");
         }
     }
-
-    private void EnsureUserHasNotBeenCreatedOrUpdatedAfterRemoveAction(DateTime removed)
-    {
-        if (!IsUpdatedRolesDateChronological(removed))
-        {
-            throw new InvalidOperationException("User has been reinvoked or updated after remove request");
-        }
-    }
 }

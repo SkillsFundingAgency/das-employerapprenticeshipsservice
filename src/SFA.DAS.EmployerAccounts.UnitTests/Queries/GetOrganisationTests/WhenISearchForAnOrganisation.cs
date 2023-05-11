@@ -7,7 +7,6 @@ using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.ReferenceData;
 using SFA.DAS.EmployerAccounts.Queries.GetOrganisations;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetOrganisationTests
 {

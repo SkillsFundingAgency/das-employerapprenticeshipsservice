@@ -9,22 +9,21 @@
     string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId].ToString();
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Cancel invitation</h1>
-        <p class="lede">Are you sure you want to cancel @Model.Data.Name's invitation?</p>
-        <div class="form-group">
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Cancel invitation</h1>
+        <p class="govuk-body-l">Are you sure you want to cancel @Model.Data.Name's invitation?</p>
+        <div class="govuk-button-group">
             <form asp-route="@RouteNames.EmployerTeamCancelInvitationPost" asp-route-hashedAccountId="@hashedAccountId" method="POST">
                 <input type="hidden" id="cancel" name="cancel" value="1" />
                 <input type="hidden" id="Email" name="Email" value="@Model.Data.Email" />
-                <button type="submit" class="button" id="cancel_invitation">Yes, cancel invitation</button>
+                <button type="submit" class="govuk-button" id="cancel_invitation">Yes, cancel invitation</button>
             </form>
-            <a asp-route="@RouteNames.EmployerTeamView" asp-route-hashedAccountId="@hashedAccountId" class="button button-link">No, don't cancel invitation</a>
+            <a asp-route="@RouteNames.EmployerTeamView" asp-route-hashedAccountId="@hashedAccountId" class="govuk-link">No, don't cancel invitation</a>
         </div>
     </div>
 </div>
+
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <a asp-route ="@RouteNames.EmployerTeamView" asp-route-hashedAccountId="@hashedAccountId" class="back-link">Back to your team</a>
-    </div>
+    <a asp-route ="@RouteNames.EmployerTeamView" asp-route-hashedAccountId="@hashedAccountId" class="govuk-back-link">Back to your team</a>
 }

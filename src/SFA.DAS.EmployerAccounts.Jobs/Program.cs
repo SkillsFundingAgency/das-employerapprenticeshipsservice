@@ -1,8 +1,6 @@
-﻿using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.Jobs.Extensions;
+﻿using SFA.DAS.EmployerAccounts.Jobs.Extensions;
 using SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
 using SFA.DAS.EmployerAccounts.Jobs.StartupJobs;
-using SFA.DAS.NServiceBus.Configuration.MicrosoftDependencyInjection;
 
 namespace SFA.DAS.EmployerAccounts.Jobs;
 
@@ -34,7 +32,6 @@ public class Program
             .ConfigureDasWebJobs()
             .ConfigureDasLogging()
             .ConfigureDasServices()
-            .UseNServiceBusContainer()
             .Build();
     }
 }

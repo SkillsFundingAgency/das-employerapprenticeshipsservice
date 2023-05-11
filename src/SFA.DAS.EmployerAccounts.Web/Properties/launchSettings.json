@@ -3,11 +3,10 @@
     "SFA.DAS.EmployerAccounts.Web": {
       "commandName": "Project",
       "launchBrowser": true,
+      "applicationUrl": "https://localhost:44344;http://localhost:63171",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "ResourceEnvironmentName": "TEST"
-      },
-      "applicationUrl": "https://localhost:44344;http://localhost:63171"
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
     }
   }
 }

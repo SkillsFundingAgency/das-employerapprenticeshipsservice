@@ -11,13 +11,12 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.GivenEmployerAccountsApi
 [TestFixture]
 public class WhenGetAccountUsersWithKnownIds : GivenEmployerAccountsApi
 {
-
     private Guid _userRef;
 
     [SetUp]
     public async Task SetUp()
     {
-        string hashedAccountId = null;
+        string? hashedAccountId = null;
         _userRef = Guid.Empty;
 
         await InitialiseEmployerAccountData(async builder =>
@@ -29,7 +28,7 @@ public class WhenGetAccountUsersWithKnownIds : GivenEmployerAccountsApi
 
             await builder.SetupDataAsync(data);
 
-            hashedAccountId = data.CurrentAccount.AccountOutput.HashedAccountId;
+            hashedAccountId = data.CurrentAccount.AccountOutput?.HashedAccountId;
             _userRef = data.CurrentUser.UserOutput.UserRef;
         });
 
@@ -39,10 +38,10 @@ public class WhenGetAccountUsersWithKnownIds : GivenEmployerAccountsApi
     [Test]
     public void ThenTheStatusShouldBeFound_AndDataShouldContainOnlyTheExpectedUser()
     {
-        var teamMembers = Response.GetContent<List<TeamMember>>();
-        Response.ExpectStatusCodes(HttpStatusCode.OK);
+        var teamMembers = Response?.GetContent<List<TeamMember>>();
+        Response?.ExpectStatusCodes(HttpStatusCode.OK);
         Assert.IsNotNull(teamMembers);
-        Assert.AreEqual(1, teamMembers.Count);
-        Assert.AreEqual(_userRef, Guid.Parse(teamMembers[0].UserRef));
+        Assert.AreEqual(1, teamMembers?.Count);
+        Assert.AreEqual(_userRef, Guid.Parse(teamMembers?[0].UserRef));
     }
 }

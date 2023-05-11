@@ -26,6 +26,8 @@ public class AuditService : IAuditService
                 builder.Build(message);
             }
 
+
+            // ?
             message.Category = message.Category;
             message.Description = message.Description;
             message.ChangedProperties = message.ChangedProperties;

@@ -10,9 +10,9 @@
     string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId].ToString();
 }
    
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Remove team member</h1>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Remove team member</h1>
         @if (!ViewContext.ViewData.ModelState.IsValid)
         {
             foreach (var state in ViewContext.ViewData.ModelState.Values)
@@ -20,29 +20,26 @@
                 foreach (var error in state.Errors)
                 {
                     <div class="error" id="invalidMessage">
-                        <p class="error-message">@error.ErrorMessage</p>
+                        <p class="govuk-error-message">@error.ErrorMessage</p>
                     </div>
                 }
             }
         }
-        <p class="lede">Are you sure you want to remove @name?</p>
-        <div class="form-group">
+        <p class="govuk-body-l">Are you sure you want to remove @name?</p>
+        <div class="govuk-button-group">
             <form asp-route="@RouteNames.ConfirmRemoveTeamMember"
                   asp-route-hashedAccountId="@hashedAccountId"
                   asp-route-email="@Model.Data.Email" method="POST">
                 <input type="hidden" id="remove" name="remove" value="1" />
                 <input type="hidden" id="UserId" name="UserId" value="@Model.Data.Id" />
                 <input type="hidden" id="Email" name="Email" value="@Model.Data.Email" />
-                <button type="submit" class="button" id="remove_team_member">Yes, remove now</button>
+                <button type="submit" class="govuk-button" id="remove_team_member">Yes, remove now</button>
             </form>
-            <a asp-route="@RouteNames.EmployerTeamView" asp-route-hashedAccountId="@hashedAccountId" class="button button-link">No, cancel</a>
+            <a asp-route="@RouteNames.EmployerTeamView" asp-route-hashedAccountId="@hashedAccountId" class="govuk-link">No, cancel</a>
         </div>
     </div>
 </div>
 
 @section breadcrumb {
-
-    <div class="breadcrumbs">
-        <a asp-route="@RouteNames.EmployerTeamView" asp-route-hashedAccountId="@hashedAccountId" class="govuk-back-link">Back to your team</a>
-    </div>
+    <a asp-route="@RouteNames.EmployerTeamView" asp-route-hashedAccountId="@hashedAccountId" class="govuk-back-link">Back to your team</a>
 }

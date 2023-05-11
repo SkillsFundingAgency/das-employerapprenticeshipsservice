@@ -41,7 +41,7 @@ public class WhenIGetTheEmployerAgreement : QueryBaseTest<GetEmployerAgreementPd
         _db.Setup(d => d.Agreements).Returns(mockDbSet.Object);
 
         _pdfService = new Mock<IPdfService>();
-        _pdfService.Setup(x => x.SubsituteValuesForPdf(It.IsAny<string>())).ReturnsAsync(new MemoryStream());
+        _pdfService.Setup(x => x.SubstituteValuesForPdf(It.IsAny<string>())).ReturnsAsync(new MemoryStream());
 
 
         RequestHandler = new GetEmployerAgreementPdfQueryHandler(RequestValidator.Object, _pdfService.Object, new Lazy<EmployerAccountsDbContext>(() => _db.Object));
@@ -55,7 +55,7 @@ public class WhenIGetTheEmployerAgreement : QueryBaseTest<GetEmployerAgreementPd
         await RequestHandler.Handle(Query, CancellationToken.None);
 
         //Assert
-        _pdfService.Verify(x => x.SubsituteValuesForPdf($"{ExpectedAgreementFileName}.pdf"));
+        _pdfService.Verify(x => x.SubstituteValuesForPdf($"{ExpectedAgreementFileName}.pdf"));
     }
 
     [Test]

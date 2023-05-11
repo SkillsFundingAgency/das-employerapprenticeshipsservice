@@ -2,7 +2,6 @@
 using AutoFixture;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Moq;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Api.Types;
@@ -61,15 +60,14 @@ select (
 
             var accountDbContext = new EmployerAccountsDbContext(optionsBuilder.Options);
             var lazyDb = new Lazy<EmployerAccountsDbContext>(() => accountDbContext);
-            var userRepo = new UserRepository(_configuration, Mock.Of<ILogger<UserRepository>>(), lazyDb);
+            var userRepo = new UserRepository(lazyDb);
             var userToCreate = fixture
                 .Build<User>()
                 .Without(user => user.Id)
                 .Without(user => user.UserRef)
                 .Create();
             
-            var accountRepo = new AccountRepository(_configuration,
-                Mock.Of<ILogger<AccountRepository>>(), lazyDb, Mock.Of<IEncodingService>());
+            var accountRepo = new AccountRepository(lazyDb, Mock.Of<IEncodingService>());
 
             accountDbContext.Database.BeginTransaction();
 

@@ -18,17 +18,20 @@ public class CohortMappings : Profile
 
     }
 
-    private CohortStatus GetStatus(CohortSummary cohort)
+    private static CohortStatus GetStatus(CohortSummary cohort)
     {
         if (cohort.IsDraft && cohort.WithParty == Party.Employer)
             return CohortStatus.Draft;
-        else if (!cohort.IsDraft && cohort.WithParty == Party.Employer)
+        
+        if (!cohort.IsDraft && cohort.WithParty == Party.Employer)
             return CohortStatus.Review;
-        else if (!cohort.IsDraft && cohort.WithParty == Party.Provider)
+        
+        if (!cohort.IsDraft && cohort.WithParty == Party.Provider)
             return CohortStatus.WithTrainingProvider;
-        else if (!cohort.IsDraft && cohort.WithParty == Party.TransferSender)
+        
+        if (!cohort.IsDraft && cohort.WithParty == Party.TransferSender)
             return CohortStatus.WithTransferSender;
-        else
-            return CohortStatus.Unknown;
+        
+        return CohortStatus.Unknown;
     }
 }

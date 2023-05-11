@@ -10,7 +10,6 @@ using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.Hosting;
 using SFA.DAS.NServiceBus.SqlServer.Configuration;
 using SFA.DAS.UnitOfWork.NServiceBus.Configuration;
-using Endpoint = NServiceBus.Endpoint;
 
 namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 
@@ -26,7 +25,7 @@ public static class NServiceBusServiceRegistrations
 
         if (string.IsNullOrEmpty(databaseConnectionString))
         {
-            throw new Exception("DatabaseConnectionString configuration value is empty.");
+            throw new InvalidConfigurationValueException("DatabaseConnectionString");
         }
 
         var endpointConfiguration = new EndpointConfiguration(EndPointName)

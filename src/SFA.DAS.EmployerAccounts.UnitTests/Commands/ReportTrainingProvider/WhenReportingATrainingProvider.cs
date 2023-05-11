@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ReportTrainingProvider
             _configuration.ReportTrainingProviderEmailAddress = "";
 
             //Act Assert
-            Assert.ThrowsAsync<ArgumentNullException>(async () => await _handler.Handle(_validCommand, CancellationToken.None));
+            Assert.ThrowsAsync<InvalidConfigurationValueException>(async () => await _handler.Handle(_validCommand, CancellationToken.None));
         }
 
         [Test]

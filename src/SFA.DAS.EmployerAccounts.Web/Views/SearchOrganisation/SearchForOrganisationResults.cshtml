@@ -9,12 +9,19 @@
     ViewBag.ZenDeskLabel = "eas-select-your-organisation";
 
     ViewBag.GaData.Vpv = Model.Data.IsExistingAccount ? "/accounts/organisations/search/results/select-your-organisation" : "/onboarding/search/results/select-your-organisation";
+
+    var hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId];
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">@ViewBag.Title</h1>
-        <form asp-controller="@ControllerConstants.SearchOrganisationControllerName" asp-action="@ControllerConstants.SearchForOrganisationActionName" method="POST" role="search" aria-label="On this page">
+        <form 
+            asp-controller="@ControllerConstants.SearchOrganisationControllerName" 
+            asp-action="@ControllerConstants.SearchForOrganisationResultsActionName" 
+            asp-route-hashedAccountId="@hashedAccountId"
+            asp-route-organisationType="@Model.Data.OrganisationType"
+            method="POST" role="search" aria-label="On this page">
             <div class="govuk-form-group">
                 <label for="searchTerm" class="govuk-label">
                     Search results
@@ -32,7 +39,12 @@
 
 <div class="govuk-grid-row">
     <section class="govuk-grid-column-one-third">
-        <form id="filter" asp-controller="@ControllerConstants.SearchOrganisationControllerName" asp-action="@ControllerConstants.SearchForOrganisationActionName" asp-route-searchTerm="@(Uri.EscapeDataString(Model.Data.SearchTerm))" method="POST">
+        <form id="filter" 
+            asp-controller="@ControllerConstants.SearchOrganisationControllerName"
+              asp-action="@ControllerConstants.SearchForOrganisationResultsActionName"
+              asp-route-hashedAccountId="@hashedAccountId"
+              asp-route-searchTerm="@Model.Data.SearchTerm" 
+            method="POST">
 
             <div class="das-filter">
                 <div class="das-filter__header">
@@ -72,7 +84,7 @@
                             </div>
                         </div>
                     </fieldset>
-                    <div class="form-group das-js-hide">
+                    <div class="govuk-form-group das-js-hide">
                         <button type="submit" class="govuk-button govuk-button--secondary">Apply filter</button>
                     </div>
                 </div>
@@ -95,7 +107,7 @@
                                 <form 
                                     asp-action="@ControllerConstants.SearchForOrganisationResultsConfirmActionName"
                                     asp-controller="@ControllerConstants.SearchOrganisationControllerName"
-                                    asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]"
+                                    asp-route-hashedAccountId="@hashedAccountId"
                                     method="post">
                                     <input type="hidden" name="DateOfInception" value="@organisation.DateOfInception" />
                                     <input type="hidden" name="ReferenceNumber" value="@organisation.ReferenceNumber" />
@@ -126,7 +138,7 @@
                                     <dd class="das-definition-list__definition">@organisation.Type.GetDescription()</dd>
                                 </dl>
                                 <p class="govuk-body govuk-!-margin-bottom-0">
-                                    Already added - <a asp-route="@RouteNames.EmployerAgreementIndex" asp-route-HashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" class="govuk-link">view my organisations</a>
+                                    Already added - <a asp-route="@RouteNames.EmployerAgreementIndex" asp-route-hashedAccountId="@hashedAccountId" class="govuk-link">view my organisations</a>
                                 </p>
                             </li>
                         }

@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using SFA.DAS.EmployerAccounts.Infrastructure;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
@@ -29,9 +30,9 @@ public class TaskController : BaseController
             return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
         }
 
-        var externalUserId = HttpContext.User.FindFirstValue("sub");
+        var externalUserId = HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserIdClaimTypeIdentifier);
 
-        _logger.LogDebug($"Task dismiss requested for account id '{viewModel.HashedAccountId}', user id '{externalUserId}' and task '{viewModel.TaskType}'");
+        _logger.LogDebug("Task dismiss requested for account id '{HashedAccountId}', user id '{ExternalUserId}' and task '{TaskType}'", viewModel.HashedAccountId, externalUserId, viewModel.TaskType);
 
         var result = await _orchestrator.DismissMonthlyReminderTask(viewModel.HashedAccountId, externalUserId, viewModel.TaskType);
 
@@ -39,7 +40,7 @@ public class TaskController : BaseController
         {
             //Curently we are not telling the user of the error and are instead just logging the issue
             //The error log will be done at a lower level
-            _logger.LogDebug($"Task dismiss requested failed for account id '{viewModel.HashedAccountId}', user id '{externalUserId}' and task '{viewModel.TaskType}'");
+            _logger.LogDebug("Task dismiss requested failed for account id '{HashedAccountId}', user id '{ExternalUserId}' and task '{TaskType}'", viewModel.HashedAccountId, externalUserId, viewModel.TaskType);
         }
 
         return RedirectToAction("Index", "EmployerTeam");

@@ -6,6 +6,7 @@
     ViewBag.GaData.Vpv = "/accounts/agreements/accepted-employer-agreement";
     ViewBag.ZenDeskLabel = "eas-accepted-employer-agreement";
     ViewBag.ShowNav = false;
+    var hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId];
 }
 
 <div class="govuk-grid-row">
@@ -34,10 +35,10 @@
         @if (ViewBag.HasFurtherPendingAgreements)
         {
             <div class="govuk-inset-text">
-                You still need to <a class="govuk-link" href="@Url.Action(ControllerConstants.IndexActionName)">review and accept your other agreements</a>.
+                You still need to <a class="govuk-link" asp-route="@RouteNames.EmployerAgreementIndex" asp-route-hashedAccountId="@hashedAccountId">review and accept your other agreements</a>.
             </div>
         }
 
-        <a class="govuk-button" asp-route="@RouteNames.EmployerTeamIndex" asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]">View your account</a>
+        <a class="govuk-button" asp-route="@RouteNames.EmployerTeamIndex" asp-route-hashedAccountId="@hashedAccountId">View your account</a>
     </div>
 </div>

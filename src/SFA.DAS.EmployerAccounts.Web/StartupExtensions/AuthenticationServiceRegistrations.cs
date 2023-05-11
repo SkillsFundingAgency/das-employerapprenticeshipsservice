@@ -8,6 +8,7 @@ using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
 using SFA.DAS.EmployerAccounts.Web.Cookies;
 using SFA.DAS.EmployerAccounts.Web.Handlers;
+using SFA.DAS.GovUK.Auth.Authentication;
 using SFA.DAS.GovUK.Auth.Services;
 
 namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
@@ -23,7 +24,9 @@ public static class EmployerAuthenticationServiceRegistrations
         services.AddSingleton<IAuthorizationHandler, EmployerAccountAllRolesAuthorizationHandler>();
         services.AddSingleton<IAuthorizationHandler, EmployerUsersIsOutsideAccountAuthorizationHandler>();
         services.AddSingleton<IAuthorizationHandler, EmployerAccountOwnerAuthorizationHandler>();
+        services.AddSingleton<IAuthorizationHandler, AccountActiveAuthorizationHandler>();//TODO remove after gov login enabled
         services.AddTransient<IUserAccountService, UserAccountService>();
+        
 
         services.AddAuthorization(options =>
         {
@@ -33,6 +36,7 @@ public static class EmployerAuthenticationServiceRegistrations
                 {
                     policy.RequireClaim(EmployerClaims.IdamsUserIdClaimTypeIdentifier);
                     policy.RequireAuthenticatedUser();
+                    policy.Requirements.Add(new AccountActiveRequirement());
                 });
 
             options.AddPolicy(
@@ -41,6 +45,7 @@ public static class EmployerAuthenticationServiceRegistrations
                 {
                     policy.RequireClaim(EmployerClaims.AccountsClaimsTypeIdentifier);
                     policy.Requirements.Add(new EmployerAccountOwnerRequirement());
+                    policy.Requirements.Add(new AccountActiveRequirement());
                     policy.RequireAuthenticatedUser();
                 });
             options.AddPolicy(
@@ -49,6 +54,7 @@ public static class EmployerAuthenticationServiceRegistrations
                 {
                     policy.RequireClaim(EmployerClaims.AccountsClaimsTypeIdentifier);
                     policy.Requirements.Add(new EmployerAccountAllRolesRequirement());
+                    policy.Requirements.Add(new AccountActiveRequirement());
                     policy.RequireAuthenticatedUser();
                 });
         });

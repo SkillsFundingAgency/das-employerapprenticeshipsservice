@@ -26,11 +26,20 @@
             <p>If you work with more than one organisation, they will need their own agreement with the Department for Education (<abbr>DfE</abbr>).<p>
             <p>If the organisation is not listed below you will need to add them.</p>
         </div>
-        <p class="govuk-body">You can add as many <a class="govuk-link" href="https://www.gov.uk/government/publications/employment-allowance-more-detailed-guidance" target="_blank">connected organisations</a> as you need to.</p>
+        <p class="govuk-body">You can add as many <a class="govuk-link" href="https://www.gov.uk/government/publications/employment-allowance-more-detailed-guidance" rel="noopener" target="_blank">connected organisations</a> as you need to.</p>
         <p class="govuk-body">
             Transfers status:&nbsp;
             <span>
-                enabled
+                @{
+                    if (@Model.Data.EmployerAgreementsData.MinimumSignedAgreementVersion >= 3)
+                    {
+                        @:enabled.
+                    }
+                    else
+                    {
+                        @:disabled.
+                    }
+                }
             </span>
         </p>
         <p class="govuk-!-margin-bottom-8">
@@ -69,7 +78,7 @@
                             @:Accepted
                         }
                     </td>
-                    <td class="govuk-table__cell">
+                    <td class="govuk-table__cell govuk-table__cell--numeric">
                         <a asp-controller="@ControllerConstants.EmployerAgreementControllerName" asp-action="@ControllerConstants.ViewAllAgreementActionName" asp-all-route-data="@routeData" class="govuk-link">View all agreements</a>
                     </td>
                     <td class="govuk-table__cell govuk-table__cell--numeric">

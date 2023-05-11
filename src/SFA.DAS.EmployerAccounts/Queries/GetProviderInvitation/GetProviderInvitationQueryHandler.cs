@@ -18,9 +18,12 @@ public class GetProviderInvitationQueryHandler : IRequestHandler<GetProviderInvi
 
     public async Task<GetProviderInvitationResponse> Handle(GetProviderInvitationQuery message, CancellationToken cancellationToken)
     {
-        _logger.LogInformation($"Get Invitations for {message.CorrelationId}");
+        _logger.LogInformation("Get Invitations for {message.CorrelationId}", message.CorrelationId);
+
         var json = await _providerRegistrationApiClient.GetInvitations(message.CorrelationId.ToString());
-        _logger.LogInformation($"Request sent Get Invitations for {message.CorrelationId} {json}");
+
+        _logger.LogInformation("Request sent Get Invitations for {CorrelationId} {Json}", message.CorrelationId, json);
+
         return new GetProviderInvitationResponse
         {
             Result = json == null ? null : JsonConvert.DeserializeObject<ProviderInvitation>(json)

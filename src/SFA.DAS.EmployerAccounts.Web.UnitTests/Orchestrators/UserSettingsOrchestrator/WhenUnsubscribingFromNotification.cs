@@ -50,7 +50,7 @@ public class WhenUnsubscribingFromNotification
                 }
             });
 
-        _sut = new Web.Orchestrators.UserSettingsOrchestrator(_mediator.Object, Mock.Of<ILogger<Web.Orchestrators.UserSettingsOrchestrator>>(), _endcodingService.Object);
+        _sut = new Web.Orchestrators.UserSettingsOrchestrator(_mediator.Object, Mock.Of<ILogger<Web.Orchestrators.UserSettingsOrchestrator>>(), _endcodingService.Object, null);
     }
 
     [Test]

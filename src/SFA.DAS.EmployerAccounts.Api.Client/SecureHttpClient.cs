@@ -1,9 +1,9 @@
-﻿using System.Net.Http;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Azure.Services.AppAuthentication;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Azure.Core;
+using Azure.Identity;
 
 namespace SFA.DAS.EmployerAccounts.Api.Client
 {
@@ -40,17 +40,20 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
 
         private static async Task<string> GetClientCredentialAuthenticationResult(string clientId, string clientSecret, string resource, string tenant)
         {
-            var authority = $"https://login.microsoftonline.com/{tenant}";
-            var clientCredential = new ClientCredential(clientId, clientSecret);
-            var context = new AuthenticationContext(authority, true);
-            var result = await context.AcquireTokenAsync(resource, clientCredential);
-            return result.AccessToken;
+            var credential = new ClientSecretCredential(tenantId: tenant, clientId: clientId, clientSecret: clientSecret);
+            var accessToken = await credential.GetTokenAsync(new TokenRequestContext(scopes: new[] { $"{resource}/.default" }));
+            return accessToken.Token;
         }
 
         private static async Task<string> GetManagedIdentityAuthenticationResult(string resource)
         {
-            var azureServiceTokenProvider = new AzureServiceTokenProvider();
-            return await azureServiceTokenProvider.GetAccessTokenAsync(resource);
+            var azureServiceTokenProvider = new ChainedTokenCredential(
+                new ManagedIdentityCredential(),
+                new AzureCliCredential(),
+                new VisualStudioCodeCredential(),
+                new VisualStudioCredential()
+                 );
+            return (await azureServiceTokenProvider.GetTokenAsync(new TokenRequestContext(scopes: new string[] { resource }))).Token;
         }
 
         private static bool IsClientCredentialConfiguration(string clientId, string clientSecret, string tenant)

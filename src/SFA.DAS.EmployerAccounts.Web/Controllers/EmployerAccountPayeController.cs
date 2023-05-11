@@ -15,21 +15,24 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 [Route("accounts")]
 public class EmployerAccountPayeController : BaseController
 {
+    private readonly IUrlActionHelper _urlActionHelper;
     private readonly EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
     private readonly LinkGenerator _linkGenerator;
 
     public EmployerAccountPayeController(
+        IUrlActionHelper urlActionHelper,
         EmployerAccountPayeOrchestrator employerAccountPayeOrchestrator,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
         LinkGenerator linkGenerator)
         : base(flashMessage)
     {
+        _urlActionHelper = urlActionHelper;
         _employerAccountPayeOrchestrator = employerAccountPayeOrchestrator;
         _linkGenerator = linkGenerator;
     }
 
     [HttpGet]
-    [Route("{HashedAccountId}/schemes")]
+    [Route("{HashedAccountId}/schemes", Name = RouteNames.EmployerAccountPaye)]
     public async Task<IActionResult> Index(string hashedAccountId)
     {
         var model = await _employerAccountPayeOrchestrator.Get(hashedAccountId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
@@ -55,14 +58,14 @@ public class EmployerAccountPayeController : BaseController
     }
 
     [HttpPost]
-    [Route("{HashedAccountId}/schemes/next")]
-    public IActionResult NextSteps(int? choice)
+    [Route("{HashedAccountId}/schemes/next", Name = RouteNames.PayePostNextSteps)]
+    public IActionResult NextSteps(string hashedAccountId, int? choice)
     {
         switch (choice ?? 0)
         {
-            case 1: return RedirectToAction(ControllerConstants.GatewayInformActionName);
-            case 2: return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerAccountTransactionsControllerName);
-            case 3: return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName);
+            case 1: return RedirectToAction(ControllerConstants.GatewayInformActionName, new { hashedAccountId });
+            case 2: return Redirect(_urlActionHelper.EmployerFinanceAction("finance"));
+            case 3: return RedirectToRoute(RouteNames.EmployerTeamIndex, new { hashedAccountId });
             default:
                 var model = new OrchestratorResponse<PayeSchemeNextStepsViewModel>
                 {
@@ -85,7 +88,7 @@ public class EmployerAccountPayeController : BaseController
     }
 
     [HttpGet]
-    [Route("{HashedAccountId}/schemes/gatewayInform")]
+    [Route("{HashedAccountId}/schemes/gatewayInform", Name = RouteNames.EmployerAccountPayeGatewayInform)]
     public async Task<IActionResult> GatewayInform(string hashedAccountId)
     {
         var response = await _employerAccountPayeOrchestrator.CheckUserIsOwner(
@@ -98,7 +101,7 @@ public class EmployerAccountPayeController : BaseController
     }
 
     [HttpGet]
-    [Route("{HashedAccountId}/schemes/gateway")]
+    [Route("{HashedAccountId}/schemes/gateway", Name = RouteNames.EmployerAccountPayeGateway)]
     public async Task<IActionResult> GetGateway(string hashedAccountId)
     {
         var redirectUrl = _linkGenerator.GetUriByAction(
@@ -146,8 +149,6 @@ public class EmployerAccountPayeController : BaseController
         {
             return View(result);
         }
-
-        var payeSchemeName = string.IsNullOrEmpty(model.PayeName) ? "this PAYE scheme" : model.PayeName;
 
         var flashMessage = new FlashMessageViewModel
         {

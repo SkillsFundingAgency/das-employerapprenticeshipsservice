@@ -19,13 +19,9 @@ using SFA.DAS.EmployerAccounts.Api.Filters;
 using SFA.DAS.EmployerAccounts.Api.ServiceRegistrations;
 using SFA.DAS.EmployerAccounts.Authorisation;
 using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Mappings;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
-using SFA.DAS.UnitOfWork.EntityFrameworkCore.DependencyResolution.Microsoft;
-using SFA.DAS.UnitOfWork.Mvc.Extensions;
-using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.Microsoft;
 using SFA.DAS.Validation.Mvc.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.Api;
@@ -93,7 +89,7 @@ public class Startup
 
                 opt.AddValidation();
 
-                opt.Filters.Add<StopwatchFilter>();
+                opt.Filters.Add<StopwatchFilterAttribute>();
             });
 
         services.AddApplicationInsightsTelemetry();
@@ -120,6 +116,7 @@ public class Startup
             .UseApiGlobalExceptionHandler(loggerFactory.CreateLogger("Startup"))
             .UseStaticFiles()
             .UseDasHealthChecks()
+            .UseAuthentication()
             //.UseUnitOfWork()
             .UseRouting()
             .UseAuthorization()

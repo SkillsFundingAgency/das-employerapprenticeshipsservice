@@ -1,9 +1,8 @@
 ﻿using SFA.DAS.EmployerAccounts.Data.Contracts;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 
-public class GetAccountEmployerAgreementsValidator : IValidator<GetAccountEmployerAgreementsRequest> 
+public class GetAccountEmployerAgreementsValidator : IValidator<GetAccountEmployerAgreementsRequest>
 {
     private readonly IMembershipRepository _membershipRepository;
 
@@ -23,7 +22,7 @@ public class GetAccountEmployerAgreementsValidator : IValidator<GetAccountEmploy
 
         if (string.IsNullOrEmpty(item.ExternalUserId))
         {
-            validationResult.AddError(nameof(item.ExternalUserId),"ExternalUserId has not been supplied");
+            validationResult.AddError(nameof(item.ExternalUserId), "ExternalUserId has not been supplied");
         }
         if (item.AccountId <= 0)
         {
@@ -41,7 +40,7 @@ public class GetAccountEmployerAgreementsValidator : IValidator<GetAccountEmploy
         {
             validationResult.IsUnauthorized = true;
         }
-                
+
 
         return validationResult;
     }

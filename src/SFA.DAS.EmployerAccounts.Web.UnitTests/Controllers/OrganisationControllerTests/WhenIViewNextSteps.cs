@@ -39,7 +39,7 @@ class WhenIViewNextSteps : ControllerTestBase
             });
 
         //Act
-        var result = _controller.OrganisationAddedNextSteps("test", hashedAccountId, hashedAgreementId).Result as ViewResult;
+        var result = _controller.OrganisationAddedNextSteps("test", hashedAccountId, hashedAgreementId) as ViewResult;
         var model = result?.Model as OrchestratorResponse<OrganisationAddedNextStepsViewModel>;
 
         //Assert
@@ -65,7 +65,7 @@ class WhenIViewNextSteps : ControllerTestBase
             });
 
         //Act
-        var result = _controller.OrganisationAddedNextStepsSearch("test", hashedAccountId, hashedAgreementId).Result as ViewResult;
+        var result = _controller.OrganisationAddedNextStepsSearch("test", hashedAccountId, hashedAgreementId) as ViewResult;
         var model = result?.Model as OrchestratorResponse<OrganisationAddedNextStepsViewModel>;
 
         //Assert

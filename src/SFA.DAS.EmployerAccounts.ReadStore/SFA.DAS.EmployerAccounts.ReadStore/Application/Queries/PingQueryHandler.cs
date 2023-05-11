@@ -27,9 +27,15 @@ internal class PingQueryHandler : IRequestHandler<PingQuery>
 
         if (value == 0)
         {
-            throw new Exception("Read store database ping failed");
+            throw new PingException();
         }
 
         return Task.FromResult(Unit.Value);
     }
+}
+
+[Serializable]
+public class PingException : SystemException
+{
+    public PingException() : base("Read store database ping failed") { }
 }

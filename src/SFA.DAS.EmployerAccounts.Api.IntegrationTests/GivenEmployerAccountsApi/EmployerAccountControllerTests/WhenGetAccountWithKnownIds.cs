@@ -15,7 +15,7 @@ public class WhenGetAccountWithKnownIds : GivenEmployerAccountsApi
     [SetUp]
     public async Task SetUp()
     {
-        EmployerAccountOutput _employerAccount = null;
+        EmployerAccountOutput? employerAccount = null;
 
         await InitialiseEmployerAccountData(async builder =>
         {
@@ -26,10 +26,10 @@ public class WhenGetAccountWithKnownIds : GivenEmployerAccountsApi
 
             await builder.SetupDataAsync(data);
 
-            _employerAccount = data.CurrentAccount.AccountOutput;
+            employerAccount = data.CurrentAccount.AccountOutput;
         });
 
-        WhenControllerActionIsCalled($"/api/accounts/{_employerAccount.HashedAccountId}");
+        WhenControllerActionIsCalled($"/api/accounts/{employerAccount?.HashedAccountId}");
     }
 
     [Test]

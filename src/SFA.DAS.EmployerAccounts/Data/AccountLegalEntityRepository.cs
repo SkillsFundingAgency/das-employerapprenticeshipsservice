@@ -1,17 +1,14 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models.Account;
 
 namespace SFA.DAS.EmployerAccounts.Data;
 
-public class AccountLegalEntityRepository : BaseRepository, IAccountLegalEntityRepository
+public class AccountLegalEntityRepository :  IAccountLegalEntityRepository
 {
     private readonly Lazy<EmployerAccountsDbContext> _db;
 
-    public AccountLegalEntityRepository(EmployerAccountsConfiguration configuration, ILogger<AccountLegalEntityRepository> logger, Lazy<EmployerAccountsDbContext> db)
-        : base(configuration.DatabaseConnectionString, logger)
+    public AccountLegalEntityRepository(Lazy<EmployerAccountsDbContext> db)
     {
         _db = db;
     }

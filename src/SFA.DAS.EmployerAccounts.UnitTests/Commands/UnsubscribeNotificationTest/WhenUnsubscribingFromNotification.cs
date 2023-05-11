@@ -12,7 +12,6 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.Notifications.Api.Client;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UnsubscribeNotificationTest
 {

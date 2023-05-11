@@ -4,7 +4,6 @@ using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Requests.Finance;
 using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Responses.Finance;
 using SFA.DAS.EmployerAccounts.Interfaces.OuterApi;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeInUse;
-using SFA.DAS.Validation;
 using DasEnglishFraction = SFA.DAS.EmployerAccounts.Models.Levy.DasEnglishFraction;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerEnglishFractionHistory;

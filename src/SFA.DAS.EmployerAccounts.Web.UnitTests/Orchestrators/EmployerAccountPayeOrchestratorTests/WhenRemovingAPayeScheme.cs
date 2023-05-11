@@ -74,7 +74,7 @@ public class WhenRemovingAPayeScheme
         var actual = await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(new RemovePayeSchemeViewModel());
 
         //Assert
-        Assert.AreEqual(actual.Status, HttpStatusCode.Unauthorized);
+        Assert.AreEqual( HttpStatusCode.Unauthorized, actual.Status);
 
     }
 
@@ -89,7 +89,7 @@ public class WhenRemovingAPayeScheme
         var actual = await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(new RemovePayeSchemeViewModel());
 
         //Assert
-        Assert.AreEqual(actual.Status, HttpStatusCode.BadRequest);
+        Assert.AreEqual(HttpStatusCode.BadRequest, actual.Status);
 
     }
 

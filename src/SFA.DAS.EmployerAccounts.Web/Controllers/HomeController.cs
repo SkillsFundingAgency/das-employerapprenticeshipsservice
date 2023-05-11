@@ -22,6 +22,7 @@ public class HomeController : BaseController
     private readonly ILogger<HomeController> _logger;
     private readonly IConfiguration _config;
     private readonly IStubAuthenticationService _stubAuthenticationService;
+    private readonly IUrlActionHelper _urlHelper;
 
     public const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
 
@@ -32,7 +33,7 @@ public class HomeController : BaseController
         ICookieStorageService<ReturnUrlModel> returnUrlCookieStorageService,
         ILogger<HomeController> logger,
         IConfiguration config,
-        IStubAuthenticationService stubAuthenticationService)
+        IStubAuthenticationService stubAuthenticationService, IUrlActionHelper urlHelper)
         : base(flashMessage)
     {
         _homeOrchestrator = homeOrchestrator;
@@ -41,6 +42,7 @@ public class HomeController : BaseController
         _logger = logger;
         _config = config;
         _stubAuthenticationService = stubAuthenticationService;
+        _urlHelper = urlHelper;
     }
 
     [Route("~/")]
@@ -54,12 +56,16 @@ public class HomeController : BaseController
 
         if (userIdClaim != null)
         {
-            var partialLogin = HttpContext.User.FindFirstValue(DasClaimTypes.RequiresVerification);
-
-            if (partialLogin.Equals("true", StringComparison.CurrentCultureIgnoreCase))
+            if (!_configuration.UseGovSignIn)
             {
-                return Redirect(ConfigurationFactory.Current.Get().AccountActivationUrl);
+                var partialLogin = HttpContext.User.FindFirstValue(DasClaimTypes.RequiresVerification);
+
+                if (partialLogin.Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    return Redirect(ConfigurationFactory.Current.Get().AccountActivationUrl);
+                }    
             }
+            
 
             var userRef = HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserIdClaimTypeIdentifier);
             var email = HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserEmailClaimTypeIdentifier);
@@ -78,6 +84,16 @@ public class HomeController : BaseController
             };
 
             return View(ControllerConstants.ServiceStartPageViewName, model);
+        }
+
+        // check if the GovSignIn is enabled
+        if (_configuration.UseGovSignIn)
+        {
+            // check if the user account is found, if not re-direct the user to the EmployerProfile Add User Details Page.
+            if (accounts.Data.Accounts.AccountList == null || accounts.Data.Accounts.AccountList.Count == 0)
+            {
+                return Redirect(_urlHelper.EmployerProfileAddUserDetails("/user/add-user-details"));
+            }
         }
 
         if (accounts.Data.Invitations > 0)
@@ -151,7 +167,7 @@ public class HomeController : BaseController
         var userId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
         if (string.IsNullOrWhiteSpace(userId))
         {
-            _logger.LogWarning($"UserId not found on OwinWrapper. Redirecting back to passed in returnUrl: {returnUrl}");
+            _logger.LogWarning("UserId not found on OwinWrapper. Redirecting back to passed in returnUrl: {ReturnUrl}", returnUrl);
             return Redirect(returnUrl);
         }
 
@@ -299,19 +315,33 @@ public class HomeController : BaseController
    
 
     [Route("signOut", Name = RouteNames.SignOut)]
-    new public async Task<IActionResult> SignOut()
+    public async Task<IActionResult> SignOutUser()
     {
         var idToken = await HttpContext.GetTokenAsync("id_token");
 
         var authenticationProperties = new AuthenticationProperties();
         authenticationProperties.Parameters.Clear();
         authenticationProperties.Parameters.Add("id_token", idToken);
+        if (_configuration.UseGovSignIn)
+        {
+            var schemes = new List<string>
+            {
+                CookieAuthenticationDefaults.AuthenticationScheme
+            };
+            _ = bool.TryParse(_config["StubAuth"], out var stubAuth);
+            if (!stubAuth)
+            {
+                schemes.Add(OpenIdConnectDefaults.AuthenticationScheme);
+            }
+            
+            return SignOut(authenticationProperties, schemes.ToArray());    
+        }
+        
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = "/", Parameters = { { "id_token", idToken } } }); 
-        SignOut(authenticationProperties, CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
-
+        await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = "/", Parameters = { { "id_token", idToken } } }); SignOut(authenticationProperties, CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
+        
         var constants = new Constants(_configuration.Identity);
-
+        
         return new RedirectResult(string.Format(constants.LogoutEndpoint(), idToken));
     }
 
@@ -389,13 +419,16 @@ public class HomeController : BaseController
     }
     [HttpPost]
     [Route("SignIn-Stub")]
-    public IActionResult SigninStubPost()
+    public async Task<IActionResult> SigninStubPost()
     {
-        _stubAuthenticationService?.AddStubEmployerAuth(Response.Cookies, new StubAuthUserDetails
+        var claims = await _stubAuthenticationService.GetStubSignInClaims(new StubAuthUserDetails
         {
             Email = _config["StubEmail"],
             Id = _config["StubId"]
-        }, true);
+        });
+
+        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claims,
+            new AuthenticationProperties());
 
         return RedirectToRoute("Signed-in-stub");
     }

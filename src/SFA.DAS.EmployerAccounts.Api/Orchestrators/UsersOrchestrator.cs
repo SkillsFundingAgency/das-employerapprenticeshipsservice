@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
 
         public async Task<ICollection<AccountDetail>> GetUserAccounts(string userRef)
         {
-            _logger.LogInformation($"Requesting user's accounts for user Ref  {userRef}");
+            _logger.LogInformation("Requesting user's accounts for user Ref {UserRef}", userRef);
 
             var accounts = await _mediator.Send(new GetUserAccountsQuery { UserRef = userRef });
 

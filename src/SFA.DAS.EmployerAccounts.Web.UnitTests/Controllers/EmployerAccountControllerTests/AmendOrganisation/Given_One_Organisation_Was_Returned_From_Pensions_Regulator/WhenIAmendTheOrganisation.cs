@@ -30,7 +30,7 @@ public class WhenIAmendTheOrganisation
     }
 
     [Test]
-    public async Task ThenTheSearchOrganisationPageIsDisplayed()
+    public void ThenTheSearchOrganisationPageIsDisplayed()
     {
         var response =  _employerAccountController.AmendOrganisation();
         var redirectResponse = (RedirectToActionResult)response;

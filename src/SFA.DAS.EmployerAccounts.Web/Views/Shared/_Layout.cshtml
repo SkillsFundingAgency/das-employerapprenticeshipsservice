@@ -108,13 +108,14 @@
     <script>
         document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
     </script>
-    @*@await Html.PartialAsync("_CookieBanner", HtmlHelpers.GetCookieBannerViewModel(Html))*@
+    
+    <partial name="_CookieBanner"></partial>
+
     <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
     @if (HtmlHelpers.IsSupportUser())
     {
         @(await Component.InvokeAsync(ComponentConstants.SupportUserBanner, new { model = Model is OrchestratorResponse ? Model?.Data : Model }))
     }
-
     @* ReSharper disable once Mvc.PartialViewNotResolved *@
     <partial name="_Header">
         @* ReSharper disable once Mvc.PartialViewNotResolved *@

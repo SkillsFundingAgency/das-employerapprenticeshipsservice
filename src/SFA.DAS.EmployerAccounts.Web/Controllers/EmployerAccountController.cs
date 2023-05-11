@@ -20,7 +20,7 @@ public class EmployerAccountController : BaseController
 {
     private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
     private readonly ILogger<EmployerAccountController> _logger;
-    private readonly IMediator _mediatr;
+    private readonly IMediator _mediator;
     private readonly ICookieStorageService<HashedAccountIdModel> _accountCookieStorage;
     private readonly LinkGenerator _linkGenerator;
     private readonly ICookieStorageService<ReturnUrlModel> _returnUrlCookieStorageService;
@@ -42,7 +42,7 @@ public class EmployerAccountController : BaseController
     {
         _employerAccountOrchestrator = employerAccountOrchestrator;
         _logger = logger;
-        _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr));
+        _mediator = mediatr ?? throw new ArgumentNullException(nameof(mediatr));
         _returnUrlCookieStorageService = returnUrlCookieStorageService;
         _accountCookieStorage = accountCookieStorage;
         _linkGenerator = linkGenerator;
@@ -118,7 +118,7 @@ public class EmployerAccountController : BaseController
 
             if (response.Status != HttpStatusCode.OK)
             {
-                _logger.LogWarning($"Gateway response does not indicate success. Status = {response.Status}.");
+                _logger.LogWarning("Gateway response does not indicate success. Status = {Status}.", response.Status);
                 response.Status = HttpStatusCode.OK;
 
                 AddFlashMessageToCookie(response.FlashMessage);
@@ -127,13 +127,13 @@ public class EmployerAccountController : BaseController
             }
 
             var externalUserId = HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserIdClaimTypeIdentifier);
-            _logger.LogInformation($"Gateway response is for user identity ID {externalUserId}");
+            _logger.LogInformation("Gateway response is for user identity ID {ExternalUserId}", externalUserId);
 
             var email = HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserEmailClaimTypeIdentifier);
             var empref = await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.Data.AccessToken, email);
-            _logger.LogInformation($"Gateway response is for empref {empref.Empref} \n {JsonConvert.SerializeObject(empref)}");
+            _logger.LogInformation("Gateway response is for empref {Empref} \n {SerializedEmpref}", empref.Empref, JsonConvert.SerializeObject(empref));
 
-            await _mediatr.Send(new SavePayeRefData(new EmployerAccountPayeRefData
+            await _mediator.Send(new SavePayeRefData(new EmployerAccountPayeRefData
             {
                 EmployerRefName = empref.EmployerLevyInformation?.Employer?.Name?.EmprefAssociatedName ?? "",
                 PayeReference = empref.Empref,
@@ -157,7 +157,7 @@ public class EmployerAccountController : BaseController
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Error processing Gateway response - {ex.Message}");
+            _logger.LogError(ex, "Error processing Gateway response - {Ex}", ex);
             throw;
         }
     }
@@ -180,15 +180,15 @@ public class EmployerAccountController : BaseController
 
     [HttpPost]
     [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
-    [Route("{HashedAccountId}/getApprenticeshipFunding", Order = 0, Name = RouteNames.EmployerAccountPostApprenticeshipFundingInAccount)]
+    [Route("{hashedAccountId}/getApprenticeshipFunding", Order = 0, Name = RouteNames.EmployerAccountPostApprenticeshipFundingInAccount)]
     [Route("getApprenticeshipFunding", Order = 1, Name = RouteNames.EmployerAccountPostApprenticeshipFunding)]
-    public IActionResult PostGetApprenticeshipFunding(int? choice)
+    public IActionResult GetApprenticeshipFunding(string hashedAccountId, int? choice)
     {
         switch (choice ?? 0)
         {
             case AddPayeLater: return RedirectToRoute(RouteNames.SkipRegistration);
-            case AddPayeNow: return RedirectToAction(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName);
-            case AddPayeNowAorn: return RedirectToAction(ControllerConstants.SearchUsingAornActionName, ControllerConstants.SearchPensionRegulatorControllerName);
+            case AddPayeNow: return RedirectToAction(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName, new { hashedAccountId });
+            case AddPayeNowAorn: return RedirectToAction(ControllerConstants.SearchUsingAornActionName, ControllerConstants.SearchPensionRegulatorControllerName, new { hashedAccountId });
             default:
                 {
                     var model = new

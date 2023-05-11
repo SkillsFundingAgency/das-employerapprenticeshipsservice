@@ -41,7 +41,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
 
         public async Task<PayeScheme> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
         {
-            _logger.LogInformation($"Getting paye scheme {payeSchemeRef} for account {hashedAccountId}");
+            _logger.LogInformation("Getting paye scheme {PayeSchemeRef} for account {HashedAccountId}", payeSchemeRef, hashedAccountId);
 
             var payeSchemeResult = await _mediator.Send(new GetPayeSchemeByRefQuery { HashedAccountId = hashedAccountId, Ref = payeSchemeRef });
             return payeSchemeResult.PayeScheme == null ? null : ConvertToPayeScheme(hashedAccountId, payeSchemeResult);
@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
 
         public async Task<AccountDetail> GetAccount(string hashedAccountId)
         {
-            _logger.LogInformation($"Getting account {hashedAccountId}");
+            _logger.LogInformation("Getting account {HashedAccountId}", hashedAccountId);
 
             var accountResult = await _mediator.Send(new GetEmployerAccountDetailByHashedIdQuery { HashedAccountId = hashedAccountId });
             return accountResult.Account == null ? null : ConvertToAccountDetail(accountResult);
@@ -90,7 +90,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
 
         public async Task<List<TeamMember>> GetAccountTeamMembers(long accountId)
         {
-            _logger.LogInformation($"Requesting team members for account {accountId}");
+            _logger.LogInformation("Requesting team members for account {AccountId}", accountId);
 
             var teamMembers = await _mediator.Send(new GetTeamMembersRequest(accountId));
             return teamMembers.TeamMembers.Select(x => _mapper.Map<TeamMember>(x)).ToList();
@@ -98,7 +98,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
 
         public async Task<List<TeamMember>> GetAccountTeamMembersWhichReceiveNotifications(long accountId)
         {
-            _logger.LogInformation($"Requesting team members which receive notifications for account {accountId}");
+            _logger.LogInformation("Requesting team members which receive notifications for account {AccountId}", accountId);
 
             var teamMembers = await _mediator.Send(new GetTeamMembersWhichReceiveNotificationsQuery { AccountId = accountId });
             return teamMembers.TeamMembersWhichReceiveNotifications.Select(x => _mapper.Map<TeamMember>(x)).ToList();
@@ -108,7 +108,6 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
         {
             try
             {
-
                 var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
                 var response = await _mediator.Send(new GetAccountPayeSchemesQuery { AccountId = accountId });
 
@@ -120,7 +119,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
             }
         }
 
-        private PayeScheme ConvertToPayeScheme(string hashedAccountId, GetPayeSchemeByRefResponse payeSchemeResult)
+        private static PayeScheme ConvertToPayeScheme(string hashedAccountId, GetPayeSchemeByRefResponse payeSchemeResult)
         {
             return new PayeScheme
             {

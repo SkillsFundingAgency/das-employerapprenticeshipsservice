@@ -7,6 +7,7 @@ using SFA.DAS.EmployerAccounts.Infrastructure;
 using SFA.DAS.EmployerAccounts.Models.UserAccounts;
 using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
+using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.GovUK.Auth.Services;
 
 namespace SFA.DAS.EmployerAccounts.Web.Handlers;
@@ -17,32 +18,15 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
     private readonly IConfiguration _configuration;
     private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
 
-    public EmployerAccountPostAuthenticationClaimsHandler(IUserAccountService userAccountService, IConfiguration configuration, IOptions<EmployerAccountsConfiguration> forecastingConfiguration)
+    public EmployerAccountPostAuthenticationClaimsHandler(IUserAccountService userAccountService, IConfiguration configuration, IOptions<EmployerAccountsConfiguration> employerAccountsConfiguration)
     {
         _userAccountService = userAccountService;
         _configuration = configuration;
-        _employerAccountsConfiguration = forecastingConfiguration.Value;
+        _employerAccountsConfiguration = employerAccountsConfiguration.Value;
     }
     public async Task<IEnumerable<Claim>> GetClaims(TokenValidatedContext tokenValidatedContext)
     {
         var claims = new List<Claim>();
-        if (_configuration.UseStubAuth())
-        {
-            var accountClaims = new Dictionary<string, EmployerUserAccountItem>();
-            accountClaims.Add("", new EmployerUserAccountItem
-            {
-                Role = "Owner",
-                AccountId = "ABC123",
-                EmployerName = "Stub Employer"
-            });
-            claims.AddRange(new[]
-            {
-                new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, JsonConvert.SerializeObject(accountClaims)),
-                new Claim(EmployerClaims.IdamsUserEmailClaimTypeIdentifier, _configuration["NoAuthEmail"]),
-                new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, Guid.NewGuid().ToString())
-            });
-            return claims.ToList();
-        }
 
         string userId;
         var email = string.Empty;
@@ -67,7 +51,7 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
                 .First(c => c.Type.Equals(EmployerClaims.IdamsUserEmailClaimTypeIdentifier)).Value;
 
             claims.AddRange(tokenValidatedContext.Principal.Claims);
-            claims.Add(new Claim("sub", userId));
+            claims.Add(new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, userId));
         }
 
         var result = await _userAccountService.GetUserAccounts(userId, email);
@@ -80,9 +64,16 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
         {
             return claims;
         }
-
+        
+        if (result.IsSuspended)
+        {
+            claims.Add(new Claim(ClaimTypes.AuthorizationDecision, "Suspended"));
+        }
+        
         claims.Add(new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, result.EmployerUserId));
         claims.Add(new Claim(EmployerClaims.IdamsUserDisplayNameClaimTypeIdentifier, result.FirstName + " " + result.LastName));
+        claims.Add(new Claim(DasClaimTypes.GivenName, result.FirstName));
+        claims.Add(new Claim(DasClaimTypes.FamilyName, result.LastName));
 
         return claims;
     }

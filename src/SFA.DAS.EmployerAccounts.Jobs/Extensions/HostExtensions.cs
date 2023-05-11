@@ -6,7 +6,6 @@ using SFA.DAS.EmployerAccounts.Jobs.ServiceRegistrations;
 using SFA.DAS.EmployerAccounts.Jobs.StartupJobs;
 using SFA.DAS.EmployerAccounts.ReadStore.ServiceRegistrations;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
-using SFA.DAS.UnitOfWork.DependencyResolution.Microsoft;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.Extensions;
 
@@ -16,11 +15,11 @@ public static class HostExtensions
     {
         builder.ConfigureLogging((context, loggingBuilder) =>
         {
-            var appInsightsKey = context.Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"];
-            if (!string.IsNullOrEmpty(appInsightsKey))
+            var connectionString = context.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"];
+            if (!string.IsNullOrEmpty(connectionString))
             {
                 loggingBuilder.AddNLog(context.HostingEnvironment.IsDevelopment() ? "nlog.development.config" : "nlog.config");
-                loggingBuilder.AddApplicationInsightsWebJobs(o => o.InstrumentationKey = appInsightsKey);
+                loggingBuilder.AddApplicationInsightsWebJobs(o => o.ConnectionString = connectionString);
             }
             loggingBuilder.AddConsole();
         });
@@ -58,17 +57,15 @@ public static class HostExtensions
                 services.AddLogging();
                 services.AddApplicationServices();
                 services.AddReadStoreServices();
+                services.AddDatabaseRegistration();
                 services.AddTransient<CreateReadStoreDatabaseJob>();
                 services.AddTransient<SeedAccountUsersJob>();
                 services.AddTransient<IRunOnceJobsService, RunOnceJobsService>();
                 services.AddTransient<IRetryStrategy>(_ => new ExponentialBackoffRetryAttribute(5, "00:00:10", "00:00:20"));
-                services.AddUnitOfWork();
+                //services.AddUnitOfWork();
 #pragma warning disable 618
                 services.AddSingleton<IWebHookProvider>(p => null);
-#pragma warning restore 618}
-                services.AddEmployerFinanceDbContext();
-                services.AddNServiceBus();
-                services.BuildServiceProvider();
+#pragma warning restore 618
             });
 
 

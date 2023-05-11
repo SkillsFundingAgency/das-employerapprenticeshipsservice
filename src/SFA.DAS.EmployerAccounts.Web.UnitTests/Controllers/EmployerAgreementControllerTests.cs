@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using AutoMapper;
 using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Primitives;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Dtos;
+using SFA.DAS.EmployerAccounts.Infrastructure;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesCountByHashedAccountId;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
@@ -24,8 +24,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
     private Mock<EmployerAgreementOrchestrator> _orchestratorMock;
     private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
     private Mock<IMediator> _mediator;
-    private Mock<IMapper> _mapper;
-
+    
     private const string HashedAccountLegalEntityId = "AYT887";
     private const string HashedAccountId = "ABC167";
     private const string UserId = "UserNumeroUno";
@@ -37,7 +36,6 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
         _orchestratorMock = new Mock<EmployerAgreementOrchestrator>();
         _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
         _mediator = new Mock<IMediator>();
-        _mapper = new Mock<IMapper>();
 
         var httpRequestMock = new Mock<HttpRequest>();
         var httpContextMock = new Mock<HttpContext>();
@@ -48,7 +46,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
         httpRequestMock.Setup(x => x.Query).Returns(queryCollection);
         httpContextMock.Setup(x => x.Request).Returns(httpRequestMock.Object);
 
-        var identity = new ClaimsIdentity(new[] { new Claim("sub", UserId) });
+        var identity = new ClaimsIdentity(new[] { new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, UserId) });
 
         var principal = new ClaimsPrincipal(identity);
 
@@ -58,7 +56,6 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
             _orchestratorMock.Object,
             _flashMessage.Object,
             _mediator.Object,
-            _mapper.Object,
             Mock.Of<IUrlActionHelper>());
 
         _controller.ControllerContext = new ControllerContext { HttpContext = httpContextMock.Object };
@@ -89,18 +86,18 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
     {
         //Arrange
         _orchestratorMock
-            .Setup(x => x.GetConfirmRemoveOrganisationViewModel(HashedAccountLegalEntityId, HashedAccountId, UserId))
+            .Setup(x => x.GetConfirmRemoveOrganisationViewModel(HashedAccountId, HashedAccountLegalEntityId, UserId))
                     .ReturnsAsync(new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>
                     {
                         Data = new ConfirmOrganisationToRemoveViewModel
                         {
-                          CanBeRemoved = true  
+                            CanBeRemoved = true
                         },
                         Status = HttpStatusCode.OK
                     });
 
         //Act
-        var response = await _controller.ConfirmRemoveOrganisation(HashedAccountLegalEntityId, HashedAccountId);
+        var response = await _controller.ConfirmRemoveOrganisation(HashedAccountId, HashedAccountLegalEntityId);
 
         //Assert
         ViewResult viewResult = response as ViewResult;
@@ -112,7 +109,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
     {
         //Arrange
         _orchestratorMock
-            .Setup(x => x.GetConfirmRemoveOrganisationViewModel(HashedAccountLegalEntityId, HashedAccountId, UserId))
+            .Setup(x => x.GetConfirmRemoveOrganisationViewModel(HashedAccountId, HashedAccountLegalEntityId, UserId))
                     .ReturnsAsync(new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>
                     {
                         Data = new ConfirmOrganisationToRemoveViewModel
@@ -123,7 +120,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
                     });
 
         //Act
-        var response = await _controller.ConfirmRemoveOrganisation(HashedAccountLegalEntityId, HashedAccountId);
+        var response = await _controller.ConfirmRemoveOrganisation(HashedAccountId, HashedAccountLegalEntityId);
 
         //Assert
         ViewResult viewResult = response as ViewResult;
@@ -141,7 +138,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
                 }),
             act: fixtures => fixtures.ConfirmRemoveOrganisation(),
             assert: (fixtures, result) => fixtures.Orchestrator.Verify(
-                x => x.GetConfirmRemoveOrganisationViewModel(fixtures.HashedAccountLegalEntityId, fixtures.HashedAccountId, fixtures.UserId), Times.Once));
+                x => x.GetConfirmRemoveOrganisationViewModel(fixtures.HashedAccountId, fixtures.HashedAccountLegalEntityId, fixtures.UserId), Times.Once));
     }
 
     [Test]
@@ -166,8 +163,8 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
         //Assert
         var result = response as RedirectToActionResult;
         Assert.IsNotNull(result);
-        Assert.AreEqual(result.ActionName, "AboutYourAgreement");
-        Assert.AreEqual(result.RouteValues["agreementId"], HashedAgreementId);
+        Assert.AreEqual("AboutYourAgreement", result.ActionName);
+        Assert.AreEqual(HashedAgreementId, result.RouteValues["agreementId"]);
     }
 
     [Test, MoqAutoData]
@@ -176,8 +173,8 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
         //Arrange
         _orchestratorMock
             .Setup(x => x.GetSignedAgreementViewModel(HashedAccountId, HashedAgreementId, UserId))
-            .ReturnsAsync(new OrchestratorResponse<SignEmployerAgreementViewModel> 
-            { 
+            .ReturnsAsync(new OrchestratorResponse<SignEmployerAgreementViewModel>
+            {
                 Data = viewModel
             });
 
@@ -227,15 +224,15 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
             });
 
         //Act
-        var response = await _controller.Sign(HashedAgreementId, HashedAccountId, null);
+        var response = await _controller.Sign(HashedAccountId, HashedAgreementId, null);
 
         //Assert
         var viewResult = response as ViewResult;
         var model = viewResult.Model as SignEmployerAgreementViewModel;
         var modelState = _controller.ModelState;
 
-        Assert.AreEqual(viewResult.ViewName, ControllerConstants.SignAgreementViewName);
-        Assert.AreEqual(viewModel, model);
+        Assert.AreEqual(ControllerConstants.SignAgreementViewName, viewResult.ViewName);
+        Assert.AreEqual(model, viewModel);
         Assert.IsTrue(modelState[nameof(model.Choice)].Errors.Count == 1);
     }
 
@@ -246,7 +243,7 @@ public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementCont
             arrange: fixtures =>
             {
                 fixtures.Orchestrator
-                    .Setup(x => x.GetById(fixtures.HashedAgreementId, fixtures.HashedAccountId, fixtures.UserId))
+                    .Setup(x => x.GetById(fixtures.HashedAccountId, fixtures.HashedAgreementId, fixtures.UserId))
                     .ReturnsAsync(new OrchestratorResponse<EmployerAgreementViewModel>
                     {
                         Data = new EmployerAgreementViewModel { EmployerAgreement = new EmployerAgreementView { LegalEntityName = fixtures.LegalEntityName } }
@@ -294,15 +291,13 @@ public class EmployerAgreementControllerTestFixtures : FluentTest<EmployerAgreem
     public Mock<EmployerAgreementOrchestrator> Orchestrator;
     public Mock<ICookieStorageService<FlashMessageViewModel>> FlashMessage;
     public Mock<IMediator> Mediator;
-    public Mock<IMapper> Mapper;
 
     public EmployerAgreementControllerTestFixtures()
     {
         Orchestrator = new Mock<EmployerAgreementOrchestrator>();
         FlashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
         Mediator = new Mock<IMediator>();
-        Mapper = new Mock<IMapper>();
-
+        
         GetAgreementRequest = new GetEmployerAgreementRequest
         {
             ExternalUserId = UserId,
@@ -318,22 +313,12 @@ public class EmployerAgreementControllerTestFixtures : FluentTest<EmployerAgreem
         GetSignAgreementViewModel = new SignEmployerAgreementViewModel();
     }
 
-    public static class Constants
-    {
-        public const string HashedAccountId = "ABC123";
-        public const string UserId = "AFV456TGF";
-        public const string HashedAgreementId = "789UHY";
-        public const long AccountLegalEntityId = 1234;
-        public const string HashedAccountLegalEntityId = "THGHFH";
-        public const string LegalEntityName = "FIFTEEN LIMITED";
-    }
-
-    public string HashedAccountId => Constants.HashedAccountId;
-    public string UserId => Constants.UserId;
-    public string HashedAgreementId => Constants.HashedAgreementId;
-    public long AccountLegalEntityId => Constants.AccountLegalEntityId;
-    public string LegalEntityName => Constants.LegalEntityName;
-    public string HashedAccountLegalEntityId => Constants.HashedAccountLegalEntityId;
+    public string HashedAccountId => "ABC123";
+    public string UserId => "AFV456TGF";
+    public string HashedAgreementId => "789UHY";
+    public long AccountLegalEntityId => 1234;
+    public string LegalEntityName => "FIFTEEN LIMITED";
+    public string HashedAccountLegalEntityId => "THGHFH";
 
     public GetEmployerAgreementRequest GetAgreementRequest { get; }
 
@@ -359,12 +344,6 @@ public class EmployerAgreementControllerTestFixtures : FluentTest<EmployerAgreem
 
         Mediator.Setup(x => x.Send(It.IsAny<GetAccountLegalEntitiesCountByHashedAccountIdRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(entitiesCountResponse);
-
-        Mapper.Setup(x => x.Map<GetEmployerAgreementResponse, EmployerAgreementViewModel>(agreementResponse))
-            .Returns(GetAgreementToSignViewModel);
-
-        Mapper.Setup(x => x.Map<GetEmployerAgreementResponse, SignEmployerAgreementViewModel>(agreementResponse))
-            .Returns(GetSignAgreementViewModel);
 
         Orchestrator.Setup(x => x.GetById(HashedAgreementId, HashedAccountId, UserId))
             .ReturnsAsync(new OrchestratorResponse<EmployerAgreementViewModel> { Data = GetAgreementToSignViewModel });
@@ -394,7 +373,7 @@ public class EmployerAgreementControllerTestFixtures : FluentTest<EmployerAgreem
         httpRequestMock.Setup(x => x.Query).Returns(queryCollection);
         httpContextMock.Setup(x => x.Request).Returns(httpRequestMock.Object);
 
-        var identity = new ClaimsIdentity(new[] { new Claim("sub", isAuthenticatedUser ? Constants.UserId : string.Empty) });
+        var identity = new ClaimsIdentity(new[] { new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, isAuthenticatedUser ? "AFV456TGF" : string.Empty) });
 
         var principal = new ClaimsPrincipal(identity);
 
@@ -404,7 +383,6 @@ public class EmployerAgreementControllerTestFixtures : FluentTest<EmployerAgreem
             Orchestrator.Object,
             FlashMessage.Object,
             Mediator.Object,
-            Mapper.Object,
             Mock.Of<IUrlActionHelper>());
 
         controller.ControllerContext = new ControllerContext { HttpContext = httpContextMock.Object };
@@ -415,7 +393,7 @@ public class EmployerAgreementControllerTestFixtures : FluentTest<EmployerAgreem
     public Task<IActionResult> ConfirmRemoveOrganisation()
     {
         var controller = CreateController();
-        return controller.ConfirmRemoveOrganisation(HashedAccountLegalEntityId, HashedAccountId);
+        return controller.ConfirmRemoveOrganisation(HashedAccountId, HashedAccountLegalEntityId);
     }
 
     public async Task<RedirectToActionResult> ViewUnsignedAgreements()

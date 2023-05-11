@@ -24,7 +24,7 @@ public class ReportController : BaseController
     {
         if (Guid.TryParse(correlationId, out var correlationGuid))
         {
-            _logger.LogDebug($"Reporting Training Provider with correlationId: {correlationId}");
+            _logger.LogDebug("Reporting Training Provider with correlationId: {CorrelationId}", correlationId);
 
             //If being reported, unsubscribe to not get further notifications anyway
             await _mediator.Send(new UnsubscribeProviderEmailCommand
@@ -46,7 +46,7 @@ public class ReportController : BaseController
                         invitation.Result.ProviderUserFullName,
                         invitation.Result.SentDate
                     )
-                ); ;
+                );
             }
         }
 

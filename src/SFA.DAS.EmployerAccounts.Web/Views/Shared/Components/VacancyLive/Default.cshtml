@@ -19,7 +19,7 @@
                 @(Model?.Title)
             </td>
         </tr>
-        <tr>
+        <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header">
                 Closing date
             </th>
@@ -27,7 +27,7 @@
                 @(Model.ClosingDateText)
             </td>
         </tr>
-        <tr>
+        <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header">
                 Applications
             </th>
@@ -35,7 +35,7 @@
                 <a href="@Model.ManageVacancyUrl" class="govuk-link">@applicationsTextPrefix @(!Model.NoOfApplications.GetValueOrDefault().Equals(0) ? $"{Model.NoOfApplications.Value}" : "No applications yet")  @applicationsTextSuffix</a>
             </td>
         </tr>
-        <tr>
+        <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header">
                 Status
             </th>
@@ -45,7 +45,7 @@
         </tr>
     </table>
     <p>
-        <a href="@UrlHelper.EmployerCommitmentsV2Action("unapproved/inform")" role="button" draggable="false" class="button">
+        <a href="@UrlHelper.EmployerCommitmentsV2Action("unapproved/inform")" role="button" draggable="false" class="govuk-button">
             Add apprentice details
         </a>
     </p>

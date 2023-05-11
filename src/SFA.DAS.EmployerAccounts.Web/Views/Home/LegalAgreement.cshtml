@@ -20,20 +20,20 @@
 
         @if (Model)
         {
-            <div class="grid-row">
-                <div class="column-full">
-                    <table class="sign-agreement">
-                        <tr>
-                            <th>Signed by:</th>
-                            <td>__SignedByName__</td>
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full">
+                    <table class="govuk-table">
+                        <tr class="govuk-table__row">
+                            <th class="govuk-table__header">Signed by:</th>
+                            <td class="govuk-table__cell">__SignedByName__</td>
                         </tr>
-                        <tr>
-                            <th>On behalf of:</th>
-                            <td>__LegalEntityName__</td>
+                        <tr class="govuk-table__row">
+                            <th class="govuk-table__header"><span class="das-no-wrap">On behalf of:</span></th>
+                            <td class="govuk-table__cell">__LegalEntityName__</td>
                         </tr>
-                        <tr>
-                            <th>Address:</th>
-                            <td>
+                        <tr class="govuk-table__row">
+                            <th class="govuk-table__header">Address:</th>
+                            <td class="govuk-table__cell">
                                 <span>__LegalEntityAddress_0__</span><br/>
                                 <span>__LegalEntityAddress_1__</span><br />
                                 <span>__LegalEntityAddress_2__</span><br />
@@ -41,17 +41,17 @@
                                 <span>__LegalEntityAddress_4__</span>
                             </td>
                         </tr>
-                        <tr>
-                            <th>Signed on:</th>
-                            <td>__SignedDate__</td>
+                        <tr class="govuk-table__row">
+                            <th class="govuk-table__header">Signed on:</th>
+                            <td class="govuk-table__cell">__SignedDate__</td>
                         </tr>
                     </table>
                 </div>
             </div>
         }
 
-        <div class="grid-row" id="publication-banner">
-            <div class="column-third">
+        <div class="govuk-grid-row" id="publication-banner">
+            <div class="govuk-grid-column-one-third">
                 <div class="sfa-logo">
                     <h1>
                         <span class="organisation-logo">

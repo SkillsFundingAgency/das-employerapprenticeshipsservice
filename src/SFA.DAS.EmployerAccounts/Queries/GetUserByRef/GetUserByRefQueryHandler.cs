@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 
@@ -26,7 +25,7 @@ public class GetUserByRefQueryHandler : IRequestHandler<GetUserByRefQuery, GetUs
             throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        _logger.LogDebug($"Getting user with ref {message.UserRef}");
+        _logger.LogDebug("Getting user with ref {UserRef}", message.UserRef);
 
         var user = await _repository.GetUserByRef(message.UserRef);
 

@@ -9,15 +9,17 @@ public static class DasEnvironmentName
     public static readonly string ModelOffice = nameof(ModelOffice);
     public static readonly string Demonstration = nameof(Demonstration);
 
-    public static readonly Dictionary<string, string> Map = new(StringComparer.CurrentCultureIgnoreCase)
-        {
-            { "LOCAL", "Development" },
-            { "AT", AcceptanceTest },
-            { "TEST", Test },
-            { "TEST2", Test2 },
-            { "PREPROD", PreProduction },
-            { "PROD", "Production" },
-            { "MO", ModelOffice },
-            { "DEMO", Demonstration }
-        };
+    private static readonly Dictionary<string, string> Environments = new(StringComparer.CurrentCultureIgnoreCase)
+    {
+        { "LOCAL", "Development" },
+        { "AT", AcceptanceTest },
+        { "TEST", Test },
+        { "TEST2", Test2 },
+        { "PREPROD", PreProduction },
+        { "PROD", "Production" },
+        { "MO", ModelOffice },
+        { "DEMO", Demonstration }
+    };
+
+    public static IReadOnlyDictionary<string, string> Map => Environments;
 }

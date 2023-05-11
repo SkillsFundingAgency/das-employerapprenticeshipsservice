@@ -10,8 +10,8 @@
 @if (!string.IsNullOrEmpty(viewModel?.FlashMessage?.Message) || !string.IsNullOrEmpty(viewModel?.FlashMessage?.SubMessage) || !string.IsNullOrEmpty(viewModel?.FlashMessage?.Headline))
 {
 
-    <div class="grid-row notification-wrapper">
-        <div class="column-two-thirds">
+    <div class="govuk-grid-row notification-wrapper">
+        <div class="govuk-grid-column-two-thirds">
             <div class="@viewModel.FlashMessage.SeverityCssClass" tabindex="-1">
                 @if (!string.IsNullOrWhiteSpace(viewModel.FlashMessage.Headline))
                 {

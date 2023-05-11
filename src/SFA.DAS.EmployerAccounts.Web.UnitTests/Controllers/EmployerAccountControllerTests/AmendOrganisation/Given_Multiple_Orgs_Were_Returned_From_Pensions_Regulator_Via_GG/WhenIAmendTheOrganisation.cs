@@ -31,7 +31,7 @@ public class WhenIAmendTheOrganisation
     }
 
     [Test]
-    public async Task ThenTheGovernmentGatewayPensionRegulatorChooseOrganisationPageIsDisplayed()
+    public void ThenTheGovernmentGatewayPensionRegulatorChooseOrganisationPageIsDisplayed()
     {
         var response = _employerAccountController.AmendOrganisation();
         var redirectResponse = (RedirectToActionResult)response;

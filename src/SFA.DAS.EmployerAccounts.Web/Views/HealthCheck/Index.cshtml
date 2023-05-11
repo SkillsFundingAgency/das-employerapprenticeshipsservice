@@ -4,34 +4,33 @@
     ViewBag.Title = "Health check";
 }
 
-<div class="grid-row">
-    <div class="column-full">
-        <h1 class="heading-xlarge">Health check</h1>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-xl">Health check</h1>
         <p>Running a health check will test the availability of each application. Please note that this can take a few minutes to complete.</p>
         @using (Html.BeginForm())
         {
-            @Html.AntiForgeryToken()
-            <div class="form-group">
+            <div class="govuk-form-group">
                 @if (Model.HealthCheck != null)
                 {
                     <table class="table-font-xsmall">
-                        <thead>
-                            <tr>
-                                <td></td>
+                        <thead class="govuk-table__head">
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell"></td>
                                 <th colspan="2" style="text-align: center">Request/Response</th>
                                 <th colspan="2" style="text-align: center">Publish/Subscribe</th>
                             </tr>
-                            <tr>
-                                <td></td>
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell"></td>
                                 <td style="text-align: center">Request sent</td>
                                 <td style="text-align: center">Response received</td>
                                 <td style="text-align: center">Event published</td>
                                 <td style="text-align: center">Event received</td>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>SFA.DAS.EmployerAccounts</td>
+                        <tbody class="govuk-table__body">
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">SFA.DAS.EmployerAccounts</td>
                                 <td style="text-align: center">@Model.HealthCheck.SentRequest.ToString("HH:mm:ss")</td>
                                 <td style="text-align: center">@(Model.HealthCheck.ReceivedResponse?.ToString("HH:mm:ss") ?? "Failed")</td>
                                 <td style="text-align: center">@Model.HealthCheck.PublishedEvent.ToString("HH:mm:ss")</td>
@@ -54,7 +53,7 @@
                     <p>A health check has not been run since the last deployment, please click the run button below.</p>
                 }
             </div>
-            <button class="button" type="submit">Run</button>
+            <button class="govuk-button" type="submit">Run</button>
         }
     </div>
 </div>

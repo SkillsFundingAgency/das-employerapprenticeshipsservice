@@ -34,7 +34,7 @@ public class SearchPensionRegulatorOrchestrator : UserVerificationOrchestratorBa
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, ex.Message);
+            _logger.LogError(ex, "{Message}", ex.Message);
             response.Data.Results = new List<PensionRegulatorDetailsViewModel>();
         }
 
@@ -43,7 +43,7 @@ public class SearchPensionRegulatorOrchestrator : UserVerificationOrchestratorBa
 
     public virtual async Task<OrchestratorResponse<SearchPensionRegulatorResultsViewModel>> GetOrganisationsByAorn(string aorn, string payeRef)
     {
-        var response = new OrchestratorResponse<SearchPensionRegulatorResultsViewModel>() { Data = new SearchPensionRegulatorResultsViewModel { Aorn = aorn, PayeRef = payeRef } };
+        var response = new OrchestratorResponse<SearchPensionRegulatorResultsViewModel> { Data = new SearchPensionRegulatorResultsViewModel { Aorn = aorn, PayeRef = payeRef } };
 
         try
         {
@@ -53,7 +53,7 @@ public class SearchPensionRegulatorOrchestrator : UserVerificationOrchestratorBa
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, ex.Message);
+            _logger.LogError(ex, "{Message}", ex.Message);
             response.Data.Results = new List<PensionRegulatorDetailsViewModel>();
         }
 

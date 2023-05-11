@@ -17,12 +17,10 @@ public class CreateAuditCommandValidator : IValidator<CreateAuditCommand>
             validationResult.AddError(nameof(item.EasAuditMessage.Description));
         }
 
-        if (item.EasAuditMessage.ChangedProperties==null || !item.EasAuditMessage.ChangedProperties.Any())
+        if ((item.EasAuditMessage.ChangedProperties==null || !item.EasAuditMessage.ChangedProperties.Any()) 
+            && (item.EasAuditMessage.Category == null || !item.EasAuditMessage.Category.Equals("VIEW", StringComparison.InvariantCultureIgnoreCase)))
         {
-            if (item.EasAuditMessage.Category == null || !item.EasAuditMessage.Category.Equals("VIEW", StringComparison.InvariantCultureIgnoreCase))
-            {
-                validationResult.AddError(nameof(item.EasAuditMessage.ChangedProperties));
-            }
+            validationResult.AddError(nameof(item.EasAuditMessage.ChangedProperties));
         }
             
         if (string.IsNullOrEmpty(item.EasAuditMessage.AffectedEntity?.Id) || string.IsNullOrEmpty(item.EasAuditMessage.AffectedEntity?.Type))

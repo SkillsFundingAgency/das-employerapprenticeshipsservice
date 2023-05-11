@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.Authentication;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 
@@ -14,7 +13,6 @@ public class WhenICreateAnAccount : ControllerTestBase
 {
     private EmployerAccountController _employerAccountController;
     private Mock<EmployerAccountOrchestrator> _orchestrator;
-    private Mock<IAuthenticationService> _owinWrapper;
     private const string ExpectedRedirectUrl = "http://redirect.local.test";
     private EmployerAccountData _accountData;
     private OrchestratorResponse<EmployerAgreementViewModel> _response;

@@ -150,8 +150,6 @@ public class ReferenceDataService : IReferenceDataService
             outputList.Add(item);
         }
 
-
-
         return outputList;
     }
 
@@ -161,11 +159,11 @@ public class ReferenceDataService : IReferenceDataService
     /// <param name="rawOrganisations">The list of matching organisations</param>
     /// <param name="searchTerm">The search term used</param>
     /// <param name="outputList">The output list</param>
-    private void AddOrganisationsLooselyMatchingSearchByPosition(IEnumerable<OrganisationName> rawOrganisations, string searchTerm, List<OrganisationName> outputList)
+    private static void AddOrganisationsLooselyMatchingSearchByPosition(IEnumerable<OrganisationName> rawOrganisations, string searchTerm, List<OrganisationName> outputList)
     {
         var priorityRegEx = $"({searchTerm})";
 
-        var rgx = new Regex(priorityRegEx, RegexOptions.IgnoreCase);
+        var rgx = new Regex(priorityRegEx, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(Constants.RegexTimeoutMilliseconds));
 
         var locationAwareMatches = FindLocationAwareMatches(rawOrganisations, rgx);
 
@@ -208,7 +206,7 @@ public class ReferenceDataService : IReferenceDataService
 
     private static void AddResultsMatchingRegEx(IEnumerable<OrganisationName> result, string priorityRegEx, List<OrganisationName> sortedList)
     {
-        var rgx = new Regex(priorityRegEx, RegexOptions.IgnoreCase);
+        var rgx = new Regex(priorityRegEx, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(EmployerAccounts.Constants.RegexTimeoutMilliseconds));
 
         var priorityItems = result.Where(o => rgx.Matches(o.Name).Count > 0);
         var outList = priorityItems.OrderBy(o => o.Name).ToList();
@@ -222,7 +220,7 @@ public class ReferenceDataService : IReferenceDataService
         }
     }
 
-    private List<OrganisationName> FilterOrganisationsByType(IEnumerable<OrganisationName> result, CommonOrganisationType organisationType)
+    private static List<OrganisationName> FilterOrganisationsByType(IEnumerable<OrganisationName> result, CommonOrganisationType organisationType)
     {
         if (organisationType == CommonOrganisationType.Other || organisationType == CommonOrganisationType.PublicBodies)
         {

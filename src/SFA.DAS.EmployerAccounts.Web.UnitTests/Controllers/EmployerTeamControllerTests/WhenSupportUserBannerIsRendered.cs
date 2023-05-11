@@ -8,7 +8,7 @@ public class WhenSupportUserBannerIsRendered
     private EmployerTeamController _controller;
 
     private Mock<ICookieStorageService<FlashMessageViewModel>> _mockCookieStorageService;
-    private Mock<EmployerTeamOrchestrator> _mockEmployerTeamOrchestrator;
+    private Mock<EmployerTeamOrchestratorWithCallToAction> _mockEmployerTeamOrchestrator;
     private Mock<HttpContext> _mockHttpContext;
     private Mock<ClaimsPrincipal> _mockPrincipal;
     private Mock<ClaimsIdentity> _mockClaimsIdentity;
@@ -26,7 +26,7 @@ public class WhenSupportUserBannerIsRendered
     public void Arrange()
     {
         _mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-        _mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
+        _mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestratorWithCallToAction>();
         _mockHttpContext = new Mock<HttpContext>();
         _mockPrincipal = new Mock<ClaimsPrincipal>();
         _mockClaimsIdentity = new Mock<ClaimsIdentity>();

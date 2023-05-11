@@ -11,20 +11,22 @@ public class UserSettingsOrchestrator
     private readonly IMediator _mediator;
     private readonly ILogger<UserSettingsOrchestrator> _logger;
     private readonly IEncodingService _encodingService;
+    private readonly EmployerAccountsConfiguration _configuration;
 
     //Needed for tests
     protected UserSettingsOrchestrator() { }
 
-    public UserSettingsOrchestrator(IMediator mediator, ILogger<UserSettingsOrchestrator> logger, IEncodingService encodingService)
+    public UserSettingsOrchestrator(IMediator mediator, ILogger<UserSettingsOrchestrator> logger, IEncodingService encodingService, EmployerAccountsConfiguration configuration)
     {
         _mediator = mediator;
         _logger = logger;
         _encodingService = encodingService;
+        _configuration = configuration;
     }
 
     public virtual async Task<OrchestratorResponse<NotificationSettingsViewModel>> GetNotificationSettingsViewModel(string userRef)
     {
-        _logger.LogInformation($"Getting user notification settings for user {userRef}");
+        _logger.LogInformation("Getting user notification settings for user {UserRef}", userRef);
 
         var response = await _mediator.Send(new GetUserNotificationSettingsQuery
         {
@@ -36,14 +38,15 @@ public class UserSettingsOrchestrator
             Data = new NotificationSettingsViewModel
             {
                 HashedId = userRef,
-                NotificationSettings = response.NotificationSettings
+                NotificationSettings = response.NotificationSettings,
+                UseGovSignIn = _configuration.UseGovSignIn
             },
         };
     }
 
     public virtual async Task UpdateNotificationSettings(string userRef, List<UserNotificationSetting> settings)
     {
-        _logger.LogInformation($"Updating user notification settings for user {userRef}");
+        _logger.LogInformation("Updating user notification settings for user {UserRef}", userRef);
 
         settings.ForEach(s =>
         {
@@ -75,7 +78,7 @@ public class UserSettingsOrchestrator
                 var userNotificationSettings = settings.NotificationSettings.SingleOrDefault(m => m.AccountId == accountId);
 
                 if (userNotificationSettings == null)
-                    throw new InvalidStateException($"Cannot find user settings for user {userRef} in account {accountId}");
+                    throw new InvalidStateException($"Cannot find user settings for user {userRef} in account {accountId}.");
 
                 if (userNotificationSettings.ReceiveNotifications)
                 {
@@ -85,12 +88,12 @@ public class UserSettingsOrchestrator
                         AccountId = accountId
                     });
 
-                    _logger.LogInformation("Unsubscribed from alerts for user {userRef} in account {accountId}");
+                    _logger.LogInformation("Unsubscribed from alerts for user {UserRef} in account {AccountId}", userRef, accountId);
                 }
                 else
                 {
 
-                    _logger.LogInformation("Already unsubscribed from alerts for user {userRef} in account {accountId}");
+                    _logger.LogInformation("Already unsubscribed from alerts for user {UserRef} in account {AccountId}", userRef, accountId);
                 }
 
                 return new OrchestratorResponse<SummaryUnsubscribeViewModel>
@@ -118,7 +121,7 @@ public class UserSettingsOrchestrator
         }
         catch (UnauthorizedAccessException exception)
         {
-            _logger.LogWarning($"User not associated to account. UserId:{externalUserId} AccountId:{accountId}");
+            _logger.LogWarning("User not associated to account. UserId:{ExternalUserId} AccountId:{AccountId}", externalUserId, accountId);
 
             return new OrchestratorResponse<T>
             {

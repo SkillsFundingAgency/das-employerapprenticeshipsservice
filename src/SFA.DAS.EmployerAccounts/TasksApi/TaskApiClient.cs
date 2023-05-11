@@ -9,7 +9,7 @@ namespace SFA.DAS.EmployerAccounts.TasksApi;
 
 public interface ITaskApiClient
 {
-    Task<IEnumerable<TaskDto>> GetTasks(string employerAccountId, string userid, ApprenticeshipEmployerType applicableToApprenticeshipEmployerType);
+    Task<IEnumerable<TaskDto>> GetTasks(string employerAccountId, string userId, ApprenticeshipEmployerType applicableToApprenticeshipEmployerType);
 
     Task AddUserReminderSupression(string employerAccountId, string userId, string taskType);
 }
@@ -56,7 +56,7 @@ public class TaskApiClient : ITaskApiClient
         requestMessage.Content = new StringContent(string.Empty);
         await AddAuthenticationHeader(requestMessage);
 
-        _logger.LogInformation($"Post: {url}");
+        _logger.LogInformation("Post: {Url}", url);
         await _httpClient.SendAsync(requestMessage);
     }
 

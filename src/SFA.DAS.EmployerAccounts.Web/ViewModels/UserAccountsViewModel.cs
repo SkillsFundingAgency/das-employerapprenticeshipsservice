@@ -2,24 +2,21 @@
 
 public class UserAccountsViewModel
 {
-    public Accounts<Account> Accounts;
-    public int Invitations;
-    public FlashMessageViewModel FlashMessage;
-    public string ErrorMessage;
+    public Accounts<Account> Accounts { get; set; }
+    public int Invitations { get; set; }
+    public FlashMessageViewModel FlashMessage { get; set; }
+    public string ErrorMessage { get; set; }
     public DateTime? TermAndConditionsAcceptedOn { get; set; }
     public DateTime? LastTermsAndConditionsUpdate { get; set; }
+
     public bool ShowTermsAndConditionBanner { get 
-        { 
-            if (LastTermsAndConditionsUpdate.HasValue)
+        {
+            if (!LastTermsAndConditionsUpdate.HasValue)
             {
-                if (!TermAndConditionsAcceptedOn.HasValue ||  
-                    (TermAndConditionsAcceptedOn.Value < LastTermsAndConditionsUpdate.Value))
-                {
-                    return true;
-                }
+                return false;
             }
 
-            return false;
+            return !TermAndConditionsAcceptedOn.HasValue || TermAndConditionsAcceptedOn.Value < LastTermsAndConditionsUpdate.Value;
         } 
     }
 }

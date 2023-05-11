@@ -4,6 +4,7 @@ using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.Employer.Shared.UI;
 using SFA.DAS.Employer.Shared.UI.Attributes;
 using SFA.DAS.EmployerAccounts.Commands.OrganisationData;
+using SFA.DAS.EmployerAccounts.Infrastructure;
 using SFA.DAS.EmployerAccounts.Models.ReferenceData;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
 
@@ -16,7 +17,7 @@ public class SearchOrganisationController : BaseController
 {
     private readonly SearchOrganisationOrchestrator _orchestrator;
     //This is temporary until the existing add org function is replaced, at which point the method used can be moved to the org search orchestrator
-    private IMediator _mediator;
+    private readonly IMediator _mediator;
     
 
     public SearchOrganisationController(
@@ -64,7 +65,7 @@ public class SearchOrganisationController : BaseController
         }
         else
         {
-            model = await _orchestrator.SearchOrganisation(searchTerm, pageNumber, organisationType, hashedAccountId, HttpContext.User.FindFirstValue(@"sub"));
+            model = await _orchestrator.SearchOrganisation(searchTerm, pageNumber, organisationType, hashedAccountId, HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserIdClaimTypeIdentifier));
         }
         model.Data.IsExistingAccount = !string.IsNullOrEmpty(hashedAccountId);
 

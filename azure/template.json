@@ -155,7 +155,7 @@
         "workerAppServicePlanName": "[concat(variables('resourceNamePrefix'), 'wkr-asp')]",
         "resourceGroupName": "[concat(variables('resourceNamePrefix'), '-rg')]",
         "cosmosDbName": "[concat(variables('resourceNamePrefix'), '-cdb')]",
-        "configNames": "SFA.DAS.EmployerAccounts,SFA.DAS.EmployerAccounts.ReadStore,SFA.DAS.EmployerAccounts.Notifications,SFA.DAS.ReferenceDataApiClient,SFA.DAS.Encoding",
+        "configNames": "SFA.DAS.EmployerAccounts,SFA.DAS.EmployerAccounts.ReadStore,SFA.DAS.EmployerAccounts.Notifications,SFA.DAS.ReferenceDataApiClient,SFA.DAS.Encoding,SFA.DAS.Employer.GovSignIn",
         "configNamesApi": "SFA.DAS.EmployerAccounts,SFA.DAS.Encoding"
     },
     "resources": [
@@ -337,6 +337,10 @@
                                     "value": "[parameters('environmentName')]"
                                 },
                                 {
+                                    "name": "ASPNETCORE_ENVIRONMENT",
+                                    "value": "[toUpper(parameters('environmentName'))]"
+                                },
+                                {
                                     "name": "StorageConnectionString",
                                     "value": "[parameters('sharedStorageAccountConnectionString')]"
                                 },
@@ -462,6 +466,10 @@
                                 {
                                     "name": "ConfigNames",
                                     "value": "[variables('configNamesApi')]"
+                                },
+                                {
+                                    "name": "ASPNETCORE_ENVIRONMENT",
+                                    "value": "[toUpper(parameters('environmentName'))]"
                                 }
                             ]
                         }
@@ -609,6 +617,10 @@
                                 {
                                     "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
                                     "value": "[reference(concat(variables('workerAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.ConnectionString.value]"
+                                },
+                                {
+                                    "name": "WEBSITE_RUN_FROM_PACKAGE",
+                                    "value": "0"
                                 }
                             ]
                         }

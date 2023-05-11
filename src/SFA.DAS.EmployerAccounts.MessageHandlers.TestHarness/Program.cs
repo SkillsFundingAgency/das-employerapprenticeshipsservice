@@ -17,7 +17,6 @@ public static class Program
         var provider = RegisterServices();
 
         await provider.GetService<PublishCreateAccountUserEvents>().Run();
-        await provider.GetService<PublishCohortCreatedEvents>().Run();
         await provider.GetService<PublishCreatedAccountEvents>().Run();
     }
 
@@ -31,8 +30,6 @@ public static class Program
         return new ServiceCollection()
             .AddNServiceBus()
             .AddSingleton<PublishCreateAccountUserEvents>()
-            .AddSingleton<PublishCohortCreatedEvents>()
-            .AddSingleton<PublishCohortCreatedEvents>()
             .AddSingleton<PublishCreatedAccountEvents>()
             .AddSingleton<IConfiguration>(configuration)
             .AddSingleton(accountsConfiguration)

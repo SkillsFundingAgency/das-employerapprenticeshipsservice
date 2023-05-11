@@ -8,17 +8,17 @@ using SFA.DAS.EmployerAccounts.Web.RouteValues;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
-[SetNavigationSection(NavigationSection.AccountsHome)]
+[SetNavigationSection(NavigationSection.AccountsTeamsView)]
 [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
 [Route("accounts/{HashedAccountId}/teams")]
 public class EmployerTeamController : BaseController
 {
     private readonly IUrlActionHelper _urlActionHelper;
-    private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
+    private readonly EmployerTeamOrchestratorWithCallToAction _employerTeamOrchestrator;
 
     public EmployerTeamController(
         ICookieStorageService<FlashMessageViewModel> flashMessage,
-        EmployerTeamOrchestrator employerTeamOrchestrator,
+        EmployerTeamOrchestratorWithCallToAction employerTeamOrchestrator,
         IUrlActionHelper urlActionHelper)
         : base(flashMessage)
     {
@@ -27,23 +27,33 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpGet]
+    [SetNavigationSection(NavigationSection.AccountsHome)]
     [Route("", Name = RouteNames.EmployerTeamIndex)]
     public async Task<IActionResult> Index(string hashedAccountId)
     {
-        PopulateViewBagWithExternalUserId();
-        var response = await GetAccountInformation(hashedAccountId);
-
-        if (response.Status != HttpStatusCode.OK)
+        try
         {
+            PopulateViewBagWithExternalUserId();
+            var response = await GetAccountInformation(hashedAccountId);
+
+            if (response.Status != HttpStatusCode.OK)
+            {
+                return View(response);
+            }
+
+            if (!response.Data.HasPayeScheme)
+            {
+                ViewBag.ShowNav = false;
+            }
+
             return View(response);
         }
-
-        if (!response.Data.HasPayeScheme)
+        catch (Exception e)
         {
-            ViewBag.ShowNav = false;
+            Console.WriteLine(e);
+            throw;
         }
-
-        return View(response);
+        
     }
 
     [HttpGet]
@@ -63,7 +73,7 @@ public class EmployerTeamController : BaseController
 
     [HttpGet]
     [Route("AddedProvider/{providerName}")]
-    public async Task<IActionResult> AddedProvider(string providerName)
+    public IActionResult AddedProvider(string providerName)
     {
         AddFlashMessageToCookie(new FlashMessageViewModel
         {
@@ -280,7 +290,8 @@ public class EmployerTeamController : BaseController
             ViewData.ModelState.AddModelError("Choice", "You must select an option to continue.");
             return View();
         }
-        else if (requiresAdvert.Value == true)
+
+        if (requiresAdvert.Value)
         {
             return Redirect(_urlActionHelper.EmployerRecruitAction());
         }

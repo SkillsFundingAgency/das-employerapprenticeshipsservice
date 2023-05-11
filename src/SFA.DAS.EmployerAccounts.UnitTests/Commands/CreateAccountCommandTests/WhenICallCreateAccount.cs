@@ -96,7 +96,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
         }
 
         [Test]
-        public async Task ThenTheIdHashingServiceIsCalledAfterTheAccountIsCreated()
+        public async Task ThenTheIdEncodingServiceIsCalledAfterTheAccountIsCreated()
         {
             //Arrange
             var createAccountCommand = new CreateAccountCommand { PayeReference = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT", ExternalUserId = _user.Ref.ToString() };
@@ -109,7 +109,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
         }
 
         [Test]
-        public async Task ThenTheIdPublicHashingServiceIsCalledAfterTheAccountIsCreated()
+        public async Task ThenTheIdPublicEncodingServiceIsCalledAfterTheAccountIsCreated()
         {
             //Arrange
             var createAccountCommand = new CreateAccountCommand { PayeReference = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT", ExternalUserId = _user.Ref.ToString() };

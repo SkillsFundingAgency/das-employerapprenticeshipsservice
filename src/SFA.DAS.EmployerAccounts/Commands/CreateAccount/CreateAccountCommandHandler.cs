@@ -13,7 +13,6 @@ using SFA.DAS.NServiceBus.Services;
 
 namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount;
 
-//TODO this needs changing to be a facade and calling individual commands for each component
 public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand, CreateAccountCommandResponse>
 {
     private readonly IAccountRepository _accountRepository;
@@ -110,7 +109,7 @@ public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand,
             {
                 AccountId = createAccountResult.AccountId,
                 ApprenticeshipEmployerType = ApprenticeshipEmployerType.NonLevy
-            });
+            }, cancellationToken);
         }
 
         return new CreateAccountCommandResponse

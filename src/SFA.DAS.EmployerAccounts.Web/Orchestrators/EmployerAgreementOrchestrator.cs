@@ -274,7 +274,7 @@ public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
 
     }
 
-    public virtual async Task<OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>> GetConfirmRemoveOrganisationViewModel(string accountLegalEntityHashedId, string hashedAccountId, string userId)
+    public virtual async Task<OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>> GetConfirmRemoveOrganisationViewModel(string hashedAccountId, string accountLegalEntityHashedId, string userId)
     {
         var response = new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>();
 

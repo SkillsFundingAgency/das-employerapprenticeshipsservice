@@ -12,7 +12,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators;
 
 public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorBase
 {
-    private IEncodingService _encodingService;
+    private readonly IEncodingService _encodingService;
 
     protected EmployerAccountPayeOrchestrator() { }
 
@@ -69,7 +69,6 @@ public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorB
 
         var hmrcResponse = await GetHmrcEmployerInformation(response.Data.AccessToken, string.Empty);
 
-
         return new OrchestratorResponse<AddNewPayeSchemeViewModel>
         {
             Data = new AddNewPayeSchemeViewModel
@@ -89,7 +88,7 @@ public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorB
     public async Task<OrchestratorResponse<GatewayInformViewModel>> CheckUserIsOwner(string hashedAccountId, string email, string redirectUrl, string confirmUrl)
     {
         var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
-        HttpStatusCode status = HttpStatusCode.OK;
+        var status = HttpStatusCode.OK;
 
         var response = await Mediator.Send(new GetMemberRequest
         {
@@ -98,12 +97,9 @@ public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorB
             OnlyIfMemberIsActive = true
         });
 
-        if (response != null)
+        if (response != null && response.TeamMember.Role != Role.Owner)
         {
-            if (response.TeamMember.Role != Role.Owner)
-            {
-                status = HttpStatusCode.Unauthorized;
-            }
+            status = HttpStatusCode.Unauthorized;
         }
 
         return new OrchestratorResponse<GatewayInformViewModel>

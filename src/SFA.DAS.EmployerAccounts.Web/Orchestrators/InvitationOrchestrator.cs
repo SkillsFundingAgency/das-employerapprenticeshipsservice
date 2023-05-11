@@ -63,7 +63,7 @@ public class InvitationOrchestrator
         }
         catch (InvalidRequestException ex)
         {
-            _logger.LogInformation(ex.Message);
+            _logger.LogError(ex, "Exception caught in CreateInvitation method.");
         }
 
     }
@@ -95,7 +95,7 @@ public class InvitationOrchestrator
         }
         catch (InvalidRequestException ex)
         {
-            _logger.LogInformation(ex.Message);
+            _logger.LogError(ex, "Exception caught in GetAllInvitationsForUser method.");
         }
 
         return new OrchestratorResponse<UserInvitationsViewModel>

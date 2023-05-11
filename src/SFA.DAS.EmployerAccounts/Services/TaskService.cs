@@ -26,7 +26,7 @@ public class TaskService : ITaskService
             _logger.LogError(ex, "Could not retrieve account tasks successfully");
         }
 
-        return new TaskDto[0];
+        return Array.Empty<TaskDto>();
     }
 
     public async Task DismissMonthlyTaskReminder(long accountId, string externalUserId, TaskType taskType)

@@ -114,6 +114,13 @@ public class UrlActionHelper : IUrlActionHelper
         return NonAccountsAction(baseUrl, path);
     }
 
+    public string EmployerProfileAddUserDetails(string path)
+    {
+        var baseUrl = _configuration.EmployerPortalBaseUrl;
+
+        return AccountAction(baseUrl, path);
+    }
+
     private static string Action(string baseUrl, string path)
     {
         var trimmedBaseUrl = baseUrl?.TrimEnd('/') ?? string.Empty;

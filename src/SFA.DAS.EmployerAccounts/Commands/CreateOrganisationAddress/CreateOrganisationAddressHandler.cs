@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using System.Threading;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Commands.CreateOrganisationAddress;
 
@@ -13,7 +12,7 @@ public class CreateOrganisationAddressHandler : IRequestHandler<CreateOrganisati
         _validator = validator;
     }
 
-    public async Task<CreateOrganisationAddressResponse> Handle(CreateOrganisationAddressRequest request, CancellationToken cancellationToken)
+    public Task<CreateOrganisationAddressResponse> Handle(CreateOrganisationAddressRequest request, CancellationToken cancellationToken)
     {
         var validationResults = _validator.Validate(request);
 
@@ -30,9 +29,9 @@ public class CreateOrganisationAddressHandler : IRequestHandler<CreateOrganisati
         addressBuilder.Append(string.IsNullOrEmpty(request.County) ? string.Empty : request.County + ", ");
         addressBuilder.Append(request.Postcode.Trim());
             
-        return new CreateOrganisationAddressResponse
+        return Task.FromResult(new CreateOrganisationAddressResponse
         {
             Address = addressBuilder.ToString()
-        };
+        });
     }
 }

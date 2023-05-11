@@ -5,13 +5,13 @@ public class WhenIChooseIIfIKnowWhichTrainingProviderToDeliver
     private EmployerTeamController _controller;
 
     private Mock<ICookieStorageService<FlashMessageViewModel>> _mockCookieStorageService;
-    private Mock<EmployerTeamOrchestrator> _mockEmployerTeamOrchestrator;
+    private Mock<EmployerTeamOrchestratorWithCallToAction> _mockEmployerTeamOrchestrator;
 
     [SetUp]
     public void Arrange()
     {
         _mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-        _mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
+        _mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestratorWithCallToAction>();
 
         _controller = new EmployerTeamController(
             _mockCookieStorageService.Object,

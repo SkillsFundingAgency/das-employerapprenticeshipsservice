@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.Helpers;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.ModelBuilders;
@@ -14,7 +12,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.GivenEmployerAccountsApi
 [TestFixture]
 public class WhenIGetMultipleLegalEntitiesWithKnownIds : GivenEmployerAccountsApi
 {
-    private EmployerAccountSetup _employerAccount;
+    private EmployerAccountSetup? _employerAccount;
 
     [SetUp]
     public async Task Setup()
@@ -31,24 +29,22 @@ public class WhenIGetMultipleLegalEntitiesWithKnownIds : GivenEmployerAccountsAp
             _employerAccount = data.CurrentAccount;
         });
 
-        WhenControllerActionIsCalled($"/api/accounts/{_employerAccount.AccountOutput.HashedAccountId}/legalentities");
+        WhenControllerActionIsCalled($"/api/accounts/{_employerAccount?.AccountOutput?.HashedAccountId}/legalentities");
     }
 
     [Test]
     [Ignore("The test fails as a Pending/SignedAgreementId is missing from AccountLegalEntity test setup which is required")]
-    public async Task ThenTheStatusShouldBeFound_ByHashedAccountId()
+    public void ThenTheStatusShouldBeFound_ByHashedAccountId()
     {
-        var resources =
-            Response
-                .GetContent<ResourceList>();
+        var resources = Response?.GetContent<ResourceList>();
 
         // Assert
         Assert.IsNotNull(resources);
-        Assert.AreEqual(2, resources.Count);
+        Assert.AreEqual(2, resources?.Count);
             
         var idsFromApi = resources.Select(a => long.Parse(a.Id, NumberStyles.None)).ToArray();
 
-        var idsFromDatabase = _employerAccount.LegalEntities
+        var idsFromDatabase = _employerAccount?.LegalEntities
             .Select(le => le.LegalEntityWithAgreementInputOutput.LegalEntityId)
             .Union(new[]{_employerAccount.AccountOutput.LegalEntityId})
             .ToArray();

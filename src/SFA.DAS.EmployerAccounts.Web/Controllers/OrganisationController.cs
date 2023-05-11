@@ -25,10 +25,8 @@ public class OrganisationController : BaseController
 
     [HttpGet]
     [Route("nextStep")]
-    public async Task<IActionResult> OrganisationAddedNextSteps(string organisationName, string hashedAccountId, string hashedAgreementId)
+    public IActionResult OrganisationAddedNextSteps(string organisationName, string hashedAccountId, string hashedAgreementId)
     {
-        var userId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
-
         var viewModel = _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName, hashedAgreementId);
 
         viewModel.FlashMessage = GetFlashMessageViewModelFromCookie();
@@ -38,10 +36,8 @@ public class OrganisationController : BaseController
 
     [HttpGet]
     [Route("nextStepSearch")]
-    public async Task<IActionResult> OrganisationAddedNextStepsSearch(string organisationName, string hashedAccountId, string hashedAgreementId)
+    public IActionResult OrganisationAddedNextStepsSearch(string organisationName, string hashedAccountId, string hashedAgreementId)
     {
-        var userId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
-
         var viewModel = _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName, hashedAgreementId);
 
         viewModel.FlashMessage = GetFlashMessageViewModelFromCookie();

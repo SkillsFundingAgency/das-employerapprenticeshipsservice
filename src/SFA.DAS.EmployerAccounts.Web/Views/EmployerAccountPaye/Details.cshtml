@@ -6,10 +6,9 @@
     ViewBag.PageID = "page-paye-schemes-view";
     ViewBag.Section = "paye";
     ViewBag.ZenDeskLabel = "eas-paye-scheme";
-}
-
-@{
     ViewBag.GaData.Vpv = "/accounts/schemes/details";
+
+    var hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId];
 }
 
 <div class="govuk-grid-row">
@@ -73,7 +72,7 @@
     <div class="govuk-grid-column-one-third">
         <a asp-controller="@ControllerConstants.EmployerAccountPayeControllerName"
         asp-action="Remove"
-        asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" 
+        asp-route-hashedAccountId="@hashedAccountId" 
         asp-route-empRef="@Model.Data.EmpRef.FormatPayeForUrl()" 
         class="govuk-button das-float-right" 
         aria-label="Remove PAYE scheme @Model.Data.EmpRef"
@@ -84,8 +83,8 @@
 @section breadcrumb {
     <div class="govuk-breadcrumbs">
         <ol class="govuk-breadcrumbs__list" role="navigation">
-            <li class="govuk-breadcrumbs__list-item"><a href="@Url.Action("Index", "EmployerTeam")" class="govuk-breadcrumbs__link">Home</a></li>
-            <li class="govuk-breadcrumbs__list-item"><a href="@Url.Action("Index", "EmployerAccountPaye")" class="govuk-breadcrumbs__link"><abbr>PAYE</abbr> schemes</a></li>
+            <li class="govuk-breadcrumbs__list-item"><a asp-route="@RouteNames.EmployerTeamIndex" asp-route-hashedAccountId="@hashedAccountId" class="govuk-breadcrumbs__link">Home</a></li>
+            <li class="govuk-breadcrumbs__list-item"><a asp-route="@RouteNames.EmployerAccountPaye" asp-route-hashedAccountId="@hashedAccountId" class="govuk-breadcrumbs__link"><abbr>PAYE</abbr> schemes</a></li>
             <li class="govuk-breadcrumbs__list-item"><abbr>PAYE</abbr> scheme @Model.Data.EmpRef</li>
         </ol>
     </div>

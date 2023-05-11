@@ -44,7 +44,7 @@ public class GetHmrcEmployerInformationHandler : IRequestHandler<GetHmrcEmployer
 
         if (schemeCheck.PayeScheme != null)
         {
-            _logger.LogWarning($"PAYE scheme {empref} already in use.");
+            _logger.LogWarning("PAYE scheme {Empref} already in use.", empref);
             throw new ConstraintException("PAYE scheme already in use");
         }
             

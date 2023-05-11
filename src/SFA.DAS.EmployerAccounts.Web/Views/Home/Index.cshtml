@@ -48,25 +48,23 @@
                 <tbody class="govuk-table__body">
                     @foreach (var account in Model.Data.Accounts.AccountList)
                     {
-                        <tr>
+                        <tr class="govuk-table__row">
                             <td data-label="Account name">
-                                <span class="force-word-wrap">
+                                <span class="das-!-display-block">
                                     @account.Name
                                 </span>
-                                <span class="account-id">
+                                <span class="das-no-wrap account-id">
                                     Account ID: @account.PublicHashedId
                                 </span>
                             </td>
                             <td data-label="What you can do">
                                 @RoleStrings.GetRoleDescription(account.RoleName)
                             </td>
-                            <td>
-                                <a aria-label="View account homepage for @account.Name"
-                                   title="View account homepage for @account.Name"
-                                   class="govuk-link govuk-link--no-visited-state"
+                            <td class="govuk-table__cell govuk-table__cell--numeric">
+                                <a class="govuk-link govuk-link--no-visited-state"
                                    asp-route="@RouteNames.EmployerTeamIndex"
                                    asp-route-hashedAccountId="@account.HashedId">
-                                    Open<span class="vh"> @account.Name account homepage</span>
+                                    Open<span class="govuk-visually-hidden"> @account.Name account homepage</span>
                                 </a>
                             </td>
                         </tr>
@@ -87,7 +85,7 @@
             </p>
 
             <p class="govuk-body">
-                <a href="@Url.Action("All", "Invitation")" class="govuk-link">View Invitations</a>
+                <a href="@Url.Action("All", "Invitation")" class="govuk-link govuk-link--no-visited-state">View invitations</a>
             </p>
         }
     </div>

@@ -15,7 +15,6 @@ public class EmployerAccountsDbContext : DbContext, IEmployerAccountsDbContext
     private readonly EmployerAccountsConfiguration _configuration;
     private readonly AzureServiceTokenProvider _azureServiceTokenProvider;
 
-    private const string AzureResource = "https://database.windows.net/";
     private readonly IDbConnection _connection;
 
     public virtual DbSet<AccountLegalEntity> AccountLegalEntities { get; set; }
@@ -45,17 +44,14 @@ public class EmployerAccountsDbContext : DbContext, IEmployerAccountsDbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        optionsBuilder.UseLazyLoadingProxies();
+
         if (_configuration == null || _azureServiceTokenProvider == null)
         {
-            optionsBuilder
-                .UseSqlServer()
-                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             return;
         }
 
-        optionsBuilder
-            .UseLazyLoadingProxies()
-            .UseSqlServer(_connection as SqlConnection);
+        optionsBuilder.UseSqlServer(_connection as SqlConnection);
 
     }
 

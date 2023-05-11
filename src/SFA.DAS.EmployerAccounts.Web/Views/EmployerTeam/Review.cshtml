@@ -28,7 +28,7 @@
                     }
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="govuk-table__body">
                 <tr class="govuk-table__row">
                     <td data-label="Email" class="govuk-table__cell">@Model.Data.Email</td>
                     <td data-label="What they can do" class="govuk-table__cell">@RoleStrings.GetRoleDescription(@Model.Data.Role)</td>
@@ -46,19 +46,18 @@
 
         @if (@Model.Data.Status == InvitationStatus.Pending || @Model.Data.Status == InvitationStatus.Expired)
         {
-            <div class="form-group">
-                <form asp-route="@RouteNames.EmployerTeamResendInvite" asp-route-hashedAccountId="@hashedAccountId" method="POST">
-                    <input type="hidden" id="Email" name="Email" value="@Model.Data.Email" />
-                    <input type="hidden" id="Name" name="Name" value="@Model.Data.Name" />
-                    <button type="submit" class="button" id="resend_invitation">Resend Invitation</button>
-                </form>
-                <a asp-route="@RouteNames.EmployerTeamCancelInvitation"
-                    asp-route-hashedAccountId="@hashedAccountId"
-                    asp-route-email="@Model.Data.Email"
-                    asp-route-hashedInvitationId="@Model.Data.HashedInvitationId"
-                    class="button button-link">Cancel Invitation</a>
-
-            </div>
+            <form asp-route="@RouteNames.EmployerTeamResendInvite" asp-route-hashedAccountId="@hashedAccountId" method="POST">
+                <input type="hidden" id="Email" name="Email" value="@Model.Data.Email" />
+                <input type="hidden" id="Name" name="Name" value="@Model.Data.Name" />
+                <div class="govuk-button-group">
+                        <button type="submit" class="govuk-button" id="resend_invitation">Resend invitation</button>
+                        <a asp-route="@RouteNames.EmployerTeamCancelInvitation"
+                            asp-route-hashedAccountId="@hashedAccountId"
+                            asp-route-email="@Model.Data.Email"
+                            asp-route-hashedInvitationId="@Model.Data.HashedInvitationId"
+                            class="govuk-link">Cancel invitation</a>
+                </div>
+            </form>
         }
         @if (@Model.Data.IsUser)
         {

@@ -6,23 +6,15 @@
     ViewBag.ShowNav = false;
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge access-denied">Access denied</h1>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl access-denied">Access denied</h1>
         <p class="access-denied">Your account does not have sufficient privileges</p>
-    </div>
-</div>
-<div class="grid-row">
-    <div class="column-two-thirds">
         <p>@HtmlHelpers.ReturnParagraphContent()</p>
-        <a class="button" href="@HtmlHelpers.ReturnToHomePageButtonHref((string)ViewBag.AccountId)">@HtmlHelpers.ReturnToHomePageButtonText((string)ViewBag.AccountId)</a>
+        <a class="govuk-button" href="@HtmlHelpers.ReturnToHomePageButtonHref((string)ViewBag.AccountId)">@HtmlHelpers.ReturnToHomePageButtonText((string)ViewBag.AccountId)</a>
     </div>
 </div>
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@HtmlHelpers.ReturnToHomePageLinkHref((string)ViewBag.AccountId)" class="back-link">@HtmlHelpers.ReturnToHomePageLinkText((string)ViewBag.AccountId)</a></li>
-        </ol>
-    </div>
+    <a href="@HtmlHelpers.ReturnToHomePageLinkHref((string)ViewBag.AccountId)" class="govuk-back-link">@HtmlHelpers.ReturnToHomePageLinkText((string)ViewBag.AccountId)</a>
 }

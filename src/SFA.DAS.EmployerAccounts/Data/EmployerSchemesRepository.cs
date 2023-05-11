@@ -2,19 +2,16 @@
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.Logging;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 
 namespace SFA.DAS.EmployerAccounts.Data;
 
-public class EmployerSchemesRepository : BaseRepository, IEmployerSchemesRepository
+public class EmployerSchemesRepository : IEmployerSchemesRepository
 {
     private readonly Lazy<EmployerAccountsDbContext> _db;
 
-    public EmployerSchemesRepository(EmployerAccountsConfiguration configuration, ILogger<EmployerSchemesRepository> logger, Lazy<EmployerAccountsDbContext> db)
-        : base(configuration.DatabaseConnectionString, logger)
+    public EmployerSchemesRepository(Lazy<EmployerAccountsDbContext> db)
     {
         _db = db;
     }

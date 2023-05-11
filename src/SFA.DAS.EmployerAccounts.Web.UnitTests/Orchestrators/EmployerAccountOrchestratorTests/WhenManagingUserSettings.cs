@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentAssertions;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Commands.UpdateUserNotificationSettings;
 using SFA.DAS.EmployerAccounts.Models;
@@ -17,12 +18,16 @@ public class WhenManagingUserSettings
     [SetUp]
     public void Arrange()
     {
+        var configuration = new EmployerAccountsConfiguration
+        {
+            UseGovSignIn = true
+        };
         _mediator = new Mock<IMediator>();
         _encodingService = new Mock<IEncodingService>();
 
         _encodingService.Setup(x => x.Decode(It.IsAny<string>(), It.IsAny<EncodingType>())).Returns(() => 123);
 
-        _orchestrator = new Web.Orchestrators.UserSettingsOrchestrator(_mediator.Object, Mock.Of<ILogger<Web.Orchestrators.UserSettingsOrchestrator>>(), _encodingService.Object);
+        _orchestrator = new Web.Orchestrators.UserSettingsOrchestrator(_mediator.Object, Mock.Of<ILogger<Web.Orchestrators.UserSettingsOrchestrator>>(), _encodingService.Object, configuration);
 
         _mediator.Setup(x => x.Send(It.IsAny<GetUserNotificationSettingsQuery>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new GetUserNotificationSettingsQueryResponse
@@ -38,11 +43,12 @@ public class WhenManagingUserSettings
     public async Task ThenTheMediatorIsCalledToRetrieveSettings()
     {
         //Act
-        await _orchestrator.GetNotificationSettingsViewModel("USERREF");
+        var actual = await _orchestrator.GetNotificationSettingsViewModel("USERREF");
 
         //Assert
         _mediator.Verify(x => x.Send(It.Is<GetUserNotificationSettingsQuery>(s => s.UserRef == "USERREF"), It.IsAny<CancellationToken>()),
             Times.Once);
+        actual.Data.UseGovSignIn.Should().BeTrue();
     }
 
     [Test]

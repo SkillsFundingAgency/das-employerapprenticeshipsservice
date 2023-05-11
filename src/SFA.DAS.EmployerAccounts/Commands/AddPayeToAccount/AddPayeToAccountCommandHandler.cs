@@ -26,7 +26,7 @@ public class AddPayeToAccountCommandHandler : IRequestHandler<AddPayeToAccountCo
         IValidator<AddPayeToAccountCommand> validator,
         IPayeRepository payeRepository,
         IEventPublisher eventPublisher,
-        IEncodingService hashingService,
+        IEncodingService encodingService,
         IMediator mediator,
         IGenericEventFactory genericEventFactory,
         IPayeSchemeEventFactory payeSchemeEventFactory)
@@ -34,7 +34,7 @@ public class AddPayeToAccountCommandHandler : IRequestHandler<AddPayeToAccountCo
         _validator = validator;
         _payeRepository = payeRepository;
         _eventPublisher = eventPublisher;
-        _encodingService = hashingService;
+        _encodingService = encodingService;
         _mediator = mediator;
         _genericEventFactory = genericEventFactory;
         _payeSchemeEventFactory = payeSchemeEventFactory;

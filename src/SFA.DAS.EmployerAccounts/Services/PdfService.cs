@@ -21,13 +21,13 @@ public class PdfService : AzureServiceBase<string, PdfService>, IPdfService
         Logger = logger;
     }
 
-    public async Task<MemoryStream> SubsituteValuesForPdf(string fileName)
+    public async Task<MemoryStream> SubstituteValuesForPdf(string fileName)
     {
-        var returnValue = await SubsituteValuesForPdf(fileName, new Dictionary<string, string>());
+        var returnValue = await SubstituteValuesForPdf(fileName, new Dictionary<string, string>());
         return returnValue;
     }
 
-    public async Task<MemoryStream> SubsituteValuesForPdf(string fileName, Dictionary<string,string> valuesToSubsitute )
+    public async Task<MemoryStream> SubstituteValuesForPdf(string fileName, Dictionary<string,string> valuesToSubstitute )
     {
         var pdfStream = await StreamDataFromBlobStorage(ConfigurationName, fileName);
             
@@ -35,7 +35,7 @@ public class PdfService : AzureServiceBase<string, PdfService>, IPdfService
 
         var pdfDocument = new Document(pdfStream);
 
-        foreach (var key in valuesToSubsitute)
+        foreach (var key in valuesToSubstitute)
         {
 
             var textFragmentAbsorber = new TextFragmentAbsorber($"__{key.Key}__")

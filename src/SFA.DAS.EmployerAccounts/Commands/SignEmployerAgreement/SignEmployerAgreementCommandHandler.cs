@@ -92,6 +92,28 @@ public class SignEmployerAgreementCommandHandler : IRequestHandler<SignEmployerA
             agreement.VersionNumber, correlationId);
     }
 
+    private Task PublishAgreementSignedMessage(
+        long accountId, long accountLegalEntityId, long legalEntityId, string legalEntityName, long agreementId,
+        bool cohortCreated, string currentUserName, Guid currentUserRef,
+        AgreementType agreementType, int versionNumber, string correlationId)
+    {
+        return _eventPublisher.Publish(new SignedAgreementEvent
+        {
+            AccountId = accountId,
+            AgreementId = agreementId,
+            AccountLegalEntityId = accountLegalEntityId,
+            LegalEntityId = legalEntityId,
+            OrganisationName = legalEntityName,
+            CohortCreated = cohortCreated,
+            Created = DateTime.UtcNow,
+            UserName = currentUserName,
+            UserRef = currentUserRef,
+            AgreementType = agreementType,
+            SignedAgreementVersion = versionNumber,
+            CorrelationId = correlationId
+        });
+    }
+
     private async Task PublishLegalGenericEvent(SignEmployerAgreementCommand message, string hashedLegalEntityId)
     {
         var agreementEvent = _agreementEventFactory.CreateSignedEvent(message.HashedAccountId, hashedLegalEntityId, message.HashedAgreementId);
@@ -128,28 +150,6 @@ public class SignEmployerAgreementCommandHandler : IRequestHandler<SignEmployerA
         };
 
         await _employerAgreementRepository.SignAgreement(signedAgreementDetails);
-    }
-
-    private Task PublishAgreementSignedMessage(
-        long accountId, long accountLegalEntityId, long legalEntityId, string legalEntityName, long agreementId,
-        bool cohortCreated, string currentUserName, Guid currentUserRef,
-        AgreementType agreementType, int versionNumber, string correlationId)
-    {
-        return _eventPublisher.Publish(new SignedAgreementEvent
-        {
-            AccountId = accountId,
-            AgreementId = agreementId,
-            AccountLegalEntityId = accountLegalEntityId,
-            LegalEntityId = legalEntityId,
-            OrganisationName = legalEntityName,
-            CohortCreated = cohortCreated,
-            Created = DateTime.UtcNow,
-            UserName = currentUserName,
-            UserRef = currentUserRef,
-            AgreementType = agreementType,
-            SignedAgreementVersion = versionNumber,
-            CorrelationId = correlationId
-        });
     }
 
     private async Task AddAuditEntry(SignEmployerAgreementCommand message, long accountId, long agreementId)

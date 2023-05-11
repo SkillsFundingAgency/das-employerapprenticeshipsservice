@@ -10,9 +10,7 @@ public static class DataProtectionServiceRegistrations
 {
     public static IServiceCollection AddDataProtection(this IServiceCollection services, IConfiguration configuration)
     {
-
-        var config = configuration.GetSection(nameof(EmployerAccountsConfiguration))
-            .Get<EmployerAccountsConfiguration>();
+        var config = configuration.GetSection(ConfigurationKeys.ServiceName).Get<EmployerAccountsConfiguration>();
 
         if (config != null
             && !string.IsNullOrEmpty(config.DataProtectionKeysDatabase)
@@ -25,7 +23,7 @@ public static class DataProtectionServiceRegistrations
                 .Connect($"{redisConnectionString},{dataProtectionKeysDatabase}");
 
             services.AddDataProtection()
-                .SetApplicationName("das-employer-accounts-web")
+                .SetApplicationName("das-employer")
                 .PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys");
         }
 

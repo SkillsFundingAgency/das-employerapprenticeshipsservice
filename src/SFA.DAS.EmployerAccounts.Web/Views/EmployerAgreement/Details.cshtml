@@ -11,40 +11,40 @@
     ViewBag.GaData.Vpv = "/accounts/agreements/view-your-agreement/agreement-details";
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">
-            <span class="heading-secondary">@Model.Data.EmployerAgreement.LegalEntityName</span>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">
+            <span class="govuk-caption-xl">@Model.Data.EmployerAgreement.LegalEntityName</span>
             Your ESFA agreement
         </h1>
         <p>This agreement allows you to spend funds for <strong>@Model.Data.EmployerAgreement.LegalEntityName</strong>.</p>
 
     </div>
 </div>
-<hr />
-<div class="grid-row agreement-parties">
-    <div class="column-one-third">
-        <h2 class="heading-medium section-heading">Parties</h2>
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+<div class="govuk-grid-row agreement-parties">
+    <div class="govuk-grid-column-one-third">
+        <h2 class="govuk-heading-m section-heading">Parties</h2>
     </div>
-    <div class="column-one-third">
-        <address class="party">
+    <div class="govuk-grid-column-one-third">
+        <p class="party">
             <b>The Secretary of State for Education acting through the Education and Skills Funding Agency an executive agency of the Department for Education</b>
             <br />
             Cheylesmore House<br />
             Quinton Road<br />
             Coventry<br />
             CV1 2WT
-        </address>
+        </p>
     </div>
 </div>
-<div class="grid-row agreement-parties">
+<div class="govuk-grid-row agreement-parties">
     <div class="column-one-third column-hide">&nbsp;</div>
-    <div class="column-two-thirds"><hr /></div>
+    <div class="govuk-grid-column-two-thirds"><hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" /></div>
 </div>
-<div class="grid-row agreement-parties">
+<div class="govuk-grid-row agreement-parties">
     <div class="column-one-third column-hide">&nbsp;</div>
-    <div class="column-one-third">
-        <address class="party">
+    <div class="govuk-grid-column-one-third">
+        <p class="party">
             <strong>@Model.Data.EmployerAgreement.LegalEntityName</strong><br />
             @Html.CommaSeperatedAddressToHtml(@Model.Data.EmployerAgreement.LegalEntityAddress)
             @if (Model.Data.OrganisationLookupPossible)
@@ -58,15 +58,15 @@
                     })">Update these details</a>
                 </p>
             }
-        </address>
+        </p>
     </div>
 </div>
-<hr />
-<div class="grid-row">
-    <div class="column-one-third">
-        <h2 class="heading-medium section-heading">Document</h2>
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
+        <h2 class="govuk-heading-m section-heading">Document</h2>
     </div>
-    <div class="column-two-thirds">
+    <div class="govuk-grid-column-two-thirds">
         <div class="signed-agreement">
             <section class="attachment embedded">
                 <div class="attachment-thumb">
@@ -82,37 +82,37 @@
         </div>
     </div>
 </div>
-<hr />
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h3 class="heading-medium">This agreement has been accepted</h3>
-        <table>
-            <tr>
-                <th scope="row">Accepted by:</th>
-                <td>@Model.Data.EmployerAgreement.SignedByName</td>
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h3 class="govuk-heading-m">This agreement has been accepted</h3>
+        <table class="govuk-table">
+            <tr class="govuk-table__row">
+                <th class="govuk-table__header" scope="row">Accepted by:</th>
+                <td class="govuk-table__cell">@Model.Data.EmployerAgreement.SignedByName</td>
             </tr>
-            <tr>
-                <th scope="row">On behalf of:</th>
-                <td>@Model.Data.EmployerAgreement.LegalEntityName</td>
+            <tr class="govuk-table__row">
+                <th class="govuk-table__header" scope="row">On behalf of:</th>
+                <td class="govuk-table__cell">@Model.Data.EmployerAgreement.LegalEntityName</td>
             </tr>
-            <tr>
-                <th scope="row">Address:</th>
-                <td><span class="table-address">@Model.Data.EmployerAgreement.LegalEntityAddress</span></td>
+            <tr class="govuk-table__row">
+                <th class="govuk-table__header" scope="row">Address:</th>
+                <td class="govuk-table__cell"><span class="table-address">@Model.Data.EmployerAgreement.LegalEntityAddress</span></td>
             </tr>
-            <tr>
-                <th scope="row"><span class="no-wrap">Accepted on:</span></th>
-                <td>@Model.Data.EmployerAgreement.SignedDate.Value.ToString("d MMMM yyyy")</td>
+            <tr class="govuk-table__row">
+                <th class="govuk-table__header" scope="row"><span class="das-no-wrap">Accepted on:</span></th>
+                <td class="govuk-table__cell">@Model.Data.EmployerAgreement.SignedDate.Value.ToString("d MMMM yyyy")</td>
             </tr>
         </table>
     </div>
 </div>
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
-            <li><a href="@Url.Action("Index", "EmployerAgreement")">Your organisations and agreements</a></li>
-            <li>Your ESFA agreement</li>
+    <div class="govuk-breadcrumbs">
+        <ol class="govuk-breadcrumbs__list">
+            <li class="govuk-breadcrumbs__list-item"><a href="@Url.Action("Index", "EmployerTeam")" class="govuk-breadcrumbs__link">Home</a></li>
+            <li class="govuk-breadcrumbs__list-item"><a href="@Url.Action("Index", "EmployerAgreement")" class="govuk-breadcrumbs__link">Your organisations and agreements</a></li>
+            <li class="govuk-breadcrumbs__list-item">Your ESFA agreement</li>
         </ol>
     </div>
 }
