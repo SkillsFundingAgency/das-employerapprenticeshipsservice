@@ -9,11 +9,11 @@
 
         <h1 class="govuk-heading-xl">Update your organisation's details</h1>
 
-        <div class="panel panel-border-wide">
+        <div class="govuk-inset-text">
             Please ensure you've updated your organisation's details at <span>@Model.DataSourceFriendlyName</span>. This update can take up to 7 working days to process.
         </div>
 
-        <p>If you have done this and the updated information is still not displayed here, please <a href="@Url.Action("Help", "Home")">contact support</a> for further help.</p>
+        <p>If you have done this and the updated information is still not displayed here, please <a href="@Url.Action("Help", "Home")" class="govuk-link">contact support</a> for further help.</p>
 
 
         <form asp-route="@RouteNames.OrganisationPostUpdateSelection" asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" method="post">
