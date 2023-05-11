@@ -10,6 +10,7 @@ public class WhenIModifyMyUserAccount : ControllerTestBase
     private EmployerAccountsConfiguration _configuration;      
     private HomeController _homeController;
     private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
+    private Mock<IUrlActionHelper> _urlActionHelper;
 
     [SetUp]
     public void Arrange()
@@ -20,13 +21,15 @@ public class WhenIModifyMyUserAccount : ControllerTestBase
         _homeOrchestrator = new Mock<HomeOrchestrator>();          
         _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
         _configuration = new EmployerAccountsConfiguration();
+        _urlActionHelper = new Mock<IUrlActionHelper>();
 
         _homeController = new HomeController(
             _homeOrchestrator.Object,              
             _configuration, 
             _flashMessage.Object,
             Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
-            Mock.Of<ILogger<HomeController>>(), null, null)
+            Mock.Of<ILogger<HomeController>>(), null, null,
+            _urlActionHelper.Object)
         {
             ControllerContext = ControllerContext
         };

@@ -8,6 +8,7 @@ public class WhenILoginAUser
     private Mock<EmployerAccountsConfiguration> _configuration;
     private HomeController _homeController;    
     private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
+    private Mock<IUrlActionHelper> _urlActionHelper;
 
     [SetUp]
     public void Arrange()
@@ -15,13 +16,15 @@ public class WhenILoginAUser
         _homeOrchestrator = new Mock<HomeOrchestrator>();
         _configuration = new Mock<EmployerAccountsConfiguration>();          
         _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
+        _urlActionHelper = new Mock<IUrlActionHelper>();
 
         _homeController = new HomeController(
             _homeOrchestrator.Object, 
             _configuration.Object, 
             _flashMessage.Object,
             Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
-            Mock.Of<ILogger<HomeController>>(), null, null);
+            Mock.Of<ILogger<HomeController>>(), null, null,
+            _urlActionHelper.Object);
     }
 
     [Test]

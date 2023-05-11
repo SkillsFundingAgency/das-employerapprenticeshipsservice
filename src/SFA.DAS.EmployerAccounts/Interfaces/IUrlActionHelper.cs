@@ -14,4 +14,5 @@ public interface IUrlActionHelper
     string LegacyEasAccountAction(string path);
     string LegacyEasAction(string path);
     string EmployerFeedbackAction(string path);
+    string EmployerProfileAddUserDetails(string path);
 }
