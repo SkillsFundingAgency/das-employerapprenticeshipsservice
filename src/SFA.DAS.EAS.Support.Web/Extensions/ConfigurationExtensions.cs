@@ -30,10 +30,6 @@ public static class ConfigurationExtensions
             options.StorageConnectionString = configuration["ConfigurationStorageConnectionString"];
             options.EnvironmentName = configuration["EnvironmentName"];
             options.PreFixConfigurationKeys = false;
-            options.ConfigurationKeysRawJsonResult = new[]
-            {
-                    "SFA.DAS.Support.EAS", "SFA.DAS.EmployerAccountAPI", "SFA.DAS.TokenServiceApiClient", "SFA.DAS.EmployerAccounts.Api.Client" 
-            };
         });
 
         return config.Build();

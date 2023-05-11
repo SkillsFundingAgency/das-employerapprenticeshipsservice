@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using SFA.DAS.Authentication;
 using SFA.DAS.EAS.Application.ServiceRegistrations;
-using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Support.Web.Configuration;
 using SFA.DAS.EAS.Support.Web.Extensions;
 using SFA.DAS.EAS.Support.Web.ServiceRegistrations;
 
@@ -20,12 +21,18 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        var easConfiguration = _configuration.Get<EmployerApprenticeshipsServiceConfiguration>();
+        services.AddSingleton(_configuration);
+        services.AddOptions();
+
+        services.AddSingleton(cfg => cfg.GetService<IOptions<WebConfiguration>>().Value);
+
+        var webConfiguration = _configuration.Get<WebConfiguration>();
+
         var identityServerConfiguration = _configuration
                .GetSection("Identity")
                .Get<IdentityServerConfiguration>();
 
-        services.AddOuterApi(easConfiguration.EmployerAccountsOuterApiConfiguration);
+        services.AddOuterApi(webConfiguration.EmployerAccountsOuterApiConfiguration);
         services.AddAuthenticationServices();
         services.AddAndConfigureEmployerAuthentication(identityServerConfiguration);
 
