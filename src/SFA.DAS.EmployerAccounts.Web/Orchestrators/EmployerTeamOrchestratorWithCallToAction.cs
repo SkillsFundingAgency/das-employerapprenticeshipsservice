@@ -41,6 +41,9 @@ public class EmployerTeamOrchestratorWithCallToAction : EmployerTeamOrchestrator
         _encodingService = encodingService;
     }
 
+    //Needed for tests	
+    protected EmployerTeamOrchestratorWithCallToAction() { }
+
     public override async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string hashedAccountId, string externalUserId)
     {
         var accountResponseTask = _employerTeamOrchestrator.GetAccount(hashedAccountId, externalUserId);

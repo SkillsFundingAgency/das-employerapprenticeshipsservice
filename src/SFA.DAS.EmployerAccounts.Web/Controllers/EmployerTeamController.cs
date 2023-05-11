@@ -14,11 +14,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 public class EmployerTeamController : BaseController
 {
     private readonly IUrlActionHelper _urlActionHelper;
-    private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
+    private readonly EmployerTeamOrchestratorWithCallToAction _employerTeamOrchestrator;
 
     public EmployerTeamController(
         ICookieStorageService<FlashMessageViewModel> flashMessage,
-        EmployerTeamOrchestrator employerTeamOrchestrator,
+        EmployerTeamOrchestratorWithCallToAction employerTeamOrchestrator,
         IUrlActionHelper urlActionHelper)
         : base(flashMessage)
     {
