@@ -302,11 +302,8 @@ public class WhenIViewTheHomePage : ControllerTestBase
     {
         //Arrange
         _configuration.UseGovSignIn = true;
-        AddUserToContext(ExpectedUserId, string.Empty, string.Empty,
-            new Claim(ControllerConstants.UserRefClaimKeyName, ExpectedUserId),
-            new Claim(DasClaimTypes.RequiresVerification, "false")
-        );
-
+        AddEmptyUserToContext();
+        
         _urlActionHelper.Setup(x => x.EmployerProfileAddUserDetails(It.IsAny<string>())).Returns(ProfileAddUserDetailsRoute);
 
         _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId, It.IsAny<DateTime?>())).ReturnsAsync(

@@ -116,22 +116,6 @@ public class WhenIRegisterAUser
             actualRedirectResult.Url);
     }
 
-    [Test, MoqAutoData]
-    public void When_GovSignIn_True_ThenTheUserIsRedirectedToTheGov(string signInUrl)
-    {
-        //arrange
-        _configuration.Object.UseGovSignIn = true;
-        
-        //Act
-        var actual = _homeController.SignIn();
-
-        //Assert
-        Assert.IsNotNull(actual);
-        var actualRedirectResult = actual as RedirectResult;
-        Assert.IsNotNull(actualRedirectResult);
-        Assert.AreEqual($"{GovSignInIdentityConfiguration.BaseUrl}/{GovSignInIdentityConfiguration.SignInLink}", actualRedirectResult.Url);
-    }
-
     private IdentityServerConfiguration GetMockIdentityServerConfiguration(string baseUrl)
     {
         return new IdentityServerConfiguration

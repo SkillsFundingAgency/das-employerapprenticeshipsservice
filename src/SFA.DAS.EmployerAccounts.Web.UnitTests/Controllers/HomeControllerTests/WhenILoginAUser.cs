@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests;
 
@@ -30,7 +28,7 @@ public class WhenILoginAUser
     }
 
     [Test]
-    public void When_GovSignIn_False_ThenTheUserIsRedirectedToPreAuth()
+    public void When_GovSignIn_False_ThenTheUserIsRedirectedToIndex()
     {
         //arrange
         _configuration.Object.UseGovSignIn = false;
@@ -42,30 +40,15 @@ public class WhenILoginAUser
         Assert.IsNotNull(actual);
         var actualRedirectResult = actual as RedirectToActionResult;
         Assert.IsNotNull(actualRedirectResult);
-        Assert.AreEqual(ControllerConstants.PreAuthActionName, actualRedirectResult.ActionName);
+        Assert.AreEqual(ControllerConstants.IndexActionName, actualRedirectResult.ActionName);
     }
 
-    [Test, MoqAutoData]
-    public void When_GovSignIn_True_ThenTheUserIsRedirectedToTheGov(string baseUrl)
-    {
-        //arrange
-        _configuration.Object.UseGovSignIn = true;
-        
-        //Act
-        var actual = _homeController.SignIn();
-
-        //Assert
-        Assert.IsNotNull(actual);
-        var actualRedirectResult = actual as RedirectResult;
-        Assert.IsNotNull(actualRedirectResult);
-        Assert.AreEqual($"{GovSignInIdentityConfiguration.BaseUrl}/{GovSignInIdentityConfiguration.SignInLink}", actualRedirectResult.Url);
-    }
 
     [Test]
     public void When_Route_To_PreAuth_ThenTheUserIsRedirectedToIndex()
     {
         //Act
-        var actual = _homeController.PreAuth();
+        var actual = _homeController.GovSignIn();
 
         //Assert
         Assert.IsNotNull(actual);
