@@ -20,6 +20,7 @@
             asp-controller="@ControllerConstants.SearchOrganisationControllerName" 
             asp-action="@ControllerConstants.SearchForOrganisationResultsActionName" 
             asp-route-hashedAccountId="@hashedAccountId"
+            asp-route-organisationType="@Model.Data.OrganisationType"
             method="POST" role="search" aria-label="On this page">
             <div class="govuk-form-group">
                 <label for="searchTerm" class="govuk-label">
@@ -42,7 +43,7 @@
             asp-controller="@ControllerConstants.SearchOrganisationControllerName"
               asp-action="@ControllerConstants.SearchForOrganisationResultsActionName"
               asp-route-hashedAccountId="@hashedAccountId"
-              asp-route-searchTerm="@(Uri.EscapeDataString(Model.Data.SearchTerm))" 
+              asp-route-searchTerm="@Model.Data.SearchTerm" 
             method="POST">
 
             <div class="das-filter">
@@ -106,7 +107,7 @@
                                 <form 
                                     asp-action="@ControllerConstants.SearchForOrganisationResultsConfirmActionName"
                                     asp-controller="@ControllerConstants.SearchOrganisationControllerName"
-                                    asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]"
+                                    asp-route-hashedAccountId="@hashedAccountId"
                                     method="post">
                                     <input type="hidden" name="DateOfInception" value="@organisation.DateOfInception" />
                                     <input type="hidden" name="ReferenceNumber" value="@organisation.ReferenceNumber" />
@@ -137,7 +138,7 @@
                                     <dd class="das-definition-list__definition">@organisation.Type.GetDescription()</dd>
                                 </dl>
                                 <p class="govuk-body govuk-!-margin-bottom-0">
-                                    Already added - <a asp-route="@RouteNames.EmployerAgreementIndex" asp-route-HashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" class="govuk-link">view my organisations</a>
+                                    Already added - <a asp-route="@RouteNames.EmployerAgreementIndex" asp-route-hashedAccountId="@hashedAccountId" class="govuk-link">view my organisations</a>
                                 </p>
                             </li>
                         }
