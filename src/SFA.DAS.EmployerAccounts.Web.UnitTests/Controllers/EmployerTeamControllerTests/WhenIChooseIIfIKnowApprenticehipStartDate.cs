@@ -1,51 +1,44 @@
-﻿namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests;
+﻿using AutoFixture.NUnit3;
+using SFA.DAS.EmployerAccounts.Web.RouteValues;
+using SFA.DAS.Testing.AutoFixture;
+
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests;
 
 public class WhenIChooseIIfIKnowApprenticehipStartDate 
 {
-    private EmployerTeamController _controller;
-
-    private Mock<ICookieStorageService<FlashMessageViewModel>> _mockCookieStorageService;
-    private Mock<EmployerTeamOrchestratorWithCallToAction> _mockEmployerTeamOrchestrator;
-
-    [SetUp]
-    public void Arrange()
-    {
-        _mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-        _mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestratorWithCallToAction>();
-
-        _controller = new EmployerTeamController(
-            _mockCookieStorageService.Object,
-            _mockEmployerTeamOrchestrator.Object,
-            Mock.Of<IUrlActionHelper>());
-    }
-
-    [Test]
-    public void IfIChooseYesIContinueTheJourney()
+    [Test, MoqAutoData]
+    public void IfIChooseYesIContinueTheJourney(
+        string hashedAccountId,
+        [NoAutoProperties] EmployerTeamController controller)
     {
         //Act
-        var result = _controller.TriageWillApprenticeshipTrainingStart(new TriageViewModel { TriageOption = TriageOptions.Yes }) as RedirectToActionResult;
+        var result = controller.TriageWillApprenticeshipTrainingStart(hashedAccountId, new TriageViewModel { TriageOption = TriageOptions.Yes }) as RedirectToRouteResult;
 
         //Assert
-        Assert.AreEqual(ControllerConstants.TriageApprenticeForExistingEmployeeActionName, result.ActionName);
+        Assert.AreEqual(RouteNames.TriageWhenApprenticeshipForExistingEmployee, result.RouteName);
     }
 
-    [Test]
-    public void IfIChooseNoICannotSetupAnApprentice()
+    [Test, MoqAutoData]
+    public void IfIChooseNoICannotSetupAnApprentice(
+        string hashedAccountId,
+        [NoAutoProperties] EmployerTeamController controller)
     {
         //Act
-        var result = _controller.TriageWillApprenticeshipTrainingStart(new TriageViewModel { TriageOption = TriageOptions.No }) as RedirectToActionResult;
+        var result = controller.TriageWillApprenticeshipTrainingStart(hashedAccountId, new TriageViewModel { TriageOption = TriageOptions.No }) as RedirectToRouteResult;
 
         //Assert
-        Assert.AreEqual(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetStartDateActionName, result.ActionName);
+        Assert.AreEqual(RouteNames.TriageCannotSetupWithoutStartDate, result.RouteName);
     }
 
-    [Test]
-    public void IfIChooseDontKnowICannotSetupAnApprentice()
+    [Test, MoqAutoData]
+    public void IfIChooseDontKnowICannotSetupAnApprentice(
+        string hashedAccountId,
+        [NoAutoProperties] EmployerTeamController controller)
     {
         //Act
-        var result = _controller.TriageWillApprenticeshipTrainingStart(new TriageViewModel { TriageOption = TriageOptions.Unknown }) as RedirectToActionResult;
+        var result = controller.TriageWillApprenticeshipTrainingStart(hashedAccountId, new TriageViewModel { TriageOption = TriageOptions.Unknown }) as RedirectToRouteResult;
 
         //Assert
-        Assert.AreEqual(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetApproximateStartDateActionName, result.ActionName);
+        Assert.AreEqual(RouteNames.TriageCannotSetupWithoutApproximateStartDate, result.RouteName);
     }
 }

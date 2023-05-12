@@ -1,13 +1,14 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
 @model SFA.DAS.EmployerAccounts.Web.ViewModels.TriageViewModel
-@{ViewBag.PageID = "apprentice-for-existing-employee"; }
-@{ViewBag.Title = "Are you setting up an apprenticeship for an existing employee?"; }
-@{ViewBag.MetaDesc = "Are you setting up an apprenticeship for an existing employee"; }
-@{ViewBag.GaData.Vpv = "/account/setupapprentice/apprentice-for-existing-employee"; }
+@{
+    ViewBag.PageID = "apprentice-for-existing-employee";
+    ViewBag.Title = "Are you setting up an apprenticeship for an existing employee?";
+    ViewBag.MetaDesc = "Are you setting up an apprenticeship for an existing employee";
+    ViewBag.GaData.Vpv = "/account/setupapprentice/apprentice-for-existing-employee";
+}
 
-@section breadcrumb
-{
-    <a href="javascript:history.back()" class="govuk-back-link js-show">Back</a>    
+@section breadcrumb {
+    <a href="javascript:history.back()" class="govuk-back-link js-show">Back</a>
 }
 
 <div class="govuk-grid-row">
@@ -29,7 +30,9 @@
         }
 
         <h1 class="govuk-heading-xl">@ViewBag.Title</h1>
-        <form method="POST" action="@Url.Action(ControllerConstants.TriageApprenticeForExistingEmployeeActionName)">
+        <form method="POST"
+              asp-route="@RouteNames.TriageWhenApprenticeshipForExistingEmployeePost"
+              asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]">
             <div class="govuk-form-group @(ViewData.ModelState.IsValid ? "" : "govuk-form-group--error")" id="apprentice-for-existing-employee">
                 <fieldset class="govuk-fieldset" aria-describedby="apprentice-for-existing-employee">
                     @if (!ViewData.ModelState.IsValid)

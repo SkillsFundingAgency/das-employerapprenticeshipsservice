@@ -11,7 +11,6 @@
 
         public const string SearchPensionRegulatorAddOrganisation = "search-pension-regulator-add-org";
         public const string SearchPensionRegulatorCreateAccount = "search-pension-regulator-create-account";
-        public const string PostSearchPensionRegulator = "post-search-pension-regulator";
 
         public const string SignOut = "SignOut";
         public const string EmployerAgreementIndex = "employer-agreement-index";
@@ -49,5 +48,22 @@
         public const string ConfirmRemoveTeamMember = "cofirm-remove-team-member";
 
         public const string InvitationAcceptPost = "invitation-accept";
+
+        // Dynamic Homepage Triage
+        public const string CreateAdvert = "create-advert";
+        public const string CreateAdvertPost = "create-advert-post";
+        public const string TriageCourse = "triage-course";
+        public const string TriageCoursePost = "tirage-course-post";
+        public const string TriageCannotSetupWithoutChosenCourseAndProvider = "triage-cannot-setup-without-course-provider";
+        public const string TriageChosenProvider = "triage-chosen-provider";
+        public const string TriageChosenProviderPost = "triage-chosen-provider-post";
+        public const string TriageCannotSetupWithoutChosenProvider = "triage-cannot-setup-without-provider";
+        public const string TriageWhenWillApprenticeshipStart = "triage-when-will-apprenticeship-start";
+        public const string TriageWhenWillApprenticeshipStartPost = "triage-when-will-apprenticeship-start-post";
+        public const string TriageCannotSetupWithoutStartDate = "triage-cannot-setup-without-start-date";
+        public const string TriageCannotSetupWithoutApproximateStartDate = "triage-cannot-setup-without-approx-start-date";
+        public const string TriageWhenApprenticeshipForExistingEmployee = "triage-existing-employee";
+        public const string TriageWhenApprenticeshipForExistingEmployeePost = "triage-existing-employee-post";
+
     }
 }

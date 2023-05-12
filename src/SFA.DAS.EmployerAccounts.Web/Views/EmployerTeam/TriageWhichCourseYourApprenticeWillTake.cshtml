@@ -1,9 +1,11 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
 @model SFA.DAS.EmployerAccounts.Web.ViewModels.TriageViewModel
-@{ViewBag.PageID = "which-course-your-apprentice-will-take"; }
-@{ViewBag.Title = "Do you know which course your apprentice will take?"; }
-@{ViewBag.MetaDesc = "Do you know which course your apprentice will take"; }
-@{ViewBag.GaData.Vpv = "/account/setupapprentice/which-course-your-apprentice-will-take"; }
+@{
+    ViewBag.PageID = "which-course-your-apprentice-will-take";
+    ViewBag.Title = "Do you know which course your apprentice will take?";
+    ViewBag.MetaDesc = "Do you know which course your apprentice will take";
+    ViewBag.GaData.Vpv = "/account/setupapprentice/which-course-your-apprentice-will-take";
+}
 
 @section breadcrumb
 {
@@ -29,7 +31,7 @@
         }
 
         <h1 class="govuk-heading-xl">@ViewBag.Title</h1>
-        <form method="POST" action="@Url.Action(ControllerConstants.TriageWhichCourseYourApprenticeWillTakeActionName)">
+        <form method="POST" asp-route="@RouteNames.TriageCoursePost" asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]">
             <div class="govuk-form-group @(ViewData.ModelState.IsValid ? "" : "govuk-form-group--error")" id="which-course-your-apprentice-will-take">
                 <fieldset class="govuk-fieldset" aria-describedby="which-course-you-apprentice-will-take">
                     @if (!ViewData.ModelState.IsValid)
