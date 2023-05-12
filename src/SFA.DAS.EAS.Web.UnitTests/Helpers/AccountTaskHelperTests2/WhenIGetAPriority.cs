@@ -2,7 +2,7 @@
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Web.Helpers;
 
-namespace SFA.DAS.EAS.Web.UnitTests.Helpers.AccountTaskHelperTests
+namespace SFA.DAS.EAS.Web.UnitTests.Helpers.AccountTaskHelperTests2
 {
     [TestFixture]
     public class WhenIGetAPriority
@@ -14,10 +14,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Helpers.AccountTaskHelperTests
         [TestCase(4, "ApprenticeChangesToReview")]
         [TestCase(5, "CohortRequestReadyForApproval")]
         [TestCase(6, "IncompleteApprenticeshipDetails")]
-        public void ThenIShouldRecieveTheCorrectValue(int priority, string taskType)
+        public void ThenIShouldReceiveTheCorrectValue(int priority, string taskType)
         {
             //Assert
-            Assert.AreEqual(priority, AccountTaskHelper.GetTaskPriority(new AccountTask { Type = taskType }));
+            Assert.That(AccountTaskHelper.GetTaskPriority(new AccountTask { Type = taskType }), Is.EqualTo(priority));
         }
     }
 }

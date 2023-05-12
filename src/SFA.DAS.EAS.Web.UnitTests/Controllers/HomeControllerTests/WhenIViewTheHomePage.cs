@@ -1,5 +1,4 @@
-﻿using System.ServiceModel.Channels;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -14,24 +13,22 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
 {
     public class WhenIViewTheHomePage
     {
-        private HomeController _homeController;
-        private Mock<ControllerContext> _mockControllerContext;
-        private Mock<HttpContext> _mockHttpContext;
-        private Mock<HttpRequest> _mockHttpRequest;
-        private Mock<RequestContext> _mockRequestContext;
-        private QueryCollection _queryString;
-        private IConfiguration _config;
-        private string gaValue;
+        private HomeController? _homeController;
+        private Mock<ControllerContext>? _mockControllerContext;
+        private Mock<HttpContext>? _mockHttpContext;
+        private Mock<HttpRequest>? _mockHttpRequest;
+        private QueryCollection? _queryString;
+        private IConfiguration? _config;
+        private string? _gaValue;
 
         [SetUp]
         public void Arrange()
         {
-            gaValue = Guid.NewGuid().ToString();
+            _gaValue = Guid.NewGuid().ToString();
             _mockControllerContext = new Mock<ControllerContext>();
             _mockHttpContext = new Mock<HttpContext>();
             _mockHttpRequest = new Mock<HttpRequest>();
-            _mockRequestContext = new Mock<RequestContext>();
-            _queryString = new QueryCollection(new Dictionary<string, StringValues>() { { "_ga", gaValue } });
+            _queryString = new QueryCollection(new Dictionary<string, StringValues>() { { "_ga", _gaValue } });
             _config = new ConfigurationManager();
             _config["EmployerAccountsBaseUrl"] = @"http://localhost";
 
@@ -57,10 +54,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         public void ThenTheGoogleTagQueryStringIsPreservedWhenRedirecting()
         {
             //Act
-            var result = new Uri((_homeController.Index() as RedirectResult).Url);
+            var result = new Uri((_homeController!.Index() as RedirectResult)!.Url);
 
             //Assert
-            Assert.IsTrue(result.Query.Contains($"_ga={gaValue}"));
+            Assert.That(result.Query, Does.Contain($"_ga={_gaValue}"));
         }
     }
 }

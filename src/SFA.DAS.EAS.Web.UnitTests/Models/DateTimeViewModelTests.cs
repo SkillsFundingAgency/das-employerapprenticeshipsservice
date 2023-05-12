@@ -1,5 +1,4 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.EAS.Web.ViewModels;
 
@@ -9,7 +8,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Models
     public class DateTimeViewModelTests
     {
         [Test]
-        public void SholudBeNull()
+        public void ShouldBeNull()
         {
             var sut = new DateTimeViewModel(null);
             sut.DateTime.Should().Be(null);
