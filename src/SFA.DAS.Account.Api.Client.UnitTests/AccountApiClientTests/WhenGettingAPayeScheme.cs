@@ -13,7 +13,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
         public override void HttpClientSetup()
         {
             _uri = $"/api/accounts/{TextualAccountId}/payeschemes/ABC%F123";
-            var absoluteUri = Configuration.ApiBaseUrl.TrimEnd('/') + _uri;
+            var absoluteUri = Configuration!.ApiBaseUrl.TrimEnd('/') + _uri;
 
             _expectedPayeScheme = new PayeSchemeModel
             {
@@ -21,14 +21,14 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
                 Name = "Name"
             };
 
-            HttpClient.Setup(c => c.GetAsync(absoluteUri)).Returns(Task.FromResult(JsonConvert.SerializeObject(_expectedPayeScheme)));
+            HttpClient!.Setup(c => c.GetAsync(absoluteUri)).Returns(Task.FromResult(JsonConvert.SerializeObject(_expectedPayeScheme)));
         }
 
         [Test]
         public async Task ThenThePayeSchemeIsReturned()
         {
             // Act
-            var response = await ApiClient.GetResource<PayeSchemeModel>(_uri);
+            var response = await ApiClient!.GetResource<PayeSchemeModel>(_uri);
 
             // Assert
             Assert.That(response, Is.Not.Null);

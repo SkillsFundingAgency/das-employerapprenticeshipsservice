@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
         public override void HttpClientSetup()
         {
             _uri = $"/api/accounts/internal/{NumericalAccountId}/users";
-            var absoluteUri = Configuration.ApiBaseUrl.TrimEnd('/') + _uri;
+            var absoluteUri = Configuration!.ApiBaseUrl.TrimEnd('/') + _uri;
 
             var fixture = new Fixture();
 
@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
 
             var members = new List<TeamMemberViewModel?> { _teamMember };
 
-            HttpClient.Setup(c => c.GetAsync(absoluteUri))
+            HttpClient!.Setup(c => c.GetAsync(absoluteUri))
                 .Returns(Task.FromResult(JsonConvert.SerializeObject(members)));
         }
 
@@ -32,11 +32,11 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
         public async Task ThenTheCorrectEndpointIsCalled()
         {
             //Act
-            var actual = await ApiClient.GetAccountUsers(NumericalAccountId);
+            var actual = await ApiClient!.GetAccountUsers(NumericalAccountId);
 
             //Assert
-            Assert.IsNotNull(actual);
-            Assert.IsTrue(actual.Any());
+            Assert.That(actual, Is.Not.Null);
+            Assert.That(actual.Any(), Is.True);
         }
     }
 }

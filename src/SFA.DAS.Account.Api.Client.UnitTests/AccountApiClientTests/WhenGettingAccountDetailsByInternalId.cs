@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
         public override void HttpClientSetup()
         {
             _uri = "/api/accounts/internal/123";
-            var absoluteUri = Configuration.ApiBaseUrl.TrimEnd('/') + _uri;
+            var absoluteUri = Configuration?.ApiBaseUrl.TrimEnd('/') + _uri;
 
             _expectedAccount = new AccountDetailViewModel
             {
@@ -30,14 +30,14 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
                 PayeSchemes = new ResourceList(new[] { new ResourceViewModel { Id = "1", Href = "/api/payeschemes/test1" } })
             };
 
-            HttpClient.Setup(c => c.GetAsync(absoluteUri)).Returns(Task.FromResult(JsonConvert.SerializeObject(_expectedAccount)));
+            HttpClient?.Setup(c => c.GetAsync(absoluteUri)).Returns(Task.FromResult(JsonConvert.SerializeObject(_expectedAccount)));
         }
 
         [Test]
         public async Task ThenTheCorrectEndpointIsCalled()
         {
             //Act
-            var actual = await ApiClient.GetAccount(123);
+            var actual = await ApiClient?.GetAccount(123)!;
 
             //Assert
             Assert.That(actual, Is.Not.Null);

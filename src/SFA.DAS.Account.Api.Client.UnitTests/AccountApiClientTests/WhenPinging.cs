@@ -8,7 +8,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
     {
         public override void HttpClientSetup()
         {
-            HttpClient.Setup(c => c.GetAsync(It.IsAny<string>()))
+            HttpClient!.Setup(c => c.GetAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(""));
         }
 
@@ -16,11 +16,11 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
         public async Task ThenItShouldCallTheApiWithTheCorrectUrl()
         {
             // Act
-            await ApiClient.Ping();
+            await ApiClient!.Ping();
 
             // Assert
-            var expectedUrl = $"http://some-url/api/ping";
-            HttpClient.Verify(c => c.GetAsync(expectedUrl), Times.Once);
+            const string expectedUrl = $"http://some-url/api/ping";
+            HttpClient!.Verify(c => c.GetAsync(expectedUrl), Times.Once);
         }
     }
 }

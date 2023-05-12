@@ -13,7 +13,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
         public override void HttpClientSetup()
         {
             _uri = $"/api/user/{TextualAccountId}/accounts";
-            var absoluteUri = Configuration.ApiBaseUrl.TrimEnd('/') + _uri;
+            var absoluteUri = Configuration!.ApiBaseUrl.TrimEnd('/') + _uri;
 
             _accountViewModel = new AccountDetailViewModel
             {
@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
 
             var accounts = new List<AccountDetailViewModel?> { _accountViewModel };
 
-            HttpClient.Setup(c => c.GetAsync(absoluteUri))
+            HttpClient!.Setup(c => c.GetAsync(absoluteUri))
                 .Returns(Task.FromResult(JsonConvert.SerializeObject(accounts)));
         }
 
@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
         public async Task ThenThePayeSchemeIsReturned()
         {
             // Act
-            var response = await ApiClient.GetUserAccounts(TextualAccountId);
+            var response = await ApiClient!.GetUserAccounts(TextualAccountId);
             var account = response?.FirstOrDefault();
 
             // Assert

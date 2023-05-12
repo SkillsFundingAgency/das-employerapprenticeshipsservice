@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
         public override void HttpClientSetup()
         {
             _uri = "/api/accounts/ABC123";
-            var absoluteUri = Configuration.ApiBaseUrl.TrimEnd('/') + _uri;
+            var absoluteUri = Configuration?.ApiBaseUrl.TrimEnd('/') + _uri;
 
             _expectedAccount = new AccountDetailViewModel
             {
@@ -28,14 +28,14 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
                 PayeSchemes = new ResourceList(new[] { new ResourceViewModel { Id = "1", Href = "/api/payeschemes/test1" } })
             };
 
-            HttpClient.Setup(c => c.GetAsync(absoluteUri)).Returns(Task.FromResult(JsonConvert.SerializeObject(_expectedAccount)));
+            HttpClient?.Setup(c => c.GetAsync(absoluteUri)).Returns(Task.FromResult(JsonConvert.SerializeObject(_expectedAccount)));
         }
 
         [Test]
         public async Task ThenTheAccountDetailsAreReturned()
         {
             // Act
-            var response = await ApiClient.GetResource<AccountDetailViewModel>(_uri);
+            var response = await ApiClient?.GetResource<AccountDetailViewModel>(_uri);
 
             // Assert
             Assert.That(response, Is.Not.Null);
