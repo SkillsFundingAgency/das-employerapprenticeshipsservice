@@ -105,7 +105,7 @@
     </p>
 </div>
 <div id="svg-defs" aria-hidden="true">
-    @Html.Partial("_SVGSprite")
+    <partial name="_SVGSprite"/>
 </div>
 <header role="banner" id="global-header" class="with-proposition">
     <div class="header-wrapper">
@@ -220,8 +220,8 @@
     }
 }
 <main role="main" id="content">
-    @RenderSection("breadcrumb", required: false)
-    @Html.Partial(@"_SuccessMessage", Model as OrchestratorResponse)
+    @await RenderSectionAsync("breadcrumb", required: false)
+    @await Html.PartialAsync(@"_SuccessMessage", Model as OrchestratorResponse)
     @RenderBody()
 </main>
 <footer class="group js-footer" id="footer" role="contentinfo">
