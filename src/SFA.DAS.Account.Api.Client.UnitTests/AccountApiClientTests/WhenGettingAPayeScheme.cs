@@ -7,8 +7,8 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
 {
     public class WhenGettingAPayeScheme : ApiClientTestBase
     {
-        private PayeSchemeModel _expectedPayeScheme;
-        private string _uri;
+        private PayeSchemeModel? _expectedPayeScheme;
+        private string? _uri;
 
         public override void HttpClientSetup()
         {
@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
             var response = await ApiClient.GetResource<PayeSchemeModel>(_uri);
 
             // Assert
-            Assert.IsNotNull(response);
+            Assert.That(response, Is.Not.Null);
             Assert.IsAssignableFrom<PayeSchemeModel>(response);
             response.Should().NotBeNull();
             response.Should().BeEquivalentTo(_expectedPayeScheme);

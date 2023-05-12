@@ -11,7 +11,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
         private const string HashedlegalEntityId = "DEF456";
         private const string HashedAgreementId = "GHI789";
 
-        private string _uri;
+        private string? _uri;
 
         public override void HttpClientSetup()
         {
@@ -30,8 +30,8 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
             var response = await ApiClient.GetEmployerAgreement(HashedAccountId, HashedlegalEntityId, HashedAgreementId);
 
             //Assert
-            Assert.IsNotNull(response);
-            Assert.AreEqual(HashedAccountId,response.HashedAccountId);
+            Assert.That(response, Is.Not.Null);
+            Assert.That(response.HashedAccountId, Is.EqualTo(HashedAccountId));
         }
     }
 }

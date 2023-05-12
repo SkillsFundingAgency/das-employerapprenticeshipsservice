@@ -7,8 +7,8 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
 {
     public class WhenGettingLegalEntityDetailsForAnAccount : ApiClientTestBase
     {
-        private List<LegalEntityViewModel> _legalEntities;
-        private string _uri;
+        private List<LegalEntityViewModel>? _legalEntities;
+        private string? _uri;
 
         public override void HttpClientSetup()
         {
@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
             var response = await ApiClient.GetLegalEntityDetailsConnectedToAccount(TextualAccountId);
 
             // Assert
-            Assert.IsNotNull(response);
+            Assert.That(response, Is.Not.Null);
             Assert.IsAssignableFrom<List<LegalEntityViewModel>>(response);
             response.Should().NotBeNull();
             response.Should().BeEquivalentTo(_legalEntities);

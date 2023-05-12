@@ -10,8 +10,8 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
 {
     public class WhenGettingAccountDetailsByInternalId : ApiClientTestBase
     {
-        private AccountDetailViewModel _expectedAccount;
-        private string _uri;
+        private AccountDetailViewModel? _expectedAccount;
+        private string? _uri;
 
         public override void HttpClientSetup()
         {
@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
             var actual = await ApiClient.GetAccount(123);
 
             //Assert
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
         }
     }
 }

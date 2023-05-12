@@ -7,8 +7,8 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
 {
     public class WhenGettingAUsersAccounts : ApiClientTestBase
     {
-        private AccountDetailViewModel _accountViewModel;
-        private string _uri;
+        private AccountDetailViewModel? _accountViewModel;
+        private string? _uri;
 
         public override void HttpClientSetup()
         {
@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
                 DateRegistered = DateTime.Now.AddDays(-30),
             };
 
-            var accounts = new List<AccountDetailViewModel> { _accountViewModel };
+            var accounts = new List<AccountDetailViewModel?> { _accountViewModel };
 
             HttpClient.Setup(c => c.GetAsync(absoluteUri))
                 .Returns(Task.FromResult(JsonConvert.SerializeObject(accounts)));
@@ -37,8 +37,11 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
             var account = response?.FirstOrDefault();
 
             // Assert
-            Assert.IsNotNull(response);
-            Assert.IsNotNull(account);
+            Assert.Multiple(() =>
+            {
+                Assert.That(response, Is.Not.Null);
+                Assert.That(account, Is.Not.Null);
+            });
             account.Should().BeEquivalentTo(_accountViewModel);
         }
     }

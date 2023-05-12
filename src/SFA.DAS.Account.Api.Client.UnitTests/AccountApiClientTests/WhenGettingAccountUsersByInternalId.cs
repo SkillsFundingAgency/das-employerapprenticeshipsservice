@@ -10,8 +10,8 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
 {
     public class WhenGettingAccountUsersByInternalId : ApiClientTestBase
     {
-        private TeamMemberViewModel _teamMember;
-        private string _uri;
+        private TeamMemberViewModel? _teamMember;
+        private string? _uri;
 
         public override void HttpClientSetup()
         {
@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
 
             _teamMember = fixture.Create<TeamMemberViewModel>();
 
-            var members = new List<TeamMemberViewModel> { _teamMember };
+            var members = new List<TeamMemberViewModel?> { _teamMember };
 
             HttpClient.Setup(c => c.GetAsync(absoluteUri))
                 .Returns(Task.FromResult(JsonConvert.SerializeObject(members)));

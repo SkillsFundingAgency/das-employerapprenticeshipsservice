@@ -8,8 +8,8 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
     [TestFixture]
     public class WhenGettingAccountDetails : ApiClientTestBase
     {
-        private AccountDetailViewModel _expectedAccount;
-        private string _uri;
+        private AccountDetailViewModel? _expectedAccount;
+        private string? _uri;
 
         public override void HttpClientSetup()
         {
@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
             var response = await ApiClient.GetResource<AccountDetailViewModel>(_uri);
 
             // Assert
-            Assert.IsNotNull(response);
+            Assert.That(response, Is.Not.Null);
             Assert.IsAssignableFrom<AccountDetailViewModel>(response);
             response.Should().NotBeNull();
             response.Should().BeEquivalentTo(_expectedAccount);
