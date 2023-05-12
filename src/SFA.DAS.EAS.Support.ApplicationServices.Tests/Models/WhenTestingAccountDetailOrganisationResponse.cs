@@ -9,14 +9,13 @@ namespace SFA.DAS.EAS.Support.ApplicationServices.Tests.Models
         [Test]
         public void ItShouldDefaultToNotFoundStatusCode()
         {
-            Assert.AreEqual(SearchResponseCodes.NoSearchResultsFound,
-                new AccountDetailOrganisationsResponse().StatusCode);
+            Assert.That(new AccountDetailOrganisationsResponse().StatusCode, Is.EqualTo(SearchResponseCodes.NoSearchResultsFound));
         }
 
         [Test]
         public void ItShouldDefaultToNullAccount()
         {
-            Assert.IsNull(new AccountDetailOrganisationsResponse().Account);
+            Assert.That(new AccountDetailOrganisationsResponse().Account, Is.Null);
         }
     }
 }

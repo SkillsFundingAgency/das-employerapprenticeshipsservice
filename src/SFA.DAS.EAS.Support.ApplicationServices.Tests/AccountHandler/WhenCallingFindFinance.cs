@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
@@ -17,11 +15,11 @@ namespace SFA.DAS.EAS.Support.ApplicationServices.Tests.AccountHandler
             MockAccountRepository.Setup(x => x.Get(Id, AccountFieldsSelection.Finance))
                 .ReturnsAsync(null as Core.Models.Account);
             var actual = await Unit.FindFinance(Id);
-            Assert.AreEqual(SearchResponseCodes.NoSearchResultsFound, actual.StatusCode);
+            Assert.That(actual.StatusCode, Is.EqualTo(SearchResponseCodes.NoSearchResultsFound));
         }
 
         [Test]
-        public async Task ItShouldReturnTheAccountWithBallanceLookupIfNoTransactionsAreFound()
+        public async Task ItShouldReturnTheAccountWithBalanceLookupIfNoTransactionsAreFound()
         {
             MockAccountRepository.Setup(x => x.Get(Id, AccountFieldsSelection.Finance))
                 .Returns(Task.FromResult(new Core.Models.Account
@@ -35,9 +33,11 @@ namespace SFA.DAS.EAS.Support.ApplicationServices.Tests.AccountHandler
             var actual = await Unit.FindFinance(Id);
 
             MockAccountRepository.Verify(x => x.GetAccountBalance(Id), Times.Once);
-
-            Assert.AreEqual(SearchResponseCodes.Success, actual.StatusCode);
-            Assert.IsNotNull(actual.Account);
+            Assert.Multiple(() =>
+            {
+                Assert.That(actual.StatusCode, Is.EqualTo(SearchResponseCodes.Success));
+                Assert.That(actual.Account, Is.Not.Null);
+            });
         }
     }
 }

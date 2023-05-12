@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 
@@ -14,13 +11,13 @@ namespace SFA.DAS.EAS.Support.ApplicationServices.Tests.AccountHandler
         {
             var accountDetailModels = new List<Core.Models.Account>
             {
-                new Core.Models.Account
+                new()
                 {
                     AccountId = 123,
                     OwnerEmail = "owner1@tempuri.org",
                     HashedAccountId = "ABC78"
                 },
-                new Core.Models.Account
+                new()
                 {
                     AccountId = 124,
                     OwnerEmail = "owner2@tempuri.org",
@@ -30,21 +27,19 @@ namespace SFA.DAS.EAS.Support.ApplicationServices.Tests.AccountHandler
 
             MockAccountRepository.Setup(r => r.FindAllDetails(10,1)).ReturnsAsync(accountDetailModels);
 
-            var actual = await Unit.FindAllAccounts(10,1);
-            Assert.IsNotNull(actual);
-            Assert.AreEqual(2, actual.Count());
+            var actual = (await Unit.FindAllAccounts(10,1)).ToArray();
+            Assert.That(actual, Is.Not.Null);
+            Assert.That(actual.Count, Is.EqualTo(2));
         }
 
         [Test]
         public async Task ItShouldReturnAnEmptyCollectionIfNotFound()
         {
-            var accountDetailModels = new List<Core.Models.Account>();
+            MockAccountRepository.Setup(r => r.FindAllDetails(10,1)).ReturnsAsync(new List<Core.Models.Account>());
 
-            MockAccountRepository.Setup(r => r.FindAllDetails(10,1)).ReturnsAsync(accountDetailModels);
-
-            var actual = await Unit.FindAllAccounts(10,1);
-            Assert.IsNotNull(actual);
-            Assert.AreEqual(0, actual.Count());
+            var actual = (await Unit.FindAllAccounts(10,1)).ToArray();
+            Assert.That(actual, Is.Not.Null);
+            Assert.That(actual, Is.Empty);
         }
     }
 }

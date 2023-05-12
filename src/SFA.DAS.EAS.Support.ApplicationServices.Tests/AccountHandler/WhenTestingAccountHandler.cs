@@ -6,9 +6,9 @@ namespace SFA.DAS.EAS.Support.ApplicationServices.Tests.AccountHandler
 {
     public abstract class WhenTestingAccountHandler
     {
-        protected readonly string Id = "123";
-        protected Mock<IAccountRepository> MockAccountRepository;
-        protected ApplicationServices.Services.AccountHandler Unit;
+        protected const string Id = "123";
+        protected Mock<IAccountRepository>? MockAccountRepository;
+        protected ApplicationServices.Services.AccountHandler? Unit;
 
         [SetUp]
         public void Setup()

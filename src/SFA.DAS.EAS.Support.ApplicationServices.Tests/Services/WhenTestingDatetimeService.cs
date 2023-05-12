@@ -1,6 +1,4 @@
-﻿using System;
-using NUnit.Framework;
-using SFA.DAS.EAS.Support.ApplicationServices.Services;
+﻿using NUnit.Framework;
 using SFA.DAS.EAS.Support.Infrastructure.Services;
 
 namespace SFA.DAS.EAS.Support.ApplicationServices.Tests.Services
@@ -14,7 +12,7 @@ namespace SFA.DAS.EAS.Support.ApplicationServices.Tests.Services
             _unit = new DatetimeService();
         }
 
-        private DatetimeService _unit;
+        private DatetimeService? _unit;
 
         [TestCase("1-Apr-2016", "1-Apr-2016")]
         [TestCase("1-May-2016", "1-Apr-2016")]
@@ -32,8 +30,7 @@ namespace SFA.DAS.EAS.Support.ApplicationServices.Tests.Services
         [TestCase("1-Apr-2017", "1-Apr-2017")]
         public void ItShouldTestTheBehaviour(string testDate, string expected)
         {
-            Assert.AreEqual(DateTime.Parse(expected),
-                _unit.GetBeginningFinancialYear(DateTime.Parse(testDate)));
+            Assert.That(_unit!.GetBeginningFinancialYear(DateTime.Parse(testDate)), Is.EqualTo(DateTime.Parse(expected)));
         }
     }
 }

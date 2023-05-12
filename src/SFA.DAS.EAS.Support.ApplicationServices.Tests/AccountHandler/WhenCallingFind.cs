@@ -12,34 +12,40 @@ namespace SFA.DAS.EAS.Support.ApplicationServices.Tests.AccountHandler
         [Test]
         public async Task ItShouldReturnAccountInResponseIfFound()
         {
-            var accountId = 123L;
-            var orgid = accountId.ToString();
+            const long accountId = 123L;
+            var originalId = accountId.ToString();
             var account = new Core.Models.Account {AccountId = accountId};
 
 
-            MockAccountRepository.Setup(r => r.Get(orgid, AccountFieldsSelection.None)).ReturnsAsync(account);
+            MockAccountRepository.Setup(r => r.Get(originalId, AccountFieldsSelection.None)).ReturnsAsync(account);
 
-            var actual = await Unit.Find(orgid);
-            Assert.IsNotNull(actual);
-            Assert.AreEqual(SearchResponseCodes.Success, actual.StatusCode);
-            Assert.IsNotNull(actual.Account);
+            var actual = await Unit.Find(originalId);
+            Assert.That(actual, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(actual.StatusCode, Is.EqualTo(SearchResponseCodes.Success));
+                Assert.That(actual.Account, Is.Not.Null);
+            });
         }
 
         [Test]
         public async Task ItShouldReturnNoAccountInTheResponseIfNotFound()
         {
-            var accountId = 123L;
-            var orgid = accountId.ToString();
+            const long accountId = 123L;
+            var originalId = accountId.ToString();
             var account = new Core.Models.Account {AccountId = accountId};
 
 
-            MockAccountRepository.Setup(r => r.Get(orgid, AccountFieldsSelection.None))
+            MockAccountRepository.Setup(r => r.Get(originalId, AccountFieldsSelection.None))
                 .ReturnsAsync(null as Core.Models.Account);
 
-            var actual = await Unit.Find(orgid);
-            Assert.IsNotNull(actual);
-            Assert.AreEqual(new AccountDetailOrganisationsResponse().StatusCode, actual.StatusCode);
-            Assert.IsNull(actual.Account);
+            var actual = await Unit.Find(originalId);
+            Assert.That(actual, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(actual.StatusCode, Is.EqualTo(new AccountDetailOrganisationsResponse().StatusCode));
+                Assert.That(actual.Account, Is.Null);
+            });
         }
     }
 }

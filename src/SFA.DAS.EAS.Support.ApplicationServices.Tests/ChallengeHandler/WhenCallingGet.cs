@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
@@ -26,9 +25,12 @@ namespace SFA.DAS.EAS.Support.ApplicationServices.Tests.ChallengeHandler
             var actual = await _unit.Get(id);
 
 
-            Assert.IsNotNull(actual);
-            Assert.IsNotNull(actual.Account);
-            Assert.AreEqual(SearchResponseCodes.Success, actual.StatusCode);
+            Assert.That(actual, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(actual.Account, Is.Not.Null);
+                Assert.That(actual.StatusCode, Is.EqualTo(SearchResponseCodes.Success));
+            });
         }
 
         [Test]
@@ -42,8 +44,8 @@ namespace SFA.DAS.EAS.Support.ApplicationServices.Tests.ChallengeHandler
 
             var actual = await _unit.Get(id);
 
-            Assert.IsNotNull(actual);
-            Assert.AreEqual(SearchResponseCodes.NoSearchResultsFound, actual.StatusCode);
+            Assert.That(actual, Is.Not.Null);
+            Assert.That(actual.StatusCode, Is.EqualTo(SearchResponseCodes.NoSearchResultsFound));
         }
     }
 }
