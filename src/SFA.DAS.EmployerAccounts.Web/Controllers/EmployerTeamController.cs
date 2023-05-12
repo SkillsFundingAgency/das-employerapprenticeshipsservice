@@ -392,7 +392,7 @@ public class EmployerTeamController : BaseController
 
     [HttpPost]
     [Route("triagewillapprenticeshiptrainingstart", Name = RouteNames.TriageWhenWillApprenticeshipStartPost)]
-    public IActionResult TriageWillApprenticeshipTrainingStart(TriageViewModel model)
+    public IActionResult TriageWillApprenticeshipTrainingStart(string hashedAccountId,TriageViewModel model)
     {
         if (!ModelState.IsValid)
         {
@@ -403,17 +403,17 @@ public class EmployerTeamController : BaseController
         {
             case TriageOptions.Yes:
                 {
-                    return RedirectToAction(ControllerConstants.TriageApprenticeForExistingEmployeeActionName);
+                    return RedirectToRoute(RouteNames.TriageWhenApprenticeshipForExistingEmployee, new { hashedAccountId });
                 }
 
             case TriageOptions.No:
                 {
-                    return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetStartDateActionName);
+                    return RedirectToRoute(RouteNames.TriageCannotSetupWithoutStartDate, new { hashedAccountId });
                 }
 
             case TriageOptions.Unknown:
                 {
-                    return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetApproximateStartDateActionName);
+                    return RedirectToRoute(RouteNames.TriageCannotSetupWithoutApproximateStartDate, new { hashedAccountId });
                 }
 
             default:

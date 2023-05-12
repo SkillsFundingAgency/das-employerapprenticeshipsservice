@@ -1,9 +1,11 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
 @model SFA.DAS.EmployerAccounts.Web.ViewModels.TriageViewModel
-@{ViewBag.PageID = "will-apprenticeship-training-start"; }
-@{ViewBag.Title = "Will the apprenticeship training start in the next 6 months?"; }
-@{ViewBag.MetaDesc = "Will the apprenticeship training start in the next 6 months"; }
-@{ViewBag.GaData.Vpv = "/account/setupapprentice/will-apprenticeship-training-start"; }
+@{
+    ViewBag.PageID = "will-apprenticeship-training-start";
+    ViewBag.Title = "Will the apprenticeship training start in the next 6 months?";
+    ViewBag.MetaDesc = "Will the apprenticeship training start in the next 6 months";
+    ViewBag.GaData.Vpv = "/account/setupapprentice/will-apprenticeship-training-start";
+}
 
 @section breadcrumb
 {
@@ -33,7 +35,9 @@
             You do not need to know the exact date.
         </div>
 
-        <form method="POST" action="@Url.Action(ControllerConstants.TriageWillApprenticeshipTrainingStartActionName)">
+        <form method="POST" 
+            asp-route="@RouteNames.TriageWhenWillApprenticeshipStartPost" 
+            asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]">
             <div class="govuk-form-group @(ViewData.ModelState.IsValid ? "" : "govuk-form-group--error")" id="will-apprenticeship-training-start">
                 <fieldset class="govuk-fieldset" aria-describedby="will-apprenticeship-training-start">
                     @if (!ViewData.ModelState.IsValid)

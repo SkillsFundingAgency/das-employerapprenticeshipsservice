@@ -1,12 +1,14 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
-@{ViewBag.PageID = "you-cannot-setup-an-apprenticeship-yet-approximate-start-date"; }
-@{ViewBag.Title = "You cannot set up an apprenticeship yet"; }
-@{ViewBag.MetaDesc = "You cannot set up an apprenticeship yet"; }
-@{ViewBag.GaData.Vpv = "/account/setupapprentice/you-cannot-setup-an-apprenticeship-yet-approximate-start-date"; }
+@{
+    ViewBag.PageID = "you-cannot-setup-an-apprenticeship-yet-approximate-start-date";
+    ViewBag.Title = "You cannot set up an apprenticeship yet";
+    ViewBag.MetaDesc = "You cannot set up an apprenticeship yet";
+    ViewBag.GaData.Vpv = "/account/setupapprentice/you-cannot-setup-an-apprenticeship-yet-approximate-start-date";
+}
 
 @section breadcrumb
 {
-    <a href="javascript:history.back()" class="govuk-back-link js-show">Back</a>    
+    <a href="javascript:history.back()" class="govuk-back-link js-show">Back</a>
 }
 
 <div class="govuk-grid-row">
@@ -15,6 +17,6 @@
         <p class="govuk-body">Before you can set up an apprenticeship, you need to know the approximate training start date.</p>
         <p class="govuk-body">Ask your training provider when the apprenticeship training will start. You can get their contact details from <a href="https://findapprenticeshiptraining.apprenticeships.education.gov.uk" class="govuk-link" target="_blank" rel="noopener">find apprenticeship training</a>.</p>
         <p class="govuk-body">Try again once you know when the apprenticeship training will start.</p>
-        <a href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName)" class="govuk-button" id="return-to-homepage">Return to account home</a>
+        <a asp-route="@RouteNames.EmployerTeamIndex" asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" class="govuk-button" id="return-to-homepage">Return to account home</a>
     </div>
 </div>
