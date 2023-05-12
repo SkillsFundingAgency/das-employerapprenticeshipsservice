@@ -70,7 +70,8 @@ public class SearchPensionRegulatorController : BaseController
     }
 
     [HttpPost]
-    [Route("{HashedAccountId?}/pensionregulator", Name = RouteNames.PostSearchPensionRegulator)]
+    [Route("{HashedAccountId}/pensionregulator", Order = 0)]
+    [Route("pensionregulator", Order = 1)]
     public async Task<IActionResult> SearchPensionRegulator(string hashedAccountId, SearchPensionRegulatorResultsViewModel viewModel)
     {
         if (!viewModel.SelectedOrganisation.HasValue)

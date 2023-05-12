@@ -11,7 +11,6 @@
 
         public const string SearchPensionRegulatorAddOrganisation = "search-pension-regulator-add-org";
         public const string SearchPensionRegulatorCreateAccount = "search-pension-regulator-create-account";
-        public const string PostSearchPensionRegulator = "post-search-pension-regulator";
 
         public const string SignOut = "SignOut";
         public const string EmployerAgreementIndex = "employer-agreement-index";
