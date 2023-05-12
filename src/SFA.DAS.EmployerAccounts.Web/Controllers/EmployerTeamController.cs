@@ -275,14 +275,14 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpGet]
-    [Route("continuesetupcreateadvert")]
+    [Route("continuesetupcreateadvert", Name = RouteNames.CreateAdvert)]
     public IActionResult ContinueSetupCreateAdvert(string hashedAccountId)
     {
         return View();
     }
 
     [HttpPost]
-    [Route("continuesetupcreateadvert")]
+    [Route("continuesetupcreateadvert", Name = RouteNames.CreateAdvertPost)]
     public IActionResult ContinueSetupCreateAdvert(string hashedAccountId, bool? requiresAdvert)
     {
         if (!requiresAdvert.HasValue)
@@ -300,14 +300,14 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpGet]
-    [Route("triagewhichcourseyourapprenticewilltake")]
+    [Route("triagewhichcourseyourapprenticewilltake", Name = RouteNames.TriageCourse)]
     public IActionResult TriageWhichCourseYourApprenticeWillTake()
     {
         return View();
     }
 
     [HttpPost]
-    [Route("triagewhichcourseyourapprenticewilltake")]
+    [Route("triagewhichcourseyourapprenticewilltake", Name = RouteNames.TriageCoursePost)]
     public IActionResult TriageWhichCourseYourApprenticeWillTake(TriageViewModel model)
     {
         if (!ModelState.IsValid)
@@ -335,21 +335,21 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpGet]
-    [Route("triageyoucannotsetupanapprenticeshipyetcourseprovider")]
+    [Route("triageyoucannotsetupanapprenticeshipyetcourseprovider", Name = RouteNames.TriageCannotSetupWithoutChosenCourseAndProvider)]
     public IActionResult TriageYouCannotSetupAnApprenticeshipYetCourseProvider()
     {
         return View();
     }
 
     [HttpGet]
-    [Route("triagehaveyouchosenatrainingprovider")]
+    [Route("triagehaveyouchosenatrainingprovider", Name = RouteNames.TriageChosenProvider)]
     public IActionResult TriageHaveYouChosenATrainingProvider()
     {
         return View();
     }
 
     [HttpPost]
-    [Route("triagehaveyouchosenatrainingprovider")]
+    [Route("triagehaveyouchosenatrainingprovider", Name = RouteNames.TriageChosenProviderPost)]
     public IActionResult TriageHaveYouChosenATrainingProvider(TriageViewModel model)
     {
         if (!ModelState.IsValid)
@@ -377,21 +377,21 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpGet]
-    [Route("triageyoucannotsetupanapprenticeshipyetprovider")]
+    [Route("triageyoucannotsetupanapprenticeshipyetprovider", Name = RouteNames.TriageCannotSetupWithoutChosenProvider)]
     public IActionResult TriageYouCannotSetupAnApprenticeshipYetProvider()
     {
         return View();
     }
 
     [HttpGet]
-    [Route("triagewillapprenticeshiptrainingstart")]
+    [Route("triagewillapprenticeshiptrainingstart", Name = RouteNames.TriageWhenWillApprenticeshipStart)]
     public IActionResult TriageWillApprenticeshipTrainingStart()
     {
         return View();
     }
 
     [HttpPost]
-    [Route("triagewillapprenticeshiptrainingstart")]
+    [Route("triagewillapprenticeshiptrainingstart", Name = RouteNames.TriageWhenWillApprenticeshipStartPost)]
     public IActionResult TriageWillApprenticeshipTrainingStart(TriageViewModel model)
     {
         if (!ModelState.IsValid)
@@ -424,28 +424,28 @@ public class EmployerTeamController : BaseController
     }
 
     [HttpGet]
-    [Route("triageyoucannotsetupanapprenticeshipyetstartdate")]
+    [Route("triageyoucannotsetupanapprenticeshipyetstartdate", Name = RouteNames.TriageCannotSetupWithoutStartDate)]
     public IActionResult TriageYouCannotSetupAnApprenticeshipYetStartDate()
     {
         return View();
     }
 
     [HttpGet]
-    [Route("triageyoucannotsetupanapprenticeshipyetapproximatestartdate")]
+    [Route("triageyoucannotsetupanapprenticeshipyetapproximatestartdate", Name = RouteNames.TriageCannotSetupWithoutApproximateStartDate)]
     public IActionResult TriageYouCannotSetupAnApprenticeshipYetApproximateStartDate()
     {
         return View();
     }
 
     [HttpGet]
-    [Route("triageapprenticeforexistingemployee")]
+    [Route("triageapprenticeforexistingemployee", Name = RouteNames.TriageWhenApprenticeshipForExistingEmployee)]
     public IActionResult TriageApprenticeForExistingEmployee()
     {
         return View();
     }
 
     [HttpPost]
-    [Route("triageapprenticeforexistingemployee")]
+    [Route("triageapprenticeforexistingemployee", Name = RouteNames.TriageWhenApprenticeshipForExistingEmployeePost)]
     public IActionResult TriageApprenticeForExistingEmployee(TriageViewModel model)
     {
         if (!ModelState.IsValid)
