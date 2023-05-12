@@ -1,41 +1,32 @@
-﻿namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests;
+﻿using AutoFixture.NUnit3;
+using SFA.DAS.EmployerAccounts.Web.RouteValues;
+using SFA.DAS.Testing.AutoFixture;
+
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests;
 
 public class WhenIChooseIIfIKnowWhichTrainingProviderToDeliver
 {
-    private EmployerTeamController _controller;
-
-    private Mock<ICookieStorageService<FlashMessageViewModel>> _mockCookieStorageService;
-    private Mock<EmployerTeamOrchestratorWithCallToAction> _mockEmployerTeamOrchestrator;
-
-    [SetUp]
-    public void Arrange()
-    {
-        _mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-        _mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestratorWithCallToAction>();
-
-        _controller = new EmployerTeamController(
-            _mockCookieStorageService.Object,
-            _mockEmployerTeamOrchestrator.Object,
-            Mock.Of<IUrlActionHelper>());
-    }
-
-    [Test]
-    public void IfIChooseYesIContinueTheJourney()
+    [Test, MoqAutoData]
+    public void IfIChooseYesIContinueTheJourney(
+        string hashedAccountId,
+        [NoAutoProperties] EmployerTeamController controller)
     {
         //Act
-        var result = _controller.TriageHaveYouChosenATrainingProvider(new TriageViewModel { TriageOption = TriageOptions.Yes }) as RedirectToActionResult;
+        var result = controller.TriageHaveYouChosenATrainingProvider(hashedAccountId, new TriageViewModel { TriageOption = TriageOptions.Yes }) as RedirectToRouteResult;
 
         //Assert
-        Assert.AreEqual(ControllerConstants.TriageWillApprenticeshipTrainingStartActionName, result.ActionName);
+        Assert.AreEqual(RouteNames.TriageWhenWillApprenticeshipStart, result.RouteName);
     }
 
-    [Test]
-    public void IfIChooseNoICannotSetupAnApprentice()
+    [Test, MoqAutoData]
+    public void IfIChooseNoICannotSetupAnApprentice(
+        string hashedAccountId,
+        [NoAutoProperties] EmployerTeamController controller)
     {
         //Act
-        var result = _controller.TriageHaveYouChosenATrainingProvider(new TriageViewModel { TriageOption = TriageOptions.No }) as RedirectToActionResult;
+        var result = controller.TriageHaveYouChosenATrainingProvider(hashedAccountId, new TriageViewModel { TriageOption = TriageOptions.No }) as RedirectToRouteResult;
 
         //Assert
-        Assert.AreEqual(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetProviderActionName, result.ActionName);
+        Assert.AreEqual(RouteNames.TriageCannotSetupWithoutChosenProvider, result.RouteName);
     }
 }
