@@ -9,10 +9,11 @@ namespace SFA.DAS.EAS.Web.Controllers;
 [Route("accounts")]
 public class SearchOrganisationController : Controller
 {
-    public IConfiguration Configuration { get; set; }
-    public SearchOrganisationController(IConfiguration _configuration)
+    private readonly IConfiguration _configuration;
+    
+    public SearchOrganisationController(IConfiguration configuration)
     {
-        Configuration = _configuration;
+        _configuration = configuration;
     }
 
     [HttpGet]
@@ -20,15 +21,15 @@ public class SearchOrganisationController : Controller
     [Route("organisations/search", Order = 1)]
     public IActionResult SearchForOrganisation()
     {
-        return Redirect(Url.EmployerAccountsAction("organisations/search", Configuration));
+        return Redirect(Url.EmployerAccountsAction("organisations/search", _configuration));
     }
     
     [Route("{HashedAccountId}/organisations/search/results", Order = 0)]
     [Route("organisations/search/results", Order = 1)]
-    public async Task<IActionResult> SearchForOrganisationResults()
+    public IActionResult SearchForOrganisationResults()
     {
         var paramString = Request?.Query == null ? string.Empty : $"?{Request.Query}";
 
-        return Redirect(Url.EmployerAccountsAction($"organisations/search/results{paramString}", Configuration));
+        return Redirect(Url.EmployerAccountsAction($"organisations/search/results{paramString}", _configuration));
     }
 }
