@@ -9,60 +9,61 @@ namespace SFA.DAS.EAS.Web.Controllers;
 [Route("accounts/{HashedAccountId}/organisations")]
 public class OrganisationController : Controller
 {
-    public IConfiguration Configuration { get; set; }
-    public OrganisationController(IConfiguration _configuration)
+    private readonly IConfiguration _configuration;
+    
+    public OrganisationController(IConfiguration configuration)
     {
-        Configuration = _configuration;
+        _configuration = configuration;
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Route("confirm")]
-    public async Task<IActionResult> Confirm()
+    public IActionResult Confirm()
     {
-        return Redirect(Url.EmployerAccountsAction("organisations/confirm", Configuration));
+        return Redirect(Url.EmployerAccountsAction("organisations/confirm", _configuration));
     }
 
     [HttpGet]
     [Route("nextStep")]
-    public async Task<IActionResult> OrganisationAddedNextSteps()
+    public IActionResult OrganisationAddedNextSteps()
     {
-        return Redirect(Url.EmployerAccountsAction($"organisations/nextStep", Configuration));
+        return Redirect(Url.EmployerAccountsAction($"organisations/nextStep", _configuration));
     }
 
     [HttpGet]
     [Route("nextStepSearch")]
-    public async Task<IActionResult> OrganisationAddedNextStepsSearch()
+    public IActionResult OrganisationAddedNextStepsSearch()
     {
-        return Redirect(Url.EmployerAccountsAction($"organisations/nextStepSearch", Configuration));
+        return Redirect(Url.EmployerAccountsAction($"organisations/nextStepSearch", _configuration));
     }
 
 
     [HttpPost]
     [Route("nextStep")]
-    public async Task<IActionResult> GoToNextStep()
+    public IActionResult GoToNextStep()
     {
-        return Redirect(Url.EmployerAccountsAction("nextStep", Configuration));
+        return Redirect(Url.EmployerAccountsAction("nextStep", _configuration));
     }
 
     [HttpGet]
     [Route("review")]
-    public async Task<IActionResult> Review()
+    public IActionResult Review()
     {
-        return Redirect(Url.EmployerAccountsAction("organisations/review", Configuration));
+        return Redirect(Url.EmployerAccountsAction("organisations/review", _configuration));
     }
 
     [HttpPost]
     [Route("review")]
-    public async Task<IActionResult> ProcessReviewSelection()
+    public IActionResult ProcessReviewSelection()
     {
-        return Redirect(Url.EmployerAccountsAction("organisations/review", Configuration));
+        return Redirect(Url.EmployerAccountsAction("organisations/review", _configuration));
     }
 
     [HttpPost]
     [Route("PostUpdateSelection")]
     public IActionResult GoToPostUpdateSelection()
     {
-        return Redirect(Url.EmployerAccountsAction("organisations/PostUpdateSelection", Configuration));
+        return Redirect(Url.EmployerAccountsAction("organisations/PostUpdateSelection", _configuration));
     }
 }
