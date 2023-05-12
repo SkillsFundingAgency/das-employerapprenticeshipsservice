@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
@@ -14,7 +13,7 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Challenge
     public class WhenCallingIndexPost : WhenTestingChallengeController
     {
         /// <summary>
-        ///     Note that this Controler method scenario sets HttpResponse.StatusCode = 403 (Forbidden), this result is not
+        ///     Note that this Controller method scenario sets HttpResponse.StatusCode = 403 (Forbidden), this result is not
         ///     testable from a unit test
         /// </summary>
         /// <returns></returns>
@@ -29,17 +28,6 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Challenge
                 Challenge2 = "A",
                 FirstCharacterPosition = 0,
                 SecondCharacterPosition = 1,
-                Url = "https://tempuri.org/challenge/me/to/a/deul/any/time"
-            };
-
-            var query = new ChallengePermissionQuery
-            {
-                Id = "123",
-                Balance = "£1000",
-                ChallengeElement1 = "1",
-                ChallengeElement2 = "A",
-                FirstCharacterPosition = 1,
-                SecondCharacterPosition = 2,
                 Url = "https://tempuri.org/challenge/me/to/a/deul/any/time"
             };
 
@@ -58,7 +46,7 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Challenge
             Assert.IsNotNull(actual);
             Assert.IsInstanceOf<ViewResult>(actual);
             Assert.IsInstanceOf<ChallengeViewModel>(((ViewResult)actual).Model);
-            Assert.AreEqual(true, ((ChallengeViewModel)((ViewResult)actual).Model).HasError);
+            Assert.AreEqual(true, ((ChallengeViewModel)((ViewResult)actual).Model!).HasError);
         }
 
         [Test]
@@ -70,17 +58,6 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Challenge
                 Balance = "£1000",
                 Challenge1 = "1",
                 Challenge2 = "A",
-                FirstCharacterPosition = 1,
-                SecondCharacterPosition = 4,
-                Url = "https://tempuri.org/challenge/me/to/a/deul/any/time"
-            };
-
-            var query = new ChallengePermissionQuery
-            {
-                Id = "123",
-                Balance = "£1000",
-                ChallengeElement1 = "1",
-                ChallengeElement2 = "B",
                 FirstCharacterPosition = 1,
                 SecondCharacterPosition = 4,
                 Url = "https://tempuri.org/challenge/me/to/a/deul/any/time"
@@ -103,7 +80,7 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Challenge
 
             var result = ((JsonResult)actual).Value as ChallengeValidationResult;
             Assert.IsNotNull(result);
-            Assert.IsTrue(result.IsValidResponse);
+            Assert.IsTrue(result!.IsValidResponse);
         }
     }
 }

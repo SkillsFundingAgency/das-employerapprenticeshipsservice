@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
@@ -19,7 +18,7 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Challenge
                 StatusCode = SearchResponseCodes.NoSearchResultsFound
             };
 
-            var id = "123";
+            const string id = "123";
 
             MockChallengeHandler.Setup(x => x.Get(id))
                 .ReturnsAsync(challengeResponse);
@@ -38,7 +37,7 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Challenge
                 StatusCode = SearchResponseCodes.SearchFailed
             };
 
-            var id = "123";
+            const string id = "123";
 
             MockChallengeHandler.Setup(x => x.Get(id))
                 .ReturnsAsync(challengeResponse);
@@ -62,7 +61,7 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Challenge
                 StatusCode = SearchResponseCodes.Success
             };
 
-            var id = "123";
+            const string id = "123";
 
             MockChallengeHandler.Setup(x => x.Get(id))
                 .ReturnsAsync(challengeResponse);

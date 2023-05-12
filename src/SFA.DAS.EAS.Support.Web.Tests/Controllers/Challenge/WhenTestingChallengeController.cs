@@ -12,15 +12,14 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Challenge
 {
     public abstract class WhenTestingChallengeController
     {
-        protected Mock<IChallengeHandler> MockChallengeHandler;
-        protected Mock<HttpContext> MockContextBase;
-        protected Mock<HttpRequest> MockRequestBase;
-        protected Mock<HttpResponse> MockResponseBase;
-        protected Mock<ClaimsPrincipal> MockUser;
-        protected Mock<ILogger<ChallengeController>> _logger;
-        protected RouteData RouteData;
-        protected ChallengeController Unit;
-        protected ControllerContext UnitControllerContext;
+        protected Mock<IChallengeHandler>? MockChallengeHandler;
+        private Mock<HttpContext>? _mockContextBase;
+        private Mock<HttpRequest>? _mockRequestBase;
+        private Mock<HttpResponse>? _mockResponseBase;
+        private Mock<ClaimsPrincipal>? _mockUser;
+        private Mock<ILogger<ChallengeController>>? _logger;
+        protected ChallengeController? Unit;
+        private ControllerContext? _unitControllerContext;
 
         [SetUp]
         public void Setup()
@@ -29,20 +28,19 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Challenge
             _logger = new Mock<ILogger<ChallengeController>>();
             Unit = new ChallengeController(MockChallengeHandler.Object, _logger.Object);
 
-            RouteData = new RouteData();
-            MockContextBase = new Mock<HttpContext>();
+            _mockContextBase = new Mock<HttpContext>();
 
-            MockRequestBase = new Mock<HttpRequest>();
-            MockResponseBase = new Mock<HttpResponse>();
-            MockUser = new Mock<ClaimsPrincipal>();
+            _mockRequestBase = new Mock<HttpRequest>();
+            _mockResponseBase = new Mock<HttpResponse>();
+            _mockUser = new Mock<ClaimsPrincipal>();
 
-            MockContextBase.Setup(x => x.Request).Returns(MockRequestBase.Object);
-            MockContextBase.Setup(x => x.Response).Returns(MockResponseBase.Object);
-            MockContextBase.Setup(x => x.User).Returns(MockUser.Object);
+            _mockContextBase.Setup(x => x.Request).Returns(_mockRequestBase.Object);
+            _mockContextBase.Setup(x => x.Response).Returns(_mockResponseBase.Object);
+            _mockContextBase.Setup(x => x.User).Returns(_mockUser.Object);
 
-            UnitControllerContext = new ControllerContext();
+            _unitControllerContext = new ControllerContext();
 
-            Unit.ControllerContext = UnitControllerContext;
+            Unit.ControllerContext = _unitControllerContext;
         }
     }
 }
