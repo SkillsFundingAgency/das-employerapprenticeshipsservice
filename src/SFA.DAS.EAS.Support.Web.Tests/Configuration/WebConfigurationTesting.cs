@@ -4,9 +4,6 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Support.Infrastructure.Settings;
 using SFA.DAS.EAS.Support.Web.Configuration;
-using SFA.DAS.Support.Shared.SiteConnection;
-using System;
-using System.IO;
 
 namespace SFA.DAS.EAS.Support.Web.Tests.Configuration
 {
@@ -27,12 +24,6 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Configuration
                     Tenant = "--- configuration value goes here ---"
                 },
                 EmployerAccountsConfiguration = new EmployerAccountsConfiguration(),
-                SiteValidator = new SiteValidatorSettings
-                {
-                    Audience = "--- configuration value goes here ---",
-                    Scope = "--- configuration value goes here ---",
-                    Tenant = "--- configuration value goes here ---"
-                },
                 LevySubmission = new LevySubmissionsSettings
                 {
                     HmrcApi = new HmrcApiClientConfiguration

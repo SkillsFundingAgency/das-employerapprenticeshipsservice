@@ -10,10 +10,7 @@ public class WebConfiguration : IWebConfiguration
 {
     [JsonRequired]
     public AccountApiConfiguration AccountApi { get; set; }
-
-    [JsonRequired]
-    public SiteValidatorSettings SiteValidator { get; set; }
-
+    
     [JsonRequired]
     public LevySubmissionsSettings LevySubmission { get; set; }
 
