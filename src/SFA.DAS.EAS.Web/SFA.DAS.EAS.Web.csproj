@@ -139,4 +139,9 @@
     <None Include="wwwroot\dist\javascripts\showhide-content.js" />
     <None Include="wwwroot\dist\javascripts\stacker.js" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>
