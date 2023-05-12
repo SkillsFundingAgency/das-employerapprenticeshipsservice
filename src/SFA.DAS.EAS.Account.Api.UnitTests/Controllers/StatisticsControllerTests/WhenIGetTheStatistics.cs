@@ -11,9 +11,9 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.StatisticsControllerTest
     [TestFixture]
     public class WhenICallTheStatisticsEndPoint
     {
-        private StatisticsController _controller;
-        private Mock<StatisticsOrchestrator> _orchestrator;
-        private StatisticsViewModel _statisticsViewModel;
+        private StatisticsController? _controller;
+        private Mock<StatisticsOrchestrator>? _orchestrator;
+        private StatisticsViewModel? _statisticsViewModel;
 
         [SetUp]
         public void Setup()
@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.StatisticsControllerTest
         public async Task ThenShouldReturnOkNegotiatedContentResultWithStatistics()
         {
             //Act
-            var result = await _controller.GetStatistics();
+            var result = await _controller!.GetStatistics();
 
             //Assert
             result.Should().NotBeNull();
@@ -49,7 +49,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.StatisticsControllerTest
             actResult.Result.Should().NotBeNull();
             actResult.Result.Should().BeOfType<OkObjectResult>();
 
-            var okResult = (OkObjectResult)actResult.Result;
+            var okResult = (OkObjectResult)actResult.Result!;
 
             okResult.Value.Should().NotBeNull();
             okResult.Value.Should().BeEquivalentTo(_statisticsViewModel);

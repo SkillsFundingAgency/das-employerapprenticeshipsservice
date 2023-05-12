@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
         private Mock<ILogger<AccountTransactionsOrchestrator>> _logger;
         private Mock<IUrlHelper> _urlHelper;        
         private Mock<IEmployerFinanceApiService> _financeApiService;
-        protected IMapper _mapper;
+        protected IMapper? _mapper;
         private TransactionsViewModel transactionsViewModel;
 
         [SetUp]

@@ -12,11 +12,11 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
     [TestFixture]
     public class WhenIGetTheTransactionSummaryForAnAccount : AccountTransactionsControllerTests
     {
-        private AccountTransactionsController _controller;             
-        private Mock<ILogger<AccountTransactionsOrchestrator>> _logger;
-        private Mock<IUrlHelper> _urlHelper;
-        private  Mock<IEmployerFinanceApiService> _financeApiService;
-        protected IMapper _mapper;        
+        private AccountTransactionsController? _controller;             
+        private Mock<ILogger<AccountTransactionsOrchestrator>>? _logger;
+        private Mock<IUrlHelper>? _urlHelper;
+        private  Mock<IEmployerFinanceApiService>? _financeApiService;
+        private IMapper? _mapper;        
 
         [SetUp]
         public void Arrange()
@@ -26,8 +26,10 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             _financeApiService = new Mock<IEmployerFinanceApiService>();
             _mapper = ConfigureMapper();
             var orchestrator = new AccountTransactionsOrchestrator(_logger.Object, _financeApiService.Object);
-            _controller = new AccountTransactionsController(orchestrator);
-            _controller.Url = _urlHelper.Object; 
+            _controller = new AccountTransactionsController(orchestrator)
+            {
+                Url = _urlHelper.Object
+            };
         }
 
         //[Test]

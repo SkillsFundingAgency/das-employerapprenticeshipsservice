@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
                 }
             };
 
-            _employerAccountsApiService.Setup(s => s.GetAccounts(null, 1000, 1, It.IsAny<CancellationToken>()))
+            EmployerAccountsApiService.Setup(s => s.GetAccounts(null, 1000, 1, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(accountsResponse);
 
             var response = new List<AccountBalance>
@@ -36,10 +36,10 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
                 };
            
 
-            _employerFinanceApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>(), CancellationToken.None)).ReturnsAsync(response);
+            EmployerFinanceApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>(), CancellationToken.None)).ReturnsAsync(response);
 
             //Act
-            var result = await _controller.GetAccounts();
+            var result = await Controller.GetAccounts();
             
             //Assert
             result.Should().NotBeNull();

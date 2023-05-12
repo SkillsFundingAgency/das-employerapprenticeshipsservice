@@ -33,17 +33,17 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
                 LegalEntities = new ResourceList(new List<ResourceViewModel> { new ResourceViewModel { Href = "/api/123", Id = "123" } }),
                 PayeSchemes = new ResourceList(new List<ResourceViewModel> { new ResourceViewModel { Href = "/api/XXX", Id = "XXX" } })
             };
-            _employerAccountsApiService.Setup(x => x.GetAccount(hashedAccountId, It.IsAny<CancellationToken>())).ReturnsAsync(account);
+            EmployerAccountsApiService.Setup(x => x.GetAccount(hashedAccountId, It.IsAny<CancellationToken>())).ReturnsAsync(account);
 
 
             var accountBalancesResponse = new List<AccountBalance> { new AccountBalance { AccountId = account.AccountId, Balance = 123.45m } };
-            _employerFinanceApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>(), CancellationToken.None)).ReturnsAsync(accountBalancesResponse);
+            EmployerFinanceApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>(), CancellationToken.None)).ReturnsAsync(accountBalancesResponse);
 
             var transferAllowanceResponse = new TransferAllowance() { StartingTransferAllowance = 10, RemainingTransferAllowance = 15 };            
-            _employerFinanceApiService.Setup(x => x.GetTransferAllowance(It.IsAny<string>(), CancellationToken.None)).ReturnsAsync(transferAllowanceResponse);
+            EmployerFinanceApiService.Setup(x => x.GetTransferAllowance(It.IsAny<string>(), CancellationToken.None)).ReturnsAsync(transferAllowanceResponse);
 
             //Act
-            var response = await _controller.GetAccount(hashedAccountId);
+            var response = await Controller.GetAccount(hashedAccountId);
 
             //Assert
             Assert.IsNotNull(response);
@@ -77,8 +77,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             var hashedAccountId = "ABC123";
            
             //Act
-            _employerAccountsApiService.Setup(x => x.GetAccount(hashedAccountId, It.IsAny<CancellationToken>())).ReturnsAsync(new AccountDetailViewModel { AccountId = 0 });
-            var response = await _controller.GetAccount(hashedAccountId);
+            EmployerAccountsApiService.Setup(x => x.GetAccount(hashedAccountId, It.IsAny<CancellationToken>())).ReturnsAsync(new AccountDetailViewModel { AccountId = 0 });
+            var response = await Controller.GetAccount(hashedAccountId);
 
             //Assert
             Assert.IsNotNull(response.Result);
@@ -92,13 +92,13 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             var accountId = 1923701937;
             var hashedAccountId = "ABC123";
             
-            _encodingService.Setup(x => x.Encode(accountId, Encoding.EncodingType.AccountId)).Returns(hashedAccountId);
-            _employerAccountsApiService.Setup(x => x.GetAccount(hashedAccountId, It.IsAny<CancellationToken>())).ReturnsAsync(new AccountDetailViewModel { AccountId = accountId, ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy.ToString(), LegalEntities = new ResourceList(new List<ResourceViewModel>()), PayeSchemes = new ResourceList(new List<ResourceViewModel>()) });
-            _employerFinanceApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>(), CancellationToken.None)).ReturnsAsync( new List<AccountBalance> { new AccountBalance() });
-            _employerFinanceApiService.Setup(x => x.GetTransferAllowance(It.IsAny<string>(), CancellationToken.None)).ReturnsAsync( new TransferAllowance());
+            EncodingService.Setup(x => x.Encode(accountId, Encoding.EncodingType.AccountId)).Returns(hashedAccountId);
+            EmployerAccountsApiService.Setup(x => x.GetAccount(hashedAccountId, It.IsAny<CancellationToken>())).ReturnsAsync(new AccountDetailViewModel { AccountId = accountId, ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy.ToString(), LegalEntities = new ResourceList(new List<ResourceViewModel>()), PayeSchemes = new ResourceList(new List<ResourceViewModel>()) });
+            EmployerFinanceApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>(), CancellationToken.None)).ReturnsAsync( new List<AccountBalance> { new AccountBalance() });
+            EmployerFinanceApiService.Setup(x => x.GetTransferAllowance(It.IsAny<string>(), CancellationToken.None)).ReturnsAsync( new TransferAllowance());
 
             //Act
-            var response = await _controller.GetAccount(accountId);
+            var response = await Controller.GetAccount(accountId);
 
             //Assert
             Assert.IsNotNull(response);
