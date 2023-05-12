@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using AutoFixture;
+﻿using AutoFixture;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -16,7 +13,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
         [Test]
         public async Task ItShouldReturnTheAccountAndTheTeamMembers()
         {
-            var id = "123";
+            const string id = "123";
 
             AccountApiClient.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
                 .ReturnsAsync(new AccountDetailViewModel()
@@ -31,32 +28,34 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
                 fixture.Create<TeamMemberViewModel>()
             } );
 
-            var actual = await _sut.Get(id, AccountFieldsSelection.TeamMembers);
+            var actual = await Sut.Get(id, AccountFieldsSelection.TeamMembers);
 
             Logger.Verify(x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Exactly(2));
 
-            Assert.IsNotNull(actual);
-            Assert.IsNull(actual.PayeSchemes);
-            Assert.IsNull(actual.LegalEntities);
-            Assert.IsNotEmpty(actual.TeamMembers);
-            Assert.IsNull(actual.Transactions);
+            Assert.Multiple(() =>
+            {
+                Assert.That(actual, Is.Not.Null);
+                Assert.That(actual.PayeSchemes, Is.Null);
+                Assert.That(actual.LegalEntities, Is.Null);
+                Assert.That(actual.TeamMembers, Is.Not.Empty);
+                Assert.That(actual.Transactions, Is.Null);
+            });
         }
 
         [Test]
         public async Task ItShouldReturnTheAccountWithEmptyTeamMembersOnException()
         {
-            var id = "123";
-
+            const string id = "123";
             
             AccountApiClient.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
                 .ThrowsAsync(new Exception());
 
-            var actual = await _sut.Get(id, AccountFieldsSelection.TeamMembers);
+            var actual = await Sut.Get(id, AccountFieldsSelection.TeamMembers);
 
             Logger.Verify(x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
             Logger.Verify(x => x.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
 
-            Assert.IsNull(actual);
+            Assert.That(actual, Is.Null);
            
         }
     }

@@ -13,23 +13,23 @@ public class WhenCallingGetWithAccountFieldSelectionPayeSchemes : WhenTestingAcc
     [Test]
     public async Task ItShouldReturnNullOnException()
     {
-        var id = "123";
+        const string id = "123";
 
         AccountApiClient.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
             .ThrowsAsync(new Exception());
 
-        var actual = await _sut.Get(id, AccountFieldsSelection.PayeSchemes);
+        var actual = await Sut.Get(id, AccountFieldsSelection.PayeSchemes);
 
         Logger.Verify(x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
         Logger.Verify(x => x.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
 
-        Assert.IsNull(actual);
+        Assert.That(actual, Is.Null);
     }
 
     [Test]
     public async Task ItShouldReturnTheAccountWithPayeSchemes()
     {
-        var id = "123";
+        const string id = "123";
 
         var accountDetailViewModel = new AccountDetailViewModel
         {
@@ -64,9 +64,8 @@ public class WhenCallingGetWithAccountFieldSelectionPayeSchemes : WhenTestingAcc
 
         var obscuredPayePayeScheme = "123/123456";
 
-        PayeSchemeObfuscator.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
+        PayeSchemeObsfuscator.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
             .Returns(obscuredPayePayeScheme);
-
 
         var payeSchemeViewModel = new PayeSchemeModel
         {
@@ -80,19 +79,21 @@ public class WhenCallingGetWithAccountFieldSelectionPayeSchemes : WhenTestingAcc
         AccountApiClient.Setup(x => x.GetResource<PayeSchemeModel>(It.IsAny<string>()))
             .ReturnsAsync(payeSchemeViewModel);
 
-        var actual = await _sut.Get(id, AccountFieldsSelection.PayeSchemes);
+        var actual = await Sut.Get(id, AccountFieldsSelection.PayeSchemes);
 
         Logger.Verify(x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Exactly(2));
 
-        PayeSchemeObfuscator.Verify(x => x.ObscurePayeScheme(It.IsAny<string>()), Times.Exactly(2));
+        PayeSchemeObsfuscator.Verify(x => x.ObscurePayeScheme(It.IsAny<string>()), Times.Exactly(2));
 
 
-        Assert.IsNotNull(actual);
-        Assert.IsNotNull(actual.PayeSchemes);
-        Assert.AreEqual(1, actual.PayeSchemes.Count());
-
-        Assert.IsNull(actual.LegalEntities);
-        Assert.IsNull(actual.TeamMembers);
-        Assert.IsNull(actual.Transactions);
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual.PayeSchemes, Is.Not.Null);
+        Assert.Multiple(() =>
+        {
+            Assert.That(actual.PayeSchemes.Count(), Is.EqualTo(1));
+            Assert.That(actual.LegalEntities, Is.Null);
+            Assert.That(actual.TeamMembers, Is.Null);
+            Assert.That(actual.Transactions, Is.Null);
+        });
     }
 }

@@ -10,13 +10,13 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
 {
     public abstract class WhenTestingAccountRepository
     {
-        protected Mock<IAccountApiClient> AccountApiClient;
-        protected Mock<IDatetimeService> DatetimeService;
-        protected Mock<ILogger<Services.AccountRepository>> Logger;
-        protected Mock<IPayeSchemeObfuscator> PayeSchemeObfuscator;
-        protected Mock<IPayRefHashingService> HashingService;
+        protected Mock<IAccountApiClient>? AccountApiClient;
+        protected Mock<IDatetimeService>? DatetimeService;
+        protected Mock<ILogger<Services.AccountRepository>>? Logger;
+        protected Mock<IPayeSchemeObfuscator>? PayeSchemeObsfuscator;
+        protected Mock<IPayRefHashingService>? HashingService;
 
-        protected IAccountRepository _sut;
+        protected IAccountRepository? Sut;
 
         [SetUp]
         public void Setup()
@@ -24,12 +24,12 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
             AccountApiClient = new Mock<IAccountApiClient>();
             DatetimeService = new Mock<IDatetimeService>();
             Logger = new Mock<ILogger<Services.AccountRepository>>();
-            PayeSchemeObfuscator = new Mock<IPayeSchemeObfuscator>();
+            PayeSchemeObsfuscator = new Mock<IPayeSchemeObfuscator>();
             HashingService = new Mock<IPayRefHashingService>();
 
-            _sut = new Services.AccountRepository(
+            Sut = new Services.AccountRepository(
                 AccountApiClient.Object,
-                PayeSchemeObfuscator.Object,
+                PayeSchemeObsfuscator.Object,
                 DatetimeService.Object,
                 Logger.Object,
                 HashingService.Object

@@ -13,7 +13,7 @@ public class WhenCallingGetWithAccountFieldsSelectionChallengePayeSchemes : When
     [Test]
     public async Task ItShouldReturnTheAccountWithTheChallengedPayeSchemes()
     {
-        var id = "123";
+        const string id = "123";
 
         var accountDetailViewModel = new AccountDetailViewModel
         {
@@ -22,7 +22,7 @@ public class WhenCallingGetWithAccountFieldsSelectionChallengePayeSchemes : When
             PayeSchemes = new ResourceList(
                 new List<ResourceViewModel>
                 {
-                    new ResourceViewModel
+                    new()
                     {
                         Id = "123/123456",
                         Href = "https://tempuri.org/payescheme/{1}"
@@ -31,7 +31,7 @@ public class WhenCallingGetWithAccountFieldsSelectionChallengePayeSchemes : When
             LegalEntities = new ResourceList(
                 new List<ResourceViewModel>
                 {
-                    new ResourceViewModel
+                    new()
                     {
                         Id = "TempUri Limited",
                         Href = "https://tempuri.org/organisation/{1}"
@@ -51,7 +51,7 @@ public class WhenCallingGetWithAccountFieldsSelectionChallengePayeSchemes : When
 
         var obscuredPayePayeScheme = "123/123456";
 
-        PayeSchemeObfuscator.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
+        PayeSchemeObsfuscator.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
             .Returns(obscuredPayePayeScheme);
 
 
@@ -67,19 +67,21 @@ public class WhenCallingGetWithAccountFieldsSelectionChallengePayeSchemes : When
         AccountApiClient.Setup(x => x.GetResource<PayeSchemeModel>(It.IsAny<string>()))
             .ReturnsAsync(payeSchemeViewModel);
 
-        var actual = await _sut.Get(id, AccountFieldsSelection.PayeSchemes);
+        var actual = await Sut.Get(id, AccountFieldsSelection.PayeSchemes);
 
         Logger.Verify(x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Exactly(2));
 
-        PayeSchemeObfuscator.Verify(x => x.ObscurePayeScheme(It.IsAny<string>()), Times.Exactly(2));
+        PayeSchemeObsfuscator.Verify(x => x.ObscurePayeScheme(It.IsAny<string>()), Times.Exactly(2));
 
-
-        Assert.IsNotNull(actual);
-        Assert.IsNotNull(actual.PayeSchemes);
-        Assert.AreEqual(1, actual.PayeSchemes.Count());
-
-        Assert.IsNull(actual.LegalEntities);
-        Assert.IsNull(actual.TeamMembers);
-        Assert.IsNull(actual.Transactions);
+        Assert.Multiple(() =>
+        {
+            Assert.That(actual, Is.Not.Null);
+            Assert.That(actual.PayeSchemes, Is.Not.Null);
+            Assert.That(actual.PayeSchemes.Count(), Is.EqualTo(1));
+            
+            Assert.That(actual.LegalEntities, Is.Null);
+            Assert.That(actual.TeamMembers, Is.Null);
+            Assert.That(actual.Transactions, Is.Null);
+        });
     }
 }

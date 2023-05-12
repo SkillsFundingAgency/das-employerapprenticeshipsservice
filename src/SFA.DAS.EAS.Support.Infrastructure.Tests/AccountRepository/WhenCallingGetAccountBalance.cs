@@ -1,9 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
 
 namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
@@ -14,7 +11,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
         [Test]
         public async Task ItShouldReturnAZeroBalanceWhenTheClientThrowsAnException()
         {
-            var id = "123";
+            const string id = "123";
 
             var exception = new Exception("Some exception");
 
@@ -37,7 +34,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()
             ));
 
-            var actual = await _sut.GetAccountBalance(id);
+            var actual = await Sut.GetAccountBalance(id);
 
             Logger.Verify(x => x.Log(
                 LogLevel.Debug,
@@ -54,13 +51,13 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()
             ), Times.Once);
 
-            Assert.AreEqual(0, actual);
+            Assert.That(actual, Is.EqualTo(0));
         }
 
         [Test]
         public async Task ItShouldReturnTheMatchingAccountBalanceValue()
         {
-            var id = "123";
+            const string id = "123";
             var response = new AccountWithBalanceViewModel
             {
                 AccountId = 123,
@@ -74,7 +71,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
             AccountApiClient.Setup(x => x.GetResource<AccountWithBalanceViewModel>($"/api/accounts/{id}"))
                 .ReturnsAsync(response);
 
-            var actual = await _sut.GetAccountBalance(id);
+            var actual = await Sut.GetAccountBalance(id);
 
             Logger.Verify(x =>
                 x.Log(
@@ -84,7 +81,8 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()
             ));
-            Assert.AreEqual(response.Balance, actual);
+            
+            Assert.That(actual, Is.EqualTo(response.Balance));
         }
     }
 }

@@ -18,7 +18,7 @@ public class WhenCallingGetWithAccountFieldsSelectionFinance : WhenTestingAccoun
     [Test]
     public async Task ItShouldReturntheMatchingAccountWithTransaction()
     {
-        var id = "123";
+        const string id = "123";
 
         var accountDetailViewModel = new AccountDetailViewModel
         {
@@ -27,7 +27,7 @@ public class WhenCallingGetWithAccountFieldsSelectionFinance : WhenTestingAccoun
             PayeSchemes = new ResourceList(
                 new List<ResourceViewModel>
                 {
-                    new ResourceViewModel
+                    new()
                     {
                         Id = "123/123456",
                         Href = "https://tempuri.org/payescheme/{1}"
@@ -36,7 +36,7 @@ public class WhenCallingGetWithAccountFieldsSelectionFinance : WhenTestingAccoun
             LegalEntities = new ResourceList(
                 new List<ResourceViewModel>
                 {
-                    new ResourceViewModel
+                    new()
                     {
                         Id = "TempUri Limited",
                         Href = "https://tempuri.org/organisation/{1}"
@@ -54,7 +54,7 @@ public class WhenCallingGetWithAccountFieldsSelectionFinance : WhenTestingAccoun
 
         var obscuredPayePayeScheme = "123/123456";
 
-        PayeSchemeObfuscator.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
+        PayeSchemeObsfuscator.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
             .Returns(obscuredPayePayeScheme);
 
 
@@ -96,17 +96,17 @@ public class WhenCallingGetWithAccountFieldsSelectionFinance : WhenTestingAccoun
                             (now.Month - startOfFinancialYear.Month) + 1;
         ;
 
-        var isNotZero = 100m;
+        const decimal isNotZero = 100m;
         var isTxDateCreated = DateTime.Today;
         var transactionsViewModel = new TransactionsViewModel
         {
-            new TransactionViewModel
+            new()
             {
                 Description = "Is Not Null",
                 Amount = isNotZero,
                 DateCreated = isTxDateCreated
             },
-            new TransactionViewModel
+            new()
             {
                 Description = "Is Not Null 2",
                 Amount = isNotZero,
@@ -120,32 +120,35 @@ public class WhenCallingGetWithAccountFieldsSelectionFinance : WhenTestingAccoun
             .ReturnsAsync(transactionsViewModel
             );
 
-        var actual = await _sut.Get(id, AccountFieldsSelection.Finance);
+        var actual = await Sut.Get(id, AccountFieldsSelection.Finance);
 
-        Logger.Verify(x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Exactly(2));
+        Logger.Verify(
+            x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Exactly(2));
 
-        PayeSchemeObfuscator
+        PayeSchemeObsfuscator
             .Verify(x => x.ObscurePayeScheme(It.IsAny<string>()), Times.Exactly(2));
 
         AccountApiClient
             .Verify(x => x.GetTransactions(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()),
                 Times.Exactly(monthsToQuery));
 
-        Assert.IsNotNull(actual);
-        Assert.IsNotNull(actual.PayeSchemes);
-        Assert.AreEqual(1, actual.PayeSchemes.Count());
-        Assert.IsNotNull(actual.Transactions);
-        Assert.AreEqual(2 * monthsToQuery, actual.Transactions.Count());
-
-        Assert.IsNull(actual.LegalEntities);
-        Assert.IsNull(actual.TeamMembers);
+        Assert.Multiple(() =>
+        {
+            Assert.That(actual, Is.Not.Null);
+            Assert.That(actual.PayeSchemes, Is.Not.Null);
+            Assert.That(actual.PayeSchemes.Count(), Is.EqualTo(1));
+            Assert.That(actual.Transactions, Is.Not.Null);
+            Assert.That(actual.Transactions.Count(), Is.EqualTo(2 * monthsToQuery));
+            Assert.That(actual.LegalEntities, Is.Null);
+            Assert.That(actual.TeamMembers, Is.Null);
+        });
     }
-
 
     [Test]
     public async Task ItShouldReturnZeroAccountTransactionsIfTheApiThrowsAnException()
     {
-        var id = "123";
+        const string id = "123";
 
         var accountDetailViewModel = new AccountDetailViewModel
         {
@@ -181,9 +184,8 @@ public class WhenCallingGetWithAccountFieldsSelectionFinance : WhenTestingAccoun
 
         var obscuredPayePayeScheme = "123/123456";
 
-        PayeSchemeObfuscator.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
+        PayeSchemeObsfuscator.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
             .Returns(obscuredPayePayeScheme);
-
 
         var payeSchemeViewModel = new PayeSchemeModel
         {
@@ -196,7 +198,6 @@ public class WhenCallingGetWithAccountFieldsSelectionFinance : WhenTestingAccoun
 
         AccountApiClient.Setup(x => x.GetResource<PayeSchemeModel>(It.IsAny<string>()))
             .ReturnsAsync(payeSchemeViewModel);
-
 
         /* 
          * This is a testing HACK to avoid using a concrete datetime service
@@ -211,48 +212,33 @@ public class WhenCallingGetWithAccountFieldsSelectionFinance : WhenTestingAccoun
         DatetimeService.Setup(x => x.GetBeginningFinancialYear(startOfFirstFinancialYear))
             .Returns(startOfFirstFinancialYear);
 
-
-        var isNotZero = 100m;
-        var isTxDateCreated = DateTime.Today;
-        var transactionsViewModel = new TransactionsViewModel
-        {
-            new TransactionViewModel
-            {
-                Description = "Is Not Null",
-                Amount = isNotZero,
-                DateCreated = isTxDateCreated
-            },
-            new TransactionViewModel
-            {
-                Description = "Is Not Null 2",
-                Amount = isNotZero,
-                DateCreated = isTxDateCreated
-            }
-        };
-
         AccountApiClient.Setup(x => x.GetTransactions(accountDetailViewModel.HashedAccountId,
                 It.IsAny<int>(),
                 It.IsAny<int>()))
             .ThrowsAsync(new Exception("Waaaaaaaah"));
 
-        var actual = await _sut.Get(id, AccountFieldsSelection.Finance);
+        var actual = await Sut.Get(id, AccountFieldsSelection.Finance);
 
-        Logger.Verify(x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Exactly(2));
+        Logger.Verify(
+            x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Exactly(2));
 
-        PayeSchemeObfuscator
+        PayeSchemeObsfuscator
             .Verify(x => x.ObscurePayeScheme(It.IsAny<string>()), Times.Exactly(2));
 
         AccountApiClient
             .Verify(x => x.GetTransactions(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()),
                 Times.Exactly(monthsToQuery));
 
-        Assert.IsNotNull(actual);
-        Assert.IsNotNull(actual.PayeSchemes);
-        Assert.AreEqual(1, actual.PayeSchemes.Count());
-        Assert.IsNotNull(actual.Transactions);
-        Assert.AreEqual(0, actual.Transactions.Count());
-
-        Assert.IsNull(actual.LegalEntities);
-        Assert.IsNull(actual.TeamMembers);
+        Assert.Multiple(() =>
+        {
+            Assert.That(actual.PayeSchemes.Count(), Is.EqualTo(1));
+            Assert.That(actual.Transactions, Is.Not.Null);
+            Assert.That(actual, Is.Not.Null);
+            Assert.That(actual.PayeSchemes, Is.Not.Null);
+            Assert.That(actual.Transactions.Count(), Is.EqualTo(0));
+            Assert.That(actual.LegalEntities, Is.Null);
+            Assert.That(actual.TeamMembers, Is.Null);
+        });
     }
 }

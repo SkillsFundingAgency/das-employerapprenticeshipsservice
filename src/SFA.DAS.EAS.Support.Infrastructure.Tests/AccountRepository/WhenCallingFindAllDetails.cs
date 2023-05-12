@@ -10,29 +10,29 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository;
 [TestFixture]
 public class WhenCallingFindAllDetails : WhenTestingAccountRepository
 {
-    PagedApiResponseViewModel<AccountWithBalanceViewModel> _pagedApiResponseViewModel;
-    List<AccountWithBalanceViewModel> _accountWithBalanceViewModels;
+    private PagedApiResponseViewModel<AccountWithBalanceViewModel>? _pagedApiResponseViewModel;
+    private List<AccountWithBalanceViewModel>? _accountWithBalanceViewModels;
 
     [SetUp]
     public void InitialiseTest()
     {
         _accountWithBalanceViewModels = new List<AccountWithBalanceViewModel>
         {
-            new AccountWithBalanceViewModel
+            new()
             {
                 AccountId = 123,
                 AccountHashId = "ERERE",
                 Balance = 1000m,
-                Href = "http://tempuri.org/account/ERERE",
+                Href = "https://tempuri.org/account/ERERE",
                 AccountName = "Test Account",
                 IsLevyPayer = true
             },
-            new AccountWithBalanceViewModel
+            new()
             {
                 AccountId = 345,
                 AccountHashId = "CNDFJ",
                 Balance = 1000m,
-                Href = "http://tempuri.org/account/CNDFJ",
+                Href = "https://tempuri.org/account/CNDFJ",
                 AccountName = "Test Account 2",
                 IsLevyPayer = true
             }
@@ -54,22 +54,21 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
     {
         AccountApiClient
             .Setup(x => x.GetPageOfAccounts(It.IsAny<int>(), 10, null))
-             .ReturnsAsync(_pagedApiResponseViewModel);
+            .ReturnsAsync(_pagedApiResponseViewModel);
 
         var e = new Exception("Some exception message");
         AccountApiClient
             .Setup(x => x.GetAccount(It.IsAny<string>()))
             .ThrowsAsync(e);
 
-        _sut = new Services.AccountRepository(
-                         AccountApiClient.Object,
-                         PayeSchemeObfuscator.Object,
-                         DatetimeService.Object,
-                         Logger.Object,
-                         HashingService.Object);
+        Sut = new Services.AccountRepository(
+            AccountApiClient.Object,
+            PayeSchemeObsfuscator.Object,
+            DatetimeService.Object,
+            Logger.Object,
+            HashingService.Object);
 
-        var actual = await _sut.FindAllDetails(10, 1);
-
+        var actual = (await Sut.FindAllDetails(10, 1)).ToArray();
 
         AccountApiClient.Verify(x => x.GetPageOfAccounts(It.IsAny<int>(), It.IsAny<int>(), null), Times.AtLeastOnce);
         AccountApiClient.Verify(x => x.GetAccount(It.IsAny<string>()), Times.AtLeastOnce);
@@ -82,7 +81,7 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
             It.IsAny<Func<It.IsAnyType, Exception?, string>>()
         ));
 
-        Assert.IsNotNull(actual);
+        Assert.That(actual, Is.Not.Null);
         var list = actual.ToList();
         CollectionAssert.IsEmpty(list);
     }
@@ -91,22 +90,22 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
     public async Task ItShouldReturnAnEmptyListIfGetAccountsThrowsAnHttpRequestException()
     {
         AccountApiClient
-         .Setup(x => x.GetPageOfAccounts(It.IsAny<int>(), 10, null))
-          .ReturnsAsync(_pagedApiResponseViewModel);
+            .Setup(x => x.GetPageOfAccounts(It.IsAny<int>(), 10, null))
+            .ReturnsAsync(_pagedApiResponseViewModel);
 
         var e = new HttpRequestException("Some exception message");
         AccountApiClient
             .Setup(x => x.GetAccount(It.IsAny<string>()))
             .ThrowsAsync(e);
 
-        _sut = new Services.AccountRepository(
-                         AccountApiClient.Object,
-                         PayeSchemeObfuscator.Object,
-                         DatetimeService.Object,
-                         Logger.Object,
-                         HashingService.Object);
+        Sut = new Services.AccountRepository(
+            AccountApiClient.Object,
+            PayeSchemeObsfuscator.Object,
+            DatetimeService.Object,
+            Logger.Object,
+            HashingService.Object);
 
-        var actual = await _sut.FindAllDetails(10, 1);
+        var actual = (await Sut.FindAllDetails(10, 1)).ToArray();
 
         AccountApiClient.Verify(x => x.GetPageOfAccounts(It.IsAny<int>(), It.IsAny<int>(), null), Times.AtLeastOnce);
         AccountApiClient.Verify(x => x.GetAccount(It.IsAny<string>()), Times.AtLeastOnce);
@@ -117,7 +116,8 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
             It.IsAny<Exception>(),
             It.IsAny<Func<It.IsAnyType, Exception?, string>>()
         ), Times.Once);
-        Assert.IsNotNull(actual);
+
+        Assert.That(actual, Is.Not.Null);
         CollectionAssert.IsEmpty(actual.ToList());
     }
 
@@ -134,21 +134,23 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
                 PayeSchemes = new ResourceList(new List<ResourceViewModel>())
             });
 
-        _sut = new Services.AccountRepository(
-                        AccountApiClient.Object,
-                        PayeSchemeObfuscator.Object,
-                        DatetimeService.Object,
-                        Logger.Object,
-                        HashingService.Object);
+        Sut = new Services.AccountRepository(
+            AccountApiClient.Object,
+            PayeSchemeObsfuscator.Object,
+            DatetimeService.Object,
+            Logger.Object,
+            HashingService.Object);
 
-        var actual = await _sut.FindAllDetails(10, 1);
+        var actual = (await Sut.FindAllDetails(10, 1)).ToArray();
 
         AccountApiClient.Verify(x => x.GetPageOfAccounts(It.IsAny<int>(), It.IsAny<int>(), null), Times.Once);
         AccountApiClient.Verify(x => x.GetAccount(It.IsAny<string>()), Times.Exactly(2));
-        Assert.IsNotNull(actual);
+
+        Assert.That(actual, Is.Not.Null);
+
         var list = actual.ToList();
         CollectionAssert.IsNotEmpty(list);
-        Assert.That(list.Count(), Is.EqualTo(2));
+        Assert.That(list, Has.Count.EqualTo(2));
     }
 
     [Test]
@@ -156,39 +158,41 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
     {
         //Arrange
         AccountApiClient.Setup(x => x.GetPageOfAccounts(It.IsAny<int>(), 10, null))
-           .ReturnsAsync(_pagedApiResponseViewModel);
+            .ReturnsAsync(_pagedApiResponseViewModel);
 
         AccountApiClient
             .Setup(x => x.GetAccount(It.IsAny<string>()))
             .ReturnsAsync(new AccountDetailViewModel
             {
-                PayeSchemes = new ResourceList(new[] { new ResourceViewModel { Id = "1", Href = "/api/payeschemes/test1" } })
+                PayeSchemes = new ResourceList(new[]
+                    { new ResourceViewModel { Id = "1", Href = "/api/payeschemes/test1" } })
             });
 
         AccountApiClient.Setup(x => x.GetResource<PayeSchemeModel>(It.IsAny<string>()))
             .ReturnsAsync(new PayeSchemeModel { Name = "Test", Ref = "123" });
 
         var obscuredPayePayeScheme = "123/123456";
-        PayeSchemeObfuscator.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
+        PayeSchemeObsfuscator.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
             .Returns(obscuredPayePayeScheme);
 
-        _sut = new Services.AccountRepository(
-                        AccountApiClient.Object,
-                        PayeSchemeObfuscator.Object,
-                        DatetimeService.Object,
-                        Logger.Object,
-                        HashingService.Object);
+        Sut = new Services.AccountRepository(
+            AccountApiClient.Object,
+            PayeSchemeObsfuscator.Object,
+            DatetimeService.Object,
+            Logger.Object,
+            HashingService.Object);
 
         //Act
-        var actual = await _sut.FindAllDetails(10, 1);
+        var actual = (await Sut.FindAllDetails(10, 1)).ToArray();
 
         //Assert
         AccountApiClient.Verify(x => x.GetPageOfAccounts(It.IsAny<int>(), It.IsAny<int>(), null), Times.Once);
         AccountApiClient.Verify(x => x.GetAccount(It.IsAny<string>()), Times.Exactly(2));
-        Assert.IsNotNull(actual);
+        
+        Assert.That(actual, Is.Not.Null);
         var list = actual.ToList();
         CollectionAssert.IsNotEmpty(list);
-        Assert.That(list.Count(), Is.EqualTo(2));
+        Assert.That(list, Has.Count.EqualTo(2));
     }
 
     [Test]
@@ -196,40 +200,41 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
     {
         //Arrange
         AccountApiClient.Setup(x => x.GetPageOfAccounts(It.IsAny<int>(), 10, null))
-           .ReturnsAsync(_pagedApiResponseViewModel);
+            .ReturnsAsync(_pagedApiResponseViewModel);
 
         AccountApiClient
             .Setup(x => x.GetAccount(It.IsAny<string>()))
             .ReturnsAsync(new AccountDetailViewModel
             {
-                PayeSchemes = new ResourceList(new[] { new ResourceViewModel { Id = "1", Href = "/api/payeschemes/test1" } })
+                PayeSchemes = new ResourceList(new[]
+                    { new ResourceViewModel { Id = "1", Href = "/api/payeschemes/test1" } })
             });
 
         var e = new Exception("Some exception message");
         AccountApiClient.Setup(x => x.GetResource<PayeSchemeModel>(It.IsAny<string>()))
-             .ThrowsAsync(e);
+            .ThrowsAsync(e);
 
         var obscuredPayePayeScheme = "123/123456";
-        PayeSchemeObfuscator.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
+        PayeSchemeObsfuscator.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
             .Returns(obscuredPayePayeScheme);
 
-        _sut = new Services.AccountRepository(
-                        AccountApiClient.Object,
-                        PayeSchemeObfuscator.Object,
-                        DatetimeService.Object,
-                        Logger.Object,
-                        HashingService.Object);
+        Sut = new Services.AccountRepository(
+            AccountApiClient.Object,
+            PayeSchemeObsfuscator.Object,
+            DatetimeService.Object,
+            Logger.Object,
+            HashingService.Object);
 
         //Act
-        var actual = await _sut.FindAllDetails(10, 1);
+        var actual = (await Sut.FindAllDetails(10, 1)).ToArray();
 
         //Assert            
         AccountApiClient.Verify(x => x.GetPageOfAccounts(It.IsAny<int>(), It.IsAny<int>(), null), Times.Once);
         AccountApiClient.Verify(x => x.GetAccount(It.IsAny<string>()), Times.Exactly(2));
 
-        Assert.IsNotNull(actual);
+        Assert.That(actual, Is.Not.Null);
         var list = actual.ToList();
         CollectionAssert.IsNotEmpty(list);
-        Assert.That(list.Count(), Is.EqualTo(2));
+        Assert.That(list, Has.Count.EqualTo(2));
     }
 }

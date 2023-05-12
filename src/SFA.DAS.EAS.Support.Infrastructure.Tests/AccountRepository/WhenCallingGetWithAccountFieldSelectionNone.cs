@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
@@ -14,12 +12,12 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
         [Test]
         public async Task ItShouldReturnJustTheAccount()
         {
-            var id = "123";
+            const string id = "123";
 
             AccountApiClient.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
                 .ReturnsAsync(new AccountDetailViewModel());
 
-            var actual = await _sut.Get(id, AccountFieldsSelection.None);
+            var actual = await Sut.Get(id, AccountFieldsSelection.None);
 
             Logger.Verify(x => x.Log(
                 LogLevel.Debug,
@@ -29,22 +27,25 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()
             ), Times.Once);
 
-            Assert.IsNotNull(actual);
-            Assert.IsNull(actual.PayeSchemes);
-            Assert.IsNull(actual.LegalEntities);
-            Assert.IsNull(actual.TeamMembers);
-            Assert.IsNull(actual.Transactions);
+            Assert.That(actual, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(actual.PayeSchemes, Is.Null);
+                Assert.That(actual.LegalEntities, Is.Null);
+                Assert.That(actual.TeamMembers, Is.Null);
+                Assert.That(actual.Transactions, Is.Null);
+            });
         }
 
         [Test]
         public async Task ItShouldReturnNullOnException()
         {
-            var id = "123";
+            const string id = "123";
 
             AccountApiClient.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
                 .ThrowsAsync(new Exception());
 
-            var actual = await _sut.Get(id, AccountFieldsSelection.None);
+            var actual = await Sut.Get(id, AccountFieldsSelection.None);
 
             Logger.Verify(x => x.Log(
                 LogLevel.Debug,
@@ -55,7 +56,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
             ), Times.Once);
             Logger.Verify(x => x.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
 
-            Assert.IsNull(actual);
+            Assert.That(actual, Is.Null);
         }
     }
 }
