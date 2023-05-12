@@ -122,9 +122,7 @@ public class UrlActionHelper : IUrlActionHelper
     {
         var builder = new UrlBuilder(_config["ResourceEnvironmentName"]);
 
-        var url = builder.EmployerProfiles("");
-
-        return $"{url}/user/add-user-details";
+        return builder.EmployerProfiles("UpdateUserDetails");
     }
 
     private static string Action(string baseUrl, string path)
