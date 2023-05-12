@@ -46,7 +46,7 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Configuration
 
         private const string SiteConfigFileName = "SFA.DAS.Support.EAS";
 
-        private WebConfiguration _unit;
+        private WebConfiguration? _unit;
 
         [Test]
         public void ItShouldDeserialiseFaithfuly()
