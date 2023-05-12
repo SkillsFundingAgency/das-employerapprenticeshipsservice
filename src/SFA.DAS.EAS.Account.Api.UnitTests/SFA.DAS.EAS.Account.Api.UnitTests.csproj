@@ -29,7 +29,7 @@
 		</PackageReference>
 		<PackageReference Include="AutoFixture" Version="4.18.0">
 		</PackageReference>
-		<PackageReference Include="AutoMapper" Version="5.1.1">
+		<PackageReference Include="AutoMapper" Version="12.0.1">
 		</PackageReference>
 		<PackageReference Include="FluentAssertions" Version="6.11.0">
 		</PackageReference>
@@ -53,8 +53,6 @@
 		<PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1">
 		</PackageReference>
 		<PackageReference Include="SFA.DAS.NServiceBus" Version="17.0.49">
-		</PackageReference>
-		<PackageReference Include="StructureMap" Version="4.7.1">
 		</PackageReference>
 		<PackageReference Include="System.ComponentModel.Composition" Version="7.0.0" />
 		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />

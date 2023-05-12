@@ -24,7 +24,7 @@
 		<ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="AutoMapper" Version="5.1.1" />
+		<PackageReference Include="AutoMapper" Version="12.0.1" />
 		<PackageReference Include="Azure.Identity" Version="1.8.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.16" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
@@ -50,9 +50,6 @@
 		</PackageReference>
 		<PackageReference Include="SFA.DAS.Messaging.AzureServiceBus">
 			<Version>3.0.0.53181</Version>
-		</PackageReference>
-		<PackageReference Include="SFA.DAS.Messaging.AzureServiceBus.StructureMap">
-			<Version>3.0.0.63765</Version>
 		</PackageReference>
 		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
 	</ItemGroup>
