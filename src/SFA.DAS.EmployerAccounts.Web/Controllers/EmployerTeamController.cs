@@ -350,7 +350,7 @@ public class EmployerTeamController : BaseController
 
     [HttpPost]
     [Route("triagehaveyouchosenatrainingprovider", Name = RouteNames.TriageChosenProviderPost)]
-    public IActionResult TriageHaveYouChosenATrainingProvider(TriageViewModel model)
+    public IActionResult TriageHaveYouChosenATrainingProvider(string hashedAccountId, TriageViewModel model)
     {
         if (!ModelState.IsValid)
         {
@@ -361,12 +361,12 @@ public class EmployerTeamController : BaseController
         {
             case TriageOptions.Yes:
                 {
-                    return RedirectToAction(ControllerConstants.TriageWillApprenticeshipTrainingStartActionName);
+                    return RedirectToRoute(RouteNames.TriageWhenWillApprenticeshipStart, new { hashedAccountId });
                 }
 
             case TriageOptions.No:
                 {
-                    return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetProviderActionName);
+                    return RedirectToRoute(RouteNames.TriageCannotSetupWithoutChosenProvider, new { hashedAccountId });
                 }
 
             default:
