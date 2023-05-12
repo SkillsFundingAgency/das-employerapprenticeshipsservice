@@ -35,8 +35,6 @@ public class Startup
                .GetSection("Identity")
                .Get<IdentityServerConfiguration>();
 
-        var constants = new Constants(identityServerConfiguration);
-
         services.AddHttpContextAccessor();
 
         services.Configure<IdentityServerConfiguration>(_configuration.GetSection("Identity"));
@@ -86,9 +84,8 @@ public class Startup
             options.CheckConsentNeeded = context => true;
             options.MinimumSameSitePolicy = SameSiteMode.None;
         });
-
-        UserLinksViewModel.ChangePasswordLink = $"{constants.ChangePasswordLink()}{$"https://{_configuration.GetValue<string>("DashboardUrl")}/service/password/change"}";
-        UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{$"https://{_configuration.GetValue<string>("DashboardUrl")}/service/email/change"}";
+        
+        SetupUserLinks(identityServerConfiguration);
 
         services.AddApplicationInsightsTelemetry();
     }
@@ -110,5 +107,13 @@ public class Startup
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
         });
+    }
+
+    private void SetupUserLinks(IdentityServerConfiguration identityServerConfiguration)
+    {
+        var constants = new Constants(identityServerConfiguration);
+
+        UserLinksViewModel.ChangePasswordLink = $"{constants.ChangePasswordLink()}{$"https://{_configuration.GetValue<string>("DashboardUrl")}/service/password/change"}";
+        UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{$"https://{_configuration.GetValue<string>("DashboardUrl")}/service/email/change"}";
     }
 }
