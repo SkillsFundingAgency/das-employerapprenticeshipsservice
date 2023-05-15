@@ -3,45 +3,44 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.Core.Models;
 
-namespace SFA.DAS.EAS.Support.ApplicationServices.Tests.AccountHandler
+namespace SFA.DAS.EAS.Support.ApplicationServices.Tests.AccountHandler;
+
+[TestFixture]
+public class WhenCallingFindOrganisations : WhenTestingAccountHandler
 {
-    [TestFixture]
-    public class WhenCallingFindOrganisations : WhenTestingAccountHandler
+    [Test]
+    public async Task ItShouldReturnAccountInResponseIfFound()
     {
-        [Test]
-        public async Task ItShouldReturnAccountInResponseIfFound()
+        const long accountId = 123L;
+        var originalId = accountId.ToString();
+        var account = new Core.Models.Account {AccountId = accountId};
+
+        MockAccountRepository!.Setup(r => r.Get(originalId, AccountFieldsSelection.Organisations)).ReturnsAsync(account);
+
+        var actual = await Unit!.FindOrganisations(originalId);
+        Assert.That(actual, Is.Not.Null);
+        Assert.Multiple(() =>
         {
-            const long accountId = 123L;
-            var originalId = accountId.ToString();
-            var account = new Core.Models.Account {AccountId = accountId};
+            Assert.That(actual.StatusCode, Is.EqualTo(SearchResponseCodes.Success));
+            Assert.That(actual.Account, Is.Not.Null);
+        });
+    }
 
-            MockAccountRepository.Setup(r => r.Get(originalId, AccountFieldsSelection.Organisations)).ReturnsAsync(account);
-
-            var actual = await Unit.FindOrganisations(originalId);
-            Assert.That(actual, Is.Not.Null);
-            Assert.Multiple(() =>
-            {
-                Assert.That(actual.StatusCode, Is.EqualTo(SearchResponseCodes.Success));
-                Assert.That(actual.Account, Is.Not.Null);
-            });
-        }
-
-        [Test]
-        public async Task ItShouldReturnNoAccountInTheResponseIfNotFound()
-        {
-            const long accountId = 123L;
-            var originalId = accountId.ToString();
+    [Test]
+    public async Task ItShouldReturnNoAccountInTheResponseIfNotFound()
+    {
+        const long accountId = 123L;
+        var originalId = accountId.ToString();
            
-            MockAccountRepository.Setup(r => r.Get(originalId, AccountFieldsSelection.Organisations))
-                .ReturnsAsync(null as Core.Models.Account);
+        MockAccountRepository!.Setup(r => r.Get(originalId, AccountFieldsSelection.Organisations))
+            .ReturnsAsync(null as Core.Models.Account);
 
-            var actual = await Unit.FindOrganisations(originalId);
-            Assert.Multiple(() =>
-            {
-                Assert.That(actual.StatusCode, Is.EqualTo(new AccountDetailOrganisationsResponse().StatusCode));
-                Assert.That(actual, Is.Not.Null);
-            });
-            Assert.That(actual.Account, Is.Null);
-        }
+        var actual = await Unit!.FindOrganisations(originalId);
+        Assert.Multiple(() =>
+        {
+            Assert.That(actual.StatusCode, Is.EqualTo(new AccountDetailOrganisationsResponse().StatusCode));
+            Assert.That(actual, Is.Not.Null);
+        });
+        Assert.That(actual.Account, Is.Null);
     }
 }

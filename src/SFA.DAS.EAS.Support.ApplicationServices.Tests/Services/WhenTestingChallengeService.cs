@@ -2,39 +2,38 @@
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Core.Models;
 
-namespace SFA.DAS.EAS.Support.ApplicationServices.Tests.Services
+namespace SFA.DAS.EAS.Support.ApplicationServices.Tests.Services;
+
+[TestFixture]
+public class WhenTestingChallengeService
 {
-    [TestFixture]
-    public class WhenTestingChallengeService
+    private ChallengeService? _sut;
+
+    [SetUp]
+    public void Setup()
     {
-        private ChallengeService? _sut;
+        _sut = new ChallengeService();
+    }
 
-        [SetUp]
-        public void Setup()
+    [Test]
+    public void ItShouldObtainAnIndexListFromTheListOfPayeSchemeDetails()
+    {
+        var payeSchemeModel = new List<PayeSchemeModel>
         {
-            _sut = new ChallengeService();
-        }
-
-        [Test]
-        public void ItShouldObtainAnIndexlistFromTheListOfPayeSchemDetails()
-        {
-            var payeSchemeModel = new List<PayeSchemeModel>
+            new()
             {
-                new()
-                {
-                    AddedDate = DateTime.Today.AddMonths(-12),
-                    Name = "Account 123",
-                    DasAccountId = "123",
-                    Ref = "123/123456",
-                    ObscuredPayeRef = "1**/*****6",
-                    RemovedDate = null
-                }
-            };
+                AddedDate = DateTime.Today.AddMonths(-12),
+                Name = "Account 123",
+                DasAccountId = "123",
+                Ref = "123/123456",
+                ObscuredPayeRef = "1**/*****6",
+                RemovedDate = null
+            }
+        };
 
-            var actual = _sut?.GetPayeSchemesCharacters(payeSchemeModel);
+        var actual = _sut?.GetPayeSchemesCharacters(payeSchemeModel);
 
-            Assert.That(actual, Is.Not.Null);
-            CollectionAssert.IsNotEmpty(actual);
-        }
+        Assert.That(actual, Is.Not.Null);
+        CollectionAssert.IsNotEmpty(actual);
     }
 }

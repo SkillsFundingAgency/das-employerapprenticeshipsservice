@@ -3,49 +3,48 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.Core.Models;
 
-namespace SFA.DAS.EAS.Support.ApplicationServices.Tests.ChallengeHandler
+namespace SFA.DAS.EAS.Support.ApplicationServices.Tests.ChallengeHandler;
+
+[TestFixture]
+public class WhenCallingGet : WhenTestingChallengeHandler
 {
-    [TestFixture]
-    public class WhenCallingGet : WhenTestingChallengeHandler
+    [Test]
+    public async Task ItShouldReturnAnAccountAndSuccessWhenQueryHasAMatch()
     {
-        [Test]
-        public async Task ItShouldReturnAnAccountAndSuccessWhenQueryHasAMatch()
+        const string id = "123";
+        var account = new Core.Models.Account
         {
-            const string id = "123";
-            var account = new Core.Models.Account
-            {
-                HashedAccountId = "ASDAS",
-                AccountId = 123
-            };
-            _accountRepository.Setup(x =>
-                    x.Get(id,
-                        AccountFieldsSelection.PayeSchemes))
-                .ReturnsAsync(account);
+            HashedAccountId = "ASDAS",
+            AccountId = 123
+        };
+        AccountRepository.Setup(x =>
+                x.Get(id,
+                    AccountFieldsSelection.PayeSchemes))
+            .ReturnsAsync(account);
 
-            var actual = await _unit.Get(id);
+        var actual = await Unit.Get(id);
 
 
-            Assert.That(actual, Is.Not.Null);
-            Assert.Multiple(() =>
-            {
-                Assert.That(actual.Account, Is.Not.Null);
-                Assert.That(actual.StatusCode, Is.EqualTo(SearchResponseCodes.Success));
-            });
-        }
-
-        [Test]
-        public async Task ItShouldReturnNoSearchResultsFoundWhenQueryHasNoMatch()
+        Assert.That(actual, Is.Not.Null);
+        Assert.Multiple(() =>
         {
-            const string id = "123";
-            _accountRepository.Setup(x =>
-                    x.Get(id,
-                        AccountFieldsSelection.PayeSchemes))
-                .ReturnsAsync(null as Core.Models.Account);
+            Assert.That(actual.Account, Is.Not.Null);
+            Assert.That(actual.StatusCode, Is.EqualTo(SearchResponseCodes.Success));
+        });
+    }
 
-            var actual = await _unit.Get(id);
+    [Test]
+    public async Task ItShouldReturnNoSearchResultsFoundWhenQueryHasNoMatch()
+    {
+        const string id = "123";
+        AccountRepository.Setup(x =>
+                x.Get(id,
+                    AccountFieldsSelection.PayeSchemes))
+            .ReturnsAsync(null as Core.Models.Account);
 
-            Assert.That(actual, Is.Not.Null);
-            Assert.That(actual.StatusCode, Is.EqualTo(SearchResponseCodes.NoSearchResultsFound));
-        }
+        var actual = await Unit.Get(id);
+
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual.StatusCode, Is.EqualTo(SearchResponseCodes.NoSearchResultsFound));
     }
 }
