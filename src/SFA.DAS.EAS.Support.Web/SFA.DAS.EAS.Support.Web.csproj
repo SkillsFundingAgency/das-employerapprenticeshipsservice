@@ -39,9 +39,6 @@
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
     <PackageReference Include="SFA.DAS.EmployerAccounts.Api.Client" Version="1.6.3195" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.16" />
-    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
-    <PackageReference Include="System.Text.Encodings.Web" Version="7.0.0" />
-    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Helpers\ControllerConstants.cs" />
@@ -49,7 +46,4 @@
   <PropertyGroup>
     <WebProjectOutputDir Condition="$(WebProjectOutputDir) == '' AND $(OS) == 'Unix' ">./</WebProjectOutputDir>
   </PropertyGroup>
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
 </Project>
