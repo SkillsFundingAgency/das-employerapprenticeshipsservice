@@ -56,14 +56,10 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
 
         var result = await _userAccountService.GetUserAccounts(userId, email);
 
-        if (result.EmployerAccounts.Any())
-        {
-            var accountsAsJson = JsonConvert.SerializeObject(result.EmployerAccounts.ToDictionary(k => k.AccountId));
-            var associatedAccountsClaim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, accountsAsJson, JsonClaimValueTypes.Json);
-            claims.Add(associatedAccountsClaim);    
-        }
-        
-
+        var accountsAsJson = JsonConvert.SerializeObject(result.EmployerAccounts.ToDictionary(k => k.AccountId));
+        var associatedAccountsClaim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, accountsAsJson, JsonClaimValueTypes.Json);
+        claims.Add(associatedAccountsClaim);    
+    
         if (!_employerAccountsConfiguration.UseGovSignIn)
         {
             return claims;
