@@ -1,147 +1,131 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <LangVersion>latest</LangVersion>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <OutputPath>bin\</OutputPath>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj" />
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.8.2" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.16" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0">
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.Authentication" Version="1.1.2" />
-    <PackageReference Include="SFA.DAS.Employer.Shared.UI" Version="17.1.44" />
-    <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.1.338">
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.GovUK.Auth" Version="17.1.45-prerelease-14" />
-    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1">
-    </PackageReference>
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
-	<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.30.0" />
-	<PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.21.0">
-	</PackageReference>
-	<PackageReference Include="SFA.DAS.Validation.Mvc" Version="6.0.30">
-	</PackageReference>
-	<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.16" />
-	<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-	<PackageReference Include="System.Net.Security" Version="4.3.2" />
-	<PackageReference Include="System.Security.Cryptography.Xml" Version="7.0.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="ViewModels\GatewayInformViewModel.cs" />
-  </ItemGroup>
-  <PropertyGroup>
-    <WebProjectOutputDir Condition="$(WebProjectOutputDir) == '' AND $(OS) == 'Unix' ">./</WebProjectOutputDir>
-  </PropertyGroup>
-  <ProjectExtensions>
-    <VisualStudio>
-      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
-        <WebProjectProperties>
-          <UseIIS>True</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>57196</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost:44349</IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
-        </WebProjectProperties>
-      </FlavorProperties>
-    </VisualStudio>
-  </ProjectExtensions>
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="wwwroot\dist\css\external-links\external-link-24x24.png" />
-    <None Include="wwwroot\dist\css\external-links\external-link-black-12x12.png" />
-    <None Include="wwwroot\dist\css\external-links\external-link-black-24x24.png" />
-    <None Include="wwwroot\dist\css\external-links\external-link.png" />
-    <None Include="wwwroot\dist\css\fonts-ie8.css" />
-    <None Include="wwwroot\dist\css\fonts.css" />
-    <None Include="wwwroot\dist\css\fonts\GDSTransportTabular-Bold.eot" />
-    <None Include="wwwroot\dist\css\fonts\GDSTransportTabular-Light.eot" />
-    <None Include="wwwroot\dist\css\fonts\GDSTransportWebsite-Bold.eot" />
-    <None Include="wwwroot\dist\css\fonts\GDSTransportWebsite.eot" />
-    <None Include="wwwroot\dist\css\govuk-template-ie6.css" />
-    <None Include="wwwroot\dist\css\govuk-template-ie7.css" />
-    <None Include="wwwroot\dist\css\govuk-template-ie8.css" />
-    <None Include="wwwroot\dist\css\govuk-template-print.css" />
-    <None Include="wwwroot\dist\css\govuk-template.css" />
-    <None Include="wwwroot\dist\css\images\close.png" />
-    <None Include="wwwroot\dist\css\images\gov.uk_logotype_crown-1x.png" />
-    <None Include="wwwroot\dist\css\images\gov.uk_logotype_crown.png" />
-    <None Include="wwwroot\dist\css\images\govuk-crest-2x.png" />
-    <None Include="wwwroot\dist\css\images\govuk-crest-ie.png" />
-    <None Include="wwwroot\dist\css\images\govuk-crest.png" />
-    <None Include="wwwroot\dist\css\images\open-government-licence.png" />
-    <None Include="wwwroot\dist\css\images\open-government-licence_2x.png" />
-    <None Include="wwwroot\dist\css\images\option-select-toggle-sprite.png" />
-    <None Include="wwwroot\dist\css\images\pagination-arrow-sprite.png" />
-    <None Include="wwwroot\dist\css\screen-ie6.css" />
-    <None Include="wwwroot\dist\css\screen-ie7.css" />
-    <None Include="wwwroot\dist\css\screen-ie8.css" />
-    <None Include="wwwroot\dist\css\screen.css" />
-    <None Include="wwwroot\dist\css\select2.min.css" />
-    <None Include="wwwroot\dist\images\apple-touch-icon-120x120.png" />
-    <None Include="wwwroot\dist\images\apple-touch-icon-152x152.png" />
-    <None Include="wwwroot\dist\images\apple-touch-icon-60x60.png" />
-    <None Include="wwwroot\dist\images\apple-touch-icon-76x76.png" />
-    <None Include="wwwroot\dist\images\arrow-sprite.png" />
-    <None Include="wwwroot\dist\images\favicon.ico" />
-    <None Include="wwwroot\dist\images\gov.uk_logotype_crown.svg" />
-    <None Include="wwwroot\dist\images\gov.uk_logotype_crown_invert.png" />
-    <None Include="wwwroot\dist\images\gov.uk_logotype_crown_invert_trans.png" />
-    <None Include="wwwroot\dist\images\icon-green-tick.png" />
-    <None Include="wwwroot\dist\images\icon-important-2x.png" />
-    <None Include="wwwroot\dist\images\icon-important.png" />
-    <None Include="wwwroot\dist\images\icon-pointer-2x.png" />
-    <None Include="wwwroot\dist\images\icon-pointer-black-2x.png" />
-    <None Include="wwwroot\dist\images\icon-pointer-black.png" />
-    <None Include="wwwroot\dist\images\icon-pointer-indexed.png" />
-    <None Include="wwwroot\dist\images\icon-pointer.png" />
-    <None Include="wwwroot\dist\images\icon-search-2x.png" />
-    <None Include="wwwroot\dist\images\icon-search.png" />
-    <None Include="wwwroot\dist\images\opengraph-image.png" />
-    <None Include="wwwroot\dist\images\org_crest_13px.png" />
-    <None Include="wwwroot\dist\images\org_crest_13px_x2.png" />
-    <None Include="wwwroot\dist\images\org_crest_18px.png" />
-    <None Include="wwwroot\dist\images\org_crest_18px_x2.png" />
-    <None Include="wwwroot\dist\images\org_crest_27px.png" />
-    <None Include="wwwroot\dist\images\org_crest_27px_x2.png" />
-    <None Include="wwwroot\dist\images\pub-cover-html.png" />
-    <None Include="wwwroot\dist\images\separator-2x.png" />
-    <None Include="wwwroot\dist\images\separator.png" />
-    <None Include="wwwroot\dist\javascripts\app.js" />
-    <None Include="wwwroot\dist\javascripts\apprentice\dropdown.js" />
-    <None Include="wwwroot\dist\javascripts\apprentice\select2.min.js" />
-    <None Include="wwwroot\dist\javascripts\character-limit.js" />
-    <None Include="wwwroot\dist\javascripts\govuk-template.js" />
-    <None Include="wwwroot\dist\javascripts\ie.js" />
-    <None Include="wwwroot\dist\javascripts\jquery-1.11.0.min.js" />
-    <None Include="wwwroot\dist\javascripts\length-limit.js" />
-    <None Include="wwwroot\dist\javascripts\lodash.js" />
-    <None Include="wwwroot\dist\javascripts\payment-order.js" />
-    <None Include="wwwroot\dist\javascripts\respond.min.js" />
-    <None Include="wwwroot\dist\javascripts\selection-buttons.js" />
-    <None Include="wwwroot\dist\javascripts\sfa-modernizr.js" />
-    <None Include="wwwroot\dist\javascripts\showhide-content.js" />
-    <None Include="wwwroot\dist\javascripts\stacker.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Update="appsettings.json">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <OutputPath>bin\</OutputPath>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj" />
+        <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <WCFMetadata Include="Connected Services\" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Azure.Identity" Version="1.9.0" />
+        <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.16" />
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+        <PackageReference Include="SFA.DAS.Employer.Shared.UI" Version="17.1.44" />
+        <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.1.338" />
+        <PackageReference Include="SFA.DAS.GovUK.Auth" Version="17.1.45-prerelease-14" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.16" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="ViewModels\GatewayInformViewModel.cs" />
+    </ItemGroup>
+    <PropertyGroup>
+        <WebProjectOutputDir Condition="$(WebProjectOutputDir) == '' AND $(OS) == 'Unix' ">./</WebProjectOutputDir>
+    </PropertyGroup>
+    <ProjectExtensions>
+        <VisualStudio>
+            <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+                <WebProjectProperties>
+                    <UseIIS>True</UseIIS>
+                    <AutoAssignPort>True</AutoAssignPort>
+                    <DevelopmentServerPort>57196</DevelopmentServerPort>
+                    <DevelopmentServerVPath>/</DevelopmentServerVPath>
+                    <IISUrl>https://localhost:44349</IISUrl>
+                    <NTLMAuthentication>False</NTLMAuthentication>
+                    <UseCustomServer>False</UseCustomServer>
+                    <CustomServerUrl>
+                    </CustomServerUrl>
+                    <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+                </WebProjectProperties>
+            </FlavorProperties>
+        </VisualStudio>
+    </ProjectExtensions>
+    <ItemGroup>
+        <None Include="wwwroot\dist\css\external-links\external-link-24x24.png" />
+        <None Include="wwwroot\dist\css\external-links\external-link-black-12x12.png" />
+        <None Include="wwwroot\dist\css\external-links\external-link-black-24x24.png" />
+        <None Include="wwwroot\dist\css\external-links\external-link.png" />
+        <None Include="wwwroot\dist\css\fonts-ie8.css" />
+        <None Include="wwwroot\dist\css\fonts.css" />
+        <None Include="wwwroot\dist\css\fonts\GDSTransportTabular-Bold.eot" />
+        <None Include="wwwroot\dist\css\fonts\GDSTransportTabular-Light.eot" />
+        <None Include="wwwroot\dist\css\fonts\GDSTransportWebsite-Bold.eot" />
+        <None Include="wwwroot\dist\css\fonts\GDSTransportWebsite.eot" />
+        <None Include="wwwroot\dist\css\govuk-template-ie6.css" />
+        <None Include="wwwroot\dist\css\govuk-template-ie7.css" />
+        <None Include="wwwroot\dist\css\govuk-template-ie8.css" />
+        <None Include="wwwroot\dist\css\govuk-template-print.css" />
+        <None Include="wwwroot\dist\css\govuk-template.css" />
+        <None Include="wwwroot\dist\css\images\close.png" />
+        <None Include="wwwroot\dist\css\images\gov.uk_logotype_crown-1x.png" />
+        <None Include="wwwroot\dist\css\images\gov.uk_logotype_crown.png" />
+        <None Include="wwwroot\dist\css\images\govuk-crest-2x.png" />
+        <None Include="wwwroot\dist\css\images\govuk-crest-ie.png" />
+        <None Include="wwwroot\dist\css\images\govuk-crest.png" />
+        <None Include="wwwroot\dist\css\images\open-government-licence.png" />
+        <None Include="wwwroot\dist\css\images\open-government-licence_2x.png" />
+        <None Include="wwwroot\dist\css\images\option-select-toggle-sprite.png" />
+        <None Include="wwwroot\dist\css\images\pagination-arrow-sprite.png" />
+        <None Include="wwwroot\dist\css\screen-ie6.css" />
+        <None Include="wwwroot\dist\css\screen-ie7.css" />
+        <None Include="wwwroot\dist\css\screen-ie8.css" />
+        <None Include="wwwroot\dist\css\screen.css" />
+        <None Include="wwwroot\dist\css\select2.min.css" />
+        <None Include="wwwroot\dist\images\apple-touch-icon-120x120.png" />
+        <None Include="wwwroot\dist\images\apple-touch-icon-152x152.png" />
+        <None Include="wwwroot\dist\images\apple-touch-icon-60x60.png" />
+        <None Include="wwwroot\dist\images\apple-touch-icon-76x76.png" />
+        <None Include="wwwroot\dist\images\arrow-sprite.png" />
+        <None Include="wwwroot\dist\images\favicon.ico" />
+        <None Include="wwwroot\dist\images\gov.uk_logotype_crown.svg" />
+        <None Include="wwwroot\dist\images\gov.uk_logotype_crown_invert.png" />
+        <None Include="wwwroot\dist\images\gov.uk_logotype_crown_invert_trans.png" />
+        <None Include="wwwroot\dist\images\icon-green-tick.png" />
+        <None Include="wwwroot\dist\images\icon-important-2x.png" />
+        <None Include="wwwroot\dist\images\icon-important.png" />
+        <None Include="wwwroot\dist\images\icon-pointer-2x.png" />
+        <None Include="wwwroot\dist\images\icon-pointer-black-2x.png" />
+        <None Include="wwwroot\dist\images\icon-pointer-black.png" />
+        <None Include="wwwroot\dist\images\icon-pointer-indexed.png" />
+        <None Include="wwwroot\dist\images\icon-pointer.png" />
+        <None Include="wwwroot\dist\images\icon-search-2x.png" />
+        <None Include="wwwroot\dist\images\icon-search.png" />
+        <None Include="wwwroot\dist\images\opengraph-image.png" />
+        <None Include="wwwroot\dist\images\org_crest_13px.png" />
+        <None Include="wwwroot\dist\images\org_crest_13px_x2.png" />
+        <None Include="wwwroot\dist\images\org_crest_18px.png" />
+        <None Include="wwwroot\dist\images\org_crest_18px_x2.png" />
+        <None Include="wwwroot\dist\images\org_crest_27px.png" />
+        <None Include="wwwroot\dist\images\org_crest_27px_x2.png" />
+        <None Include="wwwroot\dist\images\pub-cover-html.png" />
+        <None Include="wwwroot\dist\images\separator-2x.png" />
+        <None Include="wwwroot\dist\images\separator.png" />
+        <None Include="wwwroot\dist\javascripts\app.js" />
+        <None Include="wwwroot\dist\javascripts\apprentice\dropdown.js" />
+        <None Include="wwwroot\dist\javascripts\apprentice\select2.min.js" />
+        <None Include="wwwroot\dist\javascripts\character-limit.js" />
+        <None Include="wwwroot\dist\javascripts\govuk-template.js" />
+        <None Include="wwwroot\dist\javascripts\ie.js" />
+        <None Include="wwwroot\dist\javascripts\jquery-1.11.0.min.js" />
+        <None Include="wwwroot\dist\javascripts\length-limit.js" />
+        <None Include="wwwroot\dist\javascripts\lodash.js" />
+        <None Include="wwwroot\dist\javascripts\payment-order.js" />
+        <None Include="wwwroot\dist\javascripts\respond.min.js" />
+        <None Include="wwwroot\dist\javascripts\selection-buttons.js" />
+        <None Include="wwwroot\dist\javascripts\sfa-modernizr.js" />
+        <None Include="wwwroot\dist\javascripts\showhide-content.js" />
+        <None Include="wwwroot\dist\javascripts\stacker.js" />
+    </ItemGroup>
+    <ItemGroup>
+        <Content Update="appsettings.json">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
 </Project>
