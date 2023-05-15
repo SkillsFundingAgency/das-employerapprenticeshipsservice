@@ -1,13 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-
 		<IsPackable>false</IsPackable>
 	</PropertyGroup>
-
 	<ItemGroup>
 		<PackageReference Include="coverlet.msbuild" Version="3.2.0">
 		  <PrivateAssets>all</PrivateAssets>
@@ -48,24 +45,12 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.30.0" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-
-
-
 		<PackageReference Include="NLog" Version="5.1.4">
 		</PackageReference>
 		<PackageReference Include="HMRC.ESFA.Levy.Api.Client" Version="2.0.4" />
-		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-
-
-
+	<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
 	</ItemGroup>
-
 	<ItemGroup>
-		<ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj" />
-		<ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj" />
-		<ProjectReference Include="..\SFA.DAS.EAS.Support.ApplicationServices\SFA.DAS.EAS.Support.ApplicationServices.csproj" />
-		<ProjectReference Include="..\SFA.DAS.EAS.Support.Core\SFA.DAS.EAS.Support.Core.csproj" />
 		<ProjectReference Include="..\SFA.DAS.EAS.Support.Infrastructure\SFA.DAS.EAS.Support.Infrastructure.csproj" />
 	</ItemGroup>
-
 </Project>

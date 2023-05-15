@@ -1,13 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-
     <IsPackable>false</IsPackable>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="coverlet.msbuild" Version="3.2.0">
       <PrivateAssets>all</PrivateAssets>
@@ -33,11 +30,7 @@
     <PackageReference Include="System.Net.Security" Version="4.3.2" />
     <PackageReference Include="System.Security.Cryptography.Xml" Version="7.0.1" />
   </ItemGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj" />
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj" />
-    <ProjectReference Include="..\SFA.DAS.EAS.Support.Infrastructure\SFA.DAS.EAS.Support.Infrastructure.csproj" />
     <ProjectReference Include="..\SFA.DAS.EAS.Web\SFA.DAS.EAS.Web.csproj" />
   </ItemGroup>
 </Project>

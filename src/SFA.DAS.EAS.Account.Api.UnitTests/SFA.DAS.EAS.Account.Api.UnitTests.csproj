@@ -30,9 +30,6 @@
         <PackageReference Include="NUnit3TestAdapter" Version="4.4.2"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj"/>
         <ProjectReference Include="..\SFA.DAS.EAS.Api\SFA.DAS.EAS.Account.Api.csproj"/>
-        <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj"/>
-        <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj"/>
     </ItemGroup>
 </Project>
