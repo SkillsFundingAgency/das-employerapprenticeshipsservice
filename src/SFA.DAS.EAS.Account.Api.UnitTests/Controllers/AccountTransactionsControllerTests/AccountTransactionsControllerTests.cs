@@ -1,26 +1,25 @@
 ﻿using System.Reflection;
 using AutoMapper;
 
-namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsControllerTests
+namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsControllerTests;
+
+public abstract class AccountTransactionsControllerTests
 {
-    public abstract class AccountTransactionsControllerTests
+    protected IMapper? Mapper;
+
+    protected static IMapper? ConfigureMapper()
     {
-        protected IMapper? Mapper;
+        var profiles = Assembly.Load("SFA.DAS.EAS.Account.Api")
+            .GetTypes()
+            .Where(t => typeof(Profile).IsAssignableFrom(t))
+            .Select(t => (Profile)Activator.CreateInstance(t)!)
+            .ToList();
 
-        protected static IMapper? ConfigureMapper()
+        var config = new MapperConfiguration(c =>
         {
-            var profiles = Assembly.Load("SFA.DAS.EAS.Account.Api")
-                .GetTypes()
-                .Where(t => typeof(Profile).IsAssignableFrom(t))
-                .Select(t => (Profile)Activator.CreateInstance(t)!)
-                .ToList();
+            profiles.ForEach(c.AddProfile);
+        });
 
-            var config = new MapperConfiguration(c =>
-            {
-                profiles.ForEach(c.AddProfile);
-            });
-
-            return config.CreateMapper();
-        }
+        return config.CreateMapper();
     }
 }
