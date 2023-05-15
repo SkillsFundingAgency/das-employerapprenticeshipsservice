@@ -4,7 +4,6 @@ using SFA.DAS.EAS.Support.Web.Authorization;
 using SFA.DAS.EAS.Support.Web.Helpers;
 using SFA.DAS.EAS.Support.Web.Models;
 using SFA.DAS.EAS.Support.Web.Services;
-using SFA.DAS.Support.Shared.Discovery;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers;
 

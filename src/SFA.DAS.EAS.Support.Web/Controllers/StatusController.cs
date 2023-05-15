@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using Microsoft.AspNetCore.Http.Extensions;
+using SFA.DAS.EAS.Support.ApplicationServices;
 using SFA.DAS.EAS.Support.Web.Authorization;
-using SFA.DAS.Support.Shared;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers;
 
