@@ -38,9 +38,9 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
             AccountApiClient.Setup(x => x.GetResource<LegalEntityViewModel>(legalEntity.Href))
                 .ReturnsAsync(legalEntityResponse);
 
-            var actual = await Sut.Get(id, AccountFieldsSelection.Organisations);
+            var actual = await Sut!.Get(id, AccountFieldsSelection.Organisations);
 
-            Logger.Verify(
+            Logger!.Verify(
                 x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(),
                     It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
                 Times.Exactly(accountResponse.LegalEntities.Count + 1));
@@ -75,7 +75,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
                     })
             };
 
-            AccountApiClient.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
+            AccountApiClient!.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
                 .ReturnsAsync(accountResponse);
 
             var legalEntityResponse = new LegalEntityViewModel
@@ -88,10 +88,9 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
             AccountApiClient.Setup(x => x.GetResource<LegalEntityViewModel>(legalEntity.Href))
                 .ReturnsAsync(legalEntityResponse);
 
-            var actual = await Sut.Get(id, AccountFieldsSelection.Organisations);
+            var actual = await Sut!.Get(id, AccountFieldsSelection.Organisations);
 
-
-            Logger.Verify(
+            Logger!.Verify(
                 x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(),
                     It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
                 Times.Exactly(2));
@@ -115,25 +114,23 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
         {
             const string id = "123";
 
-            AccountApiClient.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
+            AccountApiClient!.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
                 .ThrowsAsync(new Exception());
 
-            var actual = await Sut.Get(id, AccountFieldsSelection.Organisations);
+            var actual = await Sut!.Get(id, AccountFieldsSelection.Organisations);
 
-            Logger.Verify(
+            Logger!.Verify(
                 x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(),
                     It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
             Logger.Verify(
                 x => x.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(),
                     It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
 
-
             AccountApiClient.Verify(x => x.GetResource<AccountDetailViewModel>(It.IsAny<string>()), Times.Once);
             AccountApiClient.Verify(x => x.GetResource<LegalEntityViewModel>(It.IsAny<string>()), Times.Never);
 
             Assert.That(actual, Is.Null);
         }
-
 
         [Test]
         public async Task ItShoudFailGracefullyAndLogErrorWhenClientThrowsExceptionOnGetResourceLegalEntity()
@@ -149,24 +146,22 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
                     })
             };
 
-            AccountApiClient.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
+            AccountApiClient!.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
                 .ReturnsAsync(accountResponse);
-
 
             var legalEntity = accountResponse.LegalEntities[0];
 
             AccountApiClient.Setup(x => x.GetResource<LegalEntityViewModel>(legalEntity.Href))
                 .ThrowsAsync(new Exception());
 
-            var actual = await Sut.Get(id, AccountFieldsSelection.Organisations);
+            var actual = await Sut!.Get(id, AccountFieldsSelection.Organisations);
 
-            Logger.Verify(
+            Logger!.Verify(
                 x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(),
                     It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Exactly(2));
             Logger.Verify(
                 x => x.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(),
                     It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
-
 
             AccountApiClient.Verify(x => x.GetResource<LegalEntityViewModel>(It.IsAny<string>()),
                 Times.Exactly(accountResponse.LegalEntities.Count));

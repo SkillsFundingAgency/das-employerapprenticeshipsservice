@@ -15,11 +15,8 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
         {
             const string id = "123";
 
-            AccountApiClient.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
-                .ReturnsAsync(new AccountDetailViewModel()
-                {
-
-                } );
+            AccountApiClient!.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
+                .ReturnsAsync(new AccountDetailViewModel());
 
             var fixture = new Fixture();
             AccountApiClient.Setup(x => x.GetAccountUsers( It.IsAny<string>())).ReturnsAsync(new List<TeamMemberViewModel>()
@@ -28,9 +25,9 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
                 fixture.Create<TeamMemberViewModel>()
             } );
 
-            var actual = await Sut.Get(id, AccountFieldsSelection.TeamMembers);
+            var actual = await Sut!.Get(id, AccountFieldsSelection.TeamMembers);
 
-            Logger.Verify(x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Exactly(2));
+            Logger!.Verify(x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Exactly(2));
 
             Assert.Multiple(() =>
             {
@@ -47,12 +44,12 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
         {
             const string id = "123";
             
-            AccountApiClient.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
+            AccountApiClient!.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
                 .ThrowsAsync(new Exception());
 
-            var actual = await Sut.Get(id, AccountFieldsSelection.TeamMembers);
+            var actual = await Sut!.Get(id, AccountFieldsSelection.TeamMembers);
 
-            Logger.Verify(x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
+            Logger!.Verify(x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
             Logger.Verify(x => x.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
 
             Assert.That(actual, Is.Null);

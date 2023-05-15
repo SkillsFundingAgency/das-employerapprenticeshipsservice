@@ -15,11 +15,11 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
 
             var exception = new Exception("Some exception");
 
-            AccountApiClient
+            AccountApiClient!
                 .Setup(x => x.GetResource<AccountWithBalanceViewModel>($"/api/accounts/{id}"))
                 .ThrowsAsync(exception);
 
-            Logger.Setup(x => x.Log(
+            Logger!.Setup(x => x.Log(
                 LogLevel.Debug,
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()
             ));
 
-            var actual = await Sut.GetAccountBalance(id);
+            var actual = await Sut!.GetAccountBalance(id);
 
             Logger.Verify(x => x.Log(
                 LogLevel.Debug,
@@ -43,6 +43,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()
             ), Times.Never);
+            
             Logger.Verify(x => x.Log(
                 LogLevel.Error,
                 It.IsAny<EventId>(),
@@ -68,12 +69,12 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
                 IsLevyPayer = true
             };
 
-            AccountApiClient.Setup(x => x.GetResource<AccountWithBalanceViewModel>($"/api/accounts/{id}"))
+            AccountApiClient!.Setup(x => x.GetResource<AccountWithBalanceViewModel>($"/api/accounts/{id}"))
                 .ReturnsAsync(response);
 
-            var actual = await Sut.GetAccountBalance(id);
+            var actual = await Sut!.GetAccountBalance(id);
 
-            Logger.Verify(x =>
+            Logger!.Verify(x =>
                 x.Log(
                 LogLevel.Debug,
                 It.IsAny<EventId>(),

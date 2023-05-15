@@ -1,14 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Support.Core.Models;
-using SFA.DAS.EmployerAccounts.Api.Types;
-using ResourceList = SFA.DAS.EAS.Account.Api.Types.ResourceList;
 
 namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository;
 
@@ -49,12 +43,12 @@ public class WhenCallingGetWithAccountFieldsSelectionFinance : WhenTestingAccoun
             DasAccountName = "Test Account 1"
         };
 
-        AccountApiClient.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
+        AccountApiClient!.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
             .ReturnsAsync(accountDetailViewModel);
 
         var obscuredPayePayeScheme = "123/123456";
 
-        PayeSchemeObsfuscator.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
+        PayeSchemeObsfuscator!.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
             .Returns(obscuredPayePayeScheme);
 
 
@@ -80,7 +74,7 @@ public class WhenCallingGetWithAccountFieldsSelectionFinance : WhenTestingAccoun
         var yearOffset = now.Month <= 4 ? -1 : 0;
         var startOfFinancialYear = new DateTime(now.Year + yearOffset, 4, 1);
 
-        DatetimeService.Setup(x => x.GetBeginningFinancialYear(It.IsAny<DateTime>()))
+        DatetimeService!.Setup(x => x.GetBeginningFinancialYear(It.IsAny<DateTime>()))
             .Returns(startOfFinancialYear);
 
         // Q: 2016,4,1 -> 2016,11,1    
@@ -94,8 +88,7 @@ public class WhenCallingGetWithAccountFieldsSelectionFinance : WhenTestingAccoun
 
         var monthsToQuery = (now.Year - startOfFinancialYear.Year) * 12 +
                             (now.Month - startOfFinancialYear.Month) + 1;
-        ;
-
+        
         const decimal isNotZero = 100m;
         var isTxDateCreated = DateTime.Today;
         var transactionsViewModel = new TransactionsViewModel
@@ -120,9 +113,9 @@ public class WhenCallingGetWithAccountFieldsSelectionFinance : WhenTestingAccoun
             .ReturnsAsync(transactionsViewModel
             );
 
-        var actual = await Sut.Get(id, AccountFieldsSelection.Finance);
+        var actual = await Sut!.Get(id, AccountFieldsSelection.Finance);
 
-        Logger.Verify(
+        Logger!.Verify(
             x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Exactly(2));
 
@@ -179,12 +172,12 @@ public class WhenCallingGetWithAccountFieldsSelectionFinance : WhenTestingAccoun
             DasAccountName = "Test Account 1"
         };
 
-        AccountApiClient.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
+        AccountApiClient!.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
             .ReturnsAsync(accountDetailViewModel);
 
         var obscuredPayePayeScheme = "123/123456";
 
-        PayeSchemeObsfuscator.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
+        PayeSchemeObsfuscator!.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
             .Returns(obscuredPayePayeScheme);
 
         var payeSchemeViewModel = new PayeSchemeModel
@@ -209,7 +202,7 @@ public class WhenCallingGetWithAccountFieldsSelectionFinance : WhenTestingAccoun
         var monthsToQuery = (now.Year - startOfFirstFinancialYear.Year) * 12 +
                             (now.Month - startOfFirstFinancialYear.Month) + 1;
 
-        DatetimeService.Setup(x => x.GetBeginningFinancialYear(startOfFirstFinancialYear))
+        DatetimeService!.Setup(x => x.GetBeginningFinancialYear(startOfFirstFinancialYear))
             .Returns(startOfFirstFinancialYear);
 
         AccountApiClient.Setup(x => x.GetTransactions(accountDetailViewModel.HashedAccountId,
@@ -217,9 +210,9 @@ public class WhenCallingGetWithAccountFieldsSelectionFinance : WhenTestingAccoun
                 It.IsAny<int>()))
             .ThrowsAsync(new Exception("Waaaaaaaah"));
 
-        var actual = await Sut.Get(id, AccountFieldsSelection.Finance);
+        var actual = await Sut!.Get(id, AccountFieldsSelection.Finance);
 
-        Logger.Verify(
+        Logger!.Verify(
             x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Exactly(2));
 

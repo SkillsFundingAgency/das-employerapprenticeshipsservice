@@ -52,7 +52,7 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
     [Test]
     public async Task ItShouldReturnAnEmptyListIfGetAccountsThrowsAnException()
     {
-        AccountApiClient
+        AccountApiClient!
             .Setup(x => x.GetPageOfAccounts(It.IsAny<int>(), 10, null))
             .ReturnsAsync(_pagedApiResponseViewModel);
 
@@ -63,10 +63,10 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
 
         Sut = new Services.AccountRepository(
             AccountApiClient.Object,
-            PayeSchemeObsfuscator.Object,
-            DatetimeService.Object,
-            Logger.Object,
-            HashingService.Object);
+            PayeSchemeObsfuscator!.Object,
+            DatetimeService!.Object,
+            Logger!.Object,
+            HashingService!.Object);
 
         var actual = (await Sut.FindAllDetails(10, 1)).ToArray();
 
@@ -89,7 +89,7 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
     [Test]
     public async Task ItShouldReturnAnEmptyListIfGetAccountsThrowsAnHttpRequestException()
     {
-        AccountApiClient
+        AccountApiClient!
             .Setup(x => x.GetPageOfAccounts(It.IsAny<int>(), 10, null))
             .ReturnsAsync(_pagedApiResponseViewModel);
 
@@ -100,10 +100,10 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
 
         Sut = new Services.AccountRepository(
             AccountApiClient.Object,
-            PayeSchemeObsfuscator.Object,
-            DatetimeService.Object,
-            Logger.Object,
-            HashingService.Object);
+            PayeSchemeObsfuscator!.Object,
+            DatetimeService!.Object,
+            Logger!.Object,
+            HashingService!.Object);
 
         var actual = (await Sut.FindAllDetails(10, 1)).ToArray();
 
@@ -124,7 +124,7 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
     [Test]
     public async Task ItShouldReturnTheEntireListOfAccounts()
     {
-        AccountApiClient.Setup(x => x.GetPageOfAccounts(It.IsAny<int>(), 10, null))
+        AccountApiClient!.Setup(x => x.GetPageOfAccounts(It.IsAny<int>(), 10, null))
             .ReturnsAsync(_pagedApiResponseViewModel);
 
         AccountApiClient
@@ -136,10 +136,10 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
 
         Sut = new Services.AccountRepository(
             AccountApiClient.Object,
-            PayeSchemeObsfuscator.Object,
-            DatetimeService.Object,
-            Logger.Object,
-            HashingService.Object);
+            PayeSchemeObsfuscator!.Object,
+            DatetimeService!.Object,
+            Logger!.Object,
+            HashingService!.Object);
 
         var actual = (await Sut.FindAllDetails(10, 1)).ToArray();
 
@@ -157,7 +157,7 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
     public async Task ItShouldReturnTheEntireListOfAccountsWhenAccountHasPayeScheme()
     {
         //Arrange
-        AccountApiClient.Setup(x => x.GetPageOfAccounts(It.IsAny<int>(), 10, null))
+        AccountApiClient!.Setup(x => x.GetPageOfAccounts(It.IsAny<int>(), 10, null))
             .ReturnsAsync(_pagedApiResponseViewModel);
 
         AccountApiClient
@@ -172,15 +172,15 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
             .ReturnsAsync(new PayeSchemeModel { Name = "Test", Ref = "123" });
 
         var obscuredPayePayeScheme = "123/123456";
-        PayeSchemeObsfuscator.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
+        PayeSchemeObsfuscator!.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
             .Returns(obscuredPayePayeScheme);
 
         Sut = new Services.AccountRepository(
             AccountApiClient.Object,
             PayeSchemeObsfuscator.Object,
-            DatetimeService.Object,
-            Logger.Object,
-            HashingService.Object);
+            DatetimeService!.Object,
+            Logger!.Object,
+            HashingService!.Object);
 
         //Act
         var actual = (await Sut.FindAllDetails(10, 1)).ToArray();
@@ -199,7 +199,7 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
     public async Task ItShouldThrowsAnExceptionWhenAccountHasNoResourceForPayeScheme()
     {
         //Arrange
-        AccountApiClient.Setup(x => x.GetPageOfAccounts(It.IsAny<int>(), 10, null))
+        AccountApiClient!.Setup(x => x.GetPageOfAccounts(It.IsAny<int>(), 10, null))
             .ReturnsAsync(_pagedApiResponseViewModel);
 
         AccountApiClient
@@ -215,15 +215,15 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
             .ThrowsAsync(e);
 
         var obscuredPayePayeScheme = "123/123456";
-        PayeSchemeObsfuscator.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
+        PayeSchemeObsfuscator!.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
             .Returns(obscuredPayePayeScheme);
 
         Sut = new Services.AccountRepository(
             AccountApiClient.Object,
             PayeSchemeObsfuscator.Object,
-            DatetimeService.Object,
-            Logger.Object,
-            HashingService.Object);
+            DatetimeService!.Object,
+            Logger!.Object,
+            HashingService!.Object);
 
         //Act
         var actual = (await Sut.FindAllDetails(10, 1)).ToArray();

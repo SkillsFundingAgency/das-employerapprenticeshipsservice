@@ -14,12 +14,12 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
         {
             const string id = "123";
 
-            AccountApiClient.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
+            AccountApiClient!.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
                 .ReturnsAsync(new AccountDetailViewModel());
 
-            var actual = await Sut.Get(id, AccountFieldsSelection.None);
+            var actual = await Sut!.Get(id, AccountFieldsSelection.None);
 
-            Logger.Verify(x => x.Log(
+            Logger!.Verify(x => x.Log(
                 LogLevel.Debug,
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
@@ -42,12 +42,12 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
         {
             const string id = "123";
 
-            AccountApiClient.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
+            AccountApiClient!.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
                 .ThrowsAsync(new Exception());
 
-            var actual = await Sut.Get(id, AccountFieldsSelection.None);
+            var actual = await Sut!.Get(id, AccountFieldsSelection.None);
 
-            Logger.Verify(x => x.Log(
+            Logger!.Verify(x => x.Log(
                 LogLevel.Debug,
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),

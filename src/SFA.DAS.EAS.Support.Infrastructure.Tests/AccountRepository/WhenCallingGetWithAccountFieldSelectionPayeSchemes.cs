@@ -15,12 +15,12 @@ public class WhenCallingGetWithAccountFieldSelectionPayeSchemes : WhenTestingAcc
     {
         const string id = "123";
 
-        AccountApiClient.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
+        AccountApiClient!.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
             .ThrowsAsync(new Exception());
 
-        var actual = await Sut.Get(id, AccountFieldsSelection.PayeSchemes);
+        var actual = await Sut!.Get(id, AccountFieldsSelection.PayeSchemes);
 
-        Logger.Verify(x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
+        Logger!.Verify(x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
         Logger.Verify(x => x.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
 
         Assert.That(actual, Is.Null);
@@ -59,12 +59,12 @@ public class WhenCallingGetWithAccountFieldSelectionPayeSchemes : WhenTestingAcc
             DasAccountName = "Test Account 1"
         };
 
-        AccountApiClient.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
+        AccountApiClient!.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
             .ReturnsAsync(accountDetailViewModel);
 
         var obscuredPayePayeScheme = "123/123456";
 
-        PayeSchemeObsfuscator.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
+        PayeSchemeObsfuscator!.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
             .Returns(obscuredPayePayeScheme);
 
         var payeSchemeViewModel = new PayeSchemeModel
@@ -79,12 +79,11 @@ public class WhenCallingGetWithAccountFieldSelectionPayeSchemes : WhenTestingAcc
         AccountApiClient.Setup(x => x.GetResource<PayeSchemeModel>(It.IsAny<string>()))
             .ReturnsAsync(payeSchemeViewModel);
 
-        var actual = await Sut.Get(id, AccountFieldsSelection.PayeSchemes);
+        var actual = await Sut!.Get(id, AccountFieldsSelection.PayeSchemes);
 
-        Logger.Verify(x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Exactly(2));
+        Logger!.Verify(x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Exactly(2));
 
         PayeSchemeObsfuscator.Verify(x => x.ObscurePayeScheme(It.IsAny<string>()), Times.Exactly(2));
-
 
         Assert.That(actual, Is.Not.Null);
         Assert.That(actual.PayeSchemes, Is.Not.Null);
