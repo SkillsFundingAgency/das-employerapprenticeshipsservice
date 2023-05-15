@@ -5,32 +5,18 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System.IdentityModel" />
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.Transactions" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj" />
     <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj" />
     <ProjectReference Include="..\SFA.DAS.EAS.Support.Core\SFA.DAS.EAS.Support.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="SFA.DAS.EmployerAccounts.Api.Types" Version="1.6.3195">
-    </PackageReference>
+    <PackageReference Include="SFA.DAS.EmployerAccounts.Api.Types" Version="1.6.3195"/>
     <PackageReference Include="SFA.DAS.Encoding" Version="1.1.76" />
-    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1">
-    </PackageReference>
     <PackageReference Include="HMRC.ESFA.Levy.Api.Client" Version="2.0.4" />
-    <PackageReference Include="System.Net.Security" Version="4.3.2" />
-    <PackageReference Include="System.Text.Encodings.Web" Version="7.0.0" />
-    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Services\AppConfigSettingsProvider.cs" />
     <Compile Remove="Services\MachineSettings.cs" />
     <Compile Remove="Settings\AccountsApiConfiguration.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 </Project>
