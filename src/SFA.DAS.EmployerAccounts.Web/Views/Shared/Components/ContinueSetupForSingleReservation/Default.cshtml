@@ -23,7 +23,7 @@
             </td>
         </tr>
     </table>
-    <a href="@Url.Action("ContinueSetupCreateAdvert", "EmployerTeam")" role="button" draggable="false" class="govuk-button">
+    <a asp-route="@RouteNames.CreateAdvert" asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" role="button" draggable="false" class="govuk-button">
         Continue
     </a>
 </section>

@@ -18,7 +18,7 @@
             Do you need to create an advert for this apprenticeship?
         </h1>
 
-        <form method="POST" action="@Url.Action("ContinueSetupCreateAdvert")">
+        <form method="POST" asp-route="@RouteNames.CreateAdvertPost" asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]">
             <div class="govuk-form-group  @(!ViewData.ModelState.IsValid ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset">
                     <legend class="govuk-fieldset__legend">
