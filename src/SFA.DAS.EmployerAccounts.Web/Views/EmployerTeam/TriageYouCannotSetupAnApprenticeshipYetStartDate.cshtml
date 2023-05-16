@@ -1,12 +1,13 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
-@{ViewBag.PageID = "you-cannot-setup-an-apprenticeship-yet-start-date"; }
-@{ViewBag.Title = "You cannot set up an apprenticeship yet"; }
-@{ViewBag.MetaDesc = "You cannot set up an apprenticeship yet"; }
-@{ViewBag.GaData.Vpv = "/account/setupapprentice/you-cannot-setup-an-apprenticeship-yet-start-date"; }
+@{
+    ViewBag.PageID = "you-cannot-setup-an-apprenticeship-yet-start-date";
+    ViewBag.Title = "You cannot set up an apprenticeship yet";
+    ViewBag.MetaDesc = "You cannot set up an apprenticeship yet";
+    ViewBag.GaData.Vpv = "/account/setupapprentice/you-cannot-setup-an-apprenticeship-yet-start-date";
+}
 
-@section breadcrumb
-{
-    <a href="javascript:history.back()" class="govuk-back-link js-show">Back</a>    
+@section breadcrumb {
+    <a href="javascript:history.back()" class="govuk-back-link js-show">Back</a>
 }
 
 <div class="govuk-grid-row">
@@ -14,6 +15,6 @@
         <h1 class="govuk-heading-xl">@ViewBag.Title</h1>
         <p class="govuk-body">You can only set up an apprenticeship that will start within the next 6 months.</p>
         <p class="govuk-body">Try again once the training start date is within the next 6 months.</p>
-        <a href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName)" class="govuk-button" id="return-to-homepage">Return to account home</a>
+        <a asp-route="@RouteNames.EmployerTeamIndex" asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" class="govuk-button" id="return-to-homepage">Return to account home</a>
     </div>
 </div>

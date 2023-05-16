@@ -62,7 +62,7 @@ class WhenIChooseAorn : ControllerTestBase
     public void ThenIShouldGoToGatewayInform()
     {
         //Act
-        var result = _employerAccountController.GetApprenticeshipFunding(3) as RedirectToActionResult;
+        var result = _employerAccountController.GetApprenticeshipFunding(string.Empty, 3) as RedirectToActionResult;
 
         //Assert
         Assert.AreEqual(ControllerConstants.SearchUsingAornActionName, result.ActionName);

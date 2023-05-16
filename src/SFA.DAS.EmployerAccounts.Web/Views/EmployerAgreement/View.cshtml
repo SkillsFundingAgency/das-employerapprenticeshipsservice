@@ -5,9 +5,9 @@
     ViewBag.PageID = "agreement-view";
     ViewBag.Title = "Agreement view";
     ViewBag.Section = "organisations";
-}
-@{
     ViewBag.GaData.Vpv = "/accounts/agreements/view-your-agreement/agreement-view";
+
+    string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]?.ToString();
 }
 
 <div class="govuk-grid-row">
@@ -62,23 +62,23 @@
 </div>
 
 
-    @if (HtmlHelpers.ViewExists(Html, Model.EmployerAgreement.TemplatePartialViewName + "_body"))
-    {
-        @await Html.PartialAsync(Model.EmployerAgreement.TemplatePartialViewName + "_body")
-    }
-    else
-    {
-        @await Html.PartialAsync(Model.EmployerAgreement.TemplatePartialViewName)
-    }
+@if (HtmlHelpers.ViewExists(Html, Model.EmployerAgreement.TemplatePartialViewName + "_body"))
+{
+    @await Html.PartialAsync(Model.EmployerAgreement.TemplatePartialViewName + "_body")
+}
+else
+{
+    @await Html.PartialAsync(Model.EmployerAgreement.TemplatePartialViewName)
+}
 
-    @section breadcrumb {
-        <div class="govuk-breadcrumbs">
-            <ol class="govuk-breadcrumbs__list" role="navigation">
-                <li class="govuk-breadcrumbs__list-item"><a href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName)" class="govuk-breadcrumbs__link">Home</a></li>
-                <li class="govuk-breadcrumbs__list-item"><a href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerAgreementControllerName)" class="govuk-breadcrumbs__link">Your organisations and agreements</a></li>
-                <li class="govuk-breadcrumbs__list-item">Your <abbr>DfE</abbr> agreement</li>
-            </ol>
-        </div>
+@section breadcrumb {
+    <div class="govuk-breadcrumbs">
+        <ol class="govuk-breadcrumbs__list" role="navigation">
+            <li class="govuk-breadcrumbs__list-item"><a asp-route="@RouteNames.EmployerTeamIndex" asp-route-hashedAccountId="@hashedAccountId" class="govuk-breadcrumbs__link">Home</a></li>
+            <li class="govuk-breadcrumbs__list-item"><a asp-route="@RouteNames.EmployerAgreementIndex" asp-route-hashedAccountId="@hashedAccountId" class="govuk-breadcrumbs__link">Your organisations and agreements</a></li>
+            <li class="govuk-breadcrumbs__list-item">Your <abbr>DfE</abbr> agreement</li>
+        </ol>
+    </div>
     }
 
 

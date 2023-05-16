@@ -56,7 +56,7 @@ class WhenISkipRegistration : ControllerTestBase
     public void ThenIShouldGoToSkipRegistration()
     {
         //Act
-        var result = _employerAccountController.GetApprenticeshipFunding(1) as RedirectToRouteResult;
+        var result = _employerAccountController.GetApprenticeshipFunding(string.Empty, 1) as RedirectToRouteResult;
 
         //Assert
         Assert.AreEqual(RouteNames.SkipRegistration, result.RouteName);

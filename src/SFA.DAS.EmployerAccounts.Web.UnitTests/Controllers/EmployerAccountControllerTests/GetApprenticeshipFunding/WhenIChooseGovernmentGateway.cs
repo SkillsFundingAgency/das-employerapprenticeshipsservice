@@ -67,7 +67,7 @@ class WhenIChooseGovernmentGateway : ControllerTestBase
     public void ThenIShouldGoToGatewayInform()
     {
         //Act
-        var result = _employerAccountController.GetApprenticeshipFunding(2) as RedirectToActionResult;
+        var result = _employerAccountController.GetApprenticeshipFunding(string.Empty, 2) as RedirectToActionResult;
 
         //Assert
         Assert.AreEqual(ControllerConstants.GatewayInformActionName, result.ActionName);

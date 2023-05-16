@@ -3,20 +3,21 @@
     ViewBag.Title = "Update an organisation";
     ViewBag.Section = "organisations";
     ViewBag.PageID = "update-organisation-details";
+    string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]?.ToString();
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
         <h1 class="govuk-heading-xl">Update your organisation's details</h1>
 
-        <div class="panel panel-border-wide">
+        <div class="govuk-inset-text">
             Please ensure you've updated your organisation's details at <span>@Model.DataSourceFriendlyName</span>. This update can take up to 7 working days to process.
         </div>
 
-        <p>If you have done this and the updated information is still not displayed here, please <a href="@Url.Action("Help", "Home")">contact support</a> for further help.</p>
+        <p>If you have done this and the updated information is still not displayed here, please <a href="@Url.Action("Help", "Home")" class="govuk-link">contact support</a> for further help.</p>
 
 
-        <form asp-route="@RouteNames.OrganisationPostUpdateSelection" asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" method="post">
+        <form asp-route="@RouteNames.OrganisationPostUpdateSelection" asp-route-hashedAccountId="@hashedAccountId" method="post">
             <div class="govuk-form-group">
                 <h2 class="govuk-heading-l">
                     What's next?
@@ -40,5 +41,5 @@
 
 @section breadcrumb
 {
-    <a href="@Url.Action("Index", "EmployerAgreement")" class="govuk-back-link">Back to your organisations</a>
+    <a asp-route="@RouteNames.EmployerAgreementIndex" asp-route-hashedAccountId="@hashedAccountId" class="govuk-back-link">Back to your organisations</a>
 }

@@ -82,7 +82,10 @@ public class SearchPensionRegulatorController : BaseController
 
         if (viewModel.SelectedOrganisation == OrgNotListed)
         {
-            return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
+            return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName, new
+            {
+                hashedAccountId
+            });
         }
 
         var item = viewModel.Results.SingleOrDefault(m => m.ReferenceNumber == viewModel.SelectedOrganisation);

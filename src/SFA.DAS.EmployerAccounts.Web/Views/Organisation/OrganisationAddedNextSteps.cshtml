@@ -6,12 +6,13 @@
     ViewBag.Section = "organisations";
     ViewBag.ZenDeskLabel = "eas-organisation-has-been-added";
     ViewBag.GaData.Vpv = "/accounts/organisations/nextStep/page-onboard-organisation-added-what-next";
-    ViewBag.ShowNav = false;
+    string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]?.ToString();
+    ViewBag.ShowNav = !string.IsNullOrEmpty(hashedAccountId);
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-l">What's next?</h1>
-        <form asp-route="@RouteNames.OrganisationGoToNextStep" asp-route-HashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" method="POST">
+        <form asp-route="@RouteNames.OrganisationGoToNextStep" asp-route-HashedAccountId="@hashedAccountId" method="POST">
             <div class="govuk-form-group @(!string.IsNullOrEmpty(Model.Data.ErrorMessage) ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset">
                     <legend class="govuk-fieldset__legend">

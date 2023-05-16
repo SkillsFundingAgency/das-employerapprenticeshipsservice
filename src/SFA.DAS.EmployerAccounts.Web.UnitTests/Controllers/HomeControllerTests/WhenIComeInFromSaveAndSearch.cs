@@ -8,6 +8,7 @@ public class WhenIComeInFromSaveAndSearch : ControllerTestBase
     private EmployerAccountsConfiguration _configuration;
     private Mock<HomeOrchestrator> _homeOrchestrator;
     private Mock<ICookieStorageService<ReturnUrlModel>> _returnUrlCookieStorageService;
+    private Mock<IUrlActionHelper> _urlActionHelper;
 
     private const string ExpectedEmail = "test@test.com";
     private const string ExpectedId = "123456";
@@ -26,13 +27,15 @@ public class WhenIComeInFromSaveAndSearch : ControllerTestBase
         _configuration = new EmployerAccountsConfiguration();
         _homeOrchestrator = new Mock<HomeOrchestrator>();
         _returnUrlCookieStorageService = new Mock<ICookieStorageService<ReturnUrlModel>>();
+        _urlActionHelper = new Mock<IUrlActionHelper>();
 
         _homeController = new HomeController(
             _homeOrchestrator.Object,
             _configuration,
             Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
             _returnUrlCookieStorageService.Object,
-                Mock.Of<ILogger<HomeController>>(), null, null)
+                Mock.Of<ILogger<HomeController>>(), null, null, 
+            _urlActionHelper.Object)
         {
             ControllerContext = ControllerContext
         };

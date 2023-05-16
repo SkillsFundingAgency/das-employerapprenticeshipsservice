@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Logging;
@@ -50,7 +49,7 @@ public class ProviderRegistrationApiClient : ApiClientBase, IProviderRegistratio
 
     private async Task AddAuthenticationHeader()
     {
-        if (ConfigurationManager.AppSettings["EnvironmentName"].ToUpper() != "LOCAL")
+        if (!string.IsNullOrEmpty(_identifierUri))
         {
             var azureServiceTokenProvider = new AzureServiceTokenProvider();
             var accessToken = await azureServiceTokenProvider.GetAccessTokenAsync(_identifierUri);
