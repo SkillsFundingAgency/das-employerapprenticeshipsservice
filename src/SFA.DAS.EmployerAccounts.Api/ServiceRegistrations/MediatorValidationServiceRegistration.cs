@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesByHashedAccountId;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountDetail;
@@ -31,6 +32,7 @@ public static class MediatorValidationServiceRegistration
         services.AddTransient<IValidator<GetAccountLegalEntitiesByHashedAccountIdRequest>, GetAccountLegalEntitiesByHashedAccountIdValidator>();
         services.AddTransient<IValidator<GetEmployerAgreementsByAccountIdRequest>, GetEmployerAgreementsByAccountIdRequestValidator>();
         services.AddTransient<IValidator<GetUserByEmailQuery>, GetUserByEmailQueryValidator>();
+        services.AddTransient<IValidator<UpsertRegisteredUserCommand>, UpsertRegisteredUserCommandValidator>();
         
         return services;
     }
