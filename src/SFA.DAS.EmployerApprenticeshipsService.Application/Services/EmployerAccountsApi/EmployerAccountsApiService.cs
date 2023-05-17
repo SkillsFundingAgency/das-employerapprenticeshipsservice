@@ -37,8 +37,8 @@ public class EmployerAccountsApiService : ApiClientService, IEmployerAccountsApi
         return Get<AccountDetailViewModel>($"/api/accounts/{hashedAccountId}", cancellationToken);
     }
 
-    public Task<string> Redirect(string url, CancellationToken cancellationToken = default)
+    public Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default)
     {
-        return Get<string>(url, cancellationToken);
+        return Get<dynamic>(url, cancellationToken);
     }
 }

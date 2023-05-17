@@ -24,6 +24,8 @@ public class EmployerAgreementController : ControllerBase
         string hashedLegalEntityId,
         string hashedAgreementId)
     {
-        return Ok(await _apiService.Redirect($"/api/accounts/{hashedAccountId}/legalentities/{hashedLegalEntityId}/agreements/{hashedAgreementId}"));
+        var redirectResponse = await _apiService.Redirect($"/api/accounts/{hashedAccountId}/legalentities/{hashedLegalEntityId}/agreements/{hashedAgreementId}");
+
+        return Content(redirectResponse.ToString(), "application/json");
     }
 }

@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.WebUtilities;
 using SFA.DAS.EAS.Application.Http;
+using System.Net.Http.Json;
 
 namespace SFA.DAS.EAS.Application.Services;
 
@@ -19,15 +22,16 @@ public abstract class ApiClientService
         _httpClient = httpClient;
     }
 
-    public Task<T> Get<T>(string uri, object queryData = null, CancellationToken cancellationToken = default)
+    public Task<TResponse> Get<TResponse>(string uri, object queryData = null, CancellationToken cancellationToken = default)
     {
-        return Get<T>(new Uri(uri, UriKind.RelativeOrAbsolute), queryData, cancellationToken);
+        return Get<TResponse>(new Uri(uri, UriKind.RelativeOrAbsolute), queryData, cancellationToken);
     }
 
-    public async Task<T> Get<T>(Uri uri, object queryData = null, CancellationToken cancellationToken = default)
+    public async Task<TResponse> Get<TResponse>(Uri uri, object queryData = null, CancellationToken cancellationToken = default)
     {
         var response = await GetResponse(uri, queryData, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
-        return await response.Content.ReadAsAsync<T>(cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
+
+        return await response.Content.ReadAsAsync<TResponse>(cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
     }
 
     private async Task<HttpResponseMessage> GetResponse(Uri uri, object queryData = null, CancellationToken cancellationToken = default)
