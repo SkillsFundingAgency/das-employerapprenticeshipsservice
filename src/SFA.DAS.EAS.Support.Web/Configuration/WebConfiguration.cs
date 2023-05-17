@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using SFA.DAS.EAS.Account.Api.Client;
-using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Support.Infrastructure.Settings;
 
 namespace SFA.DAS.EAS.Support.Web.Configuration;
@@ -9,7 +8,9 @@ public class WebConfiguration : IWebConfiguration
 {
     [JsonRequired]
     public AccountApiConfiguration AccountApi { get; set; }
-    
+
+    [JsonRequired] public SiteValidatorSettings SiteValidator { get; set; }
+
     [JsonRequired]
     public LevySubmissionsSettings LevySubmission { get; set; }
 
@@ -18,6 +19,4 @@ public class WebConfiguration : IWebConfiguration
 
     [JsonRequired]
     public EmployerAccountsConfiguration EmployerAccountsConfiguration { get; set; }
-
-    public OuterApiConfiguration EmployerAccountsOuterApiConfiguration { get; set; }
 }
