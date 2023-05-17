@@ -40,6 +40,12 @@ public class WebConfigurationTesting
             {
                 AllowedCharacters = "",
                 Hashstring = ""
+            },
+            SiteValidator = new SiteValidatorSettings
+            {
+                Audience = "some rubbish",
+                Scope = "scopy",
+                Tenant = "David"
             }
         };
     }

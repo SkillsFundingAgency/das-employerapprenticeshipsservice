@@ -21,7 +21,6 @@ public class StatisticsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<Types.StatisticsViewModel>> GetStatistics()
     {
-        var redirectResponse = await _statisticsOrchestrator.Get();
-        return Content(redirectResponse.ToString(), "application/json");
+        return Ok(await _statisticsOrchestrator.Get());
     }
 }
