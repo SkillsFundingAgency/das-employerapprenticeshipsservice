@@ -24,6 +24,7 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.30.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="System.Security.Cryptography.Xml" Version="7.0.1" />
     </ItemGroup>
     <ItemGroup>
         <Content Update="appsettings.json">
