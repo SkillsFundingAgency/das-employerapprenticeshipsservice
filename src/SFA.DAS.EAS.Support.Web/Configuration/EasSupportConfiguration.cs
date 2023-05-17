@@ -4,12 +4,13 @@ using SFA.DAS.EAS.Support.Infrastructure.Settings;
 
 namespace SFA.DAS.EAS.Support.Web.Configuration;
 
-public class WebConfiguration : IWebConfiguration
+public class EasSupportConfiguration : IEasSupportConfiguration
 {
     [JsonRequired]
     public AccountApiConfiguration AccountApi { get; set; }
 
-    [JsonRequired] public SiteValidatorSettings SiteValidator { get; set; }
+    [JsonRequired] 
+    public SiteValidatorSettings SiteValidator { get; set; }
 
     [JsonRequired]
     public LevySubmissionsSettings LevySubmission { get; set; }
