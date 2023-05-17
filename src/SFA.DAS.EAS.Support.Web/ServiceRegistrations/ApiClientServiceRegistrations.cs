@@ -11,10 +11,10 @@ public static class ApiClientServiceRegistrations
 {
     public static IServiceCollection AddApiClientServices(this IServiceCollection services)
     {
-        services.AddSingleton<ISecureHttpClient, EmployerAccountsSecureHttpClient>();
+        services.AddHttpClient<IAccountApiClient, AccountApiClient>();
+        services.AddHttpClient<ILevyTokenHttpClientFactory, LevyTokenHttpClientFactory>();
         services.AddSingleton<ITokenServiceApiClient, TokenServiceApiClient>();
-        services.AddSingleton<ILevyTokenHttpClientFactory, LevyTokenHttpClientFactory>();
-        services.AddSingleton<IAccountApiClient, AccountApiClient>();
+        services.AddSingleton<ISecureHttpClient, EmployerAccountsSecureHttpClient>();
 
         return services;
     }

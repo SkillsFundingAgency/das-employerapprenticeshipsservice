@@ -13,7 +13,7 @@ public class WebConfigurationTesting
     [SetUp]
     public void Setup()
     {
-        _unit = new WebConfiguration
+        _unit = new EasSupportConfiguration
         {
             AccountApi = new AccountApiConfiguration
             {
@@ -46,14 +46,14 @@ public class WebConfigurationTesting
 
     private const string SiteConfigFileName = "SFA.DAS.Support.EAS";
 
-    private WebConfiguration? _unit;
+    private EasSupportConfiguration? _unit;
 
     [Test]
     public void ItShouldDeserializeFaithfully()
     {
         var json = JsonConvert.SerializeObject(_unit);
         Assert.IsNotNull(json);
-        var actual = JsonConvert.DeserializeObject<WebConfiguration>(json);
+        var actual = JsonConvert.DeserializeObject<EasSupportConfiguration>(json);
         Assert.AreEqual(json, JsonConvert.SerializeObject(actual));
     }
 
@@ -62,7 +62,7 @@ public class WebConfigurationTesting
     {
         var json = JsonConvert.SerializeObject(_unit);
         Assert.IsNotNull(json);
-        var actual = JsonConvert.DeserializeObject<WebConfiguration>(json);
+        var actual = JsonConvert.DeserializeObject<EasSupportConfiguration>(json);
         Assert.IsNotNull(actual);
     }
 
@@ -73,7 +73,7 @@ public class WebConfigurationTesting
         var jSchemaGenerator = new JSchemaGenerator();
         jSchemaGenerator.GenerationProviders.Clear();
         jSchemaGenerator.GenerationProviders.Add(provider);
-        var actual = jSchemaGenerator.Generate(typeof(WebConfiguration));
+        var actual = jSchemaGenerator.Generate(typeof(EasSupportConfiguration));
 
         Assert.IsNotNull(actual);
         // hack to leverage format as 'environmentVariable'

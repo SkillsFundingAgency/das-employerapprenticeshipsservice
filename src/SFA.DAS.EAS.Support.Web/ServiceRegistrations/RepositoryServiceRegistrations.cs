@@ -4,6 +4,7 @@ using SFA.DAS.EAS.Support.Infrastructure.Services;
 
 namespace SFA.DAS.EAS.Support.Web.ServiceRegistrations;
 
+[ExcludeFromCodeCoverage]
 public static class RepositoryServiceRegistrations
 {
     public static IServiceCollection AddRepositories(this IServiceCollection services)
