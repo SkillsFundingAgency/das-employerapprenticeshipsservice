@@ -1,52 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-    <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
-        <LangVersion>latest</LangVersion>
-        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-        <OutputPath>bin\</OutputPath>
-        <ApplicationInsightsResourceId>/subscriptions/68208b91-0105-498e-a1bc-40d75596c01a/resourceGroups/das-at-eas-rg/providers/microsoft.insights/components/das-at-easapi-as</ApplicationInsightsResourceId>
-        <UserSecretsId>db26f280-6f78-4459-b0a3-801e3be133c4</UserSecretsId>
-    </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<OutputPath>bin\</OutputPath>
+		<OutputType>Exe</OutputType>
+	</PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj"/>
-        <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj"/>
-        <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj"/>
+        <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj" />
+        <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj" />
+        <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1"/>
-        <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0-beta3"/>
-        <PackageReference Include="Microsoft.ApplicationInsights.NLogTarget" Version="2.21.0"/>
-        <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.21.0"/>
-        <PackageReference Include="NLog" Version="5.1.4"/>
-        <PackageReference Include="NLog.Extensions.Logging" Version="5.2.3"/>
-        <PackageReference Include="NLog.Web.AspNetCore" Version="5.2.3"/>
-        <PackageReference Include="SFA.DAS.Api.Common" Version="1.0.28"/>
-        <PackageReference Include="SFA.DAS.Encoding" Version="1.1.76"/>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.16"/>
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.30.0"/>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
-    </ItemGroup>
-    <ProjectExtensions>
-        <VisualStudio>
-            <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
-                <WebProjectProperties>
-                    <UseIIS>True</UseIIS>
-                    <AutoAssignPort>True</AutoAssignPort>
-                    <DevelopmentServerPort>51693</DevelopmentServerPort>
-                    <DevelopmentServerVPath>/</DevelopmentServerVPath>
-                    <IISUrl>https://localhost:44366/</IISUrl>
-                    <NTLMAuthentication>False</NTLMAuthentication>
-                    <UseCustomServer>False</UseCustomServer>
-                    <CustomServerUrl>
-                    </CustomServerUrl>
-                    <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
-                </WebProjectProperties>
-            </FlavorProperties>
-        </VisualStudio>
-    </ProjectExtensions>
-    <ItemGroup>
-        <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+        <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
+        <PackageReference Include="Microsoft.ApplicationInsights.NLogTarget" Version="2.21.0" />
+        <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.21.0" />
+        <PackageReference Include="NLog" Version="5.1.4" />
+        <PackageReference Include="NLog.Extensions.Logging" Version="5.2.3" />
+        <PackageReference Include="NLog.Web.AspNetCore" Version="5.2.3" />
+        <PackageReference Include="SFA.DAS.Api.Common" Version="1.0.28" />
+        <PackageReference Include="SFA.DAS.Encoding" Version="1.1.76" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.30.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
     <ItemGroup>
         <Content Update="appsettings.json">

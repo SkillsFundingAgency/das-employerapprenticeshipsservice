@@ -1,10 +1,8 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
-using SFA.DAS.NLog.Logger;
-using Microsoft.Extensions.Logging;
 
 namespace SFA.DAS.EAS.Account.Api.Orchestrators
 {

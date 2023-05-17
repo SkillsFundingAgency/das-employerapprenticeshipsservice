@@ -31,8 +31,6 @@ public class Startup
             .AddApiAuthentication(_configuration, _configuration.IsDevOrLocal())
             .AddApiAuthorization();
 
-        services.AddControllersWithViews()
-                .AddNewtonsoftJson(opts => opts.UseMemberCasing());
 
         services.AddAutoMapper(typeof(Startup));
         services.AddClientServices();

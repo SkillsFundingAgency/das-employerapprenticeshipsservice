@@ -10,9 +10,14 @@ public static class ConfigurationServiceRegistrations
 {
     public static IServiceCollection AddApiConfigurationSections(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSingleton(configuration.GetSection("EmployerAccountsApi").Get<EmployerAccountsApiConfiguration>());
-        services.AddSingleton(configuration.GetSection("EmployerFinanceApi").Get<EmployerFinanceApiConfiguration>());
-        
+        services.AddOptions();
+
+        var easConfiguration = configuration.Get<EmployerApprenticeshipsServiceConfiguration>();
+        services.AddSingleton(easConfiguration);
+
+        services.AddSingleton(sp => sp.GetService<EmployerApprenticeshipsServiceConfiguration>().EmployerAccountsApi);
+        services.AddSingleton(sp => sp.GetService<EmployerApprenticeshipsServiceConfiguration>().EmployerFinanceApi);
+
         var encodingConfigJson = configuration.GetSection("SFA.DAS.Encoding").Value;
         var encodingConfig = JsonConvert.DeserializeObject<EncodingConfig>(encodingConfigJson);
         services.AddSingleton(encodingConfig);
