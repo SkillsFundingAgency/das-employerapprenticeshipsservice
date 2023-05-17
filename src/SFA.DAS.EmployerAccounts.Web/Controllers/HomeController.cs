@@ -291,7 +291,7 @@ public class HomeController : BaseController
         return RedirectToAction(ControllerConstants.IndexActionName);
     }
 
-    [AllowAnonymous]
+    [Authorize]
     [Route("signIn")]
     public IActionResult SignIn()
     {
