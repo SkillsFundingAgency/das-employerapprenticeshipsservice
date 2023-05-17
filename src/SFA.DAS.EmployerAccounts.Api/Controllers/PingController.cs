@@ -8,7 +8,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers;
 public class PingController : ControllerBase
 {
     [HttpGet]
-    [Route("get")]
+    [Route("")]
     public IActionResult Get()
     {
         return Ok();
