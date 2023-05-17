@@ -21,6 +21,7 @@ public class AccountLegalEntitiesController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> Get(int? pageSize, int? pageNumber)
     {
-        return Ok(await _apiService.Redirect($"/api/accountlegalentities?{(pageSize.HasValue ? "pageSize=" + pageSize + "&" : "")}{(pageNumber.HasValue ? "pageNumber=" + pageNumber : "")}"));
+        var redirectResponse = await _apiService.Redirect($"/api/accountlegalentities?{(pageSize.HasValue ? "pageSize=" + pageSize + "&" : "")}{(pageNumber.HasValue ? "pageNumber=" + pageNumber : "")}");
+        return Content(redirectResponse.ToString(), "application/json");
     }
 }

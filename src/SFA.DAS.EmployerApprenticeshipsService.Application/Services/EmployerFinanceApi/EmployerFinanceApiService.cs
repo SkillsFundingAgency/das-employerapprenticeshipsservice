@@ -105,8 +105,8 @@ public class EmployerFinanceApiService : ApiClientService, IEmployerFinanceApiSe
         return Get<TransferAllowance>(url, cancellationToken);
     }
 
-    public Task<string> Redirect(string url, CancellationToken cancellationToken = default)
+    public Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default)
     {
-        return Get<string>(url, cancellationToken);
+        return Get<dynamic>(url, cancellationToken);
     }
 }

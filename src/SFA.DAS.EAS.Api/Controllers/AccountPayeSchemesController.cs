@@ -22,13 +22,15 @@ public class AccountPayeSchemesController : ControllerBase
     [HttpGet(Name = "GetPayeSchemes")]
     public async Task<IActionResult> GetPayeSchemes(string hashedAccountId)
     {
-        return Ok(await _apiService.Redirect($"/api/accounts/{hashedAccountId}/payeschemes"));
+        var redirectResponse = await _apiService.Redirect($"/api/accounts/{hashedAccountId}/payeschemes");
+        return Content(redirectResponse.ToString(), "application/json");
     }
 
     [Authorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet("{payeschemeref}", Name = "GetPayeScheme")]
     public async Task<IActionResult> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
     {
-        return Ok(await _apiService.Redirect($"/api/accounts/{hashedAccountId}/payeschemes/{WebUtility.UrlEncode(payeSchemeRef)}"));
+        var redirectResponse = await _apiService.Redirect($"/api/accounts/{hashedAccountId}/payeschemes/{WebUtility.UrlEncode(payeSchemeRef)}");
+        return Content(redirectResponse.ToString(), "application/json");
     }
 }

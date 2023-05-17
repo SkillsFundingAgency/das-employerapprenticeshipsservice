@@ -21,6 +21,7 @@ public class TransferConnectionsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetTransferConnections(string hashedAccountId)
     {
-        return Ok(await _apiService.Redirect($"/api/accounts/{hashedAccountId}/transfers/connections"));
+        var redirectResponse = await _apiService.Redirect($"/api/accounts/{hashedAccountId}/transfers/connections"));
+        return Content(redirectResponse.ToString(), "application/json");
     }
 }

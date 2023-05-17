@@ -21,7 +21,8 @@ public class LegalEntitiesController : ControllerBase
     [HttpGet(Name = "GetLegalEntities")]
     public async Task<IActionResult> GetLegalEntities(string hashedAccountId)
     {
-        return Ok(await _apiService.Redirect($"/api/accounts/{hashedAccountId}/legalentities"));
+        var redirectResponse = await _apiService.Redirect($"/api/accounts/{hashedAccountId}/legalentities");
+        return Content(redirectResponse.ToString(), "application/json");
     }
 
     [Authorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
@@ -30,6 +31,7 @@ public class LegalEntitiesController : ControllerBase
         string hashedAccountId,
         long legalEntityId)
     {
-        return Ok(await _apiService.Redirect($"/api/accounts/{hashedAccountId}/legalentities/{legalEntityId}"));
+        var redirectResponse = await _apiService.Redirect($"/api/accounts/{hashedAccountId}/legalentities/{legalEntityId}");
+        return Content(redirectResponse.ToString(), "application/json");
     }
 }

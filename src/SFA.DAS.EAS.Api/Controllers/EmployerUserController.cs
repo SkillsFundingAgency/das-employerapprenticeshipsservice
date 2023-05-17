@@ -21,6 +21,7 @@ public class EmployerUserController : ControllerBase
     [HttpGet("accounts", Name = "Accounts")]
     public async Task<IActionResult> GetUserAccounts(string userRef)
     {
-        return Ok(await _apiService.Redirect($"/api/user/{userRef}/accounts"));
+        var redirectResponse = await _apiService.Redirect($"/api/user/{userRef}/accounts");
+        return Content(redirectResponse.ToString(), "application/json");
     }
 }

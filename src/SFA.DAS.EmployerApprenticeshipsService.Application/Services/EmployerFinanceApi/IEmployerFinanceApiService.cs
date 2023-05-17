@@ -23,5 +23,5 @@ public interface IEmployerFinanceApiService
 
     Task<TransferAllowance> GetTransferAllowance(string hashedAccountId, CancellationToken cancellationToken = default);
 
-    Task<string> Redirect(string url, CancellationToken cancellationToken = default);
+    Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default);
 }

@@ -69,13 +69,15 @@ public class EmployerAccountsController : ControllerBase
     [HttpGet("{hashedAccountId}/users", Name = "GetAccountUsers")]
     public async Task<IActionResult> GetAccountUsers(string hashedAccountId)
     {
-        return Ok(await _apiService.Redirect($"/api/accounts/{hashedAccountId}/users"));
+        var redirectResponse = await _apiService.Redirect($"/api/accounts/{hashedAccountId}/users");
+        return Content(redirectResponse.ToString(), "application/json");
     }
 
     [Authorize(Roles = ApiRoles.ReadAllAccountUsers)]
     [HttpGet("internal/{accountId}/users", Name = "GetAccountUsersByInternalAccountId")]
     public async Task<IActionResult> GetAccountUsers(long accountId)
     {
-        return Ok(await _apiService.Redirect($"/api/accounts/internal/{accountId}/users"));
+        var redirectResponse = await _apiService.Redirect($"/api/accounts/internal/{accountId}/users");
+        return Content(redirectResponse.ToString(), "application/json");
     }
 }

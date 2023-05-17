@@ -23,7 +23,8 @@ public class UserController : ControllerBase
     {
         try
         {
-            return Ok(await _apiService.Redirect($"/api/user?email={email}"));
+            var redirectResponse = await _apiService.Redirect($"/api/user?email={email}");
+            return Content(redirectResponse.ToString(), "application/json");
         }
         catch
         {
