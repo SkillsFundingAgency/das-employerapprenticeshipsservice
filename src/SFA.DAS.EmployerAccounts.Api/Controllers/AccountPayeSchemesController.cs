@@ -19,10 +19,10 @@ public class AccountPayeSchemesController : ControllerBase
         _orchestrator = orchestrator;
     }
 
-    [Route("{payeschemeref}", Name = "GetPayeScheme")]
+    [Route("{payeSchemeRef}", Name = "GetPayeScheme")]
     [Authorize(Policy = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet]
-    public async Task<IActionResult> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
+    public async Task<IActionResult> GetPayeScheme([FromRoute]string hashedAccountId, [FromRoute]string payeSchemeRef)
     {
         var result = await _orchestrator.GetPayeScheme(hashedAccountId, WebUtility.UrlDecode(payeSchemeRef));
 
@@ -37,7 +37,7 @@ public class AccountPayeSchemesController : ControllerBase
     [Route("", Name = "GetPayeSchemes")]
     [Authorize(Policy = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet]
-    public async Task<IActionResult> GetPayeSchemes(string hashedAccountId)
+    public async Task<IActionResult> GetPayeSchemes([FromRoute]string hashedAccountId)
     {
         var result = await _orchestrator.GetPayeSchemesForAccount(hashedAccountId);
 
