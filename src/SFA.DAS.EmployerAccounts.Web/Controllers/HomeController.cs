@@ -50,6 +50,21 @@ public class HomeController : BaseController
     public async Task<IActionResult> Index()
     {
         
+        // check if the GovSignIn is enabled
+        if (_configuration.UseGovSignIn)
+        {
+            if (User.Identities.FirstOrDefault() != null && User.Identities.FirstOrDefault()!.IsAuthenticated)
+            {
+                var firstName = HttpContext.User.FindFirstValue(DasClaimTypes.GivenName);
+                var lastName = HttpContext.User.FindFirstValue(DasClaimTypes.FamilyName);
+                var userRef = HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserIdClaimTypeIdentifier);
+
+                if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(lastName) || string.IsNullOrEmpty(userRef))
+                {
+                    return Redirect(_urlHelper.EmployerProfileAddUserDetails("/user/add-user-details"));    
+                }
+            }
+        }
         var userIdClaim = HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals(ControllerConstants.UserRefClaimKeyName));
 
         OrchestratorResponse<UserAccountsViewModel> accounts;
@@ -78,29 +93,23 @@ public class HomeController : BaseController
         }
         else
         {
-            var model = new
+            var model = new ServiceStartPageViewModel
             {
-                HideHeaderSignInLink = true
+                HideHeaderSignInLink = true,
+                GovSignInEnabled = _configuration.UseGovSignIn
             };
 
             return View(ControllerConstants.ServiceStartPageViewName, model);
         }
 
-        // check if the GovSignIn is enabled
-        if (_configuration.UseGovSignIn)
-        {
-            // check if the user account is found, if not re-direct the user to the EmployerProfile Add User Details Page.
-            if (accounts.Data.Accounts.AccountList == null || accounts.Data.Accounts.AccountList.Count == 0)
-            {
-                return Redirect(_urlHelper.EmployerProfileAddUserDetails("/user/add-user-details"));
-            }
-        }
+        
 
         if (accounts.Data.Invitations > 0)
         {
             return RedirectToAction(ControllerConstants.InvitationIndexName, ControllerConstants.InvitationControllerName);
         }
 
+        // condition to check if the user has only one account, then redirect to home page/dashboard.
         if (accounts.Data.Accounts.AccountList.Count == 1)
         {
             var account = accounts.Data.Accounts.AccountList.FirstOrDefault();
@@ -118,12 +127,19 @@ public class HomeController : BaseController
             accounts.FlashMessage = flashMessage;
         }
 
+        // condition to check if the user has more than one account, then redirect to accounts page.
         if (accounts.Data.Accounts.AccountList.Count > 1)
         {
             return View(accounts);
         }
 
         return RedirectToRoute(RouteNames.EmployerAccountGetApprenticeshipFunding);
+    }
+
+    [Authorize]
+    public IActionResult GovSignIn()
+    {
+        return RedirectToAction(ControllerConstants.IndexActionName);
     }
 
     [HttpGet]
@@ -213,6 +229,7 @@ public class HomeController : BaseController
     [Route("register/{correlationId}")]
     public async Task<IActionResult> RegisterUser(Guid? correlationId)
     {
+        
         var schema = Request.Scheme;
         var authority = HttpContext?.Request.Host.Value;
         var appConstants = new Constants(_configuration.Identity);
@@ -227,6 +244,7 @@ public class HomeController : BaseController
         return invitation.Data != null
             ? new RedirectResult($"{appConstants.RegisterLink()}{schema}://{authority}/service/register/new/{correlationId}&firstname={WebUtility.UrlEncode(invitation.Data.EmployerFirstName)}&lastname={WebUtility.UrlEncode(invitation.Data.EmployerLastName)}&email={WebUtility.UrlEncode(invitation.Data.EmployerEmail)}")
             : new RedirectResult($"{appConstants.RegisterLink()}{schema}://{authority}/service/register/new");
+
     }
 
     [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
@@ -279,7 +297,6 @@ public class HomeController : BaseController
     {
         return RedirectToAction(ControllerConstants.IndexActionName);
     }
-
    
 
     [Route("signOut", Name = RouteNames.SignOut)]
@@ -338,9 +355,10 @@ public class HomeController : BaseController
     [Route("start")]
     public IActionResult ServiceStartPage()
     {
-        var model = new
+        var model = new ServiceStartPageViewModel
         {
-            HideHeaderSignInLink = true
+            HideHeaderSignInLink = true,
+            GovSignInEnabled = _configuration.UseGovSignIn
         };
 
         return View(model);

@@ -58,8 +58,8 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
 
         var accountsAsJson = JsonConvert.SerializeObject(result.EmployerAccounts.ToDictionary(k => k.AccountId));
         var associatedAccountsClaim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, accountsAsJson, JsonClaimValueTypes.Json);
-        claims.Add(associatedAccountsClaim);
-
+        claims.Add(associatedAccountsClaim);    
+    
         if (!_employerAccountsConfiguration.UseGovSignIn)
         {
             return claims;
@@ -71,9 +71,14 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
         }
         
         claims.Add(new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, result.EmployerUserId));
-        claims.Add(new Claim(EmployerClaims.IdamsUserDisplayNameClaimTypeIdentifier, result.FirstName + " " + result.LastName));
-        claims.Add(new Claim(DasClaimTypes.GivenName, result.FirstName));
-        claims.Add(new Claim(DasClaimTypes.FamilyName, result.LastName));
+        
+        if (!string.IsNullOrEmpty(result.FirstName) && !string.IsNullOrEmpty(result.LastName))
+        {
+            claims.Add(new Claim(DasClaimTypes.GivenName, result.FirstName));
+            claims.Add(new Claim(DasClaimTypes.FamilyName, result.LastName));
+            claims.Add(new Claim(EmployerClaims.IdamsUserDisplayNameClaimTypeIdentifier, result.FirstName + " " + result.LastName));    
+        }
+        
 
         return claims;
     }

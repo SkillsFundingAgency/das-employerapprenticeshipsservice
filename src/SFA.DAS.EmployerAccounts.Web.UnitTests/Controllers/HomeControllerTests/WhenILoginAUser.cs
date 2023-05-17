@@ -28,11 +28,28 @@ public class WhenILoginAUser
     }
 
     [Test]
-    public void ThenTheUserIsRedirectedToTheIndex()
+    public void When_GovSignIn_False_ThenTheUserIsRedirectedToIndex()
     {
+        //arrange
+        _configuration.Object.UseGovSignIn = false;
+
         //Act
         var actual = _homeController.SignIn();
             
+        //Assert
+        Assert.IsNotNull(actual);
+        var actualRedirectResult = actual as RedirectToActionResult;
+        Assert.IsNotNull(actualRedirectResult);
+        Assert.AreEqual(ControllerConstants.IndexActionName, actualRedirectResult.ActionName);
+    }
+
+
+    [Test]
+    public void When_Route_To_PreAuth_ThenTheUserIsRedirectedToIndex()
+    {
+        //Act
+        var actual = _homeController.GovSignIn();
+
         //Assert
         Assert.IsNotNull(actual);
         var actualRedirectResult = actual as RedirectToActionResult;

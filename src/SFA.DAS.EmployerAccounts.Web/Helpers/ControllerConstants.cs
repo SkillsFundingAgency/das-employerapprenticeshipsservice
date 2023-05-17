@@ -61,16 +61,8 @@ public static class ControllerConstants
     public const string UnsubscribedViewName = "Unsubscribed"; 
     public const string ViewTeamActionName = "ViewTeam";
     public const string ViewTeamViewName = "ViewTeam";
-    public const string TriageApprenticeForExistingEmployeeActionName = "TriageApprenticeForExistingEmployee";
     public const string TriageSetupApprenticeshipExistingEmployeeViewName = "TriageSetupApprenticeshipExistingEmployee";
     public const string TriageSetupApprenticeshipNewEmployeeViewName = "TriageSetupApprenticeshipNewEmployee";
-    public const string TriageHaveYouChosenATrainingProviderActionName = "TriageHaveYouChosenATrainingProvider";
-    public const string TriageWhichCourseYourApprenticeWillTakeActionName = "TriageWhichCourseYourApprenticeWillTake";
-    public const string TriageWillApprenticeshipTrainingStartActionName = "TriageWillApprenticeshipTrainingStart";
-    public const string TriageYouCannotSetupAnApprenticeshipYetCourseProviderActionName = "TriageYouCannotSetupAnApprenticeshipYetCourseProvider";
-    public const string TriageYouCannotSetupAnApprenticeshipYetProviderActionName = "TriageYouCannotSetupAnApprenticeshipYetProvider";
-    public const string TriageYouCannotSetupAnApprenticeshipYetStartDateActionName = "TriageYouCannotSetupAnApprenticeshipYetStartDate";
-    public const string TriageYouCannotSetupAnApprenticeshipYetApproximateStartDateActionName = "TriageYouCannotSetupAnApprenticeshipYetApproximateStartDate";
     public const string UserRefClaimKeyName = "http://das/employer/identity/claims/id";
     public const string WhenDoYouWantToView = "WhenDoYouWantToView";
     public const string SearchUsingAornViewName = "SearchPensionRegulatorByAorn";
@@ -82,4 +74,5 @@ public static class ControllerConstants
     public const string CookieConsentControllerName = "CookieConsent";
     public const string CookieConsentDetailsActionName = "Details";
     public const string CookieConsentSettingsActionName = "Settings";
+    public const string PreAuthActionName = "PreAuth";
 }
