@@ -34,8 +34,9 @@ public class AccountTransactionsController : Microsoft.AspNetCore.Mvc.Controller
         return Ok(result.Data);
     }
 
+    [Route("{year}/{month}", Name = "GetTransactions")]
     [Authorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
-    [HttpGet("{year?}/{month?}", Name = "GetTransactions")]
+    [HttpGet]
     public async Task<ActionResult<TransactionsViewModel>> GetTransactions(string hashedAccountId, int year = 0, int month = 0)
     {
         var result = await GetAccountTransactions(hashedAccountId, year, month);
@@ -43,12 +44,6 @@ public class AccountTransactionsController : Microsoft.AspNetCore.Mvc.Controller
         if (result.Data == null)
         {
             return NotFound();
-        }
-
-        if (result.Data.HasPreviousTransactions)
-        {
-            var previousMonth = new DateTime(result.Data.Year, result.Data.Month, 1).AddMonths(-1);
-            result.Data.PreviousMonthUri = Url.Link("GetTransactions", new { hashedAccountId, year = previousMonth.Year, month = previousMonth.Month });
         }
 
         return Ok(result.Data);
