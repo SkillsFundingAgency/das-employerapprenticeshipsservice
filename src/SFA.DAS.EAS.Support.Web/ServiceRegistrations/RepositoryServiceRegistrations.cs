@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.EAS.Support.Infrastructure.Services.Contracts;
 using SFA.DAS.EAS.Support.Infrastructure.Services;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.EAS.Support.Web.ServiceRegistrations;
 
