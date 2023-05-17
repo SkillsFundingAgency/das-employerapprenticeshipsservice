@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Controllers;
@@ -33,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.UserControllerTests
 
             _mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(_response);
 
-            _controller = new UserController(_mediator.Object);
+            _controller = new UserController(_mediator.Object, Mock.Of<ILogger<UserController>>());
         }
 
         [Test]

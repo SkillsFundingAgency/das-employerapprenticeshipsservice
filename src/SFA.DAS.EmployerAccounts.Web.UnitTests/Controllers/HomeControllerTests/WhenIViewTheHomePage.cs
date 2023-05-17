@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Web.RouteValues;
@@ -17,7 +18,7 @@ public class WhenIViewTheHomePage : ControllerTestBase
     private EmployerAccountsConfiguration _configuration;
     private const string ExpectedUserId = "123ABC";
     private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
-    private Mock<IUrlActionHelper> _urlActionHelper;
+    private UrlActionHelper _urlActionHelper;
     private const string ProfileAddUserDetailsRoute = "https://test.com";
 
     [SetUp]
@@ -28,7 +29,7 @@ public class WhenIViewTheHomePage : ControllerTestBase
         _homeOrchestrator = new Mock<HomeOrchestrator>();
         _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
         _homeOrchestrator = new Mock<HomeOrchestrator>();
-        _urlActionHelper = new Mock<IUrlActionHelper>();
+        
 
         _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId, null)).ReturnsAsync(
             new OrchestratorResponse<UserAccountsViewModel>
@@ -53,14 +54,16 @@ public class WhenIViewTheHomePage : ControllerTestBase
             },
             EmployerPortalBaseUrl = "https://localhost"
         };
-
+        var configurationMock = new Mock<IConfiguration>();
+        configurationMock.Setup(x => x["ResourceEnvironmentName"]).Returns("test");
+        _urlActionHelper = new UrlActionHelper(_configuration, Mock.Of<IHttpContextAccessor>(),configurationMock.Object);
         _homeController = new HomeController(
             _homeOrchestrator.Object,
             _configuration,
             _flashMessage.Object,
             Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
             Mock.Of<ILogger<HomeController>>(), null, null,
-            _urlActionHelper.Object)
+            _urlActionHelper)
         {
             ControllerContext = new ControllerContext { HttpContext = MockHttpContext.Object },
             Url = new UrlHelper(new ActionContext(Mock.Of<HttpContext>(), new RouteData(), new ActionDescriptor()))
@@ -302,12 +305,8 @@ public class WhenIViewTheHomePage : ControllerTestBase
     {
         //Arrange
         _configuration.UseGovSignIn = true;
-        AddUserToContext(ExpectedUserId, string.Empty, string.Empty,
-            new Claim(ControllerConstants.UserRefClaimKeyName, ExpectedUserId),
-            new Claim(DasClaimTypes.RequiresVerification, "false")
-        );
-
-        _urlActionHelper.Setup(x => x.EmployerProfileAddUserDetails(It.IsAny<string>())).Returns(ProfileAddUserDetailsRoute);
+        AddEmptyUserToContext();
+        
 
         _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId, It.IsAny<DateTime?>())).ReturnsAsync(
             new OrchestratorResponse<UserAccountsViewModel>
@@ -324,6 +323,6 @@ public class WhenIViewTheHomePage : ControllerTestBase
         //Assert
         Assert.IsNotNull(actual);
         var actualViewResult = actual as RedirectResult;
-        Assert.AreEqual(actualViewResult.Url, ProfileAddUserDetailsRoute);
+        Assert.AreEqual( "https://employerprofiles.test-eas.apprenticeships.education.gov.uk/user/add-user-details", actualViewResult.Url);
     }
 }

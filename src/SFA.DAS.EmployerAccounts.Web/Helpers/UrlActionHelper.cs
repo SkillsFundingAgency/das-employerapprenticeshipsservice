@@ -1,14 +1,18 @@
-﻿namespace SFA.DAS.EmployerAccounts.Web.Helpers;
+﻿using SFA.DAS.Employer.Shared.UI;
+
+namespace SFA.DAS.EmployerAccounts.Web.Helpers;
 
 public class UrlActionHelper : IUrlActionHelper
 {
     private readonly EmployerAccountsConfiguration _configuration;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IConfiguration _config;
 
-    public UrlActionHelper(EmployerAccountsConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+    public UrlActionHelper(EmployerAccountsConfiguration configuration, IHttpContextAccessor httpContextAccessor, IConfiguration config)
     {
         _configuration = configuration;
         _httpContextAccessor = httpContextAccessor;
+        _config = config;
     }
 
     public string EmployerAccountsAction(string path)
@@ -116,9 +120,9 @@ public class UrlActionHelper : IUrlActionHelper
 
     public string EmployerProfileAddUserDetails(string path)
     {
-        var baseUrl = _configuration.EmployerPortalBaseUrl;
+        var builder = new UrlBuilder(_config["ResourceEnvironmentName"]);
 
-        return AccountAction(baseUrl, path);
+        return builder.EmployerProfiles("UpdateUserDetails");
     }
 
     private static string Action(string baseUrl, string path)

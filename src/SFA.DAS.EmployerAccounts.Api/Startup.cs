@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,6 +22,7 @@ using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Mappings;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
+using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.Microsoft;
 using SFA.DAS.Validation.Mvc.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.Api;
@@ -62,7 +63,7 @@ public class Startup
         services.AddOrchestrators();
 
         // services.AddEntityFrameworkUnitOfWork<EmployerAccountsDbContext>();
-        // services.AddNServiceBusClientUnitOfWork();
+        services.AddNServiceBusClientUnitOfWork();
 
         services.AddDatabaseRegistration();
         services.AddDataRepositories();
@@ -97,7 +98,7 @@ public class Startup
 
     public void ConfigureContainer(UpdateableServiceProvider serviceProvider)
     {
-        //serviceProvider.StartNServiceBus(_configuration.IsDevOrLocal() || _configuration.IsTest());
+        serviceProvider.StartNServiceBus(_configuration.IsDevOrLocal());
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)

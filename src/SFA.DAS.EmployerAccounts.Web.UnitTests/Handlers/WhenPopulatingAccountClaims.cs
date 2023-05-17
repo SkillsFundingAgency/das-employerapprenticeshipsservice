@@ -46,6 +46,40 @@ public class WhenPopulatingAccountClaims
         actual.First(c => c.Type.Equals(DasClaimTypes.FamilyName)).Value.Should().Be(accountData.LastName);
         actual.First(c => c.Type.Equals(ClaimTypes.AuthorizationDecision)).Value.Should().Be("Suspended");
     }
+    
+    [Test, MoqAutoData]
+    public async Task Then_The_Claims_Are_Populated_For_Gov_User_With_No_Accounts(
+        string nameIdentifier,
+        string idamsIdentifier,
+        string emailAddress,
+        EmployerUserAccounts accountData,
+        [Frozen] Mock<IUserAccountService> accountService,
+        [Frozen] Mock<IOptions<EmployerAccountsConfiguration>> accountsConfiguration,
+        EmployerAccountPostAuthenticationClaimsHandler handler)
+    {
+        accountData.IsSuspended = true;
+        accountData.EmployerAccounts = new List<EmployerUserAccountItem>();
+        accountData.FirstName = null;
+        accountData.LastName = null;
+        accountsConfiguration.Object.Value.UseGovSignIn = true;
+        var tokenValidatedContext = ArrangeTokenValidatedContext(nameIdentifier, idamsIdentifier, emailAddress);
+        accountService.Setup(x => x.GetUserAccounts(nameIdentifier, emailAddress)).ReturnsAsync(accountData);
+
+        var actual = await handler.GetClaims(tokenValidatedContext);
+
+        accountService.Verify(x => x.GetUserAccounts(nameIdentifier, emailAddress), Times.Once);
+        accountService.Verify(x => x.GetUserAccounts(idamsIdentifier, emailAddress), Times.Never);
+        actual.Should().Contain(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier));
+        actual.FirstOrDefault(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier))?.Value.Should().Be("{}");
+        
+        actual.First(c => c.Type.Equals(EmployerClaims.IdamsUserIdClaimTypeIdentifier)).Value.Should().Be(accountData.EmployerUserId);
+        actual.FirstOrDefault(c => c.Type.Equals(EmployerClaims.IdamsUserDisplayNameClaimTypeIdentifier))?.Value.Should().BeNull();
+        actual.First(c => c.Type.Equals(EmployerClaims.IdamsUserEmailClaimTypeIdentifier)).Value.Should().Be(emailAddress);
+        actual.FirstOrDefault(c => c.Type.Equals(DasClaimTypes.GivenName))?.Value.Should().BeNull();
+        actual.FirstOrDefault(c => c.Type.Equals(DasClaimTypes.FamilyName))?.Value.Should().BeNull();
+        actual.First(c => c.Type.Equals(ClaimTypes.AuthorizationDecision)).Value.Should().Be("Suspended");
+    }
+    
     [Test, MoqAutoData]
     public async Task Then_The_Claims_Are_Populated_For_Gov_User_And_Not_Suspended_Set(
         string nameIdentifier,

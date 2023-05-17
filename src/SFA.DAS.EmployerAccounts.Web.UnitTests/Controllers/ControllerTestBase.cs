@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Security.Claims;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using SFA.DAS.EmployerAccounts.Infrastructure;
@@ -41,7 +42,7 @@ public abstract class ControllerTestBase
 
     protected void AddEmptyUserToContext()
     {
-        var identity = new ClaimsIdentity();
+        var identity = new ClaimsIdentity(new List<Claim>(), CookieAuthenticationDefaults.AuthenticationScheme);
 
         MockHttpContext.Setup(c => c.User).Returns(new ClaimsPrincipal(identity));
     }
