@@ -17,12 +17,12 @@ public class WhenCallingGet : WhenTestingChallengeHandler
             HashedAccountId = "ASDAS",
             AccountId = 123
         };
-        AccountRepository.Setup(x =>
+        AccountRepository!.Setup(x =>
                 x.Get(id,
                     AccountFieldsSelection.PayeSchemes))
             .ReturnsAsync(account);
 
-        var actual = await Unit.Get(id);
+        var actual = await Unit!.Get(id);
 
 
         Assert.That(actual, Is.Not.Null);
@@ -37,12 +37,12 @@ public class WhenCallingGet : WhenTestingChallengeHandler
     public async Task ItShouldReturnNoSearchResultsFoundWhenQueryHasNoMatch()
     {
         const string id = "123";
-        AccountRepository.Setup(x =>
+        AccountRepository!.Setup(x =>
                 x.Get(id,
                     AccountFieldsSelection.PayeSchemes))
             .ReturnsAsync(null as Core.Models.Account);
 
-        var actual = await Unit.Get(id);
+        var actual = await Unit!.Get(id);
 
         Assert.That(actual, Is.Not.Null);
         Assert.That(actual.StatusCode, Is.EqualTo(SearchResponseCodes.NoSearchResultsFound));

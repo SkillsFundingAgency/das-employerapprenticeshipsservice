@@ -40,7 +40,7 @@ public class WhenIGetTransactionsForAnAccount : AccountTransactionsControllerTes
 
     [Test]
     public async Task ThenTheTransactionsAreReturned()
-    {            
+    {
         //Arrange
         const string hashedAccountId = "ABC123";
         const int year = 2017;
@@ -59,11 +59,13 @@ public class WhenIGetTransactionsForAnAccount : AccountTransactionsControllerTes
         Assert.That(model.Result, Is.InstanceOf<OkObjectResult>());
 
         var oKResult = model.Result as OkObjectResult;
-
-        Assert.That(oKResult!.Value, Is.Not.Null);
-        Assert.That(oKResult.Value, Is.InstanceOf<TransactionsViewModel>());
-
-        var value = oKResult.Value as TransactionsViewModel;
+        
+        Assert.Multiple(() =>
+        {
+            Assert.That(oKResult!.Value, Is.Not.Null);
+            Assert.That(oKResult.Value, Is.InstanceOf<TransactionsViewModel>());
+        });
+        var value = oKResult!.Value as TransactionsViewModel;
 
         value.Should().NotBeNull();
     }
@@ -89,11 +91,13 @@ public class WhenIGetTransactionsForAnAccount : AccountTransactionsControllerTes
         Assert.That(model.Result, Is.InstanceOf<OkObjectResult>());
 
         var oKObject = model.Result as OkObjectResult;
-
-        Assert.That(oKObject!.Value, Is.Not.Null);
-        Assert.That(oKObject.Value, Is.InstanceOf<TransactionsViewModel>());
-
-        var value = oKObject.Value as TransactionsViewModel;
+        
+        Assert.Multiple(() =>
+        {
+            Assert.That(oKObject!.Value, Is.Not.Null);
+            Assert.That(oKObject.Value, Is.InstanceOf<TransactionsViewModel>());
+        });
+        var value = oKObject!.Value as TransactionsViewModel;
 
         value.Should().NotBeNull();
         value!.PreviousMonthUri.Should().BeNullOrEmpty();
@@ -123,11 +127,13 @@ public class WhenIGetTransactionsForAnAccount : AccountTransactionsControllerTes
         Assert.That(model.Result, Is.InstanceOf<OkObjectResult>());
 
         var okResult = model.Result as OkObjectResult;
-
-        Assert.That(okResult!.Value, Is.Not.Null);
-        Assert.That(okResult.Value, Is.InstanceOf<TransactionsViewModel>());
-
-        var value = okResult.Value as TransactionsViewModel;
+        
+        Assert.Multiple(() =>
+        {
+            Assert.That(okResult!.Value, Is.Not.Null);
+            Assert.That(okResult.Value, Is.InstanceOf<TransactionsViewModel>());
+        });
+        var value = okResult!.Value as TransactionsViewModel;
 
         value.Should().NotBeNull();
         value!.PreviousMonthUri.Should().BeNullOrEmpty();
@@ -152,11 +158,13 @@ public class WhenIGetTransactionsForAnAccount : AccountTransactionsControllerTes
         Assert.That(model.Result, Is.InstanceOf<OkObjectResult>());
 
         var okResult = model.Result as OkObjectResult;
-
-        Assert.That(okResult!.Value, Is.Not.Null);
-        Assert.That(okResult.Value, Is.InstanceOf<TransactionsViewModel>());
-
-        var value = okResult.Value as TransactionsViewModel;
+        
+        Assert.Multiple(() =>
+        {
+            Assert.That(okResult!.Value, Is.Not.Null);
+            Assert.That(okResult.Value, Is.InstanceOf<TransactionsViewModel>());
+        });
+        var value = okResult!.Value as TransactionsViewModel;
 
         value.Should().NotBeNull();
     }

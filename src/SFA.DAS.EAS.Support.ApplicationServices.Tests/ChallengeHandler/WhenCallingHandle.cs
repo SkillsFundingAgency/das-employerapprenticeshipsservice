@@ -1,7 +1,5 @@
-using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.Core.Models;
 using SFA.DAS.EAS.Support.Infrastructure.Models;
 
@@ -42,7 +40,7 @@ public class WhenCallingHandle : WhenTestingChallengeHandler
             ChallengeElement1 = element1,
             ChallengeElement2 = element2
         };
-        var actual = await Unit.Handle(message);
+        var actual = await Unit!.Handle(message);
         
         Assert.That(actual, Is.Not.Null);
         Assert.That(actual.IsValid, Is.EqualTo(false));
@@ -57,11 +55,11 @@ public class WhenCallingHandle : WhenTestingChallengeHandler
             ChallengeElement1 = "1",
             ChallengeElement2 = "2"
         };
-        AccountRepository
+        AccountRepository!
             .Setup(x =>x.Get(message.Id, AccountFieldsSelection.PayeSchemes))
             .ReturnsAsync(null as Core.Models.Account);
 
-        var actual = await Unit.Handle(message);
+        var actual = await Unit!.Handle(message);
         Assert.That(actual, Is.Not.Null);
         Assert.That(actual.IsValid, Is.EqualTo(false));
     }
@@ -82,13 +80,13 @@ public class WhenCallingHandle : WhenTestingChallengeHandler
             AccountId = 123
         };
       
-        AccountRepository
+        AccountRepository!
             .Setup(x =>x.Get(message.Id, AccountFieldsSelection.PayeSchemes))
             .ReturnsAsync(account);
 
-        ChallengeRepository.Setup(x => x.CheckData(account, message)).ReturnsAsync(false);
+        ChallengeRepository!.Setup(x => x.CheckData(account, message)).ReturnsAsync(false);
 
-        var actual = await Unit.Handle(message);
+        var actual = await Unit!.Handle(message);
 
         ChallengeRepository.Verify(x => x.CheckData(account, message));
 
@@ -112,13 +110,13 @@ public class WhenCallingHandle : WhenTestingChallengeHandler
             AccountId = 123
         };
         
-        AccountRepository
+        AccountRepository!
             .Setup(x =>x.Get(message.Id, AccountFieldsSelection.PayeSchemes))
             .ReturnsAsync(account);
 
-        ChallengeRepository.Setup(x => x.CheckData(account, message)).ReturnsAsync(true);
+        ChallengeRepository!.Setup(x => x.CheckData(account, message)).ReturnsAsync(true);
 
-        var actual = await Unit.Handle(message);
+        var actual = await Unit!.Handle(message);
 
         ChallengeRepository.Verify(x => x.CheckData(account, message));
 

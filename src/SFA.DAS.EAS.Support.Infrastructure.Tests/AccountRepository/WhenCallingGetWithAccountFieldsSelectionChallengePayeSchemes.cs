@@ -1,9 +1,7 @@
-using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Support.Core.Models;
-using ResourceList = SFA.DAS.EAS.Account.Api.Types.ResourceList;
 
 namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository;
 
@@ -68,8 +66,6 @@ public class WhenCallingGetWithAccountFieldsSelectionChallengePayeSchemes : When
             .ReturnsAsync(payeSchemeViewModel);
 
         var actual = await Sut!.Get(id, AccountFieldsSelection.PayeSchemes);
-
-        Logger!.Verify(x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Exactly(2));
 
         PayeSchemeObsfuscator.Verify(x => x.ObscurePayeScheme(It.IsAny<string>()), Times.Exactly(2));
 

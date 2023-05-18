@@ -7,80 +7,79 @@ using SFA.DAS.EAS.Support.Core.Models;
 using SFA.DAS.EAS.Support.Infrastructure.Models;
 using SFA.DAS.EAS.Support.Web.Models;
 
-namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Challenge
+namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Challenge;
+
+[TestFixture]
+public class WhenCallingIndexPost : WhenTestingChallengeController
 {
-    [TestFixture]
-    public class WhenCallingIndexPost : WhenTestingChallengeController
+    /// <summary>
+    ///     Note that this Controller method scenario sets HttpResponse.StatusCode = 403 (Forbidden), this result is not
+    ///     testable from a unit test
+    /// </summary>
+    /// <returns></returns>
+    [Test]
+    public async Task ItShouldReturnAViewModelWhenTheChallengeEntryIsInvalid()
     {
-        /// <summary>
-        ///     Note that this Controller method scenario sets HttpResponse.StatusCode = 403 (Forbidden), this result is not
-        ///     testable from a unit test
-        /// </summary>
-        /// <returns></returns>
-        [Test]
-        public async Task ItShouldReturnAViewModelWhenTheChallengeEntryIsInvalid()
+        var challengeEntry = new ChallengeEntry
         {
-            var challengeEntry = new ChallengeEntry
-            {
-                Id = "123",
-                Balance = "£1000",
-                Challenge1 = "1",
-                Challenge2 = "A",
-                FirstCharacterPosition = 0,
-                SecondCharacterPosition = 1,
-                Url = "https://tempuri.org/challenge/me/to/a/deul/any/time"
-            };
+            Id = "123",
+            Balance = "£1000",
+            Challenge1 = "1",
+            Challenge2 = "A",
+            FirstCharacterPosition = 0,
+            SecondCharacterPosition = 1,
+            Url = "https://tempuri.org/challenge/me/to/a/deul/any/time"
+        };
 
-            var response = new ChallengePermissionResponse
-            {
-                Id = challengeEntry.Id,
-                Url = challengeEntry.Url,
-                IsValid = false
-            };
-
-            MockChallengeHandler.Setup(x => x.Handle(It.IsAny<ChallengePermissionQuery>()))
-                .ReturnsAsync(response);
-
-            var actual = await Unit.Index(challengeEntry.Id, challengeEntry);
-
-            Assert.IsNotNull(actual);
-            Assert.IsInstanceOf<ViewResult>(actual);
-            Assert.IsInstanceOf<ChallengeViewModel>(((ViewResult)actual).Model);
-            Assert.AreEqual(true, ((ChallengeViewModel)((ViewResult)actual).Model!).HasError);
-        }
-
-        [Test]
-        public async Task ItShouldReturnChallengeValidationJsonResultWhenTheChallengeEntryIsValid()
+        var response = new ChallengePermissionResponse
         {
-            var challengeEntry = new ChallengeEntry
-            {
-                Id = "123",
-                Balance = "£1000",
-                Challenge1 = "1",
-                Challenge2 = "A",
-                FirstCharacterPosition = 1,
-                SecondCharacterPosition = 4,
-                Url = "https://tempuri.org/challenge/me/to/a/deul/any/time"
-            };
+            Id = challengeEntry.Id,
+            Url = challengeEntry.Url,
+            IsValid = false
+        };
 
-            var response = new ChallengePermissionResponse
-            {
-                Id = challengeEntry.Id,
-                Url = challengeEntry.Url,
-                IsValid = true
-            };
+        MockChallengeHandler!.Setup(x => x.Handle(It.IsAny<ChallengePermissionQuery>()))
+            .ReturnsAsync(response);
 
-            MockChallengeHandler.Setup(x => x.Handle(It.IsAny<ChallengePermissionQuery>()))
-                .ReturnsAsync(response);
+        var actual = await Unit!.Index(challengeEntry.Id, challengeEntry);
 
-            var actual = await Unit.Index(challengeEntry.Id, challengeEntry);
+        Assert.IsNotNull(actual);
+        Assert.IsInstanceOf<ViewResult>(actual);
+        Assert.IsInstanceOf<ChallengeViewModel>(((ViewResult)actual).Model);
+        Assert.AreEqual(true, ((ChallengeViewModel)((ViewResult)actual).Model!).HasError);
+    }
 
-            Assert.IsNotNull(actual);
-            Assert.IsInstanceOf<JsonResult>(actual);
+    [Test]
+    public async Task ItShouldReturnChallengeValidationJsonResultWhenTheChallengeEntryIsValid()
+    {
+        var challengeEntry = new ChallengeEntry
+        {
+            Id = "123",
+            Balance = "£1000",
+            Challenge1 = "1",
+            Challenge2 = "A",
+            FirstCharacterPosition = 1,
+            SecondCharacterPosition = 4,
+            Url = "https://tempuri.org/challenge/me/to/a/deul/any/time"
+        };
 
-            var result = ((JsonResult)actual).Value as ChallengeValidationResult;
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result!.IsValidResponse);
-        }
+        var response = new ChallengePermissionResponse
+        {
+            Id = challengeEntry.Id,
+            Url = challengeEntry.Url,
+            IsValid = true
+        };
+
+        MockChallengeHandler!.Setup(x => x.Handle(It.IsAny<ChallengePermissionQuery>()))
+            .ReturnsAsync(response);
+
+        var actual = await Unit!.Index(challengeEntry.Id, challengeEntry);
+
+        Assert.IsNotNull(actual);
+        Assert.IsInstanceOf<JsonResult>(actual);
+
+        var result = ((JsonResult)actual).Value as ChallengeValidationResult;
+        Assert.IsNotNull(result);
+        Assert.IsTrue(result!.IsValidResponse);
     }
 }

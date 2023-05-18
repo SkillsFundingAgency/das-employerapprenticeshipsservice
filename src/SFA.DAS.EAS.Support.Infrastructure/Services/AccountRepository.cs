@@ -34,8 +34,6 @@ public sealed class AccountRepository : IAccountRepository
     {
         try
         {
-            _logger.LogDebug($"{nameof(IAccountApiClient)}.{nameof(IAccountApiClient.GetResource)}<{nameof(AccountDetailViewModel)}>(\"/api/accounts/{id.ToUpper()}\");");
-
             var response = await _accountApiClient.GetResource<AccountDetailViewModel>($"/api/accounts/{id.ToUpper()}");
 
             return await GetAdditionalFields(response, selection);
@@ -47,13 +45,13 @@ public sealed class AccountRepository : IAccountRepository
         }
     }
 
-    public async Task<IEnumerable<Core.Models.Account>> FindAllDetails(int pagesize, int pageNumber)
+    public async Task<IEnumerable<Core.Models.Account>> FindAllDetails(int pageSize, int pageNumber)
     {
         var results = new List<Core.Models.Account>();
 
         try
         {
-            var accountPageModel = await _accountApiClient.GetPageOfAccounts(pageNumber, pagesize);
+            var accountPageModel = await _accountApiClient.GetPageOfAccounts(pageNumber, pageSize);
             if (accountPageModel?.Data?.Count > 0)
             {
                 var accountsDetail = await GetAccountSearchDetails(accountPageModel.Data);
@@ -69,7 +67,7 @@ public sealed class AccountRepository : IAccountRepository
             _logger.LogError(exception, $"A general exception has been thrown while requesting employer account details");
         }
 
-        _logger.LogDebug("Account Details data Page ({PageNumber} Size {pagesize}) : {Results}", pageNumber, pagesize, JsonConvert.SerializeObject(results));
+        _logger.LogDebug("Account Details data Page ({PageNumber} Size {pagesize}) : {Results}", pageNumber, pageSize, JsonConvert.SerializeObject(results));
 
         return results;
     }
@@ -231,21 +229,22 @@ public sealed class AccountRepository : IAccountRepository
 
         return payes.Select(payeSchemeViewModel =>
         {
-            if (IsValidPayeScheme(payeSchemeViewModel))
+            if (!IsValidPayeScheme(payeSchemeViewModel))
             {
-                var item = new PayeSchemeModel
-                {
-                    Ref = payeSchemeViewModel.Ref,
-                    DasAccountId = payeSchemeViewModel.DasAccountId,
-                    AddedDate = payeSchemeViewModel.AddedDate,
-                    RemovedDate = payeSchemeViewModel.RemovedDate,
-                    Name = payeSchemeViewModel.Name
-                };
-
-                return item;
+                return null;
             }
+            
+            var item = new PayeSchemeModel
+            {
+                Ref = payeSchemeViewModel.Ref,
+                DasAccountId = payeSchemeViewModel.DasAccountId,
+                AddedDate = payeSchemeViewModel.AddedDate,
+                RemovedDate = payeSchemeViewModel.RemovedDate,
+                Name = payeSchemeViewModel.Name
+            };
 
-            return null;
+            return item;
+
         }).Where(x => x != null)
           .OrderBy(x => x.Ref);
     }
@@ -278,14 +277,13 @@ public sealed class AccountRepository : IAccountRepository
 
         foreach (var legalEntity in responseLegalEntities)
         {
-            _logger.LogDebug($"{nameof(IAccountApiClient)}.{nameof(_accountApiClient.GetResource)}<{nameof(LegalEntityViewModel)}>(\"{legalEntity.Href}\");");
             try
             {
                 var legalResponse = await _accountApiClient.GetResource<LegalEntityViewModel>(legalEntity.Href);
 
-                if (legalResponse.AgreementStatus == Account.Api.Types.EmployerAgreementStatus.Signed ||
-                    legalResponse.AgreementStatus == Account.Api.Types.EmployerAgreementStatus.Pending ||
-                    legalResponse.AgreementStatus == Account.Api.Types.EmployerAgreementStatus.Superseded)
+                if (legalResponse.AgreementStatus == EmployerAgreementStatus.Signed ||
+                    legalResponse.AgreementStatus == EmployerAgreementStatus.Pending ||
+                    legalResponse.AgreementStatus == EmployerAgreementStatus.Superseded)
                     legalEntitiesList.Add(legalResponse);
             }
             catch (Exception ex)

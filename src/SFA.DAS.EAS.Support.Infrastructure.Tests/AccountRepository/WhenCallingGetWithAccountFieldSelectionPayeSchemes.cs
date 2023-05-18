@@ -20,8 +20,7 @@ public class WhenCallingGetWithAccountFieldSelectionPayeSchemes : WhenTestingAcc
 
         var actual = await Sut!.Get(id, AccountFieldsSelection.PayeSchemes);
 
-        Logger!.Verify(x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
-        Logger.Verify(x => x.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
+        Logger!.Verify(x => x.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
 
         Assert.That(actual, Is.Null);
     }
@@ -62,7 +61,7 @@ public class WhenCallingGetWithAccountFieldSelectionPayeSchemes : WhenTestingAcc
         AccountApiClient!.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
             .ReturnsAsync(accountDetailViewModel);
 
-        var obscuredPayePayeScheme = "123/123456";
+        const string obscuredPayePayeScheme = "123/123456";
 
         PayeSchemeObsfuscator!.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
             .Returns(obscuredPayePayeScheme);
@@ -80,8 +79,6 @@ public class WhenCallingGetWithAccountFieldSelectionPayeSchemes : WhenTestingAcc
             .ReturnsAsync(payeSchemeViewModel);
 
         var actual = await Sut!.Get(id, AccountFieldsSelection.PayeSchemes);
-
-        Logger!.Verify(x => x.Log(LogLevel.Debug, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Exactly(2));
 
         PayeSchemeObsfuscator.Verify(x => x.ObscurePayeScheme(It.IsAny<string>()), Times.Exactly(2));
 

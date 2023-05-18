@@ -25,7 +25,7 @@ public class AccountSearchModel
     {
         get
         {
-            return PayeSchemeIds?.Select(o => o.ToLower()).ToList();
+            return PayeSchemeIds?.Select(o => o.ToLower());
         }
     }
 }

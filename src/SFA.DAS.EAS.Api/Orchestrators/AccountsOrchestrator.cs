@@ -177,8 +177,7 @@ public class AccountsOrchestrator
 
         return new OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>
         {
-            Data = new AccountResourceList<LevyDeclarationViewModel>(levyViewModels),
-            Status = HttpStatusCode.OK
+            Data = new AccountResourceList<LevyDeclarationViewModel>(levyViewModels), Status = HttpStatusCode.OK
         };
     }
 }

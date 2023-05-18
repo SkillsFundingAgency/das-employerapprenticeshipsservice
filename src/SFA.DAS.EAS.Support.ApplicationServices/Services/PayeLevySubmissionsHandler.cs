@@ -31,7 +31,7 @@ public class PayeLevySubmissionsHandler : IPayeLevySubmissionsHandler
         _hashingService = hashingService;
     }
 
-    public async Task<PayeLevySubmissionsResponse> FindPayeSchemeLevySubmissions(string accountId, string hashedPayeRef)
+    public async Task<PayeLevySubmissionsResponse> FindPayeSchemeLevySubmissions(string accountId, string payeId)
     {
         var account = await _accountRepository.Get(accountId, AccountFieldsSelection.PayeSchemes);
 
@@ -43,7 +43,7 @@ public class PayeLevySubmissionsHandler : IPayeLevySubmissionsHandler
             };
         }
 
-        var actualPayeId = _hashingService.DecodeValueToString(hashedPayeRef);
+        var actualPayeId = _hashingService.DecodeValueToString(payeId);
 
         var selectedPayeScheme = account.PayeSchemes.First(o => o.Ref.Equals(actualPayeId, StringComparison.OrdinalIgnoreCase));
         selectedPayeScheme.Ref = _payeSchemeObfuscator.ObscurePayeScheme(selectedPayeScheme.Ref);

@@ -20,7 +20,5 @@ public class EmployerAccountAllRolesAuthorizationHandler : AuthorizationHandler<
         }
 
         context.Succeed(requirement);
-
-        return;
     }
 }

@@ -6,9 +6,9 @@ public class DatetimeService : IDatetimeService
 {
     private const int FirstFiscalYearMonth = 4;
 
-    public int GetYear(DateTime date)
+    public int GetYear(DateTime endDate)
     {
-        return date.Month >= FirstFiscalYearMonth ? date.Year : date.Year - 1;
+        return endDate.Month >= FirstFiscalYearMonth ? endDate.Year : endDate.Year - 1;
     }
 
     public DateTime GetBeginningFinancialYear(DateTime endDate)
