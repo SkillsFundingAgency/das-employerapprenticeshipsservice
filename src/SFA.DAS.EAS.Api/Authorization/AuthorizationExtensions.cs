@@ -18,11 +18,11 @@ public static class AuthorizationExtensions
     {
         services.AddAuthorization(options =>
         {
-            // AddDefaultPolicy(isDevelopment, options);
+            AddDefaultPolicy(isDevelopment, options);
 
             AddRolePolicies(isDevelopment, options);
 
-            // options.DefaultPolicy = options.GetPolicy(DefaultPolicyName);
+            options.DefaultPolicy = options.GetPolicy(DefaultPolicyName);
         });
 
         if (isDevelopment)
