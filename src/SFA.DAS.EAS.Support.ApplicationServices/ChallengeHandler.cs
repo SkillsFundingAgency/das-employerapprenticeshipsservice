@@ -30,20 +30,21 @@ public class ChallengeHandler : IChallengeHandler
 
         var record = await _accountRepository.Get(id, AccountFieldsSelection.PayeSchemes);
 
-
-        if (record != null)
+        if (record == null)
         {
-            response.StatusCode = SearchResponseCodes.Success;
-            response.Account = record;
-            response.Characters = _challengeService.GetPayeSchemesCharacters(record.PayeSchemes);
+            return response;
         }
+        
+        response.StatusCode = SearchResponseCodes.Success;
+        response.Account = record;
+        response.Characters = _challengeService.GetPayeSchemesCharacters(record.PayeSchemes);
 
         return response;
     }
 
     public async Task<ChallengePermissionResponse> Handle(ChallengePermissionQuery message)
     {
-        var challenegModel = await Get(message.Id);
+        var challengeResponse = await Get(message.Id);
 
         var isValidInput = !(string.IsNullOrEmpty(message.Balance)
                         || string.IsNullOrEmpty(message.ChallengeElement1)
@@ -60,15 +61,17 @@ public class ChallengeHandler : IChallengeHandler
             IsValid = false
         };
 
-        if (challenegModel.StatusCode == SearchResponseCodes.Success)
+        if (challengeResponse.StatusCode != SearchResponseCodes.Success)
         {
-            if (isValidInput)
-            {
-                response.IsValid = await _challengeRepository.CheckData(challenegModel.Account, message);
-            }
-
-            response.Characters = challenegModel.Characters;
+            return response;
         }
+        
+        if (isValidInput)
+        {
+            response.IsValid = await _challengeRepository.CheckData(challengeResponse.Account, message);
+        }
+
+        response.Characters = challengeResponse.Characters;
 
         return response;
     }
