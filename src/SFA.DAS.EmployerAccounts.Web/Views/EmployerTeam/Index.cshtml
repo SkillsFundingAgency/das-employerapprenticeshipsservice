@@ -1,6 +1,7 @@
 ﻿@using SFA.DAS.Common.Domain.Types
 @using SFA.DAS.EmployerAccounts.Web.ViewComponents
-@using TasksEnum = SFA.DAS.EmployerAccounts.TasksApi.TaskType
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using SFA.DAS.EmployerAccounts.TasksApi
 
 @inject IHtmlHelpers HtmlHelpers;
 @inject IUrlActionHelper UrlHelpers;
@@ -217,45 +218,45 @@ else
                                     <li>
                                         @switch (task.Type)
                                         {
-                                            case "LevyDeclarationDue":
+                                            case nameof(TaskType.LevyDeclarationDue):
                                                 <span>
                                                     Levy declaration due by 19 @DateTime.Now.ToString("MMMM")
                                                 </span>
                                                 <form action="@Url.Action("DismissTask", "Task")" method="POST">
-                                                    <input type="hidden" name="taskType" value="@Enum.GetName(typeof(TasksEnum), TasksEnum.LevyDeclarationDue)" />
+                                                    <input type="hidden" name="taskType" value="@Enum.GetName(typeof(TaskType), TaskType.LevyDeclarationDue)" />
                                                     <button type="submit" class="das-button--inline-link">Dismiss this message</button>
                                                 </form>
                                                 break;
-                                            case "AgreementToSign":
+                                            case nameof(TaskType.AgreementToSign):
                                                 <span>
                                                     @task.ItemsDueCount agreement@(task.ItemsDueCount > 1 ? "s" : "") to sign
                                                     <br /><a href="@Url.Action("ViewUnsignedAgreements", "EmployerAgreement")" class="govuk-link govuk-link govuk-link--no-visited-state">View agreement@(task.ItemsDueCount > 1 ? "s" : "")</a>
                                                 </span>
                                                 break;
-                                            case "AddApprentices":
+                                            case nameof(TaskType.AddApprentices):
                                                 <span>
                                                     <a href="@UrlHelpers.EmployerCommitmentsV2Action("unapproved/Inform")" class="govuk-link govuk-link govuk-link--no-visited-state">Start adding apprentices now</a>
                                                 </span>
                                                 break;
-                                            case "ApprenticeChangesToReview":
+                                            case nameof(TaskType.ApprenticeChangesToReview):
                                                 <span>
                                                     @task.ItemsDueCount apprentice change@(task.ItemsDueCount > 1 ? "s" : "") to review
                                                     <br /><a href="@UrlHelpers.EmployerCommitmentsV2Action("apprentices")" class="govuk-link govuk-link govuk-link--no-visited-state">View<span class="govuk-visually-hidden">apprentice</span> change@(task.ItemsDueCount > 1 ? "s" : "")</a>
                                                 </span>
                                                 break;
-                                            case "CohortRequestReadyForApproval":
+                                            case nameof(TaskType.CohortRequestReadyForApproval):
                                                 <span>
                                                     @task.ItemsDueCount cohort request@(task.ItemsDueCount > 1 ? "s" : "") ready for approval
                                                     <br /><a href="@UrlHelpers.EmployerCommitmentsV2Action("unapproved/review")" class="govuk-link govuk-link govuk-link--no-visited-state">View cohort<span class="govuk-visually-hidden"> request</span>@(task.ItemsDueCount > 1 ? "s" : "")</a>
                                                 </span>
                                                 break;
-                                            case "ReviewConnectionRequest":
+                                            case nameof(TaskType.ReviewConnectionRequest):
                                                 <span>
                                                     @task.ItemsDueCount connection request@(task.ItemsDueCount > 1 ? "s" : "") to review
                                                     <br /><a href="@UrlHelpers.EmployerFinanceAction("transfers/connections")" class="govuk-link govuk-link govuk-link--no-visited-state">View details<span class="govuk-visually-hidden"> of connection request@(task.ItemsDueCount > 1 ? "s" : "")</span></a>
                                                 </span>
                                                 break;
-                                            case "TransferRequestReceived":
+                                            case nameof(TaskType.TransferRequestReceived):
                                                 <span>
                                                     Transfer request received
                                                     <br /><a href="@UrlHelpers.EmployerFinanceAction("transfers/connections")" class="govuk-link">View details<span class="govuk-visually-hidden"> of the transfer request</span></a>

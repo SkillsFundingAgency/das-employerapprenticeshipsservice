@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Web.Helpers;
+﻿using SFA.DAS.EmployerAccounts.TasksApi;
+
+namespace SFA.DAS.EmployerAccounts.Web.Helpers;
 
 public static class AccountTaskHelper
 {
@@ -6,16 +8,16 @@ public static class AccountTaskHelper
     {
         switch (task.Type)
         {
-            case "LevyDeclarationDue": return 1;
-            case "AgreementToSign": return 2;
-            case "AddApprentices": return 3;
-            case "ApprenticeChangesToReview": return 4;
-            case "CohortRequestReadyForApproval": return 5;
-            case "IncompleteApprenticeshipDetails": return 6;
-            case "ReviewConnectionRequest": return 7;
-            case "TransferRequestReceived": return 8;
+            case nameof(TaskType.LevyDeclarationDue): return 1;
+            case nameof(TaskType.AgreementToSign): return 2;
+            case nameof(TaskType.AddApprentices): return 3;
+            case nameof(TaskType.ApprenticeChangesToReview): return 4;
+            case nameof(TaskType.CohortRequestReadyForApproval): return 5;
+            case nameof(TaskType.IncompleteApprenticeshipDetails): return 6;
+            case nameof(TaskType.ReviewConnectionRequest): return 7;
+            case nameof(TaskType.TransferRequestReceived): return 8;
 
-            default: return int.MaxValue; //if its an usupported type we place it last
+            default: return int.MaxValue; //if its an unsupported type we place it last
         }
     }
 }
