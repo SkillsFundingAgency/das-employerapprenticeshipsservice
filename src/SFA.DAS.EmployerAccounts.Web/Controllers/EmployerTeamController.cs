@@ -511,7 +511,10 @@ public class EmployerTeamController : BaseController
     private void PopulateViewBagWithExternalUserId()
     {
         var externalUserId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+        
         if (externalUserId != null)
+        {
             ViewBag.UserId = externalUserId;
+        }
     }
 }
