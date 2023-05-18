@@ -8,12 +8,15 @@ using Microsoft.Extensions.DependencyInjection;
 using NServiceBus;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.AcceptInvitation;
+using SFA.DAS.EmployerAccounts.Commands.AccountLevyStatus;
+using SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.EmployerAccounts;
 using SFA.DAS.EmployerAccounts.MessageHandlers.Extensions;
 using SFA.DAS.EmployerAccounts.MessageHandlers.ServiceRegistrations;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
+using SFA.DAS.EmployerAccounts.ReadStore.ServiceRegistrations;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
 using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.UnitOfWork.DependencyResolution.Microsoft;
@@ -48,6 +51,20 @@ public class WhenAddingServicesToTheContainer
         var type = provider.GetService(toResolve);
         Assert.IsNotNull(type);
     }
+    
+    [TestCase(typeof(IRequestHandler<CreateUserAccountCommand, CreateUserAccountCommandResponse>))]
+    [TestCase(typeof(IRequestHandler<RemoveAccountUserCommand, Unit>))]
+    [TestCase(typeof(IRequestHandler<CreateAccountUserCommand, Unit>))]
+    [TestCase(typeof(IRequestHandler<AccountLevyStatusCommand, Unit>))]
+    public void Then_The_Dependencies_Are_Correctly_Resolved_For_Handlers(Type toResolve)
+    {
+        var services = new ServiceCollection();
+        SetupServiceCollection(services);
+        var provider = services.BuildServiceProvider();
+
+        var type = provider.GetService(toResolve);
+        Assert.IsNotNull(type);
+    }
 
     private static void SetupServiceCollection(IServiceCollection services)
     {
@@ -60,6 +77,10 @@ public class WhenAddingServicesToTheContainer
         services.AddSingleton<IConfiguration>(configuration);
         services.AddSingleton(accountsConfiguration);
         services.AddApplicationServices();
+        services.AddConfigurationSections(configuration);
+        services.AddMediatorValidators();
+        services.AddReadStoreServices();
+        services.AddMessageHandlerDataRepositories();
         services.AddUnitOfWork();
         services.AddNServiceBus();
         services.AddMemoryCache();

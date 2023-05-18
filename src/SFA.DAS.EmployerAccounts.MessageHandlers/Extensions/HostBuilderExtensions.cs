@@ -31,16 +31,20 @@ public static class HostBuilderExtensions
             services.AddConfigurationSections(context.Configuration);
             services.AddApplicationServices();
             services.AddReadStoreServices();
+            services.AddMessageHandlerDataRepositories();
+            services.AddMediatorValidators();
             services.AddUnitOfWork();
             services.AddNServiceBus();
             services.AddMemoryCache();
             services.AddCachesRegistrations();
             services.AddDatabaseRegistration();
-            services.AddMediatR(typeof(CreateAccountUserCommandHandler).Assembly, typeof(AccountLevyStatusCommandHandler).Assembly);
+            services.AddMediatR(typeof(CreateAccountUserCommandHandler).Assembly,
+                typeof(AccountLevyStatusCommandHandler).Assembly);
         });
 
         return hostBuilder;
     }
+
     public static IHostBuilder ConfigureDasLogging(this IHostBuilder hostBuilder)
     {
         hostBuilder.ConfigureLogging((context, loggingBuilder) =>
@@ -48,7 +52,9 @@ public static class HostBuilderExtensions
             var connectionString = context.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"];
             if (!string.IsNullOrEmpty(connectionString))
             {
-                loggingBuilder.AddNLog(context.HostingEnvironment.IsDevelopment() ? "nlog.development.config" : "nlog.config");
+                loggingBuilder.AddNLog(context.HostingEnvironment.IsDevelopment()
+                    ? "nlog.development.config"
+                    : "nlog.config");
                 loggingBuilder.AddApplicationInsightsWebJobs(o => o.ConnectionString = connectionString);
             }
 
@@ -62,7 +68,14 @@ public static class HostBuilderExtensions
     {
         return hostBuilder.ConfigureAppConfiguration((context, builder) =>
         {
-            builder.AddAzureTableStorage(ConfigurationKeys.EmployerAccounts, ConfigurationKeys.EmployerAccountsReadStore)
+            builder.AddAzureTableStorage(options =>
+                    {
+                        options.ConfigurationKeys = new[]
+                            { ConfigurationKeys.EmployerAccounts, ConfigurationKeys.EmployerAccountsReadStore };
+                        options.PreFixConfigurationKeys = true;
+                        options.ConfigurationKeysRawJsonResult = new[] { "SFA.DAS.Encoding" };
+                    }
+                )
                 .AddJsonFile("appsettings.json", true, true)
                 .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", true, true)
                 .AddEnvironmentVariables()

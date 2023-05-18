@@ -1,5 +1,7 @@
-﻿using SFA.DAS.EmployerAccounts.Data.Contracts;
-using SFA.DAS.EmployerAccounts.Data;
+﻿using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Factories;
+using SFA.DAS.Encoding;
+using SFA.DAS.Events.Api.Client.Configuration;
 using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.UnitOfWork.NServiceBus.Services;
 
@@ -10,8 +12,11 @@ public static class ApplicationServiceRegistrations
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         services.AddScoped<IEventPublisher, EventPublisher>();
-        services.AddScoped<IEmployerAccountRepository, EmployerAccountRepository>();
-
+        services.AddSingleton<IGenericEventFactory, GenericEventFactory>();
+        services.AddSingleton<IAccountEventFactory, AccountEventFactory>();
+        services.AddSingleton<IEncodingService, EncodingService>();
+        services.AddSingleton<IEventsApiClientConfiguration>(cfg => cfg.GetService<EmployerAccountsConfiguration>().EventsApi);
+        
         return services;
     }
 }
