@@ -11,7 +11,7 @@ public interface ITaskApiClient
 {
     Task<IEnumerable<TaskDto>> GetTasks(string employerAccountId, string userId, ApprenticeshipEmployerType applicableToApprenticeshipEmployerType);
 
-    Task AddUserReminderSupression(string employerAccountId, string userId, string taskType);
+    Task AddUserReminderSuppression(string employerAccountId, string userId, string taskType);
 }
 
 public class TaskApiClient : ITaskApiClient
@@ -37,7 +37,7 @@ public class TaskApiClient : ITaskApiClient
         var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
         await AddAuthenticationHeader(requestMessage);
 
-        _logger.LogInformation($"Get: {url}");
+        _logger.LogInformation("Get: {Url}", url);
         var response = await _httpClient.SendAsync(requestMessage);
 
         response.EnsureSuccessStatusCode();
@@ -47,7 +47,7 @@ public class TaskApiClient : ITaskApiClient
         return JsonConvert.DeserializeObject<IEnumerable<TaskDto>>(content);
     }
 
-    public async Task AddUserReminderSupression(string employerAccountId, string userId, string taskType)
+    public async Task AddUserReminderSuppression(string employerAccountId, string userId, string taskType)
     {
         var baseUrl = GetBaseUrl();
         var url = $"{baseUrl}api/tasks/{employerAccountId}/supressions/{userId}/add/{taskType}";
