@@ -37,7 +37,7 @@ public class TaskService : ITaskService
 
             var taskName = Enum.GetName(typeof(TaskType), taskType);
 
-            await _apiClient.AddUserReminderSupression(accountId.ToString(), externalUserId, taskName);
+            await _apiClient.AddUserReminderSuppression(accountId.ToString(), externalUserId, taskName);
         }
         catch (Exception ex)
         {
