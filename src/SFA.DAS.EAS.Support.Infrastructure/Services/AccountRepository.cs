@@ -99,8 +99,6 @@ public sealed class AccountRepository : IAccountRepository
         {
             var response = await _accountApiClient.GetResource<AccountWithBalanceViewModel>($"/api/accounts/{id}");
 
-            _logger.LogDebug($"{nameof(IAccountApiClient)}.{nameof(_accountApiClient.GetResource)}<{nameof(AccountWithBalanceViewModel)}>(\"/api/accounts/{id}\"); {response.Balance}");
-
             return response.Balance;
         }
         catch (Exception exception)
@@ -180,7 +178,7 @@ public sealed class AccountRepository : IAccountRepository
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, $"Exception occured in Account API type of {nameof(TransactionsViewModel)} for period {financialYearIterator.Year}.{financialYearIterator.Month} id {accountId}");
+                _logger.LogError(exception, "Exception occured in Account API type of {TransactionsViewModelName} for period {FinancialYearIteratorYear}.{FinancialYearIteratorMonth} id {AccountId}", nameof(TransactionsViewModel), financialYearIterator.Year, financialYearIterator.Month, accountId);
             }
             financialYearIterator = financialYearIterator.AddMonths(1);
         }
@@ -259,7 +257,6 @@ public sealed class AccountRepository : IAccountRepository
     {
         try
         {
-            _logger.LogDebug($"{nameof(IAccountApiClient)}.{nameof(_accountApiClient.GetAccountUsers)}(\"{resultHashedAccountId}\");");
             var teamMembers = await _accountApiClient.GetAccountUsers(resultHashedAccountId);
 
             return teamMembers;

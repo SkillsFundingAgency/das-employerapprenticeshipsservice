@@ -17,7 +17,7 @@ public class WhenIGetAnAccount : EmployerAccountsControllerTests
     public async Task ThenTheAccountWithBalanceIsReturned()
     {
         //Arrange
-        var hashedAccountId = "ABC123";
+        const string hashedAccountId = "ABC123";
         var account = new AccountDetailViewModel
         {
             HashedAccountId = hashedAccountId,
@@ -50,11 +50,13 @@ public class WhenIGetAnAccount : EmployerAccountsControllerTests
         Assert.That(model.Result, Is.InstanceOf<OkObjectResult>());
 
         var oKResult = model.Result as OkObjectResult;
-
-        Assert.That(oKResult!.Value, Is.Not.Null);
-        Assert.That(oKResult.Value, Is.InstanceOf<AccountDetailViewModel>());
-
-        var value = oKResult.Value as AccountDetailViewModel;
+        
+        Assert.Multiple(() =>
+        {
+            Assert.That(oKResult!.Value, Is.Not.Null);
+            Assert.That(oKResult.Value, Is.InstanceOf<AccountDetailViewModel>());
+        });
+        var value = oKResult!.Value as AccountDetailViewModel;
 
         value.Should().NotBeNull();
         value!.DasAccountId.Should().Be(hashedAccountId);

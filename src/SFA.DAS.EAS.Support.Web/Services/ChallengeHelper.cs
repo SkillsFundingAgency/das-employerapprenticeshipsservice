@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EAS.Support.Web.Services;
 
-public class ChallengeHelper
+public static class ChallengeHelper
 {
     public static string GetChallengeMessage(List<int> challengeCharacterPositions)
     {

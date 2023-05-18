@@ -6,7 +6,7 @@ using SFA.DAS.EAS.Support.Infrastructure.Services.Contracts;
 namespace SFA.DAS.EAS.Support.ApplicationServices.Tests.ChallengeHandler;
 
 [TestFixture]
-public class WhenTestingChallengeHandler
+public abstract class WhenTestingChallengeHandler
 {
     private Mock<IChallengeService>? _challengeService;
     

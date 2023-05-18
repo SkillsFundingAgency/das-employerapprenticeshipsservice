@@ -2,22 +2,21 @@
 
 namespace SFA.DAS.EAS.Web.Helpers;
 
-public class AccountTaskHelper
+public static class AccountTaskHelper
 {
     public static int GetTaskPriority(AccountTask task)
     {
-        switch (task.Type)
+        return task.Type switch
         {
-            case "LevyDeclarationDue": return 1;
-            case "AgreementToSign": return 2;
-            case "AddApprentices": return 3;
-            case "ApprenticeChangesToReview": return 4;
-            case "CohortRequestReadyForApproval": return 5;
-            case "IncompleteApprenticeshipDetails": return 6;
-            case "ReviewConnectionRequest": return 7;
-            case "TransferRequestReceived": return 8;
-
-            default: return int.MaxValue; //if its an usupported type we place it last
-        }
+            "LevyDeclarationDue" => 1,
+            "AgreementToSign" => 2,
+            "AddApprentices" => 3,
+            "ApprenticeChangesToReview" => 4,
+            "CohortRequestReadyForApproval" => 5,
+            "IncompleteApprenticeshipDetails" => 6,
+            "ReviewConnectionRequest" => 7,
+            "TransferRequestReceived" => 8,
+            _ => int.MaxValue //if its an usupported type we place it last
+        };
     }
 }

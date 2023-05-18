@@ -1,33 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
-using System.Text.Json.Serialization;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.WebUtilities;
 using SFA.DAS.EAS.Application.Http;
-using System.Net.Http.Json;
 
 namespace SFA.DAS.EAS.Application.Services;
 
 public abstract class ApiClientService
 {
-    protected readonly HttpClient _httpClient;
+    protected readonly HttpClient BaseHttpClient;
 
-    public ApiClientService(HttpClient httpClient)
+    protected ApiClientService(HttpClient baseHttpClient)
     {
-        _httpClient = httpClient;
+        BaseHttpClient = baseHttpClient;
     }
 
-    public Task<TResponse> Get<TResponse>(string uri, object queryData = null, CancellationToken cancellationToken = default)
+    protected Task<TResponse> GetResponse<TResponse>(string uri, object queryData = null, CancellationToken cancellationToken = default)
     {
-        return Get<TResponse>(new Uri(uri, UriKind.RelativeOrAbsolute), queryData, cancellationToken);
+        return GetInternal<TResponse>(new Uri(uri, UriKind.RelativeOrAbsolute), queryData, cancellationToken);
     }
 
-    public async Task<TResponse> Get<TResponse>(Uri uri, object queryData = null, CancellationToken cancellationToken = default)
+    private async Task<TResponse> GetInternal<TResponse>(Uri uri, object queryData = null, CancellationToken cancellationToken = default)
     {
         var response = await GetResponse(uri, queryData, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
 
@@ -41,10 +37,10 @@ public abstract class ApiClientService
             uri = new Uri(AddQueryString(uri.ToString(), queryData), UriKind.RelativeOrAbsolute);
         }
 
-        HttpResponseMessage httpResponseMessage = await _httpClient.GetAsync(uri, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
+        var httpResponseMessage = await BaseHttpClient.GetAsync(uri, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
         if (!httpResponseMessage.IsSuccessStatusCode)
         {
-            HttpResponseMessage httpResponseMessage2 = httpResponseMessage;
+            var httpResponseMessage2 = httpResponseMessage;
             throw CreateClientException(httpResponseMessage2, await httpResponseMessage.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(continueOnCapturedContext: false));
         }
 
@@ -53,11 +49,11 @@ public abstract class ApiClientService
 
     private static string AddQueryString(string uri, object queryData)
     {
-        Dictionary<string, string> queryString = queryData.GetType().GetProperties().ToDictionary((PropertyInfo x) => x.Name, (PropertyInfo x) => x.GetValue(queryData)?.ToString() ?? string.Empty);
+        var queryString = queryData.GetType().GetProperties().ToDictionary((PropertyInfo x) => x.Name, (PropertyInfo x) => x.GetValue(queryData)?.ToString() ?? string.Empty);
         return QueryHelpers.AddQueryString(uri, queryString);
     }
 
-    protected virtual Exception CreateClientException(HttpResponseMessage httpResponseMessage, string content)
+    private static Exception CreateClientException(HttpResponseMessage httpResponseMessage, string content)
     {
         return new RestHttpClientException(httpResponseMessage, content);
     }
