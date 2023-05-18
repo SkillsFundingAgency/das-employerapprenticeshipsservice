@@ -134,7 +134,7 @@
                     <nav id="user-nav">
                         <ul>
                             <li>
-                                <a href="@Url.Action("Help", "Home")" target="_blank">Help</a>
+                                <a href="@Url.Action("Help", "Home")" target="_blank" rel="noopener">Help</a>
                             </li>
                             @if (Context.User.Identity.IsAuthenticated)
                             {
@@ -230,18 +230,18 @@
             <div class="footer-meta-inner">
                 <ul class="platform-help-links">
                     <li>
-                        <a href="@Url.Action("Help", "Home")" target="_blank">Help</a>
+                        <a href="@Url.Action("Help", "Home")" target="_blank" rel="noopener">Help</a>
                     </li>
                     <li>
-                        <a href="https://www.smartsurvey.co.uk/s/apprenticeshipservicefeedback/" target="_blank">Feedback</a>
+                        <a href="https://www.smartsurvey.co.uk/s/apprenticeshipservicefeedback/" target="_blank" rel="noopener">Feedback</a>
                     </li>
                     <li>
                         <a href="@Url.Action("Privacy", "Home")">Privacy and cookies</a>
                     </li>
                     <li>
-                        <a target="_blank" href="@Url.Action("TermsAndConditionsOverview", "Home")">Terms and conditions</a>
+                        <a target="_blank" rel="noopener" href="@Url.Action("TermsAndConditionsOverview", "Home")">Terms and conditions</a>
                     </li>
-                    <li>Built by the <a href="http://gov.uk/esfa" target="_blank">Education and Skills Funding Agency</a></li>
+                    <li>Built by the <a href="http://gov.uk/esfa" target="_blank" rel="noopener">Education and Skills Funding Agency</a></li>
                 </ul>
                 <div class="open-government-licence">
                     <p class="logo">
