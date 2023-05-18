@@ -17,7 +17,7 @@ public class EmployerUserController : ControllerBase
         _apiService = apiService;
     }
 
-    [Authorize(Roles = ApiRoles.ReadUserAccounts)]
+    [Authorize(Policy = ApiRoles.ReadUserAccounts)]
     [HttpGet("accounts", Name = "Accounts")]
     public async Task<IActionResult> GetUserAccounts(string userRef)
     {

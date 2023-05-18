@@ -18,7 +18,7 @@ public class AccountPayeSchemesController : ControllerBase
         _apiService = apiService;
     }
 
-    [Authorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
+    [Authorize(Policy = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet(Name = "GetPayeSchemes")]
     public async Task<IActionResult> GetPayeSchemes(string hashedAccountId)
     {
@@ -26,7 +26,7 @@ public class AccountPayeSchemesController : ControllerBase
         return Content(redirectResponse.ToString(), "application/json");
     }
 
-    [Authorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
+    [Authorize(Policy = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet("{payeschemeref}", Name = "GetPayeScheme")]
     public async Task<IActionResult> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
     {

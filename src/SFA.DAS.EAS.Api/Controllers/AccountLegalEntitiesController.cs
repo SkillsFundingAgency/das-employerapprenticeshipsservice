@@ -7,7 +7,7 @@ using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 namespace SFA.DAS.EAS.Account.Api.Controllers;
 
 [ApiController]
-[Authorize(Roles = ApiRoles.ReadUserAccounts)]
+[Authorize(Policy = ApiRoles.ReadUserAccounts)]
 [Route("api/accountlegalentities")]
 public class AccountLegalEntitiesController : ControllerBase
 {      

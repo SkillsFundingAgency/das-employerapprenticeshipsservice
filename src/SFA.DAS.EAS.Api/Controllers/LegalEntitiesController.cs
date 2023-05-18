@@ -17,7 +17,7 @@ public class LegalEntitiesController : ControllerBase
         _apiService = apiService;
     }
 
-    [Authorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
+    [Authorize(Policy = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet(Name = "GetLegalEntities")]
     public async Task<IActionResult> GetLegalEntities(string hashedAccountId)
     {
@@ -25,7 +25,7 @@ public class LegalEntitiesController : ControllerBase
         return Content(redirectResponse.ToString(), "application/json");
     }
 
-    [Authorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
+    [Authorize(Policy = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet("{legalEntityId}", Name = "GetLegalEntity")]
     public async Task<IActionResult> GetLegalEntity(
         string hashedAccountId,
