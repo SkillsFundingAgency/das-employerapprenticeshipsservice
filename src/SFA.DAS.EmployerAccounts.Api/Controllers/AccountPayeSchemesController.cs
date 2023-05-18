@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -24,7 +25,7 @@ public class AccountPayeSchemesController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetPayeScheme([FromRoute]string hashedAccountId, [FromRoute]string payeSchemeRef)
     {
-        var result = await _orchestrator.GetPayeScheme(hashedAccountId, WebUtility.UrlDecode(payeSchemeRef));
+        var result = await _orchestrator.GetPayeScheme(hashedAccountId, Uri.UnescapeDataString(payeSchemeRef));
 
         if (result == null)
         {
@@ -49,7 +50,7 @@ public class AccountPayeSchemesController : ControllerBase
         return Ok(new ResourceList(result.Select(pv => new Resource
         {
             Id = pv.Ref,
-            Href = Url.RouteUrl("GetPayeScheme", new { hashedAccountId, payeSchemeRef = WebUtility.UrlEncode(pv.Ref) })
+            Href = Url.RouteUrl("GetPayeScheme", new { hashedAccountId, payeSchemeRef = Uri.EscapeDataString(pv.Ref) })
         })));
     }
 }
