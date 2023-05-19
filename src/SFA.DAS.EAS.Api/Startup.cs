@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using SFA.DAS.Api.Common.Infrastructure;
 using SFA.DAS.EAS.Account.Api.Authentication;
+using SFA.DAS.EAS.Account.Api.Authorization;
 using SFA.DAS.EAS.Account.Api.Extensions;
 using SFA.DAS.EAS.Account.Api.Filters;
 using SFA.DAS.EAS.Account.Api.ServiceRegistrations;
@@ -31,8 +32,8 @@ public class Startup
         services.AddApiConfigurationSections(_configuration);
 
         services
-            .AddApiAuthentication(_configuration, _configuration.IsDevOrLocal());
-            //.AddApiAuthorization();
+            .AddApiAuthentication(_configuration, _configuration.IsDevOrLocal())
+            .AddApiAuthorization();
 
 
         services.AddAutoMapper(typeof(Startup));

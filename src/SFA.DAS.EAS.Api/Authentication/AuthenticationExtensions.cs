@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.Api.Common.AppStart;
 using SFA.DAS.Api.Common.Configuration;
 using SFA.DAS.Api.Common.Infrastructure;
-using SFA.DAS.EAS.Account.Api.Authorization;
 using SFA.DAS.EAS.Domain.Configuration;
 
 namespace SFA.DAS.EAS.Account.Api.Authentication;
@@ -25,14 +24,7 @@ public static class AuthenticationExtensions
                    .GetSection(ConfigurationKeys.AzureActiveDirectoryApiConfiguration)
                    .Get<AzureActiveDirectoryConfiguration>();
 
-            var policies = new Dictionary<string, string> {
-                { PolicyNames.Default, RoleNames.Default },
-                { ApiRoles.ReadAllEmployerAccountBalances, ApiRoles.ReadAllEmployerAccountBalances },
-                { ApiRoles.ReadUserAccounts,ApiRoles.ReadUserAccounts },
-                { ApiRoles.ReadAllAccountUsers,ApiRoles.ReadAllAccountUsers },
-                { ApiRoles.ReadAllEmployerAgreements, ApiRoles.ReadAllEmployerAgreements }
-            };
-            
+            var policies = new Dictionary<string, string> { { PolicyNames.Default, RoleNames.Default } };
             services.AddAuthentication(azureAdConfiguration, policies);
         }
 
