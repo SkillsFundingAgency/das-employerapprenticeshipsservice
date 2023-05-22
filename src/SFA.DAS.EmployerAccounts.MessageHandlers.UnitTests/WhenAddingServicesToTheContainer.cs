@@ -62,6 +62,8 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IRequestHandler<GetUserByRefQuery, GetUserByRefResponse>))]
     [TestCase(typeof(IRequestHandler<PublishGenericEventCommand, Unit>))]
     [TestCase(typeof(IRequestHandler<CreateAuditCommand, Unit>))]
+    [TestCase(typeof(IRequestHandler<RemoveAccountUserCommand, Unit>))]
+    [TestCase(typeof(IRequestHandler<UpdateAccountUserCommand, Unit>))]
     public void Then_The_Dependencies_Are_Correctly_Resolved_For_Handlers(Type toResolve)
     {
         var services = new ServiceCollection();
