@@ -1,4 +1,6 @@
-﻿using SFA.DAS.EmployerAccounts.Configuration;
+﻿using SFA.DAS.Api.Common.Infrastructure;
+using SFA.DAS.Api.Common.Interfaces;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.Encoding;
 using SFA.DAS.Events.Api.Client.Configuration;
@@ -16,6 +18,7 @@ public static class ApplicationServiceRegistrations
         services.AddSingleton<IAccountEventFactory, AccountEventFactory>();
         services.AddSingleton<IEncodingService, EncodingService>();
         services.AddSingleton<IEventsApiClientConfiguration>(cfg => cfg.GetService<EmployerAccountsConfiguration>().EventsApi);
+        services.AddTransient<IAzureClientCredentialHelper, AzureClientCredentialHelper>();
         
         return services;
     }

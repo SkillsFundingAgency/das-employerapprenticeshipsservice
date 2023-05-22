@@ -9,12 +9,15 @@ using NServiceBus;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.AcceptInvitation;
 using SFA.DAS.EmployerAccounts.Commands.AccountLevyStatus;
+using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
+using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.EmployerAccounts;
 using SFA.DAS.EmployerAccounts.MessageHandlers.Extensions;
 using SFA.DAS.EmployerAccounts.MessageHandlers.ServiceRegistrations;
 using SFA.DAS.EmployerAccounts.Messages.Events;
+using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
 using SFA.DAS.EmployerAccounts.ReadStore.ServiceRegistrations;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
@@ -56,6 +59,9 @@ public class WhenAddingServicesToTheContainer
     [TestCase(typeof(IRequestHandler<RemoveAccountUserCommand, Unit>))]
     [TestCase(typeof(IRequestHandler<CreateAccountUserCommand, Unit>))]
     [TestCase(typeof(IRequestHandler<AccountLevyStatusCommand, Unit>))]
+    [TestCase(typeof(IRequestHandler<GetUserByRefQuery, GetUserByRefResponse>))]
+    [TestCase(typeof(IRequestHandler<PublishGenericEventCommand, Unit>))]
+    [TestCase(typeof(IRequestHandler<CreateAuditCommand, Unit>))]
     public void Then_The_Dependencies_Are_Correctly_Resolved_For_Handlers(Type toResolve)
     {
         var services = new ServiceCollection();
@@ -86,6 +92,10 @@ public class WhenAddingServicesToTheContainer
         services.AddMemoryCache();
         services.AddCachesRegistrations();
         services.AddDatabaseRegistration();
+        services.AddEventsApi();
+        services.AddAuditServices();
+        services.AddHttpContextAccessor();
+        services.AddAuditServices();
         services.AddMediatR(
             typeof(UpdateAccountUserCommand),
             typeof(AcceptInvitationCommand)
@@ -124,6 +134,10 @@ public class WhenAddingServicesToTheContainer
                     new("Environment", "test"),
                     new("EnvironmentName", "test"),
                     new("APPINSIGHTS_INSTRUMENTATIONKEY", "test"),
+                    new("SFA.DAS.EmployerAccounts:EventsApi:BaseUrl", "https://test.test"),
+                    new("SFA.DAS.EmployerAccounts:EventsApi:ClientToken", "CLIENT_TOKEN"),
+                    new("SFA.DAS.EmployerAccounts:AuditApi:BaseUrl", "https://test.test"),
+                    new("SFA.DAS.EmployerAccounts:AuditApi:IdentifierUri", "test"),
                 }
         };
 
