@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +24,8 @@ public class AccountPayeSchemesController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetPayeScheme([FromRoute]string hashedAccountId, [FromRoute]string payeSchemeRef)
     {
-        var result = await _orchestrator.GetPayeScheme(hashedAccountId, Uri.UnescapeDataString(payeSchemeRef));
+        var decodedPayeSchemeRef = Uri.UnescapeDataString(payeSchemeRef);
+        var result = await _orchestrator.GetPayeScheme(hashedAccountId, decodedPayeSchemeRef);
 
         if (result == null)
         {
