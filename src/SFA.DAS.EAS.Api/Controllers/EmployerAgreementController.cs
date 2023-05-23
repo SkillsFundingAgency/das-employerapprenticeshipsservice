@@ -17,7 +17,7 @@ public class EmployerAgreementController : ControllerBase
         _apiService = apiService;
     }
 
-    [Authorize(Roles = ApiRoles.ReadAllEmployerAgreements)]
+    [Authorize(Policy = ApiRoles.ReadAllEmployerAgreements)]
     [HttpGet("{hashedAgreementId}", Name = "AgreementById")]
     public async Task<IActionResult> GetAgreement(
         string hashedAccountId,

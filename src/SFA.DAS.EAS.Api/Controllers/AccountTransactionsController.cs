@@ -20,6 +20,7 @@ public class AccountTransactionsController : Microsoft.AspNetCore.Mvc.Controller
     }
 
     [HttpGet(Name = "GetTransactionSummary")]
+    [Authorize(Policy = ApiRoles.ReadAllEmployerAccountBalances)]
     public async Task<ActionResult> Index(string hashedAccountId)
     {
         var result = await _orchestrator.GetAccountTransactionSummary(hashedAccountId);
@@ -35,7 +36,7 @@ public class AccountTransactionsController : Microsoft.AspNetCore.Mvc.Controller
     }
 
     [Route("{year}/{month}", Name = "GetTransactions")]
-    [Authorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
+    [Authorize(Policy = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet]
     public async Task<ActionResult<TransactionsViewModel>> GetTransactions(string hashedAccountId, int year = 0, int month = 0)
     {

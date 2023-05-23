@@ -21,7 +21,7 @@ public class EmployerAccountsController : ControllerBase
         _apiService = apiService;
     }
 
-    [Authorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
+    [Authorize(Policy = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet(Name = "AccountsIndex")]   
     public async Task<ActionResult<Types.PagedApiResponseViewModel<Types.AccountWithBalanceViewModel>>> GetAccounts(string toDate = null, int pageSize = 1000, int pageNumber = 1)
     {
@@ -37,7 +37,7 @@ public class EmployerAccountsController : ControllerBase
     }
 
 
-    [Authorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
+    [Authorize(Policy = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet("{hashedAccountId}", Name = "GetAccount")]
     public async Task<ActionResult<Types.AccountDetailViewModel>> GetAccount(string hashedAccountId)
     {
@@ -51,7 +51,7 @@ public class EmployerAccountsController : ControllerBase
         return Ok(result.Data);
     }
 
-    [Authorize(Roles = ApiRoles.ReadAllEmployerAccountBalances)]
+    [Authorize(Policy = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet("internal/{accountId}", Name = "GetAccountByInternalId")]
     public async Task<IActionResult> GetAccount(long accountId)
     {
@@ -65,7 +65,7 @@ public class EmployerAccountsController : ControllerBase
         return Ok(result.Data);
     }
 
-    [Authorize(Roles = ApiRoles.ReadAllAccountUsers)]
+    [Authorize(Policy = ApiRoles.ReadAllAccountUsers)]
     [HttpGet("{hashedAccountId}/users", Name = "GetAccountUsers")]
     public async Task<IActionResult> GetAccountUsers(string hashedAccountId)
     {
@@ -73,7 +73,7 @@ public class EmployerAccountsController : ControllerBase
         return Content(redirectResponse.ToString(), "application/json");
     }
 
-    [Authorize(Roles = ApiRoles.ReadAllAccountUsers)]
+    [Authorize(Policy = ApiRoles.ReadAllAccountUsers)]
     [HttpGet("internal/{accountId}/users", Name = "GetAccountUsersByInternalAccountId")]
     public async Task<IActionResult> GetAccountUsers(long accountId)
     {

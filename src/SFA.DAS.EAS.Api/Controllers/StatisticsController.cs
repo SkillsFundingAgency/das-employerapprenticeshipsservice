@@ -7,7 +7,7 @@ using SFA.DAS.EAS.Account.Api.Orchestrators;
 namespace SFA.DAS.EAS.Account.Api.Controllers;
 
 [ApiController]
-[Authorize(Roles = ApiRoles.ReadUserAccounts)]
+[Authorize(Policy = ApiRoles.ReadUserAccounts)]
 [Route("api/statistics")]
 public class StatisticsController : ControllerBase
 {
