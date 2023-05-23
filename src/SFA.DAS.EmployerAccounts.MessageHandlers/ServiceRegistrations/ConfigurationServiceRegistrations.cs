@@ -18,7 +18,7 @@ public static class ConfigurationServiceRegistrations
         services.Configure<EmployerAccountsReadStoreConfiguration>(configuration.GetSection(ConfigurationKeys.EmployerAccountsReadStore));
         services.AddSingleton(c => c.GetService<IOptions<EmployerAccountsReadStoreConfiguration>>().Value);
             
-        var encodingConfigJson = configuration.GetSection("SFA.DAS.Encoding").Value;
+        var encodingConfigJson = configuration.GetSection(ConfigurationKeys.EncodingConfig).Value;
         var encodingConfig = JsonConvert.DeserializeObject<EncodingConfig>(encodingConfigJson);
         services.AddSingleton(encodingConfig);
 

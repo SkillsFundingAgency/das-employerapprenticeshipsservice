@@ -74,9 +74,9 @@ public static class HostBuilderExtensions
             builder.AddAzureTableStorage(options =>
                     {
                         options.ConfigurationKeys = new[]
-                            { ConfigurationKeys.EmployerAccounts, ConfigurationKeys.EmployerAccountsReadStore };
+                            { ConfigurationKeys.EmployerAccounts, ConfigurationKeys.EmployerAccountsReadStore, ConfigurationKeys.EncodingConfig };
                         options.PreFixConfigurationKeys = true;
-                        options.ConfigurationKeysRawJsonResult = new[] { "SFA.DAS.Encoding" };
+                        options.ConfigurationKeysRawJsonResult = new[] { ConfigurationKeys.EncodingConfig };
                     }
                 )
                 .AddJsonFile("appsettings.json", true, true)
