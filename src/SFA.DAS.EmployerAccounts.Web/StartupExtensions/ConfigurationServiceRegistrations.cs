@@ -32,7 +32,7 @@ public static class ConfigurationServiceRegistrations
         services.AddSingleton(cfg => cfg.GetService<IOptions<IdentityServerConfiguration>>().Value);
 
 
-        var encodingConfigJson = configuration.GetSection("SFA.DAS.Encoding").Value;
+        var encodingConfigJson = configuration.GetSection(ConfigurationKeys.EncodingConfig).Value;
         var encodingConfig = JsonConvert.DeserializeObject<EncodingConfig>(encodingConfigJson);
         services.AddSingleton(encodingConfig);
 

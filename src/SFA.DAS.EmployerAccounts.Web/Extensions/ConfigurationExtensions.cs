@@ -34,7 +34,7 @@ public static class ConfigurationExtensions
                 options.StorageConnectionString = configuration["ConfigurationStorageConnectionString"];
                 options.EnvironmentName = configuration["EnvironmentName"];
                 options.PreFixConfigurationKeys = true;
-                options.ConfigurationKeysRawJsonResult = new[] { "SFA.DAS.Encoding" };
+                options.ConfigurationKeysRawJsonResult = new[] { ConfigurationKeys.EncodingConfig };
             }
         );
         
