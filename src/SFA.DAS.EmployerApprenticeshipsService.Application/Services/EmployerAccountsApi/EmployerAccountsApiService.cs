@@ -20,25 +20,25 @@ public class EmployerAccountsApiService : ApiClientService, IEmployerAccountsApi
     {
         _log.LogInformation("Getting statistics");
 
-        return GetResponse<Statistics>("/api/statistics", cancellationToken);
+        return GetResponse<Statistics>("/api/statistics", cancellationToken: cancellationToken);
     }
 
     public Task<PagedApiResponseViewModel<AccountWithBalanceViewModel>> GetAccounts(string toDate = null, int pageSize = 1000, int pageNumber = 1, CancellationToken cancellationToken = default)
     {
         _log.LogInformation($"Getting paged accounts");
 
-        return GetResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>>($"/api/accounts?{(string.IsNullOrWhiteSpace(toDate) ? "" : "toDate=" + toDate + "&")}pageNumber={pageNumber}&pageSize={pageSize}", cancellationToken, cancellationToken);
+        return GetResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>>($"/api/accounts?{(string.IsNullOrWhiteSpace(toDate) ? "" : "toDate=" + toDate + "&")}pageNumber={pageNumber}&pageSize={pageSize}", cancellationToken: cancellationToken);
     }
 
     public Task<AccountDetailViewModel> GetAccount(string hashedAccountId, CancellationToken cancellationToken = default)
     {
         _log.LogInformation("Getting paged accounts");
 
-        return GetResponse<AccountDetailViewModel>($"/api/accounts/{hashedAccountId}", cancellationToken);
+        return GetResponse<AccountDetailViewModel>($"/api/accounts/{hashedAccountId}", cancellationToken: cancellationToken);
     }
 
     public Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default)
     {
-        return GetResponse<dynamic>(url, cancellationToken);
+        return GetResponse<dynamic>(url, cancellationToken: cancellationToken);
     }
 }

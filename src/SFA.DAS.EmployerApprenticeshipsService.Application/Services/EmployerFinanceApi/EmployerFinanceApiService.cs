@@ -29,7 +29,7 @@ public class EmployerFinanceApiService : ApiClientService, IEmployerFinanceApiSe
 
         _log.LogInformation("Getting EmployerFinanceApiService : GetLevyDeclarations url : {Url}", url);
 
-        return GetResponse<List<LevyDeclarationViewModel>>(url, cancellationToken);
+        return GetResponse<List<LevyDeclarationViewModel>>(url, cancellationToken: cancellationToken);
     }
 
     public Task<List<LevyDeclarationViewModel>> GetLevyForPeriod(string hashedAccountId, string payrollYear, short payrollMonth, CancellationToken cancellationToken = default)
@@ -40,7 +40,7 @@ public class EmployerFinanceApiService : ApiClientService, IEmployerFinanceApiSe
 
         _log.LogInformation("Getting EmployerFinanceApiService : GetLevyForPeriod url : {Url}", url);
 
-        return GetResponse<List<LevyDeclarationViewModel>>(url, cancellationToken);
+        return GetResponse<List<LevyDeclarationViewModel>>(url, cancellationToken: cancellationToken);
     }
 
     public Task<TransactionsViewModel> GetTransactions(string accountId, int year, int month, CancellationToken cancellationToken = default)
@@ -51,7 +51,7 @@ public class EmployerFinanceApiService : ApiClientService, IEmployerFinanceApiSe
 
         _log.LogInformation("Getting EmployerFinanceApiService : GetTransactions url : {Url}", url);
 
-        return GetResponse<TransactionsViewModel>(url, cancellationToken);
+        return GetResponse<TransactionsViewModel>(url, cancellationToken: cancellationToken);
     }
 
     public Task<List<TransactionSummaryViewModel>> GetTransactionSummary(string accountId, CancellationToken cancellationToken = default)
@@ -62,14 +62,14 @@ public class EmployerFinanceApiService : ApiClientService, IEmployerFinanceApiSe
 
         _log.LogInformation("Getting EmployerFinanceApiService : GetTransactionSummary url : {Url}", url);
 
-        return GetResponse<List<TransactionSummaryViewModel>>(url, cancellationToken);
+        return GetResponse<List<TransactionSummaryViewModel>>(url, cancellationToken: cancellationToken);
     }
 
     public Task<TotalPaymentsModel> GetStatistics(CancellationToken cancellationToken = default)
     {
         _log.LogInformation("Getting EmployerFinanceApiService : statistics");
 
-        return GetResponse<TotalPaymentsModel>("/api/financestatistics", cancellationToken);
+        return GetResponse<TotalPaymentsModel>("/api/financestatistics", cancellationToken: cancellationToken);
     }
 
     public async Task<List<AccountBalance>> GetAccountBalances(List<string> accountIds, CancellationToken cancellationToken = default)
@@ -102,11 +102,11 @@ public class EmployerFinanceApiService : ApiClientService, IEmployerFinanceApiSe
 
         _log.LogInformation("Getting EmployerFinanceApiService : GetTransferAllowance url : {Url}", url);
 
-        return GetResponse<TransferAllowance>(url, cancellationToken);
+        return GetResponse<TransferAllowance>(url, cancellationToken: cancellationToken);
     }
 
     public Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default)
     {
-        return GetResponse<dynamic>(url, cancellationToken);
+        return GetResponse<dynamic>(url, cancellationToken: cancellationToken);
     }
 }

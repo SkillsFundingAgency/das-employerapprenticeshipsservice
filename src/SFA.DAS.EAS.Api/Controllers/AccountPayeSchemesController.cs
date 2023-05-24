@@ -27,7 +27,7 @@ public class AccountPayeSchemesController : ControllerBase
     }
 
     [Authorize(Policy = ApiRoles.ReadAllEmployerAccountBalances)]
-    [HttpGet("{payeschemeref}", Name = "GetPayeScheme")]
+    [HttpGet("{payeSchemeRef}", Name = "GetPayeScheme")]
     public async Task<IActionResult> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
     {
         var redirectResponse = await _apiService.Redirect($"/api/accounts/{hashedAccountId}/payeschemes/{WebUtility.UrlEncode(payeSchemeRef)}");
