@@ -2,7 +2,6 @@
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.NServiceBus.Configuration;
-using SFA.DAS.NServiceBus.Configuration.AzureServiceBus;
 using SFA.DAS.NServiceBus.Configuration.MicrosoftDependencyInjection;
 using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.Hosting;
@@ -22,10 +21,6 @@ public static class ServiceCollectionExtensions
                 var hostingEnvironment = provider.GetService<IHostEnvironment>();
                 var configuration = provider.GetService<EmployerAccountsConfiguration>();
                 var isDevelopment = hostingEnvironment.IsDevelopment();
-                
-                var logger = provider.GetService<ILogger<Program>>();
-                logger.LogInformation(configuration.DatabaseConnectionString);
-                logger.LogInformation(configuration.ServiceBusConnectionString);
 
                 var endpointConfiguration = new EndpointConfiguration(EndpointName)
                     .UseErrorQueue($"{EndpointName}-errors")
