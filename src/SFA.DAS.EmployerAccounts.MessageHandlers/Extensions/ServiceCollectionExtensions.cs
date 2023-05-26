@@ -17,11 +17,15 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddNServiceBus(this IServiceCollection services)
     {
         return services
-            .AddSingleton(p =>
+            .AddSingleton(provider =>
             {
-                var hostingEnvironment = p.GetService<IHostEnvironment>();
-                var configuration = p.GetService<EmployerAccountsConfiguration>();
+                var hostingEnvironment = provider.GetService<IHostEnvironment>();
+                var configuration = provider.GetService<EmployerAccountsConfiguration>();
                 var isDevelopment = hostingEnvironment.IsDevelopment();
+                
+                var logger = provider.GetService<ILogger<Program>>();
+                logger.LogInformation(configuration.DatabaseConnectionString);
+                logger.LogInformation(configuration.ServiceBusConnectionString);
 
                 var endpointConfiguration = new EndpointConfiguration(EndpointName)
                     .UseErrorQueue($"{EndpointName}-errors")
