@@ -24,8 +24,6 @@ public static class ApplicationServiceRegistrations
         services.AddSingleton<IAccountEventFactory, AccountEventFactory>();
         services.AddSingleton<IPdfService, PdfService>();
         
-        services.AddScoped<IEventPublisher, EventPublisher>();
-       
         services.AddScoped<IHtmlHelpers, HtmlHelpers>();
         services.AddTransient<IHttpServiceFactory, HttpServiceFactory>();
         services.AddTransient<IUserAornPayeLockService, UserAornPayeLockService>();
