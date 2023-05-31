@@ -149,7 +149,7 @@ public class Startup
 
     public void ConfigureContainer(UpdateableServiceProvider serviceProvider)
     {
-        serviceProvider.StartNServiceBus(_configuration.IsDevOrLocal());
+        serviceProvider.StartNServiceBus(_configuration.IsDevOrLocal(), ServiceBusEndpointType.Web);
 
         // Replacing ClientOutboxPersisterV2 with a local version to fix unit of work issue due to propogating Task up the chain rathert than awaiting on DB Command.
         // not clear why this fixes the issue. Attempted to make the change in SFA.DAS.Nservicebus.SqlServer however it conflicts when upgraded with SFA.DAS.UnitOfWork.Nservicebus

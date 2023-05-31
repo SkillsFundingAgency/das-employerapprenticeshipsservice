@@ -13,12 +13,18 @@ using SFA.DAS.UnitOfWork.NServiceBus.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.ServiceRegistration;
 
+public enum ServiceBusEndpointType
+{
+    Api,
+    Web
+}
+
 public static class NServiceBusServiceRegistrations
 {
-    private const string EndPointName = "SFA.DAS.EmployerAccounts.Web";
-
-    public static void StartNServiceBus(this UpdateableServiceProvider services, bool isDevOrLocal)
+    public static void StartNServiceBus(this UpdateableServiceProvider services, bool isDevOrLocal,
+        ServiceBusEndpointType endpointType)
     {
+        var endPointName = $"SFA.DAS.EmployerAccounts.{endpointType}";
         var employerAccountsConfiguration = services.GetService<EmployerAccountsConfiguration>();
 
         var databaseConnectionString = employerAccountsConfiguration.DatabaseConnectionString;
@@ -28,8 +34,8 @@ public static class NServiceBusServiceRegistrations
             throw new InvalidConfigurationValueException("DatabaseConnectionString");
         }
 
-        var endpointConfiguration = new EndpointConfiguration(EndPointName)
-            .UseErrorQueue($"{EndPointName}-errors")
+        var endpointConfiguration = new EndpointConfiguration(endPointName)
+            .UseErrorQueue($"{endPointName}-errors")
             .UseInstallers()
             .UseMessageConventions()
             .UseServicesBuilder(services)
@@ -44,7 +50,8 @@ public static class NServiceBusServiceRegistrations
         }
         else
         {
-            endpointConfiguration.UseAzureServiceBusTransport(employerAccountsConfiguration.ServiceBusConnectionString, r => { });
+            endpointConfiguration.UseAzureServiceBusTransport(employerAccountsConfiguration.ServiceBusConnectionString,
+                r => { });
         }
 
         if (!string.IsNullOrEmpty(employerAccountsConfiguration.NServiceBusLicense))

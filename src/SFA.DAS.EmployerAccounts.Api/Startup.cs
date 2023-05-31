@@ -98,7 +98,7 @@ public class Startup
 
     public void ConfigureContainer(UpdateableServiceProvider serviceProvider)
     {
-        serviceProvider.StartNServiceBus(_configuration.IsDevOrLocal());
+        serviceProvider.StartNServiceBus(_configuration.IsDevOrLocal(), ServiceBusEndpointType.Api);
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
