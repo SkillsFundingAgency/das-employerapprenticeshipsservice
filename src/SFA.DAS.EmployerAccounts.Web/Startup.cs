@@ -82,7 +82,6 @@ public class Startup
             .AddEntityFramework(employerAccountsConfiguration)
             .AddEntityFrameworkUnitOfWork<EmployerAccountsDbContext>();
         services.AddNServiceBusClientUnitOfWork();
-        services.AddNServiceBusUnitOfWork();
         services.AddEmployerAccountsApi();
         services.AddExecutionPolicies();
         services.AddEmployerAccountsOuterApi(employerAccountsConfiguration.EmployerAccountsOuterApiConfiguration);
