@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture.NUnit3;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using SFA.DAS.EmployerAccounts.Api.Controllers;
 using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
@@ -35,6 +37,12 @@ public class WhenIGetAPayeScheme
         [NoAutoProperties] AccountPayeSchemesController sut)
     {
         accountResponse.PayeSchemes.RemoveAt(2);
+
+        foreach (var scheme in accountResponse.PayeSchemes)
+        {
+            scheme.Ref = $"{RandomNumberGenerator.GetInt32(100, 999)}/REF";
+        }
+        
         sut.Url = urlHelperMock.Object;
 
         mediatorMock
@@ -44,8 +52,7 @@ public class WhenIGetAPayeScheme
         encodingServiceMock
             .Setup(x => x.Decode(hashedAccountId, EncodingType.AccountId))
             .Returns(accountId);
-
-        //SetUpMockUrlEncodes(urlHelperMock, hashedAccountId, accountResponse);
+        
         urlHelperMock
             .Setup(
                 x => x.RouteUrl(
@@ -53,8 +60,8 @@ public class WhenIGetAPayeScheme
                         c.RouteName == "GetPayeScheme" &&
                         c.Values.IsEquivalentTo(new
                         {
-                            hashedAccountId = hashedAccountId,
-                            payeSchemeRef = WebUtility.UrlEncode(accountResponse.PayeSchemes[0].Ref)
+                            hashedAccountId,
+                            payeSchemeRef = Uri.EscapeDataString(accountResponse.PayeSchemes[0].Ref)
                         })))
             )
             .Returns(
@@ -67,7 +74,7 @@ public class WhenIGetAPayeScheme
                         c.RouteName == "GetPayeScheme" &&
                         c.Values.IsEquivalentTo(new
                         {
-                            hashedAccountId = hashedAccountId,
+                            hashedAccountId,
                             payeSchemeRef = WebUtility.UrlEncode(accountResponse.PayeSchemes[1].Ref)
                         })))
             )
@@ -126,7 +133,7 @@ public class WhenIGetAPayeScheme
         model.Should().BeEquivalentTo(payeSchemeResponse.PayeScheme);
         model?.DasAccountId.Should().Be(hashedAccountId);
     }
-
+    
     [Test, MoqAutoData]
     public async Task AndThePayeSchemeDoesNotExistThenItIsNotReturned(
         string hashedAccountId,
