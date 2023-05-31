@@ -11,6 +11,7 @@ using SFA.DAS.EmployerAccounts.TasksApi;
 using SFA.DAS.Encoding;
 using SFA.DAS.GovUK.Auth.Services;
 using SFA.DAS.NServiceBus.Services;
+using SFA.DAS.UnitOfWork.NServiceBus.Services;
 
 namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 
@@ -22,6 +23,8 @@ public static class ApplicationServiceRegistrations
 
         services.AddSingleton<IAccountEventFactory, AccountEventFactory>();
         services.AddSingleton<IPdfService, PdfService>();
+        
+        services.AddScoped<IEventPublisher, EventPublisher>();
        
         services.AddScoped<IHtmlHelpers, HtmlHelpers>();
         services.AddTransient<IHttpServiceFactory, HttpServiceFactory>();
