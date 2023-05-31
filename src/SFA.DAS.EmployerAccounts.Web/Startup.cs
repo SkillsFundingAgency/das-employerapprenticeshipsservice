@@ -21,6 +21,7 @@ using SFA.DAS.NServiceBus.Features.ClientOutbox.Data;
 using SFA.DAS.UnitOfWork.DependencyResolution.Microsoft;
 using SFA.DAS.UnitOfWork.EntityFrameworkCore.DependencyResolution.Microsoft;
 using SFA.DAS.UnitOfWork.Mvc.Extensions;
+using SFA.DAS.UnitOfWork.NServiceBus.DependencyResolution.Microsoft;
 using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.Microsoft;
 
 namespace SFA.DAS.EmployerAccounts.Web;
@@ -70,8 +71,6 @@ public class Startup
             services.AddMaMenuConfiguration(RouteNames.SignOut, identityServerConfiguration.ClientId, _configuration["ResourceEnvironmentName"]);
         }
 
-        
-
         services.AddAuditServices();
         services.AddCachesRegistrations();
         services.AddDateTimeServices(_configuration);
@@ -83,6 +82,7 @@ public class Startup
             .AddEntityFramework(employerAccountsConfiguration)
             .AddEntityFrameworkUnitOfWork<EmployerAccountsDbContext>();
         services.AddNServiceBusClientUnitOfWork();
+        services.AddNServiceBusUnitOfWork();
         services.AddEmployerAccountsApi();
         services.AddExecutionPolicies();
         services.AddEmployerAccountsOuterApi(employerAccountsConfiguration.EmployerAccountsOuterApiConfiguration);
@@ -94,7 +94,6 @@ public class Startup
         services.AddReferenceDataApi();
 
         services.AddAuthenticationServices();
-
 
         services.AddMediatorValidators();
         services.AddMediatR(typeof(GetEmployerAccountByIdQuery));
