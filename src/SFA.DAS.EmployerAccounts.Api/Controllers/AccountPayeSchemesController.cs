@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EmployerAccounts.Api.Authorization;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
@@ -24,7 +25,11 @@ public class AccountPayeSchemesController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetPayeScheme([FromRoute]string hashedAccountId, [FromRoute]string payeSchemeRef)
     {
+        // There's an issue in EMPACC_API_05_ApiGetAccountPayeSchemesHashedAccountIdPayeSchemesPayeSchemeRef due to double encoding somewhere.
+        // This should prove it, if it passes
         var decodedPayeSchemeRef = Uri.UnescapeDataString(payeSchemeRef);
+        decodedPayeSchemeRef = Uri.UnescapeDataString(decodedPayeSchemeRef);
+        
         var result = await _orchestrator.GetPayeScheme(hashedAccountId, decodedPayeSchemeRef);
 
         if (result == null)
