@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using NServiceBus;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.EmployerAccounts.Configuration;
@@ -26,7 +27,7 @@ public static class NServiceBusServiceRegistrations
     {
         var endPointName = $"SFA.DAS.EmployerAccounts.{endpointType}";
         var employerAccountsConfiguration = services.GetService<EmployerAccountsConfiguration>();
-
+       
         var databaseConnectionString = employerAccountsConfiguration.DatabaseConnectionString;
 
         if (string.IsNullOrEmpty(databaseConnectionString))
@@ -42,17 +43,8 @@ public static class NServiceBusServiceRegistrations
             .UseNewtonsoftJsonSerializer()
             .UseOutbox(true)
             .UseSqlServerPersistence(() => DatabaseExtensions.GetSqlConnection(databaseConnectionString))
+            .UseAzureServiceBusTransport(() => employerAccountsConfiguration.ServiceBusConnectionString, isDevOrLocal)
             .UseUnitOfWork();
-
-        if (isDevOrLocal)
-        {
-            endpointConfiguration.UseLearningTransport();
-        }
-        else
-        {
-            endpointConfiguration.UseAzureServiceBusTransport(employerAccountsConfiguration.ServiceBusConnectionString,
-                r => { });
-        }
 
         if (!string.IsNullOrEmpty(employerAccountsConfiguration.NServiceBusLicense))
         {
