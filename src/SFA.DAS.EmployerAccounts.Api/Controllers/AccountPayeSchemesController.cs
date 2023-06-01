@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Api.Authorization;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
 using SFA.DAS.EmployerAccounts.Api.Types;
@@ -14,10 +15,12 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers;
 public class AccountPayeSchemesController : ControllerBase
 {
     private readonly AccountsOrchestrator _orchestrator;
+    private readonly ILogger<AccountPayeSchemesController> _logger;
 
-    public AccountPayeSchemesController(AccountsOrchestrator orchestrator)
+    public AccountPayeSchemesController(AccountsOrchestrator orchestrator, ILogger<AccountPayeSchemesController> logger)
     {
         _orchestrator = orchestrator;
+        _logger = logger;
     }
 
     [Route("{payeSchemeRef}", Name = "GetPayeScheme")]
@@ -25,8 +28,7 @@ public class AccountPayeSchemesController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetPayeScheme([FromRoute]string hashedAccountId, [FromRoute]string payeSchemeRef)
     {
-        // There's an issue in EMPACC_API_05_ApiGetAccountPayeSchemesHashedAccountIdPayeSchemesPayeSchemeRef due to double encoding somewhere.
-        // This should prove it, if it passes
+        // Double encoding is used sometimes due to the forward slash in the PayeSchemeRef.
         var decodedPayeSchemeRef = Uri.UnescapeDataString(payeSchemeRef);
         decodedPayeSchemeRef = Uri.UnescapeDataString(decodedPayeSchemeRef);
         
@@ -34,6 +36,7 @@ public class AccountPayeSchemesController : ControllerBase
 
         if (result == null)
         {
+            _logger.LogDebug("The PAYE scheme {PayeScheme} was not found.", decodedPayeSchemeRef);
             return NotFound();
         }
 
