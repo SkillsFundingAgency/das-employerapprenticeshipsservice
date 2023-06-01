@@ -58,7 +58,7 @@ public class WhenIGetAPayeScheme
                             c.Values.IsEquivalentTo(new
                             {
                                 hashedAccountId,
-                                payeSchemeRef = Uri.EscapeDataString(scheme.Ref)
+                                @ref = Uri.EscapeDataString(scheme.Ref)
                             })))
                 ).Returns($"/api/accounts/{hashedAccountId}/payeschemes/scheme?ref={scheme.Ref.Replace(@"/", "%2f")}");
         }
