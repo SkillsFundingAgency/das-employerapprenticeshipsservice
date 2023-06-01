@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Moq;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using SFA.DAS.EmployerAccounts.Api.Controllers;
 using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
@@ -19,7 +17,6 @@ using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerAccounts.TestCommon.Extensions;
 using SFA.DAS.Encoding;
 using SFA.DAS.Testing.AutoFixture;
-using PayeScheme = SFA.DAS.EmployerAccounts.Api.Types.PayeScheme;
 
 namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountPayeSchemesControllerTests;
 
@@ -38,48 +35,33 @@ public class WhenIGetAPayeScheme
     {
         accountResponse.PayeSchemes.RemoveAt(2);
 
-        foreach (var scheme in accountResponse.PayeSchemes)
-        {
-            scheme.Ref = $"{RandomNumberGenerator.GetInt32(100, 999)}/REF";
-        }
-        
         sut.Url = urlHelperMock.Object;
 
         mediatorMock
-            .Setup(x => x.Send(It.Is<GetAccountPayeSchemesQuery>(q => q.AccountId == accountId), It.IsAny<CancellationToken>()))
+            .Setup(x => x.Send(It.Is<GetAccountPayeSchemesQuery>(q => q.AccountId == accountId),
+                It.IsAny<CancellationToken>()))
             .ReturnsAsync(accountResponse);
 
         encodingServiceMock
             .Setup(x => x.Decode(hashedAccountId, EncodingType.AccountId))
             .Returns(accountId);
-        
-        urlHelperMock
-            .Setup(
-                x => x.RouteUrl(
-                    It.Is<UrlRouteContext>(c =>
-                        c.RouteName == "GetPayeScheme" &&
-                        c.Values.IsEquivalentTo(new
-                        {
-                            hashedAccountId,
-                            payeSchemeRef = Uri.EscapeDataString(accountResponse.PayeSchemes[0].Ref)
-                        })))
-            )
-            .Returns(
-                $"/api/accounts/{hashedAccountId}/payeschemes/{accountResponse.PayeSchemes[0].Ref.Replace(@"/", "%2f")}");
 
-        urlHelperMock
-            .Setup(
-                x => x.RouteUrl(
-                    It.Is<UrlRouteContext>(c =>
-                        c.RouteName == "GetPayeScheme" &&
-                        c.Values.IsEquivalentTo(new
-                        {
-                            hashedAccountId,
-                            payeSchemeRef = WebUtility.UrlEncode(accountResponse.PayeSchemes[1].Ref)
-                        })))
-            )
-            .Returns(
-                $"/api/accounts/{hashedAccountId}/payeschemes/{accountResponse.PayeSchemes[1].Ref.Replace(@"/", "%2f")}");
+        foreach (var scheme in accountResponse.PayeSchemes)
+        {
+            scheme.Ref = $"{RandomNumberGenerator.GetInt32(100, 999)}/REF";
+
+            urlHelperMock
+                .Setup(
+                    x => x.RouteUrl(
+                        It.Is<UrlRouteContext>(c =>
+                            c.RouteName == "GetPayeScheme" &&
+                            c.Values.IsEquivalentTo(new
+                            {
+                                hashedAccountId,
+                                payeSchemeRef = Uri.EscapeDataString(scheme.Ref)
+                            })))
+                ).Returns($"/api/accounts/{hashedAccountId}/payeschemes/{scheme.Ref.Replace(@"/", "%2f")}");
+        }
 
         var response = await sut.GetPayeSchemes(hashedAccountId);
 
@@ -102,7 +84,7 @@ public class WhenIGetAPayeScheme
     public async Task AndTheAccountDoesNotExistThenItIsNotReturned(
         string hashedAccountId,
         [NoAutoProperties] AccountPayeSchemesController sut)
-    { 
+    {
         var response = await sut.GetPayeSchemes(hashedAccountId);
 
         Assert.IsNotNull(response);
@@ -133,7 +115,7 @@ public class WhenIGetAPayeScheme
         model.Should().BeEquivalentTo(payeSchemeResponse.PayeScheme);
         model?.DasAccountId.Should().Be(hashedAccountId);
     }
-    
+
     [Test, MoqAutoData]
     public async Task AndThePayeSchemeDoesNotExistThenItIsNotReturned(
         string hashedAccountId,
@@ -145,7 +127,9 @@ public class WhenIGetAPayeScheme
         payeSchemeResponse.PayeScheme = null;
 
         mediatorMock
-            .Setup(x => x.Send(It.Is<GetPayeSchemeByRefQuery>(q => q.Ref == payeSchemeRef && q.HashedAccountId == hashedAccountId), It.IsAny<CancellationToken>()))
+            .Setup(x => x.Send(
+                It.Is<GetPayeSchemeByRefQuery>(q => q.Ref == payeSchemeRef && q.HashedAccountId == hashedAccountId),
+                It.IsAny<CancellationToken>()))
             .ReturnsAsync(payeSchemeResponse);
 
         var response = await sut.GetPayeScheme(hashedAccountId, payeSchemeRef);
