@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountPayeSchemesC
             Mapper = new Mock<IMapper>();
             EncodingService = new Mock<IEncodingService>();
             var orchestrator = new AccountsOrchestrator(Mediator.Object, Logger.Object, Mapper.Object, EncodingService.Object);
-            Controller = new AccountPayeSchemesController(orchestrator);
+            Controller = new AccountPayeSchemesController(orchestrator, Mock.Of<ILogger<AccountPayeSchemesController>>());
 
             UrlTestHelper = new Mock<IUrlHelper>();
             Controller.Url = UrlTestHelper.Object;
