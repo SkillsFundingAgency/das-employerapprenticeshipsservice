@@ -56,7 +56,7 @@ public class AccountPayeSchemesController : ControllerBase
         return Ok(new ResourceList(result.Select(pv => new Resource
         {
             Id = pv.Ref,
-            Href = Url.RouteUrl("GetPayeScheme", new { hashedAccountId, payeSchemeRef = Uri.EscapeDataString(pv.Ref) })
+            Href = Url.RouteUrl("GetPayeScheme", new { hashedAccountId, @ref = Uri.EscapeDataString(pv.Ref) })
         })));
     }
 }
