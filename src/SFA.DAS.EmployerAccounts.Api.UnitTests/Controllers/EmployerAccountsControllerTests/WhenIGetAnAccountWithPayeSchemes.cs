@@ -47,7 +47,7 @@ public class WhenIGetAnAccountWithPayeSchemes : EmployerAccountsControllerTests
                         })))
             )
             .Returns(
-                $"/api/accounts/{hashedAccountId}/scheme?ref={accountsResponse.Account.PayeSchemes[0].Replace("/", "%2f")}");
+                $"/api/accounts/{hashedAccountId}/payeschemes/scheme?ref={accountsResponse.Account.PayeSchemes[0].Replace("/", "%2f")}");
 
         UrlTestHelper
             .Setup(
@@ -60,7 +60,7 @@ public class WhenIGetAnAccountWithPayeSchemes : EmployerAccountsControllerTests
                         })))
             )
             .Returns(
-                $"/api/accounts/{hashedAccountId}/scheme?ref={accountsResponse.Account.PayeSchemes[1].Replace("/", "%2f")}");
+                $"/api/accounts/{hashedAccountId}/payeschemes/scheme?ref={accountsResponse.Account.PayeSchemes[1].Replace("/", "%2f")}");
 
         var response = await Controller.GetAccount(hashedAccountId);
 
@@ -77,7 +77,7 @@ public class WhenIGetAnAccountWithPayeSchemes : EmployerAccountsControllerTests
         {
             var matchedScheme = model.PayeSchemes.Single(x => x.Id == payeScheme);
             matchedScheme?.Href.Should()
-                .Be($"/api/accounts/{hashedAccountId}/scheme?ref={payeScheme.Replace("/", "%2f")}");
+                .Be($"/api/accounts/{hashedAccountId}/payeschemes/scheme?ref={payeScheme.Replace("/", "%2f")}");
         }
     }
 }
