@@ -23,15 +23,13 @@ public class AccountPayeSchemesController : ControllerBase
         _logger = logger;
     }
 
-    [Route("{payeSchemeRef}", Name = "GetPayeScheme")]
+    [Route("scheme", Name = "GetPayeScheme")]
     [Authorize(Policy = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet]
-    public async Task<IActionResult> GetPayeScheme([FromRoute]string hashedAccountId, [FromRoute]string payeSchemeRef)
+    public async Task<IActionResult> GetPayeScheme([FromRoute] string hashedAccountId, [FromQuery] string @ref)
     {
-        // Double encoding is used sometimes due to the forward slash in the PayeSchemeRef.
-        var decodedPayeSchemeRef = Uri.UnescapeDataString(payeSchemeRef);
-        decodedPayeSchemeRef = Uri.UnescapeDataString(decodedPayeSchemeRef);
-        
+        var decodedPayeSchemeRef = Uri.UnescapeDataString(@ref);
+
         var result = await _orchestrator.GetPayeScheme(hashedAccountId, decodedPayeSchemeRef);
 
         if (result == null)
@@ -46,7 +44,7 @@ public class AccountPayeSchemesController : ControllerBase
     [Route("", Name = "GetPayeSchemes")]
     [Authorize(Policy = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet]
-    public async Task<IActionResult> GetPayeSchemes([FromRoute]string hashedAccountId)
+    public async Task<IActionResult> GetPayeSchemes([FromRoute] string hashedAccountId)
     {
         var result = await _orchestrator.GetPayeSchemesForAccount(hashedAccountId);
 

@@ -60,7 +60,7 @@ public class WhenIGetAPayeScheme
                                 hashedAccountId,
                                 payeSchemeRef = Uri.EscapeDataString(scheme.Ref)
                             })))
-                ).Returns($"/api/accounts/{hashedAccountId}/payeschemes/{scheme.Ref.Replace(@"/", "%2f")}");
+                ).Returns($"/api/accounts/{hashedAccountId}/scheme?ref={scheme.Ref.Replace(@"/", "%2f")}");
         }
 
         var response = await sut.GetPayeSchemes(hashedAccountId);
@@ -76,7 +76,7 @@ public class WhenIGetAPayeScheme
         {
             var matchedScheme = model.Single(x => x.Id == payeScheme.Ref);
             matchedScheme?.Href.Should()
-                .Be($"/api/accounts/{hashedAccountId}/payeschemes/{payeScheme.Ref.Replace(@"/", "%2f")}");
+                .Be($"/api/accounts/{hashedAccountId}/scheme?ref={payeScheme.Ref.Replace(@"/", "%2f")}");
         }
     }
 
