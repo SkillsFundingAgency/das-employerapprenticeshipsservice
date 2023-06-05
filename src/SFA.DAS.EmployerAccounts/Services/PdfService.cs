@@ -65,7 +65,7 @@ public class PdfService : AzureServiceBase<string, PdfService>, IPdfService
 
     private async Task SetPdfLicense()
     {
-        using (var licenseStream = await StreamDataFromBlobStorage(ConfigurationName, "Aspose.Total.lic"))
+        using (var licenseStream = await StreamDataFromBlobStorage(ConfigurationName, "Aspose.Pdf.lic"))
         {
             var license = new License();
             licenseStream.Position = 0;

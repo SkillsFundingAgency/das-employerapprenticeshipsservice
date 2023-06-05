@@ -39,9 +39,6 @@
 		<None Remove="ScheduledJobs\**" />
 	</ItemGroup>
 	<ItemGroup>
-		<None Remove="C:\Users\ADM_HarrisJo\.nuget\packages\nlog.schema\4.5.3\contentFiles\any\any\NLog.xsd" />
-	</ItemGroup>
-	<ItemGroup>
 		<None Update="nlog.config">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
