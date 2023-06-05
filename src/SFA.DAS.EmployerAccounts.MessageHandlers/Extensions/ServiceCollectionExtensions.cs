@@ -1,4 +1,5 @@
-﻿using NServiceBus.ObjectBuilder.MSDependencyInjection;
+﻿using System.Net;
+using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.NServiceBus.Configuration;
@@ -24,19 +25,19 @@ public static class ServiceCollectionExtensions
                 var isDevelopment = hostingEnvironment.IsDevelopment();
 
                 var endpointConfiguration = new EndpointConfiguration(EndpointName)
+                    .UseAzureServiceBusTransport(() => configuration.ServiceBusConnectionString, isDevelopment)
                     .UseErrorQueue($"{EndpointName}-errors")
                     .UseInstallers()
-                    .UseOutbox()
-                    .UseMessageConventions()
-                    .UseNewtonsoftJsonSerializer()
                     .UseSqlServerPersistence(() => DatabaseExtensions.GetSqlConnection(configuration.DatabaseConnectionString))
-                    .UseAzureServiceBusTransport(() => configuration.ServiceBusConnectionString, isDevelopment)
+                    .UseNewtonsoftJsonSerializer()
+                    .UseOutbox()
                     .UseUnitOfWork()
                     .UseServicesBuilder(new UpdateableServiceProvider(services));
 
                 if (!string.IsNullOrEmpty(configuration.NServiceBusLicense))
                 {
-                    endpointConfiguration.UseLicense(configuration.NServiceBusLicense);
+                    var decodedLicence = WebUtility.HtmlDecode(configuration.NServiceBusLicense);
+                    endpointConfiguration.UseLicense(decodedLicence);
                 }
 
                 var endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();

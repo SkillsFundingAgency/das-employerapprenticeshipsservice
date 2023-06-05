@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Net;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NServiceBus;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
@@ -48,7 +49,8 @@ public static class NServiceBusServiceRegistrations
 
         if (!string.IsNullOrEmpty(employerAccountsConfiguration.NServiceBusLicense))
         {
-            endpointConfiguration.License(employerAccountsConfiguration.NServiceBusLicense);
+            var decodedLicence = WebUtility.HtmlDecode(employerAccountsConfiguration.NServiceBusLicense);
+            endpointConfiguration.License(decodedLicence);
         }
 
         var endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
