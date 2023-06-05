@@ -17,7 +17,7 @@ public class SignedAgreementEventHandler : IHandleMessages<SignedAgreementEvent>
 
     public async Task Handle(SignedAgreementEvent message, IMessageHandlerContext context)
     {
-        _loger.LogDebug($"Starting {nameof(SignedAgreementEventHandler)} handler.");
+        _loger.LogInformation($"Starting {nameof(SignedAgreementEventHandler)} handler.");
         
         await _messagePublisher.Publish(new AgreementSignedMessage(
             message.AccountId,
@@ -28,6 +28,6 @@ public class SignedAgreementEventHandler : IHandleMessages<SignedAgreementEvent>
             message.UserName,
             message.UserRef.ToString()));
         
-        _loger.LogDebug($"Completed {nameof(SignedAgreementEventHandler)} handler.");
+        _loger.LogInformation($"Completed {nameof(SignedAgreementEventHandler)} handler.");
     }
 }
