@@ -6,6 +6,7 @@ using SFA.DAS.Encoding;
 using SFA.DAS.Events.Api.Client.Configuration;
 using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.UnitOfWork.NServiceBus.Services;
+using SFA.DAS.UnitOfWork.Pipeline;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.ServiceRegistrations;
 
@@ -19,6 +20,7 @@ public static class ApplicationServiceRegistrations
         services.AddSingleton<IEncodingService, EncodingService>();
         services.AddSingleton<IEventsApiClientConfiguration>(cfg => cfg.GetService<EmployerAccountsConfiguration>().EventsApi);
         services.AddTransient<IAzureClientCredentialHelper, AzureClientCredentialHelper>();
+        services.AddScoped<IUnitOfWork, UnitOfWork.NServiceBus.Pipeline.UnitOfWork>();
         
         return services;
     }
