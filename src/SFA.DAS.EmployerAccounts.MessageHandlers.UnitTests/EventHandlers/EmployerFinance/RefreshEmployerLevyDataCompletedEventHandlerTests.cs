@@ -7,6 +7,7 @@ using NUnit.Framework;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.AccountLevyStatus;
 using SFA.DAS.EmployerAccounts.Events.Messages;
+using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.EmployerFinance;
 using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.NServiceBus.Services;
@@ -70,12 +71,12 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Emplo
     public class RefreshEmployerLevyDataCompletedEventHandlerTestsFixture
     {
         private readonly RefreshEmployerLevyDataCompletedEventHandler _handler;
-        private readonly Mock<IEventPublisher> _mockEventPublisher;
+        private readonly Mock<ILegacyTopicMessagePublisher> _mockEventPublisher;
         private readonly Mock<IMediator> _mediator;
 
         public RefreshEmployerLevyDataCompletedEventHandlerTestsFixture()
         {
-            _mockEventPublisher = new Mock<IEventPublisher>();
+            _mockEventPublisher = new Mock<ILegacyTopicMessagePublisher>();
             _mediator = new Mock<IMediator>();
 
             _handler = new RefreshEmployerLevyDataCompletedEventHandler(_mockEventPublisher.Object, _mediator.Object);
@@ -89,7 +90,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Emplo
         public void VerifyRefreshEmployerLevyDataCompletedMessageIsPublished(long accountId, bool levyImported, short periodMonth, string periodYear, DateTime timestamp)
         {
             _mockEventPublisher.Verify(e =>
-                e.Publish(It.Is<RefreshEmployerLevyDataCompletedMessage>(m =>
+                e.PublishAsync(It.Is<RefreshEmployerLevyDataCompletedMessage>(m =>
                     m.AccountId.Equals(accountId)
                     && m.LevyImported.Equals(levyImported)
                     && m.PeriodMonth.Equals(periodMonth)

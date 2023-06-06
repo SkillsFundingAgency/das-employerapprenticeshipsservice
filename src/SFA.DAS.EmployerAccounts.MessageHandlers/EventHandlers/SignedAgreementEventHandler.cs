@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.EmployerAccounts.Events.Messages;
+using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.NServiceBus.Services;
 
@@ -6,10 +7,10 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers;
 
 public class SignedAgreementEventHandler : IHandleMessages<SignedAgreementEvent>
 {
-    private readonly IEventPublisher _messagePublisher;
+    private readonly ILegacyTopicMessagePublisher _messagePublisher;
     private readonly ILogger<SignedAgreementEventHandler> _loger;
 
-    public SignedAgreementEventHandler(IEventPublisher messagePublisher, ILogger<SignedAgreementEventHandler> loger)
+    public SignedAgreementEventHandler(ILegacyTopicMessagePublisher messagePublisher, ILogger<SignedAgreementEventHandler> loger)
     {
         _messagePublisher = messagePublisher;
         _loger = loger;
@@ -19,7 +20,7 @@ public class SignedAgreementEventHandler : IHandleMessages<SignedAgreementEvent>
     {
         _loger.LogInformation($"Starting {nameof(SignedAgreementEventHandler)} handler.");
         
-        await _messagePublisher.Publish(new AgreementSignedMessage(
+        await _messagePublisher.PublishAsync(new AgreementSignedMessage(
             message.AccountId,
             message.AgreementId,
             message.OrganisationName,

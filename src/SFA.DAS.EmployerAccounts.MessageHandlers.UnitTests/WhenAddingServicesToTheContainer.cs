@@ -23,6 +23,7 @@ using SFA.DAS.EmployerAccounts.ReadStore.ServiceRegistrations;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
 using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.UnitOfWork.DependencyResolution.Microsoft;
+using SFA.DAS.UnitOfWork.NServiceBus.DependencyResolution.Microsoft;
 using HealthCheckEvent = SFA.DAS.EmployerAccounts.Messages.Events.HealthCheckEvent;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests;
@@ -91,6 +92,7 @@ public class WhenAddingServicesToTheContainer
         services.AddMessageHandlerDataRepositories();
         services.AddUnitOfWork();
         services.AddNServiceBus();
+        services.AddNServiceBusUnitOfWork();
         services.AddMemoryCache();
         services.AddCachesRegistrations();
         services.AddDatabaseRegistration();
