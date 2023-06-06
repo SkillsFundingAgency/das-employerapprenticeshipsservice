@@ -30,7 +30,7 @@ public class AccountPayeSchemesController : ControllerBase
     [HttpGet("{payeSchemeRef}", Name = "GetPayeScheme")]
     public async Task<IActionResult> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
     {
-        var redirectResponse = await _apiService.Redirect($"/api/accounts/{hashedAccountId}/payeschemes/{WebUtility.UrlEncode(payeSchemeRef)}");
+        var redirectResponse = await _apiService.Redirect($"/api/accounts/{hashedAccountId}/payeschemes/scheme?ref={WebUtility.UrlEncode(payeSchemeRef)}");
         return Content(redirectResponse.ToString(), "application/json");
     }
 }

@@ -165,7 +165,7 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
             .ReturnsAsync(new AccountDetailViewModel
             {
                 PayeSchemes = new ResourceList(new[]
-                    { new ResourceViewModel { Id = "1", Href = "/api/payeschemes/test1" } })
+                    { new ResourceViewModel { Id = "1", Href = "/api/payeschemes/scheme?ref=test1" } })
             });
 
         AccountApiClient.Setup(x => x.GetResource<PayeSchemeModel>(It.IsAny<string>()))
@@ -207,7 +207,7 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
             .ReturnsAsync(new AccountDetailViewModel
             {
                 PayeSchemes = new ResourceList(new[]
-                    { new ResourceViewModel { Id = "1", Href = "/api/payeschemes/test1" } })
+                    { new ResourceViewModel { Id = "1", Href = "/api/payeschemes/scheme?ref=test1" } })
             });
 
         var e = new Exception("Some exception message");
