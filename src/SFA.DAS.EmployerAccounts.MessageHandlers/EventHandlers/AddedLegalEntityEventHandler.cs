@@ -1,21 +1,24 @@
 ﻿using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Messages.Events;
-using SFA.DAS.NServiceBus.Services;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers;
 
 public class AddedLegalEntityEventHandler : IHandleMessages<AddedLegalEntityEvent>
 {
     private readonly ILegacyTopicMessagePublisher _messagePublisher;
+    private readonly ILogger<AddedLegalEntityEventHandler> _logger;
 
-    public AddedLegalEntityEventHandler(ILegacyTopicMessagePublisher messagePublisher)
+    public AddedLegalEntityEventHandler(ILegacyTopicMessagePublisher messagePublisher, ILogger<AddedLegalEntityEventHandler> logger)
     {
         _messagePublisher = messagePublisher;
+        _logger = logger;
     }
 
     public async Task Handle(AddedLegalEntityEvent message, IMessageHandlerContext context)
     {
+        _logger.LogInformation($"Starting {nameof(AddedLegalEntityEventHandler)} handler.");
+
         await _messagePublisher.PublishAsync(
             new LegalEntityAddedMessage(
                 message.AccountId,
@@ -24,5 +27,7 @@ public class AddedLegalEntityEventHandler : IHandleMessages<AddedLegalEntityEven
                 message.LegalEntityId,
                 message.UserName,
                 message.UserRef.ToString()));
+
+        _logger.LogInformation($"Completed {nameof(AddedLegalEntityEventHandler)} handler.");
     }
 }

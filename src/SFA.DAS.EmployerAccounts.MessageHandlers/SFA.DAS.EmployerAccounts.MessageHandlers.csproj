@@ -10,7 +10,6 @@
 		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
 		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Azure.WebJobs.Logging.ApplicationInsights" Version="3.0.33" />
-		<PackageReference Include="Microsoft.Azure.WebJobs.Logging.ApplicationInsights" Version="2.2.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="NLog.Extensions.Logging" Version="5.2.1" />
@@ -37,9 +36,6 @@
 			<DependentUpon>App.config</DependentUpon>
 			<IsTransformFile>True</IsTransformFile>
 		</None>
-	</ItemGroup>
-	<ItemGroup>
-	  <None Remove="C:\Users\ADM_HarrisJo\.nuget\packages\nlog.schema\4.5.3\contentFiles\any\any\NLog.xsd" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="appsettings.json" />

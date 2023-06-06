@@ -8,17 +8,17 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers;
 public class SignedAgreementEventHandler : IHandleMessages<SignedAgreementEvent>
 {
     private readonly ILegacyTopicMessagePublisher _messagePublisher;
-    private readonly ILogger<SignedAgreementEventHandler> _loger;
+    private readonly ILogger<SignedAgreementEventHandler> _logger;
 
-    public SignedAgreementEventHandler(ILegacyTopicMessagePublisher messagePublisher, ILogger<SignedAgreementEventHandler> loger)
+    public SignedAgreementEventHandler(ILegacyTopicMessagePublisher messagePublisher, ILogger<SignedAgreementEventHandler> logger)
     {
         _messagePublisher = messagePublisher;
-        _loger = loger;
+        _logger = logger;
     }
 
     public async Task Handle(SignedAgreementEvent message, IMessageHandlerContext context)
     {
-        _loger.LogInformation($"Starting {nameof(SignedAgreementEventHandler)} handler.");
+        _logger.LogInformation($"Starting {nameof(SignedAgreementEventHandler)} handler.");
         
         await _messagePublisher.PublishAsync(new AgreementSignedMessage(
             message.AccountId,
@@ -29,6 +29,6 @@ public class SignedAgreementEventHandler : IHandleMessages<SignedAgreementEvent>
             message.UserName,
             message.UserRef.ToString()));
         
-        _loger.LogInformation($"Completed {nameof(SignedAgreementEventHandler)} handler.");
+        _logger.LogInformation($"Completed {nameof(SignedAgreementEventHandler)} handler.");
     }
 }
