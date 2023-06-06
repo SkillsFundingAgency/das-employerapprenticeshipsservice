@@ -10,6 +10,7 @@ public class Program
         using var host = CreateHost(args);
 
         var logger = host.Services.GetService<ILogger<Program>>();
+        
         logger.LogInformation("SFA.DAS.EmployerAccounts.MessageHandlers starting up ...");
 
         await host.RunAsync();

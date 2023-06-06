@@ -21,7 +21,7 @@ public static class ApplicationServiceRegistrations
         services.AddSingleton<IEventsApiClientConfiguration>(cfg => cfg.GetService<EmployerAccountsConfiguration>().EventsApi);
         services.AddTransient<IAzureClientCredentialHelper, AzureClientCredentialHelper>();
         services.AddScoped<IUnitOfWork, UnitOfWork.NServiceBus.Pipeline.UnitOfWork>();
-        
+
         return services;
     }
 }
