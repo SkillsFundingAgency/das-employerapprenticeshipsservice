@@ -47,7 +47,7 @@ public class HomeController : BaseController
 
     [Route("~/")]
     [Route("Index")]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(GaQueryData queryData)
     {
         
         // check if the GovSignIn is enabled
@@ -61,7 +61,7 @@ public class HomeController : BaseController
 
                 if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(lastName) || string.IsNullOrEmpty(userRef))
                 {
-                    return Redirect(_urlHelper.EmployerProfileAddUserDetails("/user/add-user-details"));    
+                    return Redirect(_urlHelper.EmployerProfileAddUserDetails($"/user/add-user-details") + $"?_ga={queryData.Ga}&_gl={queryData.Gl}&utm_source={queryData.UtmSource}&utm_campaign={queryData.UtmCampaign}&utm_medium={queryData.UtmMedium}&utm_keywords={queryData.UtmKeywords}&utm_content={queryData.UtmContent}");    
                 }
             }
         }
@@ -106,7 +106,7 @@ public class HomeController : BaseController
 
         if (accounts.Data.Invitations > 0)
         {
-            return RedirectToAction(ControllerConstants.InvitationIndexName, ControllerConstants.InvitationControllerName);
+            return RedirectToAction(ControllerConstants.InvitationIndexName, ControllerConstants.InvitationControllerName,queryData);
         }
 
         // condition to check if the user has only one account, then redirect to home page/dashboard.
@@ -116,7 +116,17 @@ public class HomeController : BaseController
 
             if (account != null)
             {
-                return RedirectToRoute(RouteNames.EmployerTeamIndex, new { HashedAccountId = account.HashedId });
+                return RedirectToRoute(RouteNames.EmployerTeamIndex, new
+                {
+                    HashedAccountId = account.HashedId,
+                    _ga = queryData.Ga,
+                    _gl = queryData.Gl,
+                    utm_source = queryData.UtmSource,
+                    utm_campaign = queryData.UtmCampaign,
+                    utm_medium = queryData.UtmMedium,
+                    utm_keywords = queryData.UtmKeywords,
+                    utm_content = queryData.UtmContent
+                });
             }
         }
 
@@ -133,13 +143,13 @@ public class HomeController : BaseController
             return View(accounts);
         }
 
-        return RedirectToRoute(RouteNames.EmployerAccountGetApprenticeshipFunding);
+        return RedirectToRoute(RouteNames.EmployerAccountGetApprenticeshipFunding, queryData);
     }
 
     [Authorize]
-    public IActionResult GovSignIn()
+    public IActionResult GovSignIn(GaQueryData queryData)
     {
-        return RedirectToAction(ControllerConstants.IndexActionName);
+        return RedirectToAction(ControllerConstants.IndexActionName, "Home", queryData);
     }
 
     [HttpGet]

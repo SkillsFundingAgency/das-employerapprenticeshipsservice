@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using AutoFixture;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -19,6 +20,7 @@ public class WhenIViewTheHomePage : ControllerTestBase
     private const string ExpectedUserId = "123ABC";
     private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
     private UrlActionHelper _urlActionHelper;
+    private GaQueryData _queryData;
     private const string ProfileAddUserDetailsRoute = "https://test.com";
 
     [SetUp]
@@ -30,6 +32,8 @@ public class WhenIViewTheHomePage : ControllerTestBase
         _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
         _homeOrchestrator = new Mock<HomeOrchestrator>();
         
+        var fixture = new Fixture();
+        _queryData = fixture.Create<GaQueryData>();
 
         _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId, null)).ReturnsAsync(
             new OrchestratorResponse<UserAccountsViewModel>
@@ -77,7 +81,7 @@ public class WhenIViewTheHomePage : ControllerTestBase
         AddEmptyUserToContext();
 
         //Act
-        await _homeController.Index();
+        await _homeController.Index(null);
 
         //Assert
         _homeOrchestrator.Verify(x => x.GetUserAccounts(It.Is<string>(c => c.Equals(string.Empty)), It.IsAny<DateTime?>()), Times.Never);
@@ -95,7 +99,7 @@ public class WhenIViewTheHomePage : ControllerTestBase
         AddUserToContext(new Claim(ControllerConstants.UserRefClaimKeyName, ExpectedUserId), new Claim(DasClaimTypes.RequiresVerification, "true"));
 
         //Act
-        var actual = await _homeController.Index();
+        var actual = await _homeController.Index(null);
 
         //Assert
         Assert.IsNotNull(actual);
@@ -112,7 +116,7 @@ public class WhenIViewTheHomePage : ControllerTestBase
         AddUserToContext(ExpectedUserId, string.Empty, string.Empty,new Claim(ControllerConstants.UserRefClaimKeyName, ExpectedUserId), new Claim(DasClaimTypes.RequiresVerification, "true"));
 
         //Act
-        var actual = await _homeController.Index();
+        var actual = await _homeController.Index(_queryData);
 
         //Assert
         Assert.IsNotNull(actual);
@@ -132,7 +136,7 @@ public class WhenIViewTheHomePage : ControllerTestBase
         );
 
         //Act
-        await _homeController.Index();
+        await _homeController.Index(_queryData);
 
         //Assert
         _homeOrchestrator.Verify(x => x.GetUserAccounts(ExpectedUserId, It.IsAny<DateTime?>()), Times.Once);
@@ -162,7 +166,7 @@ public class WhenIViewTheHomePage : ControllerTestBase
         AddEmptyUserToContext();
 
         //Act
-        var actual = await _homeController.Index();
+        var actual = await _homeController.Index(null);
 
         //Assert
         Assert.IsNotNull(actual);
@@ -181,7 +185,7 @@ public class WhenIViewTheHomePage : ControllerTestBase
         );
 
         //Act
-        var actual = await _homeController.Index();
+        var actual = await _homeController.Index(_queryData);
 
         //Assert
         Assert.IsNotNull(actual);
@@ -213,7 +217,7 @@ public class WhenIViewTheHomePage : ControllerTestBase
             });
 
         //Act
-        var actual = await _homeController.Index();
+        var actual = await _homeController.Index(null);
 
         //Assert
         Assert.IsNotNull(actual);
@@ -247,7 +251,7 @@ public class WhenIViewTheHomePage : ControllerTestBase
             });
 
         //Act
-        var actual = await _homeController.Index();
+        var actual = await _homeController.Index(null);
 
         //Assert
         Assert.IsNotNull(actual);
@@ -286,7 +290,7 @@ public class WhenIViewTheHomePage : ControllerTestBase
             });
 
         //Act
-        var actual = await _homeController.Index();
+        var actual = await _homeController.Index(null);
 
         //Assert
         Assert.IsNotNull(actual);
@@ -318,11 +322,11 @@ public class WhenIViewTheHomePage : ControllerTestBase
             });
 
         //Act
-        var actual = await _homeController.Index();
+        var actual = await _homeController.Index(_queryData);
 
         //Assert
         Assert.IsNotNull(actual);
         var actualViewResult = actual as RedirectResult;
-        Assert.AreEqual( "https://employerprofiles.test-eas.apprenticeships.education.gov.uk/user/add-user-details", actualViewResult.Url);
+        Assert.AreEqual( $"https://employerprofiles.test-eas.apprenticeships.education.gov.uk/user/add-user-details?_ga={_queryData.Ga}&_gl={_queryData.Gl}&utm_source={_queryData.UtmSource}&utm_campaign={_queryData.UtmCampaign}&utm_medium={_queryData.UtmMedium}&utm_keywords={_queryData.UtmKeywords}&utm_content={_queryData.UtmContent}", actualViewResult.Url);
     }
 }

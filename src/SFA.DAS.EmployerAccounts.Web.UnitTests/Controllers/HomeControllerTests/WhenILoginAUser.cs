@@ -48,7 +48,7 @@ public class WhenILoginAUser
     public void When_Route_To_PreAuth_ThenTheUserIsRedirectedToIndex()
     {
         //Act
-        var actual = _homeController.GovSignIn();
+        var actual = _homeController.GovSignIn(null);
 
         //Assert
         Assert.IsNotNull(actual);
