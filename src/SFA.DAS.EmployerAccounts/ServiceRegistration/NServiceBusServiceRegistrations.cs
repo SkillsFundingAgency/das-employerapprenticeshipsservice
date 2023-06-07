@@ -44,7 +44,7 @@ public static class NServiceBusServiceRegistrations
             .UseNewtonsoftJsonSerializer()
             .UseOutbox(true)
             .UseSqlServerPersistence(() => DatabaseExtensions.GetSqlConnection(databaseConnectionString))
-            .UseAzureServiceBusTransport(() => employerAccountsConfiguration.ServiceBusConnectionString, isDevOrLocal)
+            .ConfigureServiceBusTransport(() => employerAccountsConfiguration.ServiceBusConnectionString, isDevOrLocal)
             .UseUnitOfWork();
 
         if (!string.IsNullOrEmpty(employerAccountsConfiguration.NServiceBusLicense))

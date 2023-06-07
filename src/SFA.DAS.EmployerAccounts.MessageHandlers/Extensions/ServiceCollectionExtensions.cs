@@ -25,7 +25,7 @@ public static class ServiceCollectionExtensions
                 var isDevelopment = hostingEnvironment.IsDevelopment();
 
                 var endpointConfiguration = new EndpointConfiguration(EndpointName)
-                    .UseAzureServiceBusTransport(() => configuration.ServiceBusConnectionString, isDevelopment)
+                    .ConfigureServiceBusTransport(() => configuration.ServiceBusConnectionString, isDevelopment)
                     .UseErrorQueue($"{EndpointName}-errors")
                     .UseInstallers()
                     .UseSqlServerPersistence(() => DatabaseExtensions.GetSqlConnection(configuration.DatabaseConnectionString))

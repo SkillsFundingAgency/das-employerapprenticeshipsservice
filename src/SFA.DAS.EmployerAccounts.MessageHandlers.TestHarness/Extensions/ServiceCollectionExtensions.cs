@@ -29,7 +29,7 @@ public static class ServiceCollectionExtensions
                 var isLocal = configuration["EnvironmentName"].Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase);
 
                 var endpointConfiguration = new EndpointConfiguration(EndpointName)
-                    .UseAzureServiceBusTransport(() => employerAccountsConfiguration.ServiceBusConnectionString,
+                    .ConfigureServiceBusTransport(() => employerAccountsConfiguration.ServiceBusConnectionString,
                         isLocal)
                     .UseErrorQueue($"{EndpointName}-errors")
                     .UseInstallers()
