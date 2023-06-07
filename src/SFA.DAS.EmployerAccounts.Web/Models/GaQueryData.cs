@@ -3,17 +3,17 @@ namespace SFA.DAS.EmployerAccounts.Web.Models;
 public class GaQueryData
 {
     [FromQuery(Name = "_ga")]
-    public string Ga { get; set; }
+    public string _ga { get; set; }
     [FromQuery(Name = "_gl")]
-    public string Gl { get; set; }
+    public string _gl { get; set; }
     [FromQuery(Name = "utm_source")]
-    public string UtmSource { get; set; }
+    public string utm_source { get; set; }
     [FromQuery(Name = "utm_campaign")]
-    public string UtmCampaign { get; set; }
+    public string utm_campaign { get; set; }
     [FromQuery(Name = "utm_medium")]
-    public string UtmMedium { get; set; }
+    public string utm_medium { get; set; }
     [FromQuery(Name = "utm_keywords")]
-    public string UtmKeywords { get; set; }
+    public string utm_keywords { get; set; }
     [FromQuery(Name = "utm_content")]
-    public string UtmContent { get; set; }
+    public string utm_content { get; set; }
 }

@@ -61,7 +61,7 @@ public class HomeController : BaseController
 
                 if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(lastName) || string.IsNullOrEmpty(userRef))
                 {
-                    return Redirect(_urlHelper.EmployerProfileAddUserDetails($"/user/add-user-details") + $"?_ga={queryData.Ga}&_gl={queryData.Gl}&utm_source={queryData.UtmSource}&utm_campaign={queryData.UtmCampaign}&utm_medium={queryData.UtmMedium}&utm_keywords={queryData.UtmKeywords}&utm_content={queryData.UtmContent}");    
+                    return Redirect(_urlHelper.EmployerProfileAddUserDetails($"/user/add-user-details") + $"?_ga={queryData._ga}&_gl={queryData._gl}&utm_source={queryData.utm_source}&utm_campaign={queryData.utm_campaign}&utm_medium={queryData.utm_medium}&utm_keywords={queryData.utm_keywords}&utm_content={queryData.utm_content}");    
                 }
             }
         }
@@ -119,13 +119,13 @@ public class HomeController : BaseController
                 return RedirectToRoute(RouteNames.EmployerTeamIndex, new
                 {
                     HashedAccountId = account.HashedId,
-                    _ga = queryData.Ga,
-                    _gl = queryData.Gl,
-                    utm_source = queryData.UtmSource,
-                    utm_campaign = queryData.UtmCampaign,
-                    utm_medium = queryData.UtmMedium,
-                    utm_keywords = queryData.UtmKeywords,
-                    utm_content = queryData.UtmContent
+                    queryData._ga,
+                    queryData._gl,
+                    queryData.utm_source,
+                    queryData.utm_campaign,
+                    queryData.utm_medium,
+                    queryData.utm_keywords,
+                    queryData.utm_content
                 });
             }
         }

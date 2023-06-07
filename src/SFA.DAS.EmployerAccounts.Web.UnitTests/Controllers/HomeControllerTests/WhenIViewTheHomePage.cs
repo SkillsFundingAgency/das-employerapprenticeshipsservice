@@ -327,6 +327,6 @@ public class WhenIViewTheHomePage : ControllerTestBase
         //Assert
         Assert.IsNotNull(actual);
         var actualViewResult = actual as RedirectResult;
-        Assert.AreEqual( $"https://employerprofiles.test-eas.apprenticeships.education.gov.uk/user/add-user-details?_ga={_queryData.Ga}&_gl={_queryData.Gl}&utm_source={_queryData.UtmSource}&utm_campaign={_queryData.UtmCampaign}&utm_medium={_queryData.UtmMedium}&utm_keywords={_queryData.UtmKeywords}&utm_content={_queryData.UtmContent}", actualViewResult.Url);
+        Assert.AreEqual( $"https://employerprofiles.test-eas.apprenticeships.education.gov.uk/user/add-user-details?_ga={_queryData._ga}&_gl={_queryData._gl}&utm_source={_queryData.utm_source}&utm_campaign={_queryData.utm_campaign}&utm_medium={_queryData.utm_medium}&utm_keywords={_queryData.utm_keywords}&utm_content={_queryData.utm_content}", actualViewResult.Url);
     }
 }
