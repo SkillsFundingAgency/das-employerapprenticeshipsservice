@@ -44,7 +44,7 @@ public class LegacyTopicMessagePublisher : ILegacyTopicMessagePublisher
         {
             if (client != null && !client.IsClosedOrClosing)
             {
-                this._logger.LogDebug("Closing legacy topic message publisher");
+                _logger.LogDebug("Closing legacy topic message publisher");
                 await client.CloseAsync();
             }
         }
