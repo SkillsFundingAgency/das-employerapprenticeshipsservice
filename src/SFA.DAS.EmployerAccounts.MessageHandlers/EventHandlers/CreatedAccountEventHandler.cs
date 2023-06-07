@@ -17,7 +17,7 @@ public class CreatedAccountEventHandler : IHandleMessages<CreatedAccountEvent>
 
     public async Task Handle(CreatedAccountEvent message, IMessageHandlerContext context)
     {
-        _logger.LogInformation($"Starting {nameof(CreatedAccountEventHandler)} handler.");
+        _logger.LogInformation($"Starting {nameof(CreatedAccountEventHandler)} handler for accountId: '{message.AccountId}'.");
 
         await _messagePublisher.PublishAsync(
             new AccountCreatedMessage(
