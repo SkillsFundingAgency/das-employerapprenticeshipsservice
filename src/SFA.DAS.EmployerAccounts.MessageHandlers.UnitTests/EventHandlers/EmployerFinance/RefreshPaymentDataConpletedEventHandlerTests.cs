@@ -6,8 +6,6 @@ using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.EmployerFinance;
 using SFA.DAS.EmployerFinance.Messages.Events;
-using SFA.DAS.Messaging.Interfaces;
-using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.Testing;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.EmployerFinance

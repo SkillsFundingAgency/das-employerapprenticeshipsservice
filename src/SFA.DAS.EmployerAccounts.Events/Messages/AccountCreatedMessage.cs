@@ -1,5 +1,4 @@
-﻿using SFA.DAS.Messaging.Attributes;
-using System;
+﻿using System;
 
 namespace SFA.DAS.EmployerAccounts.Events.Messages;
 

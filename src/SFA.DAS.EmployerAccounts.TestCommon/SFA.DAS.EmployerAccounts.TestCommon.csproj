@@ -1,57 +1,44 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
-	</PropertyGroup>
-	<PropertyGroup>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	</PropertyGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.14" />
-		<PackageReference Include="Dapper" Version="2.0.123" />
-		<PackageReference Include="AutoMapper" Version="12.0.1">
-		</PackageReference>
-		<PackageReference Include="FluentAssertions" Version="6.10.0">
-		</PackageReference>
-		<PackageReference Include="MediatR" Version="11.1.0">
-		</PackageReference>
-		<PackageReference Include="Moq" Version="4.18.4">
-		</PackageReference>
-		<PackageReference Include="NLog" Version="4.6.8">
-		</PackageReference>
-		<PackageReference Include="NUnit" Version="3.13.3">
-		</PackageReference>
-		<PackageReference Include="NUnit3TestAdapter" Version="4.3.1">
-		</PackageReference>
-		<PackageReference Include="SFA.DAS.Authentication" Version="1.1.2">
-		</PackageReference>
-		<PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.283">
-		</PackageReference>
-		<PackageReference Include="SFA.DAS.Messaging" Version="3.0.0.63765">
-		</PackageReference>
-		<PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.2.37">
-		</PackageReference>
-		<PackageReference Include="SFA.DAS.Sql.Client" Version="1.0.0.32930">
-		</PackageReference>
-		<PackageReference Include="HtmlTags" Version="8.1.1" />
-		<PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
-		<PackageReference Include="SFA.DAS.Elastic" Version="2.0.14" />
-		<PackageReference Include="SpecFlow" Version="3.9.74" />
-		<PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.0" />
-		<PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
-		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-	</ItemGroup>
-	<ItemGroup>
-		<Compile Remove="DependencyResolution\DefaultRegistry.cs" />
-		<Compile Remove="ScenarioCommonSteps\AccountSteps.cs" />
-		<Compile Remove="ScenarioCommonSteps\UserSteps.cs" />
-	</ItemGroup>
-	<ItemGroup>
-		<FrameworkReference Include="Microsoft.AspNetCore.App" />
-	</ItemGroup>
-	<ItemGroup>
-		<Content Include="appsettings.json" />
-	</ItemGroup>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+    </PropertyGroup>
+    <PropertyGroup>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.14" />
+        <PackageReference Include="Dapper" Version="2.0.123" />
+        <PackageReference Include="AutoMapper" Version="12.0.1" />
+        <PackageReference Include="FluentAssertions" Version="6.10.0" />
+        <PackageReference Include="MediatR" Version="11.1.0" />
+        <PackageReference Include="Moq" Version="4.18.4" />
+        <PackageReference Include="NLog" Version="4.6.8" />
+        <PackageReference Include="NUnit" Version="3.13.3" />
+        <PackageReference Include="NUnit3TestAdapter" Version="4.3.1" />
+        <PackageReference Include="SFA.DAS.Authentication" Version="1.1.2" />
+        <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.283" />
+        <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.2.37" />
+        <PackageReference Include="SFA.DAS.Sql.Client" Version="1.0.0.32930" />
+        <PackageReference Include="HtmlTags" Version="8.1.1" />
+        <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
+        <PackageReference Include="SFA.DAS.Elastic" Version="2.0.14" />
+        <PackageReference Include="SpecFlow" Version="3.9.74" />
+        <PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.0" />
+        <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+        <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="DependencyResolution\DefaultRegistry.cs" />
+        <Compile Remove="ScenarioCommonSteps\AccountSteps.cs" />
+        <Compile Remove="ScenarioCommonSteps\UserSteps.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="appsettings.json" />
+    </ItemGroup>
 </Project>
