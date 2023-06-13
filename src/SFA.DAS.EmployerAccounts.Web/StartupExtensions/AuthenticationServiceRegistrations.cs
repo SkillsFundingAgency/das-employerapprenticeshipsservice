@@ -7,6 +7,7 @@ using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
 using SFA.DAS.EmployerAccounts.Web.Cookies;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Handlers;
 using SFA.DAS.GovUK.Auth.Authentication;
 using SFA.DAS.GovUK.Auth.Services;
@@ -64,7 +65,8 @@ public static class EmployerAuthenticationServiceRegistrations
 
     public static IServiceCollection AddAndConfigureEmployerAuthentication(
             this IServiceCollection services,
-            IdentityServerConfiguration configuration)
+            IdentityServerConfiguration configuration,
+            SupportConsoleAuthenticationOptions authOptions)
     {
         services
             .AddAuthentication(sharedOptions =>
@@ -74,7 +76,19 @@ public static class EmployerAuthenticationServiceRegistrations
                 sharedOptions.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
                 sharedOptions.DefaultSignOutScheme = OpenIdConnectDefaults.AuthenticationScheme;
 
-            }).AddOpenIdConnect(options =>
+            })
+            .AddCookie(options =>
+            {
+                options.AccessDeniedPath = new PathString("/error/403");
+                options.ExpireTimeSpan = TimeSpan.FromHours(1);
+                options.Cookie.Name = CookieNames.Authentication;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.SlidingExpiration = true;
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.CookieManager = new ChunkingCookieManager { ChunkSize = 3000 };
+            })
+            .AddAndConfigureSupportConsoleAuthentication(authOptions)
+            .AddOpenIdConnect(options =>
             {
                 options.ClientId = configuration.ClientId;
                 options.ClientSecret = configuration.ClientSecret;
@@ -99,16 +113,7 @@ public static class EmployerAuthenticationServiceRegistrations
 
                     return Task.CompletedTask;
                 };
-            }).AddCookie(options =>
-            {
-                options.AccessDeniedPath = new PathString("/error/403");
-                options.ExpireTimeSpan = TimeSpan.FromHours(1);
-                options.Cookie.Name = CookieNames.Authentication;
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                options.SlidingExpiration = true;
-                options.Cookie.SameSite = SameSiteMode.None;
-                options.CookieManager = new ChunkingCookieManager { ChunkSize = 3000 };
-            }); 
+            });
 
         services
             .AddOptions<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme)
