@@ -30,7 +30,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
                     options.MetadataAddress = authOptions.AdfsOptions.MetadataAddress;
                     options.Wtrealm = authOptions.AdfsOptions.Wtrealm;
                     options.Wreply = authOptions.AdfsOptions.Wreply;
+                    options.UseTokenLifetime = false;
                     options.CallbackPath = PathString.Empty;
+                    options.CorrelationCookie = new CookieBuilder
+                    {
+                        Name = "SFA.Staff.Auth",
+                        SameSite = SameSiteMode.None,
+                        HttpOnly = false,
+                        SecurePolicy = CookieSecurePolicy.Always
+                    };
                     options.Events = new WsFederationEvents
                     {
                         OnRemoteFailure = OnRemoteFailure,
@@ -50,6 +58,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
                     options.Cookie.Name = Staff;
                     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                     options.SlidingExpiration = true;
+                    options.Cookie.HttpOnly = false;
                     options.Cookie.SameSite = SameSiteMode.None;
                 });
 
@@ -192,7 +201,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
 
                         await context.ChallengeAsync(WsFed, new AuthenticationProperties
                         {
-                            RedirectUri = requestRedirect
+                            RedirectUri = requestRedirect,
                         });
                     }
                     else

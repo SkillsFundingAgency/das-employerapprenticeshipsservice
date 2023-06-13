@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Routing;
@@ -178,6 +179,13 @@ public class Startup
 
         app.UseStaticFiles();
         app.UseAuthentication();
+        app.UseCookiePolicy(new CookiePolicyOptions
+        {
+            Secure = CookieSecurePolicy.Always,
+            MinimumSameSitePolicy = SameSiteMode.Strict,
+            HttpOnly = HttpOnlyPolicy.Always
+        });
+        
         app.UseRouting();
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>
