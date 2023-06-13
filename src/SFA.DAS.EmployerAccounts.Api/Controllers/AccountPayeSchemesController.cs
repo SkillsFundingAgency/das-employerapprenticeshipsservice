@@ -23,24 +23,6 @@ public class AccountPayeSchemesController : ControllerBase
         _logger = logger;
     }
 
-    [Route("scheme", Name = "GetPayeScheme")]
-    [Authorize(Policy = ApiRoles.ReadAllEmployerAccountBalances)]
-    [HttpGet]
-    public async Task<IActionResult> GetPayeScheme([FromRoute] string hashedAccountId, [FromQuery] string @ref)
-    {
-        var decodedPayeSchemeRef = Uri.UnescapeDataString(@ref);
-
-        var result = await _orchestrator.GetPayeScheme(hashedAccountId, decodedPayeSchemeRef);
-
-        if (result == null)
-        {
-            _logger.LogDebug("The PAYE scheme {PayeScheme} was not found.", decodedPayeSchemeRef);
-            return NotFound();
-        }
-
-        return Ok(result);
-    }
-
     [Route("", Name = "GetPayeSchemes")]
     [Authorize(Policy = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet]
@@ -56,7 +38,25 @@ public class AccountPayeSchemesController : ControllerBase
         return Ok(new ResourceList(result.Select(pv => new Resource
         {
             Id = pv.Ref,
-            Href = Url.RouteUrl("GetPayeScheme", new { hashedAccountId, @ref = Uri.EscapeDataString(pv.Ref) })
+            Href = Url.RouteUrl("GetPayeScheme", new { hashedAccountId, payeSchemeRef = Uri.EscapeDataString(pv.Ref) })
         })));
+    }
+
+    [Route("scheme", Name = "GetPayeScheme")]
+    [Authorize(Policy = ApiRoles.ReadAllEmployerAccountBalances)]
+    [HttpGet]
+    public async Task<IActionResult> GetPayeScheme([FromRoute] string hashedAccountId, [FromQuery] string payeSchemeRef)
+    {
+        var decodedPayeSchemeRef = Uri.UnescapeDataString(payeSchemeRef);
+
+        var result = await _orchestrator.GetPayeScheme(hashedAccountId, decodedPayeSchemeRef);
+
+        if (result == null)
+        {
+            _logger.LogDebug("The PAYE scheme {PayeScheme} was not found.", decodedPayeSchemeRef);
+            return NotFound();
+        }
+
+        return Ok(result);
     }
 }
