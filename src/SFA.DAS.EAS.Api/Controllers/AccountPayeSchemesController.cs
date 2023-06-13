@@ -1,4 +1,4 @@
-﻿using System.Net;
+﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,19 +18,21 @@ public class AccountPayeSchemesController : ControllerBase
         _apiService = apiService;
     }
 
+    [Route("", Name = "GetPayeSchemes")]
     [Authorize(Policy = ApiRoles.ReadAllEmployerAccountBalances)]
-    [HttpGet(Name = "GetPayeSchemes")]
-    public async Task<IActionResult> GetPayeSchemes(string hashedAccountId)
+    [HttpGet]
+    public async Task<IActionResult> GetPayeSchemes([FromRoute] string hashedAccountId)
     {
         var redirectResponse = await _apiService.Redirect($"/api/accounts/{hashedAccountId}/payeschemes");
         return Content(redirectResponse.ToString(), "application/json");
     }
 
+    [Route("scheme", Name = "GetPayeScheme")]
     [Authorize(Policy = ApiRoles.ReadAllEmployerAccountBalances)]
-    [HttpGet("{payeSchemeRef}", Name = "GetPayeScheme")]
-    public async Task<IActionResult> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
+    [HttpGet]
+    public async Task<IActionResult> GetPayeScheme([FromRoute] string hashedAccountId, [FromQuery] string payeSchemeRef)
     {
-        var redirectResponse = await _apiService.Redirect($"/api/accounts/{hashedAccountId}/payeschemes/scheme?ref={WebUtility.UrlEncode(payeSchemeRef)}");
+        var redirectResponse = await _apiService.Redirect($"/api/accounts/{hashedAccountId}/payeschemes/scheme?payeSchemeRef={Uri.EscapeDataString(payeSchemeRef)}");
         return Content(redirectResponse.ToString(), "application/json");
     }
 }
