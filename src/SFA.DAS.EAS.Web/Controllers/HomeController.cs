@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Extensions;
@@ -74,6 +77,18 @@ public class HomeController : Controller
     public IActionResult SignOut()
     {
         return Redirect(Url.EmployerAccountsAction("service/signOut", _configuration, false));
+    }
+    
+    [Route("signoutcleanup")]
+    public async Task SignOutCleanup()
+    {
+        var idToken = await HttpContext.GetTokenAsync("id_token");
+
+        var authenticationProperties = new AuthenticationProperties();
+        authenticationProperties.Parameters.Clear();
+        authenticationProperties.Parameters.Add("id_token", idToken);
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme, authenticationProperties);
+        await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, authenticationProperties);
     }
 
     [HttpGet]
