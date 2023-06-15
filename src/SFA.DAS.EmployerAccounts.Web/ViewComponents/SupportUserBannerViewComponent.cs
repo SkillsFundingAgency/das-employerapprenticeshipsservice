@@ -5,9 +5,9 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewComponents;
 public class SupportUserBannerViewComponent : ViewComponent
 {
     private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
-    private readonly HttpContextAccessor _httpContextAccessor;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public SupportUserBannerViewComponent(EmployerTeamOrchestrator employerTeamOrchestrator, HttpContextAccessor httpContextAccessor)
+    public SupportUserBannerViewComponent(EmployerTeamOrchestrator employerTeamOrchestrator, IHttpContextAccessor httpContextAccessor)
     {
         _employerTeamOrchestrator = employerTeamOrchestrator;
         _httpContextAccessor = httpContextAccessor;

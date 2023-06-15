@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.EmployerAccounts.Infrastructure;
 using SFA.DAS.EmployerAccounts.Services;
@@ -35,6 +36,7 @@ public static class EmployerAuthenticationServiceRegistrations
                 PolicyNames.HasUserAccount
                 , policy =>
                 {
+                    policy.AddAuthenticationSchemes(SupportUserExtensions.WsFederationAuthScheme, OpenIdConnectDefaults.AuthenticationScheme);
                     policy.RequireClaim(EmployerClaims.IdamsUserIdClaimTypeIdentifier);
                     policy.RequireAuthenticatedUser();
                     policy.Requirements.Add(new AccountActiveRequirement());
@@ -44,6 +46,7 @@ public static class EmployerAuthenticationServiceRegistrations
                 PolicyNames.HasEmployerOwnerAccount
                 , policy =>
                 {
+                    policy.AddAuthenticationSchemes(SupportUserExtensions.WsFederationAuthScheme, OpenIdConnectDefaults.AuthenticationScheme);
                     policy.RequireClaim(EmployerClaims.AccountsClaimsTypeIdentifier);
                     policy.Requirements.Add(new EmployerAccountOwnerRequirement());
                     policy.Requirements.Add(new AccountActiveRequirement());
@@ -53,6 +56,7 @@ public static class EmployerAuthenticationServiceRegistrations
                 PolicyNames.HasEmployerViewerTransactorOwnerAccount
                 , policy =>
                 {
+                    policy.AddAuthenticationSchemes(SupportUserExtensions.WsFederationAuthScheme, OpenIdConnectDefaults.AuthenticationScheme);
                     policy.RequireClaim(EmployerClaims.AccountsClaimsTypeIdentifier);
                     policy.Requirements.Add(new EmployerAccountAllRolesRequirement());
                     policy.Requirements.Add(new AccountActiveRequirement());

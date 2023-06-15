@@ -1,16 +1,19 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Infrastructure;
+using SFA.DAS.EmployerAccounts.Services;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
     public static class SupportUserExtensions
     {
-        private const string Staff = "Staff";
+        private const string Staff = "SFA.Staff.Auth";
         private const string Employer = "Employer";
         private const string HashedAccountId = "HashedAccountId";
         private const string ServiceClaimTier2Role = "ESF";
@@ -19,12 +22,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
         private const string ConsoleUser = "ConsoleUser";
         private const string ServiceClaimTier1Role = "ESS";
         private const string serviceClaimType = "http://service/service";
-        private const string WsFed = "wsfed";
+        public const string WsFederationAuthScheme = "wsfed";
 
         public static AuthenticationBuilder AddAndConfigureSupportConsoleAuthentication(this AuthenticationBuilder services, SupportConsoleAuthenticationOptions authOptions)
         {
             services
-                .AddWsFederation(WsFed, options =>
+                .AddWsFederation(WsFederationAuthScheme, options =>
                 {
                     options.SignInScheme = Staff;
                     options.MetadataAddress = authOptions.AdfsOptions.MetadataAddress;
@@ -34,21 +37,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
                     options.CallbackPath = PathString.Empty;
                     options.CorrelationCookie = new CookieBuilder
                     {
-                        Name = "SFA.Staff.Auth",
+                        Name = Staff,
                         SameSite = SameSiteMode.None,
                         HttpOnly = false,
                         SecurePolicy = CookieSecurePolicy.Always
                     };
                     options.Events = new WsFederationEvents
                     {
-                        OnRemoteFailure = OnRemoteFailure,
-                        OnAccessDenied = OnAccessDenied,
-                        OnMessageReceived = OnMessageReceived,
-                        OnTicketReceived = OnTicketReceived,
                         OnSecurityTokenValidated = OnSecurityTokenValidated,
-                        OnSecurityTokenReceived = OnSecurityTokenReceived,
-                        OnAuthenticationFailed = OnAuthenticationFailed,
-                        OnRedirectToIdentityProvider = OnRedirectToIdentityProvider
                     };
                 })
                 .AddCookie(Staff, options =>
@@ -65,49 +61,25 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             return services;
         }
 
-        private static Task OnTicketReceived(TicketReceivedContext context)
-        {
-            return Task.CompletedTask;
-        }
-
-        private static Task OnMessageReceived(MessageReceivedContext context)
-        {
-            return Task.CompletedTask;
-        }
-
-        private static Task OnRemoteFailure(RemoteFailureContext context)
-        {
-            if (context.Failure.Message.Contains("Correlation failed", StringComparison.InvariantCultureIgnoreCase)
-                || context.Failure.Message.Contains("No message", StringComparison.InvariantCultureIgnoreCase))
-            {
-                //context.Response.Redirect("/");
-                context.SkipHandler();
-            }
-
-            return Task.CompletedTask;
-        }
-
-        private static Task OnAccessDenied(AccessDeniedContext context)
-        {
-            return Task.CompletedTask;
-        }
 
         public static IApplicationBuilder UseSupportConsoleAuthentication(this IApplicationBuilder app)
         {
             // https://skillsfundingagency.atlassian.net/wiki/spaces/ERF/pages/104010807/Staff+IDAMS
-            //app.UseW();
-            //app.UseWsFederationAuthentication(wsFederationOptions);
-
             app.Map("/login/staff", SetAuthenticationContextForStaffUser());
-
-            //app.Map("/login", SetAuthenticationContext());
 
             return app;
         }
 
         private static Task OnSecurityTokenValidated(SecurityTokenValidatedContext context)
         {
+            var redirectUri = context.Properties.RedirectUri;
+
+            // Retrieve the HashedAccountId query parameter
+            var hashedAccountId = redirectUri.Split('/')[2];
+
             var logger = context.HttpContext.RequestServices.GetService(typeof(ILogger)) as ILogger;
+            var accountsService = context.HttpContext.RequestServices.GetService(typeof(IUserAccountService)) as IUserAccountService;
+            var db = context.HttpContext.RequestServices.GetService(typeof(EmployerAccountsDbContext)) as EmployerAccountsDbContext;
             logger?.LogDebug("SecurityTokenValidated");
 
             var claimsIdentity = context.Principal.Identity as ClaimsIdentity;
@@ -140,6 +112,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
                 throw new SecurityTokenValidationException("Service Claim Type not available to identify the Role");
             }
 
+            var accountOwner = db.Accounts.Single(acc => acc.HashedId == hashedAccountId).Memberships.FirstOrDefault(m => m.Role == Role.Owner).User;
+
+            var result = accountsService.GetUserAccounts(accountOwner.Ref.ToString(), accountOwner.Email).Result;
+
+            var accountsAsJson = JsonConvert.SerializeObject(result.EmployerAccounts.ToDictionary(k => k.AccountId));
+            var associatedAccountsClaim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, accountsAsJson, JsonClaimValueTypes.Json);
+
+            claimsIdentity.AddClaim(associatedAccountsClaim);
+            claimsIdentity.AddClaim(new Claim(ControllerConstants.UserRefClaimKeyName, accountOwner.Ref.ToString()));
+
             var firstName = claimsIdentity.Claims.SingleOrDefault(x => x.Type == ClaimTypes.GivenName)?.Value;
             var lastName = claimsIdentity.Claims.SingleOrDefault(x => x.Type == ClaimTypes.Surname)?.Value;
             var userEmail = claimsIdentity.Claims.Single(x => x.Type == ClaimTypes.Upn).Value;
@@ -148,7 +130,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
 
             if (!string.IsNullOrEmpty(userEmail))
             {
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Email, userEmail));
+                claimsIdentity.AddClaim(new Claim(EmployerClaims.IdamsUserEmailClaimTypeIdentifier, userEmail));
                 claimsIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userEmail));
             }
             else
@@ -159,28 +141,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             logger?.LogDebug("End of callback");
 
             return Task.CompletedTask;
-        }
-
-        private static Task OnSecurityTokenReceived(SecurityTokenReceivedContext context)
-        {
-            var logger = context.HttpContext.RequestServices.GetService(typeof(ILogger)) as ILogger;
-            logger?.LogDebug("SecurityTokenReceived");
-            return Task.CompletedTask;
-        }
-
-        private static Task OnAuthenticationFailed(AuthenticationFailedContext context)
-        {
-            var logger = context.HttpContext.RequestServices.GetService(typeof(ILogger)) as ILogger;
-            var logReport = $"AuthenticationFailed, State: {context.ProtocolMessage.Wresult}, Exception: {context.Exception.GetBaseException().Message}, Protocol Message: Wct {context.ProtocolMessage.Wct},\r\nWfresh {context.ProtocolMessage.Wfresh},\r\nWhr {context.ProtocolMessage.Whr},\r\nWp {context.ProtocolMessage.Wp},\r\nWpseudo{context.ProtocolMessage.Wpseudo},\r\nWpseudoptr {context.ProtocolMessage.Wpseudoptr},\r\nWreq {context.ProtocolMessage.Wreq},\r\nWfed {context.ProtocolMessage.Wfed},\r\nWreqptr {context.ProtocolMessage.Wreqptr},\r\nWres {context.ProtocolMessage.Wres},\r\nWreply{context.ProtocolMessage.Wreply},\r\nWencoding {context.ProtocolMessage.Wencoding},\r\nWtrealm {context.ProtocolMessage.Wtrealm},\r\nWresultptr {context.ProtocolMessage.Wresultptr},\r\nWauth {context.ProtocolMessage.Wauth},\r\nWattrptr{context.ProtocolMessage.Wattrptr},\r\nWattr {context.ProtocolMessage.Wattr},\r\nWa {context.ProtocolMessage.Wa},\r\nIsSignOutMessage {context.ProtocolMessage.IsSignOutMessage},\r\nIsSignInMessage {context.ProtocolMessage.IsSignInMessage},\r\nWctx {context.ProtocolMessage.Wctx},\r\n";
-            logger?.LogDebug(logReport);
-            return Task.CompletedTask;
-        }
-
-        private static Task OnRedirectToIdentityProvider(RedirectContext context)
-        {
-            var logger = context.HttpContext.RequestServices.GetService(typeof(ILogger)) as ILogger;
-            logger?.LogDebug("RedirectToIdentityProvider");
-           return Task.CompletedTask;
         }
 
         private static Action<IApplicationBuilder> SetAuthenticationContextForStaffUser()
@@ -199,34 +159,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
                         // as this is the only action they will currently perform.
 
 
-                        await context.ChallengeAsync(WsFed, new AuthenticationProperties
+                        await context.ChallengeAsync(WsFederationAuthScheme, new AuthenticationProperties
                         {
                             RedirectUri = requestRedirect,
+                            IsPersistent = true
                         });
                     }
                     else
                     {
                         context.Response.Redirect(requestRedirect); // Redirect to the home page or any other desired location
                     }
-                });
-            };
-        }
-
-        private static Action<IApplicationBuilder> SetAuthenticationContext()
-        {
-            return conf =>
-            {
-                conf.Run(async context =>
-                {
-                    var logger = context.RequestServices.GetService(typeof(ILogger)) as ILogger;
-                    await context.ChallengeAsync(CookieAuthenticationDefaults.AuthenticationScheme, new AuthenticationProperties
-                    {
-                        RedirectUri = "/service/index",
-                        IsPersistent = true
-                    });
-
-                    context.Response.StatusCode = 401;
-                    await context.Response.WriteAsync(string.Empty);
                 });
             };
         }

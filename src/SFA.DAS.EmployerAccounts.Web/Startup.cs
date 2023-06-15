@@ -46,6 +46,8 @@ public class Startup
 
         services.AddLogging();
 
+        services.AddHttpContextAccessor();
+
         services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
         services.AddConfigurationOptions(_configuration);
         var identityServerConfiguration = _configuration
