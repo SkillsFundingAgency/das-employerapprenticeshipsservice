@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.EmployerAccounts.Infrastructure;
 using SFA.DAS.EmployerAccounts.Services;
@@ -36,35 +36,74 @@ public static class EmployerAuthenticationServiceRegistrations
                 PolicyNames.HasUserAccount
                 , policy =>
                 {
-                    policy.AddAuthenticationSchemes(SupportUserExtensions.WsFederationAuthScheme, OpenIdConnectDefaults.AuthenticationScheme);
-                    policy.RequireClaim(EmployerClaims.IdamsUserIdClaimTypeIdentifier);
-                    policy.RequireAuthenticatedUser();
+                    policy.AddAuthenticationSchemes(SupportUserClaimConstants.WsFederationAuthScheme, OpenIdConnectDefaults.AuthenticationScheme);
+
+                    policy.RequireAssertion(_ =>
+                    {
+                        if (_.User.IsSupportUser())
+                        {
+                            return true;
+                        }
+
                     policy.Requirements.Add(new AccountActiveRequirement());
+
+                        return _.User.HasClaim(c => c.Type == EmployerClaims.IdamsUserIdClaimTypeIdentifier);
+                });
+
+                    policy.RequireAuthenticatedUser();
                 });
 
             options.AddPolicy(
                 PolicyNames.HasEmployerOwnerAccount
                 , policy =>
                 {
-                    policy.AddAuthenticationSchemes(SupportUserExtensions.WsFederationAuthScheme, OpenIdConnectDefaults.AuthenticationScheme);
-                    policy.RequireClaim(EmployerClaims.AccountsClaimsTypeIdentifier);
+                    policy.AddAuthenticationSchemes(SupportUserClaimConstants.WsFederationAuthScheme, OpenIdConnectDefaults.AuthenticationScheme);
+
+                    policy.RequireAssertion(_ =>
+                    {
+                        if (_.User.IsSupportUser())
+                        {
+                            return true;
+                        }
+
                     policy.Requirements.Add(new EmployerAccountOwnerRequirement());
                     policy.Requirements.Add(new AccountActiveRequirement());
+
+                        return _.User.HasClaim(c => c.Type == EmployerClaims.AccountsClaimsTypeIdentifier);
+                    });
+
+                    policy.RequireClaim(EmployerClaims.AccountsClaimsTypeIdentifier);
+
                     policy.RequireAuthenticatedUser();
                 });
+
             options.AddPolicy(
                 PolicyNames.HasEmployerViewerTransactorOwnerAccount
                 , policy =>
                 {
-                    policy.AddAuthenticationSchemes(SupportUserExtensions.WsFederationAuthScheme, OpenIdConnectDefaults.AuthenticationScheme);
-                    policy.RequireClaim(EmployerClaims.AccountsClaimsTypeIdentifier);
+                    policy.AddAuthenticationSchemes(SupportUserClaimConstants.WsFederationAuthScheme, OpenIdConnectDefaults.AuthenticationScheme);
+                    policy.RequireAssertion(_ =>
+                    {
+                        if (_.User.IsSupportUser())
+                        {
+                            return true;
+                        }
+
                     policy.Requirements.Add(new EmployerAccountAllRolesRequirement());
                     policy.Requirements.Add(new AccountActiveRequirement());
+
+                        return _.User.HasClaim(c => c.Type == EmployerClaims.AccountsClaimsTypeIdentifier);
+                    });
                     policy.RequireAuthenticatedUser();
                 });
         });
 
         return services;
+    }
+
+    private static bool IsSupportUser(this ClaimsPrincipal user)
+    {
+        return user.HasClaim(ClaimTypes.Role, SupportUserClaimConstants.Tier1UserClaim) || user.HasClaim(ClaimTypes.Role, SupportUserClaimConstants.Tier2UserClaim);
     }
 
     public static IServiceCollection AddAndConfigureEmployerAuthentication(

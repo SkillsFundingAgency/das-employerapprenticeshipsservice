@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using SFA.DAS.EmployerAccounts.Data;
@@ -17,17 +16,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
         private const string Employer = "Employer";
         private const string HashedAccountId = "HashedAccountId";
         private const string ServiceClaimTier2Role = "ESF";
-        private const string Tier2User = "Tier2User";
-        private const string Tier1User = "Tier1User";
         private const string ConsoleUser = "ConsoleUser";
         private const string ServiceClaimTier1Role = "ESS";
         private const string serviceClaimType = "http://service/service";
-        public const string WsFederationAuthScheme = "wsfed";
 
         public static AuthenticationBuilder AddAndConfigureSupportConsoleAuthentication(this AuthenticationBuilder services, SupportConsoleAuthenticationOptions authOptions)
         {
             services
-                .AddWsFederation(WsFederationAuthScheme, options =>
+                .AddWsFederation(SupportUserClaimConstants.WsFederationAuthScheme, options =>
                 {
                     options.SignInScheme = Staff;
                     options.MetadataAddress = authOptions.AdfsOptions.MetadataAddress;
@@ -94,7 +90,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             if (claimsIdentity.HasClaim(serviceClaimType, ServiceClaimTier2Role))
             {
                 logger?.LogDebug("Adding Tier2 Role");
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, Tier2User));
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, SupportUserClaimConstants.Tier2UserClaim));
 
                 logger?.LogDebug("Adding ConsoleUser Role");
                 claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, ConsoleUser));
@@ -102,7 +98,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             else if (claimsIdentity.HasClaim(serviceClaimType, ServiceClaimTier1Role))
             {
                 logger?.LogDebug("Adding Tier1 Role");
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, Tier1User));
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, SupportUserClaimConstants.Tier1UserClaim));
 
                 logger?.LogDebug("Adding ConsoleUser Role");
                 claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, ConsoleUser));
@@ -112,15 +108,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
                 throw new SecurityTokenValidationException("Service Claim Type not available to identify the Role");
             }
 
-            var accountOwner = db.Accounts.Single(acc => acc.HashedId == hashedAccountId).Memberships.FirstOrDefault(m => m.Role == Role.Owner).User;
-
-            var result = accountsService.GetUserAccounts(accountOwner.Ref.ToString(), accountOwner.Email).Result;
-
-            var accountsAsJson = JsonConvert.SerializeObject(result.EmployerAccounts.ToDictionary(k => k.AccountId));
-            var associatedAccountsClaim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, accountsAsJson, JsonClaimValueTypes.Json);
-
-            claimsIdentity.AddClaim(associatedAccountsClaim);
-            claimsIdentity.AddClaim(new Claim(ControllerConstants.UserRefClaimKeyName, accountOwner.Ref.ToString()));
+            ImpersonateExistingAccountOwner(hashedAccountId, db, claimsIdentity);
 
             var firstName = claimsIdentity.Claims.SingleOrDefault(x => x.Type == ClaimTypes.GivenName)?.Value;
             var lastName = claimsIdentity.Claims.SingleOrDefault(x => x.Type == ClaimTypes.Surname)?.Value;
@@ -143,6 +131,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             return Task.CompletedTask;
         }
 
+        private static void ImpersonateExistingAccountOwner(string hashedAccountId, EmployerAccountsDbContext db, ClaimsIdentity claimsIdentity)
+        {
+            var accountOwner = db.Accounts.Single(acc => acc.HashedId == hashedAccountId).Memberships.FirstOrDefault(m => m.Role == Role.Owner).User;
+            claimsIdentity.AddClaim(new Claim(ControllerConstants.UserRefClaimKeyName, accountOwner.Ref.ToString()));
+        }
+
         private static Action<IApplicationBuilder> SetAuthenticationContextForStaffUser()
         {
             return app =>
@@ -159,7 +153,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
                         // as this is the only action they will currently perform.
 
 
-                        await context.ChallengeAsync(WsFederationAuthScheme, new AuthenticationProperties
+                        await context.ChallengeAsync(SupportUserClaimConstants.WsFederationAuthScheme, new AuthenticationProperties
                         {
                             RedirectUri = requestRedirect,
                             IsPersistent = true
@@ -185,5 +179,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
         public string MetadataAddress { get; set; }
         public string Wreply { get; set; }
         public string BaseUrl { get; set; }
+    }
+
+    public static class SupportUserClaimConstants
+    {
+        public const string WsFederationAuthScheme = "wsfed";
+        public const string Tier2UserClaim = "Tier2User";
+        public const string Tier1UserClaim = "Tier1User";
     }
 }
