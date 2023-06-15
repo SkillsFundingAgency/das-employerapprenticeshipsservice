@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Security.Cryptography;
+using System.Text;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -55,6 +56,17 @@ public class HttpCookieService<T> : ICookieService<T>
             return default(T);
 
         var base64EncodedBytes = Convert.FromBase64String(contextAccessor.HttpContext.Request.Cookies[name]);
-        return JsonConvert.DeserializeObject<T>(new UTF8Encoding().GetString(_protector.Unprotect(base64EncodedBytes)));
+        byte[] unprotect;
+        try
+        {
+            unprotect = _protector.Unprotect(base64EncodedBytes);
+        }
+        catch (CryptographicException e)
+        {
+            Delete(contextAccessor, name);
+            return default(T);
+        }
+        
+        return JsonConvert.DeserializeObject<T>(new UTF8Encoding().GetString(unprotect));
     }
 }
