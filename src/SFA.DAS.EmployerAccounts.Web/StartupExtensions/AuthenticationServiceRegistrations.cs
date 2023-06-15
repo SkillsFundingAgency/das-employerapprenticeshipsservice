@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
@@ -7,6 +8,7 @@ using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
 using SFA.DAS.EmployerAccounts.Web.Cookies;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Handlers;
 using SFA.DAS.GovUK.Auth.Authentication;
 using SFA.DAS.GovUK.Auth.Services;
@@ -34,27 +36,64 @@ public static class EmployerAuthenticationServiceRegistrations
                 PolicyNames.HasUserAccount
                 , policy =>
                 {
-                    policy.RequireClaim(EmployerClaims.IdamsUserIdClaimTypeIdentifier);
-                    policy.RequireAuthenticatedUser();
+                    policy.AddAuthenticationSchemes(SupportUserClaimConstants.WsFederationAuthScheme, OpenIdConnectDefaults.AuthenticationScheme);
+
+                    policy.RequireAssertion(_ =>
+                    {
+                        if (_.User.IsSupportUser())
+                        {
+                            return true;
+                        }
+
                     policy.Requirements.Add(new AccountActiveRequirement());
+
+                        return _.User.HasClaim(c => c.Type == EmployerClaims.IdamsUserIdClaimTypeIdentifier);
+                });
+
+                    policy.RequireAuthenticatedUser();
                 });
 
             options.AddPolicy(
                 PolicyNames.HasEmployerOwnerAccount
                 , policy =>
                 {
-                    policy.RequireClaim(EmployerClaims.AccountsClaimsTypeIdentifier);
+                    policy.AddAuthenticationSchemes(SupportUserClaimConstants.WsFederationAuthScheme, OpenIdConnectDefaults.AuthenticationScheme);
+
+                    policy.RequireAssertion(_ =>
+                    {
+                        if (_.User.IsSupportUser())
+                        {
+                            return true;
+                        }
+
                     policy.Requirements.Add(new EmployerAccountOwnerRequirement());
                     policy.Requirements.Add(new AccountActiveRequirement());
+
+                        return _.User.HasClaim(c => c.Type == EmployerClaims.AccountsClaimsTypeIdentifier);
+                    });
+
+                    policy.RequireClaim(EmployerClaims.AccountsClaimsTypeIdentifier);
+
                     policy.RequireAuthenticatedUser();
                 });
+
             options.AddPolicy(
                 PolicyNames.HasEmployerViewerTransactorOwnerAccount
                 , policy =>
                 {
-                    policy.RequireClaim(EmployerClaims.AccountsClaimsTypeIdentifier);
+                    policy.AddAuthenticationSchemes(SupportUserClaimConstants.WsFederationAuthScheme, OpenIdConnectDefaults.AuthenticationScheme);
+                    policy.RequireAssertion(_ =>
+                    {
+                        if (_.User.IsSupportUser())
+                        {
+                            return true;
+                        }
+
                     policy.Requirements.Add(new EmployerAccountAllRolesRequirement());
                     policy.Requirements.Add(new AccountActiveRequirement());
+
+                        return _.User.HasClaim(c => c.Type == EmployerClaims.AccountsClaimsTypeIdentifier);
+                    });
                     policy.RequireAuthenticatedUser();
                 });
         });
@@ -62,9 +101,15 @@ public static class EmployerAuthenticationServiceRegistrations
         return services;
     }
 
+    private static bool IsSupportUser(this ClaimsPrincipal user)
+    {
+        return user.HasClaim(ClaimTypes.Role, SupportUserClaimConstants.Tier1UserClaim) || user.HasClaim(ClaimTypes.Role, SupportUserClaimConstants.Tier2UserClaim);
+    }
+
     public static IServiceCollection AddAndConfigureEmployerAuthentication(
             this IServiceCollection services,
-            IdentityServerConfiguration configuration)
+            IdentityServerConfiguration configuration,
+            SupportConsoleAuthenticationOptions authOptions)
     {
         services
             .AddAuthentication(sharedOptions =>
@@ -74,7 +119,19 @@ public static class EmployerAuthenticationServiceRegistrations
                 sharedOptions.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
                 sharedOptions.DefaultSignOutScheme = OpenIdConnectDefaults.AuthenticationScheme;
 
-            }).AddOpenIdConnect(options =>
+            })
+            .AddCookie(options =>
+            {
+                options.AccessDeniedPath = new PathString("/error/403");
+                options.ExpireTimeSpan = TimeSpan.FromHours(1);
+                options.Cookie.Name = CookieNames.Authentication;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.SlidingExpiration = true;
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.CookieManager = new ChunkingCookieManager { ChunkSize = 3000 };
+            })
+            .AddAndConfigureSupportConsoleAuthentication(authOptions)
+            .AddOpenIdConnect(options =>
             {
                 options.ClientId = configuration.ClientId;
                 options.ClientSecret = configuration.ClientSecret;
@@ -99,16 +156,7 @@ public static class EmployerAuthenticationServiceRegistrations
 
                     return Task.CompletedTask;
                 };
-            }).AddCookie(options =>
-            {
-                options.AccessDeniedPath = new PathString("/error/403");
-                options.ExpireTimeSpan = TimeSpan.FromHours(1);
-                options.Cookie.Name = CookieNames.Authentication;
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                options.SlidingExpiration = true;
-                options.Cookie.SameSite = SameSiteMode.None;
-                options.CookieManager = new ChunkingCookieManager { ChunkSize = 3000 };
-            }); 
+            });
 
         services
             .AddOptions<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme)
