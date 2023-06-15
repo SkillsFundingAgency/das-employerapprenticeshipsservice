@@ -1,33 +1,15 @@
 @model SFA.DAS.EmployerAccounts.Web.ViewModels.SupportUserBannerViewModel
 
-<header role="banner" id="global-header" class="with-proposition">
-    <div id="service-console-header" class="header-wrapper">
-        <div class="header-global">
-            <div class="header-logo">
-                <p class="govuk-heading-l">
-                    Apprenticeship Service Console
-                </p>
-            </div>
-        </div>
-        <div class="header-proposition">
-            <div class="content">
-                @Model.ConsoleUserType
-            </div>
-        </div>
-
-
-    </div>
-
-    <div id="service-console-msg">
-
-        <div id="global-header-bar"></div>
-
-        <div class="header-wrapper">
-
-            <div class="content">
-                <p>You are viewing as @(Model.Account?.Name ?? string.Empty) (account ID:  @(Model.Account?.PublicHashedId ?? string.Empty))</p>
-            </div>
-
+<div class="app-support-banner">
+    <div class="app-support-banner__content">
+        <p class="govuk-heading-l app-support-banner__heading">
+            Apprenticeship service console
+        </p>
+        <div class="app-support-banner__user">
+            <p class="govuk-!-font-size-16">@Model.ConsoleUserType</p>
         </div>
     </div>
-</header>
+    <div class=" app-support-banner__context">
+        <p class="govuk-!-font-size-16">You are viewing as @(Model.Account?.Name ?? string.Empty) (account ID:  @(Model.Account?.PublicHashedId ?? string.Empty))</p>
+    </div>
+</div>
