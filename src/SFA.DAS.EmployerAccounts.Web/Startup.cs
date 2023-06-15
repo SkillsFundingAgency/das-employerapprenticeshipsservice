@@ -1,6 +1,5 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Routing;
@@ -22,6 +21,7 @@ using SFA.DAS.NServiceBus.Features.ClientOutbox.Data;
 using SFA.DAS.UnitOfWork.DependencyResolution.Microsoft;
 using SFA.DAS.UnitOfWork.EntityFrameworkCore.DependencyResolution.Microsoft;
 using SFA.DAS.UnitOfWork.Mvc.Extensions;
+using SFA.DAS.UnitOfWork.NServiceBus.DependencyResolution.Microsoft;
 using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.Microsoft;
 
 namespace SFA.DAS.EmployerAccounts.Web;
@@ -45,8 +45,6 @@ public class Startup
         services.AddOptions();
 
         services.AddLogging();
-
-        services.AddHttpContextAccessor();
 
         services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
         services.AddConfigurationOptions(_configuration);
@@ -111,17 +109,11 @@ public class Startup
         }
         else
         {
-            services.AddAndConfigureEmployerAuthentication(identityServerConfiguration, new SupportConsoleAuthenticationOptions
-            {
-                AdfsOptions = new ADFSOptions
-                {
-                    MetadataAddress = employerAccountsConfiguration.AdfsMetadata,
-                    Wreply = employerAccountsConfiguration.EmployerAccountsBaseUrl,
-                    Wtrealm = employerAccountsConfiguration.EmployerAccountsBaseUrl,
-                    BaseUrl = employerAccountsConfiguration.Identity.BaseAddress,
-                }
-            });
+            services.AddAndConfigureEmployerAuthentication(identityServerConfiguration);
         }
+
+        // TODO: Support sign in 
+        //services.AddAndConfigureSupportUserAuthentications(new SupportConsoleAuthenticationOptions());
 
         services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
 
@@ -133,8 +125,7 @@ public class Startup
             options.Filters.Add(new AnalyticsFilterAttribute());
             if (!_configuration.IsDev())
             {
-                // remove tempt to pass correlation issue between idams and employer accounts
-                // options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             }
 
         });
@@ -175,19 +166,10 @@ public class Startup
             app.UseDeveloperExceptionPage();
         }
 
-        app.UseSupportConsoleAuthentication();
-
         app.UseUnitOfWork();
 
         app.UseStaticFiles();
         app.UseAuthentication();
-        app.UseCookiePolicy(new CookiePolicyOptions
-        {
-            Secure = CookieSecurePolicy.Always,
-            MinimumSameSitePolicy = SameSiteMode.Strict,
-            HttpOnly = HttpOnlyPolicy.Always
-        });
-        
         app.UseRouting();
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>
