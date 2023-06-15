@@ -61,3 +61,48 @@
     border-bottom: 1px solid #777;
     outline: 1px solid #ccc;
 }
+
+.app-support-banner {
+    background: #333;
+    color: #fff;
+}
+
+
+.app-support-banner__content {
+    padding: 20px 30px 10px;
+}
+
+@media (min-width: 40.0625em) {
+    .app-support-banner__content {
+        display: flex;
+        align-items: center;
+    }
+}
+
+.app-support-banner__heading {
+    margin-bottom: 10px;
+}
+
+.app-support-banner__user {
+    margin-left: auto;
+}
+
+.app-support-banner__heading {
+    color: inherit;
+}
+
+.app-support-banner__context {
+    padding: 15px 30px 30px;
+    border-top: 1px solid #000;
+}
+
+@media (min-width: 40.0625em) {
+    .app-support-banner__context {
+        padding-top: 0;
+        border: none;
+    }
+}
+
+.app-support-banner__context p {
+    margin: 0;
+}
