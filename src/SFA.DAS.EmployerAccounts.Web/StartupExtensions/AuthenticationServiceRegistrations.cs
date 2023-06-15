@@ -118,7 +118,6 @@ public static class EmployerAuthenticationServiceRegistrations
                 sharedOptions.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 sharedOptions.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
                 sharedOptions.DefaultSignOutScheme = OpenIdConnectDefaults.AuthenticationScheme;
-
             })
             .AddCookie(options =>
             {
