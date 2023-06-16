@@ -1,5 +1,7 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.IdentityModel.Tokens;
@@ -64,6 +66,36 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             app.Map("/login/staff", SetAuthenticationContextForStaffUser());
 
             return app;
+        }
+
+        private static Action<IApplicationBuilder> SetAuthenticationContextForStaffUser()
+        {
+            return app =>
+            {
+                app.Run(async context =>
+                {
+                    var hashedAccountId = context.Request.Query[HashedAccountId];
+                    var requestRedirect = string.IsNullOrEmpty(hashedAccountId) ? "/service/index" : $"/accounts/{hashedAccountId}/teams/view";
+
+                    if (!context.User.Identity.IsAuthenticated)
+                    {
+                        var logger = context.RequestServices.GetService(typeof(ILogger)) as ILogger;
+                        // for first iteration of this work, allow deep linking from the support console to the teams view
+                        // as this is the only action they will currently perform.
+
+
+                        await context.ChallengeAsync(SupportUserClaimConstants.WsFederationAuthScheme, new AuthenticationProperties
+                        {
+                            RedirectUri = requestRedirect,
+                            IsPersistent = true
+                        });
+                    }
+                    else
+                    {
+                        context.Response.Redirect(requestRedirect); // Redirect to the home page or any other desired location
+                    }
+                });
+            };
         }
 
         private static Task OnSecurityTokenValidated(SecurityTokenValidatedContext context)
@@ -135,36 +167,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
         {
             var accountOwner = db.Accounts.Single(acc => acc.HashedId == hashedAccountId).Memberships.FirstOrDefault(m => m.Role == Role.Owner).User;
             claimsIdentity.AddClaim(new Claim(ControllerConstants.UserRefClaimKeyName, accountOwner.Ref.ToString()));
-        }
-
-        private static Action<IApplicationBuilder> SetAuthenticationContextForStaffUser()
-        {
-            return app =>
-            {
-                app.Run(async context =>
-                {
-                    var hashedAccountId = context.Request.Query[HashedAccountId];
-                    var requestRedirect = string.IsNullOrEmpty(hashedAccountId) ? "/service/index" : $"/accounts/{hashedAccountId}/teams/view";
-
-                    if (!context.User.Identity.IsAuthenticated)
-                    {
-                        var logger = context.RequestServices.GetService(typeof(ILogger)) as ILogger;
-                        // for first iteration of this work, allow deep linking from the support console to the teams view
-                        // as this is the only action they will currently perform.
-
-
-                        await context.ChallengeAsync(SupportUserClaimConstants.WsFederationAuthScheme, new AuthenticationProperties
-                        {
-                            RedirectUri = requestRedirect,
-                            IsPersistent = true
-                        });
-                    }
-                    else
-                    {
-                        context.Response.Redirect(requestRedirect); // Redirect to the home page or any other desired location
-                    }
-                });
-            };
         }
     }
 

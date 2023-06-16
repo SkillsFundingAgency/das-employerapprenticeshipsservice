@@ -4,7 +4,8 @@
       "commandName": "Project",
       "launchBrowser": true,
       "applicationUrl": "https://localhost:44344;http://localhost:63171",
-      "launchUrl": "login/staff?HashedAccountId=VPYN9B",
+      //"launchUrl": "login/staff?HashedAccountId=VPYN9B",
+      "launchUrl": "accounts/VPYN9B/teams",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

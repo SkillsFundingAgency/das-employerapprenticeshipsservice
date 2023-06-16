@@ -28,7 +28,7 @@ public static class EmployerAuthenticationServiceRegistrations
         services.AddSingleton<IAuthorizationHandler, EmployerAccountOwnerAuthorizationHandler>();
         services.AddSingleton<IAuthorizationHandler, AccountActiveAuthorizationHandler>();//TODO remove after gov login enabled
         services.AddTransient<IUserAccountService, UserAccountService>();
-        
+
 
         services.AddAuthorization(options =>
         {
@@ -36,7 +36,7 @@ public static class EmployerAuthenticationServiceRegistrations
                 PolicyNames.HasUserAccount
                 , policy =>
                 {
-                    policy.AddAuthenticationSchemes(SupportUserClaimConstants.WsFederationAuthScheme, OpenIdConnectDefaults.AuthenticationScheme);
+                    policy.AddAuthenticationSchemes(OpenIdConnectDefaults.AuthenticationScheme, SupportUserClaimConstants.WsFederationAuthScheme);
 
                     policy.RequireAssertion(_ =>
                     {
@@ -45,10 +45,10 @@ public static class EmployerAuthenticationServiceRegistrations
                             return true;
                         }
 
-                    policy.Requirements.Add(new AccountActiveRequirement());
+                        policy.Requirements.Add(new AccountActiveRequirement());
 
                         return _.User.HasClaim(c => c.Type == EmployerClaims.IdamsUserIdClaimTypeIdentifier);
-                });
+                    });
 
                     policy.RequireAuthenticatedUser();
                 });
@@ -57,7 +57,7 @@ public static class EmployerAuthenticationServiceRegistrations
                 PolicyNames.HasEmployerOwnerAccount
                 , policy =>
                 {
-                    policy.AddAuthenticationSchemes(SupportUserClaimConstants.WsFederationAuthScheme, OpenIdConnectDefaults.AuthenticationScheme);
+                    policy.AddAuthenticationSchemes(OpenIdConnectDefaults.AuthenticationScheme, SupportUserClaimConstants.WsFederationAuthScheme);
 
                     policy.RequireAssertion(_ =>
                     {
@@ -66,8 +66,8 @@ public static class EmployerAuthenticationServiceRegistrations
                             return true;
                         }
 
-                    policy.Requirements.Add(new EmployerAccountOwnerRequirement());
-                    policy.Requirements.Add(new AccountActiveRequirement());
+                        policy.Requirements.Add(new EmployerAccountOwnerRequirement());
+                        policy.Requirements.Add(new AccountActiveRequirement());
 
                         return _.User.HasClaim(c => c.Type == EmployerClaims.AccountsClaimsTypeIdentifier);
                     });
@@ -81,7 +81,7 @@ public static class EmployerAuthenticationServiceRegistrations
                 PolicyNames.HasEmployerViewerTransactorOwnerAccount
                 , policy =>
                 {
-                    policy.AddAuthenticationSchemes(SupportUserClaimConstants.WsFederationAuthScheme, OpenIdConnectDefaults.AuthenticationScheme);
+                    policy.AddAuthenticationSchemes(OpenIdConnectDefaults.AuthenticationScheme, SupportUserClaimConstants.WsFederationAuthScheme);
                     policy.RequireAssertion(_ =>
                     {
                         if (_.User.IsSupportUser())
@@ -89,8 +89,8 @@ public static class EmployerAuthenticationServiceRegistrations
                             return true;
                         }
 
-                    policy.Requirements.Add(new EmployerAccountAllRolesRequirement());
-                    policy.Requirements.Add(new AccountActiveRequirement());
+                        policy.Requirements.Add(new EmployerAccountAllRolesRequirement());
+                        policy.Requirements.Add(new AccountActiveRequirement());
 
                         return _.User.HasClaim(c => c.Type == EmployerClaims.AccountsClaimsTypeIdentifier);
                     });
@@ -131,31 +131,38 @@ public static class EmployerAuthenticationServiceRegistrations
             })
             .AddAndConfigureSupportConsoleAuthentication(authOptions)
             .AddOpenIdConnect(options =>
-            {
-                options.ClientId = configuration.ClientId;
-                options.ClientSecret = configuration.ClientSecret;
-                options.Authority = configuration.BaseAddress;
-                options.MetadataAddress = $"{configuration.BaseAddress}/.well-known/openid-configuration";
-                options.ResponseType = "code";
-                options.UsePkce = false;
+             {
+                 options.ClientId = configuration.ClientId;
+                 options.ClientSecret = configuration.ClientSecret;
+                 options.Authority = configuration.BaseAddress;
+                 options.MetadataAddress = $"{configuration.BaseAddress}/.well-known/openid-configuration";
+                 options.ResponseType = "code";
+                 options.UsePkce = false;
+                 options.CorrelationCookie = new CookieBuilder
+                 {
+                     Name = "Employer",
+                     SameSite = SameSiteMode.None,
+                     HttpOnly = false,
+                     SecurePolicy = CookieSecurePolicy.Always
+                 };
 
-                var scopes = configuration.Scopes.Split(' ');
-                foreach (var scope in scopes)
-                {
-                    options.Scope.Add(scope);
-                }
-                options.ClaimActions.MapUniqueJsonKey("sub", "id");
-                options.Events.OnRemoteFailure = c =>
-                {
-                    if (c.Failure.Message.Contains("Correlation failed"))
-                    {
-                        c.Response.Redirect("/");
-                        c.HandleResponse();
-                    }
+                 var scopes = configuration.Scopes.Split(' ');
+                 foreach (var scope in scopes)
+                 {
+                     options.Scope.Add(scope);
+                 }
+                 options.ClaimActions.MapUniqueJsonKey("sub", "id");
+                 options.Events.OnRemoteFailure = c =>
+                 {
+                     if (c.Failure.Message.Contains("Correlation failed"))
+                     {
+                         c.Response.Redirect("/");
+                         c.HandleResponse();
+                     }
 
-                    return Task.CompletedTask;
-                };
-            });
+                     return Task.CompletedTask;
+                 };
+             });
 
         services
             .AddOptions<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme)
