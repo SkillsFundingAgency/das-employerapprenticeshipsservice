@@ -134,7 +134,7 @@ public class Startup
             if (!_configuration.IsDev())
             {
                 // remove tempt to pass correlation issue between idams and employer accounts
-                // options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             }
 
         });
