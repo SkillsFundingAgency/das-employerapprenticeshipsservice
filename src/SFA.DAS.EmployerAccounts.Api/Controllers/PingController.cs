@@ -1,14 +1,16 @@
-﻿using System.Web.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
-namespace SFA.DAS.EmployerAccounts.Api.Controllers
+namespace SFA.DAS.EmployerAccounts.Api.Controllers;
+
+[AllowAnonymous]
+[Route("ping")]
+public class PingController : ControllerBase
 {
-    [RoutePrefix("ping")]
-    public class PingController : ApiController
+    [HttpGet]
+    [Route("")]
+    public IActionResult Get()
     {
-        [Route]
-        public IHttpActionResult Get()
-        {
-            return Ok();
-        }
+        return Ok();
     }
 }

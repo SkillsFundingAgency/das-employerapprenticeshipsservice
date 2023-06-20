@@ -1,20 +1,16 @@
-﻿using System;
-using SFA.DAS.EmployerAccounts.Interfaces;
+﻿namespace SFA.DAS.EmployerAccounts.Time;
 
-namespace SFA.DAS.EmployerAccounts.Time
+public sealed class CurrentDateTime : ICurrentDateTime
 {
-    public sealed class CurrentDateTime : ICurrentDateTime
+    public DateTime Now { get; }
+
+    public CurrentDateTime()
     {
-        public DateTime Now { get; }
+        Now = DateTime.UtcNow;
+    }
 
-        public CurrentDateTime()
-        {
-            Now = DateTime.UtcNow;
-        }
-
-        public CurrentDateTime(DateTime time)
-        {
-            Now = time;
-        }
+    public CurrentDateTime(DateTime time)
+    {
+        Now = time;
     }
 }

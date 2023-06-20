@@ -3,7 +3,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.CreateAccount;
-using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests

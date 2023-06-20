@@ -1,60 +1,52 @@
-﻿using System;
-using System.Net;
-using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.Validation;
+﻿using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 
-namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
+namespace SFA.DAS.EmployerAccounts.Web.Orchestrators;
+
+public class SupportErrorOrchestrator
 {
-    public class SupportErrorOrchestrator
+    private readonly IMediator _mediator;
+
+    public SupportErrorOrchestrator(IMediator mediator)
     {
-        private readonly IMediator _mediator;
+        _mediator = mediator;
+    }
 
-        public SupportErrorOrchestrator(IMediator mediator)
+    public virtual async Task<OrchestratorResponse<AccountSummaryViewModel>> GetAccountSummary(long accountId, string externalUserId)
+    {
+        try
         {
-            _mediator = mediator;
+            var accountResponse = await _mediator.Send(new GetEmployerAccountByIdQuery
+            {
+                AccountId = accountId,
+                UserId = externalUserId
+            });
+
+            var viewModel = new AccountSummaryViewModel
+            {
+                Account = accountResponse.Account
+            };
+
+            return new OrchestratorResponse<AccountSummaryViewModel>
+            {
+                Status = HttpStatusCode.OK,
+                Data = viewModel
+            };
         }
-
-
-        public virtual async Task<OrchestratorResponse<AccountSummaryViewModel>> GetAccountSummary(string hashedAccountId, string externalUserId)
+        catch (InvalidRequestException ex)
         {
-            try
+            return new OrchestratorResponse<AccountSummaryViewModel>
             {
-                var accountResponse = await _mediator.SendAsync(new GetEmployerAccountByHashedIdQuery
-                {
-                    HashedAccountId = hashedAccountId,
-                    UserId = externalUserId
-                });
-
-                var viewModel = new AccountSummaryViewModel
-                {
-                    Account = accountResponse.Account
-                };
-
-                return new OrchestratorResponse<AccountSummaryViewModel>
-                {
-                    Status = HttpStatusCode.OK,
-                    Data = viewModel
-                };
-            }
-            catch (InvalidRequestException ex)
+                Status = HttpStatusCode.BadRequest,
+                Data = new AccountSummaryViewModel(),
+                Exception = ex
+            };
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return new OrchestratorResponse<AccountSummaryViewModel>
             {
-                return new OrchestratorResponse<AccountSummaryViewModel>
-                {
-                    Status = HttpStatusCode.BadRequest,
-                    Data = new AccountSummaryViewModel(),
-                    Exception = ex
-                };
-            }
-            catch (UnauthorizedAccessException)
-            {
-                return new OrchestratorResponse<AccountSummaryViewModel>
-                {
-                    Status = HttpStatusCode.Unauthorized
-                };
-            }
+                Status = HttpStatusCode.Unauthorized
+            };
         }
     }
 }

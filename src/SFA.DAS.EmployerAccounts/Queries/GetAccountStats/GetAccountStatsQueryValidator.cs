@@ -1,46 +1,43 @@
-﻿using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.Validation;
+﻿using SFA.DAS.EmployerAccounts.Data.Contracts;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountStats
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountStats;
+
+public class GetAccountStatsQueryValidator : IValidator<GetAccountStatsQuery>
 {
-    public class GetAccountStatsQueryValidator : IValidator<GetAccountStatsQuery>
+    private readonly IMembershipRepository _repository;
+
+    public GetAccountStatsQueryValidator(IMembershipRepository repository)
     {
-        private readonly IMembershipRepository _repository;
+        _repository = repository;
+    }
 
-        public GetAccountStatsQueryValidator(IMembershipRepository repository)
+    public ValidationResult Validate(GetAccountStatsQuery item)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public async Task<ValidationResult> ValidateAsync(GetAccountStatsQuery item)
+    {
+        var validationResult = new ValidationResult();
+        if (string.IsNullOrEmpty(item.ExternalUserId))
         {
-            _repository = repository;
+            validationResult.AddError(nameof(item.ExternalUserId), "UserId has not been supplied");
+        }
+        if (item.AccountId <= 0)
+        {
+            validationResult.AddError(nameof(item.AccountId), "AccountId has not been supplied");
         }
 
-        public ValidationResult Validate(GetAccountStatsQuery item)
+        if (validationResult.IsValid())
         {
-            throw new System.NotImplementedException();
+            var member = await _repository.GetCaller(item.AccountId, item.ExternalUserId);
+            if (member == null)
+            {
+                validationResult.AddError(nameof(member), "Unauthorised: User not connected to account");
+                validationResult.IsUnauthorized = true;
+            }
         }
 
-        public async Task<ValidationResult> ValidateAsync(GetAccountStatsQuery item)
-        {
-            var validationResult = new ValidationResult();
-            if (string.IsNullOrEmpty(item.ExternalUserId))
-            {
-                validationResult.AddError(nameof(item.ExternalUserId), "UserId has not been supplied");
-            }
-            if (string.IsNullOrEmpty(item.HashedAccountId))
-            {
-                validationResult.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
-            }
-
-            if (validationResult.IsValid())
-            {
-                var member = await _repository.GetCaller(item.HashedAccountId, item.ExternalUserId);
-                if (member == null)
-                {
-                    validationResult.AddError(nameof(member), "Unauthorised: User not connected to account");
-                    validationResult.IsUnauthorized = true;
-                }
-            }
-
-            return validationResult;
-        }
+        return validationResult;
     }
 }

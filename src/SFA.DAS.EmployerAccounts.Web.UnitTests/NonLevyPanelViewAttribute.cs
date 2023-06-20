@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Reflection;
 using AutoFixture;
 using AutoFixture.NUnit3;
 using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.EmployerAccounts.Web.ViewComponents;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests
 {
@@ -20,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests
 
             if (parameter.ParameterType != typeof(PanelViewModel<AccountDashboardViewModel>))
             {
-                throw new ArgumentException(nameof(parameter));
+                throw new ArgumentException("Parameter.ParameterType is not the correct type.", nameof(parameter));
             }
 
             return new ArrangeNonLevyPanelViewCustomisation();
@@ -32,7 +30,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests
         public void Customize(IFixture fixture)
         {
             fixture.Customize<PanelViewModel<AccountDashboardViewModel>>(composer => composer
-                .With(panel => panel.ViewName, "Empty"));
+                .With(panel => panel.ComponentName, ComponentConstants.Empty));
             fixture.Customize<AccountDashboardViewModel>(composer => composer
                 .With(dash => dash.ApprenticeshipEmployerType, ApprenticeshipEmployerType.NonLevy)
                 .With(dash => dash.PendingAgreements, new List<PendingAgreementsViewModel>()));

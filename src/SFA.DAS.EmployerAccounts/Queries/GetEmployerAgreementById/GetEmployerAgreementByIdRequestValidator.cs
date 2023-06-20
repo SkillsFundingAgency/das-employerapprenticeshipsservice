@@ -1,30 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using SFA.DAS.Validation;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementById;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementById
+public class GetEmployerAgreementByIdRequestValidator : IValidator<GetEmployerAgreementByIdRequest>
 {
-    public class GetEmployerAgreementByIdRequestValidator : IValidator<GetEmployerAgreementByIdRequest>
+    public ValidationResult Validate(GetEmployerAgreementByIdRequest item)
     {
-        public ValidationResult Validate(GetEmployerAgreementByIdRequest item)
+        var validationResults = new Dictionary<string,string>();
+
+        if (item.AgreementId <= 0)
         {
-            var validationResults = new Dictionary<string,string>();
-
-            if (string.IsNullOrEmpty(item.HashedAgreementId))
-            {
-                validationResults.Add(nameof(item.HashedAgreementId), "Hashed agreement ID must be populated");
-            }
-
-            return new ValidationResult
-            {
-                ValidationDictionary = validationResults
-            };
+            validationResults.Add(nameof(item.AgreementId), "Hashed agreement ID must be populated");
         }
 
-        public Task<ValidationResult> ValidateAsync(GetEmployerAgreementByIdRequest item)
+        return new ValidationResult
         {
-            throw new NotImplementedException();
-        }
+            ValidationDictionary = validationResults
+        };
+    }
+
+    public Task<ValidationResult> ValidateAsync(GetEmployerAgreementByIdRequest item)
+    {
+        return Task.FromResult(Validate(item));
     }
 }

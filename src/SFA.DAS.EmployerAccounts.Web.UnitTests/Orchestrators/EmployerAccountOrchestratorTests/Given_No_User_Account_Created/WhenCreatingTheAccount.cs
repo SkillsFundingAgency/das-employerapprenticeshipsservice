@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.CreateAccount;
@@ -10,6 +12,7 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web.Models;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
+using SFA.DAS.Encoding;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTests.Given_No_User_Account_Created
@@ -18,7 +21,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
     {
         private EmployerAccountOrchestrator _employerAccountOrchestrator;
         private Mock<IMediator> _mediator;
-        private Mock<ILog> _logger;
+        private Mock<ILogger<EmployerAccountOrchestrator>> _logger;
         private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
 
         private EmployerAccountsConfiguration _configuration;
@@ -27,12 +30,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _logger = new Mock<ILog>();
+            _logger = new Mock<ILogger<EmployerAccountOrchestrator>>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _configuration = new EmployerAccountsConfiguration();
 
-            _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration);
-            _mediator.Setup(x => x.SendAsync(It.IsAny<CreateAccountCommand>()))
+            _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration, Mock.Of<IEncodingService>());
+            _mediator.Setup(x => x.Send(It.IsAny<CreateAccountCommand>(), It.IsAny<CancellationToken>()))
                      .ReturnsAsync(new CreateAccountCommandResponse()
                      {
                          HashedAccountId = "ABS10"
@@ -46,10 +49,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             var model = ArrangeModel();
 
             //Act
-            await _employerAccountOrchestrator.CreateOrUpdateAccount(model, It.IsAny<HttpContextBase>());
+            await _employerAccountOrchestrator.CreateOrUpdateAccount(model, It.IsAny<HttpContext>());
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAccountCommand>(
+            _mediator.Verify(x => x.Send(It.Is<CreateAccountCommand>(
                         c => c.AccessToken.Equals(model.AccessToken)
                         && c.OrganisationDateOfInception.Equals(model.OrganisationDateOfInception)
                         && c.OrganisationName.Equals(model.OrganisationName)
@@ -61,7 +64,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
                         && c.AccessToken.Equals(model.AccessToken)
                         && c.RefreshToken.Equals(model.RefreshToken)
                         && c.EmployerRefName.Equals(model.EmployerRefName)
-                    )));
+                    ), It.IsAny<CancellationToken>()));
         }
 
         [Test]
@@ -69,14 +72,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
         {
             //Assign
             const string hashedId = "1AFGG0";
-            _mediator.Setup(x => x.SendAsync(It.IsAny<CreateAccountCommand>()))
+            _mediator.Setup(x => x.Send(It.IsAny<CreateAccountCommand>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new CreateAccountCommandResponse()
                 {
                     HashedAccountId = hashedId
                 });
 
             //Act
-            var response = await _employerAccountOrchestrator.CreateOrUpdateAccount(new CreateAccountModel(), It.IsAny<HttpContextBase>());
+            var response = await _employerAccountOrchestrator.CreateOrUpdateAccount(new CreateAccountModel(), It.IsAny<HttpContext>());
 
             //Assert
             Assert.AreEqual(hashedId, response.Data?.EmployerAgreement?.HashedAccountId);
@@ -108,7 +111,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             _cookieService.Setup(x => x.Get( It.IsAny<string>()))
                 .Returns(employerAccountData);
 
-            var context = new Mock<HttpContextBase>();
+            var context = new Mock<HttpContext>();
 
             //Act
             var model = _employerAccountOrchestrator.GetSummaryViewModel(context.Object);

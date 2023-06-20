@@ -1,9 +1,6 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetGatewayInformation;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetGatewayInformation
+public class GetGatewayInformationQuery : IRequest<GetGatewayInformationResponse>
 {
-    public class GetGatewayInformationQuery : IAsyncRequest<GetGatewayInformationResponse>
-    {
-        public string ReturnUrl { get; set; }
-    }
+    public string ReturnUrl { get; set; }
 }

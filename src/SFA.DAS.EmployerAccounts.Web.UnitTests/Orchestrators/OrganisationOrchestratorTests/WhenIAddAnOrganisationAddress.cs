@@ -1,110 +1,98 @@
-﻿using System.Collections.Generic;
-using System.Net;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
-using Moq;
-using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.CreateOrganisationAddress;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.MarkerInterfaces;
-using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Validation;
+using SFA.DAS.EmployerAccounts.Exceptions;
+using SFA.DAS.Encoding;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests;
+
+class WhenIAddAnOrganisationAddress
 {
-    class WhenIAddAnOrganisationAddress
+    private OrganisationOrchestrator _orchestrator;
+    private Mock<IMediator> _mediator;
+    private Mock<IMapper> _mapper;
+    private Mock<IEncodingService> _encodingServiceMock;
+
+    private CreateOrganisationAddressRequest _request;
+    private AddOrganisationAddressViewModel _viewModel;
+    private string _address;
+    private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
+
+    [SetUp]
+    public void Arrange()
     {
-        private OrganisationOrchestrator _orchestrator;
-        private Mock<IMediator> _mediator;
-        private Mock<ILog> _logger;
-        private Mock<IMapper> _mapper;
-        private Mock<IAccountLegalEntityPublicHashingService> _hashingService;
+        _viewModel = new AddOrganisationAddressViewModel();
 
-        private CreateOrganisationAddressRequest _request;
-        private AddOrganisationAddressViewModel _viewModel;
-        private string _address;
-        private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
-
-        [SetUp]
-        public void Arrange()
+        _request = new CreateOrganisationAddressRequest()
         {
-            _viewModel = new AddOrganisationAddressViewModel();
+            AddressFirstLine = "123, Test Lane",
+            AddressSecondLine = "Test Garden",
+            TownOrCity = "Test Town",
+            County = "Testshire",
+            Postcode = "TE12 3ST"
+        };
 
-            _request = new CreateOrganisationAddressRequest()
-            {
-                AddressFirstLine = "123, Test Lane",
-                AddressSecondLine = "Test Garden",
-                TownOrCity = "Test Town",
-                County = "Testshire",
-                Postcode = "TE12 3ST"
-            };
+        _address = $"{_request.AddressFirstLine}, {_request.AddressSecondLine}, " +
+                   $"{_request.TownOrCity}, {_request.County}, {_request.Postcode}";
 
-            _address = $"{_request.AddressFirstLine}, {_request.AddressSecondLine}, " +
-                       $"{_request.TownOrCity}, {_request.County}, {_request.Postcode}";
-           
-            _mediator = new Mock<IMediator>();
-            _logger = new Mock<ILog>();
-            _mapper = new Mock<IMapper>();
-            _hashingService = new Mock<IAccountLegalEntityPublicHashingService>();
+        _mediator = new Mock<IMediator>();
+        _mapper = new Mock<IMapper>();
+        _encodingServiceMock = new Mock<IEncodingService>();
 
-            _mapper.Setup(x => x.Map<CreateOrganisationAddressRequest>(It.IsAny<AddOrganisationAddressViewModel>()))
-                .Returns(_request);
+        _mapper.Setup(x => x.Map<CreateOrganisationAddressRequest>(It.IsAny<AddOrganisationAddressViewModel>()))
+            .Returns(_request);
 
-            _mediator.Setup(x => x.Send(It.IsAny<CreateOrganisationAddressRequest>()))
-                     .Returns(new CreateOrganisationAddressResponse {Address = _address});
+        _mediator.Setup(x => x.Send(It.IsAny<CreateOrganisationAddressRequest>(), CancellationToken.None))
+            .ReturnsAsync(new CreateOrganisationAddressResponse { Address = _address });
 
-            _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
-            
-
-             _orchestrator = new OrganisationOrchestrator(_mediator.Object, _logger.Object, _mapper.Object, _cookieService.Object, _hashingService.Object);
-        }
-
-        [Test]
-        public void ThenIShouldReturnAnOrganisationWithTheCorrectAddress()
-        {
-            //Act
-            var result = _orchestrator.AddOrganisationAddress(_viewModel);
-
-            //Assert
-            _mapper.Verify(x => x.Map<CreateOrganisationAddressRequest>(_viewModel.Address), Times.Once);
-            _mediator.Verify(x => x.Send(_request), Times.Once);
-            Assert.AreEqual(_address, result.Data.Address);
-        }
-
-        [Test]
-        public void ThenIShouldReturnBadRequestIfValidationHasFailed()
-        {
-            //Arange
-            _mediator.Setup(x => x.Send(It.IsAny<CreateOrganisationAddressRequest>()))
-                .Throws(new InvalidRequestException(new Dictionary<string, string>
-                    {
-                        {"Test", "Test"}
-                    })
-                );
+        _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
 
 
-            //Act
-            var result = _orchestrator.AddOrganisationAddress(_viewModel);
+        _orchestrator = new OrganisationOrchestrator(_mediator.Object, _mapper.Object, _cookieService.Object, _encodingServiceMock.Object);
+    }
 
-            //Assert
-            Assert.AreEqual(HttpStatusCode.BadRequest, result.Status);
-        }
+    [Test]
+    public void ThenIShouldReturnAnOrganisationWithTheCorrectAddress()
+    {
+        //Act
+        var result = _orchestrator.AddOrganisationAddress(_viewModel);
+
+        //Assert
+        _mapper.Verify(x => x.Map<CreateOrganisationAddressRequest>(_viewModel.Address), Times.Once);
+        _mediator.Verify(x => x.Send(_request, CancellationToken.None), Times.Once);
+        Assert.AreEqual(_address, result.Data.Address);
+    }
+
+    [Test]
+    public void ThenIShouldReturnBadRequestIfValidationHasFailed()
+    {
+        //Arange
+        _mediator.Setup(x => x.Send(It.IsAny<CreateOrganisationAddressRequest>(), CancellationToken.None))
+            .Throws(new InvalidRequestException(new Dictionary<string, string>
+                {
+                    {"Test", "Test"}
+                })
+            );
 
 
-        [Test]
-        public void ThenTheCodeIsDefaultedToEmptyStringIfNull()
-        {
-            //Arrange
-            _viewModel.OrganisationReferenceNumber = null;
+        //Act
+        var result = _orchestrator.AddOrganisationAddress(_viewModel);
 
-            //Act
-            var actual = _orchestrator.AddOrganisationAddress(_viewModel);
+        //Assert
+        Assert.AreEqual(HttpStatusCode.BadRequest, result.Status);
+    }
 
-            //Assert
-            Assert.AreEqual("",actual.Data.ReferenceNumber);
-        }
+
+    [Test]
+    public void ThenTheCodeIsDefaultedToEmptyStringIfNull()
+    {
+        //Arrange
+        _viewModel.OrganisationReferenceNumber = null;
+
+        //Act
+        var actual = _orchestrator.AddOrganisationAddress(_viewModel);
+
+        //Assert
+        Assert.AreEqual("", actual.Data.ReferenceNumber);
     }
 }

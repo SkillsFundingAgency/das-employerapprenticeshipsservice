@@ -1,9 +1,6 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements
+public class GetOrganisationAgreementsRequest : IRequest<GetOrganisationAgreementsResponse>
 {
-    public class GetOrganisationAgreementsRequest : IAsyncRequest<GetOrganisationAgreementsResponse>
-    {
-        public string AccountLegalEntityHashedId { get; set; }
-    }
+    public string AccountLegalEntityHashedId { get; set; }
 }

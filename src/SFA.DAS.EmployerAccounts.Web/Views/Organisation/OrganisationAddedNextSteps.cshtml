@@ -1,63 +1,58 @@
 ﻿@model OrchestratorResponse<OrganisationAddedNextStepsViewModel>
 
-@{ViewBag.PageID = "page-onboard-organisation-added-what-next"; }
 @{
+    ViewBag.PageID = "page-onboard-organisation-added-what-next";
     ViewBag.Title = "What's next";
     ViewBag.Section = "organisations";
     ViewBag.ZenDeskLabel = "eas-organisation-has-been-added";
-}
-@{
     ViewBag.GaData.Vpv = "/accounts/organisations/nextStep/page-onboard-organisation-added-what-next";
+    string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]?.ToString();
+    ViewBag.ShowNav = !string.IsNullOrEmpty(hashedAccountId);
 }
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-large">What's next?</h1>
-        
-        <form action="@Url.Action("GoToNextStep")" method="post">
-            <fieldset>
-
-                <legend>
-                    <span class="vh">What's next?</span>
-                    @if (!string.IsNullOrEmpty(Model.Data.ErrorMessage))
-        {
-            <span class="error-message">@Model.Data.ErrorMessage</span>
-}
-                </legend>
-
-                <div class="form-group @(!string.IsNullOrEmpty(Model.Data.ErrorMessage) ? "error" : "")">
-                    @if (!Model.Data.ShowWizard)
-        {
-            <label for="acceptAgreement" class="block-label">
-                <span class="form-label">Sign an agreement to allow @Model.Data.OrganisationName to spend funds</span>
-                <input type="radio" name="nextStep" value="agreement" id="acceptAgreement" />
-            </label>
-
-            <label for="teamMembers" class="block-label">
-                <span class="form-label">Check which team members can sign the agreement</span>
-                <input type="radio" name="nextStep" value="teamMembers" id="teamMembers" />
-            </label>
-}
-                    <label for="addAnotherOrganisation" class="block-label">
-                        <span class="form-label">Add another organisation</span>
-                        <input type="radio" name="nextStep" value="addOrganisation" id="addAnotherOrganisation" />
-                    </label>
-
-                    <label for="GoToDashboard" class="block-label">
-                        <span class="form-label">@(Model.Data.ShowWizard ? "Continue account setup" : "Return to homepage")</span>
-                        <input type="radio" name="nextStep" value="dashboard" id="GoToDashboard" />
-                    </label>
-
-                </div>
-
-                <input type="hidden" name="organisationName" value="@Model.Data.OrganisationName" />
-                <input type="hidden" name="hashedAgreementId" value="@Model.Data.HashedAgreementId" />
-
-                <div class="form-group">
-                    <button type="submit" class="button">Continue</button>
-                </div>
-
-            </fieldset>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">What's next?</h1>
+        <form asp-route="@RouteNames.OrganisationGoToNextStep" asp-route-HashedAccountId="@hashedAccountId" method="POST">
+            <div class="govuk-form-group @(!string.IsNullOrEmpty(Model.Data.ErrorMessage) ? "govuk-form-group--error" : "")">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend">
+                        <span class="govuk-visually-hidden">What's next?</span>
+                        @if (!string.IsNullOrEmpty(Model.Data.ErrorMessage))
+                        {
+                            <span class="govuk-error-message">@Model.Data.ErrorMessage</span>
+                        }
+                    </legend>
+                    <div class="govuk-radios" data-module="govuk-radios">
+                        <div class="govuk-radios__item">
+                            <input type="radio" name="nextStep" value="agreement" id="acceptAgreement" class="govuk-radios__input" />
+                            <label for="acceptAgreement" class="govuk-label govuk-radios__label">
+                                <span class="form-label">Sign an agreement to allow @Model.Data.OrganisationName to spend funds</span>
+                            </label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input type="radio" name="nextStep" value="teamMembers" id="teamMembers" class="govuk-radios__input" />
+                            <label for="teamMembers" class="govuk-label govuk-radios__label">
+                                <span class="form-label">Check which team members can sign the agreement</span>
+                            </label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input type="radio" name="nextStep" value="addOrganisation" id="addAnotherOrganisation" class="govuk-radios__input" />
+                            <label for="addAnotherOrganisation" class="govuk-label govuk-radios__label">
+                                <span class="form-label">Add another organisation</span>
+                            </label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input type="radio" name="nextStep" value="dashboard" id="GoToDashboard" class="govuk-radios__input" />
+                            <label for="GoToDashboard" class="govuk-label govuk-radios__label">
+                                <span class="form-label">Return to homepage</span>
+                            </label>
+                        </div>
+                    </div>
+                    <input type="hidden" name="organisationName" value="@Model.Data.OrganisationName" />
+                    <input type="hidden" name="hashedAgreementId" value="@Model.Data.HashedAgreementId" />
+                </fieldset>
+            </div>
+            <button type="submit" class="govuk-button">Continue</button>
         </form>
     </div>
 </div>
-

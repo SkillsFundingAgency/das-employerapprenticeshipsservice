@@ -1,44 +1,41 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Validation;
+﻿using System.Threading;
+using Microsoft.Extensions.Logging;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetTeamMembers
+namespace SFA.DAS.EmployerAccounts.Queries.GetTeamMembers;
+
+public class GetTeamMembersRequestHandler : IRequestHandler<GetTeamMembersRequest, GetTeamMembersResponse>
 {
-    public class GetTeamMembersRequestHandler : IAsyncRequestHandler<GetTeamMembersRequest, GetTeamMembersResponse>
+    private readonly IEmployerAccountTeamRepository _repository;
+    private readonly IValidator<GetTeamMembersRequest> _validator;
+    private readonly ILogger<GetTeamMembersRequestHandler> _logger;
+
+    public GetTeamMembersRequestHandler(
+        IEmployerAccountTeamRepository repository, 
+        IValidator<GetTeamMembersRequest> validator,
+        ILogger<GetTeamMembersRequestHandler> logger)
     {
-        private readonly IEmployerAccountTeamRepository _repository;
-        private readonly IValidator<GetTeamMembersRequest> _validator;
-        private readonly ILog _logger;
+        _repository = repository;
+        _validator = validator;
+        _logger = logger;
+    }
 
-        public GetTeamMembersRequestHandler(
-            IEmployerAccountTeamRepository repository, 
-            IValidator<GetTeamMembersRequest> validator,
-            ILog logger)
+    public async Task<GetTeamMembersResponse> Handle(GetTeamMembersRequest message, CancellationToken cancellationToken)
+    {
+        var validationResult = _validator.Validate(message);
+
+        if (!validationResult.IsValid())
         {
-            _repository = repository;
-            _validator = validator;
-            _logger = logger;
+            throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        public async Task<GetTeamMembersResponse> Handle(GetTeamMembersRequest message)
+        _logger.LogInformation("Getting team members for account id {AccountId}", message.AccountId);
+
+        var teamMembers = await _repository.GetAccountTeamMembers(message.AccountId);
+
+        return new GetTeamMembersResponse
         {
-            var validationResult = _validator.Validate(message);
-
-            if (!validationResult.IsValid())
-            {
-                throw new InvalidRequestException(validationResult.ValidationDictionary);
-            }
-
-            _logger.Info($"Getting team members for account id {message.HashedAccountId}");
-
-            var teamMembers = await _repository.GetAccountTeamMembers(message.HashedAccountId);
-
-            return new GetTeamMembersResponse
-            {
-                TeamMembers = teamMembers
-            };
-        }
+            TeamMembers = teamMembers
+        };
     }
 }

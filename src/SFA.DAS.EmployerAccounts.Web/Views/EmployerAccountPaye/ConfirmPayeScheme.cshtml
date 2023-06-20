@@ -2,22 +2,20 @@
 @{
     ViewBag.PageID = "page-paye-scheme-confirm";
     ViewBag.ZenDeskLabel = "eas-confirm-paye-scheme";
+    ViewBag.Title = "Confirm PAYE Scheme";
+    ViewBag.Section = "paye";
+
+    string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]?.ToString();
 }
-@{ViewBag.Title = "Confirm PAYE Scheme";}
-@{ViewBag.Section = "paye";}
 
 @if (string.IsNullOrEmpty(Model.Data.PayeScheme))
 {
     ViewBag.PageID = "page-paye-scheme-in-use-error";
     ViewBag.Title = "PAYE scheme already in use";
     ViewBag.ZenDeskLabel = "eas-paye-scheme-already-in-use";
-}
-
-@{
     ViewBag.GaData.Vpv = "/accounts/schemes/confirm";
 }
 
-@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -30,7 +28,6 @@
             </h1>
 
             <form method="post">
-                @Html.AntiForgeryToken()
 
                 <p class="govuk-body">Is this the correct <abbr>PAYE</abbr> scheme?</p>
 
@@ -42,13 +39,13 @@
 
                 <div class="govuk-form-group">
                     <button type="submit" class="govuk-button" id="accept">Yes, continue</button>
-                    <a href="@Url.Action("Getgateway", "EmployerAccountPaye", new { confirmPayeVisibility = true })" class="govuk-link das-link--button-aligned">No, use different details</a>
+                    <a asp-route="@RouteNames.EmployerAccountPayeGateway" asp-route-hashedAccountId="@hashedAccountId" class="govuk-link das-link--button-aligned">No, use different details</a>
                 </div>
             </form>
         }
         else if (Model.Data.EmprefNotFound)
         {
-            @Html.Partial("_PayeNotFound", Url.Action("Getgateway", "EmployerAccountPaye", new { confirmPayeVisibility = true }))
+            @await Html.PartialAsync("_PayeNotFound", Url.Action("Getgateway", "EmployerAccountPaye", new { hashedAccountId }))
         }
         else
         {
@@ -56,7 +53,7 @@
 
             <h1 class="govuk-heading-xl"><abbr>PAYE</abbr> scheme already in use</h1>
             <p class="govuk-body">The <abbr>PAYE</abbr> scheme for the Government Gateway details you entered is already added to an account.</p>
-            <p class="govuk-body"><a class="govuk-button" href="@Url.Action("Getgateway", "EmployerAccountPaye", new {confirmPayeVisibility = true})">Use different details</a></p>
+            <p class="govuk-body"><a class="govuk-button" asp-route="@RouteNames.EmployerAccountPayeGateway" asp-route-hashedAccountId="@hashedAccountId">Use different details</a></p>
         }
 
     </div>
@@ -64,6 +61,6 @@
 
 @section breadcrumb {
     <div class="govuk-breadcrumbs">
-        <a href="@Url.Action("Index", "EmployerAccountPaye", new { HashedAccountId = Model.Data.HashedAccountId })" class="govuk-back-link">Back to <abbr>PAYE</abbr> schemes</a>
+        <a asp-route="@RouteNames.EmployerAccountPaye" asp-route-hashedAccountId="@hashedAccountId" class="govuk-back-link">Back to <abbr>PAYE</abbr> schemes</a>
     </div>
 }

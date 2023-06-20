@@ -1,285 +1,258 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using System.Web;
-using AutoMapper;
-using MediatR;
+﻿using AutoMapper;
 using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 using SFA.DAS.EmployerAccounts.Commands.CreateOrganisationAddress;
 using SFA.DAS.EmployerAccounts.Commands.UpdateOrganisationDetails;
 using SFA.DAS.EmployerAccounts.Extensions;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.MarkerInterfaces;
-using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntity;
 using SFA.DAS.EmployerAccounts.Queries.GetOrganisationById;
-using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Validation;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Validation;
+using SFA.DAS.Encoding;
 
-namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
+namespace SFA.DAS.EmployerAccounts.Web.Orchestrators;
+
+public class OrganisationOrchestrator : UserVerificationOrchestratorBase, IOrchestratorCookie
 {
-    public class OrganisationOrchestrator : UserVerificationOrchestratorBase, IOrchestratorCookie
+    private readonly IMediator _mediator;
+    private readonly IMapper _mapper;
+    private readonly ICookieStorageService<EmployerAccountData> _cookieService;
+    private readonly IEncodingService _encodingService;
+    private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
+
+    public OrganisationOrchestrator(
+        IMediator mediator,
+        IMapper mapper,
+        ICookieStorageService<EmployerAccountData> cookieService,
+        IEncodingService encodingService)
+        : base(mediator)
     {
-        private readonly IMediator _mediator;
-        private readonly ILog _logger;
-        private readonly IMapper _mapper;
-        private readonly ICookieStorageService<EmployerAccountData> _cookieService;
-        private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityHashingService;
+        _mediator = mediator;
+        _mapper = mapper;
+        _cookieService = cookieService;
+        this._encodingService = encodingService;
+    }
+    
+    protected OrganisationOrchestrator() { }
 
-        private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
-
-        public OrganisationOrchestrator(
-            IMediator mediator,
-            ILog logger,
-            IMapper mapper,
-            ICookieStorageService<EmployerAccountData> cookieService,
-            IAccountLegalEntityPublicHashingService accountLegalEntityHashingService)
-            : base(mediator)
+    public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateLegalEntity(CreateNewLegalEntityViewModel request)
+    {
+        try
         {
-            _mediator = mediator;
-            _logger = logger;
-            _mapper = mapper;
-            _cookieService = cookieService;
-            _accountLegalEntityHashingService = accountLegalEntityHashingService;
-        }
-
-
-        protected OrganisationOrchestrator()
-        {
-        }
-
-        public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateLegalEntity(CreateNewLegalEntityViewModel request)
-        {
-            try
+            var result = await _mediator.Send(new CreateLegalEntityCommand
             {
-                var result = await _mediator.SendAsync(new CreateLegalEntityCommand
-                {
-                    HashedAccountId = request.HashedAccountId,
-                    Code = request.Code,
-                    DateOfIncorporation = request.IncorporatedDate,
-                    Status = request.LegalEntityStatus,
-                    Source = request.Source,
-                    PublicSectorDataSource = request.PublicSectorDataSource,
-                    Sector = request.Sector,
-                    Name = request.Name,
-                    Address = request.Address,
-                    ExternalUserId = request.ExternalUserId
-                });
+                HashedAccountId = request.HashedAccountId,
+                Code = request.Code,
+                DateOfIncorporation = request.IncorporatedDate,
+                Status = request.LegalEntityStatus,
+                Source = request.Source,
+                PublicSectorDataSource = request.PublicSectorDataSource,
+                Sector = request.Sector,
+                Name = request.Name,
+                Address = request.Address,
+                ExternalUserId = request.ExternalUserId
+            });
 
-                return new OrchestratorResponse<EmployerAgreementViewModel>
-                {
-                    Data = new EmployerAgreementViewModel
-                    {
-                        EmployerAgreement = result.AgreementView
-                    },
-                    Status = HttpStatusCode.OK
-                };
-            }
-            catch (UnauthorizedAccessException e)
+            return new OrchestratorResponse<EmployerAgreementViewModel>
             {
-                return new OrchestratorResponse<EmployerAgreementViewModel>
+                Data = new EmployerAgreementViewModel
                 {
-                    Status = HttpStatusCode.Unauthorized,
-                    Exception = e,
-                };
-            }
-            catch (InvalidRequestException e)
-            {
-                return new OrchestratorResponse<EmployerAgreementViewModel>
-                {
-                    Status = HttpStatusCode.BadRequest,
-                    Exception = e,
-                };
-            }
-        }
-
-        public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>> ValidateLegalEntityName(OrganisationDetailsViewModel request)
-        {
-            var response = new OrchestratorResponse<OrganisationDetailsViewModel>
-            {
-                Data = request
+                    EmployerAgreement = result.AgreementView
+                },
+                Status = HttpStatusCode.OK
             };
-
-            var validator = new OrganisationDetailsViewModelValidator();
-            var validationResult = await validator.ValidateAsync(request);
-
-            if (!validationResult.IsValid)
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return new OrchestratorResponse<EmployerAgreementViewModel>
             {
-                response.Data.ErrorDictionary = new Dictionary<string, string>();
-                foreach (var validationError in validationResult.Errors)
+                Status = HttpStatusCode.Unauthorized,
+                Exception = e,
+            };
+        }
+        catch (InvalidRequestException e)
+        {
+            return new OrchestratorResponse<EmployerAgreementViewModel>
+            {
+                Status = HttpStatusCode.BadRequest,
+                Exception = e,
+            };
+        }
+    }
+
+    public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>> ValidateLegalEntityName(OrganisationDetailsViewModel request)
+    {
+        var response = new OrchestratorResponse<OrganisationDetailsViewModel>
+        {
+            Data = request
+        };
+
+        var validator = new OrganisationDetailsViewModelValidator();
+        var validationResult = await validator.ValidateAsync(request);
+
+        if (!validationResult.IsValid)
+        {
+            response.Data.ErrorDictionary = new Dictionary<string, string>();
+            foreach (var validationError in validationResult.Errors)
+            {
+                response.Data.ErrorDictionary.Add(validationError.PropertyName, validationError.ErrorMessage);
+            }
+
+            response.Status = HttpStatusCode.BadRequest;
+
+            response.FlashMessage = new FlashMessageViewModel
+            {
+                Headline = "Errors to fix",
+                Message = "Check the following details:",
+                Severity = FlashMessageSeverityLevel.Error,
+                ErrorMessages = response.Data.ErrorDictionary
+            };
+        }
+
+        return response;
+    }
+
+    public virtual OrchestratorResponse<OrganisationDetailsViewModel> AddOrganisationAddress(AddOrganisationAddressViewModel viewModel)
+    {
+        try
+        {
+            var request = _mapper.Map<CreateOrganisationAddressRequest>(viewModel.Address);
+
+            var response =  _mediator.Send(request).Result;
+
+            return new OrchestratorResponse<OrganisationDetailsViewModel>
+            {
+                Data = new OrganisationDetailsViewModel
                 {
-                    response.Data.ErrorDictionary.Add(validationError.PropertyName, validationError.ErrorMessage);
+                    HashedId = viewModel.OrganisationHashedId,
+                    Name = viewModel.OrganisationName,
+                    Address = response.Address,
+                    DateOfInception = viewModel.OrganisationDateOfInception,
+                    ReferenceNumber = viewModel.OrganisationReferenceNumber ?? string.Empty,
+                    Type = viewModel.OrganisationType,
+                    PublicSectorDataSource = viewModel.PublicSectorDataSource,
+                    Status = viewModel.OrganisationStatus,
+                    Sector = viewModel.Sector
                 }
-
-                response.Status = HttpStatusCode.BadRequest;
-
-                response.FlashMessage = new FlashMessageViewModel
+            };
+        }
+        catch (InvalidRequestException e)
+        {
+            return new OrchestratorResponse<OrganisationDetailsViewModel>
+            {
+                Data = new OrganisationDetailsViewModel
+                {
+                    ErrorDictionary = e.ErrorMessages
+                },
+                Status = HttpStatusCode.BadRequest,
+                Exception = e,
+                FlashMessage = new FlashMessageViewModel
                 {
                     Headline = "Errors to fix",
                     Message = "Check the following details:",
-                    Severity = FlashMessageSeverityLevel.Error,
-                    ErrorMessages = response.Data.ErrorDictionary
-                };
-            }
-
-            return response;
-        }
-
-        public virtual OrchestratorResponse<OrganisationDetailsViewModel> AddOrganisationAddress(AddOrganisationAddressViewModel viewModel)
-        {
-            try
-            {
-                var request = _mapper.Map<CreateOrganisationAddressRequest>(viewModel.Address);
-
-                var response = _mediator.Send(request);
-
-                return new OrchestratorResponse<OrganisationDetailsViewModel>
-                {
-                    Data = new OrganisationDetailsViewModel
-                    {
-                        HashedId = viewModel.OrganisationHashedId,
-                        Name = viewModel.OrganisationName,
-                        Address = response.Address,
-                        DateOfInception = viewModel.OrganisationDateOfInception,
-                        ReferenceNumber = viewModel.OrganisationReferenceNumber ?? string.Empty,
-                        Type = viewModel.OrganisationType,
-                        PublicSectorDataSource = viewModel.PublicSectorDataSource,
-                        Status = viewModel.OrganisationStatus,
-                        Sector = viewModel.Sector
-                    }
-                };
-            }
-            catch (InvalidRequestException e)
-            {
-                return new OrchestratorResponse<OrganisationDetailsViewModel>
-                {
-                    Data = new OrganisationDetailsViewModel
-                    {
-                        ErrorDictionary = e.ErrorMessages
-                    },
-                    Status = HttpStatusCode.BadRequest,
-                    Exception = e,
-                    FlashMessage = new FlashMessageViewModel
-                    {
-                        Headline = "Errors to fix",
-                        Message = "Check the following details:",
-                        ErrorMessages = e.ErrorMessages,
-                        Severity = FlashMessageSeverityLevel.Error
-                    }
-                };
-            }
-        }
-
-        public virtual EmployerAccountData GetCookieData(HttpContextBase context)
-        {
-            return _cookieService.Get(CookieName);
-        }
-
-        public virtual void CreateCookieData(HttpContextBase context, EmployerAccountData data)
-        {
-            _cookieService.Create(data, CookieName, 365);
-        }
-
-        public virtual async Task<bool> UserShownWizard(string userId, string hashedAccountId)
-        {
-            var userResponse = await Mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = hashedAccountId, TeamMemberId = userId });
-            return userResponse.User.ShowWizard && userResponse.User.Role == Role.Owner;
-        }
-
-        public virtual async Task<OrchestratorResponse<OrganisationAddedNextStepsViewModel>> GetOrganisationAddedNextStepViewModel(
-            string organisationName,
-            string userId,
-            string hashedAccountId,
-            string hashedAgreementId)
-        {
-            var showWizard = await UserShownWizard(userId, hashedAccountId);
-
-            return new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
-            {
-                Data = new OrganisationAddedNextStepsViewModel { OrganisationName = organisationName, ShowWizard = showWizard, HashedAgreementId = hashedAgreementId }
-            };
-        }
-
-        public async Task<OrchestratorResponse<ReviewOrganisationAddressViewModel>> GetRefreshedOrganisationDetails(string accountLegalEntityPublicHashedId)
-        {
-            var currentDetails = await Mediator.SendAsync(new GetAccountLegalEntityRequest
-            {
-                AccountLegalEntityId = _accountLegalEntityHashingService.DecodeValue(accountLegalEntityPublicHashedId)
-            });
-
-            var refreshedDetails = await Mediator.SendAsync(new GetOrganisationByIdRequest
-            {
-                Identifier = currentDetails.AccountLegalEntity.Identifier,
-                OrganisationType = currentDetails.AccountLegalEntity.OrganisationType
-            });
-
-            var result = new OrchestratorResponse<ReviewOrganisationAddressViewModel>
-            {
-                Data = new ReviewOrganisationAddressViewModel
-                {
-                    DataSourceFriendlyName = currentDetails.AccountLegalEntity.OrganisationType.GetFriendlyName(),
-                    AccountLegalEntityPublicHashedId = accountLegalEntityPublicHashedId,
-                    OrganisationName = currentDetails.AccountLegalEntity.Name,
-                    OrganisationAddress = currentDetails.AccountLegalEntity.Address,
-                    RefreshedName = refreshedDetails.Organisation.Name,
-                    RefreshedAddress = refreshedDetails.Organisation.Address.FormatAddress(),
+                    ErrorMessages = e.ErrorMessages,
+                    Severity = FlashMessageSeverityLevel.Error
                 }
             };
-
-            result.Data.UpdatesAvailable = CheckForUpdate(result.Data.OrganisationName, result.Data.RefreshedName, OrganisationUpdatesAvailable.Name) |
-                                           CheckForUpdate(result.Data.OrganisationAddress, result.Data.RefreshedAddress, OrganisationUpdatesAvailable.Address);
-
-            return result;
         }
+    }
 
-        public async Task<OrchestratorResponse<OrganisationUpdatedNextStepsViewModel>> UpdateOrganisation(
-            string accountLegalEntityPublicHashedId, 
-            string organisationName, 
-            string organisationAddress, 
-            string hashedAccountId, 
-            string userId)
+    public virtual EmployerAccountData GetCookieData(HttpContext context)
+    {
+        return _cookieService.Get(CookieName);
+    }
+
+    public virtual void CreateCookieData(HttpContext context, EmployerAccountData data)
+    {
+        _cookieService.Create(data, CookieName, 365);
+    }
+
+    public virtual OrchestratorResponse<OrganisationAddedNextStepsViewModel> GetOrganisationAddedNextStepViewModel(
+        string organisationName,
+        string hashedAgreementId)
+    {
+        return new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
         {
-            var result = new OrchestratorResponse<OrganisationUpdatedNextStepsViewModel>
+            Data = new OrganisationAddedNextStepsViewModel { OrganisationName = organisationName, HashedAgreementId = hashedAgreementId }
+        };
+    }
+
+    public async Task<OrchestratorResponse<ReviewOrganisationAddressViewModel>> GetRefreshedOrganisationDetails(string hashedAccountLegalEntityId)
+    {
+        var accountLegalEntityId = _encodingService.Decode(hashedAccountLegalEntityId, EncodingType.PublicAccountLegalEntityId);
+
+        var currentDetails = await Mediator.Send(new GetAccountLegalEntityRequest
+        {
+            AccountLegalEntityId = accountLegalEntityId
+        });
+
+        var refreshedDetails = await Mediator.Send(new GetOrganisationByIdRequest
+        {
+            Identifier = currentDetails.AccountLegalEntity.Identifier,
+            OrganisationType = currentDetails.AccountLegalEntity.OrganisationType
+        });
+
+        var result = new OrchestratorResponse<ReviewOrganisationAddressViewModel>
+        {
+            Data = new ReviewOrganisationAddressViewModel
             {
-                Data = new OrganisationUpdatedNextStepsViewModel()
+                DataSourceFriendlyName = currentDetails.AccountLegalEntity.OrganisationType.GetFriendlyName(),
+                OrganisationName = currentDetails.AccountLegalEntity.Name,
+                OrganisationAddress = currentDetails.AccountLegalEntity.Address,
+                RefreshedName = refreshedDetails.Organisation.Name,
+                RefreshedAddress = refreshedDetails.Organisation.Address.FormatAddress(),
+                HashedAccountLegalEntityId = hashedAccountLegalEntityId
+            }
+        };
+
+        result.Data.UpdatesAvailable = CheckForUpdate(result.Data.OrganisationName, result.Data.RefreshedName, OrganisationUpdatesAvailable.Name) |
+                                       CheckForUpdate(result.Data.OrganisationAddress, result.Data.RefreshedAddress, OrganisationUpdatesAvailable.Address);
+
+        return result;
+    }
+
+    public async Task<OrchestratorResponse<OrganisationUpdatedNextStepsViewModel>> UpdateOrganisation(
+        string accountLegalEntityPublicHashedId, 
+        string organisationName, 
+        string organisationAddress, 
+        string hashedAccountId, 
+        string userId)
+    {
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+        var accountLegalEntityId = _encodingService.Decode(accountLegalEntityPublicHashedId, EncodingType.PublicAccountLegalEntityId);    
+
+        var result = new OrchestratorResponse<OrganisationUpdatedNextStepsViewModel>
+        {
+            Data = new OrganisationUpdatedNextStepsViewModel()
+        };
+
+        try
+        {
+            var request = new UpdateOrganisationDetailsCommand
+            {
+                AccountLegalEntityId = accountLegalEntityId,
+                Name = organisationName,
+                Address = organisationAddress,
+                AccountId = accountId,
+                UserId = userId
             };
 
-            try
-            {
-                var request = new UpdateOrganisationDetailsCommand
-                {
-                    AccountLegalEntityId = _accountLegalEntityHashingService.DecodeValue(accountLegalEntityPublicHashedId),
-                    Name = organisationName,
-                    Address = organisationAddress,
-                    HashedAccountId = hashedAccountId,
-                    UserId = userId
-                };
-
-                await _mediator.SendAsync(request);
-            }
-            catch (Exception)
-            {
-                result.Data.ErrorMessage = "Failed to update the organisation's details.";
-            }
-
-            return result;
+            await _mediator.Send(request);
         }
-
-        private OrganisationUpdatesAvailable CheckForUpdate(string currentValue, string updatedValue, OrganisationUpdatesAvailable includeIfDifferent)
+        catch (Exception)
         {
-            // The address will be stored with leading and trailing spaces removed, so the change comparison will exclude these.
-            // Also, the names and addresses returned by CH search and get by id are inconsistent. Specifically the spacing within a 
-            // name of address are different. To counter this one or spaces will be considered to be equivalent. 
-            return !currentValue.IsEquivalent(updatedValue, StringEquivalenceOptions.IgnoreLeadingSpaces | StringEquivalenceOptions.IgnoreTrailingSpaces | StringEquivalenceOptions.MultipleSpacesAreEquivalent) 
-                ? includeIfDifferent 
-                : OrganisationUpdatesAvailable.None;
+            result.Data.ErrorMessage = "Failed to update the organisation's details.";
         }
+
+        return result;
+    }
+
+    private static OrganisationUpdatesAvailable CheckForUpdate(string currentValue, string updatedValue, OrganisationUpdatesAvailable includeIfDifferent)
+    {
+        // The address will be stored with leading and trailing spaces removed, so the change comparison will exclude these.
+        // Also, the names and addresses returned by CH search and get by id are inconsistent. Specifically the spacing within a 
+        // name of address are different. To counter this one or spaces will be considered to be equivalent. 
+        return !currentValue.IsEquivalent(updatedValue, StringEquivalenceOptions.IgnoreLeadingSpaces | StringEquivalenceOptions.IgnoreTrailingSpaces | StringEquivalenceOptions.MultipleSpacesAreEquivalent) 
+            ? includeIfDifferent 
+            : OrganisationUpdatesAvailable.None;
     }
 }

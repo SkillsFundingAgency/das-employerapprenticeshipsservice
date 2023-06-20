@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole;
-using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.NServiceBus.Services;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
 {
@@ -84,7 +83,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
 
             _membershipRepository.Setup(x => x.GetCaller(command.HashedAccountId, command.ExternalUserId)).ReturnsAsync(() => null);
 
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command, CancellationToken.None));
 
             Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
             Assert.That(exception.ErrorMessages.FirstOrDefault(x => x.Key == "Membership"), Is.Not.Null);
@@ -110,7 +109,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
 
             _membershipRepository.Setup(x => x.GetCaller(callerMembership.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
 
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command, CancellationToken.None));
 
             Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
             Assert.That(exception.ErrorMessages.FirstOrDefault(x => x.Key == "Membership"), Is.Not.Null);
@@ -137,7 +136,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             _membershipRepository.Setup(x => x.GetCaller(callerMembership.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
             _membershipRepository.Setup(x => x.Get(callerMembership.AccountId, command.Email)).ReturnsAsync(() => null);
 
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command, CancellationToken.None));
 
             Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
             Assert.That(exception.ErrorMessages.FirstOrDefault(x => x.Key == "Membership"), Is.Not.Null);
@@ -171,7 +170,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             _membershipRepository.Setup(x => x.GetCaller(callerMembership.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
             _membershipRepository.Setup(x => x.Get(callerMembership.AccountId, command.Email)).ReturnsAsync(userMembership);
 
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command, CancellationToken.None));
 
             Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
             Assert.That(exception.ErrorMessages.FirstOrDefault(x => x.Key == "Membership"), Is.Not.Null);
@@ -180,7 +179,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
         [Test]
         public async Task WillChangeMembershipRole()
         {
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
             _membershipRepository.Verify(x => x.ChangeRole(_userMembership.Id, _callerMembership.AccountId, _command.Role), Times.Once);
         }
@@ -188,7 +187,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
         [Test]
         public async Task WillPublishUserRoleUpdatedEvent()
         {
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
             _eventPublisher.Verify(x => x.Publish(It.Is<AccountUserRolesUpdatedEvent>(
                 p => p.AccountId  == _userMembership.AccountId &&
@@ -202,7 +201,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
         {
             var command = new ChangeTeamMemberRoleCommand();
 
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command, CancellationToken.None));
 
             Assert.That(exception.ErrorMessages.Count, Is.EqualTo(4));
 
@@ -216,21 +215,21 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
         public async Task ThenTheTheCommandIsAuditedIfItIsValid()
         {
             //Act
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Role") && y.NewValue.Equals(_command.Role.ToString())) != null 
-                    )));
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
-                      c.EasAuditMessage.Description.Equals($"Member {_command.Email} on account {ExpectedAccountId} role has changed to {_command.Role.ToString()}"))));
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                    ), It.IsAny<CancellationToken>()));
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
+                      c.EasAuditMessage.Description.Equals($"Member {_command.Email} on account {ExpectedAccountId} role has changed to {_command.Role.ToString()}")), It.IsAny<CancellationToken>()));
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
                       c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(ExpectedAccountId.ToString()) && y.Type.Equals("Account")) != null
-                    )));
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                    ), It.IsAny<CancellationToken>()));
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
                     c.EasAuditMessage.AffectedEntity.Id.Equals(_userMembership.Id.ToString()) &&
                     c.EasAuditMessage.AffectedEntity.Type.Equals("Membership")
-                    )));
+                    ), It.IsAny<CancellationToken>()));
         }
     }
 }

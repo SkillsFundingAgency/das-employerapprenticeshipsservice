@@ -1,10 +1,8 @@
-using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Models;
+using SFA.DAS.EmployerAccounts.Audit.Types;
 
-namespace SFA.DAS.EmployerAccounts.Interfaces
+namespace SFA.DAS.EmployerAccounts.Interfaces;
+
+public interface IAuditService
 {
-    public interface IAuditService
-    {
-        Task SendAuditMessage(EasAuditMessage message);
-    }
+    Task SendAuditMessage(AuditMessage message);
 }

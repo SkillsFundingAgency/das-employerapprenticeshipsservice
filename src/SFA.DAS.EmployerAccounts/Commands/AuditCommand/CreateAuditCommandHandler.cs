@@ -1,31 +1,29 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.Validation;
+﻿using System.Threading;
 
-namespace SFA.DAS.EmployerAccounts.Commands.AuditCommand
+namespace SFA.DAS.EmployerAccounts.Commands.AuditCommand;
+
+public class CreateAuditCommandHandler : IRequestHandler<CreateAuditCommand>
 {
-    public class CreateAuditCommandHandler : AsyncRequestHandler<CreateAuditCommand>
+    private readonly IAuditService _auditService;
+    private readonly IValidator<CreateAuditCommand> _validator;
+
+    public CreateAuditCommandHandler(IAuditService auditService, IValidator<CreateAuditCommand> validator)
     {
-        private readonly IAuditService _auditService;
-        private readonly IValidator<CreateAuditCommand> _validator;
+        _auditService = auditService;
+        _validator = validator;
+    }
 
-        public CreateAuditCommandHandler(IAuditService auditService, IValidator<CreateAuditCommand> validator)
+    public async Task<Unit> Handle(CreateAuditCommand message, CancellationToken cancellationToken)
+    {
+        var validationResult = _validator.Validate(message);
+
+        if (!validationResult.IsValid())
         {
-            _auditService = auditService;
-            _validator = validator;
+            throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        protected override async Task HandleCore(CreateAuditCommand message)
-        {
-            var validationResult = _validator.Validate(message);
+        await _auditService.SendAuditMessage(message.EasAuditMessage);
 
-            if (!validationResult.IsValid())
-            {
-                throw new InvalidRequestException(validationResult.ValidationDictionary);
-            }
-
-            await _auditService.SendAuditMessage(message.EasAuditMessage);
-        }
+        return Unit.Value;
     }
 }

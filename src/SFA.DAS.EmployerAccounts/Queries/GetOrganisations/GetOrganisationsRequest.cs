@@ -1,12 +1,10 @@
-﻿using MediatR;
-using SFA.DAS.Common.Domain.Types;
+﻿using SFA.DAS.Common.Domain.Types;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisations
+namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisations;
+
+public class GetOrganisationsRequest : IRequest<GetOrganisationsResponse>
 {
-    public class GetOrganisationsRequest : IAsyncRequest<GetOrganisationsResponse>
-    {
-        public string SearchTerm { get; set; }
-        public int PageNumber { get; set; }
-        public OrganisationType? OrganisationType { get; set; }
-    }
+    public string SearchTerm { get; set; }
+    public int PageNumber { get; set; }
+    public OrganisationType? OrganisationType { get; set; }
 }

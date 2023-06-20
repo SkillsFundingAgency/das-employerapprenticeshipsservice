@@ -1,30 +1,25 @@
-﻿using System;
-using System.Threading.Tasks;
-using SFA.DAS.Validation;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef
+public class GetPayeSchemeByRefValidator : IValidator<GetPayeSchemeByRefQuery>
 {
-    public class GetPayeSchemeByRefValidator : IValidator<GetPayeSchemeByRefQuery>
+    public ValidationResult Validate(GetPayeSchemeByRefQuery item)
     {
-        public ValidationResult Validate(GetPayeSchemeByRefQuery item)
+        var validationResult = new ValidationResult();
+
+        if (string.IsNullOrEmpty(item.HashedAccountId))
         {
-            var validationResult = new ValidationResult();
-
-            if (string.IsNullOrEmpty(item.HashedAccountId))
-            {
-                validationResult.AddError(nameof(item.Ref), "HashedAccountId has not been supplied");
-            }
-
-            if (string.IsNullOrEmpty(item.Ref))
-            {
-                validationResult.AddError(nameof(item.Ref), "PayeSchemeRef has not been supplied");
-            }
-            return validationResult;
+            validationResult.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
         }
 
-        public Task<ValidationResult> ValidateAsync(GetPayeSchemeByRefQuery item)
+        if (string.IsNullOrEmpty(item.Ref))
         {
-            throw new NotImplementedException();
+            validationResult.AddError(nameof(item.Ref), "PayeSchemeRef has not been supplied");
         }
+        return validationResult;
+    }
+
+    public Task<ValidationResult> ValidateAsync(GetPayeSchemeByRefQuery item)
+    {
+        return Task.FromResult(Validate(item));
     }
 }

@@ -1,49 +1,46 @@
-﻿using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.Validation;
+﻿using SFA.DAS.EmployerAccounts.Data.Contracts;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
+
+public class GetAccountPayeSchemesForAuthorisedUserQueryValidator : IValidator<GetAccountPayeSchemesForAuthorisedUserQuery>
 {
-    public class GetAccountPayeSchemesForAuthorisedUserQueryValidator : IValidator<GetAccountPayeSchemesForAuthorisedUserQuery>
+    private readonly IMembershipRepository _membershipRepository;
+
+    public GetAccountPayeSchemesForAuthorisedUserQueryValidator(IMembershipRepository membershipRepository)
     {
-        private readonly IMembershipRepository _membershipRepository;
+        _membershipRepository = membershipRepository;
+    }
 
-        public GetAccountPayeSchemesForAuthorisedUserQueryValidator(IMembershipRepository membershipRepository)
+    public ValidationResult Validate(GetAccountPayeSchemesForAuthorisedUserQuery query)
+    {
+        return
+            ValidateAsync(query).Result;
+    }
+
+    public async Task<ValidationResult> ValidateAsync(GetAccountPayeSchemesForAuthorisedUserQuery query)
+    {
+        var validationResult = new ValidationResult();
+
+        if (query.AccountId <= 0)
         {
-            _membershipRepository = membershipRepository;
+            validationResult.ValidationDictionary.Add(nameof(query.AccountId), "Account ID has not been supplied");
         }
 
-        public ValidationResult Validate(GetAccountPayeSchemesForAuthorisedUserQuery query)
+        if (string.IsNullOrEmpty(query.ExternalUserId))
         {
-            return
-                ValidateAsync(query).Result;
+            validationResult.ValidationDictionary.Add(nameof(query.ExternalUserId), "User ID has not been supplied");
         }
 
-        public async Task<ValidationResult> ValidateAsync(GetAccountPayeSchemesForAuthorisedUserQuery query)
+        if (validationResult.IsValid())
         {
-            var validationResult = new ValidationResult();
-
-            if (string.IsNullOrEmpty(query.HashedAccountId))
+            var member = await _membershipRepository.GetCaller(query.AccountId, query.ExternalUserId);
+            if (member == null)
             {
-                validationResult.ValidationDictionary.Add(nameof(query.HashedAccountId), "Hashed account ID has not been supplied");
+                validationResult.AddError(nameof(member), "Unauthorised: User not connected to account");
+                validationResult.IsUnauthorized = true;
             }
-
-            if (string.IsNullOrEmpty(query.ExternalUserId))
-            {
-                validationResult.ValidationDictionary.Add(nameof(query.ExternalUserId), "User ID has not been supplied");
-            }
-
-            if (validationResult.IsValid())
-            {
-                var member = await _membershipRepository.GetCaller(query.HashedAccountId, query.ExternalUserId);
-                if (member == null)
-                {
-                    validationResult.AddError(nameof(member), "Unauthorised: User not connected to account");
-                    validationResult.IsUnauthorized = true;
-                }
-            }
-
-            return validationResult;
         }
+
+        return validationResult;
     }
 }

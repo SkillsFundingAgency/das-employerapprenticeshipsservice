@@ -1,6 +1,7 @@
-﻿@using SFA.DAS.EmployerAccounts.Authorisation
-@using SFA.DAS.EmployerAccounts.Web.Helpers
+﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
 @model OrchestratorResponse<EmployerAgreementListViewModel>
+
+@inject IHtmlHelpers HtmlHelpers;
 
 @{
     ViewBag.PageID = "organisations-agreements-home";
@@ -15,7 +16,6 @@
     }
 }
 
-@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -26,13 +26,12 @@
             <p>If you work with more than one organisation, they will need their own agreement with the Department for Education (<abbr>DfE</abbr>).<p>
             <p>If the organisation is not listed below you will need to add them.</p>
         </div>
-        <p class="govuk-body">You can add as many <a class="govuk-link" href="https://www.gov.uk/government/publications/employment-allowance-more-detailed-guidance" target="_blank">connected organisations</a> as you need to.</p>
+        <p class="govuk-body">You can add as many <a class="govuk-link" href="https://www.gov.uk/government/publications/employment-allowance-more-detailed-guidance" rel="noopener" target="_blank">connected organisations</a> as you need to.</p>
         <p class="govuk-body">
             Transfers status:&nbsp;
             <span>
                 @{
-                    var authorizationResult = Html.GetAuthorizationResult("EmployerFeature.TransferConnectionRequests");
-                    if (authorizationResult.IsAuthorized)
+                    if (@Model.Data.EmployerAgreementsData.MinimumSignedAgreementVersion >= 3)
                     {
                         @:enabled.
                     }
@@ -44,7 +43,7 @@
             </span>
         </p>
         <p class="govuk-!-margin-bottom-8">
-            <a href="@Url.Action(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName)" class="govuk-button govuk-!-margin-bottom-0">Add an organisation</a>
+            <a asp-controller="@ControllerConstants.SearchOrganisationControllerName" asp-action="@ControllerConstants.SearchForOrganisationActionName" asp-route-HashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" class="govuk-button govuk-!-margin-bottom-0">Add an organisation</a>
         </p>
     </div>
 </div>
@@ -62,6 +61,8 @@
             <tbody class="govuk-table__body">
                 @foreach (var employerAgreement in Model.Data.EmployerAgreementsData.EmployerAgreements)
                 {
+                    var routeData = new Dictionary<string, string>() { { RouteValueKeys.HashedAccountId, ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId].ToString() }, { RouteValueKeys.HashedAccountLegalEntityId, employerAgreement.LegalEntity.AccountLegalEntityPublicHashedId } };
+
                     <tr class="govuk-table__row">
                         <td class="govuk-table__cell">
                             @employerAgreement.LegalEntity.Name
@@ -77,13 +78,13 @@
                             @:Accepted
                         }
                     </td>
-                    <td class="govuk-table__cell">
-                        <a href="@Url.Action(ControllerConstants.ViewAllAgreementActionName, ControllerConstants.EmployerAgreementControllerName, new {accountLegalEntityHashedId = employerAgreement.LegalEntity.AccountLegalEntityPublicHashedId})" class="govuk-link">View all agreements</a>
+                    <td class="govuk-table__cell govuk-table__cell--numeric">
+                        <a asp-controller="@ControllerConstants.EmployerAgreementControllerName" asp-action="@ControllerConstants.ViewAllAgreementActionName" asp-all-route-data="@routeData" class="govuk-link">View all agreements</a>
                     </td>
                     <td class="govuk-table__cell govuk-table__cell--numeric">
                         @if (Model.Data.EmployerAgreementsData.EmployerAgreements.Count > 1)
                         {
-                            <a href="@Url.Action(ControllerConstants.RemoveOrganisationActionName ,ControllerConstants.EmployerAgreementControllerName,new {accountLegalEntityHashedId = employerAgreement.LegalEntity.AccountLegalEntityPublicHashedId})" class="govuk-link">Remove organisation</a>
+                                <a asp-controller="@ControllerConstants.EmployerAgreementControllerName" asp-action="@ControllerConstants.RemoveOrganisationActionName" asp-all-route-data="@routeData" class="govuk-link">Remove organisation</a>
                         }
                     </td>
                 </tr>
@@ -108,7 +109,7 @@
     <div class="govuk-breadcrumbs">
         <ol class="govuk-breadcrumbs__list">
             <li class="govuk-breadcrumbs__list-item">
-                <a class="govuk-breadcrumbs__link" href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName)">Home</a>
+                <a class="govuk-breadcrumbs__link" asp-controller="@ControllerConstants.EmployerTeamControllerName" asp-action="@ControllerConstants.IndexActionName" asp-route-HashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]">Home</a>
             </li>
             <li class="govuk-breadcrumbs__list-item" aria-current="page">Your organisations and agreements</li>
         </ol>

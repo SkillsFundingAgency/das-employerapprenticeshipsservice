@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net48</TargetFrameworks>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>latest</LangVersion>
 
     <Authors>DAS</Authors>
@@ -15,11 +15,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="11.1.0" />
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.24.0" />
-    <PackageReference Include="Microsoft.Azure.Services.AppAuthentication" Version="1.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="SFA.DAS.CosmosDb" Version="1.0.47" />
-    <PackageReference Include="StructureMap" Version="4.6.1" />
   </ItemGroup>
 
   <ItemGroup>

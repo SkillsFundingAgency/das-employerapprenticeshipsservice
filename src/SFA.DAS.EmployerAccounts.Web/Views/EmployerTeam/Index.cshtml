@@ -1,8 +1,10 @@
 ﻿@using SFA.DAS.Common.Domain.Types
-@using SFA.DAS.EmployerAccounts.Web.Extensions
-@using SFA.DAS.EmployerAccounts.Web.Helpers
-@using TasksEnum = SFA.DAS.Tasks.API.Types.Enums
-@using SFA.DAS.EmployerAccounts.Web.Extensions
+@using SFA.DAS.EmployerAccounts.Web.ViewComponents
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using SFA.DAS.EmployerAccounts.TasksApi
+
+@inject IHtmlHelpers HtmlHelpers;
+@inject IUrlActionHelper UrlHelpers;
 
 @model SFA.DAS.EmployerAccounts.Web.OrchestratorResponse<SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel>
 
@@ -12,12 +14,13 @@
     ViewBag.PageID = "page-company-homepage";
     ViewBag.GaData.Vpv = "/accounts/agreements/page-company-homepage";
     ViewBag.ZenDeskLabel = "eas-homepage";
-    Layout = "~/Views/Shared/_Layout_CDN.cshtml";
 
     if (!string.IsNullOrEmpty(Model.Data.EmployerAccountType))
     {
         ViewBag.PageID = $"page-employer-account-created-{Model.Data.EmployerAccountType}";
     }
+
+    var hashedAccountId = Model.Data.HashedAccountId;
 }
 
 
@@ -49,7 +52,7 @@
             <dd class="das-definition-list__definition">
                 @if (string.IsNullOrEmpty(Model.Data.SingleAccountLegalEntityId))
                 {
-                    <a href="@Url.Action("Index", "EmployerAgreement")" class="govuk-link govuk-link--no-visited-state">View your agreement IDs</a>
+                    <a asp-controller="@ControllerConstants.EmployerAgreementControllerName" asp-action="@ControllerConstants.IndexActionName" asp-route-HashedAccountId="@hashedAccountId" class="govuk-link govuk-link--no-visited-state">View your agreement IDs</a>
                 }
                 else
                 {
@@ -66,7 +69,7 @@
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            @Html.Action("Row1Panel1", new { model = Model.Data })
+            @await Component.InvokeAsync(ComponentConstants.Row1Panel1, new { model = Model.Data })
         </div>
     </div>
 }
@@ -75,7 +78,7 @@ else
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
-            @Html.Action("Row1Panel1", new { model = Model.Data })
+            @await Component.InvokeAsync(ComponentConstants.Row1Panel1, new { model = Model.Data })
 
             <section>
                 <h2 class="govuk-heading-l govuk-!-margin-bottom-2">Apprenticeships</h2>
@@ -83,31 +86,31 @@ else
                 <div class="das-cards">
                     <div class="das-card">
                         <h3 class="govuk-heading-m das-card__heading">
-                            <a href="@Url.EmployerCommitmentsV2Action("")" class="govuk-link govuk-link--no-visited-state">Apprentices</a>
+                            <a href="@UrlHelpers.EmployerCommitmentsV2Action("")" class="govuk-link govuk-link--no-visited-state">Apprentices</a>
                         </h3>
                         <p class="govuk-body govuk-!-font-size-16">Add apprentices, update details of existing apprentices, change training providers and authorise payments to training providers.</p>
                     </div>
                     <div class="das-card">
-                            <h3 class="govuk-heading-m das-card__heading">
-                                <a href="@Url.EmployerRecruitAction()" class="govuk-link govuk-link--no-visited-state">Your apprenticeship adverts</a>
-                            </h3>
-                            <p class="govuk-body govuk-!-font-size-16">Create adverts to post on find an apprenticeship, view applications, your previous adverts and adverts created by training providers.</p>
-                        </div>                   
+                        <h3 class="govuk-heading-m das-card__heading">
+                            <a href="@UrlHelpers.EmployerRecruitAction()" class="govuk-link govuk-link--no-visited-state">Your apprenticeship adverts</a>
+                        </h3>
+                        <p class="govuk-body govuk-!-font-size-16">Create adverts to post on find an apprenticeship, view applications, your previous adverts and adverts created by training providers.</p>
+                    </div>
                     <div class="das-card">
                         <h3 class="govuk-heading-m das-card__heading">
-                            <a href="@Url.ProviderRelationshipsAction("providers")" class="govuk-link govuk-link--no-visited-state">Your training providers</a>
+                            <a href="@UrlHelpers.ProviderRelationshipsAction("providers")" class="govuk-link govuk-link--no-visited-state">Your training providers</a>
                         </h3>
                         <p class="govuk-body govuk-!-font-size-16">Add training providers and manage permissions to choose what they can do on your behalf.</p>
-                    </div>                   
+                    </div>
                     <div class="das-card">
                         <h3 class="govuk-heading-m das-card__heading">
-                            <a href="https://findapprenticeshiptraining.apprenticeships.education.gov.uk/Apprenticeship/Search" rel="external" target="_blank" class="govuk-link govuk-link--no-visited-state">Find apprenticeship training</a>
+                            <a href="https://findapprenticeshiptraining.apprenticeships.education.gov.uk/Apprenticeship/Search" rel="external noopener" target="_blank" class="govuk-link govuk-link--no-visited-state">Find apprenticeship training</a>
                         </h3>
                         <p class="govuk-body govuk-!-font-size-16">Search for apprenticeships and see details of approved providers who can deliver the training.</p>
                     </div>
                     <div class="das-card">
                         <h3 class="govuk-heading-m das-card__heading">
-                            <a href="@Url.EmployerFeedbackAction("providers")" class="govuk-link govuk-link--no-visited-state">Feedback on training providers</a>
+                            <a href="@UrlHelpers.EmployerFeedbackAction("providers")" class="govuk-link govuk-link--no-visited-state">Feedback on training providers</a>
                         </h3>
                         <p class="govuk-body govuk-!-font-size-16">Give feedback on your training providers.</p>
                     </div>
@@ -122,7 +125,7 @@ else
                     {
                         <div class="das-card">
                             <h3 class="govuk-heading-m das-card__heading">
-                                <a href="@Url.ReservationsAction("reservations/manage")" class="govuk-link govuk-link--no-visited-state">Your funding reservations</a>
+                                <a href="@UrlHelpers.ReservationsAction("reservations/manage")" class="govuk-link govuk-link--no-visited-state">Your funding reservations</a>
                             </h3>
                             <p class="govuk-body govuk-!-font-size-16">Reserve and manage funding.</p>
                         </div>
@@ -130,26 +133,24 @@ else
 
                     <div class="das-card">
                         <h3 class="govuk-heading-m das-card__heading">
-                            <a href="@Url.EmployerFinanceAction("finance")" class="govuk-link govuk-link--no-visited-state">Your finances</a>
+                            <a href="@UrlHelpers.EmployerFinanceAction("finance")" class="govuk-link govuk-link--no-visited-state">Your finances</a>
                         </h3>
                         <p class="govuk-body govuk-!-font-size-16">View your financial transactions, connect with other employers and @(Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy ? "send or " : "")receive transfer funds.</p>
                     </div>
 
-                    @if (Html.IsAuthorized("EmployerFeature.EmployerIncentives"))
-                    {
-                        <div class="das-card">
-                            <h3 class="govuk-heading-m das-card__heading">
-                                <a href="@Url.EmployerIncentivesAction()" class="govuk-link govuk-link--no-visited-state">Your hire a new apprentice payments</a>
-                            </h3>
-                            <p class="govuk-body govuk-!-font-size-16">View applications and change your payment details.</p>
-                        </div>
-                    }
+                    <div class="das-card">
+                        <h3 class="govuk-heading-m das-card__heading">
+                            <a href="@UrlHelpers.EmployerIncentivesAction()" class="govuk-link govuk-link--no-visited-state">Your hire a new apprentice payments</a>
+                        </h3>
+                        <p class="govuk-body govuk-!-font-size-16">View applications and change your payment details.</p>
+                    </div>
+
 
                     @if (Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
                     {
                         <div class="das-card">
                             <h3 class="govuk-heading-m das-card__heading">
-                                <a href="@Url.EmployerFinanceAction("transfers")" class="govuk-link govuk-link--no-visited-state">Your transfers</a>
+                                <a href="@UrlHelpers.EmployerFinanceAction("transfers")" class="govuk-link govuk-link--no-visited-state">Your transfers</a>
                             </h3>
                             <p class="govuk-body govuk-!-font-size-16">View your 25% transfers balance and manage your transfers, including finding a business to transfer your levy to.</p>
                         </div>
@@ -158,7 +159,7 @@ else
                     {
                         <div class="das-card">
                             <h3 class="govuk-heading-m das-card__heading">
-                                <a href="@Url.EmployerFinanceAction("transfers")" class="govuk-link govuk-link--no-visited-state">Your transfers</a>
+                                <a href="@UrlHelpers.EmployerFinanceAction("transfers")" class="govuk-link govuk-link--no-visited-state">Your transfers</a>
                             </h3>
                             <p class="govuk-body govuk-!-font-size-16">View your apprentices funded by a transfer. Find a large business to fund your apprenticeship training with a transfer.</p>
                         </div>
@@ -171,23 +172,23 @@ else
                 <p class="govuk-caption-m govuk-!-width-two-thirds govuk-!-margin-bottom-6">Manage your account details and team</p>
                 <div class="das-cards">
                     <div class="das-card">
-                        <h3 class="govuk-heading-m das-card__heading"><a href="@Url.Action("Index", "EmployerAgreement")" class="govuk-link govuk-link--no-visited-state">Your organisations and agreements</a></h3>
+                        <h3 class="govuk-heading-m das-card__heading"><a asp-route="@RouteNames.EmployerAgreementIndex" asp-route-hashedAccountId="@hashedAccountId" class="govuk-link govuk-link--no-visited-state">Your organisations and agreements</a></h3>
                         <p class="govuk-body govuk-!-font-size-16">Add your organisations that will make contracts with training providers.</p>
                     </div>
                     <div class="das-card">
-                        <h3 class="govuk-heading-m das-card__heading"><a href="@Url.Action("ViewTeam")" class="govuk-link govuk-link--no-visited-state">Your team</a></h3>
+                        <h3 class="govuk-heading-m das-card__heading"><a asp-route="@RouteNames.EmployerTeamView" asp-route-hashedAccountId="@hashedAccountId" class="govuk-link govuk-link--no-visited-state">Your team</a></h3>
                         <p class="govuk-body govuk-!-font-size-16">Control what your team can do and invite new team members.</p>
                     </div>
                     <div class="das-card">
-                        <h3 class="govuk-heading-m das-card__heading"><a href="@Url.Action("Index", "EmployerAccountPaye")" class="govuk-link govuk-link--no-visited-state">PAYE schemes</a></h3>
+                        <h3 class="govuk-heading-m das-card__heading"><a asp-route="@RouteNames.EmployerAccountPaye" asp-route-hashedAccountId="@hashedAccountId" class="govuk-link govuk-link--no-visited-state">PAYE schemes</a></h3>
                         <p class="govuk-body govuk-!-font-size-16">Add or remove PAYE schemes.</p>
                     </div>
                 </div>
             </section>
-            @Html.GetContentByType("covid_section")
+            @HtmlHelpers.GetContentByType("covid_section")
             <div class="das-highlight">
                 <h2 class="govuk-heading-m">Help us improve this service</h2>
-                <p class="govuk-body govuk-!-margin-bottom-0"><a href="https://www.smartsurvey.co.uk/s/apprenticeshipservicefeedback/" class="govuk-link" rel="nofollow" target="_blank">Take our 3 minute survey</a> so that we can improve this service.</p>
+                <p class="govuk-body govuk-!-margin-bottom-0"><a href="https://www.smartsurvey.co.uk/s/apprenticeshipservicefeedback/" class="govuk-link" rel="nofollow noopener" target="_blank">Take our 3 minute survey</a> so that we can improve this service.</p>
             </div>
         </div>
         <div class="govuk-grid-column-one-third">
@@ -202,7 +203,7 @@ else
                             <a class="govuk-tabs__tab" href="#tasks">
                                 Tasks
                             </a>
-                        </li>                        
+                        </li>
                     </ul>
                     <div class="govuk-tabs__panel" id="tasks">
                         @if (Model.Data.Tasks.Count > 0)
@@ -217,54 +218,54 @@ else
                                     <li>
                                         @switch (task.Type)
                                         {
-                                            case "LevyDeclarationDue":
+                                            case nameof(TaskType.LevyDeclarationDue):
                                                 <span>
                                                     Levy declaration due by 19 @DateTime.Now.ToString("MMMM")
                                                 </span>
                                                 <form action="@Url.Action("DismissTask", "Task")" method="POST">
-                                                    <input type="hidden" name="taskType" value="@Enum.GetName(typeof(TasksEnum.TaskType), TasksEnum.TaskType.LevyDeclarationDue)" />
+                                                    <input type="hidden" name="taskType" value="@Enum.GetName(typeof(TaskType), TaskType.LevyDeclarationDue)" />
                                                     <button type="submit" class="das-button--inline-link">Dismiss this message</button>
                                                 </form>
                                                 break;
-                                            case "AgreementToSign":
+                                            case nameof(TaskType.AgreementToSign):
                                                 <span>
                                                     @task.ItemsDueCount agreement@(task.ItemsDueCount > 1 ? "s" : "") to sign
                                                     <br /><a href="@Url.Action("ViewUnsignedAgreements", "EmployerAgreement")" class="govuk-link govuk-link govuk-link--no-visited-state">View agreement@(task.ItemsDueCount > 1 ? "s" : "")</a>
                                                 </span>
                                                 break;
-                                            case "AddApprentices":
+                                            case nameof(TaskType.AddApprentices):
                                                 <span>
-                                                    <a href="@Url.EmployerCommitmentsV2Action("unapproved/Inform")" class="govuk-link govuk-link govuk-link--no-visited-state">Start adding apprentices now</a>
+                                                    <a href="@UrlHelpers.EmployerCommitmentsV2Action("unapproved/Inform")" class="govuk-link govuk-link govuk-link--no-visited-state">Start adding apprentices now</a>
                                                 </span>
                                                 break;
-                                            case "ApprenticeChangesToReview":
+                                            case nameof(TaskType.ApprenticeChangesToReview):
                                                 <span>
                                                     @task.ItemsDueCount apprentice change@(task.ItemsDueCount > 1 ? "s" : "") to review
-                                                    <br /><a href="@Url.EmployerCommitmentsV2Action("apprentices")" class="govuk-link govuk-link govuk-link--no-visited-state">View<span class="govuk-visually-hidden">apprentice</span> change@(task.ItemsDueCount > 1 ? "s" : "")</a>
+                                                    <br /><a href="@UrlHelpers.EmployerCommitmentsV2Action("apprentices")" class="govuk-link govuk-link govuk-link--no-visited-state">View<span class="govuk-visually-hidden">apprentice</span> change@(task.ItemsDueCount > 1 ? "s" : "")</a>
                                                 </span>
                                                 break;
-                                            case "CohortRequestReadyForApproval":
+                                            case nameof(TaskType.CohortRequestReadyForApproval):
                                                 <span>
                                                     @task.ItemsDueCount cohort request@(task.ItemsDueCount > 1 ? "s" : "") ready for approval
-                                                    <br /><a href="@Url.EmployerCommitmentsV2Action("unapproved/review")" class="govuk-link govuk-link govuk-link--no-visited-state">View cohort<span class="govuk-visually-hidden"> request</span>@(task.ItemsDueCount > 1 ? "s" : "")</a>
+                                                    <br /><a href="@UrlHelpers.EmployerCommitmentsV2Action("unapproved/review")" class="govuk-link govuk-link govuk-link--no-visited-state">View cohort<span class="govuk-visually-hidden"> request</span>@(task.ItemsDueCount > 1 ? "s" : "")</a>
                                                 </span>
                                                 break;
-                                            case "ReviewConnectionRequest":
+                                            case nameof(TaskType.ReviewConnectionRequest):
                                                 <span>
                                                     @task.ItemsDueCount connection request@(task.ItemsDueCount > 1 ? "s" : "") to review
-                                                    <br /><a href="@Url.EmployerFinanceAction("transfers/connections")" class="govuk-link govuk-link govuk-link--no-visited-state">View details<span class="govuk-visually-hidden"> of connection request@(task.ItemsDueCount > 1 ? "s" : "")</span></a>
+                                                    <br /><a href="@UrlHelpers.EmployerFinanceAction("transfers/connections")" class="govuk-link govuk-link govuk-link--no-visited-state">View details<span class="govuk-visually-hidden"> of connection request@(task.ItemsDueCount > 1 ? "s" : "")</span></a>
                                                 </span>
                                                 break;
-                                            case "TransferRequestReceived":
+                                            case nameof(TaskType.TransferRequestReceived):
                                                 <span>
                                                     Transfer request received
-                                                    <br /><a href="@Url.EmployerFinanceAction("transfers/connections")" class="govuk-link">View details<span class="govuk-visually-hidden"> of the transfer request</span></a>
+                                                    <br /><a href="@UrlHelpers.EmployerFinanceAction("transfers/connections")" class="govuk-link">View details<span class="govuk-visually-hidden"> of the transfer request</span></a>
                                                 </span>
                                                 break;
                                             case "PledgeApplicationForReview":
                                                 <span id="application-approval-task">
                                                     @task.ItemsDueCount transfer pledge application@(task.ItemsDueCount > 1 ? "s" : "") awaiting your approval
-                                                    <br /><a href="@Url.LevyTransfersMatchingAction("pledges")" class="govuk-link govuk-link--no-visited-state">View<span class="govuk-visually-hidden"> transfer pledge</span> application@(task.ItemsDueCount > 1 ? "s" : "")</a>
+                                                    <br /><a href="@UrlHelpers.LevyTransfersMatchingAction("pledges")" class="govuk-link govuk-link--no-visited-state">View<span class="govuk-visually-hidden"> transfer pledge</span> application@(task.ItemsDueCount > 1 ? "s" : "")</a>
                                                 </span>
                                                 break;
                                         }
@@ -277,7 +278,7 @@ else
                         {
                             <p>You do not have any tasks</p>
                         }
-                    </div>                   
+                    </div>
                 </div>
             }
         </div>

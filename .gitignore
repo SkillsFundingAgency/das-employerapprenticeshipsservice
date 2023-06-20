@@ -276,3 +276,11 @@ SonarQube.Analysis.xml
 **/*.slconfig
 /src/.upgrade-assistant
 /src/**/UpgradeReport.sarif
+/src/SFA.DAS.EmployerAccounts.Web/internal-nlog.txt
+/src/SFA.DAS.EmployerAccounts.Api/**nlog.txt
+/src/SFA.DAS.EmployerAccounts.Web/appsettings.Development.json
+
+src/SFA.DAS.EmployerAccounts.Api/appsettings.Development.json
+
+# ignore azurite files
+__azurite*

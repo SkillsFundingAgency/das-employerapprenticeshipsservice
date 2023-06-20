@@ -7,7 +7,7 @@ using NUnit.Framework;
 using Polly;
 using Polly.Registry;
 using Polly.Timeout;
-using SFA.DAS.EmployerAccounts.Infrastructure.OuterApiResponses.Reservations;
+using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Responses.Reservations;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Reservations;
 using SFA.DAS.EmployerAccounts.Services;

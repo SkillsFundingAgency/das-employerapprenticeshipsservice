@@ -1,9 +1,8 @@
 ﻿using SFA.DAS.EmployerAccounts.Api.Types;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities.Api
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities.Api;
+
+public class GetAccountLegalEntitiesResponse
 {
-    public class GetAccountLegalEntitiesResponse
-    {
-        public PagedApiResponse<AccountLegalEntity> AccountLegalEntities { get; set; }
-    }
+    public PagedApiResponse<AccountLegalEntity> AccountLegalEntities { get; set; }
 }

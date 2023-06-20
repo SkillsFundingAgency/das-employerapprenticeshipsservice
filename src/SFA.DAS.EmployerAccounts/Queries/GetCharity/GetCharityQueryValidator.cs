@@ -1,26 +1,21 @@
-﻿using System;
-using System.Threading.Tasks;
-using SFA.DAS.Validation;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetCharity;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetCharity
+public class GetCharityQueryValidator : IValidator<GetCharityQueryRequest>
 {
-    public class GetCharityQueryValidator : IValidator<GetCharityQueryRequest>
+    public ValidationResult Validate(GetCharityQueryRequest item)
     {
-        public ValidationResult Validate(GetCharityQueryRequest item)
+        var validationResult = new ValidationResult();
+
+        if (item.RegistrationNumber == 0)
         {
-            var validationResult = new ValidationResult();
-
-            if (item.RegistrationNumber == 0)
-            {
-                validationResult.AddError(nameof(item.RegistrationNumber));
-            }
-
-            return validationResult;
+            validationResult.AddError(nameof(item.RegistrationNumber));
         }
 
-        public Task<ValidationResult> ValidateAsync(GetCharityQueryRequest item)
-        {
-            throw new NotImplementedException();
-        }
+        return validationResult;
+    }
+
+    public Task<ValidationResult> ValidateAsync(GetCharityQueryRequest item)
+    {
+        return Task.FromResult(Validate(item));
     }
 }

@@ -1,35 +1,33 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Data;
+﻿using System.Threading;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models.Account;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetUserAccounts
+namespace SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
+
+public class GetUserAccountsQueryHandler : IRequestHandler<GetUserAccountsQuery, GetUserAccountsQueryResponse>
 {
-    public class GetUserAccountsQueryHandler : IAsyncRequestHandler<GetUserAccountsQuery, GetUserAccountsQueryResponse>
+    private readonly IUserAccountRepository _userAccountsRepository;
+
+    public GetUserAccountsQueryHandler(IUserAccountRepository userAcountRepository)
     {
-        private readonly IUserAccountRepository _userAccountsRepository;
+        _userAccountsRepository = userAcountRepository;
+    }
 
-        public GetUserAccountsQueryHandler(IUserAccountRepository userAcountRepository)
+    public async Task<GetUserAccountsQueryResponse> Handle(GetUserAccountsQuery message, CancellationToken cancellationToken)
+    {
+        //TODO add validator.
+        var userRef = message.UserRef;
+        Accounts<Account> accounts;
+
+        if (!string.IsNullOrEmpty(userRef))
         {
-            _userAccountsRepository = userAcountRepository;
+            accounts = await _userAccountsRepository.GetAccountsByUserRef(userRef);
+        }
+        else
+        {
+            accounts = await _userAccountsRepository.GetAccounts();
         }
 
-        public async Task<GetUserAccountsQueryResponse> Handle(GetUserAccountsQuery message)
-        {
-            //TODO add validator.
-            var userRef = message.UserRef;
-            var accounts = new Accounts<Account>();
-
-            if (!string.IsNullOrEmpty(userRef))
-            {
-                accounts = await _userAccountsRepository.GetAccountsByUserRef(userRef);
-            }
-            else
-            {
-                accounts = await _userAccountsRepository.GetAccounts();
-            }
-
-            return new GetUserAccountsQueryResponse {Accounts = accounts};
-        }
+        return new GetUserAccountsQueryResponse {Accounts = accounts};
     }
 }

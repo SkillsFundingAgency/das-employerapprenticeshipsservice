@@ -2,9 +2,8 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.CreateInvitation;
-using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 

@@ -1,12 +1,10 @@
-﻿using MediatR;
-using SFA.DAS.Tasks.API.Types.Enums;
+﻿using SFA.DAS.EmployerAccounts.TasksApi;
 
-namespace SFA.DAS.EmployerAccounts.Commands.DismissMonthlyTaskReminder
+namespace SFA.DAS.EmployerAccounts.Commands.DismissMonthlyTaskReminder;
+
+public class DismissMonthlyTaskReminderCommand : IRequest
 {
-    public class DismissMonthlyTaskReminderCommand : IAsyncRequest
-    {
-        public string HashedAccountId { get; set; }
-        public string ExternalUserId { get; set; }
-        public TaskType TaskType { get; set; }
-    }
+    public string HashedAccountId { get; set; }
+    public string ExternalUserId { get; set; }
+    public TaskType TaskType { get; set; }
 }

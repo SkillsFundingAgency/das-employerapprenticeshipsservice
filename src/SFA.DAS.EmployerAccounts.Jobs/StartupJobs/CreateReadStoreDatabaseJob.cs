@@ -1,63 +1,59 @@
 ﻿using System.Collections.ObjectModel;
 using System.Net;
-using System.Threading.Tasks;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;
 
-namespace SFA.DAS.EmployerAccounts.Jobs.StartupJobs
+namespace SFA.DAS.EmployerAccounts.Jobs.StartupJobs;
+
+public class CreateReadStoreDatabaseJob
 {
-    public class CreateReadStoreDatabaseJob
+    private readonly IDocumentClient _documentClient;
+    private readonly ILogger<CreateReadStoreDatabaseJob> _logger;
+
+    public CreateReadStoreDatabaseJob(IDocumentClient documentClient, ILogger<CreateReadStoreDatabaseJob> logger)
     {
-        private readonly IDocumentClient _documentClient;
-        private readonly ILogger _logger;
+        _documentClient = documentClient;
+        _logger = logger;
+    }
 
-        public CreateReadStoreDatabaseJob(IDocumentClient documentClient, ILogger logger)
+    [NoAutomaticTrigger]
+    public async Task Run()
+    {
+        var database = new Database
         {
-            _documentClient = documentClient;
-            _logger = logger;
-        }
+            Id = DocumentSettings.DatabaseName
+        };
 
-        [NoAutomaticTrigger]
-        public async Task Run()
+        var documentCollection = new DocumentCollection
         {
-            var database = new Database
+            Id = DocumentSettings.AccountUsersCollectionName,
+            PartitionKey = new PartitionKeyDefinition
             {
-                Id = DocumentSettings.DatabaseName
-            };
-
-            var documentCollection = new DocumentCollection
-            {
-                Id = DocumentSettings.AccountUsersCollectionName,
-                PartitionKey = new PartitionKeyDefinition
+                Paths = new Collection<string>
                 {
-                    Paths = new Collection<string>
-                        {
-                            "/accountId"
-                        }
-                },
-                UniqueKeyPolicy = new UniqueKeyPolicy
-                {
-                    UniqueKeys = new Collection<UniqueKey>
-                        {
-                            new UniqueKey
-                            {
-                                Paths = new Collection<string> { "/userRef" }
-                            }
-                        }
+                    "/accountId"
                 }
-            };
+            },
+            UniqueKeyPolicy = new UniqueKeyPolicy
+            {
+                UniqueKeys = new Collection<UniqueKey>
+                {
+                    new UniqueKey
+                    {
+                        Paths = new Collection<string> { "/userRef" }
+                    }
+                }
+            }
+        };
 
-            _logger.LogInformation("Creating ReadStore database and collection if they don't exist");
+        _logger.LogInformation("Creating ReadStore database and collection if they don't exist");
 
-            var createDatabaseResponse = await _documentClient.CreateDatabaseIfNotExistsAsync(database);
-            _logger.LogInformation($"Database {(createDatabaseResponse.StatusCode == HttpStatusCode.Created ? "created" : "already existed")}");
+        var createDatabaseResponse = await _documentClient.CreateDatabaseIfNotExistsAsync(database);
+        _logger.LogInformation($"Database {(createDatabaseResponse.StatusCode == HttpStatusCode.Created ? "created" : "already existed")}");
 
-            var requestOptions = new RequestOptions { OfferThroughput = 1000 };
-            var createDocumentCollectionResponse = await _documentClient.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(database.Id), documentCollection, requestOptions);
-            _logger.LogInformation($"Document collection {(createDocumentCollectionResponse.StatusCode == HttpStatusCode.Created ? "created" : "already existed")}");
-        }
+        var requestOptions = new RequestOptions { OfferThroughput = 1000 };
+        var createDocumentCollectionResponse = await _documentClient.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(database.Id), documentCollection, requestOptions);
+        _logger.LogInformation($"Document collection {(createDocumentCollectionResponse.StatusCode == HttpStatusCode.Created ? "created" : "already existed")}");
     }
 }

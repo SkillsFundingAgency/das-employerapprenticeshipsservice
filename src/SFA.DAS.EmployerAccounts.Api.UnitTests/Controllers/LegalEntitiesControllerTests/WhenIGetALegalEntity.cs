@@ -1,13 +1,14 @@
-﻿using MediatR;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using AutoFixture.NUnit3;
+using FluentAssertions;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Controllers;
-using SFA.DAS.EmployerAccounts.Queries.GetLegalEntity;
-using System.Threading.Tasks;
-using System.Web.Http.Results;
-using AutoFixture.NUnit3;
-using FluentAssertions;
 using SFA.DAS.EmployerAccounts.Api.Mappings;
+using SFA.DAS.EmployerAccounts.Queries.GetLegalEntity;
 using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesControllerTests
@@ -25,15 +26,16 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
             [Greedy] LegalEntitiesController controller)
         {
             var expectedModel = LegalEntityMapping.MapFromAccountLegalEntity(mediatorResponse.LegalEntity, mediatorResponse.LatestAgreement, includeAllAgreements);
-            mediator.Setup(m => m.SendAsync(
-                    It.Is<GetLegalEntityQuery>(
-                        q => q.AccountHashedId.Equals(hashedAccountId) && q.LegalEntityId.Equals(legalEntityId))))
+
+            mediator.Setup(m => m.Send(
+                    It.Is<GetLegalEntityQuery>(q => q.AccountHashedId == hashedAccountId && q.LegalEntityId == legalEntityId), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(mediatorResponse);
             
-            var result = await controller.GetLegalEntity(hashedAccountId, legalEntityId, includeAllAgreements) as OkNegotiatedContentResult<Api.Types.LegalEntity>;
+            var result = await controller.GetLegalEntity(hashedAccountId, legalEntityId, includeAllAgreements) as OkObjectResult;
 
             Assert.IsNotNull(result);
-            result.Content.ShouldBeEquivalentTo(expectedModel);
+            var model = ((OkObjectResult)result).Value;
+            model.Should().BeEquivalentTo(expectedModel);
         }
 
     }

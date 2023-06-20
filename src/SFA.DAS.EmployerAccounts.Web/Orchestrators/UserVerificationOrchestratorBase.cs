@@ -1,30 +1,24 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
+﻿using SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
 
-namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
+namespace SFA.DAS.EmployerAccounts.Web.Orchestrators;
+
+public abstract class UserVerificationOrchestratorBase
 {
-    public abstract class UserVerificationOrchestratorBase
+    public IMediator Mediator { get; set; }
+
+    protected UserVerificationOrchestratorBase() { }
+
+    protected UserVerificationOrchestratorBase(IMediator mediator)
     {
-        public IMediator Mediator { get; set; }
+        Mediator = mediator;
+    }
 
-        protected UserVerificationOrchestratorBase()
+    public virtual async Task<GetUserAccountRoleResponse> GetUserAccountRole(long accountId, string externalUserId)
+    {
+        return await Mediator.Send(new GetUserAccountRoleQuery
         {
-
-        }
-
-        protected UserVerificationOrchestratorBase(IMediator mediator)
-        {
-            Mediator = mediator;
-        }
-
-        public virtual async Task<GetUserAccountRoleResponse> GetUserAccountRole(string hashedAccountId, string externalUserId)
-        {
-            return await Mediator.SendAsync(new GetUserAccountRoleQuery
-            {
-                HashedAccountId = hashedAccountId,
-                ExternalUserId = externalUserId
-            });
-        }
+            AccountId = accountId,
+            ExternalUserId = externalUserId
+        });
     }
 }

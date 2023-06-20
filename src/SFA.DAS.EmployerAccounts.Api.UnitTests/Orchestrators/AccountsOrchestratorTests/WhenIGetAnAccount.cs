@@ -1,12 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountDetail;
-using SFA.DAS.HashingService;
-using SFA.DAS.NLog.Logger;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Orchestrators.AccountsOrchestratorTests
 {
@@ -14,18 +15,18 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Orchestrators.AccountsOrchestra
     {
         private AccountsOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
-        private Mock<ILog> _log;
+        private Mock<ILogger<AccountsOrchestrator>> _log;
 
         [SetUp]
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _log = new Mock<ILog>();
+            _log = new Mock<ILogger<AccountsOrchestrator>>();
 
-            _orchestrator = new AccountsOrchestrator(_mediator.Object, _log.Object, Mock.Of<IMapper>(), Mock.Of<IHashingService>());
+            _orchestrator = new AccountsOrchestrator(_mediator.Object, _log.Object, Mock.Of<IMapper>(), Mock.Of<IEncodingService>());
 
             _mediator
-                .Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountDetailByHashedIdQuery>()))
+                .Setup(x => x.Send(It.IsAny<GetEmployerAccountDetailByHashedIdQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetEmployerAccountDetailByHashedIdResponse())
                 .Verifiable("Get account was not called");
         }

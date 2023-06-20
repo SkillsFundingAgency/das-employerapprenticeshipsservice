@@ -1,24 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.CommitmentsV2.Api.Types.Responses;
-using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.Organisation;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove;
-using SFA.DAS.HashingService;
-using SFA.DAS.Validation;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntityRemove
 {
     public class WhenIGetAccountLegalEntityRemove : QueryBaseTest<GetAccountLegalEntityRemoveQueryHandler, GetAccountLegalEntityRemoveRequest, GetAccountLegalEntityRemoveResponse>
     {
-        private Mock<IHashingService> _hashingService;
-        private Mock<IAccountLegalEntityPublicHashingService> _accountLegalEntityPublicHashingService;
+        private Mock<IEncodingService> _encodingService;
         private Mock<IEmployerAgreementRepository> _repository;
         private Mock<ICommitmentsV2ApiClient> _commitmentsV2ApiClient;
       
@@ -28,6 +26,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntityRemove
 
         private const string ExpectedHashedAccountId = "345ASD";
         private const string ExpectedHashedAccountLegalEntityId = "PHF78";
+        private const string ExpectedHashedAgreementId = "ZH157";
         private const long ExpectedAgreementId = 12345555;
         private const string ExpectedUserId = "098GHY";
         private const long ExpectedAccountId = 98172938;
@@ -59,12 +58,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntityRemove
                     new List<EmployerAgreement>()
                 );
 
-            _hashingService = new Mock<IHashingService>();
-            _hashingService.Setup(x => x.DecodeValue(ExpectedHashedAccountId)).Returns(ExpectedAccountId);
-            _hashingService.Setup(x => x.DecodeValue(ExpectedHashedAccountLegalEntityId)).Returns(ExpectedAgreementId);
-
-            _accountLegalEntityPublicHashingService = new Mock<IAccountLegalEntityPublicHashingService>();
-            _accountLegalEntityPublicHashingService.Setup(x => x.DecodeValue(ExpectedHashedAccountLegalEntityId)).Returns(ExpectedAccountLegalEntityId);
+            _encodingService = new Mock<IEncodingService>();
+            _encodingService.Setup(x => x.Decode(ExpectedHashedAccountId, EncodingType.AccountId)).Returns(ExpectedAccountId);
+            _encodingService.Setup(x => x.Decode(ExpectedHashedAgreementId, EncodingType.PublicAccountLegalEntityId)).Returns(ExpectedAgreementId);
+            _encodingService.Setup(x => x.Decode(ExpectedHashedAccountLegalEntityId, EncodingType.PublicAccountLegalEntityId)).Returns(ExpectedAccountLegalEntityId);
 
             _commitmentsV2ApiClient = new Mock<ICommitmentsV2ApiClient>();
             _commitmentsV2ApiClient.Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
@@ -77,8 +74,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntityRemove
             RequestHandler = new GetAccountLegalEntityRemoveQueryHandler(
                 RequestValidator.Object,
                 _repository.Object,
-                _hashingService.Object,
-                _accountLegalEntityPublicHashingService.Object,
+                _encodingService.Object,
                 _commitmentsV2ApiClient.Object
             );
         }
@@ -90,14 +86,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntityRemove
             RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<GetAccountLegalEntityRemoveRequest>())).ReturnsAsync(new ValidationResult { IsUnauthorized = true });
 
             //Act Assert
-            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await RequestHandler.Handle(new GetAccountLegalEntityRemoveRequest()));
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await RequestHandler.Handle(new GetAccountLegalEntityRemoveRequest(), CancellationToken.None));
         }
 
         [Test]
         public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
             //Act
-            await RequestHandler.Handle(Query);
+            await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             _repository.Verify(x => x.GetAccountLegalEntityAgreements(ExpectedAccountLegalEntityId), Times.Once);
@@ -107,7 +103,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntityRemove
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Act
-            var actual = await RequestHandler.Handle(Query);
+            var actual = await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             Assert.IsNotNull(actual);

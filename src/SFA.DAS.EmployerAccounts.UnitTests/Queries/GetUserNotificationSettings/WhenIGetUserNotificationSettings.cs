@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Queries.GetUserNotificationSettings;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUserNotificationSettings
 {
@@ -37,7 +37,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUserNotificationSettings
             var query = new GetUserNotificationSettingsQuery();
 
             //Act
-            await _handler.Handle(query);
+            await _handler.Handle(query, CancellationToken.None);
 
             //Assert
             _validator.Verify(x => x.Validate(query), Times.Once);
@@ -53,7 +53,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUserNotificationSettings
             };
 
             //Act
-            await _handler.Handle(query);
+            await _handler.Handle(query, CancellationToken.None);
 
             //Assert
             _repository.Verify(x => x.GetUserAccountSettings(

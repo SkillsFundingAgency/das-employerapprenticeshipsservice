@@ -1,7 +1,7 @@
-﻿using Moq;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authentication;
-using System.Security.Claims;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
 
@@ -9,7 +9,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Extensions.AuthenticationServiceExt
 {
     public class WhenIsSupportUserIsCalled
     {
-        private Mock<IAuthenticationService> _mockAuthenticationService;
+        private Mock<IHttpContextAccessor> _httpContextAccessorMock;
         private EmployerAccountsConfiguration _employerAccountsConfiguration;
         private IUserContext _userContext;
         private readonly string _supportConsoleUsers = "Tier1User,Tier2User";
@@ -17,12 +17,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Extensions.AuthenticationServiceExt
         [SetUp]
         public void Arrange()
         {
-            _mockAuthenticationService = new Mock<IAuthenticationService>();
+            _httpContextAccessorMock = new Mock<IHttpContextAccessor>();
             _employerAccountsConfiguration=new EmployerAccountsConfiguration()
             {
                 SupportConsoleUsers = _supportConsoleUsers
             };
-            _userContext = new UserContext(_mockAuthenticationService.Object,_employerAccountsConfiguration);
+            _userContext = new UserContext(_httpContextAccessorMock.Object,_employerAccountsConfiguration);
         }
 
         [Test]
@@ -30,11 +30,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Extensions.AuthenticationServiceExt
         [TestCase("Tier2User")]
         public void ThenTheAuthenticationServiceIsCalled(string role)
         {
+            //Arrange
+            _httpContextAccessorMock.Setup(m => m.HttpContext.User.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role)).Returns(true);
+
             //Act
             _userContext.IsSupportConsoleUser();
 
             //Assert
-            _mockAuthenticationService.Verify(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role), Times.Once);
+            _httpContextAccessorMock.Verify(m => m.HttpContext.User.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role), Times.Once);
         }
 
         [Test]
@@ -43,8 +46,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Extensions.AuthenticationServiceExt
         public void ThenTrueIsReturnedWhenTheAuthenticationServiceHasTheSupportUserClaim(string role)
         {
             // Arrange
-            _mockAuthenticationService
-                .Setup(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role))
+            _httpContextAccessorMock
+                .Setup(m => m.HttpContext.User.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role))
                 .Returns(true);
 
             //Act
@@ -60,8 +63,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Extensions.AuthenticationServiceExt
         public void ThenFalseIsReturnedWhenTheAuthenticationServiceDoesNotHaveTheSupportUserClaim(string role)
         {
             // Arrange
-            _mockAuthenticationService
-                .Setup(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role))
+            _httpContextAccessorMock
+                .Setup(m => m.HttpContext.User.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role))
                 .Returns(false);
 
             //Act

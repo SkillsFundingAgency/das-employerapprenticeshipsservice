@@ -1,88 +1,93 @@
-@using SFA.DAS.Authorization
-@using SFA.DAS.EmployerAccounts.Models
-
 @model OrchestratorResponse<SFA.DAS.EmployerAccounts.Web.ViewModels.InviteTeamMemberViewModel>
+@using SFA.DAS.EmployerAccounts.Models;
 
 @{
     ViewBag.PageID = "page-invite-team-member";
     ViewBag.Title = "Create invitation";
     ViewBag.Section = "team";
-}
-
-@{
     ViewBag.GaData.Vpv = "/accounts/teams/invite/page-invite-team-member";
+    string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId].ToString();
 }
-        <div class="grid-row">
-            <div class="column-two-thirds">
-                <h1 class="heading-xlarge">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <h1 class="govuk-heading-xl">
                     Create invitation
                 </h1>
-                <p class="lede">Invite somebody from your organisation to access this account.</p>
-                <form method="POST" action="@Url.Action("Invite")">
-                    @Html.AntiForgeryToken()
-                    <div class="form-group @(!string.IsNullOrEmpty(Model.Data.EmailError) || !string.IsNullOrEmpty(Model.Data.ExistingMemberError) ? "error" : "")">
-
-                        <label for="Email">
-                            <span class="form-label-bold">Email</span>
-                            <span class="form-hint">An invitation will be sent to this email address</span>
-                            @if (!string.IsNullOrEmpty(Model.Data.EmailError))
-                            {
-                                <span class="error-message" id="error-message-email">@Model.Data.EmailError</span>
-                            }
-                            @if (!string.IsNullOrEmpty(Model.Data.ExistingMemberError))
-                            {
-                                <span class="error-message" id="error-message-email">@Model.Data.ExistingMemberError</span>
-                            }
+                <p class="govuk-body-l">Invite somebody from your organisation to access this account.</p>
+                <form method="POST" asp-route="@RouteNames.EmployerTeamInvitePost" asp-route-hashedAccountId="@hashedAccountId">
+                    <div class="govuk-form-group @(!string.IsNullOrEmpty(Model.Data.EmailError) || !string.IsNullOrEmpty(Model.Data.ExistingMemberError) ? "govuk-form-group--error" : "")">
+                        <label for="Email" class="govuk-label">
+                            <span>Email</span>
                         </label>
-                        <input class="form-control form-control-3-4" id="Email" name="Email" type="text"
+                        <div class="govuk-hint">An invitation will be sent to this email address</div>
+                        @if (!string.IsNullOrEmpty(Model.Data.EmailError))
+                        {
+                            <span class="govuk-error-message" id="error-message-email">@Model.Data.EmailError</span>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.Data.ExistingMemberError))
+                        {
+                            <span class="govuk-error-message" id="error-message-email">@Model.Data.ExistingMemberError</span>
+                        }
+                        <input class="govuk-input govuk-!-width-three-quarters" id="Email" name="Email" type="text"
                                @(!string.IsNullOrEmpty(Model.Data.EmailError) || !string.IsNullOrEmpty(Model.Data.ExistingMemberError) ? " aria-describedby=error-message-email " : "")
                                aria-required="true" value="@Model.Data.Email" />
                     </div>
 
-                    <div class="form-group @(!string.IsNullOrEmpty(Model.Data.NameError) ? "error" : "")">
-                        <label for="Name">
-                            <span class="form-label-bold" id="error-message-name">Full name</span>
-                            @if (!string.IsNullOrEmpty(Model.Data.NameError))
-                            {
-                                <span class="error-message">@Model.Data.NameError</span>
-                            }
+                    <div class="govuk-form-group @(!string.IsNullOrEmpty(Model.Data.NameError) ? "govuk-form-group--error" : "")">
+                        <label for="Name" class="govuk-label">
+                            <span id="error-message-name">Full name</span>
+        
                         </label>
-                        <input class="form-control form-control-3-4" id="Name" name="Name" type="text"
+                        @if (!string.IsNullOrEmpty(Model.Data.NameError))
+                        {
+                            <span class="govuk-error-message">@Model.Data.NameError</span>
+                        }
+                        <input class="govuk-input govuk-!-width-three-quarters" id="Name" name="Name" type="text"
                                @(!string.IsNullOrEmpty(Model.Data.NameError) ? " aria-describedby=error-message-name " : "")
                                aria-required="true" value="@Model.Data.Name" />
                     </div>
-                    <div class="form-group @(!string.IsNullOrEmpty(Model.Data.RoleError) ? "error" : "")">
-                        <fieldset>
-                            <legend>
-                                <span class="form-label-bold">Team member access</span>
-                                <span class="form-hint">Choose the level of access this user can have.</span>
-                                @if (!string.IsNullOrEmpty(Model.Data.RoleError))
-                                {
-                                    <span class="error-message" id="Role">@Model.Data.RoleError</span>
-                                }
+                    <div class="govuk-form-group @(!string.IsNullOrEmpty(Model.Data.RoleError) ? "govuk-form-group--error" : "")">
+                        <fieldset class="govuk-fieldset">
+                            <legend class="govuk-fieldset__legend">
+                                <span>Team member access</span>
+                                
                             </legend>
-                            <label class="block-label" for="radio1">
-                                <input id="radio1" type="radio" name="Role" value="3" @(Model.Data.Role == Role.Viewer ? "checked" : "") />
-                                @(RoleStrings.GetRoleDescription(Role.Viewer))
-                            </label>
-                            <label class="block-label" for="radio2">
-                                <input id="radio2" type="radio" name="Role" value="2" @(Model.Data.Role == Role.Transactor ? "checked" : "") />
-                                @(RoleStrings.GetRoleDescription(Role.Transactor))
-                            </label>
-                            <label class="block-label" for="radio3">
-                                <input id="radio3" type="radio" name="Role" value="1" @(Model.Data.Role == Role.Owner ? "checked" : "") />
-                                @(RoleStrings.GetRoleDescription(Role.Owner))
-                            </label>
+                            <div class="govuk-hint">Choose the level of access this user can have.</div>
+                            @if (!string.IsNullOrEmpty(Model.Data.RoleError))
+                            {
+                                <span class="govuk-error-message">@Model.Data.RoleError</span>
+                            }
+                            <div class="govuk-radios" data-module="govuk-radios">
+                                <div class="govuk-radios__item">
+                            
+                                    <input class="govuk-radios__input" id="radio1" type="radio" name="Role" value="3" @(Model.Data.Role == Role.Viewer ? "checked" : "") />
+                                <label class="govuk-label govuk-radios__label" for="radio1">
+                                    @(RoleStrings.GetRoleDescription(Role.Viewer))
+                                </label>
+                                </div>
+                                <div class="govuk-radios__item">
+                                
+                                    <input class="govuk-radios__input" id="radio2" type="radio" name="Role" value="2" @(Model.Data.Role == Role.Transactor ? "checked" : "") />
+                                <label class="govuk-label govuk-radios__label" for="radio2">
+                                    @(RoleStrings.GetRoleDescription(Role.Transactor))
+                                </label>
+                                </div>
+                                <div class="govuk-radios__item">
+                                
+                                    <input class="govuk-radios__input" id="radio3" type="radio" name="Role" value="1" @(Model.Data.Role == Role.Owner ? "checked" : "") />
+                                <label class="govuk-label govuk-radios__label" for="radio3">
+                                    @(RoleStrings.GetRoleDescription(Role.Owner))
+                                </label>
+                                </div>
+                            </div>
                         </fieldset>
                     </div>
                     <input type="hidden" id="HashedId" name="HashedId" value="@Model.Data.HashedAccountId" />
-                    <button type="submit" class="button" id="send_invitation">Send invitation</button>
+                    <button type="submit" class="govuk-button" id="send_invitation">Send invitation</button>
                 </form>
             </div>
         </div>
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <a href="@Url.Action("ViewTeam", "EmployerTeam")", class="back-link">Back to your team</a>
-    </div>
+    <a asp-route="@RouteNames.EmployerTeamView" asp-route-hashedAccountId="@hashedAccountId" class="govuk-back-link">Back to your team</a>
 }

@@ -1,31 +1,29 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.NLog.Logger;
+﻿using System.Threading;
+using Microsoft.Extensions.Logging;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetTeamUser
+namespace SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
+
+public class GetTeamUserHandler : IRequestHandler<GetTeamMemberQuery, GetTeamMemberResponse>
 {
-    public class GetTeamUserHandler : IAsyncRequestHandler<GetTeamMemberQuery, GetTeamMemberResponse>
+    private readonly IMembershipRepository _repository;
+    private readonly ILogger<GetTeamUserHandler> _logger;
+
+    public GetTeamUserHandler(IMembershipRepository repository, ILogger<GetTeamUserHandler> logger)
     {
-        private readonly IMembershipRepository _repository;
-        private readonly ILog _logger;
+        _repository = repository;
+        _logger = logger;
+    }
 
-        public GetTeamUserHandler(IMembershipRepository repository, ILog logger)
+    public async Task<GetTeamMemberResponse> Handle(GetTeamMemberQuery message, CancellationToken cancellationToken)
+    {
+        _logger.LogDebug("Getting team member for account hashed ID {AccountId} and team member ID {TeamMemberId}", message.AccountId, message.TeamMemberId);
+
+        var member = await _repository.GetCaller(message.AccountId, message.TeamMemberId);
+
+        return new GetTeamMemberResponse
         {
-            _repository = repository;
-            _logger = logger;
-        }
-
-        public async Task<GetTeamMemberResponse> Handle(GetTeamMemberQuery message)
-        {
-            _logger.Debug($"Getting team member for account hashed ID {message.HashedAccountId} and team member ID {message.TeamMemberId}");
-            var member = await _repository.GetCaller(message.HashedAccountId, message.TeamMemberId);
-
-            return new GetTeamMemberResponse
-            {
-                User = member
-            };
-        }
+            User = member
+        };
     }
 }

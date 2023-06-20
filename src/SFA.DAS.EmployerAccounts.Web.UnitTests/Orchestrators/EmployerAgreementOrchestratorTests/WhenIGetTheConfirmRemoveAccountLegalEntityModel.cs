@@ -1,99 +1,104 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerAccounts.Exceptions;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.Validation;
+using SFA.DAS.Encoding;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests;
+
+public class WhenIGetTheConfirmRemoveAccountLegalEntityModel
 {
-    public class WhenIGetTheConfirmRemoveAccountLegalEntityModel
+    private Mock<IMediator> _mediator;
+    private Mock<IReferenceDataService> _referenceDataService;
+    private EmployerAgreementOrchestrator _orchestrator;
+
+    private const string ExpectedHashedAccountId = "RT456";
+    private const string ExpectedHashedAccountLegalEntityId = "RRTE56";
+    private const string ExpectedUserId = "TYG68UY";
+    private const string ExpectedName = "Test Name";
+
+    [SetUp]
+    public void Arrange()
     {
-        private Mock<IMediator> _mediator;
-        private Mock<IReferenceDataService> _referenceDataService;
-        private EmployerAgreementOrchestrator _orchestrator;
+        _mediator = new Mock<IMediator>();
+        _mediator.Setup(x => x.Send(It.IsAny<GetAccountLegalEntityRemoveRequest>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new GetAccountLegalEntityRemoveResponse
+            {
+                Name = ExpectedName,
+                CanBeRemoved = true,
+                HasSignedAgreement = true
+            });
 
-        private const string ExpectedHahsedAccountId = "RT456";
-        private const string ExpectedHashedAccountLegalEntityId = "RRTE56";
-        private const string ExpectedUserId = "TYG68UY";
-        private const string ExpectedName = "Test Name";
+        _referenceDataService = new Mock<IReferenceDataService>();
 
-        [SetUp]
-        public void Arrange()
-        {
-            _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntityRemoveRequest>()))
-                .ReturnsAsync(new GetAccountLegalEntityRemoveResponse
-                {
-                    Name = ExpectedName,
-                    CanBeRemoved = true,
-                    HasSignedAgreement = true
-                });
+        _orchestrator =
+            new EmployerAgreementOrchestrator(_mediator.Object, Mock.Of<IMapper>(), _referenceDataService.Object, Mock.Of<IEncodingService>());
+    }
 
-            _referenceDataService = new Mock<IReferenceDataService>();
+    [Test]
+    public async Task ThenTheMediatorIsCalledToGetASingledOrgToRemove()
+    {
 
-            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, Mock.Of<IMapper>(), _referenceDataService.Object);
-        }
+        //Act
+        await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAccountId, ExpectedHashedAccountLegalEntityId, ExpectedUserId);
 
-        [Test]
-        public async Task ThenTheMediatorIsCalledToGetASingledOrgToRemove()
-        {
-
-            //Act
-            await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAccountLegalEntityId, ExpectedHahsedAccountId, ExpectedUserId);
-
-            //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetAccountLegalEntityRemoveRequest>(
-                c => c.HashedAccountId.Equals(ExpectedHahsedAccountId)
-                     && c.UserId.Equals(ExpectedUserId)
-                     && c.HashedAccountLegalEntityId.Equals(ExpectedHashedAccountLegalEntityId)
-                )), Times.Once);
-        }
+        //Assert
+        _mediator.Verify(x => x.Send(It.Is<GetAccountLegalEntityRemoveRequest>(
+            c => c.HashedAccountId.Equals(ExpectedHashedAccountId)
+                 && c.UserId.Equals(ExpectedUserId)
+                 && c.HashedAccountLegalEntityId.Equals(ExpectedHashedAccountLegalEntityId)
+        ), It.IsAny<CancellationToken>()), Times.Once);
+    }
 
 
-        [Test]
-        public async Task ThenIfAnInvalidRequestExceptionIsThrownTheOrchestratorResponseContainsTheError()
-        {
-            //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntityRemoveRequest>())).ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
+    [Test]
+    public async Task ThenIfAnInvalidRequestExceptionIsThrownTheOrchestratorResponseContainsTheError()
+    {
+        //Arrange
+        _mediator.Setup(x => x.Send(It.IsAny<GetAccountLegalEntityRemoveRequest>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
 
-            //Act
-            var actual = await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAccountLegalEntityId, ExpectedHahsedAccountId, ExpectedUserId);
+        //Act
+        var actual = await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAccountLegalEntityId,
+            ExpectedHashedAccountId, ExpectedUserId);
 
-            //Assert
-            Assert.AreEqual(HttpStatusCode.BadRequest, actual.Status);
-        }
+        //Assert
+        Assert.AreEqual(HttpStatusCode.BadRequest, actual.Status);
+    }
 
-        [Test]
-        public async Task ThenIfAUnauthroizedAccessExceptionIsThrownThenTheOrchestratorResponseShowsAccessDenied()
-        {
-            //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntityRemoveRequest>())).ThrowsAsync(new UnauthorizedAccessException());
+    [Test]
+    public async Task ThenIfAUnauthroizedAccessExceptionIsThrownThenTheOrchestratorResponseShowsAccessDenied()
+    {
+        //Arrange
+        _mediator.Setup(x => x.Send(It.IsAny<GetAccountLegalEntityRemoveRequest>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new UnauthorizedAccessException());
 
-            //Act
-            var actual = await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAccountLegalEntityId, ExpectedHahsedAccountId, ExpectedUserId);
+        //Act
+        var actual = await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAccountLegalEntityId,
+            ExpectedHashedAccountId, ExpectedUserId);
 
-            //Assert
-            Assert.AreEqual(HttpStatusCode.Unauthorized, actual.Status);
-        }
+        //Assert
+        Assert.AreEqual(HttpStatusCode.Unauthorized, actual.Status);
+    }
 
-        [Test]
-        public async Task ThenTheValuesAreReturnedInTheResponseFromTheMediatorCall()
-        {
-            //Act
-            var actual = await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAccountLegalEntityId, ExpectedHahsedAccountId, ExpectedUserId);
+    [Test]
+    public async Task ThenTheValuesAreReturnedInTheResponseFromTheMediatorCall()
+    {
+        //Act
+        var actual = await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAccountId, ExpectedHashedAccountLegalEntityId, ExpectedUserId);
 
-            //Assert
-            Assert.AreEqual(ExpectedHashedAccountLegalEntityId, actual.Data.HashedAccountLegalEntitytId);
-            Assert.AreEqual(ExpectedHahsedAccountId, actual.Data.HashedAccountId);
-            Assert.AreEqual(ExpectedName, actual.Data.Name);
-        }
-
+        //Assert
+        Assert.AreEqual(ExpectedHashedAccountLegalEntityId, actual.Data.HashedAccountLegalEntitytId);
+        Assert.AreEqual(ExpectedHashedAccountId, actual.Data.HashedAccountId);
+        Assert.AreEqual(ExpectedName, actual.Data.Name);
     }
 }

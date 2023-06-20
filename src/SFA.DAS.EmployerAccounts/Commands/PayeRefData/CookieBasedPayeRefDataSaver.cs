@@ -1,61 +1,58 @@
-﻿using System;
-using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Interfaces;
+﻿using System.Threading;
 using SFA.DAS.EmployerAccounts.Models.Account;
 
-namespace SFA.DAS.EmployerAccounts.Commands.PayeRefData
+namespace SFA.DAS.EmployerAccounts.Commands.PayeRefData;
+
+public sealed class CookieBasedPayeRefDataSaver : IRequestHandler<SavePayeRefData>
 {
-    public sealed  class CookieBasedPayeRefDataSaver : AsyncRequestHandler<SavePayeRefData>
+    private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
+
+    private readonly ICookieStorageService<EmployerAccountData> _cookieRepository;
+    private const int CookieExpiryInDays = 365;
+
+    public CookieBasedPayeRefDataSaver(ICookieStorageService<EmployerAccountData> cookieRepository)
     {
-        private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
+        _cookieRepository = cookieRepository ?? throw new ArgumentNullException(nameof(cookieRepository));
+    }
 
-        private readonly ICookieStorageService<EmployerAccountData> _cookieRepository;
-        private const int CookieExpiryInDays = 365;
+    public Task<Unit> Handle(SavePayeRefData message, CancellationToken cancellationToken)
+    {
+        var existingCookie = _cookieRepository.Get(CookieName);
 
-        public CookieBasedPayeRefDataSaver(ICookieStorageService<EmployerAccountData> cookieRepository)
+        if (existingCookie == null)
         {
-            _cookieRepository = cookieRepository ?? throw new ArgumentNullException(nameof(cookieRepository));
+            createNewCookieWithData(message.PayeRefData);
+        }
+        else
+        {
+            updateExistingCookieWithNewData(existingCookie, message.PayeRefData);
         }
 
-        protected override Task HandleCore(SavePayeRefData message)
-        {
-            var existingCookie = _cookieRepository.Get(CookieName);
+        return Task.FromResult(Unit.Value);
+    }
 
-                if (existingCookie == null)
-            {
-                createNewCookieWithData(message.PayeRefData);
-            }
-            else
-            {
-                updateExistingCookieWithNewData(existingCookie, message.PayeRefData);
-            }
+    private void updateExistingCookieWithNewData(EmployerAccountData existingCookie,
+        EmployerAccountPayeRefData payeRefData)
+    {
+        existingCookie.EmployerAccountPayeRefData = payeRefData;
 
-            return Task.CompletedTask;
-        }
+        _cookieRepository
+            .Update(
+                CookieName,
+                existingCookie);
+    }
 
-        private void updateExistingCookieWithNewData(EmployerAccountData existingCookie, EmployerAccountPayeRefData payeRefData)
-        {
-            existingCookie.EmployerAccountPayeRefData = payeRefData;
+    private void createNewCookieWithData(EmployerAccountPayeRefData payeRefData)
+    {
 
-            _cookieRepository
-                .Update(
-                    CookieName,
-                    existingCookie);
-        }
-
-        private void createNewCookieWithData(EmployerAccountPayeRefData payeRefData)
-        {
-
-            _cookieRepository
-                .Create(
-                    new EmployerAccountData
-                    {
-                        EmployerAccountOrganisationData = new EmployerAccountOrganisationData(),
-                        EmployerAccountPayeRefData = payeRefData
-                    },
-                    CookieName,
-                    CookieExpiryInDays);
-        }
+        _cookieRepository
+            .Create(
+                new EmployerAccountData
+                {
+                    EmployerAccountOrganisationData = new EmployerAccountOrganisationData(),
+                    EmployerAccountPayeRefData = payeRefData
+                },
+                CookieName,
+                CookieExpiryInDays);
     }
 }

@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
 using DasEnglishFraction = SFA.DAS.EmployerAccounts.Models.Levy.DasEnglishFraction;
-using OuterDasEnglishFraction = SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.OuterApiResponses.Finance.DasEnglishFraction;
+using OuterDasEnglishFraction = SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Responses.Finance.DasEnglishFraction;
 
-namespace SFA.DAS.EmployerAccounts.Mappings
+namespace SFA.DAS.EmployerAccounts.Mappings;
+
+public class LevyMappings : Profile
 {
-    public class LevyMappings : Profile
+    public LevyMappings()
     {
-        public LevyMappings()
-        {
-            CreateMap<OuterDasEnglishFraction, DasEnglishFraction>();
-        }
+        CreateMap<OuterDasEnglishFraction, DasEnglishFraction>();
     }
 }

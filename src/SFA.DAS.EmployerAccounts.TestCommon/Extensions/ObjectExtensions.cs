@@ -9,7 +9,7 @@ namespace SFA.DAS.EmployerAccounts.TestCommon.Extensions
         {
             try
             {
-                source.ShouldBeEquivalentTo(expectation);
+                source.Should().BeEquivalentTo(expectation);
             }
             catch (Exception)
             {

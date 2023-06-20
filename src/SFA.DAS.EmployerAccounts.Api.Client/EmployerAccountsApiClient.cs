@@ -1,18 +1,16 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
+using MediatR;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Queries;
-using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 
 namespace SFA.DAS.EmployerAccounts.Api.Client
 {
-    //todo: not a great client/http combo
     public class EmployerAccountsApiClient : IEmployerAccountsApiClient
     {
         private readonly ISecureHttpClient _httpClient;
-        private readonly IReadStoreMediator _mediator;
+        private readonly IMediator _mediator;
 
-        public EmployerAccountsApiClient(ISecureHttpClient httpClient, IReadStoreMediator mediator)
+        public EmployerAccountsApiClient(ISecureHttpClient httpClient, IMediator mediator)
         {
             _httpClient = httpClient;
             _mediator = mediator;

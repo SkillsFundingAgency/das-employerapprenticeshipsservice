@@ -1,42 +1,60 @@
 ﻿using System.Threading.Tasks;
-using System.Web.Http;
-using SFA.DAS.EmployerAccounts.Api.Attributes;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.EmployerAccounts.Api.Authorization;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
+using SFA.DAS.EmployerAccounts.Api.Types;
+using SFA.DAS.Encoding;
 
-namespace SFA.DAS.EmployerAccounts.Api.Controllers
+namespace SFA.DAS.EmployerAccounts.Api.Controllers;
+
+[Route("api/accounts")]
+public class EmployerAgreementController : ControllerBase
 {
-    [RoutePrefix("api/accounts")]
-    public class EmployerAgreementController : ApiController
+    private readonly AgreementOrchestrator _orchestrator;
+    private readonly IEncodingService _encodingService;
+
+    public EmployerAgreementController(AgreementOrchestrator orchestrator, IEncodingService encodingService)
     {
-        private readonly AgreementOrchestrator _orchestrator;
-        
-        public EmployerAgreementController(AgreementOrchestrator orchestrator)
+        _orchestrator = orchestrator;
+        this._encodingService = encodingService;
+    }
+
+    [Route("{hashedAccountId}/legalEntities/{hashedlegalEntityId}/agreements/{agreementId}", Name = "AgreementById")]
+    [Authorize(Policy = ApiRoles.ReadAllEmployerAgreements)]
+    [HttpGet]
+    public async Task<IActionResult> GetAgreement(string agreementId)
+    {
+        var decodedAgreementId = _encodingService.Decode(agreementId, EncodingType.AccountId);
+        var response = await _orchestrator.GetAgreement(decodedAgreementId);
+
+        if (response == null)
         {
-            _orchestrator = orchestrator;
+            return NotFound();
         }
 
-        [Route("{hashedAccountId}/legalEntities/{hashedlegalEntityId}/agreements/{agreementId}", Name = "AgreementById")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAgreements")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetAgreement(string agreementId)
+        return Ok(response);
+    }
+
+    [Route("internal/{accountId}/minimum-signed-agreement-version", Name = "InternalGetMinimumSignedAgreemmentVersion")]
+    [Authorize(Policy = ApiRoles.ReadAllEmployerAgreements)]
+    [HttpGet]
+    public async Task<IActionResult> GetMinimumSignedAgreemmentVersion(long accountId)
+    {
+        var result = await _orchestrator.GetMinimumSignedAgreemmentVersion(accountId);
+        return Ok(result);
+    }
+    
+    [Route("{hashedAccountId}/signed-agreement-version", Name = "GetMinimumSignedAgreemmentVersion")]
+    [Authorize(Policy = ApiRoles.ReadAllEmployerAgreements)]
+    [HttpGet]
+    public async Task<IActionResult> GetMinimumSignedAgreementVersionByHashedId(string hashedAccountId)
+    {
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+        var result = await _orchestrator.GetMinimumSignedAgreemmentVersion(accountId);
+        return Ok(new MinimumSignedAgreementResponse
         {
-            var response = await _orchestrator.GetAgreement(agreementId);
-
-            if (response == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(response);
-        }
-
-        [Route("internal/{accountId}/minimum-signed-agreement-version", Name = "GetMinimumSignedAgreemmentVersion")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAgreements")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetMinimumSignedAgreemmentVersion(long accountId)
-        {
-            var result = await _orchestrator.GetMinimumSignedAgreemmentVersion(accountId);
-            return Ok(result);
-        }
+            MinimumSignedAgreementVersion = result
+        });
     }
 }

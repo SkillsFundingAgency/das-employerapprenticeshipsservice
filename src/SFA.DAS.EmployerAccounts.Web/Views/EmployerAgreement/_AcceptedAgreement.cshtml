@@ -1,5 +1,6 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
 @model SFA.DAS.EmployerAccounts.Web.ViewModels.OrganisationAgreementViewModel
+@inject IUrlActionHelper UrlHelper;
     
 <div class="govuk-accordion__section ">
     <div class="govuk-accordion__section-header">
@@ -73,16 +74,36 @@
                         </p>
                     </div>
                     <div class="govuk-grid-column-two-thirds">
-                        <div class="govuk-grid-row">
-                            <div class="govuk-grid-column-one-third">
-                                <a href="@Url.EmployerAccountsAction($"agreements/{Model.HashedAgreementId}/view")" aria-hidden="true">
-                                    <img src="/dist/images/pub-cover-html.png" alt=".">
+                        <div class="app-document">
+                            <div class="app-document__icon">
+                                <a asp-route="@RouteNames.AgreementView" 
+                                   asp-route-hashedAccountId="@Model.HashedAccountId" 
+                                   asp-route-hashedAgreementId="@Model.HashedAgreementId" 
+                                   aria-hidden="true">
+                                    <div class="govuk-body app-document__icon-text">HTML</div>
+                                    <div class="app-document__icon-image">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 283" aria-hidden="true" focusable="false">
+                                            <rect x="26.4" y="24.2" fill="currentColor" width="146.2" height="64.7"/>
+                                            <rect x="26.4" y="113.2" fill="currentColor" width="15.7" height="17.8"/>
+                                            <rect x="26.4" y="113.2" fill="currentColor" width="15.7" height="17.8"/>
+                                            <rect x="26.4" y="151.4" fill="currentColor" width="15.7" height="17.8"/>
+                                            <rect x="26.4" y="189.5" fill="currentColor" width="15.7" height="17.8"/>
+                                            <rect x="26.4" y="227.6" fill="currentColor" width="15.7" height="17.8"/>
+                                            <rect x="62.7" y="113.2" fill="currentColor" width="109.9" height="17.8"/>
+                                            <rect x="62.7" y="151.4" fill="currentColor" width="72.1" height="17.8"/>
+                                            <rect x="62.7" y="189.5" fill="currentColor" width="109.9" height="17.8"/>
+                                            <rect x="62.7" y="227.6" fill="currentColor" width="92.3" height="17.8"/>
+                                        </svg>
+                                    </div>
                                 </a>
                             </div>
-                            <div class="govuk-grid-column-two-thirds">
-                                <a href="@Url.EmployerAccountsAction($"agreements/{Model.HashedAgreementId}/view")" class="govuk-link">View your agreement</a>
-                                <p class="govuk-body">HTML</p>
-                                <p></p>
+                            <div class="app-document__details">
+                                <p class="govuk-!-margin-bottom-1">
+                                    <a asp-route="@RouteNames.AgreementView"
+                                   asp-route-hashedAccountId="@Model.HashedAccountId"
+                                   asp-route-hashedAgreementId="@Model.HashedAgreementId" 
+                                   class="govuk-link">View your agreement</a> </p>
+                                <p>HTML</p>
                             </div>
                         </div>
                     </div>
@@ -94,30 +115,26 @@
                             This agreement has been accepted
                         </h3>
                         <table class="govuk-table">
-                            <thead class="govuk-table__head">
-                                <tr class="govuk-table__row">
-                                    <th scope="col" class="govuk-table__header">Accepted by:</th>
-                                    <td class="govuk-table__cell">@Model.SignedByName</td>
-                                </tr>
-                            </thead>
-                            <tbody class="govuk-table__body">
-                                <tr class="govuk-table__row">
-                                    <th scope="row" class="govuk-table__header">On behalf of:</th>
-                                    <td class="govuk-table__cell">@Model.AccountLegalEntity.Name</td>
-                                </tr>
-                                <tr class="govuk-table__row">
-                                    <th scope="row" class="govuk-table__header">Address: </th>
-                                    <td class="govuk-table__cell">@Model.AccountLegalEntity.Address</td>
-                                </tr>
-                                <tr class="govuk-table__row">
-                                    <th scope="row" class="govuk-table__header">Accepted on:</th>
-                                    <td class="govuk-table__cell">@Model.SignedDateText</td>
-                                </tr>
-                                <tr class="govuk-table__row">
-                                    <th scope="row" class="govuk-table__header">Agreement ID:</th>
-                                    <td class="govuk-table__cell">@Model.AccountLegalEntityPublicHashedId</td>
-                                </tr>
-                            </tbody>
+                            <tr class="govuk-table__row">
+                                <th scope="col" class="govuk-table__header">Accepted by:</th>
+                                <td class="govuk-table__cell">@Model.SignedByName</td>
+                            </tr>
+                            <tr class="govuk-table__row">
+                                <th scope="row" class="govuk-table__header"><span class="das-no-wrap">On behalf of:</span></th>
+                                <td class="govuk-table__cell">@Model.AccountLegalEntity.Name</td>
+                            </tr>
+                            <tr class="govuk-table__row">
+                                <th scope="row" class="govuk-table__header">Address: </th>
+                                <td class="govuk-table__cell">@Model.AccountLegalEntity.Address</td>
+                            </tr>
+                            <tr class="govuk-table__row">
+                                <th scope="row" class="govuk-table__header">Accepted on:</th>
+                                <td class="govuk-table__cell">@Model.SignedDateText</td>
+                            </tr>
+                            <tr class="govuk-table__row">
+                                <th scope="row" class="govuk-table__header"><span class="das-no-wrap">Agreement ID:</span></th>
+                                <td class="govuk-table__cell">@Model.AccountLegalEntityPublicHashedId</td>
+                            </tr>
                         </table>
                     </div>
                 </div>

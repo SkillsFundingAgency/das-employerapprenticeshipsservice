@@ -1,9 +1,8 @@
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove;
+
+public class GetAccountLegalEntityRemoveResponse
 {
-    public class GetAccountLegalEntityRemoveResponse
-    {
-        public string Name { get; set; }
-        public bool CanBeRemoved { get; set; }
-        public bool HasSignedAgreement { get; set; }
-    }
+    public string Name { get; set; }
+    public bool CanBeRemoved { get; set; }
+    public bool HasSignedAgreement { get; set; }
 }

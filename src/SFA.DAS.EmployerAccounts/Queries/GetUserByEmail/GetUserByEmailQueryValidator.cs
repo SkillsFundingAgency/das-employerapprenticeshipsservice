@@ -1,26 +1,21 @@
-﻿using System;
-using System.Threading.Tasks;
-using SFA.DAS.Validation;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetUserByEmail;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetUserByEmail
+public class GetUserByEmailQueryValidator : IValidator<GetUserByEmailQuery>
 {
-    public class GetUserByEmailQueryValidator : IValidator<GetUserByEmailQuery>
+    public ValidationResult Validate(GetUserByEmailQuery item)
     {
-        public ValidationResult Validate(GetUserByEmailQuery item)
+        var result = new ValidationResult();
+
+        if (string.IsNullOrWhiteSpace(item.Email))
         {
-            var result = new ValidationResult();
-
-            if (string.IsNullOrWhiteSpace(item.Email))
-            {
-                result.AddError(nameof(item.Email), "User email has not been supplied");
-            }
-
-            return result;
+            result.AddError(nameof(item.Email), "User email has not been supplied");
         }
 
-        public Task<ValidationResult> ValidateAsync(GetUserByEmailQuery item)
-        {
-            throw new NotImplementedException();
-        }
+        return result;
+    }
+
+    public Task<ValidationResult> ValidateAsync(GetUserByEmailQuery item)
+    {
+        return Task.FromResult(Validate(item));
     }
 }

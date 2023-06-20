@@ -2,23 +2,22 @@
 using NServiceBus;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 
-namespace SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness.Scenarios
+namespace SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness.Scenarios;
+
+public class PublishCreatedAccountEvents
 {
-    public class PublishCreatedAccountEvents
+    private readonly IMessageSession _messageSession;
+
+    public PublishCreatedAccountEvents(IMessageSession messageSession)
     {
-        private readonly IMessageSession _messageSession;
+        _messageSession = messageSession;
+    }
 
-        public PublishCreatedAccountEvents(IMessageSession messageSession)
-        {
-            _messageSession = messageSession;
-        }
+    public Task Run()
+    {
+        var newEvent = new CreatedAccountEvent();
+        _messageSession.Publish(newEvent);
 
-        public async Task Run()
-        {
-            var newEvent = new CreatedAccountEvent();
-            await _messageSession.Publish(newEvent);
-
-            // TODO: assert the document is updated
-        }
+        return Task.CompletedTask;
     }
 }

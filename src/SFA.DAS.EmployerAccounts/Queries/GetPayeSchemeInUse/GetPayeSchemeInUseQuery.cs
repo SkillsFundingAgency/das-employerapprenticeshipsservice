@@ -1,9 +1,6 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeInUse;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeInUse
+public class GetPayeSchemeInUseQuery : IRequest<GetPayeSchemeInUseResponse>
 {
-    public class GetPayeSchemeInUseQuery : IAsyncRequest<GetPayeSchemeInUseResponse>
-    {
-        public string Empref { get; set; }
-    }
+    public string Empref { get; set; }
 }

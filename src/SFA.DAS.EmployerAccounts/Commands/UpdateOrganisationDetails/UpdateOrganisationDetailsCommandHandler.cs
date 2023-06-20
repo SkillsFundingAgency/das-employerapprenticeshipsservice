@@ -1,72 +1,64 @@
-﻿using System;
-using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.Messages.Events;
-using SFA.DAS.HashingService;
+﻿using System.Threading;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
+using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Services;
-using SFA.DAS.Validation;
 
-namespace SFA.DAS.EmployerAccounts.Commands.UpdateOrganisationDetails
+namespace SFA.DAS.EmployerAccounts.Commands.UpdateOrganisationDetails;
+
+public class UpdateOrganisationDetailsCommandHandler : IRequestHandler<UpdateOrganisationDetailsCommand>
 {
-    public class UpdateOrganisationDetailsCommandHandler : AsyncRequestHandler<UpdateOrganisationDetailsCommand>
+    private readonly IValidator<UpdateOrganisationDetailsCommand> _validator;
+    private readonly IAccountRepository _accountRepository;
+    private readonly IMembershipRepository _membershipRepository;
+    private readonly IEventPublisher _eventPublisher;
+
+    public UpdateOrganisationDetailsCommandHandler(
+        IValidator<UpdateOrganisationDetailsCommand> validator,
+        IAccountRepository accountRepository,
+        IMembershipRepository membershipRepository,
+        IEventPublisher eventPublisher)
     {
-        private readonly IValidator<UpdateOrganisationDetailsCommand> _validator;
-        private readonly IAccountRepository _accountRepository;
-        private readonly IMembershipRepository _membershipRepository;
-        private readonly IHashingService _hashingService;
-        private readonly IEventPublisher _eventPublisher;
+        _validator = validator;
+        _accountRepository = accountRepository;
+        _membershipRepository = membershipRepository;
+        _eventPublisher = eventPublisher;
+    }
 
-        public UpdateOrganisationDetailsCommandHandler(
-            IValidator<UpdateOrganisationDetailsCommand> validator,
-            IAccountRepository accountRepository,
-            IMembershipRepository membershipRepository,
-            IHashingService hashingService,
-            IEventPublisher eventPublisher)
+    public async Task<Unit> Handle(UpdateOrganisationDetailsCommand command, CancellationToken cancellationToken)
+    {
+        var validationResults = _validator.Validate(command);
+
+        if (!validationResults.IsValid())
+            throw new InvalidRequestException(validationResults.ValidationDictionary);
+
+        await _accountRepository.UpdateLegalEntityDetailsForAccount(
+            command.AccountLegalEntityId,
+            command.Name,
+            command.Address);
+
+        await PublishLegalEntityUpdatedMessage(command.AccountId, command.AccountLegalEntityId, command.Name, command.Address, command.UserId);
+
+        return Unit.Value;
+    }
+
+    private async Task PublishLegalEntityUpdatedMessage(
+        long accountId,
+        long accountLegalEntityId,
+        string name,
+        string address,
+        string userRef)
+    { 
+        var caller = await _membershipRepository.GetCaller(accountId, userRef);
+        var updatedByName = caller.FullName();
+
+        await _eventPublisher.Publish(new UpdatedLegalEntityEvent
         {
-            _validator = validator;
-            _accountRepository = accountRepository;
-            _membershipRepository = membershipRepository;
-            _hashingService = hashingService;
-            _eventPublisher = eventPublisher;
-        }
-
-        protected override async Task HandleCore(UpdateOrganisationDetailsCommand command)
-        {
-            var validationResults = _validator.Validate(command);
-
-            if (!validationResults.IsValid())
-                throw new InvalidRequestException(validationResults.ValidationDictionary);
-
-            await _accountRepository.UpdateLegalEntityDetailsForAccount(
-                command.AccountLegalEntityId,
-                command.Name,
-                command.Address);
-
-            await PublishLegalEntityUpdatedMessage(command.HashedAccountId, command.AccountLegalEntityId, command.Name, command.Address, command.UserId);
-        }
-
-        private async Task PublishLegalEntityUpdatedMessage(
-            string hashedAccountId,
-            long accountLegalEntityId,
-            string name,
-            string address,
-            string userRef)
-        {
-            var accountId = _hashingService.DecodeValue(hashedAccountId);
-
-            var caller = await _membershipRepository.GetCaller(accountId, userRef);
-            var updatedByName = caller.FullName();
-
-            await _eventPublisher.Publish(new UpdatedLegalEntityEvent
-            {
-                Name = name,
-                Address = address,
-                AccountLegalEntityId = accountLegalEntityId,
-                UserName = updatedByName,
-                UserRef = Guid.Parse(userRef),
-                Created = DateTime.UtcNow
-            });
-        }
+            Name = name,
+            Address = address,
+            AccountLegalEntityId = accountLegalEntityId,
+            UserName = updatedByName,
+            UserRef = Guid.Parse(userRef),
+            Created = DateTime.UtcNow
+        });
     }
 }

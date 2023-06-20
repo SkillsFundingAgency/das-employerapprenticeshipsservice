@@ -1,10 +1,7 @@
-﻿using Moq;
-using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Web.Authorization;
-using SFA.DAS.EmployerAccounts.Web.Extensions;
-using System.Collections.Generic;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Security.Principal;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
+using SFA.DAS.EmployerAccounts.Web.RouteValues;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
 {
@@ -31,7 +28,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
         public void HashedAccountId_WhenClaimsSetWithHashedAccountId_ThenReturnHashedAccountId()
         {
             //Arrange
-            claims.Add(new Claim(RouteValueKeys.AccountHashedId, HashedAccountId));
+            claims.Add(new Claim(RouteValueKeys.HashedAccountId, HashedAccountId));
             mockClaimsIdentity.Setup(m => m.Claims).Returns(claims);
 
             //Act

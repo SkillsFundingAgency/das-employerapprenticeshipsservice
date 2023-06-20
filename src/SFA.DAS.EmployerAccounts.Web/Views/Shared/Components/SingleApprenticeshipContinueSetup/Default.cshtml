@@ -1,0 +1,43 @@
+﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.ApprenticeshipViewModel
+@inject IUrlActionHelper UrlHelper;
+
+<section>
+    <h2 class="govuk-heading-l govuk-!-margin-bottom-2" id="call-to-action-continue-setting-up-an-apprenticeship">
+        Continue setting up an apprenticeship
+    </h2>
+    <p>You've added the following details:</p>
+    <table class="govuk-table">
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header das-table-cell-width-35">
+                Course
+            </th>
+            <td class="govuk-table__cell das-table-cell-width-65" id="course-name">
+                @(Model?.CourseName)
+            </td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">
+                Training Provider
+            </th>
+            <td id="training-provider" class="govuk-table__cell">
+                @(Model?.TrainingProvider?.Name)
+            </td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">
+                Status
+            </th>
+            <td id="draft" class="govuk-table__cell">
+                <span class="govuk-tag govuk-tag--grey">Draft</span>
+            </td>
+        </tr>
+    </table>
+    <p>
+        <a href="@UrlHelper.EmployerCommitmentsV2Action($"{Model.ViewOrEditApprenticeDetailsLink}")" role="button" draggable="false" class="govuk-button">
+            Continue
+        </a>
+    </p>
+</section>
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+

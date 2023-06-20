@@ -1,10 +1,9 @@
 ﻿using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetSingleCohort
+namespace SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
+
+public class GetSingleCohortResponse
 {
-    public class GetSingleCohortResponse
-    {
-        public Cohort Cohort { get; set; }
-        public bool HasFailed { get; set; }
-    }
+    public Cohort Cohort { get; set; }
+    public bool HasFailed { get; set; }
 }

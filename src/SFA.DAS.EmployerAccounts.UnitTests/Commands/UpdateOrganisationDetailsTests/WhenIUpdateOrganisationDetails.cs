@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.UpdateOrganisationDetails;
-using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
-using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus.Services;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpdateOrganisationDetailsTests
 {
@@ -18,12 +17,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpdateOrganisationDetailsT
         private UpdateOrganisationDetailsCommandHandler _handler;
         private Mock<IValidator<UpdateOrganisationDetailsCommand>> _validator;
         private UpdateOrganisationDetailsCommand _command;
-        private Mock<IHashingService> _hashingService;
         private Mock<IAccountRepository> _accountRepository;
         private Mock<IMembershipRepository> _membershipRepository;
         private Mock<IEventPublisher> _eventPublisher;
-
-        private const string HashedAccountId = "34RFD";
         private const long AccountId = 123455;
         private const string ExpectedOrganisationName = "Org Name";
         private const string ExpectedOrganisationAddress = "Org Address";
@@ -36,9 +32,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpdateOrganisationDetailsT
             _validator = new Mock<IValidator<UpdateOrganisationDetailsCommand>>();
             _validator.Setup(x => x.Validate(It.IsAny<UpdateOrganisationDetailsCommand>())).Returns(new ValidationResult());
 
-            _hashingService = new Mock<IHashingService>();
-            _hashingService.Setup(x => x.DecodeValue(HashedAccountId)).Returns(AccountId);
-
             _accountRepository = new Mock<IAccountRepository>();
 
             _membershipRepository = new Mock<IMembershipRepository>();
@@ -48,13 +41,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpdateOrganisationDetailsT
 
             _eventPublisher = new Mock<IEventPublisher>();
 
-            _command = new UpdateOrganisationDetailsCommand { AccountLegalEntityId = ExpectedAccountLegalEntityId, Name = ExpectedOrganisationName, Address = ExpectedOrganisationAddress, HashedAccountId = HashedAccountId, UserId = _expectedUserId };
+            _command = new UpdateOrganisationDetailsCommand { AccountLegalEntityId = ExpectedAccountLegalEntityId, Name = ExpectedOrganisationName, Address = ExpectedOrganisationAddress, AccountId = AccountId, UserId = _expectedUserId };
 
             _handler = new UpdateOrganisationDetailsCommandHandler(
                 _validator.Object,
                 _accountRepository.Object,
                 _membershipRepository.Object,
-                _hashingService.Object,
                 _eventPublisher.Object);
         }
 
@@ -65,14 +57,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpdateOrganisationDetailsT
             _validator.Setup(x => x.Validate(It.IsAny<UpdateOrganisationDetailsCommand>())).Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string> { { "", "" } } });
 
             //Act Assert
-            Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command));
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command, CancellationToken.None));
         }
 
         [Test]
         public async Task ThenTheRepositoryIsCalled()
         {
             //Act
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
             //Assert
             _accountRepository.Verify(r => r.UpdateLegalEntityDetailsForAccount(ExpectedAccountLegalEntityId, ExpectedOrganisationName, ExpectedOrganisationAddress));
@@ -81,7 +73,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpdateOrganisationDetailsT
         [Test]
         public async Task ThenTheUpdatedLegalEntityEventIsPublished()
         {
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
             _eventPublisher.Verify(ep => ep.Publish(It.Is<UpdatedLegalEntityEvent>(e =>
                 e.Name.Equals(ExpectedOrganisationName)

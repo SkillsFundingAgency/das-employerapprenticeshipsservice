@@ -1,9 +1,8 @@
 ﻿using SFA.DAS.EmployerAccounts.Events.PayeScheme;
-namespace SFA.DAS.EmployerAccounts.Factories
+namespace SFA.DAS.EmployerAccounts.Factories;
+
+public interface IPayeSchemeEventFactory
 {
-    public interface IPayeSchemeEventFactory
-    {
-        PayeSchemeAddedEvent CreatePayeSchemeAddedEvent(string hashedAccountId, string payeScheme);
-        PayeSchemeRemovedEvent CreatePayeSchemeRemovedEvent(string hashedAccountId, string payeScheme);
-    }
+    PayeSchemeAddedEvent CreatePayeSchemeAddedEvent(string hashedAccountId, string payeSchemeRef);
+    PayeSchemeRemovedEvent CreatePayeSchemeRemovedEvent(string hashedAccountId, string payeSchemeRef);
 }

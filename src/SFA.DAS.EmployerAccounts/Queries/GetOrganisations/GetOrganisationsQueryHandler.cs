@@ -1,38 +1,34 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.Validation;
+﻿using System.Threading;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisations
+namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisations;
+
+public class GetOrganisationsQueryHandler : IRequestHandler<GetOrganisationsRequest, GetOrganisationsResponse>
 {
-    public class GetOrganisationsQueryHandler : IAsyncRequestHandler<GetOrganisationsRequest, GetOrganisationsResponse>
+    private readonly IValidator<GetOrganisationsRequest> _validator;
+    private readonly IReferenceDataService _referenceDataService;
+
+    public GetOrganisationsQueryHandler(IValidator<GetOrganisationsRequest> validator, IReferenceDataService referenceDataService)
     {
-        private readonly IValidator<GetOrganisationsRequest> _validator;
-        private readonly IReferenceDataService _referenceDataService;
+        _validator = validator;
+        _referenceDataService = referenceDataService;
+    }
 
-        public GetOrganisationsQueryHandler(IValidator<GetOrganisationsRequest> validator, IReferenceDataService referenceDataService)
+    public async Task<GetOrganisationsResponse> Handle(GetOrganisationsRequest message, CancellationToken cancellationToken)
+    {
+        var valdiationResult = await _validator.ValidateAsync(message);
+
+        if (!valdiationResult.IsValid())
         {
-            _validator = validator;
-            _referenceDataService = referenceDataService;
+            throw new InvalidRequestException(valdiationResult.ValidationDictionary);
         }
 
-        public async Task<GetOrganisationsResponse> Handle(GetOrganisationsRequest message)
+        var organisations = await _referenceDataService.SearchOrganisations(message.SearchTerm, message.PageNumber, organisationType: message.OrganisationType);
+
+        if (organisations == null)
         {
-            var valdiationResult = _validator.Validate(message);
-
-            if (!valdiationResult.IsValid())
-            {
-                throw new InvalidRequestException(valdiationResult.ValidationDictionary);
-            }
-
-            var organisations = await _referenceDataService.SearchOrganisations(message.SearchTerm, message.PageNumber, organisationType: message.OrganisationType);
-
-            if (organisations == null)
-            {
-                return new GetOrganisationsResponse();
-            }
-
-            return new GetOrganisationsResponse { Organisations = organisations };
+            return new GetOrganisationsResponse();
         }
+
+        return new GetOrganisationsResponse { Organisations = organisations };
     }
 }

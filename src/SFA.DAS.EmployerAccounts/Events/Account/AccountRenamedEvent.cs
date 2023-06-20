@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Events.Account
+﻿namespace SFA.DAS.EmployerAccounts.Events.Account;
+
+public class AccountRenamedEvent
 {
-    public class AccountRenamedEvent
-    {
-        public string ResourceUri { get; set; }
-    }
+    public string ResourceUri { get; set; }
 }

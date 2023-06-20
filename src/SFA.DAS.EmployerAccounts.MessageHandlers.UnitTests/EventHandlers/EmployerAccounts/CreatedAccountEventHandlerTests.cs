@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NServiceBus;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.EmployerAccounts;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
-using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 using SFA.DAS.EmployerAccounts.Types.Models;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.Testing;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.EmployerAccounts
@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Emplo
         public Task Handle_WhenHandlingEvent_ThenShouldSendCreateAccountUserCommand()
         {
             return TestAsync(f => f.Handler.Handle(f.Message, f.MessageHandlerContext.Object),
-                f => f.ReadStoreMediator.Verify(x => x.Send(It.Is<CreateAccountUserCommand>(p =>
+                f => f.Mediator.Verify(x => x.Send(It.Is<CreateAccountUserCommand>(p =>
                         p.AccountId == f.AccountId &&
                         p.UserRef == f.UserRef &&
                         p.Role == UserRole.Owner &&
@@ -44,12 +44,12 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Emplo
         public DateTime Created = DateTime.Now.AddMinutes(-1);
 
         public Mock<IMessageHandlerContext> MessageHandlerContext;
-        public Mock<IReadStoreMediator> ReadStoreMediator;
+        public Mock<IMediator> Mediator;
         public CreatedAccountEventHandler Handler;
 
         public CreatedAccountEventHandlerForReadStoreTestsFixture()
         {
-            ReadStoreMediator = new Mock<IReadStoreMediator>();
+            Mediator = new Mock<IMediator>();
             MessageHandlerContext = new Mock<IMessageHandlerContext>();
             MessageHandlerContext.Setup(x => x.MessageId).Returns(MessageId);
 
@@ -60,7 +60,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Emplo
                 Created = Created
             };
 
-            Handler = new CreatedAccountEventHandler(ReadStoreMediator.Object, Mock.Of<ILog>());
+            Handler = new CreatedAccountEventHandler(Mediator.Object, Mock.Of<ILogger<CreatedAccountEventHandler>>());
         }
     }
 }

@@ -1,8 +1,7 @@
-﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
+﻿@inject IUrlActionHelper UrlHelper;
 @{ViewBag.PageID = "set-up-an-apprenticeship-for-an-existing-employee"; }
 @{ViewBag.Title = "Set up an apprenticeship for an existing employee"; }
 @{ViewBag.MetaDesc = "Set up an apprenticeship for an existing employee"; }
-@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
 @{ViewBag.GaData.Vpv = "/account/setupapprentice/set-up-an-apprenticeship-for-an-existing-employee"; }
 
 @section breadcrumb
@@ -27,6 +26,6 @@
             <li>the employee’s name and date of birth</li>
             <li>the cost of the apprenticeship training (as agreed with your training provider)</li>
         </ul>
-        <a href="@Url.ReservationsAction("reservations/start")" class="govuk-button" id="reserve-funding">Continue to reserve funding</a>
+        <a href="@UrlHelper.ReservationsAction("reservations/start")" class="govuk-button" id="reserve-funding">Continue to reserve funding</a>
     </div>
 </div>

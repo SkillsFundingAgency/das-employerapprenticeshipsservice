@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Queries.GetMinimumSignedAgreementVersion
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetMinimumSignedAgreementVersion;
+
+public class GetMinimumSignedAgreementVersionResponse
 {
-    public class GetMinimumSignedAgreementVersionResponse
-    {
-        public int MinimumSignedAgreementVersion { get; set; }
-    }
+    public int MinimumSignedAgreementVersion { get; set; }
 }

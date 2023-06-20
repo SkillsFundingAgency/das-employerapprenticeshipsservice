@@ -1,8 +1,5 @@
-﻿using SFA.DAS.Http.Configuration;
+﻿namespace SFA.DAS.EmployerAccounts.Interfaces;
 
-namespace SFA.DAS.EmployerAccounts.Interfaces
+public interface IRecruitClientApiConfiguration : IManagedIdentityClientConfiguration
 {
-    public interface IRecruitClientApiConfiguration : IManagedIdentityClientConfiguration
-    {
-    }
 }

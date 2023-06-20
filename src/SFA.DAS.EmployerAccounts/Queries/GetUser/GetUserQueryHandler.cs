@@ -1,33 +1,30 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.Validation;
+﻿using System.Threading;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetUser
+namespace SFA.DAS.EmployerAccounts.Queries.GetUser;
+
+public class GetUserQueryHandler : IRequestHandler<GetUserQuery, GetUserResponse>
 {
-    public class GetUserQueryHandler : IAsyncRequestHandler<GetUserQuery, GetUserResponse>
+    private readonly IUserAccountRepository _repository;
+    private readonly IValidator<GetUserQuery> _validator;
+
+    public GetUserQueryHandler(IUserAccountRepository repository, IValidator<GetUserQuery> validator)
     {
-        private readonly IUserAccountRepository _repository;
-        private readonly IValidator<GetUserQuery> _validator;
+        _repository = repository;
+        _validator = validator;
+    }
 
-        public GetUserQueryHandler(IUserAccountRepository repository, IValidator<GetUserQuery> validator)
+    public async  Task<GetUserResponse> Handle(GetUserQuery message, CancellationToken cancellationToken)
+    {
+        var result = await _validator.ValidateAsync(message);
+
+        if (!result.IsValid())
         {
-            _repository = repository;
-            _validator = validator;
+            throw new InvalidRequestException(result.ValidationDictionary);
         }
 
-        public async  Task<GetUserResponse> Handle(GetUserQuery message)
-        {
-            var result = _validator.Validate(message);
+        var user = await _repository.Get(message.UserId);
 
-            if (!result.IsValid())
-            {
-                throw new InvalidRequestException(result.ValidationDictionary);
-            }
-
-            var user = await _repository.Get(message.UserId);
-
-            return new GetUserResponse {User = user};
-        }
+        return new GetUserResponse {User = user};
     }
 }

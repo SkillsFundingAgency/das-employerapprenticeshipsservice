@@ -1,56 +1,38 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.Authentication;
-using SFA.DAS.Authorization.Services;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Web.Controllers;
-using SFA.DAS.EmployerAccounts.Web.Helpers;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
+﻿namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests
+public class WhenIChooseIIfIKnowApprenticeshipIsForExistingEmployee
 {
-    public class WhenIChooseIIfIKnowApprenticeshipIsForExistingEmployee
+    private EmployerTeamController _controller;
+
+    private Mock<ICookieStorageService<FlashMessageViewModel>> _mockCookieStorageService;
+    private Mock<EmployerTeamOrchestratorWithCallToAction> _mockEmployerTeamOrchestrator;
+
+    [SetUp]
+    public void Arrange()
     {
-        private EmployerTeamController _controller;
+        _mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
+        _mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestratorWithCallToAction>();
 
-        private Mock<IAuthenticationService> mockAuthenticationService;
-        private Mock<IMultiVariantTestingService> mockMultiVariantTestingService;
-        private Mock<ICookieStorageService<FlashMessageViewModel>> mockCookieStorageService;
-        private Mock<EmployerTeamOrchestrator> mockEmployerTeamOrchestrator;
+        _controller = new EmployerTeamController(
+            _mockCookieStorageService.Object,
+            _mockEmployerTeamOrchestrator.Object,
+            Mock.Of<IUrlActionHelper>());
+    }
 
-        [SetUp]
-        public void Arrange()
+    [Test]
+    public void IfIChooseYesIContinueTheJourney()
+    {
+        // Arrange
+        var model = new AccountDashboardViewModel
         {
-            mockAuthenticationService = new Mock<IAuthenticationService>();
-            mockMultiVariantTestingService = new Mock<IMultiVariantTestingService>();
-            mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-            mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
+            PayeSchemeCount = 1,
+            PendingAgreements = new List<PendingAgreementsViewModel> { new PendingAgreementsViewModel() }
+        };
 
-            _controller = new EmployerTeamController(
-                mockAuthenticationService.Object,
-                mockMultiVariantTestingService.Object,
-                mockCookieStorageService.Object,
-                mockEmployerTeamOrchestrator.Object);
-        }
+        //Act
+        var result = _controller.TriageApprenticeForExistingEmployee(new TriageViewModel { TriageOption = TriageOptions.No }) as ViewResult;
 
-        [Test]
-        public void IfIChooseYesIContinueTheJourney()
-        {
-            // Arrange
-            var model = new AccountDashboardViewModel
-            {
-                PayeSchemeCount = 1,
-                PendingAgreements = new List<PendingAgreementsViewModel> { new PendingAgreementsViewModel() }
-            };
-
-            //Act
-            var result = _controller.TriageApprenticeForExistingEmployee(new TriageViewModel { TriageOption = TriageOptions.No }) as ViewResult;
-
-            //Assert
-            Assert.AreEqual(ControllerConstants.TriageSetupApprenticeshipNewEmployeeViewName, result.ViewName);
-        }
+        //Assert
+        Assert.AreEqual(ControllerConstants.TriageSetupApprenticeshipNewEmployeeViewName, result.ViewName);
     }
 }

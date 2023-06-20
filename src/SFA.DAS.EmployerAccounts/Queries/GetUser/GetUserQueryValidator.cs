@@ -1,26 +1,21 @@
-﻿using System;
-using System.Threading.Tasks;
-using SFA.DAS.Validation;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetUser;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetUser
+public class GetUserQueryValidator : IValidator<GetUserQuery>
 {
-    public class GetUserQueryValidator : IValidator<GetUserQuery>
+    public ValidationResult Validate(GetUserQuery item)
     {
-        public ValidationResult Validate(GetUserQuery item)
+        var result = new ValidationResult();
+
+        if (item.UserId < 1)
         {
-            var result = new ValidationResult();
-
-            if (item.UserId < 1)
-            {
-                result.AddError(nameof(item.UserId), "UserId has not been supplied");
-            }
-
-            return result;
+            result.AddError(nameof(item.UserId), "UserId has not been supplied");
         }
 
-        public Task<ValidationResult> ValidateAsync(GetUserQuery item)
-        {
-            throw new NotImplementedException();
-        }
+        return result;
+    }
+
+    public Task<ValidationResult> ValidateAsync(GetUserQuery item)
+    {
+        return Task.FromResult(Validate(item));
     }
 }

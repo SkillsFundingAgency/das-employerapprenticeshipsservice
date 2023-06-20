@@ -1,167 +1,155 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.Audit.Types;
-using SFA.DAS.Authorization;
+﻿using System.Threading;
+using SFA.DAS.EmployerAccounts.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.Factories;
-using SFA.DAS.EmployerAccounts.MarkerInterfaces;
-using SFA.DAS.EmployerAccounts.Messages.Events;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Services;
-using SFA.DAS.Validation;
-using Entity = SFA.DAS.Audit.Types.Entity;
 
 
-namespace SFA.DAS.EmployerAccounts.Commands.CreateUserAccount
+namespace SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
+
+public class CreateUserAccountCommandHandler : IRequestHandler<CreateUserAccountCommand, CreateUserAccountCommandResponse>
 {
-    //TODO this needs changing to be a facade and calling individual commands for each component
-    public class CreateUserAccountCommandHandler : IAsyncRequestHandler<CreateUserAccountCommand, CreateUserAccountCommandResponse>
+    private readonly IAccountRepository _accountRepository;
+    private readonly IMediator _mediator;
+    private readonly IValidator<CreateUserAccountCommand> _validator;
+    private readonly IEncodingService _encodingService;
+    private readonly IGenericEventFactory _genericEventFactory;
+    private readonly IAccountEventFactory _accountEventFactory;
+    private readonly IMembershipRepository _membershipRepository;
+    private readonly IEventPublisher _eventPublisher;
+
+    public CreateUserAccountCommandHandler(
+        IAccountRepository accountRepository,
+        IMediator mediator,
+        IValidator<CreateUserAccountCommand> validator,
+        IEncodingService encodingService,
+        IGenericEventFactory genericEventFactory,
+        IAccountEventFactory accountEventFactory,
+        IMembershipRepository membershipRepository,
+        IEventPublisher eventPublisher)
     {
-        private readonly IAccountRepository _accountRepository;
-        private readonly IMediator _mediator;
-        private readonly IValidator<CreateUserAccountCommand> _validator;
-        private readonly IHashingService _hashingService;
-        private readonly IPublicHashingService _publicHashingService;    
-        private readonly IGenericEventFactory _genericEventFactory;
-        private readonly IAccountEventFactory _accountEventFactory;
-        private readonly IMembershipRepository _membershipRepository;    
-        private readonly IEventPublisher _eventPublisher;
+        _accountRepository = accountRepository;
+        _mediator = mediator;
+        _validator = validator;
+        _encodingService = encodingService;
+        _genericEventFactory = genericEventFactory;
+        _accountEventFactory = accountEventFactory;
+        _membershipRepository = membershipRepository;
+        _eventPublisher = eventPublisher;
+    }
 
-        public CreateUserAccountCommandHandler(
-            IAccountRepository accountRepository,
-            IMediator mediator,
-            IValidator<CreateUserAccountCommand> validator,
-            IHashingService hashingService,
-            IPublicHashingService publicHashingService,
-            IGenericEventFactory genericEventFactory,
-            IAccountEventFactory accountEventFactory,
-            IMembershipRepository membershipRepository, 
-            IEventPublisher eventPublisher)
+    public async Task<CreateUserAccountCommandResponse> Handle(CreateUserAccountCommand message, CancellationToken cancellationToken)
+    {
+        ValidateMessage(message);
+
+        var externalUserId = Guid.Parse(message.ExternalUserId);
+
+        var userResponse = await _mediator.Send(new GetUserByRefQuery { UserRef = message.ExternalUserId }, cancellationToken);
+
+        var createAccountResult = await _accountRepository.CreateUserAccount(userResponse.User.Id, message.OrganisationName);
+
+        var hashedAccountId = _encodingService.Encode(createAccountResult.AccountId, EncodingType.AccountId);
+        var publicHashedAccountId = _encodingService.Encode(createAccountResult.AccountId, EncodingType.PublicAccountId);
+
+        await _accountRepository.UpdateAccountHashedIds(createAccountResult.AccountId, hashedAccountId, publicHashedAccountId);
+
+        var caller = await _membershipRepository.GetCaller(createAccountResult.AccountId, message.ExternalUserId);
+
+        var createdByName = caller.FullName();
+
+        await PublishAccountCreatedMessage(createAccountResult.AccountId, hashedAccountId, publicHashedAccountId,
+            message.OrganisationName, createdByName, externalUserId);
+
+        await NotifyAccountCreated(hashedAccountId);
+
+        await CreateAuditEntries(message, createAccountResult, hashedAccountId, userResponse.User);
+
+        return new CreateUserAccountCommandResponse
         {
-            _accountRepository = accountRepository;
-            _mediator = mediator;
-            _validator = validator;
-            _hashingService = hashingService;
-            _publicHashingService = publicHashingService;          
-            _genericEventFactory = genericEventFactory;
-            _accountEventFactory = accountEventFactory;
-            _membershipRepository = membershipRepository;         
-            _eventPublisher = eventPublisher;
-        }
+            HashedAccountId = hashedAccountId
+        };
+    }
 
-        public async Task<CreateUserAccountCommandResponse> Handle(CreateUserAccountCommand message)
+    private Task NotifyAccountCreated(string hashedAccountId)
+    {
+        var accountEvent = _accountEventFactory.CreateAccountCreatedEvent(hashedAccountId);
+
+        var genericEvent = _genericEventFactory.Create(accountEvent);
+
+        return _mediator.Send(new PublishGenericEventCommand { Event = genericEvent });
+    }
+
+    private Task PublishAccountCreatedMessage(long accountId, string hashedId, string publicHashedId, string name,
+        string createdByName, Guid userRef)
+    {
+        return _eventPublisher.Publish(new CreatedAccountEvent
         {
-            ValidateMessage(message);
+            AccountId = accountId,
+            HashedId = hashedId,
+            PublicHashedId = publicHashedId,
+            Name = name,
+            UserName = createdByName,
+            UserRef = userRef,
+            Created = DateTime.UtcNow
+        });
+    }
 
-            var externalUserId = Guid.Parse(message.ExternalUserId);
+    private void ValidateMessage(CreateUserAccountCommand message)
+    {
+        var validationResult = _validator.Validate(message);
 
-            var userResponse = await _mediator.SendAsync(new GetUserByRefQuery { UserRef = message.ExternalUserId });
+        if (!validationResult.IsValid())
+            throw new InvalidRequestException(validationResult.ValidationDictionary);
+    }
 
-            var createAccountResult = await _accountRepository.CreateUserAccount(userResponse.User.Id, message.OrganisationName);
-
-            var hashedAccountId = _hashingService.HashValue(createAccountResult.AccountId);
-            var publicHashedAccountId = _publicHashingService.HashValue(createAccountResult.AccountId);
-
-            await _accountRepository.UpdateAccountHashedIds(createAccountResult.AccountId, hashedAccountId, publicHashedAccountId);
-
-            var caller = await _membershipRepository.GetCaller(createAccountResult.AccountId, message.ExternalUserId);
-
-            var createdByName = caller.FullName();
-           
-            await PublishAccountCreatedMessage(createAccountResult.AccountId, hashedAccountId, publicHashedAccountId, message.OrganisationName, createdByName, externalUserId);
-
-            await NotifyAccountCreated(hashedAccountId);
-
-            await CreateAuditEntries(message, createAccountResult, hashedAccountId, userResponse.User);
-
-            return new CreateUserAccountCommandResponse
+    private async Task CreateAuditEntries(CreateUserAccountCommand message, CreateUserAccountResult returnValue,
+        string hashedAccountId, User user)
+    {
+        //Account
+        await _mediator.Send(new CreateAuditCommand
+        {
+            EasAuditMessage = new AuditMessage
             {
-                HashedAccountId = hashedAccountId
-            };
-        }
-      
-        private Task NotifyAccountCreated(string hashedAccountId)
-        {
-            var accountEvent = _accountEventFactory.CreateAccountCreatedEvent(hashedAccountId);
-
-            var genericEvent = _genericEventFactory.Create(accountEvent);
-
-            return _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
-        }
-     
-        private Task PublishAccountCreatedMessage(long accountId, string hashedId, string publicHashedId, string name, string createdByName, Guid userRef)
-        {
-            return _eventPublisher.Publish(new CreatedAccountEvent
-            { 
-                AccountId = accountId,
-                HashedId = hashedId, 
-                PublicHashedId = publicHashedId,
-                Name = name,
-                UserName = createdByName,
-                UserRef = userRef,
-                Created = DateTime.UtcNow
-            });
-        }
-
-        private void ValidateMessage(CreateUserAccountCommand message)
-        {
-            var validationResult =  _validator.Validate(message);
-
-            if (!validationResult.IsValid())
-                throw new InvalidRequestException(validationResult.ValidationDictionary);
-        }
-
-        private async Task CreateAuditEntries(CreateUserAccountCommand message, CreateUserAccountResult returnValue, string hashedAccountId, User user)
-        {
-            //Account
-            await _mediator.SendAsync(new CreateAuditCommand
-            {
-                EasAuditMessage = new EasAuditMessage
+                Category = "CREATED",
+                Description = $"Account {message.OrganisationName} created with id {returnValue.AccountId}",
+                ChangedProperties = new List<PropertyUpdate>
                 {
-                    Category = "CREATED",
-                    Description = $"Account {message.OrganisationName} created with id {returnValue.AccountId}",
-                    ChangedProperties = new List<PropertyUpdate>
-                    {
-                        PropertyUpdate.FromLong("AccountId", returnValue.AccountId),
-                        PropertyUpdate.FromString("HashedId", hashedAccountId),
-                        PropertyUpdate.FromString("Name", message.OrganisationName),
-                        PropertyUpdate.FromDateTime("CreatedDate", DateTime.UtcNow),
-                    },
-                    AffectedEntity = new Entity { Type = "Account", Id = returnValue.AccountId.ToString() },
-                    RelatedEntities = new List<Entity>()
-                }
-            });
+                    PropertyUpdate.FromLong("AccountId", returnValue.AccountId),
+                    PropertyUpdate.FromString("HashedId", hashedAccountId),
+                    PropertyUpdate.FromString("Name", message.OrganisationName),
+                    PropertyUpdate.FromDateTime("CreatedDate", DateTime.UtcNow),
+                },
+                AffectedEntity = new AuditEntity { Type = "Account", Id = returnValue.AccountId.ToString() },
+                RelatedEntities = new List<AuditEntity>()
+            }
+        });
 
-            //Membership Account
-            await _mediator.SendAsync(new CreateAuditCommand
+        //Membership Account
+        await _mediator.Send(new CreateAuditCommand
+        {
+            EasAuditMessage = new AuditMessage
             {
-                EasAuditMessage = new EasAuditMessage
+                Category = "CREATED",
+                Description = $"User {message.ExternalUserId} added to account {returnValue.AccountId} as owner",
+                ChangedProperties = new List<PropertyUpdate>
                 {
-                    Category = "CREATED",
-                    Description = $"User {message.ExternalUserId} added to account {returnValue.AccountId} as owner",
-                    ChangedProperties = new List<PropertyUpdate>
-                    {
-                        PropertyUpdate.FromLong("AccountId", returnValue.AccountId),
-                        PropertyUpdate.FromString("UserId", message.ExternalUserId),
-                        PropertyUpdate.FromString("Role", Role.Owner.ToString()),
-                        PropertyUpdate.FromDateTime("CreatedDate", DateTime.UtcNow)
-                    },
-                    RelatedEntities = new List<Entity>
-                    {
-                        new Entity { Id = returnValue.AccountId.ToString(), Type = "Account" },
-                        new Entity { Id = user.Id.ToString(), Type = "User" }
-                    },
-                    AffectedEntity = new Entity { Type = "Membership", Id = message.ExternalUserId }
-                }
-            });
-        }
+                    PropertyUpdate.FromLong("AccountId", returnValue.AccountId),
+                    PropertyUpdate.FromString("UserId", message.ExternalUserId),
+                    PropertyUpdate.FromString("Role", Role.Owner.ToString()),
+                    PropertyUpdate.FromDateTime("CreatedDate", DateTime.UtcNow)
+                },
+                RelatedEntities = new List<AuditEntity>
+                {
+                    new AuditEntity { Id = returnValue.AccountId.ToString(), Type = "Account" },
+                    new AuditEntity { Id = user.Id.ToString(), Type = "User" }
+                },
+                AffectedEntity = new AuditEntity { Type = "Membership", Id = message.ExternalUserId }
+            }
+        });
     }
 }

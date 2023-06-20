@@ -1,10 +1,9 @@
 ﻿using SFA.DAS.EmployerAccounts.Events.Agreement;
 
-namespace SFA.DAS.EmployerAccounts.Factories
+namespace SFA.DAS.EmployerAccounts.Factories;
+
+public interface IEmployerAgreementEventFactory
 {
-    public interface IEmployerAgreementEventFactory
-    {
-        AgreementSignedEvent CreateSignedEvent(string hashedAccountId, string hashedLegalEntityId, string hashedAgreementId);
-        AgreementRemovedEvent RemoveAgreementEvent(string hashedAgreementId);
-    }
+    AgreementSignedEvent CreateSignedEvent(string hashedAccountId, string hashedLegalEntityId, string hashedAgreementId);
+    AgreementRemovedEvent RemoveAgreementEvent(string hashedAgreementId);
 }

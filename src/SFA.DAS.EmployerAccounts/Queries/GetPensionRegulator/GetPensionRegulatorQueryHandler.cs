@@ -1,34 +1,30 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.Validation;
+﻿using System.Threading;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetPensionRegulator
+namespace SFA.DAS.EmployerAccounts.Queries.GetPensionRegulator;
+
+public class GetPensionRegulatorQueryHandler : IRequestHandler<GetPensionRegulatorRequest, GetPensionRegulatorResponse>
 {
-    public class GetPensionRegulatorQueryHandler : IAsyncRequestHandler<GetPensionRegulatorRequest, GetPensionRegulatorResponse>
+    private readonly IValidator<GetPensionRegulatorRequest> _validator;
+    private readonly IPensionRegulatorService _pensionRegulatorService;
+
+    public GetPensionRegulatorQueryHandler(IValidator<GetPensionRegulatorRequest> validator, IPensionRegulatorService pensionRegulatorService)
     {
-        private readonly IValidator<GetPensionRegulatorRequest> _validator;
-        private readonly IPensionRegulatorService _pensionRegulatorService;
+        _validator = validator;
+        _pensionRegulatorService = pensionRegulatorService;
+    }
 
-        public GetPensionRegulatorQueryHandler(IValidator<GetPensionRegulatorRequest> validator, IPensionRegulatorService pensionRegulatorService)
+    public async Task<GetPensionRegulatorResponse> Handle(GetPensionRegulatorRequest message, CancellationToken cancellationToken)
+    {
+        var validationResult = await _validator.ValidateAsync(message);
+
+        if (!validationResult.IsValid())
         {
-            _validator = validator;
-            _pensionRegulatorService = pensionRegulatorService;
+            throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        public async Task<GetPensionRegulatorResponse> Handle(GetPensionRegulatorRequest message)
-        {
-            var validationResult = _validator.Validate(message);
-
-            if (!validationResult.IsValid())
-            {
-                throw new InvalidRequestException(validationResult.ValidationDictionary);
-            }
-
-            var organisations = await _pensionRegulatorService.GetOrganisationsByPayeRef(message.PayeRef);
-            return organisations == null
-                ? new GetPensionRegulatorResponse()
-                : new GetPensionRegulatorResponse {Organisations = organisations};
-        }
+        var organisations = await _pensionRegulatorService.GetOrganisationsByPayeRef(message.PayeRef);
+        return organisations == null
+            ? new GetPensionRegulatorResponse()
+            : new GetPensionRegulatorResponse {Organisations = organisations};
     }
 }

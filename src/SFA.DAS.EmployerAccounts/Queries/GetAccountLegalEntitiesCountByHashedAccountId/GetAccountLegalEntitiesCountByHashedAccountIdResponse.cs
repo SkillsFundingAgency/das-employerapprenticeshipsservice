@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesCountByHashedAccountId
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesCountByHashedAccountId;
+
+public class GetAccountLegalEntitiesCountByHashedAccountIdResponse
 {
-    public class GetAccountLegalEntitiesCountByHashedAccountIdResponse
-    {
-        public int LegalEntitiesCount { get; set; }
-    }
+    public int LegalEntitiesCount { get; set; }
 }

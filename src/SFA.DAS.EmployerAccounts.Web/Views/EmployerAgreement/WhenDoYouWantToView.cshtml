@@ -4,15 +4,13 @@
 @{
     ViewBag.Title = "When do you want to view the employer agreement?";
     ViewBag.ZenDeskLabel = "eas-when-do-you-want-to-view-the-employer-agreement";
+    ViewBag.ShowNav = false;
 }
-@{ViewBag.HideNav = true; }
 
 @{var errorClassFormGroup = Model.InError ? "govuk-form-group--error" : "";}
 @{var errorClass = Model.InError ? "govuk-error-message" : "";}
 @{var hiddenClass = Model.InError ? "" : "das-hidden";}
 @{var ariaHidden = Model.InError ? "false" : "true";}
-
-@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
 
 
 <div class="govuk-grid-row">
@@ -35,8 +33,11 @@
         }
 
         
-        <form method="POST" action="@Url.Action(ControllerConstants.WhenDoYouWantToView)">
-            @Html.AntiForgeryToken()
+        <form method="POST" 
+            asp-controller="@ControllerConstants.EmployerAgreementControllerName" 
+            asp-action="@ControllerConstants.WhenDoYouWantToView"
+            asp-route-HashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]"
+            asp-route-hashedAgreementId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAgreementId]">
             <fieldset class="govuk-fieldset" aria-describedby="intro-hint">
 
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">

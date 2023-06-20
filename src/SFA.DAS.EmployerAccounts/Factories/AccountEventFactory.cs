@@ -1,23 +1,22 @@
 ﻿using SFA.DAS.EmployerAccounts.Events.Account;
 
-namespace SFA.DAS.EmployerAccounts.Factories
-{
-    public class AccountEventFactory : IAccountEventFactory
-    {
-        public AccountCreatedEvent CreateAccountCreatedEvent(string hashedAccountId)
-        {
-            return new AccountCreatedEvent
-            {
-                ResourceUri = $"api/accounts/{hashedAccountId}"
-            };
-        }
+namespace SFA.DAS.EmployerAccounts.Factories;
 
-        public AccountRenamedEvent CreateAccountRenamedEvent(string hashedAccountId)
+public class AccountEventFactory : IAccountEventFactory
+{
+    public AccountCreatedEvent CreateAccountCreatedEvent(string hashedAccountId)
+    {
+        return new AccountCreatedEvent
         {
-            return new AccountRenamedEvent
-            {
-                ResourceUri = $"api/accounts/{hashedAccountId}"
-            };
-        }
+            ResourceUri = $"api/accounts/{hashedAccountId}"
+        };
+    }
+
+    public AccountRenamedEvent CreateAccountRenamedEvent(string hashedAccountId)
+    {
+        return new AccountRenamedEvent
+        {
+            ResourceUri = $"api/accounts/{hashedAccountId}"
+        };
     }
 }

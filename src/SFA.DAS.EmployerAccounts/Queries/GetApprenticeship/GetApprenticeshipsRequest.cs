@@ -1,10 +1,7 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetApprenticeship;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetApprenticeship
+public class GetApprenticeshipsRequest : IRequest<GetApprenticeshipsResponse>
 {
-    public class GetApprenticeshipsRequest : IAsyncRequest<GetApprenticeshipsResponse>
-    {
-        public string HashedAccountId { get; set; }
-        public string ExternalUserId { get; set; }
-    }
+    public long AccountId { get; set; }
+    public string ExternalUserId { get; set; }
 }

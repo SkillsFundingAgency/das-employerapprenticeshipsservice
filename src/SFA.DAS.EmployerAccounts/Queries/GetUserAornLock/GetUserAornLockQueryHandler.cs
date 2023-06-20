@@ -1,22 +1,19 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Interfaces;
+﻿using System.Threading;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetUserAornLock
+namespace SFA.DAS.EmployerAccounts.Queries.GetUserAornLock;
+
+public class GetUserAornLockQueryHandler : IRequestHandler<GetUserAornLockRequest, GetUserAornLockResponse>
 {
-    public class GetUserAornLockQueryHandler : IAsyncRequestHandler<GetUserAornLockRequest, GetUserAornLockResponse>
+    private readonly IUserAornPayeLockService _userAornPayeLockService;
+
+    public GetUserAornLockQueryHandler(IUserAornPayeLockService userAornPayeLockService)
     {
-        private readonly IUserAornPayeLockService _userAornPayeLockService;
+        _userAornPayeLockService = userAornPayeLockService;
+    }
 
-        public GetUserAornLockQueryHandler(IUserAornPayeLockService userAornPayeLockService)
-        {
-            _userAornPayeLockService = userAornPayeLockService;
-        }
-
-        public async Task<GetUserAornLockResponse> Handle(GetUserAornLockRequest message)
-        {
-            var status = await _userAornPayeLockService.UserAornPayeStatus(message.UserRef);
-            return new GetUserAornLockResponse { UserAornStatus = status };
-        }
+    public async Task<GetUserAornLockResponse> Handle(GetUserAornLockRequest message, CancellationToken cancellationToken)
+    {
+        var status = await _userAornPayeLockService.UserAornPayeStatus(message.UserRef);
+        return new GetUserAornLockResponse { UserAornStatus = status };
     }
 }

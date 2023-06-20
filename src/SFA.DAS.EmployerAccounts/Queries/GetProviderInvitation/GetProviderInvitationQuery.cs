@@ -1,10 +1,6 @@
-﻿using System;
-using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetProviderInvitation;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetProviderInvitation
+public class GetProviderInvitationQuery : IRequest<GetProviderInvitationResponse>
 {
-    public class GetProviderInvitationQuery : IAsyncRequest<GetProviderInvitationResponse>
-    {
-        public Guid CorrelationId { get; set; }
-    }
+    public Guid CorrelationId { get; set; }
 }

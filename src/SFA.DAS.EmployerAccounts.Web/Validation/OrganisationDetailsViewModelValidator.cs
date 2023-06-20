@@ -1,13 +1,11 @@
 ﻿using FluentValidation;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
-namespace SFA.DAS.EmployerAccounts.Web.Validation
+namespace SFA.DAS.EmployerAccounts.Web.Validation;
+
+public sealed class OrganisationDetailsViewModelValidator : AbstractValidator<OrganisationDetailsViewModel>
 {
-    public sealed class OrganisationDetailsViewModelValidator : AbstractValidator<OrganisationDetailsViewModel>
+    public OrganisationDetailsViewModelValidator()
     {
-        public OrganisationDetailsViewModelValidator()
-        {
-            RuleFor(r => r.Name).NotEmpty().WithMessage("Enter a name");
-        }
+        RuleFor(r => r.Name).NotEmpty().WithMessage("Enter a name");
     }
 }

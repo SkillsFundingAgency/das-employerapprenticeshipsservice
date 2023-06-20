@@ -6,46 +6,47 @@
     ViewBag.Section = "organisations";
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
 
         @if (string.IsNullOrEmpty(Model.Data.ErrorMessage))
         {
-            <div class="success-summary" tabindex="-1">
-                <h1 class="bold-large">Details updated</h1>
+            <div class="das-notification das-notification--success" tabindex="-1">
+                <h1 class="das-notification__heading">Details updated</h1>
                 <p>You've successfully updated your organisation details</p>
             </div>
         }
         else
         {
-            <div class="error-summary" tabindex="-1">
-                <h1 class="bold-large">Details could not be updated</h1>
-                <p class="error-message">@Model.Data.ErrorMessage</p>
+            <div class="govuk-error-summary" tabindex="-1">
+                <h1 class="govuk-error-summary__title">Details could not be updated</h1>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        <li>@Model.Data.ErrorMessage</li>
+                    </ul>
+                </div>
             </div>
         }
 
-        <form action="@Url.Action("GoToPostUpdateSelection")" method="post">
-            <div class="form-group">
-                <h2 class="heading-large">What's next?</h2>
-
-                <div class="multiple-choice">
-                    <input type="radio" name="nextStep" value="dashboard" />
-                    <label for="acceptAgreement">Go to your organisations and agreements</label>
-                </div>
-                <div class="multiple-choice">
-                    <input type="radio" name="nextStep" value="homepage" />
-                    <label for="teamMembers">Go to the homepage</label>
+        <form asp-route="@RouteNames.OrganisationPostUpdateSelection" asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" method="post">
+            <div class="govuk-form-group">
+                <h2 class="govuk-heading-l">What's next?</h2>
+                <div class="govuk-radios" data-module="govuk-radios">
+                    <div class="govuk-radios__item">
+                        <input type="radio" name="nextStep" value="dashboard" class="govuk-radios__input"  />
+                        <label for="acceptAgreement" class="govuk-label govuk-radios__label">Go to your organisations and agreements</label>
+                    </div>
+                    <div class="govuk-radios__item">
+                        <input type="radio" name="nextStep" value="homepage" class="govuk-radios__input"  />
+                        <label for="teamMembers" class="govuk-label govuk-radios__label">Go to the homepage</label>
+                    </div>
                 </div>
             </div>
-            <button type="submit" class="button">Continue</button>
+            <button type="submit" class="govuk-button">Continue</button>
         </form>
     </div>
 </div>
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("ViewTeam", "EmployerTeam")" class="back-link">Back to your team</a></li>
-        </ol>
-    </div>
+    <a href="@Url.Action("ViewTeam", "EmployerTeam")" class="govuk-back-link">Back to your team</a>
 }

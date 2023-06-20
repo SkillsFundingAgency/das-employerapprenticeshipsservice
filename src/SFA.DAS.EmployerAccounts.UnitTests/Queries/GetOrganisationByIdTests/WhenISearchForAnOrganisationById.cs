@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using AutoMapper;
 using Moq;
 using NUnit.Framework;
@@ -7,7 +8,6 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Mappings;
 using SFA.DAS.EmployerAccounts.Models.PensionRegulator;
 using SFA.DAS.EmployerAccounts.Queries.GetOrganisationById;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetOrganisationByIdTests
 {
@@ -39,7 +39,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetOrganisationByIdTests
             var expectedIdentifier = "123xyz";
 
             //Act
-            await _requestHandler.Handle(new GetOrganisationByIdRequest {Identifier = expectedIdentifier, OrganisationType = organisationType });
+            await _requestHandler.Handle(new GetOrganisationByIdRequest {Identifier = expectedIdentifier, OrganisationType = organisationType }, CancellationToken.None);
 
             //Assert
             if (organisationType == OrganisationType.PensionsRegulator)
@@ -69,7 +69,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetOrganisationByIdTests
             _referenceDataService.Setup(x => x.GetLatestDetails(_query.OrganisationType, _query.Identifier)).ReturnsAsync(new ReferenceData.Types.DTO.Organisation {Name = id});
 
             //Act
-            var actual = await _requestHandler.Handle(_query);
+            var actual = await _requestHandler.Handle(_query, CancellationToken.None);
 
             //Assert
             Assert.AreSame(id, actual.Organisation.Name);

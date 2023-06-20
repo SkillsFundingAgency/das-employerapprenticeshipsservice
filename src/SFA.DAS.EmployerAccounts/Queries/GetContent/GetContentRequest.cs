@@ -1,10 +1,7 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetContent;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetContent
+public class GetContentRequest : IRequest<GetContentResponse>
 {
-    public class GetContentRequest : IAsyncRequest<GetContentResponse>
-    {
-        public string ContentType { get; set; }
-        public bool UseLegacyStyles { get; set; }
-    }
+    public string ContentType { get; set; }
+    public bool UseLegacyStyles { get; set; }
 }

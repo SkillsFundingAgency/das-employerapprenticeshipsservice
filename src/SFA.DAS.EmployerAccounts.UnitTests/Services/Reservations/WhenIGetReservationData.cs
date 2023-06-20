@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
-using Newtonsoft.Json;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Infrastructure.OuterApiRequests.Reservations;
-using SFA.DAS.EmployerAccounts.Infrastructure.OuterApiResponses.Reservations;
+using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Requests.Reservations;
+using SFA.DAS.EmployerAccounts.Infrastructure.OuterApi.Responses.Reservations;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Interfaces.OuterApi;
-using SFA.DAS.EmployerAccounts.Models.Reservations;
 using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.NLog.Logger;
 
@@ -50,7 +49,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Reservations
                 .Setup(m => m.Get<GetReservationsResponse>(It.Is<GetReservationsRequest>(k=>k.AccountId == _accountId)))
                 .ReturnsAsync(_testData);
 
-            _reservationsService = new ReservationsService(_mockOuterApiClient.Object, Mock.Of<ILog>());
+            _reservationsService = new ReservationsService(_mockOuterApiClient.Object, Mock.Of<ILogger<ReservationsService>>());
         }
 
         [Test]

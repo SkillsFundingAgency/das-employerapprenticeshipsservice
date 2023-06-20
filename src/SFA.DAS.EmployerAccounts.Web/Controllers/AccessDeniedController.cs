@@ -1,12 +1,9 @@
-﻿using System.Web.Mvc;
+﻿namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
-namespace SFA.DAS.EmployerAccounts.Web.Controllers
+public class AccessDeniedController : Controller
 {
-    public class AccessDeniedController : Controller
+    public IActionResult Index()
     {
-        public ActionResult Index()
-        {
-            return View();
-        }
+        return View();
     }
 }

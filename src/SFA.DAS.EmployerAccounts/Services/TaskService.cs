@@ -1,53 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Tasks.API.Client;
-using SFA.DAS.Tasks.API.Types.DTOs;
-using SFA.DAS.Tasks.API.Types.Enums;
+﻿using Microsoft.Extensions.Logging;
+using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerAccounts.TasksApi;
 
-namespace SFA.DAS.EmployerAccounts.Services
+namespace SFA.DAS.EmployerAccounts.Services;
+
+public class TaskService : ITaskService
 {
-    public class TaskService : ITaskService
+    private readonly ITaskApiClient _apiClient;
+    private readonly ILogger<TaskService> _logger;
+
+    public TaskService(ITaskApiClient apiClient, ILogger<TaskService> logger)
     {
-        private readonly ITaskApiClient _apiClient;
-        private readonly ILog _logger;
+        _apiClient = apiClient;
+        _logger = logger;
+    }
 
-        public TaskService(ITaskApiClient apiClient, ILog logger)
+    public async Task<IEnumerable<TaskDto>> GetAccountTasks(long accountId, string externalUserId, ApprenticeshipEmployerType applicableToApprenticeshipEmployerType)
+    {
+        try
         {
-            _apiClient = apiClient;
-            _logger = logger;
+            return await _apiClient.GetTasks(accountId.ToString(), externalUserId, applicableToApprenticeshipEmployerType);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Could not retrieve account tasks successfully");
         }
 
-        public async Task<IEnumerable<TaskDto>> GetAccountTasks(long accountId, string externalUserId, ApprenticeshipEmployerType applicableToApprenticeshipEmployerType)
-        {
-            try
-            {
-                return await _apiClient.GetTasks(accountId.ToString(), externalUserId, applicableToApprenticeshipEmployerType);
-            }
-            catch (Exception ex)
-            {
-               _logger.Error(ex, "Could not retrieve account tasks successfully");
-            }
+        return Array.Empty<TaskDto>();
+    }
 
-            return new TaskDto[0];
+    public async Task DismissMonthlyTaskReminder(long accountId, string externalUserId, TaskType taskType)
+    {
+        try
+        {
+            if (taskType == TaskType.None) return;
+
+            var taskName = Enum.GetName(typeof(TaskType), taskType);
+
+            await _apiClient.AddUserReminderSuppression(accountId.ToString(), externalUserId, taskName);
         }
-
-        public async Task DismissMonthlyTaskReminder(long accountId, string externalUserId, TaskType taskType)
+        catch (Exception ex)
         {
-            try
-            {
-                if (taskType == TaskType.None) return;
-
-                var taskName = Enum.GetName(typeof(TaskType), taskType);
-
-                await _apiClient.AddUserReminderSupression(accountId.ToString(), externalUserId, taskName);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "Could not dismiss account tasks successfully");
-            }
+            _logger.LogError(ex, "Could not dismiss account tasks successfully");
         }
     }
 }

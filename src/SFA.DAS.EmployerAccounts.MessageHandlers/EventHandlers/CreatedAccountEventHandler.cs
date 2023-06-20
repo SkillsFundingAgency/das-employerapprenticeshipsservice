@@ -1,27 +1,30 @@
-﻿using System.Threading.Tasks;
-using NServiceBus;
-using SFA.DAS.EmployerAccounts.Events.Messages;
+﻿using SFA.DAS.EmployerAccounts.Events.Messages;
+using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Messages.Events;
-using SFA.DAS.Messaging.Interfaces;
 
-namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers
+namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers;
+
+public class CreatedAccountEventHandler : IHandleMessages<CreatedAccountEvent>
 {
-    public class CreatedAccountEventHandler : IHandleMessages<CreatedAccountEvent>
+    private readonly ILegacyTopicMessagePublisher _messagePublisher;
+    private readonly ILogger<CreatedAccountEventHandler> _logger;
+
+    public CreatedAccountEventHandler(ILegacyTopicMessagePublisher messagePublisher, ILogger<CreatedAccountEventHandler> logger)
     {
-        private readonly IMessagePublisher _messagePublisher;
+        _messagePublisher = messagePublisher;
+        _logger = logger;
+    }
 
-        public CreatedAccountEventHandler(IMessagePublisher messagePublisher)
-        {
-            _messagePublisher = messagePublisher;
-        }
+    public async Task Handle(CreatedAccountEvent message, IMessageHandlerContext context)
+    {
+        _logger.LogInformation($"Starting {nameof(CreatedAccountEventHandler)} handler for accountId: '{message.AccountId}'.");
 
-        public async Task Handle(CreatedAccountEvent message, IMessageHandlerContext context)
-        {
-            await _messagePublisher.PublishAsync(
-                new AccountCreatedMessage(
-                    message.AccountId,
-                    message.UserName,
-                    message.UserRef.ToString()));
-        }
+        await _messagePublisher.PublishAsync(
+            new AccountCreatedMessage(
+                message.AccountId,
+                message.UserName,
+                message.UserRef.ToString()));
+
+        _logger.LogInformation($"Completed {nameof(CreatedAccountEventHandler)} handler.");
     }
 }

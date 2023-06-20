@@ -1,14 +1,14 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
+@inject IHtmlHelpers HtmlHelpers;
 @model SignEmployerAgreementViewModel
 @{
     ViewBag.PageID = "agreement-view";
     ViewBag.Title = "Agreement view";
     ViewBag.Section = "organisations";
-}
-@{
     ViewBag.GaData.Vpv = "/accounts/agreements/view-your-agreement/agreement-view";
+
+    string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]?.ToString();
 }
-@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -24,27 +24,27 @@
     <div class="govuk-grid-column-two-thirds">
         <table class="govuk-table">
             <tbody class="govuk-table__body">
-                <tr>
+                <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">
-                        <span class="no-wrap">Accepted by:</span>
+                        <span class="das-no-wrap">Accepted by:</span>
                     </th>
                     <td class="govuk-table__cell">@Model.EmployerAgreement.SignedByName</td>
                 </tr>
-                <tr>
+                <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">
-                        <span class="no-wrap">On behalf of:</span>
+                        <span class="das-no-wrap">On behalf of:</span>
                     </th>
                     <td class="govuk-table__cell">@Model.EmployerAgreement.LegalEntityName</td>
                 </tr>
-                <tr>
+                <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">Address:</th>
                     <td class="govuk-table__cell">
                         <span class="table-address">@Model.EmployerAgreement.LegalEntityAddress</span>
                     </td>
                 </tr>
-                <tr>
+                <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">
-                        <span class="no-wrap">Accepted on:</span>
+                        <span class="das-no-wrap">Accepted on:</span>
                     </th>
                     <td class="govuk-table__cell">@Model.EmployerAgreement.SignedDate.Value.ToString("d MMMM yyyy")</td>
                 </tr>
@@ -56,29 +56,29 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <p class="govuk-body">
-            <a href="@Url.Action(ControllerConstants.GetSignedPdfAgreementActionName, ControllerConstants.EmployerAgreementControllerName)" target="_blank" class="govuk-link download">Download the agreement</a>
+            <a asp-route="@RouteNames.GetSignedPdfAgreement" asp-route-HashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" asp-route-hashedAgreementId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAgreementId]" target="_blank" class="govuk-link download">Download the agreement</a>
         </p>
     </div>
 </div>
 
 
-    @if (Html.ViewExists(Model.EmployerAgreement.TemplatePartialViewName + "_body"))
-    {
-        @Html.Partial(Model.EmployerAgreement.TemplatePartialViewName + "_body");
-    }
-    else
-    {
-        @Html.Partial(Model.EmployerAgreement.TemplatePartialViewName)
-    }
+@if (HtmlHelpers.ViewExists(Html, Model.EmployerAgreement.TemplatePartialViewName + "_body"))
+{
+    @await Html.PartialAsync(Model.EmployerAgreement.TemplatePartialViewName + "_body")
+}
+else
+{
+    @await Html.PartialAsync(Model.EmployerAgreement.TemplatePartialViewName)
+}
 
-    @section breadcrumb {
-        <div class="govuk-breadcrumbs">
-            <ol class="govuk-breadcrumbs__list" role="navigation">
-                <li class="govuk-breadcrumbs__list-item"><a href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName)" class="govuk-breadcrumbs__link">Home</a></li>
-                <li class="govuk-breadcrumbs__list-item"><a href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerAgreementControllerName)" class="govuk-breadcrumbs__link">Your organisations and agreements</a></li>
-                <li class="govuk-breadcrumbs__list-item">Your <abbr>DfE</abbr> agreement</li>
-            </ol>
-        </div>
+@section breadcrumb {
+    <div class="govuk-breadcrumbs">
+        <ol class="govuk-breadcrumbs__list" role="navigation">
+            <li class="govuk-breadcrumbs__list-item"><a asp-route="@RouteNames.EmployerTeamIndex" asp-route-hashedAccountId="@hashedAccountId" class="govuk-breadcrumbs__link">Home</a></li>
+            <li class="govuk-breadcrumbs__list-item"><a asp-route="@RouteNames.EmployerAgreementIndex" asp-route-hashedAccountId="@hashedAccountId" class="govuk-breadcrumbs__link">Your organisations and agreements</a></li>
+            <li class="govuk-breadcrumbs__list-item">Your <abbr>DfE</abbr> agreement</li>
+        </ol>
+    </div>
     }
 
 

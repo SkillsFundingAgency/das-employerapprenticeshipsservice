@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+﻿using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 
-namespace SFA.DAS.EmployerAccounts.Web.ViewModels
+namespace SFA.DAS.EmployerAccounts.Web.ViewModels;
+
+public class UserInvitationsViewModel
 {
-    public class UserInvitationsViewModel
-    {
-        public List<InvitationView> Invitations { get; set; }
-        public bool ShowBreadCrumbs { get; set; }
-    }
+    public List<InvitationView> Invitations { get; set; }
+    public bool ShowBreadCrumbs { get; set; }
 }

@@ -3,42 +3,43 @@
     ViewBag.Title = "Update an organisation";
     ViewBag.Section = "organisations";
     ViewBag.PageID = "update-organisation-details";
+    string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]?.ToString();
 }
-<div class="grid-row">
-    <div class="column-two-thirds">
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
 
-        <h1 class="heading-xlarge">Update your organisation's details</h1>
+        <h1 class="govuk-heading-xl">Update your organisation's details</h1>
 
-        <div class="panel panel-border-wide">
-             Please ensure you've updated your organisation's details at <span>@Model.DataSourceFriendlyName</span>. This update can take up to 7 working days to process.
+        <div class="govuk-inset-text">
+            Please ensure you've updated your organisation's details at <span>@Model.DataSourceFriendlyName</span>. This update can take up to 7 working days to process.
         </div>
 
-        <p>If you have done this and the updated information is still not displayed here, please <a href="@Url.Action("Help", "Home")">contact support</a> for further help.</p>
+        <p>If you have done this and the updated information is still not displayed here, please <a href="@Url.Action("Help", "Home")" class="govuk-link">contact support</a> for further help.</p>
 
 
-        <form action="@Url.Action("GoToPostUpdateSelection","Organisation")" method="post">
-            <div class="form-group">
-                <h2 class="heading-large">What's next?</h2>
-                <div class="multiple-choice">
-                    <input type="radio" name="nextStep" value="dashboard" />
-                    <label for="acceptAgreement">Go to your organisations and agreements</label>
-                </div>
-                
-                <div class="multiple-choice">
-                    <input type="radio" name="nextStep" value="homepage" />
-                    <label for="teamMembers">Go to the homepage</label>
+        <form asp-route="@RouteNames.OrganisationPostUpdateSelection" asp-route-hashedAccountId="@hashedAccountId" method="post">
+            <div class="govuk-form-group">
+                <h2 class="govuk-heading-l">
+                    What's next?
+                </h2>
+                <div class="govuk-radios" data-module="govuk-radios">
+                    <div class="govuk-radios__item">
+                        <input type="radio" id="goToOrg" name="nextStep" value="dashboard" class="govuk-radios__input" />
+                        <label for="goToOrg" class="govuk-label govuk-radios__label">Go to your organisations and agreements</label>
+                    </div>
+                    <div class="govuk-radios__item">
+                        <input type="radio" id="goToHome" name="nextStep" value="homepage" class="govuk-radios__input" />
+                        <label for="goToHome" class="govuk-label govuk-radios__label">Go to the homepage</label>
+                    </div>
                 </div>
             </div>
-            <button type="submit" class="button">Continue</button>
+            <button type="submit" class="govuk-button">Continue</button>
         </form>
     </div>
 </div>
 
 
-@section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to your organisations</a></li>
-        </ol>
-    </div>
+@section breadcrumb
+{
+    <a asp-route="@RouteNames.EmployerAgreementIndex" asp-route-hashedAccountId="@hashedAccountId" class="govuk-back-link">Back to your organisations</a>
 }

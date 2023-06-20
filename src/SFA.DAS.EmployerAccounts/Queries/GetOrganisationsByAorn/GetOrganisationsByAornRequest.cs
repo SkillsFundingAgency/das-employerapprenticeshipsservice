@@ -1,16 +1,13 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationsByAorn;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationsByAorn
+public class GetOrganisationsByAornRequest : IRequest<GetOrganisationsByAornResponse>
 {
-    public class GetOrganisationsByAornRequest : IAsyncRequest<GetOrganisationsByAornResponse>
+    public GetOrganisationsByAornRequest(string aorn, string payeRef)
     {
-        public GetOrganisationsByAornRequest(string aorn, string payeRef)
-        {
-            Aorn = aorn;
-            PayeRef = payeRef;
-        }
-
-        public string Aorn { get; }
-        public string PayeRef { get; }
+        Aorn = aorn;
+        PayeRef = payeRef;
     }
+
+    public string Aorn { get; }
+    public string PayeRef { get; }
 }

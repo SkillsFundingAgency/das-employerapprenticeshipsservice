@@ -1,9 +1,8 @@
-using SFA.DAS.Hmrc.Models;
+using SFA.DAS.EmployerAccounts.Models;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetGatewayToken
+namespace SFA.DAS.EmployerAccounts.Queries.GetGatewayToken;
+
+public class GetGatewayTokenQueryResponse
 {
-    public class GetGatewayTokenQueryResponse
-    {
-        public HmrcTokenResponse HmrcTokenResponse { get; set; }
-    }
+    public HmrcTokenResponse HmrcTokenResponse { get; set; }
 }

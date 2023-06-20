@@ -1,14 +1,14 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.AccountLevyStatus;
-using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.NServiceBus.Services;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AccountLevyStatus
@@ -19,14 +19,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AccountLevyStatus
     {
         private AccountLevyStatusCommandHandler _accountLevyStatusCommandHandler;
         private Mock<IEmployerAccountRepository> _accountRepository;
-        private Mock<ILog> _logger;
+        private Mock<ILogger<AccountLevyStatusCommandHandler>> _logger;
         private Mock<IEventPublisher> _eventPublisher;
 
         [SetUp]
         public void Setup()
         {
             _accountRepository = new Mock<IEmployerAccountRepository>();
-            _logger = new Mock<ILog>();
+            _logger = new Mock<ILogger<AccountLevyStatusCommandHandler>>();
             _eventPublisher = new Mock<IEventPublisher>();
 
             _accountLevyStatusCommandHandler = new AccountLevyStatusCommandHandler(
@@ -52,7 +52,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AccountLevyStatus
                 ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy
             };
 
-            await _accountLevyStatusCommandHandler.Handle(command);
+            await _accountLevyStatusCommandHandler.Handle(command, CancellationToken.None);
 
             _accountRepository.Verify(x => x.SetAccountLevyStatus(accountId, ApprenticeshipEmployerType.Levy), Times.Once);
 
@@ -78,7 +78,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AccountLevyStatus
                 ApprenticeshipEmployerType = ApprenticeshipEmployerType.NonLevy
             };
 
-            await _accountLevyStatusCommandHandler.Handle(command);
+            await _accountLevyStatusCommandHandler.Handle(command, CancellationToken.None);
 
             _accountRepository.Verify(x => x.SetAccountLevyStatus(accountId, ApprenticeshipEmployerType.Levy), Times.Never);
 
@@ -104,7 +104,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AccountLevyStatus
                 ApprenticeshipEmployerType = ApprenticeshipEmployerType.NonLevy
             };
 
-            await _accountLevyStatusCommandHandler.Handle(command);
+            await _accountLevyStatusCommandHandler.Handle(command, CancellationToken.None);
 
             _accountRepository.Verify(x => x.SetAccountLevyStatus(accountId, ApprenticeshipEmployerType.Levy), Times.Never);
 
@@ -130,7 +130,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AccountLevyStatus
                 ApprenticeshipEmployerType = ApprenticeshipEmployerType.Unknown
             };
 
-            await _accountLevyStatusCommandHandler.Handle(command);
+            await _accountLevyStatusCommandHandler.Handle(command, CancellationToken.None);
 
             _accountRepository.Verify(x => x.SetAccountLevyStatus(accountId, ApprenticeshipEmployerType.Levy), Times.Never);
 

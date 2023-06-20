@@ -1,7 +1,5 @@
-﻿@using SFA.DAS.Authorization
-@using SFA.DAS.EmployerAccounts.Models
-@using SFA.DAS.EmployerAccounts.Models.AccountTeam
-
+﻿@using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+@using SFA.DAS.EmployerAccounts.Models;
 @model OrchestratorResponse<SFA.DAS.EmployerAccounts.Web.ViewModels.EmployerTeamMembersViewModel>
 
 @{
@@ -9,80 +7,75 @@
     ViewBag.Title = "Manage team members";
     ViewBag.Section = "team";
     ViewBag.ZenDeskLabel = "eas-view-team-member";
+    ViewBag.GaData.Vpv = "/accounts/teams/view/page-manage-team";
 
     if (!string.IsNullOrEmpty(Model.FlashMessage?.HiddenFlashMessageInformation))
     {
         ViewBag.PageID = Model.FlashMessage.HiddenFlashMessageInformation;
     }
 
+    string hashedAccountId = Model.Data.HashedAccountId;
 }
 
-@{
-    ViewBag.GaData.Vpv = "/accounts/teams/view/page-manage-team";
-}
-
-<div class="grid-row header-index">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Your team</h1>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Your team</h1>
         @if (Model.Data.TeamMembers.Count == 0)
         {
             <p>TODO : EMPTY STATE</p>
         }
         else
         {
-            <p class="lede">
+            <p class="govuk-body-l">
                 Invite team members from your organisation, control what they can do, remove members and cancel or resend invitations.
             </p>
         }
     </div>
-    <div class="column-one-third">
-        <form action="@Url.Action("Invite")" method="get">
-            <input class="button action-add" id="addNewUser" type="submit" value="Invite a new member">
+    <div class="govuk-grid-column-one-third">
+        <form asp-route="@RouteNames.EmployerTeamInvite" asp-route-hashedAccountId="@hashedAccountId" method="get">
+            <input class="govuk-button das-float-right" id="addNewUser" type="submit" value="Invite a new member">
         </form>
     </div>
 </div>
 
 @if (Model.Data.TeamMembers.Count > 0)
 {
-    <div class="grid-row">
-        <div class="column-full">
-            <table class="responsive">
-                <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">What they can do</th>
-                        <th scope="col">Status</th>
-                        <th scope="col"><span class="vh">Action</span></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var teamMember in Model.Data.TeamMembers)
-                {
-                        <tr>
-                            <td data-label="Name">
-                                <div>@teamMember.Name</div>
-                                <div class="responsive-detail">@teamMember.Email</div>
-                            </td>
-                            <td data-label="What they can do">@RoleStrings.GetRoleDescription(teamMember.Role)</td>
-                            <td data-label="Status">@InvitationStatusStrings.ToString(teamMember.Status)</td>
-                            <td class="link-right">
-                                <a aria-label="View details for @teamMember.Name"
-                                   href="@Url.Action("Review", new { email = teamMember.Email })">View<span class="vh"> details for @teamMember.Name</span></a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-           
-        </div>
-    </div>
+    <table class="govuk-table das-table--responsive">
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header">Name</th>
+                <th scope="col" class="govuk-table__header">What they can do</th>
+                <th scope="col" class="govuk-table__header">Status</th>
+                <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Action</span></th>
+            </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+            @foreach (var teamMember in Model.Data.TeamMembers)
+        {
+                <tr class="govuk-table__row">
+                    <td data-label="Name" class="govuk-table__cell">
+                        <div>@teamMember.Name</div>
+                        <div class="govuk-hint">@teamMember.Email</div>
+                    </td>
+                    <td data-label="What they can do" class="govuk-table__cell">@RoleStrings.GetRoleDescription(teamMember.Role)</td>
+                    <td data-label="Status" class="govuk-table__cell">@InvitationStatusStrings.ToString(teamMember.Status)</td>
+                    <td class="govuk-table__cell govuk-table__cell--numeric">
+                        <a aria-label="View details for @teamMember.Name"
+                        asp-route="@RouteNames.EmployerTeamReview"
+                        asp-route-hashedAccountId="@hashedAccountId"
+                        asp-route-email="@teamMember.Email" class="govuk-link">View<span class="govuk-visually-hidden"> details for @teamMember.Name</span></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
-            <li>Your team</li>
+    <div class="govuk-breadcrumbs">
+        <ol class="govuk-breadcrumbs__list">
+            <li class="govuk-breadcrumbs__list-item"><a asp-route="@RouteNames.EmployerTeamIndex" asp-route-hashedAccountId="@hashedAccountId" class="govuk-breadcrumbs__link">Home</a></li>
+            <li class="govuk-breadcrumbs__list-item">Your team</li>
         </ol>
     </div>
 }

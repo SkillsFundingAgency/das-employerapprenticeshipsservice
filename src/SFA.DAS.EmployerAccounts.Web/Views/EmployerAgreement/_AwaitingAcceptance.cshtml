@@ -1,5 +1,6 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
 @model SFA.DAS.EmployerAccounts.Web.ViewModels.OrganisationAgreementViewModel
+@inject IUrlActionHelper UrlHelper;
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -27,8 +28,11 @@
     You need to ensure you have authority from your organisation before you accept this agreement on their behalf.
 </p>
 
-<form method="get" action="@Url.EmployerAccountsAction($"agreements/{Model.HashedAgreementId}/about-your-agreement")">
-    @Html.AntiForgeryToken()
+<form 
+    method="get"
+    asp-route="@RouteNames.AboutYourAgreement"
+    asp-route-hashedAccountId="@Model.HashedAccountId"
+    asp-route-hashedAgreementId="@Model.HashedAgreementId">
     <input class="govuk-button" type="submit" value="View agreement" />
 </form>
 

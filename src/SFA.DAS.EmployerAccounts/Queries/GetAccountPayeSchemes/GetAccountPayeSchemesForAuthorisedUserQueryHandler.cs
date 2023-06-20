@@ -1,48 +1,39 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.Validation;
+﻿using System.Threading;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
+
+public class GetAccountPayeSchemesForAuthorisedUserQueryHandler : IRequestHandler<GetAccountPayeSchemesForAuthorisedUserQuery, GetAccountPayeSchemesResponse>
 {
-    public class GetAccountPayeSchemesForAuthorisedUserQueryHandler : IAsyncRequestHandler<GetAccountPayeSchemesForAuthorisedUserQuery, GetAccountPayeSchemesResponse>
+    private readonly IPayeSchemesWithEnglishFractionService _payeSchemesService;
+    private readonly IValidator<GetAccountPayeSchemesForAuthorisedUserQuery> _validator;
+
+    public GetAccountPayeSchemesForAuthorisedUserQueryHandler(
+        IPayeSchemesWithEnglishFractionService payeSchemesService,
+        IValidator<GetAccountPayeSchemesForAuthorisedUserQuery> validator)
     {
-        private readonly IPayeSchemesWithEnglishFractionService _payeSchemesService;
-        private readonly IValidator<GetAccountPayeSchemesForAuthorisedUserQuery> _validator;
+        _payeSchemesService = payeSchemesService;
+        _validator = validator;
+    }
 
-        public GetAccountPayeSchemesForAuthorisedUserQueryHandler(
-            IPayeSchemesWithEnglishFractionService payeSchemesService,
-            IValidator<GetAccountPayeSchemesForAuthorisedUserQuery> validator)
+    public async Task<GetAccountPayeSchemesResponse> Handle(GetAccountPayeSchemesForAuthorisedUserQuery message, CancellationToken cancellationToken)
+    {
+        var validationResult = await _validator.ValidateAsync(message);
+
+        if (!validationResult.IsValid())
         {
-            _payeSchemesService = payeSchemesService;
-            _validator = validator;
+            throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        public async Task<GetAccountPayeSchemesResponse> Handle(GetAccountPayeSchemesForAuthorisedUserQuery message)
+        if (validationResult.IsUnauthorized)
         {
-            var validationResult = await _validator.ValidateAsync(message);
-
-            if (!validationResult.IsValid())
-            {
-                throw new InvalidRequestException(validationResult.ValidationDictionary);
-            }
-
-            if (validationResult.IsUnauthorized)
-            {
-                throw new UnauthorizedAccessException();
-            }
-
-            var payeSchemes =
-                (await _payeSchemesService
-                    .GetPayeSchemes(message.HashedAccountId))
-                .ToList();
-
-            return new GetAccountPayeSchemesResponse
-            {
-                PayeSchemes = payeSchemes
-            };
+            throw new UnauthorizedAccessException();
         }
+
+        var payeSchemes = await _payeSchemesService.GetPayeSchemes(message.AccountId);
+
+        return new GetAccountPayeSchemesResponse
+        {
+            PayeSchemes = payeSchemes.ToList()
+        };
     }
 }

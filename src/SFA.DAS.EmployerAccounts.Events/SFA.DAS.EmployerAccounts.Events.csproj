@@ -1,13 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net48</TargetFrameworks>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <Authors>DAS</Authors>
     <Description>Events raised by SFA.DAS.EmployerAccounts</Description>
     <PackageLicense>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice/blob/master/LICENSE</PackageLicense>
     <PackageProjectUrl>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice</PackageProjectUrl>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="SFA.DAS.Messaging" Version="3.1.133" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NServiceBus.MSDependencyInjection" Version="0.1.4" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="7.0.1" />
+    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
   </ItemGroup>
 </Project>

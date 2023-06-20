@@ -4,21 +4,24 @@
 @{
     ViewBag.PageID = "select-your-organisation";
     ViewBag.Title = "Select your organisation";
-    ViewBag.HideNav = !Model.Data.IsExistingAccount;
+    ViewBag.ShowNav = Model.Data.IsExistingAccount;
     ViewBag.Section = "organisations";
     ViewBag.ZenDeskLabel = "eas-select-your-organisation";
-}
 
-@{
     ViewBag.GaData.Vpv = Model.Data.IsExistingAccount ? "/accounts/organisations/search/results/select-your-organisation" : "/onboarding/search/results/select-your-organisation";
-}
 
-@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
+    var hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId];
+}
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">@ViewBag.Title</h1>
-        <form action="@Url.Action("SearchForOrganisationResults")" method="POST" role="search" aria-label="On this page">
+        <form 
+            asp-controller="@ControllerConstants.SearchOrganisationControllerName" 
+            asp-action="@ControllerConstants.SearchForOrganisationResultsActionName" 
+            asp-route-hashedAccountId="@hashedAccountId"
+            asp-route-organisationType="@Model.Data.OrganisationType"
+            method="POST" role="search" aria-label="On this page">
             <div class="govuk-form-group">
                 <label for="searchTerm" class="govuk-label">
                     Search results
@@ -36,7 +39,13 @@
 
 <div class="govuk-grid-row">
     <section class="govuk-grid-column-one-third">
-        <form id="filter" action="@Url.Action("SearchForOrganisationResults")?searchTerm=@(HttpUtility.UrlEncode(Model.Data.SearchTerm))" method="POST">
+        <form id="filter" 
+            asp-controller="@ControllerConstants.SearchOrganisationControllerName"
+              asp-action="@ControllerConstants.SearchForOrganisationResultsActionName"
+              asp-route-hashedAccountId="@hashedAccountId"
+              asp-route-searchTerm="@Model.Data.SearchTerm" 
+            method="POST">
+
             <div class="das-filter">
                 <div class="das-filter__header">
                     <h2 class="govuk-heading-m das-filter__heading">Filter results</h2>
@@ -75,7 +84,7 @@
                             </div>
                         </div>
                     </fieldset>
-                    <div class="form-group das-js-hide">
+                    <div class="govuk-form-group das-js-hide">
                         <button type="submit" class="govuk-button govuk-button--secondary">Apply filter</button>
                     </div>
                 </div>
@@ -90,87 +99,91 @@
             <hr class="govuk-section-break govuk-section-break--visible">
             <div class="das-search-results">
                 <ol class="das-search-results__list">
-                @foreach (var organisation in Model.Data.Results.Data)
-                {
-                    if (!organisation.AddedToAccount)
+                    @foreach (var organisation in Model.Data.Results.Data)
+                    {
+                        if (!organisation.AddedToAccount)
+                        {
+                            <li class="das-search-results__list-item">
+                                <form 
+                                    asp-action="@ControllerConstants.SearchForOrganisationResultsConfirmActionName"
+                                    asp-controller="@ControllerConstants.SearchOrganisationControllerName"
+                                    asp-route-hashedAccountId="@hashedAccountId"
+                                    method="post">
+                                    <input type="hidden" name="DateOfInception" value="@organisation.DateOfInception" />
+                                    <input type="hidden" name="ReferenceNumber" value="@organisation.ReferenceNumber" />
+                                    <input type="hidden" name="Sector" value="@organisation.Sector" />
+                                    <input type="hidden" name="Type" value="@organisation.Type" />
+                                    <input type="hidden" name="Name" value="@organisation.Name" />
+                                    <input type="hidden" name="Address" value="@organisation.Address" />
+                                    <h2 class="govuk-heading-s das-search-results__heading">
+                                        <button type="submit" class="das-button--inline-link">@organisation.Name</button>
+                                    </h2>
+                                </form>
+                                <dl class="das-definition-list das-definition-list--inline">
+                                    <dt class="das-definition-list__title">Address</dt>
+                                    <dd class="das-definition-list__definition">@(string.IsNullOrEmpty(organisation.Address) ? "No address supplied" : organisation.Address)</dd>
+                                    <dt class="das-definition-list__title">Type</dt>
+                                    <dd class="das-definition-list__definition">@organisation.Type.GetDescription()</dd>
+                                </dl>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="das-search-results__list-item">
+                                <h3 class="govuk-heading-s das-search-results__heading">@organisation.Name</h3>
+                                <dl class="das-definition-list das-definition-list--inline">
+                                    <dt class="das-definition-list__title">Address</dt>
+                                    <dd class="das-definition-list__definition">@(string.IsNullOrEmpty(organisation.Address) ? "No address supplied" : organisation.Address)</dd>
+                                    <dt class="das-definition-list__title">Type</dt>
+                                    <dd class="das-definition-list__definition">@organisation.Type.GetDescription()</dd>
+                                </dl>
+                                <p class="govuk-body govuk-!-margin-bottom-0">
+                                    Already added - <a asp-route="@RouteNames.EmployerAgreementIndex" asp-route-hashedAccountId="@hashedAccountId" class="govuk-link">view my organisations</a>
+                                </p>
+                            </li>
+                        }
+                    }
+                    @if (Model.Data.Results.PageNumber == Model.Data.Results.TotalPages || Model.Data.Results.TotalPages == 0)
                     {
                         <li class="das-search-results__list-item">
-                            <form action="@Url.Action("Confirm")" method="post">
-                                <input type="hidden" name="DateOfInception" value="@organisation.DateOfInception" />
-                                <input type="hidden" name="ReferenceNumber" value="@organisation.ReferenceNumber" />
-                                <input type="hidden" name="Sector" value="@organisation.Sector" />
-                                <input type="hidden" name="Type" value="@organisation.Type" />
-                                <input type="hidden" name="Name" value="@organisation.Name" />
-                                <input type="hidden" name="Address" value="@organisation.Address" />
-                                <h2 class="govuk-heading-s das-search-results__heading">
-                                    <button type="submit" class="das-button--inline-link">@organisation.Name</button>
-                                </h2>
-                            </form>
-                            <dl class="das-definition-list das-definition-list--inline">
-                                <dt class="das-definition-list__title">Address</dt>
-                                <dd class="das-definition-list__definition">@(string.IsNullOrEmpty(organisation.Address) ? "No address supplied" : organisation.Address)</dd>
-                                <dt class="das-definition-list__title">Type</dt>
-                                <dd class="das-definition-list__definition">@organisation.Type.GetDescription()</dd>
-                            </dl>
+                            <p class="govuk-heading-s">Can't find your organisation?</p>
+                            <p class="govuk-body">Check the spelling and <a href="#searchTerm" class="govuk-link">search again</a>.</p>
                         </li>
                     }
-                    else
-                    {
-                        <li class="das-search-results__list-item">
-                            <h3 class="govuk-heading-s das-search-results__heading">@organisation.Name</h3>
-                            <dl class="das-definition-list das-definition-list--inline">
-                                <dt class="das-definition-list__title">Address</dt>
-                                <dd class="das-definition-list__definition">@(string.IsNullOrEmpty(organisation.Address) ? "No address supplied" : organisation.Address)</dd>
-                                <dt class="das-definition-list__title">Type</dt>
-                                <dd class="das-definition-list__definition">@organisation.Type.GetDescription()</dd>
-                            </dl>
-                            <p class="govuk-body govuk-!-margin-bottom-0">
-                                Already added - <a href="@Url.Action("Index", "EmployerAgreement")" class="govuk-link">view my organisations</a>
-                            </p>
-                        </li>
-                    }
-                }
-                @if (Model.Data.Results.PageNumber == Model.Data.Results.TotalPages || Model.Data.Results.TotalPages == 0)
-                {
-                    <li class="das-search-results__list-item">
-                        <p class="govuk-heading-s">Can't find your organisation?</p>          
-                        <p class="govuk-body">Check the spelling and <a href="#searchTerm" class="govuk-link">search again</a>.</p>
-                    </li>
-                }
                 </ol>
             </div>
         }
         else
         {
             <p class="govuk-heading-s"><strong>No results found.</strong></p>
-            <p class="govuk-body">Can't find your organisation?</p> 
+            <p class="govuk-body">Can't find your organisation?</p>
             <p class="govuk-body">Check the spelling and <a href="#searchTerm" class="govuk-link">search again</a>.</p>
         }
-                
+
         <hr class="govuk-section-break govuk-section-break--visible">
 
         <nav class="das-pagination-simple" role="navigation" aria-label="Pagination">
             <ul class="das-pagination-simple__list">
-            @if (Model.Data.Results.PageNumber > 1)
-            {
-                <li class="das-pagination-simple__list-item das-pagination-simple__list-item--previous">
-                    <a href="@Url.Action("SearchForOrganisationResults", new {searchTerm = Model.Data.SearchTerm, pageNumber = Model.Data.Results.PageNumber - 1, organisationType = Model.Data.OrganisationType })" class="das-pagination-simple__link">
-                        <span class="das-pagination-simple__link-text">Previous page</span>
-                        <span class="das-pagination-simple__link-divider govuk-visually-hidden">: </span>
-                        <span class="das-pagination-simple__link-label">Page @(Model.Data.Results.PageNumber - 1) of @Model.Data.Results.TotalPages</span>
-                    </a>
-                </li>
-            }
-            @if (Model.Data.Results.PageNumber < Model.Data.Results.TotalPages)
-            {
-                <li class="das-pagination-simple__list-item das-pagination-simple__list-item--next">
-                    <a href="@Url.Action("SearchForOrganisationResults", new {searchTerm = Model.Data.SearchTerm, pageNumber = Model.Data.Results.PageNumber + 1, organisationType = Model.Data.OrganisationType })" class="das-pagination-simple__link">
-                        <span class="das-pagination-simple__link-text">Next page</span>
-                        <span class="das-pagination-simple__link-divider govuk-visually-hidden">: </span>
-                        <span class="das-pagination-simple__link-label">Page @(Model.Data.Results.PageNumber + 1) of @Model.Data.Results.TotalPages</span>
-                    </a>
-                </li>
-            }
+                @if (Model.Data.Results.PageNumber > 1)
+                {
+                    <li class="das-pagination-simple__list-item das-pagination-simple__list-item--previous">
+                        <a href="@Url.Action("SearchForOrganisationResults", new {searchTerm = Model.Data.SearchTerm, pageNumber = Model.Data.Results.PageNumber - 1, organisationType = Model.Data.OrganisationType })" class="das-pagination-simple__link">
+                            <span class="das-pagination-simple__link-text">Previous page</span>
+                            <span class="das-pagination-simple__link-divider govuk-visually-hidden">: </span>
+                            <span class="das-pagination-simple__link-label">Page @(Model.Data.Results.PageNumber - 1) of @Model.Data.Results.TotalPages</span>
+                        </a>
+                    </li>
+                }
+                @if (Model.Data.Results.PageNumber < Model.Data.Results.TotalPages)
+                {
+                    <li class="das-pagination-simple__list-item das-pagination-simple__list-item--next">
+                        <a href="@Url.Action("SearchForOrganisationResults", new {searchTerm = Model.Data.SearchTerm, pageNumber = Model.Data.Results.PageNumber + 1, organisationType = Model.Data.OrganisationType })" class="das-pagination-simple__link">
+                            <span class="das-pagination-simple__link-text">Next page</span>
+                            <span class="das-pagination-simple__link-divider govuk-visually-hidden">: </span>
+                            <span class="das-pagination-simple__link-label">Page @(Model.Data.Results.PageNumber + 1) of @Model.Data.Results.TotalPages</span>
+                        </a>
+                    </li>
+                }
             </ul>
         </nav>
     </section>
@@ -214,10 +227,10 @@
     @if (Model.Data.Results.PageNumber == Model.Data.Results.TotalPages || Model.Data.Results.TotalPages == 0)
     {
         <script>
-  dataLayer.push({
-            'event': 'zerosearch',
-            'term' : '@Model.Data.SearchTerm'
-  });  </script>
+            dataLayer.push({
+                'event': 'zerosearch',
+                'term': '@Model.Data.SearchTerm'
+            });</script>
     }
 }
 

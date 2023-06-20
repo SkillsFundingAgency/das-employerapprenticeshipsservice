@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Audit.Types;
+using SFA.DAS.EmployerAccounts.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.Validation;
-using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AuditCommandTests
 {
@@ -31,7 +29,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AuditCommandTests
         public async Task ThenTheCommandIsValidated()
         {
             //Act
-            await _createAuditCommandHandler.Handle(new CreateAuditCommand());
+            await _createAuditCommandHandler.Handle(new CreateAuditCommand(), CancellationToken.None);
 
             //Assert
             _validator.Verify(x=>x.Validate(It.IsAny<CreateAuditCommand>()),Times.Once);
@@ -44,20 +42,20 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AuditCommandTests
             _validator.Setup(x => x.Validate(It.IsAny<CreateAuditCommand>())).Returns(new ValidationResult {ValidationDictionary = new Dictionary<string, string> {{"", ""}}});
 
             //Act Assert
-            Assert.ThrowsAsync<InvalidRequestException>(async () => await _createAuditCommandHandler.Handle(new CreateAuditCommand()));
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await _createAuditCommandHandler.Handle(new CreateAuditCommand(), CancellationToken.None));
         }
 
         [Test]
         public async Task ThenTheCommandIfValidIsPassedToTheService()
         {
             //Arrange
-            var auditCommand = new CreateAuditCommand {EasAuditMessage = new EasAuditMessage {ChangedProperties = new List<PropertyUpdate> {new PropertyUpdate()},Description = "test", RelatedEntities = new List<Entity> {new Entity()} } };
+            var auditCommand = new CreateAuditCommand {EasAuditMessage = new AuditMessage {ChangedProperties = new List<PropertyUpdate> {new PropertyUpdate()},Description = "test", RelatedEntities = new List<AuditEntity> {new AuditEntity()} } };
 
             //Act
-            await _createAuditCommandHandler.Handle(auditCommand);
+            await _createAuditCommandHandler.Handle(auditCommand, CancellationToken.None);
 
             //Assert
-            _auditService.Verify(x=>x.SendAuditMessage(It.Is<EasAuditMessage>(c=>
+            _auditService.Verify(x=>x.SendAuditMessage(It.Is<AuditMessage>(c=>
                         c.Description.Equals(auditCommand.EasAuditMessage.Description) &&
                         c.ChangedProperties.Count == 1 &&
                         c.RelatedEntities.Count == 1 

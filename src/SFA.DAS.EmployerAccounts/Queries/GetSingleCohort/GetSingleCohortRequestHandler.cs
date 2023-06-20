@@ -1,69 +1,57 @@
-﻿using System;
-using MediatR;
-using System.Threading.Tasks;
-using SFA.DAS.Validation;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using System.Linq;
-using SFA.DAS.HashingService;
-using System;
-using SFA.DAS.NLog.Logger;
+﻿using System.Threading;
+using Microsoft.Extensions.Logging;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetSingleCohort
+namespace SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
+
+public class GetSingleCohortRequestHandler : IRequestHandler<GetSingleCohortRequest, GetSingleCohortResponse>
 {
-    public class GetSingleCohortRequestHandler : IAsyncRequestHandler<GetSingleCohortRequest, GetSingleCohortResponse>
-    {
-        private readonly IValidator<GetSingleCohortRequest> _validator;
-        private readonly ICommitmentV2Service _commitmentV2Service;
-        private readonly IHashingService _hashingService;
-        private readonly ILog _logger;
+    private readonly IValidator<GetSingleCohortRequest> _validator;
+    private readonly ICommitmentV2Service _commitmentV2Service;
+    private readonly ILogger<GetSingleCohortRequestHandler> _logger;
 
-        public GetSingleCohortRequestHandler(
-            IValidator<GetSingleCohortRequest> validator,
-            ICommitmentV2Service commitmentV2Service,            
-            IHashingService hashingService,
-            ILog logger)
+    public GetSingleCohortRequestHandler(
+        IValidator<GetSingleCohortRequest> validator,
+        ICommitmentV2Service commitmentV2Service,            
+        ILogger<GetSingleCohortRequestHandler> logger)
+    {
+        _validator = validator;
+        _commitmentV2Service = commitmentV2Service;
+        _logger = logger;
+    }
+
+    public async Task<GetSingleCohortResponse> Handle(GetSingleCohortRequest message, CancellationToken cancellationToken)
+    {
+        var validationResult = await _validator.ValidateAsync(message);
+
+        if (!validationResult.IsValid())
         {
-            _validator = validator;
-            _commitmentV2Service = commitmentV2Service;
-            _hashingService = hashingService;
-            _logger = logger;
+            throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        public async Task<GetSingleCohortResponse> Handle(GetSingleCohortRequest message)
+        try
         {
-            var validationResult = _validator.Validate(message);
+            var cohortsResponse = await _commitmentV2Service.GetCohorts(message.AccountId);
+            if (cohortsResponse.Count() != 1) return new GetSingleCohortResponse();
 
-            if (!validationResult.IsValid())
+            var singleCohort = cohortsResponse.Single();
+
+            if (singleCohort.NumberOfDraftApprentices > 0)
             {
-                throw new InvalidRequestException(validationResult.ValidationDictionary);
+                singleCohort.Apprenticeships = await _commitmentV2Service.GetDraftApprenticeships(singleCohort);
             }
-
-            long accountId = _hashingService.DecodeValue(message.HashedAccountId);
-
-            try
+            return new GetSingleCohortResponse
             {
-                var cohortsResponse = await _commitmentV2Service.GetCohorts(accountId);
-                if (cohortsResponse.Count() != 1) return new GetSingleCohortResponse();
+                Cohort = singleCohort
+            };
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError(ex, "Failed to get Cohorts for {AccountId}", message.AccountId);
 
-                var singleCohort = cohortsResponse.Single();
-
-                if (singleCohort.NumberOfDraftApprentices > 0)
-                {
-                    singleCohort.Apprenticeships = await _commitmentV2Service.GetDraftApprenticeships(singleCohort);
-                }
-                return new GetSingleCohortResponse
-                {
-                    Cohort = singleCohort
-                };
-            }
-            catch(Exception ex)
+            return new GetSingleCohortResponse
             {
-                _logger.Error(ex, $"Failed to get Cohorts for {message.HashedAccountId}");
-                return new GetSingleCohortResponse
-                {
-                    HasFailed = true
-                };
-            }
+                HasFailed = true
+            };
         }
     }
 }

@@ -1,9 +1,6 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetMinimumSignedAgreementVersion;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetMinimumSignedAgreementVersion
+public class GetMinimumSignedAgreementVersionQuery : IRequest<GetMinimumSignedAgreementVersionResponse>
 {
-    public class GetMinimumSignedAgreementVersionQuery : IAsyncRequest<GetMinimumSignedAgreementVersionResponse>
-    {
-        public long AccountId { get; set; }
-    }
+    public long AccountId { get; set; }
 }

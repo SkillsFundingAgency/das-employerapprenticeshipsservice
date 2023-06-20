@@ -2,20 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
 using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.Testing;
-using SFA.DAS.Testing.EntityFramework;
+using SFA.DAS.EmployerAccounts.TestCommon;
+using SFA.DAS.EmployerAccounts.TestCommon.DatabaseMock;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
 {
     [TestFixture]
     [Parallelizable]
-    public class RunOnceServiceTests : FluentTest<RunOnceServiceTestsFixture>
+    public class RunOnceServiceTests : Testing.FluentTest<RunOnceServiceTestsFixture>
     {
         [Test]
         public Task RunOnce_WhenRunningAfterJobHasPreviouslySuccessfullyCompleted_ThenShouldImmediatelyReturnAndNotRunTheJob()
@@ -41,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
     public class RunOnceServiceTestsFixture
     {
         internal Mock<EmployerAccountsDbContext> EmployerAccountsDbContext { get; set; }
-        public Mock<ILogger> Logger { get; set; }
+        public Mock<ILogger<RunOnceJobsService>> Logger { get; set; }
 
         internal RunOnceJobsService RunOnceJobsService { get; set; }
 
@@ -49,16 +50,13 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
         private readonly string _jobName = typeof(SeedAccountUsersJob).Name;
 
         private readonly List<RunOnceJob> _jobsList = new List<RunOnceJob>();
-        private readonly DbSetStub<RunOnceJob> _jobsDbSet;
 
         public RunOnceServiceTestsFixture()
         {
-
-            _jobsDbSet = new DbSetStub<RunOnceJob>(_jobsList);
             EmployerAccountsDbContext = new Mock<EmployerAccountsDbContext>();
-            EmployerAccountsDbContext.Setup(x => x.RunOnceJobs).Returns(_jobsDbSet);
+            EmployerAccountsDbContext.Setup(x => x.RunOnceJobs).Returns(_jobsList.AsQueryable().BuildMockDbSet().Object);
 
-            Logger = new Mock<ILogger>();
+            Logger = new Mock<ILogger<RunOnceJobsService>>();
 
             RunOnceJobsService = new RunOnceJobsService(new Lazy<EmployerAccountsDbContext>(() => EmployerAccountsDbContext.Object), Logger.Object);
         }

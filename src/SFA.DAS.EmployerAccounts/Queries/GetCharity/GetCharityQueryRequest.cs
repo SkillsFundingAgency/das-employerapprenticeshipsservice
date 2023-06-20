@@ -1,9 +1,6 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetCharity;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetCharity
+public class GetCharityQueryRequest : IRequest<GetCharityQueryResponse>
 {
-    public class GetCharityQueryRequest : IAsyncRequest<GetCharityQueryResponse>
-    {
-        public int RegistrationNumber { get; set; }
-    }
+    public int RegistrationNumber { get; set; }
 }

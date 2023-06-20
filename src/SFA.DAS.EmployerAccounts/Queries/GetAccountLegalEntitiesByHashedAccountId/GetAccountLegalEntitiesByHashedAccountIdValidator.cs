@@ -1,26 +1,21 @@
-﻿using System;
-using System.Threading.Tasks;
-using SFA.DAS.Validation;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesByHashedAccountId;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesByHashedAccountId
+public class GetAccountLegalEntitiesByHashedAccountIdValidator : IValidator<GetAccountLegalEntitiesByHashedAccountIdRequest>
 {
-    public class GetAccountLegalEntitiesByHashedAccountIdValidator : IValidator<GetAccountLegalEntitiesByHashedAccountIdRequest>
+    public ValidationResult Validate(GetAccountLegalEntitiesByHashedAccountIdRequest item)
     {
-        public ValidationResult Validate(GetAccountLegalEntitiesByHashedAccountIdRequest item)
+        var validationResult = new ValidationResult();
+
+        if (string.IsNullOrEmpty(item.HashedAccountId))
         {
-            var validationResult = new ValidationResult();
-
-            if (string.IsNullOrEmpty(item.HashedAccountId))
-            {
-                validationResult.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
-            }
-
-            return validationResult;
+            validationResult.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
         }
 
-        public Task<ValidationResult> ValidateAsync(GetAccountLegalEntitiesByHashedAccountIdRequest item)
-        {
-            return Task.FromResult(Validate(item));
-        }
+        return validationResult;
+    }
+
+    public Task<ValidationResult> ValidateAsync(GetAccountLegalEntitiesByHashedAccountIdRequest item)
+    {
+        return Task.FromResult(Validate(item));
     }
 }

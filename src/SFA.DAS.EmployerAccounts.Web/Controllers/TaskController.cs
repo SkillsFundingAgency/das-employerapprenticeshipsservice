@@ -1,61 +1,48 @@
-﻿using System.Net;
-using System.Threading.Tasks;
-using System.Web.Mvc;
-using SFA.DAS.Authentication;
-using SFA.DAS.Authorization.Mvc.Attributes;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Web.Helpers;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.NLog.Logger;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using SFA.DAS.EmployerAccounts.Infrastructure;
+using SFA.DAS.EmployerAccounts.Web.Authentication;
 
-namespace SFA.DAS.EmployerAccounts.Web.Controllers
+namespace SFA.DAS.EmployerAccounts.Web.Controllers;
+
+[Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+[Route("tasks/{hashedAccountId}")]
+public class TaskController : BaseController
 {
-    [DasAuthorize]
-    [RoutePrefix("tasks/{hashedAccountId}")]
-    public class TaskController : BaseController
+    private readonly TaskOrchestrator _orchestrator;
+    private readonly ILogger<TaskController> _logger;
+    public TaskController(
+        TaskOrchestrator taskOrchestrator,
+        ICookieStorageService<FlashMessageViewModel> flashMessage,
+        ILogger<TaskController> logger)
+        : base(flashMessage)
     {
-        private readonly TaskOrchestrator _orchestrator;
-        private readonly ILog _logger;
+        _orchestrator = taskOrchestrator;
+        _logger = logger;
+    }
 
-        public TaskController(
-            IAuthenticationService owinWrapper,
-            TaskOrchestrator taskOrchestrator,
-            IMultiVariantTestingService multiVariantTestingService,
-            ICookieStorageService<FlashMessageViewModel> flashMessage,
-            ILog logger) : base(owinWrapper, multiVariantTestingService, flashMessage)
+    [HttpPost]
+    [Route("dismissTask", Name = "DismissTask")]
+    public async Task<IActionResult> DismissTask(DismissTaskViewModel viewModel)
+    {
+        if (string.IsNullOrEmpty(HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName)))
         {
-            _orchestrator = taskOrchestrator;
-            _logger = logger;
+            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
         }
 
-        [HttpPost]
-        [DasAuthorize]
-        [Route("dismissTask", Name = "DismissTask")]
-        public async Task<ActionResult> DismissTask(DismissTaskViewModel viewModel)
+        var externalUserId = HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserIdClaimTypeIdentifier);
+
+        _logger.LogDebug("Task dismiss requested for account id '{HashedAccountId}', user id '{ExternalUserId}' and task '{TaskType}'", viewModel.HashedAccountId, externalUserId, viewModel.TaskType);
+
+        var result = await _orchestrator.DismissMonthlyReminderTask(viewModel.HashedAccountId, externalUserId, viewModel.TaskType);
+
+        if (result.Status != HttpStatusCode.OK)
         {
-            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)))
-            {
-                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
-            }
-
-            var externalUserId = OwinWrapper.GetClaimValue("sub");
-
-            _logger.Debug($"Task dismiss requested for account id '{viewModel.HashedAccountId}', user id '{externalUserId}' and task '{viewModel.TaskType}'");
-
-
-
-            var result = await _orchestrator.DismissMonthlyReminderTask(viewModel.HashedAccountId, externalUserId, viewModel.TaskType);
-
-            if (result.Status != HttpStatusCode.OK)
-            {
-                //Curently we are not telling the user of the error and are instead just logging the issue
-                //The error log will be done at a lower level
-                _logger.Debug($"Task dismiss requested failed for account id '{viewModel.HashedAccountId}', user id '{externalUserId}' and task '{viewModel.TaskType}'");
-            }
-
-            return RedirectToAction("Index", "EmployerTeam");
+            //Curently we are not telling the user of the error and are instead just logging the issue
+            //The error log will be done at a lower level
+            _logger.LogDebug("Task dismiss requested failed for account id '{HashedAccountId}', user id '{ExternalUserId}' and task '{TaskType}'", viewModel.HashedAccountId, externalUserId, viewModel.TaskType);
         }
 
+        return RedirectToAction("Index", "EmployerTeam");
     }
 }

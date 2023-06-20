@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authorization;
 using SFA.DAS.CosmosDb.Testing;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
@@ -14,16 +15,15 @@ using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;
 using SFA.DAS.EmployerAccounts.ReadStore.Models;
+using SFA.DAS.EmployerAccounts.TestCommon.DatabaseMock;
 using SFA.DAS.EmployerAccounts.Types.Models;
-using SFA.DAS.Testing;
 using SFA.DAS.Testing.Builders;
-using SFA.DAS.Testing.EntityFramework;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
 {
     [TestFixture]
     [Parallelizable]
-    public class SeedAccountUsersJobTests : FluentTest<SeedAccountUsersJobTestsFixture>
+    public class SeedAccountUsersJobTests : Testing.FluentTest<SeedAccountUsersJobTestsFixture>
     {
         [Test]
         public Task Run_WhenRunningJob_ThenShouldAddUsersWhichHaveRealRolesAndIgnoreThoseSetToNone()
@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
         internal Mock<IRunOnceJobsService> RunOnceService { get; set; }
         internal Mock<IAccountUsersRepository> AccountUsersRepository { get; set; }
         internal Mock<EmployerAccountsDbContext> EmployerAccountsDbContext { get; set; }
-        public Mock<ILogger> Logger { get; set; }
+        public Mock<ILogger<SeedAccountUsersJob>> Logger { get; set; }
 
         public ICollection<Membership> Users = new List<Membership>();
 
@@ -70,7 +70,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
 
         private readonly string _jobName = typeof(SeedAccountUsersJob).Name;
 
-        private readonly DbSetStub<Membership> _usersDbSet;
+        private readonly DbSet<Membership> _usersDbSet;
 
         public SeedAccountUsersJobTestsFixture()
         {
@@ -82,12 +82,13 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
             AccountUsersRepository.SetupInMemoryCollection(ReadStoreUsers);
 
             UsersToMigrate = new List<Membership> { UserOwnerRole, UserTranasactorRole, UserNoRole };
-            _usersDbSet = new DbSetStub<Membership>(UsersToMigrate);
+            _usersDbSet = UsersToMigrate.AsQueryable().BuildMockDbSet().Object; ;
+            
 
             EmployerAccountsDbContext = new Mock<EmployerAccountsDbContext>();
             EmployerAccountsDbContext.Setup(x => x.Memberships).Returns(_usersDbSet);
 
-            Logger = new Mock<ILogger>();
+            Logger = new Mock<ILogger<SeedAccountUsersJob>>();
 
             SeedAccountUsersJob =
                 new SeedAccountUsersJob(RunOnceService.Object, AccountUsersRepository.Object, new Lazy<EmployerAccountsDbContext>(() => EmployerAccountsDbContext.Object), Logger.Object);

@@ -1,159 +1,100 @@
-﻿using SFA.DAS.Authentication;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Web.Helpers;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using System;
-using System.Linq;
-using System.Net;
-using System.Text.RegularExpressions;
-using System.Web.Mvc;
-using SFA.DAS.Validation;
+﻿namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
-namespace SFA.DAS.EmployerAccounts.Web.Controllers
+public class BaseController : Controller
 {
-    public class BaseController : Controller
+    private const string FlashMessageCookieName = "sfa-das-employerapprenticeshipsservice-flashmessage";
+
+    private readonly ICookieStorageService<FlashMessageViewModel> _flashMessage;
+
+    public BaseController(ICookieStorageService<FlashMessageViewModel> flashMessage)
     {
-        public IAuthenticationService OwinWrapper;
-
-        private const string FlashMessageCookieName = "sfa-das-employerapprenticeshipsservice-flashmessage";
-
-        private readonly IMultiVariantTestingService _multiVariantTestingService;
-        private readonly ICookieStorageService<FlashMessageViewModel> _flashMessage;
-
-        public BaseController(IAuthenticationService owinWrapper, IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage)
-        {
-            OwinWrapper = owinWrapper;
-            _multiVariantTestingService = multiVariantTestingService;
-            _flashMessage = flashMessage;
-        }
-
-        public BaseController(IAuthenticationService owinWrapper)
-        {
-            OwinWrapper = owinWrapper;
-        }
-
-        protected override ViewResult View(string viewName, string masterName, object model)
-        {
-            if (!(model is OrchestratorResponse orchestratorResponse))
-            {
-                return base.View(viewName, masterName, model);
-            }
-            
-            if (orchestratorResponse.Exception is InvalidRequestException invalidRequestException)
-            {
-                foreach (var errorMessageItem in invalidRequestException.ErrorMessages)
-                {
-                    ModelState.AddModelError(errorMessageItem.Key, errorMessageItem.Value);
-                }
-
-                return ReturnViewResult(viewName, masterName, orchestratorResponse);
-            }
-
-            if (orchestratorResponse.Status == HttpStatusCode.BadRequest)
-            {
-                return ReturnViewResult(viewName, masterName, orchestratorResponse);
-            }
-
-            if (orchestratorResponse.Status == HttpStatusCode.NotFound)
-            {
-                return base.View(ControllerConstants.NotFoundViewName);
-            }
-
-            if (orchestratorResponse.Status == HttpStatusCode.OK)
-            {
-                return ReturnViewResult(viewName, masterName, orchestratorResponse);
-            }
-
-            if (orchestratorResponse.Status == HttpStatusCode.Unauthorized)
-            {
-                var accountId = Request.Params[ControllerConstants.AccountHashedIdRouteKeyName];
-
-                if (accountId != null)
-                {
-                    ViewBag.AccountId = accountId;
-                }
-
-                return base.View(ControllerConstants.AccessDeniedViewName, masterName, orchestratorResponse);
-            }
-
-            if (orchestratorResponse.Exception != null)
-            {
-                throw orchestratorResponse.Exception;
-            }
-
-            throw new Exception($"Orchestrator response of type '{model.GetType()}' could not be handled.");
-        }
-
-        private ViewResult ReturnViewResult(string viewName, string masterName, OrchestratorResponse orchestratorResponse)
-        {
-
-            var userViews = _multiVariantTestingService.GetMultiVariantViews();
-
-            if (userViews == null)
-            {
-                return base.View(viewName, masterName, orchestratorResponse);
-            }
-
-            var controllerName = ControllerContext.RouteData.Values[ControllerConstants.ControllerKeyName].ToString();
-            var actionName = ControllerContext.RouteData.Values[ControllerConstants.ActionKeyName].ToString();
-            var userView = userViews.Data.SingleOrDefault(c => c.Controller.Equals(controllerName, StringComparison.CurrentCultureIgnoreCase)
-                            && c.Action.Equals(actionName, StringComparison.CurrentCultureIgnoreCase));
-
-            if (userView != null)
-            {
-                if (!userView.SplitAccessAcrossUsers)
-                {
-                    var userEmail = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
-
-                    foreach (var view in userView.Views)
-                    {
-                        if (view.EmailAddresses.Any(pattern => Regex.IsMatch(userEmail, pattern, RegexOptions.IgnoreCase)))
-                        {
-                            return base.View(view.ViewName, masterName, orchestratorResponse);
-                        }
-                    }
-                }
-                else
-                {
-                    var randomViewName = _multiVariantTestingService.GetRandomViewNameToShow(userView.Views);
-
-                    if (string.IsNullOrEmpty(randomViewName))
-                    {
-                        return base.View(viewName, masterName, orchestratorResponse);
-                    }
-
-                    return base.View(randomViewName, masterName, orchestratorResponse);
-                }
-            }
-
-            return base.View(viewName, masterName, orchestratorResponse);
-        }
-
-        public void AddFlashMessageToCookie(FlashMessageViewModel model)
-        {
-            _flashMessage.Delete(FlashMessageCookieName);
-
-            _flashMessage.Create(model, FlashMessageCookieName);
-        }
-
-        public FlashMessageViewModel GetFlashMessageViewModelFromCookie()
-        {
-            var flashMessageViewModelFromCookie = _flashMessage.Get(FlashMessageCookieName);
-            _flashMessage.Delete(FlashMessageCookieName);
-            return flashMessageViewModelFromCookie;
-        }
-
-        public void RemoveFlashMessageFromCookie()
-        {
-            _flashMessage.Delete(FlashMessageCookieName);
-        }
-
-        /// <summary>
-        /// Default implementation for the SupportUserBanner.  Can be overridden to render based on the available IAccountIdentifier model.
-        /// </summary>
-        public virtual ActionResult SupportUserBanner(IAccountIdentifier model = null)
-        {
-            return PartialView("_SupportUserBanner", new SupportUserBannerViewModel());
-        }
+        _flashMessage = flashMessage;
     }
+
+    public BaseController() { }
+
+
+    [NonAction]
+    public override ViewResult View(string viewName, object model)
+    {
+        if (!(model is OrchestratorResponse orchestratorResponse))
+        {
+            return base.View(viewName, model);
+        }
+
+        if (orchestratorResponse.Exception is InvalidRequestException invalidRequestException)
+        {
+            foreach (var errorMessageItem in invalidRequestException.ErrorMessages)
+            {
+                ModelState.AddModelError(errorMessageItem.Key, errorMessageItem.Value);
+            }
+
+            return base.View(viewName, orchestratorResponse);
+        }
+
+        if (orchestratorResponse.Status == HttpStatusCode.BadRequest)
+        {
+            return base.View(viewName, orchestratorResponse);
+        }
+
+        if (orchestratorResponse.Status == HttpStatusCode.NotFound)
+        {
+            return base.View(ControllerConstants.NotFoundViewName);
+        }
+
+        if (orchestratorResponse.Status == HttpStatusCode.OK)
+        {
+            return base.View(viewName, orchestratorResponse);
+        }
+
+        if (orchestratorResponse.Status == HttpStatusCode.Unauthorized)
+        {
+            var accountId = Request.Query[ControllerConstants.AccountHashedIdRouteKeyName].ToString();
+
+            if (accountId != null)
+            {
+                ViewBag.AccountId = accountId;
+            }
+
+            return base.View(ControllerConstants.AccessDeniedViewName, orchestratorResponse);
+        }
+
+        if (orchestratorResponse.Exception != null)
+        {
+            throw orchestratorResponse.Exception;
+        }
+
+        throw new OrchestratorResponseTypeException(model.GetType());
+    }
+
+    [NonAction]
+    public void AddFlashMessageToCookie(FlashMessageViewModel model)
+    {
+        _flashMessage.Delete(FlashMessageCookieName);
+
+        _flashMessage.Create(model, FlashMessageCookieName);
+    }
+
+    [NonAction]
+    public FlashMessageViewModel GetFlashMessageViewModelFromCookie()
+    {
+        var flashMessageViewModelFromCookie = _flashMessage.Get(FlashMessageCookieName);
+        _flashMessage.Delete(FlashMessageCookieName);
+        return flashMessageViewModelFromCookie;
+    }
+
+    /// <summary>
+    /// Default implementation for the SupportUserBanner.  Can be overridden to render based on the available IAccountIdentifier model.
+    /// </summary>
+    [NonAction]
+    public virtual IActionResult SupportUserBanner(IAccountIdentifier model = null)
+    {
+        return ViewComponent("SupportUserBanner", new SupportUserBannerViewModel());
+    }
+}
+
+[Serializable]
+public class OrchestratorResponseTypeException : Exception
+{
+    public OrchestratorResponseTypeException(Type modelType) : base($"Orchestrator response of type '{modelType}' could not be handled.") { }
 }

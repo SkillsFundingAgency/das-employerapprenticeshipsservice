@@ -1,87 +1,71 @@
-﻿using System.Net;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
-using MediatR;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Web.Controllers;
-using SFA.DAS.EmployerAccounts.Web.Models;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.NLog.Logger;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Logging;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.SkipRegistration.GivenReturnUrlIsSpecified
-{ 
-    class WhenISkipRegistration : ControllerTestBase
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.SkipRegistration.GivenReturnUrlIsSpecified;
+
+class WhenISkipRegistration : ControllerTestBase
+{
+    private EmployerAccountController _employerAccountController;
+    private Mock<EmployerAccountOrchestrator> _orchestrator;
+    private const string ExpectedRedirectUrl = "http://redirect.local.test";
+    private OrchestratorResponse<EmployerAccountViewModel> _response;
+    private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
+    private Mock<ICookieStorageService<ReturnUrlModel>> _returnUrlCookieStorage;
+    private const string HashedAccountId = "ABC123";
+    private const string ExpectedReturnUrl = "test.com";
+
+    [SetUp]
+    public void Arrange()
     {
-        private EmployerAccountController _employerAccountController;
-        private Mock<EmployerAccountOrchestrator> _orchestrator;
-        private Mock<IAuthenticationService> _owinWrapper;
-        private Mock<IMultiVariantTestingService> _userViewTestingService;
-        private const string ExpectedRedirectUrl = "http://redirect.local.test";
-        private OrchestratorResponse<EmployerAccountViewModel> _response;
-        private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
-        private Mock<ICookieStorageService<ReturnUrlModel>> _returnUrlCookieStorage;
-        private const string HashedAccountId = "ABC123";
-        private const string ExpectedReturnUrl = "test.com";
+        base.Arrange(ExpectedRedirectUrl);
 
-        [SetUp]
-        public void Arrange()
+        _orchestrator = new Mock<EmployerAccountOrchestrator>();
+        _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
+        _returnUrlCookieStorage = new Mock<ICookieStorageService<ReturnUrlModel>>();
+
+        _response = new OrchestratorResponse<EmployerAccountViewModel>()
         {
-            base.Arrange(ExpectedRedirectUrl);
-
-            _orchestrator = new Mock<EmployerAccountOrchestrator>();
-
-            _owinWrapper = new Mock<IAuthenticationService>();
-            _userViewTestingService = new Mock<IMultiVariantTestingService>();
-            var logger = new Mock<ILog>();
-            _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-            _returnUrlCookieStorage = new Mock<ICookieStorageService<ReturnUrlModel>>();
-
-            _response = new OrchestratorResponse<EmployerAccountViewModel>()
+            Data = new EmployerAccountViewModel
             {
-                Data = new EmployerAccountViewModel
-                {
-                    HashedId = HashedAccountId
-                },
-                Status = HttpStatusCode.OK
-            };
+                HashedId = HashedAccountId
+            },
+            Status = HttpStatusCode.OK
+        };
 
-            _orchestrator.Setup(x =>
-                    x.CreateMinimalUserAccountForSkipJourney(It.IsAny<CreateUserAccountViewModel>(), It.IsAny<HttpContextBase>()))
-                .ReturnsAsync(_response);
+        AddUserToContext();
 
-            _returnUrlCookieStorage.Setup(x => x.Get("SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie"))
-                .Returns(new ReturnUrlModel() {Value = ExpectedReturnUrl});
+        _orchestrator.Setup(x =>
+                x.CreateMinimalUserAccountForSkipJourney(It.IsAny<CreateUserAccountViewModel>(), It.IsAny<HttpContext>()))
+            .ReturnsAsync(_response);
 
-            _employerAccountController = new EmployerAccountController(
-                _owinWrapper.Object,
-                _orchestrator.Object,
-                _userViewTestingService.Object,
-                logger.Object,
-                _flashMessage.Object,
-                Mock.Of<IMediator>(),
-                _returnUrlCookieStorage.Object,
-                Mock.Of<ICookieStorageService<HashedAccountIdModel>>())
-            {
-                ControllerContext = _controllerContext.Object,
-                Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)
-            };
-        }
+        _returnUrlCookieStorage.Setup(x => x.Get(EmployerAccountController.ReturnUrlCookieName))
+            .Returns(new ReturnUrlModel() {Value = ExpectedReturnUrl});
 
-        [Test]
-        public async Task ThenIShouldGoToTheReturnUrl()
+        _employerAccountController = new EmployerAccountController(
+            _orchestrator.Object,
+            Mock.Of<ILogger<EmployerAccountController>>(),
+            _flashMessage.Object,
+            Mock.Of<IMediator>(),
+            _returnUrlCookieStorage.Object,
+            Mock.Of<ICookieStorageService<HashedAccountIdModel>>(),
+            Mock.Of<LinkGenerator>())
         {
-            //Act
-            var result = await _employerAccountController.SkipRegistration() as RedirectResult;
+            ControllerContext = ControllerContext,
+            Url = new UrlHelper(new ActionContext(MockHttpContext.Object, Routes, new ActionDescriptor()))
+        };
+    }
 
-            //Assert
-            Assert.AreEqual(ExpectedReturnUrl, result.Url);
-        }
+    [Test]
+    public async Task ThenIShouldGoToTheReturnUrl()
+    {
+        //Act
+        var result = await _employerAccountController.SkipRegistration() as RedirectResult;
+
+        //Assert
+        Assert.AreEqual(ExpectedReturnUrl, result.Url);
     }
 }

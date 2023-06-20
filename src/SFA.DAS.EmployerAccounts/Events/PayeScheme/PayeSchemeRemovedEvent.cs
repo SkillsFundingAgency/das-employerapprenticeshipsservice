@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Events.PayeScheme
+﻿namespace SFA.DAS.EmployerAccounts.Events.PayeScheme;
+
+public class PayeSchemeRemovedEvent
 {
-    public class PayeSchemeRemovedEvent
-    {
-        public string ResourceUri { get; set; }
-    }
+    public string ResourceUri { get; set; }
 }

@@ -1,0 +1,54 @@
+﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.VacancyViewModel
+@inject IUrlActionHelper UrlHelper;
+@{
+    var applicationsTextSuffix = !Model.NoOfApplications.GetValueOrDefault().Equals(0) ? (Model.NoOfApplications.Value.Equals(1) ? "application" : "applications") : "";
+    var applicationsTextPrefix = !Model.NoOfApplications.GetValueOrDefault().Equals(0) ? "View" : "";
+}
+
+<section>
+    <h2 class="govuk-heading-l govuk-!-margin-bottom-2">
+        Your apprenticeship advert
+    </h2>
+    <p>You've created an advert for your apprenticeship.</p>
+    <table class="govuk-table">
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header das-table-cell-width-35">
+                Title
+            </th>
+            <td class="govuk-table__cell das-table-cell-width-65">
+                @(Model?.Title)
+            </td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">
+                Closing date
+            </th>
+            <td class="govuk-table__cell">
+                @(Model.ClosedDateText)
+            </td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">
+                Applications
+            </th>
+            <td class="govuk-table__cell">
+                <a href="@Model.ManageVacancyUrl" class="govuk-link">@applicationsTextPrefix @(!Model.NoOfApplications.GetValueOrDefault().Equals(0) ? $"{Model.NoOfApplications.Value}" : "No applications yet")  @applicationsTextSuffix</a>
+            </td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">
+                Status
+            </th>
+            <td class="govuk-table__cell">
+                <span class="govuk-tag govuk-tag--grey">Closed</span>
+            </td>
+        </tr>
+    </table>
+    <p>
+        <a href="@UrlHelper.EmployerCommitmentsV2Action("unapproved/inform")" role="button" draggable="false" class="govuk-button">
+            Add apprentice details
+        </a>
+    </p>
+</section>
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">

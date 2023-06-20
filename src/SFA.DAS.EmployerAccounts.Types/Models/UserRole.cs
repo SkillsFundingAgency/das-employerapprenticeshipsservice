@@ -1,9 +1,8 @@
-﻿namespace SFA.DAS.EmployerAccounts.Types.Models
+﻿namespace SFA.DAS.EmployerAccounts.Types.Models;
+
+public enum UserRole
 {
-    public enum UserRole
-    {
-        Viewer = 3,
-        Transactor = 2,
-        Owner = 1
-    }
+    Viewer = 3,
+    Transactor = 2,
+    Owner = 1
 }

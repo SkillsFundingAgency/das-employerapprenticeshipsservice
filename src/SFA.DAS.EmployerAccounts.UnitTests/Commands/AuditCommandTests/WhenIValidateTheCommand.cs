@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using SFA.DAS.Audit.Types;
+using SFA.DAS.EmployerAccounts.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
-using SFA.DAS.EmployerAccounts.Models;
-using Entity = SFA.DAS.Audit.Types.Entity;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AuditCommandTests
 {
@@ -21,12 +19,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AuditCommandTests
         public void ThenTrueIsReturnedWhenAllFieldsArePopulated()
         {
             //Act
-            var actual = _validator.Validate(new CreateAuditCommand {EasAuditMessage = new EasAuditMessage
+            var actual = _validator.Validate(new CreateAuditCommand {EasAuditMessage = new AuditMessage
             {
                 Description = "descriptiosn",
-                RelatedEntities = new List<Entity> { new Entity () },
+                RelatedEntities = new List<AuditEntity> { new AuditEntity () },
                 ChangedProperties = new List<PropertyUpdate> { new PropertyUpdate()},
-                AffectedEntity = new Entity { Id="1",Type="test"}
+                AffectedEntity = new AuditEntity { Id="1",Type="test"}
             } });
 
             //Assert
@@ -37,7 +35,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AuditCommandTests
         public void ThenFalseIsReturnedAndTheDictionaryIsPopulatedWhenTheCommandIsNotValid()
         {
             //Act
-            var actual = _validator.Validate(new CreateAuditCommand { EasAuditMessage = new EasAuditMessage() });
+            var actual = _validator.Validate(new CreateAuditCommand { EasAuditMessage = new AuditMessage() });
 
             //Assert
             Assert.IsFalse(actual.IsValid());
@@ -50,7 +48,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AuditCommandTests
         public void ThenFalseIsReturnedAndTheDictionaryIsPopulatedWhenTheListsAreEmpty()
         {
             //Act
-            var actual = _validator.Validate(new CreateAuditCommand { EasAuditMessage = new EasAuditMessage {Description = "test", ChangedProperties = new List<PropertyUpdate>()} });
+            var actual = _validator.Validate(new CreateAuditCommand { EasAuditMessage = new AuditMessage {Description = "test", ChangedProperties = new List<PropertyUpdate>()} });
 
             //Assert
             Assert.IsFalse(actual.IsValid());
@@ -75,13 +73,13 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AuditCommandTests
             // arrange
             var command = new CreateAuditCommand
             {
-                EasAuditMessage = new EasAuditMessage
+                EasAuditMessage = new AuditMessage
                 {
                     Category = "View",
                     Description = "description",
-                    RelatedEntities = new List<Entity> { new Entity() },
+                    RelatedEntities = new List<AuditEntity> { new AuditEntity() },
                     ChangedProperties = null,
-                    AffectedEntity = new Entity { Id = "1", Type = "test" }
+                    AffectedEntity = new AuditEntity { Id = "1", Type = "test" }
                 }
             };
 
@@ -98,13 +96,13 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AuditCommandTests
             // arrange
             var command = new CreateAuditCommand
             {
-                EasAuditMessage = new EasAuditMessage
+                EasAuditMessage = new AuditMessage
                 {
                     Category = "Changed",
                     Description = "description",
-                    RelatedEntities = new List<Entity> { new Entity() },
+                    RelatedEntities = new List<AuditEntity> { new AuditEntity() },
                     ChangedProperties = null,
-                    AffectedEntity = new Entity { Id = "1", Type = "test" }
+                    AffectedEntity = new AuditEntity { Id = "1", Type = "test" }
                 }
             };
 

@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels
+﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels;
+
+public class SearchOrganisationViewModel
 {
-    public class SearchOrganisationViewModel
-    {
-        public bool IsExistingAccount { get; set; }
-    }
+    public bool IsExistingAccount { get; set; }
 }

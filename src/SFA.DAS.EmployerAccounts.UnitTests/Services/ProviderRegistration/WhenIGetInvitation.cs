@@ -20,17 +20,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.ProviderRegistration
         private ProviderRegistrationClientApiConfiguration _configuration;
         private string _correlationId;
         private string _testData;
-        private string _apiBaseUrl;
-        private string _identifierUri;           
+        private string _apiBaseUrl;       
         Mock<HttpMessageHandler> _mockHttpMessageHandler;
         Mock<ILogger<ProviderRegistrationApiClient>> _logger;
 
         [SetUp]
         public void Arrange()
         {
-            ConfigurationManager.AppSettings["EnvironmentName"] = "LOCAL";
             _apiBaseUrl = $"http://{Guid.NewGuid().ToString()}/";
-            _identifierUri = Guid.NewGuid().ToString();
             _correlationId = Guid.NewGuid().ToString();
             _testData = "Employer details";
 
@@ -39,7 +36,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.ProviderRegistration
             _configuration = new ProviderRegistrationClientApiConfiguration
             {
                 BaseUrl = _apiBaseUrl,
-                IdentifierUri = _identifierUri
+                IdentifierUri = string.Empty
             };            
 
             _mockHttpMessageHandler = new Mock<HttpMessageHandler>();

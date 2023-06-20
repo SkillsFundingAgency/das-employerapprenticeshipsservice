@@ -1,10 +1,7 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetSingleCohort
+public class GetSingleCohortRequest : IRequest<GetSingleCohortResponse>
 {
-    public class GetSingleCohortRequest : IAsyncRequest<GetSingleCohortResponse>
-    {
-        public string HashedAccountId { get; set; }        
-        public string ExternalUserId { get; set; }
-    }
+    public long AccountId { get; set; }        
+    public string ExternalUserId { get; set; }
 }

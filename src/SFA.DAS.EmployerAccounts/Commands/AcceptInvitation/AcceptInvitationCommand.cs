@@ -1,10 +1,7 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Commands.AcceptInvitation;
 
-namespace SFA.DAS.EmployerAccounts.Commands.AcceptInvitation
+public class AcceptInvitationCommand : IRequest
 {
-    public class AcceptInvitationCommand : IAsyncRequest
-    {
-        public long Id { get; set; }
-        public string ExternalUserId { get; set; }  
-    }
+    public long Id { get; set; }
+    public string ExternalUserId { get; set; }  
 }

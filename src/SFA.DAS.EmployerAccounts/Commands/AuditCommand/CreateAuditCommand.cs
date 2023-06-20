@@ -1,10 +1,8 @@
-﻿using MediatR;
-using SFA.DAS.EmployerAccounts.Models;
+﻿using SFA.DAS.EmployerAccounts.Audit.Types;
 
-namespace SFA.DAS.EmployerAccounts.Commands.AuditCommand
+namespace SFA.DAS.EmployerAccounts.Commands.AuditCommand;
+
+public class CreateAuditCommand : IRequest
 {
-    public class CreateAuditCommand : IAsyncRequest
-    {
-        public EasAuditMessage EasAuditMessage { get; set; }
-    }
+    public AuditMessage EasAuditMessage { get; set; }
 }

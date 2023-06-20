@@ -1,93 +1,79 @@
-﻿using System.Threading.Tasks;
-using System.Web.Mvc;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
-using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models.AccountTeam;
-using SFA.DAS.EmployerAccounts.Web.Controllers;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
+﻿using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.InvitationControllerTests
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.InvitationControllerTests;
+
+public class WhenViewingInvitations : ControllerTestBase
 {
-    public class WhenViewingInvitations : ControllerTestBase
+    private Mock<InvitationOrchestrator> _invitationOrchestrator ;
+    private EmployerAccountsConfiguration _configuration ;
+    private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
+
+    private InvitationController _controller;
+
+    [SetUp]
+    public void Arrange()
     {
-        private Mock<InvitationOrchestrator> _invitationOrchestrator;
-        private InvitationController _controller;
-        private Mock<IAuthenticationService> _owinWrapper;
-        private Mock<IMultiVariantTestingService> _userViewTestingService;
-        private EmployerAccountsConfiguration _configuration;
-        private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
+        base.Arrange();
 
-        [SetUp]
-        public void Arrange()
-        {
-            base.Arrange();
+        _invitationOrchestrator = new Mock<InvitationOrchestrator>();
+        _configuration = new EmployerAccountsConfiguration();
+        _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
-            _owinWrapper = new Mock<IAuthenticationService>();
-            _userViewTestingService = new Mock<IMultiVariantTestingService>();
-            _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
+       _controller = new InvitationController(
+            _invitationOrchestrator.Object,
+            _configuration,
+            _flashMessage.Object)
+       {
+           ControllerContext = ControllerContext
+       };
+    }
 
-            _invitationOrchestrator = new Mock<InvitationOrchestrator>();
+    [Test]
+    public void ThenTheUserIsShownTheIndexWhenNotAuthenticated()
+    {
+        //Arrange
+        AddEmptyUserToContext();
+        
+        //Act
+        var actual = _controller.Invite();
 
-            _configuration = new EmployerAccountsConfiguration();
+        //Assert
+        Assert.IsNotNull(actual);
+    }
 
-            _controller = new InvitationController(
-                _invitationOrchestrator.Object, _owinWrapper.Object, 
-                _userViewTestingService.Object, _configuration, _flashMessage.Object);
-        }
+    [Test]
+    public void ThenTheUserIsRedirectedToTheServiceLandingPageWhenAuthenticated()
+    {
+        //Arrange
+        AddUserToContext("my_user_id");
+        
+        //Act
+        var actual = _controller.Invite();
 
-        [Test]
-        public void ThenTheUserIsShownTheIndexWhenNotAuthenticated()
-        {
-            //Arrange
-            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("");
+        //Assert
+        Assert.IsNotNull(actual);
+        var actualRedirectResult = actual as RedirectToActionResult;
+        Assert.IsNotNull(actualRedirectResult);
+        Assert.AreEqual("Index",actualRedirectResult.ActionName);
+        Assert.AreEqual("Home",actualRedirectResult.ControllerName);
+    }
 
-            //Act
-            var actual = _controller.Invite();
+    [Test]
+    public async Task ThenTheCorrectInvitationIsRetrieved()
+    {
+        //Arrange
+        AddUserToContext("TEST");
+        _invitationOrchestrator.Setup(x => x.GetInvitation(It.Is<string>(i => i == "123")))
+            .ReturnsAsync(new OrchestratorResponse<InvitationView> { Data = new InvitationView() });
 
-            //Assert
-            Assert.IsNotNull(actual);
-        }
 
-        [Test]
-        public void ThenTheUserIsRedirectedToTheServiceLandingPageWhenAuthenticated()
-        {
-            //Arrange
-            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("my_user_id");
-            
-            //Act
-            var actual = _controller.Invite();
+        //Act
+        var actual = await _controller.Details("123");
 
-            //Assert
-            Assert.IsNotNull(actual);
-            var actualRedirectResult = actual as RedirectToRouteResult;
-            Assert.IsNotNull(actualRedirectResult);
-            Assert.AreEqual("Index",actualRedirectResult.RouteValues["action"]);
-            Assert.AreEqual("Home",actualRedirectResult.RouteValues["controller"]);
-        }
-
-        [Test]
-        public async Task ThenTheCorrectInvitationIsRetrieved()
-        {
-            //Arrange
-            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("TEST");
-            _invitationOrchestrator.Setup(x => x.GetInvitation(It.Is<string>(i => i == "123")))
-                .ReturnsAsync(new OrchestratorResponse<InvitationView> { Data = new InvitationView()});
-            
-
-            //Act
-            var actual = await _controller.Details("123");
-
-            //Assert
-            _invitationOrchestrator.Verify(x => x.GetInvitation(It.Is<string>(i => i == "123")));
-            Assert.IsNotNull(actual);
-            var viewResult = actual as ViewResult;
-            Assert.IsNotNull(viewResult);
-        }
-
+        //Assert
+        _invitationOrchestrator.Verify(x => x.GetInvitation(It.Is<string>(i => i == "123")));
+        Assert.IsNotNull(actual);
+        var viewResult = actual as ViewResult;
+        Assert.IsNotNull(viewResult);
     }
 }

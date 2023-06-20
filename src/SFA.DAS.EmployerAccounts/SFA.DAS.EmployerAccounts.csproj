@@ -1,86 +1,65 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <TargetFramework>net48</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Remove="Models\Commitments\**" />
     <EmbeddedResource Remove="Models\Commitments\**" />
     <None Remove="Models\Commitments\**" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Remove="Interfaces\IDistributedLockProvider.cs" />
     <Compile Remove="Services\AzureDistributedLockProvider.cs" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="Aspose.Pdf" Version="17.2.0" />
-    <PackageReference Include="AutoMapper" Version="5.1.1" />
-    <PackageReference Include="Dapper" Version="1.50.2" />
-    <PackageReference Include="EntityFramework" Version="6.2.0" />
-    <PackageReference Include="HMRC.ESFA.Levy.Api.Client" version="1.0.43" />
-    <PackageReference Include="HMRC.ESFA.Levy.Api.Types" version="1.0.43" />
-    <PackageReference Include="MediatR" Version="2.1.0" />
-    <PackageReference Include="Microsoft.Azure.Services.AppAuthentication" Version="1.0.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.13.1" />
+    <PackageReference Include="HMRC.ESFA.Levy.Api.Client" Version="2.0.4" />
+    <PackageReference Include="HMRC.ESFA.Levy.Api.Types" Version="2.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="6.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.14" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="6.0.13" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="MediatR" Version="11.1.0" />
+    <PackageReference Include="microsoft.data.sqlclient" Version="5.0.1" />
     <PackageReference Include="Polly" Version="5.7.0" />
-    <PackageReference Include="RestSharp" Version="106.12.0" />
+    <PackageReference Include="Scrutor" Version="4.2.1" />
     <PackageReference Include="SFA.DAS.Account.Api.Client" Version="1.6.3195" />
     <PackageReference Include="SFA.DAS.ActiveDirectory" Version="1.0.3" />
-    <PackageReference Include="SFA.DAS.Audit.Client" Version="1.0.0.20553" />    
+    <PackageReference Include="SFA.DAS.Api.Common" Version="1.0.28" />
     <PackageReference Include="SFA.DAS.Authentication" Version="1.1.2" />
-    <PackageReference Include="SFA.DAS.Authentication.Extensions.Legacy" Version="1.0.29" />
-    <PackageReference Include="SFA.DAS.Authorization" Version="6.0.52" />
-    <PackageReference Include="SFA.DAS.Authorization.EmployerFeatures" Version="6.0.52" />
-    <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles" Version="6.0.52" />
-    <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
+    <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.2.17" />
     <PackageReference Include="SFA.DAS.Caches" Version="1.1.4" />
-    <PackageReference Include="SFA.DAS.Commitments.Events" Version="2.1.1073" />
     <PackageReference Include="SFA.DAS.CommitmentsV2.Api.Types" Version="8.2.0" />
-    <PackageReference Include="SFA.DAS.CommitmentsV2.Types" Version="8.2.0" />
-    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.283" />
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.52781" />
-    <PackageReference Include="SFA.DAS.Encoding" Version="1.1.61" />
-    <PackageReference Include="SFA.DAS.EntityFramework" Version="1.0.1" />
+    <PackageReference Include="SFA.DAS.Encoding" Version="1.1.76" />
     <PackageReference Include="SFA.DAS.EmployerFinance.Messages" Version="1.6.2933" />
-    <PackageReference Include="SFA.DAS.HashingService" Version="1.0.183" />
-    <PackageReference Include="SFA.DAS.Hmrc" Version="1.0.30" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
     <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.2.37" />
-    <PackageReference Include="SFA.DAS.Notifications.Api.Types" Version="2.2.37" />
     <PackageReference Include="SFA.DAS.Notifications.Messages" Version="3.0.0" />
+    <PackageReference Include="SFA.DAS.NServiceBus" Version="16.0.21" />
     <PackageReference Include="SFA.DAS.ReferenceData.Api.Client" Version="1.1.90" />
     <PackageReference Include="SFA.DAS.ReferenceData.Types" Version="1.1.90" />
     <PackageReference Include="SFA.DAS.TimeProvider" version="1.0.0.3956" />
-    <PackageReference Include="SFA.DAS.Activities.Client" Version="1.2.71" />
-    <PackageReference Include="SFA.DAS.Configuration" Version="1.0.0.53229" />
-    <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="1.0.0.53229" />
-    <PackageReference Include="SFA.DAS.Configuration.FileStorage" Version="1.0.0.49931" />
-    <PackageReference Include="SFA.DAS.CookieService" Version="1.0.3" />
     <PackageReference Include="SFA.DAS.Events.Api.Client" Version="1.20.0.26497" />
-    <PackageReference Include="SFA.DAS.Events.Api.Types" Version="2.0.0.36524" />
-    <PackageReference Include="SFA.DAS.Messaging" Version="3.0.0.63765" />
-    <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus" Version="3.0.0.53181" />
-    <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus.StructureMap" Version="3.0.0.63765" />
-    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
-    <PackageReference Include="SFA.DAS.NServiceBus" Version="15.0.25" />
-    <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="15.0.25" />
-    <PackageReference Include="SFA.DAS.Sql.Client" Version="1.0.0.32930" />
-    <PackageReference Include="SFA.DAS.Tasks.Api.Client" Version="1.8.163" />
-    <PackageReference Include="SFA.DAS.Tasks.API.Types" Version="1.8.44" />
-    <PackageReference Include="SFA.DAS.TokenService.Api.Client" Version="2.3.0" />    
-    <PackageReference Include="SFA.DAS.UnitOfWork" Version="9.0.13" />
-    <PackageReference Include="SFA.DAS.Validation" Version="5.1.167" />
-    <PackageReference Include="StructureMap" Version="4.7.1" />
-    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="16.0.20" />
+    <PackageReference Include="SFA.DAS.TokenService.Api.Client" Version="2.3.0" />
+    <PackageReference Include="SFA.DAS.UnitOfWork" Version="9.0.28" />
+    <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="9.0.28" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.1" />
     <PackageReference Include="System.Runtime" Version="4.3.1" />
-    <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />
-    <PackageReference Include="Z.EntityFramework.Plus.QueryFuture.EF6" Version="1.7.19" />
+    <PackageReference Include="Aspose.Pdf" Version="23.5.0" />
+    <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
+    <PackageReference Include="SFA.DAS.Events.Api.Types" Version="2.1.31" />
+    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Types\SFA.DAS.EmployerAccounts.Api.Types.csproj" />
@@ -88,24 +67,10 @@
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Types\SFA.DAS.EmployerAccounts.Types.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-  </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Models\Portal\" />
     <Folder Include="Queries\GetAccountLegalEntitiesByHashedAccountId\" />
     <Folder Include="Queries\GetEmployerAgreementById\" />
     <Folder Include="Queries\GetLegalEntity\" />
   </ItemGroup>
-
 </Project>

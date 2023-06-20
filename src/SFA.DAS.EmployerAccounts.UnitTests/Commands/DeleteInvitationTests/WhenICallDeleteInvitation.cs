@@ -1,15 +1,14 @@
 ﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.DeleteInvitation;
-using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.DeleteInvitationTests
 {
@@ -55,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.DeleteInvitationTests
                 AccountId = _invitation.AccountId
             });
 
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
             _invitationRepository.Verify(x => x.ChangeStatus(It.Is<Invitation>(z => z.Id == _invitation.Id && z.Status == InvitationStatus.Deleted)), Times.Once);
         }
@@ -65,7 +64,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.DeleteInvitationTests
         {
             _invitationRepository.Setup(x => x.Get(_invitation.AccountId, _command.Email)).ReturnsAsync(_invitation);
 
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command, CancellationToken.None));
 
             Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
         }
@@ -79,7 +78,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.DeleteInvitationTests
                 Role = Role.Viewer
             });
 
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command, CancellationToken.None));
 
             Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
         }
@@ -95,12 +94,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.DeleteInvitationTests
                 AccountId = _invitation.AccountId
             });
 
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
                 c.EasAuditMessage.ChangedProperties.SingleOrDefault(
                     y => y.PropertyName.Equals("Status") && y.NewValue.Equals(InvitationStatus.Deleted.ToString())) != null
-                )));
+                ), It.IsAny<CancellationToken>()));
 
         }
     }

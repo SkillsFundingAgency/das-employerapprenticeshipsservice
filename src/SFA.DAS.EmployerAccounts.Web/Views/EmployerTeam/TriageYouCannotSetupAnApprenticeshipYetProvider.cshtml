@@ -1,20 +1,19 @@
-﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
-@{ViewBag.PageID = "you-cannot-setup-an-apprenticeship-yet-provider"; }
-@{ViewBag.Title = "You cannot set up an apprenticeship yet"; }
-@{ViewBag.MetaDesc = "You cannot set up an apprenticeship yet"; }
-@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
-@{ViewBag.GaData.Vpv = "/account/setupapprentice/you-cannot-setup-an-apprenticeship-yet-provider"; }
+﻿@{
+    ViewBag.PageID = "you-cannot-setup-an-apprenticeship-yet-provider";
+    ViewBag.Title = "You cannot set up an apprenticeship yet";
+    ViewBag.MetaDesc = "You cannot set up an apprenticeship yet";
+    ViewBag.GaData.Vpv = "/account/setupapprentice/you-cannot-setup-an-apprenticeship-yet-provider";
+}
 
-@section breadcrumb
-{
-    <a href="javascript:history.back()" class="govuk-back-link js-show">Back</a>    
+@section breadcrumb {
+    <a href="javascript:history.back()" class="govuk-back-link js-show">Back</a>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">@ViewBag.Title</h1>
-        <p class="govuk-body">Before you can set up an apprenticeship, you need to <a href="https://findapprenticeshiptraining.apprenticeships.education.gov.uk" class="govuk-link" target="_blank">choose a training provider</a>.</p>
+        <p class="govuk-body">Before you can set up an apprenticeship, you need to <a href="https://findapprenticeshiptraining.apprenticeships.education.gov.uk" rel="noopener" class="govuk-link" target="_blank">choose a training provider</a>.</p>
         <p class="govuk-body">Try again once you've found a training provider to deliver the course.</p>
-        <a href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName)" class="govuk-button" id="return-to-homepage">Return to account home</a>
+        <a asp-route="@RouteNames.EmployerTeamIndex" asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" class="govuk-button" id="return-to-homepage">Return to account home</a>
     </div>
 </div>

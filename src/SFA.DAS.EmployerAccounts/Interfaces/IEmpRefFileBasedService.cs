@@ -1,9 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿namespace SFA.DAS.EmployerAccounts.Interfaces;
 
-namespace SFA.DAS.EmployerAccounts.Interfaces
+public interface IEmpRefFileBasedService
 {
-    public interface IEmpRefFileBasedService
-    {
-        Task<string> GetEmpRef(string email, string id);
-    }
+    Task<string> GetEmpRef(string email, string id);
 }

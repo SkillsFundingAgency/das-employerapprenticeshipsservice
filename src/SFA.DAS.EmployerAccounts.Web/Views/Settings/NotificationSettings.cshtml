@@ -4,36 +4,46 @@
 @{
     ViewBag.Title = "Notification Settings";
     ViewBag.PageId = "notification-settings";
-    ViewBag.HideNav = true;
+    ViewBag.ShowNav = false;
 }
 
 <form method="post">
-    <div class="grid-row">
-        <div class="column-two-thirds">
-            <h1 class="heading-xlarge">Notification Settings</h1>
-            <p>Choose which accounts you want to receive cohort and apprentice updates from.</p>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-xl">Notification settings</h1>
+            
+            @if (Model.Data.UseGovSignIn)
+            {
+                <p>Choose which accounts you want to receive cohort and apprentice updates from. The updates will be sent to the email address you use for 
+                    <a href="https://home.account.gov.uk/settings" rel="noopener" class="govuk-link" rel="external" target="_blank" title="Opens in a new window">your GOV.UK One Login (opens in new tab).</a>
+                </p>    
+            }
+            else
+            {
+                <p>Choose which accounts you want to receive cohort and apprentice updates from.</p>
+            }
+            
             <p>Changes to these settings won't affect service emails, such as password resets.</p>
-
-            @Html.AntiForgeryToken()
 
             <input type="hidden" value="@Model.Data.HashedId" name="HashedId" />
 
-            <table>
-                <thead>
-                    <tr>
-                        <th scope="col">Account name</th>
-                        <th scope="col">Emails</th>
-                        <th scope="col">No emails</th>
+
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">Account name</th>
+                        <th scope="col" class="govuk-table__header">Emails</th>
+                        <th scope="col" class="govuk-table__header">No emails</th>
                     </tr>
                 </thead>
 
-                <tbody>
+                <tbody class="govuk-table__body">
                     @for (var i = 0; i < Model.Data.NotificationSettings.Count; i++)
                     {
                         var setting = Model.Data.NotificationSettings[i];
 
-                        <tr>
-                            <td class="notification-row">
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">
                                 @setting.Name
 
                                 @Html.Hidden($"NotificationSettings[{i}].HashedAccountId", setting.HashedAccountId)
@@ -41,36 +51,38 @@
                                 @Html.Hidden($"NotificationSettings[{i}].Id", setting.Id)
                             </td>
 
-                            <td class="notification-row">
+                            <td class="govuk-table__cell">
                                 @{
                                     var trueId = $"NotificationSettings-true-{i}";
                                     var falseId = $"NotificationSettings-false-{i}";
                                 }
-
-                                <label for="@trueId" class="block-label selection-button-radio" aria-label="Send emails">
-                                    @Html.RadioButton($"NotificationSettings[{i}].ReceiveNotifications", true, setting.ReceiveNotifications, new { id = trueId })
-                                </label>
+                                <div class="govuk-radios__item">
+                                    @Html.RadioButton($"NotificationSettings[{i}].ReceiveNotifications", true, setting.ReceiveNotifications, new { id = trueId, @class = "govuk-radios__input" })
+                                    <label for="@trueId" class="govuk-label govuk-radios__label"><span class="govuk-visually-hidden">Send emails</span></label>
+                                </div>
                             </td>
-
-                            <td class="notification-row">
-                                <label for="@falseId" class="block-label selection-button-radio" aria-label="Stop emails">
-                                    @Html.RadioButton($"NotificationSettings[{i}].ReceiveNotifications", false, !setting.ReceiveNotifications, new { id = falseId })
-                                </label>
+                            <td class="govuk-table__cell">
+                                <div class="govuk-radios__item">
+                                    @Html.RadioButton($"NotificationSettings[{i}].ReceiveNotifications", false, !setting.ReceiveNotifications, new { id = falseId, @class = "govuk-radios__input" })
+                                    <label for="@falseId" class="govuk-label govuk-radios__label">
+                                        <span class="govuk-visually-hidden">Stop emails</span>
+                                    </label>
+                                </div>
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
 
-            <p><button type="submit" class="button">Update</button></p>
-            <p><a href="@Url.Action("Index", "Home")" class="text-link">Cancel</a></p>
+            <div class="govuk-button-group">
+                <button type="submit" class="govuk-button">Update</button>
+                <a href="@Url.Action("Index", "Home")" class="govuk-link">Cancel</a>
+            </div>
         </div>
     </div>
 </form>
 
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <a href="@Url.Action("Index", "Home")" aria-label="Back" class="back-link">Back</a>
-    </div>
+    <a href="@Url.Action("Index", "Home")" aria-label="Back" class="govuk-back-link">Back</a>
 }

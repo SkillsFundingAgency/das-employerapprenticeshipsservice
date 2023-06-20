@@ -1,9 +1,6 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetUserAornLock;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetUserAornLock
+public class GetUserAornLockRequest : IRequest<GetUserAornLockResponse>
 {
-    public class GetUserAornLockRequest : IAsyncRequest<GetUserAornLockResponse>
-    {
-        public string UserRef { get; set; }
-    }
+    public string UserRef { get; set; }
 }

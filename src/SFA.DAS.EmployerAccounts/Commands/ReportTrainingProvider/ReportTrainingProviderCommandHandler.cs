@@ -1,52 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using MediatR;
+﻿using System.Threading;
+using Microsoft.Extensions.Logging;
 using NServiceBus;
 using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Messages.Commands;
 
-namespace SFA.DAS.EmployerAccounts.Commands.ReportTrainingProvider
+namespace SFA.DAS.EmployerAccounts.Commands.ReportTrainingProvider;
+
+public class ReportTrainingProviderCommandHandler : IRequestHandler<ReportTrainingProviderCommand>
 {
-    public class ReportTrainingProviderCommandHandler : AsyncRequestHandler<ReportTrainingProviderCommand>
+    private const string ReportTrainingProviderTemplateId = "ReportTrainingProviderNotification";
+    private readonly EmployerAccountsConfiguration _configuration;
+    private readonly IMessageSession _publisher;
+    private readonly ILogger<ReportTrainingProviderCommandHandler> _logger;
+
+    public ReportTrainingProviderCommandHandler(
+        IMessageSession publisher,
+        ILogger<ReportTrainingProviderCommandHandler> logger,
+        EmployerAccountsConfiguration configuration)
     {
-        private const string ReportTrainingProviderTemplateId = "ReportTrainingProviderNotification";
-        private readonly EmployerAccountsConfiguration _configuration;
-        private readonly IMessageSession _publisher;
-        private readonly ILog _logger;
+        _publisher = publisher;
+        _logger = logger;
+        _configuration = configuration;
+    }
 
-        public ReportTrainingProviderCommandHandler(
-            IMessageSession publisher,
-            ILog logger,
-            EmployerAccountsConfiguration configuration)
+    public async Task<Unit> Handle(ReportTrainingProviderCommand message, CancellationToken cancellationToken)
+    {
+        var tokens = new Dictionary<string, string>()
         {
-            _publisher = publisher;
-            _logger = logger;
-            _configuration = configuration;
+            {"employer_email", message.EmployerEmailAddress },
+            {"email_reported_date", message.EmailReportedDate.ToString("g") },
+            {"training_provider", message.TrainingProvider },
+            {"training_provider_name", message.TrainingProviderName },
+            {"invitation_email_sent_date", message.InvitationEmailSentDate.ToString("g") },
+        };
+
+        if (string.IsNullOrWhiteSpace(_configuration.ReportTrainingProviderEmailAddress))
+        {
+            var exception = new InvalidConfigurationValueException(nameof(_configuration.ReportTrainingProviderEmailAddress));
+            _logger.LogError(exception, "Report Training Provider Email must be provided in configuration");
+            throw exception;
         }
 
-        protected override async Task HandleCore(ReportTrainingProviderCommand message)
-        {
-            var tokens = new Dictionary<string, string>()
-            {
-                {"employer_email", message.EmployerEmailAddress },
-                {"email_reported_date", message.EmailReportedDate.ToString("g") },
-                {"training_provider", message.TrainingProvider },
-                {"training_provider_name", message.TrainingProviderName },
-                {"invitation_email_sent_date", message.InvitationEmailSentDate.ToString("g") },
-             };
+        await _publisher.Send(new SendEmailCommand(ReportTrainingProviderTemplateId, _configuration.ReportTrainingProviderEmailAddress, tokens));
 
-            if (string.IsNullOrWhiteSpace(_configuration.ReportTrainingProviderEmailAddress))
-            {
-                var exception = new ArgumentNullException("reportTrainingProviderEmailAddress", "ReportTrainingProviderEmailAddress configuration value can not be blank.");
-                _logger.Error(exception, "Report Training Provider Email must be provided in configuration");
-                throw exception;
-            }
-
-            await _publisher.Send(new SendEmailCommand(ReportTrainingProviderTemplateId, _configuration.ReportTrainingProviderEmailAddress, tokens));
-
-        }
+        return Unit.Value;
     }
 }

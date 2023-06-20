@@ -1,20 +1,16 @@
 ﻿@{
     ViewBag.PageID = "page-not-found";
     ViewBag.Title = "Page not found";
-    ViewBag.HideNav = true;
+    ViewBag.ShowNav = false;
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Page not found</h1>
-        <p>If you entered a web address, check that it's correct. Or you can <a href="@Url.Action("Index","Home")">return to the homepage</a>.</p>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Page not found</h1>
+        <p>If you entered a web address, check that it's correct. Or you can <a href="@Url.Action("Index","Home")" class="govuk-link govuk-link--no-visited-state">return to the homepage</a>.</p>
     </div>
 </div>
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="/" class="back-link">Back to the homepage</a></li>
-        </ol>
-    </div>
+    <a href="/" class="govuk-back-link">Back to the homepage</a></li>
 }

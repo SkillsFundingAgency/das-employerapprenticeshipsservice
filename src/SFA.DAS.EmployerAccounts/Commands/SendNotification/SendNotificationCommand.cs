@@ -1,10 +1,8 @@
-﻿using MediatR;
-using SFA.DAS.Notifications.Api.Types;
+﻿using SFA.DAS.Notifications.Api.Types;
 
-namespace SFA.DAS.EmployerAccounts.Commands.SendNotification
+namespace SFA.DAS.EmployerAccounts.Commands.SendNotification;
+
+public class SendNotificationCommand : IRequest
 {
-    public class SendNotificationCommand : IAsyncRequest
-    {
-        public Email Email { get; set; }
-    }
+    public Email Email { get; set; }
 }

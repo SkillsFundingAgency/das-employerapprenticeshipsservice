@@ -3,14 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.EAS.Employer_Account.Database", "SFA.DAS.EAS.Employer_Account.Database\SFA.DAS.EAS.Employer_Account.Database.sqlproj", "{927A0BEA-B043-4A03-9311-F49CB60541D5}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PreReqs", "PreReqs", "{15DE899B-AD05-470D-B0F8-E5696141CA9A}"
-	ProjectSection(SolutionItems) = preProject
-		DevInstall.ps1 = DevInstall.ps1
-		GenCert.ps1 = GenCert.ps1
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Events", "SFA.DAS.EmployerAccounts.Events\SFA.DAS.EmployerAccounts.Events.csproj", "{0E46510C-0D06-4B63-8E17-B9037DB7C7ED}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AzureConfiguration", "AzureConfiguration", "{68328FF1-53F2-4737-A983-7E2B67179E17}"
@@ -19,8 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AzureConfiguration", "Azure
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Jobs", "SFA.DAS.EmployerAccounts.Jobs\SFA.DAS.EmployerAccounts.Jobs.csproj", "{C129093D-7F7E-4D89-92BF-55407553B191}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Host", "SFA.DAS.EmployerAccounts.Host\SFA.DAS.EmployerAccounts.Host.csproj", "{6D84017B-D6A3-433A-B66B-DCECAC37741E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.MessageHandlers", "SFA.DAS.EmployerAccounts.MessageHandlers\SFA.DAS.EmployerAccounts.MessageHandlers.csproj", "{41E84BA4-A174-4DD8-89A1-7F0B4E470E97}"
 EndProject
@@ -32,11 +22,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Me
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts", "SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj", "{B520A3E4-8259-4309-94D4-4A99FD32D2F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.Web", "SFA.DAS.EmployerAccounts.Web\SFA.DAS.EmployerAccounts.Web.csproj", "{4FFEA4C7-0E7D-4A5E-BFC4-1819CAF8905C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Web", "SFA.DAS.EmployerAccounts.Web\SFA.DAS.EmployerAccounts.Web.csproj", "{4FFEA4C7-0E7D-4A5E-BFC4-1819CAF8905C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Web.UnitTests", "SFA.DAS.EmployerAccounts.Web.UnitTests\SFA.DAS.EmployerAccounts.Web.UnitTests.csproj", "{7F16390B-E824-4EF9-86A1-7533235035CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.Api", "SFA.DAS.EmployerAccounts.Api\SFA.DAS.EmployerAccounts.Api.csproj", "{9B6A8DDB-BF37-406D-BA80-2EB8B18D9D90}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Api", "SFA.DAS.EmployerAccounts.Api\SFA.DAS.EmployerAccounts.Api.csproj", "{9B6A8DDB-BF37-406D-BA80-2EB8B18D9D90}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Api.UnitTests", "SFA.DAS.EmployerAccounts.Api.UnitTests\SFA.DAS.EmployerAccounts.Api.UnitTests.csproj", "{CF6BB8B3-3AA7-483C-B704-5C195FF95687}"
 EndProject
@@ -48,15 +38,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Ap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Jobs.UnitTests", "SFA.DAS.EmployerAccounts.Jobs.UnitTests\SFA.DAS.EmployerAccounts.Jobs.UnitTests.csproj", "{644B4794-B428-44CA-8A47-55A8136EE5CA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Certificates", "Certificates", "{30621570-5457-4505-9B76-D498FEF6C480}"
-	ProjectSection(SolutionItems) = preProject
-		DasAmlCert.pfx = DasAmlCert.pfx
-		DasIDPCert.pfx = DasIDPCert.pfx
-		GenCert.ps1 = GenCert.ps1
-		Certificates\localhost.pfx = Certificates\localhost.pfx
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.TestCommon", "SFA.DAS.EmployerAccounts.TestCommon\SFA.DAS.EmployerAccounts.TestCommon.csproj", "{87D578C3-4624-4260-8B19-0BC248117358}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.TestCommon", "SFA.DAS.EmployerAccounts.TestCommon\SFA.DAS.EmployerAccounts.TestCommon.csproj", "{87D578C3-4624-4260-8B19-0BC248117358}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.ReadStore", "SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore.csproj", "{51F0BA52-DCCD-4E6A-9F84-3BDFD501A06B}"
 EndProject
@@ -64,17 +46,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Ty
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.ReadStore.UnitTests", "SFA.DAS.EmployerAccounts.ReadStore.UnitTests\SFA.DAS.EmployerAccounts.ReadStore.UnitTests.csproj", "{80E4594E-FD83-4DD4-9458-053CDBFC6C60}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.ApiClient.TestHarness", "SFA.DAS.EmployerAccounts.ApiClient.TestHarness\SFA.DAS.EmployerAccounts.ApiClient.TestHarness.csproj", "{91342D1E-1DFC-45F0-8B20-BAAE1FFD16E8}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness", "SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness\SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness.csproj", "{FE91D5DB-E66E-4335-AFEA-8441FAB23FCD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.IntegrationTests", "SFA.DAS.EmployerAccounts.IntegrationTests\SFA.DAS.EmployerAccounts.IntegrationTests.csproj", "{9845E503-8B67-4F31-B2BD-202D1EC0D98F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.IntegrationTests", "SFA.DAS.EmployerAccounts.IntegrationTests\SFA.DAS.EmployerAccounts.IntegrationTests.csproj", "{9845E503-8B67-4F31-B2BD-202D1EC0D98F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Api.Types", "SFA.DAS.EmployerAccounts.Api.Types\SFA.DAS.EmployerAccounts.Api.Types.csproj", "{8057E87B-5893-45D0-93A1-6278EA8BA328}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.Api.IntegrationTests", "SFA.DAS.EmployerAccounts.Api.IntegrationTests\SFA.DAS.EmployerAccounts.Api.IntegrationTests.csproj", "{BD68EB2C-A486-42B2-8685-776B164FD860}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Api.IntegrationTests", "SFA.DAS.EmployerAccounts.Api.IntegrationTests\SFA.DAS.EmployerAccounts.Api.IntegrationTests.csproj", "{BD68EB2C-A486-42B2-8685-776B164FD860}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.Webjobs.Host", "SFA.DAS.EmployerAccounts.Webjobs.Host\SFA.DAS.EmployerAccounts.Webjobs.Host.csproj", "{9F64758B-428F-42F4-AB6D-7B6F0CD57260}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Webjobs.Host", "SFA.DAS.EmployerAccounts.Webjobs.Host\SFA.DAS.EmployerAccounts.Webjobs.Host.csproj", "{9F64758B-428F-42F4-AB6D-7B6F0CD57260}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.EmployerAccounts.Database", "SFA.DAS.EmployerAccounts.Database\SFA.DAS.EmployerAccounts.Database.sqlproj", "{927A0BEA-B043-4A03-9311-F49CB60541D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.Host", "SFA.DAS.EmployerAccounts.Host\SFA.DAS.EmployerAccounts.Host.csproj", "{DC987889-C0E0-4E8B-8E12-02ED6312A866}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -82,11 +66,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{927A0BEA-B043-4A03-9311-F49CB60541D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{927A0BEA-B043-4A03-9311-F49CB60541D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{927A0BEA-B043-4A03-9311-F49CB60541D5}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{927A0BEA-B043-4A03-9311-F49CB60541D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{927A0BEA-B043-4A03-9311-F49CB60541D5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0E46510C-0D06-4B63-8E17-B9037DB7C7ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0E46510C-0D06-4B63-8E17-B9037DB7C7ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E46510C-0D06-4B63-8E17-B9037DB7C7ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -95,10 +74,6 @@ Global
 		{C129093D-7F7E-4D89-92BF-55407553B191}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C129093D-7F7E-4D89-92BF-55407553B191}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C129093D-7F7E-4D89-92BF-55407553B191}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6D84017B-D6A3-433A-B66B-DCECAC37741E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6D84017B-D6A3-433A-B66B-DCECAC37741E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6D84017B-D6A3-433A-B66B-DCECAC37741E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6D84017B-D6A3-433A-B66B-DCECAC37741E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{41E84BA4-A174-4DD8-89A1-7F0B4E470E97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{41E84BA4-A174-4DD8-89A1-7F0B4E470E97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41E84BA4-A174-4DD8-89A1-7F0B4E470E97}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -163,10 +138,6 @@ Global
 		{80E4594E-FD83-4DD4-9458-053CDBFC6C60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80E4594E-FD83-4DD4-9458-053CDBFC6C60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80E4594E-FD83-4DD4-9458-053CDBFC6C60}.Release|Any CPU.Build.0 = Release|Any CPU
-		{91342D1E-1DFC-45F0-8B20-BAAE1FFD16E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{91342D1E-1DFC-45F0-8B20-BAAE1FFD16E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{91342D1E-1DFC-45F0-8B20-BAAE1FFD16E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{91342D1E-1DFC-45F0-8B20-BAAE1FFD16E8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FE91D5DB-E66E-4335-AFEA-8441FAB23FCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FE91D5DB-E66E-4335-AFEA-8441FAB23FCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE91D5DB-E66E-4335-AFEA-8441FAB23FCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -187,6 +158,16 @@ Global
 		{9F64758B-428F-42F4-AB6D-7B6F0CD57260}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F64758B-428F-42F4-AB6D-7B6F0CD57260}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F64758B-428F-42F4-AB6D-7B6F0CD57260}.Release|Any CPU.Build.0 = Release|Any CPU
+		{927A0BEA-B043-4A03-9311-F49CB60541D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{927A0BEA-B043-4A03-9311-F49CB60541D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{927A0BEA-B043-4A03-9311-F49CB60541D5}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{927A0BEA-B043-4A03-9311-F49CB60541D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{927A0BEA-B043-4A03-9311-F49CB60541D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{927A0BEA-B043-4A03-9311-F49CB60541D5}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{DC987889-C0E0-4E8B-8E12-02ED6312A866}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC987889-C0E0-4E8B-8E12-02ED6312A866}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC987889-C0E0-4E8B-8E12-02ED6312A866}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC987889-C0E0-4E8B-8E12-02ED6312A866}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -200,7 +181,6 @@ Global
 		{644B4794-B428-44CA-8A47-55A8136EE5CA} = {29FCFFB5-8496-46A7-BD41-889814DB9439}
 		{87D578C3-4624-4260-8B19-0BC248117358} = {29FCFFB5-8496-46A7-BD41-889814DB9439}
 		{80E4594E-FD83-4DD4-9458-053CDBFC6C60} = {29FCFFB5-8496-46A7-BD41-889814DB9439}
-		{91342D1E-1DFC-45F0-8B20-BAAE1FFD16E8} = {29FCFFB5-8496-46A7-BD41-889814DB9439}
 		{FE91D5DB-E66E-4335-AFEA-8441FAB23FCD} = {29FCFFB5-8496-46A7-BD41-889814DB9439}
 		{9845E503-8B67-4F31-B2BD-202D1EC0D98F} = {29FCFFB5-8496-46A7-BD41-889814DB9439}
 		{BD68EB2C-A486-42B2-8685-776B164FD860} = {29FCFFB5-8496-46A7-BD41-889814DB9439}

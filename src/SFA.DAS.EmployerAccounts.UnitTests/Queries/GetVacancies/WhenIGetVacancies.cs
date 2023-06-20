@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Recruit;
 using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetVacancies
 {
@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetVacancies
 
         private Mock<IRecruitService> _recruitService;
         private Vacancy _vacancy;
-        private Mock<ILog> _logger;
+        private Mock<ILogger<GetVacanciesRequestHandler>> _logger;
         private string _hashedAccountId;
 
         [SetUp]
@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetVacancies
             _hashedAccountId = "123ABC";
 
             _vacancy = new Vacancy();
-            _logger = new Mock<ILog>();
+            _logger = new Mock<ILogger<GetVacanciesRequestHandler>>();
 
             _recruitService = new Mock<IRecruitService>();
             _recruitService
@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetVacancies
         public async Task ThenIfTheMessageIsValidTheServiceIsCalled()
         {
             //Act
-            await RequestHandler.Handle(Query);
+            await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             _recruitService.Verify(x => x.GetVacancies(_hashedAccountId, int.MaxValue), Times.Once);
@@ -59,7 +59,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetVacancies
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Act
-            var response = await RequestHandler.Handle(Query);
+            var response = await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             Assert.Contains(_vacancy, (ICollection) response.Vacancies);

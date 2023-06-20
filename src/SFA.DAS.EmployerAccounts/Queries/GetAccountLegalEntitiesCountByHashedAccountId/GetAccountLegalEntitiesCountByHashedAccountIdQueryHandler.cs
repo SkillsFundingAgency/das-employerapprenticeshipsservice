@@ -1,57 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.HashingService;
-using SFA.DAS.Validation;
+﻿using System.Threading;
+using Microsoft.EntityFrameworkCore;
+using SFA.DAS.Encoding;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesCountByHashedAccountId
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesCountByHashedAccountId;
+
+public class GetAccountLegalEntitiesCountByHashedAccountIdQueryHandler : IRequestHandler<GetAccountLegalEntitiesCountByHashedAccountIdRequest, GetAccountLegalEntitiesCountByHashedAccountIdResponse>
 {
-    public class GetAccountLegalEntitiesCountByHashedAccountIdQueryHandler : IAsyncRequestHandler<GetAccountLegalEntitiesCountByHashedAccountIdRequest, GetAccountLegalEntitiesCountByHashedAccountIdResponse>
+    private readonly IEncodingService _encodingService;
+    private readonly Lazy<EmployerAccountsDbContext> _db;
+    private readonly IValidator<GetAccountLegalEntitiesCountByHashedAccountIdRequest> _validator;
+
+    public GetAccountLegalEntitiesCountByHashedAccountIdQueryHandler(
+        IEncodingService encodingService,
+        Lazy<EmployerAccountsDbContext> db,
+        IValidator<GetAccountLegalEntitiesCountByHashedAccountIdRequest> validator)
     {
-        private readonly IHashingService _hashingService;
-        private readonly Lazy<EmployerAccountsDbContext> _db;
-        private readonly IValidator<GetAccountLegalEntitiesCountByHashedAccountIdRequest> _validator;
+        _encodingService = encodingService;
+        _db = db;
+        _validator = validator;
+    }
 
-        public GetAccountLegalEntitiesCountByHashedAccountIdQueryHandler(
-            IHashingService hashingService,
-            Lazy<EmployerAccountsDbContext> db,
-            IValidator<GetAccountLegalEntitiesCountByHashedAccountIdRequest> validator)
+    public async Task<GetAccountLegalEntitiesCountByHashedAccountIdResponse> Handle(GetAccountLegalEntitiesCountByHashedAccountIdRequest message, CancellationToken cancellationToken)
+    {
+        var result = _validator.Validate(message);
+
+        if (!result.IsValid())
         {
-            _hashingService = hashingService;
-            _db = db;
-            _validator = validator;
+            throw new InvalidRequestException(result.ValidationDictionary);
         }
 
-        public async Task<GetAccountLegalEntitiesCountByHashedAccountIdResponse> Handle(GetAccountLegalEntitiesCountByHashedAccountIdRequest message)
+        if (_encodingService.TryDecode(message.HashedAccountId, EncodingType.AccountId, out var accountId))
         {
-            var result = _validator.Validate(message);
+            var accountSpecificLegalEntity = await _db.Value.AccountLegalEntities.CountAsync(ale => ale.AccountId == accountId && !ale.Deleted.HasValue, cancellationToken: cancellationToken);
 
-            if (!result.IsValid())
+            return new GetAccountLegalEntitiesCountByHashedAccountIdResponse
             {
-                throw new InvalidRequestException(result.ValidationDictionary);
-            }
+                LegalEntitiesCount = accountSpecificLegalEntity
+            };
+        }
 
-            if (_hashingService.TryDecodeValue(message.HashedAccountId, out var accountId))
+        throw new InvalidRequestException(
+            new Dictionary<string, string>
             {
-                var accountSpecificLegalEntity = await _db.Value.AccountLegalEntities.CountAsync(ale => ale.AccountId == accountId && !ale.Deleted.HasValue);
-
-                return new GetAccountLegalEntitiesCountByHashedAccountIdResponse
                 {
-                    LegalEntitiesCount = accountSpecificLegalEntity
-                };
-            }
-
-            throw new InvalidRequestException(
-                new Dictionary<string, string>
-                {
-                    {
-                        nameof(message.HashedAccountId), "Hashed account ID cannot be decoded."
-                    }
+                    nameof(message.HashedAccountId), "Hashed account ID cannot be decoded."
                 }
-            );
-        }
+            }
+        );
     }
 }

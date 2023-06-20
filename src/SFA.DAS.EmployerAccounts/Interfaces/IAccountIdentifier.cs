@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Interfaces
+﻿namespace SFA.DAS.EmployerAccounts.Interfaces;
+
+public interface IAccountIdentifier
 {
-    public interface IAccountIdentifier
-    {
-        string HashedAccountId { get; set; }
-    }
+    string HashedAccountId { get; set; }
 }

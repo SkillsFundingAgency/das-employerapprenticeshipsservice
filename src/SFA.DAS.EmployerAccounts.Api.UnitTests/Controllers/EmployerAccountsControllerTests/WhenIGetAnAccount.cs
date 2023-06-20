@@ -1,6 +1,7 @@
-﻿using System.Threading.Tasks;
-using System.Web.Http.Results;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Types;
@@ -25,19 +26,19 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.EmployerAccountsCon
                 }
             };
 
-            Mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountDetailByHashedIdQuery>()))
+            Mediator.Setup(x => x.Send(It.IsAny<GetEmployerAccountDetailByHashedIdQuery>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(accountsResponse);
-          
-            var response = await Controller.GetAccount(hashedAccountId);
+
+            var response = await Controller.GetAccount(hashedAccountId) as OkObjectResult;
 
             Assert.IsNotNull(response);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<AccountDetail>>(response);
-            var model = response as OkNegotiatedContentResult<AccountDetail>;
+            var model = response.Value as AccountDetail;
 
-            model?.Content?.Should().NotBeNull();
-            model?.Content?.AccountId.Should().Be(123);
-            model?.Content?.DasAccountName.Should().Be("Test 1");
-            model?.Content?.HashedAccountId.Should().Be(hashedAccountId);
+            Assert.IsInstanceOf<AccountDetail>(model);
+            model.Should().NotBeNull();
+            model.AccountId.Should().Be(123);
+            model.DasAccountName.Should().Be("Test 1");
+            model.HashedAccountId.Should().Be(hashedAccountId);
         }
     }
 }

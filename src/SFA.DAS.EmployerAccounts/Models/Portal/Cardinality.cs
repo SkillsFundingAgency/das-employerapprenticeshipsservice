@@ -1,10 +1,8 @@
-﻿
-namespace SFA.DAS.EmployerAccounts.Models.Portal
+﻿namespace SFA.DAS.EmployerAccounts.Models.Portal;
+
+public enum Cardinality
 {
-    public enum Cardinality
-    {
-        None,
-        One,
-        Many
-    }
+    None,
+    One,
+    Many
 }

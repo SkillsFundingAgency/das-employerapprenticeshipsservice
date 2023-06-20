@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using SFA.DAS.EmployerAccounts.Models;
+﻿using SFA.DAS.EmployerAccounts.Models;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetUserNotificationSettings
+namespace SFA.DAS.EmployerAccounts.Queries.GetUserNotificationSettings;
+
+public class GetUserNotificationSettingsQueryResponse
 {
-    public class GetUserNotificationSettingsQueryResponse
-    {
-        public List<UserNotificationSetting> NotificationSettings { get; set; }
-    }
+    public List<UserNotificationSetting> NotificationSettings { get; set; }
 }

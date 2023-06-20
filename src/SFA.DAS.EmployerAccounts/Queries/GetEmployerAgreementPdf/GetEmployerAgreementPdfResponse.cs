@@ -1,9 +1,8 @@
 ﻿using System.IO;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf
+namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
+
+public class GetEmployerAgreementPdfResponse
 {
-    public class GetEmployerAgreementPdfResponse
-    {
-        public Stream FileStream { get; set; }
-    }
+    public Stream FileStream { get; set; }
 }

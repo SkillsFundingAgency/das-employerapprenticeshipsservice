@@ -1,93 +1,73 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Reservations;
 using SFA.DAS.EmployerAccounts.Queries.GetReservations;
-using SFA.DAS.HashingService;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Validation;
 
-namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetReservations
+namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetReservations;
+
+public class WhenIGetReservations : QueryBaseTest<GetReservationsRequestHandler, GetReservationsRequest, GetReservationsResponse>
 {
-    public class WhenIGetReservations : QueryBaseTest<GetReservationsRequestHandler, GetReservationsRequest, GetReservationsResponse>
+    public override GetReservationsRequest Query { get; set; }
+    public override GetReservationsRequestHandler RequestHandler { get; set; }
+    public override Mock<IValidator<GetReservationsRequest>> RequestValidator { get; set; }
+
+    private Mock<IReservationsService> _reservationsService;
+    private Reservation _reservation;
+    private Mock<ILogger<GetReservationsRequestHandler>> _logger;
+    private long _accountId;
+
+
+    [SetUp]
+    public void Arrange()
     {
-        public override GetReservationsRequest Query { get; set; }
-        public override GetReservationsRequestHandler RequestHandler { get; set; }
-        public override Mock<IValidator<GetReservationsRequest>> RequestValidator { get; set; }
+        SetUp();
 
-        private Mock<IReservationsService> _reservationsService;
-        private Mock<IHashingService> _hashingService;
-        private Reservation _reservation;
-        private Mock<ILog> _logger;
-        private string _hashedAccountId;
-        private long _accountId;
+        _accountId = 123;
 
-        
-        [SetUp]
-        public void Arrange()
+        _reservation = new Reservation();
+        _logger = new Mock<ILogger<GetReservationsRequestHandler>>();
+
+        _reservationsService = new Mock<IReservationsService>();
+        _reservationsService
+            .Setup(s => s.Get(_accountId))
+            .ReturnsAsync(new List<Reservation> { _reservation });
+
+        RequestHandler = new GetReservationsRequestHandler(RequestValidator.Object, _logger.Object, _reservationsService.Object);
+
+        Query = new GetReservationsRequest
         {
-            SetUp();
+            AccountId = _accountId
+        };
+    }
 
-            _hashedAccountId = "123ABC";
-            _accountId = 123;
+    [Test]
+    public async Task ThenIfTheMessageIsValidTheServiceIsCalled()
+    {
+        //Act
+        await RequestHandler.Handle(Query, CancellationToken.None);
 
-            _reservation = new Reservation();
-            _logger = new Mock<ILog>();
+        //Assert
+        _reservationsService.Verify(x => x.Get(_accountId), Times.Once);
+    }
 
-            _reservationsService = new Mock<IReservationsService>();
-            _reservationsService
-                .Setup(s => s.Get(_accountId))
-                .ReturnsAsync(new List<Reservation> { _reservation });
+    [Test]
+    public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
+    {
+        //Act
+        var response = await RequestHandler.Handle(Query, CancellationToken.None);
 
-            _hashingService = new Mock<IHashingService>();
-            _hashingService
-                .Setup(m => m.DecodeValue(_hashedAccountId))
-                .Returns(_accountId);
-            
-            RequestHandler = new GetReservationsRequestHandler(RequestValidator.Object, _logger.Object, _reservationsService.Object, _hashingService.Object);
+        //Assert
+        Assert.Contains(_reservation, (ICollection)response.Reservations);
+    }
 
-            Query = new GetReservationsRequest
-            {
-                HashedAccountId = _hashedAccountId
-            };
-        }
-
-        [Test]
-        public async Task ThenIfTheMessageIsValidTheServiceIsCalled()
-        {
-            //Act
-            await RequestHandler.Handle(Query);
-
-            //Assert
-            _reservationsService.Verify(x => x.Get(_accountId), Times.Once);
-        }
-
-        [Test]
-        public async Task ThenIfTheMessageIsValidTheHashingServiceIsCalled()
-        {
-            //Act
-            await RequestHandler.Handle(Query);
-
-            //Assert
-            _hashingService.Verify(x => x.DecodeValue(_hashedAccountId), Times.Once);
-        }
-
-        [Test]
-        public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
-        {
-            //Act
-            var response = await RequestHandler.Handle(Query);
-
-            //Assert
-            Assert.Contains(_reservation, (ICollection) response.Reservations);
-        }
-
-        public override Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
-        {
-            throw new System.NotImplementedException();
-        }
+    public override Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
+    {
+        throw new System.NotImplementedException();
     }
 }

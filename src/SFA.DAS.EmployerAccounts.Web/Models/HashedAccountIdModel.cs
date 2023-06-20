@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Web.Models
+﻿namespace SFA.DAS.EmployerAccounts.Web.Models;
+
+public class HashedAccountIdModel
 {
-    public class HashedAccountIdModel
-    {
-        public string Value { get; set; }
-    }
+    public string Value { get; set; }
 }

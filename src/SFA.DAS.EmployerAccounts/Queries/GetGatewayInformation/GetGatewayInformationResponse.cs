@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Queries.GetGatewayInformation
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetGatewayInformation;
+
+public class GetGatewayInformationResponse
 {
-    public class GetGatewayInformationResponse
-    {
-        public string Url { get; set; }
-    }
+    public string Url { get; set; }
 }

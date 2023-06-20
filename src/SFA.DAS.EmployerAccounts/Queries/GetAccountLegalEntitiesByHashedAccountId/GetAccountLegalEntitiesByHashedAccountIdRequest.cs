@@ -1,9 +1,6 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesByHashedAccountId;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesByHashedAccountId
+public class GetAccountLegalEntitiesByHashedAccountIdRequest : IRequest<GetAccountLegalEntitiesByHashedAccountIdResponse>
 {
-    public class GetAccountLegalEntitiesByHashedAccountIdRequest : IAsyncRequest<GetAccountLegalEntitiesByHashedAccountIdResponse>
-    {
-        public string HashedAccountId { get; set; }
-    }
+    public string HashedAccountId { get; set; }
 }

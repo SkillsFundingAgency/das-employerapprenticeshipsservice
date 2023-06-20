@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using MediatR;
 using Moq;
 using NServiceBus;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.EmployerAccounts;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
-using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.Testing;
 
@@ -44,12 +44,12 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Emplo
         public DateTime Created = DateTime.Now.AddMinutes(-1);
 
         public Mock<IMessageHandlerContext> MessageHandlerContext;
-        public Mock<IReadStoreMediator> ReadStoreMediator;
+        public Mock<IMediator> ReadStoreMediator;
         public AccountUserRolesUpdatedEventHandler Handler;
 
         public UserRolesUpdatedEventHandlerTestsFixture()
         {
-            ReadStoreMediator = new Mock<IReadStoreMediator>();
+            ReadStoreMediator = new Mock<IMediator>();
             MessageHandlerContext = new Mock<IMessageHandlerContext>();
             MessageHandlerContext.Setup(x => x.MessageId).Returns(MessageId);
 

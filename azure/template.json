@@ -138,6 +138,12 @@
         "utcValue": {
             "type": "string",
             "defaultValue": "[utcNow()]"
+        },
+        "cdnUrl": {
+            "type": "string"
+        },
+        "stubAuth": {
+            "type": "string"
         }
     },
     "variables": {
@@ -148,7 +154,9 @@
         "workerAppServiceName": "[concat(variables('resourceNamePrefix'), 'wkr-as')]",
         "workerAppServicePlanName": "[concat(variables('resourceNamePrefix'), 'wkr-asp')]",
         "resourceGroupName": "[concat(variables('resourceNamePrefix'), '-rg')]",
-        "cosmosDbName": "[concat(variables('resourceNamePrefix'), '-cdb')]"
+        "cosmosDbName": "[concat(variables('resourceNamePrefix'), '-cdb')]",
+        "configNames": "SFA.DAS.EmployerAccounts,SFA.DAS.EmployerAccounts.ReadStore,SFA.DAS.EmployerAccounts.Notifications,SFA.DAS.ReferenceDataApiClient,SFA.DAS.Encoding,SFA.DAS.Employer.GovSignIn",
+        "configNamesApi": "SFA.DAS.EmployerAccounts,SFA.DAS.Encoding"
     },
     "resources": [
         {
@@ -309,6 +317,10 @@
                         "value": {
                             "array": [
                                 {
+                                    "name": "ResourceEnvironmentName",
+                                    "value": "[parameters('resourceEnvironmentName')]"
+                                },
+                                {
                                     "name": "LoggingRedisConnectionString",
                                     "value": "[parameters('loggingRedisConnectionString')]"
                                 },
@@ -325,12 +337,16 @@
                                     "value": "[parameters('environmentName')]"
                                 },
                                 {
+                                    "name": "ASPNETCORE_ENVIRONMENT",
+                                    "value": "[toUpper(parameters('environmentName'))]"
+                                },
+                                {
                                     "name": "StorageConnectionString",
                                     "value": "[parameters('sharedStorageAccountConnectionString')]"
                                 },
                                 {
-                                    "name": "InstrumentationKey",
-                                    "value": "[reference(concat(variables('uiAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.InstrumentationKey.value]"
+                                    "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                                    "value": "[reference(concat(variables('uiAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.ConnectionString.value]"
                                 },
                                 {
                                     "name": "WEBSITE_LOAD_CERTIFICATES",
@@ -339,6 +355,18 @@
                                 {
                                     "name": "TokenCertificateThumbprint",
                                     "value": "[parameters('employerUsersTokenSigningCertificateThumbprint')]"
+                                },
+                                {
+                                    "name": "ConfigNames",
+                                    "value": "[variables('configNames')]"
+                                },
+                                {
+                                    "name": "Cdn:Url",
+                                    "value": "[parameters('cdnUrl')]"
+                                },
+                                {
+                                    "name": "StubAuth",
+                                    "value": "[parameters('stubAuth')]"
                                 }
                             ]
                         }
@@ -424,8 +452,8 @@
                                     "value": "[parameters('environmentName')]"
                                 },
                                 {
-                                    "name": "InstrumentationKey",
-                                    "value": "[reference(concat(variables('apiAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.InstrumentationKey.value]"
+                                    "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                                    "value": "[reference(concat(variables('apiAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.ConnectionString.value]"
                                 },
                                 {
                                     "name": "IdaTenant",
@@ -434,6 +462,14 @@
                                 {
                                     "name": "AccountsApiIdentifierUri",
                                     "value": "[parameters('accountsApiIdentifierUri')]"
+                                },
+                                {
+                                    "name": "ConfigNames",
+                                    "value": "[variables('configNamesApi')]"
+                                },
+                                {
+                                    "name": "ASPNETCORE_ENVIRONMENT",
+                                    "value": "[toUpper(parameters('environmentName'))]"
                                 }
                             ]
                         }
@@ -579,8 +615,12 @@
                                     "value": "[parameters('sharedStorageAccountConnectionString')]"
                                 },
                                 {
-                                    "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                                    "value": "[reference(concat(variables('workerAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.InstrumentationKey.value]"
+                                    "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                                    "value": "[reference(concat(variables('workerAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.ConnectionString.value]"
+                                },
+                                {
+                                    "name": "WEBSITE_RUN_FROM_PACKAGE",
+                                    "value": "0"
                                 }
                             ]
                         }

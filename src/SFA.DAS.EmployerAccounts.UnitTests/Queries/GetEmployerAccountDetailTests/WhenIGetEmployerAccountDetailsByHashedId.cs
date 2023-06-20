@@ -1,11 +1,10 @@
-﻿using System;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountDetail;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountDetailTests
 {
@@ -37,7 +36,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountDetailTes
             await RequestHandler.Handle(new GetEmployerAccountDetailByHashedIdQuery
             {
                 HashedAccountId = ExpectedHashedAccountId
-            });
+            }, CancellationToken.None);
 
             //Assert
             _employerAccountRepository.Verify(x => x.GetAccountDetailByHashedId(ExpectedHashedAccountId));
@@ -50,7 +49,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountDetailTes
             var result = await RequestHandler.Handle(new GetEmployerAccountDetailByHashedIdQuery
             {
                 HashedAccountId = ExpectedHashedAccountId
-            });
+            }, CancellationToken.None);
 
             //Assert
             Assert.IsNotNull(result);

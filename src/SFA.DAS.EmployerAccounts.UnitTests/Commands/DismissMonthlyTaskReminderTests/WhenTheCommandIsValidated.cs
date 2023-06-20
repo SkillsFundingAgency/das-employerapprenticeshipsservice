@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.DismissMonthlyTaskReminder;
-using SFA.DAS.Tasks.API.Types.Enums;
+using SFA.DAS.EmployerAccounts.TasksApi;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.DismissMonthlyTaskReminderTests
 {

@@ -1,18 +1,17 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.ModelBuilders;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess.Adapters;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess.Dtos;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
+using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 using SFA.DAS.Testing.Helpers;
-using SFA.DAS.NLog.Logger;
-using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
 {
@@ -21,48 +20,37 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
     {
         private const string ServiceName = "SFA.DAS.EmployerAccounts";
 
-        private readonly IContainer _container;
-        private readonly IHashingService _hashingService;
-        private readonly IPublicHashingService _publicHashingService;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly IEncodingService? _encodingService;
         private readonly EmployerAccountsDbContext _dbContext;
         private readonly Lazy<IAccountRepository> _lazyAccountRepository;
         private readonly Lazy<IUserRepository> _lazyUserRepository;
-        private EmployerAccountsConfiguration _configuration;
+        private readonly EmployerAccountsConfiguration _configuration;
 
-        public EmployerAccountsDbBuilder(IContainer container)
+        public EmployerAccountsDbBuilder(IServiceProvider serviceProvider)
         {
-            _container = container;
+            _serviceProvider = serviceProvider;
 
             _configuration = ConfigurationTestHelper.GetConfiguration<EmployerAccountsConfiguration>(ServiceName);
 
-            _hashingService = _container.GetInstance<IHashingService>();
-            _publicHashingService = _container.GetInstance<IPublicHashingService>();
+            _encodingService = _serviceProvider.GetService<IEncodingService>();
+            var sqlConnection = DatabaseExtensions.GetSqlConnection(_configuration.DatabaseConnectionString);
+            var optionsBuilder = new DbContextOptionsBuilder<EmployerAccountsDbContext>();
+            optionsBuilder.UseSqlServer(sqlConnection);
+            _dbContext = new EmployerAccountsDbContext(optionsBuilder.Options);
 
-            _dbContext = new EmployerAccountsDbContext(_configuration.DatabaseConnectionString);
-
-            _lazyAccountRepository = new  Lazy<IAccountRepository>(buildAccountRepository);
-            _lazyUserRepository = new Lazy<IUserRepository>(buildUserRepository);
-
+            _lazyAccountRepository = new Lazy<IAccountRepository>(BuildAccountRepository);
+            _lazyUserRepository = new Lazy<IUserRepository>(BuildUserRepository);
         }
 
-        private IUserRepository buildUserRepository()
+        private IUserRepository BuildUserRepository()
         {
-            return 
-                new UserRepository(
-                    _configuration,
-                    _container.GetInstance<ILog>(),
-                    new Lazy<EmployerAccountsDbContext>(() => _dbContext)
-                    );
+            return new UserRepository(new Lazy<EmployerAccountsDbContext>(() => _dbContext));
         }
 
-        private IAccountRepository buildAccountRepository()
+        private IAccountRepository BuildAccountRepository()
         {
-            return
-                new AccountRepository(
-                    _configuration,
-                    _container.GetInstance<ILog>(),
-                    new Lazy<EmployerAccountsDbContext>(() => _dbContext),
-                    _container.GetInstance<IAccountLegalEntityPublicHashingService>());
+            return new AccountRepository(new Lazy<EmployerAccountsDbContext>(() => _dbContext), _encodingService);
         }
 
         public bool HasTransaction => _dbContext.Database.CurrentTransaction != null;
@@ -98,32 +86,34 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
             return output;
         }
 
-        public async Task<EmployerAccountOutput> CreateAccountAsync(EmployerAccountInput input)
+        public async Task<EmployerAccountOutput?> CreateAccountAsync(EmployerAccountInput input)
         {
             var createResult = await _lazyAccountRepository.Value.CreateAccount(
-                new CreateAccountParams { 
-                UserId = input.UserId(),
-                EmployerNumber = input.OrganisationReferenceNumber,
-                EmployerName = input.OrganisationName,
-                EmployerRegisteredAddress = input.OrganisationRegisteredAddress,
-                EmployerDateOfIncorporation = input.OrganisationDateOfInception,
-                EmployerRef = input.PayeReference,
-                AccessToken = input.AccessToken,
-                RefreshToken = input.RefreshToken,
-                CompanyStatus = input.OrganisationStatus,
-                EmployerRefName = input.EmployerRefName,
-                Source = input.Source,
-                PublicSectorDataSource = input.PublicSectorDataSource,
-                Sector = input.Sector,
-                Aorn = input.Aorn,
-                AgreementType = input.AgreementType});
+                new CreateAccountParams
+                {
+                    UserId = input.UserId(),
+                    EmployerNumber = input.OrganisationReferenceNumber,
+                    EmployerName = input.OrganisationName,
+                    EmployerRegisteredAddress = input.OrganisationRegisteredAddress,
+                    EmployerDateOfIncorporation = input.OrganisationDateOfInception,
+                    EmployerRef = input.PayeReference,
+                    AccessToken = input.AccessToken,
+                    RefreshToken = input.RefreshToken,
+                    CompanyStatus = input.OrganisationStatus,
+                    EmployerRefName = input.EmployerRefName,
+                    Source = input.Source,
+                    PublicSectorDataSource = input.PublicSectorDataSource,
+                    Sector = input.Sector,
+                    Aorn = input.Aorn,
+                    AgreementType = input.AgreementType
+                });
 
             var output = new EmployerAccountOutput
             {
                 AccountId = createResult.AccountId,
-                HashedAccountId = _hashingService.HashValue(createResult.AccountId),
-                PublicHashedAccountId = _publicHashingService.HashValue(createResult.AccountId),
-                LegalEntityId =  createResult.LegalEntityId
+                HashedAccountId = _encodingService?.Encode(createResult.AccountId, EncodingType.AccountId),
+                PublicHashedAccountId = _encodingService?.Encode(createResult.AccountId, EncodingType.PublicAccountId),
+                LegalEntityId = createResult.LegalEntityId
             };
 
             await _lazyAccountRepository.Value.UpdateAccountHashedIds(output.AccountId, output.HashedAccountId, output.PublicHashedAccountId);
@@ -140,7 +130,8 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
             {
                 EmployerAgreementId = view.Id,
                 LegalEntityId = view.LegalEntityId,
-                HashedAgreementId = view.HashedAgreementId
+                // TODO: maybe
+                //HashedAgreementId = view.HashedAgreementId
             };
 
             return output;
@@ -181,7 +172,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
                 throw new InvalidOperationException("Cannot commit a transaction because a transaction has not been started");
             }
 
-            _dbContext.Database.CurrentTransaction.Commit();
+            _dbContext.Database.CurrentTransaction?.Commit();
         }
 
         public void RollbackTransaction()
@@ -191,14 +182,14 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
                 throw new InvalidOperationException("Cannot rollback a transaction because a transaction has not been started");
             }
 
-            _dbContext.Database.CurrentTransaction.Rollback();
+            _dbContext.Database.CurrentTransaction?.Rollback();
         }
 
         public void Dispose()
         {
             if (!HasTransaction) return;
 
-            _dbContext.Database.CurrentTransaction.Dispose();
+            _dbContext.Database.CurrentTransaction?.Dispose();
         }
     }
 }

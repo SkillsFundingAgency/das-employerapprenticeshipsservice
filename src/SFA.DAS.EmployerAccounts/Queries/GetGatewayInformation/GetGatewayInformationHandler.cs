@@ -1,23 +1,21 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.Hmrc;
+﻿using System.Threading;
+using SFA.DAS.EmployerAccounts.Interfaces.Hmrc;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetGatewayInformation
+namespace SFA.DAS.EmployerAccounts.Queries.GetGatewayInformation;
+
+public class GetGatewayInformationHandler : IRequestHandler<GetGatewayInformationQuery, GetGatewayInformationResponse>
 {
-    public class GetGatewayInformationHandler : IAsyncRequestHandler<GetGatewayInformationQuery, GetGatewayInformationResponse>
+    private readonly IHmrcService _hmrcService;
+
+    public GetGatewayInformationHandler(IHmrcService hmrcService)
     {
-        private readonly IHmrcService _hmrcService;
+        _hmrcService = hmrcService;
+    }
 
-        public GetGatewayInformationHandler(IHmrcService hmrcService)
-        {
-            _hmrcService = hmrcService;
-        }
+    public Task<GetGatewayInformationResponse> Handle(GetGatewayInformationQuery message, CancellationToken cancellationToken)
+    {
+        var returnUrl = _hmrcService.GenerateAuthRedirectUrl(message.ReturnUrl);
 
-        public Task<GetGatewayInformationResponse> Handle(GetGatewayInformationQuery message)
-        {
-            var returnUrl = _hmrcService.GenerateAuthRedirectUrl(message.ReturnUrl);
-
-            return Task.FromResult(new GetGatewayInformationResponse { Url = returnUrl });
-        }
+        return Task.FromResult(new GetGatewayInformationResponse { Url = returnUrl });
     }
 }

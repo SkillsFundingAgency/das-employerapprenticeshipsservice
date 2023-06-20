@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Web.Models
+﻿namespace SFA.DAS.EmployerAccounts.Web.Models;
+
+public class ReturnUrlModel
 {
-    public class ReturnUrlModel
-    {
-        public string Value { get; set; }
-    }
+    public string Value { get; set; }
 }

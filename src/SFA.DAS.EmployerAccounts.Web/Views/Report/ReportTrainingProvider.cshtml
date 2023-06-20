@@ -1,18 +1,17 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
-@{ViewBag.PageID = "thanks-for-letting-us-know"; }
-@{ViewBag.Title = "Thanks for letting us know"; }
-@{ViewBag.MetaDesc = "Thanks for letting us know"; }
-@{ViewBag.HideNav = true; }
-
 @{
+    ViewBag.PageID = "thanks-for-letting-us-know";
+    ViewBag.Title = "Thanks for letting us know";
+    ViewBag.MetaDesc = "Thanks for letting us know";
+    ViewBag.ShowNav = false;
     ViewBag.GaData.Vpv = "/thanks-for-letting-us-know";
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-large">
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">
             @ViewBag.Title
-        </h1>     
+        </h1>
         <p>We will look into why you got this invitation. You can close this window.</p>
     </div>
 </div>

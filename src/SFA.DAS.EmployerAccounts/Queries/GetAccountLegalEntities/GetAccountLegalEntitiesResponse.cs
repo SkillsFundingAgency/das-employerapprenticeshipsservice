@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using SFA.DAS.EmployerAccounts.Models.Account;
+﻿using SFA.DAS.EmployerAccounts.Models.Account;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities;
+
+public class GetAccountLegalEntitiesResponse
 {
-    public class GetAccountLegalEntitiesResponse
-    {
-        public List<AccountSpecificLegalEntity> LegalEntities { get; set; }
-    }
+    public List<AccountSpecificLegalEntity> LegalEntities { get; set; }
 }

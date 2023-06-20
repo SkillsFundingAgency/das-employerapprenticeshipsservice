@@ -1,82 +1,91 @@
-﻿using SFA.DAS.EmployerAccounts.Api.Attributes;
+﻿using System.Net;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.EmployerAccounts.Api.Authorization;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
 using SFA.DAS.EmployerAccounts.Api.Types;
+using SFA.DAS.Encoding;
 
-namespace SFA.DAS.EmployerAccounts.Api.Controllers
+namespace SFA.DAS.EmployerAccounts.Api.Controllers;
+
+[Route("api/accounts")]
+[ApiController]
+public class EmployerAccountsController : ControllerBase
 {
-    [RoutePrefix("api/accounts")]
-    public class EmployerAccountsController : ApiController
+    private readonly AccountsOrchestrator _orchestrator;
+    private readonly IEncodingService _encodingService;
+
+    public EmployerAccountsController(AccountsOrchestrator orchestrator, IEncodingService encodingService)
     {
-        private readonly AccountsOrchestrator _orchestrator;
-      
-        public EmployerAccountsController(AccountsOrchestrator orchestrator)
+        _orchestrator = orchestrator;
+        _encodingService = encodingService;
+    }
+
+    [Route("", Name = "AccountsIndex")]
+    [Authorize(Policy = ApiRoles.ReadAllEmployerAccountBalances)]
+    [HttpGet]
+    public async Task<IActionResult> GetAccounts(string toDate = null, int pageSize = 1000, int pageNumber = 1)
+    {
+        var result = await _orchestrator.GetAccounts(toDate, pageSize, pageNumber);
+
+        foreach (var account in result.Data)
         {
-            _orchestrator = orchestrator;
+            account.Href = Url.RouteUrl("GetAccount", new { hashedAccountId = account.AccountHashId });
         }
 
-        [Route("", Name = "AccountsIndex")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetAccounts(string toDate = null, int pageSize = 1000, int pageNumber = 1)
-        {
-            var result = await _orchestrator.GetAccounts(toDate, pageSize, pageNumber);
+        return Ok(result);
+    }
 
-            result.Data.ForEach(x => x.Href = Url.Route("GetAccount", new { hashedAccountId = x.AccountHashId }));
-            return Ok(result);
-        }
+    [Route("{hashedAccountId}", Name = "GetAccount")]
+    [Authorize(Policy = ApiRoles.ReadAllEmployerAccountBalances)]
+    [HttpGet]
+    public async Task<IActionResult> GetAccount(string hashedAccountId)
+    {
+        var result = await _orchestrator.GetAccount(hashedAccountId);
 
-        [Route("{hashedAccountId}", Name = "GetAccount")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetAccount(string hashedAccountId)
-        {
-            var result = await _orchestrator.GetAccount(hashedAccountId);
+        if (result == null) return NotFound();
 
-            if (result == null) return NotFound();
-             
-            result.LegalEntities.ForEach(x => CreateGetLegalEntityLink(hashedAccountId, x));
-            result.PayeSchemes.ForEach(x => CreateGetPayeSchemeLink(hashedAccountId, x));
-            return Ok(result);
-        }
+        result.LegalEntities.ForEach(x => CreateGetLegalEntityLink(hashedAccountId, x));
+        result.PayeSchemes.ForEach(x => CreateGetPayeSchemeLink(hashedAccountId, x));
+        return Ok(result);
+    }
 
-        [Route("{hashedAccountId}/users", Name = "GetAccountUsers")]
-        [ApiAuthorize(Roles = "ReadAllAccountUsers")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetAccountUsers(string hashedAccountId)
-        {
-            var result = await _orchestrator.GetAccountTeamMembers(hashedAccountId);
-            return Ok(result);
-        }
+    [Route("{hashedAccountId}/users", Name = "GetAccountUsers")]
+    [Authorize(Policy = ApiRoles.ReadAllAccountUsers)]
+    [HttpGet]
+    public async Task<IActionResult> GetAccountUsers(string hashedAccountId)
+    {
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+        var result = await _orchestrator.GetAccountTeamMembers(accountId);
+        return Ok(result);
+    }
 
-        [Route("internal/{accountId}/users", Name = "GetAccountUsersByInternalAccountId")]
-        [ApiAuthorize(Roles = "ReadAllAccountUsers")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetAccountUsers(long accountId)
-        {
-            var result = await _orchestrator.GetAccountTeamMembers(accountId);
-            return Ok(result);
-        }
+    [Route("internal/{accountId}/users", Name = "GetAccountUsersByInternalAccountId")]
+    [Authorize(Policy = ApiRoles.ReadAllAccountUsers)]
+    [HttpGet]
+    public async Task<IActionResult> GetAccountUsers(long accountId)
+    {
+        var result = await _orchestrator.GetAccountTeamMembers(accountId);
+        return Ok(result);
+    }
 
-        [Route("internal/{accountId}/users/which-receive-notifications", Name = "GetAccountUsersByInteralIdWhichReceiveNotifications")]
-        [ApiAuthorize(Roles = "ReadAllAccountUsers")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetAccountUsersWhichReceiveNotifications(long accountId)
-        {
-            var result = await _orchestrator.GetAccountTeamMembersWhichReceiveNotifications(accountId);
-            return Ok(result);
-        }
+    [Route("internal/{accountId}/users/which-receive-notifications", Name = "GetAccountUsersByInteralIdWhichReceiveNotifications")]
+    [Authorize(Policy = ApiRoles.ReadAllAccountUsers)]
+    [HttpGet]
+    public async Task<IActionResult> GetAccountUsersWhichReceiveNotifications(long accountId)
+    {
+        var result = await _orchestrator.GetAccountTeamMembersWhichReceiveNotifications(accountId);
+        return Ok(result);
+    }
 
-        private void CreateGetLegalEntityLink(string hashedAccountId, Resource legalEntity)
-        {
-            legalEntity.Href = Url.Route("GetLegalEntity", new { hashedAccountId, legalEntityId = legalEntity.Id });
-        }
+    private void CreateGetLegalEntityLink(string hashedAccountId, Resource legalEntity)
+    {
+        legalEntity.Href = Url.RouteUrl("GetLegalEntity", new { hashedAccountId, legalEntityId = legalEntity.Id });
+    }
 
-        private void CreateGetPayeSchemeLink(string hashedAccountId, Resource payeScheme)
-        {
-            payeScheme.Href = Url.Route("GetPayeScheme", new { hashedAccountId, payeSchemeRef = HttpUtility.UrlEncode(payeScheme.Id) });
-        }
+    private void CreateGetPayeSchemeLink(string hashedAccountId, Resource payeScheme)
+    {
+        payeScheme.Href = Url.RouteUrl("GetPayeScheme", new { hashedAccountId, payeSchemeRef = WebUtility.UrlEncode(payeScheme.Id) });
     }
 }

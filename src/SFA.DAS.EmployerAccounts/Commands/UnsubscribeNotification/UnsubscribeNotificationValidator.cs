@@ -1,30 +1,26 @@
-using System.Threading.Tasks;
-using SFA.DAS.Validation;
+namespace SFA.DAS.EmployerAccounts.Commands.UnsubscribeNotification;
 
-namespace SFA.DAS.EmployerAccounts.Commands.UnsubscribeNotification
+public class UnsubscribeNotificationValidator : IValidator<UnsubscribeNotificationCommand>
 {
-    public class UnsubscribeNotificationValidator : IValidator<UnsubscribeNotificationCommand>
+    public ValidationResult Validate(UnsubscribeNotificationCommand item)
     {
-        public ValidationResult Validate(UnsubscribeNotificationCommand item)
+        var validationResult = new ValidationResult();
+
+        if (string.IsNullOrEmpty(item.UserRef))
         {
-            var validationResult = new ValidationResult();
-
-            if (string.IsNullOrEmpty(item.UserRef))
-            {
-                validationResult.AddError(nameof(item.UserRef), "User id cannot be null");
-            }
-
-            if (item.AccountId < 1)
-            {
-                validationResult.AddError(nameof(item.AccountId), "Account id must be more that 0");
-            }
-
-            return validationResult;
+            validationResult.AddError(nameof(item.UserRef), "User id cannot be null");
         }
 
-        public Task<ValidationResult> ValidateAsync(UnsubscribeNotificationCommand item)
+        if (item.AccountId < 1)
         {
-            throw new System.NotImplementedException();
+            validationResult.AddError(nameof(item.AccountId), "Account id must be more that 0");
         }
+
+        return validationResult;
+    }
+
+    public Task<ValidationResult> ValidateAsync(UnsubscribeNotificationCommand item)
+    {
+        return Task.FromResult(Validate(item));
     }
 }

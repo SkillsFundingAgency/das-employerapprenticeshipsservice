@@ -1,47 +1,37 @@
-﻿using Microsoft.Azure.WebJobs;
-using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Jobs.DependencyResolution;
-using SFA.DAS.EmployerAccounts.Jobs.StartupJobs;
-using Microsoft.Extensions.Logging;
-using SFA.DAS.AutoConfiguration;
+﻿using SFA.DAS.EmployerAccounts.Jobs.Extensions;
 using SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
+using SFA.DAS.EmployerAccounts.Jobs.StartupJobs;
 
-namespace SFA.DAS.EmployerAccounts.Jobs
+namespace SFA.DAS.EmployerAccounts.Jobs;
+
+public class Program
 {
-    public class Program
+    public static async Task Main()
     {
-        public static void Main()
+        using (var host = CreateHost())
         {
-            Task.Run(MainAsync).GetAwaiter().GetResult();
+            await SeedData(host);
+
+            await host.RunAsync();
         }
+    }
 
-        public static async Task MainAsync()
-        {
-            using (var container = IoC.Initialize())
-            {
-                var startup = container.GetInstance<EndpointStartup>();
-                var config = new JobHostConfiguration { JobActivator = new StructureMapJobActivator(container) };
-                var isDevelopment = container.GetInstance<IEnvironmentService>().IsCurrent(DasEnv.LOCAL);
+    private static async Task SeedData(IHost host)
+    {
+        var readStoreDatabaseJob = host.Services.GetService<CreateReadStoreDatabaseJob>();
+        var seedAccountUsersJob = host.Services.GetService<SeedAccountUsersJob>();
 
-                if (isDevelopment)
-                {
-                    config.UseDevelopmentSettings();
-                }
+        await readStoreDatabaseJob.Run();
+        await seedAccountUsersJob.Run();
+    }
 
-                config.LoggerFactory = container.GetInstance<ILoggerFactory>();
-
-                config.UseTimers();
-
-                var jobHost = new JobHost(config);
-
-                await startup.StartAsync();
-                await jobHost.CallAsync(typeof(CreateReadStoreDatabaseJob).GetMethod(nameof(CreateReadStoreDatabaseJob.Run)));
-                await jobHost.CallAsync(typeof(SeedAccountUsersJob).GetMethod(nameof(SeedAccountUsersJob.Run)));
-
-                jobHost.RunAndBlock();
-
-                await startup.StopAsync();
-            }
-        }
+    private static IHost CreateHost()
+    {
+        return new HostBuilder()
+            .ConfigureDasAppConfiguration()
+            .ConfigureDasWebJobs()
+            .ConfigureDasLogging()
+            .ConfigureDasServices()
+            .Build();
     }
 }

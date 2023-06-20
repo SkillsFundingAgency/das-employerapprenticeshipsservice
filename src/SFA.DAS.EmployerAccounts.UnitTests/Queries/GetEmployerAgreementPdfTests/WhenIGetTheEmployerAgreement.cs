@@ -1,85 +1,82 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
-using SFA.DAS.HashingService;
-using SFA.DAS.Testing.EntityFramework;
-using SFA.DAS.Validation;
+using SFA.DAS.EmployerAccounts.TestCommon.DatabaseMock;
 
-namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementPdfTests
+namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementPdfTests;
+
+public class WhenIGetTheEmployerAgreement : QueryBaseTest<GetEmployerAgreementPdfQueryHandler, GetEmployerAgreementPdfRequest, GetEmployerAgreementPdfResponse>
 {
-    public class WhenIGetTheEmployerAgreement : QueryBaseTest<GetEmployerAgreementPdfQueryHandler, GetEmployerAgreementPdfRequest, GetEmployerAgreementPdfResponse>
+    private Mock<IPdfService> _pdfService;
+    private Mock<EmployerAccountsDbContext> _db;
+
+    public override GetEmployerAgreementPdfRequest Query { get; set; }
+    public override GetEmployerAgreementPdfQueryHandler RequestHandler { get; set; }
+    public override Mock<IValidator<GetEmployerAgreementPdfRequest>> RequestValidator { get; set; }
+
+    private const long ExpectedEmployerAgreementId = 12344241;
+    private const string ExpectedAgreementFileName = "FileTemplate";
+
+    [SetUp]
+    public void Arrange()
     {
-        private Mock<IPdfService> _pdfService;
-        private Mock<IHashingService> _hashingService;
-        private Mock<EmployerAccountsDbContext> _db;
-        private DbSetStub<EmployerAgreement> _employerAgreementDbSet;
+        SetUp();
 
-        public override GetEmployerAgreementPdfRequest Query { get; set; }
-        public override GetEmployerAgreementPdfQueryHandler RequestHandler { get; set; }
-        public override Mock<IValidator<GetEmployerAgreementPdfRequest>> RequestValidator { get; set; }
+        Query = new GetEmployerAgreementPdfRequest { AccountId = 12321, LegalAgreementId = ExpectedEmployerAgreementId, UserId = "1234RFV" };
 
-        private const long ExpectedEmployerAgreementId = 12344241;
-        private const string ExpectedAgreementFileName = "FileTemplate";
+        _db = new Mock<EmployerAccountsDbContext>();
+        var employerAgreement = new EmployerAgreement { Id = ExpectedEmployerAgreementId, Template = new AgreementTemplate { PartialViewName = ExpectedAgreementFileName } };
 
-        [SetUp]
-        public void Arrange()
-        {
-            SetUp();
+        var mockDbSet = new List<EmployerAgreement> { employerAgreement }.AsQueryable().BuildMockDbSet();
 
-            Query = new GetEmployerAgreementPdfRequest {HashedAccountId = "123RED", HashedLegalAgreementId = "668YUT",UserId = "1234RFV"};
+        _db.Setup(d => d.Agreements).Returns(mockDbSet.Object);
 
-            _db = new Mock<EmployerAccountsDbContext>();
-            var employerAgreement = new EmployerAgreement { Id = ExpectedEmployerAgreementId, Template = new AgreementTemplate { PartialViewName = ExpectedAgreementFileName }};
-            _employerAgreementDbSet = new DbSetStub<EmployerAgreement>(employerAgreement);
-            _db.Setup(d => d.Agreements).Returns(_employerAgreementDbSet);
+        _pdfService = new Mock<IPdfService>();
+        _pdfService.Setup(x => x.SubstituteValuesForPdf(It.IsAny<string>())).ReturnsAsync(new MemoryStream());
 
-            _hashingService = new Mock<IHashingService>();
-            _hashingService.Setup(x => x.DecodeValue("668YUT")).Returns(ExpectedEmployerAgreementId);
 
-            _pdfService = new Mock<IPdfService>();
-            _pdfService.Setup(x => x.SubsituteValuesForPdf(It.IsAny<string>())).ReturnsAsync(new MemoryStream());
+        RequestHandler = new GetEmployerAgreementPdfQueryHandler(RequestValidator.Object, _pdfService.Object, new Lazy<EmployerAccountsDbContext>(() => _db.Object));
+    }
 
-            RequestHandler = new GetEmployerAgreementPdfQueryHandler(RequestValidator.Object, _pdfService.Object, _hashingService.Object, new Lazy<EmployerAccountsDbContext>(() => _db.Object));
-        }
+    [Test]
+    public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
+    {
 
-        [Test]
-        public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
-        {
+        //Act
+        await RequestHandler.Handle(Query, CancellationToken.None);
 
-            //Act
-            await RequestHandler.Handle(Query);
+        //Assert
+        _pdfService.Verify(x => x.SubstituteValuesForPdf($"{ExpectedAgreementFileName}.pdf"));
+    }
 
-            //Assert
-            _pdfService.Verify(x=>x.SubsituteValuesForPdf($"{ExpectedAgreementFileName}.pdf"));
-        }
+    [Test]
+    public void ThenWhenTheValidationReturnsNotAuthorizedThenAnUnauthoriedAccessExceptionIsThrown()
+    {
+        //Arrange
+        RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<GetEmployerAgreementPdfRequest>())).ReturnsAsync(new ValidationResult { IsUnauthorized = true });
 
-        [Test]
-        public void ThenWhenTheValidationReturnsNotAuthorizedThenAnUnauthoriedAccessExceptionIsThrown()
-        {
-            //Arrange
-            RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<GetEmployerAgreementPdfRequest>())).ReturnsAsync(new ValidationResult {IsUnauthorized = true});
+        //Act Assert
+        Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await RequestHandler.Handle(Query, CancellationToken.None));
+    }
 
-            //Act Assert
-            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await RequestHandler.Handle(Query));
-        }
+    [Test]
+    public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
+    {
+        //Act
+        var actual = await RequestHandler.Handle(Query, CancellationToken.None);
 
-        [Test]
-        public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
-        {
-            //Act
-            var actual = await RequestHandler.Handle(Query);
+        //Assert
+        Assert.IsAssignableFrom<GetEmployerAgreementPdfResponse>(actual);
+        Assert.IsNotNull(actual.FileStream);
 
-            //Assert
-            Assert.IsAssignableFrom<GetEmployerAgreementPdfResponse>(actual);
-            Assert.IsNotNull(actual.FileStream);
-
-        }
     }
 }

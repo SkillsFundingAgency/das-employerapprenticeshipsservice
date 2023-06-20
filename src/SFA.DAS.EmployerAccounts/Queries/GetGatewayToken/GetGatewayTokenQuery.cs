@@ -1,10 +1,7 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetGatewayToken;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetGatewayToken
+public class GetGatewayTokenQuery : IRequest<GetGatewayTokenQueryResponse>
 {
-    public class GetGatewayTokenQuery : IAsyncRequest<GetGatewayTokenQueryResponse>
-    {
-        public string AccessCode { get; set; }
-        public string RedirectUrl { get; set; }
-    }
+    public string AccessCode { get; set; }
+    public string RedirectUrl { get; set; }
 }

@@ -1,10 +1,9 @@
 ﻿using SFA.DAS.Common.Domain.Types;
 
-namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
+namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement;
+
+public class SignEmployerAgreementCommandResponse
 {
-    public class SignEmployerAgreementCommandResponse
-    {
-        public string LegalEntityName { get; set; } 
-        public AgreementType AgreementType { get; set; }
-    }
+    public string LegalEntityName { get; set; } 
+    public AgreementType AgreementType { get; set; }
 }
