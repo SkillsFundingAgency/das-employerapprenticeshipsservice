@@ -54,7 +54,7 @@ public class EmployerAccountController : BaseController
     [Route("create/{HashedAccountId}/tasklist")]
     public async Task<IActionResult> CreateAccountTaskList(string hashedAccountId)
     {
-        var accountCreationState = await Task.Run(() => Task.FromResult(1));
+        var accountTaskListViewModel = await Task.Run(() => Task.FromResult(1));
 
         return View();
     }
