@@ -143,7 +143,7 @@ public class HomeController : BaseController
             return View(accounts);
         }
 
-        return RedirectToRoute(RouteNames.EmployerAccountGetApprenticeshipFunding, queryData);
+        return RedirectToRoute(RouteNames.NewEmpoyerAccountTaskList, queryData);
     }
 
     [Authorize]

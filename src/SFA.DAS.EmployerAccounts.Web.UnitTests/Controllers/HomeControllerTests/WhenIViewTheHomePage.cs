@@ -329,4 +329,35 @@ public class WhenIViewTheHomePage : ControllerTestBase
         var actualViewResult = actual as RedirectResult;
         Assert.AreEqual( $"https://employerprofiles.test-eas.apprenticeships.education.gov.uk/user/add-user-details?_ga={_queryData._ga}&_gl={_queryData._gl}&utm_source={_queryData.utm_source}&utm_campaign={_queryData.utm_campaign}&utm_medium={_queryData.utm_medium}&utm_keywords={_queryData.utm_keywords}&utm_content={_queryData.utm_content}", actualViewResult.Url);
     }
+
+    [Test]
+    public async Task ThenIfIHaveEmployerUserProfile_ButNoEmployerAccountsAndGovSignInTrueIAmRedirectedToTheProfilePage()
+    {
+        //Arrange
+        _configuration.UseGovSignIn = true;
+        AddUserToContext(ExpectedUserId, string.Empty, string.Empty,
+            new Claim(ControllerConstants.UserRefClaimKeyName, ExpectedUserId),
+            new Claim(DasClaimTypes.RequiresVerification, "false")
+        );
+
+        _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId, It.IsAny<DateTime?>())).ReturnsAsync(
+            new OrchestratorResponse<UserAccountsViewModel>
+            {
+                Data = new UserAccountsViewModel
+                {
+                    Accounts = new Accounts<Account>
+                    {
+                        AccountList = new List<Account>()
+                    }
+                }
+            });
+
+        //Act
+        var actual = await _homeController.Index(_queryData);
+
+        //Assert
+        Assert.IsNotNull(actual);
+        var actualViewResult = actual as RedirectToRouteResult;
+        Assert.AreEqual(RouteNames.NewEmpoyerAccountTaskList, actualViewResult.RouteName);
+    }
 }

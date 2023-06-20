@@ -64,6 +64,6 @@
         public const string TriageCannotSetupWithoutApproximateStartDate = "triage-cannot-setup-without-approx-start-date";
         public const string TriageWhenApprenticeshipForExistingEmployee = "triage-existing-employee";
         public const string TriageWhenApprenticeshipForExistingEmployeePost = "triage-existing-employee-post";
-
+        public const string NewEmpoyerAccountTaskList = "new-account-task-list";
     }
 }

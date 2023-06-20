@@ -50,6 +50,16 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpGet]
+    [Route("create/tasklist", Name = RouteNames.NewEmpoyerAccountTaskList)]
+    [Route("create/{HashedAccountId}/tasklist")]
+    public async Task<IActionResult> CreateAccountTaskList(string hashedAccountId)
+    {
+        var accountCreationState = await Task.Run(() => Task.FromResult(1));
+
+        return View();
+    }
+
+    [HttpGet]
     [Route("{HashedAccountId}/gatewayInform", Order = 0)]
     [Route("gatewayInform", Order = 1)]
     public IActionResult GatewayInform(string hashedAccountId)
