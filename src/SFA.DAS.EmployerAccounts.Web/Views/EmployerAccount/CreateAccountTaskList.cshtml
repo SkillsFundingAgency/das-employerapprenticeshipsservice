@@ -43,7 +43,8 @@
                         @if (!Model.HasPayeScheme)
                         {
                             <strong class="govuk-tag das-task-list__task-tag govuk-tag--grey" id="status-add-paye-scheme">Not started</strong>
-                        } else
+                        }
+                        else
                         {
                             <strong class="govuk-tag das-task-list__task-tag" id="status-add-paye-scheme">Completed</strong>
                         }
@@ -56,15 +57,21 @@
                 </h2>
                 <ul class="das-task-list__items">
                     <li class="das-task-list__item">
-                        <span class="das-task-list__task-name">
-                            Set your account name
-                        </span>
-                        @if(!Model.HasPayeScheme)
+
+                        @if (!Model.HasPayeScheme)
                         {
+                            <span class="das-task-list__task-name">
+                                Set your account name
+                            </span>
                             <strong class="govuk-tag das-task-list__task-tag govuk-tag--grey" id="status-set-account-name">Cannot start yet</strong>
                         }
                         else
                         {
+                            <span class="das-task-list__task-name">
+                                <a asp-route="@RouteNames.AccountRename" asp-route-hashedAccountId="@Model.HashedAccountId" aria-describedby="status-add-paye" class="govuk-link">
+                                    Set your account name
+                                </a>
+                            </span>
                             <strong class="govuk-tag das-task-list__task-tag govuk-tag--grey" id="status-set-account-name">Not started</strong>
                         }
                     </li>
@@ -104,7 +111,7 @@
             </li>*@
         </ol>
         @*<div class="app-save-return">*@
-            <a href="#" class="govuk-body govuk-button govuk-button--secondary app-save-return__link">Save and come back later</a>
+        <a href="#" class="govuk-body govuk-button govuk-button--secondary app-save-return__link">Save and come back later</a>
         @*</div>*@
     </div>
 </div>
