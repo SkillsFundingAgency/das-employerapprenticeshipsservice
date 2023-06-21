@@ -11,6 +11,23 @@
     string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]?.ToString();
     var postEndpointName = string.IsNullOrEmpty(hashedAccountId) ? RouteNames.EmployerAccountPostApprenticeshipFunding : RouteNames.EmployerAccountPostApprenticeshipFundingInAccount;
 }
+
+@if (Model?.GetType().GetProperty("InError") != null)
+{
+<div class="govuk-error-summary" data-module="govuk-error-summary">
+    <div role="alert">
+        <h2 class="govuk-error-summary__title">
+            There is a problem
+        </h2>
+        <div class="govuk-error-summary__body">
+            <ul class="govuk-list govuk-error-summary__list">
+                <li><a href="#more-than-three-million">You need to select your organisation's annual pay bill</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+}
+
 <div class="govuk-grid-row">
    <div class="govuk-grid-column-two-thirds">
       <form method="POST" asp-route="@postEndpointName" asp-route-hashedAccountId="@hashedAccountId">
