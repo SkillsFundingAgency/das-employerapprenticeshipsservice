@@ -25,11 +25,11 @@ public static class ApplicationServiceRegistrations
         services.AddSingleton<IChallengeService, ChallengeService>();
         services.AddSingleton<IDatetimeService, DatetimeService>();
         services.AddSingleton<IChallengeHandler, ChallengeHandler>();
-        
+
         services.AddSingleton<IPayeLevySubmissionsHandler, PayeLevySubmissionsHandler>();
         services.AddSingleton<IPayeLevyMapper, PayeLevyMapper>();
         services.AddSingleton<IPayeSchemeObfuscator, PayeSchemeObfuscator>();
-        
+
         return services;
     }
 }

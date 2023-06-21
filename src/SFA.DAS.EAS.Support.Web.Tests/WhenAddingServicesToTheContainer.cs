@@ -58,13 +58,10 @@ public class WhenAddingServicesToTheContainer
             InitialData = new List<KeyValuePair<string, string>>
             {
                 new("EnvironmentName", "LOCAL"),
-                new($"{ConfigurationKeys.SupportEasConfig}:HashingService:Hashstring", "SaltAndVinegar"),
-                new($"{ConfigurationKeys.SupportEasConfig}:HashingService:AllowedCharacters",
-                    "0123456789QWERTYUIOPASDFGHJKLZXCVBNM"),
-                new($"{ConfigurationKeys.SupportEasConfig}:LevySubmission:TokenServiceApi:ApiBaseUrl",
-                    "https://localhost:123"),
-                new($"{ConfigurationKeys.SupportEasConfig}:LevySubmission:TokenServiceApi:IdentifierUri",
-                    "https://localhost:321"),
+                new("HashingService:Hashstring", "SaltAndVinegar"),
+                new("HashingService:AllowedCharacters", "0123456789QWERTYUIOPASDFGHJKLZXCVBNM"),
+                new("LevySubmission:TokenServiceApi:ApiBaseUrl", "https://localhost:123"),
+                new("LevySubmission:TokenServiceApi:IdentifierUri", "https://localhost:321"),
             }
         };
 

@@ -16,17 +16,16 @@ public static class ConfigurationServiceRegistrations
     {
         services.AddOptions();
 
-        var supportConfig = configuration.GetSection(ConfigurationKeys.SupportEasConfig);
-
-        services.Configure<EasSupportConfiguration>(supportConfig);
-        services.Configure<IEmployerAccountsApiClientConfiguration>(configuration.GetSection(ConfigurationKeys.EmployerAccountApiConfig));
+        services.Configure<EasSupportConfiguration>(configuration);
+        services.AddSingleton(cfg => cfg.GetService<IOptions<EasSupportConfiguration>>().Value);
+        services.AddSingleton<IEasSupportConfiguration>(cfg => cfg.GetService<IOptions<EasSupportConfiguration>>().Value);
+        
+        services.AddSingleton(cfg => cfg.GetService<IOptions<EmployerAccountsApiClientConfiguration>>().Value);
         services.AddSingleton(cfg => cfg.GetService<IOptions<IEmployerAccountsApiClientConfiguration>>().Value);
+        
+        services.Configure<IEmployerAccountsApiClientConfiguration>(configuration.GetSection(ConfigurationKeys.EmployerAccountApiConfig));
+        services.Configure<EmployerAccountsApiClientConfiguration>(configuration.GetSection(ConfigurationKeys.EmployerAccountApiConfig));
 
-
-        services.AddSingleton(cfg => cfg.GetService<IOptions<EasSupportConfiguration>>().Value);
-        services.AddSingleton(cfg => cfg.GetService<IOptions<EasSupportConfiguration>>().Value);
-
-        services.AddSingleton<IEasSupportConfiguration, EasSupportConfiguration>();
         services.AddSingleton<IAccountApiConfiguration>(sp => sp.GetService<EasSupportConfiguration>().AccountApi);
         services.AddSingleton<ISiteValidatorSettings>(sp => sp.GetService<EasSupportConfiguration>().SiteValidator);
         services.AddSingleton<IHmrcApiClientConfiguration>(sp => sp.GetService<EasSupportConfiguration>().LevySubmission.HmrcApi);
