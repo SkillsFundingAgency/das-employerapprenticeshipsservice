@@ -16,87 +16,82 @@
     <div class="govuk-grid-column-two-thirds">
 
         <h1 class="govuk-heading-xl">
-            Add a <abbr>PAYE</abbr> Scheme
+            How much is your organisation's annual pay bill?
         </h1>
 
-        <p class="govuk-body">We need you to add the <abbr title="Pay As You Earn">PAYE</abbr> scheme for your organisation.</p>
-        <p class="govuk-body">
-            You can do this by using either of the following:
-        </p>
-
-        <ul class="govuk-list govuk-list--bullet">
-            <li>the Government Gateway login for your organisation</li>
-            <li>your accounts office reference number for your organisation</li>
-        </ul>
-
-        <details class="govuk-details" role="group" data-module="govuk-details">
-            <summary class="govuk-details__summary" role="button">
-                <span class="govuk-details__summary-text">
-                    Find your Government Gateway details
-                </span>
-            </summary>
-            <div class="govuk-details__text">
-                If you have lost your Government Gateway log in details you can <a href="https://www.gov.uk/log-in-register-hmrc-online-services/problems-signing-in" rel="noopener" class="govuk-link" rel="external" target="_blank" title="Opens in a new window">get help signing in</a>
-            </div>
-        </details>
-
-        <details class="govuk-details" role="group" data-module="govuk-details">
-            <summary class="govuk-details__summary" role="button">
-                <span class="govuk-details__summary-text">
-                    Find your accounts office and <abbr>PAYE</abbr> scheme reference numbers
-                </span>
-            </summary>
-            <div class="govuk-details__text">
-                You can find your 13-character accounts office reference number on the letter <abbr title="Her Majesty's Revenue and Customs">HMRC</abbr> sent you when you first registered as an employer. You will find your employer <abbr>PAYE</abbr> scheme reference in the payslip booklet <abbr>HMRC</abbr> provided. Contact <abbr>HMRC</abbr> or your accountant if you do not have access to the booklet.
-            </div>
-        </details>
-
+        <p class="govuk-caption-m">If your organisation's pay bill is over £3 million you will be able to spend levy on apprenticeship training without having to reserve funds.</p>
 
         <form method="POST" asp-route="@postEndpointName" asp-route-hashedAccountId="@hashedAccountId">
             <div class="govuk-form-group @errorClass" id="do-you-want-to-add-paye-scheme-form">
 
                 <fieldset class="govuk-fieldset" aria-describedby="have-not-got-everything">
 
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-                        <h1 class="govuk-fieldset__heading">
-                            <span>You can add a <abbr>PAYE</abbr> scheme later if you need more time, we can still create your account for you.</span>
-                        </h1>
-                    </legend>
-
-                    <span class="govuk-error-message js-hidden @hiddenClass" aria-hidden="false" id="have-not-got-everything">
-                        Tell us if you want to add a <abbr>PAYE</abbr> scheme
+                    <span class="govuk-error-message @hiddenClass" aria-hidden="false" id="have-not-got-everything">
+                        You need to select your organisation's annual pay bill
                     </span>
 
                     <div class="govuk-radios">
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" type="radio" name="choice" id="want-to-add-paye-scheme" value="2" />
-                            <label class="govuk-label govuk-radios__label" for="want-to-add-paye-scheme">
-                                Use Government Gateway log in
+                            <input class="govuk-radios__input" type="radio" name="choice" id="more-than-three-million" value="2" />
+                            <label class="govuk-label govuk-radios__label" for="more-than-three-million">
+                                Over £3 million
                             </label>
                         </div>
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" type="radio" name="choice" id="want-to-add-paye-scheme-aorn" value="3" />
-                            <label class="govuk-label govuk-radios__label" for="want-to-add-paye-scheme-aorn">
-                                Use accounts office reference number and employer <abbr>PAYE</abbr> scheme reference. <b>You should only use this if your payroll for your organisation is under &pound;3 million</b>.
+                            <input class="govuk-radios__input" type="radio" name="choice" id="almost-three-million" value="3" />
+                            <label class="govuk-label govuk-radios__label" for="almost-three-million">
+                                Close to £3 million
                             </label>
+                            <p class="govuk-caption-m">To access levy funds, choose this option if you think your annual pay bill could be more than £3 million in the future</p>
                         </div>
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" type="radio" name="choice" id="do-not-want-to-add-paye-scheme" value="1" />
+                            <input class="govuk-radios__input" type="radio" name="choice" id="less-than-three-million" value="1" />
                             <label class="govuk-label govuk-radios__label" for="do-not-want-to-add-paye-scheme">
-                                No, I'll do this later
+                                Less than £3 million
                             </label>
                         </div>
                     </div>
                 </fieldset>
             </div>
 
-            <div class="govuk-warning-text govuk-!-padding-top-8">
-                <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-                <strong class="govuk-warning-text__text">
-                    <span class="govuk-warning-text__assistive">Warning</span>
-                    Before you continue, you must make sure you have authority to add <abbr>PAYE</abbr> schemes to the account for this organisation
-                </strong>
-            </div>
+            <details class="govuk-details" role="group" data-module="govuk-details">
+                <summary class="govuk-details__summary" role="button">
+                    <span class="govuk-details__summary-text">
+                        What does annual pay bill mean?
+                    </span>
+                </summary>
+                <div class="govuk-details__text">
+                    <p class="govuk-body">
+                        Your annual pay bill is all payments to employees that are subject to employer <a href="https://www.gov.uk/national-insurance-rates-letters" rel="noopener" class="govuk-link" rel="external" target="_blank" title="Opens in a new window">
+                            Class 1 secondary National Insurance contributions
+                        </a> such as wages, bonuses and commissions.
+                    </p>
+
+                    <p class="govuk-body">
+                        Your pay bill must include payments to:
+                    </p>
+
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>
+                            all employees earning below the <a href="https://www.gov.uk/guidance/rates-and-thresholds-for-employers-2021-to-2022#class-1-national-insurance-threshold" rel="noopener" class="govuk-link" rel="external" target="_blank" title="Opens in a new window">
+                                Lower Earnings Limit and the Secondary Threshold
+                            </a>
+                        </li>
+                        <li>employees under the age of 21</li>
+                        <li>apprentices under the age of 25</li>
+                    </ul>
+
+                    <p class="govuk-body">
+                        Your pay bill must not include earnings:
+                    </p>
+
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>of employees under the age of 16</li>
+                        <li>of employees who are not subject to UK National Insurance contributions legislation</li>
+                        <li>on which Class 1A National Insurance contributions are payable, such as benefits in kind</li>
+                    </ul>
+                </div>
+            </details>
 
             <div class="govuk-form-group">
                 <button class="govuk-button" type="submit" id="submit-add-a-paye-scheme-button">Continue</button>

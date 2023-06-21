@@ -210,7 +210,6 @@ public class EmployerAccountController : BaseController
                 {
                     var model = new
                     {
-                        HideHeaderSignInLink = true,
                         InError = true
                     };
 
