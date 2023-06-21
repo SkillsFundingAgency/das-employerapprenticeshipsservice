@@ -61,6 +61,22 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
         [Test]
         [MoqAutoData]
+        public async Task WhenHashedId_Then_GetCreateAccountTaskList_Sets_ViewModel_HashedAccountId(
+          string hashedAccountId,
+          [NoAutoProperties] EmployerAccountController controller)
+        {
+            // Arrange
+
+            // Act
+            var result = await controller.CreateAccountTaskList(hashedAccountId) as ViewResult;
+            var model = result.Model as AccountTaskListViewModel;
+
+            // Assert
+            model.HashedAccountId.Should().Be(hashedAccountId);
+        }
+
+        [Test]
+        [MoqAutoData]
         public async Task WhenHashedId_Then_GetCreateAccountTaskList_Should_GetAccountPayes(
             string hashedAccountId,
             long accountId,

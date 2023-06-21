@@ -61,6 +61,8 @@ public class EmployerAccountController : BaseController
             accountTaskListViewModel = (await _employerAccountOrchestrator.GetCreateAccountTaskList(hashedAccountId)).Data;
         }
 
+        accountTaskListViewModel.HashedAccountId = hashedAccountId;
+
         return View(accountTaskListViewModel);
     }
 
@@ -319,7 +321,7 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpGet]
-    [Route("{HashedAccountId}/rename")]
+    [Route("{HashedAccountId}/rename", Name = RouteNames.AccountRename)]
     public async Task<IActionResult> RenameAccount(string hashedAccountId)
     {
         var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
@@ -328,7 +330,7 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpPost]
-    [Route("{HashedAccountId}/rename")]
+    [Route("{HashedAccountId}/rename", Name = RouteNames.AccountRenamePost)]
     public async Task<IActionResult> RenameAccount(string hashedAccountId, RenameEmployerAccountViewModel vm)
     {
         var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
