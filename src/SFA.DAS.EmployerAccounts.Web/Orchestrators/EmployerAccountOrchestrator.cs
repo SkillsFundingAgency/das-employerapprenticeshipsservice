@@ -3,6 +3,7 @@ using SFA.DAS.EmployerAccounts.Commands.CreateAccount;
 using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 using SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
 using SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
 using SFA.DAS.Encoding;
@@ -20,8 +21,8 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
     protected EmployerAccountOrchestrator() { }
 
     public EmployerAccountOrchestrator(
-        IMediator mediator, 
-        ILogger<EmployerAccountOrchestrator> logger, 
+        IMediator mediator,
+        ILogger<EmployerAccountOrchestrator> logger,
         ICookieStorageService<EmployerAccountData> cookieService,
         EmployerAccountsConfiguration configuration,
         IEncodingService encodingService)
@@ -151,7 +152,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception,"Create Account Validation Error: {Message}", exception.Message);
+            _logger.LogError(exception, "Create Account Validation Error: {Message}", exception.Message);
             return new OrchestratorResponse<EmployerAgreementViewModel>
             {
                 Data = new EmployerAgreementViewModel(),
@@ -334,5 +335,23 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
     public virtual void DeleteCookieData()
     {
         CookieService.Delete(CookieName);
+    }
+
+    public virtual async Task<OrchestratorResponse<AccountTaskListViewModel>> GetCreateAccountTaskList(string hashedAccountId)
+    {
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+
+        var accountPayeResponse = await _mediator.Send(new GetAccountPayeSchemesQuery
+        {
+            AccountId = accountId
+        });
+
+        return new OrchestratorResponse<AccountTaskListViewModel>
+        {
+            Data = new AccountTaskListViewModel
+            {
+                HasPayeScheme = accountPayeResponse?.PayeSchemes?.Any() ?? false
+            }
+        };
     }
 }

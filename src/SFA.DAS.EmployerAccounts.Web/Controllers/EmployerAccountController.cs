@@ -54,9 +54,14 @@ public class EmployerAccountController : BaseController
     [Route("create/{HashedAccountId}/tasklist")]
     public async Task<IActionResult> CreateAccountTaskList(string hashedAccountId)
     {
-        var accountTaskListViewModel = await Task.Run(() => Task.FromResult(1));
+        var accountTaskListViewModel = new AccountTaskListViewModel();
 
-        return View();
+        if (!string.IsNullOrEmpty(hashedAccountId))
+        {
+            accountTaskListViewModel = (await _employerAccountOrchestrator.GetCreateAccountTaskList(hashedAccountId)).Data;
+        }
+
+        return View(accountTaskListViewModel);
     }
 
     [HttpGet]

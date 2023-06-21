@@ -1,3 +1,5 @@
+@model AccountTaskListViewModel;
+
 @{
     ViewBag.PageID = "create-account-task-list";
     ViewBag.Title = "Create your employer account";
@@ -9,7 +11,7 @@
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">@ViewBag.Title</h1>
         <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Account creation incomplete</h2>
-        <p class="govuk-body">You have completed 0 of 3 sections.</p>
+        <p class="govuk-body">You have completed @Model.CompletedSections sections.</p>
         <div class="govuk-inset-text govuk-!-margin-bottom-7">
             You do not have to complete all sections at once. Those labelled 'completed' have been saved so you can continue your employer account creation later.
         </div>
@@ -34,7 +36,7 @@
                 <ul class="das-task-list__items">
                     <li class="das-task-list__item">
                         <span class="das-task-list__task-name">
-                            <a href="set-up-as-a-user" aria-describedby="status-add-paye" class="govuk-link">
+                            <a asp-controller="@ControllerConstants.EmployerAccountControllerName" asp-action="@ControllerConstants.GatewayInformActionName" aria-describedby="status-add-paye" class="govuk-link">
                                 Add a PAYE scheme
                             </a>
                         </span>
