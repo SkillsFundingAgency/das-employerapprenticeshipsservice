@@ -5,12 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Support.Infrastructure.Services;
-using SFA.DAS.EAS.Support.Web.Configuration;
 using SFA.DAS.EAS.Support.Web.Controllers;
 using SFA.DAS.EAS.Support.Web.ServiceRegistrations;
-using SFA.DAS.Encoding;
-using IConfigurationProvider = Microsoft.Extensions.Configuration.IConfigurationProvider;
 
 namespace SFA.DAS.EAS.Support.Web.Tests;
 
@@ -30,8 +26,6 @@ public class WhenAddingServicesToTheContainer
         var serviceCollection = new ServiceCollection();
         SetupServiceCollection(serviceCollection);
         var provider = serviceCollection.BuildServiceProvider();
-
-        //var configuration = provider.GetService<EasSupportConfiguration>();
 
         var type = provider.GetService(toResolve);
         Assert.That(type, Is.Not.Null);
