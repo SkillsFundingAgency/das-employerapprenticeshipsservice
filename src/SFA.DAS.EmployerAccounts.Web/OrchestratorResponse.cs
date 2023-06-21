@@ -17,5 +17,6 @@
     public class OrchestratorResponse<T> : OrchestratorResponse
     {
         public T Data { get; set; }
+        public string CancelRoute { get; internal set; }
     }
 }

@@ -82,6 +82,7 @@ public class EmployerAccountController : BaseController
 
         var gatewayInformViewModel = new OrchestratorResponse<GatewayInformViewModel>
         {
+            CancelRoute = string.IsNullOrEmpty(hashedAccountId) ? RouteNames.NewEmpoyerAccountTaskList : RouteNames.EmployerAccountPaye,
             Data = new GatewayInformViewModel
             {
                 BreadcrumbDescription = "Back to Your User Profile",
