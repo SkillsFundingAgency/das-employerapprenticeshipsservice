@@ -5,44 +5,19 @@ using SFA.DAS.EAS.Support.Web.Authorization;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers;
 
-[Authorize(Policy = PolicyNames.IsSupportPortalUser)]
+[AllowAnonymous]
 [Route("api/status")]
-[ApiController]
 public class StatusController : ControllerBase
 {
-    [AllowAnonymous]
+    [HttpGet]
     public IActionResult Get()
     {
         return Ok(new
         {
             ServiceName = "SFA DAS Employer Apprenticeship Service Support Site",
-            ServiceVersion = AddServiceVersion(),
+            ServiceVersion = Assembly.GetExecutingAssembly().Version(),
             ServiceTime = DateTimeOffset.UtcNow,
-            Request = AddRequestContext()
+            Request = $" {HttpContext.Request.Method}: {HttpContext.Request.GetDisplayUrl()}"
         });
-    }
-
-    private static string AddServiceVersion()
-    {
-        try
-        {
-            return Assembly.GetExecutingAssembly().Version();
-        }
-        catch (Exception)
-        {
-            return "Unknown";
-        }
-    }
-
-    private string AddRequestContext()
-    {
-        try
-        {
-            return $" {HttpContext.Request.Method}: {HttpContext.Request.GetDisplayUrl()}";
-        }
-        catch
-        {
-            return "Unknown";
-        }
     }
 }
