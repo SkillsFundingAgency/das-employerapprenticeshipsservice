@@ -29,6 +29,8 @@ public class Startup
         services.AddRepositories();
         services.AddApplicationServices();
 
+        services.AddApplicationInsightsTelemetry();
+
         services.AddControllersWithViews()
             .AddNewtonsoftJson(options =>
             {
