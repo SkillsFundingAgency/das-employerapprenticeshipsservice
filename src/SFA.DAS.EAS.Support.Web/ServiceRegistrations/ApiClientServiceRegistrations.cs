@@ -11,8 +11,9 @@ public static class ApiClientServiceRegistrations
 {
     public static IServiceCollection AddApiClientServices(this IServiceCollection services)
     {
-        services.AddHttpClient<IAccountApiClient, AccountApiClient>();
-        services.AddHttpClient<ILevyTokenHttpClientFactory, LevyTokenHttpClientFactory>();
+        services.AddScoped<IAccountApiClient, AccountApiClient>();
+        services.AddScoped<ILevyTokenHttpClientFactory, LevyTokenHttpClientFactory>();
+        
         services.AddSingleton<ITokenServiceApiClient, TokenServiceApiClient>();
         services.AddSingleton<ISecureHttpClient, EmployerAccountsSecureHttpClient>();
 
