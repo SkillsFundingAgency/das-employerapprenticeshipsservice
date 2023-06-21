@@ -26,9 +26,9 @@ public class EmployerAccountController : BaseController
     private readonly ICookieStorageService<ReturnUrlModel> _returnUrlCookieStorageService;
     private readonly string _hashedAccountIdCookieName;
 
-    private const int AddPayeLater = 1;
-    private const int AddPayeNow = 2;
-    private const int AddPayeNowAorn = 3;
+    private const int Over3Million = 1;
+    private const int CloseTo3Million = 2;
+    private const int LessThan3Million = 3;
     public const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
 
     public EmployerAccountController(EmployerAccountOrchestrator employerAccountOrchestrator,
@@ -204,9 +204,9 @@ public class EmployerAccountController : BaseController
     {
         switch (choice ?? 0)
         {
-            case AddPayeLater: return RedirectToRoute(RouteNames.SkipRegistration);
-            case AddPayeNow: return RedirectToAction(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName, new { hashedAccountId });
-            case AddPayeNowAorn: return RedirectToAction(ControllerConstants.SearchUsingAornActionName, ControllerConstants.SearchPensionRegulatorControllerName, new { hashedAccountId });
+            case Over3Million:
+            case CloseTo3Million: return RedirectToAction(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName, new { hashedAccountId });
+            case LessThan3Million: return RedirectToAction(ControllerConstants.SearchUsingAornActionName, ControllerConstants.SearchPensionRegulatorControllerName, new { hashedAccountId });
             default:
                 {
                     var model = new
