@@ -1,63 +1,69 @@
-﻿using System.Threading.Tasks;
-using System.Web.Mvc;
-using SFA.DAS.Authorization.Mvc.Attributes;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
+using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Extensions;
 
-namespace SFA.DAS.EAS.Web.Controllers
+namespace SFA.DAS.EAS.Web.Controllers;
+
+[Authorize(Policy = nameof(PolicyNames.HasUserAccount))]
+[Route("accounts/{HashedAccountId}/organisations")]
+public class OrganisationController : Controller
 {
-    [DasAuthorize]
-    [RoutePrefix("accounts/{HashedAccountId}/organisations")]
-    public class OrganisationController : Controller
+    private readonly IConfiguration _configuration;
+    
+    public OrganisationController(IConfiguration configuration)
     {
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("confirm")]
-        public async Task<ActionResult> Confirm()
-        {
-            return Redirect(Url.EmployerAccountsAction("organisations/confirm"));
-        }
+        _configuration = configuration;
+    }
 
-        [HttpGet]
-        [Route("nextStep")]
-        public async Task<ActionResult> OrganisationAddedNextSteps()
-        {
-            return Redirect(Url.EmployerAccountsAction($"organisations/nextStep"));
-        }
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Route("confirm")]
+    public IActionResult Confirm()
+    {
+        return Redirect(Url.EmployerAccountsAction("organisations/confirm", _configuration));
+    }
 
-        [HttpGet]
-        [Route("nextStepSearch")]
-        public async Task<ActionResult> OrganisationAddedNextStepsSearch()
-        {
-            return Redirect(Url.EmployerAccountsAction($"organisations/nextStepSearch"));
-        }
+    [HttpGet]
+    [Route("nextStep")]
+    public IActionResult OrganisationAddedNextSteps()
+    {
+        return Redirect(Url.EmployerAccountsAction($"organisations/nextStep", _configuration));
+    }
+
+    [HttpGet]
+    [Route("nextStepSearch")]
+    public IActionResult OrganisationAddedNextStepsSearch()
+    {
+        return Redirect(Url.EmployerAccountsAction($"organisations/nextStepSearch", _configuration));
+    }
 
 
-        [HttpPost]
-        [Route("nextStep")]
-        public async Task<ActionResult> GoToNextStep()
-        {
-            return Redirect(Url.EmployerAccountsAction("nextStep"));
-        }
+    [HttpPost]
+    [Route("nextStep")]
+    public IActionResult GoToNextStep()
+    {
+        return Redirect(Url.EmployerAccountsAction("nextStep", _configuration));
+    }
 
-        [HttpGet]
-        [Route("review")]
-        public async Task<ActionResult> Review()
-        {
-            return Redirect(Url.EmployerAccountsAction("organisations/review"));
-        }
+    [HttpGet]
+    [Route("review")]
+    public IActionResult Review()
+    {
+        return Redirect(Url.EmployerAccountsAction("organisations/review", _configuration));
+    }
 
-        [HttpPost]
-        [Route("review")]
-        public async Task<ActionResult> ProcessReviewSelection()
-        {
-            return Redirect(Url.EmployerAccountsAction("organisations/review"));
-        }
+    [HttpPost]
+    [Route("review")]
+    public IActionResult ProcessReviewSelection()
+    {
+        return Redirect(Url.EmployerAccountsAction("organisations/review", _configuration));
+    }
 
-        [HttpPost]
-        [Route("PostUpdateSelection")]
-        public ActionResult GoToPostUpdateSelection()
-        {
-            return Redirect(Url.EmployerAccountsAction("organisations/PostUpdateSelection"));
-        }
+    [HttpPost]
+    [Route("PostUpdateSelection")]
+    public IActionResult GoToPostUpdateSelection()
+    {
+        return Redirect(Url.EmployerAccountsAction("organisations/PostUpdateSelection", _configuration));
     }
 }

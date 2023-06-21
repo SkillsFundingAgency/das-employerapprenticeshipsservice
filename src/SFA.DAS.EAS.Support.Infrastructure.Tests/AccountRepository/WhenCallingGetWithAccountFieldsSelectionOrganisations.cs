@@ -1,176 +1,156 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Support.Core.Models;
 
-namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
+namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository;
+
+[TestFixture]
+public class WhenCallingGetWithAccountFieldsSelectionOrganisations : WhenTestingAccountRepository
 {
-    [TestFixture]
-    public class WhenCallingGetWithAccountFieldsSelectionOrganisations : WhenTestingAccountRepository
+    [TestCase(EmployerAgreementStatus.Signed)]
+    [TestCase(EmployerAgreementStatus.Pending)]
+    [TestCase(EmployerAgreementStatus.Superseded)]
+    public async Task ItShouldReturnTheMatchingAccountWithLegalEntitiesThatAreInScope(EmployerAgreementStatus scope)
     {
-        [TestCase(EmployerAgreementStatus.Signed)]
-        [TestCase(EmployerAgreementStatus.Pending)]
-        [TestCase(EmployerAgreementStatus.Superseded)]
-        public async Task ItShouldReturnTheMatchingAccountWithLegalEntitiesThatAreInScope(EmployerAgreementStatus scope)
+        const string id = "123";
+
+        var accountResponse = new AccountDetailViewModel
         {
-            var id = "123";
+            LegalEntities = new ResourceList(
+                new List<ResourceViewModel>
+                {
+                    new ResourceViewModel { Href = "https://tempuri.org/legalEntity/{id}", Id = "ABC" }
+                })
+        };
 
-            var accountResponse = new AccountDetailViewModel
-            {
-                LegalEntities = new ResourceList(
-                    new List<ResourceViewModel>
-                    {
-                        new ResourceViewModel {Href = "https://tempuri.org/legalEntity/{id}", Id = "ABC"}
-                    })
-            };
+        AccountApiClient!.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
+            .ReturnsAsync(accountResponse);
 
-            AccountApiClient.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
-                .ReturnsAsync(accountResponse);
-
-            var legalEntityResponse = new LegalEntityViewModel
-            {
-                AgreementStatus = scope
-            };
-
-            var legalEntity = accountResponse.LegalEntities[0];
-
-            AccountApiClient.Setup(x => x.GetResource<LegalEntityViewModel>(legalEntity.Href))
-                .ReturnsAsync(legalEntityResponse);
-
-            var actual = await _sut.Get(id, AccountFieldsSelection.Organisations);
-
-
-            Logger.Verify(x => x.Debug(It.IsAny<string>()), Times.Exactly(accountResponse.LegalEntities.Count + 1));
-
-            AccountApiClient.Verify(x => x.GetResource<LegalEntityViewModel>(It.IsAny<string>()),
-                Times.Exactly(accountResponse.LegalEntities.Count));
-
-            Assert.IsNotNull(actual);
-            Assert.IsNotNull(actual.LegalEntities);
-            Assert.AreEqual(accountResponse.LegalEntities.Count, actual.LegalEntities.Count());
-
-            Assert.IsNull(actual.PayeSchemes);
-            Assert.IsNull(actual.Transactions);
-            Assert.IsNull(actual.TeamMembers);
-        }
-
-        [TestCase(EmployerAgreementStatus.Expired)]
-        [TestCase(EmployerAgreementStatus.Removed)]
-        public async Task ItShouldReturnTheMatchingAccountWithOutLegalEntitiesThatAreOutOfScope(
-            EmployerAgreementStatus scope)
+        var legalEntityResponse = new LegalEntityViewModel
         {
-            var id = "123";
+            AgreementStatus = scope
+        };
 
-            var accountResponse = new AccountDetailViewModel
-            {
-                LegalEntities = new ResourceList(
-                    new List<ResourceViewModel>
-                    {
-                        new ResourceViewModel {Href = "https://tempuri.org/legalEntity/{id}", Id = "ABC"}
-                    })
-            };
+        var legalEntity = accountResponse.LegalEntities[0];
 
-            AccountApiClient.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
-                .ReturnsAsync(accountResponse);
+        AccountApiClient.Setup(x => x.GetResource<LegalEntityViewModel>(legalEntity.Href))
+            .ReturnsAsync(legalEntityResponse);
 
-            var legalEntityResponse = new LegalEntityViewModel
-            {
-                AgreementStatus = scope
-            };
+        var actual = await Sut!.Get(id, AccountFieldsSelection.Organisations);
 
-            var legalEntity = accountResponse.LegalEntities[0];
+        AccountApiClient.Verify(x => x.GetResource<LegalEntityViewModel>(It.IsAny<string>()),
+            Times.Exactly(accountResponse.LegalEntities.Count));
 
-            AccountApiClient.Setup(x => x.GetResource<LegalEntityViewModel>(legalEntity.Href))
-                .ReturnsAsync(legalEntityResponse);
-
-            var actual = await _sut.Get(id, AccountFieldsSelection.Organisations);
-
-
-            Logger.Verify(
-                x => x.Debug(
-                    $"{nameof(IAccountApiClient)}.{nameof(IAccountApiClient.GetResource)}<{nameof(AccountDetailViewModel)}>(\"/api/accounts/{id}\");"),
-                Times.Once);
-            Logger.Verify(
-                x => x.Debug(
-                    $"{nameof(IAccountApiClient)}.{nameof(IAccountApiClient.GetResource)}<{nameof(LegalEntityViewModel)}>(\"{legalEntity.Href}\");"),
-                Times.Once);
-
-            AccountApiClient.Verify(x => x.GetResource<LegalEntityViewModel>(It.IsAny<string>()),
-                Times.Exactly(accountResponse.LegalEntities.Count));
-
-            Assert.IsNotNull(actual);
-            Assert.IsNotNull(actual.LegalEntities);
-            Assert.AreEqual(0, actual.LegalEntities.Count());
-
-            Assert.IsNull(actual.PayeSchemes);
-            Assert.IsNull(actual.Transactions);
-            Assert.IsNull(actual.TeamMembers);
-        }
-
-        [Test]
-        public async Task ItShoudFailGracefullyAndLogErrorWhenClientThrowsExceptionOnGetResourceAccount()
+        Assert.Multiple(() =>
         {
-            var id = "123";
+            Assert.That(actual.LegalEntities.Count(), Is.EqualTo(accountResponse.LegalEntities.Count));
+            Assert.That(actual, Is.Not.Null);
+            Assert.That(actual.LegalEntities, Is.Not.Null);
+            Assert.That(actual.PayeSchemes, Is.Null);
+            Assert.That(actual.Transactions, Is.Null);
+            Assert.That(actual.TeamMembers, Is.Null);
+        });
+    }
 
+    [TestCase(EmployerAgreementStatus.Expired)]
+    [TestCase(EmployerAgreementStatus.Removed)]
+    public async Task ItShouldReturnTheMatchingAccountWithOutLegalEntitiesThatAreOutOfScope(
+        EmployerAgreementStatus scope)
+    {
+        const string id = "123";
 
-            AccountApiClient.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
-                .ThrowsAsync(new Exception());
-
-
-            var actual = await _sut.Get(id, AccountFieldsSelection.Organisations);
-
-
-            Logger.Verify(x => x.Debug(It.IsAny<string>()), Times.Once);
-            Logger.Verify(x => x.Error(It.IsAny<Exception>(), It.IsAny<string>()), Times.Once);
-
-
-            AccountApiClient.Verify(x => x.GetResource<AccountDetailViewModel>(It.IsAny<string>()), Times.Once);
-            AccountApiClient.Verify(x => x.GetResource<LegalEntityViewModel>(It.IsAny<string>()), Times.Never);
-
-            Assert.IsNull(actual);
-        }
-
-
-        [Test]
-        public async Task ItShoudFailGracefullyAndLogErrorWhenClientThrowsExceptionOnGetResourceLegalEntity()
+        var accountResponse = new AccountDetailViewModel
         {
-            var id = "123";
+            LegalEntities = new ResourceList(
+                new List<ResourceViewModel>
+                {
+                    new() { Href = "https://tempuri.org/legalEntity/{id}", Id = "ABC" }
+                })
+        };
 
-            var accountResponse = new AccountDetailViewModel
-            {
-                LegalEntities = new ResourceList(
-                    new List<ResourceViewModel>
-                    {
-                        new ResourceViewModel {Href = "https://tempuri.org/legalEntity/{id}", Id = "ABC"}
-                    })
-            };
+        AccountApiClient!.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
+            .ReturnsAsync(accountResponse);
 
-            AccountApiClient.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
-                .ReturnsAsync(accountResponse);
+        var legalEntityResponse = new LegalEntityViewModel
+        {
+            AgreementStatus = scope
+        };
 
+        var legalEntity = accountResponse.LegalEntities[0];
 
-            var legalEntity = accountResponse.LegalEntities[0];
+        AccountApiClient.Setup(x => x.GetResource<LegalEntityViewModel>(legalEntity.Href))
+            .ReturnsAsync(legalEntityResponse);
 
-            AccountApiClient.Setup(x => x.GetResource<LegalEntityViewModel>(legalEntity.Href))
-                .ThrowsAsync(new Exception());
+        var actual = await Sut!.Get(id, AccountFieldsSelection.Organisations);
+        
+        AccountApiClient.Verify(x => x.GetResource<LegalEntityViewModel>(It.IsAny<string>()),
+            Times.Exactly(accountResponse.LegalEntities.Count));
 
-            var actual = await _sut.Get(id, AccountFieldsSelection.Organisations);
+        Assert.Multiple(() =>
+        {
+            Assert.That(actual.LegalEntities.Count(), Is.EqualTo(0));
+            Assert.That(actual, Is.Not.Null);
+            Assert.That(actual.LegalEntities, Is.Not.Null);
+            Assert.That(actual.PayeSchemes, Is.Null);
+            Assert.That(actual.Transactions, Is.Null);
+            Assert.That(actual.TeamMembers, Is.Null);
+        });
+    }
 
+    [Test]
+    public async Task ItShoudFailGracefullyAndLogErrorWhenClientThrowsExceptionOnGetResourceAccount()
+    {
+        const string id = "123";
 
-            Logger.Verify(x => x.Debug(It.IsAny<string>()), Times.Exactly(2));
-            Logger.Verify(x => x.Error(It.IsAny<Exception>(), It.IsAny<string>()), Times.Once);
+        AccountApiClient!.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
+            .ThrowsAsync(new Exception());
 
+        var actual = await Sut!.Get(id, AccountFieldsSelection.Organisations);
 
-            AccountApiClient.Verify(x => x.GetResource<LegalEntityViewModel>(It.IsAny<string>()),
-                Times.Exactly(accountResponse.LegalEntities.Count));
+        Logger!.Verify(
+            x => x.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
 
-            Assert.IsNotNull(actual);
-            Assert.IsEmpty(actual.LegalEntities);
-        }
+        AccountApiClient.Verify(x => x.GetResource<AccountDetailViewModel>(It.IsAny<string>()), Times.Once);
+        AccountApiClient.Verify(x => x.GetResource<LegalEntityViewModel>(It.IsAny<string>()), Times.Never);
+
+        Assert.That(actual, Is.Null);
+    }
+
+    [Test]
+    public async Task ItShoudFailGracefullyAndLogErrorWhenClientThrowsExceptionOnGetResourceLegalEntity()
+    {
+        const string id = "123";
+
+        var accountResponse = new AccountDetailViewModel
+        {
+            LegalEntities = new ResourceList(
+                new List<ResourceViewModel>
+                {
+                    new() { Href = "https://tempuri.org/legalEntity/{id}", Id = "ABC" }
+                })
+        };
+
+        AccountApiClient!.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
+            .ReturnsAsync(accountResponse);
+
+        var legalEntity = accountResponse.LegalEntities[0];
+
+        AccountApiClient.Setup(x => x.GetResource<LegalEntityViewModel>(legalEntity.Href))
+            .ThrowsAsync(new Exception());
+
+        var actual = await Sut!.Get(id, AccountFieldsSelection.Organisations);
+        
+        Logger!.Verify(
+            x => x.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
+
+        AccountApiClient.Verify(x => x.GetResource<LegalEntityViewModel>(It.IsAny<string>()),
+            Times.Exactly(accountResponse.LegalEntities.Count));
+
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual.LegalEntities, Is.Empty);
     }
 }

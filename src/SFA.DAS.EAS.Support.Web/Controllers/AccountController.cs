@@ -1,143 +1,132 @@
-﻿using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using SFA.DAS.EAS.Support.ApplicationServices.Models;
+﻿using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
+using SFA.DAS.EAS.Support.Web.Authorization;
 using SFA.DAS.EAS.Support.Web.Helpers;
 using SFA.DAS.EAS.Support.Web.Models;
 using SFA.DAS.EAS.Support.Web.Services;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Support.Shared.Discovery;
 
-namespace SFA.DAS.EAS.Support.Web.Controllers
+namespace SFA.DAS.EAS.Support.Web.Controllers;
+
+[Authorize(Policy = PolicyNames.IsSupportPortalUser)]
+public class AccountController : Controller
 {
-    [Authorize(Roles = "das-support-portal")]
-    public class AccountController : Controller
+    private readonly IAccountHandler _accountHandler;
+    private readonly IPayeLevySubmissionsHandler _payeLevySubmissionsHandler;
+    private readonly IPayeLevyMapper _payeLevyMapper;
+
+    public AccountController(IAccountHandler accountHandler,
+        IPayeLevySubmissionsHandler payeLevySubmissionsHandler,
+        IPayeLevyMapper payeLevyDeclarationMapper)
     {
-        private readonly IAccountHandler _accountHandler;
-        private readonly IPayeLevySubmissionsHandler _payeLevySubmissionsHandler;
-        private readonly ILog _log;
-        private readonly IPayeLevyMapper _payeLevyMapper;
-        private readonly HttpContextBase _httpContext;
+        _accountHandler = accountHandler;
+        _payeLevySubmissionsHandler = payeLevySubmissionsHandler;
+        _payeLevyMapper = payeLevyDeclarationMapper;
+    }
 
-        public AccountController(IAccountHandler accountHandler,
-            IPayeLevySubmissionsHandler payeLevySubmissionsHandler,
-            ILog log,
-            IPayeLevyMapper payeLevyDeclarationMapper,
-            HttpContextBase httpContext)
+    [Route("account/{id}")]
+    public async Task<IActionResult> Index(string id)
+    {
+        var response = await _accountHandler.FindOrganisations(id);
+
+        if (response.StatusCode == SearchResponseCodes.Success)
         {
-            _accountHandler = accountHandler;
-            _payeLevySubmissionsHandler = payeLevySubmissionsHandler;
-            _log = log;
-            _payeLevyMapper = payeLevyDeclarationMapper;
-            _httpContext = httpContext;
-        }
-
-        [Route("account/{id}")]
-        public async Task<ActionResult> Index(string id)
-        {
-            var response = await _accountHandler.FindOrganisations(id);            
-
-            if (response.StatusCode == SearchResponseCodes.Success)
+            var vm = new AccountDetailViewModel
             {
-                var vm = new AccountDetailViewModel
-                {
-                    Account = response.Account,
-                    AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}"
+                Account = response.Account,
+                AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}"
 
-                };
+            };
 
-                return View(vm);
-            }
-            
-            return HttpNotFound();
+            return View(vm);
         }
 
-        [Route("account/payeschemes/{id}")]
-        public async Task<ActionResult> PayeSchemes(string id)
-        {            
-            var response = await _accountHandler.FindPayeSchemes(id);
+        return NotFound();
+    }
 
-            if (response.StatusCode == SearchResponseCodes.Success)
-            {
-                var vm = new AccountDetailViewModel
-                {
-                    Account = response.Account,
-                    AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}"
-                };
+    [Route("account/payeschemes/{id}")]
+    public async Task<IActionResult> PayeSchemes(string id)
+    {
+        var response = await _accountHandler.FindPayeSchemes(id);
 
-                return View(vm);
-            }
-            
-            return new HttpNotFoundResult();
-        }
-
-        [Route("account/header/{id}")]
-        public async Task<ActionResult> Header(string id)
+        if (response.StatusCode == SearchResponseCodes.Success)
         {
-            var response = await _accountHandler.Find(id);            
-
-            if (response.StatusCode != SearchResponseCodes.Success)
-                return HttpNotFound();
-
-            return View("SubHeader", response.Account);
-        }
-
-        [Route("account/team/{id}")]
-        public async Task<ActionResult> Team(string id)
-        {
-            var response = await _accountHandler.FindTeamMembers(id);
-
-            if (response.StatusCode == SearchResponseCodes.Success)
+            var vm = new AccountDetailViewModel
             {
-                var vm = new AccountDetailViewModel
-                {
-                    Account = response.Account,
-                    AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}",
-                    IsTier2User = _httpContext.User.IsInRole(AuthorizationConstants.Tier2User)
-                };
+                Account = response.Account,
+                AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}"
+            };
 
-                return View(vm);
-            }
-
-            return HttpNotFound();
+            return View(vm);
         }
 
-        [Route("account/finance/{id}")]
-        public async Task<ActionResult> Finance(string id)
+        return new NotFoundResult();
+    }
+
+    [Route("account/header/{id}")]
+    public async Task<IActionResult> Header(string id)
+    {
+        var response = await _accountHandler.Find(id);
+
+        if (response.StatusCode != SearchResponseCodes.Success)
+            return NotFound();
+
+        return View("SubHeader", response.Account);
+    }
+
+    [Route("account/team/{id}")]
+    public async Task<IActionResult> Team(string id)
+    {
+        var response = await _accountHandler.FindTeamMembers(id);
+
+        if (response.StatusCode == SearchResponseCodes.Success)
         {
-            var response = await _accountHandler.FindFinance(id);
-
-            if (response.StatusCode == SearchResponseCodes.Success)
+            var vm = new AccountDetailViewModel
             {
-                var vm = new FinanceViewModel
-                {
-                    Account = response.Account,
-                    Balance = response.Balance
-                };
+                Account = response.Account,
+                AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}",
+                IsTier2User = User.IsInRole(AuthorizationConstants.Tier2User)
+            };
 
-                return View(vm);
-            }
-
-            return HttpNotFound();
+            return View(vm);
         }
 
-        [Route("account/levysubmissions/{id}/{payeSchemeId}")]
-        public async Task<ActionResult> PayeSchemeLevySubmissions(string id, string payeSchemeId)
+        return NotFound();
+    }
+
+    [Route("account/finance/{id}")]
+    public async Task<IActionResult> Finance(string id)
+    {
+        var response = await _accountHandler.FindFinance(id);
+
+        if (response.StatusCode == SearchResponseCodes.Success)
         {
-            var response = await _payeLevySubmissionsHandler.FindPayeSchemeLevySubmissions(id, payeSchemeId);
-
-            if (response.StatusCode != PayeLevySubmissionsResponseCodes.AccountNotFound)
+            var vm = new FinanceViewModel
             {
-                var model = _payeLevyMapper.MapPayeLevyDeclaration(response);
+                Account = response.Account,
+                Balance = response.Balance
+            };
 
-                model.UnexpectedError =
-                    response.StatusCode == PayeLevySubmissionsResponseCodes.UnexpectedError;
-
-                return View(model);
-            }
-
-            return HttpNotFound();
+            return View(vm);
         }
+
+        return NotFound();
+    }
+
+    [Route("account/levysubmissions/{id}/{payeSchemeId}")]
+    public async Task<IActionResult> PayeSchemeLevySubmissions(string id, string payeSchemeId)
+    {
+        var response = await _payeLevySubmissionsHandler.FindPayeSchemeLevySubmissions(id, payeSchemeId);
+
+        if (response.StatusCode != PayeLevySubmissionsResponseCodes.AccountNotFound)
+        {
+            var model = _payeLevyMapper.MapPayeLevyDeclaration(response);
+
+            model.UnexpectedError =
+                response.StatusCode == PayeLevySubmissionsResponseCodes.UnexpectedError;
+
+            return View(model);
+        }
+
+        return NotFound();
     }
 }

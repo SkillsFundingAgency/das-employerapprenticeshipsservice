@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
     {
         public override void HttpClientSetup()
         {
-            HttpClient.Setup(c => c.GetAsync(It.IsAny<string>()))
+            HttpClient!.Setup(c => c.GetAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(
                     JsonConvert.SerializeObject(new PagedApiResponseViewModel<AccountWithBalanceViewModel>
                     {
@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
                         TotalPages = 1,
                         Data = new List<AccountWithBalanceViewModel>
                         {
-                            new AccountWithBalanceViewModel
+                            new()
                             {
                                 AccountId = 1,
                                 AccountHashId = "1",
@@ -43,28 +43,28 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
             var toDay = int.Parse(toDateString.Substring(6, 2));
 
             // Act
-            await ApiClient.GetPageOfAccounts(pageNumber, pageSize, new DateTime(toYear, toMonth, toDay));
+            await ApiClient!.GetPageOfAccounts(pageNumber, pageSize, new DateTime(toYear, toMonth, toDay));
 
             // Assert
             var expectedUrl = $"http://some-url/api/accounts?pageNumber={pageNumber}&pageSize={pageSize}&toDate={toDateString}";
-            HttpClient.Verify(c => c.GetAsync(expectedUrl), Times.Once);
+            HttpClient!.Verify(c => c.GetAsync(expectedUrl), Times.Once);
         }
 
         [Test]
         public async Task ThenItShouldReturnAPageOfAccounts()
         {
             // Act
-            var actual = await ApiClient.GetPageOfAccounts();
+            var actual = await ApiClient!.GetPageOfAccounts();
 
             // Assert
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
         }
 
         [Test]
         public async Task ThenItShouldDeserializeTheResponseCorrectly()
         {
             // Act
-            var actual = await ApiClient.GetPageOfAccounts();
+            var actual = await ApiClient!.GetPageOfAccounts();
 
             // Assert
             Assert.IsAssignableFrom<PagedApiResponseViewModel<AccountWithBalanceViewModel>>(actual);

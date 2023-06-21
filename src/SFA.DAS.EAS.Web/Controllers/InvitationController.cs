@@ -1,48 +1,50 @@
-﻿using SFA.DAS.EAS.Web.Extensions;
-using SFA.DAS.EmployerUsers.WebClientComponents;
-using System.Web.Mvc;
-using SFA.DAS.Authorization.Mvc.Attributes;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
+using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.Extensions;
 
-namespace SFA.DAS.EAS.Web.Controllers
+namespace SFA.DAS.EAS.Web.Controllers;
+
+[Route("invitations")]
+public class InvitationController : Controller
 {
-    [RoutePrefix("invitations")]
-    public class InvitationController : Controller
+    public IConfiguration Configuration { get; set; }
+    public InvitationController(IConfiguration _configuration)
     {
-        [Route("invite")]
-        public ActionResult Invite()
-        {
-            return Redirect(Url.EmployerAccountsAction("invitations/invite", false));
-        }
+        Configuration = _configuration;
+    }
+    [Route("invite")]
+    public IActionResult Invite()
+    {
+        return Redirect(Url.EmployerAccountsAction("invitations/invite", Configuration, false));
+    }
 
-        [HttpGet]
-        [AuthoriseActiveUser]
-        [Route]
-        public ActionResult All()
-        {
-            return Redirect(Url.EmployerAccountsAction("invitations", false));
-        }
+    [HttpGet("")]
+    [Authorize(Policy = nameof(PolicyNames.HasUserAccount))]
+    public IActionResult All()
+    {
+        return Redirect(Url.EmployerAccountsAction("invitations", Configuration, false));
+    }
 
-        [HttpGet]
-        [DasAuthorize]
-        [Route("view")]
-        public ActionResult Details(string invitationId)
-        {
-            return Redirect(Url.EmployerAccountsAction($"invitations/view?invitationId={invitationId}", false));
-        }
+    [HttpGet]
+    [Authorize(Policy = nameof(PolicyNames.HasUserAccount))]
+    [Route("view")]
+    public IActionResult Details(string invitationId)
+    {
+        return Redirect(Url.EmployerAccountsAction($"invitations/view?invitationId={invitationId}", Configuration, false));
+    }
 
-        [HttpGet]
-        [Route("register-and-accept")]
-        public ActionResult AcceptInvitationNewUser()
-        {
-            return Redirect(Url.EmployerAccountsAction("invitations/register-and-accept", false));
-        }
+    [HttpGet]
+    [Route("register-and-accept")]
+    public IActionResult AcceptInvitationNewUser()
+    {
+        return Redirect(Url.EmployerAccountsAction("invitations/register-and-accept", Configuration, false));
+    }
 
-
-        [HttpGet]
-        [Route("accept")]
-        public ActionResult AcceptInvitationExistingUser()
-        {
-            return Redirect(Url.EmployerAccountsAction("invitations/accept", false));
-        }
+    [HttpGet]
+    [Route("accept")]
+    public IActionResult AcceptInvitationExistingUser()
+    {
+        return Redirect(Url.EmployerAccountsAction("invitations/accept", Configuration, false));
     }
 }

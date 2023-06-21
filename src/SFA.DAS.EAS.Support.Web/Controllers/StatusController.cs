@@ -1,50 +1,48 @@
-﻿using System;
-using System.Reflection;
-using System.Web;
-using System.Web.Http;
-using SFA.DAS.Support.Shared;
+﻿using System.Reflection;
+using Microsoft.AspNetCore.Http.Extensions;
+using SFA.DAS.EAS.Support.ApplicationServices;
+using SFA.DAS.EAS.Support.Web.Authorization;
 
-namespace SFA.DAS.EAS.Support.Web.Controllers
+namespace SFA.DAS.EAS.Support.Web.Controllers;
+
+[Authorize(Policy = PolicyNames.IsSupportPortalUser)]
+[Route("api/status")]
+[ApiController]
+public class StatusController : ControllerBase
 {
-    [Authorize(Roles = "das-support-portal")]
-    [System.Web.Mvc.RoutePrefix("api/status")]
-    public class StatusController : ApiController
+    [AllowAnonymous]
+    public IActionResult Get()
     {
-        // GET: Status
-        [System.Web.Mvc.AllowAnonymous]
-        public IHttpActionResult Get()
+        return Ok(new
         {
-            return Ok(new
-            {
-                ServiceName = "SFA DAS Employer Apprenticeship Service Support Site",
-                ServiceVersion = AddServiceVersion(),
-                ServiceTime = DateTimeOffset.UtcNow,
-                Request = AddRequestContext()
-            });
-        }
+            ServiceName = "SFA DAS Employer Apprenticeship Service Support Site",
+            ServiceVersion = AddServiceVersion(),
+            ServiceTime = DateTimeOffset.UtcNow,
+            Request = AddRequestContext()
+        });
+    }
 
-        private string AddServiceVersion()
+    private static string AddServiceVersion()
+    {
+        try
         {
-            try
-            {
-                return Assembly.GetExecutingAssembly().Version();
-            }
-            catch (Exception)
-            {
-                return "Unknown";
-            }
+            return Assembly.GetExecutingAssembly().Version();
         }
-        private string AddRequestContext()
+        catch (Exception)
         {
-            try
-            {
-                return $" {HttpContext.Current.Request.HttpMethod}: {HttpContext.Current.Request.RawUrl}";
-            }
-            catch
-            {
-                return "Unknown";
-            }
+            return "Unknown";
         }
+    }
 
+    private string AddRequestContext()
+    {
+        try
+        {
+            return $" {HttpContext.Request.Method}: {HttpContext.Request.GetDisplayUrl()}";
+        }
+        catch
+        {
+            return "Unknown";
+        }
     }
 }

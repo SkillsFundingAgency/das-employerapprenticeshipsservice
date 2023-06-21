@@ -1,23 +1,22 @@
 ﻿using System.Text;
 
-namespace SFA.DAS.EAS.Support.Core.Services
+namespace SFA.DAS.EAS.Support.Core.Services;
+
+public class PayeSchemeObfuscator : IPayeSchemeObfuscator
 {
-    public class PayeSchemeObfuscator : IPayeSchemeObfuscator
+    public string ObscurePayeScheme(string payeSchemeId)
     {
-        public string ObscurePayeScheme(string payeSchemeId)
-        {
-            var length = payeSchemeId.Length;
+        var length = payeSchemeId.Length;
 
-            var response = new StringBuilder(payeSchemeId);
+        var response = new StringBuilder(payeSchemeId);
 
-            for (var i = 1; i < length - 1; i++)
-                if (response[i].ToString() != "/")
-                {
-                    response.Remove(i, 1);
-                    response.Insert(i, "*");
-                }
+        for (var i = 1; i < length - 1; i++)
+            if (response[i].ToString() != "/")
+            {
+                response.Remove(i, 1);
+                response.Insert(i, "*");
+            }
 
-            return response.ToString();
-        }
+        return response.ToString();
     }
 }

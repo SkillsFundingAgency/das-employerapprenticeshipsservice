@@ -1,115 +1,136 @@
-﻿using SFA.DAS.EmployerUsers.WebClientComponents;
-using System.Web.Mvc;
-using SFA.DAS.Authorization.Mvc.Attributes;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
+using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Extensions;
 
-namespace SFA.DAS.EAS.Web.Controllers
+namespace SFA.DAS.EAS.Web.Controllers;
+
+[Route("service")]
+public class HomeController : Controller
 {
-    [RoutePrefix("service")]
-    public class HomeController : Controller
+    private const string GoogleTag = "_ga";
+    private readonly IConfiguration _configuration;
+
+    public HomeController(IConfiguration configuration)
     {
-        private const string GoogleTag = "_ga";
+        _configuration = configuration;
+    }
 
-        [Route("~/")]
-        [Route]
-        [Route("Index")]
-        public ActionResult Index()
-        {
-            return Redirect(Url.EmployerAccountsAction($"service/index?{GetTrackerQueryString()}", false));
-        }        
+    [Route("~/")]
+    [Route("")]
+    [Route("Index")]
+    public IActionResult Index()
+    {
+        return Redirect(Url.EmployerAccountsAction($"service/index?{GetTrackerQueryString()}", _configuration, false));
+    }
 
-        [AuthoriseActiveUser]
-        [HttpGet]
-        [Route("accounts")]
-        public ActionResult ViewAccounts()
-        {
-            return Redirect(Url.EmployerAccountsAction("service/accounts", false));
-        }
+    [Authorize(Policy = nameof(PolicyNames.HasUserAccount))]
+    [HttpGet]
+    [Route("accounts")]
+    public IActionResult ViewAccounts()
+    {
+        return Redirect(Url.EmployerAccountsAction("service/accounts", _configuration, false));
+    }
 
-        [HttpGet]
-        [Route("register")]
-        public ActionResult RegisterUser()
-        {
-            return Redirect(Url.EmployerAccountsAction("service/register", false));
-        }
+    [HttpGet]
+    [Route("register")]
+    public IActionResult RegisterUser()
+    {
+        return Redirect(Url.EmployerAccountsAction("service/register", _configuration, false));
+    }
 
-        [DasAuthorize]
-        [HttpGet]
-        [Route("register/new")]
-        public ActionResult HandleNewRegistration()
-        {
-            return Redirect(Url.EmployerAccountsAction("service/register/new", false));
-        }
+    [Authorize(Policy = nameof(PolicyNames.HasUserAccount))]
+    [HttpGet]
+    [Route("register/new")]
+    public IActionResult HandleNewRegistration()
+    {
+        return Redirect(Url.EmployerAccountsAction("service/register/new", _configuration, false));
+    }
 
-        [DasAuthorize]
-        [HttpGet]
-        [Route("password/change")]
-        public ActionResult HandlePasswordChanged(bool userCancelled = false)
-        {
-            return Redirect(Url.EmployerAccountsAction("service/password/change", false));
-        }
+    [Authorize(Policy = nameof(PolicyNames.HasUserAccount))]
+    [HttpGet]
+    [Route("password/change")]
+    public IActionResult HandlePasswordChanged(bool userCancelled = false)
+    {
+        return Redirect(Url.EmployerAccountsAction("service/password/change", _configuration, false));
+    }
 
-        [DasAuthorize]
-        [HttpGet]
-        [Route("email/change")]
-        public ActionResult HandleEmailChanged(bool userCancelled = false)
-        {
-            return Redirect(Url.EmployerAccountsAction("service/email/change", false));
-        }
+    [Authorize(Policy = nameof(PolicyNames.HasUserAccount))]
+    [HttpGet]
+    [Route("email/change")]
+    public IActionResult HandleEmailChanged(bool userCancelled = false)
+    {
+        return Redirect(Url.EmployerAccountsAction("service/email/change", _configuration, false));
+    }
 
-        [DasAuthorize]
-        [Route("signIn")]
-        public ActionResult SignIn()
-        {
-            return Redirect(Url.EmployerAccountsAction("service/signIn", false));
-        }
+    [Authorize(Policy = nameof(PolicyNames.HasUserAccount))]
+    [Route("signIn")]
+    public IActionResult SignIn()
+    {
+        return Redirect(Url.EmployerAccountsAction("service/signIn", _configuration, false));
+    }
 
-        [Route("signOut")]
-        public ActionResult SignOut()
-        {
-            return Redirect(Url.EmployerAccountsAction("service/signOut", false));
-        }
+    [Route("signOut")]
+    public IActionResult SignOut()
+    {
+        return Redirect(Url.EmployerAccountsAction("service/signOut", _configuration, false));
+    }
+    
+    [Route("signoutcleanup")]
+    public async Task SignOutCleanup()
+    {
+        var idToken = await HttpContext.GetTokenAsync("id_token");
 
-        [HttpGet]
-        [Route("{HashedAccountId}/privacy", Order = 0)]
-        [Route("privacy", Order = 1)]
-        public ActionResult Privacy()
-        {
-            return Redirect(Url.EmployerAccountsAction("service/privacy", false));
-        }
+        var authenticationProperties = new AuthenticationProperties();
+        authenticationProperties.Parameters.Clear();
+        authenticationProperties.Parameters.Add("id_token", idToken);
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme, authenticationProperties);
+        await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, authenticationProperties);
+    }
 
-        [HttpGet]
-        [Route("cookieConsent")]
-        public ActionResult CookieConsent()
-        {
-            return Redirect(Url.EmployerAccountsAction("cookieConsent/settings", false));
-        }
+    [HttpGet]
+    [Route("{HashedAccountId}/privacy", Order = 0)]
+    [Route("privacy", Order = 1)]
+    public IActionResult Privacy()
+    {
+        return Redirect(Url.EmployerAccountsAction("service/privacy", _configuration, false));
+    }
 
-        [HttpGet]
-        [Route("help")]
-        public ActionResult Help()
-        {
-            return Redirect(Url.EmployerAccountsAction("service/help", false));
-        }
+    [HttpGet]
+    [Route("cookieConsent")]
+    public IActionResult CookieConsent()
+    {
+        return Redirect(Url.EmployerAccountsAction("cookieConsent/settings", _configuration, false));
+    }
 
-        [HttpGet]
-        [Route("start")]
-        public ActionResult ServiceStartPage()
-        {
-            return Redirect(Url.EmployerAccountsAction("service/start", false));
-        }
+    [HttpGet]
+    [Route("help")]
+    public IActionResult Help()
+    {
+        return Redirect(Url.EmployerAccountsAction("service/help", _configuration, false));
+    }
 
-        [HttpGet]
-        [Route("termsAndConditions/overview")]
-        public ActionResult TermsAndConditionsOverview()
-        {
-            return Redirect(Url.EmployerAccountsAction("service/termsAndConditions/overview", false));
-        }
+    [HttpGet]
+    [Route("start")]
+    public IActionResult ServiceStartPage()
+    {
+        return Redirect(Url.EmployerAccountsAction("service/start", _configuration, false));
+    }
 
-        private string GetTrackerQueryString()
-        {
-            var trackerValue = Url.RequestContext.HttpContext.Request.QueryString[GoogleTag];
-            return trackerValue == null ? string.Empty : $"{GoogleTag}={trackerValue}";
-        }
+    [HttpGet]
+    [Route("termsAndConditions/overview")]
+    public IActionResult TermsAndConditionsOverview()
+    {
+        return Redirect(Url.EmployerAccountsAction("service/termsAndConditions/overview", _configuration, false));
+    }
+
+    private string GetTrackerQueryString()
+    {
+        Url.ActionContext.HttpContext.Request.Query.TryGetValue(GoogleTag, out var res);
+        var trackerValue = res.ToString();
+        return trackerValue == null ? string.Empty : $"{GoogleTag}={trackerValue}";
     }
 }

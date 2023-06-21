@@ -5,9 +5,9 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
 {
     public abstract class ApiClientTestBase
     {
-        protected AccountApiConfiguration Configuration;
-        internal Mock<SecureHttpClient> HttpClient;
-        protected AccountApiClient ApiClient;
+        protected AccountApiConfiguration? Configuration;
+        internal Mock<SecureHttpClient>? HttpClient;
+        protected AccountApiClient? ApiClient;
 
         protected const long NumericalAccountId = 12345;
         protected const string TextualAccountId = "ABC123";

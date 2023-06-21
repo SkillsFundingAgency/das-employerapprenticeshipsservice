@@ -1,9 +1,0 @@
-﻿CREATE TABLE [dbo].[HealthChecks]
-(
-	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
-	[UserRef] UNIQUEIDENTIFIER NOT NULL,
-	[SentRequest] DATETIME NOT NULL,
-	[ReceivedResponse] DATETIME NULL,
-	[PublishedEvent] DATETIME NOT NULL,
-	[ReceivedEvent] DATETIME NULL
-)

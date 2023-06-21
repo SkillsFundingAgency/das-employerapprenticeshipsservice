@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Support.ApplicationServices;
-using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.Core.Models;
 using SFA.DAS.EAS.Support.Infrastructure.Models;
-using SFA.DAS.EAS.Support.Infrastructure.Services;
+using SFA.DAS.EAS.Support.Infrastructure.Services.Contracts;
 
 namespace SFA.DAS.EAS.Support.Infrastructure.Tests.ChallengeRepository
 {
@@ -22,8 +17,8 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.ChallengeRepository
             _unit = new Services.ChallengeRepository(_accountRepository.Object);
         }
 
-        private Services.ChallengeRepository _unit;
-        private Mock<IAccountRepository> _accountRepository;
+        private Services.ChallengeRepository? _unit;
+        private Mock<IAccountRepository>? _accountRepository;
 
         [Test]
         public async Task ItShouldReturnFalseWhenCheckDataHasIncorrectBalance()
@@ -32,17 +27,17 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.ChallengeRepository
             {
                 Transactions = new List<TransactionViewModel>
                 {
-                    new TransactionViewModel {Balance = 300m},
-                    new TransactionViewModel {Balance = 700m}
+                    new() {Balance = 300m},
+                    new() {Balance = 700m}
                 },
                 PayeSchemes = new List<PayeSchemeModel>
                 {
-                    new PayeSchemeModel
+                    new()
                     {
                         AddedDate = DateTime.Today.AddMonths(-12),
                         Ref = "123/456789"
                     },
-                    new PayeSchemeModel
+                    new()
                     {
                         AddedDate = DateTime.Today.AddMonths(-12),
                         Ref = "124/456789"
@@ -59,14 +54,14 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.ChallengeRepository
                 SecondCharacterPosition = 3
             };
 
-            var balance = 999m;
+            const decimal balance = 999m;
 
-            _accountRepository.Setup(x => x.GetAccountBalance(challengePermissionQuery.Id))
+            _accountRepository!.Setup(x => x.GetAccountBalance(challengePermissionQuery.Id))
                 .ReturnsAsync(balance);
 
-            var actual = await _unit.CheckData(account, challengePermissionQuery);
+            var actual = await _unit!.CheckData(account, challengePermissionQuery);
 
-            Assert.IsFalse(actual);
+            Assert.That(actual, Is.False);
         }
 
         [Test]
@@ -76,17 +71,17 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.ChallengeRepository
             {
                 Transactions = new List<TransactionViewModel>
                 {
-                    new TransactionViewModel {Balance = 300m},
-                    new TransactionViewModel {Balance = 700m}
+                    new() {Balance = 300m},
+                    new() {Balance = 700m}
                 },
                 PayeSchemes = new List<PayeSchemeModel>
                 {
-                    new PayeSchemeModel
+                    new()
                     {
                         AddedDate = DateTime.Today.AddMonths(-12),
                         Ref = "123/456789"
                     },
-                    new PayeSchemeModel
+                    new()
                     {
                         AddedDate = DateTime.Today.AddMonths(-12),
                         Ref = "124/AA6789"
@@ -103,14 +98,14 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.ChallengeRepository
                 SecondCharacterPosition = 4
             };
 
-            var balance = 1000m;
+            const decimal balance = 1000m;
 
-            _accountRepository.Setup(x => x.GetAccountBalance(challengePermissionQuery.Id))
+            _accountRepository!.Setup(x => x.GetAccountBalance(challengePermissionQuery.Id))
                 .ReturnsAsync(balance);
 
-            var actual = await _unit.CheckData(account, challengePermissionQuery);
+            var actual = await _unit!.CheckData(account, challengePermissionQuery);
 
-            Assert.IsFalse(actual);
+            Assert.That(actual, Is.False);
         }
 
         [Test]
@@ -120,23 +115,24 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.ChallengeRepository
             {
                 Transactions = new List<TransactionViewModel>
                 {
-                    new TransactionViewModel {Balance = 300m},
-                    new TransactionViewModel {Balance = 700m}
+                    new() {Balance = 300m},
+                    new() {Balance = 700m}
                 },
                 PayeSchemes = new List<PayeSchemeModel>
                 {
-                    new PayeSchemeModel
+                    new()
                     {
                         AddedDate = DateTime.Today.AddMonths(-12),
                         Ref = "123/456789"
                     },
-                    new PayeSchemeModel
+                    new()
                     {
                         AddedDate = DateTime.Today.AddMonths(-12),
                         Ref = "124/456789"
                     }
                 }
             };
+            
             var challengePermissionQuery = new ChallengePermissionQuery
             {
                 Id = "123",
@@ -147,14 +143,14 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.ChallengeRepository
                 SecondCharacterPosition = 1
             };
 
-            var balance = 1000m;
+            const decimal balance = 1000m;
 
-            _accountRepository.Setup(x => x.GetAccountBalance(challengePermissionQuery.Id))
+            _accountRepository!.Setup(x => x.GetAccountBalance(challengePermissionQuery.Id))
                 .ReturnsAsync(balance);
 
-            var actual = await _unit.CheckData(account, challengePermissionQuery);
+            var actual = await _unit!.CheckData(account, challengePermissionQuery);
 
-            Assert.IsFalse(actual);
+            Assert.That(actual, Is.False);
         }
 
         [Test]
@@ -164,17 +160,17 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.ChallengeRepository
             {
                 Transactions = new List<TransactionViewModel>
                 {
-                    new TransactionViewModel {Balance = 300m},
-                    new TransactionViewModel {Balance = 700m}
+                    new() {Balance = 300m},
+                    new() {Balance = 700m}
                 },
                 PayeSchemes = new List<PayeSchemeModel>
                 {
-                    new PayeSchemeModel
+                    new()
                     {
                         AddedDate = DateTime.Today.AddMonths(-12),
                         Ref = "123/456789"
                     },
-                    new PayeSchemeModel
+                    new()
                     {
                         AddedDate = DateTime.Today.AddMonths(-12),
                         Ref = "124/45A789"
@@ -191,14 +187,14 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.ChallengeRepository
                 SecondCharacterPosition = 5
             };
 
-            var balance = 1000m;
+            const decimal balance = 1000m;
 
-            _accountRepository.Setup(x => x.GetAccountBalance(challengePermissionQuery.Id))
+            _accountRepository!.Setup(x => x.GetAccountBalance(challengePermissionQuery.Id))
                 .ReturnsAsync(balance);
 
-            var actual = await _unit.CheckData(account, challengePermissionQuery);
+            var actual = await _unit!.CheckData(account, challengePermissionQuery);
 
-            Assert.IsTrue(actual);
+            Assert.That(actual, Is.True);
         }
     }
 }

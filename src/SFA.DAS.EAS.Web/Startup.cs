@@ -1,153 +1,119 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IdentityModel.Tokens;
-using System.Linq;
-using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using System.Web.Mvc;
-using Microsoft.Owin;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Cookies;
-using NLog;
-using Owin;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using SFA.DAS.Authentication;
+using SFA.DAS.EAS.Application.ServiceRegistrations;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Web;
-using SFA.DAS.EAS.Web.App_Start;
-using SFA.DAS.EAS.Web.Authentication;
-using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.Extensions;
+using SFA.DAS.EAS.Web.Handlers;
+using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.RouteValues;
+using SFA.DAS.EAS.Web.StartupExtensions;
 using SFA.DAS.EAS.Web.ViewModels;
-using SFA.DAS.EmployerUsers.WebClientComponents;
-using SFA.DAS.OidcMiddleware;
+using SFA.DAS.Employer.Shared.UI;
+using SFA.DAS.GovUK.Auth.AppStart;
 
-[assembly: OwinStartup(typeof(Startup))]
+namespace SFA.DAS.EAS.Web;
 
-namespace SFA.DAS.EAS.Web
+public class Startup
 {
-    public class Startup
+    private readonly IConfiguration _configuration;
+
+    public Startup(IConfiguration configuration, bool buildConfig = true)
     {
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
-        private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
-
-        public void Configuration(IAppBuilder app)
-        {
-            var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestrator>();
-            var config = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<EmployerApprenticeshipsServiceConfiguration>();
-            var constants = new Constants(config.Identity);
-            var urlHelper = new UrlHelper();
-
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AuthenticationType = "Cookies",
-                ExpireTimeSpan = new TimeSpan(0, 10, 0),
-                SlidingExpiration = true
-            });
-
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AuthenticationType = "TempState",
-                AuthenticationMode = AuthenticationMode.Passive
-            });
-
-            app.UseCodeFlowAuthentication(new OidcMiddlewareOptions
-            {
-                BaseUrl = config.Identity.BaseAddress,
-                ClientId = config.Identity.ClientId,
-                ClientSecret = config.Identity.ClientSecret,
-                Scopes = config.Identity.Scopes,
-                AuthorizeEndpoint = constants.AuthorizeEndpoint(),
-                TokenEndpoint = constants.TokenEndpoint(),
-                UserInfoEndpoint = constants.UserInfoEndpoint(),
-                TokenSigningCertificateLoader = GetSigningCertificate(config.Identity.UseCertificate),
-                TokenValidationMethod = config.Identity.UseCertificate ? TokenValidationMethod.SigningKey : TokenValidationMethod.BinarySecret,
-                AuthenticatedCallback = identity =>
-                {
-                    PostAuthentiationAction(identity, authenticationOrchestrator, constants);
-                }
-            });
-
-            ConfigurationFactory.Current = new IdentityServerConfigurationFactory(config);
-            JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
-            UserLinksViewModel.ChangePasswordLink = $"{constants.ChangePasswordLink()}{urlHelper.Encode("https://" + config.DashboardUrl + "/service/password/change")}";
-            UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{urlHelper.Encode("https://" + config.DashboardUrl + "/service/email/change")}";
-        }
-
-        private static Func<X509Certificate2> GetSigningCertificate(bool useCertificate)
-        {
-            if (!useCertificate)
-            {
-                return null;
-            }
-
-            return () =>
-            {
-                var store = new X509Store(StoreLocation.CurrentUser);
-
-                store.Open(OpenFlags.ReadOnly);
-
-                try
-                {
-                    var thumbprint = ConfigurationManager.AppSettings["TokenCertificateThumbprint"];
-                    var certificates = store.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, false);
-
-                    if (certificates.Count < 1)
-                    {
-                        throw new Exception($"Could not find certificate with thumbprint '{thumbprint}' in CurrentUser store.");
-                    }
-
-                    return certificates[0];
-                }
-                finally
-                {
-                    store.Close();
-                }
-            };
-        }
-
-        private static void PostAuthentiationAction(ClaimsIdentity identity, AuthenticationOrchestrator authenticationOrchestrator, Constants constants)
-        {
-            Logger.Info("Retrieving claims from OIDC server.");
-
-            var userRef = identity.Claims.FirstOrDefault(claim => claim.Type == constants.Id())?.Value;
-            var email = identity.Claims.FirstOrDefault(claim => claim.Type == constants.Email())?.Value;
-            var firstName = identity.Claims.FirstOrDefault(claim => claim.Type == constants.GivenName())?.Value;
-            var lastName = identity.Claims.FirstOrDefault(claim => claim.Type == constants.FamilyName())?.Value;
-
-            Logger.Info($"Retrieved claims from OIDC server for user with external ID '{userRef}'.");
-
-            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, identity.Claims.First(c => c.Type == constants.Id()).Value));
-            identity.AddClaim(new Claim(ClaimTypes.Name, identity.Claims.First(c => c.Type == constants.DisplayName()).Value));
-            identity.AddClaim(new Claim("sub", identity.Claims.First(c => c.Type == constants.Id()).Value));
-            identity.AddClaim(new Claim("email", identity.Claims.First(c => c.Type == constants.Email()).Value));
-
-            Task.Run(async () => await authenticationOrchestrator.SaveIdentityAttributes(userRef, email, firstName, lastName)).Wait();
-        }
+        _configuration = buildConfig ? configuration.BuildDasConfiguration() : configuration;
     }
 
-    public class Constants
+    public void ConfigureServices(IServiceCollection services)
     {
-        private readonly string _baseUrl;
-        private readonly IdentityServerConfiguration _configuration;
+        services.AddSingleton(_configuration);
+        services.AddOptions();
 
-        public Constants(IdentityServerConfiguration configuration)
+        var identityServerConfiguration = _configuration
+               .GetSection("Identity")
+               .Get<IdentityServerConfiguration>();
+
+        services.AddHttpContextAccessor();
+
+        services.Configure<IdentityServerConfiguration>(_configuration.GetSection("Identity"));
+        services.AddSingleton(cfg => cfg.GetService<IOptions<IdentityServerConfiguration>>().Value);
+
+        services.Configure<EmployerApprenticeshipsServiceConfiguration>(_configuration);
+        services.AddSingleton(cfg => cfg.GetService<IOptions<EmployerApprenticeshipsServiceConfiguration>>().Value);
+
+        var easConfiguration = _configuration.Get<EmployerApprenticeshipsServiceConfiguration>();
+
+        if (easConfiguration.UseGovSignIn)
         {
-            _baseUrl = configuration.ClaimIdentifierConfiguration.ClaimsBaseUrl;
-            _configuration = configuration;
+            services.AddMaMenuConfiguration(RouteNames.SignOut, _configuration["ResourceEnvironmentName"]);
+        }
+        else
+        {
+            services.AddMaMenuConfiguration(RouteNames.SignOut, identityServerConfiguration.ClientId, _configuration["ResourceEnvironmentName"]);
         }
 
-        public string AuthorizeEndpoint() => $"{_configuration.BaseAddress}{_configuration.AuthorizeEndPoint}";
-        public string ChangeEmailLink() => _configuration.BaseAddress.Replace("/identity", "") + string.Format(_configuration.ChangeEmailLink, _configuration.ClientId);
-        public string ChangePasswordLink() => _configuration.BaseAddress.Replace("/identity", "") + string.Format(_configuration.ChangePasswordLink, _configuration.ClientId);
-        public string DisplayName() => _baseUrl + _configuration.ClaimIdentifierConfiguration.DisplayName;
-        public string Email() => _baseUrl + _configuration.ClaimIdentifierConfiguration.Email;
-        public string FamilyName() => _baseUrl + _configuration.ClaimIdentifierConfiguration.FaimlyName;
-        public string GivenName() => _baseUrl + _configuration.ClaimIdentifierConfiguration.GivenName;
-        public string Id() => _baseUrl + _configuration.ClaimIdentifierConfiguration.Id;
-        public string LogoutEndpoint() => $"{_configuration.BaseAddress}{_configuration.LogoutEndpoint}";
-        public string RegisterLink() => _configuration.BaseAddress.Replace("/identity", "") + string.Format(_configuration.RegisterLink, _configuration.ClientId);
-        public string RequiresVerification() => _baseUrl + "requires_verification";
-        public string TokenEndpoint() => $"{_configuration.BaseAddress}{_configuration.TokenEndpoint}";
-        public string UserInfoEndpoint() => $"{_configuration.BaseAddress}{_configuration.UserInfoEndpoint}";
+        services.AddOuterApi(easConfiguration.EmployerAccountsOuterApiConfiguration);
+        services.AddAuthenticationServices();
+
+        if (_configuration.UseGovUkSignIn())
+        {
+            var govConfig = _configuration.GetSection("SFA.DAS.Employer.GovSignIn");
+            govConfig["ResourceEnvironmentName"] = _configuration["ResourceEnvironmentName"];
+            govConfig["StubAuth"] = _configuration["StubAuth"];
+            services.AddAndConfigureGovUkAuthentication(govConfig,
+                typeof(EmployerAccountPostAuthenticationClaimsHandler),
+                "",
+                "/service/SignIn-Stub");
+        }
+        else
+        {
+            services.AddAndConfigureEmployerAuthentication(identityServerConfiguration);
+        }
+
+        services.AddControllersWithViews()
+            .AddNewtonsoftJson(options =>
+            {
+                options.UseMemberCasing();
+            });
+
+        services.Configure<CookiePolicyOptions>(options =>
+        {
+            // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+            options.CheckConsentNeeded = context => true;
+            options.MinimumSameSitePolicy = SameSiteMode.None;
+        });
+        
+        SetupUserLinks(identityServerConfiguration);
+
+        services.AddApplicationInsightsTelemetry();
+    }
+
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+
+        app.UseStaticFiles();
+        app.UseAuthentication();
+        app.UseRouting();
+        app.UseAuthorization();
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+        });
+    }
+
+    private void SetupUserLinks(IdentityServerConfiguration identityServerConfiguration)
+    {
+        var constants = new Constants(identityServerConfiguration);
+
+        UserLinksViewModel.ChangePasswordLink = $"{constants.ChangePasswordLink()}{$"https://{_configuration.GetValue<string>("DashboardUrl")}/service/password/change"}";
+        UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{$"https://{_configuration.GetValue<string>("DashboardUrl")}/service/email/change"}";
     }
 }

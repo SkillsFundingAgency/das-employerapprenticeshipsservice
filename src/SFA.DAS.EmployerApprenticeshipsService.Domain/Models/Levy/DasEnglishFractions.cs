@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace SFA.DAS.EAS.Domain.Models.Levy
+namespace SFA.DAS.EAS.Domain.Models.Levy;
+
+public class DasEnglishFractions
 {
-    public class DasEnglishFractions
-    {
-        public List<DasEnglishFraction> Fractions { get; set; }
-    }
+    public List<DasEnglishFraction> Fractions { get; set; }
 }

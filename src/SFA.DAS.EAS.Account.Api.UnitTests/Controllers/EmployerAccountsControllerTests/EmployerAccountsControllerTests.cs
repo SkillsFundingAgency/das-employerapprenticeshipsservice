@@ -1,40 +1,39 @@
-﻿using System.Web.Http.Routing;
-using AutoMapper;
+﻿using AutoMapper;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Controllers;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.HashingService;
 using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using SFA.DAS.Encoding;
 
-namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControllerTests
+namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControllerTests;
+
+public abstract class EmployerAccountsControllerTests
 {
-    public abstract class EmployerAccountsControllerTests
+    protected EmployerAccountsController? Controller;
+    private Mock<ILogger<AccountsOrchestrator>>? _logger;
+    private Mock<IUrlHelper>? _urlHelper;
+    private Mock<IMapper>? _mapper;
+    protected Mock<IEncodingService>? EncodingService;
+    protected Mock<IEmployerAccountsApiService>? EmployerAccountsApiService;
+    protected Mock<IEmployerFinanceApiService>? EmployerFinanceApiService;
+
+    [SetUp]
+    public void Arrange()
     {
-        protected EmployerAccountsController _controller;
-        protected Mock<ILog> Logger;
-        protected Mock<UrlHelper> _urlHelper;
-        protected Mock<IMapper> _mapper;
-        protected Mock<IHashingService> _hashingService;
-        protected Mock<IEmployerAccountsApiService> _employerAccountsApiService;
-        protected Mock<IEmployerFinanceApiService> _employerFinanceApiService;
-
-        [SetUp]
-        public void Arrange()
-        {
-             Logger = new Mock<ILog>();
-            _mapper = new Mock<IMapper>();
-            _hashingService = new Mock<IHashingService>();
-            _employerAccountsApiService = new Mock<IEmployerAccountsApiService>();
-            _employerFinanceApiService = new Mock<IEmployerFinanceApiService>();
+        _logger = new Mock<ILogger<AccountsOrchestrator>>();
+        _mapper = new Mock<IMapper>();
+        EncodingService = new Mock<IEncodingService>();
+        EmployerAccountsApiService = new Mock<IEmployerAccountsApiService>();
+        EmployerFinanceApiService = new Mock<IEmployerFinanceApiService>();
           
-            var orchestrator = new AccountsOrchestrator(Logger.Object, _mapper.Object, _hashingService.Object, _employerAccountsApiService.Object, _employerFinanceApiService.Object);
-            _controller = new EmployerAccountsController(orchestrator, _employerAccountsApiService.Object);
+        var orchestrator = new AccountsOrchestrator(_logger.Object, _mapper.Object, EncodingService.Object, EmployerAccountsApiService.Object, EmployerFinanceApiService.Object);
+        Controller = new EmployerAccountsController(orchestrator, EmployerAccountsApiService.Object);
 
-            _urlHelper = new Mock<UrlHelper>();
-            _controller.Url = _urlHelper.Object;
-        }
+        _urlHelper = new Mock<IUrlHelper>();
+        Controller.Url = _urlHelper.Object;
     }
 }

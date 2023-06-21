@@ -17,7 +17,7 @@ namespace SFA.DAS.EAS.Account.Api.Client
             _httpClient = new SecureHttpClient(configuration);
         }
 
-        internal AccountApiClient(IAccountApiConfiguration configuration, SecureHttpClient httpClient)
+        public AccountApiClient(IAccountApiConfiguration configuration, SecureHttpClient httpClient)
         {
             _configuration = configuration;
             _httpClient = httpClient;

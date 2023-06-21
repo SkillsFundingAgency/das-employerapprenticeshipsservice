@@ -1,25 +1,26 @@
 ﻿using System.Threading.Tasks;
-using System.Web.Http;
-using SFA.DAS.EAS.Account.Api.Attributes;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.EAS.Account.Api.Authorization;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
 
-namespace SFA.DAS.EAS.Account.Api.Controllers
+namespace SFA.DAS.EAS.Account.Api.Controllers;
+
+[ApiController]
+[Authorize(Policy = ApiRoles.ReadUserAccounts)]
+[Route("api/statistics")]
+public class StatisticsController : ControllerBase
 {
-    [ApiAuthorize(Roles = "ReadUserAccounts")]
-    [RoutePrefix("api/statistics")]
-    public class StatisticsController : ApiController
+    private readonly StatisticsOrchestrator _statisticsOrchestrator;
+
+    public StatisticsController(StatisticsOrchestrator statisticsOrchestrator)
     {
-        private readonly StatisticsOrchestrator _statisticsOrchestrator;
+        _statisticsOrchestrator = statisticsOrchestrator;
+    }
 
-        public StatisticsController(StatisticsOrchestrator statisticsOrchestrator)
-        {
-            _statisticsOrchestrator = statisticsOrchestrator;
-        }
-
-        [Route("")]
-        public async Task<IHttpActionResult> GetStatistics()
-        {
-            return Ok(await _statisticsOrchestrator.Get());
-        }
+    [HttpGet]
+    public async Task<ActionResult<Types.StatisticsViewModel>> GetStatistics()
+    {
+        return Ok(await _statisticsOrchestrator.Get());
     }
 }

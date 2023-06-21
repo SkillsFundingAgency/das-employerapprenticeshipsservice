@@ -1,76 +1,81 @@
-﻿using System.Web.Mvc;
-using SFA.DAS.Authorization.Mvc.Attributes;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
+using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Extensions;
 
-namespace SFA.DAS.EAS.Web.Controllers
+namespace SFA.DAS.EAS.Web.Controllers;
+
+[Authorize(Policy = nameof(PolicyNames.HasUserAccount))]
+[Route("accounts/{HashedAccountId}/teams")]
+public class EmployerTeamController : Controller
 {
-    [DasAuthorize]
-    [RoutePrefix("accounts/{HashedAccountId}/teams")]
-    public class EmployerTeamController : Controller
+    public IConfiguration Configuration { get; set; }
+    public EmployerTeamController(IConfiguration _configuration)
     {
-        [HttpGet]
-        [Route]
-        public ActionResult Index(string hashedAccountId)
-        {
-            return Redirect(Url.EmployerAccountsAction($"teams?{Request.QueryString}"));
-        }
+        Configuration = _configuration;
+    }
+    [HttpGet]
+    [Route("")]
+    public IActionResult Index(string hashedAccountId)
+    {
+        return Redirect(Url.EmployerAccountsAction($"teams?{Request.QueryString}", Configuration));
+    }
 
-        [HttpGet]
-        [Route("view")]
-        public ActionResult ViewTeam(string hashedAccountId)
-        {
-            return Redirect(Url.EmployerAccountsAction($"teams/view?{Request.QueryString}"));
-        }
+    [HttpGet]
+    [Route("view")]
+    public IActionResult ViewTeam(string hashedAccountId)
+    {
+        return Redirect(Url.EmployerAccountsAction($"teams/view?{Request.QueryString}", Configuration));
+    }
 
-        [HttpGet]
-        [Route("invite")]
-        public ActionResult Invite(string hashedAccountId)
-        {
-            return Redirect(Url.EmployerAccountsAction($"teams/invite?{Request.QueryString}"));
-        }
+    [HttpGet]
+    [Route("invite")]
+    public IActionResult Invite(string hashedAccountId)
+    {
+        return Redirect(Url.EmployerAccountsAction($"teams/invite?{Request.QueryString}", Configuration));
+    }
 
-        [HttpGet]
-        [Route("invite/next")]
-        public ActionResult NextSteps(string hashedAccountId)
-        {
-            return Redirect(Url.EmployerAccountsAction($"teams/invite/next?{Request.QueryString}"));
-        }
-
-
-        [HttpGet]
-        [Route("{invitationId}/cancel")]
-        public ActionResult Cancel(string email, string invitationId, string hashedAccountId)
-        {
-            return Redirect(Url.EmployerAccountsAction($"teams/{invitationId}/cancel?{Request.QueryString}"));
-        }
-
-        [HttpGet]
-        [Route("{email}/remove")]
-        public ActionResult Remove(string hashedAccountId, string email)
-        {
-            return Redirect(Url.EmployerAccountsAction($"teams/{email}/remove?{Request.QueryString}"));
-        }
-
-        [HttpGet]
-        [Route("{email}/role/change")]
-        public ActionResult ChangeRole(string hashedAccountId, string email)
-        {
-            return Redirect(Url.EmployerAccountsAction($"teams/{email}/role/change?{Request.QueryString}"));
-        }
+    [HttpGet]
+    [Route("invite/next")]
+    public IActionResult NextSteps(string hashedAccountId)
+    {
+        return Redirect(Url.EmployerAccountsAction($"teams/invite/next?{Request.QueryString}", Configuration));
+    }
 
 
-        [HttpGet]
-        [Route("{email}/review")]
-        public ActionResult Review(string hashedAccountId, string email)
-        {
-            return Redirect(Url.EmployerAccountsAction($"teams/{email}/review?{Request.QueryString}"));
-        }
+    [HttpGet]
+    [Route("{invitationId}/cancel")]
+    public IActionResult Cancel(string email, string invitationId, string hashedAccountId)
+    {
+        return Redirect(Url.EmployerAccountsAction($"teams/{invitationId}/cancel?{Request.QueryString}", Configuration));
+    }
 
-        [HttpGet]
-        [Route("hideWizard")]
-        public ActionResult HideWizard(string hashedAccountId)
-        {
-            return Redirect(Url.EmployerAccountsAction($"teams/hideWizard?{Request.QueryString}"));
-        }
+    [HttpGet]
+    [Route("{email}/remove")]
+    public IActionResult Remove(string hashedAccountId, string email)
+    {
+        return Redirect(Url.EmployerAccountsAction($"teams/{email}/remove?{Request.QueryString}", Configuration));
+    }
+
+    [HttpGet]
+    [Route("{email}/role/change")]
+    public IActionResult ChangeRole(string hashedAccountId, string email)
+    {
+        return Redirect(Url.EmployerAccountsAction($"teams/{email}/role/change?{Request.QueryString}", Configuration));
+    }
+
+
+    [HttpGet]
+    [Route("{email}/review")]
+    public IActionResult Review(string hashedAccountId, string email)
+    {
+        return Redirect(Url.EmployerAccountsAction($"teams/{email}/review?{Request.QueryString}", Configuration));
+    }
+
+    [HttpGet]
+    [Route("hideWizard")]
+    public IActionResult HideWizard(string hashedAccountId)
+    {
+        return Redirect(Url.EmployerAccountsAction($"teams/hideWizard?{Request.QueryString}", Configuration));
     }
 }

@@ -1,27 +1,27 @@
 ﻿using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
-using SFA.DAS.EAS.Support.Infrastructure.Services;
+using SFA.DAS.EAS.Support.Infrastructure.Services.Contracts;
 
-namespace SFA.DAS.EAS.Support.ApplicationServices.Tests.ChallengeHandler
+namespace SFA.DAS.EAS.Support.ApplicationServices.Tests.ChallengeHandler;
+
+[TestFixture]
+public abstract class WhenTestingChallengeHandler
 {
-    [TestFixture]
-    public class WhenTestingChallengeHandler
+    private Mock<IChallengeService>? _challengeService;
+    
+    protected IChallengeHandler? Unit;
+    protected Mock<IAccountRepository>? AccountRepository;
+    protected Mock<IChallengeRepository>? ChallengeRepository;
+    
+    [SetUp]
+    public void Setup()
     {
-        [SetUp]
-        public void Setup()
-        {
-            _accountRepository = new Mock<IAccountRepository>();
-            _challengeService = new Mock<IChallengeService>();
-            _challengeRepository = new Mock<IChallengeRepository>();
+        AccountRepository = new Mock<IAccountRepository>();
+        _challengeService = new Mock<IChallengeService>();
+        ChallengeRepository = new Mock<IChallengeRepository>();
 
-            _unit = new ApplicationServices.ChallengeHandler(_accountRepository.Object, _challengeService.Object,
-                _challengeRepository.Object);
-        }
-
-        protected IChallengeHandler _unit;
-        protected Mock<IAccountRepository> _accountRepository;
-        protected Mock<IChallengeService> _challengeService;
-        protected Mock<IChallengeRepository> _challengeRepository;
+        Unit = new ApplicationServices.ChallengeHandler(AccountRepository.Object, _challengeService.Object,
+            ChallengeRepository.Object);
     }
 }

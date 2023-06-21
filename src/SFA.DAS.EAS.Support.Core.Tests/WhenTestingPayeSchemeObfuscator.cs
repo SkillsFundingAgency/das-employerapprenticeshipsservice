@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Support.Core.Tests
         [TestCase("A/b", "A/b")]
         public void ItShouldObfuscateThePayeIdentifierDetails(string payeSchemeId, string expectedPayeSchemeId)
         {
-            Assert.AreEqual(expectedPayeSchemeId, new PayeSchemeObfuscator().ObscurePayeScheme(payeSchemeId));
+            Assert.That(new PayeSchemeObfuscator().ObscurePayeScheme(payeSchemeId), Is.EqualTo(expectedPayeSchemeId));
         }
     }
 }

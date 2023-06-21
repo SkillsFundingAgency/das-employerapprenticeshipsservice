@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Account
         [Test]
         public async Task ItShouldReturnAViewAndModelOnSuccess()
         {
-            var accountFinanceReponse = new AccountFinanceResponse
+            var accountFinanceResponse = new AccountFinanceResponse
             {
                 Account = new Core.Models.Account
                 {
@@ -25,23 +25,23 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Account
                 },
                 StatusCode = SearchResponseCodes.Success
             };
-            var id = "123";
-            AccountHandler.Setup(x => x.FindFinance(id)).ReturnsAsync(accountFinanceReponse);
-            var actual = await Unit.Finance("123");
+            const string id = "123";
+            AccountHandler!.Setup(x => x.FindFinance(id)).ReturnsAsync(accountFinanceResponse);
+            var actual = await Unit!.Finance("123");
 
             Assert.IsNotNull(actual);
             Assert.IsNotNull(actual);
             Assert.IsInstanceOf<ViewResult>(actual);
-            Assert.AreEqual("", ((ViewResult) actual).ViewName);
-            Assert.IsInstanceOf<FinanceViewModel>(((ViewResult) actual).Model);
-            Assert.AreEqual(accountFinanceReponse.Account, ((FinanceViewModel) ((ViewResult) actual).Model).Account);
-            Assert.AreEqual(accountFinanceReponse.Balance, ((FinanceViewModel) ((ViewResult) actual).Model).Balance);
+            Assert.AreEqual(true, string.IsNullOrEmpty(((ViewResult)actual).ViewName));
+            Assert.IsInstanceOf<FinanceViewModel>(((ViewResult)actual).Model);
+            Assert.AreEqual(accountFinanceResponse.Account, ((FinanceViewModel)((ViewResult)actual).Model!).Account);
+            Assert.AreEqual(accountFinanceResponse.Balance, ((FinanceViewModel)((ViewResult)actual).Model!)!.Balance);
         }
 
         [Test]
-        public async Task ItShouodReturnHttpNotFoundOnNoSearchResultsFound()
+        public async Task ItShouldReturnHttpNotFoundOnNoSearchResultsFound()
         {
-            var accountFinanceReponse = new AccountFinanceResponse
+            var accountFinanceResponse = new AccountFinanceResponse
             {
                 Account = new Core.Models.Account
                 {
@@ -52,17 +52,17 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Account
                 },
                 StatusCode = SearchResponseCodes.NoSearchResultsFound
             };
-            var id = "123";
-            AccountHandler.Setup(x => x.FindFinance(id)).ReturnsAsync(accountFinanceReponse);
-            var actual = await Unit.Finance("123");
+            const string id = "123";
+            AccountHandler!.Setup(x => x.FindFinance(id)).ReturnsAsync(accountFinanceResponse);
+            var actual = await Unit!.Finance("123");
             Assert.IsNotNull(actual);
-            Assert.IsInstanceOf<HttpNotFoundResult>(actual);
+            Assert.IsInstanceOf<NotFoundResult>(actual);
         }
 
         [Test]
-        public async Task ItShouodReturnHttpNotFoundOnSearchFailed()
+        public async Task ItShouldReturnHttpNotFoundOnSearchFailed()
         {
-            var accountFinanceReponse = new AccountFinanceResponse
+            var accountFinanceResponse = new AccountFinanceResponse
             {
                 Account = new Core.Models.Account
                 {
@@ -73,12 +73,13 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Account
                 },
                 StatusCode = SearchResponseCodes.SearchFailed
             };
-            var id = "123";
-            AccountHandler.Setup(x => x.FindFinance(id)).ReturnsAsync(accountFinanceReponse);
-            var actual = await Unit.Finance("123");
+            
+            const string id = "123";
+            AccountHandler!.Setup(x => x.FindFinance(id)).ReturnsAsync(accountFinanceResponse);
+            var actual = await Unit!.Finance("123");
 
             Assert.IsNotNull(actual);
-            Assert.IsInstanceOf<HttpNotFoundResult>(actual);
+            Assert.IsInstanceOf<NotFoundResult>(actual);
         }
     }
 }

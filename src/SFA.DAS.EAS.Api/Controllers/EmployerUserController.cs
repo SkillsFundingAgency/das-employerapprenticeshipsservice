@@ -1,26 +1,27 @@
 ﻿using System.Threading.Tasks;
-using System.Web.Http;
-using SFA.DAS.EAS.Account.Api.Attributes;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.EAS.Account.Api.Authorization;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
-namespace SFA.DAS.EAS.Account.Api.Controllers
+namespace SFA.DAS.EAS.Account.Api.Controllers;
+
+[ApiController]
+[Route("api/user/{userRef}")]
+public class EmployerUserController : ControllerBase
 {
-    [RoutePrefix("api/user/{userRef}")]
-    public class EmployerUserController : ApiController
+    private readonly IEmployerAccountsApiService _apiService;
+
+    public EmployerUserController(IEmployerAccountsApiService apiService)
     {
-        private readonly IEmployerAccountsApiService _apiService;
+        _apiService = apiService;
+    }
 
-        public EmployerUserController(IEmployerAccountsApiService apiService)
-        {
-            _apiService = apiService;
-        }
-
-        [Route("accounts", Name = "Accounts")]
-        [ApiAuthorize(Roles = "ReadUserAccounts")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetUserAccounts(string userRef)
-        {
-            return Ok(await _apiService.Redirect($"/api/user/{userRef}/accounts"));
-        }
+    [Authorize(Policy = ApiRoles.ReadUserAccounts)]
+    [HttpGet("accounts", Name = "Accounts")]
+    public async Task<IActionResult> GetUserAccounts(string userRef)
+    {
+        var redirectResponse = await _apiService.Redirect($"/api/user/{userRef}/accounts");
+        return Content(redirectResponse.ToString(), "application/json");
     }
 }

@@ -1,26 +1,31 @@
-﻿using System.Web.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
+using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Extensions;
-using SFA.DAS.EmployerUsers.WebClientComponents;
 
-namespace SFA.DAS.EAS.Web.Controllers
+namespace SFA.DAS.EAS.Web.Controllers;
+
+[Route("settings")]
+[Authorize(Policy = nameof(PolicyNames.HasUserAccount))]
+public class SettingsController : Controller
 {
-    [RoutePrefix("settings")]
-    [AuthoriseActiveUser]
-    public class SettingsController : Controller
+    public IConfiguration Configuration { get; set; }
+    public SettingsController(IConfiguration _configuration)
     {
-        [HttpGet]
-        [Route("notifications")]
-        public ActionResult NotificationSettings()
-        {
-            return Redirect(Url.EmployerAccountsAction("settings/notifications", false));
-        }
-
-        [HttpGet]
-        [Route("notifications/unsubscribe/{hashedAccountId}")]
-        public ActionResult NotificationUnsubscribe(string hashedAccountId)
-        {
-            return Redirect(Url.EmployerAccountsAction($"settings/notifications/unsubscribe/{hashedAccountId}", false));
-        }
-
+        Configuration = _configuration;
     }
+    [HttpGet]
+    [Route("notifications")]
+    public IActionResult NotificationSettings()
+    {
+        return Redirect(Url.EmployerAccountsAction("settings/notifications", Configuration, false));
+    }
+
+    [HttpGet]
+    [Route("notifications/unsubscribe/{hashedAccountId}")]
+    public IActionResult NotificationUnsubscribe(string hashedAccountId)
+    {
+        return Redirect(Url.EmployerAccountsAction($"settings/notifications/unsubscribe/{hashedAccountId}", Configuration, false));
+    }
+
 }

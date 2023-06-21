@@ -1,32 +1,34 @@
 ﻿using System.Threading.Tasks;
-using System.Web.Http;
-using SFA.DAS.EAS.Account.Api.Attributes;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.EAS.Account.Api.Authorization;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
-namespace SFA.DAS.EAS.Account.Api.Controllers
+namespace SFA.DAS.EAS.Account.Api.Controllers;
+
+[ApiController]
+[Authorize(Policy = ApiRoles.ReadUserAccounts)]
+[Route("api/user")]
+public class UserController : ControllerBase
 {
-    [ApiAuthorize(Roles = "ReadUserAccounts")]
-    [RoutePrefix("api/user")]
-    public class UserController : ApiController
+    private readonly IEmployerAccountsApiService _apiService;
+
+    public UserController(IEmployerAccountsApiService apiService)
     {
-        private readonly IEmployerAccountsApiService _apiService;
+        _apiService = apiService;
+    }
 
-        public UserController(IEmployerAccountsApiService apiService)
+    [HttpGet]
+    public async Task<IActionResult> Get(string email)
+    {
+        try
         {
-            _apiService = apiService;
+            var redirectResponse = await _apiService.Redirect($"/api/user?email={email}");
+            return Content(redirectResponse.ToString(), "application/json");
         }
-
-        [Route("")]
-        public async Task<IHttpActionResult> Get(string email)
+        catch
         {
-            try
-            {
-                return Ok(await _apiService.Redirect($"/api/user?email={email}"));
-            }
-            catch
-            {
-                return NotFound();
-            }
+            return NotFound();
         }
     }
 }

@@ -1,28 +1,23 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Web.Mvc;
 
-namespace SFA.DAS.EAS.Support.Web.Controllers
+namespace SFA.DAS.EAS.Support.Web.Controllers;
+
+[ExcludeFromCodeCoverage]
+public class ErrorController : Controller
 {
-    [ExcludeFromCodeCoverage]
-    public class ErrorController : Controller
+    public IActionResult Error()
     {
-
-        public ActionResult Error()
-        {
-            return View();
-        }
+        return View();
+    }
 
 
-        public ActionResult NotFound()
-        {
-            return View("Error");
-        }
+    public IActionResult NotFound()
+    {
+        return View("Error");
+    }
 
-        public ActionResult BadRequest()
-        {
-            return View("Error");
-        }
-
-
+    public IActionResult BadRequest()
+    {
+        return View("Error");
     }
 }

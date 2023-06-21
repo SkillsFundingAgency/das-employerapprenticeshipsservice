@@ -1,8 +1,7 @@
 ﻿using SFA.DAS.EAS.Domain.Models.Transaction;
 
-namespace SFA.DAS.EAS.Domain.Models.ExpiredFunds
+namespace SFA.DAS.EAS.Domain.Models.ExpiredFunds;
+
+public class ExpiredFundTransactionLine : TransactionLine
 {
-    public class ExpiredFundTransactionLine : TransactionLine
-    {
-    }
 }

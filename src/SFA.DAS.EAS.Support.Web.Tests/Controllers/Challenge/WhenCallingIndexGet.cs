@@ -1,77 +1,75 @@
-﻿using System.Threading.Tasks;
-using System.Web.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.Web.Models;
 
-namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Challenge
+namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Challenge;
+
+[TestFixture]
+public class WhenCallingIndexGet : WhenTestingChallengeController
 {
-    [TestFixture]
-    public class WhenCallingIndexGet : WhenTestingChallengeController
+    [Test]
+    public async Task ItShouldReturnHttpNoFoundWhenThereIsNotAMatch()
     {
-        [Test]
-        public async Task ItShouldReturnHttpNoFoundWhenThereIsNotAMatch()
+        var challengeResponse = new ChallengeResponse
         {
-            var challengeResponse = new ChallengeResponse
-            {
-                Account = null,
-                StatusCode = SearchResponseCodes.NoSearchResultsFound
-            };
+            Account = null,
+            StatusCode = SearchResponseCodes.NoSearchResultsFound
+        };
 
-            var id = "123";
+        const string id = "123";
 
-            MockChallengeHandler.Setup(x => x.Get(id))
-                .ReturnsAsync(challengeResponse);
+        MockChallengeHandler!.Setup(x => x.Get(id))
+            .ReturnsAsync(challengeResponse);
 
-            var actual = await Unit.Index(id);
+        var actual = await Unit!.Index(id);
 
-            Assert.IsInstanceOf<HttpNotFoundResult>(actual);
-        }
+        Assert.IsInstanceOf<NotFoundObjectResult>(actual);
+    }
 
-        [Test]
-        public async Task ItShouldReturnHttpNoFoundWhenTheSearchFails()
+    [Test]
+    public async Task ItShouldReturnHttpNoFoundWhenTheSearchFails()
+    {
+        var challengeResponse = new ChallengeResponse
         {
-            var challengeResponse = new ChallengeResponse
-            {
-                Account = null,
-                StatusCode = SearchResponseCodes.SearchFailed
-            };
+            Account = null,
+            StatusCode = SearchResponseCodes.SearchFailed
+        };
 
-            var id = "123";
+        const string id = "123";
 
-            MockChallengeHandler.Setup(x => x.Get(id))
-                .ReturnsAsync(challengeResponse);
+        MockChallengeHandler!.Setup(x => x.Get(id))
+            .ReturnsAsync(challengeResponse);
 
-            var actual = await Unit.Index(id);
+        var actual = await Unit!.Index(id);
 
-            Assert.IsInstanceOf<HttpNotFoundResult>(actual);
-        }
+        Assert.IsInstanceOf<NotFoundObjectResult>(actual);
+    }
 
-        [Test]
-        public async Task ItShouldReturnTheChallengeViewWithAModelWhenThereIsAMatch()
+    [Test]
+    public async Task ItShouldReturnTheChallengeViewWithAModelWhenThereIsAMatch()
+    {
+        var challengeResponse = new ChallengeResponse
         {
-            var challengeResponse = new ChallengeResponse
+            Account = new Core.Models.Account
             {
-                Account = new Core.Models.Account
-                {
-                    AccountId = 123,
-                    HashedAccountId = "ERERER",
-                    DasAccountName = "Test Account"
-                },
-                StatusCode = SearchResponseCodes.Success
-            };
+                AccountId = 123,
+                HashedAccountId = "ERERER",
+                DasAccountName = "Test Account"
+            },
+            StatusCode = SearchResponseCodes.Success
+        };
 
-            var id = "123";
+        const string id = "123";
 
-            MockChallengeHandler.Setup(x => x.Get(id))
-                .ReturnsAsync(challengeResponse);
+        MockChallengeHandler!.Setup(x => x.Get(id))
+            .ReturnsAsync(challengeResponse);
 
-            var actual = await Unit.Index(id);
+        var actual = await Unit!.Index(id);
 
-            Assert.IsInstanceOf<ViewResult>(actual);
-            var viewResult = (ViewResult) actual;
-            Assert.IsInstanceOf<ChallengeViewModel>(viewResult.Model);
-        }
+        Assert.IsInstanceOf<ViewResult>(actual);
+        var viewResult = (ViewResult)actual;
+        Assert.IsInstanceOf<ChallengeViewModel>(viewResult.Model);
     }
 }

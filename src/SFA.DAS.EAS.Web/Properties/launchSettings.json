@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "SFA.DAS.EAS.Web": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "applicationUrl": "https://localhost:54202;http://localhost:54203",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

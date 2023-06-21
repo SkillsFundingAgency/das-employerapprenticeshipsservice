@@ -1,4 +1,5 @@
-﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.UserAccountsViewModel>
+﻿@using SFA.DAS.EAS.Web.Orchestrators
+@model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.UserAccountsViewModel>
 
 @{ViewBag.PageID = "page-auth-setupaccount"; }
 @{ViewBag.Section = "home"; }
@@ -11,7 +12,7 @@
 
 <div class="grid-row">
     <div class="column-full">
-        @Html.Partial("_SetupAccount")
+        <partial name="SetupAccount"/>
     </div>
 </div>
 

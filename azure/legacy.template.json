@@ -63,10 +63,10 @@
             "type": "string",
             "defaultValue": ""
         },
-        "keyVaultResourceGroupName": {
+        "sharedManagementResourceGroup": {
             "type": "string"
         },
-        "keyVaultName": {
+        "sharedKeyVaultName": {
             "type": "string"
         },
         "deploySupportSite": {
@@ -76,10 +76,10 @@
         "tokenCertificateName": {
             "type": "string"
         },
-        "apiIdaAudience": {
+        "idaAudience": {
             "type": "string"
         },
-        "apiIdaTenant": {
+        "Tenant": {
             "type": "string"
         },
         "appServiceAllowedIPs": {
@@ -93,6 +93,12 @@
         "tags": {
             "type": "object"
         },
+        "sharedApimResourceGroup": {
+            "type": "string"
+        },
+        "sharedApimName": {
+            "type": "string"
+        },
         "utcValue": {
             "type": "string",
             "defaultValue": "[utcNow()]"
@@ -104,7 +110,9 @@
         "uiAppServiceName": "[concat(variables('resourceNamePrefix'), parameters('serviceName'), 'ui-as')]",
         "apiAppServiceName": "[concat(variables('resourceNamePrefix'), parameters('serviceName'), 'api-as')]",
         "supportAppServiceName": "[concat(variables('resourceNamePrefix'), 's', parameters('serviceName'), '-as')]",
-        "resourceGroupName": "[concat(variables('resourceNamePrefix'), parameters('serviceName'), '-rg')]"
+        "resourceGroupName": "[concat(variables('resourceNamePrefix'), parameters('serviceName'), '-rg')]",
+        "configNames": "SFA.DAS.EmployerApprenticeshipsService",
+        "configNamesApi": "SFA.DAS.EmployerApprenticeshipsService,SFA.DAS.Encoding"
     },
     "resources": [
         {
@@ -177,10 +185,10 @@
                         "value": "[parameters('uiCertificateName')]"
                     },
                     "keyVaultName": {
-                        "value": "[parameters('keyVaultName')]"
+                        "value": "[parameters('sharedKeyVaultName')]"
                     },
                     "keyVaultResourceGroup": {
-                        "value": "[parameters('keyVaultResourceGroupName')]"
+                        "value": "[parameters('sharedManagementResourceGroup')]"
                     }
                 }
             }
@@ -201,10 +209,34 @@
                         "value": "[parameters('tokenCertificateName')]"
                     },
                     "keyVaultName": {
-                        "value": "[parameters('keyVaultName')]"
+                        "value": "[parameters('sharedKeyVaultName')]"
                     },
                     "keyVaultResourceGroup": {
-                        "value": "[parameters('keyVaultResourceGroupName')]"
+                        "value": "[parameters('sharedManagementResourceGroup')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2021-04-01",
+            "name": "[concat(variables('uiAppServiceName'), '-apim-subscription-', parameters('utcValue'))]",
+            "resourceGroup": "[parameters('sharedApimResourceGroup')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('deploymentUrlBase'),'apim/apim-subscription.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "apimName": {
+                        "value": "[parameters('sharedApimName')]"
+                    },
+                    "subscriptionName": {
+                        "value": "[variables('uiAppServiceName')]"
+                    },
+                    "subscriptionScope": {
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('sharedApimResourceGroup'), '/providers/Microsoft.ApiManagement/service/', parameters('sharedApimName'), '/products/EmployerAccountsOuterApi')]"
                     }
                 }
             }
@@ -267,6 +299,10 @@
                                 {
                                     "name": "TokenCertificateThumbprint",
                                     "value": "[reference(concat('ui-token-signing-certificate-', parameters('utcValue')), '2018-11-01').outputs.certificateThumbprint.value]"
+                                },
+                                {
+                                    "name": "ConfigNames",
+                                    "value": "[variables('configNames')]"
                                 }
                             ]
                         }
@@ -300,10 +336,10 @@
                         "value": "[parameters('apiCertificateName')]"
                     },
                     "keyVaultName": {
-                        "value": "[parameters('keyVaultName')]"
+                        "value": "[parameters('sharedKeyVaultName')]"
                     },
                     "keyVaultResourceGroup": {
-                        "value": "[parameters('keyVaultResourceGroupName')]"
+                        "value": "[parameters('sharedManagementResourceGroup')]"
                     }
                 }
             }
@@ -357,11 +393,15 @@
                                 },
                                 {
                                     "name": "idaAudience",
-                                    "value": "[parameters('apiIdaAudience')]"
+                                    "value": "[parameters('idaAudience')]"
                                 },
                                 {
                                     "name": "idaTenant",
-                                    "value": "[parameters('apiIdaTenant')]"
+                                    "value": "[parameters('Tenant')]"
+                                },
+                                {
+                                    "name": "ConfigNames",
+                                    "value": "[variables('configNamesApi')]"
                                 }
                             ]
                         }
@@ -417,10 +457,10 @@
                         "value": "[parameters('supportCertificateName')]"
                     },
                     "keyVaultName": {
-                        "value": "[parameters('keyVaultName')]"
+                        "value": "[parameters('sharedKeyVaultName')]"
                     },
                     "keyVaultResourceGroup": {
-                        "value": "[parameters('keyVaultResourceGroupName')]"
+                        "value": "[parameters('sharedManagementResourceGroup')]"
                     }
                 }
             }
@@ -526,19 +566,19 @@
         }
     ],
     "outputs": {
-        "LegacyResourceGroupName": {
+        "ResourceGroupName": {
             "type": "string",
             "value": "[variables('resourceGroupName')]"
         },
-        "LegacyUIAppServiceName": {
+        "UIAppServiceName": {
             "type": "string",
             "value": "[variables('uiAppServiceName')]"
         },
-        "LegacyApiAppServiceName": {
+        "ApiAppServiceName": {
             "type": "string",
             "value": "[variables('apiAppServiceName')]"
         },
-        "LegacySupportAppServiceName": {
+        "SupportAppServiceName": {
             "type": "string",
             "value": "[variables('supportAppServiceName')]"
         }

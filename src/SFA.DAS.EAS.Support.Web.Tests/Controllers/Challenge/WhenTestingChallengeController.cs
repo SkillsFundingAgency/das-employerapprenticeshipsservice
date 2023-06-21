@@ -1,47 +1,46 @@
-﻿using System.Security.Principal;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Support.ApplicationServices;
 using SFA.DAS.EAS.Support.Web.Controllers;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Challenge
 {
     public abstract class WhenTestingChallengeController
     {
-        protected Mock<IChallengeHandler> MockChallengeHandler;
-        protected Mock<HttpContextBase> MockContextBase;
-        protected Mock<HttpRequestBase> MockRequestBase;
-        protected Mock<HttpResponseBase> MockResponseBase;
-        protected Mock<IPrincipal> MockUser;
-        protected Mock<ILog> _logger;
-        protected RouteData RouteData;
-        protected ChallengeController Unit;
-        protected ControllerContext UnitControllerContext;
+        protected Mock<IChallengeHandler>? MockChallengeHandler;
+        private Mock<HttpContext>? _mockContextBase;
+        private Mock<HttpRequest>? _mockRequestBase;
+        private Mock<HttpResponse>? _mockResponseBase;
+        private Mock<ClaimsPrincipal>? _mockUser;
+        private Mock<ILogger<ChallengeController>>? _logger;
+        protected ChallengeController? Unit;
+        private ControllerContext? _unitControllerContext;
 
         [SetUp]
         public void Setup()
         {
             MockChallengeHandler = new Mock<IChallengeHandler>();
-            _logger = new Mock<ILog>();
+            _logger = new Mock<ILogger<ChallengeController>>();
             Unit = new ChallengeController(MockChallengeHandler.Object, _logger.Object);
 
-            RouteData = new RouteData();
-            MockContextBase = new Mock<HttpContextBase>();
+            _mockContextBase = new Mock<HttpContext>();
 
-            MockRequestBase = new Mock<HttpRequestBase>();
-            MockResponseBase = new Mock<HttpResponseBase>();
-            MockUser = new Mock<IPrincipal>();
+            _mockRequestBase = new Mock<HttpRequest>();
+            _mockResponseBase = new Mock<HttpResponse>();
+            _mockUser = new Mock<ClaimsPrincipal>();
 
-            MockContextBase.Setup(x => x.Request).Returns(MockRequestBase.Object);
-            MockContextBase.Setup(x => x.Response).Returns(MockResponseBase.Object);
-            MockContextBase.Setup(x => x.User).Returns(MockUser.Object);
-            UnitControllerContext = new ControllerContext(MockContextBase.Object, RouteData, Unit);
+            _mockContextBase.Setup(x => x.Request).Returns(_mockRequestBase.Object);
+            _mockContextBase.Setup(x => x.Response).Returns(_mockResponseBase.Object);
+            _mockContextBase.Setup(x => x.User).Returns(_mockUser.Object);
 
-            Unit.ControllerContext = UnitControllerContext;
+            _unitControllerContext = new ControllerContext();
+
+            Unit.ControllerContext = _unitControllerContext;
         }
     }
 }

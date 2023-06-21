@@ -1,18 +1,17 @@
 ﻿using System;
 using SFA.DAS.UnitOfWork.Context;
 
-namespace SFA.DAS.EAS.Domain.Models
+namespace SFA.DAS.EAS.Domain.Models;
+
+public abstract class Entity
 {
-    public abstract class Entity
+    protected void Publish<T>(Action<T> action) where T : new()
     {
-        protected void Publish<T>(Action<T> action) where T : new()
+        UnitOfWorkContext.AddEvent<object>(() =>
         {
-            UnitOfWorkContext.AddEvent<object>(() =>
-            {
-                var message = new T();
-                action(message);
-                return message;
-            });
-        }
+            var message = new T();
+            action(message);
+            return message;
+        });
     }
 }

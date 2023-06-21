@@ -1,9 +1,8 @@
-﻿namespace SFA.DAS.EAS.Domain.Models.Account
+﻿namespace SFA.DAS.EAS.Domain.Models.Account;
+
+public class EmployerAccountOutput
 {
-    public class EmployerAccountOutput
-    {
-        public long AccountId { get; set; }
-        public string HashedAccountId { get; set; }
-        public string PublicHashedAccountId { get; set; }
-    }
+    public long AccountId { get; set; }
+    public string HashedAccountId { get; set; }
+    public string PublicHashedAccountId { get; set; }
 }

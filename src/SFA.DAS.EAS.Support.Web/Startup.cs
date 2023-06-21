@@ -1,32 +1,57 @@
-﻿using System.Web.Mvc;
-using Microsoft.Owin;
-using Microsoft.Owin.Security.ActiveDirectory;
-using Owin;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Support.Shared.SiteConnection;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.EAS.Support.Web.Configuration;
+using SFA.DAS.EAS.Support.Web.Extensions;
+using SFA.DAS.EAS.Support.Web.ServiceRegistrations;
 
-[assembly: OwinStartup(typeof(SFA.DAS.EAS.Support.Web.Startup))]
-namespace SFA.DAS.EAS.Support.Web
+namespace SFA.DAS.EAS.Support.Web;
+
+public class Startup
 {
-    public class Startup
+    private readonly IConfiguration _configuration;
+
+    public Startup(IConfiguration configuration)
     {
-        public void Configuration(IAppBuilder app)
-        {
-            var ioc = DependencyResolver.Current;
-            var logger = ioc.GetService<ILog>();
-            var siteValidatorSettings = ioc.GetService<ISiteValidatorSettings>();
+        _configuration = configuration.BuildDasConfiguration();
+    }
 
-            logger.Info($"SiteValidator Configuration Tenant : {siteValidatorSettings.Tenant} and Audience : {siteValidatorSettings.Audience} ");
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddConfigurationSections(_configuration);
 
-            app.UseWindowsAzureActiveDirectoryBearerAuthentication(new WindowsAzureActiveDirectoryBearerAuthenticationOptions
+        services.AddSingleton(_configuration);
+        var webConfiguration = _configuration.Get<EasSupportConfiguration>();
+
+        services.AddAndConfigureSupportAuthentication(webConfiguration);
+
+        services.AddApiClientServices();
+        services.AddRepositories();
+        services.AddApplicationServices();
+
+        services.AddControllersWithViews()
+            .AddNewtonsoftJson(options =>
             {
-                Tenant = siteValidatorSettings.Tenant,
-                TokenValidationParameters = new System.IdentityModel.Tokens.TokenValidationParameters
-                {
-                    RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role",
-                    ValidAudiences = siteValidatorSettings.Audience.Split(',')
-                }
-            });            
+                options.UseMemberCasing();
+            });
+    }
+
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
         }
+
+        app.UseStaticFiles();
+        app.UseAuthentication();
+        app.UseRouting();
+        app.UseAuthorization();
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+        });
     }
 }

@@ -1,5 +1,0 @@
-﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
-
-<h2 class="govuk-heading-m">Accept your agreement to access apprenticeship funding</h2>
-<p class="govuk-body">Accept your agreement with the Department for Education (<abbr>DfE</abbr>) to access funding for apprenticeship training.</p>
-<p class="govuk-body govuk-!-margin-0"><a href="@Url.Action("AboutYourAgreement", "EmployerAgreement", new { agreementId = Model.PendingAgreements.FirstOrDefault().HashedAgreementId, hashedAccountId = Model.HashedAccountId })" class="govuk-link govuk-!-font-weight-bold das-highlight__link">Accept your agreement</a> </p>
