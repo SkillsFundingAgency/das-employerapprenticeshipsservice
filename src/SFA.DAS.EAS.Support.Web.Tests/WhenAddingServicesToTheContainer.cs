@@ -41,6 +41,7 @@ public class WhenAddingServicesToTheContainer
         services.AddApplicationServices();
         services.AddConfigurationSections(config);
         services.AddApiClientServices();
+        services.AddRepositories();
         
         services.AddLogging();
 

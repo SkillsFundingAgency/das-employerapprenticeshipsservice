@@ -5,21 +5,27 @@ using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Support.Infrastructure.Settings;
 using SFA.DAS.EAS.Support.Web.Configuration;
+using SFA.DAS.EmployerAccounts.Api.Client;
 
 namespace SFA.DAS.EAS.Support.Web.ServiceRegistrations;
 
 public static class ConfigurationServiceRegistrations
 {
-    public static IServiceCollection AddConfigurationSections(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddConfigurationSections(this IServiceCollection services,
+        IConfiguration configuration)
     {
         services.AddOptions();
 
         var supportConfig = configuration.GetSection(ConfigurationKeys.SupportEasConfig);
-        
+
         services.Configure<EasSupportConfiguration>(supportConfig);
+        services.Configure<IEmployerAccountsApiClientConfiguration>(configuration.GetSection(ConfigurationKeys.EmployerAccountApiConfig));
+        services.AddSingleton(cfg => cfg.GetService<IOptions<IEmployerAccountsApiClientConfiguration>>().Value);
+
 
         services.AddSingleton(cfg => cfg.GetService<IOptions<EasSupportConfiguration>>().Value);
-        
+        services.AddSingleton(cfg => cfg.GetService<IOptions<EasSupportConfiguration>>().Value);
+
         services.AddSingleton<IEasSupportConfiguration, EasSupportConfiguration>();
         services.AddSingleton<IAccountApiConfiguration>(sp => sp.GetService<EasSupportConfiguration>().AccountApi);
         services.AddSingleton<ISiteValidatorSettings>(sp => sp.GetService<EasSupportConfiguration>().SiteValidator);

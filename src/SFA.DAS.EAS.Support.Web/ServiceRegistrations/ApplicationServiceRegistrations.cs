@@ -25,15 +25,11 @@ public static class ApplicationServiceRegistrations
         services.AddSingleton<IChallengeService, ChallengeService>();
         services.AddSingleton<IDatetimeService, DatetimeService>();
         services.AddSingleton<IChallengeHandler, ChallengeHandler>();
-        services.AddSingleton<ILevySubmissionsRepository, LevySubmissionsRepository>();
-        services.AddSingleton<ILevyTokenHttpClientFactory, LevyTokenHttpClientFactory>();
+        
         services.AddSingleton<IPayeLevySubmissionsHandler, PayeLevySubmissionsHandler>();
         services.AddSingleton<IPayeLevyMapper, PayeLevyMapper>();
         services.AddSingleton<IPayeSchemeObfuscator, PayeSchemeObfuscator>();
-
-        services.AddSingleton<IAccountRepository, AccountRepository>();
-        services.AddSingleton<IChallengeRepository, ChallengeRepository>();
-
+        
         return services;
     }
 }
