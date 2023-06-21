@@ -6,7 +6,7 @@ using Azure.Identity;
 using Microsoft.Identity.Client;
 using SFA.DAS.EmployerAccounts.Api.Client;
 
-namespace SFA.DAS.EAS.Account.Api.Clients;
+namespace SFA.DAS.EAS.Support.Web.Clients;
 
 public class EmployerAccountsSecureHttpClient : ISecureHttpClient
 {
