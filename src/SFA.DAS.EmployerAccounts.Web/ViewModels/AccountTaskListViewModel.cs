@@ -2,7 +2,7 @@
 {
     public class AccountTaskListViewModel
     {
-        public int HashedAccountId { get; set; }
+        public string HashedAccountId { get; set; }
         public bool HasPayeScheme { get; set; }
 
         public int CompletedSections
