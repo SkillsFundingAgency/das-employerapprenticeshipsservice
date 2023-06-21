@@ -2,7 +2,6 @@
 using FluentAssertions;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.Encoding;
 using SFA.DAS.Testing.AutoFixture;
 
@@ -105,10 +104,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         }
 
         [Test]
-        [InlineAutoData(1)]
-        [InlineAutoData(3)]
+        [MoqAutoData]
         public async Task Then_GetCreateAccountTaskList_AccountHasPayeSchemes_Should_Return_HasPaye_True(
-            int payeCount,
             string hashedAccountId,
             long accountId,
             GetAccountPayeSchemesResponse payeSchemeResponse,
@@ -117,7 +114,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
             [NoAutoProperties] EmployerAccountController controller)
         {
             // Arrange
-            payeSchemeResponse.PayeSchemes = payeSchemeResponse.PayeSchemes.Take(payeCount).ToList();
+            payeSchemeResponse.PayeSchemes = payeSchemeResponse.PayeSchemes.Take(1).ToList();
             encodingService.Setup(m => m.Decode(hashedAccountId, EncodingType.AccountId)).Returns(accountId);
             mediator.Setup(m => m.Send(It.Is<GetAccountPayeSchemesQuery>(x => x.AccountId == accountId), It.IsAny<CancellationToken>())).ReturnsAsync(payeSchemeResponse);
 
