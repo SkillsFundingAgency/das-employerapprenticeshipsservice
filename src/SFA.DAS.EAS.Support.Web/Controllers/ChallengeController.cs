@@ -34,11 +34,13 @@ public class ChallengeController : Controller
             return NotFound($"There was a problem finding the account {id}");
         }
 
-        return View(new ChallengeViewModel
+        var model = new ChallengeViewModel
         {
             Characters = response.Characters,
             Id = id
-        });
+        };
+        
+        return View(model);
     }
 
     [HttpPost]
