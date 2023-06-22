@@ -15,7 +15,7 @@ public static class AuthenticationServiceRegistrations
             options.AddPolicy(PolicyNames.IsSupportPortalUser, policy =>
             {
                 policy.RequireAuthenticatedUser();
-                policy.RequireRole("das-support-portal");
+                policy.RequireRole(RoleNames.SupportPortal);
             });
         });
 
