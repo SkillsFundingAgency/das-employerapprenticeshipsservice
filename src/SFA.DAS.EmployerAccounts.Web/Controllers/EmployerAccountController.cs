@@ -34,6 +34,8 @@ public class EmployerAccountController : BaseController
 
     public const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
 
+    private const string AddPayeShutterView = "AddPayeShutter";
+
     public EmployerAccountController(EmployerAccountOrchestrator employerAccountOrchestrator,
         ILogger<EmployerAccountController> logger,
         ICookieStorageService<FlashMessageViewModel> flashMessage,
@@ -73,9 +75,13 @@ public class EmployerAccountController : BaseController
     [HttpGet]
     [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     [Route("payBill", Name = RouteNames.EmployerAccountPayBillTriage)]
-    public IActionResult PayBillTriage()
+    public IActionResult PayBillTriage(string hashedAccountId)
     {
-        PopulateViewBagWithExternalUserId();
+        if (string.IsNullOrEmpty(hashedAccountId))
+        {
+            return View(AddPayeShutterView, hashedAccountId);
+        }
+
         var model = new
         {
             HideHeaderSignInLink = true

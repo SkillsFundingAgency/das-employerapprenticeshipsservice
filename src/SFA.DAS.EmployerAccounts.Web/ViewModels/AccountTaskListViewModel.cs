@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels
+﻿using SFA.DAS.EmployerAccounts.Web.RouteValues;
+
+namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
     public class AccountTaskListViewModel
     {
@@ -13,5 +15,7 @@
                 return HasPayeScheme ? 2 : 1;
             }
         }
+
+        public string AddPayeRouteName => string.IsNullOrEmpty(HashedAccountId) ? RouteNames.EmployerAccountPayBillTriage : RouteNames.AddPayeShutter;
     }
 }
