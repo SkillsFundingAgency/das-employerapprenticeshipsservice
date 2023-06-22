@@ -53,7 +53,8 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpGet]
-    [Route("create/tasklist", Name = RouteNames.NewEmpoyerAccountTaskList)]
+    [Route("create/tasklist", Order=1, Name = RouteNames.NewEmpoyerAccountTaskList)]
+    [Route("{HashedAccountId}/tasklist", Order = 2, Name = RouteNames.ContinueNewEmployerAccountTaskList)]
     public async Task<IActionResult> CreateAccountTaskList(string hashedAccountId)
     {
         var accountTaskListViewModel = new OrchestratorResponse<AccountTaskListViewModel>
@@ -354,7 +355,7 @@ public class EmployerAccountController : BaseController
         if (returnUrlCookie != null && !string.IsNullOrWhiteSpace(returnUrlCookie.Value))
             return Redirect(returnUrlCookie.Value);
 
-        return RedirectToRoute(RouteNames.NewEmpoyerAccountTaskList, new { hashedAccountId = response.Data.EmployerAgreement.HashedAccountId });
+        return RedirectToRoute(RouteNames.ContinueNewEmployerAccountTaskList, new { hashedAccountId = response.Data.EmployerAgreement.HashedAccountId });
     }
 
     [HttpGet]

@@ -1,4 +1,4 @@
-@model AccountTaskListViewModel;
+@model OrchestratorResponse<AccountTaskListViewModel>;
 
 @{
     ViewBag.PageID = "create-account-task-list";
@@ -11,7 +11,7 @@
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">@ViewBag.Title</h1>
         <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Account creation incomplete</h2>
-        <p class="govuk-body">You have completed @Model.CompletedSections of 3 sections.</p>
+        <p class="govuk-body">You have completed @Model.Data.CompletedSections of 3 sections.</p>
         <div class="govuk-inset-text govuk-!-margin-bottom-7">
             You do not have to complete all sections at once. Those labelled 'completed' have been saved so you can continue your employer account creation later.
         </div>
@@ -40,7 +40,7 @@
                                 Add a PAYE scheme
                             </a>
                         </span>
-                        @if (!Model.HasPayeScheme)
+                        @if (!Model.Data.HasPayeScheme)
                         {
                             <strong class="govuk-tag das-task-list__task-tag govuk-tag--grey" id="status-add-paye-scheme">Not started</strong>
                         }
@@ -58,7 +58,7 @@
                 <ul class="das-task-list__items">
                     <li class="das-task-list__item">
 
-                        @if (!Model.HasPayeScheme)
+                        @if (!Model.Data.HasPayeScheme)
                         {
                             <span class="das-task-list__task-name">
                                 Set your account name
@@ -68,7 +68,7 @@
                         else
                         {
                             <span class="das-task-list__task-name">
-                                <a asp-route="@RouteNames.AccountRename" asp-route-hashedAccountId="@Model.HashedAccountId" aria-describedby="status-add-paye" class="govuk-link">
+                                <a asp-route="@RouteNames.AccountRename" asp-route-hashedAccountId="@Model.Data.HashedAccountId" aria-describedby="status-add-paye" class="govuk-link">
                                     Set your account name
                                 </a>
                             </span>
