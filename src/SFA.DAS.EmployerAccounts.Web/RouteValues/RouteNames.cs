@@ -3,6 +3,8 @@
     public static class RouteNames
     {
         public const string EmployerTeamIndex = "employer-team-index";
+        public const string EmployerAccountPayBillTriage = "empoyer-account-pay-bill";
+        public const string EmployerAccountPayBillTriagePost = "empoyer-account-pay-bill-post";
         public const string EmployerAccountGetApprenticeshipFundingInAccount = "employer-account-get-apprentice-funding-in-account";
         public const string EmployerAccountPostApprenticeshipFundingInAccount = "post-employer-account-get-apprentice-funding-in-account";
         public const string EmployerAccountGetApprenticeshipFunding = "employer-account-get-apprentice-funding";

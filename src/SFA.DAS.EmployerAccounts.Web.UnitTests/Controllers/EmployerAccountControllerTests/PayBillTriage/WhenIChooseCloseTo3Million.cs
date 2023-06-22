@@ -2,15 +2,15 @@
 using FluentAssertions;
 using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.GetApprenticeshipFunding;
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.PayBillTriage;
 
-class WhenIChooseGovernmentGateway
+class WhenIChooseCloseTo3Million
 {
     [Test, MoqAutoData]
     public void ThenIShouldGoToGatewayInform([NoAutoProperties] EmployerAccountController controller)
     {
         //Act
-        var result = controller.GetApprenticeshipFunding(string.Empty, 1) as RedirectToActionResult;
+        var result = controller.PayBillTriage(2) as RedirectToActionResult;
 
         //Assert
         result.ActionName.Should().Be(ControllerConstants.GatewayInformActionName);

@@ -29,6 +29,9 @@ public class EmployerAccountController : BaseController
     private const int Over3Million = 1;
     private const int CloseTo3Million = 2;
     private const int LessThan3Million = 3;
+    public const int AddPayeGovGateway = 1;
+    public const int AddPayeAorn = 2;
+
     public const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
 
     public EmployerAccountController(EmployerAccountOrchestrator employerAccountOrchestrator,
@@ -64,6 +67,79 @@ public class EmployerAccountController : BaseController
         accountTaskListViewModel.HashedAccountId = hashedAccountId;
 
         return View(accountTaskListViewModel);
+    }
+
+    [HttpGet]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    [Route("payBill", Name = RouteNames.EmployerAccountPayBillTriage)]
+    public IActionResult PayBillTriage()
+    {
+        PopulateViewBagWithExternalUserId();
+        var model = new
+        {
+            HideHeaderSignInLink = true
+        };
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    [Route("payBill", Order = 1, Name = RouteNames.EmployerAccountPayBillTriagePost)]
+    public IActionResult PayBillTriage(int? choice)
+    {
+        switch (choice ?? 0)
+        {
+            case Over3Million:
+            case CloseTo3Million: return RedirectToAction(ControllerConstants.GatewayInformActionName);
+            case LessThan3Million: return RedirectToRoute(RouteNames.EmployerAccountGetApprenticeshipFunding);
+            default:
+                {
+                    var model = new
+                    {
+                        InError = true
+                    };
+
+                    return View(model);
+                }
+        }
+    }
+
+    [HttpGet]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    [Route("{HashedAccountId}/getApprenticeshipFunding", Order = 0, Name = RouteNames.EmployerAccountGetApprenticeshipFundingInAccount)]
+    [Route("getApprenticeshipFunding", Order = 1, Name = RouteNames.EmployerAccountGetApprenticeshipFunding)]
+    public IActionResult GetApprenticeshipFunding()
+    {
+        PopulateViewBagWithExternalUserId();
+        var model = new
+        {
+            HideHeaderSignInLink = true
+        };
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    [Route("{hashedAccountId}/getApprenticeshipFunding", Order = 0, Name = RouteNames.EmployerAccountPostApprenticeshipFundingInAccount)]
+    [Route("getApprenticeshipFunding", Order = 1, Name = RouteNames.EmployerAccountPostApprenticeshipFunding)]
+    public IActionResult GetApprenticeshipFunding(string hashedAccountId, int? choice)
+    {
+        switch (choice ?? 0)
+        {
+            case AddPayeGovGateway: return RedirectToAction(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName, new { hashedAccountId });
+            case AddPayeAorn: return RedirectToAction(ControllerConstants.SearchUsingAornActionName, ControllerConstants.SearchPensionRegulatorControllerName, new { hashedAccountId });
+            default:
+                {
+                    var model = new
+                    {
+                        InError = true
+                    };
+
+                    return View(model);
+                }
+        }
     }
 
     [HttpGet]
@@ -177,45 +253,6 @@ public class EmployerAccountController : BaseController
         {
             _logger.LogError(ex, "Error processing Gateway response - {Ex}", ex);
             throw;
-        }
-    }
-
-    [HttpGet]
-    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
-    [Route("{HashedAccountId}/getApprenticeshipFunding", Order = 0, Name = RouteNames.EmployerAccountGetApprenticeshipFundingInAccount)]
-    [Route("getApprenticeshipFunding", Order = 1, Name = RouteNames.EmployerAccountGetApprenticeshipFunding)]
-    public IActionResult GetApprenticeshipFunding()
-    {
-        PopulateViewBagWithExternalUserId();
-        var model = new
-        {
-            HideHeaderSignInLink = true
-        };
-
-        return View("~/Views/EmployerAccount/GetApprenticeshipFunding.cshtml", model);
-
-    }
-
-    [HttpPost]
-    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
-    [Route("{hashedAccountId}/getApprenticeshipFunding", Order = 0, Name = RouteNames.EmployerAccountPostApprenticeshipFundingInAccount)]
-    [Route("getApprenticeshipFunding", Order = 1, Name = RouteNames.EmployerAccountPostApprenticeshipFunding)]
-    public IActionResult GetApprenticeshipFunding(string hashedAccountId, int? choice)
-    {
-        switch (choice ?? 0)
-        {
-            case Over3Million:
-            case CloseTo3Million: return RedirectToAction(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName, new { hashedAccountId });
-            case LessThan3Million: return RedirectToAction(ControllerConstants.SearchUsingAornActionName, ControllerConstants.SearchPensionRegulatorControllerName, new { hashedAccountId });
-            default:
-                {
-                    var model = new
-                    {
-                        InError = true
-                    };
-
-                    return View(model);
-                }
         }
     }
 
