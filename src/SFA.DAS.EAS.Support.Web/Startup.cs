@@ -18,6 +18,8 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddLogging();
+        
         services.AddConfigurationSections(_configuration);
 
         services.AddSingleton(_configuration);
@@ -51,9 +53,7 @@ public class Startup
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>
         {
-            endpoints.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+            endpoints.MapDefaultControllerRoute();
         });
     }
 }
