@@ -7,7 +7,7 @@ using SFA.DAS.EAS.Support.Web.Services;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers;
 
-[Authorize(Policy = PolicyNames.IsSupportPortalUser)]
+[Authorize(Roles = PolicyNames.IsSupportPortalUser)]
 public class AccountController : Controller
 {
     private readonly IAccountHandler _accountHandler;

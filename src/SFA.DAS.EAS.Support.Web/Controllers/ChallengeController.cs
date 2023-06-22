@@ -7,7 +7,7 @@ using SFA.DAS.EAS.Support.Web.Models;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers;
 
-[Authorize(Policy = PolicyNames.IsSupportPortalUser)]
+[Authorize(Roles = PolicyNames.IsSupportPortalUser)]
 public class ChallengeController : Controller
 {
     private readonly IChallengeHandler _handler;
