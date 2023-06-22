@@ -7,7 +7,7 @@ namespace SFA.DAS.EAS.Support.Web.ServiceRegistrations;
 
 public static class AuthenticationServiceRegistrations
 {
-    public static IServiceCollection AddAndConfigureSupportAuthentication(this IServiceCollection services,
+    public static IServiceCollection AddActiveDirectoryAuthentication(this IServiceCollection services,
         EasSupportConfiguration configuration)
     {
         services.AddAuthorization(options =>
