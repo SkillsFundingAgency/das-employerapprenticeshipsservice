@@ -16,13 +16,15 @@ public class StatusController : ControllerBase
     public IActionResult Get()
     {
         _logger.LogInformation("Retrieving status info from {ControllerName}.", nameof(StatusController));
-        
-        return Ok(new
+
+        var model = new
         {
             ServiceName = "SFA DAS Employer Apprenticeship Service Support Site",
             ServiceVersion = Assembly.GetExecutingAssembly().Version(),
             ServiceTime = DateTimeOffset.UtcNow,
             Request = $" {HttpContext.Request.Method}: {HttpContext.Request.GetDisplayUrl()}"
-        });
+        };
+        
+        return Ok(model);
     }
 }

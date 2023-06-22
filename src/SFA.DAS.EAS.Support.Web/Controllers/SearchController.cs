@@ -3,7 +3,6 @@ using SFA.DAS.EAS.Support.Web.Authorization;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers;
 
-[ApiController]
 [Authorize(Policy = PolicyNames.IsSupportPortalUser)]
 public class SearchController : ControllerBase
 {
@@ -18,6 +17,7 @@ public class SearchController : ControllerBase
     public async Task<IActionResult> Accounts(int pageSize, int pageNumber)
     {
         var accounts = await _handler.FindAllAccounts(pageSize, pageNumber);
+        
         return Ok(accounts);
     }
 
@@ -25,6 +25,7 @@ public class SearchController : ControllerBase
     public async Task<IActionResult> AllAccountsTotalCount(int pageSize)
     {
         var accounts = await _handler.TotalAccountRecords(pageSize);
+        
         return Ok(accounts);
     }
 }

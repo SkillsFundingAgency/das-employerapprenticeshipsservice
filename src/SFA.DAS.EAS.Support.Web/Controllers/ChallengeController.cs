@@ -55,7 +55,6 @@ public class ChallengeController : Controller
             });
         }
 
-
         var model = new ChallengeViewModel
         {
             Characters = response.Characters,

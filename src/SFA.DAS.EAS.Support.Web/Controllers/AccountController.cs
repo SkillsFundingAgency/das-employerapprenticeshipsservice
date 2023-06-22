@@ -28,19 +28,19 @@ public class AccountController : Controller
     {
         var response = await _accountHandler.FindOrganisations(id);
 
-        if (response.StatusCode == SearchResponseCodes.Success)
+        if (response.StatusCode != SearchResponseCodes.Success)
         {
-            var vm = new AccountDetailViewModel
-            {
-                Account = response.Account,
-                AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}"
-
-            };
-
-            return View(vm);
+            return NotFound();
         }
+        
+        var model = new AccountDetailViewModel
+        {
+            Account = response.Account,
+            AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}"
 
-        return NotFound();
+        };
+
+        return View(model);
     }
 
     [Route("account/payeschemes/{id}")]
@@ -48,18 +48,18 @@ public class AccountController : Controller
     {
         var response = await _accountHandler.FindPayeSchemes(id);
 
-        if (response.StatusCode == SearchResponseCodes.Success)
+        if (response.StatusCode != SearchResponseCodes.Success)
         {
-            var vm = new AccountDetailViewModel
-            {
-                Account = response.Account,
-                AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}"
-            };
-
-            return View(vm);
+            return new NotFoundResult();
         }
+        
+        var model = new AccountDetailViewModel
+        {
+            Account = response.Account,
+            AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}"
+        };
 
-        return new NotFoundResult();
+        return View(model);
     }
 
     [Route("account/header/{id}")]
@@ -68,7 +68,9 @@ public class AccountController : Controller
         var response = await _accountHandler.Find(id);
 
         if (response.StatusCode != SearchResponseCodes.Success)
+        {
             return NotFound();
+        }
 
         return View("SubHeader", response.Account);
     }
@@ -78,19 +80,20 @@ public class AccountController : Controller
     {
         var response = await _accountHandler.FindTeamMembers(id);
 
-        if (response.StatusCode == SearchResponseCodes.Success)
+        if (response.StatusCode != SearchResponseCodes.Success)
         {
-            var vm = new AccountDetailViewModel
-            {
-                Account = response.Account,
-                AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}",
-                IsTier2User = User.IsInRole(AuthorizationConstants.Tier2User)
-            };
-
-            return View(vm);
+            return NotFound();
         }
+        
+        var model = new AccountDetailViewModel
+        {
+            Account = response.Account,
+            AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}",
+            IsTier2User = User.IsInRole(AuthorizationConstants.Tier2User)
+        };
 
-        return NotFound();
+        return View(model);
+
     }
 
     [Route("account/finance/{id}")]
@@ -98,18 +101,18 @@ public class AccountController : Controller
     {
         var response = await _accountHandler.FindFinance(id);
 
-        if (response.StatusCode == SearchResponseCodes.Success)
+        if (response.StatusCode != SearchResponseCodes.Success)
         {
-            var vm = new FinanceViewModel
-            {
-                Account = response.Account,
-                Balance = response.Balance
-            };
-
-            return View(vm);
+            return NotFound();
         }
+        
+        var model = new FinanceViewModel
+        {
+            Account = response.Account,
+            Balance = response.Balance
+        };
 
-        return NotFound();
+        return View(model);
     }
 
     [Route("account/levysubmissions/{id}/{payeSchemeId}")]
@@ -117,16 +120,15 @@ public class AccountController : Controller
     {
         var response = await _payeLevySubmissionsHandler.FindPayeSchemeLevySubmissions(id, payeSchemeId);
 
-        if (response.StatusCode != PayeLevySubmissionsResponseCodes.AccountNotFound)
+        if (response.StatusCode == PayeLevySubmissionsResponseCodes.AccountNotFound)
         {
-            var model = _payeLevyMapper.MapPayeLevyDeclaration(response);
-
-            model.UnexpectedError =
-                response.StatusCode == PayeLevySubmissionsResponseCodes.UnexpectedError;
-
-            return View(model);
+            return NotFound();
         }
+        
+        var model = _payeLevyMapper.MapPayeLevyDeclaration(response);
 
-        return NotFound();
+        model.UnexpectedError = response.StatusCode == PayeLevySubmissionsResponseCodes.UnexpectedError;
+
+        return View(model);
     }
 }
