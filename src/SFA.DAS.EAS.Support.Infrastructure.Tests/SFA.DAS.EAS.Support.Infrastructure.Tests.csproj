@@ -46,7 +46,7 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.30.0" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-		<PackageReference Include="NLog" Version="5.1.4">
+		<PackageReference Include="NLog" Version="5.2.0">
 		</PackageReference>
 		<PackageReference Include="HMRC.ESFA.Levy.Api.Client" Version="2.0.4" />
 	<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
