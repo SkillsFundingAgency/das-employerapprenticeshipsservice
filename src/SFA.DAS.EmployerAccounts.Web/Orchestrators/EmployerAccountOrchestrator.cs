@@ -3,8 +3,8 @@ using SFA.DAS.EmployerAccounts.Commands.CreateAccount;
 using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 using SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
 using SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
-using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountDetail;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
 using SFA.DAS.Encoding;
 
@@ -339,18 +339,22 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
 
     public virtual async Task<OrchestratorResponse<AccountTaskListViewModel>> GetCreateAccountTaskList(string hashedAccountId)
     {
-        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
-
-        var accountPayeResponse = await _mediator.Send(new GetAccountPayeSchemesQuery
+        var accountResponse = await _mediator.Send(new GetEmployerAccountDetailByHashedIdQuery
         {
-            AccountId = accountId
+            HashedAccountId = hashedAccountId
         });
+
+        if (accountResponse == null || accountResponse.Account == null)
+        {
+            return new OrchestratorResponse<AccountTaskListViewModel> { Status = HttpStatusCode.NotFound };
+        }
 
         return new OrchestratorResponse<AccountTaskListViewModel>
         {
             Data = new AccountTaskListViewModel
             {
-                HasPayeScheme = accountPayeResponse?.PayeSchemes?.Any() ?? false
+                HashedAccountId = hashedAccountId,
+                HasPayeScheme = accountResponse?.Account?.PayeSchemes?.Any() ?? false
             }
         };
     }

@@ -1,7 +1,7 @@
 ﻿using AutoFixture.NUnit3;
 using FluentAssertions;
 using MediatR;
-using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountDetail;
 using SFA.DAS.Encoding;
 using SFA.DAS.Testing.AutoFixture;
 
@@ -34,114 +34,113 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
             // Act
             var result = await controller.CreateAccountTaskList(null) as ViewResult;
-            var model = result.Model as AccountTaskListViewModel;
+            var model = result.Model as OrchestratorResponse<AccountTaskListViewModel>;
 
             // Assert
             Assert.IsNotNull(model);
-            model.HasPayeScheme.Should().BeFalse();
-            model.CompletedSections.Should().Be(1);
+            model.Data.HasPayeScheme.Should().BeFalse();
+            model.Data.CompletedSections.Should().Be(1);
         }
 
         [Test]
         [MoqAutoData]
         public async Task WhenHashedId_Then_GetCreateAccountTaskList_Decodes_HashedAccountId(
             string hashedAccountId,
-            [Frozen] Mock<IEncodingService> encodingService,
+            [Frozen] Mock<IMediator> mediatorMock,
             [NoAutoProperties] EmployerAccountController controller)
         {
             // Arrange
-
 
             // Act
             var result = await controller.CreateAccountTaskList(hashedAccountId);
 
             // Assert
-            encodingService.Verify(m => m.Decode(hashedAccountId, EncodingType.AccountId), Times.Once);
+            mediatorMock.Verify(m => m.Send(It.Is<GetEmployerAccountDetailByHashedIdQuery>(x => x.HashedAccountId == hashedAccountId), It.IsAny<CancellationToken>()), Times.Once);
         }
+
 
         [Test]
         [MoqAutoData]
-        public async Task WhenHashedId_Then_GetCreateAccountTaskList_Sets_ViewModel_HashedAccountId(
-          string hashedAccountId,
-          [NoAutoProperties] EmployerAccountController controller)
+        public async Task WhenHashedId_And_Account_NotFound_Then_Return_NotFound(
+            string hashedAccountId,
+            [NoAutoProperties] EmployerAccountController controller)
         {
             // Arrange
 
             // Act
             var result = await controller.CreateAccountTaskList(hashedAccountId) as ViewResult;
-            var model = result.Model as AccountTaskListViewModel;
 
             // Assert
-            model.HashedAccountId.Should().Be(hashedAccountId);
+            result.ViewName.Should().Be(ControllerConstants.NotFoundViewName);
         }
 
         [Test]
         [MoqAutoData]
-        public async Task WhenHashedId_Then_GetCreateAccountTaskList_Should_GetAccountPayes(
+        public async Task WhenHashedId_Then_GetCreateAccountTaskList_Sets_ViewModel_HashedAccountId(
             string hashedAccountId,
-            long accountId,
-            [Frozen] Mock<IMediator> mediator,
-            [Frozen] Mock<IEncodingService> encodingService,
+            GetEmployerAccountDetailByHashedIdResponse accountDetailResponse,
+            [Frozen] Mock<IMediator> mediatorMock,
             [NoAutoProperties] EmployerAccountController controller)
         {
             // Arrange
-            encodingService.Setup(m => m.Decode(hashedAccountId, EncodingType.AccountId)).Returns(accountId);
+            mediatorMock
+                .Setup(m => m.Send(It.Is<GetEmployerAccountDetailByHashedIdQuery>(x => x.HashedAccountId == hashedAccountId), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(accountDetailResponse);
 
             // Act
-            var result = await controller.CreateAccountTaskList(hashedAccountId);
+            var result = await controller.CreateAccountTaskList(hashedAccountId) as ViewResult;
+            var model = result.Model as OrchestratorResponse<AccountTaskListViewModel>;
 
             // Assert
-            mediator.Verify(m => m.Send(It.Is<GetAccountPayeSchemesQuery>(x => x.AccountId == accountId), It.IsAny<CancellationToken>()), Times.Once);
+            model.Data.HashedAccountId.Should().Be(hashedAccountId);
         }
 
         [Test]
         [MoqAutoData]
         public async Task Then_GetCreateAccountTaskList_WithoutPaye_Should_Return_HasPaye_False(
             string hashedAccountId,
-            long accountId,
-            GetAccountPayeSchemesResponse payeSchemeResponse,
-            [Frozen] Mock<IMediator> mediator,
-            [Frozen] Mock<IEncodingService> encodingService,
+            GetEmployerAccountDetailByHashedIdResponse accountDetailResponse,
+            [Frozen] Mock<IMediator> mediatorMock,
             [NoAutoProperties] EmployerAccountController controller)
         {
             // Arrange
-            payeSchemeResponse.PayeSchemes.Clear();
-            encodingService.Setup(m => m.Decode(hashedAccountId, EncodingType.AccountId)).Returns(accountId);
-            mediator.Setup(m => m.Send(It.Is<GetAccountPayeSchemesQuery>(x => x.AccountId == accountId), It.IsAny<CancellationToken>())).ReturnsAsync(payeSchemeResponse);
+            accountDetailResponse.Account.PayeSchemes.Clear();
+            mediatorMock
+                .Setup(m => m.Send(It.Is<GetEmployerAccountDetailByHashedIdQuery>(x => x.HashedAccountId == hashedAccountId), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(accountDetailResponse);
 
             // Act
             var result = await controller.CreateAccountTaskList(hashedAccountId) as ViewResult;
-            var model = result.Model as AccountTaskListViewModel;
+            var model = result.Model as OrchestratorResponse<AccountTaskListViewModel>;
 
             // Assert
             Assert.IsNotNull(model);
-            model.HasPayeScheme.Should().BeFalse();
-            model.CompletedSections.Should().Be(1);
+            model.Data.HasPayeScheme.Should().BeFalse();
+            model.Data.CompletedSections.Should().Be(1);
         }
 
         [Test]
         [MoqAutoData]
         public async Task Then_GetCreateAccountTaskList_AccountHasPayeSchemes_Should_Return_HasPaye_True(
             string hashedAccountId,
-            long accountId,
-            GetAccountPayeSchemesResponse payeSchemeResponse,
-            [Frozen] Mock<IMediator> mediator,
-            [Frozen] Mock<IEncodingService> encodingService,
+            GetEmployerAccountDetailByHashedIdResponse accountDetailResponse,
+            [Frozen] Mock<IMediator> mediatorMock,
             [NoAutoProperties] EmployerAccountController controller)
         {
             // Arrange
-            payeSchemeResponse.PayeSchemes = payeSchemeResponse.PayeSchemes.Take(1).ToList();
-            encodingService.Setup(m => m.Decode(hashedAccountId, EncodingType.AccountId)).Returns(accountId);
-            mediator.Setup(m => m.Send(It.Is<GetAccountPayeSchemesQuery>(x => x.AccountId == accountId), It.IsAny<CancellationToken>())).ReturnsAsync(payeSchemeResponse);
+            accountDetailResponse.Account.PayeSchemes = accountDetailResponse.Account.PayeSchemes.Take(1).ToList();
+            mediatorMock
+                .Setup(m => m.Send(It.Is<GetEmployerAccountDetailByHashedIdQuery>(x => x.HashedAccountId == hashedAccountId), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(accountDetailResponse);
 
             // Act
             var result = await controller.CreateAccountTaskList(hashedAccountId) as ViewResult;
-            var model = result.Model as AccountTaskListViewModel;
+            var model = result.Model as OrchestratorResponse<AccountTaskListViewModel>;
 
             // Assert
             Assert.IsNotNull(model);
-            model.HasPayeScheme.Should().BeTrue();
-            model.CompletedSections.Should().Be(2);
+            model.Data.HasPayeScheme.Should().BeTrue();
+            model.Data.CompletedSections.Should().Be(2);
         }
     }
 }

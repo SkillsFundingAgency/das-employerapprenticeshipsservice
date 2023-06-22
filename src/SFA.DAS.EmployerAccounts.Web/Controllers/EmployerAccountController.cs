@@ -54,19 +54,19 @@ public class EmployerAccountController : BaseController
 
     [HttpGet]
     [Route("create/tasklist", Name = RouteNames.NewEmpoyerAccountTaskList)]
-    [Route("create/{HashedAccountId}/tasklist")]
     public async Task<IActionResult> CreateAccountTaskList(string hashedAccountId)
     {
-        var accountTaskListViewModel = new AccountTaskListViewModel();
+        var accountTaskListViewModel = new OrchestratorResponse<AccountTaskListViewModel>
+        {
+            Data = new AccountTaskListViewModel()
+        };
 
         if (!string.IsNullOrEmpty(hashedAccountId))
         {
-            accountTaskListViewModel = (await _employerAccountOrchestrator.GetCreateAccountTaskList(hashedAccountId)).Data;
+            accountTaskListViewModel = await _employerAccountOrchestrator.GetCreateAccountTaskList(hashedAccountId);
         }
 
-        accountTaskListViewModel.HashedAccountId = hashedAccountId;
-
-        return View(accountTaskListViewModel);
+        return View(nameof(CreateAccountTaskList), accountTaskListViewModel);
     }
 
     [HttpGet]
@@ -158,11 +158,11 @@ public class EmployerAccountController : BaseController
 
         var gatewayInformViewModel = new OrchestratorResponse<GatewayInformViewModel>
         {
-            CancelRoute = string.IsNullOrEmpty(hashedAccountId) ? RouteNames.NewEmpoyerAccountTaskList : RouteNames.EmployerAccountPaye,
             Data = new GatewayInformViewModel
             {
                 BreadcrumbDescription = "Back to Your User Profile",
                 ConfirmUrl = _linkGenerator.GetUriByAction(HttpContext, ControllerConstants.GatewayViewName, ControllerConstants.EmployerAccountControllerName),
+                CancelRoute = string.IsNullOrEmpty(hashedAccountId) ? RouteNames.NewEmpoyerAccountTaskList : RouteNames.EmployerAccountPaye,
             }
         };
 
@@ -306,7 +306,7 @@ public class EmployerAccountController : BaseController
     [Route("create", Name = RouteNames.EmployerAccountCreate)]
     public async Task<IActionResult> CreateAccount()
     {
-        var enteredData = _employerAccountOrchestrator.GetCookieData();
+            var enteredData = _employerAccountOrchestrator.GetCookieData();
 
         if (enteredData == null)
         {
@@ -354,7 +354,7 @@ public class EmployerAccountController : BaseController
         if (returnUrlCookie != null && !string.IsNullOrWhiteSpace(returnUrlCookie.Value))
             return Redirect(returnUrlCookie.Value);
 
-        return RedirectToAction(ControllerConstants.WhenDoYouWantToView, ControllerConstants.EmployerAgreementControllerName, new { hashedAccountId = response.Data.EmployerAgreement.HashedAccountId, hashedAgreementId = response.Data.EmployerAgreement.HashedAgreementId });
+        return RedirectToRoute(RouteNames.NewEmpoyerAccountTaskList, new { hashedAccountId = response.Data.EmployerAgreement.HashedAccountId });
     }
 
     [HttpGet]

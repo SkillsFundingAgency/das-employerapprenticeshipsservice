@@ -79,7 +79,7 @@ public class When_I_Call_GatewayInform_Without_HashedAccountId : ControllerTestB
         var model = result.Model as OrchestratorResponse<GatewayInformViewModel>;
 
         // Assert
-        model.CancelRoute.Should().Be(RouteNames.EmployerAccountPaye);
+        model.Data.CancelRoute.Should().Be(RouteNames.EmployerAccountPaye);
     }
 
     [Test]
@@ -91,6 +91,6 @@ public class When_I_Call_GatewayInform_Without_HashedAccountId : ControllerTestB
         var model = result.Model as OrchestratorResponse<GatewayInformViewModel>;
 
         // Assert
-        model.CancelRoute.Should().Be(RouteNames.NewEmpoyerAccountTaskList);
+        model.Data.CancelRoute.Should().Be(RouteNames.NewEmpoyerAccountTaskList);
     }
 }
