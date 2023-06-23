@@ -6,6 +6,9 @@
         public const string EmployerAccountPayBillTriage = "empoyer-account-pay-bill";
         public const string EmployerAccountPayBillTriagePost = "empoyer-account-pay-bill-post";
         public const string AddPayeShutter = "add-paye-shutter";
+        public const string NewAccountSaveProgress = "new-account-save-progress";
+        public const string PartialAccountSaveProgress = "partial-account-save-progess";
+
         public const string EmployerAccountGetApprenticeshipFundingInAccount = "employer-account-get-apprentice-funding-in-account";
         public const string EmployerAccountPostApprenticeshipFundingInAccount = "post-employer-account-get-apprentice-funding-in-account";
         public const string EmployerAccountGetApprenticeshipFunding = "employer-account-get-apprentice-funding";

@@ -73,6 +73,14 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpGet]
+    [Route("create/progress-saved", Order = 1, Name = RouteNames.NewAccountSaveProgress)]
+    [Route("{HashedAccountId}/progress-saved", Order = 2, Name = RouteNames.PartialAccountSaveProgress)]
+    public IActionResult CreateAccountProgressSaved(string hashedAccountId)
+    {
+        return View(new CreateAccountProgressSavedViewModel { HashedAccountId = hashedAccountId });
+    }
+
+    [HttpGet]
     [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     [Route("payBill", Name = RouteNames.EmployerAccountPayBillTriage)]
     public IActionResult PayBillTriage(string hashedAccountId)
