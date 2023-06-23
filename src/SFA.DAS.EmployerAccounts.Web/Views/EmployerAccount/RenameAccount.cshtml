@@ -7,49 +7,74 @@
 
     string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId].ToString();
 }
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
 
-<form method="post">
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-
-            <h1 class="govuk-heading-xl">Rename account</h1>
-
+        <h1 class="govuk-heading-xl">Set your employer account name</h1>
+        <p>You can change the employer name you use in the apprenticeship service if there is another organisation name (such as a trading name) that you are known by.
+            Your employer account name is visible to training providers and helps them to find you in the service.
+        </p>
+        <p>This is not the legal entity name that is registered with the Pensions regulator.
+        </p>
+        <p>You can change your employer account name at any time.
+        </p>
+        <dl class="das-definition-list">
+            <dt class="das-definition-list__title">Organisation name (legal entity)</dt>
+            <dd class="das-definition-list__definition govuk-!-margin-bottom-4">{{ LEGAL ENTITY }}</dd>
+            <dt class="das-definition-list__title">Employer account name [in the apprenticeship service]</dt>
+            <dd class="das-definition-list__definition govuk-!-margin-bottom-6">@Model.Data.CurrentName</dd>
+        </dl>
+        <form action="#" method="post">
             <input type="hidden" value="@Model.Data.CurrentName" name="CurrentName" />
-
             <div class="govuk-form-group">
-                <dl class="das-definition-list">
-                    <dt class="das-definition-list__title">Current name</dt>
-                    <dd class="das-definition-list__definition">@Model.Data.CurrentName</dd>
-                </dl>
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                        Do you want to change your employer account name?
+                    </legend>
+                    <div class="govuk-radios" data-module="govuk-radios">
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="change-account-name-yes" name="change-account-name" type="radio" value="yes" aria-controls="conditional-change-account-name" aria-expanded="true">
+                            <label class="govuk-label govuk-radios__label" for="change-account-name-yes">
+                                Yes, I want to change my employer account name
+                            </label>
+                        </div>
+                        <div class="govuk-radios__conditional" id="conditional-change-account-name">
+                            <div class="govuk-form-group @(!string.IsNullOrEmpty(Model.Data.NewNameError) ? "govuk-form-group--error" : "")">
+                                <label id="NewName-label" for="NewName" class="govuk-label">
+                                    Enter new employer account name
+                                </label>
+                                @if (!string.IsNullOrEmpty(Model.Data.NewNameError))
+                                {
+                                    <span id="error-message-newname" class="govuk-error-message">
+                                        <span class="govuk-visually-hidden">Error:</span> @Model.Data.NewNameError
+                                    </span>
+                                }
+
+                                <input id="NewName" name="NewName" type="text" maxlength="100" class="govuk-input" aria-required="true"
+                                    aria-describedby="@(!string.IsNullOrEmpty(Model.Data.NewNameError) ? "error-message-newname" : "")"
+                                    value="@Model.Data.NewName" />
+                            </div>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="change-account-name-no" name="change-account-name" type="radio" value="no">
+                            <label class="govuk-label govuk-radios__label" for="change-account-name-no">
+                                No, I want to use my organisation name as my employer account name
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
             </div>
-
-            <div class="govuk-form-group @(!string.IsNullOrEmpty(Model.Data.NewNameError) ? "govuk-form-group--error" : "")">
-                <label id="NewName-label" for="NewName" class="govuk-label">
-                    New account name
-                </label>
-
-                @if (!string.IsNullOrEmpty(Model.Data.NewNameError))
-                {
-                    <span id="error-message-newname" class="govuk-error-message">
-                        <span class="govuk-visually-hidden">Error:</span> @Model.Data.NewNameError
-                    </span>
-                }
-
-                <input id="NewName" name="NewName" type="text" maxlength="100" class="govuk-input" aria-required="true"
-                       aria-describedby="@(!string.IsNullOrEmpty(Model.Data.NewNameError) ? "error-message-newname" : "")"
-                       value="@Model.Data.NewName" />
-
-            </div>
-
             <div class="govuk-button-group">
-                <button type="submit" class="govuk-button" id="accept">Save and continue</button>
+                <button class="govuk-button" data-module="govuk-button" id="accept">
+                    Continue
+                </button>
                 <a asp-route="@RouteNames.EmployerTeamIndex" asp-route-hashedAccountId="@hashedAccountId"
                    class="govuk-link">Cancel</a>
             </div>
-
-        </div>
+        </form>
     </div>
-</form>
+</div>
+
 
 @section breadcrumb {
     <div class="govuk-breadcrumbs">
