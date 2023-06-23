@@ -130,7 +130,7 @@ public class HomeController : BaseController
                     });
                 } else
                 {
-                    return RedirectToRoute(RouteNames.ContinueNewEmployerAccountTaskList, new { account.HashedId });
+                    return RedirectToRoute(RouteNames.ContinueNewEmployerAccountTaskList, new { hashedAccountId = account.HashedId });
                 }
             }
         }
