@@ -8,6 +8,7 @@ public class Account
     public virtual string HashedId { get; set; }
     public virtual DateTime? ModifiedDate { get; set; }
     public virtual string Name { get; set; }
+    public virtual bool NameConfirmed { get; set; }
     public virtual string PublicHashedId { get; set; }
     public virtual Role role { get; set; }
     public string RoleName => (role).ToString();

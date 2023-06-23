@@ -3,6 +3,9 @@
     public static class RouteNames
     {
         public const string EmployerTeamIndex = "employer-team-index";
+        public const string EmployerAccountPayBillTriage = "empoyer-account-pay-bill";
+        public const string EmployerAccountPayBillTriagePost = "empoyer-account-pay-bill-post";
+        public const string AddPayeShutter = "add-paye-shutter";
         public const string EmployerAccountGetApprenticeshipFundingInAccount = "employer-account-get-apprentice-funding-in-account";
         public const string EmployerAccountPostApprenticeshipFundingInAccount = "post-employer-account-get-apprentice-funding-in-account";
         public const string EmployerAccountGetApprenticeshipFunding = "employer-account-get-apprentice-funding";
@@ -31,6 +34,8 @@
         public const string EmployerAccountPayeGateway = "account-paye-gateway";
         public const string EmployerAccountPayeGatewayInform = "account-paye-gateway-inform";
         public const string PayePostNextSteps = "paye-post-next-steps";
+        public const string AccountRename = "account-rename";
+        public const string AccountRenamePost = "account-rename- post";
 
         public const string PostConfirmRemoveOrganisation = "post-confirm-remove-organisation";
         public const string EmployerAgreementSignYourAgreement = "sign-your-agreement";
@@ -65,5 +70,6 @@
         public const string TriageWhenApprenticeshipForExistingEmployee = "triage-existing-employee";
         public const string TriageWhenApprenticeshipForExistingEmployeePost = "triage-existing-employee-post";
         public const string NewEmpoyerAccountTaskList = "new-account-task-list";
+        public const string ContinueNewEmployerAccountTaskList = "continue-account-task-list";
     }
 }

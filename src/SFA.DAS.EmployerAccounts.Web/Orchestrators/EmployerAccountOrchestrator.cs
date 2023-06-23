@@ -4,6 +4,7 @@ using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 using SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
 using SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountDetail;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
 using SFA.DAS.Encoding;
 
@@ -20,8 +21,8 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
     protected EmployerAccountOrchestrator() { }
 
     public EmployerAccountOrchestrator(
-        IMediator mediator, 
-        ILogger<EmployerAccountOrchestrator> logger, 
+        IMediator mediator,
+        ILogger<EmployerAccountOrchestrator> logger,
         ICookieStorageService<EmployerAccountData> cookieService,
         EmployerAccountsConfiguration configuration,
         IEncodingService encodingService)
@@ -151,7 +152,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception,"Create Account Validation Error: {Message}", exception.Message);
+            _logger.LogError(exception, "Create Account Validation Error: {Message}", exception.Message);
             return new OrchestratorResponse<EmployerAgreementViewModel>
             {
                 Data = new EmployerAgreementViewModel(),
@@ -334,5 +335,27 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
     public virtual void DeleteCookieData()
     {
         CookieService.Delete(CookieName);
+    }
+
+    public virtual async Task<OrchestratorResponse<AccountTaskListViewModel>> GetCreateAccountTaskList(string hashedAccountId)
+    {
+        var accountResponse = await _mediator.Send(new GetEmployerAccountDetailByHashedIdQuery
+        {
+            HashedAccountId = hashedAccountId
+        });
+
+        if (accountResponse == null || accountResponse.Account == null)
+        {
+            return new OrchestratorResponse<AccountTaskListViewModel> { Status = HttpStatusCode.NotFound };
+        }
+
+        return new OrchestratorResponse<AccountTaskListViewModel>
+        {
+            Data = new AccountTaskListViewModel
+            {
+                HashedAccountId = hashedAccountId,
+                HasPayeScheme = accountResponse?.Account?.PayeSchemes?.Any() ?? false
+            }
+        };
     }
 }
