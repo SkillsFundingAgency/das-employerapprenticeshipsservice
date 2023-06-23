@@ -63,6 +63,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
         {
             Data = new RenameEmployerAccountViewModel
             {
+                LegalEntityName = response.Account.AccountLegalEntities.OrderBy(x => x.Created).First()?.Name,
                 CurrentName = response.Account.Name,
                 NewName = string.Empty
             }
