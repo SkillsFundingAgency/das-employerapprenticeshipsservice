@@ -200,7 +200,7 @@ public class WhenIViewTheHomePage : ControllerTestBase
             new Claim(DasClaimTypes.RequiresVerification, "false")
         );
 
-        _userAccountsViewModel.Accounts.AccountList[0].AccountNameConfirmed = false;
+        _userAccountsViewModel.Accounts.AccountList[0].NameConfirmed = false;
 
         //Act
         var actual = await _homeController.Index(_queryData);
@@ -387,7 +387,7 @@ public class WhenIViewTheHomePage : ControllerTestBase
                 AccountList = new List<Account> {
                             new Account
                             {
-                                AccountNameConfirmed = true,
+                                NameConfirmed = true,
                                 AccountHistory = new List<AccountHistory>
                                 {
                                     new AccountHistory()
