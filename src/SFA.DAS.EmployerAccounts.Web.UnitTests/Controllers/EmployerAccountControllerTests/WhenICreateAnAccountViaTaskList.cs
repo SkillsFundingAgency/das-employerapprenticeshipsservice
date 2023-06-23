@@ -98,41 +98,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
         [Test]
         [MoqAutoData]
-        public async Task WhenNoAccount_Then_Can_Add_Org_And_Paye([NoAutoProperties] EmployerAccountController controller)
-        {
-            // Arrange
-
-            // Act
-            var result = await controller.CreateAccountTaskList(string.Empty) as ViewResult;
-            var model = result.Model as OrchestratorResponse<AccountTaskListViewModel>;
-
-            // Assert
-            model.Data.AddPayeRouteName.Should().Be(RouteNames.EmployerAccountPayBillTriage);
-        }
-
-        [Test]
-        [MoqAutoData]
-        public async Task WhenHashedId_Then_Cannot_Modify_Org_And_Paye(
-            string hashedAccountId,
-            GetEmployerAccountDetailByHashedIdResponse accountDetailResponse,
-            [Frozen] Mock<IMediator> mediatorMock,
-            [NoAutoProperties] EmployerAccountController controller)
-        {
-            // Arrange
-            mediatorMock
-                .Setup(m => m.Send(It.Is<GetEmployerAccountDetailByHashedIdQuery>(x => x.HashedAccountId == hashedAccountId), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(accountDetailResponse);
-
-            // Act
-            var result = await controller.CreateAccountTaskList(hashedAccountId) as ViewResult;
-            var model = result.Model as OrchestratorResponse<AccountTaskListViewModel>;
-
-            // Assert
-            model.Data.AddPayeRouteName.Should().Be(RouteNames.AddPayeShutter);
-        }
-
-        [Test]
-        [MoqAutoData]
         public async Task WhenHashedId_Then_SaveProgressRoute_Maintains_AccountContext(
             string hashedAccountId,
             GetEmployerAccountDetailByHashedIdResponse accountDetailResponse,

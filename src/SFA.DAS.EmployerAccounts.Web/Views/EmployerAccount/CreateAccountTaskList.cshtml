@@ -36,7 +36,7 @@
                 <ul class="das-task-list__items">
                     <li class="das-task-list__item">
                         <span class="das-task-list__task-name">
-                            <a asp-route="@RouteNames.EmployerAccountPayBillTriage" aria-describedby="status-add-paye" class="govuk-link">
+                            <a asp-route="@RouteNames.EmployerAccountPayBillTriage" asp-route-hashedAccountId="@Model.Data.HashedAccountId" aria-describedby="status-add-paye" class="govuk-link">
                                 Add a PAYE scheme
                             </a>
                         </span>
