@@ -39,7 +39,7 @@ public class Startup
         {
             if (!_environment.IsDevelopment())
             {
-                opt.Filters.Add(new AuthorizeFilter(PolicyNames.IsSupportPortalUser));
+                opt.Filters.Add(new AuthorizeFilter(PolicyNames.Default));
             }
         }).AddNewtonsoftJson(options => { options.UseMemberCasing(); });
 

@@ -12,7 +12,7 @@ public static class AuthenticationServiceRegistrations
     {
         services.AddAuthorization(options =>
         {
-            options.AddPolicy(PolicyNames.IsSupportPortalUser, policy =>
+            options.AddPolicy(PolicyNames.Default, policy =>
             {
                 policy.RequireAuthenticatedUser();
                 policy.RequireRole(RoleNames.SupportPortal);
