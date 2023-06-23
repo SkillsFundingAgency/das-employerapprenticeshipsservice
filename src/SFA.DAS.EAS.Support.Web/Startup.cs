@@ -35,7 +35,7 @@ public class Startup
         var supportConfiguration = _configuration.Get<EasSupportConfiguration>();
         services.AddActiveDirectoryAuthentication(supportConfiguration);
 
-        services.AddControllersWithViews(opt =>
+        services.AddMvc(opt =>
         {
             if (!_environment.IsDevelopment())
             {
