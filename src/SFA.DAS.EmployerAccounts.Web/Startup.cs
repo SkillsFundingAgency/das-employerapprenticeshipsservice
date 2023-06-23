@@ -169,18 +169,8 @@ public class Startup
         app.UseUnitOfWork();
 
         app.UseStaticFiles();
-        app.Use(async (context, next) =>
-        {
-            if (context.Request.Path == "/robots.txt")
-            {
-                context.Response.ContentType = "text/plain";
-                await context.Response.SendFileAsync("robots.txt");
-            }
-            else
-            {
-                await next();
-            }
-        });
+
+        app.UseMiddleware<RobotsTextMiddleware>();
 
         app.UseAuthentication();
         app.UseRouting();

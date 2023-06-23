@@ -96,7 +96,7 @@ public class HomeController : BaseController
             if (_config["ResourceEnvironmentName"].Equals("PROD"))
             {
                 //GDS requirement that users begin their service journey on .gov.uk
-                return RedirectPermanent(_configuration.GovUkSignInToASAccountUrl);
+                return Redirect(_configuration.GovUkSignInToASAccountUrl);
             }
 
             var model = new ServiceStartPageViewModel
