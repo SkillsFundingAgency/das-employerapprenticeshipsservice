@@ -95,8 +95,10 @@ public class HomeController : BaseController
         {
             if (_config["ResourceEnvironmentName"].Equals("PROD"))
             {
+                 string govUkSignInUrl = "https://www.gov.uk/recruit-apprentice";
+
                 //GDS requirement that users begin their service journey on .gov.uk
-                return RedirectPermanent("https://www.gov.uk/recruit-apprentice");
+                return RedirectPermanent(govUkSignInUrl);
             }
 
             var model = new ServiceStartPageViewModel
