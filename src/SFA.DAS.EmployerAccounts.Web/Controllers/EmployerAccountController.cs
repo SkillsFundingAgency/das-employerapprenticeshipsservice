@@ -77,7 +77,7 @@ public class EmployerAccountController : BaseController
     [Route("payBill", Name = RouteNames.EmployerAccountPayBillTriage)]
     public IActionResult PayBillTriage(string hashedAccountId)
     {
-        if (string.IsNullOrEmpty(hashedAccountId))
+        if (!string.IsNullOrEmpty(hashedAccountId))
         {
             return View(AddPayeShutterView, hashedAccountId);
         }

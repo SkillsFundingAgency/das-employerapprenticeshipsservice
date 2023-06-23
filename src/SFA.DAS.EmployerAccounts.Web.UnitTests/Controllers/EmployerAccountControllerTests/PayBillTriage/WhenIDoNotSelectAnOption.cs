@@ -10,7 +10,7 @@ class WhenIDoNotSelectAnOption
     public void ThenIShouldReceiveAnError([NoAutoProperties] EmployerAccountController controller)
     {
         //Act
-        var result = controller.PayBillTriage(null) as ViewResult;
+        var result = controller.PayBillTriage(string.Empty) as ViewResult;
 
         //Assert
         result.Model?.GetType().GetProperty("InError").Should().NotBeNull();
