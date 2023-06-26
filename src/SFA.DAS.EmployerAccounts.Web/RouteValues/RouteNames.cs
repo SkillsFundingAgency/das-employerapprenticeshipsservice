@@ -42,6 +42,7 @@
         public const string RenameAccountConfirm = "account-rename-confirm";
         public const string RenameAccountConfirmPost = "account-rename-confirm-post";
         public const string RenameAccountSuccess = "account-rename-success";
+        public const string CreateAccountSuccess = "create-account-success";
 
         public const string PostConfirmRemoveOrganisation = "post-confirm-remove-organisation";
         public const string EmployerAgreementSignYourAgreement = "sign-your-agreement";

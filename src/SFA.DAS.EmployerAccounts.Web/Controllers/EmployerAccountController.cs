@@ -457,6 +457,15 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpGet]
+    [Route("{HashedAccountId}/create/success", Name = RouteNames.CreateAccountSuccess)]
+    public async Task<IActionResult> CreateAccountSuccess(string hashedAccountId)
+    {
+        var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+        var vm = await _employerAccountOrchestrator.GetRenameEmployerAccountViewModel(hashedAccountId, userIdClaim);
+        return View(vm);
+    }
+
+    [HttpGet]
     [Route("amendOrganisation")]
     public IActionResult AmendOrganisation()
     {
