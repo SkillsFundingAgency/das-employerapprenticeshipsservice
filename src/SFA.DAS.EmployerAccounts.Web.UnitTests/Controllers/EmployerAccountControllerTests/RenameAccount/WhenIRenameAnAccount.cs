@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Web.Models;
 using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests;
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.RenameAccount;
 
 public class WhenIRenameAnAccount : ControllerTestBase
 {
@@ -32,7 +32,7 @@ public class WhenIRenameAnAccount : ControllerTestBase
                 Data = new RenameEmployerAccountViewModel()
             });
 
-        
+
         AddUserToContext();
 
         _employerAccountController = new EmployerAccountController(

@@ -55,7 +55,7 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpGet]
-    [Route("create/tasklist", Order=1, Name = RouteNames.NewEmpoyerAccountTaskList)]
+    [Route("create/tasklist", Order = 1, Name = RouteNames.NewEmpoyerAccountTaskList)]
     [Route("{HashedAccountId}/tasklist", Order = 2, Name = RouteNames.ContinueNewEmployerAccountTaskList)]
     public async Task<IActionResult> CreateAccountTaskList(string hashedAccountId)
     {
@@ -321,7 +321,7 @@ public class EmployerAccountController : BaseController
     [Route("create", Name = RouteNames.EmployerAccountCreate)]
     public async Task<IActionResult> CreateAccount()
     {
-            var enteredData = _employerAccountOrchestrator.GetCookieData();
+        var enteredData = _employerAccountOrchestrator.GetCookieData();
 
         if (enteredData == null)
         {
@@ -385,8 +385,18 @@ public class EmployerAccountController : BaseController
     [Route("{HashedAccountId}/rename", Name = RouteNames.AccountRenamePost)]
     public async Task<IActionResult> RenameAccount(string hashedAccountId, RenameEmployerAccountViewModel vm)
     {
+        var response = new OrchestratorResponse<RenameEmployerAccountViewModel>();
+        if (!vm.ChangeAccountName.HasValue)
+        {
+            // Model validation failed, return the view with validation errors
+            vm.ErrorDictionary.Add(nameof(vm.ChangeAccountName), "Please select whether you wish to set a new Employer Account name.");
+            response.Data = vm;
+            response.Status = response.Status = HttpStatusCode.BadRequest;
+            return View(response);
+        }
+
         var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
-        var response = await _employerAccountOrchestrator.RenameEmployerAccount(hashedAccountId, vm, userIdClaim);
+        response = await _employerAccountOrchestrator.RenameEmployerAccount(hashedAccountId, vm, userIdClaim);
 
         if (response.Status == HttpStatusCode.OK)
         {
@@ -402,18 +412,10 @@ public class EmployerAccountController : BaseController
             return RedirectToRoute(RouteNames.EmployerTeamIndex, new { hashedAccountId });
         }
 
-        var errorResponse = new OrchestratorResponse<RenameEmployerAccountViewModel>();
+        response.Data = vm;
+        response.Status = response.Status;
 
-        if (response.Status == HttpStatusCode.BadRequest)
-        {
-            vm.ErrorDictionary = response.FlashMessage.ErrorMessages;
-        }
-
-        errorResponse.Data = vm;
-        errorResponse.FlashMessage = response.FlashMessage;
-        errorResponse.Status = response.Status;
-
-        return View(errorResponse);
+        return View(response);
     }
 
     [HttpGet]

@@ -104,13 +104,6 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
             response.Status = HttpStatusCode.BadRequest;
             response.Data.ErrorDictionary = ex.ErrorMessages;
             response.Exception = ex;
-            response.FlashMessage = new FlashMessageViewModel
-            {
-                Headline = "Errors to fix",
-                Message = "Check the following details:",
-                ErrorMessages = ex.ErrorMessages,
-                Severity = FlashMessageSeverityLevel.Error
-            };
         }
 
         return response;
