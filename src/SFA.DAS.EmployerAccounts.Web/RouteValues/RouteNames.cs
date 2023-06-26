@@ -37,8 +37,11 @@
         public const string EmployerAccountPayeGateway = "account-paye-gateway";
         public const string EmployerAccountPayeGatewayInform = "account-paye-gateway-inform";
         public const string PayePostNextSteps = "paye-post-next-steps";
-        public const string AccountRename = "account-rename";
-        public const string AccountRenamePost = "account-rename- post";
+        public const string RenameAccount = "account-rename";
+        public const string RenameAccountPost = "account-rename-post";
+        public const string RenameAccountConfirm = "account-rename-confirm";
+        public const string RenameAccountConfirmPost = "account-rename-confirm-post";
+        public const string RenameAccountSuccess = "account-rename-success";
 
         public const string PostConfirmRemoveOrganisation = "post-confirm-remove-organisation";
         public const string EmployerAgreementSignYourAgreement = "sign-your-agreement";

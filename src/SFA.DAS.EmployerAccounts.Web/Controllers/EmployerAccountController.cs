@@ -373,7 +373,7 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpGet]
-    [Route("{HashedAccountId}/rename", Name = RouteNames.AccountRename)]
+    [Route("{HashedAccountId}/rename", Name = RouteNames.RenameAccount)]
     public async Task<IActionResult> RenameAccount(string hashedAccountId)
     {
         var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
@@ -382,40 +382,78 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpPost]
-    [Route("{HashedAccountId}/rename", Name = RouteNames.AccountRenamePost)]
+    [Route("{HashedAccountId}/rename", Name = RouteNames.RenameAccountPost)]
     public async Task<IActionResult> RenameAccount(string hashedAccountId, RenameEmployerAccountViewModel vm)
     {
         var response = new OrchestratorResponse<RenameEmployerAccountViewModel>();
-        if (!vm.ChangeAccountName.HasValue)
-        {
-            // Model validation failed, return the view with validation errors
-            vm.ErrorDictionary.Add(nameof(vm.ChangeAccountName), "Please select whether you wish to set a new Employer Account name.");
-            response.Data = vm;
-            response.Status = response.Status = HttpStatusCode.BadRequest;
-            return View(response);
-        }
 
+        switch (vm.ChangeAccountName)
+        {
+            case true: return RedirectToRoute(RouteNames.RenameAccountConfirm, new { hashedAccountId, NewAccountName = Uri.EscapeDataString(vm.NewName) }); ;
+            case false:
+                {
+
+                    var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+                    response = await _employerAccountOrchestrator.RenameEmployerAccount(hashedAccountId, vm, userIdClaim);
+
+                    if (response.Status == HttpStatusCode.OK)
+                    {
+                        return RedirectToRoute(RouteNames.RenameAccountConfirmPost);
+                    }
+
+                    response.Data = vm;
+                    response.Status = response.Status;
+
+                    return View(response);
+
+                }
+            default:
+                {
+                    // Model validation failed, return the view with validation errors
+                    vm.ErrorDictionary.Add(nameof(vm.ChangeAccountName), "Please select whether you wish to set a new Employer Account name.");
+                    response.Data = vm;
+                    response.Status = response.Status = HttpStatusCode.BadRequest;
+                    return View(response);
+                }
+        }
+    }
+
+    [HttpGet]
+    [Route("{HashedAccountId}/rename/confirm", Name = RouteNames.RenameAccountConfirm)]
+    public IActionResult RenameAccountConfirm(string hashedAccountId, string newAccountName)
+    {
+        return View(new RenameEmployerAccountViewModel
+        {
+            ChangeAccountName = true,
+            NewName = Uri.UnescapeDataString(newAccountName)
+        });
+    }
+
+    [HttpPost]
+    [Route("{HashedAccountId}/rename/confirm", Name = RouteNames.RenameAccountConfirmPost)]
+    public async Task<IActionResult> RenameAccountConfirm(string hashedAccountId, RenameEmployerAccountViewModel vm)
+    {
         var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
-        response = await _employerAccountOrchestrator.RenameEmployerAccount(hashedAccountId, vm, userIdClaim);
+        var response = await _employerAccountOrchestrator.RenameEmployerAccount(hashedAccountId, vm, userIdClaim);
 
         if (response.Status == HttpStatusCode.OK)
         {
-            var flashmessage = new FlashMessageViewModel
-            {
-                Headline = "Account renamed",
-                Message = "You successfully updated the account name",
-                Severity = FlashMessageSeverityLevel.Success
-            };
-
-            AddFlashMessageToCookie(flashmessage);
-
-            return RedirectToRoute(RouteNames.EmployerTeamIndex, new { hashedAccountId });
+            return RedirectToRoute(RouteNames.RenameAccountSuccess, new { hashedAccountId });
         }
 
         response.Data = vm;
         response.Status = response.Status;
 
         return View(response);
+    }
+
+    [HttpGet]
+    [Route("{HashedAccountId}/rename/success", Name = RouteNames.RenameAccountSuccess)]
+    public async Task<IActionResult> RenameAccountSuccess(string hashedAccountId)
+    {
+        var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+        var vm = await _employerAccountOrchestrator.GetRenameEmployerAccountViewModel(hashedAccountId, userIdClaim);
+        return View(vm);
     }
 
     [HttpGet]
