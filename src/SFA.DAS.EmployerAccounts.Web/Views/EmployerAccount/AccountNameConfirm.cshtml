@@ -22,7 +22,7 @@
                         @Model.NewName
                     </dd>
                     <dd class="govuk-summary-list__actions">
-                        <a class="govuk-link" asp-route="@RouteNames.RenameAccount" asp-route-hashedAccountId="@hashedAccountId">
+                        <a class="govuk-link" asp-route="@RouteNames.AccountName" asp-route-hashedAccountId="@hashedAccountId">
                             Change<span class="govuk-visually-hidden"> your account name</span>
                         </a>
                     </dd>
@@ -32,7 +32,7 @@
                 <button class="govuk-button" type="submit" data-module="govuk-button" id="accept">
                     Continue
                 </button>
-                <a class="govuk-link" asp-route="@RouteNames.EmployerTeamIndex" asp-route-hashedAccountId="@hashedAccountId">Cancel</a>
+                <a class="govuk-link" asp-route="@RouteNames.ContinueNewEmployerAccountTaskList" asp-route-hashedAccountId="@hashedAccountId">Cancel</a>
             </div>
 
             <input type="hidden" asp-for="NewName" value="@Model.NewName" />
