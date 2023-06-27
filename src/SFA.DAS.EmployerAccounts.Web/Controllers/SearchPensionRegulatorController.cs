@@ -215,7 +215,7 @@ public class SearchPensionRegulatorController : BaseController
 
         if (string.IsNullOrWhiteSpace(viewModel.PayeRef) || !_payeRegex.IsMatch(viewModel.PayeRef))
         {
-            errors.Add(nameof(viewModel.PayeRef), "You need to enter your PAYE in the correct format For example 123/AB456");
+            errors.Add(nameof(viewModel.PayeRef), "You need to enter your PAYE in the correct format for example 123/AB456");
         }
         else if (viewModel.PayeRef[3] != '/')
         {
