@@ -3,5 +3,4 @@
 public static class PolicyNames
 {
     public const string Default = "default";
-    public const string IsSupportPortalUser = nameof(IsSupportPortalUser);
 }

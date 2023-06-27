@@ -3,7 +3,7 @@ using SFA.DAS.EAS.Support.Web.Authorization;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers;
 
-[Authorize(Roles = RoleNames.SupportPortal)]
+[Authorize(Policy = PolicyNames.Default)]
 public class SearchController : ControllerBase
 {
     private readonly IAccountHandler _handler;
