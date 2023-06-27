@@ -426,7 +426,7 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpPost]
-    [Route("{HashedAccountId}/rename", Name = RouteNames.AccountNamePost)]
+    [Route("{HashedAccountId}/create/accountName", Name = RouteNames.AccountNamePost)]
     public async Task<IActionResult> AccountName(string hashedAccountId, RenameEmployerAccountViewModel vm)
     {
         var response = new OrchestratorResponse<RenameEmployerAccountViewModel>();
@@ -463,7 +463,7 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpGet]
-    [Route("{HashedAccountId}/rename/confirm", Name = RouteNames.AccountNameConfirm)]
+    [Route("{HashedAccountId}/create/accountName/confirm", Name = RouteNames.AccountNameConfirm)]
     public IActionResult AccountNameConfirm(string hashedAccountId, string newAccountName)
     {
         return View(new RenameEmployerAccountViewModel
@@ -474,7 +474,7 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpPost]
-    [Route("{HashedAccountId}/rename/confirm", Name = RouteNames.AccountNameConfirmPost)]
+    [Route("{HashedAccountId}/create/accountName/confirm", Name = RouteNames.AccountNameConfirmPost)]
     public async Task<IActionResult> AccountNameConfirm(string hashedAccountId, RenameEmployerAccountViewModel vm)
     {
         var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
@@ -492,7 +492,7 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpGet]
-    [Route("{HashedAccountId}/rename/success", Name = RouteNames.AccountNameSuccess)]
+    [Route("{HashedAccountId}/create/accountName/success", Name = RouteNames.AccountNameSuccess)]
     public async Task<IActionResult> AccountNameSuccess(string hashedAccountId)
     {
         var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);

@@ -1,0 +1,64 @@
+﻿@model OrchestratorResponse<RenameEmployerAccountViewModel>
+
+@{
+    ViewBag.PageID = "page-change-account-name";
+    ViewBag.Title = "Rename account";
+    ViewBag.GaData.Vpv = "/page-change-account-name";
+
+    string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId].ToString();
+}
+
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form method="post">
+            <h1 class="govuk-heading-xl">Rename account</h1>
+
+            <input type="hidden" value="true" name="ChangeAccountName" />
+            <input type="hidden" value="@Model.Data.CurrentName" name="CurrentName" />
+
+            <div class="govuk-form-group">
+                <dl class="das-definition-list">
+                    <dt class="das-definition-list__title">Current name</dt>
+                    <dd class="das-definition-list__definition">@Model.Data.CurrentName</dd>
+                </dl>
+            </div>
+
+            <div class="govuk-form-group @(!string.IsNullOrEmpty(Model.Data.NewNameError) ? "govuk-form-group--error" : "")">
+                <label id="NewName-label" for="NewName" class="govuk-label">
+                    New account name
+                </label>
+
+                @if (!string.IsNullOrEmpty(Model.Data.NewNameError))
+                {
+                    <span id="error-message-newname" class="govuk-error-message">
+                        <span class="govuk-visually-hidden">Error:</span> @Model.Data.NewNameError
+                    </span>
+                }
+
+                <input id="NewName" name="NewName" type="text" maxlength="100" class="govuk-input" aria-required="true"
+                       aria-describedby="@(!string.IsNullOrEmpty(Model.Data.NewNameError) ? "error-message-newname" : "")"
+                       value="@Model.Data.NewName" />
+
+            </div>
+
+            <div class="govuk-button-group">
+                <button type="submit" class="govuk-button" id="accept">Save and continue</button>
+                <a asp-route="@RouteNames.EmployerTeamIndex" asp-route-hashedAccountId="@hashedAccountId"
+                   class="govuk-link">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section breadcrumb {
+    <div class="govuk-breadcrumbs">
+        <ol class="govuk-breadcrumbs__list">
+            <li class="govuk-breadcrumbs__list-item">
+                <a asp-route="@RouteNames.EmployerTeamIndex" asp-route-hashedAccountId="@hashedAccountId" class="govuk-breadcrumbs__link">Home</a>
+            </li>
+            <li class="govuk-breadcrumbs__list-item">@ViewBag.Title</li>
+        </ol>
+    </div>
+}
