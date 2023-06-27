@@ -442,7 +442,7 @@ public class EmployerAccountController : BaseController
 
                     if (response.Status == HttpStatusCode.OK)
                     {
-                        return RedirectToRoute(RouteNames.AccountNameConfirmPost);
+                        return RedirectToRoute(RouteNames.AccountNameSuccess, new { hashedAccountId });
                     }
 
                     response.Data = vm;
