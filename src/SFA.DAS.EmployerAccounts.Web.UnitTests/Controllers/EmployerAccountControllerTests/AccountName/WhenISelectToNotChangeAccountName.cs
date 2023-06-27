@@ -1,7 +1,7 @@
 ﻿using AutoFixture.NUnit3;
 using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.RenameAccount
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.AccountName
 {
     [TestFixture]
     class WhenISelectToNotChangeAccountName
@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
             // Arrange
 
             // Act
-            var result = await controller.RenameAccount(hashedAccountId, viewModel) as ViewResult;
+            var result = await controller.AccountName(hashedAccountId, viewModel) as ViewResult;
 
             // Assert
         }

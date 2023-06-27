@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Web.RouteValues;
 using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.RenameAccount;
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.AccountName;
 
 public class WhenIRenameAnAccount : ControllerTestBase
 {
@@ -62,10 +62,10 @@ public class WhenIRenameAnAccount : ControllerTestBase
         };
 
         //Act
-        var result = await _employerAccountController.RenameAccount(hashedAccountId, model) as RedirectToRouteResult;
+        var result = await _employerAccountController.AccountName(hashedAccountId, model) as RedirectToRouteResult;
 
         //Assert
-        result.RouteName.Should().Be(RouteNames.RenameAccountConfirm);
+        result.RouteName.Should().Be(RouteNames.AccountNameConfirm);
         
     }
 }
