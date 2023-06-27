@@ -4,7 +4,7 @@ using MediatR;
 using SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
 using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.RenameAccount
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.AccountName
 {
     [TestFixture]
     class WhenIDoNotSelectAChoice
@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
             viewModel.ChangeAccountName = null;
 
             // Act
-            var result = await controller.RenameAccount(hashedAccountId, viewModel) as ViewResult;
+            var result = await controller.AccountName(hashedAccountId, viewModel) as ViewResult;
             var model = result.Model.As<OrchestratorResponse<RenameEmployerAccountViewModel>>();
 
             // Assert
@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         }
 
         [Test, MoqAutoData]
-        public async Task Then_Do_Not_Rename_Account(
+        public async Task Then_Do_Not_Name_Account(
             string hashedAccountId,
             RenameEmployerAccountViewModel viewModel,
             [Frozen] Mock<IMediator> mediatorMock,
@@ -38,7 +38,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
             viewModel.ChangeAccountName = null;
             
             // Act
-            var result = await controller.RenameAccount(hashedAccountId, viewModel) as ViewResult;
+            var result = await controller.AccountName(hashedAccountId, viewModel) as ViewResult;
             var model = result.Model.As<OrchestratorResponse<RenameEmployerAccountViewModel>>();
 
             // Assert

@@ -7,7 +7,7 @@ using SFA.DAS.EmployerAccounts.Models.Account;
 
 namespace SFA.DAS.EmployerAccounts.Data;
 
-public class UserAccountRepository :  IUserAccountRepository
+public class UserAccountRepository : IUserAccountRepository
 {
     private readonly Lazy<EmployerAccountsDbContext> _db;
 
@@ -18,19 +18,24 @@ public class UserAccountRepository :  IUserAccountRepository
 
     public async Task<Accounts<Account>> GetAccountsByUserRef(string userRef)
     {
-        var parameters = new DynamicParameters();
-
-        parameters.Add("@userRef", Guid.Parse(userRef), DbType.Guid);
-
-        var result = await _db.Value.Database.GetDbConnection().QueryAsync<Account>(
-            sql: @"[employer_account].[GetAccounts_ByUserRef]",
-            param: parameters,
-            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
-            commandType: CommandType.StoredProcedure);
+        var guidUserRef = Guid.Parse(userRef);
+        var accounts = await _db.Value.Memberships
+            .Where(m => m.User.Ref == guidUserRef)
+            .Select(m => new Account
+            {
+                Id = m.Account.Id,
+                Name = m.Account.Name,
+                Role = m.Role,
+                HashedId = m.Account.HashedId,
+                PublicHashedId = m.Account.PublicHashedId,
+                NameConfirmed = m.Account.NameConfirmed,
+                AccountHistory = m.Account.AccountHistory.Any() ? m.Account.AccountHistory.Take(1).ToList() : m.Account.AccountHistory
+            })
+            .ToListAsync();
 
         return new Accounts<Account>
         {
-            AccountList = (List<Account>)result
+            AccountList = accounts
         };
     }
 
