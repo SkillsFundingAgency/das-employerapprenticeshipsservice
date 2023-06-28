@@ -4,7 +4,7 @@
     ViewBag.PageID = "page-change-account-name";
     ViewBag.Title = "Rename account";
     ViewBag.GaData.Vpv = "/page-change-account-name";
-
+    ViewBag.ShowNav = false;
     string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId].ToString();
 
     var errorClass = Model.Data!.ErrorDictionary!.Any() ? "govuk-form-group--error" : "";
