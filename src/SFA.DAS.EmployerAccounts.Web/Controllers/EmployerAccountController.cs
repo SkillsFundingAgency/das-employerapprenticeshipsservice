@@ -53,24 +53,19 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpGet]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     [Route("create/tasklist", Order = 1, Name = RouteNames.NewEmpoyerAccountTaskList)]
     [Route("{HashedAccountId}/tasklist", Order = 2, Name = RouteNames.ContinueNewEmployerAccountTaskList)]
     public async Task<IActionResult> CreateAccountTaskList(string hashedAccountId)
     {
-        var accountTaskListViewModel = new OrchestratorResponse<AccountTaskListViewModel>
-        {
-            Data = new AccountTaskListViewModel()
-        };
-
-        if (!string.IsNullOrEmpty(hashedAccountId))
-        {
-            accountTaskListViewModel = await _employerAccountOrchestrator.GetCreateAccountTaskList(hashedAccountId);
-        }
+        var userIdClaim = HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals(ControllerConstants.UserRefClaimKeyName));
+        var accountTaskListViewModel = await _employerAccountOrchestrator.GetCreateAccountTaskList(hashedAccountId, userIdClaim.Value);
 
         return View(nameof(CreateAccountTaskList), accountTaskListViewModel);
     }
 
     [HttpGet]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     [Route("create/progress-saved", Order = 1, Name = RouteNames.NewAccountSaveProgress)]
     [Route("{HashedAccountId}/progress-saved", Order = 2, Name = RouteNames.PartialAccountSaveProgress)]
     public IActionResult CreateAccountProgressSaved(string hashedAccountId)
@@ -452,7 +447,6 @@ public class EmployerAccountController : BaseController
                     }
 
                     response.Data = vm;
-                    response.Status = response.Status;
 
                     return View(response);
 

@@ -19,5 +19,7 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public string SaveProgressRouteName => string.IsNullOrEmpty(HashedAccountId) ? RouteNames.NewAccountSaveProgress : RouteNames.PartialAccountSaveProgress;
 
         public string AddPayeRouteName => string.IsNullOrEmpty(HashedAccountId) ? RouteNames.EmployerAccountPayBillTriage : RouteNames.AddPayeShutter;
+
+        public bool NameConfirmed { get; internal set; }
     }
 }

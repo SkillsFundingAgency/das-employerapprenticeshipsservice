@@ -1,56 +1,27 @@
-﻿using AutoFixture.NUnit3;
+﻿using System.Security.Claims;
+using AutoFixture.NUnit3;
 using FluentAssertions;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountDetail;
 using SFA.DAS.EmployerAccounts.Web.RouteValues;
-using SFA.DAS.Encoding;
 using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests
 {
     [TestFixture]
-    public class WhenICreateAnAccountViaTaskList
+    public class WhenUserHasNotSetAccountName
     {
         [Test]
         [MoqAutoData]
-        public async Task When_No_HashedId_Then_Do_Not_Fetch_Account_Status(
-            [Frozen] Mock<IEncodingService> encodingService,
-            [NoAutoProperties] EmployerAccountController controller)
-        {
-            // Arrange
-
-            // Act
-            var result = await controller.CreateAccountTaskList(null) as ActionResult;
-
-            // Assert
-            encodingService.Verify(m => m.Decode(It.IsAny<string>(), EncodingType.AccountId), Times.Never);
-        }
-
-        [Test]
-        [MoqAutoData]
-        public async Task When_No_HashedId_Then_HasPaye_False(
-            [NoAutoProperties] EmployerAccountController controller)
-        {
-            // Arrange
-
-            // Act
-            var result = await controller.CreateAccountTaskList(null) as ViewResult;
-            var model = result.Model as OrchestratorResponse<AccountTaskListViewModel>;
-
-            // Assert
-            Assert.IsNotNull(model);
-            model.Data.HasPayeScheme.Should().BeFalse();
-            model.Data.CompletedSections.Should().Be(1);
-        }
-
-        [Test]
-        [MoqAutoData]
-        public async Task WhenHashedId_Then_GetCreateAccountTaskList_Decodes_HashedAccountId(
+        public async Task Then_GetCreateAccountTaskList_GetAccountWithId(
             string hashedAccountId,
+            string userId,
             [Frozen] Mock<IMediator> mediatorMock,
             [NoAutoProperties] EmployerAccountController controller)
         {
             // Arrange
+            SetControllerContextUserIdClaim(userId, controller);
 
             // Act
             var result = await controller.CreateAccountTaskList(hashedAccountId);
@@ -61,28 +32,16 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
         [Test]
         [MoqAutoData]
-        public async Task WhenNoHashedId_Then_CannotAddAnotherPaye(
-           [NoAutoProperties] EmployerAccountController controller)
-        {
-            // Arrange
-
-            // Act
-            var result = await controller.CreateAccountTaskList(string.Empty) as ViewResult;
-            var model = result.Model as OrchestratorResponse<AccountTaskListViewModel>;
-
-            // Assert
-            model.Data.AddPayeRouteName.Should().Be(RouteNames.EmployerAccountPayBillTriage);
-        }
-
-        [Test]
-        [MoqAutoData]
-        public async Task WhenHashedId_Then_CannotAddAnotherPaye(
+        public async Task Then_CannotAddAnotherPaye(
             string hashedAccountId,
+            string userId,
             GetEmployerAccountDetailByHashedIdResponse accountDetailResponse,
             [Frozen] Mock<IMediator> mediatorMock,
             [NoAutoProperties] EmployerAccountController controller)
         {
             // Arrange
+            SetControllerContextUserIdClaim(userId, controller);
+
             mediatorMock
                 .Setup(m => m.Send(It.Is<GetEmployerAccountDetailByHashedIdQuery>(x => x.HashedAccountId == hashedAccountId), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(accountDetailResponse);
@@ -95,14 +54,15 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
             model.Data.AddPayeRouteName.Should().Be(RouteNames.AddPayeShutter);
         }
 
-
         [Test]
         [MoqAutoData]
-        public async Task WhenHashedId_And_Account_NotFound_Then_Return_NotFound(
+        public async Task And_No_Account_Then_Return_NotFound(
             string hashedAccountId,
+            string userId,
             [NoAutoProperties] EmployerAccountController controller)
         {
             // Arrange
+            SetControllerContextUserIdClaim(userId, controller);
 
             // Act
             var result = await controller.CreateAccountTaskList(hashedAccountId) as ViewResult;
@@ -113,13 +73,16 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
         [Test]
         [MoqAutoData]
-        public async Task WhenHashedId_Then_GetCreateAccountTaskList_Sets_ViewModel_HashedAccountId(
+        public async Task Then_GetCreateAccountTaskList_Sets_ViewModel_HashedAccountId(
             string hashedAccountId,
+            string userId,
             GetEmployerAccountDetailByHashedIdResponse accountDetailResponse,
             [Frozen] Mock<IMediator> mediatorMock,
             [NoAutoProperties] EmployerAccountController controller)
         {
             // Arrange
+            SetControllerContextUserIdClaim(userId, controller);
+
             mediatorMock
                 .Setup(m => m.Send(It.Is<GetEmployerAccountDetailByHashedIdQuery>(x => x.HashedAccountId == hashedAccountId), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(accountDetailResponse);
@@ -134,13 +97,16 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
         [Test]
         [MoqAutoData]
-        public async Task WhenHashedId_Then_SaveProgressRoute_Maintains_AccountContext(
+        public async Task Then_SaveProgressRoute_Maintains_AccountContext(
             string hashedAccountId,
+            string userId,
             GetEmployerAccountDetailByHashedIdResponse accountDetailResponse,
             [Frozen] Mock<IMediator> mediatorMock,
             [NoAutoProperties] EmployerAccountController controller)
         {
             // Arrange
+            SetControllerContextUserIdClaim(userId, controller);
+
             mediatorMock
                 .Setup(m => m.Send(It.Is<GetEmployerAccountDetailByHashedIdQuery>(x => x.HashedAccountId == hashedAccountId), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(accountDetailResponse);
@@ -155,51 +121,16 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
         [Test]
         [MoqAutoData]
-        public async Task WhenHashedId_Then_SaveProgressRoute_Without_AccountContext([NoAutoProperties] EmployerAccountController controller)
-        {
-            // Arrange
-
-            // Act
-            var result = await controller.CreateAccountTaskList(string.Empty) as ViewResult;
-            var model = result.Model as OrchestratorResponse<AccountTaskListViewModel>;
-
-            // Assert
-            model.Data.SaveProgressRouteName.Should().Be(RouteNames.NewAccountSaveProgress);
-        }
-
-        [Test]
-        [MoqAutoData]
-        public async Task Then_Account_WithoutPaye_Should_Return_HasPaye_False(
-            string hashedAccountId,
-            GetEmployerAccountDetailByHashedIdResponse accountDetailResponse,
-            [Frozen] Mock<IMediator> mediatorMock,
-            [NoAutoProperties] EmployerAccountController controller)
-        {
-            // Arrange
-            accountDetailResponse.Account.PayeSchemes.Clear();
-            mediatorMock
-                .Setup(m => m.Send(It.Is<GetEmployerAccountDetailByHashedIdQuery>(x => x.HashedAccountId == hashedAccountId), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(accountDetailResponse);
-
-            // Act
-            var result = await controller.CreateAccountTaskList(hashedAccountId) as ViewResult;
-            var model = result.Model as OrchestratorResponse<AccountTaskListViewModel>;
-
-            // Assert
-            Assert.IsNotNull(model);
-            model.Data.HasPayeScheme.Should().BeFalse();
-            model.Data.CompletedSections.Should().Be(1);
-        }
-
-        [Test]
-        [MoqAutoData]
         public async Task Then_AccountHasPayeSchemes_Should_Return_HasPaye_True(
             string hashedAccountId,
+            string userId,
             GetEmployerAccountDetailByHashedIdResponse accountDetailResponse,
             [Frozen] Mock<IMediator> mediatorMock,
             [NoAutoProperties] EmployerAccountController controller)
         {
             // Arrange
+            SetControllerContextUserIdClaim(userId, controller);
+
             accountDetailResponse.Account.PayeSchemes = accountDetailResponse.Account.PayeSchemes.Take(1).ToList();
             mediatorMock
                 .Setup(m => m.Send(It.Is<GetEmployerAccountDetailByHashedIdQuery>(x => x.HashedAccountId == hashedAccountId), It.IsAny<CancellationToken>()))
@@ -213,6 +144,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
             Assert.IsNotNull(model);
             model.Data.HasPayeScheme.Should().BeTrue();
             model.Data.CompletedSections.Should().Be(2);
+        }
+
+        private static void SetControllerContextUserIdClaim(string userId, EmployerAccountController controller)
+        {
+            var claims = new List<Claim> { new Claim(ControllerConstants.UserRefClaimKeyName, userId) };
+            var claimsIdentity = new ClaimsIdentity(claims);
+            var user = new ClaimsPrincipal(claimsIdentity);
+            controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
         }
     }
 }

@@ -66,6 +66,5 @@ public class WhenIRenameAnAccount : ControllerTestBase
 
         //Assert
         result.RouteName.Should().Be(RouteNames.AccountNameConfirm);
-        
     }
 }

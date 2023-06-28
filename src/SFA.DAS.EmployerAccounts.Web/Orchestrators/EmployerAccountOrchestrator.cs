@@ -331,8 +331,23 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
         CookieService.Delete(CookieName);
     }
 
-    public virtual async Task<OrchestratorResponse<AccountTaskListViewModel>> GetCreateAccountTaskList(string hashedAccountId)
+    public virtual async Task<OrchestratorResponse<AccountTaskListViewModel>> GetCreateAccountTaskList(string hashedAccountId, string userRef)
     {
+        if (string.IsNullOrEmpty(hashedAccountId))
+        {
+            Account firstAccount = await GetFirstUserAccount(userRef);
+
+            return new OrchestratorResponse<AccountTaskListViewModel>
+            {
+                Data = new AccountTaskListViewModel
+                {
+                    HashedAccountId = firstAccount?.HashedId,
+                    HasPayeScheme = firstAccount?.AccountHistory.Any() ?? false,
+                    NameConfirmed = firstAccount?.NameConfirmed ?? false
+                }
+            };
+        }
+
         var accountResponse = await _mediator.Send(new GetEmployerAccountDetailByHashedIdQuery
         {
             HashedAccountId = hashedAccountId
@@ -351,5 +366,19 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
                 HasPayeScheme = accountResponse?.Account?.PayeSchemes?.Any() ?? false
             }
         };
+    }
+
+    private async Task<Account> GetFirstUserAccount(string userRef)
+    {
+        var getUserAccountsQueryResponse = await _mediator.Send(new GetUserAccountsQuery
+        {
+            UserRef = userRef
+        });
+
+       var firstAccount = getUserAccountsQueryResponse.Accounts.AccountsCount == 0 
+            ? null 
+            : getUserAccountsQueryResponse.Accounts.AccountList.OrderBy(x => x.CreatedDate).FirstOrDefault();
+        
+        return firstAccount;
     }
 }
