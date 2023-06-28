@@ -54,9 +54,17 @@
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
                         Do you want to change your employer account name?
                     </legend>
+
+                    @if (Model.Data.ErrorDictionary.ContainsKey(nameof(Model.Data.ChangeAccountName)))
+                    {
+                        <span id="error-message-newname" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> @Model.Data.ErrorDictionary[nameof(Model.Data.ChangeAccountName)]
+                        </span>
+                    }
+
                     <div class="govuk-radios" data-module="govuk-radios">
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="ChangeAccountName" name="ChangeAccountName" type="radio" value="@bool.TrueString" aria-controls="conditional-change-account-name" aria-expanded="true">
+                            <input class="govuk-radios__input" id="ChangeAccountName" name="ChangeAccountName" type="radio" checked="@Model.Data.ChangeAccountName" value="@bool.TrueString" aria-controls="conditional-change-account-name" aria-expanded="true">
                             <label class="govuk-label govuk-radios__label" for="ChangeAccountName">
                                 Yes, I want to change my employer account name
                             </label>
