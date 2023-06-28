@@ -4,6 +4,7 @@
     ViewBag.PageID = "page-change-account-name-confirm";
     ViewBag.Title = "Confirm your new account name";
     ViewBag.GaData.Vpv = "/page-change-account-name-confirm";
+    ViewBag.ShowNav = false;
     string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]?.ToString();
 }
 
