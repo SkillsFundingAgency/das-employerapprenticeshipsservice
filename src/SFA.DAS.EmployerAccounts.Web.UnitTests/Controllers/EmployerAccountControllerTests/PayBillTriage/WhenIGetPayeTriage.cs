@@ -1,5 +1,6 @@
 ﻿using AutoFixture.NUnit3;
 using FluentAssertions;
+using SFA.DAS.EmployerAccounts.Web.RouteValues;
 using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.PayBillTriage;
@@ -21,9 +22,9 @@ class WhenIGetPayeTriage
     public void Then_If_Has_Account_Should_Return_Shutter(string hashedAccountId, [NoAutoProperties] EmployerAccountController controller)
     {
         //Act
-        var result = controller.PayBillTriage(hashedAccountId) as ViewResult;
+        var result = controller.PayBillTriage(hashedAccountId) as RedirectToRouteResult;
 
         //Assert
-        result.ViewName.Should().Be("AddPayeShutter");
+        result.RouteName.Should().Be(RouteNames.AddPayeShutter);
     }
 }
