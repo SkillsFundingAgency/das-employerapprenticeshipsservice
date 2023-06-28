@@ -36,7 +36,7 @@
         
         <div class="govuk-button-group">
             <a href="@Model.Data.ConfirmUrl" id="agree_and_continue" class="govuk-button">Continue</a>
-            <a href="@Model.Data.CancelRoute" class="govuk-link">Cancel</a>
+            <a asp-route="@Model.Data.CancelRoute" asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" class="govuk-link">Cancel</a>
         </div>
     </div>
 </div>
