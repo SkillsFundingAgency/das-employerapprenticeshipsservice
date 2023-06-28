@@ -3,7 +3,7 @@
     "SFA.DAS.EAS.Support.Web": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:52793;http://localhost:52794",
+      "applicationUrl": "https://localhost:44349;http://localhost:52794",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
