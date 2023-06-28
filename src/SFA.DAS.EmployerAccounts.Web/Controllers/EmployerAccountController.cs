@@ -434,10 +434,21 @@ public class EmployerAccountController : BaseController
 
         switch (vm.ChangeAccountName)
         {
-            case true: return RedirectToRoute(RouteNames.AccountNameConfirm, new { hashedAccountId, NewAccountName = Uri.EscapeDataString(vm.NewName) }); ;
+            case true:
+                {
+                    if (string.IsNullOrEmpty(vm.NewName))
+                    {
+                        // Model validation failed, return the view with validation errors
+                        vm.ErrorDictionary.Add(nameof(vm.NewName), "Enter a name");
+                        response.Data = vm;
+                        response.Status = response.Status = HttpStatusCode.BadRequest;
+                        return View(response);
+                    }
+
+                    return RedirectToRoute(RouteNames.AccountNameConfirm, new { hashedAccountId, NewAccountName = Uri.EscapeDataString(vm.NewName) });
+                }
             case false:
                 {
-
                     var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
                     response = await _employerAccountOrchestrator.RenameEmployerAccount(hashedAccountId, vm, userIdClaim);
 
@@ -449,7 +460,6 @@ public class EmployerAccountController : BaseController
                     response.Data = vm;
 
                     return View(response);
-
                 }
             default:
                 {
