@@ -2,6 +2,7 @@
 using FluentAssertions;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountDetail;
+using SFA.DAS.EmployerAccounts.Web.RouteValues;
 using SFA.DAS.Encoding;
 using SFA.DAS.Testing.AutoFixture;
 
@@ -56,6 +57,42 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
             // Assert
             mediatorMock.Verify(m => m.Send(It.Is<GetEmployerAccountDetailByHashedIdQuery>(x => x.HashedAccountId == hashedAccountId), It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Test]
+        [MoqAutoData]
+        public async Task WhenNoHashedId_Then_CannotAddAnotherPaye(
+           [NoAutoProperties] EmployerAccountController controller)
+        {
+            // Arrange
+
+            // Act
+            var result = await controller.CreateAccountTaskList(string.Empty) as ViewResult;
+            var model = result.Model as OrchestratorResponse<AccountTaskListViewModel>;
+
+            // Assert
+            model.Data.AddPayeRouteName.Should().Be(RouteNames.EmployerAccountPayBillTriage);
+        }
+
+        [Test]
+        [MoqAutoData]
+        public async Task WhenHashedId_Then_CannotAddAnotherPaye(
+            string hashedAccountId,
+            GetEmployerAccountDetailByHashedIdResponse accountDetailResponse,
+            [Frozen] Mock<IMediator> mediatorMock,
+            [NoAutoProperties] EmployerAccountController controller)
+        {
+            // Arrange
+            mediatorMock
+                .Setup(m => m.Send(It.Is<GetEmployerAccountDetailByHashedIdQuery>(x => x.HashedAccountId == hashedAccountId), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(accountDetailResponse);
+
+            // Act
+            var result = await controller.CreateAccountTaskList(hashedAccountId) as ViewResult;
+            var model = result.Model as OrchestratorResponse<AccountTaskListViewModel>;
+
+            // Assert
+            model.Data.AddPayeRouteName.Should().Be(RouteNames.AddPayeShutter);
         }
 
 
