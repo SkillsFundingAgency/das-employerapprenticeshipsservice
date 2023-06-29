@@ -41,9 +41,9 @@ public class EmployerTeamController : BaseController
                 return View(response);
             }
 
-            if (!response.Data.HasPayeScheme || !response.Data.Account.NameConfirmed)
+            if (!response.Data.Account.NameConfirmed)
             {
-                return RedirectToRoute(RouteNames.ContinueNewEmployerAccountTaskList, new { hashedAccountId = hashedAccountId } );
+                return RedirectToRoute(RouteNames.ContinueNewEmployerAccountTaskList, new { hashedAccountId } );
             }
 
             return View(response);
