@@ -22,7 +22,6 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddRazorPages();
         services.AddLogging();
 
         services.AddConfigurationSections(_configuration);
@@ -64,7 +63,6 @@ public class Startup
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>
         {
-            endpoints.MapRazorPages();
             endpoints.MapControllers();
         });
     }
