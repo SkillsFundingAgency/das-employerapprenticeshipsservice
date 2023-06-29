@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SFA.DAS.EAS.Support.Infrastructure.Models;
+﻿namespace SFA.DAS.EAS.Support.Infrastructure.Models;
 
 public class PrivilegedAccessToken
 {
