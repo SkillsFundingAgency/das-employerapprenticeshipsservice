@@ -1,12 +1,13 @@
-﻿using MediatR;
+﻿using FluentAssertions;
+using MediatR;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.EmployerAccounts.Web.Models;
+using SFA.DAS.EmployerAccounts.Web.RouteValues;
 using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests;
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.AccountName;
 
 public class WhenIRenameAnAccount : ControllerTestBase
 {
@@ -32,7 +33,7 @@ public class WhenIRenameAnAccount : ControllerTestBase
                 Data = new RenameEmployerAccountViewModel()
             });
 
-        
+
         AddUserToContext();
 
         _employerAccountController = new EmployerAccountController(
@@ -50,22 +51,20 @@ public class WhenIRenameAnAccount : ControllerTestBase
     }
 
     [Test, MoqAutoData]
-    public async Task ThenTheAccountIsRenamed(string hashedAccountId)
+    public async Task ThenIMustConfirmTheRename(string hashedAccountId)
     {
         //Arrange
         var model = new RenameEmployerAccountViewModel
         {
+            ChangeAccountName = true,
             CurrentName = "Test Account",
             NewName = "New Account Name"
         };
 
         //Act
-        await _employerAccountController.RenameAccount(hashedAccountId, model);
+        var result = await _employerAccountController.AccountName(hashedAccountId, model) as RedirectToRouteResult;
 
         //Assert
-        _orchestrator.Verify(x => x.RenameEmployerAccount(hashedAccountId, It.Is<RenameEmployerAccountViewModel>(r =>
-            r.CurrentName == "Test Account"
-            && r.NewName == "New Account Name"
-        ), It.IsAny<string>()));
+        result.RouteName.Should().Be(RouteNames.AccountNameConfirm);
     }
 }

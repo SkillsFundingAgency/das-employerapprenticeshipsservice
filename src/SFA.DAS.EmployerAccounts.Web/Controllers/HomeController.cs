@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.EmployerAccounts.Infrastructure;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
-using SFA.DAS.EmployerAccounts.Web.Cookies;
 using SFA.DAS.EmployerAccounts.Web.RouteValues;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.GovUK.Auth.Models;
@@ -49,9 +48,8 @@ public class HomeController : BaseController
     [Route("Index")]
     public async Task<IActionResult> Index(GaQueryData queryData)
     {
-        
         // check if the GovSignIn is enabled
-        if (_configuration.UseGovSignIn)
+      if (_configuration.UseGovSignIn)
         {
             if (User.Identities.FirstOrDefault() != null && User.Identities.FirstOrDefault()!.IsAuthenticated)
             {
@@ -102,8 +100,6 @@ public class HomeController : BaseController
             return View(ControllerConstants.ServiceStartPageViewName, model);
         }
 
-        
-
         if (accounts.Data.Invitations > 0)
         {
             return RedirectToAction(ControllerConstants.InvitationIndexName, ControllerConstants.InvitationControllerName,queryData);
@@ -116,17 +112,23 @@ public class HomeController : BaseController
 
             if (account != null)
             {
-                return RedirectToRoute(RouteNames.EmployerTeamIndex, new
+                if (account.AccountHistory.Any() && account.NameConfirmed)
                 {
-                    HashedAccountId = account.HashedId,
-                    queryData._ga,
-                    queryData._gl,
-                    queryData.utm_source,
-                    queryData.utm_campaign,
-                    queryData.utm_medium,
-                    queryData.utm_keywords,
-                    queryData.utm_content
-                });
+                    return RedirectToRoute(RouteNames.EmployerTeamIndex, new
+                    {
+                        HashedAccountId = account.HashedId,
+                        queryData._ga,
+                        queryData._gl,
+                        queryData.utm_source,
+                        queryData.utm_campaign,
+                        queryData.utm_medium,
+                        queryData.utm_keywords,
+                        queryData.utm_content
+                    });
+                } else
+                {
+                    return RedirectToRoute(RouteNames.ContinueNewEmployerAccountTaskList, new { hashedAccountId = account.HashedId });
+                }
             }
         }
 
@@ -143,7 +145,7 @@ public class HomeController : BaseController
             return View(accounts);
         }
 
-        return RedirectToRoute(RouteNames.EmployerAccountGetApprenticeshipFunding, queryData);
+        return RedirectToRoute(RouteNames.NewEmpoyerAccountTaskList, queryData);
     }
 
     [Authorize]
