@@ -257,7 +257,7 @@ public class HomeController : BaseController
             var queryData = invitation.Data != null
                 ? $"?correlationId={correlationId}&firstname={WebUtility.UrlEncode(invitation.Data.EmployerFirstName)}&lastname={WebUtility.UrlEncode(invitation.Data.EmployerLastName)}"
                 : "";
-            return Redirect(_urlHelper.EmployerProfileAddUserDetails($"/user/add-user-details{queryData}"));
+            return Redirect(_urlHelper.EmployerProfileAddUserDetails($"/user/add-user-details") + queryData);
         }
         
         return invitation.Data != null
