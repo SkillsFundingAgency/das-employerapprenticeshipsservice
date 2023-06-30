@@ -49,6 +49,7 @@
         </dl>
         <form method="post" asp-route="@RouteNames.RenameAccountPost" asp-hashedAccountId="@Context.Request.RouteValues[RouteValueKeys.HashedAccountId]">
             <input type="hidden" value="@Model.Data.CurrentName" name="CurrentName" />
+            <input type="hidden" value="@Model.Data.LegalEntityName" name="LegalEntityName" />
             <div class="govuk-form-group @errorClass">
                 <fieldset class="govuk-fieldset">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
