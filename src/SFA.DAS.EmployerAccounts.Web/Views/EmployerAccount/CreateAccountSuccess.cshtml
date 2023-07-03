@@ -1,0 +1,28 @@
+@inject IUrlActionHelper UrlHelpers;
+
+@{
+    ViewBag.PageID = "page-employer-account-created";
+    ViewBag.Title = "Employer account created";
+    ViewBag.GaData.Vpv = "/page-employer-account-created";
+    string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]?.ToString();
+}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-6">
+            <h1 class="govuk-panel__title">
+                Employer account created
+            </h1>
+        </div>
+        @*<p>We've sent you a confirmation email (you may need to check your junk folder and add us to your safe senders list).</p>*@
+        <h2 class="govuk-heading-m">Next steps</h2>
+        <p class="govuk-body"> Before you can reserve funds for apprenticeship training you will need to:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li><a asp-route="@RouteNames.EmployerAgreementIndex" asp-route-hashedAccountId="@hashedAccountId" class="govuk-link">accept the agreement</a> between your organisation and the Department for Education (DfE)</li>
+            <li><a href="@UrlHelpers.ProviderRelationshipsAction("providers")" class="govuk-link">add a training provider</a> who will support your apprentice(s) through their apprenticeship.</li>
+        </ul>
+        <p class="govuk-body">You can also give permission for your training provider to create adverts and reserve apprenticeship funds on your behalf.</p>
+        <a asp-route="@RouteNames.EmployerTeamIndex" asp-route-hashedAccountId="@hashedAccountId" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
+            Go to your employer account homepage
+        </a>
+    </div>
+</div>

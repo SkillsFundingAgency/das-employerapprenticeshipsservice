@@ -8,12 +8,13 @@
     string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId].ToString();
 }
 
-<form method="post">
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
 
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form method="post">
             <h1 class="govuk-heading-xl">Rename account</h1>
 
+            <input type="hidden" value="true" name="ChangeAccountName" />
             <input type="hidden" value="@Model.Data.CurrentName" name="CurrentName" />
 
             <div class="govuk-form-group">
@@ -46,10 +47,10 @@
                 <a asp-route="@RouteNames.EmployerTeamIndex" asp-route-hashedAccountId="@hashedAccountId"
                    class="govuk-link">Cancel</a>
             </div>
-
-        </div>
+        </form>
     </div>
-</form>
+</div>
+
 
 @section breadcrumb {
     <div class="govuk-breadcrumbs">

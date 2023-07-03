@@ -3,7 +3,7 @@
 
 @{
     ViewBag.PageID = "page-onboard-gov-gateway-inform";
-    ViewBag.Title = "Check details";
+    ViewBag.Title = "Add a PAYE scheme using your Government Gateway details";
     ViewBag.ZenDeskLabel = "eas-use-your-government-gateway-details";
     ViewBag.Section = "paye"; 
     ViewBag.ShowNav = false;
@@ -11,12 +11,32 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-xl">Using your Government Gateway details</h1>
+        <h1 class="govuk-heading-xl">Add a PAYE scheme using your Government Gateway details</h1>
         <p class="govuk-body">You'll now be taken to the HMRC Government Gateway site where you'll be asked to sign in using your Government Gateway credentials.</p>
         <p class="govuk-body">When you sign in to your Government Gateway account you'll be asked to ‘grant authority' to allow your tax details to be used.</p>
+        
+        <details class="govuk-details" role="group" data-module="govuk-details">
+            <summary class="govuk-details__summary" role="button">
+                <span class="govuk-details__summary-text">
+                    How to find your Government Gateway details
+                </span>
+            </summary>
+            <div class="govuk-details__text">
+                If you have lost your Government Gateway log in details you can <a href="https://www.gov.uk/log-in-register-hmrc-online-services/problems-signing-in" rel="noopener" class="govuk-link" rel="external" target="_blank" title="Opens in a new window">get help signing in</a>
+            </div>
+        </details>
+
+        <div class="govuk-warning-text">
+            <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+            <strong class="govuk-warning-text__text">
+                <span class="govuk-warning-text__assistive">Warning</span>
+                Before you continue, you must make sure you have authority to add <abbr>PAYE</abbr> schemes to the account for this organisation
+            </strong>
+        </div>
+        
         <div class="govuk-button-group">
             <a href="@Model.Data.ConfirmUrl" id="agree_and_continue" class="govuk-button">Continue</a>
-            <a href="@Url.Action(ControllerConstants.SkipRegistrationActionName, ControllerConstants.EmployerAccountControllerName)" class="govuk-link">Skip this step for now</a>
+            <a asp-route="@Model.Data.CancelRoute" asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" class="govuk-link">Cancel</a>
         </div>
     </div>
 </div>

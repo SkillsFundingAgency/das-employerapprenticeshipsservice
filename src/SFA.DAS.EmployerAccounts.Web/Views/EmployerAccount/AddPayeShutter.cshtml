@@ -1,0 +1,25 @@
+﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
+@{
+    ViewBag.PageID = "add-paye-shutter";
+    ViewBag.Title = "Add PAYE Scheme";
+    ViewBag.ShowNav = false;
+
+    ViewBag.GaData.Vpv = "/service/accounts/add-paye-shutter";
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">
+            @ViewBag.Title
+        </h1>
+        <p class="govuk-body">You have already added a PAYE scheme.</p>
+        <p class="govuk-body">To change, add or amend a PAYE scheme, you need to complete setting up your Employer account first, then go to the PAYE section to make any changes.</p>
+        <div class="govuk-button-group">
+            <a asp-route="@RouteNames.ContinueNewEmployerAccountTaskList" asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" class="govuk-link">Close</a>
+        </div>
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="das-js-back-link"></div>
+}

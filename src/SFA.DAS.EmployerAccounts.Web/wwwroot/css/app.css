@@ -106,3 +106,9 @@
 .app-support-banner__context p {
     margin: 0;
 }
+
+@media (min-width: 40.0625em) {
+    .app-save-return {
+        margin: -15px 0 30px;
+    }
+}

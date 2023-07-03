@@ -4,5 +4,6 @@
 AS
 	UPDATE [employer_account].[Account]
 	SET [Name] = @AccountName,
+	[NameConfirmed] = 1,
 	[ModifiedDate] = GETDATE()
 	WHERE Id = @AccountId 
