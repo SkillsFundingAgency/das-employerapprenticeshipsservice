@@ -395,26 +395,7 @@ public class WhenIViewTheHomePage : ControllerTestBase
         //Assert
         Assert.IsNotNull(actual);
         var actualViewResult = actual as RedirectToRouteResult;
-        Assert.AreEqual(RouteNames.NewEmpoyerAccountTaskList, actualViewResult.RouteName);
+        Assert.AreEqual(RouteNames.EmployerAccountGetApprenticeshipFunding, actualViewResult.RouteName);
     }
 
-    private static UserAccountsViewModel SetupUserAccountsViewModel()
-    {
-        return new UserAccountsViewModel
-        {
-            Accounts = new Accounts<Account>
-            {
-                AccountList = new List<Account> {
-                            new Account
-                            {
-                                NameConfirmed = true,
-                                AccountHistory = new List<AccountHistory>
-                                {
-                                    new AccountHistory()
-                                }
-                            }
-                        }
-            }
-        };
-    }
 }
