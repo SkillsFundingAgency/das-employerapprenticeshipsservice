@@ -57,7 +57,7 @@ public class HomeController : BaseController
                 
                 var userDetail = await _homeOrchestrator.GetUser(userRef);
                 
-                if (string.IsNullOrEmpty(userDetail.FirstName) || string.IsNullOrEmpty(userDetail.LastName) || string.IsNullOrEmpty(userRef))
+                if (userDetail == null || string.IsNullOrEmpty(userDetail.FirstName) || string.IsNullOrEmpty(userDetail.LastName) || string.IsNullOrEmpty(userRef))
                 {
                     return Redirect(_urlHelper.EmployerProfileAddUserDetails($"/user/add-user-details") + $"?_ga={queryData._ga}&_gl={queryData._gl}&utm_source={queryData.utm_source}&utm_campaign={queryData.utm_campaign}&utm_medium={queryData.utm_medium}&utm_keywords={queryData.utm_keywords}&utm_content={queryData.utm_content}");    
                 }

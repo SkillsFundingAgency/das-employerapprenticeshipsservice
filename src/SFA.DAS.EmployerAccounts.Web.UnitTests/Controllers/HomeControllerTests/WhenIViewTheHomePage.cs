@@ -128,7 +128,7 @@ public class WhenIViewTheHomePage : ControllerTestBase
         Assert.IsNotNull(actualRedirect);
         Assert.AreEqual("employer-team-index", actualRedirect.RouteName);
     }
-
+    
     [Test]
     public async Task ThenTheAccountsAreReturnedForThatUserWhenAuthenticated()
     {
@@ -346,6 +346,33 @@ public class WhenIViewTheHomePage : ControllerTestBase
                 }
             });
         _homeOrchestrator.Setup(x => x.GetUser(userId)).ReturnsAsync(new User());
+
+        //Act
+        var actual = await _homeController.Index(_queryData);
+
+        //Assert
+        Assert.IsNotNull(actual);
+        var actualViewResult = actual as RedirectResult;
+        Assert.AreEqual($"https://employerprofiles.test-eas.apprenticeships.education.gov.uk/user/add-user-details?_ga={_queryData._ga}&_gl={_queryData._gl}&utm_source={_queryData.utm_source}&utm_campaign={_queryData.utm_campaign}&utm_medium={_queryData.utm_medium}&utm_keywords={_queryData.utm_keywords}&utm_content={_queryData.utm_content}", actualViewResult.Url);
+    }
+    [Test]
+    public async Task ThenIfIAmAuthenticatedWithNoUserInformation()
+    {
+        //Arrange
+        var userId = Guid.NewGuid().ToString();
+        _configuration.UseGovSignIn = true;
+        AddNewGovUserToContext(userId);
+
+
+        _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId, It.IsAny<DateTime?>())).ReturnsAsync(
+            new OrchestratorResponse<UserAccountsViewModel>
+            {
+                Data = new UserAccountsViewModel
+                {
+                    Accounts = new Accounts<Account>()
+                }
+            });
+        _homeOrchestrator.Setup(x => x.GetUser(userId)).ReturnsAsync((User)null);
 
         //Act
         var actual = await _homeController.Index(_queryData);

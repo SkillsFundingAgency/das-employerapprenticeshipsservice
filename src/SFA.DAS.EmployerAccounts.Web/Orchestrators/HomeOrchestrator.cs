@@ -102,10 +102,18 @@ public class HomeOrchestrator
 
     public virtual async Task<User> GetUser(string userRef)
     {
-        var user = await _mediator.Send(new GetUserByRefQuery
+        try
         {
-            UserRef = userRef
-        });
-        return user.User;
+            var user = await _mediator.Send(new GetUserByRefQuery
+            {
+                UserRef = userRef
+            });
+            return user.User;
+        }
+        catch (InvalidRequestException e)
+        {
+            return null;
+        }
+        
     }
 }
