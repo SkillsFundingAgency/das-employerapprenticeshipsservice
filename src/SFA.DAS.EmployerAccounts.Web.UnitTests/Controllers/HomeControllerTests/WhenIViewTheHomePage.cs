@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.Authentication;
+using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Web.RouteValues;
+using SFA.DAS.Testing.Builders;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests;
 
@@ -111,7 +113,12 @@ public class WhenIViewTheHomePage : ControllerTestBase
         //Arrange
         _configuration.UseGovSignIn = true;
         AddUserToContext(ExpectedUserId, string.Empty, string.Empty, new Claim(ControllerConstants.UserRefClaimKeyName, ExpectedUserId), new Claim(DasClaimTypes.RequiresVerification, "true"));
-
+        _homeOrchestrator.Setup(x => x.GetUser(ExpectedUserId)).ReturnsAsync(new User
+        {
+            FirstName = "test",
+            LastName = "Tester"
+        });
+        
         //Act
         var actual = await _homeController.Index(_queryData);
 
@@ -322,11 +329,12 @@ public class WhenIViewTheHomePage : ControllerTestBase
     }
 
     [Test]
-    public async Task ThenIfIHaveNoAccountsAndGovSignInTrueIAmRedirectedToTheProfilePage()
+    public async Task ThenIfIAmAuthenticatedWithNoProfileInformation()
     {
         //Arrange
+        var userId = Guid.NewGuid().ToString();
         _configuration.UseGovSignIn = true;
-        AddEmptyUserToContext();
+        AddNewGovUserToContext(userId);
 
 
         _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId, It.IsAny<DateTime?>())).ReturnsAsync(
@@ -337,6 +345,7 @@ public class WhenIViewTheHomePage : ControllerTestBase
                     Accounts = new Accounts<Account>()
                 }
             });
+        _homeOrchestrator.Setup(x => x.GetUser(userId)).ReturnsAsync(new User());
 
         //Act
         var actual = await _homeController.Index(_queryData);
@@ -352,10 +361,12 @@ public class WhenIViewTheHomePage : ControllerTestBase
     {
         //Arrange
         _configuration.UseGovSignIn = true;
-        AddUserToContext(ExpectedUserId, string.Empty, string.Empty,
-            new Claim(ControllerConstants.UserRefClaimKeyName, ExpectedUserId),
-            new Claim(DasClaimTypes.RequiresVerification, "false")
-        );
+        AddNewGovUserToContext(ExpectedUserId);
+        _homeOrchestrator.Setup(x => x.GetUser(ExpectedUserId)).ReturnsAsync(new User
+        {
+            FirstName = "test",
+            LastName = "Tester"
+        });
 
         _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId, It.IsAny<DateTime?>())).ReturnsAsync(
             new OrchestratorResponse<UserAccountsViewModel>
