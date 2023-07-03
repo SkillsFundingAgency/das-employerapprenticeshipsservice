@@ -208,14 +208,22 @@ public class SearchPensionRegulatorController : BaseController
         viewModel.Aorn = viewModel.Aorn?.ToUpper().Trim();
         viewModel.PayeRef = viewModel.PayeRef?.ToUpper().Trim();
 
-        if (string.IsNullOrWhiteSpace(viewModel.Aorn) || !_aornRegex.IsMatch(viewModel.Aorn.ToUpper().Trim()))
+        if (string.IsNullOrWhiteSpace(viewModel.Aorn))
         {
-            errors.Add(nameof(viewModel.Aorn), "You need to enter your Accounts Office reference in the correct format for example 123PX00123456 or 123PX0012345X");
+            errors.Add(nameof(viewModel.Aorn), "Enter your reference number to continue");
+        }
+        else if (!_aornRegex.IsMatch(viewModel.Aorn.ToUpper().Trim()))
+        {
+            errors.Add(nameof(viewModel.Aorn), "Enter an accounts office reference number in the correct format");
         }
 
-        if (string.IsNullOrWhiteSpace(viewModel.PayeRef) || !_payeRegex.IsMatch(viewModel.PayeRef))
+        if (string.IsNullOrWhiteSpace(viewModel.PayeRef))
         {
-            errors.Add(nameof(viewModel.PayeRef), "You need to enter your PAYE in the correct format for example 123/AB456");
+            errors.Add(nameof(viewModel.PayeRef), "Enter your PAYE scheme to continue");
+        }
+        else if (!_payeRegex.IsMatch(viewModel.PayeRef))
+        {
+            errors.Add(nameof(viewModel.PayeRef), "Enter a PAYE scheme number in the correct format");
         }
         else if (viewModel.PayeRef[3] != '/')
         {

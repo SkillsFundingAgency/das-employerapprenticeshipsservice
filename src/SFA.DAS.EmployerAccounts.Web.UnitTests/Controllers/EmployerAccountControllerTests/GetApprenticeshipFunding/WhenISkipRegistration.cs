@@ -4,16 +4,14 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.Authentication;
-using SFA.DAS.NLog.Logger;
+using SFA.DAS.EmployerAccounts.Web.RouteValues;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.GetApprenticeshipFunding;
 
-class WhenIChooseAorn : ControllerTestBase
+class WhenISkipRegistration : ControllerTestBase
 {
     private EmployerAccountController _employerAccountController;
     private Mock<EmployerAccountOrchestrator> _orchestrator;
-    private Mock<IAuthenticationService> _owinWrapper;
     private const string ExpectedRedirectUrl = "http://redirect.local.test";
     private OrchestratorResponse<EmployerAccountViewModel> _response;
     private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
@@ -26,10 +24,6 @@ class WhenIChooseAorn : ControllerTestBase
         base.Arrange(ExpectedRedirectUrl);
 
         _orchestrator = new Mock<EmployerAccountOrchestrator>();
-
-        _owinWrapper = new Mock<IAuthenticationService>();
-        _owinWrapper.Setup(x => x.GetClaimValue(ControllerConstants.UserRefClaimKeyName)).Returns(ExpectedUserId);
-        var logger = new Mock<ILog>();
         _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
         _response = new OrchestratorResponse<EmployerAccountViewModel>()
@@ -59,12 +53,12 @@ class WhenIChooseAorn : ControllerTestBase
     }
 
     [Test]
-    public void ThenIShouldGoToGatewayInform()
+    public void ThenIShouldGoToSkipRegistration()
     {
         //Act
-        var result = _employerAccountController.GetApprenticeshipFunding(string.Empty, 3) as RedirectToActionResult;
+        var result = _employerAccountController.GetApprenticeshipFunding(string.Empty, 1) as RedirectToRouteResult;
 
         //Assert
-        Assert.AreEqual(ControllerConstants.SearchUsingAornActionName, result.ActionName);
+        Assert.AreEqual(RouteNames.SkipRegistration, result.RouteName);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Linq;
+using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
@@ -17,7 +18,6 @@ public abstract class ControllerTestBase
     protected RouteData Routes;
     protected Mock<ILog> Logger;
     protected Mock<IMediator> Mediator;
-    protected const string UserId = "USER_ID";
 
     public virtual void Arrange(string redirectUrl = "http://localhost/testpost")
     {
@@ -49,10 +49,10 @@ public abstract class ControllerTestBase
 
     protected void AddUserToContext(params Claim[] claims)
     {
-        AddUserToContext(UserId, "my@local.com", "test name", claims);
+        AddUserToContext("USER_ID", "my@local.com", "test name", claims);
     }
 
-    protected void AddUserToContext(string id = UserId, string email = "my@local.com", string name = "test name", params Claim[] claims)
+    protected void AddUserToContext(string id = "USER_ID", string email = "my@local.com", string name = "test name", params Claim[] claims)
     {
         var identity = new ClaimsIdentity(new[]
         {
