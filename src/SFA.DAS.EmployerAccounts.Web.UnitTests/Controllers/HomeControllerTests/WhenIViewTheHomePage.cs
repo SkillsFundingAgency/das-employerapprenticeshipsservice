@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using AutoFixture;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -8,13 +8,14 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.Authentication;
+using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Web.RouteValues;
+using SFA.DAS.Testing.Builders;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests;
 
 public class WhenIViewTheHomePage : ControllerTestBase
 {
-    private UserAccountsViewModel _userAccountsViewModel;
     private HomeController _homeController;
     private Mock<HomeOrchestrator> _homeOrchestrator;
     private EmployerAccountsConfiguration _configuration;
@@ -32,16 +33,20 @@ public class WhenIViewTheHomePage : ControllerTestBase
         _homeOrchestrator = new Mock<HomeOrchestrator>();
         _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
         _homeOrchestrator = new Mock<HomeOrchestrator>();
-
+        
         var fixture = new Fixture();
         _queryData = fixture.Create<GaQueryData>();
-
-        _userAccountsViewModel = SetupUserAccountsViewModel();
 
         _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId, null)).ReturnsAsync(
             new OrchestratorResponse<UserAccountsViewModel>
             {
-                Data = _userAccountsViewModel
+                Data = new UserAccountsViewModel
+                {
+                    Accounts = new Accounts<Account>
+                    {
+                        AccountList = new List<Account> { new Account() }
+                    }
+                }
             });
 
         _configuration = new EmployerAccountsConfiguration
@@ -57,7 +62,7 @@ public class WhenIViewTheHomePage : ControllerTestBase
         };
         var configurationMock = new Mock<IConfiguration>();
         configurationMock.Setup(x => x["ResourceEnvironmentName"]).Returns("test");
-        _urlActionHelper = new UrlActionHelper(_configuration, Mock.Of<IHttpContextAccessor>(), configurationMock.Object);
+        _urlActionHelper = new UrlActionHelper(_configuration, Mock.Of<IHttpContextAccessor>(),configurationMock.Object);
         _homeController = new HomeController(
             _homeOrchestrator.Object,
             _configuration,
@@ -104,14 +109,19 @@ public class WhenIViewTheHomePage : ControllerTestBase
         Assert.IsNotNull(actualRedirect);
         Assert.AreEqual("http://test.local/confirm", actualRedirect.Url);
     }
-
+    
     [Test]
     public async Task ThenIfMyAccountIsAuthenticatedButNotActivatedForGovThenIgnoredAndGoesToIndex()
     {
         //Arrange
         _configuration.UseGovSignIn = true;
         AddUserToContext(ExpectedUserId, string.Empty, string.Empty, new Claim(ControllerConstants.UserRefClaimKeyName, ExpectedUserId), new Claim(DasClaimTypes.RequiresVerification, "true"));
-
+        _homeOrchestrator.Setup(x => x.GetUser(ExpectedUserId)).ReturnsAsync(new User
+        {
+            FirstName = "test",
+            LastName = "Tester"
+        });
+        
         //Act
         var actual = await _homeController.Index(_queryData);
 
@@ -121,12 +131,12 @@ public class WhenIViewTheHomePage : ControllerTestBase
         Assert.IsNotNull(actualRedirect);
         Assert.AreEqual("employer-team-index", actualRedirect.RouteName);
     }
-
+    
     [Test]
     public async Task ThenTheAccountsAreReturnedForThatUserWhenAuthenticated()
     {
         //Arrange
-
+        
         AddUserToContext(ExpectedUserId, string.Empty, string.Empty,
             new Claim(ControllerConstants.UserRefClaimKeyName, ExpectedUserId),
             new Claim(DasClaimTypes.RequiresVerification, "false")
@@ -173,7 +183,7 @@ public class WhenIViewTheHomePage : ControllerTestBase
     }
 
     [Test]
-    public async Task ThenIfIHave_OneAccount_IAmRedirectedToTheEmployerTeamsIndexPage()
+    public async Task ThenIfIHaveOneAccountIAmRedirectedToTheEmployerTeamsIndexPage()
     {
         //Arrange
         AddUserToContext(ExpectedUserId, string.Empty, string.Empty,
@@ -191,26 +201,6 @@ public class WhenIViewTheHomePage : ControllerTestBase
         Assert.AreEqual(RouteNames.EmployerTeamIndex, actualViewResult.RouteName);
     }
 
-    [Test]
-    public async Task ThenIfIHave_OneIncompleteAccount_IAmRedirectedToTheEmployerTeamsIndexPage()
-    {
-        //Arrange
-        AddUserToContext(ExpectedUserId, string.Empty, string.Empty,
-            new Claim(ControllerConstants.UserRefClaimKeyName, ExpectedUserId),
-            new Claim(DasClaimTypes.RequiresVerification, "false")
-        );
-
-        _userAccountsViewModel.Accounts.AccountList[0].NameConfirmed = false;
-
-        //Act
-        var actual = await _homeController.Index(_queryData);
-
-        //Assert
-        Assert.IsNotNull(actual);
-        var actualViewResult = actual as RedirectToRouteResult;
-        Assert.IsNotNull(actualViewResult);
-        Assert.AreEqual(RouteNames.ContinueNewEmployerAccountTaskList, actualViewResult.RouteName);
-    }
 
     [Test]
     public async Task ThenIfIHaveMoreThanOneAccountIAmRedirectedToTheAccountsIndexPage()
@@ -322,11 +312,38 @@ public class WhenIViewTheHomePage : ControllerTestBase
     }
 
     [Test]
-    public async Task ThenIfIHaveNoAccountsAndGovSignInTrueIAmRedirectedToTheProfilePage()
+    public async Task ThenIfIAmAuthenticatedWithNoProfileInformation()
     {
         //Arrange
+        var userId = Guid.NewGuid().ToString();
         _configuration.UseGovSignIn = true;
-        AddEmptyUserToContext();
+        AddNewGovUserToContext(userId);
+
+        _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId, It.IsAny<DateTime?>())).ReturnsAsync(
+            new OrchestratorResponse<UserAccountsViewModel>
+            {
+                Data = new UserAccountsViewModel
+                {
+                    Accounts = new Accounts<Account>()
+                }
+            });
+        _homeOrchestrator.Setup(x => x.GetUser(userId)).ReturnsAsync(new User());
+
+        //Act
+        var actual = await _homeController.Index(_queryData);
+
+        //Assert
+        Assert.IsNotNull(actual);
+        var actualViewResult = actual as RedirectResult;
+        Assert.AreEqual( $"https://employerprofiles.test-eas.apprenticeships.education.gov.uk/user/add-user-details?_ga={_queryData._ga}&_gl={_queryData._gl}&utm_source={_queryData.utm_source}&utm_campaign={_queryData.utm_campaign}&utm_medium={_queryData.utm_medium}&utm_keywords={_queryData.utm_keywords}&utm_content={_queryData.utm_content}", actualViewResult.Url);
+    }
+    [Test]
+    public async Task ThenIfIAmAuthenticatedWithNoUserInformation()
+    {
+        //Arrange
+        var userId = Guid.NewGuid().ToString();
+        _configuration.UseGovSignIn = true;
+        AddNewGovUserToContext(userId);
 
 
         _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId, It.IsAny<DateTime?>())).ReturnsAsync(
@@ -337,6 +354,7 @@ public class WhenIViewTheHomePage : ControllerTestBase
                     Accounts = new Accounts<Account>()
                 }
             });
+        _homeOrchestrator.Setup(x => x.GetUser(userId)).ReturnsAsync((User)null);
 
         //Act
         var actual = await _homeController.Index(_queryData);
@@ -352,10 +370,12 @@ public class WhenIViewTheHomePage : ControllerTestBase
     {
         //Arrange
         _configuration.UseGovSignIn = true;
-        AddUserToContext(ExpectedUserId, string.Empty, string.Empty,
-            new Claim(ControllerConstants.UserRefClaimKeyName, ExpectedUserId),
-            new Claim(DasClaimTypes.RequiresVerification, "false")
-        );
+        AddNewGovUserToContext(ExpectedUserId);
+        _homeOrchestrator.Setup(x => x.GetUser(ExpectedUserId)).ReturnsAsync(new User
+        {
+            FirstName = "test",
+            LastName = "Tester"
+        });
 
         _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId, It.IsAny<DateTime?>())).ReturnsAsync(
             new OrchestratorResponse<UserAccountsViewModel>
@@ -375,26 +395,7 @@ public class WhenIViewTheHomePage : ControllerTestBase
         //Assert
         Assert.IsNotNull(actual);
         var actualViewResult = actual as RedirectToRouteResult;
-        Assert.AreEqual(RouteNames.NewEmpoyerAccountTaskList, actualViewResult.RouteName);
+        Assert.AreEqual(RouteNames.EmployerAccountGetApprenticeshipFunding, actualViewResult.RouteName);
     }
 
-    private static UserAccountsViewModel SetupUserAccountsViewModel()
-    {
-        return new UserAccountsViewModel
-        {
-            Accounts = new Accounts<Account>
-            {
-                AccountList = new List<Account> {
-                            new Account
-                            {
-                                NameConfirmed = true,
-                                AccountHistory = new List<AccountHistory>
-                                {
-                                    new AccountHistory()
-                                }
-                            }
-                        }
-            }
-        };
-    }
 }

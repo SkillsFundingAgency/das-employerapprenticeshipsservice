@@ -1,4 +1,4 @@
-﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
+@using SFA.DAS.EmployerAccounts.Web.Helpers
 @{
     ViewBag.PageID = "get-apprenticeship-funding";
     ViewBag.Title = "Add a PAYE Scheme";
@@ -12,22 +12,6 @@
     var postEndpointName = string.IsNullOrEmpty(hashedAccountId) ? RouteNames.EmployerAccountPostApprenticeshipFunding : RouteNames.EmployerAccountPostApprenticeshipFundingInAccount;
 }
 
-@if (Model?.GetType().GetProperty("InError") != null)
-{
-    <div class="govuk-error-summary" data-module="govuk-error-summary">
-        <div role="alert">
-            <h2 class="govuk-error-summary__title">
-                There is a problem
-            </h2>
-            <div class="govuk-error-summary__body">
-                <ul class="govuk-list govuk-error-summary__list">
-                    <li><a href="#want-to-add-paye-scheme">You need to select how you wish to add your <abbr>PAYE</abbr> scheme</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-}
-
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
@@ -35,18 +19,20 @@
             Add a <abbr>PAYE</abbr> Scheme
         </h1>
 
-        <p class="govuk-body">We need you to add the <abbr title="Pay As You Earn">PAYE</abbr> scheme for your organisation.
-            You can add your PAYE scheme by using:</p>
+        <p class="govuk-body">We need you to add the <abbr title="Pay As You Earn">PAYE</abbr> scheme for your organisation.</p>
+        <p class="govuk-body">
+            You can do this by using either of the following:
+        </p>
 
         <ul class="govuk-list govuk-list--bullet">
-            <li>the Government Gateway login for your organisation or</li>
-            <li>your Accounts Office reference and Employer PAYE reference</li>
+            <li>the Government Gateway login for your organisation</li>
+            <li>your accounts office reference number for your organisation</li>
         </ul>
 
         <details class="govuk-details" role="group" data-module="govuk-details">
             <summary class="govuk-details__summary" role="button">
                 <span class="govuk-details__summary-text">
-                    How to find your Government Gateway details
+                    Find your Government Gateway details
                 </span>
             </summary>
             <div class="govuk-details__text">
@@ -57,7 +43,7 @@
         <details class="govuk-details" role="group" data-module="govuk-details">
             <summary class="govuk-details__summary" role="button">
                 <span class="govuk-details__summary-text">
-                    You need to select how you wish to add your <abbr>PAYE</abbr> scheme
+                    Find your accounts office and <abbr>PAYE</abbr> scheme reference numbers
                 </span>
             </summary>
             <div class="govuk-details__text">
@@ -77,21 +63,27 @@
                         </h1>
                     </legend>
 
-                    <span class="govuk-error-message @hiddenClass" aria-hidden="false" id="have-not-got-everything">
+                    <span class="govuk-error-message js-hidden @hiddenClass" aria-hidden="false" id="have-not-got-everything">
                         Tell us if you want to add a <abbr>PAYE</abbr> scheme
                     </span>
 
                     <div class="govuk-radios">
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" type="radio" name="choice" id="want-to-add-paye-scheme" value="1" />
+                            <input class="govuk-radios__input" type="radio" name="choice" id="want-to-add-paye-scheme" value="2" />
                             <label class="govuk-label govuk-radios__label" for="want-to-add-paye-scheme">
                                 Use Government Gateway log in
                             </label>
                         </div>
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" type="radio" name="choice" id="want-to-add-paye-scheme-aorn" value="2" />
+                            <input class="govuk-radios__input" type="radio" name="choice" id="want-to-add-paye-scheme-aorn" value="3" />
                             <label class="govuk-label govuk-radios__label" for="want-to-add-paye-scheme-aorn">
-                                Use Accounts Office reference and Employer <abbr>PAYE</abbr> reference.
+                                Use accounts office reference number and employer <abbr>PAYE</abbr> scheme reference. <b>You should only use this if your payroll for your organisation is under &pound;3 million</b>.
+                            </label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" type="radio" name="choice" id="do-not-want-to-add-paye-scheme" value="1" />
+                            <label class="govuk-label govuk-radios__label" for="do-not-want-to-add-paye-scheme">
+                                No, I'll do this later
                             </label>
                         </div>
                     </div>
@@ -106,14 +98,29 @@
                 </strong>
             </div>
 
-            <div class="govuk-button-group">
+            <div class="govuk-form-group">
                 <button class="govuk-button" type="submit" id="submit-add-a-paye-scheme-button">Continue</button>
-                <a asp-route="@RouteNames.NewEmpoyerAccountTaskList" class="govuk-link">Cancel</a>
             </div>
         </form>
     </div>
 </div>
 
-@section breadcrumb {
-    <div class="das-js-back-link"></div>
+@section pageSpecificJS {
+    <script type="text/javascript">
+        $(function () {
+            var pageTitle = $('h1.govuk-heading-xl').text().trim();
+            $('.govuk-radios').each(function () {
+                var dataLayerObj
+                var radios = $(this).find('input:radio');
+                radios.on('change', function () {
+                    dataLayerObj = {
+                        event: 'radio button selected',
+                        page: pageTitle,
+                        radio: this.id
+                    }
+                    window.dataLayer.push(dataLayerObj)
+                })
+            });
+        });
+    </script>
 }

@@ -69,7 +69,6 @@ public class WhenRenamingAnAccount
         //Act
         var response = await _orchestrator.RenameEmployerAccount(hashedAccountId, new RenameEmployerAccountViewModel
         {
-            ChangeAccountName = true,
             NewName = "New Account Name"
         }, "ABC123");
 

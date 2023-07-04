@@ -2,7 +2,6 @@
 
 public class GatewayInformViewModel
 {
-    public string CancelRoute { get; set; }
     public string ConfirmUrl { get; set; }
 
     public string BreadcrumbUrl { get; set; }

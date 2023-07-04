@@ -171,6 +171,7 @@ public class WhenIRegisterAUser
         ProviderInvitationViewModel viewModel)
     {
         //arrange
+        var queryParams = $"?correlationId={correlationId}&firstname={WebUtility.UrlEncode(viewModel.EmployerFirstName)}&lastname={WebUtility.UrlEncode(viewModel.EmployerLastName)}";
         _configuration.Object.UseGovSignIn = true;
         _configuration.Object.Identity = GetMockIdentityServerConfiguration(baseUrl);
         _homeOrchestrator.Setup(x => x.GetProviderInvitation(correlationId)).ReturnsAsync(
@@ -180,7 +181,7 @@ public class WhenIRegisterAUser
             });
         _urlActionHelper.Setup(x =>
                 x.EmployerProfileAddUserDetails(
-                    $"/user/add-user-details?correlationId={correlationId}&firstname={WebUtility.UrlEncode(viewModel.EmployerFirstName)}&lastname={WebUtility.UrlEncode(viewModel.EmployerLastName)}"))
+                    $"/user/add-user-details"))
             .Returns(redirectUrl);
 
         //Act
@@ -190,7 +191,7 @@ public class WhenIRegisterAUser
         Assert.IsNotNull(actual);
         var actualRedirectResult = actual as RedirectResult;
         Assert.IsNotNull(actualRedirectResult);
-        Assert.AreEqual(redirectUrl, actualRedirectResult.Url);
+        Assert.AreEqual(redirectUrl + queryParams, actualRedirectResult.Url);
     }
     private IdentityServerConfiguration GetMockIdentityServerConfiguration(string baseUrl)
     {

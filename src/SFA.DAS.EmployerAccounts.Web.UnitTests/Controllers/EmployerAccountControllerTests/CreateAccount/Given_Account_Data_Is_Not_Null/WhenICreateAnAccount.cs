@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -7,7 +6,6 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
-using SFA.DAS.EmployerAccounts.Web.RouteValues;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.CreateAccount.Given_Cookie_Data_Is_Not_Null;
 
@@ -92,17 +90,18 @@ class WhenICreateAnAccount : ControllerTestBase
     public async Task ThenIShouldGoToWhenDoYouWantToView()
     {
         //Act
-        var result = await _employerAccountController.CreateAccount() as RedirectToRouteResult;
+        var result = await _employerAccountController.CreateAccount() as RedirectToActionResult;
 
         //Assert
-        result.RouteName.Should().Be(RouteNames.ContinueNewEmployerAccountTaskList);
+        Assert.AreEqual(ControllerConstants.WhenDoYouWantToView, result.ActionName);
+        Assert.AreEqual(ControllerConstants.EmployerAgreementControllerName, result.ControllerName);
     }
 
     [Test]
     public async Task ThenIShouldGetBackTheAccountId()
     {
         //Act
-        var result = await _employerAccountController.CreateAccount() as RedirectToRouteResult;
+        var result = await _employerAccountController.CreateAccount() as RedirectToActionResult;
 
         //Assert
         Assert.IsNotNull(result);

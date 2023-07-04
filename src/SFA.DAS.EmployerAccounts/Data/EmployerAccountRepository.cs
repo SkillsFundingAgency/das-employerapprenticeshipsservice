@@ -127,13 +127,18 @@ public class EmployerAccountRepository : IEmployerAccountRepository
         return result.SingleOrDefault();
     }
 
-    public async Task RenameAccount(long accountId, string name)
+    public Task RenameAccount(long accountId, string name)
     {
-        var account = await _db.Value.Accounts.FindAsync(accountId);
+        var parameters = new DynamicParameters();
 
-        account.Name = name;
-        account.ModifiedDate = DateTime.UtcNow;
-        account.NameConfirmed = true;
+        parameters.Add("@accountId", accountId, DbType.Int64);
+        parameters.Add("@accountName", name, DbType.String);
+
+        return _db.Value.Database.GetDbConnection().ExecuteAsync(
+            sql: "[employer_account].[UpdateAccount_SetAccountName]",
+            param: parameters,
+            transaction: _db.Value.Database.CurrentTransaction?.GetDbTransaction(),
+            commandType: CommandType.StoredProcedure);
     }
 
     public Task SetAccountLevyStatus(long accountId, ApprenticeshipEmployerType apprenticeshipEmployerType)

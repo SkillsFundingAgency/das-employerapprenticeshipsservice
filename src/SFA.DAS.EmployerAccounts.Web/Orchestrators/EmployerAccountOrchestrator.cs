@@ -4,7 +4,6 @@ using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 using SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
 using SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
-using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountDetail;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
 using SFA.DAS.Encoding;
 
@@ -21,8 +20,8 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
     protected EmployerAccountOrchestrator() { }
 
     public EmployerAccountOrchestrator(
-        IMediator mediator,
-        ILogger<EmployerAccountOrchestrator> logger,
+        IMediator mediator, 
+        ILogger<EmployerAccountOrchestrator> logger, 
         ICookieStorageService<EmployerAccountData> cookieService,
         EmployerAccountsConfiguration configuration,
         IEncodingService encodingService)
@@ -63,7 +62,6 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
         {
             Data = new RenameEmployerAccountViewModel
             {
-                LegalEntityName = response.Account.AccountLegalEntities.OrderBy(x => x.Created).First()?.Name,
                 CurrentName = response.Account.Name,
                 NewName = string.Empty
             }
@@ -104,6 +102,13 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
             response.Status = HttpStatusCode.BadRequest;
             response.Data.ErrorDictionary = ex.ErrorMessages;
             response.Exception = ex;
+            response.FlashMessage = new FlashMessageViewModel
+            {
+                Headline = "Errors to fix",
+                Message = "Check the following details:",
+                ErrorMessages = ex.ErrorMessages,
+                Severity = FlashMessageSeverityLevel.Error
+            };
         }
 
         return response;
@@ -146,7 +151,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception, "Create Account Validation Error: {Message}", exception.Message);
+            _logger.LogError(exception,"Create Account Validation Error: {Message}", exception.Message);
             return new OrchestratorResponse<EmployerAgreementViewModel>
             {
                 Data = new EmployerAgreementViewModel(),
@@ -329,56 +334,5 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
     public virtual void DeleteCookieData()
     {
         CookieService.Delete(CookieName);
-    }
-
-    public virtual async Task<OrchestratorResponse<AccountTaskListViewModel>> GetCreateAccountTaskList(string hashedAccountId, string userRef)
-    {
-        if (string.IsNullOrEmpty(hashedAccountId))
-        {
-            Account firstAccount = await GetFirstUserAccount(userRef);
-
-            return new OrchestratorResponse<AccountTaskListViewModel>
-            {
-                Data = new AccountTaskListViewModel
-                {
-                    HashedAccountId = firstAccount?.HashedId,
-                    HasPayeScheme = firstAccount?.AccountHistory.Any() ?? false,
-                    NameConfirmed = firstAccount?.NameConfirmed ?? false
-                }
-            };
-        }
-
-        var accountResponse = await _mediator.Send(new GetEmployerAccountDetailByHashedIdQuery
-        {
-            HashedAccountId = hashedAccountId
-        });
-
-        if (accountResponse == null || accountResponse.Account == null)
-        {
-            return new OrchestratorResponse<AccountTaskListViewModel> { Status = HttpStatusCode.NotFound };
-        }
-
-        return new OrchestratorResponse<AccountTaskListViewModel>
-        {
-            Data = new AccountTaskListViewModel
-            {
-                HashedAccountId = hashedAccountId,
-                HasPayeScheme = accountResponse?.Account?.PayeSchemes?.Any() ?? false
-            }
-        };
-    }
-
-    private async Task<Account> GetFirstUserAccount(string userRef)
-    {
-        var getUserAccountsQueryResponse = await _mediator.Send(new GetUserAccountsQuery
-        {
-            UserRef = userRef
-        });
-
-       var firstAccount = getUserAccountsQueryResponse.Accounts.AccountsCount == 0 
-            ? null 
-            : getUserAccountsQueryResponse.Accounts.AccountList.OrderBy(x => x.CreatedDate).FirstOrDefault();
-        
-        return firstAccount;
     }
 }

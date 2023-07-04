@@ -84,6 +84,34 @@ public class WhenIModifyMyUserAccount : ControllerTestBase
         Assert.IsNotNull(actualRedirect);
         Assert.AreEqual("Index", actualRedirect.ActionName);
     }
+    
+    [Test]
+    public async Task ThenTheAccountCreatedActionCreatesARedirectToActionResultToIndexAndDoesntUpdateDetailsForGovSignIn()
+    {
+        //Arrange
+        _configuration.UseGovSignIn = true;
+        _homeController = new HomeController(
+            _homeOrchestrator.Object,              
+            _configuration, 
+            _flashMessage.Object,
+            Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
+            Mock.Of<ILogger<HomeController>>(), null, null,
+            _urlActionHelper.Object)
+        {
+            ControllerContext = ControllerContext
+        };
+        
+        //Act
+        var actual = await _homeController.HandleNewRegistration("123-345");
+
+        //Assert
+        Assert.IsNotNull(actual);
+        Assert.IsAssignableFrom<RedirectToActionResult>(actual);
+        var actualRedirect = actual as RedirectToActionResult;
+        Assert.IsNotNull(actualRedirect);
+        Assert.AreEqual("Index", actualRedirect.ActionName);
+        _homeOrchestrator.Verify(x=>x.SaveUpdatedIdentityAttributes(It.IsAny<string>(),It.IsAny<string>(),It.IsAny<string>(),It.IsAny<string>(),It.IsAny<string>()),Times.Never);
+    }
 
     [Test]
     public async Task ThenTheUserIsUpdatedWhenTheEmailHasChanged()
