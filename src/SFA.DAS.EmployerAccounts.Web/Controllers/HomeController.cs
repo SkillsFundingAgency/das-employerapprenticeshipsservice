@@ -55,11 +55,11 @@ public class HomeController : BaseController
         {
             if (User.Identities.FirstOrDefault() != null && User.Identities.FirstOrDefault()!.IsAuthenticated)
             {
-                var firstName = HttpContext.User.FindFirstValue(DasClaimTypes.GivenName);
-                var lastName = HttpContext.User.FindFirstValue(DasClaimTypes.FamilyName);
                 var userRef = HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserIdClaimTypeIdentifier);
-
-                if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(lastName) || string.IsNullOrEmpty(userRef))
+                
+                var userDetail = await _homeOrchestrator.GetUser(userRef);
+                
+                if (userDetail == null || string.IsNullOrEmpty(userDetail.FirstName) || string.IsNullOrEmpty(userDetail.LastName) || string.IsNullOrEmpty(userRef))
                 {
                     return Redirect(_urlHelper.EmployerProfileAddUserDetails($"/user/add-user-details") + $"?_ga={queryData._ga}&_gl={queryData._gl}&utm_source={queryData.utm_source}&utm_campaign={queryData.utm_campaign}&utm_medium={queryData.utm_medium}&utm_keywords={queryData.utm_keywords}&utm_content={queryData.utm_content}");    
                 }
@@ -78,16 +78,15 @@ public class HomeController : BaseController
                 if (partialLogin.Equals("true", StringComparison.CurrentCultureIgnoreCase))
                 {
                     return Redirect(ConfigurationFactory.Current.Get().AccountActivationUrl);
-                }    
+                }
+
+                var userRef = HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserIdClaimTypeIdentifier);
+                var email = HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserEmailClaimTypeIdentifier);
+                var firstName = HttpContext.User.FindFirstValue(DasClaimTypes.GivenName);
+                var lastName = HttpContext.User.FindFirstValue(DasClaimTypes.FamilyName);
+
+                await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName);
             }
-            
-
-            var userRef = HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserIdClaimTypeIdentifier);
-            var email = HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserEmailClaimTypeIdentifier);
-            var firstName = HttpContext.User.FindFirstValue(DasClaimTypes.GivenName);
-            var lastName = HttpContext.User.FindFirstValue(DasClaimTypes.FamilyName);
-
-            await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName);
 
             accounts = await _homeOrchestrator.GetUserAccounts(userIdClaim.Value, _configuration.LastTermsAndConditionsUpdate);
         }
@@ -185,29 +184,6 @@ public class HomeController : BaseController
     }
 
     [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
-    [Route("SaveAndSearch")]
-    public async Task<IActionResult> SaveAndSearch(string returnUrl)
-    {
-        var userId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
-        if (string.IsNullOrWhiteSpace(userId))
-        {
-            _logger.LogWarning("UserId not found on OwinWrapper. Redirecting back to passed in returnUrl: {ReturnUrl}", returnUrl);
-            return Redirect(returnUrl);
-        }
-
-        var userRef = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
-        var email = HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserEmailClaimTypeIdentifier);
-        var firstName = HttpContext.User.FindFirstValue(DasClaimTypes.GivenName);
-        var lastName = HttpContext.User.FindFirstValue(DasClaimTypes.FamilyName);
-
-        await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName);
-
-        _returnUrlCookieStorageService.Create(new ReturnUrlModel { Value = returnUrl }, ReturnUrlCookieName);
-
-        return RedirectToAction(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName);
-    }
-
-    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     [HttpGet]
     [Route("accounts")]
     public async Task<IActionResult> ViewAccounts()
@@ -221,7 +197,7 @@ public class HomeController : BaseController
     [Route("register/new/{correlationId?}")]
     public async Task<IActionResult> HandleNewRegistration(string correlationId = null)
     {
-        if (!string.IsNullOrWhiteSpace(correlationId))
+        if (!_configuration.UseGovSignIn && !string.IsNullOrWhiteSpace(correlationId))
         {
             var userRef = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
             var email = HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserEmailClaimTypeIdentifier);
@@ -257,7 +233,7 @@ public class HomeController : BaseController
             var queryData = invitation.Data != null
                 ? $"?correlationId={correlationId}&firstname={WebUtility.UrlEncode(invitation.Data.EmployerFirstName)}&lastname={WebUtility.UrlEncode(invitation.Data.EmployerLastName)}"
                 : "";
-            return Redirect(_urlHelper.EmployerProfileAddUserDetails($"/user/add-user-details{queryData}"));
+            return Redirect(_urlHelper.EmployerProfileAddUserDetails($"/user/add-user-details") + queryData);
         }
         
         return invitation.Data != null

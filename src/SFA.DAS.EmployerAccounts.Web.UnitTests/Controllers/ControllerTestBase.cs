@@ -59,7 +59,7 @@ public abstract class ControllerTestBase
             new Claim(ClaimTypes.Name, name),
             new Claim(ClaimTypes.Email, email),
             new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, id),
-        });
+        }, CookieAuthenticationDefaults.AuthenticationScheme);
 
         if (claims != null && claims.Any())
         {
@@ -83,6 +83,18 @@ public abstract class ControllerTestBase
             new Claim(ControllerConstants.UserRefClaimKeyName, id),
             new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, id),
         });
+        
+        var principal = new ClaimsPrincipal(identity);
+        
+        MockHttpContext.Setup(c => c.User).Returns(principal);
+    }
+
+    protected void AddNewGovUserToContext(string id)
+    {
+        var identity = new ClaimsIdentity(new[]
+        {
+            new Claim(ControllerConstants.UserRefClaimKeyName, id),
+        }, CookieAuthenticationDefaults.AuthenticationScheme);
 
         var principal = new ClaimsPrincipal(identity);
         MockHttpContext.Setup(c => c.User).Returns(principal);
