@@ -113,7 +113,7 @@ public class InvitationController : BaseController
     {
         if (_configuration.UseGovSignIn)
         {
-            return new RedirectToActionResult(ControllerConstants.InvitationIndexName, ControllerConstants.InvitationControllerName, null);
+            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
         }
         
         var schema = HttpContext?.Request.Scheme;
@@ -127,6 +127,10 @@ public class InvitationController : BaseController
     [Route("accept")]
     public IActionResult AcceptInvitationExistingUser()
     {
+        if (_configuration.UseGovSignIn)
+        {
+            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
+        }
         return RedirectToAction("All");
     }
 }
