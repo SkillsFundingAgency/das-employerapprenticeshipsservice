@@ -238,19 +238,28 @@ public class HomeController : BaseController
     [Route("register")]
     [Route("register/{correlationId}")]
     public async Task<IActionResult> RegisterUser(Guid? correlationId)
-    {
-        
+    {   
         var schema = Request.Scheme;
         var authority = HttpContext?.Request.Host.Value;
         var appConstants = new Constants(_configuration.Identity);
 
         if (!correlationId.HasValue)
         {
-            return new RedirectResult($"{appConstants.RegisterLink()}{schema}://{authority}/service/register/new");
+            return _configuration.UseGovSignIn 
+                ? Redirect(_urlHelper.EmployerProfileAddUserDetails($"/user/add-user-details")) 
+                : new RedirectResult($"{appConstants.RegisterLink()}{schema}://{authority}/service/register/new");
         }
 
         var invitation = await _homeOrchestrator.GetProviderInvitation(correlationId.Value);
 
+        if (_configuration.UseGovSignIn)
+        {
+            var queryData = invitation.Data != null
+                ? $"?correlationId={correlationId}&firstname={WebUtility.UrlEncode(invitation.Data.EmployerFirstName)}&lastname={WebUtility.UrlEncode(invitation.Data.EmployerLastName)}"
+                : "";
+            return Redirect(_urlHelper.EmployerProfileAddUserDetails($"/user/add-user-details{queryData}"));
+        }
+        
         return invitation.Data != null
             ? new RedirectResult($"{appConstants.RegisterLink()}{schema}://{authority}/service/register/new/{correlationId}&firstname={WebUtility.UrlEncode(invitation.Data.EmployerFirstName)}&lastname={WebUtility.UrlEncode(invitation.Data.EmployerLastName)}&email={WebUtility.UrlEncode(invitation.Data.EmployerEmail)}")
             : new RedirectResult($"{appConstants.RegisterLink()}{schema}://{authority}/service/register/new");
