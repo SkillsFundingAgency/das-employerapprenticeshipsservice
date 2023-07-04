@@ -111,6 +111,11 @@ public class InvitationController : BaseController
     [Route("register-and-accept")]
     public IActionResult AcceptInvitationNewUser()
     {
+        if (_configuration.UseGovSignIn)
+        {
+            return new RedirectToActionResult(ControllerConstants.InvitationIndexName, ControllerConstants.InvitationControllerName, null);
+        }
+        
         var schema = HttpContext?.Request.Scheme;
         var authority = HttpContext?.Request.Host;
         var appConstants = new Constants(_configuration.Identity);
