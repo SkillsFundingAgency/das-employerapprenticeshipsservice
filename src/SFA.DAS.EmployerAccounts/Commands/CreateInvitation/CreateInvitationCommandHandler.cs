@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using Microsoft.Extensions.Configuration;
 using SFA.DAS.EmployerAccounts.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.SendNotification;
@@ -19,10 +20,11 @@ public class CreateInvitationCommandHandler : IRequestHandler<CreateInvitationCo
     private readonly IValidator<CreateInvitationCommand> _validator;
     private readonly IUserAccountRepository _userRepository;
     private readonly IEventPublisher _eventPublisher;
+    private readonly bool _isProdEnvironment;
 
     public CreateInvitationCommandHandler(IInvitationRepository invitationRepository, IMembershipRepository membershipRepository, IMediator mediator,
         EmployerAccountsConfiguration employerApprenticeshipsServiceConfiguration, IValidator<CreateInvitationCommand> validator,
-        IUserAccountRepository userRepository, IEventPublisher eventPublisher)
+        IUserAccountRepository userRepository, IEventPublisher eventPublisher, IConfiguration configuration)
     {
         _invitationRepository = invitationRepository;
         _membershipRepository = membershipRepository;
@@ -31,6 +33,8 @@ public class CreateInvitationCommandHandler : IRequestHandler<CreateInvitationCo
         _validator = validator;
         _userRepository = userRepository;
         _eventPublisher = eventPublisher;
+        _isProdEnvironment = configuration["ResourceEnvironmentName"]
+            .Equals("prd", StringComparison.CurrentCultureIgnoreCase);
     }
 
     public async Task<Unit> Handle(CreateInvitationCommand message, CancellationToken cancellationToken)
@@ -102,12 +106,30 @@ public class CreateInvitationCommandHandler : IRequestHandler<CreateInvitationCo
             }
         }, cancellationToken);
 
+        var govLoginExistingUser = "11cb4eb4-c22a-47c7-aa26-1074da25ff4d";//test ---- 3c285db3-164c-4258-9180-f2d42723e155 prod
+
+        var templateId = existingUser?.UserRef != null 
+            ?  "InvitationExistingUser" : "InvitationNewUser";
+        if (_employerApprenticeshipsServiceConfiguration.UseGovSignIn)
+        {
+            if (_isProdEnvironment)
+            {
+                templateId = existingUser?.UserRef != null 
+                    ?  "3c285db3-164c-4258-9180-f2d42723e155" : "6b6b46cc-4a5f-4985-8626-ed239af11d71";
+            }
+            else
+            {
+                templateId = existingUser?.UserRef != null 
+                    ?  "11cb4eb4-c22a-47c7-aa26-1074da25ff4d" : "2bb7da99-2542-4536-9c15-4eb3466a99e3";
+            }
+        }
+        
         await _mediator.Send(new SendNotificationCommand
         {
             Email = new Email
             {
                 RecipientsAddress = message.EmailOfPersonBeingInvited,
-                TemplateId = existingUser?.UserRef != null ? "InvitationExistingUser" : "InvitationNewUser",
+                TemplateId = templateId,
                 ReplyToAddress = "noreply@sfa.gov.uk",
                 Subject = "x",
                 SystemId = "x",

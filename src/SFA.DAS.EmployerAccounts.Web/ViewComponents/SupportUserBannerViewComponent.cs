@@ -1,29 +1,27 @@
 ﻿using System.Security.Claims;
-using SFA.DAS.EmployerAccounts.Web.RouteValues;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewComponents;
 
 public class SupportUserBannerViewComponent : ViewComponent
 {
     private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly HttpContextAccessor _httpContextAccessor;
 
-    public SupportUserBannerViewComponent(EmployerTeamOrchestrator employerTeamOrchestrator, IHttpContextAccessor httpContextAccessor)
+    public SupportUserBannerViewComponent(EmployerTeamOrchestrator employerTeamOrchestrator, HttpContextAccessor httpContextAccessor)
     {
         _employerTeamOrchestrator = employerTeamOrchestrator;
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<IViewComponentResult> InvokeAsync()
+    public async Task<IViewComponentResult> InvokeAsync(IAccountIdentifier model = null)
     {
         Account account = null;
-        string hashedAccountId = _httpContextAccessor.HttpContext.Request.RouteValues[RouteValueKeys.HashedAccountId]?.ToString();
 
-        if (!string.IsNullOrEmpty(hashedAccountId))
+        if (model != null && model.HashedAccountId != null)
         {
             var externalUserId = _httpContextAccessor.HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
 
-            var response = await _employerTeamOrchestrator.GetAccountSummary(hashedAccountId, externalUserId);
+            var response = await _employerTeamOrchestrator.GetAccountSummary(model.HashedAccountId, externalUserId);
             account = response.Status != HttpStatusCode.OK ? null : response.Data.Account;
         }
 

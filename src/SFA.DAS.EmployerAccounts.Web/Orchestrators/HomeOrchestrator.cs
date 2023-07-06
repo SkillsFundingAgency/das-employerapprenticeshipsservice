@@ -1,5 +1,6 @@
 using SFA.DAS.EmployerAccounts.Commands.UnsubscribeProviderEmail;
 using SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser;
+using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
 using SFA.DAS.EmployerAccounts.Queries.GetUserInvitations;
 
@@ -90,12 +91,29 @@ public class HomeOrchestrator
             CorrelationId = correlationId
         });
     }
-
+    
     public virtual async Task UpdateTermAndConditionsAcceptedOn(string userRef)
     {
         await _mediator.Send(new UpdateTermAndConditionsAcceptedOnCommand
         {
             UserRef = userRef
         });
+    }
+
+    public virtual async Task<User> GetUser(string userRef)
+    {
+        try
+        {
+            var user = await _mediator.Send(new GetUserByRefQuery
+            {
+                UserRef = userRef
+            });
+            return user.User;
+        }
+        catch (InvalidRequestException e)
+        {
+            return null;
+        }
+        
     }
 }

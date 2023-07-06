@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoFixture.NUnit3;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.Authentication;
 using SFA.DAS.Testing.AutoFixture;
@@ -116,6 +117,82 @@ public class WhenIRegisterAUser
             actualRedirectResult.Url);
     }
 
+    [Test, AutoData]
+    public async Task When_GovSignIn_True_CorrelationId_Is_Null_ThenTheUserIsRedirectedToEmployerProfiles_AddDetailsLink(
+        string baseUrl, 
+        string redirectUrl)
+    {
+        //arrange
+        _configuration.Object.UseGovSignIn = true;
+        _configuration.Object.Identity = GetMockIdentityServerConfiguration(baseUrl);
+        _urlActionHelper.Setup(x => x.EmployerProfileAddUserDetails("/user/add-user-details")).Returns(redirectUrl);
+
+        //Act
+        var actual = await _homeController.RegisterUser(null);
+
+        //Assert
+        Assert.IsNotNull(actual);
+        var actualRedirectResult = actual as RedirectResult;
+        Assert.IsNotNull(actualRedirectResult);
+        Assert.AreEqual(redirectUrl, actualRedirectResult.Url);
+    }
+
+    [Test, MoqAutoData]
+    public async Task When_GovSignIn_True_CorrelationId_Is_Given_But_No_Invitation_Data_ThenTheUserIsRedirectedToEmployerProfiles(
+        string redirectUrl,
+        string baseUrl,
+        Guid correlationId)
+    {
+        //arrange
+        _configuration.Object.UseGovSignIn = true;
+        _configuration.Object.Identity = GetMockIdentityServerConfiguration(baseUrl);
+        _urlActionHelper.Setup(x => x.EmployerProfileAddUserDetails("/user/add-user-details")).Returns(redirectUrl);
+        _homeOrchestrator.Setup(x => x.GetProviderInvitation(correlationId)).ReturnsAsync(
+            new OrchestratorResponse<ProviderInvitationViewModel>
+            {
+                Data = null
+            });
+
+        //Act
+        var actual = await _homeController.RegisterUser(correlationId);
+
+        //Assert
+        Assert.IsNotNull(actual);
+        var actualRedirectResult = actual as RedirectResult;
+        Assert.IsNotNull(actualRedirectResult);
+        Assert.AreEqual(redirectUrl, actualRedirectResult.Url);
+    }
+
+    [Test, MoqAutoData]
+    public async Task When_GovSignIn_True_ProviderInvitation_Is_Given_ThenTheUserIsRedirectedToEmployerProfiles_AddDetailsLink(
+        string redirectUrl,
+        string baseUrl,
+        Guid correlationId,
+        ProviderInvitationViewModel viewModel)
+    {
+        //arrange
+        var queryParams = $"?correlationId={correlationId}&firstname={WebUtility.UrlEncode(viewModel.EmployerFirstName)}&lastname={WebUtility.UrlEncode(viewModel.EmployerLastName)}";
+        _configuration.Object.UseGovSignIn = true;
+        _configuration.Object.Identity = GetMockIdentityServerConfiguration(baseUrl);
+        _homeOrchestrator.Setup(x => x.GetProviderInvitation(correlationId)).ReturnsAsync(
+            new OrchestratorResponse<ProviderInvitationViewModel>
+            {
+                Data = viewModel
+            });
+        _urlActionHelper.Setup(x =>
+                x.EmployerProfileAddUserDetails(
+                    $"/user/add-user-details"))
+            .Returns(redirectUrl);
+
+        //Act
+        var actual = await _homeController.RegisterUser(correlationId);
+
+        //Assert
+        Assert.IsNotNull(actual);
+        var actualRedirectResult = actual as RedirectResult;
+        Assert.IsNotNull(actualRedirectResult);
+        Assert.AreEqual(redirectUrl + queryParams, actualRedirectResult.Url);
+    }
     private IdentityServerConfiguration GetMockIdentityServerConfiguration(string baseUrl)
     {
         return new IdentityServerConfiguration

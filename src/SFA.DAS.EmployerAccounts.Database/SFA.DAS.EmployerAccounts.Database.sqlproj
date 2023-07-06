@@ -154,6 +154,7 @@
     <None Include="Scripts\Manual\CON-3367 Migrate And Add v6 Legal Agreement.sql" />
     <None Include="Scripts\Manual\CON-3968 Migrate And Add v7 Legal Agreement.sql" />
     <None Include="Scripts\Manual\MAC-127-ExpireLegalAgreements.sql" />
+    <None Include="Scripts\PostDeployment\MAC-174-Account-name-confirmation.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EmployerAccounts.Database.refactorlog" />

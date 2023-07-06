@@ -73,16 +73,16 @@ public class EmployerTeamController : BaseController
 
     [HttpGet]
     [Route("AddedProvider/{providerName}")]
-    public IActionResult AddedProvider(string providerName)
+    public IActionResult AddedProvider([FromRoute] string hashedAccountId, [FromRoute] string providerName)
     {
         AddFlashMessageToCookie(new FlashMessageViewModel
         {
             Headline = "Your account has been created",
-            Message = $"You account has been created and you've successfully updated permissions for {WebUtility.UrlDecode(providerName.ToUpper())}",
+            Message = $"You account has been created and you've successfully updated permissions for {Uri.UnescapeDataString(providerName).ToUpper()}",
             Severity = FlashMessageSeverityLevel.Success
         });
 
-        return RedirectToAction(ControllerConstants.IndexActionName);
+        return RedirectToRoute(RouteNames.EmployerTeamIndex, new { hashedAccountId });
     }
 
     [HttpGet]
