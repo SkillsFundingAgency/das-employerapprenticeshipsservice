@@ -99,6 +99,8 @@ public class Startup
         services.AddMediatorValidators();
         services.AddMediatR(typeof(GetEmployerAccountByIdQuery));
 
+        var authenticationBuilder = services.AddAuthentication();
+
         if (_configuration.UseGovUkSignIn())
         {
             var govConfig = _configuration.GetSection("SFA.DAS.Employer.GovSignIn");
@@ -111,17 +113,21 @@ public class Startup
         }
         else
         {
-            services.AddAndConfigureEmployerAuthentication(identityServerConfiguration, new SupportConsoleAuthenticationOptions
-            {
-                AdfsOptions = new ADFSOptions
-                {
-                    MetadataAddress = employerAccountsConfiguration.AdfsMetadata,
-                    Wreply = employerAccountsConfiguration.EmployerAccountsBaseUrl,
-                    Wtrealm = employerAccountsConfiguration.EmployerAccountsBaseUrl,
-                    BaseUrl = employerAccountsConfiguration.Identity.BaseAddress,
-                }
-            });
+            services.AddAndConfigureEmployerAuthentication(identityServerConfiguration);
         }
+
+        var staffAuthConfig = new SupportConsoleAuthenticationOptions
+        {
+            AdfsOptions = new ADFSOptions
+            {
+                MetadataAddress = employerAccountsConfiguration.AdfsMetadata,
+                Wreply = employerAccountsConfiguration.EmployerAccountsBaseUrl,
+                Wtrealm = employerAccountsConfiguration.EmployerAccountsBaseUrl,
+                BaseUrl = employerAccountsConfiguration.Identity.BaseAddress,
+            }
+        };
+
+        authenticationBuilder.AddAndConfigureSupportConsoleAuthentication(staffAuthConfig);
 
         services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
 

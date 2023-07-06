@@ -1,7 +1,5 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.IdentityModel.Tokens;
@@ -15,7 +13,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
     public static class SupportUserExtensions
     {
         private const string Staff = "SFA.Staff.Auth";
-        private const string Employer = "Employer";
         private const string HashedAccountId = "HashedAccountId";
         private const string ServiceClaimTier2Role = "ESF";
         private const string ConsoleUser = "ConsoleUser";
@@ -25,9 +22,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
         public static AuthenticationBuilder AddAndConfigureSupportConsoleAuthentication(this AuthenticationBuilder services, SupportConsoleAuthenticationOptions authOptions)
         {
             services
-                .AddWsFederation(SupportUserClaimConstants.WsFederationAuthScheme, options =>
+                .AddWsFederation(options =>
                 {
-                    options.SignInScheme = Staff;
                     options.MetadataAddress = authOptions.AdfsOptions.MetadataAddress;
                     options.Wtrealm = authOptions.AdfsOptions.Wtrealm;
                     options.Wreply = authOptions.AdfsOptions.Wreply;
@@ -84,7 +80,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
                         // as this is the only action they will currently perform.
 
 
-                        await context.ChallengeAsync(SupportUserClaimConstants.WsFederationAuthScheme, new AuthenticationProperties
+                        await context.ChallengeAsync(WsFederationDefaults.AuthenticationScheme, new AuthenticationProperties
                         {
                             RedirectUri = requestRedirect,
                             IsPersistent = true
@@ -147,6 +143,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             var userEmail = claimsIdentity.Claims.Single(x => x.Type == ClaimTypes.Upn).Value;
 
             claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, $"{firstName} {lastName}"));
+
+            claimsIdentity.AddClaim(new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, "[]"));
 
             if (!string.IsNullOrEmpty(userEmail))
             {

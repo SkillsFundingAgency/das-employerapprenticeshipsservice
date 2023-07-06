@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.EmployerAccounts.Infrastructure;
 using SFA.DAS.EmployerAccounts.Services;
@@ -28,7 +29,7 @@ public static class EmployerAuthenticationServiceRegistrations
         services.AddSingleton<IAuthorizationHandler, EmployerAccountOwnerAuthorizationHandler>();
         services.AddSingleton<IAuthorizationHandler, AccountActiveAuthorizationHandler>();//TODO remove after gov login enabled
         services.AddTransient<IUserAccountService, UserAccountService>();
-
+        
 
         services.AddAuthorization(options =>
         {
@@ -36,52 +37,24 @@ public static class EmployerAuthenticationServiceRegistrations
                 PolicyNames.HasUserAccount
                 , policy =>
                 {
-                    policy.AddAuthenticationSchemes(OpenIdConnectDefaults.AuthenticationScheme, SupportUserClaimConstants.WsFederationAuthScheme);
-
-                    policy.RequireAssertion(_ =>
-                    {
-                        if (_.User.IsSupportUser())
-                        {
-                            return true;
-                        }
-
-                        policy.Requirements.Add(new AccountActiveRequirement());
-
-                        return _.User.HasClaim(c => c.Type == EmployerClaims.IdamsUserIdClaimTypeIdentifier);
-                    });
-
+                    policy.RequireClaim(EmployerClaims.IdamsUserIdClaimTypeIdentifier);
                     policy.RequireAuthenticatedUser();
+                    policy.Requirements.Add(new AccountActiveRequirement());
                 });
 
             options.AddPolicy(
                 PolicyNames.HasEmployerOwnerAccount
                 , policy =>
                 {
-                    policy.AddAuthenticationSchemes(OpenIdConnectDefaults.AuthenticationScheme, SupportUserClaimConstants.WsFederationAuthScheme);
-
-                    policy.RequireAssertion(_ =>
-                    {
-                        if (_.User.IsSupportUser())
-                        {
-                            return true;
-                        }
-
-                        policy.Requirements.Add(new EmployerAccountOwnerRequirement());
-                        policy.Requirements.Add(new AccountActiveRequirement());
-
-                        return _.User.HasClaim(c => c.Type == EmployerClaims.AccountsClaimsTypeIdentifier);
-                    });
-
                     policy.RequireClaim(EmployerClaims.AccountsClaimsTypeIdentifier);
-
+                    policy.Requirements.Add(new EmployerAccountOwnerRequirement());
+                    policy.Requirements.Add(new AccountActiveRequirement());
                     policy.RequireAuthenticatedUser();
                 });
-
             options.AddPolicy(
                 PolicyNames.HasEmployerViewerTransactorOwnerAccount
                 , policy =>
                 {
-                    policy.AddAuthenticationSchemes(OpenIdConnectDefaults.AuthenticationScheme, SupportUserClaimConstants.WsFederationAuthScheme);
                     policy.RequireAssertion(_ =>
                     {
                         if (_.User.IsSupportUser())
@@ -108,8 +81,7 @@ public static class EmployerAuthenticationServiceRegistrations
 
     public static IServiceCollection AddAndConfigureEmployerAuthentication(
             this IServiceCollection services,
-            IdentityServerConfiguration configuration,
-            SupportConsoleAuthenticationOptions authOptions)
+            IdentityServerConfiguration configuration)
     {
         services
             .AddAuthentication(sharedOptions =>
@@ -118,8 +90,33 @@ public static class EmployerAuthenticationServiceRegistrations
                 sharedOptions.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 sharedOptions.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
                 sharedOptions.DefaultSignOutScheme = OpenIdConnectDefaults.AuthenticationScheme;
-            })
-            .AddCookie(options =>
+
+            }).AddOpenIdConnect(options =>
+            {
+                options.ClientId = configuration.ClientId;
+                options.ClientSecret = configuration.ClientSecret;
+                options.Authority = configuration.BaseAddress;
+                options.MetadataAddress = $"{configuration.BaseAddress}/.well-known/openid-configuration";
+                options.ResponseType = "code";
+                options.UsePkce = false;
+
+                var scopes = configuration.Scopes.Split(' ');
+                foreach (var scope in scopes)
+                {
+                    options.Scope.Add(scope);
+                }
+                options.ClaimActions.MapUniqueJsonKey("sub", "id");
+                options.Events.OnRemoteFailure = c =>
+                {
+                    if (c.Failure.Message.Contains("Correlation failed"))
+                    {
+                        c.Response.Redirect("/");
+                        c.HandleResponse();
+                    }
+
+                    return Task.CompletedTask;
+                };
+            }).AddCookie(options =>
             {
                 options.AccessDeniedPath = new PathString("/error/403");
                 options.ExpireTimeSpan = TimeSpan.FromHours(1);
@@ -128,41 +125,7 @@ public static class EmployerAuthenticationServiceRegistrations
                 options.SlidingExpiration = true;
                 options.Cookie.SameSite = SameSiteMode.None;
                 options.CookieManager = new ChunkingCookieManager { ChunkSize = 3000 };
-            })
-            .AddAndConfigureSupportConsoleAuthentication(authOptions)
-            .AddOpenIdConnect(options =>
-             {
-                 options.ClientId = configuration.ClientId;
-                 options.ClientSecret = configuration.ClientSecret;
-                 options.Authority = configuration.BaseAddress;
-                 options.MetadataAddress = $"{configuration.BaseAddress}/.well-known/openid-configuration";
-                 options.ResponseType = "code";
-                 options.UsePkce = false;
-                 options.CorrelationCookie = new CookieBuilder
-                 {
-                     Name = "Employer",
-                     SameSite = SameSiteMode.None,
-                     HttpOnly = false,
-                     SecurePolicy = CookieSecurePolicy.Always
-                 };
-
-                 var scopes = configuration.Scopes.Split(' ');
-                 foreach (var scope in scopes)
-                 {
-                     options.Scope.Add(scope);
-                 }
-                 options.ClaimActions.MapUniqueJsonKey("sub", "id");
-                 options.Events.OnRemoteFailure = c =>
-                 {
-                     if (c.Failure.Message.Contains("Correlation failed"))
-                     {
-                         c.Response.Redirect("/");
-                         c.HandleResponse();
-                     }
-
-                     return Task.CompletedTask;
-                 };
-             });
+            }); 
 
         services
             .AddOptions<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme)
