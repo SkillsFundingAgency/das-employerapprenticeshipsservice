@@ -1,12 +1,10 @@
 ﻿using System.Net;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using NServiceBus;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.NServiceBus.Configuration;
-using SFA.DAS.NServiceBus.Configuration.AzureServiceBus;
 using SFA.DAS.NServiceBus.Configuration.MicrosoftDependencyInjection;
 using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.Hosting;
@@ -23,8 +21,7 @@ public enum ServiceBusEndpointType
 
 public static class NServiceBusServiceRegistrations
 {
-    public static void StartNServiceBus(this UpdateableServiceProvider services, bool isDevOrLocal,
-        ServiceBusEndpointType endpointType)
+    public static void StartNServiceBus(this UpdateableServiceProvider services, bool isDevOrLocal, ServiceBusEndpointType endpointType)
     {
         var endPointName = $"SFA.DAS.EmployerAccounts.{endpointType}";
         var employerAccountsConfiguration = services.GetService<EmployerAccountsConfiguration>();
@@ -36,13 +33,15 @@ public static class NServiceBusServiceRegistrations
             throw new InvalidConfigurationValueException("DatabaseConnectionString");
         }
 
+        var allowOutboxCleanup = endpointType = ServiceBusEndpointType.Api;
+
         var endpointConfiguration = new EndpointConfiguration(endPointName)
             .UseErrorQueue($"{endPointName}-errors")
             .UseInstallers()
             .UseMessageConventions()
             .UseServicesBuilder(services)
             .UseNewtonsoftJsonSerializer()
-            .UseOutbox(true)
+            .UseOutbox()
             .UseSqlServerPersistence(() => DatabaseExtensions.GetSqlConnection(databaseConnectionString))
             .ConfigureServiceBusTransport(() => employerAccountsConfiguration.ServiceBusConnectionString, isDevOrLocal)
             .UseUnitOfWork();
