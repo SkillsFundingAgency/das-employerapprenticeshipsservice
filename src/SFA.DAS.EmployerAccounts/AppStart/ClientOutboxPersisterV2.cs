@@ -11,7 +11,7 @@ using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.NServiceBus.SqlServer.Data;
 using SFA.DAS.NServiceBus.SqlServer.Features.ClientOutbox.Data;
 
-namespace SFA.DAS.EmployerAccounts.Web.AppStart
+namespace SFA.DAS.EmployerAccounts.AppStart
 {
     public class ClientOutboxPersisterV2 : IClientOutboxStorageV2
     {
