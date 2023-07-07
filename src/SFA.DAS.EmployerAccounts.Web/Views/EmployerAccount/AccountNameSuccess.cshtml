@@ -17,11 +17,11 @@
             </div>
             <div class="govuk-notification-banner__content">
                 <p class="govuk-notification-banner__heading">
-                    Account name changed
+                    You have set your account name
                 </p>
             </div>
         </div>
-        <h1 class="govuk-heading-xl">Your account name has been changed to @Model.Data.CurrentName</h1>
+        <h1 class="govuk-heading-xl">Your account name has been set to @Model.Data.CurrentName</h1>
         <p>You can change your account name at any time.</p>
         <div class="govuk-button-group">
             <a asp-route="@RouteNames.CreateAccountSuccess" asp-route-hashedAccountId="@hashedAccountId" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
