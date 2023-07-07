@@ -273,29 +273,6 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpGet]
-    [Route("skipRegistration", Name = RouteNames.SkipRegistration)]
-    public async Task<IActionResult> SkipRegistration()
-    {
-        var request = new CreateUserAccountViewModel
-        {
-            UserId = GetUserId(),
-            OrganisationName = "MY ACCOUNT"
-        };
-
-        var response = await _employerAccountOrchestrator.CreateMinimalUserAccountForSkipJourney(request, HttpContext);
-        var returnUrlCookie = _returnUrlCookieStorageService.Get(ReturnUrlCookieName);
-
-        _returnUrlCookieStorageService.Delete(ReturnUrlCookieName);
-
-        if (returnUrlCookie != null && !string.IsNullOrWhiteSpace(returnUrlCookie.Value))
-        {
-            return Redirect(returnUrlCookie.Value);
-        }
-
-        return RedirectToRoute(RouteNames.EmployerTeamIndex, new { hashedAccountId = response.Data.HashedId });
-    }
-
-    [HttpGet]
     [Route("payeerror")]
     public ViewResult PayeError(bool? notFound)
     {

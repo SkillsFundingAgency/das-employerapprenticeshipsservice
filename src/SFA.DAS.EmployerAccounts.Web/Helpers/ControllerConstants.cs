@@ -56,7 +56,6 @@ public static class ControllerConstants
     public const string ServiceStartPageViewName = "ServiceStartPage";
     public const string SignAgreementActionName = "SignAgreement";
     public const string SignAgreementViewName = "SignAgreement";
-    public const string SkipRegistrationActionName = "SkipRegistration";
     public const string SummaryActionName = "Summary";
     public const string UnsubscribedViewName = "Unsubscribed"; 
     public const string ViewTeamActionName = "ViewTeam";
