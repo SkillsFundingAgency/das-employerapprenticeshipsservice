@@ -160,7 +160,6 @@ public class HomeController : BaseController
         return View();
     }
 
-
     [HttpGet]
     [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     [Route("termsAndConditions")]
