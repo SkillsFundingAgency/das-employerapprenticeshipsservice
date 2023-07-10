@@ -347,7 +347,7 @@ public class EmployerAccountController : BaseController
         if (returnUrlCookie != null && !string.IsNullOrWhiteSpace(returnUrlCookie.Value))
             return Redirect(returnUrlCookie.Value);
 
-        return RedirectToRoute(RouteNames.ContinueNewEmployerAccountTaskList, new { hashedAccountId = response.Data.EmployerAgreement.HashedAccountId });
+        return RedirectToRoute(RouteNames.OrganisationAndPayeAddedSuccess, new { hashedAccountId = response.Data.EmployerAgreement.HashedAccountId });
     }
 
     [HttpGet]
@@ -476,6 +476,13 @@ public class EmployerAccountController : BaseController
         response.Status = response.Status;
 
         return View(response);
+    }
+
+    [HttpGet]
+    [Route("{HashedAccountId}/create/orgAndPaye/success", Name = RouteNames.OrganisationAndPayeAddedSuccess)]
+    public IActionResult OrganisationAndPayeAddedSuccess(string hashedAccountId)
+    {
+        return View();
     }
 
     [HttpGet]
