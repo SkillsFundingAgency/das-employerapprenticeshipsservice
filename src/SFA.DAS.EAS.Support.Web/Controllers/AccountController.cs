@@ -143,8 +143,7 @@ public class AccountController : Controller
         var baseUrl = _easSupportConfiguration.EmployerAccountsConfiguration.EmployerAccountsBaseUrl;
         var trimmedBaseUrl = baseUrl?.TrimEnd('/') ?? string.Empty;
         string path = $"login/staff?HashedAccountId={hashedAccountId}";
-        var accountPath = hashedAccountId == null ? $"{path}" : $"{hashedAccountId}/{path}";
 
-        return $"{trimmedBaseUrl}/{accountPath}".TrimEnd('/');
+        return $"{trimmedBaseUrl}/{path}".TrimEnd('/');
     }
 }
