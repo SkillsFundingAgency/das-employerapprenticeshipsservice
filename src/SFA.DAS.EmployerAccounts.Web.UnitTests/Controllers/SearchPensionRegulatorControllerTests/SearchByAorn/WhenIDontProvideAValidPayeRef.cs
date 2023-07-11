@@ -25,6 +25,6 @@ class WhenIDontProvideAValidPayeRef
 
         Assert.AreEqual(ControllerConstants.SearchUsingAornViewName, viewResponse.ViewName);
         var viewModel = viewResponse.Model as SearchPensionRegulatorByAornViewModel;
-        Assert.AreEqual("You need to enter your PAYE in the correct format for example 123/AB456", viewModel.PayeRefError);
+        Assert.AreEqual("Enter your PAYE reference in the correct format", viewModel.PayeRefError);
     }
 }

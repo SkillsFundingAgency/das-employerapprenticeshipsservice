@@ -210,12 +210,12 @@ public class SearchPensionRegulatorController : BaseController
 
         if (string.IsNullOrWhiteSpace(viewModel.Aorn) || !_aornRegex.IsMatch(viewModel.Aorn.ToUpper().Trim()))
         {
-            errors.Add(nameof(viewModel.Aorn), "You need to enter your Accounts Office reference in the correct format for example 123PX00123456 or 123PX0012345X");
+            errors.Add(nameof(viewModel.Aorn), "Enter your Accounts Office reference in the correct format");
         }
 
         if (string.IsNullOrWhiteSpace(viewModel.PayeRef) || !_payeRegex.IsMatch(viewModel.PayeRef))
         {
-            errors.Add(nameof(viewModel.PayeRef), "You need to enter your PAYE in the correct format for example 123/AB456");
+            errors.Add(nameof(viewModel.PayeRef), "Enter your PAYE reference in the correct format");
         }
         else if (viewModel.PayeRef[3] != '/')
         {
