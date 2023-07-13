@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Rewrite;
@@ -47,6 +48,8 @@ public class Startup
 
         services.AddLogging();
 
+        services.AddHttpContextAccessor();
+
         services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
         services.AddConfigurationOptions(_configuration);
         var identityServerConfiguration = _configuration
@@ -82,7 +85,6 @@ public class Startup
             .AddUnitOfWork()
             .AddEntityFramework(employerAccountsConfiguration)
             .AddEntityFrameworkUnitOfWork<EmployerAccountsDbContext>();
-
         services.AddNServiceBusClientUnitOfWork();
         services.AddEmployerAccountsApi();
         services.AddExecutionPolicies();
@@ -185,13 +187,21 @@ public class Startup
         .AddRedirect("^$", "/service")
         );
 
+        app.UseSupportConsoleAuthentication();
+
         app.UseUnitOfWork();
 
         app.UseStaticFiles();
         app.UseAuthentication();
+        app.UseCookiePolicy(new CookiePolicyOptions
+        {
+            Secure = CookieSecurePolicy.Always,
+            MinimumSameSitePolicy = SameSiteMode.Strict,
+            HttpOnly = HttpOnlyPolicy.Always
+        });
+
         app.UseRouting();
         app.UseAuthorization();
-        app.UseSupportConsoleAuthentication();
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllerRoute(
