@@ -1,0 +1,26 @@
+﻿@using SFA.DAS.EmployerAccounts.Web.Helpers;
+@model CreateAccountProgressSavedViewModel;
+@{
+    ViewBag.PageID = "add-paye-shutter";
+    ViewBag.Title = "Your progress has been saved";
+    ViewBag.ShowNav = false;
+
+    ViewBag.GaData.Vpv = "/service/accounts/task-list-save-and-come-back";
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">
+            @ViewBag.Title
+        </h1>
+        <p class="govuk-body">You can return anytime to continue setting up your employer account.</p>
+        <div class="govuk-button-group">
+            <a class="govuk-button" type="submit" id="continue-task-list" asp-route="@Model.ContinueTaskListRouteName" asp-route-hashedAccountId="@Context.Request.RouteValues[RouteValueKeys.HashedAccountId]">Continue creating your account</a>
+            <a class="govuk-body govuk-button govuk-button--secondary" asp-route="@RouteNames.SignOut" class="govuk-link">Sign out</a>
+        </div>
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="das-js-back-link"></div>
+}

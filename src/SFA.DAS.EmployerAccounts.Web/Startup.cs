@@ -12,6 +12,7 @@ using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Mappings;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
+using SFA.DAS.EmployerAccounts.Startup;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Filters;
 using SFA.DAS.EmployerAccounts.Web.Handlers;
@@ -81,6 +82,7 @@ public class Startup
             .AddUnitOfWork()
             .AddEntityFramework(employerAccountsConfiguration)
             .AddEntityFrameworkUnitOfWork<EmployerAccountsDbContext>();
+
         services.AddNServiceBusClientUnitOfWork();
         services.AddEmployerAccountsApi();
         services.AddExecutionPolicies();

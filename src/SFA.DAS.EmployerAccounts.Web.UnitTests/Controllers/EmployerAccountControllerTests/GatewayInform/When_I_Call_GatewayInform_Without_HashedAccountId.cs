@@ -1,9 +1,12 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.EmployerAccounts.Web.RouteValues;
+using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.GatewayInform;
 
@@ -65,5 +68,29 @@ public class When_I_Call_GatewayInform_Without_HashedAccountId : ControllerTestB
                     It.IsAny<int>()),
                 Times.Never
             );
+    }
+
+    [Test]
+    [MoqAutoData]
+    public void When_Within_Account_Then_Cancel_Returns_To_Paye_Index(string hashedAccountId)
+    {
+        // Act
+        var result = _employerAccountController.GatewayInform(hashedAccountId: hashedAccountId) as ViewResult;
+        var model = result.Model as OrchestratorResponse<GatewayInformViewModel>;
+
+        // Assert
+        model.Data.CancelRoute.Should().Be(RouteNames.EmployerAccountPaye);
+    }
+
+    [Test]
+    [MoqAutoData]
+    public void When_Within_Account_Then_Cancel_Returns_To_Task_List(string hashedAccountId)
+    {
+        // Act
+        var result = _employerAccountController.GatewayInform(hashedAccountId: null) as ViewResult;
+        var model = result.Model as OrchestratorResponse<GatewayInformViewModel>;
+
+        // Assert
+        model.Data.CancelRoute.Should().Be(RouteNames.NewEmpoyerAccountTaskList);
     }
 }

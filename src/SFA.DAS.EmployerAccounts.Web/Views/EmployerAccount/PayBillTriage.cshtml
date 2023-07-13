@@ -1,0 +1,109 @@
+﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
+@{
+    ViewBag.PageID = "pay-bill-triage";
+    ViewBag.Title = "How much is your organisation's annual pay bill";
+    ViewBag.ShowNav = false;
+
+    ViewBag.GaData.Vpv = "/service/pay-bill-triage";
+    var hiddenClass = Model?.GetType().GetProperty("InError") != null ? "" : "das-hidden";
+    var errorClass = Model?.GetType().GetProperty("InError") != null ? "govuk-form-group--error" : "";
+}
+
+@if (Model?.GetType().GetProperty("InError") != null)
+{
+    <div class="govuk-error-summary" data-module="govuk-error-summary">
+        <div role="alert">
+            <h2 class="govuk-error-summary__title">
+                There is a problem
+            </h2>
+            <div class="govuk-error-summary__body">
+                <ul class="govuk-list govuk-error-summary__list">
+                    <li><a href="#more-than-three-million">You need to tell us your organisation's annual pay bill</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form method="POST" asp-route="@RouteNames.EmployerAccountPayBillTriagePost">
+            <div class="govuk-form-group @errorClass" id="do-you-want-to-add-paye-scheme-form">
+                <fieldset class="govuk-fieldset" aria-describedby="have-not-got-everything">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                        <h1 class="govuk-fieldset__heading">
+                            How much is your organisation's annual pay bill?
+                        </h1>
+                    </legend>
+                    <div class="govuk-hint">If your organisation's pay bill is over £3 million you will be able to spend levy on apprenticeship training without having to reserve funds.</div>
+                    <span class="govuk-error-message @hiddenClass" aria-hidden="false" id="have-not-got-everything">
+                        You need to tell us your organisation's annual pay bill
+                    </span>
+                    <div class="govuk-radios">
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" type="radio" name="choice" id="more-than-three-million" value="1" />
+                            <label class="govuk-label govuk-radios__label" for="more-than-three-million">
+                                Over £3 million
+                            </label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" type="radio" name="choice" id="almost-three-million" value="2" aria-describedby="close-3million-hint" />
+                            <label class="govuk-label govuk-radios__label" for="almost-three-million">
+                                Close to £3 million
+                            </label>
+                            <div id="close-3million-hint" class="govuk-hint govuk-radios__hint">To be able to access any future levy funds, choose this if you think your annual pay bill will exceed £3 million in the future</div>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" type="radio" name="choice" id="less-than-three-million" value="3" />
+                            <label class="govuk-label govuk-radios__label" for="less-than-three-million">
+                                Less than £3 million
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <details class="govuk-details" role="group" data-module="govuk-details">
+                <summary class="govuk-details__summary" role="button">
+                    <span class="govuk-details__summary-text">
+                        What does annual pay bill mean?
+                    </span>
+                </summary>
+                <div class="govuk-details__text">
+                    <p class="govuk-body">
+                        Your annual pay bill is all payments to employees that are subject to employer <a href="https://www.gov.uk/national-insurance-rates-letters" rel="noopener" class="govuk-link" rel="external" target="_blank" title="Opens in a new window">
+                            Class 1 secondary National Insurance contributions
+                        </a> such as wages, bonuses and commissions.
+                    </p>
+                    <p class="govuk-body">
+                        Your pay bill must include payments to:
+                    </p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>
+                            all employees earning below the <a href="https://www.gov.uk/guidance/rates-and-thresholds-for-employers-2021-to-2022#class-1-national-insurance-threshold" rel="noopener" class="govuk-link" rel="external" target="_blank" title="Opens in a new window">
+                                Lower Earnings Limit and the Secondary Threshold
+                            </a>
+                        </li>
+                        <li>employees under the age of 21</li>
+                        <li>apprentices under the age of 25</li>
+                    </ul>
+                    <p class="govuk-body">
+                        Your pay bill must not include earnings:
+                    </p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>of employees under the age of 16</li>
+                        <li>of employees who are not subject to UK National Insurance contributions legislation</li>
+                        <li>on which Class 1A National Insurance contributions are payable, such as benefits in kind</li>
+                    </ul>
+                </div>
+            </details>
+            <div class="govuk-button-group">
+                <button class="govuk-button" type="submit" id="submit-add-a-paye-scheme-button">Continue</button>
+                <a asp-route="@RouteNames.NewEmpoyerAccountTaskList" class="govuk-link">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="das-js-back-link"></div>
+}

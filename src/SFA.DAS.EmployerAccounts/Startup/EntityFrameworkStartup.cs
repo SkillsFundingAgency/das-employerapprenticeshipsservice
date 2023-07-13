@@ -1,13 +1,13 @@
 ﻿using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
 using NServiceBus.Persistence;
-using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.NServiceBus.SqlServer.Data;
 using SFA.DAS.UnitOfWork.Context;
 
-namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions
+namespace SFA.DAS.EmployerAccounts.Startup
 {
     public static class EntityFrameworkStartup
     {

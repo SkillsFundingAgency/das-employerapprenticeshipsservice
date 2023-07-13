@@ -10,9 +10,7 @@ public static class EndpointConfigurationExtensions
     {
         if (isLocal)
         {
-            var transport = config.UseTransport<LearningTransport>();
-            transport.Transactions(TransportTransactionMode.ReceiveOnly);
-            transport.Routing().AddRouting();
+            config.UseLearningTransport();
         }
         else
         {
