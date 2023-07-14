@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Services.AppAuthentication;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NServiceBus.Persistence;
@@ -11,6 +12,7 @@ namespace SFA.DAS.EmployerAccounts.Startup
 {
     public static class EntityFrameworkStartup
     {
+        [ExcludeFromCodeCoverage]
         public static IServiceCollection AddEntityFramework(this IServiceCollection services, EmployerAccountsConfiguration config)
         {
             return services.AddScoped(p =>
