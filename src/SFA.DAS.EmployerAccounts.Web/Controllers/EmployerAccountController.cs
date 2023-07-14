@@ -473,7 +473,6 @@ public class EmployerAccountController : BaseController
         }
 
         response.Data = vm;
-        response.Status = response.Status;
 
         return View(response);
     }
