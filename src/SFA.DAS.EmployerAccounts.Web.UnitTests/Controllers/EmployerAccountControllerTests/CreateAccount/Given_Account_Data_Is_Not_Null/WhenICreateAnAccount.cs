@@ -95,7 +95,7 @@ class WhenICreateAnAccount : ControllerTestBase
         var result = await _employerAccountController.CreateAccount() as RedirectToRouteResult;
 
         //Assert
-        result.RouteName.Should().Be(RouteNames.ContinueNewEmployerAccountTaskList);
+        result.RouteName.Should().Be(RouteNames.OrganisationAndPayeAddedSuccess);
     }
 
     [Test]

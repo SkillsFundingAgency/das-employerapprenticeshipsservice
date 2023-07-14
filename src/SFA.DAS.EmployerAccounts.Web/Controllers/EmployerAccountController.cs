@@ -58,7 +58,7 @@ public class EmployerAccountController : BaseController
     [Route("{HashedAccountId}/tasklist", Order = 2, Name = RouteNames.ContinueNewEmployerAccountTaskList)]
     public async Task<IActionResult> CreateAccountTaskList(string hashedAccountId)
     {
-        var userIdClaim = HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals(ControllerConstants.UserRefClaimKeyName));
+        var userIdClaim = HttpContext.User.Claims.First(x => x.Type.Equals(ControllerConstants.UserRefClaimKeyName));
         var accountTaskListViewModel = await _employerAccountOrchestrator.GetCreateAccountTaskList(hashedAccountId, userIdClaim.Value);
 
         return View(nameof(CreateAccountTaskList), accountTaskListViewModel);
@@ -273,29 +273,6 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpGet]
-    [Route("skipRegistration", Name = RouteNames.SkipRegistration)]
-    public async Task<IActionResult> SkipRegistration()
-    {
-        var request = new CreateUserAccountViewModel
-        {
-            UserId = GetUserId(),
-            OrganisationName = "MY ACCOUNT"
-        };
-
-        var response = await _employerAccountOrchestrator.CreateMinimalUserAccountForSkipJourney(request, HttpContext);
-        var returnUrlCookie = _returnUrlCookieStorageService.Get(ReturnUrlCookieName);
-
-        _returnUrlCookieStorageService.Delete(ReturnUrlCookieName);
-
-        if (returnUrlCookie != null && !string.IsNullOrWhiteSpace(returnUrlCookie.Value))
-        {
-            return Redirect(returnUrlCookie.Value);
-        }
-
-        return RedirectToRoute(RouteNames.EmployerTeamIndex, new { hashedAccountId = response.Data.HashedId });
-    }
-
-    [HttpGet]
     [Route("payeerror")]
     public ViewResult PayeError(bool? notFound)
     {
@@ -370,7 +347,7 @@ public class EmployerAccountController : BaseController
         if (returnUrlCookie != null && !string.IsNullOrWhiteSpace(returnUrlCookie.Value))
             return Redirect(returnUrlCookie.Value);
 
-        return RedirectToRoute(RouteNames.ContinueNewEmployerAccountTaskList, new { hashedAccountId = response.Data.EmployerAgreement.HashedAccountId });
+        return RedirectToRoute(RouteNames.OrganisationAndPayeAddedSuccess, new { hashedAccountId = response.Data.EmployerAgreement.HashedAccountId });
     }
 
     [HttpGet]
@@ -496,9 +473,15 @@ public class EmployerAccountController : BaseController
         }
 
         response.Data = vm;
-        response.Status = response.Status;
 
         return View(response);
+    }
+
+    [HttpGet]
+    [Route("{HashedAccountId}/create/orgAndPaye/success", Name = RouteNames.OrganisationAndPayeAddedSuccess)]
+    public IActionResult OrganisationAndPayeAddedSuccess(string hashedAccountId)
+    {
+        return View();
     }
 
     [HttpGet]

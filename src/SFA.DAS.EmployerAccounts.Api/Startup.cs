@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -34,6 +35,7 @@ using SFA.DAS.Validation.Mvc.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.Api;
 
+[ExcludeFromCodeCoverage]
 public class Startup
 {
     private readonly IConfiguration _configuration;

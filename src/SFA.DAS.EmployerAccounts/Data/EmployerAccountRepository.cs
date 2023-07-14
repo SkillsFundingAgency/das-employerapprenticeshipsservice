@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -10,6 +11,7 @@ using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 
 namespace SFA.DAS.EmployerAccounts.Data;
 
+[ExcludeFromCodeCoverage]
 public class EmployerAccountRepository : IEmployerAccountRepository
 {
     private readonly Lazy<EmployerAccountsDbContext> _db;
