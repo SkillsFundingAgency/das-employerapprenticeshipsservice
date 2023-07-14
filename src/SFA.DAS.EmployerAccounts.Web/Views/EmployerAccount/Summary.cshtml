@@ -58,7 +58,7 @@
                 {
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">
-                        Account office reference number
+                        Account office reference
                     </th>
                     <td class="govuk-table__cell">
                         @Model.Data.AORN
@@ -70,7 +70,7 @@
                 }
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">
-                        PAYE scheme
+                        Employer PAYE reference
                     </th>
                     <td class="govuk-table__cell">
                         <dl class="govuk-list">
@@ -88,8 +88,9 @@
             </tbody>
         </table>
         <form method="POST" asp-route="@RouteNames.EmployerAccountCreate">
-            <div class="govuk-form-group">
-                <button type="submit" class="govuk-button" id="continue">These details are correct</button>
+            <div class="govuk-button-group">
+                <button class="govuk-button" type="submit" id="continue-check-details">Continue</button>
+                <a asp-route="@RouteNames.NewEmpoyerAccountTaskList" id="cancel-check-details" class="govuk-link">Cancel</a>
             </div>
         </form>
     </div>
