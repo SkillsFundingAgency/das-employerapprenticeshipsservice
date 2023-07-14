@@ -26,7 +26,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
                 {
                     options.MetadataAddress = authOptions.AdfsOptions.MetadataAddress;
                     options.Wtrealm = authOptions.AdfsOptions.Wtrealm;
-                    options.Wreply = authOptions.AdfsOptions.Wreply;
+                    // set /service to fix issues
+                    options.Wreply = GetServiceUrl(authOptions.AdfsOptions.Wreply);
                     options.UseTokenLifetime = false;
                     options.CallbackPath = PathString.Empty;
                     options.CorrelationCookie = new CookieBuilder
@@ -54,7 +55,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
 
             return services;
         }
-
 
         public static IApplicationBuilder UseSupportConsoleAuthentication(this IApplicationBuilder app)
         {
@@ -165,6 +165,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
         {
             var accountOwner = db.Accounts.Single(acc => acc.HashedId == hashedAccountId).Memberships.FirstOrDefault(m => m.Role == Role.Owner).User;
             claimsIdentity.AddClaim(new Claim(ControllerConstants.UserRefClaimKeyName, accountOwner.Ref.ToString()));
+        }
+
+        private static string GetServiceUrl(string wreply)
+        {
+            return $"{(wreply.EndsWith('/') ? wreply : wreply + "/")}service";
         }
     }
 
