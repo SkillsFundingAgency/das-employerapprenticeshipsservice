@@ -58,7 +58,7 @@ public class EmployerAccountController : BaseController
     [Route("{HashedAccountId}/tasklist", Order = 2, Name = RouteNames.ContinueNewEmployerAccountTaskList)]
     public async Task<IActionResult> CreateAccountTaskList(string hashedAccountId)
     {
-        var userIdClaim = HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals(ControllerConstants.UserRefClaimKeyName));
+        var userIdClaim = HttpContext.User.Claims.First(x => x.Type.Equals(ControllerConstants.UserRefClaimKeyName));
         var accountTaskListViewModel = await _employerAccountOrchestrator.GetCreateAccountTaskList(hashedAccountId, userIdClaim.Value);
 
         return View(nameof(CreateAccountTaskList), accountTaskListViewModel);
