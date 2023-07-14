@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using NServiceBus;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
@@ -19,6 +20,7 @@ public enum ServiceBusEndpointType
     Web
 }
 
+[ExcludeFromCodeCoverage]
 public static class NServiceBusServiceRegistrations
 {
     public static void StartNServiceBus(this UpdateableServiceProvider services, bool isDevOrLocal, ServiceBusEndpointType endpointType)
