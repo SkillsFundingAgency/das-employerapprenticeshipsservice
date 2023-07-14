@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Hosting;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
@@ -182,12 +181,16 @@ public class Startup
             app.UseDeveloperExceptionPage();
         }
 
-        // root '/' failing to be found when user browser to adding url re-write
-        app.UseRewriter(new RewriteOptions()
-        .AddRedirect("^$", "/service")
-        );
-
         app.UseSupportConsoleAuthentication();
+
+        app.MapWhen(ctx => ctx.Request.Path == "/", builder =>
+        {
+            builder.Run(async ctx =>
+            {
+                ctx.Response.Redirect("/service");
+                await Task.CompletedTask;
+            });
+        });
 
         app.UseUnitOfWork();
 
