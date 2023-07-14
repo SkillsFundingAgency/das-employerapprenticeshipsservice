@@ -57,7 +57,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         {
             // Arrange
             viewModel.ChangeAccountName = false;
-            viewModel.NewName = viewModel.CurrentName;
 
             // Act
             var result = await _employerAccountController.AccountName(hashedAccountId, viewModel) as ViewResult;
@@ -71,7 +70,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         {
             // Arrange
             viewModel.ChangeAccountName = false;
-            viewModel.NewName = viewModel.CurrentName;
 
             _orchestrator
                 .Setup(m => m.RenameEmployerAccount(hashedAccountId, viewModel, UserId))
@@ -93,7 +91,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         {
             // Arrange
             viewModel.ChangeAccountName = false;
-            viewModel.NewName = viewModel.CurrentName;
 
             _orchestrator
                 .Setup(m => m.RenameEmployerAccount(hashedAccountId, viewModel, UserId))
