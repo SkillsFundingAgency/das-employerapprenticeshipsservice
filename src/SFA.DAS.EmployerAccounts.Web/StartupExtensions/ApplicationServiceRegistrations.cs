@@ -11,7 +11,6 @@ using SFA.DAS.EmployerAccounts.TasksApi;
 using SFA.DAS.Encoding;
 using SFA.DAS.GovUK.Auth.Services;
 using SFA.DAS.NServiceBus.Services;
-using SFA.DAS.UnitOfWork.NServiceBus.Services;
 
 namespace SFA.DAS.EmployerAccounts.Web.StartupExtensions;
 
@@ -62,6 +61,8 @@ public static class ApplicationServiceRegistrations
         services.AddScoped<IPayeSchemesWithEnglishFractionService, PayeSchemesWithEnglishFractionService>();
 
         services.AddTransient<IUserContext, UserContext>();
+
+        services.AddTransient<IPayeSchemesService, PayeSchemesService>();
 
         services.AddTransient<IStubAuthenticationService, StubAuthenticationService>();//TODO remove once gov login live
         

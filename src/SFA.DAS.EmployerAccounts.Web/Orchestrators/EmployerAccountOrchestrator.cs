@@ -370,7 +370,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
             UserRef = userRef
         });
 
-       var firstAccount = getUserAccountsQueryResponse.Accounts.AccountsCount == 0 
+       var firstAccount = !getUserAccountsQueryResponse.Accounts.AccountList.Any() 
             ? null 
             : getUserAccountsQueryResponse.Accounts.AccountList.OrderBy(x => x.CreatedDate).FirstOrDefault();
 
