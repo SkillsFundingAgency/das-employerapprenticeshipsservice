@@ -111,7 +111,7 @@ public class HomeController : BaseController
 
             if (account != null)
             {
-                if (account.AccountHistory.Any() && account.NameConfirmed)
+                if (account.NameConfirmed)
                 {
                     return RedirectToRoute(RouteNames.EmployerTeamIndex, new
                     {
