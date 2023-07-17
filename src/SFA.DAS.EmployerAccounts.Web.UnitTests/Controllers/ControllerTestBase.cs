@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
@@ -18,6 +17,7 @@ public abstract class ControllerTestBase
     protected RouteData Routes;
     protected Mock<ILog> Logger;
     protected Mock<IMediator> Mediator;
+    protected const string UserId = "USER_ID";
 
     public virtual void Arrange(string redirectUrl = "http://localhost/testpost")
     {
@@ -49,17 +49,17 @@ public abstract class ControllerTestBase
 
     protected void AddUserToContext(params Claim[] claims)
     {
-        AddUserToContext("USER_ID", "my@local.com", "test name", claims);
+        AddUserToContext(UserId, "my@local.com", "test name", claims);
     }
 
-    protected void AddUserToContext(string id = "USER_ID", string email = "my@local.com", string name = "test name", params Claim[] claims)
+    protected void AddUserToContext(string id = UserId, string email = "my@local.com", string name = "test name", params Claim[] claims)
     {
         var identity = new ClaimsIdentity(new[]
         {
             new Claim(ClaimTypes.Name, name),
             new Claim(ClaimTypes.Email, email),
             new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, id),
-        });
+        }, CookieAuthenticationDefaults.AuthenticationScheme);
 
         if (claims != null && claims.Any())
         {
@@ -83,6 +83,18 @@ public abstract class ControllerTestBase
             new Claim(ControllerConstants.UserRefClaimKeyName, id),
             new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, id),
         });
+        
+        var principal = new ClaimsPrincipal(identity);
+        
+        MockHttpContext.Setup(c => c.User).Returns(principal);
+    }
+
+    protected void AddNewGovUserToContext(string id)
+    {
+        var identity = new ClaimsIdentity(new[]
+        {
+            new Claim(ControllerConstants.UserRefClaimKeyName, id),
+        }, CookieAuthenticationDefaults.AuthenticationScheme);
 
         var principal = new ClaimsPrincipal(identity);
         MockHttpContext.Setup(c => c.User).Returns(principal);

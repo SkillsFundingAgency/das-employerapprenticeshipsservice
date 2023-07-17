@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
@@ -43,6 +44,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateInvitationTests
 
 
         private static readonly Guid ExpectedExternalUserId = Guid.NewGuid();
+        private Mock<IConfiguration> _config;
 
         [SetUp]
         public void Setup()
@@ -71,8 +73,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateInvitationTests
             _validator.Setup(x => x.ValidateAsync(It.IsAny<CreateInvitationCommand>())).ReturnsAsync(new ValidationResult());
 
             _configuration = new EmployerAccountsConfiguration();
+            _config = new Mock<IConfiguration>();
+            _config.Setup(x => x["ResourceEnvironmentName"]).Returns("test");
 
-            _handler = new CreateInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _mediator.Object, _configuration, _validator.Object, _userRepository.Object, _endpoint.Object);
+            _handler = new CreateInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _mediator.Object, _configuration, _validator.Object, _userRepository.Object, _endpoint.Object, _config.Object);
             _command = new CreateInvitationCommand
             {
                 HashedAccountId = ExpectedHashedId,
@@ -156,6 +160,108 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateInvitationTests
                                                                                   && c.Email.SystemId.Equals("x")
                                                                                   && c.Email.TemplateId.Equals("InvitationNewUser")
                                                                                   && c.Email.Subject.Equals("x")), It.IsAny<CancellationToken>()));
+        }
+        
+        [Test]
+        public async Task ThenTheSendNotificationCommandIsInvoked_ForGovLogin_NewUserNonProd()
+        {
+            var userId = 1;
+            _configuration.UseGovSignIn = true;
+                
+            _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
+            {
+                Role = Role.Owner,
+                UserId = userId,
+                UserRef = ExpectedExternalUserId,
+                AccountId = ExpectedAccountId
+            });
+
+            //Act
+            await _handler.Handle(_command, CancellationToken.None);
+
+            //Assert
+            _mediator.Verify(x => x.Send(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress.Equals(ExpectedCallerEmail)
+                                                                             && c.Email.ReplyToAddress.Equals("noreply@sfa.gov.uk")
+                                                                             && c.Email.SystemId.Equals("x")
+                                                                             && c.Email.TemplateId.Equals("2bb7da99-2542-4536-9c15-4eb3466a99e3")
+                                                                             && c.Email.Subject.Equals("x")), It.IsAny<CancellationToken>()));
+        }
+        [Test]
+        public async Task ThenTheSendNotificationCommandIsInvoked_ForGovLogin_NewUserProd()
+        {
+            var userId = 1;
+            _configuration.UseGovSignIn = true;
+            _config.Setup(x => x["ResourceEnvironmentName"]).Returns("prd");
+            _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
+            {
+                Role = Role.Owner,
+                UserId = userId,
+                UserRef = ExpectedExternalUserId,
+                AccountId = ExpectedAccountId
+            });
+            _handler = new CreateInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _mediator.Object, _configuration, _validator.Object, _userRepository.Object, _endpoint.Object, _config.Object);
+
+            //Act
+            await _handler.Handle(_command, CancellationToken.None);
+
+            //Assert
+            _mediator.Verify(x => x.Send(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress.Equals(ExpectedCallerEmail)
+                                                                             && c.Email.ReplyToAddress.Equals("noreply@sfa.gov.uk")
+                                                                             && c.Email.SystemId.Equals("x")
+                                                                             && c.Email.TemplateId.Equals("6b6b46cc-4a5f-4985-8626-ed239af11d71")
+                                                                             && c.Email.Subject.Equals("x")), It.IsAny<CancellationToken>()));
+        }
+        
+        [Test]
+        public async Task ThenTheSendNotificationCommandIsInvoked_ForGovLogin_ExistingUserNonProd()
+        {
+            var userId = 1;
+            _configuration.UseGovSignIn = true;
+                
+            _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
+            {
+                Role = Role.Owner,
+                UserId = userId,
+                UserRef = ExpectedExternalUserId,
+                AccountId = ExpectedAccountId
+            });
+            _command.EmailOfPersonBeingInvited = ExpectedExistingUserEmail;
+
+            //Act
+            await _handler.Handle(_command, CancellationToken.None);
+
+            //Assert
+            _mediator.Verify(x => x.Send(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress.Equals(ExpectedExistingUserEmail)
+                                                                             && c.Email.ReplyToAddress.Equals("noreply@sfa.gov.uk")
+                                                                             && c.Email.SystemId.Equals("x")
+                                                                             && c.Email.TemplateId.Equals("11cb4eb4-c22a-47c7-aa26-1074da25ff4d")
+                                                                             && c.Email.Subject.Equals("x")), It.IsAny<CancellationToken>()));
+        }
+        [Test]
+        public async Task ThenTheSendNotificationCommandIsInvoked_ForGovLogin_ExistingUserProd()
+        {
+            var userId = 1;
+            _configuration.UseGovSignIn = true;
+            _config.Setup(x => x["ResourceEnvironmentName"]).Returns("prd");
+            _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
+            {
+                Role = Role.Owner,
+                UserId = userId,
+                UserRef = ExpectedExternalUserId,
+                AccountId = ExpectedAccountId
+            });
+            _handler = new CreateInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _mediator.Object, _configuration, _validator.Object, _userRepository.Object, _endpoint.Object, _config.Object);
+            _command.EmailOfPersonBeingInvited = ExpectedExistingUserEmail;
+            
+            //Act
+            await _handler.Handle(_command, CancellationToken.None);
+
+            //Assert
+            _mediator.Verify(x => x.Send(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress.Equals(ExpectedExistingUserEmail)
+                                                                             && c.Email.ReplyToAddress.Equals("noreply@sfa.gov.uk")
+                                                                             && c.Email.SystemId.Equals("x")
+                                                                             && c.Email.TemplateId.Equals("3c285db3-164c-4258-9180-f2d42723e155")
+                                                                             && c.Email.Subject.Equals("x")), It.IsAny<CancellationToken>()));
         }
 
         [Test]

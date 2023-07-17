@@ -1,0 +1,35 @@
+﻿@model OrchestratorResponse<RenameEmployerAccountViewModel>
+
+@{
+    ViewBag.PageID = "page-change-account-name-changed";
+    ViewBag.Title = "Account name changed";
+    ViewBag.GaData.Vpv = "/page-change-account-name-changed";
+    ViewBag.ShowNav = false;
+    string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId].ToString();
+}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+            <div class="govuk-notification-banner__header">
+                <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+                    Success
+                </h2>
+            </div>
+            <div class="govuk-notification-banner__content">
+                <p class="govuk-notification-banner__heading">
+                    You have set your account name
+                </p>
+            </div>
+        </div>
+        <h1 class="govuk-heading-xl">Your account name has been set to @Model.Data.CurrentName</h1>
+        <p>You can change your account name at any time.</p>
+        <div class="govuk-button-group">
+            <a asp-route="@RouteNames.CreateAccountSuccess" asp-route-hashedAccountId="@hashedAccountId" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
+                Continue
+            </a>
+          @*  <a href="#" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+                Save and come back later
+            </a>*@
+        </div>
+    </div>
+</div>

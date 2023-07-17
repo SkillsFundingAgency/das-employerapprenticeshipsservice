@@ -26,6 +26,6 @@ class WhenIDontProvideAnAorn
 
         Assert.AreEqual(ControllerConstants.SearchUsingAornViewName, viewResponse.ViewName);
         var viewModel = viewResponse.Model as SearchPensionRegulatorByAornViewModel;
-        Assert.AreEqual("Enter your reference number to continue", viewModel.AornError);
+        Assert.AreEqual("Enter your Accounts Office reference in the correct format", viewModel.AornError);
     }
 }

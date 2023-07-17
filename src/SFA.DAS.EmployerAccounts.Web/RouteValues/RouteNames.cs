@@ -3,11 +3,16 @@
     public static class RouteNames
     {
         public const string EmployerTeamIndex = "employer-team-index";
+        public const string EmployerAccountPayBillTriage = "empoyer-account-pay-bill";
+        public const string EmployerAccountPayBillTriagePost = "empoyer-account-pay-bill-post";
+        public const string AddPayeShutter = "add-paye-shutter";
+        public const string NewAccountSaveProgress = "new-account-save-progress";
+        public const string PartialAccountSaveProgress = "partial-account-save-progess";
+
         public const string EmployerAccountGetApprenticeshipFundingInAccount = "employer-account-get-apprentice-funding-in-account";
         public const string EmployerAccountPostApprenticeshipFundingInAccount = "post-employer-account-get-apprentice-funding-in-account";
         public const string EmployerAccountGetApprenticeshipFunding = "employer-account-get-apprentice-funding";
         public const string EmployerAccountPostApprenticeshipFunding = "post-employer-account-get-apprentice-funding";
-        public const string SkipRegistration = "skip-registration";
 
         public const string SearchPensionRegulatorAddOrganisation = "search-pension-regulator-add-org";
         public const string SearchPensionRegulatorCreateAccount = "search-pension-regulator-create-account";
@@ -31,6 +36,16 @@
         public const string EmployerAccountPayeGateway = "account-paye-gateway";
         public const string EmployerAccountPayeGatewayInform = "account-paye-gateway-inform";
         public const string PayePostNextSteps = "paye-post-next-steps";
+
+
+        public const string AccountName = "account-name";
+        public const string AccountNamePost = "account-name-post";
+        public const string RenameAccount = "account-rename";
+        public const string RenameAccountPost = "account-rename-post";
+        public const string AccountNameConfirm = "account-name-confirm";
+        public const string AccountNameConfirmPost = "account-name-confirm-post";
+        public const string AccountNameSuccess = "account-name-success";
+        public const string CreateAccountSuccess = "create-account-success";
 
         public const string PostConfirmRemoveOrganisation = "post-confirm-remove-organisation";
         public const string EmployerAgreementSignYourAgreement = "sign-your-agreement";
@@ -64,6 +79,9 @@
         public const string TriageCannotSetupWithoutApproximateStartDate = "triage-cannot-setup-without-approx-start-date";
         public const string TriageWhenApprenticeshipForExistingEmployee = "triage-existing-employee";
         public const string TriageWhenApprenticeshipForExistingEmployeePost = "triage-existing-employee-post";
+        public const string NewEmpoyerAccountTaskList = "new-account-task-list";
+        public const string ContinueNewEmployerAccountTaskList = "continue-account-task-list";
 
+        public const string OrganisationAndPayeAddedSuccess = "org-and-paye-added-success";
     }
 }

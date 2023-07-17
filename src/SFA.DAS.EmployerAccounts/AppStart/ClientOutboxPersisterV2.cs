@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Data.Common;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using Newtonsoft.Json;
 using NServiceBus.Persistence;
@@ -11,8 +12,9 @@ using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.NServiceBus.SqlServer.Data;
 using SFA.DAS.NServiceBus.SqlServer.Features.ClientOutbox.Data;
 
-namespace SFA.DAS.EmployerAccounts.Web.AppStart
+namespace SFA.DAS.EmployerAccounts.AppStart
 {
+    [ExcludeFromCodeCoverage]
     public class ClientOutboxPersisterV2 : IClientOutboxStorageV2
     {
         private readonly IDateTimeService _dateTimeService;
