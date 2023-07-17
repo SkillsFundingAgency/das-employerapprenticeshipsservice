@@ -3,6 +3,7 @@ using SFA.DAS.EmployerAccounts.Commands.CreateAccount;
 using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 using SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
 using SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountDetail;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
@@ -12,7 +13,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators;
 
 public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
 {
-    private readonly IMediator _mediator;
     private readonly ILogger<EmployerAccountOrchestrator> _logger;
     private readonly IEncodingService _encodingService;
     private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
@@ -28,7 +28,6 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
         IEncodingService encodingService)
         : base(mediator, cookieService, configuration)
     {
-        _mediator = mediator;
         _logger = logger;
         _encodingService = encodingService;
     }
@@ -87,7 +86,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
 
         try
         {
-            await _mediator.Send(new RenameEmployerAccountCommand
+            await Mediator.Send(new RenameEmployerAccountCommand
             {
                 HashedAccountId = hashedAccountId,
                 ExternalUserId = userId,
@@ -159,7 +158,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
 
     private async Task UpdateAccountNameToLegalEntityName(CreateAccountModel model)
     {
-        await _mediator.Send(new RenameEmployerAccountCommand
+        await Mediator.Send(new RenameEmployerAccountCommand
         {
             HashedAccountId = model.HashedAccountId.Value,
             ExternalUserId = model.UserId,
@@ -335,20 +334,15 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
     {
         if (string.IsNullOrEmpty(hashedAccountId))
         {
-            Account firstAccount = await GetFirstUserAccount(userRef);
+            var existingTaskListViewModel = await GetFirstUserAccount(userRef);
 
             return new OrchestratorResponse<AccountTaskListViewModel>
             {
-                Data = new AccountTaskListViewModel
-                {
-                    HashedAccountId = firstAccount?.HashedId,
-                    HasPayeScheme = firstAccount?.AccountHistory.Any() ?? false,
-                    NameConfirmed = firstAccount?.NameConfirmed ?? false
-                }
+                Data = existingTaskListViewModel
             };
         }
 
-        var accountResponse = await _mediator.Send(new GetEmployerAccountDetailByHashedIdQuery
+        var accountResponse = await Mediator.Send(new GetEmployerAccountDetailByHashedIdQuery
         {
             HashedAccountId = hashedAccountId
         });
@@ -368,9 +362,10 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
         };
     }
 
-    private async Task<Account> GetFirstUserAccount(string userRef)
+    private async Task<AccountTaskListViewModel> GetFirstUserAccount(string userRef)
     {
-        var getUserAccountsQueryResponse = await _mediator.Send(new GetUserAccountsQuery
+        var getAccountPayeResponse = new GetAccountPayeSchemesResponse();
+        var getUserAccountsQueryResponse = await Mediator.Send(new GetUserAccountsQuery
         {
             UserRef = userRef
         });
@@ -378,7 +373,20 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
        var firstAccount = getUserAccountsQueryResponse.Accounts.AccountsCount == 0 
             ? null 
             : getUserAccountsQueryResponse.Accounts.AccountList.OrderBy(x => x.CreatedDate).FirstOrDefault();
-        
-        return firstAccount;
+
+        if (firstAccount != null)
+        {
+            getAccountPayeResponse = await Mediator.Send(new GetAccountPayeSchemesQuery
+            {
+                AccountId = firstAccount.Id
+            });
+        }
+
+        return new AccountTaskListViewModel
+        {
+            HashedAccountId = firstAccount?.HashedId,
+            HasPayeScheme = getAccountPayeResponse.PayeSchemes?.Any() ?? false,
+            NameConfirmed = firstAccount?.NameConfirmed ?? false
+        };
     }
 }

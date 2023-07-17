@@ -3,6 +3,7 @@ using AutoFixture.NUnit3;
 using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
 using SFA.DAS.EmployerAccounts.TestCommon.AutoFixture;
 using SFA.DAS.EmployerAccounts.Web.RouteValues;
@@ -30,6 +31,27 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
             // Assert
             mediatorMock.Verify(m => m.Send(It.Is<GetUserAccountsQuery>(q => q.UserRef == userId), It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Test]
+        [DomainAutoData]
+        public async Task Then_Should_Not_Get_PAYE(
+            string userId,
+            GetUserAccountsQueryResponse queryResponse,
+            [Frozen] Mock<IMediator> mediatorMock,
+            [NoAutoProperties] EmployerAccountController controller)
+        {
+            // Arrange
+            queryResponse.Accounts.AccountList.Clear();
+            SetControllerContextUserIdClaim(userId, controller);
+            mediatorMock.Setup(m => m.Send(It.Is<GetUserAccountsQuery>(q => q.UserRef == userId), It.IsAny<CancellationToken>())).ReturnsAsync(queryResponse);
+
+            // Act
+            var result = await controller.CreateAccountTaskList(null) as ViewResult;
+            var model = result.Model as OrchestratorResponse<AccountTaskListViewModel>;
+
+            // Assert
+            mediatorMock.Verify(m => m.Send(It.IsAny<GetAccountPayeSchemesQuery>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Test]
