@@ -102,7 +102,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             var hashedAccountId = redirectUri.Split('/')[2];
 
             var logger = context.HttpContext.RequestServices.GetService(typeof(ILogger)) as ILogger;
-            var accountsService = context.HttpContext.RequestServices.GetService(typeof(IUserAccountService)) as IUserAccountService;
             var db = context.HttpContext.RequestServices.GetService(typeof(EmployerAccountsDbContext)) as EmployerAccountsDbContext;
             logger?.LogDebug("SecurityTokenValidated");
 
@@ -143,8 +142,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             var userEmail = claimsIdentity.Claims.Single(x => x.Type == ClaimTypes.Upn).Value;
 
             claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, $"{firstName} {lastName}"));
-
-            claimsIdentity.AddClaim(new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, "[]"));
 
             if (!string.IsNullOrEmpty(userEmail))
             {

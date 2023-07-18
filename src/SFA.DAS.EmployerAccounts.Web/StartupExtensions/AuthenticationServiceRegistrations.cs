@@ -28,7 +28,7 @@ public static class EmployerAuthenticationServiceRegistrations
         services.AddSingleton<IAuthorizationHandler, EmployerAccountOwnerAuthorizationHandler>();
         services.AddSingleton<IAuthorizationHandler, AccountActiveAuthorizationHandler>();//TODO remove after gov login enabled
         services.AddTransient<IUserAccountService, UserAccountService>();
-        
+
 
         services.AddAuthorization(options =>
         {
@@ -52,6 +52,15 @@ public static class EmployerAuthenticationServiceRegistrations
                 });
             options.AddPolicy(
                 PolicyNames.HasEmployerViewerTransactorOwnerAccount
+                , policy =>
+                {
+                    policy.RequireClaim(EmployerClaims.AccountsClaimsTypeIdentifier);
+                    policy.Requirements.Add(new EmployerAccountAllRolesRequirement());
+                    policy.Requirements.Add(new AccountActiveRequirement());
+                    policy.RequireAuthenticatedUser();
+                });
+            options.AddPolicy(
+                PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport
                 , policy =>
                 {
                     policy.RequireAssertion(_ =>
@@ -124,7 +133,7 @@ public static class EmployerAuthenticationServiceRegistrations
                 options.SlidingExpiration = true;
                 options.Cookie.SameSite = SameSiteMode.None;
                 options.CookieManager = new ChunkingCookieManager { ChunkSize = 3000 };
-            }); 
+            });
 
         services
             .AddOptions<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme)

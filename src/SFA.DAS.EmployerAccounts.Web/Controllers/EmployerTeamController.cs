@@ -2,14 +2,12 @@
 using Microsoft.AspNetCore.Authorization;
 using SFA.DAS.Employer.Shared.UI;
 using SFA.DAS.Employer.Shared.UI.Attributes;
-using SFA.DAS.EmployerAccounts.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerAccounts.Web.RouteValues;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
 [SetNavigationSection(NavigationSection.AccountsTeamsView)]
-[Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
 [Route("accounts/{HashedAccountId}/teams")]
 public class EmployerTeamController : BaseController
 {
@@ -28,6 +26,7 @@ public class EmployerTeamController : BaseController
 
     [HttpGet]
     [SetNavigationSection(NavigationSection.AccountsHome)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     [Route("", Name = RouteNames.EmployerTeamIndex)]
     public async Task<IActionResult> Index(string hashedAccountId)
     {
@@ -58,6 +57,7 @@ public class EmployerTeamController : BaseController
 
     [HttpGet]
     [Route("view", Name = RouteNames.EmployerTeamView)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport))]
     public async Task<IActionResult> ViewTeam(string hashedAccountId)
     {
         var response = await _employerTeamOrchestrator.GetTeamMembers(hashedAccountId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
@@ -73,6 +73,7 @@ public class EmployerTeamController : BaseController
 
     [HttpGet]
     [Route("AddedProvider/{providerName}")]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     public IActionResult AddedProvider([FromRoute] string hashedAccountId, [FromRoute] string providerName)
     {
         AddFlashMessageToCookie(new FlashMessageViewModel
@@ -87,6 +88,7 @@ public class EmployerTeamController : BaseController
 
     [HttpGet]
     [Route("invite", Name = RouteNames.EmployerTeamInvite)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport))]
     public async Task<IActionResult> Invite(string hashedAccountId)
     {
         var response = await _employerTeamOrchestrator.GetNewInvitation(hashedAccountId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
@@ -96,6 +98,7 @@ public class EmployerTeamController : BaseController
 
     [HttpPost]
     [Route("invite", Name = RouteNames.EmployerTeamInvitePost)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport))]
     public async Task<IActionResult> Invite(InviteTeamMemberViewModel model)
     {
         var response = await _employerTeamOrchestrator.InviteTeamMember(model, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
@@ -127,6 +130,7 @@ public class EmployerTeamController : BaseController
 
     [HttpGet]
     [Route("invite/next")]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport))]
     public IActionResult NextSteps(string hashedAccountId)
     {
         var model = new OrchestratorResponse<InviteTeamMemberNextStepsViewModel>
@@ -143,6 +147,7 @@ public class EmployerTeamController : BaseController
 
     [HttpPost]
     [Route("invite/next", Name = RouteNames.EmployerTeamInviteNextPost)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport))]
     public IActionResult NextSteps(int? choice, string hashedAccountId)
     {
         switch (choice ?? 0)
@@ -165,6 +170,7 @@ public class EmployerTeamController : BaseController
 
     [HttpGet]
     [Route("{hashedInvitationId}/cancel", Name = RouteNames.EmployerTeamCancelInvitation)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport))]
     public async Task<IActionResult> Cancel(string hashedInvitationId)
     {
         var invitation = await _employerTeamOrchestrator.GetInvitation(hashedInvitationId);
@@ -174,6 +180,7 @@ public class EmployerTeamController : BaseController
 
     [HttpPost]
     [Route("{hashedInvitationId}/cancel", Name = RouteNames.EmployerTeamCancelInvitationPost)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport))]
     public async Task<IActionResult> Cancel(string hashedInvitationId, string email, string hashedAccountId, int cancel)
     {
         if (cancel != 1)
@@ -186,6 +193,7 @@ public class EmployerTeamController : BaseController
 
     [HttpPost]
     [Route("resend", Name = RouteNames.EmployerTeamResendInvite)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport))]
     public async Task<IActionResult> Resend(string hashedAccountId, string email, string name)
     {
         var response = await _employerTeamOrchestrator.Resend(email, hashedAccountId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName), name);
@@ -195,6 +203,7 @@ public class EmployerTeamController : BaseController
 
     [HttpGet]
     [Route("{email}/remove", Name = RouteNames.RemoveTeamMember)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport))]
     public async Task<IActionResult> Remove(string hashedAccountId, string email)
     {
         var response = await _employerTeamOrchestrator.Review(hashedAccountId, email);
@@ -204,6 +213,7 @@ public class EmployerTeamController : BaseController
 
     [HttpPost]
     [Route("{email}/remove", Name = RouteNames.ConfirmRemoveTeamMember)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport))]
     public async Task<IActionResult> Remove(long userId, string hashedAccountId, string email, int remove)
     {
         Exception exception;
@@ -238,6 +248,7 @@ public class EmployerTeamController : BaseController
 
     [HttpGet]
     [Route("{email}/role/change", Name = RouteNames.EmployerTeamGetChangeRole)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport))]
     public async Task<IActionResult> ChangeRole(string hashedAccountId, string email)
     {
         var teamMember = await _employerTeamOrchestrator.GetTeamMemberWhetherActiveOrNot(hashedAccountId, email, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
@@ -247,6 +258,7 @@ public class EmployerTeamController : BaseController
 
     [HttpPost]
     [Route("{email}/role/change", Name = RouteNames.EmployerTeamChangeRolePost)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport))]
     public async Task<IActionResult> ChangeRole(string hashedAccountId, string email, Role role)
     {
         var response = await _employerTeamOrchestrator.ChangeRole(hashedAccountId, email, role, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
@@ -267,6 +279,7 @@ public class EmployerTeamController : BaseController
 
     [HttpGet]
     [Route("{email}/review", Name = RouteNames.EmployerTeamReview)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport))]
     public async Task<IActionResult> Review(string hashedAccountId, string email)
     {
         var invitation = await _employerTeamOrchestrator.GetTeamMemberWhetherActiveOrNot(hashedAccountId, email, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
@@ -276,6 +289,7 @@ public class EmployerTeamController : BaseController
 
     [HttpGet]
     [Route("continuesetupcreateadvert", Name = RouteNames.CreateAdvert)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     public IActionResult ContinueSetupCreateAdvert(string hashedAccountId)
     {
         return View();
@@ -283,6 +297,7 @@ public class EmployerTeamController : BaseController
 
     [HttpPost]
     [Route("continuesetupcreateadvert", Name = RouteNames.CreateAdvertPost)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     public IActionResult ContinueSetupCreateAdvert(string hashedAccountId, bool? requiresAdvert)
     {
         if (!requiresAdvert.HasValue)
@@ -301,6 +316,7 @@ public class EmployerTeamController : BaseController
 
     [HttpGet]
     [Route("triagewhichcourseyourapprenticewilltake", Name = RouteNames.TriageCourse)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     public IActionResult TriageWhichCourseYourApprenticeWillTake()
     {
         return View();
@@ -308,6 +324,7 @@ public class EmployerTeamController : BaseController
 
     [HttpPost]
     [Route("triagewhichcourseyourapprenticewilltake", Name = RouteNames.TriageCoursePost)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     public IActionResult TriageWhichCourseYourApprenticeWillTake(string hashedAccountId, TriageViewModel model)
     {
         if (!ModelState.IsValid)
@@ -336,6 +353,7 @@ public class EmployerTeamController : BaseController
 
     [HttpGet]
     [Route("triageyoucannotsetupanapprenticeshipyetcourseprovider", Name = RouteNames.TriageCannotSetupWithoutChosenCourseAndProvider)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     public IActionResult TriageYouCannotSetupAnApprenticeshipYetCourseProvider()
     {
         return View();
@@ -343,6 +361,7 @@ public class EmployerTeamController : BaseController
 
     [HttpGet]
     [Route("triagehaveyouchosenatrainingprovider", Name = RouteNames.TriageChosenProvider)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     public IActionResult TriageHaveYouChosenATrainingProvider()
     {
         return View();
@@ -350,6 +369,7 @@ public class EmployerTeamController : BaseController
 
     [HttpPost]
     [Route("triagehaveyouchosenatrainingprovider", Name = RouteNames.TriageChosenProviderPost)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     public IActionResult TriageHaveYouChosenATrainingProvider(string hashedAccountId, TriageViewModel model)
     {
         if (!ModelState.IsValid)
@@ -378,6 +398,7 @@ public class EmployerTeamController : BaseController
 
     [HttpGet]
     [Route("triageyoucannotsetupanapprenticeshipyetprovider", Name = RouteNames.TriageCannotSetupWithoutChosenProvider)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     public IActionResult TriageYouCannotSetupAnApprenticeshipYetProvider()
     {
         return View();
@@ -385,6 +406,7 @@ public class EmployerTeamController : BaseController
 
     [HttpGet]
     [Route("triagewillapprenticeshiptrainingstart", Name = RouteNames.TriageWhenWillApprenticeshipStart)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     public IActionResult TriageWillApprenticeshipTrainingStart()
     {
         return View();
@@ -392,6 +414,7 @@ public class EmployerTeamController : BaseController
 
     [HttpPost]
     [Route("triagewillapprenticeshiptrainingstart", Name = RouteNames.TriageWhenWillApprenticeshipStartPost)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     public IActionResult TriageWillApprenticeshipTrainingStart(string hashedAccountId,TriageViewModel model)
     {
         if (!ModelState.IsValid)
@@ -425,6 +448,7 @@ public class EmployerTeamController : BaseController
 
     [HttpGet]
     [Route("triageyoucannotsetupanapprenticeshipyetstartdate", Name = RouteNames.TriageCannotSetupWithoutStartDate)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     public IActionResult TriageYouCannotSetupAnApprenticeshipYetStartDate()
     {
         return View();
@@ -432,6 +456,7 @@ public class EmployerTeamController : BaseController
 
     [HttpGet]
     [Route("triageyoucannotsetupanapprenticeshipyetapproximatestartdate", Name = RouteNames.TriageCannotSetupWithoutApproximateStartDate)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     public IActionResult TriageYouCannotSetupAnApprenticeshipYetApproximateStartDate()
     {
         return View();
@@ -439,6 +464,7 @@ public class EmployerTeamController : BaseController
 
     [HttpGet]
     [Route("triageapprenticeforexistingemployee", Name = RouteNames.TriageWhenApprenticeshipForExistingEmployee)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     public IActionResult TriageApprenticeForExistingEmployee()
     {
         return View();
@@ -446,6 +472,7 @@ public class EmployerTeamController : BaseController
 
     [HttpPost]
     [Route("triageapprenticeforexistingemployee", Name = RouteNames.TriageWhenApprenticeshipForExistingEmployeePost)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
     public IActionResult TriageApprenticeForExistingEmployee(TriageViewModel model)
     {
         if (!ModelState.IsValid)
@@ -470,26 +497,6 @@ public class EmployerTeamController : BaseController
                     return View(model);
                 }
         }
-    }
-
-    public override IActionResult SupportUserBanner(IAccountIdentifier model = null)
-    {
-        Account account = null;
-
-        if (model != null && model.HashedAccountId != null)
-        {
-            var externalUserId = HttpContext.User.Claims.First(x => x.Type.Equals(ControllerConstants.UserRefClaimKeyName)).Value;
-            var response = AsyncHelper.RunSync(() => _employerTeamOrchestrator.GetAccountSummary(model.HashedAccountId, externalUserId));
-            account = response.Status != HttpStatusCode.OK ? null : response.Data.Account;
-        }
-
-        var consoleUserType = HttpContext.User.Claims.First(x => x.Type.Equals(ClaimTypes.Role)).Value == "Tier2User" ? "Service user (T2 Support)" : "Standard user";
-
-        return ViewComponent("SupportUserBanner", new SupportUserBannerViewModel
-        {
-            Account = account,
-            ConsoleUserType = consoleUserType
-        });
     }
 
     private async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccountInformation(string hashedAccountId)
