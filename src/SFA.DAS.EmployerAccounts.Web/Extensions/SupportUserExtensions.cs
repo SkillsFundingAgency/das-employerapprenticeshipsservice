@@ -169,7 +169,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
 
         private static string GetServiceUrl(string wreply)
         {
-            return $"{(wreply.EndsWith('/') ? wreply : wreply + "/")}service";
+            return $"{(wreply.EndsWith('/') ? wreply : wreply + "/")}staff";
         }
     }
 

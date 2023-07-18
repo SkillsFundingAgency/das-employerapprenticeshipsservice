@@ -182,15 +182,7 @@ public class Startup
         }
 
         app.UseSupportConsoleAuthentication();
-
-        app.MapWhen(ctx => ctx.Request.Path == "/", builder =>
-        {
-            builder.Run(async ctx =>
-            {
-                ctx.Response.Redirect("/service");
-                await Task.CompletedTask;
-            });
-        });
+        MapRouteForStaffAuthReply(app);
 
         app.UseUnitOfWork();
 
@@ -205,11 +197,23 @@ public class Startup
 
         app.UseRouting();
         app.UseAuthorization();
+
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+        });
+    }
+
+    private static void MapRouteForStaffAuthReply(IApplicationBuilder app)
+    {
+        app.MapWhen(ctx => ctx.Request.Path == "/staff", builder =>
+        {
+            builder.Run(async ctx =>
+            {
+                await Task.CompletedTask;
+            });
         });
     }
 }
