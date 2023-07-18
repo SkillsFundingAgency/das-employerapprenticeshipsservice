@@ -26,9 +26,12 @@ public class EmployerAccountController : BaseController
     private readonly ICookieStorageService<ReturnUrlModel> _returnUrlCookieStorageService;
     private readonly string _hashedAccountIdCookieName;
 
-    private const int AddPayeLater = 1;
-    private const int AddPayeNow = 2;
-    private const int AddPayeNowAorn = 3;
+    private const int Over3Million = 1;
+    private const int CloseTo3Million = 2;
+    private const int LessThan3Million = 3;
+    public const int AddPayeGovGateway = 1;
+    public const int AddPayeAorn = 2;
+
     public const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
 
     public EmployerAccountController(EmployerAccountOrchestrator employerAccountOrchestrator,
@@ -47,6 +50,112 @@ public class EmployerAccountController : BaseController
         _accountCookieStorage = accountCookieStorage;
         _linkGenerator = linkGenerator;
         _hashedAccountIdCookieName = typeof(HashedAccountIdModel).FullName;
+    }
+
+    [HttpGet]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    [Route("create/tasklist", Order = 1, Name = RouteNames.NewEmpoyerAccountTaskList)]
+    [Route("{HashedAccountId}/tasklist", Order = 2, Name = RouteNames.ContinueNewEmployerAccountTaskList)]
+    public async Task<IActionResult> CreateAccountTaskList(string hashedAccountId)
+    {
+        var userIdClaim = HttpContext.User.Claims.First(x => x.Type.Equals(ControllerConstants.UserRefClaimKeyName));
+        var accountTaskListViewModel = await _employerAccountOrchestrator.GetCreateAccountTaskList(hashedAccountId, userIdClaim.Value);
+
+        return View(nameof(CreateAccountTaskList), accountTaskListViewModel);
+    }
+
+    [HttpGet]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    [Route("create/progress-saved", Order = 1, Name = RouteNames.NewAccountSaveProgress)]
+    [Route("{HashedAccountId}/progress-saved", Order = 2, Name = RouteNames.PartialAccountSaveProgress)]
+    public IActionResult CreateAccountProgressSaved(string hashedAccountId)
+    {
+        return View(new CreateAccountProgressSavedViewModel { HashedAccountId = hashedAccountId });
+    }
+
+    [HttpGet]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    [Route("{HashedAccountId}/cannotAddPaye", Name = RouteNames.AddPayeShutter)]
+    public IActionResult AddPayeShutter(string hashedAccountId)
+    {
+        return View();
+    }
+
+    [HttpGet]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    [Route("payBill", Name = RouteNames.EmployerAccountPayBillTriage)]
+    public IActionResult PayBillTriage(string hashedAccountId)
+    {
+        if (!string.IsNullOrEmpty(hashedAccountId))
+        {
+            return RedirectToRoute(RouteNames.AddPayeShutter, new { hashedAccountId });
+        }
+
+        var model = new
+        {
+            HideHeaderSignInLink = true
+        };
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    [Route("payBill", Order = 1, Name = RouteNames.EmployerAccountPayBillTriagePost)]
+    public IActionResult PayBillTriage(int? choice)
+    {
+        switch (choice ?? 0)
+        {
+            case Over3Million:
+            case CloseTo3Million: return RedirectToAction(ControllerConstants.GatewayInformActionName);
+            case LessThan3Million: return RedirectToRoute(RouteNames.EmployerAccountGetApprenticeshipFunding);
+            default:
+                {
+                    var model = new
+                    {
+                        InError = true
+                    };
+
+                    return View(model);
+                }
+        }
+    }
+
+    [HttpGet]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    [Route("{HashedAccountId}/getApprenticeshipFunding", Order = 0, Name = RouteNames.EmployerAccountGetApprenticeshipFundingInAccount)]
+    [Route("getApprenticeshipFunding", Order = 1, Name = RouteNames.EmployerAccountGetApprenticeshipFunding)]
+    public IActionResult GetApprenticeshipFunding()
+    {
+        PopulateViewBagWithExternalUserId();
+        var model = new
+        {
+            HideHeaderSignInLink = true
+        };
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    [Route("{hashedAccountId}/getApprenticeshipFunding", Order = 0, Name = RouteNames.EmployerAccountPostApprenticeshipFundingInAccount)]
+    [Route("getApprenticeshipFunding", Order = 1, Name = RouteNames.EmployerAccountPostApprenticeshipFunding)]
+    public IActionResult GetApprenticeshipFunding(string hashedAccountId, int? choice)
+    {
+        switch (choice ?? 0)
+        {
+            case AddPayeGovGateway: return RedirectToAction(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName, new { hashedAccountId });
+            case AddPayeAorn: return RedirectToAction(ControllerConstants.SearchUsingAornActionName, ControllerConstants.SearchPensionRegulatorControllerName, new { hashedAccountId });
+            default:
+                {
+                    var model = new
+                    {
+                        InError = true
+                    };
+
+                    return View(model);
+                }
+        }
     }
 
     [HttpGet]
@@ -69,6 +178,7 @@ public class EmployerAccountController : BaseController
             {
                 BreadcrumbDescription = "Back to Your User Profile",
                 ConfirmUrl = _linkGenerator.GetUriByAction(HttpContext, ControllerConstants.GatewayViewName, ControllerConstants.EmployerAccountControllerName),
+                CancelRoute = string.IsNullOrEmpty(hashedAccountId) ? RouteNames.NewEmpoyerAccountTaskList : RouteNames.EmployerAccountPaye,
             }
         };
 
@@ -163,69 +273,6 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpGet]
-    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
-    [Route("{HashedAccountId}/getApprenticeshipFunding", Order = 0, Name = RouteNames.EmployerAccountGetApprenticeshipFundingInAccount)]
-    [Route("getApprenticeshipFunding", Order = 1, Name = RouteNames.EmployerAccountGetApprenticeshipFunding)]
-    public IActionResult GetApprenticeshipFunding()
-    {
-        PopulateViewBagWithExternalUserId();
-        var model = new
-        {
-            HideHeaderSignInLink = true
-        };
-
-        return View("~/Views/EmployerAccount/GetApprenticeshipFunding.cshtml", model);
-
-    }
-
-    [HttpPost]
-    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
-    [Route("{hashedAccountId}/getApprenticeshipFunding", Order = 0, Name = RouteNames.EmployerAccountPostApprenticeshipFundingInAccount)]
-    [Route("getApprenticeshipFunding", Order = 1, Name = RouteNames.EmployerAccountPostApprenticeshipFunding)]
-    public IActionResult GetApprenticeshipFunding(string hashedAccountId, int? choice)
-    {
-        switch (choice ?? 0)
-        {
-            case AddPayeLater: return RedirectToRoute(RouteNames.SkipRegistration);
-            case AddPayeNow: return RedirectToAction(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName, new { hashedAccountId });
-            case AddPayeNowAorn: return RedirectToAction(ControllerConstants.SearchUsingAornActionName, ControllerConstants.SearchPensionRegulatorControllerName, new { hashedAccountId });
-            default:
-                {
-                    var model = new
-                    {
-                        HideHeaderSignInLink = true,
-                        InError = true
-                    };
-
-                    return View(model);
-                }
-        }
-    }
-
-    [HttpGet]
-    [Route("skipRegistration", Name = RouteNames.SkipRegistration)]
-    public async Task<IActionResult> SkipRegistration()
-    {
-        var request = new CreateUserAccountViewModel
-        {
-            UserId = GetUserId(),
-            OrganisationName = "MY ACCOUNT"
-        };
-
-        var response = await _employerAccountOrchestrator.CreateMinimalUserAccountForSkipJourney(request, HttpContext);
-        var returnUrlCookie = _returnUrlCookieStorageService.Get(ReturnUrlCookieName);
-
-        _returnUrlCookieStorageService.Delete(ReturnUrlCookieName);
-
-        if (returnUrlCookie != null && !string.IsNullOrWhiteSpace(returnUrlCookie.Value))
-        {
-            return Redirect(returnUrlCookie.Value);
-        }
-
-        return RedirectToRoute(RouteNames.EmployerTeamIndex, new { hashedAccountId = response.Data.HashedId });
-    }
-
-    [HttpGet]
     [Route("payeerror")]
     public ViewResult PayeError(bool? notFound)
     {
@@ -300,11 +347,11 @@ public class EmployerAccountController : BaseController
         if (returnUrlCookie != null && !string.IsNullOrWhiteSpace(returnUrlCookie.Value))
             return Redirect(returnUrlCookie.Value);
 
-        return RedirectToAction(ControllerConstants.WhenDoYouWantToView, ControllerConstants.EmployerAgreementControllerName, new { hashedAccountId = response.Data.EmployerAgreement.HashedAccountId, hashedAgreementId = response.Data.EmployerAgreement.HashedAgreementId });
+        return RedirectToRoute(RouteNames.OrganisationAndPayeAddedSuccess, new { hashedAccountId = response.Data.EmployerAgreement.HashedAccountId });
     }
 
     [HttpGet]
-    [Route("{HashedAccountId}/rename")]
+    [Route("{HashedAccountId}/rename", Name = RouteNames.RenameAccount)]
     public async Task<IActionResult> RenameAccount(string hashedAccountId)
     {
         var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
@@ -313,7 +360,7 @@ public class EmployerAccountController : BaseController
     }
 
     [HttpPost]
-    [Route("{HashedAccountId}/rename")]
+    [Route("{HashedAccountId}/rename", Name = RouteNames.RenameAccountPost)]
     public async Task<IActionResult> RenameAccount(string hashedAccountId, RenameEmployerAccountViewModel vm)
     {
         var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
@@ -345,6 +392,114 @@ public class EmployerAccountController : BaseController
         errorResponse.Status = response.Status;
 
         return View(errorResponse);
+    }
+
+    [HttpGet]
+    [Route("{HashedAccountId}/create/accountName", Name = RouteNames.AccountName)]
+    public async Task<IActionResult> AccountName(string hashedAccountId)
+    {
+        var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+        var vm = await _employerAccountOrchestrator.GetRenameEmployerAccountViewModel(hashedAccountId, userIdClaim);
+        return View(vm);
+    }
+
+    [HttpPost]
+    [Route("{HashedAccountId}/create/accountName", Name = RouteNames.AccountNamePost)]
+    public async Task<IActionResult> AccountName(string hashedAccountId, RenameEmployerAccountViewModel vm)
+    {
+        var response = new OrchestratorResponse<RenameEmployerAccountViewModel>();
+
+        switch (vm.ChangeAccountName)
+        {
+            case true:
+                {
+                    if (string.IsNullOrEmpty(vm.NewName))
+                    {
+                        // Model validation failed, return the view with validation errors
+                        vm.ErrorDictionary.Add(nameof(vm.NewName), "Enter a name");
+                        response.Data = vm;
+                        response.Status = response.Status = HttpStatusCode.BadRequest;
+                        return View(response);
+                    }
+
+                    return RedirectToRoute(RouteNames.AccountNameConfirm, new { hashedAccountId, NewAccountName = Uri.EscapeDataString(vm.NewName) });
+                }
+            case false:
+                {
+                    var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+                    response = await _employerAccountOrchestrator.RenameEmployerAccount(hashedAccountId, vm, userIdClaim);
+
+                    if (response.Status == HttpStatusCode.OK)
+                    {
+                        return RedirectToRoute(RouteNames.AccountNameSuccess, new { hashedAccountId });
+                    }
+
+                    response.Data = vm;
+
+                    return View(response);
+                }
+            default:
+                {
+                    // Model validation failed, return the view with validation errors
+                    vm.ErrorDictionary.Add(nameof(vm.ChangeAccountName), "Please select whether you wish to set a new Employer Account name.");
+                    response.Data = vm;
+                    response.Status = response.Status = HttpStatusCode.BadRequest;
+                    return View(response);
+                }
+        }
+    }
+
+    [HttpGet]
+    [Route("{HashedAccountId}/create/accountName/confirm", Name = RouteNames.AccountNameConfirm)]
+    public IActionResult AccountNameConfirm(string hashedAccountId, string newAccountName)
+    {
+        return View(new RenameEmployerAccountViewModel
+        {
+            ChangeAccountName = true,
+            NewName = Uri.UnescapeDataString(newAccountName)
+        });
+    }
+
+    [HttpPost]
+    [Route("{HashedAccountId}/create/accountName/confirm", Name = RouteNames.AccountNameConfirmPost)]
+    public async Task<IActionResult> AccountNameConfirm(string hashedAccountId, RenameEmployerAccountViewModel vm)
+    {
+        var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+        var response = await _employerAccountOrchestrator.RenameEmployerAccount(hashedAccountId, vm, userIdClaim);
+
+        if (response.Status == HttpStatusCode.OK)
+        {
+            return RedirectToRoute(RouteNames.AccountNameSuccess, new { hashedAccountId });
+        }
+
+        response.Data = vm;
+
+        return View(response);
+    }
+
+    [HttpGet]
+    [Route("{HashedAccountId}/create/orgAndPaye/success", Name = RouteNames.OrganisationAndPayeAddedSuccess)]
+    public IActionResult OrganisationAndPayeAddedSuccess(string hashedAccountId)
+    {
+        return View();
+    }
+
+    [HttpGet]
+    [Route("{HashedAccountId}/create/accountName/success", Name = RouteNames.AccountNameSuccess)]
+    public async Task<IActionResult> AccountNameSuccess(string hashedAccountId)
+    {
+        var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+        var vm = await _employerAccountOrchestrator.GetRenameEmployerAccountViewModel(hashedAccountId, userIdClaim);
+        return View(vm);
+    }
+
+    [HttpGet]
+    [Route("{HashedAccountId}/create/success", Name = RouteNames.CreateAccountSuccess)]
+    public async Task<IActionResult> CreateAccountSuccess(string hashedAccountId)
+    {
+        var userIdClaim = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+        var vm = await _employerAccountOrchestrator.GetRenameEmployerAccountViewModel(hashedAccountId, userIdClaim);
+        return View(vm);
     }
 
     [HttpGet]

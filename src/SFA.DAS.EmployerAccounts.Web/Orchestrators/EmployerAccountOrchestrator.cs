@@ -3,7 +3,9 @@ using SFA.DAS.EmployerAccounts.Commands.CreateAccount;
 using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 using SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
 using SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountDetail;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
 using SFA.DAS.Encoding;
 
@@ -11,7 +13,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators;
 
 public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
 {
-    private readonly IMediator _mediator;
     private readonly ILogger<EmployerAccountOrchestrator> _logger;
     private readonly IEncodingService _encodingService;
     private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
@@ -20,14 +21,13 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
     protected EmployerAccountOrchestrator() { }
 
     public EmployerAccountOrchestrator(
-        IMediator mediator, 
-        ILogger<EmployerAccountOrchestrator> logger, 
+        IMediator mediator,
+        ILogger<EmployerAccountOrchestrator> logger,
         ICookieStorageService<EmployerAccountData> cookieService,
         EmployerAccountsConfiguration configuration,
         IEncodingService encodingService)
         : base(mediator, cookieService, configuration)
     {
-        _mediator = mediator;
         _logger = logger;
         _encodingService = encodingService;
     }
@@ -62,6 +62,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
         {
             Data = new RenameEmployerAccountViewModel
             {
+                LegalEntityName = response.Account.AccountLegalEntities.OrderBy(x => x.Created).First()?.Name,
                 CurrentName = response.Account.Name,
                 NewName = string.Empty
             }
@@ -85,7 +86,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
 
         try
         {
-            await _mediator.Send(new RenameEmployerAccountCommand
+            await Mediator.Send(new RenameEmployerAccountCommand
             {
                 HashedAccountId = hashedAccountId,
                 ExternalUserId = userId,
@@ -102,13 +103,6 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
             response.Status = HttpStatusCode.BadRequest;
             response.Data.ErrorDictionary = ex.ErrorMessages;
             response.Exception = ex;
-            response.FlashMessage = new FlashMessageViewModel
-            {
-                Headline = "Errors to fix",
-                Message = "Check the following details:",
-                ErrorMessages = ex.ErrorMessages,
-                Severity = FlashMessageSeverityLevel.Error
-            };
         }
 
         return response;
@@ -151,7 +145,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception,"Create Account Validation Error: {Message}", exception.Message);
+            _logger.LogError(exception, "Create Account Validation Error: {Message}", exception.Message);
             return new OrchestratorResponse<EmployerAgreementViewModel>
             {
                 Data = new EmployerAgreementViewModel(),
@@ -164,7 +158,7 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
 
     private async Task UpdateAccountNameToLegalEntityName(CreateAccountModel model)
     {
-        await _mediator.Send(new RenameEmployerAccountCommand
+        await Mediator.Send(new RenameEmployerAccountCommand
         {
             HashedAccountId = model.HashedAccountId.Value,
             ExternalUserId = model.UserId,
@@ -334,5 +328,65 @@ public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
     public virtual void DeleteCookieData()
     {
         CookieService.Delete(CookieName);
+    }
+
+    public virtual async Task<OrchestratorResponse<AccountTaskListViewModel>> GetCreateAccountTaskList(string hashedAccountId, string userRef)
+    {
+        if (string.IsNullOrEmpty(hashedAccountId))
+        {
+            var existingTaskListViewModel = await GetFirstUserAccount(userRef);
+
+            return new OrchestratorResponse<AccountTaskListViewModel>
+            {
+                Data = existingTaskListViewModel
+            };
+        }
+
+        var accountResponse = await Mediator.Send(new GetEmployerAccountDetailByHashedIdQuery
+        {
+            HashedAccountId = hashedAccountId
+        });
+
+        if (accountResponse == null || accountResponse.Account == null)
+        {
+            return new OrchestratorResponse<AccountTaskListViewModel> { Status = HttpStatusCode.NotFound };
+        }
+
+        return new OrchestratorResponse<AccountTaskListViewModel>
+        {
+            Data = new AccountTaskListViewModel
+            {
+                HashedAccountId = hashedAccountId,
+                HasPayeScheme = accountResponse?.Account?.PayeSchemes?.Any() ?? false
+            }
+        };
+    }
+
+    private async Task<AccountTaskListViewModel> GetFirstUserAccount(string userRef)
+    {
+        var getAccountPayeResponse = new GetAccountPayeSchemesResponse();
+        var getUserAccountsQueryResponse = await Mediator.Send(new GetUserAccountsQuery
+        {
+            UserRef = userRef
+        });
+
+       var firstAccount = !getUserAccountsQueryResponse.Accounts.AccountList.Any() 
+            ? null 
+            : getUserAccountsQueryResponse.Accounts.AccountList.OrderBy(x => x.CreatedDate).FirstOrDefault();
+
+        if (firstAccount != null)
+        {
+            getAccountPayeResponse = await Mediator.Send(new GetAccountPayeSchemesQuery
+            {
+                AccountId = firstAccount.Id
+            });
+        }
+
+        return new AccountTaskListViewModel
+        {
+            HashedAccountId = firstAccount?.HashedId,
+            HasPayeScheme = getAccountPayeResponse.PayeSchemes?.Any() ?? false,
+            NameConfirmed = firstAccount?.NameConfirmed ?? false
+        };
     }
 }

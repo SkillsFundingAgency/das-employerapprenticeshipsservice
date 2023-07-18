@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,14 +21,21 @@ using SFA.DAS.EmployerAccounts.Api.Filters;
 using SFA.DAS.EmployerAccounts.Api.ServiceRegistrations;
 using SFA.DAS.EmployerAccounts.Authorisation;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Mappings;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerAccounts.ServiceRegistration;
+using SFA.DAS.EmployerAccounts.Startup;
+using SFA.DAS.NServiceBus.Features.ClientOutbox.Data;
+using SFA.DAS.UnitOfWork.DependencyResolution.Microsoft;
+using SFA.DAS.UnitOfWork.EntityFrameworkCore.DependencyResolution.Microsoft;
+using SFA.DAS.UnitOfWork.Mvc.Extensions;
 using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.Microsoft;
 using SFA.DAS.Validation.Mvc.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.Api;
 
+[ExcludeFromCodeCoverage]
 public class Startup
 {
     private readonly IConfiguration _configuration;
@@ -62,12 +71,15 @@ public class Startup
         services.AddDasHealthChecks(employerAccountsConfiguration);
         services.AddOrchestrators();
 
-        // services.AddEntityFrameworkUnitOfWork<EmployerAccountsDbContext>();
+        services
+            .AddUnitOfWork()
+            .AddEntityFramework(employerAccountsConfiguration)
+            .AddEntityFrameworkUnitOfWork<EmployerAccountsDbContext>();
+
         services.AddNServiceBusClientUnitOfWork();
 
         services.AddDatabaseRegistration();
         services.AddDataRepositories();
-        //services.AddEventsApi(employerAccountsConfiguration);
         services.AddExecutionPolicies();
 
         services.AddAutoMapper(typeof(AccountMappings), typeof(Startup));
@@ -99,6 +111,12 @@ public class Startup
     public void ConfigureContainer(UpdateableServiceProvider serviceProvider)
     {
         serviceProvider.StartNServiceBus(_configuration.IsDevOrLocal(), ServiceBusEndpointType.Api);
+        // Replacing ClientOutboxPersisterV2 with a local version to fix unit of work issue due to propogating Task up the chain rather than awaiting on DB Command.
+        // not clear why this fixes the issue. Attempted to make the change in SFA.DAS.Nservicebus.SqlServer however it conflicts when upgraded with SFA.DAS.UnitOfWork.Nservicebus
+        // which would require upgrading to NET6 to resolve.
+        var serviceDescriptor = serviceProvider.FirstOrDefault(serv => serv.ServiceType == typeof(IClientOutboxStorageV2));
+        serviceProvider.Remove(serviceDescriptor);
+        serviceProvider.AddScoped<IClientOutboxStorageV2, AppStart.ClientOutboxPersisterV2>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
@@ -118,7 +136,7 @@ public class Startup
             .UseStaticFiles()
             .UseDasHealthChecks()
             .UseAuthentication()
-            //.UseUnitOfWork()
+            .UseUnitOfWork()
             .UseRouting()
             .UseAuthorization()
             .UseEndpoints(endpoints =>

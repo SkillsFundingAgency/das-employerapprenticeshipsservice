@@ -38,7 +38,7 @@ public class UserAornPayeLockService : IUserAornPayeLockService
     {
         try
         {
-            var lockLimit = DateTime.Now.AddMinutes(-_configuration.LockoutTimeSpanMinutes);
+            var lockLimit = DateTime.UtcNow.AddMinutes(-_configuration.LockoutTimeSpanMinutes);
             var attempts = (await _userRepository.GetAornPayeQueryAttempts(userRef)).Where(a => a > lockLimit).OrderByDescending(a => a).ToList();
 
             if (attempts.Count >= _configuration.NumberOfPermittedAttempts)
@@ -51,7 +51,7 @@ public class UserAornPayeLockService : IUserAornPayeLockService
             {
                 IsLocked = false,
                 RemainingAttempts = _configuration.NumberOfPermittedAttempts -
-                                    attempts.Count(a => (DateTime.Now - a).TotalMinutes <= _configuration.PermittedAttemptsTimeSpanMinutes),
+                                    attempts.Count(a => (DateTime.UtcNow - a).TotalMinutes <= _configuration.PermittedAttemptsTimeSpanMinutes),
                 AllowedAttempts = _configuration.NumberOfPermittedAttempts
             };
         }
@@ -77,7 +77,7 @@ public class UserAornPayeLockService : IUserAornPayeLockService
                 return new UserAornPayeStatus
                 {
                     IsLocked = true,
-                    RemainingLock = Convert.ToInt32((attempts.First().AddMinutes(_configuration.LockoutTimeSpanMinutes) - DateTime.Now).TotalMinutes),
+                    RemainingLock = Convert.ToInt32((attempts.First().AddMinutes(_configuration.LockoutTimeSpanMinutes) - DateTime.UtcNow).TotalMinutes),
                     RemainingAttempts = 0,
                     AllowedAttempts = _configuration.NumberOfPermittedAttempts
                 };
