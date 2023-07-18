@@ -182,7 +182,6 @@ public class Startup
         }
 
         app.UseSupportConsoleAuthentication();
-        MapRouteForStaffAuthReply(app);
 
         app.UseUnitOfWork();
 
@@ -203,17 +202,6 @@ public class Startup
             endpoints.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
-        });
-    }
-
-    private static void MapRouteForStaffAuthReply(IApplicationBuilder app)
-    {
-        app.MapWhen(ctx => ctx.Request.Path == "/staff", builder =>
-        {
-            builder.Run(async ctx =>
-            {
-                await Task.CompletedTask;
-            });
         });
     }
 }
