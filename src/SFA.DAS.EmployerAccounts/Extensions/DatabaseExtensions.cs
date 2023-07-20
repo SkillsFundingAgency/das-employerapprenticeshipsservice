@@ -25,7 +25,7 @@ public static class DatabaseExtensions
         }
 
         var azureServiceTokenProvider = new ChainedTokenCredential(
-            //new ManagedIdentityCredential(),
+            new ManagedIdentityCredential(),
             new AzureCliCredential(),
             new VisualStudioCodeCredential(),
             new VisualStudioCredential());

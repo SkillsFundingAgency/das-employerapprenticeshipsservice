@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
         private static async Task<string> GetManagedIdentityAuthenticationResult(string resource)
         {
             var azureServiceTokenProvider = new ChainedTokenCredential(
-                //new ManagedIdentityCredential(),
+                new ManagedIdentityCredential(),
                 new AzureCliCredential(),
                 new VisualStudioCodeCredential(),
                 new VisualStudioCredential()
