@@ -190,7 +190,7 @@ public class Startup
         app.UseCookiePolicy(new CookiePolicyOptions
         {
             Secure = CookieSecurePolicy.Always,
-            MinimumSameSitePolicy = SameSiteMode.Strict,
+            MinimumSameSitePolicy = SameSiteMode.None,
             HttpOnly = HttpOnlyPolicy.Always
         });
 
