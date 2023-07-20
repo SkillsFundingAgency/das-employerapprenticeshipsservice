@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using SFA.DAS.EmployerAccounts.Infrastructure;
-using SFA.DAS.EmployerAccounts.Models.UserAccounts;
 using SFA.DAS.EmployerAccounts.Services;
-using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.GovUK.Auth.Services;
 
@@ -15,13 +13,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Handlers;
 public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
 {
     private readonly IUserAccountService _userAccountService;
-    private readonly IConfiguration _configuration;
     private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
 
-    public EmployerAccountPostAuthenticationClaimsHandler(IUserAccountService userAccountService, IConfiguration configuration, IOptions<EmployerAccountsConfiguration> employerAccountsConfiguration)
+    public EmployerAccountPostAuthenticationClaimsHandler(IUserAccountService userAccountService, IOptions<EmployerAccountsConfiguration> employerAccountsConfiguration)
     {
         _userAccountService = userAccountService;
-        _configuration = configuration;
         _employerAccountsConfiguration = employerAccountsConfiguration.Value;
     }
     public async Task<IEnumerable<Claim>> GetClaims(TokenValidatedContext tokenValidatedContext)
