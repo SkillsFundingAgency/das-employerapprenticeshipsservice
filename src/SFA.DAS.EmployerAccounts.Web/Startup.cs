@@ -170,6 +170,9 @@ public class Startup
         app.UseUnitOfWork();
 
         app.UseStaticFiles();
+
+        app.UseMiddleware<RobotsTextMiddleware>();
+
         app.UseAuthentication();
         app.UseRouting();
         app.UseAuthorization();

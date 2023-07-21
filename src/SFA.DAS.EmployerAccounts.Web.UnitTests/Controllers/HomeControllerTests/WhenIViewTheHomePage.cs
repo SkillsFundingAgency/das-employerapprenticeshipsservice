@@ -65,7 +65,7 @@ public class WhenIViewTheHomePage : ControllerTestBase
             _configuration,
             _flashMessage.Object,
             Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
-            Mock.Of<ILogger<HomeController>>(), null, null,
+            Mock.Of<ILogger<HomeController>>(), configurationMock.Object, null,
             _urlActionHelper)
         {
             ControllerContext = new ControllerContext { HttpContext = MockHttpContext.Object },
