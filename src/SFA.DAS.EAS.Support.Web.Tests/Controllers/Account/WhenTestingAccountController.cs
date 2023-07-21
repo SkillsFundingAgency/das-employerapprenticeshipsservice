@@ -3,6 +3,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
+using SFA.DAS.EAS.Support.Web.Configuration;
 using SFA.DAS.EAS.Support.Web.Controllers;
 using SFA.DAS.EAS.Support.Web.Models;
 using SFA.DAS.EAS.Support.Web.Services;
@@ -23,7 +24,9 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Account
             _payeLevySubmissionsHandler = new Mock<IPayeLevySubmissionsHandler>();
             _payeLevyDeclarationMapper = new Mock<IPayeLevyMapper>();
 
-            Unit = new AccountController(AccountHandler.Object,
+            Unit = new AccountController(
+                Mock.Of<IEasSupportConfiguration>(),
+                AccountHandler.Object,
                 _payeLevySubmissionsHandler.Object,
                 _payeLevyDeclarationMapper.Object);
         }

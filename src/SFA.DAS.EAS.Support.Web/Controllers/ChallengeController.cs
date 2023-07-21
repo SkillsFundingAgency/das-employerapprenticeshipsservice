@@ -7,7 +7,7 @@ using SFA.DAS.EAS.Support.Web.Models;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers;
 
-[Authorize(Policy = PolicyNames.IsSupportPortalUser)]
+[Authorize(Policy = PolicyNames.Default)]
 public class ChallengeController : Controller
 {
     private readonly IChallengeHandler _handler;
@@ -34,11 +34,13 @@ public class ChallengeController : Controller
             return NotFound($"There was a problem finding the account {id}");
         }
 
-        return View(new ChallengeViewModel
+        var model = new ChallengeViewModel
         {
             Characters = response.Characters,
             Id = id
-        });
+        };
+        
+        return View(model);
     }
 
     [HttpPost]
@@ -54,7 +56,6 @@ public class ChallengeController : Controller
                 IsValidResponse = true
             });
         }
-
 
         var model = new ChallengeViewModel
         {

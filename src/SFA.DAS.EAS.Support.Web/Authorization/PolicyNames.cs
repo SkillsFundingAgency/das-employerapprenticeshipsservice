@@ -2,5 +2,5 @@
 
 public static class PolicyNames
 {
-    public const string IsSupportPortalUser = nameof(IsSupportPortalUser);
+    public const string Default = "default";
 }
