@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Routing;
@@ -46,6 +47,8 @@ public class Startup
 
         services.AddLogging();
 
+        services.AddHttpContextAccessor();
+
         services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
         services.AddConfigurationOptions(_configuration);
         var identityServerConfiguration = _configuration
@@ -64,7 +67,7 @@ public class Startup
 
         if (employerAccountsConfiguration.UseGovSignIn)
         {
-            services.AddMaMenuConfiguration(RouteNames.SignOut,  _configuration["ResourceEnvironmentName"]);
+            services.AddMaMenuConfiguration(RouteNames.SignOut, _configuration["ResourceEnvironmentName"]);
         }
         else
         {
@@ -81,7 +84,6 @@ public class Startup
             .AddUnitOfWork()
             .AddEntityFramework(employerAccountsConfiguration)
             .AddEntityFrameworkUnitOfWork<EmployerAccountsDbContext>();
-
         services.AddNServiceBusClientUnitOfWork();
         services.AddEmployerAccountsApi();
         services.AddExecutionPolicies();
@@ -98,6 +100,8 @@ public class Startup
         services.AddMediatorValidators();
         services.AddMediatR(typeof(GetEmployerAccountByIdQuery));
 
+        var authenticationBuilder = services.AddAuthentication();
+
         if (_configuration.UseGovUkSignIn())
         {
             var govConfig = _configuration.GetSection("SFA.DAS.Employer.GovSignIn");
@@ -113,8 +117,18 @@ public class Startup
             services.AddAndConfigureEmployerAuthentication(identityServerConfiguration);
         }
 
-        // TODO: Support sign in 
-        //services.AddAndConfigureSupportUserAuthentications(new SupportConsoleAuthenticationOptions());
+        var staffAuthConfig = new SupportConsoleAuthenticationOptions
+        {
+            AdfsOptions = new ADFSOptions
+            {
+                MetadataAddress = employerAccountsConfiguration.AdfsMetadata,
+                Wreply = employerAccountsConfiguration.EmployerAccountsBaseUrl,
+                Wtrealm = employerAccountsConfiguration.EmployerAccountsBaseUrl,
+                BaseUrl = employerAccountsConfiguration.Identity.BaseAddress,
+            }
+        };
+
+        authenticationBuilder.AddAndConfigureSupportConsoleAuthentication(staffAuthConfig);
 
         services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
 
@@ -167,6 +181,8 @@ public class Startup
             app.UseDeveloperExceptionPage();
         }
 
+        app.UseSupportConsoleAuthentication();
+
         app.UseUnitOfWork();
 
         app.UseStaticFiles();
@@ -174,8 +190,16 @@ public class Startup
         app.UseMiddleware<RobotsTextMiddleware>();
 
         app.UseAuthentication();
+        app.UseCookiePolicy(new CookiePolicyOptions
+        {
+            Secure = CookieSecurePolicy.Always,
+            MinimumSameSitePolicy = SameSiteMode.None,
+            HttpOnly = HttpOnlyPolicy.Always
+        });
+
         app.UseRouting();
         app.UseAuthorization();
+
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllerRoute(

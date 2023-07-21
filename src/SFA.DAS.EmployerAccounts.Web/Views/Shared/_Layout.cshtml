@@ -9,8 +9,8 @@
 
 @{
     ViewBag.HideHeaderBorder = true;
-    string accountId = (string)this.ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId] ?? "";
-    var footerModel = new FooterModel { AccountId = accountId, UsePrivacyV2 = true };
+    string hashedAccountId = (string)this.ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId] ?? "";
+    var footerModel = new FooterModel { AccountId = hashedAccountId, UsePrivacyV2 = true };
 }
 <!DOCTYPE html>
 <html lang="en" class="govuk-template ">
@@ -114,12 +114,12 @@
     <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
     @if (HtmlHelpers.IsSupportUser())
     {
-        @(await Component.InvokeAsync(ComponentConstants.SupportUserBanner, new { model = Model is OrchestratorResponse ? Model?.Data : Model }))
+        @(await Component.InvokeAsync(ComponentConstants.SupportUserBanner, new { hashedAccountId }))
     }
     @* ReSharper disable once Mvc.PartialViewNotResolved *@
     <partial name="_Header">
         @* ReSharper disable once Mvc.PartialViewNotResolved *@
-        <partial name="_Menu" model="@accountId">
+        <partial name="_Menu" model="@hashedAccountId">
         </partial>
     </partial>
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
@@ -7,6 +8,7 @@ using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
 using SFA.DAS.EmployerAccounts.Web.Cookies;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Handlers;
 using SFA.DAS.GovUK.Auth.Authentication;
 using SFA.DAS.GovUK.Auth.Services;
@@ -26,7 +28,7 @@ public static class EmployerAuthenticationServiceRegistrations
         services.AddSingleton<IAuthorizationHandler, EmployerAccountOwnerAuthorizationHandler>();
         services.AddSingleton<IAuthorizationHandler, AccountActiveAuthorizationHandler>();//TODO remove after gov login enabled
         services.AddTransient<IUserAccountService, UserAccountService>();
-        
+
 
         services.AddAuthorization(options =>
         {
@@ -57,9 +59,32 @@ public static class EmployerAuthenticationServiceRegistrations
                     policy.Requirements.Add(new AccountActiveRequirement());
                     policy.RequireAuthenticatedUser();
                 });
+            options.AddPolicy(
+                PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport
+                , policy =>
+                {
+                    policy.RequireAssertion(_ =>
+                    {
+                        if (_.User.IsSupportUser())
+                        {
+                            return true;
+                        }
+
+                        policy.Requirements.Add(new EmployerAccountAllRolesRequirement());
+                        policy.Requirements.Add(new AccountActiveRequirement());
+
+                        return _.User.HasClaim(c => c.Type == EmployerClaims.AccountsClaimsTypeIdentifier);
+                    });
+                    policy.RequireAuthenticatedUser();
+                });
         });
 
         return services;
+    }
+
+    private static bool IsSupportUser(this ClaimsPrincipal user)
+    {
+        return user.HasClaim(ClaimTypes.Role, SupportUserClaimConstants.Tier1UserClaim) || user.HasClaim(ClaimTypes.Role, SupportUserClaimConstants.Tier2UserClaim);
     }
 
     public static IServiceCollection AddAndConfigureEmployerAuthentication(
@@ -108,7 +133,7 @@ public static class EmployerAuthenticationServiceRegistrations
                 options.SlidingExpiration = true;
                 options.Cookie.SameSite = SameSiteMode.None;
                 options.CookieManager = new ChunkingCookieManager { ChunkSize = 3000 };
-            }); 
+            });
 
         services
             .AddOptions<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme)
