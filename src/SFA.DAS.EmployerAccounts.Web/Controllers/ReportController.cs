@@ -1,72 +1,60 @@
-﻿using MediatR;
-using SFA.DAS.Authentication;
-using SFA.DAS.EmployerAccounts.Commands.ReportTrainingProvider;
+﻿using SFA.DAS.EmployerAccounts.Commands.ReportTrainingProvider;
 using SFA.DAS.EmployerAccounts.Commands.UnsubscribeProviderEmail;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Queries.GetProviderInvitation;
-using SFA.DAS.EmployerAccounts.Web.Helpers;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.NLog.Logger;
-using System;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 
-namespace SFA.DAS.EmployerAccounts.Web.Controllers
+namespace SFA.DAS.EmployerAccounts.Web.Controllers;
+
+[Route("report")]
+public class ReportController : BaseController
 {
-    [RoutePrefix("report")]
-    public class ReportController : BaseController
+    private readonly IMediator _mediator;
+    private readonly ILogger<ReportController> _logger;
+
+    public ReportController(IMediator mediator,
+        ILogger<ReportController> logger,
+        ICookieStorageService<FlashMessageViewModel> flashMessage)
+        : base(flashMessage)
     {
-        private readonly IMediator _mediator;
-        private readonly ILog _logger;
+        _mediator = mediator;
+        _logger = logger;
+    }
 
-        public ReportController(IMediator mediator,
-            ILog logger, IAuthenticationService owinWrapper,
-            IMultiVariantTestingService multiVariantTestingService,
-            ICookieStorageService<FlashMessageViewModel> flashMessage)
-            : base(owinWrapper, multiVariantTestingService, flashMessage)
+    [HttpGet]
+    [Route("trainingprovider/{correlationId}")]
+    public async Task<IActionResult> TrainingProvider(string correlationId)
+    {
+        if (Guid.TryParse(correlationId, out var correlationGuid))
         {
-            _mediator = mediator;
-            _logger = logger;
-        }
+            _logger.LogDebug("Reporting Training Provider with correlationId: {CorrelationId}", correlationId);
 
-        [HttpGet]
-        [Route("trainingprovider/{correlationId}")]
-        public async Task<ActionResult> TrainingProvider(string correlationId)
-        {
-            if (Guid.TryParse(correlationId, out var correlationGuid))
+            //If being reported, unsubscribe to not get further notifications anyway
+            await _mediator.Send(new UnsubscribeProviderEmailCommand
             {
-                _logger.Debug($"Reporting Training Provider with correlationId: {correlationId}");
+                CorrelationId = correlationGuid
+            });
 
-                //If being reported, unsubscribe to not get further notifications anyway
-                await _mediator.SendAsync(new UnsubscribeProviderEmailQuery
-                {
-                    CorrelationId = correlationGuid
-                });
+            var invitation = await _mediator.Send(new GetProviderInvitationQuery
+            {
+                CorrelationId = correlationGuid
+            });
 
-                var invitation = await _mediator.SendAsync(new GetProviderInvitationQuery
-                {
-                    CorrelationId = correlationGuid
-                });
-
-                if (invitation.Result != null)
-                {
-                    await _mediator.SendAsync(new ReportTrainingProviderCommand(
+            if (invitation.Result != null)
+            {
+                await _mediator.Send(new ReportTrainingProviderCommand(
                         invitation.Result.EmployerEmail,
                         DateTime.Now,
                         invitation.Result.ProviderOrganisationName,
                         invitation.Result.ProviderUserFullName,
                         invitation.Result.SentDate
-                        )
-                    ); ;
-                }
+                    )
+                );
             }
-
-            var model = new
-            {
-                HideHeaderSignInLink = true
-            };
-
-            return View(ControllerConstants.ReportTrainingProviderViewName, model);
         }
+
+        var model = new
+        {
+            HideHeaderSignInLink = true
+        };
+
+        return View(ControllerConstants.ReportTrainingProviderViewName, model);
     }
 }

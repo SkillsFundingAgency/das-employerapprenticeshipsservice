@@ -1,62 +1,101 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoFixture.NUnit3;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
+using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemesForAuthorisedUser
 {
     public class WhenIValidateTheRequest
     {
-        private GetAccountPayeSchemesForAuthorisedUserQueryValidator _validator;
-        private Mock<IMembershipRepository> _membershipRepository;
-
-        [SetUp]
-        public void Arrange()
+        [Test]
+        [MoqInlineAutoData(0)]
+        [MoqInlineAutoData(-1)]
+        [MoqInlineAutoData(-999)]
+        public async Task ThenTheRequestIsNotValidIfAccountIdInvalidArentPopulatedAndTheRepositoryIsNotCalled(
+            long accountId,
+            GetAccountPayeSchemesForAuthorisedUserQuery query,
+            GetAccountPayeSchemesForAuthorisedUserQueryValidator validator)
         {
-            _membershipRepository = new Mock<IMembershipRepository>();
+            //Arrange
+            query.AccountId = accountId;
 
-            _validator = new GetAccountPayeSchemesForAuthorisedUserQueryValidator(_membershipRepository.Object);
+            //Act
+            var actual = await validator.ValidateAsync(query);
+
+            //Assert
+            Assert.IsFalse(actual.IsValid());
+            Assert.Contains(new KeyValuePair<string, string>("AccountId", "Account ID has not been supplied"), actual.ValidationDictionary);
+        }
+
+        [Test, MoqAutoData]
+        public async Task ThenTheRequestIsNotValidIfUserIdNotSupplied_TheRepositoryIsNotCalled(
+            GetAccountPayeSchemesForAuthorisedUserQuery query,
+            GetAccountPayeSchemesForAuthorisedUserQueryValidator validator)
+        {
+            //Arrange
+            query.ExternalUserId = string.Empty;
+
+            //Act
+            var actual = await validator.ValidateAsync(query);
+
+            //Assert
+            Assert.IsFalse(actual.IsValid());
+            Assert.Contains(new KeyValuePair<string, string>("ExternalUserId", "User ID has not been supplied"), actual.ValidationDictionary);
+        }
+
+        [Test, MoqAutoData]
+        public async Task WhenTheRequestHasValidAccountId_TheMembershipIsFetched(
+           [Frozen] Mock<IMembershipRepository> membershipRepoMock,
+           GetAccountPayeSchemesForAuthorisedUserQuery query,
+           GetAccountPayeSchemesForAuthorisedUserQueryValidator validator)
+        {
+            //Arrange
+
+            //Act
+            var actual = await validator.ValidateAsync(query);
+
+            //Assert
+            membershipRepoMock.Verify(mock => mock.GetCaller(It.Is<long>(l => l == query.AccountId), It.Is<string>(s => s == query.ExternalUserId)));
         }
 
         [Test]
-        public async Task ThenTheRequestIsValidIfTheUserIsAMemberOfTheAccount()
+        [MoqInlineAutoData(Role.Viewer)]
+        [MoqInlineAutoData(Role.Transactor)]
+        [MoqInlineAutoData(Role.Owner)]
+        public async Task WhenAccountMemberThenAuthorized(
+            Role userRole,
+            [Frozen] Mock<IMembershipRepository> membershipRepoMock,
+            GetAccountPayeSchemesForAuthorisedUserQuery query,
+            GetAccountPayeSchemesForAuthorisedUserQueryValidator validator)
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView { Role = Role.Viewer });
+            membershipRepoMock.Setup(x => x.GetCaller(It.Is<long>(l => l == query.AccountId), It.Is<string>(s => s == query.ExternalUserId))).ReturnsAsync(new MembershipView { Role = userRole });
 
             //Act
-            var actual = await _validator.ValidateAsync(new GetAccountPayeSchemesForAuthorisedUserQuery { ExternalUserId = "123ABC", HashedAccountId = "1" });
+            var actual = await validator.ValidateAsync(query);
 
             //Assert
             Assert.IsTrue(actual.IsValid());
             Assert.IsFalse(actual.IsUnauthorized);
         }
 
-        [Test]
-        public async Task ThenTheRequestIsNotValidIfAllFieldsArentPopulatedAndTheRepositoryIsNotCalled()
-        {
-            //Act
-            var actual = await _validator.ValidateAsync(new GetAccountPayeSchemesForAuthorisedUserQuery());
-
-            //Assert
-            Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string, string>("ExternalUserId", "User ID has not been supplied"), actual.ValidationDictionary);
-            Assert.Contains(new KeyValuePair<string, string>("HashedAccountId", "Hashed account ID has not been supplied"), actual.ValidationDictionary);
-            _membershipRepository.Verify(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>()), Times.Never);
-        }
-
-        [Test]
-        public async Task ThenTheRequestIsMarkedAsInvalidIfTheUserDoesNotExist()
+        [Test, MoqAutoData]
+        public async Task ThenTheRequestIsMarkedAsInvalidIfTheUserDoesNotExist(
+            [Frozen] Mock<IMembershipRepository> membershipRepoMock,
+            GetAccountPayeSchemesForAuthorisedUserQuery query,
+            GetAccountPayeSchemesForAuthorisedUserQueryValidator validator)
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(() => null);
+            membershipRepoMock.Setup(x => x.GetCaller(It.Is<long>(l => l == query.AccountId), It.Is<string>(s => s == query.ExternalUserId))).ReturnsAsync(() => null);
 
             //Act
-            var actual = await _validator.ValidateAsync(new GetAccountPayeSchemesForAuthorisedUserQuery { ExternalUserId = "123ABC", HashedAccountId = "1" });
+            var actual = await validator.ValidateAsync(query);
 
             //Assert
             Assert.IsFalse(actual.IsValid());

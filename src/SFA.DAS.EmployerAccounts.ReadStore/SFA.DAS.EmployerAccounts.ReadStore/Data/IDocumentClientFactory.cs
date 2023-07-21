@@ -1,9 +1,8 @@
 using Microsoft.Azure.Documents;
 
-namespace SFA.DAS.EmployerAccounts.ReadStore.Data
+namespace SFA.DAS.EmployerAccounts.ReadStore.Data;
+
+public interface IDocumentClientFactory
 {
-    internal interface IDocumentClientFactory
-    {
-        IDocumentClient CreateDocumentClient();
-    }
+    IDocumentClient CreateDocumentClient();
 }

@@ -1,8 +1,7 @@
-﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
+﻿@inject IUrlActionHelper UrlHelper;
 @{ViewBag.PageID = "set-up-an-apprenticeship-for-a-new-employee"; }
 @{ViewBag.Title = "Set up an apprenticeship for a new employee"; }
 @{ViewBag.MetaDesc = "Set up an apprenticeship for a new employee"; }
-@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
 @{ViewBag.GaData.Vpv = "/account/setupapprentice/set-up-an-apprenticeship-for-a-new-employee"; }
 
 @section breadcrumb
@@ -23,6 +22,6 @@
         <p class="govuk-inset-text">
             You do not have to set up an apprenticeship in one go. You can complete each section when you're ready.
         </p>
-        <a href="@Url.ReservationsAction("reservations/start")" class="govuk-button" id="reserve-funding">Continue to reserve funding</a>
+        <a href="@UrlHelper.ReservationsAction("reservations/start")" class="govuk-button" id="reserve-funding">Continue to reserve funding</a>
     </div>
 </div>

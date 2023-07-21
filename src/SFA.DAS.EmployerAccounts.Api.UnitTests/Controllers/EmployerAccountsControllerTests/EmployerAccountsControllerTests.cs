@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
-using System.Web.Http.Routing;
+using System.Threading;
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Controllers;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetPagedEmployerAccounts;
-using SFA.DAS.HashingService;
-using SFA.DAS.NLog.Logger;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.EmployerAccountsControllerTests
 {
@@ -17,31 +18,31 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.EmployerAccountsCon
     {
         protected EmployerAccountsController Controller;
         protected Mock<IMediator> Mediator;
-        protected Mock<ILog> Logger;
-        protected Mock<IHashingService> HashingService;
-        protected Mock<UrlHelper> UrlHelper;
+        protected Mock<ILogger<AccountsOrchestrator>> Logger;
+        protected Mock<IEncodingService> EncodingService;
+        protected Mock<IUrlHelper> UrlTestHelper;
         protected Mock<IMapper> Mapper;
 
         [SetUp]
         public void Arrange()
         {
             Mediator = new Mock<IMediator>();
-            Logger = new Mock<ILog>();
-            HashingService = new Mock<IHashingService>();
+            Logger = new Mock<ILogger<AccountsOrchestrator>>();
+            EncodingService = new Mock<IEncodingService>();
             Mapper = new Mock<IMapper>();
 
-            var orchestrator = new AccountsOrchestrator(Mediator.Object, Logger.Object, Mapper.Object, HashingService.Object);
-            Controller = new EmployerAccountsController(orchestrator);
+            var orchestrator = new AccountsOrchestrator(Mediator.Object, Logger.Object, Mapper.Object, EncodingService.Object);
+            Controller = new EmployerAccountsController(orchestrator, EncodingService.Object);
 
-            UrlHelper = new Mock<UrlHelper>();
-            Controller.Url = UrlHelper.Object;
+            UrlTestHelper = new Mock<IUrlHelper>();
+            Controller.Url = UrlTestHelper.Object;
 
             var accountsResponse = new GetPagedEmployerAccountsResponse
             {
                 Accounts = new List<Account>()
             };
 
-            Mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>())).ReturnsAsync(accountsResponse);
+            Mediator.Setup(x => x.Send(It.IsAny<GetPagedEmployerAccountsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(accountsResponse);
         }
     }
 }

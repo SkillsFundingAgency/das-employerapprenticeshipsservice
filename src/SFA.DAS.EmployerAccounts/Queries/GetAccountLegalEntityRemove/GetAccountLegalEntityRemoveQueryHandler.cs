@@ -1,90 +1,80 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.MarkerInterfaces;
+﻿using System.Threading;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models.Organisation;
-using SFA.DAS.HashingService;
-using SFA.DAS.Validation;
+using SFA.DAS.Encoding;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove;
+
+public class GetAccountLegalEntityRemoveQueryHandler : IRequestHandler<GetAccountLegalEntityRemoveRequest, GetAccountLegalEntityRemoveResponse>
 {
-    public class GetAccountLegalEntityRemoveQueryHandler : IAsyncRequestHandler<GetAccountLegalEntityRemoveRequest, GetAccountLegalEntityRemoveResponse>
-    {
-        private readonly IValidator<GetAccountLegalEntityRemoveRequest> _validator;
-        private readonly IEmployerAgreementRepository _employerAgreementRepository;
-        private readonly IHashingService _hashingService;
-        private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityHashingService;
-        private readonly ICommitmentsV2ApiClient _commitmentV2ApiClient;
+    private readonly IValidator<GetAccountLegalEntityRemoveRequest> _validator;
+    private readonly IEmployerAgreementRepository _employerAgreementRepository;
+    private readonly IEncodingService _encodingService;
+    private readonly ICommitmentsV2ApiClient _commitmentV2ApiClient;
 
-        public GetAccountLegalEntityRemoveQueryHandler(
-            IValidator<GetAccountLegalEntityRemoveRequest> validator,
-            IEmployerAgreementRepository employerAgreementRepository, 
-            IHashingService hashingService,
-            IAccountLegalEntityPublicHashingService accountLegalEntityHashingService,
-            ICommitmentsV2ApiClient commitmentV2ApiClient)
+    public GetAccountLegalEntityRemoveQueryHandler(
+        IValidator<GetAccountLegalEntityRemoveRequest> validator,
+        IEmployerAgreementRepository employerAgreementRepository, 
+        IEncodingService encodingService,
+        ICommitmentsV2ApiClient commitmentV2ApiClient)
+    {
+        _validator = validator;
+        _employerAgreementRepository = employerAgreementRepository;
+        _encodingService = encodingService;
+        _commitmentV2ApiClient = commitmentV2ApiClient;
+    }
+
+    public async Task<GetAccountLegalEntityRemoveResponse> Handle(GetAccountLegalEntityRemoveRequest message, CancellationToken cancellationToken)
+    {
+        var validationResult = await _validator.ValidateAsync(message);
+
+        if (!validationResult.IsValid())
         {
-            _validator = validator;
-            _employerAgreementRepository = employerAgreementRepository;
-            _hashingService = hashingService;
-            _accountLegalEntityHashingService = accountLegalEntityHashingService;
-            _commitmentV2ApiClient = commitmentV2ApiClient;
+            throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        public async Task<GetAccountLegalEntityRemoveResponse> Handle(GetAccountLegalEntityRemoveRequest message)
+        if (validationResult.IsUnauthorized)
         {
-            var validationResult = await _validator.ValidateAsync(message);
+            throw new UnauthorizedAccessException();
+        }
 
-            if (!validationResult.IsValid())
-            {
-                throw new InvalidRequestException(validationResult.ValidationDictionary);
-            }
+        var accountId = _encodingService.Decode(message.HashedAccountId, EncodingType.AccountId);
+        var accountLegalEntityId = _encodingService.Decode(message.HashedAccountLegalEntityId, EncodingType.PublicAccountLegalEntityId);
+        var accountLegalEntity = await _employerAgreementRepository.GetAccountLegalEntity(accountLegalEntityId);
 
-            if (validationResult.IsUnauthorized)
-            {
-                throw new UnauthorizedAccessException();
-            }
+        var result = await _employerAgreementRepository.GetAccountLegalEntityAgreements(accountLegalEntityId);
+        if (result == null) return new GetAccountLegalEntityRemoveResponse();
 
-            var accountId = _hashingService.DecodeValue(message.HashedAccountId);
-            var accountLegalEntityId = _accountLegalEntityHashingService.DecodeValue(message.HashedAccountLegalEntityId);
-            var accountLegalEntity = await _employerAgreementRepository.GetAccountLegalEntity(accountLegalEntityId);
-
-            var result = await _employerAgreementRepository.GetAccountLegalEntityAgreements(accountLegalEntityId);
-            if (result == null) return new GetAccountLegalEntityRemoveResponse();
-
-            if (result.Any(x => x.SignedDate.HasValue))
-            {
-                return new GetAccountLegalEntityRemoveResponse
-                {
-                    CanBeRemoved = await SetRemovedStatusBasedOnCommitments(accountId, accountLegalEntity),
-                    HasSignedAgreement = true,
-                    Name = accountLegalEntity.Name
-                };
-            }
-
+        if (result.Any(x => x.SignedDate.HasValue))
+        {
             return new GetAccountLegalEntityRemoveResponse
             {
-                CanBeRemoved = true,
-                HasSignedAgreement = false,
+                CanBeRemoved = await SetRemovedStatusBasedOnCommitments(accountId, accountLegalEntity),
+                HasSignedAgreement = true,
                 Name = accountLegalEntity.Name
             };
         }
 
-        private async Task<bool> SetRemovedStatusBasedOnCommitments(long accountId, AccountLegalEntityModel accountLegalEntityModel)
+        return new GetAccountLegalEntityRemoveResponse
         {
-            var commitments = await _commitmentV2ApiClient.GetEmployerAccountSummary(accountId);
+            CanBeRemoved = true,
+            HasSignedAgreement = false,
+            Name = accountLegalEntity.Name
+        };
+    }
 
-            var commitmentConnectedToEntity = commitments.ApprenticeshipStatusSummaryResponse.FirstOrDefault(c =>
-                !string.IsNullOrEmpty(c.LegalEntityIdentifier)
-                && c.LegalEntityIdentifier.Equals(accountLegalEntityModel.Identifier)
-                && c.LegalEntityOrganisationType == accountLegalEntityModel.OrganisationType);
+    private async Task<bool> SetRemovedStatusBasedOnCommitments(long accountId, AccountLegalEntityModel accountLegalEntityModel)
+    {
+        var commitments = await _commitmentV2ApiClient.GetEmployerAccountSummary(accountId);
 
-            return commitmentConnectedToEntity == null || (commitmentConnectedToEntity.ActiveCount +
-                                                           commitmentConnectedToEntity.PendingApprovalCount +
-                                                           commitmentConnectedToEntity.WithdrawnCount +
-                                                           commitmentConnectedToEntity.PausedCount) == 0;
-        }
+        var commitmentConnectedToEntity = commitments.ApprenticeshipStatusSummaryResponse.FirstOrDefault(c =>
+            !string.IsNullOrEmpty(c.LegalEntityIdentifier)
+            && c.LegalEntityIdentifier.Equals(accountLegalEntityModel.Identifier)
+            && c.LegalEntityOrganisationType == accountLegalEntityModel.OrganisationType);
+
+        return commitmentConnectedToEntity == null || (commitmentConnectedToEntity.ActiveCount +
+                                                       commitmentConnectedToEntity.PendingApprovalCount +
+                                                       commitmentConnectedToEntity.WithdrawnCount +
+                                                       commitmentConnectedToEntity.PausedCount) == 0;
     }
 }

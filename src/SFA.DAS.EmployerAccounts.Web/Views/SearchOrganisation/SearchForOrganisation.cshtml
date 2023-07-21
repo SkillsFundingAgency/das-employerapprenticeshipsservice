@@ -1,32 +1,41 @@
 ﻿@model OrchestratorResponse<SearchOrganisationViewModel>
 
-@{ 
+@{
     ViewBag.PageID = "search-for-organisation";
     ViewBag.Title = "Search for your organisation";
     ViewBag.Section = "organisations";
-    ViewBag.HideNav = !Model.Data.IsExistingAccount;
+    ViewBag.ShowNav = Model.Data.IsExistingAccount;
     ViewBag.ZenDeskLabel = "eas-search-for-your-organisation";
-    Layout = "~/Views/Shared/_Layout_CDN.cshtml";
-}
-
-@{
     ViewBag.GaData.Vpv = Model.Data.IsExistingAccount ? "/accounts/organisations/search/search-for-organisation" : "/onboarding/search/search-for-organisation";
-}
 
+    var hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]?.ToString();
+    var cancelRoute = string.IsNullOrEmpty(hashedAccountId) ? RouteNames.NewEmpoyerAccountTaskList : RouteNames.EmployerAgreementIndex;
+}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-xl">@ViewBag.Title</h1>
-        <form action="@Url.Action("SearchForOrganisation")" method="POST">
+        <form 
+            asp-controller="@ControllerConstants.SearchOrganisationControllerName" 
+            asp-action="@ControllerConstants.SearchForOrganisationActionName" 
+            asp-route-hashedAccountId="@hashedAccountId"
+            method="POST">
+
             <div class="govuk-form-group">
-                <label class="govuk-label" for="searchTerm">Enter organisation name</label>
+                <h1 class="govuk-label-wrapper">
+                    <label class="govuk-label govuk-label--xl" for="searchTerm">
+                        @ViewBag.Title
+                    </label>
+                </h1>
                 <input type="text" id="searchTerm" name="searchTerm" value="" class="govuk-input" />
             </div>
-            <input class="govuk-button" type="submit" value="Search" />
+
+            <div class="govuk-button-group">
+                <button class="govuk-button" type="submit" id="submit-search-organisation">Search</button>
+                <a asp-route="@cancelRoute" class="govuk-link">Cancel</a>
+            </div>
         </form>
     </div>
 </div>
 
 @section breadcrumb {
-    <div class="govuk-breadcrumbs" id="js-breadcrumbs">
-    </div>
+    <div class="das-js-back-link"></div>
 }

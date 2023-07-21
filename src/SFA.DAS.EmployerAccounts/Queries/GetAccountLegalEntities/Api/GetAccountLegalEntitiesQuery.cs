@@ -1,16 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using MediatR;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities.Api
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities.Api;
+
+public class GetAccountLegalEntitiesQuery : IRequest<GetAccountLegalEntitiesResponse>
 {
-    public class GetAccountLegalEntitiesQuery : IAsyncRequest<GetAccountLegalEntitiesResponse>
-    {
-        [Required]
-        [Range(1, int.MaxValue)]
-        public int? PageNumber { get; set; } = 1;
+    [Required]
+    [Range(1, int.MaxValue)]
+    public int? PageNumber { get; set; } = 1;
 
-        [Required]
-        [Range(100, 10000)]
-        public int? PageSize { get; set; } = 1000;
-    }
+    [Required]
+    [Range(100, 10000)]
+    public int? PageSize { get; set; } = 1000;
 }

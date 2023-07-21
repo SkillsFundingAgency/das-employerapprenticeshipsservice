@@ -4,12 +4,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
+using MediatR;
 using Microsoft.Azure.Documents;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Queries;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;
-using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 using SFA.DAS.Testing;
 
 namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
@@ -23,7 +23,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
         {
             return TestExceptionAsync(
                 f => f.Handle(),
-                (f, r) => r.ShouldNotThrow<Exception>());
+                (f, r) => r.Should().NotThrowAsync<Exception>());
         }
 
         [Test]
@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
             return TestExceptionAsync(
                 f => f.SetPingFailure(), 
                 f => f.Handle(),
-                (f, r) => r.ShouldThrow<Exception>().WithMessage("Read store database ping failed"));
+                (f, r) => r.Should().ThrowAsync<Exception>().WithMessage("Read store database ping failed"));
         }
     }
 
@@ -41,7 +41,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
         public PingQuery Query { get; set; }
         public CancellationToken CancellationToken { get; set; }
         public Mock<IDocumentClient> DocumentClient { get; set; }
-        public IReadStoreRequestHandler<PingQuery, Unit> Handler { get; set; }
+        public IRequestHandler<PingQuery, Unit> Handler { get; set; }
         public List<Database> Databases { get; set; }
 
         public PingQueryHandlerTestsFixture()

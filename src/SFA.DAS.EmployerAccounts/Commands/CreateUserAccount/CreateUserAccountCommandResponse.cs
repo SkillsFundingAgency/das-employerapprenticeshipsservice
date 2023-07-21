@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Commands.CreateUserAccount
+﻿namespace SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
+
+public class CreateUserAccountCommandResponse
 {
-    public class CreateUserAccountCommandResponse
-    {
-        public string HashedAccountId{ get; set; }
-    }
+    public string HashedAccountId{ get; set; }
 }

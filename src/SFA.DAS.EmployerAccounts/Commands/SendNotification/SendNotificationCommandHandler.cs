@@ -1,46 +1,43 @@
-﻿using System;
-using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.NLog.Logger;
+﻿using System.Threading;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.Notifications.Api.Client;
-using SFA.DAS.Validation;
 
-namespace SFA.DAS.EmployerAccounts.Commands.SendNotification
+namespace SFA.DAS.EmployerAccounts.Commands.SendNotification;
+
+public class SendNotificationCommandHandler : IRequestHandler<SendNotificationCommand>
 {
-    public class SendNotificationCommandHandler : AsyncRequestHandler<SendNotificationCommand>
+    private readonly IValidator<SendNotificationCommand> _validator;
+    private readonly ILogger<SendNotificationCommandHandler> _logger;
+    private readonly INotificationsApi _notificationsApi;
+
+    public SendNotificationCommandHandler(
+        IValidator<SendNotificationCommand> validator,
+        ILogger<SendNotificationCommandHandler> logger,
+        INotificationsApi notificationsApi)
     {
-        private readonly IValidator<SendNotificationCommand> _validator;
-        private readonly ILog _logger;
-        private readonly INotificationsApi _notificationsApi;
+        _validator = validator;
+        _logger = logger;
+        _notificationsApi = notificationsApi;
+    }
 
-        public SendNotificationCommandHandler(
-            IValidator<SendNotificationCommand> validator,
-            ILog logger,
-            INotificationsApi notificationsApi)
+    public async Task<Unit> Handle(SendNotificationCommand request, CancellationToken cancellationToken)
+    {
+        var validationResult = _validator.Validate(request);
+
+        if (!validationResult.IsValid())
         {
-            _validator = validator;
-            _logger = logger;
-            _notificationsApi = notificationsApi;
+            _logger.LogInformation("SendNotificationCommandHandler Invalid Request");
+            throw new InvalidRequestException(validationResult.ValidationDictionary);
+        }
+        try
+        {
+            await _notificationsApi.SendEmail(request.Email);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error sending email to notifications api");
         }
 
-        protected override async Task HandleCore(SendNotificationCommand message)
-        {
-            var validationResult = _validator.Validate(message);
-
-            if (!validationResult.IsValid())
-            {
-                _logger.Info("SendNotificationCommandHandler Invalid Request");
-                throw new InvalidRequestException(validationResult.ValidationDictionary);
-            }
-            try
-            {
-                await _notificationsApi.SendEmail(message.Email);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "Error sending email to notifications api");
-            }
-
-        }
+        return Unit.Value;
     }
 }

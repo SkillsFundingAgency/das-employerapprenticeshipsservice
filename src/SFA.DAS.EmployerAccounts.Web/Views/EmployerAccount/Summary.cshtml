@@ -2,11 +2,12 @@
 @using SFA.DAS.EmployerAccounts.Web.Helpers
 @model OrchestratorResponse<SummaryViewModel>
 
-@{ViewBag.PageID = "page-onboard-paye-check-details"; }
-@{ViewBag.Title = "Check Details"; }
-@{ViewBag.HideNav = true; }
-@{ViewBag.GaData.Vpv = "/onboarding/address/update/page-extra-confirm-organisation";}
-@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
+@{
+    ViewBag.PageID = "page-onboard-paye-check-details";
+    ViewBag.Title = "Check Details";
+    ViewBag.ShowNav = false;
+    ViewBag.GaData.Vpv = "/onboarding/address/update/page-extra-confirm-organisation";
+}
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -21,7 +22,7 @@
                         @Model.Data.OrganisationName
                     </td>
                     <td class="govuk-table__cell govuk-table__cell--numeric">
-                        <a href="@Url.Action(ControllerConstants.AmendOrganisationActionName, ControllerConstants.EmployerAccountControllerName)" class="govuk-link">Change</a>
+                        <a href="@Url.Action(ControllerConstants.AmendOrganisationActionName, ControllerConstants.EmployerAccountControllerName)" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> organisation</span></a>
                     </td>
                 </tr>
                 <tr class="govuk-table__row">
@@ -37,39 +38,39 @@
                 </tr>
                 @if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse || Model.Data.OrganisationType == OrganisationType.Charities)
                 {
-                <tr class="govuk-table__row">
-                    <th scope="row" class="govuk-table__header">
-                        @if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse)
-                        {
-                            <span>Companies House number</span>
-                        }
-                        else
-                        {
-                            <span>Charity number</span>
-                        }
-                    </th>
-                    <td colspan="2" class="govuk-table__cell">
-                        <span>@Model.Data.OrganisationReferenceNumber</span>
-                    </td>
-                </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">
+                            @if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse)
+                            {
+                                <span>Companies House number</span>
+                            }
+                            else
+                            {
+                                <span>Charity number</span>
+                            }
+                        </th>
+                        <td colspan="2" class="govuk-table__cell">
+                            <span>@Model.Data.OrganisationReferenceNumber</span>
+                        </td>
+                    </tr>
                 }
                 @if (!string.IsNullOrWhiteSpace(Model.Data.AORN))
                 {
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">
-                        Account office reference number
+                        Account office reference
                     </th>
                     <td class="govuk-table__cell">
                         @Model.Data.AORN
                     </td>
                     <td class="govuk-table__cell govuk-table__cell--numeric">
-                        <a href="@Url.Action(ControllerConstants.SearchUsingAornActionName, ControllerConstants.SearchPensionRegulatorControllerName)" class="govuk-link">Change</a>
+                        <a href="@Url.Action(ControllerConstants.SearchUsingAornActionName, ControllerConstants.SearchPensionRegulatorControllerName)" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> account office reference number</span></a>
                     </td>
                 </tr>
                 }
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">
-                        PAYE scheme
+                        Employer PAYE reference
                     </th>
                     <td class="govuk-table__cell">
                         <dl class="govuk-list">
@@ -81,15 +82,15 @@
                         </dl>
                     </td>
                     <td class="govuk-table__cell govuk-table__cell--numeric">
-                        <a href="@Url.Action(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName)" class="govuk-link">Change</a>
+                        <a href="@Url.Action(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName)" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> PAYE scheme</span></a>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <form method="POST" action="@Url.Action("CreateAccount", "EmployerAccount")">
-            @Html.AntiForgeryToken()
-            <div class="govuk-form-group">
-                <button type="submit" class="govuk-button" id="continue">These details are correct</button>
+        <form method="POST" asp-route="@RouteNames.EmployerAccountCreate">
+            <div class="govuk-button-group">
+                <button class="govuk-button" type="submit" id="continue-check-details">Continue</button>
+                <a asp-route="@RouteNames.NewEmpoyerAccountTaskList" id="cancel-check-details" class="govuk-link">Cancel</a>
             </div>
         </form>
     </div>

@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.UpdateUserNotificationSettings;
-using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpdateUserNotificationSettings
 {
@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpdateUserNotificationSett
             };
 
             //Act
-            await _handler.Handle(command);
+            await _handler.Handle(command, CancellationToken.None);
 
             //Assert
             _validator.Verify(x => x.Validate(It.IsAny<UpdateUserNotificationSettingsCommand>()), Times.Once);
@@ -61,7 +61,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpdateUserNotificationSett
             };
 
             //Act
-            await _handler.Handle(command);
+            await _handler.Handle(command, CancellationToken.None);
 
             //Assert
             _repository.Verify(x => x.UpdateUserAccountSettings(

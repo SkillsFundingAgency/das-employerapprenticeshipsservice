@@ -1,10 +1,7 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole
+public class GetUserAccountRoleQuery : IRequest<GetUserAccountRoleResponse>
 {
-    public class GetUserAccountRoleQuery : IAsyncRequest<GetUserAccountRoleResponse>
-    {
-        public string HashedAccountId { get; set; }
-        public string ExternalUserId { get; set; }
-    }
+    public long AccountId { get; set; }
+    public string ExternalUserId { get; set; }
 }

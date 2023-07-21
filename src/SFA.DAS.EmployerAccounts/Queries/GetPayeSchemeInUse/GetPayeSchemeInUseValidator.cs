@@ -1,26 +1,21 @@
-using System;
-using System.Threading.Tasks;
-using SFA.DAS.Validation;
+namespace SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeInUse;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeInUse
+public class GetPayeSchemeInUseValidator : IValidator<GetPayeSchemeInUseQuery>
 {
-    public class GetPayeSchemeInUseValidator : IValidator<GetPayeSchemeInUseQuery>
+    public ValidationResult Validate(GetPayeSchemeInUseQuery item)
     {
-        public ValidationResult Validate(GetPayeSchemeInUseQuery item)
+        var validationResult = new ValidationResult();
+
+        if (string.IsNullOrWhiteSpace(item.Empref))
         {
-            var validationResult = new ValidationResult();
-
-            if (string.IsNullOrWhiteSpace(item.Empref))
-            {
-                validationResult.AddError(nameof(item.Empref),"Empref has not been supplied");
-            }
-
-            return validationResult;
+            validationResult.AddError(nameof(item.Empref),"Empref has not been supplied");
         }
 
-        public Task<ValidationResult> ValidateAsync(GetPayeSchemeInUseQuery item)
-        {
-            throw new NotImplementedException();
-        }
+        return validationResult;
+    }
+
+    public Task<ValidationResult> ValidateAsync(GetPayeSchemeInUseQuery item)
+    {
+        return Task.FromResult(Validate(item));
     }
 }

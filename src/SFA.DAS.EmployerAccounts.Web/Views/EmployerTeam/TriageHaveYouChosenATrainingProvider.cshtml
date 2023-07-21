@@ -3,7 +3,6 @@
 @{ViewBag.PageID = "have-you-chosen-a-training-provider"; }
 @{ViewBag.Title = "Have you chosen a training provider to deliver the apprenticeship training?"; }
 @{ViewBag.MetaDesc = "Have you chosen a training provider to deliver the apprenticeship training"; }
-@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
 @{ViewBag.GaData.Vpv = "/account/setupapprentice/have-you-chosen-a-training-provider"; }
 
 @section breadcrumb
@@ -30,8 +29,7 @@
         }
 
         <h1 class="govuk-heading-xl">@ViewBag.Title</h1>
-        <form method="POST" action="@Url.Action(ControllerConstants.TriageHaveYouChosenATrainingProviderActionName)">
-            @Html.AntiForgeryToken()
+        <form method="POST" asp-route="@RouteNames.TriageChosenProviderPost" asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]">
             <div class="govuk-form-group @(ViewData.ModelState.IsValid ? "" : "govuk-form-group--error")" id="have-you-chosen-a-training-provider">
                 <fieldset class="govuk-fieldset" aria-describedby="have-you-chosen-a-training-provider">
                     @if (!ViewData.ModelState.IsValid)

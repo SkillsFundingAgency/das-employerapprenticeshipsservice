@@ -3,64 +3,65 @@
     ViewBag.Title = "Update an organisation";
     ViewBag.Section = "organisations";
     ViewBag.PageID = "update-organisation-details";
+    string hashedAccountId = @ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]?.ToString();
 }
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Review your details</h1>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Review your details</h1>
         <p>We've retrieved the most up-to-date details we could find for your organisation.</p>
+        <table class="govuk-table">
+            <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="row">Information from</th>
+                    <td class="govuk-table__cell">@Model.Data.DataSourceFriendlyName</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="row">Organisation name</th>
+                    <td class="govuk-table__cell">@Model.Data.RefreshedName</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="row">Organisation address</th>
+                    <td class="govuk-table__cell">@Html.CommaSeperatedAddressToHtml(@Model.Data.RefreshedAddress)</td>
+                </tr>
+            </tbody>
+        </table>
 
-        <div class="form-group">
-            <table class="details-list">
-                <tbody>
-                    <tr>
-                        <td>Information from</td>
-                        <td>@Model.Data.DataSourceFriendlyName</td>
-                    </tr>
-                    <tr>
-                        <td>Organisation name</td>
-                        <td>@Model.Data.RefreshedName</td>
-                    </tr>
-                    <tr>
-                        <td>Organisation address</td>
-                        <td>@Html.CommaSeperatedAddressToHtml(@Model.Data.RefreshedAddress)</td>
-                    </tr>
-                </tbody>
-            </table>
+        <form method="POST"
+              asp-route="@RouteNames.ProcessOrganisationReview"
+              asp-route-hashedAccountId="@hashedAccountId">
+            <input type="hidden" name="organisationName" value="@Model.Data.RefreshedName" />
+            <input type="hidden" name="organisationAddress" value="@Model.Data.RefreshedAddress" />
+            <input type="hidden" name="accountLegalEntityPublicHashedId" value="@Model.Data.HashedAccountLegalEntityId" />
+            <input type="hidden" name="dataSourceFriendlyName" value="@Model.Data.DataSourceFriendlyName" />
 
-            <form method="POST" action="@Url.Action("ProcessReviewSelection","Organisation")">
-                @Html.AntiForgeryToken()
-                <input type="hidden" name="organisationName" value="@Model.Data.RefreshedName" />
-                <input type="hidden" name="organisationAddress" value="@Model.Data.RefreshedAddress" />
-                <input type="hidden" name="accountLegalEntityPublicHashedId" value="@Model.Data.AccountLegalEntityPublicHashedId" />
-                <input type="hidden" name="dataSourceFriendlyName" value="@Model.Data.DataSourceFriendlyName" />
-
-                <div class="form-group">
-                    <h2 class="heading-medium">
-                        Are these details correct?
-                    </h2>
-                    <div class="multiple-choice">
-                        <input id="update" type="radio" name="updateChoice" value="update" />
-                        <label for="update">
-                            Yes, update my details using this information
-                        </label>
+            <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                        <h2 class="govuk-fieldset__heading">
+                            Are these details correct?
+                        </h2>
+                    </legend>
+                    <div class="govuk-radios" data-module="govuk-radios">
+                        <div class="govuk-radios__item">
+                            <input id="update" type="radio" name="updateChoice" value="update" class="govuk-radios__input" />
+                            <label for="update" class="govuk-label govuk-radios__label">
+                                Yes, update my details using this information
+                            </label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input id="cancel" type="radio" name="updateChoice" value="incorrectDetails" class="govuk-radios__input" />
+                            <label for="cancel" class="govuk-label govuk-radios__label">
+                                No, these details are incorrect
+                            </label>
+                        </div>
                     </div>
-                    <div class="multiple-choice">
-                        <input id="cancel" type="radio" name="updateChoice" value="incorrectDetails" />
-                        <label for="cancel">
-                            No, these details are incorrect
-                        </label>
-                    </div>
-                </div>
-                <button type="submit" class="button" id="accept">Continue</button>
-            </form>
-        </div>
+                </fieldset>
+            </div>
+            <button type="submit" class="govuk-button" id="accept">Continue</button>
+        </form>
     </div>
 </div>
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to your organisations</a></li>
-        </ol>
-    </div>
+    <a class="govuk-back-link" asp-route="@RouteNames.EmployerAgreementIndex" asp-route-hashedAccountId="@hashedAccountId">Your organisations and agreements</a>
 }

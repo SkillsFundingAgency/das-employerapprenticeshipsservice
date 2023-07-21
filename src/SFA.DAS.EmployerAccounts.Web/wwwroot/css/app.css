@@ -1,0 +1,114 @@
+/* Agreement content */
+
+#agreement-list .call-to-action,
+#agreement-header.call-to-action {
+    margin: 10px 0 40px 0;
+    background-color: #f3f2f1;
+    padding: 30px;
+}
+
+#agreement-list .clause-column-content {
+    padding-left: 50px;
+}
+
+#agreement-list .clause-column-fig h4.govuk-body {
+    float: left;
+}
+
+#agreement-list section > h3.govuk-heading-m span {
+    display: inline-block;
+    min-width: 50px;
+}
+
+.das-list-lower-alpha {
+    list-style-type: lower-alpha;
+}
+
+.das-list-lower-roman {
+    list-style-type: lower-roman;
+}
+
+.govuk-tabs__list-item--selected {
+    padding-bottom: 11px !important
+}
+
+.app-document {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.app-document__icon {
+    position: relative;
+}
+
+.app-document__icon-text {
+    position: absolute;
+    color: #fff;
+    font-weight: 700;
+    left: 0;
+    margin: 0;
+    right: 0;
+    text-align: center;
+    top: 13px;
+}
+
+.app-document__icon-image {
+    color: #b1b4b6;
+    width: 90px;
+    height: 126px;
+    box-shadow: 0 0 0 4px #e2e2e2;
+    border-bottom: 1px solid #777;
+    outline: 1px solid #ccc;
+}
+
+.app-support-banner {
+    background: #333;
+    color: #fff;
+}
+
+
+.app-support-banner__content {
+    padding: 20px 30px 10px;
+}
+
+@media (min-width: 40.0625em) {
+    .app-support-banner__content {
+        display: flex;
+        align-items: center;
+    }
+}
+
+.app-support-banner__heading {
+    margin-bottom: 10px;
+}
+
+.app-support-banner__user {
+    margin-left: auto;
+}
+
+.app-support-banner__heading {
+    color: inherit;
+}
+
+.app-support-banner__context {
+    padding: 15px 30px 30px;
+    border-top: 1px solid #000;
+}
+
+@media (min-width: 40.0625em) {
+    .app-support-banner__context {
+        padding-top: 0;
+        border: none;
+    }
+}
+
+.app-support-banner__context p {
+    margin: 0;
+}
+
+@media (min-width: 40.0625em) {
+    .app-save-return {
+        margin: -15px 0 30px;
+    }
+}

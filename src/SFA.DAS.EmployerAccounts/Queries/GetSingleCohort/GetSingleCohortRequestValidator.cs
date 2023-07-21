@@ -1,26 +1,21 @@
-﻿using SFA.DAS.Validation;
-using System;
-using System.Threading.Tasks;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetSingleCohort
+public class GetSingleCohortRequestValidator : IValidator<GetSingleCohortRequest>
 {
-    public class GetSingleCohortRequestValidator : IValidator<GetSingleCohortRequest>
+    public ValidationResult Validate(GetSingleCohortRequest item)
     {
-        public ValidationResult Validate(GetSingleCohortRequest item)
+        var validationResult = new ValidationResult();
+
+        if (item.AccountId <= 0)
         {
-            var validationResult = new ValidationResult();
-
-            if (item.HashedAccountId == String.Empty)
-            {
-                validationResult.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
-            }
-
-            return validationResult;
+            validationResult.AddError(nameof(item.AccountId), "AccountId has not been supplied");
         }
 
-        public Task<ValidationResult> ValidateAsync(GetSingleCohortRequest item)
-        {
-            throw new NotImplementedException();
-        }
+        return validationResult;
+    }
+
+    public Task<ValidationResult> ValidateAsync(GetSingleCohortRequest item)
+    {
+        return Task.FromResult(Validate(item));
     }
 }

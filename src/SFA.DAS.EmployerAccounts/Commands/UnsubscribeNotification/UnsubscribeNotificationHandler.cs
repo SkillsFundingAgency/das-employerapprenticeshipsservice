@@ -1,53 +1,41 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models.UserProfile;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Notifications.Api.Client;
-using SFA.DAS.Notifications.Api.Types;
-using SFA.DAS.Validation;
+using System.Threading;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 
-namespace SFA.DAS.EmployerAccounts.Commands.UnsubscribeNotification
+namespace SFA.DAS.EmployerAccounts.Commands.UnsubscribeNotification;
+
+public class UnsubscribeNotificationHandler : IRequestHandler<UnsubscribeNotificationCommand>
 {
-    public class UnsubscribeNotificationHandler : AsyncRequestHandler<UnsubscribeNotificationCommand>
+    private readonly IValidator<UnsubscribeNotificationCommand> _validator;
+    private readonly IAccountRepository _accountRepository;
+
+    public UnsubscribeNotificationHandler(
+        IValidator<UnsubscribeNotificationCommand> validator,
+        IAccountRepository accountRepository)
     {
-        private readonly IValidator<UnsubscribeNotificationCommand> _validator;
-        private readonly INotificationsApi _notificationsApi;
-        private readonly IUserRepository _userRepository;
-        private readonly IAccountRepository _accountRepository;
-        private readonly ILog _logger;
+        _validator = validator;
+        _accountRepository = accountRepository;
+    }
 
-        public UnsubscribeNotificationHandler(
-            IValidator<UnsubscribeNotificationCommand> validator,
-            INotificationsApi notificationsApi,
-            IUserRepository userRepository,
-            IAccountRepository accountRepository,
-            ILog logger)
+    public async Task<Unit> Handle(UnsubscribeNotificationCommand command, CancellationToken cancellationToken)
+    {
+        _validator.Validate(command);
+
+        var settings = await _accountRepository.GetUserAccountSettings(command.UserRef);
+        var setting = settings.SingleOrDefault(m => m.AccountId == command.AccountId);
+
+        if (setting == null)
         {
-            _validator = validator;
-            _notificationsApi = notificationsApi;
-            _userRepository = userRepository;
-            _accountRepository = accountRepository;
-            _logger = logger;
+            throw new UnsubscribeNotificationException($"Missing settings for account {command.AccountId} and user with ref {command.UserRef}");
         }
 
-        protected override async Task HandleCore(UnsubscribeNotificationCommand command)
+        if (!setting.ReceiveNotifications)
         {
-            _validator.Validate(command);
-            
-            var settings = await _accountRepository.GetUserAccountSettings(command.UserRef);
-            var setting = settings.SingleOrDefault(m => m.AccountId == command.AccountId);
-            if (setting == null)
-                throw new Exception($"Missing settings for account {command.AccountId} and user with ref {command.UserRef}");
-            if(!setting.ReceiveNotifications)
-                throw new Exception($"Trying to unsubscribe from an already unsubscribed account, {command.AccountId}");
-
-            setting.ReceiveNotifications = false;
-            await _accountRepository.UpdateUserAccountSettings(command.UserRef, settings);
+            throw new UnsubscribeNotificationException($"Trying to unsubscribe from an already unsubscribed account, {command.AccountId}");
         }
+
+        setting.ReceiveNotifications = false;
+        await _accountRepository.UpdateUserAccountSettings(command.UserRef, settings);
+
+        return Unit.Value;
     }
 }

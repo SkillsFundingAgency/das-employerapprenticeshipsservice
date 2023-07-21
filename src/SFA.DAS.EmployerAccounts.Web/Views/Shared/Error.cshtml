@@ -1,20 +1,16 @@
 ﻿@{
     ViewBag.PageID = "page-error";
     ViewBag.Title = "Error";
-    ViewBag.HideNav = true;
+    ViewBag.ShowNav = false;
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">There's been an error</h1>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">There's been an error</h1>
         <p>Sorry, there seems to be an error with this page. Please refresh your browser or <a href="@Url.Action("Index","Home")">go back to the homepage</a>.</p>
     </div>
 </div>
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="/" class="back-link">Back to the homepage</a></li>
-        </ol>
-    </div>
+    <a href="/" class="govuk-back-link">Back to the homepage</a>
 }

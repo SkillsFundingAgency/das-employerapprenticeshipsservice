@@ -1,0 +1,70 @@
+﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.ApprenticeshipViewModel
+@inject IUrlActionHelper UrlHelper;
+
+<section>
+    <h2 class="govuk-heading-l govuk-!-margin-bottom-2" id="call-to-action-your-apprentice-status">
+        Your apprentice
+    </h2>
+    <p>Your training provider is reviewing the following details:</p>
+    <table class="govuk-table">
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header das-table-cell-width-35">
+                Name
+            </th>
+            <td class="govuk-table__cell das-table-cell-width-65" id="apprentice-name">
+                @(Model?.ApprenticeshipFullName)
+            </td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">
+                Course
+            </th>
+            <td id="course-name" class="govuk-table__cell">
+                @(Model?.CourseName)
+            </td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">
+                Training Provider
+            </th>
+            <td id="provider-name" class="govuk-table__cell">
+                @(Model?.TrainingProvider?.Name)
+            </td>
+        </tr>
+        @if (!String.IsNullOrEmpty(Model.CourseStartDateText))
+        {
+            <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">
+                    Start month
+                </th>
+                <td id="course-start-date" class="govuk-table__cell">
+                    @(Model?.CourseStartDateText)
+                </td>
+            </tr>
+            <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">
+                    Finish month
+                </th>
+                <td id="course-end-date" class="govuk-table__cell">
+                    @(Model?.CourseEndDateText)
+                </td>
+            </tr>
+        }
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">
+                Status
+            </th>
+            <td id="with-training-provider" class="govuk-table__cell">
+                <span class="govuk-tag govuk-tag--grey">With training provider</span>
+            </td>
+        </tr>
+    </table>
+    <p>
+        <a href="@UrlHelper.EmployerCommitmentsV2Action($"{Model.ApprovedOrRejectApprenticeDetailsLink}")" class="govuk-link">
+            View apprentice details
+        </a>
+    </p>
+</section>
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+

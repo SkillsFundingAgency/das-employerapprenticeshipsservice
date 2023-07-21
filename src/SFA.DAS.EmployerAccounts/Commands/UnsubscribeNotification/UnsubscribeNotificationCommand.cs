@@ -1,11 +1,8 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Commands.UnsubscribeNotification;
 
-namespace SFA.DAS.EmployerAccounts.Commands.UnsubscribeNotification
+public class UnsubscribeNotificationCommand : IRequest
 {
-    public class UnsubscribeNotificationCommand : IAsyncRequest
-    {
-        public string UserRef { get; set; }
+    public string UserRef { get; set; }
 
-        public long AccountId { get; set; }
-    }
+    public long AccountId { get; set; }
 }

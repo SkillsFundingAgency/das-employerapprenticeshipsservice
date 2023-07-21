@@ -1,113 +1,137 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Threading.Tasks;
+﻿using System.IO;
+using AutoFixture.NUnit3;
 using AutoMapper;
 using MediatR;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Exceptions;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
 using SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.Validation;
+using SFA.DAS.Encoding;
+using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests;
+
+public class WhenIGetThePdfAgreement
 {
-    public class WhenIGetThePdfAgreement
+    private Mock<IMediator> _mediator;
+    private Mock<IReferenceDataService> _referenceDataService;
+    private EmployerAgreementOrchestrator _orchestrator;
+
+    [SetUp]
+    public void Arrange()
     {
-        private Mock<IMediator> _mediator;
-        private Mock<IReferenceDataService> _referenceDataService;
-        private EmployerAgreementOrchestrator _orchestrator;
-        
-        [SetUp]
-        public void Arrange()
-        {
-            _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAgreementPdfRequest>()))
-                .ReturnsAsync(new GetEmployerAgreementPdfResponse { FileStream = new MemoryStream() });
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetSignedEmployerAgreementPdfRequest>()))
-                .ReturnsAsync(new GetSignedEmployerAgreementPdfResponse { FileStream = new MemoryStream() });
+        _mediator = new Mock<IMediator>();
+        _mediator.Setup(x => x.Send(It.IsAny<GetEmployerAgreementPdfRequest>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new GetEmployerAgreementPdfResponse { FileStream = new MemoryStream() });
+        _mediator.Setup(x => x.Send(It.IsAny<GetSignedEmployerAgreementPdfRequest>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new GetSignedEmployerAgreementPdfResponse { FileStream = new MemoryStream() });
 
-            _referenceDataService = new Mock<IReferenceDataService>();
+        _referenceDataService = new Mock<IReferenceDataService>();
 
-            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, Mock.Of<IMapper>(), _referenceDataService.Object);
-        }
+        _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, Mock.Of<IMapper>(), _referenceDataService.Object, Mock.Of<IEncodingService>());
+    }
 
-        [Test]
-        public async Task ThenWhenIGetTheAgreementTheMediatorIsCalledWithTheCorrectParameters()
-        {
-            //Act
-            await _orchestrator.GetPdfEmployerAgreement("ACC456", "AGB123", "User1");
+    [Test, MoqAutoData]
+    public async Task ThenWhenIGetTheAgreementTheMediatorIsCalledWithTheCorrectParameters(
+        string hashedAccountId,
+        string hashedAgreementId,
+        string userId,
+        long accountId,
+        long agreementId,
+        [Frozen] Mock<IEncodingService> encodingServiceMock,
+        [Frozen] Mock<IMediator> mediatorMock,
+        EmployerAgreementOrchestrator orchestrator)
+    {
+        // Arrange
+        encodingServiceMock.Setup(e => e.Decode(hashedAccountId, EncodingType.AccountId)).Returns(accountId);
+        encodingServiceMock.Setup(e => e.Decode(hashedAgreementId, EncodingType.AccountId)).Returns(agreementId);
 
-            //Assert
-            _mediator.Verify(
-                x => x.SendAsync(It.Is<GetEmployerAgreementPdfRequest>(c => c.HashedAccountId.Equals("ACC456") && c.UserId.Equals("User1") && c.HashedLegalAgreementId.Equals("AGB123"))));
-        }
+        //Act
+        await orchestrator.GetPdfEmployerAgreement(hashedAccountId, hashedAgreementId, userId);
 
-        [Test]
-        public async Task ThenWhenIGetTheSignedAgreementTheMediatorIsCalledWithTheCorrectParameters()
-        {
-            //Arrange
-            var expectedHashedAccountId = "123RDF";
-            var expectedHashedAgreementId = "567TGB";
-            var expectedUserId = "123AVC";
+        //Assert
+        mediatorMock.Verify(x => x.Send(It.Is<GetEmployerAgreementPdfRequest>(c => c.AccountId == accountId && c.UserId == userId && c.LegalAgreementId == agreementId), It.IsAny<CancellationToken>()), Times.Once);
+    }
 
-            //Act
-            await
-                _orchestrator.GetSignedPdfEmployerAgreement(expectedHashedAccountId, expectedHashedAgreementId,
-                    expectedUserId);
+    [Test, MoqAutoData]
+    public async Task ThenWhenIGetTheSignedAgreementTheMediatorIsCalledWithTheCorrectParameters(
+        string hashedAccountId,
+        string hashedAgreementId,
+        string userId,
+        long accountId,
+        long agreementId,
+        [Frozen] Mock<IEncodingService> encodingServiceMock,
+        [Frozen] Mock<IMediator> mediatorMock,
+        EmployerAgreementOrchestrator orchestrator)
+    {
+        //Arrange
+        encodingServiceMock.Setup(e => e.Decode(hashedAccountId, EncodingType.AccountId)).Returns(accountId);
+        encodingServiceMock.Setup(e => e.Decode(hashedAgreementId, EncodingType.AccountId)).Returns(agreementId);
 
-            //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetSignedEmployerAgreementPdfRequest>(c =>
-                c.HashedAccountId.Equals(expectedHashedAccountId) && c.UserId.Equals(expectedUserId) &&
-                c.HashedLegalAgreementId.Equals(expectedHashedAgreementId))));
-        }
+        //Act
+        await orchestrator.GetSignedPdfEmployerAgreement(hashedAccountId, hashedAgreementId, userId);
 
-        [Test]
-        public async Task ThenTheFlashMessageViewModelIsPopulatedWithErrorsWhenAnExceptionOccursAndTheStatusIsSetToBadRequest()
-        {
-            //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetSignedEmployerAgreementPdfRequest>()))
-                .ThrowsAsync(new InvalidRequestException(new Dictionary<string, string> { { "", "" } }));
+        //Assert
+        mediatorMock.Verify(x => x.Send(It.Is<GetSignedEmployerAgreementPdfRequest>(c =>
+            c.AccountId.Equals(accountId) && c.UserId.Equals(userId) &&
+            c.LegalAgreementId.Equals(agreementId)), It.IsAny<CancellationToken>()));
+    }
 
-            //Act
-            var actual = await _orchestrator.GetSignedPdfEmployerAgreement("", "", "");
+    [Test, MoqAutoData]
+    public async Task ThenTheFlashMessageViewModelIsPopulatedWithErrorsWhenAnExceptionOccursAndTheStatusIsSetToBadRequest(
+        string hashedAccountId,
+        string hashedAgreementId,
+        string userId,
+        [Frozen] Mock<IMediator> mediatorMock,
+        EmployerAgreementOrchestrator orchestrator)
+    {
+        //Arrange
+        mediatorMock.Setup(x => x.Send(It.IsAny<GetSignedEmployerAgreementPdfRequest>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new InvalidRequestException(new Dictionary<string, string> { { "", "" } }));
 
-            //Assert
-            Assert.IsNotEmpty((IEnumerable) actual.FlashMessage.ErrorMessages);
-            Assert.AreEqual(HttpStatusCode.BadRequest, actual.Status);
-        }
+        //Act
+        var actual = await orchestrator.GetSignedPdfEmployerAgreement(hashedAccountId, hashedAgreementId, userId);
 
-        [Test]
-        public async Task ThenTheStatusIsSetToUnauhtorizedWhenAnUnauthorizedAccessExceptionIsThrownGettingASignedAgreement()
-        {
-            //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetSignedEmployerAgreementPdfRequest>()))
-                .ThrowsAsync(new UnauthorizedAccessException());
+        //Assert
+        Assert.IsNotEmpty(actual.FlashMessage.ErrorMessages);
+        Assert.AreEqual(HttpStatusCode.BadRequest, actual.Status);
+    }
 
-            //Act
-            var actual = await _orchestrator.GetSignedPdfEmployerAgreement("", "", "");
+    [Test, MoqAutoData]
+    public async Task ThenTheStatusIsSetToUnauhtorizedWhenAnUnauthorizedAccessExceptionIsThrownGettingASignedAgreement(
+        string hashedAccountId,
+        string hashedAgreementId,
+        string userId,
+        [Frozen] Mock<IMediator> mediatorMock,
+        EmployerAgreementOrchestrator orchestrator)
+    {
+        //Arrange
+        mediatorMock.Setup(x => x.Send(It.IsAny<GetSignedEmployerAgreementPdfRequest>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new UnauthorizedAccessException());
 
-            //Assert
-            Assert.AreEqual(HttpStatusCode.Unauthorized, actual.Status);
-        }
+        //Act
+        var actual = await orchestrator.GetSignedPdfEmployerAgreement(hashedAccountId, hashedAgreementId, userId);
+
+        //Assert
+        Assert.AreEqual(HttpStatusCode.Unauthorized, actual.Status);
+    }
 
 
-        [Test]
-        public async Task ThenTheStatusIsSetToUnauhtorizedWhenAnUnauthorizedAccessExceptionIsThrownGettingAnAgreement()
-        {
-            //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAgreementPdfRequest>()))
-                .ThrowsAsync(new UnauthorizedAccessException());
+    [Test, MoqAutoData]
+    public async Task ThenTheStatusIsSetToUnauhtorizedWhenAnUnauthorizedAccessExceptionIsThrownGettingAnAgreement(
+        string hashedAccountId,
+        string hashedAgreementId,
+        string userId,
+        [Frozen] Mock<IMediator> mediatorMock,
+        EmployerAgreementOrchestrator orchestrator)
+    {
+        //Arrange
+        mediatorMock.Setup(x => x.Send(It.IsAny<GetEmployerAgreementPdfRequest>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new UnauthorizedAccessException());
 
-            //Act
-            var actual = await _orchestrator.GetPdfEmployerAgreement("", "", "");
+        //Act
+        var actual = await orchestrator.GetPdfEmployerAgreement(hashedAccountId, hashedAgreementId, userId);
 
-            //Assert
-            Assert.AreEqual(HttpStatusCode.Unauthorized, actual.Status);
-        }
+        //Assert
+        Assert.AreEqual(HttpStatusCode.Unauthorized, actual.Status);
     }
 }

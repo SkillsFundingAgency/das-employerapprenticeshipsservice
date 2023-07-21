@@ -1,18 +1,15 @@
 ﻿using System;
 using MediatR;
 using Moq;
-using SFA.DAS.Authorization.Services;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
-using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Factories;
-using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Services;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTests
 {
@@ -27,11 +24,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
         protected MembershipView Owner;
         protected EmployerAgreementView AgreementView;
         protected Mock<ILegalEntityEventFactory> LegalEntityEventFactory;
-        protected Mock<IHashingService> HashingService;
-        protected Mock<IAccountLegalEntityPublicHashingService> AccountLegalEntityPublicHashingService;
+        protected Mock<IEncodingService> EncodingService;
         protected Mock<IEmployerAgreementRepository> EmployerAgreementRepository;
         protected Mock<IValidator<CreateLegalEntityCommand>> Validator;
-        protected Mock<IAuthorizationService> AuthorizationService;
         protected Mock<IEventPublisher> EventPublisher;
         protected const long AccountId = 123435;
 
@@ -40,8 +35,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
             Command = new CreateLegalEntityCommand
             {
                 HashedAccountId = "ABC123",
-                SignAgreement = true,
-                SignedDate = DateTime.Now.AddDays(-10),
                 ExternalUserId = Guid.NewGuid().ToString(),
                 Name = "Org Ltd",
                 Code = "3476782638",
@@ -56,11 +49,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
             MembershipRepository.Setup(x => x.GetCaller(Command.HashedAccountId, Command.ExternalUserId)).ReturnsAsync(new MembershipView { UserRef = Guid.Parse(Command.ExternalUserId), AccountId = AccountId });
 
             Mediator = new Mock<IMediator>();
-            AuthorizationService = new Mock<IAuthorizationService>();
             GenericEventFactory = new Mock<IGenericEventFactory>();
             LegalEntityEventFactory = new Mock<ILegalEntityEventFactory>();
-            HashingService = new Mock<IHashingService>();
-            AccountLegalEntityPublicHashingService = new Mock<IAccountLegalEntityPublicHashingService>();
+            EncodingService = new Mock<IEncodingService>();
             EmployerAgreementRepository = new Mock<IEmployerAgreementRepository>();
             EventPublisher = new Mock<IEventPublisher>();
 
@@ -74,11 +65,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
                 GenericEventFactory.Object,
                 LegalEntityEventFactory.Object,
                 EventPublisher.Object,
-                HashingService.Object,
-                AccountLegalEntityPublicHashingService.Object,
+                EncodingService.Object,
                 EmployerAgreementRepository.Object,
-                Validator.Object,
-                AuthorizationService.Object
+                Validator.Object
             );
         }
     }

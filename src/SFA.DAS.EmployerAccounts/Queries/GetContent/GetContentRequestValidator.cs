@@ -1,25 +1,20 @@
-﻿using System;
-using System.Threading.Tasks;
-using SFA.DAS.Validation;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetContent;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetContent
+public class GetContentRequestValidator : IValidator<GetContentRequest>
 {
-    public class GetContentRequestValidator : IValidator<GetContentRequest>
+    public ValidationResult Validate(GetContentRequest item)
     {
-        public ValidationResult Validate(GetContentRequest item)
-        {
-            var validationResult = new ValidationResult();
+        var validationResult = new ValidationResult();
 
-            if (string.IsNullOrEmpty(item.ContentType))
-            {
-                validationResult.AddError(nameof(item.ContentType), "Type has not been supplied");
-            }
-            return validationResult;
-        }
-
-        public Task<ValidationResult> ValidateAsync(GetContentRequest item)
+        if (string.IsNullOrEmpty(item.ContentType))
         {
-            return Task.FromResult(Validate(item));
+            validationResult.AddError(nameof(item.ContentType), "Type has not been supplied");
         }
+        return validationResult;
+    }
+
+    public Task<ValidationResult> ValidateAsync(GetContentRequest item)
+    {
+        return Task.FromResult(Validate(item));
     }
 }

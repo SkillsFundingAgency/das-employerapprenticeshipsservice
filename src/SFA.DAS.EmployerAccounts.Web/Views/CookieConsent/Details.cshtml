@@ -3,7 +3,6 @@
     ViewBag.Title = "Details about our cookies";
     ViewBag.PageID = "page-cookie-details";
     ViewBag.GaData.Vpv = "/page-cookie-details";
-    Layout = "~/Views/Shared/_Layout_CDN.cshtml";
 }
 
 <div class="govuk-grid-row">
@@ -19,7 +18,7 @@
             <li>remember what notifications you've seen so you're not shown them more than once</li>
             <li>temporarily store the selections you make</li>
         </ul>
-        <p>Find out more about <a class="govuk-link" href="https://ico.org.uk/your-data-matters/online/cookies/" target="_blank">how to manage cookies</a>.</p>
+        <p>Find out more about <a class="govuk-link" href="https://ico.org.uk/your-data-matters/online/cookies/" rel="noopener" target="_blank">how to manage cookies</a>.</p>
 
         <h2 class="govuk-heading-m">Cookies that measure website usage</h2>
         <p>
@@ -35,7 +34,7 @@
         <p>We may also set our own cookies to understand how people move through the site.</p>
         <table class="govuk-table">
             <thead class="govuk-table__head">
-                <tr>
+                <tr class="govuk-table__row">
                     <th scope="col" class="govuk-table__header">
                         Name
                     </th>
@@ -48,7 +47,7 @@
                 </tr>
             </thead>
             <tbody class="govuk-table__body">
-                <tr>
+                <tr class="govuk-table__row">
                     <td class="govuk-table__cell">
                         __zlcmid
                     </td>
@@ -59,7 +58,7 @@
                         1 year
                     </td>
                 </tr>
-                <tr>
+                <tr class="govuk-table__row">
                     <td class="govuk-table__cell">
                         _ga
                     </td>
@@ -70,7 +69,7 @@
                         2 year
                     </td>
                 </tr>
-                <tr>
+                <tr class="govuk-table__row">
                     <td class="govuk-table__cell">
                         _gat
                     </td>
@@ -81,7 +80,7 @@
                         1 minute
                     </td>
                 </tr>
-                <tr>
+                <tr class="govuk-table__row">
                     <td class="govuk-table__cell">
                         _gid
                     </td>
@@ -92,7 +91,7 @@
                         1 day
                     </td>
                 </tr>
-                <tr>
+                <tr class="govuk-table__row">
                     <td class="govuk-table__cell">
                         AnalyticsConsent
                     </td>
@@ -103,7 +102,7 @@
                         1 year
                     </td>
                 </tr>
-                <tr>
+                <tr class="govuk-table__row">
                     <td class="govuk-table__cell">
                         DASSeenCookieMessage
                     </td>
@@ -114,7 +113,7 @@
                         1 year
                     </td>
                 </tr>
-                <tr>
+                <tr class="govuk-table__row">
                     <td class="govuk-table__cell">
                         __RequestVerificationToken
                     </td>
@@ -125,7 +124,7 @@
                         Session
                     </td>
                 </tr>
-                <tr>
+                <tr class="govuk-table__row">
                     <td class="govuk-table__cell">
                         .AspNet.Cookies
                     </td>
@@ -136,49 +135,49 @@
                         Session
                     </td>
                 </tr>
-                <tr>
+                <tr class="govuk-table__row">
                     <td class="govuk-table__cell">
                         ai_session
                     </td>
                     <td class="govuk-table__cell">This monitors the performance of the website</td>
                     <td class="govuk-table__cell">Session</td>
                 </tr>
-                <tr>
+                <tr class="govuk-table__row">
                     <td class="govuk-table__cell">
                         ai_user
                     </td>
                     <td class="govuk-table__cell">This monitors the performance of the website</td>
                     <td class="govuk-table__cell">Session</td>
                 </tr>
-                <tr>
+                <tr class="govuk-table__row">
                     <td class="govuk-table__cell">
                         sfa-das-employerapprenticeshipsservice-accountcontext
                     </td>
                     <td class="govuk-table__cell">This enables the website to function properly</td>
                     <td class="govuk-table__cell">1 day</td>
                 </tr>
-                <tr>
+                <tr class="govuk-table__row">
                     <td class="govuk-table__cell">
                         recruit-data
                     </td>
                     <td class="govuk-table__cell">This enables the website to function properly</td>
                     <td class="govuk-table__cell">Session</td>
                 </tr>
-                <tr>
+                <tr class="govuk-table__row">
                     <td class="govuk-table__cell">
                         setup-employer-[AccountID]
                     </td>
                     <td class="govuk-table__cell">This enables the website to function properly</td>
                     <td class="govuk-table__cell">Session</td>
                 </tr>
-                <tr>
+                <tr class="govuk-table__row">
                     <td class="govuk-table__cell">
                         __cfruid
                     </td>
                     <td class="govuk-table__cell">Used by the content network, Cloudflare, to identify trusted web traffic.</td>
                     <td class="govuk-table__cell">1 year</td>
                 </tr>
-                <tr>
+                <tr class="govuk-table__row">
                     <td class="govuk-table__cell">
                         SFA.DAS.EmployerCommitmentsV2.Web.Auth
                     </td>
@@ -188,8 +187,7 @@
 
             </tbody>
         </table>
-        <hr class="govuk-section-break govuk-section-break--l g" />
-
+        <hr class="govuk-section-break govuk-section-break--l" />
         <h3 class="govuk-heading-s">Change your settings</h3>
         <p>You can <a href="@Url.Action(ControllerConstants.Settings)" class="govuk-link">change which cookies you're happy for us to use</a>.</p>
     </div>

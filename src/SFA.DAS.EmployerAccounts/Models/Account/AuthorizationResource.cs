@@ -1,8 +1,7 @@
-﻿namespace SFA.DAS.EmployerAccounts.Models.Account
+﻿namespace SFA.DAS.EmployerAccounts.Models.Account;
+
+public class AuthorizationResource
 {
-    public class AuthorizationResource
-    {
-        public string Name { get; set; }
-        public string Value { get; set; }
-    }
+    public string Name { get; set; }
+    public string Value { get; set; }
 }

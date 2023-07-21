@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement;
-using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
 {
@@ -13,15 +13,15 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
     {
         private SignEmployerAgreementCommandValidator _validator;
         private Mock<IEmployerAgreementRepository> _employerAgreementRepository;
-        private Mock<IHashingService> _hashingService;
+        private Mock<IEncodingService> _encodingService;
 
         [SetUp]
         public void Arrange()
         {
             _employerAgreementRepository = new Mock<IEmployerAgreementRepository>();
-            _hashingService = new Mock<IHashingService>();
+            _encodingService = new Mock<IEncodingService>();
 
-            _validator = new SignEmployerAgreementCommandValidator(_employerAgreementRepository.Object, _hashingService.Object);
+            _validator = new SignEmployerAgreementCommandValidator(_employerAgreementRepository.Object, _encodingService.Object);
         }
 
         [Test]
@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
             //aRRANGE
             var employerAgreementId = 12345;
             var hashedAgreementId = "123ASD";
-            _hashingService.Setup(x => x.DecodeValue(hashedAgreementId)).Returns(employerAgreementId);
+            _encodingService.Setup(x => x.Decode(hashedAgreementId, EncodingType.AccountId)).Returns(employerAgreementId);
             _employerAgreementRepository.Setup(x => x.GetEmployerAgreementStatus(employerAgreementId)).ReturnsAsync(EmployerAgreementStatus.Pending);
 
             //Act
@@ -70,7 +70,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
             //Arrange
             var employerAgreementId = 12345;
             var hashedAgreementId = "123ASD";
-            _hashingService.Setup(x => x.DecodeValue(hashedAgreementId)).Returns(employerAgreementId);
+            _encodingService.Setup(x => x.Decode(hashedAgreementId, EncodingType.AccountId)).Returns(employerAgreementId);
             _employerAgreementRepository.Setup(x => x.GetEmployerAgreementStatus(employerAgreementId)).ReturnsAsync(employerAgreementStatus);
 
             //Act

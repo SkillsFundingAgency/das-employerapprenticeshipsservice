@@ -1,54 +1,50 @@
-﻿using System;
-using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Validation;
+﻿using System.Threading;
+using Microsoft.Extensions.Logging;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetVacancies
+namespace SFA.DAS.EmployerAccounts.Queries.GetVacancies;
+
+public class GetVacanciesRequestHandler : IRequestHandler<GetVacanciesRequest, GetVacanciesResponse>
 {
-    public class GetVacanciesRequestHandler : IAsyncRequestHandler<GetVacanciesRequest, GetVacanciesResponse>
-    {
-        private readonly IValidator<GetVacanciesRequest> _validator;
-        private readonly ILog _logger;
-        private readonly IRecruitService _service;
+    private readonly IValidator<GetVacanciesRequest> _validator;
+    private readonly ILogger<GetVacanciesRequestHandler> _logger;
+    private readonly IRecruitService _service;
 
-        public GetVacanciesRequestHandler(
-            IValidator<GetVacanciesRequest> validator,
-            ILog logger,
-            IRecruitService service)
+    public GetVacanciesRequestHandler(
+        IValidator<GetVacanciesRequest> validator,
+        ILogger<GetVacanciesRequestHandler> logger,
+        IRecruitService service)
+    {
+        _validator = validator;
+        _logger = logger;
+        _service = service;
+    }
+
+    public async Task<GetVacanciesResponse> Handle(GetVacanciesRequest message, CancellationToken cancellationToken)
+    {
+        var validationResult = await _validator.ValidateAsync(message);
+
+        if (!validationResult.IsValid())
         {
-            _validator = validator;
-            _logger = logger;
-            _service = service;
+            throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        public async Task<GetVacanciesResponse> Handle(GetVacanciesRequest message)
+        _logger.LogInformation("Getting vacancies for hashed account id {HashedAccountId}", message.HashedAccountId);
+
+        try
         {
-            var validationResult = _validator.Validate(message);
-
-            if (!validationResult.IsValid())
+            return new GetVacanciesResponse
             {
-                throw new InvalidRequestException(validationResult.ValidationDictionary);
-            }
+                Vacancies = await _service.GetVacancies(message.HashedAccountId)
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to get vacancies for {HashedAccountId}", message.HashedAccountId);
 
-            _logger.Info($"Getting vacancies for hashed account id {message.HashedAccountId}");
-
-            try
+            return new GetVacanciesResponse
             {
-                return new GetVacanciesResponse
-                {
-                    Vacancies = await _service.GetVacancies(message.HashedAccountId)
-                };
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, $"Failed to get vacancies for {message.HashedAccountId}");
-                return new GetVacanciesResponse
-                {
-                    HasFailed = true
-                };
-            }
+                HasFailed = true
+            };
         }
     }
 }

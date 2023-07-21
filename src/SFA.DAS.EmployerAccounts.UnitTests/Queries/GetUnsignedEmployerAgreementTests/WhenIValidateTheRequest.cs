@@ -1,81 +1,104 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoFixture.NUnit3;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
+using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUnsignedEmployerAgreementTests
 {
     public class WhenIValidateTheRequest
     {
-        private Mock<IMembershipRepository> _membershipRepository;
-        private GetNextUnsignedEmployerAgreementValidator _validator;
-
-        [SetUp]
-        public void Arrange()
+        [Test]
+        [MoqInlineAutoData(0)]
+        [MoqInlineAutoData(-1)]
+        [MoqInlineAutoData(-999)]
+        public async Task ThenTheRequestIsNotValidIfAccountIdInvalidArentPopulatedAndTheRepositoryIsNotCalled(
+            long accountId,
+            GetNextUnsignedEmployerAgreementRequest query,
+            GetNextUnsignedEmployerAgreementValidator validator)
         {
-            _membershipRepository = new Mock<IMembershipRepository>();
-            _validator = new GetNextUnsignedEmployerAgreementValidator(_membershipRepository.Object);
+            //Arrange
+            query.AccountId = accountId;
+
+            //Act
+            var actual = await validator.ValidateAsync(query);
+
+            //Assert
+            Assert.IsFalse(actual.IsValid());
+            Assert.Contains(new KeyValuePair<string, string>("AccountId", "AccountId has not been supplied"), actual.ValidationDictionary);
+        }
+
+        [Test, MoqAutoData]
+        public async Task ThenTheRequestIsNotValidIfUserIdNotSupplied_TheRepositoryIsNotCalled(
+            GetNextUnsignedEmployerAgreementRequest query,
+            GetNextUnsignedEmployerAgreementValidator validator)
+        {
+            //Arrange
+            query.ExternalUserId = string.Empty;
+
+            //Act
+            var actual = await validator.ValidateAsync(query);
+
+            //Assert
+            Assert.IsFalse(actual.IsValid());
+            Assert.Contains(new KeyValuePair<string, string>("ExternalUserId", "ExternalUserId has not been supplied"), actual.ValidationDictionary);
+        }
+
+        [Test, MoqAutoData]
+        public async Task WhenTheRequestHasValdAccountId_TheMembershipIsFetched(
+           [Frozen] Mock<IMembershipRepository> membershipRepoMock,
+           GetNextUnsignedEmployerAgreementRequest query,
+           GetNextUnsignedEmployerAgreementValidator validator)
+        {
+            //Arrange
+
+            //Act
+            var actual = await validator.ValidateAsync(query);
+
+            //Assert
+            membershipRepoMock.Verify(mock => mock.GetCaller(It.Is<long>(l => l == query.AccountId), It.Is<string>(s => s == query.ExternalUserId)));
         }
 
         [Test]
-        public async Task ThenShouldReturnValidIfRequestIsValid()
+        [MoqInlineAutoData(Role.Viewer)]
+        [MoqInlineAutoData(Role.Transactor)]
+        [MoqInlineAutoData(Role.Owner)]
+        public async Task WhenAccountMemberThenAuthorized(
+            Role userRole,
+            [Frozen] Mock<IMembershipRepository> membershipRepoMock,
+            GetNextUnsignedEmployerAgreementRequest query,
+            GetNextUnsignedEmployerAgreementValidator validator)
         {
+            //Arrange
+            membershipRepoMock.Setup(x => x.GetCaller(It.Is<long>(l => l == query.AccountId), It.Is<string>(s => s == query.ExternalUserId))).ReturnsAsync(new MembershipView { Role = userRole });
+
             //Act
-            var result = await _validator.ValidateAsync(new GetNextUnsignedEmployerAgreementRequest { HashedAccountId = "ABC123", ExternalUserId = Guid.NewGuid().ToString() });
+            var actual = await validator.ValidateAsync(query);
 
             //Assert
-            Assert.IsTrue(result.IsValid());
+            Assert.IsTrue(actual.IsValid());
+            Assert.IsFalse(actual.IsUnauthorized);
         }
 
-        [Test]
-        public async Task ThenShouldReturnInvalidIfNoAccountIdIsProvided()
+        [Test, MoqAutoData]
+        public async Task ThenTheRequestIsMarkedAsInvalidIfTheUserDoesNotExist(
+            [Frozen] Mock<IMembershipRepository> membershipRepoMock,
+            GetNextUnsignedEmployerAgreementRequest query,
+            GetNextUnsignedEmployerAgreementValidator validator)
         {
-            //Act
-            var result = await _validator.ValidateAsync(new GetNextUnsignedEmployerAgreementRequest { ExternalUserId = Guid.NewGuid().ToString() });
-
-            //Assert
-            Assert.IsFalse(result.IsValid());
-        }
-
-        [Test]
-        public async Task ThenShouldReturnInvalidIfNoUserIdIsProvided()
-        {
-            //Act
-            var result = await _validator.ValidateAsync(new GetNextUnsignedEmployerAgreementRequest { HashedAccountId = "ABC123" });
-
-            //Assert
-            Assert.IsFalse(result.IsValid());
-        }
-
-        [Test]
-        public async Task ThenShouldReturnAuthorisedIfTheUserIsAssociatedToTheAccount()
-        {
-            var request = new GetNextUnsignedEmployerAgreementRequest { HashedAccountId = "ABC123", ExternalUserId = Guid.NewGuid().ToString() };
-
-            _membershipRepository.Setup(x => x.GetCaller(request.HashedAccountId, request.ExternalUserId)).ReturnsAsync(new MembershipView());
+            //Arrange
+            membershipRepoMock.Setup(x => x.GetCaller(It.Is<long>(l => l == query.AccountId), It.Is<string>(s => s == query.ExternalUserId))).ReturnsAsync(() => null);
 
             //Act
-            var result = await _validator.ValidateAsync(request);
+            var actual = await validator.ValidateAsync(query);
 
             //Assert
-            Assert.IsFalse(result.IsUnauthorized);
-        }
-
-        [Test]
-        public async Task ThenShouldReturnUnauthorisedIfTheUserIsAssociatedToTheAccount()
-        {
-            var request = new GetNextUnsignedEmployerAgreementRequest { HashedAccountId = "ABC123", ExternalUserId = Guid.NewGuid().ToString() };
-
-            _membershipRepository.Setup(x => x.GetCaller(request.HashedAccountId, request.ExternalUserId)).ReturnsAsync((MembershipView)null);
-
-            //Act
-            var result = await _validator.ValidateAsync(request);
-
-            //Assert
-            Assert.IsTrue(result.IsUnauthorized);
+            Assert.IsTrue(actual.IsUnauthorized);
         }
     }
 }

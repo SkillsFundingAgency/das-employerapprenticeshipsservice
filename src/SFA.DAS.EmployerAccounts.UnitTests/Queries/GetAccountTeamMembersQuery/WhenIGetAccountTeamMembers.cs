@@ -1,24 +1,24 @@
-﻿using Moq;
-using NUnit.Framework;
-using SFA.DAS.Validation;
-using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.Authentication;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
-using System.Collections.Generic;
-using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+﻿using System.Collections.Generic;
 using System.Security.Claims;
+using System.Threading;
+using System.Threading.Tasks;
+using MediatR;
+using Microsoft.AspNetCore.Http;
+using Moq;
+using NUnit.Framework;
+using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Extensions;
+using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTeamMembersQuery
 {
     public class WhenIGetAccountTeamMembers : QueryBaseTest<GetAccountTeamMembersHandler, EmployerAccounts.Queries.GetAccountTeamMembers.GetAccountTeamMembersQuery, GetAccountTeamMembersResponse>
     {
         private Mock<IEmployerAccountTeamRepository> _employerAccountTeamRepository;
-        private Mock<IAuthenticationService> _authenticationService;
+        private Mock<IHttpContextAccessor> _httpContextAccessor;
         private Mock<IMediator> _mediator;
         private Mock<IMembershipRepository> _membershipRepository;
         private IUserContext _userContext;
@@ -45,14 +45,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTeamMembersQuery
                 .Setup(m => m.GetAccountTeamMembersForUserId(ExpectedHashedAccountId, ExpectedExternalUserId))
                 .ReturnsAsync(TeamMembers);
 
-            _authenticationService = new Mock<IAuthenticationService>();
+            _httpContextAccessor = new Mock<IHttpContextAccessor>();
             _config = new EmployerAccountsConfiguration()
             {
                 SupportConsoleUsers = SupportConsoleUsers
             };
-            _userContext = new UserContext(_authenticationService.Object,_config);
-            _authenticationService
-                .Setup(m => m.HasClaim(It.IsAny<string>(), It.IsAny<string>()))
+            _userContext = new UserContext(_httpContextAccessor.Object,_config);
+            _httpContextAccessor
+                .Setup(m => m.HttpContext.User.HasClaim(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(false);                
 
             _mediator = new Mock<IMediator>();
@@ -78,7 +78,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTeamMembersQuery
             {
                 HashedAccountId = ExpectedHashedAccountId,
                 ExternalUserId = ExpectedExternalUserId
-            });
+            }, CancellationToken.None);
 
             //Assert
             _employerAccountTeamRepository.Verify(x => x.GetAccountTeamMembersForUserId(ExpectedHashedAccountId, ExpectedExternalUserId), Times.Once);
@@ -92,7 +92,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTeamMembersQuery
             {
                 HashedAccountId = ExpectedHashedAccountId,
                 ExternalUserId = ExpectedExternalUserId
-            });
+            }, CancellationToken.None);
 
             //Assert
             Assert.IsNotNull(result);
@@ -105,15 +105,15 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTeamMembersQuery
         public async Task ThenIfTheMessageIsValidAndTheCallerIsASupportUserThenTheMembershiprespositoryIsCalled(string role)
         {
             //Act
-            _authenticationService
-                .Setup(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role))
+            _httpContextAccessor
+                .Setup(m => m.HttpContext.User.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role))
                 .Returns(true);
 
             await RequestHandler.Handle(new EmployerAccounts.Queries.GetAccountTeamMembers.GetAccountTeamMembersQuery
             {
                 HashedAccountId = ExpectedHashedAccountId,
                 ExternalUserId = ExpectedExternalUserId
-            });
+            }, CancellationToken.None);
 
             //Assert
             _membershipRepository.Verify(x => x.GetCaller(ExpectedHashedAccountId, ExpectedExternalUserId), Times.Once);
@@ -125,21 +125,21 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTeamMembersQuery
         public async Task ThenIfTheMessageIsValidAndTheCallerIsASupportUserThenTheAuditIsRaised(string role)
         {
             //Act
-            _authenticationService
-                .Setup(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role))
+            _httpContextAccessor
+                .Setup(m => m.HttpContext.User.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role))
                 .Returns(true);
 
             await RequestHandler.Handle(new EmployerAccounts.Queries.GetAccountTeamMembers.GetAccountTeamMembersQuery
             {
                 HashedAccountId = ExpectedHashedAccountId,
                 ExternalUserId = ExpectedExternalUserId
-            });
+            }, CancellationToken.None);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c => 
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c => 
             c.EasAuditMessage.Category.Equals("VIEW") &&
             c.EasAuditMessage.Description.Equals($"Account {AccountId} team members viewed")
-            )), Times.Once);
+            ), CancellationToken.None), Times.Once);
         }
 
         [Test]
@@ -150,13 +150,13 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTeamMembersQuery
             {
                 HashedAccountId = ExpectedHashedAccountId,
                 ExternalUserId = ExpectedExternalUserId
-            });
+            }, CancellationToken.None);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
             c.EasAuditMessage.Category.Equals("VIEW") &&
             c.EasAuditMessage.Description.Equals($"Account {AccountId} team members viewed")
-            )), Times.Never);
+            ), CancellationToken.None), Times.Never);
         }
     }
 }

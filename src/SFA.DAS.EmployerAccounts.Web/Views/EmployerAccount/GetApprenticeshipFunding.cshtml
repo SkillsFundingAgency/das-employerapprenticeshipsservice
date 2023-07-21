@@ -1,14 +1,31 @@
-﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
-@{ViewBag.PageID = "get-apprenticeship-funding"; }
-@{ViewBag.Title = "Add a PAYE Scheme"; }
-@{ViewBag.HideNav = true; }
-@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
-
-
+@using SFA.DAS.EmployerAccounts.Web.Helpers
 @{
+    ViewBag.PageID = "get-apprenticeship-funding";
+    ViewBag.Title = "Add a PAYE Scheme";
+    ViewBag.ShowNav = false;
+
     ViewBag.GaData.Vpv = "/service/getApprenticeshipFunding/get-government-funding";
     var hiddenClass = Model?.GetType().GetProperty("InError") != null ? "" : "das-hidden";
     var errorClass = Model?.GetType().GetProperty("InError") != null ? "govuk-form-group--error" : "";
+
+    string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]?.ToString();
+    var postEndpointName = string.IsNullOrEmpty(hashedAccountId) ? RouteNames.EmployerAccountPostApprenticeshipFunding : RouteNames.EmployerAccountPostApprenticeshipFundingInAccount;
+}
+
+@if (Model?.GetType().GetProperty("InError") != null)
+{
+    <div class="govuk-error-summary" data-module="govuk-error-summary">
+        <div role="alert">
+            <h2 class="govuk-error-summary__title">
+                There is a problem
+            </h2>
+            <div class="govuk-error-summary__body">
+                <ul class="govuk-list govuk-error-summary__list">
+                    <li><a href="#want-to-add-paye-scheme">You need to select how you wish to add your <abbr>PAYE</abbr> scheme</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
 }
 
 <div class="govuk-grid-row">
@@ -18,31 +35,29 @@
             Add a <abbr>PAYE</abbr> Scheme
         </h1>
 
-        <p class="govuk-body">We need you to add the <abbr title="Pay As You Earn">PAYE</abbr> scheme for your organisation.</p>
-        <p class="govuk-body">
-            You can do this by using either of the following:
-        </p>
+        <p class="govuk-body">We need you to add the <abbr title="Pay As You Earn">PAYE</abbr> scheme for your organisation.
+            You can add your PAYE schem by using:</p>
 
         <ul class="govuk-list govuk-list--bullet">
-            <li>the Government Gateway login for your organisation</li>
-            <li>your accounts office reference number for your organisation</li>
+            <li>the Government Gateway login for your organisation or</li>
+            <li>your Accounts Office reference and Employer PAYE reference</li>
         </ul>
 
         <details class="govuk-details" role="group" data-module="govuk-details">
             <summary class="govuk-details__summary" role="button">
                 <span class="govuk-details__summary-text">
-                    Find your Government Gateway details
+                    How to find your Government Gateway details
                 </span>
             </summary>
             <div class="govuk-details__text">
-                If you have lost your Government Gateway log in details you can <a href="https://www.gov.uk/log-in-register-hmrc-online-services/problems-signing-in" class="govuk-link" rel="external" target="_blank" title="Opens in a new window">get help signing in</a>
+                If you have lost your Government Gateway log in details you can <a href="https://www.gov.uk/log-in-register-hmrc-online-services/problems-signing-in" rel="noopener" class="govuk-link" rel="external" target="_blank" title="Opens in a new window">get help signing in</a>
             </div>
         </details>
 
         <details class="govuk-details" role="group" data-module="govuk-details">
             <summary class="govuk-details__summary" role="button">
                 <span class="govuk-details__summary-text">
-                    Find your accounts office and <abbr>PAYE</abbr> scheme reference numbers
+                    How to find your Accounts Office reference and Employer PAYE reference
                 </span>
             </summary>
             <div class="govuk-details__text">
@@ -51,39 +66,32 @@
         </details>
 
 
-        <form method="POST" action="@Url.Action(ControllerConstants.GetApprenticeshipFundingActionName)">
-            @Html.AntiForgeryToken()
+        <form method="POST" asp-route="@postEndpointName" asp-route-hashedAccountId="@hashedAccountId">
             <div class="govuk-form-group @errorClass" id="do-you-want-to-add-paye-scheme-form">
 
                 <fieldset class="govuk-fieldset" aria-describedby="have-not-got-everything">
 
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
                         <h1 class="govuk-fieldset__heading">
-                            <span>You can add a <abbr>PAYE</abbr> scheme later if you need more time, we can still create your account for you.</span>
+                            <span>How do you want to add your PAYE scheme</span>
                         </h1>
                     </legend>
 
-                    <span class="error-message js-hidden @hiddenClass" aria-hidden="false" id="have-not-got-everything">
-                        Tell us if you want to add a <abbr>PAYE</abbr> scheme
+                    <span class="govuk-error-message @hiddenClass" aria-hidden="false" id="have-not-got-everything">
+                        Tell us how you would like to add a <abbr>PAYE</abbr> scheme
                     </span>
 
                     <div class="govuk-radios">
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" type="radio" name="choice" id="want-to-add-paye-scheme" value="2" />
+                            <input class="govuk-radios__input" type="radio" name="choice" id="want-to-add-paye-scheme" value="1" />
                             <label class="govuk-label govuk-radios__label" for="want-to-add-paye-scheme">
                                 Use Government Gateway log in
                             </label>
                         </div>
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" type="radio" name="choice" id="want-to-add-paye-scheme-aorn" value="3" />
+                            <input class="govuk-radios__input" type="radio" name="choice" id="want-to-add-paye-scheme-aorn" value="2" />
                             <label class="govuk-label govuk-radios__label" for="want-to-add-paye-scheme-aorn">
-                                Use accounts office reference number and employer <abbr>PAYE</abbr> scheme reference. <b>You should only use this if your payroll for your organisation is under &pound;3 million</b>.
-                            </label>
-                        </div>
-                        <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" type="radio" name="choice" id="do-not-want-to-add-paye-scheme" value="1" />
-                            <label class="govuk-label govuk-radios__label" for="do-not-want-to-add-paye-scheme">
-                                No, I'll do this later
+                                Use Accounts Office reference and Employer <abbr>PAYE</abbr> reference.
                             </label>
                         </div>
                     </div>
@@ -98,29 +106,14 @@
                 </strong>
             </div>
 
-            <div class="govuk-form-group">
+            <div class="govuk-button-group">
                 <button class="govuk-button" type="submit" id="submit-add-a-paye-scheme-button">Continue</button>
+                <a asp-route="@RouteNames.NewEmpoyerAccountTaskList" class="govuk-link">Cancel</a>
             </div>
         </form>
     </div>
 </div>
 
-@section pageSpecificJS {
-    <script type="text/javascript">
-      $(function () {
-        var pageTitle = $('h1.govuk-heading-xl').text().trim();
-        $('.govuk-radios').each(function () {
-          var dataLayerObj
-          var radios = $(this).find('input:radio');
-          radios.on('change', function () {
-            dataLayerObj = {
-              event: 'radio button selected',
-              page: pageTitle,
-              radio: this.id
-            }
-            window.dataLayer.push(dataLayerObj)
-          })
-        });
-      });
-    </script>
+@section breadcrumb {
+    <div class="das-js-back-link"></div>
 }

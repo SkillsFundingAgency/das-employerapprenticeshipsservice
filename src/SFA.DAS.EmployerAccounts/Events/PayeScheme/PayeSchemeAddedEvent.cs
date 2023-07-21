@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Events.PayeScheme
+﻿namespace SFA.DAS.EmployerAccounts.Events.PayeScheme;
+
+public class PayeSchemeAddedEvent
 {
-    public class PayeSchemeAddedEvent
-    {
-        public string ResourceUri { get; set; }
-    }
+    public string ResourceUri { get; set; }
 }

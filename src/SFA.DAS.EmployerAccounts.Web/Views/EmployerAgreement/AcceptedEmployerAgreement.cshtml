@@ -1,13 +1,12 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
-@{ Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
-
 @{
     ViewBag.PageID = "accepted-employer-agreement";
     ViewBag.Title = "You’ve accepted the employer agreement";
     ViewBag.Section = "organisations";
     ViewBag.GaData.Vpv = "/accounts/agreements/accepted-employer-agreement";
     ViewBag.ZenDeskLabel = "eas-accepted-employer-agreement";
-    ViewBag.HideNav = true;
+    ViewBag.ShowNav = false;
+    var hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId];
 }
 
 <div class="govuk-grid-row">
@@ -19,7 +18,7 @@
         </div>
 
         <p class="govuk-body">
-            <a class="govuk-link" href="@Url.Action(ControllerConstants.GetSignedPdfAgreementActionName, ControllerConstants.EmployerAgreementControllerName)" target="_blank">
+            <a class="govuk-link" asp-route="@RouteNames.GetSignedPdfAgreement" asp-route-HashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" asp-route-hashedAgreementId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAgreementId]" target="_blank">
                 Download your accepted agreement
             </a>
             &nbsp;(<abbr>PDF</abbr>, 225<abbr>KB</abbr>)
@@ -36,10 +35,10 @@
         @if (ViewBag.HasFurtherPendingAgreements)
         {
             <div class="govuk-inset-text">
-                You still need to <a class="govuk-link" href="@Url.Action(ControllerConstants.IndexActionName)">review and accept your other agreements</a>.
+                You still need to <a class="govuk-link" asp-route="@RouteNames.EmployerAgreementIndex" asp-route-hashedAccountId="@hashedAccountId">review and accept your other agreements</a>.
             </div>
         }
 
-        <a class="govuk-button" href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName)">View your account</a>
+        <a class="govuk-button" asp-route="@RouteNames.EmployerTeamIndex" asp-route-hashedAccountId="@hashedAccountId">View your account</a>
     </div>
 </div>

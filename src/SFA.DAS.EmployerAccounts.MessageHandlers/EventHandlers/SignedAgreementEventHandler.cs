@@ -1,30 +1,34 @@
-﻿using System.Threading.Tasks;
-using NServiceBus;
-using SFA.DAS.EmployerAccounts.Events.Messages;
+﻿using SFA.DAS.EmployerAccounts.Events.Messages;
+using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Messages.Events;
-using SFA.DAS.Messaging.Interfaces;
+using SFA.DAS.NServiceBus.Services;
 
-namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers
+namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers;
+
+public class SignedAgreementEventHandler : IHandleMessages<SignedAgreementEvent>
 {
-    public class SignedAgreementEventHandler : IHandleMessages<SignedAgreementEvent>
+    private readonly ILegacyTopicMessagePublisher _messagePublisher;
+    private readonly ILogger<SignedAgreementEventHandler> _logger;
+
+    public SignedAgreementEventHandler(ILegacyTopicMessagePublisher messagePublisher, ILogger<SignedAgreementEventHandler> logger)
     {
-        private readonly IMessagePublisher _messagePublisher;
+        _messagePublisher = messagePublisher;
+        _logger = logger;
+    }
 
-        public SignedAgreementEventHandler(IMessagePublisher messagePublisher)
-        {
-            _messagePublisher = messagePublisher;
-        }
-
-        public async Task Handle(SignedAgreementEvent message, IMessageHandlerContext context)
-        {
-            await _messagePublisher.PublishAsync(new AgreementSignedMessage(
-                message.AccountId,
-                message.AgreementId,
-                message.OrganisationName,
-                message.LegalEntityId,
-                message.CohortCreated,
-                message.UserName,
-                message.UserRef.ToString()));
-        }
+    public async Task Handle(SignedAgreementEvent message, IMessageHandlerContext context)
+    {
+        _logger.LogInformation($"Starting {nameof(SignedAgreementEventHandler)} handler.");
+        
+        await _messagePublisher.PublishAsync(new AgreementSignedMessage(
+            message.AccountId,
+            message.AgreementId,
+            message.OrganisationName,
+            message.LegalEntityId,
+            message.CohortCreated,
+            message.UserName,
+            message.UserRef.ToString()));
+        
+        _logger.LogInformation($"Completed {nameof(SignedAgreementEventHandler)} handler.");
     }
 }

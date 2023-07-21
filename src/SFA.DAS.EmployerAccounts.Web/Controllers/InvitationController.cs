@@ -1,142 +1,136 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web.Mvc;
-using SFA.DAS.Authentication;
-using SFA.DAS.Authorization.Mvc.Attributes;
-using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Web.Helpers;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using SFA.DAS.EmployerAccounts.Infrastructure;
+using SFA.DAS.EmployerAccounts.Web.RouteValues;
 
-namespace SFA.DAS.EmployerAccounts.Web.Controllers
+namespace SFA.DAS.EmployerAccounts.Web.Controllers;
+
+[Route("invitations")]
+public class InvitationController : BaseController
 {
-    [RoutePrefix("invitations")]
-    public class InvitationController : BaseController
+    private readonly InvitationOrchestrator _invitationOrchestrator;
+
+    private readonly EmployerAccountsConfiguration _configuration;
+    
+    public InvitationController(InvitationOrchestrator invitationOrchestrator,
+        EmployerAccountsConfiguration configuration,
+        ICookieStorageService<FlashMessageViewModel> flashMessage)
+        : base(flashMessage)
     {
-        private readonly InvitationOrchestrator _invitationOrchestrator;
+        _invitationOrchestrator = invitationOrchestrator ?? throw new ArgumentNullException(nameof(invitationOrchestrator));
+        _configuration = configuration;
+    }
 
-        private readonly EmployerAccountsConfiguration _configuration;
-
-        public InvitationController(InvitationOrchestrator invitationOrchestrator, IAuthenticationService owinWrapper, 
-            IMultiVariantTestingService multiVariantTestingService,
-            EmployerAccountsConfiguration configuration,
-            ICookieStorageService<FlashMessageViewModel> flashMessage)
-            : base(owinWrapper, multiVariantTestingService, flashMessage)
+    [Route("invite")]
+    public IActionResult Invite()
+    {
+        if (string.IsNullOrEmpty(HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName)))
         {
-            if (invitationOrchestrator == null)
-                throw new ArgumentNullException(nameof(invitationOrchestrator));
-            _invitationOrchestrator = invitationOrchestrator;
-            _configuration = configuration;
-
+            return View();
         }
 
-        [Route("invite")]
-        public ActionResult Invite()
-        {
-            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)))
-            {
-                return View();
-            }
+        return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
+    }
 
+    [HttpGet]
+    [Authorize]
+    public async Task<IActionResult> All()
+    {
+        if (string.IsNullOrEmpty(HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName)))
+        {
             return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
         }
 
-        [HttpGet]
-        [DasAuthorize]
-        [Route]
-        public async Task<ActionResult> All()
+        var model = await _invitationOrchestrator.GetAllInvitationsForUser(HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserIdClaimTypeIdentifier));
+
+        return View(model);
+    }
+
+    [HttpGet]
+    [Authorize]
+    [Route("view")]
+    public async Task<IActionResult> Details(string invitationId)
+    {
+        if (string.IsNullOrEmpty(HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName)))
         {
-            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)))
-            {
-                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
-            }
-
-            var model = await _invitationOrchestrator.GetAllInvitationsForUser(OwinWrapper.GetClaimValue("sub"));
-
-            return View(model);
-        }
-
-        [HttpGet]
-        [DasAuthorize]
-        [Route("view")]
-        public async Task<ActionResult> Details(string invitationId)
-        {
-            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)))
-            {
-                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
-            }
-
-            var invitation = await _invitationOrchestrator.GetInvitation(invitationId);
-
-            return View(invitation);
-        }
-
-        [HttpPost]
-        [DasAuthorize]
-        [ValidateAntiForgeryToken]
-        [Route("accept")]
-        public async Task<ActionResult> Accept(long invitation, UserInvitationsViewModel model)
-        {
-            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)))
-            {
-                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
-            }
-
-            var invitationItem = model.Invitations.SingleOrDefault(c => c.Id == invitation);
-
-            if (invitationItem == null)
-            {
-                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
-            }
-
-            await _invitationOrchestrator.AcceptInvitation(invitationItem.Id, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-
-            var flashMessage = new FlashMessageViewModel
-            {
-                Headline = "Invitation accepted",
-                Message = $"You can now access the {invitationItem.AccountName} account",
-                Severity = FlashMessageSeverityLevel.Success
-            };
-            AddFlashMessageToCookie(flashMessage);
-
-
             return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
         }
 
-        [HttpPost]
-        [DasAuthorize]
-        [ValidateAntiForgeryToken]
-        [Route("create")]
-        public async Task<ActionResult> Create(InviteTeamMemberViewModel model)
+        var invitation = await _invitationOrchestrator.GetInvitation(invitationId);
+
+        return View(invitation);
+    }
+
+    [HttpPost]
+    [Authorize]
+    [Route("accept", Name = RouteNames.InvitationAcceptPost)]
+    public async Task<IActionResult> Accept(long invitation, UserInvitationsViewModel model)
+    {
+        if (string.IsNullOrEmpty(HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName)))
         {
-            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)))
-            {
-                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
-            }
-
-            await _invitationOrchestrator.CreateInvitation(model, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-
             return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
         }
 
-        [HttpGet]
-        [Route("register-and-accept")]
-        public ActionResult AcceptInvitationNewUser()
+        var invitationItem = model.Invitations.SingleOrDefault(c => c.Id == invitation);
+
+        if (invitationItem == null)
         {
-            var schema = System.Web.HttpContext.Current.Request.Url.Scheme;
-            var authority = System.Web.HttpContext.Current.Request.Url.Authority;
-            var c = new Constants(_configuration.Identity);
-            return new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/invitations");
+            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
         }
 
+        await _invitationOrchestrator.AcceptInvitation(invitationItem.Id, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
-        [HttpGet]
-        [Route("accept")]
-        public ActionResult AcceptInvitationExistingUser()
+        var flashMessage = new FlashMessageViewModel
         {
-            return RedirectToAction("All");
+            Headline = "Invitation accepted",
+            Message = $"You can now access the {invitationItem.AccountName} account",
+            Severity = FlashMessageSeverityLevel.Success
+        };
+        AddFlashMessageToCookie(flashMessage);
+
+
+        return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
+    }
+
+    [HttpPost]
+    [Authorize]
+    [Route("create")]
+    public async Task<IActionResult> Create(InviteTeamMemberViewModel model)
+    {
+        if (string.IsNullOrEmpty(HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName)))
+        {
+            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
         }
+
+        await _invitationOrchestrator.CreateInvitation(model, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
+
+        return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
+    }
+
+    [HttpGet]
+    [Route("register-and-accept")]
+    public IActionResult AcceptInvitationNewUser()
+    {
+        if (_configuration.UseGovSignIn)
+        {
+            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
+        }
+        
+        var schema = HttpContext?.Request.Scheme;
+        var authority = HttpContext?.Request.Host;
+        var appConstants = new Constants(_configuration.Identity);
+        return new RedirectResult($"{appConstants.RegisterLink()}{schema}://{authority}/invitations");
+    }
+
+
+    [HttpGet]
+    [Route("accept")]
+    public IActionResult AcceptInvitationExistingUser()
+    {
+        if (_configuration.UseGovSignIn)
+        {
+            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.HomeControllerName);
+        }
+        return RedirectToAction("All");
     }
 }

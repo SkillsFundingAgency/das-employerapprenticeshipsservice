@@ -1,47 +1,39 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using SFA.DAS.Validation;
+namespace SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 
-namespace SFA.DAS.EmployerAccounts.Commands.AuditCommand
+public class CreateAuditCommandValidator : IValidator<CreateAuditCommand>
 {
-    public class CreateAuditCommandValidator : IValidator<CreateAuditCommand>
+    public ValidationResult Validate(CreateAuditCommand item)
     {
-        public ValidationResult Validate(CreateAuditCommand item)
+        var validationResult = new ValidationResult();
+
+        if (item.EasAuditMessage == null)
         {
-            var validationResult = new ValidationResult();
-
-            if (item.EasAuditMessage == null)
-            {
-                validationResult.AddError(nameof(item.EasAuditMessage));
-                return validationResult;
-            }
-
-            if (string.IsNullOrEmpty(item.EasAuditMessage.Description))
-            {
-                validationResult.AddError(nameof(item.EasAuditMessage.Description));
-            }
-
-            if (item.EasAuditMessage.ChangedProperties==null || !item.EasAuditMessage.ChangedProperties.Any())
-            {
-                if (item.EasAuditMessage.Category == null || !item.EasAuditMessage.Category.Equals("VIEW", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    validationResult.AddError(nameof(item.EasAuditMessage.ChangedProperties));
-                }
-            }
-            
-            if (string.IsNullOrEmpty(item.EasAuditMessage.AffectedEntity?.Id) || string.IsNullOrEmpty(item.EasAuditMessage.AffectedEntity?.Type))
-            {
-                validationResult.AddError(nameof(item.EasAuditMessage.AffectedEntity));
-            }
-            
+            validationResult.AddError(nameof(item.EasAuditMessage));
             return validationResult;
-
         }
 
-        public Task<ValidationResult> ValidateAsync(CreateAuditCommand item)
+        if (string.IsNullOrEmpty(item.EasAuditMessage.Description))
         {
-            throw new NotImplementedException();
+            validationResult.AddError(nameof(item.EasAuditMessage.Description));
         }
+
+        if ((item.EasAuditMessage.ChangedProperties==null || !item.EasAuditMessage.ChangedProperties.Any()) 
+            && (item.EasAuditMessage.Category == null || !item.EasAuditMessage.Category.Equals("VIEW", StringComparison.InvariantCultureIgnoreCase)))
+        {
+            validationResult.AddError(nameof(item.EasAuditMessage.ChangedProperties));
+        }
+            
+        if (string.IsNullOrEmpty(item.EasAuditMessage.AffectedEntity?.Id) || string.IsNullOrEmpty(item.EasAuditMessage.AffectedEntity?.Type))
+        {
+            validationResult.AddError(nameof(item.EasAuditMessage.AffectedEntity));
+        }
+            
+        return validationResult;
+
+    }
+
+    public Task<ValidationResult> ValidateAsync(CreateAuditCommand item)
+    {
+        return Task.FromResult(Validate(item));
     }
 }

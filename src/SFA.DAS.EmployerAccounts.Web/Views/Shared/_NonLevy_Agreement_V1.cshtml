@@ -2,7 +2,7 @@
 
 @{
     var hiddenClass = Model.NoChoiceSelected ? "" : "hidden";
-    var errorClass = Model.NoChoiceSelected ? "error" : "";
+    var errorClass = Model.NoChoiceSelected ? "govuk-form-group--error" : "";
 }
 
 <script type="text/javascript" src="@Url.Content("../../../../dist/javascripts/jquery-1.11.0.min.js")"></script>
@@ -11,19 +11,19 @@
 <link href="@Url.Content("../../../../dist/css/legal/legal-agreement.css")" rel="stylesheet" type="text/css" />
 
 <div>
-    <h1 class="heading-xlarge">Memorandum of Understanding between @Model.EmployerAgreement.LegalEntityName and the Education and Skills Funding Agency (ESFA)</h1>
+    <h1 class="govuk-heading-xl">Memorandum of Understanding between @Model.EmployerAgreement.LegalEntityName and the Education and Skills Funding Agency (ESFA)</h1>
     <p>This document was updated on 25th July 2019.</p>
     <p>This Memorandum of Understanding sets out what is expected of you during the private beta testing period. This is not a contract, but the ESFA expects that when you have signed it, you will comply with its terms.</p>
-    <h3 class="heading-medium">What is in the document</h3>
+    <h3 class="govuk-heading-m">What is in the document</h3>
     <p>You must read and understand the Memorandum of Understanding and be aware that the following terms apply to private beta testing:</p>
-    <ul class="list list-bullet">
+    <ul class="govuk-list  govuk-list--bullet">
         <li>you should agree the details of an apprenticeship (including the cost) with your training provider before it starts and this information should be recorded on your Apprenticeship Service Account</li>
         <li>you must use the functionality in your Apprenticeship Service Account to approve payments to your training provider for apprenticeships</li>
         <li>you must ensure that the training provider named on your application delivers the training for any of your apprentices</li>
         <li>you must ensure that the information about an apprenticeship is entered accurately on the Apprenticeship Service Account and that it is kept up to date</li>
         <li>if you do not follow the rules of this Memorandum of Understanding, you might be asked to leave the private beta testing</li>
     </ul>
-    <h3 class="heading-medium">The full document</h3>
+    <h3 class="govuk-heading-m">The full document</h3>
     <div class="js-hidden" data-module="accordion-with-descriptions">
         <div class="subsection-wrapper">
             <div class="subsection js-subsection">
@@ -31,36 +31,35 @@
                     <h2 class="subsection__title">Memorandum of Understanding</h2>
                 </div>
                 <div class="subsection__content js-subsection-content" id="subsection_content_0">
-                    @Html.Partial(Model.EmployerAgreement.TemplatePartialViewName + "_body")
+                    @await Html.PartialAsync(Model.EmployerAgreement.TemplatePartialViewName + "_body")
                 </div>
             </div>
         </div>
     </div>
     <br />
     <form method="post" action="@Url.Action("Sign", "EmployerAgreement")#no-choice-selected">
-        @Html.AntiForgeryToken()
-        <div class="form-group @errorClass">
-            <fieldset>
+        <div class="govuk-form-group @errorClass">
+            <fieldset class="govuk-fieldset">
 
-                <legend>
-                    <h1 class="heading-medium">Do you accept the Memorandum of Understanding?</h1>
-                    <span class="error-message @hiddenClass" aria-hidden="true" id="no-choice-selected">
+                <legend class="govuk-fieldset__legend">
+                    <h1 class="govuk-heading-m">Do you accept the Memorandum of Understanding?</h1>
+                    <span class="govuk-error-message @hiddenClass" aria-hidden="true" id="no-choice-selected">
                         Please select an option to continue
                     </span>
                 </legend>
 
-                <label for="want-to-sign" class="block-label">
+                <label for="want-to-sign" class="govuk-label govuk-radios__label">
                     <input type="radio" name="choice" id="want-to-sign" value="2" />
                     Yes, I have read the Memorandum of Understanding and accept it
                 </label>
-                <label for="do-not-want-to-sign" class="block-label">
+                <label for="do-not-want-to-sign" class="govuk-label govuk-radios__label">
                     <input type="radio" name="choice" id="do-not-want-to-sign" value="1" />
                     I’ll review it later
                 </label>
 
             </fieldset>
             <br />
-            <input class="button" type="submit" value="Continue" />
+            <input class="govuk-button" type="submit" value="Continue" />
         </div>
     </form>
 </div>

@@ -4,11 +4,10 @@
 @{
     ViewBag.PageID = "page-onboard-paye-scheme-in-use";
     ViewBag.ZenDeskLabel = "eas-paye-scheme-already-in-use";
+    ViewBag.Title = "PAYE scheme already in use";
+    ViewBag.ShowNav = false;
+    ViewBag.GaData.Vpv = "/onboarding/address/update/page-extra-paye-error";
 }
-@{ViewBag.Title = "PAYE scheme already in use";}
-@{ViewBag.HideNav = true; }
-@{ViewBag.GaData.Vpv = "/onboarding/address/update/page-extra-paye-error";}
-@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
 
 
 @if (ViewBag.NotFound)
@@ -21,19 +20,17 @@
     <div class="govuk-grid-column-two-thirds">
         @if (!ViewBag.NotFound)
         {
-        <h1 class="govuk-heading-xl">These details are already in use</h1>
-        <p class="govuk-body">The details you added are already attached to a <abbr>PAYE</abbr> scheme.</p>
-        <a href="@Url.Action(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName)" class="govuk-button" id="search_again">Use different details</a>
+            <h1 class="govuk-heading-xl">These details are already in use</h1>
+            <p class="govuk-body">The details you added are already attached to a <abbr>PAYE</abbr> scheme.</p>
+            <a asp-controller="@ControllerConstants.EmployerAccountControllerName" asp-action="@ControllerConstants.GatewayInformActionName" class="govuk-button" id="search_again">Use different details</a>
         }
         else
         {
-        @Html.Partial("_PayeNotFound", @Url.Action("Gateway", "EmployerAccount"))
+            @await Html.PartialAsync("_PayeNotFound", @Url.Action("Gateway", "EmployerAccount"))
         }
     </div>
 </div>
 
 @section breadcrumb {
-    <div class="govuk-breadcrumbs">
-        <a href="@Url.Action(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName)" class="govuk-back-link">Back</a>
-    </div>
+    <div class="das-js-back-link"></div>
 }

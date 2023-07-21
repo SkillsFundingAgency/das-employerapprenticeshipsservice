@@ -1,0 +1,15 @@
+@model SFA.DAS.EmployerAccounts.Web.ViewModels.SupportUserBannerViewModel
+
+<div class="app-support-banner">
+    <div class="app-support-banner__content">
+        <p class="govuk-heading-l app-support-banner__heading">
+            Apprenticeship service console
+        </p>
+        <div class="app-support-banner__user">
+            <p class="govuk-!-font-size-16">@Model.ConsoleUserType</p>
+        </div>
+    </div>
+    <div class=" app-support-banner__context">
+        <p class="govuk-!-font-size-16">You are viewing as @(Model.Account?.Name ?? string.Empty) (account ID:  @(Model.Account?.PublicHashedId ?? string.Empty))</p>
+    </div>
+</div>

@@ -1,12 +1,12 @@
-﻿using FluentAssertions;
-using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Services;
-using System.Linq;
+﻿using System.Linq;
 using System.Security.Claims;
+using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Moq;
-using SFA.DAS.Authentication;
+using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
+using SFA.DAS.EmployerAccounts.Services;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Services
 {
@@ -17,7 +17,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services
         private ClaimsIdentity _claimsIdentity;
         private IUserContext _userContext;
         private EmployerAccountsConfiguration _config;
-        private Mock<IAuthenticationService> _mockAuthenticationService;
+        private Mock<IHttpContextAccessor> _httpContextAccessorMock;
         private readonly string SupportConsoleUsers = "Tier1User,Tier2User";
 
         [SetUp]
@@ -27,8 +27,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services
             {
                 SupportConsoleUsers = SupportConsoleUsers
             };
-            _mockAuthenticationService = new Mock<IAuthenticationService>();
-            _userContext =new UserContext(_mockAuthenticationService.Object,_config);
+            _httpContextAccessorMock = new Mock<IHttpContextAccessor>();
+            _userContext =new UserContext(_httpContextAccessorMock.Object,_config);
             _authorisationResourceRepository = new AuthorisationResourceRepository(_userContext);
             _claimsIdentity = new ClaimsIdentity();
         }        
@@ -39,7 +39,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services
         public void AuthorisationResourceRepository_WhenTheUserInRoleIsTier2User_ThenAuthorisationResourcesExist(string role)
         {
             //Arrange
-            _mockAuthenticationService.Setup(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role)).Returns(true);
+            _httpContextAccessorMock.Setup(m => m.HttpContext.User.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role)).Returns(true);
 
             //Act            
             _claimsIdentity.AddClaim(new Claim(_claimsIdentity.RoleClaimType, role));
@@ -52,6 +52,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services
         [Test]
         public void AuthorisationResourceRepository_WhenTheUserInRoleIsNotTier2User_ThenAuthorisationResourcesDoNotExist()
         {
+            //Arrange
+            _httpContextAccessorMock.Setup(m => m.HttpContext.User.HasClaim(ClaimsIdentity.DefaultRoleClaimType, It.IsAny<string>())).Returns(false);
+
             //Act
             var result = _authorisationResourceRepository.Get(_claimsIdentity);
 

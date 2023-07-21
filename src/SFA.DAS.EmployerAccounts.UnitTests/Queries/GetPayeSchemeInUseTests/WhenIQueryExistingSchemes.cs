@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeInUse;
-using SFA.DAS.Validation;
+using SFA.DAS.EmployerAccounts.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetPayeSchemeInUseTests
 {
@@ -34,7 +35,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetPayeSchemeInUseTests
             var empref = "123/ABC";
 
             //Act
-            await RequestHandler.Handle(new GetPayeSchemeInUseQuery {Empref = empref});
+            await RequestHandler.Handle(new GetPayeSchemeInUseQuery {Empref = empref}, CancellationToken.None);
 
             //Assert
             _employerSchemesRepository.Verify(x=>x.GetSchemeByRef(empref),Times.Once);
@@ -47,7 +48,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetPayeSchemeInUseTests
             var empref = "123/ABC";
 
             //Act
-            var actual = await RequestHandler.Handle(new GetPayeSchemeInUseQuery { Empref = empref });
+            var actual = await RequestHandler.Handle(new GetPayeSchemeInUseQuery { Empref = empref }, CancellationToken.None);
 
             //Assert
             Assert.IsNotNull(actual.PayeScheme);

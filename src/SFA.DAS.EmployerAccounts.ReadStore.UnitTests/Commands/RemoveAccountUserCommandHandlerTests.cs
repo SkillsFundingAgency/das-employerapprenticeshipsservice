@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
             return TestExceptionAsync(
                 f => f.AddMatchingAlreadyRemovedUser(),
                 f => f.Handler.Handle(f.Command, CancellationToken.None),
-                (f, r) => r.ShouldThrow<InvalidOperationException>());
+                (f, r) => r.Should().ThrowAsync<InvalidOperationException>());
         }
 
         [Test]
@@ -70,7 +70,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
         {
             return TestExceptionAsync(
                 f => f.Handler.Handle(f.Command, CancellationToken.None),
-                (f, r) => r.ShouldThrow<Exception>());
+                (f, r) => r.Should().ThrowAsync<Exception>());
         }
     }
 

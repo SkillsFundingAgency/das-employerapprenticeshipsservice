@@ -137,7 +137,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.ReferenceData
             var result = await referenceDataService.SearchOrganisations(searchTerm);
 
             // Assert
-            result.Data.First().Address.ShouldBeEquivalentTo(organisation.Address);
+            result.Data.First().Address.Should().BeEquivalentTo(organisation.Address);
         }
 
         [Test]

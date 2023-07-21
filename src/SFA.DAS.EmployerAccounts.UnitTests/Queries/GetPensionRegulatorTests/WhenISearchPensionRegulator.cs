@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.PensionRegulator;
 using SFA.DAS.EmployerAccounts.Queries.GetPensionRegulator;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetPensionRegulatorTests
 {
@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetPensionRegulatorTests
             const string payeRef = "123/4567";
 
             //Act
-            await RequestHandler.Handle(new GetPensionRegulatorRequest {PayeRef = payeRef});
+            await RequestHandler.Handle(new GetPensionRegulatorRequest {PayeRef = payeRef}, CancellationToken.None);
 
             //Assert
             _pensionRegulatorService.Verify(x => x.GetOrganisationsByPayeRef(payeRef), Times.Once);
@@ -50,7 +50,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetPensionRegulatorTests
             _pensionRegulatorService.Setup(x => x.GetOrganisationsByPayeRef(expectedPayeRef)).ReturnsAsync(expectedResponse);
 
             //Act
-            var actual = await RequestHandler.Handle(new GetPensionRegulatorRequest() { PayeRef = expectedPayeRef });
+            var actual = await RequestHandler.Handle(new GetPensionRegulatorRequest() { PayeRef = expectedPayeRef }, CancellationToken.None);
 
             //Assert
             Assert.AreSame(expectedResponse, actual.Organisations);

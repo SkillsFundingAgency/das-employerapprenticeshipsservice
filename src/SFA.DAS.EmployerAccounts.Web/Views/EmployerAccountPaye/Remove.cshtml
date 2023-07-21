@@ -7,7 +7,6 @@
     ViewBag.GaData.Vpv = "/accounts/schemes/page-paye-scheme-remove";
     ViewBag.ZenDeskLabel = "eas-remove-paye-scheme";
 }
-@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
 
 @if (!Model.Data.Valid)
 {
@@ -40,8 +39,10 @@
 
         <p class="govuk-body">The <b>@Model.Data.AccountName</b> account will stop receiving funds through this <abbr title="Pay As You Earn">PAYE</abbr> scheme.</p>
 
-        <form method="post" action="@Url.Action("RemovePaye","EmployerAccountPaye")">
-            @Html.AntiForgeryToken()
+        <form 
+            method="post" 
+            asp-route="@RouteNames.PayePostRemove" 
+            asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" >
 
             <input type="hidden" value="@Model.Data.PayeRef" name="PayeRef" />
             <input type="hidden" value="@Model.Data.HashedAccountId" name="HashedId" />

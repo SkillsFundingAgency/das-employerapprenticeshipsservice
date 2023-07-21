@@ -1,9 +1,8 @@
 ﻿using SFA.DAS.EmployerAccounts.Models.ReferenceData;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisations
+namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisations;
+
+public class GetOrganisationsResponse
 {
-    public class GetOrganisationsResponse
-    {
-        public PagedResponse<OrganisationName> Organisations { get; set; }
-    }
+    public PagedResponse<OrganisationName> Organisations { get; set; }
 }

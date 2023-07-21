@@ -1,60 +1,56 @@
-﻿using System;
-using System.Threading.Tasks;
-using MediatR;
+﻿using System.Threading;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Validation;
+using InvalidRequestException = SFA.DAS.EmployerAccounts.Exceptions.InvalidRequestException;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetContent
+namespace SFA.DAS.EmployerAccounts.Queries.GetContent;
+
+public class GetContentRequestHandler : IRequestHandler<GetContentRequest, GetContentResponse>
 {
-    public class GetContentRequestHandler : IAsyncRequestHandler<GetContentRequest, GetContentResponse>
-    {
-        private readonly IValidator<GetContentRequest> _validator;
-        private readonly ILog _logger;
-        private readonly IContentApiClient _contentApiClient;
-        private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
+    private readonly IValidator<GetContentRequest> _validator;
+    private readonly ILogger<GetContentRequestHandler> _logger;
+    private readonly IContentApiClient _contentApiClient;
+    private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
 
-        public GetContentRequestHandler(
-            IValidator<GetContentRequest> validator,
-            ILog logger,
-            IContentApiClient contentApiClient,  EmployerAccountsConfiguration employerAccountsConfiguration)
+    public GetContentRequestHandler(
+        IValidator<GetContentRequest> validator,
+        ILogger<GetContentRequestHandler> logger,
+        IContentApiClient contentApiClient, EmployerAccountsConfiguration employerAccountsConfiguration)
+    {
+        _validator = validator;
+        _logger = logger;
+        _contentApiClient = contentApiClient;
+        _employerAccountsConfiguration = employerAccountsConfiguration;
+    }
+
+    public async Task<GetContentResponse> Handle(GetContentRequest message, CancellationToken cancellationToken)
+    {
+        var validationResult = _validator.Validate(message);
+
+        if (!validationResult.IsValid())
         {
-            _validator = validator;
-            _logger = logger;
-            _contentApiClient = contentApiClient;
-            _employerAccountsConfiguration = employerAccountsConfiguration;
+            throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        public async Task<GetContentResponse> Handle(GetContentRequest message)
+        var applicationId = message.UseLegacyStyles ? _employerAccountsConfiguration.ApplicationId + "-legacy" : _employerAccountsConfiguration.ApplicationId;
+
+        try
         {
-            var validationResult = _validator.Validate(message);
+            var contentBanner = await _contentApiClient.Get(message.ContentType, applicationId);
 
-            if (!validationResult.IsValid())
+            return new GetContentResponse
             {
-                throw new InvalidRequestException(validationResult.ValidationDictionary);
-            }
+                Content = contentBanner
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to get Content {ContentType} for {ApplicationId}", message.ContentType, applicationId);
 
-            var applicationId = message.UseLegacyStyles? _employerAccountsConfiguration.ApplicationId + "-legacy" : _employerAccountsConfiguration.ApplicationId;            
-
-            try
-            {                
-                var contentBanner = await _contentApiClient.Get(message.ContentType, applicationId);
-
-                return new GetContentResponse
-                {
-                    Content = contentBanner
-                };
-            }
-            catch (Exception ex)
+            return new GetContentResponse
             {
-                _logger.Error(ex, $"Failed to get Content {message.ContentType} for {applicationId}");
-
-                return new GetContentResponse
-                {
-                    HasFailed = true
-                };
-            }
+                HasFailed = true
+            };
         }
     }
 }

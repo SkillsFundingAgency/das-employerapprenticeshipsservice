@@ -1,214 +1,178 @@
-﻿
-using Microsoft.IdentityModel.Protocols;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Cookies;
-using Microsoft.Owin.Security.Notifications;
-using Microsoft.Owin.Security.WsFederation;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.WsFederation;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
-using NLog;
-using Owin;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Infrastructure;
+using SFA.DAS.EmployerAccounts.Services;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
     public static class SupportUserExtensions
-    {  
-        private const string Staff = "Staff";
-        private const string Employer = "Employer";
+    {
+        private const string Staff = "SFA.Staff.Auth";
         private const string HashedAccountId = "HashedAccountId";
         private const string ServiceClaimTier2Role = "ESF";
-        private const string Tier2User = "Tier2User";
-        private const string Tier1User = "Tier1User";
         private const string ConsoleUser = "ConsoleUser";
         private const string ServiceClaimTier1Role = "ESS";
         private const string serviceClaimType = "http://service/service";
-        private static ILogger Logger;
 
-        public static IAppBuilder UseSupportConsoleAuthentication(this IAppBuilder app, SupportConsoleAuthenticationOptions options)
+        public static AuthenticationBuilder AddAndConfigureSupportConsoleAuthentication(this AuthenticationBuilder services, SupportConsoleAuthenticationOptions authOptions)
         {
-            if (app == null) { throw new ArgumentNullException(nameof(app)); }
-            if (options == null) { throw new ArgumentNullException(nameof(options)); }
-            if (options.Logger == null) { throw new ArgumentNullException(nameof(options.Logger)); }
+            services
+                .AddWsFederation(options =>
+                {
+                    options.MetadataAddress = authOptions.AdfsOptions.MetadataAddress;
+                    options.Wtrealm = authOptions.AdfsOptions.Wtrealm;
+                    // set /service to fix issues
+                    options.Wreply = GetServiceUrl(authOptions.AdfsOptions.Wreply);
+                    options.UseTokenLifetime = false;
+                    options.CallbackPath = PathString.Empty;
+                    options.CorrelationCookie = new CookieBuilder
+                    {
+                        Name = Staff,
+                        SameSite = SameSiteMode.None,
+                        HttpOnly = false,
+                        SecurePolicy = CookieSecurePolicy.Always
+                    };
+                    options.Events = new WsFederationEvents
+                    {
+                        OnSecurityTokenValidated = OnSecurityTokenValidated,
+                    };
+                })
+                .AddCookie(Staff, options =>
+                {
+                    options.AccessDeniedPath = new PathString("/Error/403");
+                    options.ExpireTimeSpan = TimeSpan.FromHours(1);
+                    options.Cookie.Name = Staff;
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                    options.SlidingExpiration = true;
+                    options.Cookie.HttpOnly = false;
+                    options.Cookie.SameSite = SameSiteMode.None;
+                });
 
-            Logger = options.Logger;
+            return services;
+        }
 
-            app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
-
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AuthenticationType = Staff,
-            });
-
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AuthenticationType = Employer,
-                ExpireTimeSpan = new TimeSpan(0, 10, 0)
-            });
-
-            var WsFederationAuthenticationOptions = new WsFederationAuthenticationOptions
-            {
-                AuthenticationType = Staff,
-                Wtrealm = options.AdfsOptions.Wtrealm,
-                MetadataAddress = options.AdfsOptions.MetadataAddress,
-                Notifications = Notifications(),
-                Wreply = options.AdfsOptions.Wreply
-            };
-
-            //https://skillsfundingagency.atlassian.net/wiki/spaces/ERF/pages/104010807/Staff+IDAMS
-            app.UseWsFederationAuthentication(WsFederationAuthenticationOptions);
-
-            app.Map($"/login/staff", SetAuthenticationContextForStaffUser());
-          
-            app.Map($"/login", SetAuthenticationContext());
+        public static IApplicationBuilder UseSupportConsoleAuthentication(this IApplicationBuilder app)
+        {
+            // https://skillsfundingagency.atlassian.net/wiki/spaces/ERF/pages/104010807/Staff+IDAMS
+            app.Map("/login/staff", SetAuthenticationContextForStaffUser());
 
             return app;
         }
 
-        private static WsFederationAuthenticationNotifications Notifications()
+        private static Action<IApplicationBuilder> SetAuthenticationContextForStaffUser()
         {
-            return new WsFederationAuthenticationNotifications
+            return app =>
             {
-                SecurityTokenValidated = OnSecurityTokenValidated,
-                SecurityTokenReceived = nx => OnSecurityTokenReceived(),
-                AuthenticationFailed = nx => OnAuthenticationFailed(nx),
-                MessageReceived = nx => OnMessageReceived(),
-                RedirectToIdentityProvider = nx => OnRedirectToIdentityProvider()
+                app.Run(async context =>
+                {
+                    var hashedAccountId = context.Request.Query[HashedAccountId];
+                    var requestRedirect = string.IsNullOrEmpty(hashedAccountId) ? "/service/index" : $"/accounts/{hashedAccountId}/teams/view";
+
+                    if (!context.User.Identity.IsAuthenticated)
+                    {
+                        var logger = context.RequestServices.GetService(typeof(ILogger)) as ILogger;
+                        // for first iteration of this work, allow deep linking from the support console to the teams view
+                        // as this is the only action they will currently perform.
+
+
+                        await context.ChallengeAsync(WsFederationDefaults.AuthenticationScheme, new AuthenticationProperties
+                        {
+                            RedirectUri = requestRedirect,
+                            IsPersistent = true
+                        });
+                    }
+                    else
+                    {
+                        context.Response.Redirect(requestRedirect); // Redirect to the home page or any other desired location
+                    }
+                });
             };
         }
 
-        private static Task OnSecurityTokenValidated(SecurityTokenValidatedNotification<WsFederationMessage, WsFederationAuthenticationOptions> notification)
+        private static Task OnSecurityTokenValidated(SecurityTokenValidatedContext context)
         {
-            Logger.Debug("SecurityTokenValidated");
+            var redirectUri = context.Properties.RedirectUri;
 
-         
-            var claimsIdentity = notification.AuthenticationTicket.Identity;
+            // Retrieve the HashedAccountId query parameter
+            var hashedAccountId = redirectUri.Split('/')[2];
 
-            Logger.Debug("Authentication Properties", new Dictionary<string, object>
+            var logger = context.HttpContext.RequestServices.GetService(typeof(ILogger)) as ILogger;
+            var db = context.HttpContext.RequestServices.GetService(typeof(EmployerAccountsDbContext)) as EmployerAccountsDbContext;
+            logger?.LogDebug("SecurityTokenValidated");
+
+            var claimsIdentity = context.Principal.Identity as ClaimsIdentity;
+
+            logger?.LogDebug("Authentication Properties", new Dictionary<string, object>
+                {
+                    {"claims", JsonConvert.SerializeObject(claimsIdentity.Claims.Select(x => new {x.Value, x.ValueType, x.Type}))},
+                    {"authentication-type", claimsIdentity.AuthenticationType},
+                    {"role-type", claimsIdentity.RoleClaimType}
+                });
+
+            if (claimsIdentity.HasClaim(serviceClaimType, ServiceClaimTier2Role))
             {
-                {"claims", JsonConvert.SerializeObject(claimsIdentity.Claims.Select(x =>new {x.Value, x.ValueType, x.Type}))},
-                {"authentication-type", claimsIdentity.AuthenticationType},
-                {"role-type", claimsIdentity.RoleClaimType}
-            });
+                logger?.LogDebug("Adding Tier2 Role");
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, SupportUserClaimConstants.Tier2UserClaim));
 
-            if (notification.AuthenticationTicket.Identity.HasClaim(serviceClaimType, ServiceClaimTier2Role))
-            {
-                Logger.Debug("Adding Tier2 Role");
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, Tier2User));
-
-                Logger.Debug("Adding ConsoleUser Role");
+                logger?.LogDebug("Adding ConsoleUser Role");
                 claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, ConsoleUser));
             }
-            else if (notification.AuthenticationTicket.Identity.HasClaim(serviceClaimType, ServiceClaimTier1Role))
+            else if (claimsIdentity.HasClaim(serviceClaimType, ServiceClaimTier1Role))
             {
-                Logger.Debug("Adding Tier1 Role");
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, Tier1User));
+                logger?.LogDebug("Adding Tier1 Role");
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, SupportUserClaimConstants.Tier1UserClaim));
 
-                Logger.Debug("Adding ConsoleUser Role");
+                logger?.LogDebug("Adding ConsoleUser Role");
                 claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, ConsoleUser));
             }
             else
-            {   
+            {
                 throw new SecurityTokenValidationException("Service Claim Type not available to identify the Role");
             }
+
+            ImpersonateExistingAccountOwner(hashedAccountId, db, claimsIdentity);
 
             var firstName = claimsIdentity.Claims.SingleOrDefault(x => x.Type == ClaimTypes.GivenName)?.Value;
             var lastName = claimsIdentity.Claims.SingleOrDefault(x => x.Type == ClaimTypes.Surname)?.Value;
             var userEmail = claimsIdentity.Claims.Single(x => x.Type == ClaimTypes.Upn).Value;
-                
+
             claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, $"{firstName} {lastName}"));
 
             if (!string.IsNullOrEmpty(userEmail))
             {
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Email, userEmail));
+                claimsIdentity.AddClaim(new Claim(EmployerClaims.IdamsUserEmailClaimTypeIdentifier, userEmail));
                 claimsIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userEmail));
             }
             else
-            {                    
+            {
                 throw new SecurityTokenValidationException("Upn not available in the claims to identify UserEmail");
-            }   
+            }
 
-            Logger.Debug("End of callback");
-            return Task.FromResult(0);
+            logger?.LogDebug("End of callback");
+
+            return Task.CompletedTask;
         }
 
-        private static Task OnSecurityTokenReceived()
+        private static void ImpersonateExistingAccountOwner(string hashedAccountId, EmployerAccountsDbContext db, ClaimsIdentity claimsIdentity)
         {
-            Logger.Debug("SecurityTokenReceived");
-            return Task.FromResult(0);
+            var accountOwner = db.Accounts.Single(acc => acc.HashedId == hashedAccountId).Memberships.FirstOrDefault(m => m.Role == Role.Owner).User;
+            claimsIdentity.AddClaim(new Claim(ControllerConstants.UserRefClaimKeyName, accountOwner.Ref.ToString()));
         }
 
-        private static Task OnAuthenticationFailed(AuthenticationFailedNotification<WsFederationMessage, WsFederationAuthenticationOptions> nx)
+        private static string GetServiceUrl(string wreply)
         {
-            var logReport = $"AuthenticationFailed, State: {nx.State}, Exception: {nx.Exception.GetBaseException().Message}, Protocol Message: Wct {nx.ProtocolMessage.Wct},\r\nWfresh {nx.ProtocolMessage.Wfresh},\r\nWhr {nx.ProtocolMessage.Whr},\r\nWp {nx.ProtocolMessage.Wp},\r\nWpseudo{nx.ProtocolMessage.Wpseudo},\r\nWpseudoptr {nx.ProtocolMessage.Wpseudoptr},\r\nWreq {nx.ProtocolMessage.Wreq},\r\nWfed {nx.ProtocolMessage.Wfed},\r\nWreqptr {nx.ProtocolMessage.Wreqptr},\r\nWres {nx.ProtocolMessage.Wres},\r\nWreply{nx.ProtocolMessage.Wreply},\r\nWencoding {nx.ProtocolMessage.Wencoding},\r\nWtrealm {nx.ProtocolMessage.Wtrealm},\r\nWresultptr {nx.ProtocolMessage.Wresultptr},\r\nWauth {nx.ProtocolMessage.Wauth},\r\nWattrptr{nx.ProtocolMessage.Wattrptr},\r\nWattr {nx.ProtocolMessage.Wattr},\r\nWa {nx.ProtocolMessage.Wa},\r\nIsSignOutMessage {nx.ProtocolMessage.IsSignOutMessage},\r\nIsSignInMessage {nx.ProtocolMessage.IsSignInMessage},\r\nWctx {nx.ProtocolMessage.Wctx},\r\n";
-            Logger.Debug(logReport);
-            return Task.FromResult(0);
-        }
-
-        private static Task OnMessageReceived()
-        {
-            Logger.Debug("MessageReceived");
-            return Task.FromResult(0);
-        }
-
-        private static  Task OnRedirectToIdentityProvider()
-        {
-            Logger.Debug("RedirectToIdentityProvider");
-            return Task.FromResult(0);
-        }
-
-        private static Action<IAppBuilder> SetAuthenticationContextForStaffUser()
-        {
-            return conf =>
-            {
-                conf.Run(context =>
-                {
-                    // for first iteration of this work, allow deep linking from the support console to the teams view
-                    // as this is the only action they will currently perform.
-                    var hashedAccountId = context.Request.Query.Get(HashedAccountId);
-                    var requestRedirect = string.IsNullOrEmpty(hashedAccountId) ? "/service/index" : $"/accounts/{hashedAccountId}/teams/view";
-
-                    context.Authentication.Challenge(new AuthenticationProperties
-                    {
-                        RedirectUri = requestRedirect,
-                        IsPersistent = true
-                    },
-                    Staff);
-
-                    context.Response.StatusCode = 401;
-                    return context.Response.WriteAsync(string.Empty);
-                });
-            };
-        }
-
-        private static Action<IAppBuilder> SetAuthenticationContext()
-        {
-            return conf =>
-            {
-                conf.Run(context =>
-                {
-                    context.Authentication.Challenge(new AuthenticationProperties
-                    {
-                        RedirectUri = "/service/index",
-                        IsPersistent = true
-                    },
-                    CookieAuthenticationDefaults.AuthenticationType);
-
-                    context.Response.StatusCode = 401;
-                    return context.Response.WriteAsync(string.Empty);
-                });
-            };
+            return $"{(wreply.EndsWith('/') ? wreply : wreply + "/")}staff";
         }
     }
 
     public class SupportConsoleAuthenticationOptions
     {
         public ADFSOptions AdfsOptions { get; set; }
-        public ILogger Logger { get; set; }
     }
 
     public class ADFSOptions
@@ -217,5 +181,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
         public string MetadataAddress { get; set; }
         public string Wreply { get; set; }
         public string BaseUrl { get; set; }
-    }   
+    }
+
+    public static class SupportUserClaimConstants
+    {
+        public const string WsFederationAuthScheme = "wsfed";
+        public const string Tier2UserClaim = "Tier2User";
+        public const string Tier1UserClaim = "Tier1User";
+    }
 }

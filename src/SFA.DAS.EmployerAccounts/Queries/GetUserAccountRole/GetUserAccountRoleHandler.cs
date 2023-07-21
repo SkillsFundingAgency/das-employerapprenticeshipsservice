@@ -1,38 +1,34 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.Authorization;
-using SFA.DAS.EmployerAccounts.Data;
+﻿using System.Threading;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.Validation;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole
+namespace SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
+
+public class GetUserAccountRoleHandler: IRequestHandler<GetUserAccountRoleQuery, GetUserAccountRoleResponse>
 {
-    public class GetUserAccountRoleHandler: IAsyncRequestHandler<GetUserAccountRoleQuery, GetUserAccountRoleResponse>
+    private readonly IMembershipRepository _membershipRepository;
+    private readonly IValidator<GetUserAccountRoleQuery> _validator;
+
+    public GetUserAccountRoleHandler(IValidator<GetUserAccountRoleQuery> validator, IMembershipRepository membershipRepository)
     {
-        private readonly IMembershipRepository _membershipRepository;
-        private readonly IValidator<GetUserAccountRoleQuery> _validator;
+        _membershipRepository = membershipRepository;
+        _validator = validator;
+    }
 
-        public GetUserAccountRoleHandler(IValidator<GetUserAccountRoleQuery> validator, IMembershipRepository membershipRepository)
+    public async Task<GetUserAccountRoleResponse> Handle(GetUserAccountRoleQuery message, CancellationToken cancellationToken)
+    {
+        var validationResult = await _validator.ValidateAsync(message);
+
+        if (!validationResult.IsValid())
         {
-            _membershipRepository = membershipRepository;
-            _validator = validator;
+            throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        public async Task<GetUserAccountRoleResponse> Handle(GetUserAccountRoleQuery message)
+        var caller = await _membershipRepository.GetCaller(message.AccountId, message.ExternalUserId);
+
+        return new GetUserAccountRoleResponse
         {
-            var validationResult = _validator.Validate(message);
-
-            if (!validationResult.IsValid())
-            {
-                throw new InvalidRequestException(validationResult.ValidationDictionary);
-            }
-
-            var caller = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
-
-            return new GetUserAccountRoleResponse
-            {
-                UserRole = (caller?.Role ?? Role.None)
-            };
-        }
+            UserRole = (caller?.Role ?? Role.None)
+        };
     }
 }

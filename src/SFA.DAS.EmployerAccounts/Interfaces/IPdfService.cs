@@ -1,13 +1,10 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
+﻿using System.IO;
 
-namespace SFA.DAS.EmployerAccounts.Interfaces
+namespace SFA.DAS.EmployerAccounts.Interfaces;
+
+public interface IPdfService
 {
-    public interface IPdfService
-    {
-        Task<MemoryStream> SubsituteValuesForPdf(string fileName, Dictionary<string, string> valuesToSubsitute);
+    Task<MemoryStream> SubstituteValuesForPdf(string fileName, Dictionary<string, string> valuesToSubstitute);
 
-        Task<MemoryStream> SubsituteValuesForPdf(string fileName);
-    }
+    Task<MemoryStream> SubstituteValuesForPdf(string fileName);
 }

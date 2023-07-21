@@ -1,45 +1,43 @@
-﻿@using SFA.DAS.Authorization
-@using SFA.DAS.EmployerAccounts.Models
-@using SFA.DAS.EmployerAccounts.Models.AccountTeam
-
+﻿@using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+@using SFA.DAS.EmployerAccounts.Models;
 @model OrchestratorResponse<SFA.DAS.EmployerAccounts.Models.AccountTeam.TeamMember>
 
 @{
     ViewBag.PageID = "page-review-team-member";
     ViewBag.Title = Model.Data.Name;
     ViewBag.Section = "team";
-}
-
-@{
     ViewBag.GaData.Vpv = "/accounts/teams/review/page-review-team-member";
+
+    string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId].ToString();
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">@Model.Data.Name</h1>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">@Model.Data.Name</h1>
     </div>
 </div>
-<div class="grid-row">
-    <div class="column-full">
-        <table class="responsive">
-            <thead>
-                <tr>
-                    <th scope="col">Email</th>
-                    <th scope="col">What they can do</th>
+
+         <table class="govuk-table das-table--responsive">
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">Email</th>
+                    <th scope="col" class="govuk-table__header">What they can do</th>
                     @if (Model.Data.IsUser)
                     {
-                        <th><span class="vh">Action</span></th>
+                        <th class="govuk-table__header"><span class="govuk-visually-hidden">Action</span></th>
                     }
-                    </tr>
+                </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td data-label="Email">@Model.Data.Email</td>
-                    <td data-label="What they can do">@RoleStrings.GetRoleDescription(@Model.Data.Role)</td>
+            <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <td data-label="Email" class="govuk-table__cell">@Model.Data.Email</td>
+                    <td data-label="What they can do" class="govuk-table__cell">@RoleStrings.GetRoleDescription(@Model.Data.Role)</td>
                     @if (Model.Data.IsUser)
                     {
-                        <td class="link-right">
-                            <a href="@Url.Action("ChangeRole","EmployerTeam", new { Model.Data.Email })">Change <span class="vh">role for @Model.Data.Name</span></a>
+                        <td class="govuk-table__cell govuk-table__cell--numeric">
+                            <a asp-route="@RouteNames.EmployerTeamGetChangeRole"
+                           asp-route-hashedAccountId="@hashedAccountId"
+                           asp-route-email="@Model.Data.Email" class="govuk-link">Change <span class="govuk-visually-hidden">role for @Model.Data.Name</span></a>
                         </td>
                     }
                 </tr>
@@ -48,30 +46,29 @@
 
         @if (@Model.Data.Status == InvitationStatus.Pending || @Model.Data.Status == InvitationStatus.Expired)
         {
-            <div class="form-group">
-                <form action="@Url.Action("Resend")" method="POST">
-                    @Html.AntiForgeryToken()
-                    <input type="hidden" id="Email" name="Email" value="@Model.Data.Email" />
-                    <input type="hidden" id="Name" name="Name" value="@Model.Data.Name" />
-                    <button type="submit" class="button" id="resend_invitation">Resend Invitation</button>
-                </form>
-                <a href="@Url.Action("Cancel", "EmployerTeam",new {email = Model.Data.Email, invitationId = Model.Data.HashedInvitationId })" class="button button-link">Cancel Invitation</a>
-
-            </div>
+            <form asp-route="@RouteNames.EmployerTeamResendInvite" asp-route-hashedAccountId="@hashedAccountId" method="POST">
+                <input type="hidden" id="Email" name="Email" value="@Model.Data.Email" />
+                <input type="hidden" id="Name" name="Name" value="@Model.Data.Name" />
+                <div class="govuk-button-group">
+                        <button type="submit" class="govuk-button" id="resend_invitation">Resend invitation</button>
+                        <a asp-route="@RouteNames.EmployerTeamCancelInvitation"
+                            asp-route-hashedAccountId="@hashedAccountId"
+                            asp-route-email="@Model.Data.Email"
+                            asp-route-hashedInvitationId="@Model.Data.HashedInvitationId"
+                            class="govuk-link">Cancel invitation</a>
+                </div>
+            </form>
         }
         @if (@Model.Data.IsUser)
         {
-            <form action="@Url.Action("Remove")" method="GET">
+            <form asp-route="@RouteNames.RemoveTeamMember" asp-route-hashedAccountId="@hashedAccountId" asp-route-email="@Model.Data.Email" method="GET">
                 <input type="hidden" id="Email" name="Email" value="@Model.Data.Email" />
-                <button type="submit" class="button" id="delete_user">Remove team member</button>
+                <button type="submit" class="govuk-button govuk-button--warning" id="delete_user">Remove team member</button>
             </form>
 
         }
-    </div>
-</div>
+
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <a href="@Url.Action("ViewTeam", "EmployerTeam")" class="back-link">Back to your team</a>
-    </div>
+    <a asp-route="@RouteNames.EmployerTeamView" asp-route-hashedAccountId="@hashedAccountId" class="govuk-back-link">Back to your team</a>
 }

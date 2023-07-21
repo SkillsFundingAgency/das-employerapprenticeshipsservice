@@ -1,14 +1,11 @@
-﻿using System.Collections.Generic;
+﻿namespace SFA.DAS.EmployerAccounts.Models.UserView;
 
-namespace SFA.DAS.EmployerAccounts.Models.UserView
+public class ViewAccess
 {
-    public class ViewAccess
-    {
-        public string ViewName { get; set; }
+    public string ViewName { get; set; }
 
-        public int Weighting { get; set; }
+    public int Weighting { get; set; }
 
-        public List<string> EmailAddresses { get; set; }
+    public List<string> EmailAddresses { get; set; }
         
-    }
 }

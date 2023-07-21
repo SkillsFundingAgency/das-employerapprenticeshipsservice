@@ -1,39 +1,34 @@
-﻿using System;
-using System.Threading.Tasks;
-using SFA.DAS.Authorization;
-using SFA.DAS.EmployerAccounts.Data;
+﻿using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.Validation;
 
-namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
+namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
+
+public class CreateLegalEntityValidator : IValidator<CreateLegalEntityCommand>
 {
-    public class CreateLegalEntityValidator: IValidator<CreateLegalEntityCommand>
+    private readonly IMembershipRepository _membershipRepository;
+
+    public CreateLegalEntityValidator(IMembershipRepository membershipRepository)
     {
-        private readonly IMembershipRepository _membershipRepository;
+        _membershipRepository = membershipRepository;
+    }
 
-        public CreateLegalEntityValidator(IMembershipRepository membershipRepository)
+
+    public ValidationResult Validate(CreateLegalEntityCommand item)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<ValidationResult> ValidateAsync(CreateLegalEntityCommand item)
+    {
+        var validationResult = new ValidationResult();
+
+        var member = await _membershipRepository.GetCaller(item.HashedAccountId, item.ExternalUserId);
+
+        if (member == null || member.Role != Role.Owner)
         {
-            _membershipRepository = membershipRepository;
+            validationResult.IsUnauthorized = true;
         }
 
-
-        public ValidationResult Validate(CreateLegalEntityCommand item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<ValidationResult> ValidateAsync(CreateLegalEntityCommand item)
-        {
-            var validationResult = new ValidationResult();
-
-            var member = await _membershipRepository.GetCaller(item.HashedAccountId, item.ExternalUserId);
-
-            if (member == null || member.Role != Role.Owner)
-            {
-                validationResult.IsUnauthorized = true;
-            }
-
-            return validationResult;
-        }
+        return validationResult;
     }
 }

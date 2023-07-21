@@ -1,19 +1,17 @@
-﻿using SFA.DAS.Messaging.Attributes;
-using System;
+﻿using System;
 
-namespace SFA.DAS.EmployerAccounts.Events.Messages
+namespace SFA.DAS.EmployerAccounts.Events.Messages;
+
+[Serializable]
+[MessageGroup("user_joined")]
+public class UserJoinedMessage : AccountMessageBase
 {
-    [Serializable]
-    [MessageGroup("user_joined")]
-    public class UserJoinedMessage : AccountMessageBase
+    public UserJoinedMessage()
+    { }
+
+    public UserJoinedMessage(long accountId, string creatorName, string creatorUserRef)
+        : base(accountId, creatorName, creatorUserRef)
     {
-        public UserJoinedMessage()
-        { }
 
-        public UserJoinedMessage(long accountId, string creatorName, string creatorUserRef)
-            : base(accountId, creatorName, creatorUserRef)
-        {
-
-        }
     }
 }

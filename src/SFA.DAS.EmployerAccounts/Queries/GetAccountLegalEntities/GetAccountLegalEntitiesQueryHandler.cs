@@ -1,50 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.Validation;
+﻿using System.Threading;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities;
+
+public class GetAccountLegalEntitiesQueryHandler : IRequestHandler<GetAccountLegalEntitiesRequest, GetAccountLegalEntitiesResponse>
 {
-    public class GetAccountLegalEntitiesQueryHandler : IAsyncRequestHandler<GetAccountLegalEntitiesRequest, GetAccountLegalEntitiesResponse>
+    private readonly IMembershipRepository _membershipRepository;
+    private readonly IEmployerAgreementRepository _employerAgreementRepository;
+    private readonly IValidator<GetAccountLegalEntitiesRequest> _validator;
+
+    public GetAccountLegalEntitiesQueryHandler(IMembershipRepository membershipRepository, IEmployerAgreementRepository employerAgreementRepository, IValidator<GetAccountLegalEntitiesRequest> validator)
     {
-        private readonly IMembershipRepository _membershipRepository;
-        private readonly IEmployerAgreementRepository _employerAgreementRepository;
-        private readonly IValidator<GetAccountLegalEntitiesRequest> _validator;
+        _membershipRepository = membershipRepository ?? throw new ArgumentNullException(nameof(membershipRepository));
+        _employerAgreementRepository = employerAgreementRepository ?? throw new ArgumentNullException(nameof(employerAgreementRepository));
+        _validator = validator;
+    }
 
-        public GetAccountLegalEntitiesQueryHandler(IMembershipRepository membershipRepository, IEmployerAgreementRepository employerAgreementRepository, IValidator<GetAccountLegalEntitiesRequest> validator)
+    public async Task<GetAccountLegalEntitiesResponse> Handle(GetAccountLegalEntitiesRequest message, CancellationToken cancellationToken)
+    {
+        var result = await _validator.ValidateAsync(message);
+
+        if (!result.IsValid())
         {
-            if (membershipRepository == null)
-                throw new ArgumentNullException(nameof(membershipRepository));
-            if (employerAgreementRepository == null)
-                throw new ArgumentNullException(nameof(employerAgreementRepository));
-            _membershipRepository = membershipRepository;
-            _employerAgreementRepository = employerAgreementRepository;
-            _validator = validator;
+            throw new InvalidRequestException(result.ValidationDictionary);
         }
 
-        public async Task<GetAccountLegalEntitiesResponse> Handle(GetAccountLegalEntitiesRequest message)
+        var membership = await _membershipRepository.GetCaller(message.HashedLegalEntityId, message.UserId);
+
+        if (membership == null)
+            throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "Caller is not a member of this account" } });
+
+        var accountSpecificLegalEntity = await _employerAgreementRepository.GetLegalEntitiesLinkedToAccount(membership.AccountId, false);
+
+        return new GetAccountLegalEntitiesResponse
         {
-            var result = _validator.Validate(message);
-
-            if (!result.IsValid())
-            {
-                throw new InvalidRequestException(result.ValidationDictionary);
-            }
-
-            var membership = await _membershipRepository.GetCaller(message.HashedLegalEntityId, message.UserId);
-
-            if (membership == null)
-                throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "Caller is not a member of this account" } });
-
-            var accountSpecificLegalEntity = await _employerAgreementRepository.GetLegalEntitiesLinkedToAccount(membership.AccountId, false);
-
-            return new GetAccountLegalEntitiesResponse
-            {
-                LegalEntities = accountSpecificLegalEntity.ToList()
-            };
-        }
+            LegalEntities = accountSpecificLegalEntity.ToList()
+        };
     }
 }

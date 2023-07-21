@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
+﻿namespace SFA.DAS.EmployerAccounts.Models.Account;
 
-namespace SFA.DAS.EmployerAccounts.Models.Account
+public class Accounts<T>
 {
-    public class Accounts<T>
-    {
-        public int AccountsCount { get; set; }
-        public List<T> AccountList { get; set; }
-    }
+    public int AccountsCount { get; set; }
+    public List<T> AccountList { get; set; }
 }

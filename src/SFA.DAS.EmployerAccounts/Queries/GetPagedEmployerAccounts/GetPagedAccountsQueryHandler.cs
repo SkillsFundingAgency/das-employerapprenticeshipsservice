@@ -1,34 +1,31 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.Validation;
+﻿using System.Threading;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetPagedEmployerAccounts
+namespace SFA.DAS.EmployerAccounts.Queries.GetPagedEmployerAccounts;
+
+public class GetPagedAccountsQueryHandler : IRequestHandler<GetPagedEmployerAccountsQuery, GetPagedEmployerAccountsResponse>
 {
-    public class GetPagedAccountsQueryHandler : IAsyncRequestHandler<GetPagedEmployerAccountsQuery, GetPagedEmployerAccountsResponse>
+    private readonly IEmployerAccountRepository _employerAccountRepository;
+    private readonly IValidator<GetPagedEmployerAccountsQuery> _validator;
+
+    public GetPagedAccountsQueryHandler(
+        IValidator<GetPagedEmployerAccountsQuery> validator, 
+        IEmployerAccountRepository employerAccountRepository)
     {
-        private readonly IEmployerAccountRepository _employerAccountRepository;
-        private readonly IValidator<GetPagedEmployerAccountsQuery> _validator;
+        _employerAccountRepository = employerAccountRepository;
+        _validator = validator;
+    }
 
-        public GetPagedAccountsQueryHandler(
-            IValidator<GetPagedEmployerAccountsQuery> validator, 
-            IEmployerAccountRepository employerAccountRepository)
+    public async Task<GetPagedEmployerAccountsResponse> Handle(GetPagedEmployerAccountsQuery message, CancellationToken cancellationToken)
+    {
+        var validationResult = _validator.Validate(message);
+
+        if (!validationResult.IsValid())
         {
-            _employerAccountRepository = employerAccountRepository;
-            _validator = validator;
+            throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        public async Task<GetPagedEmployerAccountsResponse> Handle(GetPagedEmployerAccountsQuery message)
-        {
-            var validationResult = _validator.Validate(message);
-
-            if (!validationResult.IsValid())
-            {
-                throw new InvalidRequestException(validationResult.ValidationDictionary);
-            }
-
-            var accounts = await _employerAccountRepository.GetAccounts(message.ToDate, message.PageNumber, message.PageSize);
-            return new GetPagedEmployerAccountsResponse() { AccountsCount = accounts.AccountsCount, Accounts = accounts.AccountList };
-        }
+        var accounts = await _employerAccountRepository.GetAccounts(message.ToDate, message.PageNumber, message.PageSize);
+        return new GetPagedEmployerAccountsResponse() { AccountsCount = accounts.AccountsCount, Accounts = accounts.AccountList };
     }
 }

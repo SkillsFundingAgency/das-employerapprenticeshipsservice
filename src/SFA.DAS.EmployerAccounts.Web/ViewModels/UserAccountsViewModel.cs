@@ -1,29 +1,22 @@
-﻿using SFA.DAS.EmployerAccounts.Models.Account;
-using System;
+﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels;
 
-namespace SFA.DAS.EmployerAccounts.Web.ViewModels
+public class UserAccountsViewModel
 {
-    public class UserAccountsViewModel
-    {
-        public Accounts<Account> Accounts;
-        public int Invitations;
-        public FlashMessageViewModel FlashMessage;
-        public string ErrorMessage;
-        public DateTime? TermAndConditionsAcceptedOn { get; set; }
-        public DateTime? LastTermsAndConditionsUpdate { get; set; }
-        public bool ShowTermsAndConditionBanner { get 
-            { 
-                if (LastTermsAndConditionsUpdate.HasValue)
-                {
-                    if (!TermAndConditionsAcceptedOn.HasValue ||  
-                        (TermAndConditionsAcceptedOn.Value < LastTermsAndConditionsUpdate.Value))
-                    {
-                        return true;
-                    }
-                }
+    public Accounts<Account> Accounts { get; set; }
+    public int Invitations { get; set; }
+    public FlashMessageViewModel FlashMessage { get; set; }
+    public string ErrorMessage { get; set; }
+    public DateTime? TermAndConditionsAcceptedOn { get; set; }
+    public DateTime? LastTermsAndConditionsUpdate { get; set; }
 
+    public bool ShowTermsAndConditionBanner { get 
+        {
+            if (!LastTermsAndConditionsUpdate.HasValue)
+            {
                 return false;
-            } 
-        }
+            }
+
+            return !TermAndConditionsAcceptedOn.HasValue || TermAndConditionsAcceptedOn.Value < LastTermsAndConditionsUpdate.Value;
+        } 
     }
 }

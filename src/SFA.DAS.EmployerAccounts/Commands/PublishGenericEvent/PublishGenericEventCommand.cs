@@ -1,10 +1,8 @@
-﻿using MediatR;
-using SFA.DAS.Events.Api.Types;
+﻿using SFA.DAS.Events.Api.Types;
 
-namespace SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent
+namespace SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
+
+public class PublishGenericEventCommand : IRequest
 {
-    public class PublishGenericEventCommand : IAsyncRequest<PublishGenericEventCommandResponse>
-    {
-        public GenericEvent Event { get; set; }
-    }
+    public GenericEvent Event { get; set; }
 }

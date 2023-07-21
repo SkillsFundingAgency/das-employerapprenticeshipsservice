@@ -1,0 +1,1542 @@
+﻿@using SFA.DAS.EmployerAccounts.Models.EmployerAgreement
+@model SignEmployerAgreementViewModel
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="govuk-error-summary" role="alert" aria-labelledby="error-summary-heading" tabindex="-1">
+                <h2 class="govuk-error-summary__title" id="error-summary-heading">
+                    There is a problem
+                </h2>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        <li>
+                            <a href="#want-to-sign">@ViewData.ModelState[nameof(Model.Choice)].Errors[0].ErrorMessage</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        }
+
+        @if (Model.EmployerAgreement.Status != EmployerAgreementStatus.Signed)
+        {
+            <h1 class="govuk-heading-xl">Do you accept the employer agreement on behalf of @Model.EmployerAgreement.LegalEntityName<span>?</span></h1>
+        }
+
+        <p class="govuk-body govuk-!-margin-bottom-6">The points to note and guidance notes are not part of the employer agreement.</p>
+
+        <div id="agreement-header" class="grey-background das-highlight">
+            <h2 class="govuk-heading-m">Points to note</h2>
+            <p class="govuk-body">@Model.EmployerAgreement.LegalEntityName must:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>only use the funding made available through their apprenticeship service account to train and assess apprentices</li>
+                <li>have a contract with their training provider, so the provider can carry out apprenticeship training</li>
+                <li>follow the apprenticeship funding rules</li>
+            </ul>
+            <p class="govuk-body"><abbr title="Department for Education">DfE</abbr> will:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>consider an application by @Model.EmployerAgreement.LegalEntityName and / or their training provider for funding in accordance with the apprenticeship funding rules</li>
+                <li>pay the funding directly to @Model.EmployerAgreement.LegalEntityName’s training provider (if they are eligible)</li>
+            </ul>
+            <p class="govuk-body"><abbr>DfE</abbr> can:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>suspend payments, claim back funding or close @Model.EmployerAgreement.LegalEntityName’s account if they breach the terms of the agreement</li>
+                <li>vary the terms of the agreement - if this happens, @Model.EmployerAgreement.LegalEntityName can accept the new terms or close their account (by giving <abbr>DfE</abbr> 30 days’ notice)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+<!-- Full agreement -->
+<div class="govuk-grid-row" id="contents">
+
+    <div class="govuk-grid-column-one-quarter">
+
+        <p class="govuk-body-s govuk-!-font-weight-regular" id="sections-title">Clauses of the agreement<span class="govuk-visually-hidden">:</span></p>
+        <nav data-jumptoscrolltxt="Clauses" data-module="jumpToScroll">
+            <ol class="govuk-list govuk-!-font-size-16 contents">
+                <li><a class="govuk-link--no-visited-state" href="#background">Background </a></li>
+                <li><a class="govuk-link--no-visited-state" href="#1"><span class="number">1. </span>Agreed Terms</a></li>
+                <li><a class="govuk-link--no-visited-state" href="#2"><span class="number">2. </span>Commencement and Duration</a></li>
+                <li><a class="govuk-link--no-visited-state" href="#3"><span class="number">3. </span>Purpose and Use of Funding</a></li>
+                <li><a class="govuk-link--no-visited-state" href="#4"><span class="number">4. </span>Payments and Approvals</a></li>
+                <li><a class="govuk-link--no-visited-state" href="#5"><span class="number">5. </span>Requirements</a></li>
+                <li><a class="govuk-link--no-visited-state" href="#6"><span class="number">6. </span>Information, Audit and Reporting</a></li>
+                <li><a class="govuk-link--no-visited-state" href="#7"><span class="number">7. </span>Intellectual Property Rights</a></li>
+                <li><a class="govuk-link--no-visited-state" href="#8"><span class="number">8. </span>Confidentiality</a></li>
+                <li><a class="govuk-link--no-visited-state" href="#9"><span class="number">9. </span>Freedom of Information</a></li>
+                <li><a class="govuk-link--no-visited-state" href="#10"><span class="number">10. </span>Data Protection</a></li>
+                <li><a class="govuk-link--no-visited-state" href="#11"><span class="number">11. </span>Anti-Discrimination</a></li>
+                <li><a class="govuk-link--no-visited-state" href="#12"><span class="number">12. </span>Limitation of Liability</a></li>
+                <li><a class="govuk-link--no-visited-state" href="#13"><span class="number">13. </span>Withholding, Suspension and Repayment of Funding</a></li>
+                <li><a class="govuk-link--no-visited-state" href="#14"><span class="number">14. </span>Termination</a></li>
+                <li><a class="govuk-link--no-visited-state" href="#15"><span class="number">15. </span>Assignment</a></li>
+                <li><a class="govuk-link--no-visited-state" href="#16"><span class="number">16. </span>Variation</a></li>
+                <li><a class="govuk-link--no-visited-state" href="#17"><span class="number">17. </span>Waiver</a></li>
+                <li><a class="govuk-link--no-visited-state" href="#18"><span class="number">18. </span>Notices</a></li>
+                <li><a class="govuk-link--no-visited-state" href="#19"><span class="number">19. </span>Dispute Resolution</a></li>
+                <li><a class="govuk-link--no-visited-state" href="#20"><span class="number">20. </span>No Partnership or Agency</a></li>
+                <li><a class="govuk-link--no-visited-state" href="#21"><span class="number">21. </span>Joint and Several Liability</a></li>
+                <li><a class="govuk-link--no-visited-state" href="#22"><span class="number">22. </span>Governing Law</a></li>
+                <li><a class="govuk-link--no-visited-state" href="#schedule1">Schedule 1</a></li>
+                <li><a class="govuk-link--no-visited-state" href="#definitionsandinterpretation">Definitions and Interpretation</a></li>
+                <li><a class="govuk-link--no-visited-state" href="#schedule2">Schedule 2</a></li>
+                <li><a class="govuk-link--no-visited-state" href="#incentive">Incentive Payments for Hiring a New Apprentice</a></li>
+            </ol>
+        </nav>
+    </div>
+
+    <div id="agreement-list" class="govuk-grid-column-two-thirds">
+
+        <h2 class="govuk-heading-l">Agreement between @Model.EmployerAgreement.LegalEntityName and <abbr>DfE</abbr></h2>
+
+        @if (Model.PreviouslySignedEmployerAgreement != null && Model.PreviouslySignedEmployerAgreement.TemplateId != Model.EmployerAgreement.TemplateId)
+        {
+            <p class="govuk-body-lead">Updated on 26 October 2022</p>
+        }
+        else
+        {
+            <p class="govuk-body-lead">Published on 26 October 2022</p>
+        }
+
+        <p class="govuk-body">For use of the Apprenticeship Service to access funded apprenticeship training</p>
+
+        <!-- Background -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="background">Background</h3>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">A.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">This Agreement sets out the terms for use of the Apprenticeship Service by the Employer and the obligations by which the Employer agrees to be bound.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">B.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">This Agreement applies to all employers including those that pay the Apprenticeship Levy as well as those employers that do not pay the Apprenticeship Levy.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 1 -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="1"><span>1.</span> Agreed Terms</h3>
+
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">1.1.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">Terms in this Agreement which are defined have the first letter of each word capitalised and are set out in Schedule 1 (Definitions and Interpretation).</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">1.2.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">Unless the context requires otherwise, words in the singular shall include the plural and in the plural shall include the singular.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">1.3.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">A reference to a statute or statutory provision is a reference to it as amended, extended or re-enacted from time to time.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">1.4.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">A reference to a person or body includes a reference to its successor.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">1.5.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">A reference to the Employer shall also include a Connected Employer unless the context requires otherwise and the actions and non-actions of a Connected Employer shall be deemed to be the actions and non-actions of the Employer.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">1.6.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">Any words following the terms “including”, “include”, “in particular”, “for example” or any similar expression shall be construed as illustrative and shall not limit the sense of the words, description, definition, phrase or term preceding those terms.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2 -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="2"><span>2.</span> Commencement and Duration</h3>
+
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body" id="2-1">2.1.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">This Agreement will start on the date the Employer enters into this Agreement on <a target="_blank" rel="noopener" href="https://accounts.manage-apprenticeships.service.gov.uk" class="govuk-link govuk-link--no-visited-state">https://accounts.manage-apprenticeships.service.gov.uk</a> and will continue in force unless terminated earlier as set out in Clause 14.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">2.2.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">By entering into this Agreement, the Employer is agreeing to be legally bound by its terms and conditions.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3 -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="3"><span>3.</span> Purpose and Use of Funding</h3>
+
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">3.1.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">Subject to Funding being available and any applicable Spend Controls, the Employer, or the Training Provider on behalf of the Employer, may access Funding for an Apprenticeship through the Employer’s Apprenticeship Service Account.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">3.2.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The Employer acknowledges and accepts that the Funding which is made available through the Employer’s Apprenticeship Service Account is solely to support the Training and End-Point Assessment of Apprentices.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">3.3.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The use of Funding must at all times comply with the Funding Rules.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">3.4.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">Payments under the Employer Incentive Scheme shall be made in accordance with Schedule 2 (Incentive Payments for Hiring a New Apprentice) and shall be made in addition to the Funding.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4 -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="4"><span>4.</span> Payments and Approvals</h3>
+
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">4.1.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The Employer and Training Provider must agree the Apprenticeship Details before the Apprenticeship begins and this information must be recorded on the Apprenticeship Service Account.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">4.2.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">In order for the department to pay the Training Provider, the Employer or the Training Provider, on behalf of the Employer, must keep the Apprenticeship Details up to date on the Apprenticeship Service and the Employer must use the Apprenticeship Service to approve the Apprenticeship Details.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">4.3.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The department will check the Apprenticeship Details submitted by the Training Provider against the information on the Apprenticeship Service. If the Apprenticeship Details do not match, or the Employer has not approved the Apprenticeship Details on the Apprenticeship Service, the department will not make the payment to the Training Provider.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">4.4.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The department will at its discretion undertake due diligence in relation to the information provided as part of the Employer Declaration.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">4.5.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The department reserves the right to change or discontinue all or any part of the Apprenticeship Service at any time.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">4.6.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The department reserves the right to limit or remove an Employer’s access to the Apprenticeship Service if there are reasonable grounds for concluding that the Employer has breached this Agreement and / or the Funding Rules.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">4.7.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The Employer agrees to pay the Training Provider directly for any Employer Co-Investment which is payable in accordance with the Funding Rules.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">4.8.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">Where the Employer's liability to pay Employer Co-Investment occurs after the cost of Training has been paid in full from the Apprenticeship Service Account, (for example, where a change in the Employer’s tax liability reduces the amount of Funding that was previously in the Apprenticeship Service Account), the Employer agrees to pay upon request the Employer's Co-Investment to the department.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5 -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="5"><span>5.</span> Requirements</h3>
+
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">5.1.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">An Employer must:</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body" id="5-1-1">5.1.1.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">ensure that information on the Apprenticeship Service Account is accurate and that it is kept up to date, including the review and approval of information entered by the Training Provider on the Employer’s behalf;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">5.1.2.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">comply at all times with the Funding Rules;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">5.1.3.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">assist and cooperate with the Training Provider and / or End-Point Assessment Organisation to enable them to deliver the Training in compliance with the Funding Rules and the contract for services entered into between the Employer and the Training Provider;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">5.1.4.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">pay the Employer Co-Investment promptly when it is liable to pay it and as agreed with the Training Provider;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">5.1.5.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">promptly inform the department by contacting the Helpdesk (08000 150600 or <a href="mailto: helpdesk@manage-apprenticeships.service.gov.uk" class="govuk-link govuk-link--no-visited-state">helpdesk@manage-apprenticeships.service.gov.uk</a>) of any concerns that the Employer might have about the Training delivered to the Apprentice and / or the Training Provider;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">5.1.6.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">have procedures in place to deal with conflicts of interest in relation to the Apprenticeship Training;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">5.1.7.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">have procedures and processes in place to deal with the prevention of fraud and / or administrative malfunction;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body" id="5-1-8">5.1.8.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">upon request, supply the Training Provider with any information it may reasonably require in relation to any Apprentice or the delivery of Training;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body" id="5-1-9">5.1.9.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">have a contract for services with a Training Provider for the provision of Training to the Apprentice;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">5.1.10.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">inform the Training Provider of any change in the Employer’s or any Apprentice’s circumstances which might affect the Training, the Funding or any other issue connected with the contract for services within 10 Working Days;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">5.1.11.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">ensure all financial and other information disclosed to the department is true and accurate;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">5.1.12.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">ensure that it has the appropriate registrations with the Information Commissioner’s Office for controlling and / or processing data and that it maintains them for the duration of this Agreement;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">5.1.13.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">adhere to the Computer Misuse Act 1990;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">5.1.14.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">comply with Legislation and Guidance relating to Health and Safety and Safeguarding;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">5.1.15.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">not commit a Prohibited Act.</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">5.1.16.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">comply at all times with the terms and conditions for the Apprenticeship Service.</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">5.1.17.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">comply at all times with the department’s Policy for Apprenticeship and Traineeship Employers demonstrating High-Risk Behaviours (https://www.gov.uk/government/publications/policy-for-apprenticeship-and-traineeship-employers-demonstrating-high-risk-behaviours/policy-for-apprenticeship-and-traineeship-employers-demonstrating-high-risk-behaviours)</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">5.1.18.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">ensure access details for the Employer’s Apprenticeship Service Accounts remain secure, and are not shared with third parties, including but not limited to the Training Provider.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6 -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="6"><span>6.</span> Information, Audit and Reporting</h3>
+
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">6.1.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The Employer shall, upon request, supply any documents, information, data, reports, accounts, records or written or verbal explanations whether held in physical and / or electronic form which may be reasonably required by the department or its authorised representatives or auditors in connection with this Agreement or the Apprenticeship Service, including in relation to any Apprentice, Training Provider or PAYE scheme of the Employer.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">6.2.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The Employer shall assist and cooperate with the department in relation to any audit or investigation and shall grant the department or its authorised representatives or auditors access to its premises at any reasonable time, with or without notice, to examine, remove and / or copy any relevant documents and records (including electronic records) and to interview the Employer's and any Connected Employer's employees or staff carrying out activities in connection with this Agreement or any Apprentice receiving Training under this Agreement.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">6.3.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The department is entitled to disclose any information obtained from the Employer;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">6.3.1.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">to any other Crown Body;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">6.3.2.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">to Parliament and Parliamentary Committees or if required by any Parliamentary reporting requirement;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">6.3.3.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">to any professional adviser, consultant, contractor or other person engaged by the department directly in connection with this Agreement, provided that such information is treated as confidential by the third party receiving the information;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">6.3.4.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">on a confidential basis to any proposed successor body to the department in connection with any assignment disposal of its rights, obligations or liabilities under this Agreement.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">6.4.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The department is entitled to use any information about the Employer that is shared with it through any of the people or bodies referred to in Clauses 6.3.1 to 6.3.4 when determining eligibility for Funding and / or a payment under the Employer Incentive Scheme.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7 -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="7"><span>7.</span> Intellectual Property Rights</h3>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">7.1.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The department and the Employer agree that all rights, title and interest in or to any information, data, reports, documents, procedures, forecasts, technology, Know-How and any other Intellectual Property Rights whatsoever owned by either the department or the Employer before the Commencement Date or developed by either party during the Term of this Agreement, shall remain the property of that party.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">7.2.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">Subject to Clause 7.3 below, the Employer may not use any Intellectual Property Rights belonging to the department or the Crown without prior written consent from the department.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body" id="7-3">7.3.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The Employer may use the Apprenticeships Logo for the purposes of advertising and marketing its Apprenticeships without obtaining prior consent from the department.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body" id="7-4">7.4.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">Where the department has allowed the Employer to use any of its Intellectual Property Rights in connection with this Agreement, the Employer shall immediately cease to use such Intellectual Property Rights upon request or upon termination of this Agreement.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">7.5.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">In the event of Clause 7.4 applying, the Employer must at the election of the department either return or destroy such Intellectual Property Rights as requested by the department and, where relevant, shall put arrangements in place to ensure that any Connected Employer also complies with the provisions of this Clause 7.</p>
+                </div>
+            </div>            
+        </section>
+
+
+        <!-- 8 -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="8"><span>8.</span> Confidentiality</h3>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">8.1.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">Subject to Clause 9 (Freedom of Information), each party shall during the Term of this Agreement and afterwards keep secret and confidential all Intellectual Property Rights or Know-How or other business, technical or commercial information disclosed to it as a result of the Agreement. Each party shall not disclose the same to any person except to the extent necessary to perform its obligations in accordance with the terms of this Agreement or except as expressly authorised in writing by the other party.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">8.2.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The obligation of confidentiality contained in this clause shall not apply or shall cease to apply to any Intellectual Property Rights, Know-How or other business, technical or commercial information which:</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">8.2.1.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">at the time of its disclosure by the disclosing party is already in the public domain or which subsequently enters the public domain other than by breach of the terms of this Agreement by the receiving party;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">8.2.2.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">is already known to the receiving party as evidenced by written records at the time of its disclosure by the disclosing party and was not otherwise acquired by the receiving party from the disclosing party under any obligations of confidence; or</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">8.2.3.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">is at any time after the date of this Agreement acquired by the receiving party from a third party having the right to disclose the same to the receiving party without breach of the obligations owed by that party to the disclosing party.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">8.3.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">As an exemption to the duty of confidentiality set out in this Clause 8, the department may disclose confidential information obtained from the Employer:</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">8.3.1.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">to any other Central Government Body, Non-Departmental or Quasi Government Body or agency, central or local;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">8.3.2.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">to Parliament and Parliamentary Committees or if required by any Parliamentary reporting requirement; or</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">8.3.3.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">to any professional adviser, consultant, contractor or other person engaged by the department directly in connection with this Agreement, provided that such information is treated as confidential by the receiving party.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">8.4.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The Employer shall, where relevant, put in place arrangements for ensuring that any Connected Employer complies with the provisions of this Clause 8 as though it were a party to this Agreement.</p>
+                </div>
+            </div>            
+        </section>
+
+        <!-- 9 -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="9"><span>9.</span> Freedom of Information</h3>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body" id="9-1">9.1.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The Employer acknowledges that the department is subject to the requirements of the Freedom of Information Act 2000 (<abbr>FOIA</abbr>) and the Environmental Information Regulations 2004 (<abbr>EIR</abbr>s).</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">9.2.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The Employer will:</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">9.2.1.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">provide all necessary assistance and cooperation as reasonably requested by the department to enable the department to comply with its obligations under the <abbr>FOIA</abbr> and <abbr>EIR</abbr>s;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">9.2.2.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">transfer to the department all requests for information relating to this Agreement that it receives as soon as practicable and in any event within 2 Working Days of receipt;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">9.2.3.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">within 5 Working Days (or such other period as the department may specify) of the department's request for information, provide the department with a copy of all information belonging to the department that is in the Employer’s possession or control and is relevant to the request; and </p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">9.2.4.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">not respond directly to a request for information unless authorised in writing to do so by the department.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body" id="9-3">9.3.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The Employer acknowledges that the department may be required under the <abbr>FOIA</abbr> and <abbr>EIR</abbr>s to disclose information without consulting or obtaining consent from the Employer. The department shall take reasonable steps to notify the Employer of a request for information to the extent that it is permissible and reasonably practical for it to do so. Nonetheless and regardless of any other provision in this agreement, the department shall be responsible for determining in its absolute discretion whether any information is exempt from disclosure in accordance with the <abbr>FOIA</abbr> and / or the <abbr>EIR</abbr>s.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">9.4.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">Where the Employer is also subject to the requirements of <abbr>FOIA</abbr> and the <abbr>EIR</abbr>s, the department agrees to assist and cooperate with the Employer in relation to any request for information, in the same manner described in Clauses 9.1 to 9.3 above.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">9.5.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The Employer shall, where relevant, put in place arrangements for ensuring that any Connected Employer complies with the provisions of this Clause 9 as though it were a party to this Agreement.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10 -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="10"><span>10.</span> Data Protection</h3>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">10.1.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The Employer shall comply with the Data Protection Legislation.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">10.2.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The Employer shall make arrangements for ensuring that any person that is working with them or for them including employees, consultants, freelance workers and Connected Employers complies with the Data Protection Legislation.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">10.3.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The Employer shall notify the Training Provider of any suspected or actual breach of Apprentice personal data.</p>
+                </div>
+            </div>           
+        </section>
+
+        <!-- 11 -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="11"><span>11.</span> Anti-Discrimination</h3>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body" id="11-1">11.1.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The Parties shall not unlawfully discriminate within the meaning and scope of Equalities Legislation.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">11.2.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The Employer shall take all reasonable steps to make sure that all people and bodies involved on behalf of the Employer in delivering the Training comply with Clause 11.1.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 12 -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="12"><span>12.</span> Limitation of Liability</h3>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body" id="12-1">12.1.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">Subject to Clause 12.3, the department accepts no liability whatsoever for any consequences, whether direct or indirect, that may come about as a result of the actions and / or omissions of the Employer or a Connected Employer in relation to this Agreement, or their respective obligations to third parties, including but not limited to under a contract for services between the Employer and a Training Provider.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">12.2.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The Employer on behalf of itself and any Connected Employer shall indemnify and not hold the department and the people or bodies working on its behalf responsible for any claims, demands, actions, costs, expenses, losses, damages and all other liabilities arising or incurred as a result of this Agreement including but not limited to under a contract for services between the Employer and a Training Provider.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body" id="12-3">12.3.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">Neither party seeks to limit or exclude its own liability for death or personal injury caused by its own negligence, fraud, fraudulent misrepresentation or any other liability which cannot be limited or excluded by law.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">12.4.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">Subject to Clauses 12.1 and 12.3 above, the department's liability under this Agreement is limited to paying the Funding and any Employer Incentive Payment in accordance with the Funding Rules.</p>
+                </div>
+            </div>           
+        </section>
+
+        <!-- 13 -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="13"><span>13.</span> Withholding, Suspension and Repayment of Funding</h3>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">13.1.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">Without prejudice to the department's other rights and remedies, the department may at its discretion withhold or suspend payment of Funding for the Training and / or payments made under the Employer Incentive Scheme if:</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">13.1.1.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">the Employer materially breaches any of the terms or conditions set out in this Agreement;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">13.1.2.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">the department has reasonable grounds to suspect fraud, financial irregularity, dishonesty or negligence by the Employer or the Training Provider in connection with the Agreement;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">13.1.3.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">any employee or other individual carrying out activities on behalf of the Employer or a Connected Employer has (a) acted dishonestly or negligently at any time in connection with this Agreement or (b) taken any actions which, in the reasonable opinion of the department, bring or are likely to bring the department's name, brand or reputation or the Apprenticeships brand into disrepute;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">13.1.4.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">the Employer was not entitled to Funding under the Funding Rules in relation to one or more Apprenticeship;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">13.1.5.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">there occurs, in respect of the Employer or a relevant Connected Employer, any Insolvency Event or Change of Control which, in the reasonable opinion of the department, may affect the Employer's ability to comply with its obligations under this Agreement;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">13.1.6.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">the Employer fails to comply with any of the terms and conditions set out in this Agreement (including requirements in the Funding Rules) and fails to rectify any such failure within 30 days of receiving written notice detailing the failure;</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">13.2.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The department reserves the right to recover from the Employer any Funding paid to a Training Provider where the payment of Funding or any arrangement between the Employer and the Training Provider breaches the Funding Rules or the entitlement to Funding was based on wrong, inaccurate or misleading information. The department will act reasonably and proportionately in exercising its discretion to recover any sum from the Employer under this clause.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">13.3.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The department may retain or set off any sums owed to it by the Employer which have become due and payable against any sums due to the Employer under this Agreement or any other agreement which the Employer has with the department.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">13.4 .</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The Employer shall make any payments due to the department without any deduction.</p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 14 -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="14"><span>14.</span> Termination</h3>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">14.1.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">Without prejudice to the department's other rights and remedies, the department may terminate this Agreement with immediate effect by giving written notice to the Employer if:</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">14.1.1.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">the Employer commits a breach of any of Clauses 5.1.9 to 5.1.18;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">14.1.2.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">the Employer commits a breach of this Agreement which is irremediable or which it fails to remedy before the deadline specified in a written request from the department requiring the breach to be remedied;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">14.1.3.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">the Employer repeatedly breaches any of the terms of this Agreement in such a manner as to reasonably justify the opinion that its conduct is inconsistent with it having the intention or ability to give effect to the terms of this Agreement;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">14.1.4.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">the Employer commits a material breach of any term of this Agreement including but not limited to Clauses 5.1.1 to 5.1.8;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">14.1.5.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">the department becomes aware of any fraud or financial irregularity by the Employer or a Connected Employer in connection with this Agreement or any other Agreement with the Crown;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">14.1.6.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">any employee or other individual carrying out activities on behalf of the Employer or a Connected Employer has (a) acted dishonestly or negligently at any time in connection with this Agreement or (b) taken any actions which, in the reasonable opinion of the department, bring or are likely to bring the department's name, brand or reputation or the Apprenticeships brand into disrepute;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">14.1.7.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">any Insolvency Event or Change of Control which, in the reasonable opinion of the department, may affect the Employer's ability to comply with its obligations under this Agreement.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">14.2.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">Without affecting any other right or remedy available to it, either party may terminate this Agreement for any reason by giving not less than 30 days' notice in writing to the other party, or such shorter or longer notice period as may be mutually agreed in writing between them.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">14.3.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">Following the termination of this Agreement, the following clauses shall remain in full force and effect: Schedule 1 (Definitions and Interpretation), Schedule 2 (Incentive Payments for Hiring an Apprentice), 6 (Information, Audit and Reporting), 7 (Intellectual Property Rights), 9 (Freedom of Information), 10 (Data Protection), 12 (Limitation of Liability), 13 (Withholding, Suspension and Repayment of Funding), 18 (Notices), 19 (Dispute Resolution), 21 (Joint and Several Liability) and 22 (Governing Law).</p>
+                </div>
+            </div>           
+        </section>
+
+        <!-- 15 -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="15"><span>15.</span> Assignment</h3>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">15.1.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The Employer may not, without the prior written consent of the department, assign, transfer, sub-contract, or in any other way make over to any third party the benefit and / or the burden of this Agreement.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 16 -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="16"><span>16.</span> Variation</h3>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">16.1.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The department fully reserves the right to vary the terms of this Agreement. The Employer will be asked to confirm its acceptance of the new terms and conditions through the Apprenticeship Service Account.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 17 -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="17"><span>17.</span> Waiver</h3>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">17.1.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">No failure or delay by either party to exercise any right or remedy under this Agreement shall be construed as a waiver of any other right or remedy.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 18 -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="18"><span>18.</span> Notices</h3>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">18.1.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">All notices and communications in relation to this Agreement shall be in writing and personally delivered, emailed, or sent by first class post to the address of the relevant party, as referred to above or in the case of an email address or correspondence address, as notified by the relevant party in writing. The notice or communication will be considered delivered as follows:</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">18.1.1.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">if personally delivered, when handed over to the addressee;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">18.1.2.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">if sent by email, on the day the email is sent if sent on a Working Day and before 5.00 pm, otherwise the email will be considered delivered at 9.00 am on the next Working Day;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">18.1.3.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">if sent by first class post, on the second Working Day after the day on which it is posted.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 19 -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="19"><span>19.</span> Dispute Resolution</h3>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">19.1.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">Any complaint or dispute arising in relation to this Agreement shall be resolved in accordance with the department's official complaints procedure which can be accessed at <a target="_blank" rel="noopener" href="https://www.gov.uk/government/organisations/education-and-skills-funding-agency/about/complaints-procedure" class="govuk-link govuk-link--no-visited-state">https://www.gov.uk/government/organisations/education-and-skills-funding-agency/about/complaints-procedure</a>.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 20 -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="20"><span>20.</span> No Partnership or Agency</h3>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">20.1.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">This Agreement shall not create any partnership or joint venture between the department and the Employer, nor any relationship of principal and agent, nor authorise any party to make or enter into any commitments for or on behalf of the other party.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 21 -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="21"><span>21.</span> Joint and Several Liability</h3>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">21.1.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">Where the Employer is not a company nor any other separate legal entity, the individuals who enter into and sign this Agreement on behalf of the Employer shall be jointly and severally liable for the Employer's obligations and liabilities arising under this Agreement.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 22 -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="22"><span>22.</span> Governing Law</h3>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">22.1.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">This Agreement shall be governed by and construed in accordance with the law of England and Wales and the parties irrevocably submit to the exclusive jurisdiction of the English and Welsh courts.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="clause">
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="schedule1">Schedule 1</h3>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="definitionsandinterpretation">Definitions and Interpretation</h3>
+            <div>
+                <p class="govuk-body">In this Agreement the following terms shall have the following meanings:</p>
+                <p class="govuk-body"><b>Apprentice</b>: a person who works under an Apprenticeship Agreement.</p>
+                <p class="govuk-body"><b>Apprenticeship</b>: a job with training. This includes the Training and (where required) End-Point Assessment for an employee. The full definitions of (i) an English Apprenticeship (frameworks) and (ii) an approved English Apprenticeship (standards) can be found in Part 1 of the Apprenticeships, Skills, Children and Learning Act 2009.</p>
+                <p class="govuk-body"><b>Apprenticeship Agreement</b>: an Apprenticeship Agreement (<a target="_blank" rel="noopener" href="https://www.gov.uk/take-on-an-apprentice/apprenticeship-agreement" class="govuk-link govuk-link--no-visited-state">https://www.gov.uk/take-on-an-apprentice/apprenticeship-agreement</a>) is between an employer and an Apprentice, either in accordance with the Apprenticeships, Skills, Children and Learning Act 2009 sections 32 to 36 (for frameworks) or section A1 (for standards – an approved English Apprenticeship Agreement).</p>
+                <p class="govuk-body"><b>Apprenticeship Details</b>: the details of the Apprentice and their Apprenticeship including but not limited to; the Apprenticeship Standard; the agreed cost of the Training and End-Point Assessment; the Apprentice’s name, date of birth and Unique Learner Number and the Apprenticeship start date.</p>
+                <p class="govuk-body"><b>Apprenticeship Levy</b>: the levy payable by all employers with an annual pay bill of more than &pound;3 million which is used to support the funding of Apprenticeships.</p>
+                <p class="govuk-body"><b>Apprenticeships Logo</b>: the logo consisting of the word “Apprenticeships” in plain black or white typeface with a semi-circle of orange or blue brush strokes to the left hand side of the letter A, the Intellectual Property Rights of which are owned by the Crown.</p>
+                <p class="govuk-body"><b>Apprenticeship Service</b>: the digital service provided by the department to manage and fund Apprenticeship Training approved by Employers through the service and delivered by Training Providers listed on the Register of Apprenticeship Training Providers using government funds.</p>
+                <p class="govuk-body"><b>Apprenticeship Service Account</b>: the part of the Apprenticeship Service where the Employer can add Apprenticeship Details and see information about Funding and Apprentices they have previously added to their account.</p>
+                <p class="govuk-body"><b>Apprenticeship Standard</b>: the apprenticeship standards designed by employers that have had both the standard and associated assessment plan approved by the Institute for Apprenticeships and Technical Education (<abbr>IfATE</abbr>), and are published on IfATE’s website (<a target="_blank" rel="noopener" href="https://www.instituteforapprenticeships.org/" class="govuk-link govuk-link--no-visited-state">https://www.instituteforapprenticeships.org/</a>) alongside their allocated funding band.</p>
+                <p class="govuk-body"><b>Bribery Act</b>: the Bribery Act 2010 and any subordinate legislation made under that Act from time to time together with any guidance or codes of practice issued by the relevant government department concerning the legislation.</p>
+                <p class="govuk-body"><b>Change of Control</b>: has the meaning given in section 1124 of the Corporation Tax Act 2010.</p>
+                <p class="govuk-body"><b>Commencement Date</b>: the date on which the Employer signs this Agreement through their Apprenticeship Service Account as set out in Clause 2.1.</p>
+                <p class="govuk-body"><b>Connected Employer</b>: any entity (being a distinct legal entity from the Employer) which is connected with the Employer within the meaning of Schedule 1 Parts 1 and 2 of the National Insurance Contributions Act 2014, and which, not being a contracting party to this Agreement, carries out activities on behalf of the Employer in relation to the Apprenticeship Service or employs an Apprentice whose Training is funded through the Employer's Apprenticeship Service Account.</p>
+                <p class="govuk-body"><b>Data Protection Legislation</b>: means (i) the General Data Protection Regulation (Regulation (<abbr>EU</abbr>) 2016/679), the Data Protection Act 2018, including Part 3 which implements the Law Enforcement Directive (Directive (<abbr>EU</abbr>) 2016/680) and any applicable national implementing Laws as amended from time to time.</p>
+                <p class="govuk-body"><b>Department</b>: the Secretary of State for Education, acting through the Department for Education including its executive agencies including but not limited to the Education and Skills Funding Agency “(ESFA”)” acting in its own name or in the name of the DfE, whose principal address is at Sanctuary Buildings, 20 Great Smith Street, London, SW1P 3BT.</p>
+                <p class="govuk-body"><b>Employer</b>: the employer which enters into a contract with a Training Provider to commission Training (a) for its own Apprentices and / or (b) on behalf of a Connected Employer for the Connected Employer's Apprentices, to be funded through the Employer's Apprenticeship Service Account.</p>
+                <p class="govuk-body"><b>Employer Co-Investment</b>: a financial contribution towards the cost of Training which is payable by the Employer to the Training Provider in accordance with the Funding Rules.</p>
+                <p class="govuk-body"><b>End-Point Assessment</b>: the independent assessment of the Apprentice's knowledge, skills and behaviours carried out by an End-Point Assessment Organisation, after the Apprentice has passed their gateway assessment, to confirm that they have met the requirements of any relevant Apprenticeship Standard.</p>
+                <p class="govuk-body"><b>End-Point Assessment Organisation</b>: any organisation on the Register of­­­ End-Point Assessment Organisations which is selected by an Employer and contracted by a Training Provider to carry out End-Point Assessment.</p>
+                <p class="govuk-body"><b>Equalities Legislation</b>: The Equality Act 2010 and any other law, enactment, order, or regulation relating to discrimination whether in race, gender, religion, disability, sexual orientation, age or otherwise in employment.</p>                
+                <p class="govuk-body"><b>Funding</b>: the funding paid to the Training Provider on behalf of the Employer towards the cost of Training and End-Point Assessment in accordance with this Agreement.</p>
+                <p class="govuk-body"><b>Funding Rules</b>: the department's rules for funding Apprenticeships published on GOV.UK <a target="_blank" rel="noopener" href="https://www.gov.uk/guidance/apprenticeship-funding-rules" class="govuk-link govuk-link--no-visited-state">https://www.gov.uk/guidance/apprenticeship-funding-rules</a> as revised and amended from time to time.</p>
+                <p class="govuk-body"><b>Guidance</b>: any applicable guidance or directions with which the Employer is bound to comply.</p>
+                <p class="govuk-body"><b>Health and Safety</b>:  procedures intended to prevent accident or injury in workplaces or public environments.</p>
+
+                <p class="govuk-body"><b>Insolvency Event</b>: means any of the following circumstances:</p>
+                <ol class="govuk-list das-list-lower-alpha govuk-!-margin-left-4">
+                    <li>a party suspends or threatens to suspend payment of its debts or is unable to pay its debts as they fall due or is deemed unable to pay its debts within the meaning of any relevant provision of the Insolvency Act 1986;</li>
+                    <li>a party commences negotiations with all or any class of its creditors with a view to rescheduling any of its debts, or makes a proposal for or enters into any compromise or arrangement with any of its creditors (other than for the sole purpose of a bona fide reconstruction or amalgamation);</li>
+                    <li>a petition is filed, a notice is given, a resolution is passed, or an order is made, for or in connection with the winding up of the relevant party (other than for the sole purpose of a bona fide reconstruction or amalgamation);</li>
+                    <li>a receiver, administrative receiver or similar officer is appointed over the whole or any part of the relevant party's business or assets;</li>
+                    <li>an application order is made either for the appointment of an administrator or for an administration order, an administrator is appointed, or notice of intention to appoint an administrator is given;</li>
+                    <li>any event occurs, or proceeding is taken, with respect to the relevant party in any jurisdiction to which it is subject that has an effect equivalent or similar to any of the events mentioned in (a) - (e)(inclusive); or</li>
+                    <li>the relevant party suspends or ceases, or threatens to suspend or cease, carrying on all or a substantial part of its business.</li>
+                </ol>
+
+                <p class="govuk-body"><b>Intellectual Property Rights</b>: all patents, trademarks, logos (including the Apprenticeships Logo), copyrights and design rights (whether registered or not) and all applications for any of the foregoing and all rights of confidence and Know-How however arising for their full term and any renewals and extensions.</p>
+                <p class="govuk-body"><b>Know-How</b>: information, data, know-how or experience whether patentable or not and including but not limited to any technical and commercial information relating to research, design, development, manufacture, use or sale.</p>
+                <p class="govuk-body"><b>Legislation</b>: means any Act of Parliament or subordinate legislation within the meaning of Section 21(1) of the Interpretation Act 1978, any exercise of the Royal Prerogative, and any enforceable community right within the meaning of Section 2 of the European Communities Act 1972, in each case in the United Kingdom.</p>
+
+                <p class="govuk-body"><strong>Prohibited Act</strong>: means:</p>
+                <ol class="govuk-list das-list-lower-alpha govuk-!-margin-left-4">
+                    <li>
+                        offering, giving or agreeing to give to any servant of the Crown any gift or consideration of any kind as an inducement or reward for:
+                        <ol class="govuk-list das-list-lower-roman govuk-!-margin-left-4">
+                            <li>doing or not doing (or for having done or not having done) any act in relation to the obtaining or performance of this Agreement or any other contract with the Crown; or</li>
+                            <li>showing or not showing favour or disfavour to any person in relation to this Agreement or any other contract with the Crown;</li>
+                        </ol>
+                    </li>
+                    <li>entering into this Agreement or any other contract with the Crown where a commission has been paid or has been agreed to be paid by the Employer or on its behalf, or to its knowledge, to a servant of the Crown unless before the relevant contract is entered into particulars of any such commission and of the terms and conditions of any such contract for the payment thereof have been disclosed in writing to the department;</li>
+                    <li>
+                        committing any offence:
+                        <ol class="govuk-list das-list-lower-roman govuk-!-margin-left-4">
+                            <li>under the Bribery Act;</li>
+                            <li>under legislation creating offences in respect of fraudulent acts; or</li>
+                            <li>at common law in respect of fraudulent acts in relation to this Agreement or any other contract with the Crown; or</li>
+                        </ol>
+                    </li>
+                    <li>defrauding or attempting to defraud or conspiring to defraud the Crown.</li>
+                </ol>
+
+                <p class="govuk-body"><b>Register of End-Point Assessment Organisations</b>: the online register of End-Point Assessment Organisations from which the Employer may select an organisation to carry out the End-Point Assessment of Apprentices.</p>
+                <p class="govuk-body"><b>Register of Apprenticeship Training Providers</b>: means the register maintained by the department of organisations qualified to receive Funding from the department to deliver Apprenticeships.</p>
+                <p class="govuk-body"><b>Safeguarding</b>: action taken to protect vulnerable groups including children and young people from any type of harm from adults or other children.</p>
+                <p class="govuk-body"><b>Spend Controls</b>: the controls applied to manage the availability of Funding through the Apprenticeship Service as set out in the Funding Rules.</p>
+                <p class="govuk-body"><b>Term</b>: means the duration of this Agreement as set out in Clause 2.1.</p>
+                <p class="govuk-body"><b>Training</b>: the delivery of training and on-programme assessment and where relevant End-Point Assessment by the Training Provider and where relevant the End-Point Assessment Organisation to one or more Apprentices.</p>
+                <p class="govuk-body"><b>Training Provider</b>: an organisation listed on the Register of Apprenticeship Training Providers which has a contract with the Employer to provide Training to one or more Apprentices.</p>
+                <p class="govuk-body"><b>Working Day</b>: means Mondays to Fridays (inclusive) in each week, excluding bank and other public holidays in England.</p>
+            </div>
+        </div>
+
+        <div class="clause">
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="schedule2">Schedule 2</h3>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="incentive">Incentive Payments for Hiring a New Apprentice</h3>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7" id="definitions">Definitions</h3>
+            <div>
+                <p class="govuk-body"><b>Eligibility Criteria</b>: means the eligibility criteria for the Employer Incentive Scheme as set out in Paragraph 2 of this Schedule.</p>
+                <p class="govuk-body"><b>Employer Declaration</b>: means the declaration the Employer is asked to make about the eligibility of Apprentices and the accuracy of the information they provide in their application for an Employer Incentive Payment through their Apprenticeship Service Account.</p>
+                <p class="govuk-body"><b>Employer Incentive Payment</b>: means a payment under the Employer Incentive Scheme which comprises of the First Incentive Payment and if relevant, the Second Incentive Payment of the amount stated in the Funding Rules.</p>
+                <p class="govuk-body"><b>Employer Incentive Scheme</b>: means the arrangements entitled “Incentive Payments for Hiring a New Apprentice” as set out in the Funding Rules.</p>
+                <p class="govuk-body"><b>Evidence</b>: means the information set out in the relevant sections of the Funding Rules that an Employer is required to hold to support a claim for an Employer Incentive Payment.</p>
+                <p class="govuk-body"><b>First Incentive Payment</b>: means a payment made in accordance with Paragraph 10 of fifty percent of the total Employer Incentive Payment that applies for the relevant Apprentice.</p>
+                <p class="govuk-body"><b>Scheme Period</b>: means 1 August 2020 to 31 March 2021.</p>
+                <p class="govuk-body"><b>Second Incentive Payment</b>: means a payment made in accordance with Paragraph 10 of fifty percent of the total Employer Incentive Payment that applies for the relevant Apprentice.</p>
+                <p class="govuk-body"><b>Second Scheme Period</b>: means 1 April 2021 to 30 September 2021.</p>
+                <p class="govuk-body"><b>Third Scheme Period</b>: has the meaning given to it in Section “Incentive Payments for Hiring a New Apprentice” of the Funding Rules and such period shall start on 1 October 2021 and end on the date given in the Funding Rules as amended from time to time.</p>
+            </div>
+        </div>
+
+        <!-- Conditions of Funding and Eligibility Criteria -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7">Conditions of Funding and Eligibility Criteria</h3>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">1.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">An Employer that takes on an Apprentice in the circumstances specified in the sections in the Funding Rules entitled “Incentive Payments for Hiring a New Apprentice” may claim an Employer Incentive Payment in respect of that Apprentice.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">2.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">In order to be eligible for the Employer Incentive Payment in relation to an Apprentice as referred to in Paragraph 1, the Employer must:</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">2.1.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">Comply at all times with the Funding Rules;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">2.2.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">Meet the eligibility requirements for the Employer Incentive Scheme set out in the Funding Rules;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">2.3.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">Be registered on the Apprenticeship Service;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">2.4.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">Submit correct, accurate and up to date information as part of the application for an Employer Incentive Payment and the Employer Declaration in relation to each Apprentice;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">2.5.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">Provide Evidence promptly if requested in writing to do so by the department</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">3.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">Subject to Paragraph 4, an Employer may make a claim for the Employer Incentive Payment in respect of each Apprentice that meets the criteria as set out in Paragraph 2.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">4.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">If an Apprentice is employed by more than one employer simultaneously, only one of the employers may make a claim for the Employer Incentive Payment in accordance with the Funding Rules.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Payment of the Employer Incentive Payment -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7">Payment of the Employer Incentive Payment</h3>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">5.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The Employer Incentive Payment will be made in accordance with Paragraphs 6 to 10.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">6.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The information submitted by the Employer in accordance with Paragraph 2.4 will be checked against data submitted to the department by the Training Provider and any other information available to the department in accordance with Clauses 6.3 and 6.4 of this Agreement. Where the information does not match and / or other requirements as set out in the Funding Rules are not met, the department will be under no obligation to pay an Employer Incentive Payment.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">7.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">Before making any Employer Incentive Payment, the department will carry the checks set out in Clauses 4.3 and 4.4. of this Agreement including but not limited to the age of the Apprentice, the date the Apprentice started the Apprenticeship, the period during which the Apprentice has been undertaking the Apprenticeship and the information provided as part of the Employer Declaration. The Employer will ensure that it can promptly provide the department with supporting Evidence if the department requests it.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">8.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">Where the department does not make payment of Funding for Training for an Apprentice, the associated Employer Incentive Payment will not be paid. This could be for a number of reasons including but not limited to the Apprenticeship Details on the Apprenticeship Service do not match and / or payments for Training have been terminated, paused or suspended by the Employer or the department</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">9.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">If one or more of the Eligibility Criteria as set out in Paragraph 2 are not met in relation to an Apprentice, the Employer will not be entitled to the relevant Employer Incentive Payment. If the department has already made the relevant Employer Incentive Payment, it will recover the payment in accordance with Paragraph 13.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">10.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">If the Employer meets the Eligibility Criteria for an Employer Incentive Payment, the department will pay the Employer the First Incentive Payment or the Second Incentive Payment as relevant, and in accordance with the information about payments published on GOV.UK (<a target="_blank" rel="noopener" href="https://www.gov.uk/guidance/incentive-payments-for-hiring-a-new-apprentice" class="govuk-link govuk-link--no-visited-state">https://www.gov.uk/guidance/incentive-payments-for-hiring-a-new-apprentice</a>), by transferring the relevant Employer Incentive by BACS transfer to the bank account specified by the Employer in its application for the Employer Incentive Scheme.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Extension of the Scheme Period -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7">Extension of the Scheme Period, Second Scheme Period and Third Scheme Period</h3>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">11.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The department may at any time and in its sole discretion designate one or more additional periods to follow on from the Scheme Period and / or the Second Scheme Period by notice to the Employer from time to time. Any such notice shall specify whether it is the Scheme Period and / or the Second Scheme Period that is being varied and any amendment that is required to this Schedule.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">12.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The department may at any time and at its sole discretion amend the end date of the Third Scheme Period by amending Section “Incentive Payments for Hiring a New Apprentice” of the Funding Rules.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recovery of Payment -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7">Recovery of Payment</h3>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">13.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">If in the reasonable opinion of the department, the Employer:</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">13.1.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">fails to meet any obligation set out in this Schedule;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">13.2.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">failed to meet one or more of the Eligibility Criteria as referred to in Paragraph 2 when any Employer Incentive Payment was made to it;</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">13.3.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">has provided incorrect, inaccurate or misleading information or declarations in its application for the Employer Incentive Scheme; and / or</p>
+                </div>
+            </div>
+            <div class="govuk-!-margin-left-8">
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">13.4.</h4>
+                </div>
+                <div class="clause-column-content govuk-!-margin-left-3">
+                    <p class="govuk-body">has failed to supply Evidence following a written request from the department as set out in Paragraph 2</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body"></h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">the department may take all action necessary under this Agreement to recover any Employer Incentive Payments that have been made, including without limitation suspending any further payments of Employer Incentive Payments, terminating the Agreement, invoicing, retaining or setting-off payment of any amount it owes to the Employer under any other agreement that the department has with the Employer.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">14.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The department reserves the right at any time to recover any Employer Incentive Payments that have been made in respect of an Apprentice if subsequent changes to data submitted by the Employer and / or the Training Provider mean the Eligibility Criteria are no longer met.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">15.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">In any of the situations set out in Paragraph 12 where the department is reclaiming any Employer Incentive Payments made and this requires the Employer to take action so that the repayment is made, the Employer undertakes to take the relevant action.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Miscellaneous -->
+        <section>
+            <h3 class="govuk-heading-m govuk-!-margin-top-7">Miscellaneous</h3>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">16.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The department will not accept any new applications for Employer Incentive Payments any later than 2 months after the Scheme Period or the Second Scheme Period or the Third Scheme Period as appropriate has elapsed. For the avoidance of doubt, the department will continue to make Employer Incentive Payments after the Scheme Period or the Second Scheme Period or the Third Scheme Period has elapsed in relation to Apprentices who meet the criteria set out in Paragraph 2.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">17.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">The Employer must retain all Evidence in relation to the Employer Incentive Scheme for 6 years from the date of the relevant Evidence or if the Evidence is not dated, from the date the relevant Evidence came into existence.</p>
+                </div>
+            </div>
+            <div>
+                <div class="clause-column-fig">
+                    <h4 class="govuk-body">18.</h4>
+                </div>
+                <div class="clause-column-content">
+                    <p class="govuk-body">This Schedule forms part of the Agreement as varied and the terms and conditions of the Agreement apply to the Employer Incentive Scheme in addition to the provisions of this Schedule.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+        <p class="govuk-body">
+            <a asp-route="@RouteNames.GetPdfAgreement" asp-route-HashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]" asp-route-hashedAgreementId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAgreementId]" target="_blank" class="govuk-link download">Download the agreement</a> (<abbr>PDF</abbr>, 237<abbr>KB</abbr>)
+        </p>
+
+        @if (Model.EmployerAgreement.Status != EmployerAgreementStatus.Signed)
+        {
+            <div class="govuk-warning-text">
+                <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                <strong class="govuk-warning-text__text">
+                    <span class="govuk-warning-text__assistive">Warning</span>
+                    The agreement is legally binding. If @Model.EmployerAgreement.LegalEntityName breaches the terms, we could stop them hiring apprentices, claim back funding or close their account.
+                </strong>
+            </div>
+
+            <form method="post" 
+                asp-route="@RouteNames.EmployerAgreementSign"
+                asp-route-hashedAgreementId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAgreementId]"
+                asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]">
+
+
+                <div>
+                    <div class="@("govuk-form-group " + (!ViewData.ModelState.IsValid ? "govuk-form-group--error" : string.Empty))">
+                        <fieldset class="govuk-fieldset" aria-describedby="accept-hint no-choice-selected">
+
+                            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                                <h1 class="govuk-fieldset__heading">
+                                    Do you accept the employer agreement on behalf of @Model.EmployerAgreement.LegalEntityName?
+                                </h1>
+                            </legend>
+
+                            <div id="accept-hint" class="govuk-hint">
+                                By accepting, you confirm that @Model.EmployerAgreement.LegalEntityName agrees to the terms and conditions and is entering into a legally binding agreement with department.
+                            </div>
+
+                            @if (!ViewData.ModelState.IsValid)
+                            {
+                                <span class="govuk-error-message" aria-hidden="false" id="no-choice-selected">
+                                    @ViewData.ModelState[nameof(Model.Choice)].Errors[0].ErrorMessage
+                                </span>
+                            }
+
+                            <div class="govuk-radios">
+                                <div class="govuk-radios__item">
+                                    <input class="govuk-radios__input" id="want-to-sign" name="choice" type="radio" value="@SignEmployerAgreementViewModel.SignAgreementNow">
+                                    <label class="govuk-label govuk-radios__label" for="want-to-sign">
+                                        Yes, I accept the agreement
+                                    </label>
+                                </div>
+                                <div class="govuk-radios__item">
+                                    <input class="govuk-radios__input" id="do-not-want-to-sign" name="choice" type="radio" value="@SignEmployerAgreementViewModel.ReviewAgreementLater">
+                                    <label class="govuk-label govuk-radios__label" for="do-not-want-to-sign">
+                                        Not yet
+                                    </label>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <input class="govuk-button govuk-!-margin-top-6" type="submit" value="Continue" />
+                </div>
+            </form>
+        }
+    </div>
+</div>

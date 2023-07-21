@@ -1,67 +1,59 @@
-﻿using System.Threading.Tasks;
+﻿using AutoFixture.NUnit3;
 using MediatR;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.Authorization;
-using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.NLog.Logger;
+using SFA.DAS.Encoding;
+using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestratorTests
 {
     public class WhenGettingTheNextStepsDetails
     {
-        private Mock<ILog> _logger;
-        private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
-        private Mock<IMediator> _mediator;
-
-        private EmployerAccountsConfiguration _configuration;
-
-        private EmployerAccountPayeOrchestrator _orchestrator;
-
-        [SetUp]
-        public void Arrange()
-        {
-            _configuration = new EmployerAccountsConfiguration();
-
-            _logger = new Mock<ILog>();
-            _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
-            _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTeamMemberQuery>())).ReturnsAsync(new GetTeamMemberResponse {User = new MembershipView {ShowWizard = true, Role = Role.Owner}});
-
-            _orchestrator = new EmployerAccountPayeOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration);
-        }
-
-        [Test]
-        public async Task ThenTheUserIsReadFromTheQuery()
+        [Test, MoqAutoData]
+        public async Task ThenTheUserIsReadFromTheQuery(
+            string userId,
+            string hashedAccountId,
+            long accountId,
+            GetTeamMemberResponse teamMemberResponse,
+            MembershipView user,
+            [Frozen] Mock<IMediator> mediator,
+            [Frozen] Mock<IEncodingService> encodingService,
+            EmployerAccountPayeOrchestrator orchestrator)
         {
             //Arrange
-            var expectedUserId = "AFGV1234";
-            var expectedAccountId = "789GBT";
+            teamMemberResponse.User = user;
+            mediator.Setup(x => x.Send(It.IsAny<GetTeamMemberQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(teamMemberResponse);
+            encodingService.Setup(e => e.Decode(hashedAccountId, EncodingType.AccountId)).Returns(accountId);
 
             //Act
-            await _orchestrator.GetNextStepsViewModel(expectedUserId, expectedAccountId);
-            
+            await orchestrator.GetNextStepsViewModel(userId, hashedAccountId);
+
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<GetTeamMemberQuery>(c=>c.TeamMemberId.Equals(expectedUserId) && c.HashedAccountId.Equals(expectedAccountId))));
+            mediator.Verify(x => x.Send(It.Is<GetTeamMemberQuery>(c => c.TeamMemberId.Equals(userId) && c.AccountId.Equals(accountId)), It.IsAny<CancellationToken>()));
 
         }
 
-        [Test]
-        public async Task ThenTheModelIsPopulatedWithTheResponse()
+        [Test, MoqAutoData]
+        public async Task ThenTheModelIsPopulatedWithTheResponse(
+            string userId,
+            string hashedAccountId,
+            long accountId,
+            GetTeamMemberResponse teamMemberResponse,
+            MembershipView user,
+            [Frozen] Mock<IMediator> mediator,
+            [Frozen] Mock<IEncodingService> encodingService,
+            EmployerAccountPayeOrchestrator orchestrator)
         {
             //Arrange
-            var expectedUserId = "AFGV1234";
-            var expectedAccountId = "789GBT";
+            user.Role = Role.Owner;
+            user.ShowWizard = true;
+            teamMemberResponse.User = user;
+            mediator.Setup(x => x.Send(It.IsAny<GetTeamMemberQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(teamMemberResponse);
+            encodingService.Setup(e => e.Decode(hashedAccountId, EncodingType.AccountId)).Returns(accountId);
 
             //Act
-            var actual = await _orchestrator.GetNextStepsViewModel(expectedUserId, expectedAccountId);
+            var actual = await orchestrator.GetNextStepsViewModel(userId, hashedAccountId);
 
             //Assert
             Assert.IsAssignableFrom<OrchestratorResponse<PayeSchemeNextStepsViewModel>>(actual);
@@ -70,16 +62,26 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
 
         }
 
-        [Test]
-        public async Task ThenTheShowWizardFlagIsOnlyTrueWhenTheUserIsAnOwner()
+        [Test, MoqAutoData]
+        public async Task ThenTheShowWizardFlagIsOnlyTrueWhenTheUserIsAnOwner(
+            string userId,
+            string hashedAccountId,
+            long accountId,
+            GetTeamMemberResponse teamMemberResponse,
+            MembershipView user,
+            [Frozen] Mock<IMediator> mediator,
+            [Frozen] Mock<IEncodingService> encodingService,
+            EmployerAccountPayeOrchestrator orchestrator)
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTeamMemberQuery>())).ReturnsAsync(new GetTeamMemberResponse { User = new MembershipView { ShowWizard = true, Role = Role.Transactor } });
-            var expectedUserId = "AFGV1234";
-            var expectedAccountId = "789GBT";
+            user.ShowWizard = true;
+            user.Role = Role.Transactor;
+            teamMemberResponse.User = user;
+            mediator.Setup(x => x.Send(It.IsAny<GetTeamMemberQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(teamMemberResponse);
+            encodingService.Setup(e => e.Decode(hashedAccountId, EncodingType.AccountId)).Returns(accountId);
 
             //Act
-            var actual = await _orchestrator.GetNextStepsViewModel(expectedUserId, expectedAccountId);
+            var actual = await orchestrator.GetNextStepsViewModel(userId, hashedAccountId);
 
             //Assert
             Assert.IsNotNull(actual);

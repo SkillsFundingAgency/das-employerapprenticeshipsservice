@@ -4,63 +4,58 @@
     ViewBag.Title = "Update an organisation";
     ViewBag.Section = "organisations";
     ViewBag.PageID = "update-organisation-details";
+    string hashedAccountId = @ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]?.ToString();
 }
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Review your details</h1>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Review your details</h1>
         <p>Here are the most up-to-date details we found for your organisation. These details are the same as those previously held.</p>
+        <table class="govuk-table">
+            <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="row">Information from</th>
+                    <td class="govuk-table__cell">@Model.Data.DataSourceFriendlyName</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="row"">Organisation name</th>
+                    <td class="govuk-table__cell">@Model.Data.RefreshedName</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="row"">Organisation address</th>
+                    <td class="govuk-table__cell">@Html.CommaSeperatedAddressToHtml(@Model.Data.RefreshedAddress)</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="govuk-inset-text">
+            If these details are incorrect, you need to update them at @Model.Data.DataSourceFriendlyName. This update can take up to 7 working days to process.
+        </div>
 
-        <div class="form-group">
-            <table class="details-list">
-                <tbody>
-                    <tr>
-                        <td>Information from</td>
-                        <td>@Model.Data.DataSourceFriendlyName</td>
-                    </tr>
-                    <tr>
-                        <td>Organisation name</td>
-                        <td>@Model.Data.RefreshedName</td>
-                    </tr>
-                    <tr>
-                        <td>Organisation address</td>
-                        <td>@Html.CommaSeperatedAddressToHtml(@Model.Data.RefreshedAddress)</td>
-                    </tr>
-                </tbody>
-            </table>
+        <p>If you have done this and the updated information is still not displayed here, please <a href="@Url.Action("Help", "Home")" class="govuk-link">contact support</a> for further help.</p>
 
-            <div class="panel panel-border-wide">
-                If these details are incorrect, you need to update them at @Model.Data.DataSourceFriendlyName. This update can take up to 7 working days to process.
-            </div>
-
-            <p>If you have done this and the updated information is still not displayed here, please <a href="@Url.Action("Help", "Home")">contact support</a> for further help.</p>
-
-            <form action="@Url.Action("GoToPostUpdateSelection", "Organisation")" method="post">
-                <div class="form-group">
-                    <h2 class="heading-large">
-                        What's next?
-                    </h2>
-
-                    <div class="multiple-choice">
-                        <input type="radio" name="nextStep" value="dashboard" />
-                        <label for="acceptAgreement">Go to your organisations and agreements</label>
+        <form asp-route="@RouteNames.OrganisationPostUpdateSelection" asp-route-hashedAccountId="@hashedAccountId" method="post">
+            <div class="govuk-form-group">
+                <h2 class="govuk-heading-l">
+                    What's next?
+                </h2>
+                <div class="govuk-radios" data-module="govuk-radios">
+                    <div class="govuk-radios__item">
+                        <input type="radio" id="goToOrg" name="nextStep" value="dashboard" class="govuk-radios__input" />
+                        <label for="goToOrg" class="govuk-label govuk-radios__label">Go to your organisations and agreements</label>
                     </div>
-                    <div class="multiple-choice">
-                        <input type="radio" name="nextStep" value="homepage" />
-                        <label for="teamMembers">Go to the homepage</label>
+                    <div class="govuk-radios__item">
+                        <input type="radio" id="goToHome" name="nextStep" value="homepage" class="govuk-radios__input" />
+                        <label for="goToHome" class="govuk-label govuk-radios__label">Go to the homepage</label>
                     </div>
                 </div>
-                <button type="submit" class="button">Continue</button>
-            </form>
-        </div>
+            </div>
+            <button type="submit" class="govuk-button">Continue</button>
+        </form>
     </div>
+</div>
 
 </div>
 
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to your organisations</a></li>
-        </ol>
-    </div>
+    <a class="govuk-back-link" asp-route="@RouteNames.EmployerAgreementIndex" asp-route-hashedAccountId="@hashedAccountId">Your organisations and agreements</a>
 }

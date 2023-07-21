@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>SFA.DAS.EAS.Employer_Account.Database</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{927a0bea-b043-4a03-9311-f49cb60541d5}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.SqlAzureV12DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>SFA.DAS.EAS.EmployerAccount.Database</RootNamespace>
+    <AssemblyName>SFA.DAS.EAS.EmployerAccount.Database</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <DefaultSchema>employer_account</DefaultSchema>
+    <IsEncryptionOn>True</IsEncryptionOn>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="StoredProcedures" />
+    <Folder Include="Views" />
+    <Folder Include="Tables" />
+    <Folder Include="Schemas" />
+    <Folder Include="UserDefinedTypes" />
+    <Folder Include="Scripts" />
+    <Folder Include="Scripts\PostDeployment" />
+    <Folder Include="Scripts\PreDeployment" />
+    <Folder Include="Scripts\Manual" />
+    <Folder Include="Functions" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="StoredProcedures\Cleardown.sql" />
+    <Build Include="StoredProcedures\CreateAccount.sql" />
+    <Build Include="Views\GetInvitations.sql" />
+    <Build Include="Views\GetTeamMembers.sql" />
+    <Build Include="Views\MembershipView.sql" />
+    <Build Include="StoredProcedures\AcceptInvitation.sql" />
+    <Build Include="StoredProcedures\GetAccounts_ByUserRef.sql" />
+    <Build Include="StoredProcedures\GetNumberOfInvitations_ByUserRef.sql" />
+    <Build Include="Views\GetAccountPayeSchemes.sql" />
+    <Build Include="Tables\LegalEntity.sql" />
+    <Build Include="StoredProcedures\CreatePaye.sql" />
+    <Build Include="Tables\EmployerAgreementTemplate.sql" />
+    <Build Include="Tables\EmployerAgreement.sql" />
+    <Build Include="StoredProcedures\AddPayeToAccount.sql" />
+    <Build Include="StoredProcedures\CreateLegalEntity.sql" />
+    <Build Include="StoredProcedures\CreateEmployerAgreement.sql" />
+    <Build Include="StoredProcedures\CreateEmployerAgreementTemplate.sql" />
+    <Build Include="StoredProcedures\GetEmployerAgreement.sql" />
+    <Build Include="StoredProcedures\SignEmployerAgreement.sql" />
+    <Build Include="Schemas\Employer_Account.sql" />
+    <Build Include="Tables\Account.sql" />
+    <Build Include="Tables\User.sql" />
+    <Build Include="Tables\AccountHistory.sql" />
+    <Build Include="StoredProcedures\CreateAccountHistory.sql" />
+    <Build Include="StoredProcedures\UpdateAccountHistory.sql" />
+    <Build Include="StoredProcedures\GetPayeSchemes_ByAccountId.sql" />
+    <Build Include="StoredProcedures\GetPayeSchemesInUse.sql" />
+    <Build Include="StoredProcedures\UpdatePaye.sql" />
+    <Build Include="StoredProcedures\CreateLegalEntityWithAgreement.sql" />
+    <Build Include="StoredProcedures\GetAccountHistory.sql" />
+    <Build Include="StoredProcedures\UpdateAccount_SetAccountName.sql" />
+    <Build Include="StoredProcedures\GetAccountDetails_ByHashedId.sql" />
+    <Build Include="StoredProcedures\CreateInvitation.sql" />
+    <Build Include="StoredProcedures\GetPayeForAccount_ByRef.sql" />
+    <Build Include="StoredProcedures\UpsertUser.sql" />
+    <Build Include="StoredProcedures\GetEmployerAccountMembers.sql" />
+    <Build Include="StoredProcedures\GetPaye_ByRef.sql" />
+    <Build Include="StoredProcedures\UpdatePayeName_ByRef.sql" />
+    <Build Include="StoredProcedures\RemoveLegalEntityFromAccount.sql" />
+    <Build Include="Tables\UserAccountSettings.sql" />
+    <Build Include="StoredProcedures\RemoveMembership.sql" />
+    <Build Include="StoredProcedures\GetUserAccountSettings.sql" />
+    <Build Include="UserDefinedTypes\UserNotificationSettingsTable.sql" />
+    <Build Include="StoredProcedures\UpdateUserAccountSettings.sql" />
+    <Build Include="StoredProcedures\GetAccountStats.sql" />
+    <Build Include="StoredProcedures\UpdateShowWizard.sql" />
+    <Build Include="StoredProcedures\GetTeamMember.sql" />
+    <Build Include="StoredProcedures\GetAccountsMissingPublicHashedId.sql" />
+    <Build Include="StoredProcedures\UpdateAccountHashedIds.sql" />
+    <Build Include="StoredProcedures\UpdateAccountPublicHashedIds.sql" />
+    <Build Include="UserDefinedTypes\AccountPublicHashedIdsTable.sql" />
+    <Build Include="StoredProcedures\GetLegalEntities_WithoutSpecificAgreement.sql" />
+    <Build Include="StoredProcedures\GetAccountsLinkedToLegalEntity.sql" />
+    <PostDeploy Include="Scripts\PostDeployment\PostDeployment.sql" />
+    <PreDeploy Include="Scripts\PreDeployment\PreDeployment.sql" />
+    <None Include="Scripts\PostDeployment\SeedDevData.sql" />
+    <None Include="Scripts\PreDeployment\AML-2381-DeleteDuplicateUserAccountSettings.sql" />
+    <Build Include="Tables\ClientOutboxData.sql" />
+    <Build Include="Tables\OutboxData.sql" />
+    <Build Include="Tables\AccountLegalEntity.sql" />
+    <None Include="Scripts\PostDeployment\AML-2119-RestoreAgreementDetails.sql" />
+    <Build Include="Functions\GetAccountLegalEntityId.sql" />
+    <Build Include="StoredProcedures\CreateAccountLegalEntity.sql" />
+    <Build Include="StoredProcedures\UpdateAccountLegalEntity_SetNameAndAddress.sql" />
+    <Build Include="StoredProcedures\UpdateAccountLegalEntity_SetPublicHashedId.sql" />
+    <None Include="Scripts\PreDeployment\AML-2434-DeleteOrphanedUserAccountSettings.sql" />
+    <None Include="Scripts\Manual\AML-2674-NullAccountLegalEntityPublicHashIds.sql" />
+    <Build Include="Tables\HealthChecks.sql" />
+    <None Include="Scripts\PreDeployment\DeleteHealthChecks.sql" />
+    <Build Include="Tables\RunOnceJob.sql" />
+    <Build Include="StoredProcedures\CreateUserAccount.sql" />
+    <Build Include="Tables\UserAornFailedAttempts.sql" />
+    <Build Include="StoredProcedures\UpdateUserAornAttempts.sql" />
+    <Build Include="StoredProcedures\GetUserAornAttempts.sql" />
+    <None Include="Scripts\PreDeployment\AML-3784-AgreementTypeChanges.sql" />
+    <Build Include="StoredProcedures\GetPayeSchemesAddedByGovernmentGateway_ByAccountId.sql" />
+    <Build Include="StoredProcedures\UpdateAccount_SetAccountApprenticeshipEmployerType.sql" />
+    <None Include="Scripts\Manual\CON-1493-ExpireLegalAgreements.sql" />
+    <None Include="Scripts\Manual\CON-2796 Migrate And Add v5 Legal Agreement.sql" />
+    <None Include="Scripts\Manual\CON-3367 Migrate And Add v6 Legal Agreement.sql" />
+    <None Include="Scripts\Manual\CON-3968 Migrate And Add v7 Legal Agreement.sql" />
+    <None Include="Scripts\Manual\MAC-127-ExpireLegalAgreements.sql" />
+    <None Include="Scripts\PostDeployment\MAC-174-Account-name-confirmation.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="SFA.DAS.EmployerAccounts.Database.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Database.publish.xml" />
+    <None Include="Scripts\PostDeployment\CreateAgreementTemplates.sql" />
+    <None Include="Scripts\PreDeployment\AML-2119-BackupAgreementDetails.sql" />
+    <None Include="Scripts\PreDeployment\AML-2239-DeleteDuplicateAccountHistory.sql" />
+    <None Include="Scripts\Manual\CON-91-DeleteLegalEntitiesWithNoAgreements.sql" />
+    <None Include="Scripts\PostDeployment\AML-3762-EOI-API.sql" />
+    <None Include="Scripts\Manual\AML-3655_GenerateFinanceDataInserts.sql" />
+    <None Include="Scripts\PostDeployment\UpdateAgreementTemplateV3.sql" />
+    <None Include="Scripts\Manual\CON-3921-DataFixForTermAndConditionsAcceptedOn.sql" />
+    <None Include="Scripts\PostDeployment\MAC-95_Remove_transfer_connections.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Tables\Invitation.sql" />
+    <Build Include="Tables\Membership.sql" />
+    <Build Include="Tables\Paye.sql" />
+  </ItemGroup>
+</Project>

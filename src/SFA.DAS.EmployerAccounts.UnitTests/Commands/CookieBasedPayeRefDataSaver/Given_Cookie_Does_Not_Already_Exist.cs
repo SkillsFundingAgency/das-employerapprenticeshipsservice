@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
@@ -6,66 +7,62 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.Testing;
 
-namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CookieBasedPayeRefDataSaver
+namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CookieBasedPayeRefDataSaver;
+
+[TestFixture]
+public sealed class Given_Cookie_Does_Not_Already_Exist
+    : FluentTest<Given_Cookie_Does_Not_Already_Exist>
 {
-    [TestFixture]
-    public sealed class Given_Cookie_Does_Not_Already_Exist
-        : FluentTest<Given_Cookie_Does_Not_Already_Exist>
+    private EmployerAccounts.Commands.PayeRefData.CookieBasedPayeRefDataSaver _sut;
+
+    public Given_Cookie_Does_Not_Already_Exist()
     {
-        private EmployerAccounts.Commands.PayeRefData.CookieBasedPayeRefDataSaver _sut;
+        CookieRepository = new Mock<ICookieStorageService<EmployerAccountData>>();
 
-        public Given_Cookie_Does_Not_Already_Exist()
-        {
-            CookieRepository = new Mock<ICookieStorageService<EmployerAccountData>>();
+        CookieRepository
+            .Setup(
+                m =>
+                    m.Get(It.IsAny<string>()))
+            .Returns((EmployerAccountData)null);
 
-            CookieRepository
-                .Setup(
-                    m =>
-                        m.Get(It.IsAny<string>()))
-                .Returns((EmployerAccountData) null);
+        _sut = new EmployerAccounts.Commands.PayeRefData.CookieBasedPayeRefDataSaver(CookieRepository.Object);
+    }
 
-            _sut = new EmployerAccounts.Commands.PayeRefData.CookieBasedPayeRefDataSaver(CookieRepository.Object);
-        }
+    [Test]
+    public Task Then_CreateCookie_Is_Called()
+    {
+        Handle();
 
-        [Test]
-        public Task Then_CreateCookie_Is_Called()
-        {
-            return
-                RunAsync(
-                    act: f => f.Handle(),
-                    assert: f =>
-                        f.CookieRepository
-                            .Verify(
-                                m => m.Create(
-                                    It.IsAny<EmployerAccountData>(),
-                                    It.IsAny<string>(),
-                                    It.IsAny<int>())));
-        }
+        CookieRepository
+            .Verify(
+                m => m.Create(
+                    It.IsAny<EmployerAccountData>(),
+                    It.IsAny<string>(),
+                    It.IsAny<int>()));
 
-        [Test]
-            public Task Then_UpdateCookie_Is_Not_Called()
-            {
-                return
-                    RunAsync(
-                        act: f => f.Handle(),
-                        assert: f =>
-                            f.CookieRepository
-                                .Verify(
-                                    m =>
-                                        m.Update(
-                                            It.IsAny<string>(),
-                                            It.IsAny<EmployerAccountData>()),
-                                    Times.Never));
-            }
+        return Task.CompletedTask;
+    }
 
-        public Mock<ICookieStorageService<EmployerAccountData>> CookieRepository { get; set; }
+    [Test]
+    public Task Then_UpdateCookie_Is_Not_Called()
+    {
+        Handle();
 
-        private Task Handle()
-        {
-            return
-                _sut
-                    .Handle(
-                        new SavePayeRefData(new EmployerAccountPayeRefData()));
-        }
+        CookieRepository
+            .Verify(
+                m =>
+                    m.Update(
+                        It.IsAny<string>(),
+                        It.IsAny<EmployerAccountData>()),
+                Times.Never);
+
+        return Task.CompletedTask;
+    }
+
+    public Mock<ICookieStorageService<EmployerAccountData>> CookieRepository { get; set; }
+
+    private Task Handle()
+    {
+        return _sut.Handle(new SavePayeRefData(new EmployerAccountPayeRefData()), CancellationToken.None);
     }
 }

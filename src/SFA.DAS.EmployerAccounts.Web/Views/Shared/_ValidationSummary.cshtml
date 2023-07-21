@@ -1,9 +1,9 @@
-﻿@model ModelStateDictionary
+﻿@model Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary
 
 @if(!Model.IsValid)
 {
-    <div class="grid-row notification-wrapper">
-        <div class="column-two-thirds">
+    <div class="govuk-grid-row notification-wrapper">
+        <div class="govuk-grid-column-two-thirds">
             <div class="error-summary">
                 <ul class="error-summary-list">
                     @foreach (var modelState in Model)

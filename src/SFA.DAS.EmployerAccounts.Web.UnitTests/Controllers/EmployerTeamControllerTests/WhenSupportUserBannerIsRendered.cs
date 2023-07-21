@@ -1,209 +1,165 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Security.Principal;
-using System.Web;
-using System.Web.Mvc;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.Authentication;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Web.Controllers;
-using SFA.DAS.EmployerAccounts.Web.Helpers;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.EmployerAccounts.Models.Account;
+﻿using System.Security.Claims;
+using FluentAssertions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ViewComponents;
+using Nest;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
+using SFA.DAS.EmployerAccounts.Web.ViewComponents;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests;
+
+public class WhenSupportUserBannerIsRendered
 {
-    public class WhenSupportUserBannerIsRendered
+    private const string UserId = "Useramo187";
+    private SupportUserBannerViewComponent _viewComponentContext;
+    private Mock<IHttpContextAccessor> _httpContextAccessorMock;
+    private Mock<HttpContext> _mockHttpContext;
+    private Mock<ClaimsPrincipal> _mockPrincipal;
+    private Mock<ClaimsIdentity> _mockClaimsIdentity;
+    private bool _isAuthenticated = true;
+    private List<Claim> _claims;
+    private Mock<EmployerTeamOrchestratorWithCallToAction> _mockEmployerTeamOrchestrator;
+
+    private OrchestratorResponse<AccountSummaryViewModel> _orchestratorAccountSummaryResponse;
+    private AccountSummaryViewModel _accountSummaryViewModel;
+    private Account _account;
+    private string _hashedAccountId;
+
+    [SetUp]
+    public void Arrange()
     {
-        private EmployerTeamController _controller;
+        var userRefClaim = new Claim(ControllerConstants.UserRefClaimKeyName, UserId);
+        _mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestratorWithCallToAction>();
+        _httpContextAccessorMock = new Mock<IHttpContextAccessor>();
+        _mockHttpContext = new Mock<HttpContext>();
+        _mockPrincipal = new Mock<ClaimsPrincipal>();
+        _mockClaimsIdentity = new Mock<ClaimsIdentity>();
+        _claims = new List<Claim> { userRefClaim };
 
-        private Mock<IAuthenticationService> mockAuthenticationService;
-        private Mock<IMultiVariantTestingService> mockMultiVariantTestingService;
-        private Mock<ICookieStorageService<FlashMessageViewModel>> mockCookieStorageService;
-        private Mock<EmployerTeamOrchestrator> mockEmployerTeamOrchestrator;
-        private Mock<ControllerContext> mockControllerContext;
-        private Mock<HttpContextBase> mockHttpContext;
-        private Mock<IPrincipal> mockPrincipal;
-        private Mock<ClaimsIdentity> mockClaimsIdentity;
-        private bool _isAuthenticated = true;
-        private List<Claim> _claims;
-        private OrchestratorResponse<AccountDashboardViewModel> _orchestratorResponse;
-        private OrchestratorResponse<AccountSummaryViewModel> _orchestratorAccountSummaryResponse;
-        private AccountDashboardViewModel _accountViewModel;
-        private AccountSummaryViewModel _accountSummaryViewModel;
-        private Account _account;
-        private string _hashedAccountId;
-        private string _userId;
+        _mockPrincipal.Setup(m => m.Identity).Returns(_mockClaimsIdentity.Object);
+        _mockClaimsIdentity.Setup(m => m.IsAuthenticated).Returns(_isAuthenticated);
+        _mockPrincipal.Setup(x => x.Claims).Returns(_claims);
+        _mockHttpContext.Setup(m => m.User).Returns(_mockPrincipal.Object);
 
-        [SetUp]
-        public void Arrange()
+        _mockPrincipal.Setup(m => m.FindFirst(ControllerConstants.UserRefClaimKeyName)).Returns(userRefClaim);
+        _httpContextAccessorMock.SetupGet(m => m.HttpContext).Returns(_mockHttpContext.Object);
+
+        _hashedAccountId = Guid.NewGuid().ToString();
+        _account = new Account
         {
-            mockAuthenticationService = new Mock<IAuthenticationService>();
-            mockMultiVariantTestingService = new Mock<IMultiVariantTestingService>();
-            mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-            mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
-            mockControllerContext = new Mock<ControllerContext>();
-            mockHttpContext = new Mock<HttpContextBase>();
-            mockPrincipal = new Mock<IPrincipal>();
-            mockClaimsIdentity = new Mock<ClaimsIdentity>();
+            PublicHashedId = _hashedAccountId
+        };
 
-            _userId = "TestUser";
-
-            _claims = new List<Claim>
-            {
-                new Claim(ControllerConstants.UserRefClaimKeyName, _userId)
-            };
-
-            mockPrincipal.Setup(m => m.Identity).Returns(mockClaimsIdentity.Object);
-            mockClaimsIdentity.Setup(m => m.IsAuthenticated).Returns(_isAuthenticated);
-            mockClaimsIdentity.Setup(m => m.Claims).Returns(_claims);
-            mockHttpContext.Setup(m => m.User).Returns(mockPrincipal.Object);
-            mockControllerContext.Setup(m => m.HttpContext).Returns(mockHttpContext.Object);
-
-            _hashedAccountId = Guid.NewGuid().ToString();
-            _account = new Account
-            {
-                PublicHashedId = _hashedAccountId
-            };
-
-            _accountViewModel = new AccountDashboardViewModel
-            {
-                Account = _account
-            };
-
-            _accountSummaryViewModel = new AccountSummaryViewModel
-            {
-                Account = _account
-            };
-
-            _orchestratorResponse = new OrchestratorResponse<AccountDashboardViewModel>()
-            {
-                Status = System.Net.HttpStatusCode.OK,
-                Data = _accountViewModel
-            };
-
-            _orchestratorAccountSummaryResponse = new OrchestratorResponse<AccountSummaryViewModel>()
-            {
-                Status = System.Net.HttpStatusCode.OK,
-                Data = _accountSummaryViewModel
-            };
-
-            mockEmployerTeamOrchestrator
-                .Setup(m => m.GetAccount(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(_orchestratorResponse);
-
-            _controller = new EmployerTeamController(
-                mockAuthenticationService.Object,
-                mockMultiVariantTestingService.Object,
-                mockCookieStorageService.Object,
-                mockEmployerTeamOrchestrator.Object)
-            {
-                ControllerContext = mockControllerContext.Object
-            };
-        }
-
-        [Test]
-        public void ThenForAuthenticatedSupportUserAndNullModelThe_SupportUserBannerViewIsReturnedWithANullAccount()
+        _accountSummaryViewModel = new AccountSummaryViewModel
         {
-            // Arrange
-            _isAuthenticated = true;
-            _claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, ControllerConstants.Tier2UserClaim));
+            Account = _account
+        };
 
-            //Act
-            var result = _controller.SupportUserBanner(null) as PartialViewResult;
-
-            //Assert
-            Assert.AreEqual("_SupportUserBanner", result.ViewName);
-            Assert.IsNull(((SupportUserBannerViewModel)result.Model).Account);
-        }
-
-        [Test]
-        public void ThenForAuthenticatedSupportUserAndNullHashedAccountId_SupportUserBannerViewIsReturnedWithANullAccount()
+        _orchestratorAccountSummaryResponse = new OrchestratorResponse<AccountSummaryViewModel>()
         {
-            // Arrange
-            _isAuthenticated = true;
-            _claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, ControllerConstants.Tier2UserClaim));
-            var model = new TestModel(null);
+            Status = HttpStatusCode.OK,
+            Data = _accountSummaryViewModel
+        };
 
-            //Act
-            var result = _controller.SupportUserBanner(model) as PartialViewResult;
+        _viewComponentContext = new SupportUserBannerViewComponent(_mockEmployerTeamOrchestrator.Object, _httpContextAccessorMock.Object);
+    }
 
-            //Assert            
-            Assert.AreEqual("_SupportUserBanner", result.ViewName);
-            Assert.IsNull(((SupportUserBannerViewModel)result.Model).Account);
-        }
+    [Test]
+    public async Task ThenForAuthenticatedSupportUser_WithTier2Claim_ShouldReturnTier2()
+    {
+        // Arrange
+        var supportClaim = new Claim(ClaimTypes.Role, SupportUserClaimConstants.Tier2UserClaim);
+        _isAuthenticated = true;
+        _claims.Add(supportClaim);
+        _mockPrincipal.Setup(m => m.FindFirst(ClaimTypes.Role)).Returns(supportClaim);
 
-        [Test]
-        public void ThenForAuthenticatedSupportUser_TheAccountIsRetrievedFromTheOrchestrator()
-        {
-            // Arrange
-            _isAuthenticated = true;
-            _claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, ControllerConstants.Tier2UserClaim));
-            var model = new TestModel(_hashedAccountId);
+        //Act
+        var result = await _viewComponentContext.InvokeAsync(null) as ViewViewComponentResult;
+        var model = result.ViewData.Model as SupportUserBannerViewModel;
 
-            mockEmployerTeamOrchestrator
-                .Setup(m => m.GetAccountSummary(_hashedAccountId, It.IsAny<string>()))
-                .ReturnsAsync(_orchestratorAccountSummaryResponse);
-            //Act
-            var result = _controller.SupportUserBanner(model) as PartialViewResult;
+        //Assert
+        model.ConsoleUserType.Should().Be("Service user (T2 Support)");
+    }
 
-            //Assert
-            mockEmployerTeamOrchestrator.Verify(m => m.GetAccountSummary(_hashedAccountId, It.IsAny<string>()), Times.Once);
-        }
+    [Test]
+    public async Task ThenForAuthenticatedSupportUser_WithoutTier2Claim_ShouldReturnStandardUser()
+    {
+        // Arrange
+        _isAuthenticated = true;
+        _claims.Add(new Claim(ClaimTypes.Role, SupportUserClaimConstants.Tier1UserClaim));
 
-        [Test]
-        public void ThenForAuthenticatedSupportUser_TheExpectedAccountIsPassedTotheView()
-        {
-            // Arrange
-            _isAuthenticated = true;
-            _claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, ControllerConstants.Tier2UserClaim));
-            var model = new TestModel(_hashedAccountId);
+        //Act
+        var result = await _viewComponentContext.InvokeAsync(null) as ViewViewComponentResult;
+        var model = result.ViewData.Model as SupportUserBannerViewModel;
 
-            mockEmployerTeamOrchestrator
-                .Setup(m => m.GetAccountSummary(_hashedAccountId, It.IsAny<string>()))
-                .ReturnsAsync(_orchestratorAccountSummaryResponse);
+        //Assert
+        model.ConsoleUserType.Should().Be("Standard user");
+    }
 
-            //Act
-            var result = _controller.SupportUserBanner(model) as PartialViewResult;
+    [Test]
+    public async Task ThenForAuthenticatedSupportUserAndNullHashedAccountId_SupportUserBannerViewIsReturnedWithANullAccount()
+    {
+        // Arrange
+        _isAuthenticated = true;
+        _claims.Add(new Claim(ClaimTypes.Role, ControllerConstants.Tier2UserClaim));
 
-            //Assert
-            Assert.AreSame(_account, ((SupportUserBannerViewModel)result.Model).Account);
-        }
+        //Act
+        var result = await _viewComponentContext.InvokeAsync(null) as ViewViewComponentResult;
+        var model = result.ViewData.Model as SupportUserBannerViewModel;
+        //Assert
+        model.Account.Should().BeNull();
+    }
 
-        [Test]
-        public void ThenForAuthenticatedSupportUserAndTheAccountOrchestratorErrors_SupportUserBannerViewIsReturnedWithANullAccount()
-        {
-            // Arrange
-            _isAuthenticated = true;
-            _claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, ControllerConstants.Tier2UserClaim));
-            var model = new TestModel(_hashedAccountId);
+    [Test]
+    public async Task ThenForAuthenticatedSupportUser_TheAccountIsRetrievedFromTheOrchestrator()
+    {
+        // Arrange
+        _isAuthenticated = true;
+        _claims.Add(new Claim(ClaimTypes.Role, ControllerConstants.Tier2UserClaim));
+        _mockEmployerTeamOrchestrator
+            .Setup(m => m.GetAccountSummary(_hashedAccountId, It.IsAny<string>()))
+            .ReturnsAsync(_orchestratorAccountSummaryResponse);
+        //Act
+        var result = await _viewComponentContext.InvokeAsync(_hashedAccountId) as ViewViewComponentResult;
 
-            mockEmployerTeamOrchestrator
-               .Setup(m => m.GetAccount(_hashedAccountId, It.IsAny<string>()))
-               .ReturnsAsync(new OrchestratorResponse<AccountDashboardViewModel> { Status = System.Net.HttpStatusCode.BadRequest });
+        //Assert
+        _mockEmployerTeamOrchestrator.Verify(m => m.GetAccountSummary(_hashedAccountId, It.IsAny<string>()), Times.Once);
+    }
 
-            mockEmployerTeamOrchestrator
-                .Setup(m => m.GetAccountSummary(_hashedAccountId,It.IsAny<string>()))
-                .ReturnsAsync(new OrchestratorResponse<AccountSummaryViewModel> { Status = System.Net.HttpStatusCode.BadRequest });
+    [Test]
+    public async Task ThenForAuthenticatedSupportUser_TheExpectedAccountIsPassedTotheView()
+    {
+        // Arrange
+        _isAuthenticated = true;
+        _claims.Add(new Claim(ClaimTypes.Role, ControllerConstants.Tier2UserClaim));
+        _mockEmployerTeamOrchestrator
+            .Setup(m => m.GetAccountSummary(_hashedAccountId, It.IsAny<string>()))
+            .ReturnsAsync(_orchestratorAccountSummaryResponse);
 
-            //Act
-            var result = _controller.SupportUserBanner(model) as PartialViewResult;
+        //Act
+        var result = await _viewComponentContext.InvokeAsync(_hashedAccountId) as ViewViewComponentResult;
+        var model = result.ViewData.Model as SupportUserBannerViewModel;
 
-            //Assert
-            Assert.IsNull(((SupportUserBannerViewModel)result.Model).Account);
-        }
+        //Assert
+        _account.Should().BeEquivalentTo(model.Account);
+    }
 
-        internal class TestModel : IAccountIdentifier
-        {
-            public string HashedAccountId { get; set; }
+    [Test]
+    public async Task ThenForAuthenticatedSupportUserAndTheAccountOrchestratorErrors_SupportUserBannerViewIsReturnedWithANullAccount()
+    {
+        // Arrange
+        _isAuthenticated = true;
+        _claims.Add(new Claim(ClaimTypes.Role, ControllerConstants.Tier2UserClaim));
 
-            public TestModel(string hashedAccountId)
-            {
-                HashedAccountId = hashedAccountId;
-            }
-        }
+        _mockEmployerTeamOrchestrator
+            .Setup(m => m.GetAccountSummary(_hashedAccountId, It.IsAny<string>()))
+            .ReturnsAsync(new OrchestratorResponse<AccountSummaryViewModel> { Status = HttpStatusCode.BadRequest });
+
+        //Act
+        var result = await _viewComponentContext.InvokeAsync(_hashedAccountId) as ViewViewComponentResult;
+        var model = result.ViewData.Model as SupportUserBannerViewModel;
+
+        //Assert
+        model.Account.Should().BeNull();
     }
 }

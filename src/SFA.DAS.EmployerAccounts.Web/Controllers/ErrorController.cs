@@ -1,32 +1,28 @@
-﻿using System.Net;
-using System.Web.Mvc;
+﻿namespace SFA.DAS.EmployerAccounts.Web.Controllers;
 
-namespace SFA.DAS.EmployerAccounts.Web.Controllers
+public class ErrorController : Controller
 {
-    public class ErrorController : Controller
+    [Route("accessdenied")]
+    public IActionResult AccessDenied()
     {
-        [Route("accessdenied")]
-        public ActionResult AccessDenied()
-        {
-            Response.StatusCode = (int)HttpStatusCode.Forbidden;
+        Response.StatusCode = (int)HttpStatusCode.Forbidden;
 
-            return View();
-        }
+        return View();
+    }
 
-        [Route("error")]
-        public ActionResult Error()
-        {
-            Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+    [Route("error")]
+    public IActionResult Error()
+    {
+        Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-            return View();
-        }
+        return View();
+    }
 
-        [Route("notfound")]
-        public ActionResult NotFound()
-        {
-            Response.StatusCode = (int)HttpStatusCode.NotFound;
+    [Route("notfound")]
+    public IActionResult NotFound()
+    {
+        Response.StatusCode = (int)HttpStatusCode.NotFound;
 
-            return View();
-        }
+        return View();
     }
 }

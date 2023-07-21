@@ -1,17 +1,17 @@
-﻿using SFA.DAS.Messaging.Attributes;
-using System;
+﻿using System;
 
-namespace SFA.DAS.EmployerAccounts.Events.Messages
+namespace SFA.DAS.EmployerAccounts.Events.Messages;
+
+[Serializable]
+[MessageGroup("add_account")]
+public class AccountCreatedMessage : AccountMessageBase 
 {
-    [Serializable]
-    [MessageGroup("add_account")]
-    public class AccountCreatedMessage : AccountMessageBase
+    public AccountCreatedMessage() : base(0, string.Empty, string.Empty)
     {
-        public AccountCreatedMessage() : base(0, string.Empty, string.Empty)
-        {}
+    }
 
-        public AccountCreatedMessage(long accountId, string creatorName, string creatorUserRef) : base(accountId, creatorName, creatorUserRef)
-        {
-        }
+    public AccountCreatedMessage(long accountId, string creatorName, string creatorUserRef) : base(accountId,
+        creatorName, creatorUserRef)
+    {
     }
 }

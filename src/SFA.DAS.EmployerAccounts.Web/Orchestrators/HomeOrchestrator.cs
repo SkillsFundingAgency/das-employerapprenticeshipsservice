@@ -1,129 +1,119 @@
-using System;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using System.Linq;
-using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Commands.UnsubscribeProviderEmail;
-using SFA.DAS.EmployerAccounts.Queries.GetProviderInvitation;
+using SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser;
+using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
 using SFA.DAS.EmployerAccounts.Queries.GetUserInvitations;
-using SFA.DAS.EmployerAccounts.Queries.GetUsers;
-using SFA.DAS.EmployerAccounts.Queries.GetUser;
-using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 
-namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
+namespace SFA.DAS.EmployerAccounts.Web.Orchestrators;
+
+public class HomeOrchestrator
 {
-    public class HomeOrchestrator
+    private readonly IMediator _mediator;
+
+    //Required for running tests
+    public HomeOrchestrator()
     {
-        private readonly IMediator _mediator;
+    }
 
-        //Required for running tests
-        public HomeOrchestrator()
+    public HomeOrchestrator(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+
+    public virtual async Task<OrchestratorResponse<UserAccountsViewModel>> GetUserAccounts(string userId, DateTime? LastTermsAndConditionsUpdate = null)
+    {
+        var getUserAccountsQueryResponse = await _mediator.Send(new GetUserAccountsQuery
         {
-        }
-
-        public HomeOrchestrator(IMediator mediator)
+            UserRef = userId
+        });
+        var getUserInvitationsResponse = await _mediator.Send(new GetNumberOfUserInvitationsQuery
         {
-            _mediator = mediator;
-        }
-
-        public virtual async Task<SignInUserViewModel> GetUsers()
+            UserId = userId
+        });
+        var getUserQueryResponse = await _mediator.Send(new GetUserByRefQuery
         {
-            var actual = await _mediator.SendAsync(new GetUsersQuery());
-
-            return new SignInUserViewModel
-            {
-                AvailableUsers = actual.Users.Select(x =>
-                    new UserViewModel
-                    {
-                        Id = x.Id,
-                        UserRef = x.UserRef,
-                        Email = x.Email,
-                        FirstName = x.FirstName,
-                        LastName = x.LastName,
-                    }).ToList()
-            };
-        }
-
-        public virtual async Task<OrchestratorResponse<UserAccountsViewModel>> GetUserAccounts(string userId, DateTime? LastTermsAndConditionsUpdate = null)
+            UserRef = userId
+        });
+        return new OrchestratorResponse<UserAccountsViewModel>
         {
-            var getUserAccountsQueryResponse = await _mediator.SendAsync(new GetUserAccountsQuery
+            Data = new UserAccountsViewModel
             {
-                UserRef = userId
-            });
-            var getUserInvitationsResponse = await _mediator.SendAsync(new GetNumberOfUserInvitationsQuery
+                Accounts = getUserAccountsQueryResponse.Accounts,
+                Invitations = getUserInvitationsResponse.NumberOfInvites,
+                TermAndConditionsAcceptedOn = getUserQueryResponse.User.TermAndConditionsAcceptedOn,
+                LastTermsAndConditionsUpdate = LastTermsAndConditionsUpdate
+            }
+        };
+    }
+
+    public virtual async Task<OrchestratorResponse<ProviderInvitationViewModel>> GetProviderInvitation(Guid correlationId)
+    {
+        var getProviderInvitationQueryResponse = await _mediator.Send(new GetProviderInvitationQuery
+        {
+            CorrelationId = correlationId
+        });
+
+        if (getProviderInvitationQueryResponse.Result != null)
+        {
+            return new OrchestratorResponse<ProviderInvitationViewModel>
             {
-                UserId = userId
-            });
-            var getUserQueryResponse = await _mediator.SendAsync(new GetUserByRefQuery
-            {
-                UserRef = userId
-            });
-            return new OrchestratorResponse<UserAccountsViewModel>
-            {
-                Data = new UserAccountsViewModel
+                Data = new ProviderInvitationViewModel
                 {
-                    Accounts = getUserAccountsQueryResponse.Accounts,
-                    Invitations = getUserInvitationsResponse.NumberOfInvites,
-                    TermAndConditionsAcceptedOn = getUserQueryResponse.User.TermAndConditionsAcceptedOn,
-                    LastTermsAndConditionsUpdate = LastTermsAndConditionsUpdate
+                    EmployerEmail = getProviderInvitationQueryResponse.Result.EmployerEmail,
+                    EmployerFirstName = getProviderInvitationQueryResponse.Result.EmployerFirstName,
+                    EmployerLastName = getProviderInvitationQueryResponse.Result.EmployerLastName,
+                    EmployerOrganisation = getProviderInvitationQueryResponse.Result.EmployerOrganisation,
+                    Ukprn = getProviderInvitationQueryResponse.Result.Ukprn,
+                    Status = getProviderInvitationQueryResponse.Result.Status
                 }
             };
         }
 
-        public virtual async Task<OrchestratorResponse<ProviderInvitationViewModel>> GetProviderInvitation(Guid correlationId)
+        return new OrchestratorResponse<ProviderInvitationViewModel>();
+    }
+
+    public virtual async Task Unsubscribe(Guid correlationId)
+    {
+        await _mediator.Send(new UnsubscribeProviderEmailCommand
         {
-            var getProviderInvitationQueryResponse = await _mediator.SendAsync(new GetProviderInvitationQuery
-            {
-                CorrelationId = correlationId
-            });
+            CorrelationId = correlationId
+        });
+    }
 
-            if (getProviderInvitationQueryResponse.Result != null)
-            {
-                return new OrchestratorResponse<ProviderInvitationViewModel>
-                {
-                    Data = new ProviderInvitationViewModel
-                    {
-                        EmployerEmail = getProviderInvitationQueryResponse.Result.EmployerEmail,
-                        EmployerFirstName = getProviderInvitationQueryResponse.Result.EmployerFirstName,
-                        EmployerLastName = getProviderInvitationQueryResponse.Result.EmployerLastName,
-                        EmployerOrganisation = getProviderInvitationQueryResponse.Result.EmployerOrganisation,
-                        Ukprn = getProviderInvitationQueryResponse.Result.Ukprn,
-                        Status = getProviderInvitationQueryResponse.Result.Status
-                    }
-                };
-            }
-
-            return new OrchestratorResponse<ProviderInvitationViewModel>();
-        }
-
-        public virtual async Task Unsubscribe(Guid correlationId)
+    public virtual async Task SaveUpdatedIdentityAttributes(string userRef, string email, string firstName, string lastName, string correlationId = null)
+    {
+        await _mediator.Send(new UpsertRegisteredUserCommand
         {
-            await _mediator.SendAsync(new UnsubscribeProviderEmailQuery
-            {
-                CorrelationId = correlationId
-            });
-        }
-
-        public virtual async Task SaveUpdatedIdentityAttributes(string userRef, string email, string firstName, string lastName, string correlationId = null)
+            EmailAddress = email,
+            UserRef = userRef,
+            LastName = lastName,
+            FirstName = firstName,
+            CorrelationId = correlationId
+        });
+    }
+    
+    public virtual async Task UpdateTermAndConditionsAcceptedOn(string userRef)
+    {
+        await _mediator.Send(new UpdateTermAndConditionsAcceptedOnCommand
         {
-            await _mediator.SendAsync(new UpsertRegisteredUserCommand
-            {
-                EmailAddress = email,
-                UserRef = userRef,
-                LastName = lastName,
-                FirstName = firstName,
-                CorrelationId = correlationId
-            });
-        }
+            UserRef = userRef
+        });
+    }
 
-        public virtual async Task UpdateTermAndConditionsAcceptedOn(string userRef)
+    public virtual async Task<User> GetUser(string userRef)
+    {
+        try
         {
-            await _mediator.SendAsync(new UpdateTermAndConditionsAcceptedOnCommand
+            var user = await _mediator.Send(new GetUserByRefQuery
             {
                 UserRef = userRef
             });
+            return user.User;
         }
+        catch (InvalidRequestException e)
+        {
+            return null;
+        }
+        
     }
 }

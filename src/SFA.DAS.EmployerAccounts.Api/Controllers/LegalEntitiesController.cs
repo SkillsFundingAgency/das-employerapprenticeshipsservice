@@ -1,88 +1,93 @@
-﻿using MediatR;
-using SFA.DAS.EmployerAccounts.Api.Attributes;
-using SFA.DAS.EmployerAccounts.Api.Types;
-using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesByHashedAccountId;
-using SFA.DAS.EmployerAccounts.Queries.GetLegalEntity;
-using SFA.DAS.Validation;
-using SFA.DAS.Validation.WebApi;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Http;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.EmployerAccounts.Api.Authorization;
 using SFA.DAS.EmployerAccounts.Api.Mappings;
+using SFA.DAS.EmployerAccounts.Api.Types;
+using SFA.DAS.EmployerAccounts.Exceptions;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesByHashedAccountId;
+using SFA.DAS.EmployerAccounts.Queries.GetLegalEntity;
 
-namespace SFA.DAS.EmployerAccounts.Api.Controllers
+namespace SFA.DAS.EmployerAccounts.Api.Controllers;
+
+[Route("api/accounts/{hashedAccountId}/legalentities")]
+[Authorize(Policy = ApiRoles.ReadAllEmployerAccountBalances)]
+public class LegalEntitiesController : ControllerBase
 {
-    [RoutePrefix("api/accounts/{hashedAccountId}/legalentities")]
-    public class LegalEntitiesController : ApiController
+    private readonly IMediator _mediator;
+
+    public LegalEntitiesController(IMediator mediator)
     {
-        private readonly IMediator _mediator;
+        _mediator = mediator;
+    }
 
-        public LegalEntitiesController(IMediator mediator)
+    [Route("", Name = "GetLegalEntities")]
+    [HttpGet]
+    public async Task<IActionResult> GetLegalEntities(string hashedAccountId, bool includeDetails = false)
+    {
+        GetAccountLegalEntitiesByHashedAccountIdResponse result;
+
+        try
         {
-            _mediator = mediator;
-        }
-
-        [Route("", Name = "GetLegalEntities")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetLegalEntities(string hashedAccountId, bool includeDetails = false)
-        {
-            GetAccountLegalEntitiesByHashedAccountIdResponse result;
-
-            try
-            {
-                result = await _mediator.SendAsync(
-                    new GetAccountLegalEntitiesByHashedAccountIdRequest
-                    {
-                        HashedAccountId = hashedAccountId
-                    });
-            }
-            catch (InvalidRequestException)
-            {
-                return NotFound();
-            }
-
-            if (result.LegalEntities.Count == 0)
-            {
-                return NotFound();
-            }
-
-            if (!includeDetails)
-            {
-                var resources = new List<Resource>();
-
-                foreach (var legalEntity in result.LegalEntities)
+            result = await _mediator.Send(
+                new GetAccountLegalEntitiesByHashedAccountIdRequest
                 {
-                    resources
-                        .Add(
-                            new Resource
-                            {
-                                Id = legalEntity.LegalEntityId.ToString(),
-                                Href = Url.Route("GetLegalEntity", new { hashedAccountId, legalEntityId = legalEntity.LegalEntityId })
-                            });
-                }
+                    HashedAccountId = hashedAccountId
+                });
+        }
+        catch (InvalidRequestException)
+        {
+            return NotFound();
+        }
 
-                return Ok(new ResourceList(resources));
+        if (result.LegalEntities.Count == 0)
+        {
+            return NotFound();
+        }
+
+        if (!includeDetails)
+        {
+            var resources = new List<Resource>();
+
+            foreach (var legalEntity in result.LegalEntities)
+            {
+                resources
+                    .Add(
+                        new Resource
+                        {
+                            Id = legalEntity.LegalEntityId.ToString(),
+                            Href = Url.RouteUrl("GetLegalEntity",
+                                new { hashedAccountId, legalEntityId = legalEntity.LegalEntityId })
+                        });
             }
 
-            return Ok(result.LegalEntities.Select(c => LegalEntityMapping.MapFromAccountLegalEntity(c, null, false))
-                .ToList());
+            return Ok(new ResourceList(resources));
         }
 
-        [Route("{legalEntityId}", Name = "GetLegalEntity")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
-        [HttpNotFoundForNullModel]
-        public async Task<IHttpActionResult> GetLegalEntity(
-            string hashedAccountId,
-            long legalEntityId,
-            bool includeAllAgreements = false)
+        var model = result.LegalEntities
+            .Select(entity => LegalEntityMapping.MapFromAccountLegalEntity(entity, null, false))
+            .ToList();
+
+        return Ok(model);
+    }
+
+    [HttpGet]
+    [Route("{legalEntityId}", Name = "GetLegalEntity")]
+    public async Task<IActionResult> GetLegalEntity(string hashedAccountId, long legalEntityId, bool includeAllAgreements = false)
+    {
+        var response = await _mediator.Send(request: new GetLegalEntityQuery(hashedAccountId, legalEntityId));
+
+        var model = LegalEntityMapping.MapFromAccountLegalEntity(response.LegalEntity, response.LatestAgreement,
+            includeAllAgreements);
+
+        if(model == null)
         {
-            var response = await _mediator.SendAsync(request: new GetLegalEntityQuery(hashedAccountId, legalEntityId));
-
-            var model = LegalEntityMapping.MapFromAccountLegalEntity(response.LegalEntity, response.LatestAgreement, includeAllAgreements);
-            
-            return Ok(model);
+            return NotFound();
         }
+
+        return Ok(model);
     }
 }

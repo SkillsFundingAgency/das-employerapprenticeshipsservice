@@ -1,14 +1,13 @@
 ﻿
-namespace SFA.DAS.EmployerAccounts.Dtos
+namespace SFA.DAS.EmployerAccounts.Dtos;
+
+public class AccountLegalEntityDto
 {
-    public class AccountLegalEntityDto
-    {
-        public long Id { get; set; }
+    public long Id { get; set; }
 
-        public string Name { get; set; }
+    public string Name { get; set; }
 
-        public string Address { get; set; }
+    public string Address { get; set; }
 
-        public string PublicHashedId { get; set; }
-    }
+    public string PublicHashedId { get; set; }
 }

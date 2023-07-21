@@ -1,35 +1,39 @@
 ﻿﻿@using SFA.DAS.Common.Domain.Types
 @model OrchestratorResponse<OrganisationDetailsViewModel>
-@{ ViewBag.PageID = "page-extra-confirm-organisation"; }
-@{ ViewBag.Title = "Confirm details";
-                ViewBag.Section = "organisations";
-                ViewBag.ZenDeskLabel = "eas-check-your-details"; }
-@{ ViewBag.GaData.Vpv = "/onboarding/address/update/page-extra-confirm-organisation"; }
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">
+@{
+    ViewBag.PageID = "page-extra-confirm-organisation";
+    ViewBag.Title = "Confirm details";
+    ViewBag.Section = "organisations";
+    ViewBag.ZenDeskLabel = "eas-check-your-details";
+    ViewBag.GaData.Vpv = "/onboarding/address/update/page-extra-confirm-organisation";
+
+    var hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId];
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">
             Check your details
         </h1>
-        <table>
-            <tr>
-                <th role="row">Organisation name</th>
-                <td class="responsive-td">@Model.Data.Name</td>
+        <table class="govuk-table">
+            <tr class="govuk-table__row">
+                <th class="govuk-table__header" role="row">Organisation name</th>
+                <td class="govuk-table__cell">@Model.Data.Name</td>
             </tr>
-            <tr>
-                <th role="row">Organisation address</th>
-                <td class="responsive-td">@Model.Data.Address</td>
+            <tr class="govuk-table__row">
+                <th class="govuk-table__header" role="row">Organisation address</th>
+                <td class="govuk-table__cell">@Model.Data.Address</td>
             </tr>
 
             @if (Model.Data.Type != OrganisationType.PublicBodies && Model.Data.Type != OrganisationType.Other && Model.Data.Type != OrganisationType.PensionsRegulator)
             {
-<tr>
-    <th role="row">Organisation number</th>
-    <td class="responsive-td">@Model.Data.ReferenceNumber</td>
-</tr>            }
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" role="row">Organisation number</th>
+                    <td class="govuk-table__cell">@Model.Data.ReferenceNumber</td>
+                </tr>
+            }
         </table>
-
-        <form action="@Url.Action("Confirm", "Organisation")" method="POST">
-            @Html.AntiForgeryToken()
+        <form asp-route="@RouteNames.OrganisationConfirm" asp-route-HashedAccountId="@hashedAccountId" method="POST">
             <input type="hidden" id="legalEntityName" name="name" value="@Model.Data.Name" />
             <input type="hidden" id="legalEntityCode" name="code" value="@Model.Data.ReferenceNumber" />
             <input type="hidden" id="legalEntityAddress" name="address" value="@Model.Data.Address" />
@@ -39,17 +43,18 @@
             <input type="hidden" id="organisationType" name="organisationType" value="@Model.Data.Type" />
             <input type="hidden" id="sector" name="sector" value="@Model.Data.Sector" />
             <input type="hidden" id="newSearch" name="newSearch" value="@Model.Data.NewSearch.ToString()" />
-            <p class="heading-medium">Is this correct?</p>
-            <span>
-                <input class="button" type="submit" value="Yes, continue" />
-                <a class="button button-link" href="@Url.Action("SearchForOrganisation", "SearchOrganisation", new {AccountId = Model.Data.HashedId})">No, search again</a>
+            <h2 class="govuk-heading-m">Is this correct?</h2>
+            <div class="govuk-button-group">
+                <input class="govuk-button" type="submit" value="Yes, continue" />
+                <a class="govuk-link"
+                   asp-controller="@ControllerConstants.SearchOrganisationControllerName"
+                   asp-action="@ControllerConstants.SearchForOrganisationActionName"
+                   asp-route-HashedAccountId="@hashedAccountId">No, search again</a>
             </span>
         </form>
-
     </div>
 </div>
 
 @section breadcrumb {
-    <div class="breadcrumbs" id="js-breadcrumbs">
-    </div>
+    <div class="das-js-back-link"></div>
 }

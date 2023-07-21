@@ -1,8 +1,7 @@
-﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels
+﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels;
+
+public class CreateUserAccountViewModel
 {
-    public class CreateUserAccountViewModel
-    {
-        public string UserId { get; set; }    
-        public string OrganisationName { get; set; }
-    }
+    public string UserId { get; set; }    
+    public string OrganisationName { get; set; }
 }

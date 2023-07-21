@@ -1,52 +1,43 @@
-﻿using System;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.HashingService;
-using SFA.DAS.Validation;
+﻿using System.Threading;
+using Microsoft.EntityFrameworkCore;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf
+namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
+
+public class GetEmployerAgreementPdfQueryHandler : IRequestHandler<GetEmployerAgreementPdfRequest, GetEmployerAgreementPdfResponse>
 {
-    public class GetEmployerAgreementPdfQueryHandler : IAsyncRequestHandler<GetEmployerAgreementPdfRequest, GetEmployerAgreementPdfResponse>
+    private readonly IValidator<GetEmployerAgreementPdfRequest> _validator;
+    private readonly IPdfService _pdfService;
+    private readonly Lazy<EmployerAccountsDbContext> _db;
+
+    public GetEmployerAgreementPdfQueryHandler(IValidator<GetEmployerAgreementPdfRequest> validator, IPdfService pdfService, Lazy<EmployerAccountsDbContext> db)
     {
-        private readonly IValidator<GetEmployerAgreementPdfRequest> _validator;
-        private readonly IPdfService _pdfService;
-        private readonly IHashingService _hashingService;
-        private readonly Lazy<EmployerAccountsDbContext> _db;
+        _validator = validator;
+        _pdfService = pdfService;
+        _db = db;
+    }
 
-        public GetEmployerAgreementPdfQueryHandler(IValidator<GetEmployerAgreementPdfRequest> validator, IPdfService pdfService, IHashingService hashingService, Lazy<EmployerAccountsDbContext> db)
+    public async Task<GetEmployerAgreementPdfResponse> Handle(GetEmployerAgreementPdfRequest message, CancellationToken cancellationToken)
+    {
+        var validationResult = await _validator.ValidateAsync(message);
+
+        if (!validationResult.IsValid())
         {
-            _validator = validator;
-            _pdfService = pdfService;
-            _hashingService = hashingService;
-            _db = db;
+            throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        public async Task<GetEmployerAgreementPdfResponse> Handle(GetEmployerAgreementPdfRequest message)
+        if (validationResult.IsUnauthorized)
         {
-            var validationResult = await _validator.ValidateAsync(message);
-
-            if (!validationResult.IsValid())
-            {
-                throw new InvalidRequestException(validationResult.ValidationDictionary);
-            }
-
-            if (validationResult.IsUnauthorized)
-            {
-                throw new UnauthorizedAccessException();
-            }
-
-            var employerAgreementId = _hashingService.DecodeValue(message.HashedLegalAgreementId);
-
-            var templatePartialViewName = await _db.Value.Agreements.Where(x => x.Id == employerAgreementId).Select(x => x.Template.PartialViewName).SingleAsync();
-
-            var file = await _pdfService.SubsituteValuesForPdf($"{templatePartialViewName}.pdf");
-
-
-            return new GetEmployerAgreementPdfResponse {FileStream = file};
+            throw new UnauthorizedAccessException();
         }
+
+        var templatePartialViewName = await _db.Value.Agreements
+            .Where(x => x.Id == message.LegalAgreementId)
+            .Select(x => x.Template.PartialViewName)
+            .SingleAsync(cancellationToken);
+
+        var file = await _pdfService.SubstituteValuesForPdf($"{templatePartialViewName}.pdf");
+
+
+        return new GetEmployerAgreementPdfResponse {FileStream = file};
     }
 }

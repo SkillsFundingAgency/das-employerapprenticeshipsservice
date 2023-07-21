@@ -1,43 +1,37 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.HashingService;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Validation;
+﻿using System.Threading;
+using SFA.DAS.Encoding;
 
-namespace SFA.DAS.EmployerAccounts.Commands.DismissMonthlyTaskReminder
+namespace SFA.DAS.EmployerAccounts.Commands.DismissMonthlyTaskReminder;
+
+public class DismissMonthlyTaskReminderCommandHandler : IRequestHandler<DismissMonthlyTaskReminderCommand>
 {
-    public class DismissMonthlyTaskReminderCommandHandler : AsyncRequestHandler<DismissMonthlyTaskReminderCommand>
+    private readonly ITaskService _taskService;
+    private readonly IValidator<DismissMonthlyTaskReminderCommand> _validator;
+    private readonly IEncodingService _encodingService;
+
+    public DismissMonthlyTaskReminderCommandHandler(
+        ITaskService taskService, 
+        IValidator<DismissMonthlyTaskReminderCommand> validator, 
+        IEncodingService encodingService)
     {
-        private readonly ITaskService _taskService;
-        private readonly IValidator<DismissMonthlyTaskReminderCommand> _validator;
-        private readonly ILog _logger;
-        private readonly IHashingService _hashingService;
+        _taskService = taskService;
+        _validator = validator;
+        _encodingService = encodingService;
+    }
 
-        public DismissMonthlyTaskReminderCommandHandler(
-            ITaskService taskService, 
-            IValidator<DismissMonthlyTaskReminderCommand> validator, 
-            ILog logger, 
-            IHashingService hashingService)
+    public async Task<Unit> Handle(DismissMonthlyTaskReminderCommand request, CancellationToken cancellationToken)
+    {
+        var validationResults = _validator.Validate(request);
+
+        if (!validationResults.IsValid())
         {
-            _taskService = taskService;
-            _validator = validator;
-            _logger = logger;
-            _hashingService = hashingService;
+            throw new InvalidRequestException(validationResults.ValidationDictionary);
         }
 
-        protected override async Task HandleCore(DismissMonthlyTaskReminderCommand command)
-        {
-            var validationResults = _validator.Validate(command);
-
-            if (!validationResults.IsValid())
-            {
-                throw new InvalidRequestException(validationResults.ValidationDictionary);
-            }
-
-            var accountId = _hashingService.DecodeValue(command.HashedAccountId);
+        var accountId = _encodingService.Decode(request.HashedAccountId, EncodingType.AccountId);
           
-            await _taskService.DismissMonthlyTaskReminder(accountId, command.ExternalUserId, command.TaskType);
-        }
+        await _taskService.DismissMonthlyTaskReminder(accountId, request.ExternalUserId, request.TaskType);
+
+        return Unit.Value;
     }
 }

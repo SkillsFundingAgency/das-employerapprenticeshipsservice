@@ -1,0 +1,48 @@
+﻿@model RenameEmployerAccountViewModel
+
+@{
+    ViewBag.PageID = "page-change-account-name-confirm";
+    ViewBag.Title = "Confirm your new account name";
+    ViewBag.GaData.Vpv = "/page-change-account-name-confirm";
+    ViewBag.ShowNav = false;
+    string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]?.ToString();
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form method="post" asp-route="@RouteNames.AccountNameConfirmPost" asp-route-hashedAccountId="@hashedAccountId">
+            
+            <h1 class="govuk-heading-xl">Confirm your new account name</h1>
+            <p>You can change your account name at any time.</p>
+            <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        New account name
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @Model.NewName
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a class="govuk-link" asp-route="@RouteNames.AccountName" asp-route-hashedAccountId="@hashedAccountId">
+                            Change<span class="govuk-visually-hidden"> your account name</span>
+                        </a>
+                    </dd>
+                </div>
+            </dl>
+            <div class="govuk-button-group">
+                <button class="govuk-button" type="submit" data-module="govuk-button" id="accept">
+                    Continue
+                </button>
+                <a class="govuk-link" asp-route="@RouteNames.ContinueNewEmployerAccountTaskList" asp-route-hashedAccountId="@hashedAccountId">Cancel</a>
+            </div>
+
+            <input type="hidden" asp-for="NewName" value="@Model.NewName" />
+            <input type="hidden" asp-for="ChangeAccountName" value="@Model.ChangeAccountName" />
+        </form>
+    </div>
+</div>
+
+
+@section breadcrumb {
+    <div class="das-js-back-link"></div>
+}

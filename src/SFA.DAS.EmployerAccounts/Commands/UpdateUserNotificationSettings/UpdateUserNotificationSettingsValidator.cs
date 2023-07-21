@@ -1,27 +1,22 @@
-﻿using System;
-using System.Threading.Tasks;
-using SFA.DAS.Validation;
+﻿namespace SFA.DAS.EmployerAccounts.Commands.UpdateUserNotificationSettings;
 
-namespace SFA.DAS.EmployerAccounts.Commands.UpdateUserNotificationSettings
+public class UpdateUserNotificationSettingsValidator : IValidator<UpdateUserNotificationSettingsCommand>
 {
-    public class UpdateUserNotificationSettingsValidator : IValidator<UpdateUserNotificationSettingsCommand>
+    public ValidationResult Validate(UpdateUserNotificationSettingsCommand item)
     {
-        public ValidationResult Validate(UpdateUserNotificationSettingsCommand item)
-        {
-            var validationResult = new ValidationResult();
+        var validationResult = new ValidationResult();
 
-            if (string.IsNullOrWhiteSpace(item.UserRef))
-                validationResult.AddError(nameof(item.UserRef));
+        if (string.IsNullOrWhiteSpace(item.UserRef))
+            validationResult.AddError(nameof(item.UserRef));
 
-            if (item.Settings == null)
-                validationResult.AddError(nameof(item.Settings));
+        if (item.Settings == null)
+            validationResult.AddError(nameof(item.Settings));
 
-            return validationResult;
-        }
+        return validationResult;
+    }
 
-        public Task<ValidationResult> ValidateAsync(UpdateUserNotificationSettingsCommand item)
-        {
-            throw new NotImplementedException();
-        }
+    public Task<ValidationResult> ValidateAsync(UpdateUserNotificationSettingsCommand item)
+    {
+        return Task.FromResult(Validate(item));
     }
 }

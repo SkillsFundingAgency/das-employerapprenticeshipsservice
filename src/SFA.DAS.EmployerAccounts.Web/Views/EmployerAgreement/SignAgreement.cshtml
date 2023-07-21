@@ -1,24 +1,22 @@
-﻿@using SFA.DAS.EmployerAccounts.Web.Extensions
-@using SFA.DAS.EmployerAccounts.Web.Helpers
+﻿@inject IHtmlHelpers HtmlHelpers;
 @model SignEmployerAgreementViewModel
 @{
     ViewBag.PageID = "agreement-sign";
     ViewBag.Title = "Agreement";
     ViewBag.Section = "organisations";
     ViewBag.GaData.Vpv = "/accounts/agreements/sign-your-agreement/agreement-sign";
-    ViewBag.HideNav = true;
+    ViewBag.ShowNav = false;
     ViewBag.ZenDeskLabel = "reg-agreement";
 }
 
-@if (Html.ViewExists(Model.EmployerAgreement.TemplatePartialViewName + "_changes"))
+@if (HtmlHelpers.ViewExists(Html, Model.EmployerAgreement.TemplatePartialViewName + "_changes"))
 {
-    @Html.Partial(Model.EmployerAgreement.TemplatePartialViewName + "_changes");
+    @await Html.PartialAsync(Model.EmployerAgreement.TemplatePartialViewName + "_changes")
 }
 
-@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
 
 @section breadcrumb {
     <div class="das-js-back-link"></div>
 }
 
-@Html.Partial(@Model.EmployerAgreement.TemplatePartialViewName)
+<partial name="@Model.EmployerAgreement.TemplatePartialViewName"/>

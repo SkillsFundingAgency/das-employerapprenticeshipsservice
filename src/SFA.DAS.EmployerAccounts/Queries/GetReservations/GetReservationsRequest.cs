@@ -1,10 +1,7 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetReservations;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetReservations
+public class GetReservationsRequest : IRequest<GetReservationsResponse>
 {
-    public class GetReservationsRequest : IAsyncRequest<GetReservationsResponse>
-    {
-        public string HashedAccountId { get; set; }
-        public string ExternalUserId { get; set; }
-    }
+    public long AccountId { get; set; }
+    public string ExternalUserId { get; set; }
 }

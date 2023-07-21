@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Http.Results;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamMembers;
@@ -28,13 +29,13 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.EmployerAccountsCon
                 }
             };
 
-            Mediator.Setup(x => x.SendAsync(It.IsAny<GetTeamMembersRequest>()))
+            Mediator.Setup(x => x.Send(It.IsAny<GetTeamMembersRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(accountsUserResponse);
           
-            var response = await Controller.GetAccountUsers(hashedAccountId);
+            var response = await Controller.GetAccountUsers(hashedAccountId) as OkObjectResult;
 
             Assert.IsNotNull(response);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<List<TeamMember>>>(response);
+            Assert.IsInstanceOf<List<TeamMember>>(response.Value);
         }
     }
 }

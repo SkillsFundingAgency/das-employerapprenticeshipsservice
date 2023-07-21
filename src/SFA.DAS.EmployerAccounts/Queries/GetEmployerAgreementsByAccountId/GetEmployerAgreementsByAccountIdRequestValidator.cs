@@ -1,30 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using SFA.DAS.Validation;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementsByAccountId;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementsByAccountId
+public class GetEmployerAgreementsByAccountIdRequestValidator : IValidator<GetEmployerAgreementsByAccountIdRequest>
 {
-    public class GetEmployerAgreementsByAccountIdRequestValidator : IValidator<GetEmployerAgreementsByAccountIdRequest>
+    public ValidationResult Validate(GetEmployerAgreementsByAccountIdRequest item)
     {
-        public ValidationResult Validate(GetEmployerAgreementsByAccountIdRequest item)
+        var validationResults = new Dictionary<string,string>();
+
+        if (item.AccountId <= 0)
         {
-            var validationResults = new Dictionary<string,string>();
-
-            if (item.AccountId <= 0)
-            {
-                validationResults.Add(nameof(item.AccountId), "Account Id must be populated");
-            }
-
-            return new ValidationResult
-            {
-                ValidationDictionary = validationResults
-            };
+            validationResults.Add(nameof(item.AccountId), "Account Id must be populated");
         }
 
-        public Task<ValidationResult> ValidateAsync(GetEmployerAgreementsByAccountIdRequest item)
+        return new ValidationResult
         {
-            return Task.FromResult(Validate(item));
-        }
+            ValidationDictionary = validationResults
+        };
+    }
+
+    public Task<ValidationResult> ValidateAsync(GetEmployerAgreementsByAccountIdRequest item)
+    {
+        return Task.FromResult(Validate(item));
     }
 }

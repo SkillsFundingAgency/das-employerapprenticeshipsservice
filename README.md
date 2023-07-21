@@ -44,9 +44,8 @@
 
 - Open Visual Studio as an administrator
 - Open the solution
-- Set the following as the startup projects:
+- Set the following as the startup project:
 	- SFA.DAS.EmployerAccounts.Web
-	- SFA.DAS.EmployerFinance.Web
 - Running the solution will launch the site in your browser
 
 ##### Publish the databases
@@ -54,7 +53,6 @@
 Repeat these steps for:
 
 1. SFA.DAS.EAS.Employer_Account.Database
-2. SFA.DAS.EAS.Employer_Financial.Database
 
 Note: If you have an existing database you may need to drop it first, to avoid the script aborting after an error on truncating data.
 
@@ -91,9 +89,9 @@ The configuration is loaded from azure table storage.
 - Create an [Azure] account and set up a table storage
 - Create a table called Configuration and copy across these 4 rows from the employer config setup above changing the PartitionKey to "Development" from "LOCAL":
 * SFA.DAS.EmployerApprenticeshipsService._1.0
-* SFA.DAS.EmployerFinance_1.0
-* SFA.DAS.EmployerFinanceV2_1.0
 * SFA.DAS.EmployerAccounts_1.0
+* SFA.DAS.EmployerApprenticeshipsService.FeaturesV2_1.0
+* SFA.DAS.EmployerApprenticeshipsService.MultiVariantTesting_1.0
 
 ##### Set up enivronment variables
 
@@ -155,4 +153,3 @@ Execute the analyse.ps1 PowerShell script
 * [Integration Tests](docs/IntegrationTesting.md "Integration Testing")
 * [Authorization Pipeline](docs/AuthorizationPipeline.md "Authorization Pipeline")
 * [Running Jobs](docs/Jobs/RunningJobs.md "Running Jobs")
-* [Finance](docs/Finance/Index.md "Finance")

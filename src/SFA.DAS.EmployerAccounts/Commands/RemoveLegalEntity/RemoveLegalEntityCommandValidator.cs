@@ -1,70 +1,62 @@
-﻿using System;
-using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Data;
+﻿using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.HashingService;
-using SFA.DAS.Validation;
 
-namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
+namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity;
+
+public class RemoveLegalEntityCommandValidator : IValidator<RemoveLegalEntityCommand>
 {
-    public class RemoveLegalEntityCommandValidator : IValidator<RemoveLegalEntityCommand>
+    private readonly IMembershipRepository _membershipRepository;
+    private readonly IEmployerAgreementRepository _employerAgreementRepository;
+
+    public RemoveLegalEntityCommandValidator(IMembershipRepository membershipRepository, IEmployerAgreementRepository employerAgreementRepository)
     {
-        private readonly IMembershipRepository _membershipRepository;
-        private readonly IEmployerAgreementRepository _employerAgreementRepository;
-        private readonly IHashingService _hashingService;
+        _membershipRepository = membershipRepository;
+        _employerAgreementRepository = employerAgreementRepository;
+    }
 
-        public RemoveLegalEntityCommandValidator(IMembershipRepository membershipRepository, IEmployerAgreementRepository employerAgreementRepository, IHashingService hashingService)
+    public ValidationResult Validate(RemoveLegalEntityCommand item)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<ValidationResult> ValidateAsync(RemoveLegalEntityCommand item)
+    {
+        var validationResult = new ValidationResult();
+
+        if (item.AccountId <= 0)
         {
-            _membershipRepository = membershipRepository;
-            _employerAgreementRepository = employerAgreementRepository;
-            _hashingService = hashingService;
+            validationResult.AddError(nameof(item.AccountId));
+        }
+        if (string.IsNullOrEmpty(item.UserId))
+        {
+            validationResult.AddError(nameof(item.UserId));
+        }
+        if (item.AccountLegalEntityId <= 0)
+        {
+            validationResult.AddError(nameof(item.AccountLegalEntityId));
         }
 
-        public ValidationResult Validate(RemoveLegalEntityCommand item)
+        if (!validationResult.IsValid())
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<ValidationResult> ValidateAsync(RemoveLegalEntityCommand item)
-        {
-            var validationResult = new ValidationResult();
-
-            if (string.IsNullOrEmpty(item.HashedAccountId))
-            {
-                validationResult.AddError(nameof(item.HashedAccountId));
-            }
-            if (string.IsNullOrEmpty(item.UserId))
-            {
-                validationResult.AddError(nameof(item.UserId));
-            }
-            if (string.IsNullOrEmpty(item.HashedAccountLegalEntityId))
-            {
-                validationResult.AddError(nameof(item.HashedAccountLegalEntityId));
-            }
-
-            if (!validationResult.IsValid())
-            {
-                return validationResult;
-            }
-
-            var member = await _membershipRepository.GetCaller(item.HashedAccountId, item.UserId);
-
-            if (member == null || !member.Role.Equals(Role.Owner))
-            {
-                validationResult.IsUnauthorized = true;
-                return validationResult;
-            }
-
-            var accountId = _hashingService.DecodeValue(item.HashedAccountId);
-            var legalEntities = await _employerAgreementRepository.GetLegalEntitiesLinkedToAccount(accountId, false);
-
-            if (legalEntities != null && legalEntities.Count == 1)
-            {
-                validationResult.AddError(nameof(item.HashedAccountLegalEntityId), "There must be at least one legal entity on the account");
-                return validationResult;
-            }
-
             return validationResult;
         }
+
+        var member = await _membershipRepository.GetCaller(item.AccountId, item.UserId);
+
+        if (member == null || !member.Role.Equals(Role.Owner))
+        {
+            validationResult.IsUnauthorized = true;
+            return validationResult;
+        }
+        
+        var legalEntities = await _employerAgreementRepository.GetLegalEntitiesLinkedToAccount(item.AccountId, false);
+
+        if (legalEntities != null && legalEntities.Count == 1)
+        {
+            validationResult.AddError(nameof(item.AccountLegalEntityId), "There must be at least one legal entity on the account");
+            return validationResult;
+        }
+
+        return validationResult;
     }
 }

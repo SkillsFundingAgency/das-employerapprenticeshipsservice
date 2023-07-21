@@ -1,27 +1,25 @@
 ﻿using System.Threading.Tasks;
-using System.Web.Http;
 using MediatR;
-using SFA.DAS.EmployerAccounts.Api.Attributes;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.EmployerAccounts.Api.Authorization;
 using SFA.DAS.EmployerAccounts.Queries.GetStatistics;
 
-namespace SFA.DAS.EmployerAccounts.Api.Controllers
+namespace SFA.DAS.EmployerAccounts.Api.Controllers;
+
+[Authorize(Policy = ApiRoles.ReadUserAccounts)]
+[Route("api/statistics")]
+public class StatisticsController : ControllerBase
 {
-    [ApiAuthorize(Roles = "ReadUserAccounts")]
-    [RoutePrefix("api/statistics")]
-    public class StatisticsController : ApiController
+    private readonly IMediator _mediator;
+
+    public StatisticsController(IMediator mediator) => _mediator = mediator;
+
+    [HttpGet]
+    [Route("")]
+    public async Task<IActionResult> GetStatistics()
     {
-        private readonly IMediator _mediator;
-
-        public StatisticsController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
-        [Route("")]
-        public async Task<IHttpActionResult> GetStatistics()
-        {
-            var response = await _mediator.SendAsync(new GetStatisticsQuery());
-            return Ok(response.Statistics);
-        }
+        var response = await _mediator.Send(new GetStatisticsQuery());
+        return Ok(response.Statistics);
     }
 }

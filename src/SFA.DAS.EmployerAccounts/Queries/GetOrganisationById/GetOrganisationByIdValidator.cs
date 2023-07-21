@@ -1,25 +1,21 @@
-﻿using System.Threading.Tasks;
-using SFA.DAS.Validation;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationById;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationById
+public class GetOrganisationByIdValidator : IValidator<GetOrganisationByIdRequest>
 {
-    public class GetOrganisationByIdValidator : IValidator<GetOrganisationByIdRequest>
+    public ValidationResult Validate(GetOrganisationByIdRequest item)
     {
-        public ValidationResult Validate(GetOrganisationByIdRequest item)
+        var validationResult = new ValidationResult();
+
+        if (string.IsNullOrEmpty(item.Identifier))
         {
-            var validationResult = new ValidationResult();
-
-            if (string.IsNullOrEmpty(item.Identifier))
-            {
-                validationResult.AddError(nameof(item.Identifier));
-            }
-
-            return validationResult;
+            validationResult.AddError(nameof(item.Identifier));
         }
 
-        public Task<ValidationResult> ValidateAsync(GetOrganisationByIdRequest item)
-        {
-            throw new System.NotImplementedException();
-        }
+        return validationResult;
+    }
+
+    public Task<ValidationResult> ValidateAsync(GetOrganisationByIdRequest item)
+    {
+        return Task.FromResult(Validate(item));
     }
 }

@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetApprenticeship
         public void ThenShouldReturnValidIfRequestIsValid()
         {
             //Act
-            var result = _validator.Validate(new GetApprenticeshipsRequest { HashedAccountId = "123ABC", ExternalUserId = "user123" });
+            var result = _validator.Validate(new GetApprenticeshipsRequest { AccountId = 4567, ExternalUserId = "user123" });
 
             //Assert
             Assert.IsTrue(result.IsValid());

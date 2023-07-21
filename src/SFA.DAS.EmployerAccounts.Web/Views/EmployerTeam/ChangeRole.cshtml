@@ -1,7 +1,5 @@
-@using SFA.DAS.Authorization
-@using SFA.DAS.EmployerAccounts.Models
-
 @model OrchestratorResponse<SFA.DAS.EmployerAccounts.Models.AccountTeam.TeamMember>
+@using SFA.DAS.EmployerAccounts.Models;
 
 @{
     ViewBag.PageID = "page-team-member-change-role";
@@ -10,10 +8,9 @@
     ViewBag.Section = "team";
     var errorMessage = string.Empty;
     ViewBag.ZenDeskLabel = "eas-change-team-member";
-}
-
-@{
     ViewBag.GaData.Vpv = "/accounts/teams/role/change/page-team-member-change-role";
+
+    string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId].ToString();
 }
 
 @if (!ViewContext.ViewData.ModelState.IsValid)
@@ -26,57 +23,66 @@
         }
     }
 
-    <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
-        <h1 class="heading-medium error-summary-heading" id="error-summary-heading">
+<div class="govuk-error-summary" data-module="govuk-error-summary">
+    <div role="alert">
+        <h2 class="govuk-error-summary__title">
             Errors to fix
-        </h1>
-        <ul class="error-summary-list">
-            <li><a href="#change-role-selection">@errorMessage</a></li>
-        </ul>
+        </h2>
+        <div class="govuk-error-summary__body">
+            <ul class="govuk-list govuk-error-summary__list">
+                <li><a href="#change-role-selection">@errorMessage</a></li>
+            </ul>
+        </div>
     </div>
+</div>
 
 }
 
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">@name</h1>
-        <p class="lede">Choose what you allow this team member to do.</p>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">@name</h1>
+        <p class="govuk-body-l">Choose what you allow this team member to do.</p>
        
-        <form method="POST" action="@Url.Action("ChangeRole")">
-            @Html.AntiForgeryToken()
-            <div class="form-group @(!ViewContext.ViewData.ModelState.IsValid ? "error" : "")">
-                <fieldset>
-                    <legend id="change-role-selection">
-                        <span class="vh">Select a role for @name</span>
+        <form method="POST" asp-route="@RouteNames.EmployerTeamChangeRolePost" asp-route-hashedAccountId="@hashedAccountId">
+            <div class="govuk-form-group @(!ViewContext.ViewData.ModelState.IsValid ? "govuk-form-group--error" : "")">
+                <fieldset class="govuk-fieldset">
+                    <legend id="change-role-selection" class="govuk-fieldset__legend">
+                        <span class="govuk-visually-hidden">Select a role for @name</span>
                         @if (!string.IsNullOrWhiteSpace(errorMessage))
                         {
-                            <span class="error-message">@errorMessage</span>
+                            <span class="govuk-error-message">@errorMessage</span>
                         }
                     </legend>
-                    <label class="block-label" for="radio1">
-                        <input id="radio1" type="radio" name="Role" value="3" @(Model.Data.Role == Role.Viewer ? "checked" : "") />
-                        @(RoleStrings.GetRoleDescription(Role.Viewer))
-                    </label>
-                    <label class="block-label" for="radio2">
-                        <input id="radio2" type="radio" name="Role" value="2" @(Model.Data.Role == Role.Transactor ? "checked" : "") />
-                        @(RoleStrings.GetRoleDescription(Role.Transactor))
-                    </label>
-                    <label class="block-label" for="radio3">
-                        <input id="radio3" type="radio" name="Role" value="1" @(Model.Data.Role == Role.Owner ? "checked" : "") />
-                        @(RoleStrings.GetRoleDescription(Role.Owner))
-                    </label>
+                    <div class="govuk-radios" data-module="govuk-radios">
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="radio1" type="radio" name="Role" value="3" @(Model.Data.Role == Role.Viewer ? "checked" : "") />
+                            <label class="govuk-label govuk-radios__label" for="radio1">
+                                @(RoleStrings.GetRoleDescription(Role.Viewer))
+                            </label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="radio2" type="radio" name="Role" value="2" @(Model.Data.Role == Role.Transactor ? "checked" : "") />
+                            <label class="govuk-label govuk-radios__label" for="radio2">
+                                @(RoleStrings.GetRoleDescription(Role.Transactor))
+                            </label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="radio3" type="radio" name="Role" value="1" @(Model.Data.Role == Role.Owner ? "checked" : "") />
+                            <label class="govuk-label govuk-radios__label" for="radio3">
+                                @(RoleStrings.GetRoleDescription(Role.Owner))
+                            </label>
+                        </div>
+                    </div>
                     <input type="hidden" id="Email" name="Email" value="@Model.Data.Email" />
                 </fieldset>
             </div>
-            <button type="submit" class="button" id="update">Update</button>
+            <button type="submit" class="govuk-button" id="update">Update</button>
         </form>
     </div>
 </div>
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <a href="@Url.Action("ViewTeam", "EmployerTeam")", class="back-link">Back to your team</a>
-    </div>
+    <a asp-route="@RouteNames.EmployerTeamView" asp-route-hashedAccountId="@hashedAccountId" class="govuk-back-link">Back to your team</a>
 }
 

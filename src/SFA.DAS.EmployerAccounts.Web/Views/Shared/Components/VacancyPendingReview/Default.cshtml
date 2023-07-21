@@ -1,0 +1,39 @@
+﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.VacancyViewModel
+@inject IUrlActionHelper UrlHelper;
+<section>
+    <h2 class="govuk-heading-l govuk-!-margin-bottom-2">
+        Your apprenticeship advert
+    </h2>
+    <p>You've started creating an advert for your apprenticeship.</p>
+    <table class="govuk-table">
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header das-table-cell-width-35">
+                Title
+            </th>
+            <td class="govuk-table__cell das-table-cell-width-65">
+                @(Model?.Title)
+            </td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">
+                Closing date
+            </th>
+            <td class="govuk-table__cell">
+                @(Model.ClosingDateText)
+            </td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">
+                Status
+            </th>
+            <td class="govuk-table__cell">
+                <strong class="govuk-tag govuk-tag--grey">Pending review</strong>
+            </td>
+        </tr>
+    </table>
+    <p>
+        <a href="@UrlHelper.EmployerRecruitAction()" class="govuk-link">Go to your vacancy dashboard</a>
+    </p>
+</section>
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">

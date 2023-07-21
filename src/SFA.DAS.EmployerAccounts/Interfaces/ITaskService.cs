@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using SFA.DAS.Tasks.API.Types.DTOs;
-using SFA.DAS.Tasks.API.Types.Enums;
+﻿
+using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerAccounts.TasksApi;
 
-namespace SFA.DAS.EmployerAccounts.Interfaces
+namespace SFA.DAS.EmployerAccounts.Interfaces;
+
+public interface ITaskService
 {
-    public interface ITaskService
-    {
-        Task<IEnumerable<TaskDto>> GetAccountTasks(long accountId, string externalUserId, ApprenticeshipEmployerType applicableToApprenticeshipEmployerType);
+    Task<IEnumerable<TaskDto>> GetAccountTasks(long accountId, string externalUserId, ApprenticeshipEmployerType applicableToApprenticeshipEmployerType);
 
-        Task DismissMonthlyTaskReminder(long accountId, string externalUserId, TaskType taskType);
-    }
+    Task DismissMonthlyTaskReminder(long accountId, string externalUserId, TaskType taskType);
 }

@@ -1,0 +1,120 @@
+@model OrchestratorResponse<AccountTaskListViewModel>;
+
+@{
+    ViewBag.PageID = "create-account-task-list";
+    ViewBag.Title = "Create your employer account";
+    ViewBag.ShowNav = false;
+    ViewBag.GaData.Vpv = "/create-account-task-list";
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">@ViewBag.Title</h1>
+        <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Account creation incomplete</h2>
+        <p class="govuk-body">You have completed @Model.Data.CompletedSections of 3 sections.</p>
+        <div class="govuk-inset-text govuk-!-margin-bottom-7">
+            You do not have to complete all sections at once. Those labelled 'completed' have been saved so you can continue your employer account creation later.
+        </div>
+        <ol class="das-task-list">
+            <li>
+                <h2 class="das-task-list__section">
+                    <span class="das-task-list__section-number">1. </span> Add your user details
+                </h2>
+                <ul class="das-task-list__items">
+                    <li class="das-task-list__item">
+                        <span class="das-task-list__task-name">
+                            Add your user details
+                        </span>
+                        <strong class="govuk-tag das-task-list__task-tag" id="status-verify-email">Completed</strong>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h2 class="das-task-list__section">
+                    <span class="das-task-list__section-number">2. </span> Add your organisation and PAYE scheme
+                </h2>
+                <ul class="das-task-list__items">
+                    <li class="das-task-list__item">
+                        <span class="das-task-list__task-name">
+                            <a asp-route="@Model.Data.AddPayeRouteName" asp-route-hashedAccountId="@Model.Data.HashedAccountId" aria-describedby="status-add-paye" class="govuk-link">
+                                Add a PAYE scheme
+                            </a>
+                        </span>
+                        @if (!Model.Data.HasPayeScheme)
+                        {
+                            <strong class="govuk-tag das-task-list__task-tag govuk-tag--grey" id="status-add-paye-scheme">Not started</strong>
+                        }
+                        else
+                        {
+                            <strong class="govuk-tag das-task-list__task-tag" id="status-add-paye-scheme">Completed</strong>
+                        }
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <h2 class="das-task-list__section">
+                    <span class="das-task-list__section-number">3. </span> Set your account name
+                </h2>
+                <ul class="das-task-list__items">
+                    <li class="das-task-list__item">
+
+                        @if (!Model.Data.HasPayeScheme)
+                        {
+                            <span class="das-task-list__task-name">
+                                Set your account name
+                            </span>
+                            <strong class="govuk-tag das-task-list__task-tag govuk-tag--grey" id="status-set-account-name">Cannot start yet</strong>
+                        }
+                        else
+                        {
+                            <span class="das-task-list__task-name">
+                                <a asp-route="@RouteNames.AccountName" asp-route-hashedAccountId="@Model.Data.HashedAccountId" aria-describedby="status-add-paye" class="govuk-link">
+                                    Set your account name
+                                </a>
+                            </span>
+                            <strong class="govuk-tag das-task-list__task-tag govuk-tag--grey" id="status-set-account-name">Not started</strong>
+                        }
+                    </li>
+                </ul>
+            </li>
+            @*<li>
+            <h2 class="das-task-list__section">
+            <span class="das-task-list__section-number">4. </span> Accept your employer agreement
+            </h2>
+            <ul class="das-task-list__items">
+            <li class="das-task-list__item">
+            <span class="das-task-list__task-name">
+            Read and accept your employer agreement
+            </span>
+            <strong class="govuk-tag das-task-list__task-tag govuk-tag--grey" id="status-accept-agreement">Cannot start yet</strong>
+            </li>
+            </ul>
+            </li>*@
+            @* <li>
+            <h2 class="das-task-list__section">
+            <span class="das-task-list__section-number">5. </span> Add a training provider
+            </h2>
+            <ul class="das-task-list__items">
+            <li class="das-task-list__item">
+            <span class="das-task-list__task-name">
+            Add a training provider
+            </span>
+            <strong class="govuk-tag das-task-list__task-tag govuk-tag--grey" id="status-training-provider">Cannot start yet</strong>
+            </li>
+            <li class="das-task-list__item">
+            <span class="das-task-list__task-name">
+            Set your training provider permissions
+            </span>
+            <strong class="govuk-tag das-task-list__task-tag govuk-tag--grey" id="status-provider-permissions">Cannot start yet</strong>
+            </li>
+            </ul>
+            </li>*@
+        </ol>
+        @*<div class="app-save-return">*@
+        <a 
+            asp-route="@Model.Data.SaveProgressRouteName"
+            asp-route-hashedAccountId="@Model.Data.HashedAccountId"
+            class="govuk-body govuk-button govuk-button--secondary app-save-return__link">Save and come back later</a>
+        @*</div>*@
+    </div>
+</div>

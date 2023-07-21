@@ -1,32 +1,28 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.Validation;
+﻿using System.Threading;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationsByAorn
+namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationsByAorn;
+
+public class GetOrganisationsByAornQueryHandler : IRequestHandler<GetOrganisationsByAornRequest, GetOrganisationsByAornResponse>
 {
-    public class GetOrganisationsByAornQueryHandler : IAsyncRequestHandler<GetOrganisationsByAornRequest, GetOrganisationsByAornResponse>
+    private readonly IValidator<GetOrganisationsByAornRequest> _validator;
+    private readonly IPensionRegulatorService _pensionRegulatorService;
+
+    public GetOrganisationsByAornQueryHandler(IValidator<GetOrganisationsByAornRequest> validator, IPensionRegulatorService pensionRegulatorService)
     {
-        private readonly IValidator<GetOrganisationsByAornRequest> _validator;
-        private readonly IPensionRegulatorService _pensionRegulatorService;
+        _validator = validator;
+        _pensionRegulatorService = pensionRegulatorService;
+    }
 
-        public GetOrganisationsByAornQueryHandler(IValidator<GetOrganisationsByAornRequest> validator, IPensionRegulatorService pensionRegulatorService)
+    public async Task<GetOrganisationsByAornResponse> Handle(GetOrganisationsByAornRequest message, CancellationToken cancellationToken)
+    {
+        var validationResult = _validator.Validate(message);
+
+        if (!validationResult.IsValid())
         {
-            _validator = validator;
-            _pensionRegulatorService = pensionRegulatorService;
+            throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        public async Task<GetOrganisationsByAornResponse> Handle(GetOrganisationsByAornRequest message)
-        {
-            var validationResult = _validator.Validate(message);
-
-            if (!validationResult.IsValid())
-            {
-                throw new InvalidRequestException(validationResult.ValidationDictionary);
-            }
-
-            var organisations = await _pensionRegulatorService.GetOrganisationsByAorn(message.Aorn, message.PayeRef);
-            return new GetOrganisationsByAornResponse { Organisations = organisations };
-        }
+        var organisations = await _pensionRegulatorService.GetOrganisationsByAorn(message.Aorn, message.PayeRef);
+        return new GetOrganisationsByAornResponse { Organisations = organisations };
     }
 }

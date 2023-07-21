@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.OrganisationData;
@@ -22,7 +23,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CookieBasedOrganisationDat
                 .Setup(
                     m =>
                         m.Get(It.IsAny<string>()))
-                .Returns((EmployerAccountData) null);
+                .Returns((EmployerAccountData)null);
 
             _sut = new EmployerAccounts.Commands.OrganisationData.CookieBasedOrganisationDataSaver(CookieRepository.Object);
         }
@@ -30,42 +31,40 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CookieBasedOrganisationDat
         [Test]
         public Task Then_CreateCookie_Is_Called()
         {
-            return
-                RunAsync(
-                    act: f => f.Handle(),
-                    assert: f =>
-                        f.CookieRepository
-                            .Verify(
-                                m => m.Create(
-                                    It.IsAny<EmployerAccountData>(),
-                                    It.IsAny<string>(),
-                                    It.IsAny<int>())));
+            Handle();
+
+            CookieRepository
+                .Verify(
+                    m => m.Create(
+                        It.IsAny<EmployerAccountData>(),
+                        It.IsAny<string>(),
+                        It.IsAny<int>()));
+
+            return Task.CompletedTask;
         }
 
         [Test]
-            public Task Then_UpdateCookie_Is_Not_Called()
-            {
-                return
-                    RunAsync(
-                        act: f => f.Handle(),
-                        assert: f =>
-                            f.CookieRepository
-                                .Verify(
-                                    m =>
-                                        m.Update(
-                                            It.IsAny<string>(),
-                                            It.IsAny<EmployerAccountData>()),
-                                    Times.Never));
-            }
+        public Task Then_UpdateCookie_Is_Not_Called()
+        {
+            Handle();
+
+            CookieRepository
+                .Verify(
+                    m =>
+                        m.Update(
+                            It.IsAny<string>(),
+                            It.IsAny<EmployerAccountData>()),
+                    Times.Never);
+
+            return Task.CompletedTask;
+        }
 
         public Mock<ICookieStorageService<EmployerAccountData>> CookieRepository { get; set; }
 
         private Task Handle()
         {
             return
-                _sut
-                    .Handle(
-                        new SaveOrganisationData(new EmployerAccountOrganisationData()));
+                _sut.Handle(new SaveOrganisationData(new EmployerAccountOrganisationData()), CancellationToken.None);
         }
     }
 }

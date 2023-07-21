@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.UpdateShowWizard;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Validation;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpdateShowAccountWizardTests
 {
@@ -13,7 +13,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpdateShowAccountWizardTes
     {
         private Mock<IMembershipRepository> _memberRepository;
         private UpdateShowAccountWizardCommandHandler _handler;
-        private Mock<ILog> _logger;
+        private Mock<ILogger<UpdateShowAccountWizardCommandHandler>> _logger;
         private Mock<IValidator<UpdateShowAccountWizardCommand>> _validator;
         private UpdateShowAccountWizardCommand _command;
 
@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpdateShowAccountWizardTes
         {
             _memberRepository = new Mock<IMembershipRepository>();
             _validator = new Mock<IValidator<UpdateShowAccountWizardCommand>>();
-            _logger = new Mock<ILog>();
+            _logger = new Mock<ILogger<UpdateShowAccountWizardCommandHandler>>();
 
             _handler = new UpdateShowAccountWizardCommandHandler(_memberRepository.Object, _validator.Object, _logger.Object);
             _command = new UpdateShowAccountWizardCommand
@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpdateShowAccountWizardTes
             _validator.Setup(x => x.Validate(It.IsAny<UpdateShowAccountWizardCommand>()))
                       .Returns(new ValidationResult());
             //Act
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, CancellationToken.None);
 
             //Assert
             _memberRepository.Verify(x => x.SetShowAccountWizard(_command.HashedAccountId, 
@@ -58,7 +58,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpdateShowAccountWizardTes
                       .Returns(validationResult);
 
             //Act
-            Assert.ThrowsAsync<InvalidRequestException>(async () => { await _handler.Handle(_command); });
+            Assert.ThrowsAsync<InvalidRequestException>(async () => { await _handler.Handle(_command, CancellationToken.None); });
 
             //Assert
             _memberRepository.Verify(x => x.SetShowAccountWizard(It.IsAny<string>(), 

@@ -1,21 +1,16 @@
-﻿using System;
-using System.Threading.Tasks;
-using SFA.DAS.Validation;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntity;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntity
+public class GetAccountLegalEntityValidator : IValidator<GetAccountLegalEntityRequest>
 {
-    public class GetAccountLegalEntityValidator : IValidator<GetAccountLegalEntityRequest>
+    public ValidationResult Validate(GetAccountLegalEntityRequest item)
     {
-        public ValidationResult Validate(GetAccountLegalEntityRequest item)
-        {
-            var validationResult = new ValidationResult();
+        var validationResult = new ValidationResult();
 
-            return validationResult;
-        }
+        return validationResult;
+    }
 
-        public Task<ValidationResult> ValidateAsync(GetAccountLegalEntityRequest item)
-        {
-            throw new NotImplementedException();
-        }
+    public Task<ValidationResult> ValidateAsync(GetAccountLegalEntityRequest item)
+    {
+        return Task.FromResult(Validate(item));
     }
 }

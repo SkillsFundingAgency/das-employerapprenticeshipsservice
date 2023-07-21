@@ -1,9 +1,6 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes
+public class GetAccountPayeSchemesQuery : IRequest<GetAccountPayeSchemesResponse>
 {
-    public class GetAccountPayeSchemesQuery : IAsyncRequest<GetAccountPayeSchemesResponse>
-    {
-        public string HashedAccountId { get; set; }
-    }
+    public long AccountId { get; set; }
 }

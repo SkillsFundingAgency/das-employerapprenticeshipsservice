@@ -1,58 +1,32 @@
-﻿using System.Web.Mvc;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.Authentication;
-using SFA.DAS.Authorization.Services;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Web.Controllers;
-using SFA.DAS.EmployerAccounts.Web.Helpers;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
+﻿using AutoFixture.NUnit3;
+using SFA.DAS.EmployerAccounts.Web.RouteValues;
+using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests;
+
+public class WhenIChooseIIfIKnowWhichTrainingProviderToDeliver
 {
-    public class WhenIChooseIIfIKnowWhichTrainingProviderToDeliver
+    [Test, MoqAutoData]
+    public void IfIChooseYesIContinueTheJourney(
+        string hashedAccountId,
+        [NoAutoProperties] EmployerTeamController controller)
     {
-        private EmployerTeamController _controller;
+        //Act
+        var result = controller.TriageHaveYouChosenATrainingProvider(hashedAccountId, new TriageViewModel { TriageOption = TriageOptions.Yes }) as RedirectToRouteResult;
 
-        private Mock<IAuthenticationService> mockAuthenticationService;
-        private Mock<IMultiVariantTestingService> mockMultiVariantTestingService;
-        private Mock<ICookieStorageService<FlashMessageViewModel>> mockCookieStorageService;
-        private Mock<EmployerTeamOrchestrator> mockEmployerTeamOrchestrator;
+        //Assert
+        Assert.AreEqual(RouteNames.TriageWhenWillApprenticeshipStart, result.RouteName);
+    }
 
-        [SetUp]
-        public void Arrange()
-        {
-            mockAuthenticationService = new Mock<IAuthenticationService>();
-            mockMultiVariantTestingService = new Mock<IMultiVariantTestingService>();
-            mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-            mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
+    [Test, MoqAutoData]
+    public void IfIChooseNoICannotSetupAnApprentice(
+        string hashedAccountId,
+        [NoAutoProperties] EmployerTeamController controller)
+    {
+        //Act
+        var result = controller.TriageHaveYouChosenATrainingProvider(hashedAccountId, new TriageViewModel { TriageOption = TriageOptions.No }) as RedirectToRouteResult;
 
-            _controller = new EmployerTeamController(
-                mockAuthenticationService.Object,
-                mockMultiVariantTestingService.Object,
-                mockCookieStorageService.Object,
-                mockEmployerTeamOrchestrator.Object);
-        }
-
-        [Test]
-        public void IfIChooseYesIContinueTheJourney()
-        {
-            //Act
-            var result = _controller.TriageHaveYouChosenATrainingProvider(new TriageViewModel { TriageOption = TriageOptions.Yes }) as RedirectToRouteResult;
-
-            //Assert
-            Assert.AreEqual(ControllerConstants.TriageWillApprenticeshipTrainingStartActionName, result.RouteValues["Action"]);
-        }
-
-        [Test]
-        public void IfIChooseNoICannotSetupAnApprentice()
-        {
-            //Act
-            var result = _controller.TriageHaveYouChosenATrainingProvider(new TriageViewModel { TriageOption = TriageOptions.No }) as RedirectToRouteResult;
-
-            //Assert
-            Assert.AreEqual(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetProviderActionName, result.RouteValues["Action"]);
-        }
+        //Assert
+        Assert.AreEqual(RouteNames.TriageCannotSetupWithoutChosenProvider, result.RouteName);
     }
 }

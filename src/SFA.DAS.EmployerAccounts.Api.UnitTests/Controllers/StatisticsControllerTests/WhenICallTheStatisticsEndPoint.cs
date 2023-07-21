@@ -1,6 +1,7 @@
-﻿using System.Threading.Tasks;
-using System.Web.Http.Results;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Controllers;
@@ -32,7 +33,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.StatisticsControlle
 
             _response = new GetStatisticsResponse { Statistics = _statistics };
 
-            _mediator.Setup(m => m.SendAsync(It.IsAny<GetStatisticsQuery>())).ReturnsAsync(_response);
+            _mediator.Setup(m => m.Send(It.IsAny<GetStatisticsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(_response);
 
             _controller = new StatisticsController(_mediator.Object);
         }
@@ -40,10 +41,11 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.StatisticsControlle
         [Test]
         public async Task ThenShouldReturnStatistics()
         {
-            var result = await _controller.GetStatistics() as OkNegotiatedContentResult<Statistics>; 
+            var result = await _controller.GetStatistics() as OkObjectResult; 
 
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Content, Is.SameAs(_statistics));
+            var model = result.Value as Statistics;
+            Assert.That(model, Is.SameAs(_statistics));
         }
     }
 }

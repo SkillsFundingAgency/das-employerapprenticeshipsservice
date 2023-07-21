@@ -46,13 +46,13 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
     public class CreateReadStoreDatabaseJobTestsFixture
     {
         public Mock<IDocumentClient> DocumentClient { get; set; }
-        public Mock<ILogger> Logger { get; set; }
+        public Mock<ILogger<CreateReadStoreDatabaseJob>> Logger { get; set; }
         public CreateReadStoreDatabaseJob CreateReadStoreDatabaseJob { get; set; }
 
         public CreateReadStoreDatabaseJobTestsFixture()
         {
             DocumentClient = new Mock<IDocumentClient>();
-            Logger = new Mock<ILogger>();
+            Logger = new Mock<ILogger<CreateReadStoreDatabaseJob>>();
             CreateReadStoreDatabaseJob = new CreateReadStoreDatabaseJob(DocumentClient.Object, Logger.Object);
 
             var resourceResponseDatabase = CreateResourceResponseWithStatusCode<Database>(HttpStatusCode.Created);
@@ -76,7 +76,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
         /// Microsoft are working on making ResourceResponse mockable, but until then we can use this monstrosity...
         /// See https://github.com/Azure/azure-cosmos-dotnet-v2/issues/393
         /// </remarks>
-        public ResourceResponse<TResource> CreateResourceResponseWithStatusCode<TResource>(HttpStatusCode statusCode)
+        public static ResourceResponse<TResource> CreateResourceResponseWithStatusCode<TResource>(HttpStatusCode statusCode)
             where TResource : Resource, new()
         {
             const BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Instance;

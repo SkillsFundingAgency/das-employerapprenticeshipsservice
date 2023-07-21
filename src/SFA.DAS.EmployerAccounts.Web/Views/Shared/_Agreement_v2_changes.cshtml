@@ -1,4 +1,5 @@
-﻿@model SignEmployerAgreementViewModel
+﻿@using Microsoft.AspNetCore.Routing
+@model SignEmployerAgreementViewModel
 
 @{
     var previousAgreement = Model.PreviouslySignedEmployerAgreement;
@@ -11,17 +12,17 @@
         {"agreementId", Model.PreviouslySignedEmployerAgreement.HashedAgreementId}
     };
 
-    <div class="grid-row">
-        <div class="column-full">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
             <div class="panel panel-border-wide panel-filled-purple panel-top-margin">
                 <span class="font-small bold">What's in your updated agreement?</span>
                 <p>Your agreement was updated on 30 April 2018 to include information on:</p>
-                <ul class="list list-bullet list-standard-margin">
+                <ul class="govuk-list  govuk-list--bullet list-standard-margin">
                     <li>sending and receiving transfers to fund apprenticeship training (clause 7)</li>
                     <li>using this service as a non-levy paying employer</li>
                 </ul>
                 <p class="margin-bottom-small">A previous version of this agreement was signed by @previousAgreement.SignedByName on behalf of @previousAgreement.LegalEntityName on @previousAgreement.SignedDate.Value.ToGdsFormatFull()</p>
-                <p><a href="@Url.Action("GetSignedPdfAgreement", "EmployerAgreement", pdfLinkParameters)" target="_blank" class="download">View previous version</a> (PDF)</p>
+                <p><a href="@Url.Action("GetSignedPdfAgreement", "EmployerAgreement", pdfLinkParameters)" rel="noopener" target="_blank" class="download">View previous version</a> (PDF)</p>
             </div>
         </div>
     </div>

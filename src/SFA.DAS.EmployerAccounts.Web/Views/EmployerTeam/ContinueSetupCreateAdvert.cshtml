@@ -8,39 +8,38 @@
     ViewBag.GaData.Vpv = "/accounts/agreements/page-continue-setup-create-advert";
 }
 
-<div class="breadcrumbs">
-    <a href="/" class="back-link">Back</a>
-</div>
+@section breadcrumb {
+    <a href="/" class="govuk-back-link">Back</a>
+}
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-large" id="heading-continue-setup-create-advert">
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l" id="heading-continue-setup-create-advert">
             Do you need to create an advert for this apprenticeship?
         </h1>
 
-        <form method="POST" action="@Url.Action("ContinueSetupCreateAdvert")">
-            @Html.AntiForgeryToken()
-            <div class="form-group  @(!ViewData.ModelState.IsValid ? "error" : "")">
-                <fieldset>
-                    <legend>
-                        <span class="visuallyhidden"></span>
+        <form method="POST" asp-route="@RouteNames.CreateAdvertPost" asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]">
+            <div class="govuk-form-group  @(!ViewData.ModelState.IsValid ? "govuk-form-group--error" : "")">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend">
+                        <span class="govuk-visually-hidden"></span>
                         @if (!ViewData.ModelState.IsValid)
                         {
-                            <span class="error-message" id="select-option">@ViewData.ModelState["Choice"].Errors[0].ErrorMessage</span>
+                            <span class="govuk-error-message" id="select-option">@ViewData.ModelState["Choice"].Errors[0].ErrorMessage</span>
                         }
                     </legend>
-                    <label for="choice1" class="block-label" id="choice1-yes">
+                    <label for="choice1" class="govuk-label govuk-radios__label" id="choice1-yes">
                         <input id="choice1" type="radio" name="requiresAdvert" value="@bool.TrueString" />
                         Yes
                     </label>
-                    <label for="choice2" class="block-label" id="choice2-no">
+                    <label for="choice2" class="govuk-label govuk-radios__label" id="choice2-no">
                         <input id="choice2" type="radio" name="requiresAdvert" value="@bool.FalseString" />
                         No
                     </label>
                 </fieldset>
             </div>
-            <div class="form-group">
-                <button type="submit" class="button" id="accept">Continue</button>
+            <div class="govuk-form-group">
+                <button type="submit" class="govuk-button" id="accept">Continue</button>
             </div>
         </form>
     </div>

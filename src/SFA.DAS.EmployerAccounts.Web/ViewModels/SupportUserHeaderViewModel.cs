@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels
+﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels;
+
+public class SupportUserHeaderViewModel
 {
-    public class SupportUserHeaderViewModel
-    {
-        public EmployerAccounts.Models.Account.Account Account { get; set; }
-    }
+    public Account Account { get; set; }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using MediatR;
@@ -8,15 +9,14 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
-using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Events.PayeScheme;
 using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Queries.RemovePayeFromAccount;
-using SFA.DAS.HashingService;
+using SFA.DAS.Encoding;
 using SFA.DAS.NServiceBus.Testing.Services;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemovePayeFromAccountTests
 {
@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemovePayeFromAccountTests
         private RemovePayeFromAccountCommandHandler _handler;
         private Mock<IValidator<RemovePayeFromAccountCommand>> _validator;
         private Mock<IPayeRepository> _accountRepository;
-        private Mock<IHashingService> _hashingService;
+        private Mock<IEncodingService> _encodingServiceMock;
         private Mock<IMediator> _mediator;
         private Mock<IGenericEventFactory> _genericEventFactory;
         private Mock<IPayeSchemeEventFactory> _payeSchemeEventFactory;
@@ -49,8 +49,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemovePayeFromAccountTests
             _validator = new Mock<IValidator<RemovePayeFromAccountCommand>>();
             _validator.Setup(x => x.ValidateAsync(It.IsAny<RemovePayeFromAccountCommand>())).ReturnsAsync(new ValidationResult());
 
-            _hashingService = new Mock<IHashingService>();
-            _hashingService.Setup(x => x.DecodeValue(HashedAccountId)).Returns(AccountId);
+            _encodingServiceMock = new Mock<IEncodingService>();
+            _encodingServiceMock.Setup(x => x.Decode(HashedAccountId, EncodingType.AccountId)).Returns(AccountId);
 
             _mediator = new Mock<IMediator>();
             _genericEventFactory = new Mock<IGenericEventFactory>();
@@ -66,7 +66,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemovePayeFromAccountTests
                 _mediator.Object,
                 _validator.Object,
                 _accountRepository.Object,
-                _hashingService.Object,
+                _encodingServiceMock.Object,
                 _genericEventFactory.Object,
                 _payeSchemeEventFactory.Object,
                 _eventPublisher,
@@ -77,7 +77,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemovePayeFromAccountTests
         public async Task ThenTheValidatorIsCalled()
         {
             //Act
-            await _handler.Handle(new RemovePayeFromAccountCommand(null, null, null, false, null));
+            await _handler.Handle(new RemovePayeFromAccountCommand(null, null, null, false, null), CancellationToken.None);
 
             //Assert
             _validator.Verify(x => x.ValidateAsync(It.IsAny<RemovePayeFromAccountCommand>()), Times.Once);
@@ -90,7 +90,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemovePayeFromAccountTests
             _validator.Setup(x => x.ValidateAsync(It.IsAny<RemovePayeFromAccountCommand>())).ReturnsAsync(new ValidationResult { ValidationDictionary = new Dictionary<string, string> { { "", "" } } });
 
             //Act
-            Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(new RemovePayeFromAccountCommand(null, null, null, false, null)));
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(new RemovePayeFromAccountCommand(null, null, null, false, null), CancellationToken.None));
 
             //Assert
             _accountRepository.Verify(x => x.RemovePayeFromAccount(It.IsAny<long>(), It.IsAny<string>()), Times.Never);
@@ -103,7 +103,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemovePayeFromAccountTests
             _validator.Setup(x => x.ValidateAsync(It.IsAny<RemovePayeFromAccountCommand>())).ReturnsAsync(new ValidationResult { IsUnauthorized = true });
 
             //Act
-            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _handler.Handle(new RemovePayeFromAccountCommand(null, null, null, false, null)));
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _handler.Handle(new RemovePayeFromAccountCommand(null, null, null, false, null), CancellationToken.None));
 
             //Assert
             _accountRepository.Verify(x => x.RemovePayeFromAccount(It.IsAny<long>(), It.IsAny<string>()), Times.Never);
@@ -113,7 +113,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemovePayeFromAccountTests
         public async Task ThenTheRepositoryIsCalledWhenTheCommandIsValid()
         {
             //Act
-            await _handler.Handle(new RemovePayeFromAccountCommand(HashedAccountId, PayeScheme, UserRef.ToString(), false, OrganisationName));
+            await _handler.Handle(new RemovePayeFromAccountCommand(HashedAccountId, PayeScheme, UserRef.ToString(), false, OrganisationName), CancellationToken.None);
 
             //Assert
             _accountRepository.Verify(x => x.RemovePayeFromAccount(AccountId, PayeScheme), Times.Once);
@@ -126,12 +126,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemovePayeFromAccountTests
             var command = new RemovePayeFromAccountCommand(HashedAccountId, PayeScheme, UserRef.ToString(), true, OrganisationName);
 
             //Act
-            await _handler.Handle(command);
+            await _handler.Handle(command, CancellationToken.None);
 
             //Assert
             _payeSchemeEventFactory.Verify(x => x.CreatePayeSchemeRemovedEvent(command.HashedAccountId, command.PayeRef));
             _genericEventFactory.Verify(x => x.Create(It.IsAny<PayeSchemeRemovedEvent>()), Times.Once);
-            _mediator.Verify(x => x.SendAsync(It.IsAny<PublishGenericEventCommand>()));
+            _mediator.Verify(x => x.Send(It.IsAny<PublishGenericEventCommand>(), It.IsAny<CancellationToken>()));
         }
 
         [Test]
@@ -143,23 +143,23 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemovePayeFromAccountTests
 
 
             //Act
-            await _handler.Handle(command);
+            await _handler.Handle(command, CancellationToken.None);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("AccountId") && y.NewValue.Equals(AccountId.ToString())) != null &&
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("UserId") && y.NewValue.Equals(UserRef.ToString())) != null &&
-                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("PayeRef") && y.NewValue.Equals(PayeScheme)) != null)));
+                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("PayeRef") && y.NewValue.Equals(PayeScheme)) != null), It.IsAny<CancellationToken>()));
 
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
-                      c.EasAuditMessage.Description.Equals($"User {UserRef.ToString()} has removed PAYE schema {PayeScheme} from account {AccountId}"))));
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
+                      c.EasAuditMessage.Description.Equals($"User {UserRef.ToString()} has removed PAYE schema {PayeScheme} from account {AccountId}")), It.IsAny<CancellationToken>()));
 
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
-                      c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(AccountId.ToString()) && y.Type.Equals("Account")) != null)));
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
+                      c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(AccountId.ToString()) && y.Type.Equals("Account")) != null), It.IsAny<CancellationToken>()));
 
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+            _mediator.Verify(x => x.Send(It.Is<CreateAuditCommand>(c =>
                     c.EasAuditMessage.AffectedEntity.Id.Equals(PayeScheme) &&
-                    c.EasAuditMessage.AffectedEntity.Type.Equals("Paye"))));
+                    c.EasAuditMessage.AffectedEntity.Type.Equals("Paye")), It.IsAny<CancellationToken>()));
         }
 
         [Test]
@@ -169,7 +169,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemovePayeFromAccountTests
             var command = new RemovePayeFromAccountCommand(HashedAccountId, PayeScheme, UserRef.ToString(), true, OrganisationName);
 
             //Act
-            await _handler.Handle(command);
+            await _handler.Handle(command, CancellationToken.None);
 
             //Assert
             _eventPublisher.Events.Should().HaveCount(1);

@@ -1,8 +1,5 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetStatistics;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetStatistics
+public class GetStatisticsQuery : IRequest<GetStatisticsResponse>
 {
-    public class GetStatisticsQuery : IAsyncRequest<GetStatisticsResponse>
-    {
-    }
 }

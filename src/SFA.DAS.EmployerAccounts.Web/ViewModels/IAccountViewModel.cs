@@ -1,8 +1,7 @@
-﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels
+﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels;
+
+public interface IAccountViewModel
 {
-    public interface IAccountViewModel
-    {
-        long AccountId { get; set; }
-        string AccountHashedId { get; set; }
-    }
+    long AccountId { get; set; }
+    string AccountHashedId { get; set; }
 }

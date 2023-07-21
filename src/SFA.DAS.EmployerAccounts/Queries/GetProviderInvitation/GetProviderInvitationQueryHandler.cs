@@ -1,32 +1,32 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Models;
+﻿using System.Threading;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.NLog.Logger;
+using SFA.DAS.EmployerAccounts.Models;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetProviderInvitation
+namespace SFA.DAS.EmployerAccounts.Queries.GetProviderInvitation;
+
+public class GetProviderInvitationQueryHandler : IRequestHandler<GetProviderInvitationQuery, GetProviderInvitationResponse>
 {
-    public class GetProviderInvitationQueryHandler : IAsyncRequestHandler<GetProviderInvitationQuery, GetProviderInvitationResponse>
+    private readonly IProviderRegistrationApiClient _providerRegistrationApiClient;
+    private readonly ILogger<GetProviderInvitationQueryHandler> _logger;
+
+    public GetProviderInvitationQueryHandler(IProviderRegistrationApiClient providerRegistrationApiClient, ILogger<GetProviderInvitationQueryHandler> logger)
     {
-        private readonly IProviderRegistrationApiClient _providerRegistrationApiClient;
-        private readonly ILog _logger;
+        _providerRegistrationApiClient = providerRegistrationApiClient;
+        _logger = logger;
+    }
 
-        public GetProviderInvitationQueryHandler(IProviderRegistrationApiClient providerRegistrationApiClient, ILog logger)
-        {
-            _providerRegistrationApiClient = providerRegistrationApiClient;
-            _logger = logger;
-        }
+    public async Task<GetProviderInvitationResponse> Handle(GetProviderInvitationQuery message, CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("Get Invitations for {message.CorrelationId}", message.CorrelationId);
 
-        public async Task<GetProviderInvitationResponse> Handle(GetProviderInvitationQuery message)
+        var json = await _providerRegistrationApiClient.GetInvitations(message.CorrelationId.ToString());
+
+        _logger.LogInformation("Request sent Get Invitations for {CorrelationId} {Json}", message.CorrelationId, json);
+
+        return new GetProviderInvitationResponse
         {
-            _logger.Info($"Get Invitations for {message.CorrelationId}");
-            var json = await _providerRegistrationApiClient.GetInvitations(message.CorrelationId.ToString());
-            _logger.Info($"Request sent Get Invitations for {message.CorrelationId} {json}");
-            return new GetProviderInvitationResponse
-            {
-                Result = json == null ? null : JsonConvert.DeserializeObject<ProviderInvitation>(json)
-            };
-        }
+            Result = json == null ? null : JsonConvert.DeserializeObject<ProviderInvitation>(json)
+        };
     }
 }

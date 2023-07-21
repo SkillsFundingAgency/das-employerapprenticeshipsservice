@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using MediatR;
 using Moq;
 using NServiceBus;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.EmployerAccounts;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
-using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 using SFA.DAS.Testing;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.EmployerAccounts
@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Emplo
         public Task Handle_WhenHandlingEvent_ThenShouldSendRemoveAccountUserCommand()
         {
             return TestAsync(f => f.Handler.Handle(f.Message, f.MessageHandlerContext.Object),
-                f => f.ReadStoreMediator.Verify(x => x.Send(It.Is<RemoveAccountUserCommand>(p =>
+                f => f.Mediator.Verify(x => x.Send(It.Is<RemoveAccountUserCommand>(p =>
                         p.AccountId == f.AccountId &&
                         p.UserRef == f.UserRef &&
                         p.AccountId == f.AccountId &&
@@ -41,18 +41,18 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Emplo
         public DateTime Created = DateTime.Now.AddMinutes(-1);
 
         public Mock<IMessageHandlerContext> MessageHandlerContext;
-        public Mock<IReadStoreMediator> ReadStoreMediator;
+        public Mock<IMediator> Mediator;
         public AccountUserRemovedEventHandler Handler;
 
         public UserRolesRemovedEventHandlerTestsFixture()
         {
-            ReadStoreMediator = new Mock<IReadStoreMediator>();
+            Mediator = new Mock<IMediator>();
             MessageHandlerContext = new Mock<IMessageHandlerContext>();
             MessageHandlerContext.Setup(x => x.MessageId).Returns(MessageId);
 
             Message = new AccountUserRemovedEvent(AccountId, UserRef, Created);
 
-            Handler = new AccountUserRemovedEventHandler(ReadStoreMediator.Object);
+            Handler = new AccountUserRemovedEventHandler(Mediator.Object);
         }
     }
 }

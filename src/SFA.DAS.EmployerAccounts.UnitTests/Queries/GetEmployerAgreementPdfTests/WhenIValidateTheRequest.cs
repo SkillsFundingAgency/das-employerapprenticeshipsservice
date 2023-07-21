@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementPdfTest
         {
             _membershipRepository = new Mock<IMembershipRepository>();
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new MembershipView {Role = Role.Owner});
+                .ReturnsAsync(new MembershipView { Role = Role.Owner });
 
             _validator = new GetEmployerAgreementPdfValidator(_membershipRepository.Object);
         }
@@ -32,16 +32,16 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementPdfTest
 
             //Assert
             Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string,string>("HashedAccountId", "HashedAccountId has not been supplied"), actual.ValidationDictionary);
-            Assert.Contains(new KeyValuePair<string,string>("HashedLegalAgreementId", "HashedLegalAgreementId has not been supplied"), actual.ValidationDictionary);
-            Assert.Contains(new KeyValuePair<string,string>("UserId", "UserId has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("AccountId", "AccountId has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("LegalAgreementId", "LegalAgreementId has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("UserId", "UserId has not been supplied"), actual.ValidationDictionary);
         }
 
         [Test]
         public async Task ThenTrueIsReturnedWhenAllFieldsArePopulated()
         {
             //Act
-            var actual = await _validator.ValidateAsync(new GetEmployerAgreementPdfRequest {HashedAccountId = "1234RFV",HashedLegalAgreementId = "1231FG",UserId = "User"});
+            var actual = await _validator.ValidateAsync(new GetEmployerAgreementPdfRequest { AccountId = 1234, LegalAgreementId = 1231, UserId = "User" });
 
             //Assert
             Assert.IsTrue(actual.IsValid());
@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementPdfTest
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(() => null);
 
             //Act
-            var actual = await _validator.ValidateAsync(new GetEmployerAgreementPdfRequest { HashedAccountId = "1234RFV", HashedLegalAgreementId = "1231FG", UserId = "User" });
+            var actual = await _validator.ValidateAsync(new GetEmployerAgreementPdfRequest { AccountId = 1234, LegalAgreementId = 1231, UserId = "User" });
 
             //Act
             Assert.IsTrue(actual.IsUnauthorized);
@@ -69,7 +69,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementPdfTest
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView { Role = role });
 
             //Act
-            var actual = await _validator.ValidateAsync(new GetEmployerAgreementPdfRequest { HashedAccountId = "1234RFV", HashedLegalAgreementId = "1231FG", UserId = "User" });
+            var actual = await _validator.ValidateAsync(new GetEmployerAgreementPdfRequest { AccountId = 1234, LegalAgreementId = 1231, UserId = "User" });
 
             //Act
             Assert.IsTrue(actual.IsUnauthorized);

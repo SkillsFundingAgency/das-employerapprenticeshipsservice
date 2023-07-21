@@ -1,10 +1,7 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetTeamUser
+public class GetTeamMemberQuery : IRequest<GetTeamMemberResponse>
 {
-    public class GetTeamMemberQuery : IAsyncRequest<GetTeamMemberResponse>
-    {
-        public string HashedAccountId { get; set; }
-        public string TeamMemberId { get; set; }
-    }
+    public long AccountId { get; set; }
+    public string TeamMemberId { get; set; }
 }

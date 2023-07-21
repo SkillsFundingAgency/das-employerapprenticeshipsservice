@@ -1,33 +1,25 @@
-﻿using System;
-using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.HashingService;
+﻿using System.Threading;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetInvitation
+namespace SFA.DAS.EmployerAccounts.Queries.GetInvitation;
+
+//TODO tests and validator
+public class GetInvitationQueryHandler : IRequestHandler<GetInvitationRequest, GetInvitationResponse>
 {
-    //TODO tests and validator
-    public class GetInvitationQueryHandler : IAsyncRequestHandler<GetInvitationRequest, GetInvitationResponse>
+    private readonly IInvitationRepository _invitationRepository;
+
+    public GetInvitationQueryHandler(IInvitationRepository invitationRepository)
     {
-        private readonly IInvitationRepository _invitationRepository;
-        private readonly IHashingService _hashingService;
+        _invitationRepository = invitationRepository ?? throw new ArgumentNullException(nameof(invitationRepository));
+    }
 
-        public GetInvitationQueryHandler(IInvitationRepository invitationRepository, IHashingService hashingService)
+    public async Task<GetInvitationResponse> Handle(GetInvitationRequest message, CancellationToken cancellationToken)
+    {
+        var invitation = await _invitationRepository.GetView(message.Id);
+
+        return new GetInvitationResponse
         {
-            if (invitationRepository == null)
-                throw new ArgumentNullException(nameof(invitationRepository));
-            _invitationRepository = invitationRepository;
-            _hashingService = hashingService;
-        }
-
-        public async Task<GetInvitationResponse> Handle(GetInvitationRequest message)
-        {
-            var invitation = await _invitationRepository.GetView(_hashingService.DecodeValue(message.Id));
-
-            return new GetInvitationResponse
-            {
-                Invitation = invitation
-            };
-        }
+            Invitation = invitation
+        };
     }
 }

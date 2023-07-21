@@ -1,67 +1,62 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.Http;
-using SFA.DAS.EmployerAccounts.Api.Attributes;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using SFA.DAS.EmployerAccounts.Api.Authorization;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
 using SFA.DAS.EmployerAccounts.Api.Types;
 
-namespace SFA.DAS.EmployerAccounts.Api.Controllers
+namespace SFA.DAS.EmployerAccounts.Api.Controllers;
+
+[Route("api/accounts/{hashedAccountId}/payeschemes")]
+public class AccountPayeSchemesController : ControllerBase
 {
-    [RoutePrefix("api/accounts/{hashedAccountId}/payeschemes")]
-    public class AccountPayeSchemesController : ApiController
+    private readonly AccountsOrchestrator _orchestrator;
+    private readonly ILogger<AccountPayeSchemesController> _logger;
+
+    public AccountPayeSchemesController(AccountsOrchestrator orchestrator, ILogger<AccountPayeSchemesController> logger)
     {
-        private readonly AccountsOrchestrator _orchestrator;
+        _orchestrator = orchestrator;
+        _logger = logger;
+    }
 
-        public AccountPayeSchemesController(AccountsOrchestrator orchestrator)
+    [Route("", Name = "GetPayeSchemes")]
+    [Authorize(Policy = ApiRoles.ReadAllEmployerAccountBalances)]
+    [HttpGet]
+    public async Task<IActionResult> GetPayeSchemes([FromRoute] string hashedAccountId)
+    {
+        var result = await _orchestrator.GetPayeSchemesForAccount(hashedAccountId);
+
+        if (result == null)
         {
-            _orchestrator = orchestrator;
+            return NotFound();
         }
 
-        [Route("{payeschemeref}", Name = "GetPayeScheme")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
+        return Ok(new ResourceList(result.Select(pv => new Resource
         {
-            var result = await _orchestrator.GetPayeScheme(hashedAccountId, HttpUtility.UrlDecode(payeSchemeRef));
+            Id = pv.Ref,
+            Href = Url.RouteUrl("GetPayeScheme", new { hashedAccountId, payeSchemeRef = Uri.EscapeDataString(pv.Ref) })
+        })));
+    }
 
-            if (result == null)
-            {
-                return NotFound();
-            }
+    [Route("scheme", Name = "GetPayeScheme")]
+    [Authorize(Policy = ApiRoles.ReadAllEmployerAccountBalances)]
+    [HttpGet]
+    public async Task<IActionResult> GetPayeScheme([FromRoute] string hashedAccountId, [FromQuery] string payeSchemeRef)
+    {
+        var decodedPayeSchemeRef = Uri.UnescapeDataString(payeSchemeRef);
 
-            return Ok(result);
+        var result = await _orchestrator.GetPayeScheme(hashedAccountId, decodedPayeSchemeRef);
+
+        if (result == null)
+        {
+            _logger.LogDebug("The PAYE scheme {PayeScheme} was not found.", decodedPayeSchemeRef);
+            return NotFound();
         }
 
-        [Route("", Name = "GetPayeSchemes")]
-        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetPayeSchemes(string hashedAccountId)
-        {
-            var result = await _orchestrator.GetPayeSchemesForAccount(hashedAccountId);
-
-
-            if (result == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(
-                new ResourceList(
-                    result
-                        .Select(
-                            pv => new Resource
-                            {
-                                Id = pv.Ref,
-                                Href = Url.Route(
-                                    "GetPayeScheme",
-                                    new
-                                    {
-                                        hashedAccountId,
-                                        payeSchemeRef = HttpUtility.UrlEncode(pv.Ref)
-                                    })
-                            }))
-            );
-        }
+        return Ok(result);
     }
 }

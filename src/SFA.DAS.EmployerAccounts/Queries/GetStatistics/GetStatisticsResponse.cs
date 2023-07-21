@@ -1,9 +1,8 @@
 ﻿using SFA.DAS.EmployerAccounts.Api.Types;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetStatistics
+namespace SFA.DAS.EmployerAccounts.Queries.GetStatistics;
+
+public class GetStatisticsResponse
 {
-    public class GetStatisticsResponse
-    {
-        public Statistics Statistics { get; set; }
-    }
+    public Statistics Statistics { get; set; }
 }

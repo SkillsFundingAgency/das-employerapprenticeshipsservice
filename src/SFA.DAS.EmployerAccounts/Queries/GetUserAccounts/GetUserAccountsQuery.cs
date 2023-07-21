@@ -1,9 +1,6 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetUserAccounts
+public class GetUserAccountsQuery : IRequest<GetUserAccountsQueryResponse>
 {
-    public class GetUserAccountsQuery : IAsyncRequest<GetUserAccountsQueryResponse>
-    {
-        public string UserRef { get; set; }
-    }
+    public string UserRef { get; set; }
 }

@@ -1,8 +1,8 @@
-﻿using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Http.Results;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using FluentAssertions;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Controllers;
@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountLegalEntitie
         [Test]
         public Task Get_WhenGettingAccountLegalEntities_ThenShouldReturnAccountLegalEntities()
         {
-            return RunAsync(f => f.Get(), (f, r) => r.Should().NotBeNull().And.Match<OkNegotiatedContentResult<PagedApiResponse<AccountLegalEntity>>>(o => o.Content == f.AccountLegalEntities));
+            return RunAsync(f => f.Get(), (f, r) => r.Should().NotBeNull().And.Match<OkObjectResult>(o => o.Value == f.AccountLegalEntities));
         }
     }
 
@@ -37,12 +37,12 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountLegalEntitie
             AccountLegalEntities = new PagedApiResponse<AccountLegalEntity>();
             Response = new GetAccountLegalEntitiesResponse { AccountLegalEntities = AccountLegalEntities };
 
-            Mediator.Setup(m => m.SendAsync(Query)).ReturnsAsync(Response);
+            Mediator.Setup(m => m.Send(Query, CancellationToken.None)).ReturnsAsync(Response);
 
             Controller = new AccountLegalEntitiesController(Mediator.Object);
         }
 
-        public Task<IHttpActionResult> Get()
+        public Task<IActionResult> Get()
         {
             return Controller.Get(Query);
         }

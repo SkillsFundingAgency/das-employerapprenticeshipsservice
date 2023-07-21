@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -32,7 +33,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUserAornLockTests
         public async Task ThenTheLockStatusIsReturned()
         {
             //Act
-            var result = await RequestHandler.Handle(Query);
+            var result = await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             Assert.IsNotNull(result);

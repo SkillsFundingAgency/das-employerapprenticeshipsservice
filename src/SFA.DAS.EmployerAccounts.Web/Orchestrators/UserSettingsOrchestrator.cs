@@ -1,150 +1,133 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Commands.UnsubscribeNotification;
+﻿using SFA.DAS.EmployerAccounts.Commands.UnsubscribeNotification;
 using SFA.DAS.EmployerAccounts.Commands.UpdateUserNotificationSettings;
-using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerAccounts.Queries.GetUserNotificationSettings;
-using SFA.DAS.EmployerAccounts.Web.Exceptions;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.HashingService;
-using SFA.DAS.NLog.Logger;
+using SFA.DAS.Encoding;
 
-namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
+namespace SFA.DAS.EmployerAccounts.Web.Orchestrators;
+
+public class UserSettingsOrchestrator
 {
-    public class UserSettingsOrchestrator
+    private readonly IMediator _mediator;
+    private readonly ILogger<UserSettingsOrchestrator> _logger;
+    private readonly IEncodingService _encodingService;
+    private readonly EmployerAccountsConfiguration _configuration;
+
+    //Needed for tests
+    protected UserSettingsOrchestrator() { }
+
+    public UserSettingsOrchestrator(IMediator mediator, ILogger<UserSettingsOrchestrator> logger, IEncodingService encodingService, EmployerAccountsConfiguration configuration)
     {
-        private readonly IMediator _mediator;
-        private readonly IHashingService _hashingService;
-        private readonly ILog _logger;
+        _mediator = mediator;
+        _logger = logger;
+        _encodingService = encodingService;
+        _configuration = configuration;
+    }
 
-        //Needed for tests
-        protected UserSettingsOrchestrator()
+    public virtual async Task<OrchestratorResponse<NotificationSettingsViewModel>> GetNotificationSettingsViewModel(string userRef)
+    {
+        _logger.LogInformation("Getting user notification settings for user {UserRef}", userRef);
+
+        var response = await _mediator.Send(new GetUserNotificationSettingsQuery
         {
-        }
+            UserRef = userRef
+        });
 
-        public UserSettingsOrchestrator(IMediator mediator, IHashingService hashingService, ILog logger)
+        return new OrchestratorResponse<NotificationSettingsViewModel>
         {
-            _mediator = mediator;
-            _hashingService = hashingService;
-            _logger = logger;
-        }
-
-        public virtual async Task<OrchestratorResponse<NotificationSettingsViewModel>> GetNotificationSettingsViewModel(
-            string userRef)
-        {
-            _logger.Info($"Getting user notification settings for user {userRef}");
-
-            var response = await _mediator.SendAsync(new GetUserNotificationSettingsQuery
+            Data = new NotificationSettingsViewModel
             {
-                UserRef = userRef
-            });
+                HashedId = userRef,
+                NotificationSettings = response.NotificationSettings,
+                UseGovSignIn = _configuration.UseGovSignIn
+            },
+        };
+    }
 
-            return new OrchestratorResponse<NotificationSettingsViewModel>
+    public virtual async Task UpdateNotificationSettings(string userRef, List<UserNotificationSetting> settings)
+    {
+        _logger.LogInformation("Updating user notification settings for user {UserRef}", userRef);
+
+        settings.ForEach(s =>
+        {
+            var accountId = _encodingService.Decode(s.HashedAccountId, EncodingType.AccountId);
+            s.AccountId = accountId;
+        });
+
+        await _mediator.Send(new UpdateUserNotificationSettingsCommand
+        {
+            UserRef = userRef,
+            Settings = settings
+        });
+    }
+
+    public async Task<OrchestratorResponse<SummaryUnsubscribeViewModel>> Unsubscribe(
+        string userRef,
+        string hashedAccountId)
+    {
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+
+        return await CheckUserAuthorization(
+            async () =>
             {
-                Data = new NotificationSettingsViewModel
+                var settings = await _mediator.Send(new GetUserNotificationSettingsQuery
                 {
-                    HashedId = userRef,
-                    NotificationSettings = response.NotificationSettings
-                },
-            };
-        }
-
-        public virtual async Task UpdateNotificationSettings(
-            string userRef, List<UserNotificationSetting> settings)
-        {
-            _logger.Info($"Updating user notification settings for user {userRef}");
-
-            DecodeAccountIds(settings);
-
-            await _mediator.SendAsync(new UpdateUserNotificationSettingsCommand
-            {
-                UserRef = userRef,
-                Settings = settings
-            });
-        }
-
-        public async Task<OrchestratorResponse<SummaryUnsubscribeViewModel>> Unsubscribe(
-            string userRef, 
-            string hashedAccountId, 
-            string settingUrl)
-        {
-            return await CheckUserAuthorization(
-                async () =>
-                    {
-                        var accountId = _hashingService.DecodeValue(hashedAccountId);
-                        var settings = await _mediator.SendAsync(new GetUserNotificationSettingsQuery
-                        {
-                            UserRef = userRef
-                        });
-                        
-                        var userNotificationSettings = settings.NotificationSettings.SingleOrDefault(m => m.AccountId == accountId);
-
-                        if (userNotificationSettings == null)
-                            throw new InvalidStateException($"Cannot find user settings for user {userRef} in account {accountId}");
-
-                        if (userNotificationSettings.ReceiveNotifications)
-                        {
-                            await _mediator.SendAsync(
-                                new UnsubscribeNotificationCommand
-                                {
-                                    UserRef = userRef,
-                                    AccountId = accountId
-                                });
-
-                            _logger.Info("Unsubscribed from alerts for user {userRef} in account {accountId}");
-                        }
-                        else {
-
-                            _logger.Info("Already unsubscribed from alerts for user {userRef} in account {accountId}");
-                        }
-
-                        return new OrchestratorResponse<SummaryUnsubscribeViewModel>
-                        {
-                            Data = new SummaryUnsubscribeViewModel
-                            {
-                                AlreadyUnsubscribed = !userNotificationSettings.ReceiveNotifications,
-                                AccountName = userNotificationSettings.Name
-                            }
-                        };
-                    }, hashedAccountId, userRef);
-        }
-
-        private void DecodeAccountIds(List<UserNotificationSetting> source)
-        {
-            foreach (var setting in source)
-            {
-                setting.AccountId = _hashingService.DecodeValue(setting.HashedAccountId);
-            }
-        }
-
-        protected async Task<OrchestratorResponse<T>> CheckUserAuthorization<T>(Func<Task<OrchestratorResponse<T>>> code, string hashedAccountId, string externalUserId) where T : class
-        {
-            try
-            {
-                await _mediator.SendAsync(new GetEmployerAccountByHashedIdQuery
-                {
-                    HashedAccountId = hashedAccountId,
-                    UserId = externalUserId
+                    UserRef = userRef
                 });
 
-                return await code.Invoke();
-            }
-            catch (UnauthorizedAccessException exception)
-            {
-                var accountId = _hashingService.DecodeValue(hashedAccountId);
-                _logger.Warn($"User not associated to account. UserId:{externalUserId} AccountId:{accountId}");
+                var userNotificationSettings = settings.NotificationSettings.SingleOrDefault(m => m.AccountId == accountId);
 
-                return new OrchestratorResponse<T>
+                if (userNotificationSettings == null)
+                    throw new InvalidStateException($"Cannot find user settings for user {userRef} in account {accountId}.");
+
+                if (userNotificationSettings.ReceiveNotifications)
                 {
-                    Status = HttpStatusCode.Unauthorized,
-                    Exception = exception
+                    await _mediator.Send(new UnsubscribeNotificationCommand
+                    {
+                        UserRef = userRef,
+                        AccountId = accountId
+                    });
+
+                    _logger.LogInformation("Unsubscribed from alerts for user {UserRef} in account {AccountId}", userRef, accountId);
+                }
+                else
+                {
+
+                    _logger.LogInformation("Already unsubscribed from alerts for user {UserRef} in account {AccountId}", userRef, accountId);
+                }
+
+                return new OrchestratorResponse<SummaryUnsubscribeViewModel>
+                {
+                    Data = new SummaryUnsubscribeViewModel
+                    {
+                        AlreadyUnsubscribed = !userNotificationSettings.ReceiveNotifications,
+                        AccountName = userNotificationSettings.Name
+                    }
                 };
-            }
+            }, accountId, userRef);
+    }
+
+    protected async Task<OrchestratorResponse<T>> CheckUserAuthorization<T>(Func<Task<OrchestratorResponse<T>>> code, long accountId, string externalUserId) where T : class
+    {
+        try
+        {
+            await _mediator.Send(new GetEmployerAccountByIdQuery
+            {
+                AccountId = accountId,
+                UserId = externalUserId
+            });
+
+            return await code.Invoke();
+        }
+        catch (UnauthorizedAccessException exception)
+        {
+            _logger.LogWarning("User not associated to account. UserId:{ExternalUserId} AccountId:{AccountId}", externalUserId, accountId);
+
+            return new OrchestratorResponse<T>
+            {
+                Status = HttpStatusCode.Unauthorized,
+                Exception = exception
+            };
         }
     }
 }

@@ -1,37 +1,34 @@
-﻿using System;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Data;
+﻿using System.Threading;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.EmployerAccounts.Dtos;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetHealthCheck
+namespace SFA.DAS.EmployerAccounts.Queries.GetHealthCheck;
+
+public class GetHealthCheckQueryHandler : IRequestHandler<GetHealthCheckQuery, GetHealthCheckQueryResponse>
 {
-    public class GetHealthCheckQueryHandler : IAsyncRequestHandler<GetHealthCheckQuery, GetHealthCheckQueryResponse>
+    private readonly Lazy<EmployerAccountsDbContext> _db;
+
+    public GetHealthCheckQueryHandler(Lazy<EmployerAccountsDbContext> db)
     {
-        private readonly Lazy<EmployerAccountsDbContext> _db;
-        private readonly IConfigurationProvider _configurationProvider;
+        _db = db;
+    }
 
-        public GetHealthCheckQueryHandler(Lazy<EmployerAccountsDbContext> db, IConfigurationProvider configurationProvider)
+    public async Task<GetHealthCheckQueryResponse> Handle(GetHealthCheckQuery message, CancellationToken cancellationToken)
+    {
+        var healthCheck = await _db.Value.HealthChecks
+            .OrderByDescending(h => h.Id)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        return new GetHealthCheckQueryResponse
         {
-            _db = db;
-            _configurationProvider = configurationProvider;
-        }
-
-        public async Task<GetHealthCheckQueryResponse> Handle(GetHealthCheckQuery message)
-        {
-            var healthCheck = await _db.Value.HealthChecks
-                .OrderByDescending(h => h.Id)
-                .ProjectTo<HealthCheckDto>(_configurationProvider)
-                .FirstOrDefaultAsync();
-
-            return new GetHealthCheckQueryResponse
+            HealthCheck = new HealthCheckDto
             {
-                HealthCheck = healthCheck
-            };
-        }
+                Id = healthCheck.Id,
+                PublishedEvent = healthCheck.PublishedEvent,
+                ReceivedEvent = healthCheck.ReceivedEvent,
+                ReceivedResponse = healthCheck.ReceivedResponse,
+                SentRequest = healthCheck.SentRequest,
+            }
+        };
     }
 }

@@ -1,26 +1,21 @@
-﻿using System;
-using System.Threading.Tasks;
-using SFA.DAS.Validation;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements
+public class GetOrganisationAgreementsValidator : IValidator<GetOrganisationAgreementsRequest>
 {
-    public class GetOrganisationAgreementsValidator : IValidator<GetOrganisationAgreementsRequest>
+    public ValidationResult Validate(GetOrganisationAgreementsRequest item)
     {
-        public ValidationResult Validate(GetOrganisationAgreementsRequest item)
+        var validationResult = new ValidationResult();
+
+        if (string.IsNullOrEmpty(item.AccountLegalEntityHashedId))
         {
-            throw new NotImplementedException();
+            validationResult.AddError(nameof(item.AccountLegalEntityHashedId));
         }
 
-        public async Task<ValidationResult> ValidateAsync(GetOrganisationAgreementsRequest item)
-        {
-            var validationResult = new ValidationResult();
+        return validationResult;
+    }
 
-            if (string.IsNullOrEmpty(item.AccountLegalEntityHashedId))
-            {
-                validationResult.AddError(nameof(item.AccountLegalEntityHashedId));
-            }
-
-            return validationResult;
-        }
+    public Task<ValidationResult> ValidateAsync(GetOrganisationAgreementsRequest item)
+    {
+        return Task.FromResult(Validate(item));
     }
 }

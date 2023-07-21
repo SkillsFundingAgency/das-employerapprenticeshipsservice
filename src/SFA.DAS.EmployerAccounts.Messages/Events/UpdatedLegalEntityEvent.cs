@@ -1,9 +1,8 @@
 ﻿using System;
-using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EmployerAccounts.Messages.Events
 {
-    public class UpdatedLegalEntityEvent : Event
+    public class UpdatedLegalEntityEvent 
     {
         public long AccountLegalEntityId { get; set; }
         public string Name { get; set; }
@@ -12,5 +11,6 @@ namespace SFA.DAS.EmployerAccounts.Messages.Events
         public Guid UserRef { get; set; }
 
         public string OrganisationName { get; set; }
+        public DateTime Created { get; set; }
     }
 }

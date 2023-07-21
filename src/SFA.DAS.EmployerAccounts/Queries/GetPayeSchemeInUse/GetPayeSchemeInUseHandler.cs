@@ -1,33 +1,30 @@
-using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.Validation;
+using System.Threading;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeInUse
+namespace SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeInUse;
+
+public class GetPayeSchemeInUseHandler : IRequestHandler<GetPayeSchemeInUseQuery,GetPayeSchemeInUseResponse>
 {
-    public class GetPayeSchemeInUseHandler : IAsyncRequestHandler<GetPayeSchemeInUseQuery,GetPayeSchemeInUseResponse>
+    private readonly IValidator<GetPayeSchemeInUseQuery> _validator;
+    private readonly IEmployerSchemesRepository _employerSchemesRepository;
+
+    public GetPayeSchemeInUseHandler(IValidator<GetPayeSchemeInUseQuery> validator, IEmployerSchemesRepository employerSchemesRepository)
     {
-        private readonly IValidator<GetPayeSchemeInUseQuery> _validator;
-        private readonly IEmployerSchemesRepository _employerSchemesRepository;
+        _validator = validator;
+        _employerSchemesRepository = employerSchemesRepository;
+    }
 
-        public GetPayeSchemeInUseHandler(IValidator<GetPayeSchemeInUseQuery> validator, IEmployerSchemesRepository employerSchemesRepository)
+    public async Task<GetPayeSchemeInUseResponse> Handle(GetPayeSchemeInUseQuery message, CancellationToken cancellationToken)
+    {
+        var result = await _validator.ValidateAsync(message);
+
+        if (!result.IsValid())
         {
-            _validator = validator;
-            _employerSchemesRepository = employerSchemesRepository;
+            throw new InvalidRequestException(result.ValidationDictionary);
         }
 
-        public async Task<GetPayeSchemeInUseResponse> Handle(GetPayeSchemeInUseQuery message)
-        {
-            var result = _validator.Validate(message);
+        var scheme = await _employerSchemesRepository.GetSchemeByRef(message.Empref);
 
-            if (!result.IsValid())
-            {
-                throw new InvalidRequestException(result.ValidationDictionary);
-            }
-
-            var scheme = await _employerSchemesRepository.GetSchemeByRef(message.Empref);
-
-            return new GetPayeSchemeInUseResponse {PayeScheme = scheme};
-        }
+        return new GetPayeSchemeInUseResponse {PayeScheme = scheme};
     }
 }

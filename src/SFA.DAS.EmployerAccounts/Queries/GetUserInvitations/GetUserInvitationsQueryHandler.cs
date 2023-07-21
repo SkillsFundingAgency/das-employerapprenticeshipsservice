@@ -1,34 +1,24 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.HashingService;
+﻿using System.Threading;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetUserInvitations
+namespace SFA.DAS.EmployerAccounts.Queries.GetUserInvitations;
+
+public class GetUserInvitationsQueryHandler : IRequestHandler<GetUserInvitationsRequest, GetUserInvitationsResponse>
 {
-    public class GetUserInvitationsQueryHandler : IAsyncRequestHandler<GetUserInvitationsRequest, GetUserInvitationsResponse>
+    private readonly IInvitationRepository _invitationRepository;
+
+    public GetUserInvitationsQueryHandler(IInvitationRepository invitationRepository)
     {
-        private readonly IInvitationRepository _invitationRepository;
-        private readonly IHashingService _hashingService;
+        _invitationRepository = invitationRepository;
+    }
 
-        public GetUserInvitationsQueryHandler(IInvitationRepository invitationRepository, IHashingService hashingService)
+    public async Task<GetUserInvitationsResponse> Handle(GetUserInvitationsRequest message, CancellationToken cancellationToken)
+    {
+        var invitations = await _invitationRepository.Get(message.UserId);
+
+        return new GetUserInvitationsResponse
         {
-            _invitationRepository = invitationRepository;
-            _hashingService = hashingService;
-        }
-
-        public async Task<GetUserInvitationsResponse> Handle(GetUserInvitationsRequest message)
-        {
-            var invitations = await _invitationRepository.Get(message.UserId);
-
-            foreach (var invitation in invitations)
-            {
-                invitation.HashedAccountId = _hashingService.HashValue(invitation.Id);
-            }
-
-            return new GetUserInvitationsResponse
-            {
-                Invitations = invitations
-            };
-        }
+            Invitations = invitations
+        };
     }
 }

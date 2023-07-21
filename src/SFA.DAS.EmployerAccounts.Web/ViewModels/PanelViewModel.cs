@@ -1,16 +1,15 @@
-﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels
-{
-    public class PanelViewModel<T>
-    {
-        public string ViewName { get; set; }
-        public PanelType PanelType { get; set; } = PanelType.Interruption;
-        public T Data { get; set; }
-    }
+﻿namespace SFA.DAS.EmployerAccounts.Web.ViewModels;
 
-    public enum PanelType
-    {
-        Interruption,
-        Summary,
-        Action
-    }
-}   
+public class PanelViewModel<T>
+{
+    public string ComponentName { get; set; }
+    public PanelType PanelType { get; set; } = PanelType.Interruption;
+    public T Data { get; set; }
+}
+
+public enum PanelType
+{
+    Interruption,
+    Summary,
+    Action
+}

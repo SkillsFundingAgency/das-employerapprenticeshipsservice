@@ -1,10 +1,7 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
 
-namespace SFA.DAS.EmployerAccounts.Commands.CreateUserAccount
+public class CreateUserAccountCommand : IRequest<CreateUserAccountCommandResponse>
 {
-    public class CreateUserAccountCommand : IAsyncRequest<CreateUserAccountCommandResponse>
-    {
-        public string ExternalUserId { get; set; }
-        public string OrganisationName { get; set; }
-    }
+    public string ExternalUserId { get; set; }
+    public string OrganisationName { get; set; }
 }

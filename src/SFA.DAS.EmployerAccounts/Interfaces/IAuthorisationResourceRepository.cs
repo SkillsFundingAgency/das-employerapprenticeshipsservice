@@ -1,11 +1,9 @@
 ﻿using SFA.DAS.EmployerAccounts.Models.Account;
-using System.Collections.Generic;
 using System.Security.Claims;
 
-namespace SFA.DAS.EmployerAccounts.Interfaces
+namespace SFA.DAS.EmployerAccounts.Interfaces;
+
+public interface IAuthorisationResourceRepository
 {
-    public interface IAuthorisationResourceRepository
-    {
-        IEnumerable<AuthorizationResource> Get(ClaimsIdentity claimsIdentity); 
-    }
+    IEnumerable<AuthorizationResource> Get(ClaimsIdentity claimsIdentity); 
 }

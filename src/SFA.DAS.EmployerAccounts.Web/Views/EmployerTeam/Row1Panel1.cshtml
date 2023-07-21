@@ -1,8 +1,0 @@
-﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.PanelViewModel<SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel>
-
-@if (!Model.ViewName.Equals("Empty"))
-{
-    <div class="das-highlight das-highlight--@(Model.PanelType.ToString().ToLower()) govuk-!-margin-top-0">
-        @Html.Action(Model.ViewName, new { model = Model.Data })
-    </div>
-}

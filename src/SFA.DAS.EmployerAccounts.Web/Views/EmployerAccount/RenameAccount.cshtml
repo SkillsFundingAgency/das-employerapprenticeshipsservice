@@ -1,22 +1,20 @@
 ﻿@model OrchestratorResponse<RenameEmployerAccountViewModel>
 
-@{ViewBag.PageID = "page-change-account-name"; }
-@{ViewBag.Title = "Rename account"; }
 @{
+    ViewBag.PageID = "page-change-account-name";
+    ViewBag.Title = "Rename account";
     ViewBag.GaData.Vpv = "/page-change-account-name";
+
+    string hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId].ToString();
 }
-@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
 
-<form method="post">
 
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form method="post">
             <h1 class="govuk-heading-xl">Rename account</h1>
 
-            @Html.AntiForgeryToken()
-
-            <input type="hidden" value="@Model.Data.HashedId" name="HashedId" />
+            <input type="hidden" value="true" name="ChangeAccountName" />
             <input type="hidden" value="@Model.Data.CurrentName" name="CurrentName" />
 
             <div class="govuk-form-group">
@@ -25,44 +23,40 @@
                     <dd class="das-definition-list__definition">@Model.Data.CurrentName</dd>
                 </dl>
             </div>
-            <div class="govuk-form-group @(!string.IsNullOrEmpty(Model.Data.NewNameError) ? "govuk-form-group--error" : "")">
 
+            <div class="govuk-form-group @(!string.IsNullOrEmpty(Model.Data.NewNameError) ? "govuk-form-group--error" : "")">
                 <label id="NewName-label" for="NewName" class="govuk-label">
                     New account name
                 </label>
+
                 @if (!string.IsNullOrEmpty(Model.Data.NewNameError))
                 {
                     <span id="error-message-newname" class="govuk-error-message">
                         <span class="govuk-visually-hidden">Error:</span> @Model.Data.NewNameError
                     </span>
                 }
-                @Html.TextBoxFor(
-                    m => m.Data.NewName,
-                    new
-                         {
-                        Id = "NewName",
-                        Name = "NewName",
-                        @class = "govuk-input",
-                        MaxLength = 100,
-                        aria_required = "true",
-                        aria_describedby = !string.IsNullOrEmpty(Model.Data.NewNameError) ? "error-message-newname" : ""
-                    })
+
+                <input id="NewName" name="NewName" type="text" maxlength="100" class="govuk-input" aria-required="true"
+                       aria-describedby="@(!string.IsNullOrEmpty(Model.Data.NewNameError) ? "error-message-newname" : "")"
+                       value="@Model.Data.NewName" />
+
             </div>
-            <div class="govuk-form-group">
+
+            <div class="govuk-button-group">
                 <button type="submit" class="govuk-button" id="accept">Save and continue</button>
-                <a href="@Url.Action("Index", "EmployerTeam")" class="govuk-link das-link--button-aligned">Cancel</a>
+                <a asp-route="@RouteNames.EmployerTeamIndex" asp-route-hashedAccountId="@hashedAccountId"
+                   class="govuk-link">Cancel</a>
             </div>
-
-        </div>
+        </form>
     </div>
+</div>
 
-</form>
 
 @section breadcrumb {
     <div class="govuk-breadcrumbs">
-        <ol class="govuk-breadcrumbs__list" role="navigation">
+        <ol class="govuk-breadcrumbs__list">
             <li class="govuk-breadcrumbs__list-item">
-                <a href="@Url.Action("Index", "EmployerTeam")">Home</a>
+                <a asp-route="@RouteNames.EmployerTeamIndex" asp-route-hashedAccountId="@hashedAccountId" class="govuk-breadcrumbs__link">Home</a>
             </li>
             <li class="govuk-breadcrumbs__list-item">@ViewBag.Title</li>
         </ol>

@@ -1,12 +1,14 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
-@{ViewBag.PageID = "page-paye-scheme-ways-to-add"; }
-@{ViewBag.Title = "Ways to add your PAYE scheme"; }
-@{ViewBag.Section = "paye";}
-@{ViewBag.HideNav = true; }
 @{
+    ViewBag.PageID = "page-paye-scheme-add-aorn";
+    ViewBag.Title = "Add PAYE details";
+    ViewBag.Section = "paye";
+    ViewBag.ShowNav = false;
+
     ViewBag.GaData.Vpv = "/accounts/pensionregulator/search-by-aorn";
+    bool invalidAornCombination = Model.RemainingAttempts != Model.AllowedAttempts;
 }
-@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
+
 @model SearchPensionRegulatorByAornViewModel
 
 <div class="govuk-grid-row">
@@ -19,7 +21,9 @@
         }
         else
         {
-            if (Model.RemainingAttempts != Model.AllowedAttempts)
+            <h1 class="govuk-heading-xl">Add PAYE details</h1>
+
+            if (invalidAornCombination)
             {
                 <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
                     <h2 class="govuk-error-summary__title" id="error-summary-title" id="error-summary-heading">
@@ -33,7 +37,7 @@
                 </div>
             }
 
-            if (!string.IsNullOrEmpty(Model.AornError) || !string.IsNullOrEmpty(Model.PayeRefError)) 
+            if (!string.IsNullOrEmpty(Model.AornError) || !string.IsNullOrEmpty(Model.PayeRefError))
             {
                 <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
                     <h2 class="govuk-error-summary__title" id="error-summary-title" id="error-summary-heading">
@@ -58,16 +62,11 @@
                 </div>
             }
 
-            <h1 class="govuk-heading-xl">Enter your PAYE scheme details</h1>
-            <p class="govuk-body">Enter your accounts office reference number and employer PAYE scheme reference. These details will be checked against the Pensions Regulator.</p>
-
-            <form method="POST" action="@Url.Action(ControllerConstants.SearchUsingAornActionName)">
-                @Html.AntiForgeryToken()
-
+            <form method="POST" asp-action="@ControllerConstants.SearchUsingAornActionName">
                 <fieldset class="govuk-fieldset" id="aorn-details-form">
-                    <div class="govuk-form-group @(!string.IsNullOrEmpty(Model.AornError) ? "govuk-form-group--error" : "")">
+                    <div class="govuk-form-group @(!string.IsNullOrEmpty(Model.AornError) || invalidAornCombination ? "govuk-form-group--error" : "")">
                         <label class="govuk-label govuk-!-font-weight-bold" for="aorn">Accounts office reference number</label>
-                        <span class="govuk-hint">For example, 123PA12345678</span>
+                        <div class="govuk-hint">This is 13 characters, like 123PX00123456 or 123PX0012345X. It will be on letters from HMRC about PAYE and when you registered as an employer.</div>
                         @if (!string.IsNullOrEmpty(Model.AornError))
                         {
                             <span class="govuk-error-message" id="error-message-aorn">@Model.AornError</span>
@@ -75,9 +74,9 @@
                         <input class="govuk-input govuk-!-width-three-quarters" id="aorn" name="aorn" type="text" value="@Model.Aorn" @(!string.IsNullOrEmpty(Model.AornError) ? "aria-invalid=true aria-describedby=error-message-aorn" : "")>
                     </div>
 
-                    <div class="govuk-form-group @(!string.IsNullOrEmpty(Model.PayeRefError) ? "govuk-form-group--error" : "")">
+                    <div class="govuk-form-group @(!string.IsNullOrEmpty(Model.PayeRefError) || invalidAornCombination ? "govuk-form-group--error" : "")">
                         <label class="govuk-label govuk-!-font-weight-bold" for="payeRef">Employer PAYE scheme reference</label>
-                        <span class="govuk-hint">For example, 123/AB12345</span>
+                        <div class="govuk-hint">This is a 3 digit tax office number, a forward slash, and a tax office reference, like 123/ABC456.</div>
                         @if (!string.IsNullOrEmpty(Model.PayeRefError))
                         {
                             <span class="govuk-error-message" id="error-message-payeRef">@Model.PayeRefError</span>
@@ -86,9 +85,9 @@
                     </div>
                 </fieldset>
 
-                <div class="govuk-form-group">
+                <div class="govuk-button-group">
                     <button class="govuk-button" type="submit" id="submit-aorn-details">Continue</button>
-                    <a href="@Url.Action(ControllerConstants.SkipRegistrationActionName, ControllerConstants.EmployerAccountControllerName)" class="govuk-link das-link--button-aligned govuk-link--no-visited-state">Skip this step for now</a>
+                    <a asp-route="@RouteNames.NewEmpoyerAccountTaskList" class="govuk-link">Cancel</a>
                 </div>
 
             </form>
@@ -102,24 +101,24 @@
 
 @section pageSpecificJS {
     <script type="text/javascript">
-      // DataLayer pushes when form validation message is shown
-      $(function () {
-        var errorSummary = $('.govuk-error-summary');
-        var pageTitle = $('h1.govuk-heading-xl').text();
-        errorSummary.each(function () {
-          var dataLayerObj
-          var numberOfErrors = $(this).find('ul.govuk-error-summary__list li').length;
-          var validationMessage = "Form validation";
-          if (numberOfErrors === 1) {
-            validationMessage = $(this).find('a').eq(0).text();
-          }
-          dataLayerObj = {
-            event: 'form submission error',
-            page: pageTitle,
-            message: validationMessage
-          }
-          window.dataLayer.push(dataLayerObj)
+        // DataLayer pushes when form validation message is shown
+        $(function () {
+            var errorSummary = $('.govuk-error-summary');
+            var pageTitle = $('h1.govuk-heading-xl').text();
+            errorSummary.each(function () {
+                var dataLayerObj
+                var numberOfErrors = $(this).find('ul.govuk-error-summary__list li').length;
+                var validationMessage = "Form validation";
+                if (numberOfErrors === 1) {
+                    validationMessage = $(this).find('a').eq(0).text();
+                }
+                dataLayerObj = {
+                    event: 'form submission error',
+                    page: pageTitle,
+                    message: validationMessage
+                }
+                window.dataLayer.push(dataLayerObj)
+            });
         });
-      });
     </script>
 }

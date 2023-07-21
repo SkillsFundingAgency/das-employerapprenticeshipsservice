@@ -1,31 +1,26 @@
-﻿using System;
-using System.Threading.Tasks;
-using SFA.DAS.Validation;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole
+public class GetUserAccountRoleValidator : IValidator<GetUserAccountRoleQuery>
 {
-    public class GetUserAccountRoleValidator : IValidator<GetUserAccountRoleQuery>
+    public ValidationResult Validate(GetUserAccountRoleQuery query)
     {
-        public ValidationResult Validate(GetUserAccountRoleQuery query)
+        var result = new ValidationResult();
+
+        if (string.IsNullOrEmpty(query.ExternalUserId))
         {
-            var result = new ValidationResult();
-
-            if (string.IsNullOrEmpty(query.ExternalUserId))
-            {
-                result.AddError(nameof(query.ExternalUserId), "ExternalUserId has not been supplied");
-            }
-
-            if (string.IsNullOrEmpty(query.HashedAccountId))
-            {
-                result.AddError(nameof(query.HashedAccountId), "HashedAccountId has not been supplied");
-            }
-
-            return result;
+            result.AddError(nameof(query.ExternalUserId), "ExternalUserId has not been supplied");
         }
 
-        public Task<ValidationResult> ValidateAsync(GetUserAccountRoleQuery item)
+        if (query.AccountId <= 0)
         {
-            throw new NotImplementedException();
+            result.AddError(nameof(query.AccountId), "AccountId has not been supplied");
         }
+
+        return result;
+    }
+
+    public Task<ValidationResult> ValidateAsync(GetUserAccountRoleQuery item)
+    {
+        return Task.FromResult(Validate(item));
     }
 }

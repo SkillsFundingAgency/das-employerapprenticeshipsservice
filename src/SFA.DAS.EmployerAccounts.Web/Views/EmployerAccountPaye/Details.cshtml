@@ -1,5 +1,4 @@
 ﻿@using System.Linq
-@using SFA.DAS.EmployerAccounts.Web.Extensions
 @model SFA.DAS.EmployerAccounts.Web.OrchestratorResponse<SFA.DAS.EmployerAccounts.Web.ViewModels.PayeSchemeDetailViewModel>
 
 @{
@@ -7,12 +6,10 @@
     ViewBag.PageID = "page-paye-schemes-view";
     ViewBag.Section = "paye";
     ViewBag.ZenDeskLabel = "eas-paye-scheme";
-}
-
-@{
     ViewBag.GaData.Vpv = "/accounts/schemes/details";
+
+    var hashedAccountId = ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId];
 }
-@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -69,20 +66,25 @@
             </tbody>
         </table>
 
-        @Html.Partial("_WhatIsEnglishPercentage")
+        @await Html.PartialAsync("_WhatIsEnglishPercentage")
 
     </div>
     <div class="govuk-grid-column-one-third">
-        <a href="@Url.Action("Remove", new {empRef = Model.Data.EmpRef.FormatPayeForUrl()})" class="govuk-button das-float-right" aria-label="Remove PAYE scheme @Model.Data.EmpRef"
-           title="Remove PAYE scheme @Model.Data.EmpRef">Remove <abbr>PAYE</abbr> scheme</a>
+        <a asp-controller="@ControllerConstants.EmployerAccountPayeControllerName"
+        asp-action="Remove"
+        asp-route-hashedAccountId="@hashedAccountId" 
+        asp-route-empRef="@Model.Data.EmpRef.FormatPayeForUrl()" 
+        class="govuk-button das-float-right" 
+        aria-label="Remove PAYE scheme @Model.Data.EmpRef"
+        title="Remove PAYE scheme @Model.Data.EmpRef">Remove <abbr>PAYE</abbr> scheme</a>
     </div>
 </div>
 
 @section breadcrumb {
     <div class="govuk-breadcrumbs">
         <ol class="govuk-breadcrumbs__list" role="navigation">
-            <li class="govuk-breadcrumbs__list-item"><a href="@Url.Action("Index", "EmployerTeam")" class="govuk-breadcrumbs__link">Home</a></li>
-            <li class="govuk-breadcrumbs__list-item"><a href="@Url.Action("Index", "EmployerAccountPaye")" class="govuk-breadcrumbs__link"><abbr>PAYE</abbr> schemes</a></li>
+            <li class="govuk-breadcrumbs__list-item"><a asp-route="@RouteNames.EmployerTeamIndex" asp-route-hashedAccountId="@hashedAccountId" class="govuk-breadcrumbs__link">Home</a></li>
+            <li class="govuk-breadcrumbs__list-item"><a asp-route="@RouteNames.EmployerAccountPaye" asp-route-hashedAccountId="@hashedAccountId" class="govuk-breadcrumbs__link"><abbr>PAYE</abbr> schemes</a></li>
             <li class="govuk-breadcrumbs__list-item"><abbr>PAYE</abbr> scheme @Model.Data.EmpRef</li>
         </ol>
     </div>

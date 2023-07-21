@@ -1,11 +1,8 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf
+public class GetSignedEmployerAgreementPdfRequest : IRequest<GetSignedEmployerAgreementPdfResponse>
 {
-    public class GetSignedEmployerAgreementPdfRequest : IAsyncRequest<GetSignedEmployerAgreementPdfResponse>
-    {
-        public string HashedAccountId { get; set; }
-        public string UserId { get; set; }
-        public string HashedLegalAgreementId { get; set; }
-    }
+    public long AccountId { get; set; }
+    public string UserId { get; set; }
+    public long LegalAgreementId { get; set; }
 }

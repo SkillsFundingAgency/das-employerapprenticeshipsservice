@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
@@ -16,6 +18,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Orchestrators.AgreementOrchestr
     {
         private AgreementOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
+        private Mock<ILogger<AgreementOrchestrator>> _logger;
         private IMapper _mapper;
         private Models.EmployerAgreement.EmployerAgreementView _agreement;
 
@@ -23,6 +26,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Orchestrators.AgreementOrchestr
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
+            _logger = new Mock<ILogger<AgreementOrchestrator>>();
             _mapper = ConfigureMapper();
             _agreement = new Models.EmployerAgreement.EmployerAgreementView();
 
@@ -31,9 +35,9 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Orchestrators.AgreementOrchestr
                 EmployerAgreement = _agreement
             };
 
-            _orchestrator = new AgreementOrchestrator(_mediator.Object, _mapper);
+            _orchestrator = new AgreementOrchestrator(_mediator.Object, _logger.Object, _mapper);
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAgreementByIdRequest>()))
+            _mediator.Setup(x => x.Send(It.IsAny<GetEmployerAgreementByIdRequest>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(response);
         }
 
@@ -41,16 +45,16 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Orchestrators.AgreementOrchestr
         public async Task ThenARequestShouldBeCreatedAndItsResponseReturned()
         {
             //Arrange
-            const string hashedAgreementId = "ABC123";
+            const long agreementId = 123;
 
             //Act
-            var result = await _orchestrator.GetAgreement(hashedAgreementId);
+            var result = await _orchestrator.GetAgreement(agreementId);
 
             //Assert
-            result.ShouldBeEquivalentTo(_agreement);
+            result.Should().BeEquivalentTo(_agreement, option => option.ExcludingMissingMembers());
         }
 
-        private IMapper ConfigureMapper()
+        private static IMapper ConfigureMapper()
         {
             var profiles = Assembly.Load("SFA.DAS.EmployerAccounts.Api")
                 .GetTypes()

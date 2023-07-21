@@ -1,9 +1,8 @@
 ﻿using SFA.DAS.EmployerAccounts.Dtos;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement
+namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
+
+public class GetEmployerAgreementResponse
 {
-    public class GetEmployerAgreementResponse
-    {
-        public AgreementDto EmployerAgreement { get; set; }
-    }
+    public AgreementDto EmployerAgreement { get; set; }
 }

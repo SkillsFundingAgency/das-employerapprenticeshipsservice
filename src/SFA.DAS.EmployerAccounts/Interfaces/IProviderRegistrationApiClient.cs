@@ -1,11 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿namespace SFA.DAS.EmployerAccounts.Interfaces;
 
-namespace SFA.DAS.EmployerAccounts.Interfaces
+public interface IProviderRegistrationApiClient
 {
-    public interface IProviderRegistrationApiClient
-    {
-        Task Unsubscribe(string CorrelationId);
+    Task Unsubscribe(string CorrelationId);
 
-        Task<string> GetInvitations(string CorrelationId);
-    }
+    Task<string> GetInvitations(string CorrelationId);
 }

@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Commands.CreateOrganisationAddress
+﻿namespace SFA.DAS.EmployerAccounts.Commands.CreateOrganisationAddress;
+
+public class CreateOrganisationAddressResponse
 {
-    public class CreateOrganisationAddressResponse
-    {
-        public string Address { get; set; }
-    }
+    public string Address { get; set; }
 }

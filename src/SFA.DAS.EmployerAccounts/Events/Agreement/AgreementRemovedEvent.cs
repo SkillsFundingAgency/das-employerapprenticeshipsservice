@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Events.Agreement
+﻿namespace SFA.DAS.EmployerAccounts.Events.Agreement;
+
+public class AgreementRemovedEvent
 {
-    public class AgreementRemovedEvent
-    {
-        public string HashedAgreementId { get; set; }
-    }
+    public string HashedAgreementId { get; set; }
 }

@@ -1,9 +1,6 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntity;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntity
+public class GetAccountLegalEntityRequest : IRequest<GetAccountLegalEntityResponse>
 {
-    public class GetAccountLegalEntityRequest : IAsyncRequest<GetAccountLegalEntityResponse>
-    {
-        public long AccountLegalEntityId { get; set; }
-    }
+    public long AccountLegalEntityId { get; set; }
 }

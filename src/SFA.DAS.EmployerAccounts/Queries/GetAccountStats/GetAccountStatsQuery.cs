@@ -1,10 +1,7 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetAccountStats;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountStats
+public class GetAccountStatsQuery : IRequest<GetAccountStatsResponse>
 {
-    public class GetAccountStatsQuery : IAsyncRequest<GetAccountStatsResponse>
-    {
-        public string HashedAccountId { get; set; }
-        public string ExternalUserId { get; set; }
-    }
+    public long AccountId { get; set; }
+    public string ExternalUserId { get; set; }
 }

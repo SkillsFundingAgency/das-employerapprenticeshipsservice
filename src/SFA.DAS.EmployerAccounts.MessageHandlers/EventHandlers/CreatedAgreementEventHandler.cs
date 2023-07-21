@@ -1,28 +1,26 @@
-﻿using System.Threading.Tasks;
-using NServiceBus;
-using SFA.DAS.EmployerAccounts.Events.Messages;
+﻿using SFA.DAS.EmployerAccounts.Events.Messages;
+using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Messages.Events;
-using SFA.DAS.Messaging.Interfaces;
+using SFA.DAS.NServiceBus.Services;
 
-namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers
+namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers;
+
+public class CreatedAgreementEventHandler : IHandleMessages<CreatedAgreementEvent>
 {
-    public class CreatedAgreementEventHandler : IHandleMessages<CreatedAgreementEvent>
-    {
-        private readonly IMessagePublisher _messagePublisher;
+    private readonly ILegacyTopicMessagePublisher _messagePublisher;
 
-        public CreatedAgreementEventHandler(IMessagePublisher messagePublisher)
-        {
-            _messagePublisher = messagePublisher;
-        }
-        public async Task Handle(CreatedAgreementEvent message, IMessageHandlerContext context)
-        {
-            await _messagePublisher.PublishAsync(new AgreementCreatedMessage(
-                message.AccountId,
-                message.AgreementId,
-                message.OrganisationName,
-                message.LegalEntityId,
-                message.UserName,
-                message.UserRef.ToString()));
-        }
+    public CreatedAgreementEventHandler(ILegacyTopicMessagePublisher messagePublisher)
+    {
+        _messagePublisher = messagePublisher;
+    }
+    public async Task Handle(CreatedAgreementEvent message, IMessageHandlerContext context)
+    {
+        await _messagePublisher.PublishAsync(new AgreementCreatedMessage(
+            message.AccountId,
+            message.AgreementId,
+            message.OrganisationName,
+            message.LegalEntityId,
+            message.UserName,
+            message.UserRef.ToString()));
     }
 }

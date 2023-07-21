@@ -1,45 +1,52 @@
 ﻿@model OrchestratorResponse<SFA.DAS.EmployerAccounts.Web.ViewModels.InviteTeamMemberNextStepsViewModel>
-@{ViewBag.PageID = "page-invite-team-member-next-steps";}
-@{ViewBag.Title = "What's next";}
-@{ViewBag.Section = "team";}
 @{
+    ViewBag.PageID = "page-invite-team-member-next-steps";
+    ViewBag.PageID = "page-invite-team-member-next-steps";
+    ViewBag.Title = "What's next";
+    ViewBag.Section = "team";
     ViewBag.GaData.Vpv = "/accounts/teams/invite/next/page-invite-team-member-next-steps";
 }
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-large">
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">
             What's next
         </h1>
-        <form method="POST" action="@Url.Action("NextSteps")">
-            @Html.AntiForgeryToken()
-            <div class="form-group  @(!string.IsNullOrEmpty(Model.Data.ErrorMessage) ? "error" : "")">
-                <fieldset>
-                    <legend>
-                        <span class="visuallyhidden">What's next?</span>
+        <form method="POST" 
+            asp-route="@RouteNames.EmployerTeamInviteNextPost"
+            asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]">
+            <div class="govuk-form-group  @(!string.IsNullOrEmpty(Model.Data.ErrorMessage) ? "govuk-form-group--error" : "")">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend">
+                        <span class="govuk-visually-hidden">What's next?</span>
                         @if (!string.IsNullOrWhiteSpace(Model.Data.ErrorMessage))
                         {
-                            <span class="error-message" id="select-option">@Model.Data.ErrorMessage</span>
+                            <span class="govuk-error-message" id="select-option">@Model.Data.ErrorMessage</span>
                         }
                     </legend>
-                    <label for="choice1" class="block-label">
-                        <input id="choice1" type="radio" name="choice" value="1" />
-                        Add another team member
-                    </label>
-                    @if (!Model.Data.UserShownWizard)
-                    {
-                    <label for="choice2" class="block-label">
-                        <input id="choice2" type="radio" name="choice" value="2" />
-                        View all team members
-                    </label>
-                    }
-                    <label for="choice3" class="block-label">
-                        <input id="choice3" type="radio" name="choice" value="3" />
-                        @(Model.Data.UserShownWizard ? "Continue account setup" : "Return to homepage")
-                    </label>
+                    <div class="govuk-radios" data-module="govuk-radios">
+                        <div class="govuk-radios__item">
+                            <input id="choice1" type="radio" name="choice" value="1" class="govuk-radios__input" />
+                            <label for="choice1" class="govuk-label govuk-radios__label">
+                                Add another team member
+                            </label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input id="choice2" type="radio" name="choice" value="2" class="govuk-radios__input" />
+                            <label for="choice2" class="govuk-label govuk-radios__label">
+                                View all team members
+                            </label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input id="choice3" type="radio" name="choice" value="3" class="govuk-radios__input" />
+                            <label for="choice3" class="govuk-label govuk-radios__label">
+                                Return to homepage
+                            </label>
+                        </div>
+                    </div>
                 </fieldset>
             </div>
-            <div class="form-group">
-                <button type="submit" class="button" id="accept">Continue</button>
+            <div class="govuk-form-group">
+                <button type="submit" class="govuk-button" id="accept">Continue</button>
             </div>
         </form>
     </div>

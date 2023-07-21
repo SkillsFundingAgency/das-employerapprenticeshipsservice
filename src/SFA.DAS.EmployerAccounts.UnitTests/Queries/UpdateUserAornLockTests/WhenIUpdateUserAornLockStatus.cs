@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.UpdateUserAornLockTests
         public async Task ThenThePayeAttemptIsUpdated()
         {
             //Act
-            await RequestHandler.Handle(Query);
+            await RequestHandler.Handle(Query, CancellationToken.None);
 
             //Assert
             _userAornPayeLockService.Verify(x => x.UpdateUserAornPayeAttempt(Query.UserRef, Query.Success), Times.Once);

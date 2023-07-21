@@ -1,4 +1,6 @@
-﻿@using SFA.DAS.EmployerAccounts.Web.Extensions
+﻿@using SFA.DAS.EmployerAccounts.Configuration;
+@using SFA.DAS.EmployerAccounts.Web.Helpers;
+@inject EmployerAccountsConfiguration Configuration ;
 
 <script type="text/javascript">
     window.zESettings = {
@@ -13,14 +15,14 @@
             },
             helpCenter: {
                 filter: {
-                    section: @Html.GetZenDeskSnippetSectionId()
+                    section: @Configuration.ZenDeskSectionId
                 }
             }
         }
     };
 </script>
-<script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=@Html.GetZenDeskSnippetKey()"></script>
-<script id="co-snippet" src="https://embed-euw1.rcrsv.io/@Html.GetZenDeskCobrowsingSnippetKey()?zwwi=1"></script>
-@Html.SetZenDeskLabels(new string[] { ViewBag.ZenDeskLabel })
+<script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=@Configuration.ZenDeskSnippetKey"></script>
+<script id="co-snippet" src="https://embed-euw1.rcrsv.io/@Configuration.ZenDeskCobrowsingSnippetKey?zwwi=1"></script>
+@HtmlHelpers.SetZenDeskLabels(new string[] { ViewBag.ZenDeskLabel })
 
 

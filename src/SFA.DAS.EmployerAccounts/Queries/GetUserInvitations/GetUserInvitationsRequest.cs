@@ -1,9 +1,6 @@
-﻿using MediatR;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetUserInvitations;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetUserInvitations
+public class GetUserInvitationsRequest : IRequest<GetUserInvitationsResponse>
 {
-    public class GetUserInvitationsRequest : IAsyncRequest<GetUserInvitationsResponse>
-    {
-        public string UserId { get; set; }
-    }
+    public string UserId { get; set; }
 }

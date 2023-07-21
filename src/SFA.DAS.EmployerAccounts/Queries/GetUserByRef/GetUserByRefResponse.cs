@@ -1,9 +1,6 @@
-﻿using SFA.DAS.EmployerAccounts.Models.UserProfile;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetUserByRef
+public class GetUserByRefResponse
 {
-    public class GetUserByRefResponse
-    {
-        public User User { get; set; }
-    }
+    public User User { get; set; }
 }

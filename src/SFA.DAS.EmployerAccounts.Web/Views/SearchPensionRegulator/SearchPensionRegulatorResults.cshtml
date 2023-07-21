@@ -1,62 +1,66 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
 @model SearchPensionRegulatorResultsViewModel
 
-@{ 
-    ViewBag.PageID = "select-your-pension-regulator-organisation";
-    ViewBag.Title = "Select your organisation";
-    ViewBag.HideNav = !Model.IsExistingAccount;
-    ViewBag.Section = "pensionregulator";
-}
-
 @{
+    ViewBag.PageID = "select-your-pension-regulator-organisation";
+    ViewBag.Title = "Choose an organisation";
+    ViewBag.ShowNav = Model.IsExistingAccount;
+    ViewBag.Section = "pensionregulator";
+
     ViewBag.GaData.Vpv = Model.IsExistingAccount ? "/accounts/pensionregulator/search/results/select-your-pension-regulator-organisation" : "/onboarding/search/results/select-your-pension-regulator-organisation";
-    var hiddenClass = ViewBag.InError != null && ViewBag.InError ? "" : "hidden";
-    var errorClass = ViewBag.InError != null && ViewBag.InError ? "error" : "";
+    var errorClass = ViewBag.InError != null && ViewBag.InError ? "govuk-form-group--error" : "";
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">
-            Choose an organisation
-        </h1>
-
-        <p>You can add other organisations to your account later.</p>
-        
-        <form method="POST" action="@Url.Action(ControllerConstants.SearchPensionRegulatorActionName)" >
-            @Html.AntiForgeryToken()      
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form method="POST"
+              asp-controller="@ControllerConstants.SearchPensionRegulatorControllerName"
+              asp-action="@ControllerConstants.SearchPensionRegulatorActionName"
+              asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]">
             @Html.HiddenFor(m => m.IsExistingAccount)
             @Html.HiddenFor(m => m.PayeRef)
-            <div class="form-group @errorClass" id="pension-regulator-form">
-                <fieldset>
-                    <legend class="form-label-bold">
-                        <span class="error-message @hiddenClass" aria-hidden="true" id="have-not-selected-organisation">
-                            Please choose an organisation
-                        </span>
+            <div class="govuk-form-group @errorClass" id="pension-regulator-form">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                        <h1 class="govuk-fieldset__heading">
+                            Choose your organisation
+                        </h1>
                     </legend>
-                    @for (int i = 0; i < Model.Results.Count; i++)
+
+                    @if (!string.IsNullOrEmpty(errorClass))
                     {
-                        <label class="block-label">
-                            @Html.RadioButtonFor(m => m.SelectedOrganisation, Model.Results[i].ReferenceNumber, false)
+                        <p class="govuk-error-message">Choose an organisation</p>
+                    }
+                    <div class="govuk-radios" data-module="govuk-radios">
+                        @for (int i = 0; i < Model.Results.Count; i++)
+                        {
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="org@(Model.Results[i].ReferenceNumber)" asp-for="SelectedOrganisation" value="@Model.Results[i].ReferenceNumber" type="radio">
+                                <label class="govuk-label govuk-radios__label" for="org@(Model.Results[i].ReferenceNumber)">@Model.Results[i].Name</label>
+                                <div id="org-address-hint" class="govuk-hint govuk-radios__hint">@Model.Results[i].Address</div>
+                            </div>
                             @Html.HiddenFor(m => m.Results[i].Name)
                             @Html.HiddenFor(m => m.Results[i].ReferenceNumber)
                             @Html.HiddenFor(m => m.Results[i].Status)
                             @Html.HiddenFor(m => m.Results[i].Address)
                             @Html.HiddenFor(m => m.Results[i].Type)
-                            @Model.Results[i].Name
-                        </label>
-                    }
-                </fieldset>
-                <p class="form-block">or</p>
-                <fieldset>
-                    <label class="block-label">
-                        @Html.RadioButtonFor(m => m.SelectedOrganisation, 0, false)
-                        My organisation is not listed
-                    </label>
+                        }
+                        <div class="govuk-radios__divider">or</div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="org0" asp-for="SelectedOrganisation" value="0" type="radio">
+                            <label class="govuk-label govuk-radios__label" for="org0">My organisation is not listed</label>
+                        </div>
+                    </div>
                 </fieldset>
             </div>
-            <div class="form-group">
-                <button class="button" type="submit" id="submit-organisation-button">Continue</button>
+            <div class="govuk-button-group">
+                <button class="govuk-button" type="submit" id="submit-organisation-button">Continue</button>
+                <a asp-route="@RouteNames.NewEmpoyerAccountTaskList" class="govuk-link">Cancel</a>
             </div>
         </form>
     </div>
 </div>
+
+@section breadcrumb {
+    <div class="das-js-back-link"></div>
+}

@@ -1,31 +1,27 @@
-﻿using System.Threading.Tasks;
-using SFA.DAS.Validation;
+﻿namespace SFA.DAS.EmployerAccounts.Queries.GetReservations;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetReservations
+public class GetReservationsRequestValidator : IValidator<GetReservationsRequest>
 {
-    public class GetReservationsRequestValidator : IValidator<GetReservationsRequest>
+    public ValidationResult Validate(GetReservationsRequest item)
     {
-        public ValidationResult Validate(GetReservationsRequest item)
+        var validationResult = new ValidationResult();
+
+        if (string.IsNullOrEmpty(item.ExternalUserId))
         {
-            var validationResult = new ValidationResult();
-
-            if (string.IsNullOrEmpty(item.ExternalUserId))
-            {
-                validationResult.AddError(nameof(item.ExternalUserId), "ExternalUserId has not been supplied");
-            }
-
-            if (string.IsNullOrEmpty(item.HashedAccountId))
-            {
-                validationResult.ValidationDictionary.Add(nameof(item.HashedAccountId),
-                    "Hashed Account Id cannot be null or empty.");
-            }
-
-            return validationResult;
+            validationResult.AddError(nameof(item.ExternalUserId), "ExternalUserId has not been supplied");
         }
 
-        public Task<ValidationResult> ValidateAsync(GetReservationsRequest item)
+        if (item.AccountId <= 0)
         {
-            return Task.FromResult(Validate(item));
+            validationResult.ValidationDictionary.Add(nameof(item.AccountId),
+                "Account Id must be set.");
         }
+
+        return validationResult;
+    }
+
+    public Task<ValidationResult> ValidateAsync(GetReservationsRequest item)
+    {
+        return Task.FromResult(Validate(item));
     }
 }

@@ -5,11 +5,11 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.ObjectMothers
 {
     public static class AddPayeToNewLegalEntityCommandObjectMother
     {
-        public static AddPayeToAccountCommand Create(string externalUserId = "", string hashedId = "JDJFAF123", string aorn = "")
+        public static AddPayeToAccountCommand Create(string externalUserId = "", string hashedAccountId = "JDJFAF123", string aorn = "")
         {
             var command = new AddPayeToAccountCommand
             {
-                HashedAccountId = hashedId,
+                HashedAccountId = hashedAccountId,
                 ExternalUserId = string.IsNullOrEmpty(externalUserId) ? Guid.NewGuid().ToString() : externalUserId,
                 Empref = "123/ABC",
                 RefreshToken = "123GGFFDD",

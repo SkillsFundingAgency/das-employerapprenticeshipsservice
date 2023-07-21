@@ -1,675 +1,527 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using SFA.DAS.Authentication;
-using SFA.DAS.Authorization.Mvc.Attributes;
-using SFA.DAS.EmployerAccounts.Helpers;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.EmployerAccounts.Web.Extensions;
-using SFA.DAS.EmployerAccounts.Web.Helpers;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.Validation;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using SFA.DAS.Employer.Shared.UI;
+using SFA.DAS.Employer.Shared.UI.Attributes;
+using SFA.DAS.EmployerAccounts.Web.Authentication;
+using SFA.DAS.EmployerAccounts.Web.RouteValues;
 
-namespace SFA.DAS.EmployerAccounts.Web.Controllers
+namespace SFA.DAS.EmployerAccounts.Web.Controllers;
+
+[SetNavigationSection(NavigationSection.AccountsTeamsView)]
+[Route("accounts/{HashedAccountId}/teams")]
+public class EmployerTeamController : BaseController
 {
-    [DasAuthorize]
-    [RoutePrefix("accounts/{HashedAccountId}/teams")]
-    public class EmployerTeamController : BaseController
+    private readonly IUrlActionHelper _urlActionHelper;
+    private readonly EmployerTeamOrchestratorWithCallToAction _employerTeamOrchestrator;
+
+    public EmployerTeamController(
+        ICookieStorageService<FlashMessageViewModel> flashMessage,
+        EmployerTeamOrchestratorWithCallToAction employerTeamOrchestrator,
+        IUrlActionHelper urlActionHelper)
+        : base(flashMessage)
     {
-        private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
-   
-        public EmployerTeamController(
-            IAuthenticationService owinWrapper)
-            : base(owinWrapper)
-        {
-            _employerTeamOrchestrator = null;            
-        }
+        _employerTeamOrchestrator = employerTeamOrchestrator;
+        _urlActionHelper = urlActionHelper;
+    }
 
-        public EmployerTeamController(
-            IAuthenticationService owinWrapper,
-            IMultiVariantTestingService multiVariantTestingService,
-            ICookieStorageService<FlashMessageViewModel> flashMessage,
-            EmployerTeamOrchestrator employerTeamOrchestrator)
-            : base(owinWrapper, multiVariantTestingService, flashMessage)
+    [HttpGet]
+    [SetNavigationSection(NavigationSection.AccountsHome)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    [Route("", Name = RouteNames.EmployerTeamIndex)]
+    public async Task<IActionResult> Index(string hashedAccountId)
+    {
+        try
         {
-            _employerTeamOrchestrator = employerTeamOrchestrator;
-        }
-
-        [HttpGet]
-        [Route]
-        public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
-        {
-            PopulateViewBagWithExternalUserId();            
+            PopulateViewBagWithExternalUserId();
             var response = await GetAccountInformation(hashedAccountId);
-            
+
             if (response.Status != HttpStatusCode.OK)
             {
                 return View(response);
             }
 
-            if (!response.Data.HasPayeScheme)
+            if (!response.Data.Account.NameConfirmed)
             {
-                ViewBag.HideNav = true;
+                return RedirectToRoute(RouteNames.ContinueNewEmployerAccountTaskList, new { hashedAccountId } );
             }
 
             return View(response);
         }
-
-        [HttpGet]
-        [Route("view")]
-        public async Task<ActionResult> ViewTeam(string hashedAccountId)
+        catch (Exception e)
         {
-            var response = await _employerTeamOrchestrator.GetTeamMembers(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+            Console.WriteLine(e);
+            throw;
+        }
+        
+    }
 
-            var flashMessage = GetFlashMessageViewModelFromCookie();
-            if (flashMessage != null)
+    [HttpGet]
+    [Route("view", Name = RouteNames.EmployerTeamView)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport))]
+    public async Task<IActionResult> ViewTeam(string hashedAccountId)
+    {
+        var response = await _employerTeamOrchestrator.GetTeamMembers(hashedAccountId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
+
+        var flashMessage = GetFlashMessageViewModelFromCookie();
+        if (flashMessage != null)
+        {
+            response.FlashMessage = flashMessage;
+        }
+
+        return View(response);
+    }
+
+    [HttpGet]
+    [Route("AddedProvider/{providerName}")]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    public IActionResult AddedProvider([FromRoute] string hashedAccountId, [FromRoute] string providerName)
+    {
+        AddFlashMessageToCookie(new FlashMessageViewModel
+        {
+            Headline = "Your account has been created",
+            Message = $"You account has been created and you've successfully updated permissions for {Uri.UnescapeDataString(providerName).ToUpper()}",
+            Severity = FlashMessageSeverityLevel.Success
+        });
+
+        return RedirectToRoute(RouteNames.EmployerTeamIndex, new { hashedAccountId });
+    }
+
+    [HttpGet]
+    [Route("invite", Name = RouteNames.EmployerTeamInvite)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport))]
+    public async Task<IActionResult> Invite(string hashedAccountId)
+    {
+        var response = await _employerTeamOrchestrator.GetNewInvitation(hashedAccountId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
+
+        return View(response);
+    }
+
+    [HttpPost]
+    [Route("invite", Name = RouteNames.EmployerTeamInvitePost)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport))]
+    public async Task<IActionResult> Invite(InviteTeamMemberViewModel model)
+    {
+        var response = await _employerTeamOrchestrator.InviteTeamMember(model, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
+
+        if (response.Status == HttpStatusCode.OK)
+        {
+            var flashMessage = new FlashMessageViewModel
             {
-                response.FlashMessage = flashMessage;
+                HiddenFlashMessageInformation = "page-invite-team-member-sent",
+                Severity = FlashMessageSeverityLevel.Success,
+                Headline = "Invitation sent",
+                Message = $"You've sent an invitation to <strong>{model.Email}</strong>"
+            };
+            AddFlashMessageToCookie(flashMessage);
+
+            return RedirectToAction(ControllerConstants.NextStepsActionName, new { model.HashedAccountId });
+        }
+
+
+        model.ErrorDictionary = response.FlashMessage.ErrorMessages;
+        var errorResponse = new OrchestratorResponse<InviteTeamMemberViewModel>
+        {
+            Data = model,
+            FlashMessage = response.FlashMessage,
+        };
+
+        return View(errorResponse);
+    }
+
+    [HttpGet]
+    [Route("invite/next")]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport))]
+    public IActionResult NextSteps(string hashedAccountId)
+    {
+        var model = new OrchestratorResponse<InviteTeamMemberNextStepsViewModel>
+        {
+            FlashMessage = GetFlashMessageViewModelFromCookie(),
+            Data = new InviteTeamMemberNextStepsViewModel
+            {
+                HashedAccountId = hashedAccountId
             }
+        };
 
-            return View(response);
-        }
+        return View(model);
+    }
 
-        [HttpGet]
-        [Route("AddedProvider/{providerName}")]
-        public async Task<ActionResult> AddedProvider(string providerName)
+    [HttpPost]
+    [Route("invite/next", Name = RouteNames.EmployerTeamInviteNextPost)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport))]
+    public IActionResult NextSteps(int? choice, string hashedAccountId)
+    {
+        switch (choice ?? 0)
         {
-            AddFlashMessageToCookie(new FlashMessageViewModel
-            {
-                Headline = "Your account has been created",
-                Message = $"You account has been created and you've successfully updated permissions for {HttpUtility.UrlDecode(providerName.ToUpper())}",
-                Severity = FlashMessageSeverityLevel.Success
-            });
-
-            return RedirectToAction(ControllerConstants.IndexActionName);
-        }
-
-        [HttpGet]
-        [Route("invite")]
-        public async Task<ActionResult> Invite(string hashedAccountId)
-        {
-            var response = await _employerTeamOrchestrator.GetNewInvitation(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-
-            return View(response);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("invite")]
-        public async Task<ActionResult> Invite(InviteTeamMemberViewModel model)
-        {
-            var response = await _employerTeamOrchestrator.InviteTeamMember(model, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-
-            if (response.Status == HttpStatusCode.OK)
-            {
-                var flashMessage = new FlashMessageViewModel
+            case 1: return RedirectToAction(ControllerConstants.InviteActionName, new { hashedAccountId });
+            case 2: return RedirectToAction(ControllerConstants.ViewTeamActionName, new { hashedAccountId });
+            case 3: return RedirectToAction(ControllerConstants.IndexActionName, new { hashedAccountId });
+            default:
+                var model = new OrchestratorResponse<InviteTeamMemberNextStepsViewModel>
                 {
-                    HiddenFlashMessageInformation = "page-invite-team-member-sent",
-                    Severity = FlashMessageSeverityLevel.Success,
-                    Headline = "Invitation sent",
-                    Message = $"You've sent an invitation to <strong>{model.Email}</strong>"
+                    FlashMessage = GetFlashMessageViewModelFromCookie(),
+                    Data = new InviteTeamMemberNextStepsViewModel
+                    {
+                        ErrorMessage = "You must select an option to continue.",
+                    }
                 };
-                AddFlashMessageToCookie(flashMessage);
+                return View(model); //No option entered
+        }
+    }
 
-                return RedirectToAction(ControllerConstants.NextStepsActionName);
-            }
+    [HttpGet]
+    [Route("{hashedInvitationId}/cancel", Name = RouteNames.EmployerTeamCancelInvitation)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport))]
+    public async Task<IActionResult> Cancel(string hashedInvitationId)
+    {
+        var invitation = await _employerTeamOrchestrator.GetInvitation(hashedInvitationId);
 
+        return View(invitation);
+    }
 
-            model.ErrorDictionary = response.FlashMessage.ErrorMessages;
-            var errorResponse = new OrchestratorResponse<InviteTeamMemberViewModel>
-            {
-                Data = model,
-                FlashMessage = response.FlashMessage,
-            };
+    [HttpPost]
+    [Route("{hashedInvitationId}/cancel", Name = RouteNames.EmployerTeamCancelInvitationPost)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport))]
+    public async Task<IActionResult> Cancel(string hashedInvitationId, string email, string hashedAccountId, int cancel)
+    {
+        if (cancel != 1)
+            return RedirectToAction(ControllerConstants.ViewTeamViewName, new { HashedAccountId = hashedAccountId });
 
-            return View(errorResponse);
+        var response = await _employerTeamOrchestrator.Cancel(email, hashedAccountId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
+
+        return View(ControllerConstants.ViewTeamViewName, response);
+    }
+
+    [HttpPost]
+    [Route("resend", Name = RouteNames.EmployerTeamResendInvite)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport))]
+    public async Task<IActionResult> Resend(string hashedAccountId, string email, string name)
+    {
+        var response = await _employerTeamOrchestrator.Resend(email, hashedAccountId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName), name);
+
+        return View(ControllerConstants.ViewTeamViewName, response);
+    }
+
+    [HttpGet]
+    [Route("{email}/remove", Name = RouteNames.RemoveTeamMember)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport))]
+    public async Task<IActionResult> Remove(string hashedAccountId, string email)
+    {
+        var response = await _employerTeamOrchestrator.Review(hashedAccountId, email);
+
+        return View(response);
+    }
+
+    [HttpPost]
+    [Route("{email}/remove", Name = RouteNames.ConfirmRemoveTeamMember)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport))]
+    public async Task<IActionResult> Remove(long userId, string hashedAccountId, string email, int remove)
+    {
+        Exception exception;
+        HttpStatusCode httpStatusCode;
+
+        try
+        {
+            if (remove != 1)
+                return RedirectToAction(ControllerConstants.ViewTeamViewName, new { HashedAccountId = hashedAccountId });
+
+            var response = await _employerTeamOrchestrator.Remove(userId, hashedAccountId, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
+
+            return View(ControllerConstants.ViewTeamViewName, response);
+        }
+        catch (InvalidRequestException e)
+        {
+            httpStatusCode = HttpStatusCode.BadRequest;
+            exception = e;
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            httpStatusCode = HttpStatusCode.Unauthorized;
+            exception = e;
         }
 
-        [HttpGet]
-        [Route("invite/next")]
-        public async Task<ActionResult> NextSteps(string hashedAccountId)
+        var errorResponse = await _employerTeamOrchestrator.Review(hashedAccountId, email);
+        errorResponse.Status = httpStatusCode;
+        errorResponse.Exception = exception;
+
+        return View(errorResponse);
+    }
+
+    [HttpGet]
+    [Route("{email}/role/change", Name = RouteNames.EmployerTeamGetChangeRole)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport))]
+    public async Task<IActionResult> ChangeRole(string hashedAccountId, string email)
+    {
+        var teamMember = await _employerTeamOrchestrator.GetTeamMemberWhetherActiveOrNot(hashedAccountId, email, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
+
+        return View(teamMember);
+    }
+
+    [HttpPost]
+    [Route("{email}/role/change", Name = RouteNames.EmployerTeamChangeRolePost)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport))]
+    public async Task<IActionResult> ChangeRole(string hashedAccountId, string email, Role role)
+    {
+        var response = await _employerTeamOrchestrator.ChangeRole(hashedAccountId, email, role, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
+
+        if (response.Status == HttpStatusCode.OK)
         {
-            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+            return View(ControllerConstants.ViewTeamViewName, response);
+        }
 
-            var userShownWizard = await _employerTeamOrchestrator.UserShownWizard(userId, hashedAccountId);
+        var teamMemberResponse = await _employerTeamOrchestrator.GetTeamMemberWhetherActiveOrNot(hashedAccountId, email, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
 
-            var model = new OrchestratorResponse<InviteTeamMemberNextStepsViewModel>
-            {
-                FlashMessage = GetFlashMessageViewModelFromCookie(),
-                Data = new InviteTeamMemberNextStepsViewModel
-                {
-                    UserShownWizard = userShownWizard,
-                    HashedAccountId = hashedAccountId
-                }
-            };
+        //We have to override flash message as the change role view has different model to view team view
+        teamMemberResponse.FlashMessage = response.FlashMessage;
+        teamMemberResponse.Exception = response.Exception;
 
+        return View(teamMemberResponse);
+    }
+
+    [HttpGet]
+    [Route("{email}/review", Name = RouteNames.EmployerTeamReview)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccountOrSupport))]
+    public async Task<IActionResult> Review(string hashedAccountId, string email)
+    {
+        var invitation = await _employerTeamOrchestrator.GetTeamMemberWhetherActiveOrNot(hashedAccountId, email, HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName));
+
+        return View(invitation);
+    }
+
+    [HttpGet]
+    [Route("continuesetupcreateadvert", Name = RouteNames.CreateAdvert)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    public IActionResult ContinueSetupCreateAdvert(string hashedAccountId)
+    {
+        return View();
+    }
+
+    [HttpPost]
+    [Route("continuesetupcreateadvert", Name = RouteNames.CreateAdvertPost)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    public IActionResult ContinueSetupCreateAdvert(string hashedAccountId, bool? requiresAdvert)
+    {
+        if (!requiresAdvert.HasValue)
+        {
+            ViewData.ModelState.AddModelError("Choice", "You must select an option to continue.");
+            return View();
+        }
+
+        if (requiresAdvert.Value)
+        {
+            return Redirect(_urlActionHelper.EmployerRecruitAction());
+        }
+
+        return Redirect(_urlActionHelper.EmployerCommitmentsV2Action("unapproved/Inform"));
+    }
+
+    [HttpGet]
+    [Route("triagewhichcourseyourapprenticewilltake", Name = RouteNames.TriageCourse)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    public IActionResult TriageWhichCourseYourApprenticeWillTake()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    [Route("triagewhichcourseyourapprenticewilltake", Name = RouteNames.TriageCoursePost)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    public IActionResult TriageWhichCourseYourApprenticeWillTake(string hashedAccountId, TriageViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
             return View(model);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("invite/next")]
-        public async Task<ActionResult> NextSteps(int? choice, string hashedAccountId)
+        switch (model.TriageOption)
         {
-            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-
-            var userShownWizard = await _employerTeamOrchestrator.UserShownWizard(userId, hashedAccountId);
-
-            switch (choice ?? 0)
-            {
-                case 1: return RedirectToAction(ControllerConstants.InviteActionName);
-                case 2: return RedirectToAction(ControllerConstants.ViewTeamActionName);
-                case 3: return RedirectToAction(ControllerConstants.IndexActionName);
-                default:
-                    var model = new OrchestratorResponse<InviteTeamMemberNextStepsViewModel>
-                    {
-                        FlashMessage = GetFlashMessageViewModelFromCookie(),
-                        Data = new InviteTeamMemberNextStepsViewModel
-                        {
-                            ErrorMessage = "You must select an option to continue.",
-                            UserShownWizard = userShownWizard
-                        }
-                    };
-                    return View(model); //No option entered
-            }
-        }
-
-        [HttpGet]
-        [Route("{invitationId}/cancel")]
-        public async Task<ActionResult> Cancel(string email, string invitationId, string hashedAccountId)
-        {
-            var invitation = await _employerTeamOrchestrator.GetInvitation(invitationId);
-            invitation.Data.HashedAccountId = hashedAccountId;
-
-            return View(invitation);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("{invitationId}/cancel")]
-        public async Task<ActionResult> Cancel(string invitationId, string email, string hashedAccountId, int cancel)
-        {
-            if (cancel != 1)
-                return RedirectToAction(ControllerConstants.ViewTeamViewName, new { HashedAccountId = hashedAccountId });
-
-            var response = await _employerTeamOrchestrator.Cancel(email, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-
-            return View(ControllerConstants.ViewTeamViewName, response);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("resend")]
-        public async Task<ActionResult> Resend(string hashedAccountId, string email, string name)
-        {
-            var response = await _employerTeamOrchestrator.Resend(email, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName), name);
-
-            return View(ControllerConstants.ViewTeamViewName, response);
-        }
-
-        [HttpGet]
-        [Route("{email}/remove")]
-        public async Task<ActionResult> Remove(string hashedAccountId, string email)
-        {
-            var response = await _employerTeamOrchestrator.Review(hashedAccountId, email);
-
-            return View(response);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("{email}/remove")]
-        public async Task<ActionResult> Remove(long userId, string hashedAccountId, string email, int remove)
-        {
-            Exception exception;
-            HttpStatusCode httpStatusCode;
-
-            try
-            {
-                if (remove != 1)
-                    return RedirectToAction(ControllerConstants.ViewTeamViewName, new { HashedAccountId = hashedAccountId });
-
-                var response = await _employerTeamOrchestrator.Remove(userId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-
-                return View(ControllerConstants.ViewTeamViewName, response);
-            }
-            catch (InvalidRequestException e)
-            {
-                httpStatusCode = HttpStatusCode.BadRequest;
-                exception = e;
-            }
-            catch (UnauthorizedAccessException e)
-            {
-                httpStatusCode = HttpStatusCode.Unauthorized;
-                exception = e;
-            }
-
-            var errorResponse = await _employerTeamOrchestrator.Review(hashedAccountId, email);
-            errorResponse.Status = httpStatusCode;
-            errorResponse.Exception = exception;
-
-            return View(errorResponse);
-        }
-
-        [HttpGet]
-        [Route("{email}/role/change")]
-        public async Task<ActionResult> ChangeRole(string hashedAccountId, string email)
-        {
-            var teamMember = await _employerTeamOrchestrator.GetTeamMemberWhetherActiveOrNot(hashedAccountId, email, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-
-            return View(teamMember);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("{email}/role/change")]
-        public async Task<ActionResult> ChangeRole(string hashedAccountId, string email, Role role)
-        {
-            var response = await _employerTeamOrchestrator.ChangeRole(hashedAccountId, email, role, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-
-            if (response.Status == HttpStatusCode.OK)
-            {
-                return View(ControllerConstants.ViewTeamViewName, response);
-            }
-
-            var teamMemberResponse = await _employerTeamOrchestrator.GetTeamMemberWhetherActiveOrNot(hashedAccountId, email, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-
-            //We have to override flash message as the change role view has different model to view team view
-            teamMemberResponse.FlashMessage = response.FlashMessage;
-            teamMemberResponse.Exception = response.Exception;
-
-            return View(teamMemberResponse);
-        }
-
-        [HttpGet]
-        [Route("{email}/review")]
-        public async Task<ActionResult> Review(string hashedAccountId, string email)
-        {
-            var invitation = await _employerTeamOrchestrator.GetTeamMemberWhetherActiveOrNot(hashedAccountId, email, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-
-            return View(invitation);
-        }
-
-        [HttpGet]
-        [Route("hideWizard")]
-        public async Task<ActionResult> HideWizard(string hashedAccountId)
-        {
-            var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-
-            await _employerTeamOrchestrator.HideWizard(hashedAccountId, externalUserId);
-
-            return RedirectToAction(ControllerConstants.IndexActionName);
-        }
-
-        [HttpGet]
-        [Route("continuesetupcreateadvert")]
-        public ActionResult ContinueSetupCreateAdvert(string hashedAccountId)
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("continuesetupcreateadvert")]
-        public ActionResult ContinueSetupCreateAdvert(string hashedAccountId, bool? requiresAdvert)
-        {
-            if (!requiresAdvert.HasValue)
-            {
-                ViewData.ModelState.AddModelError("Choice", "You must select an option to continue.");
-                return View();
-            }
-            else if(requiresAdvert.Value == true)
-            {
-                return Redirect(Url.EmployerRecruitAction());
-            }
-
-            return Redirect(Url.EmployerCommitmentsV2Action("unapproved/Inform"));
-        }
-
-        [ChildActionOnly]
-        public ActionResult SingleApprenticeshipContinueSetup(AccountDashboardViewModel model)
-        {
-            return PartialView(model.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single());
-        }
-
-        [ChildActionOnly]
-        public ActionResult SingleApprenticeshipWithTrainingProvider(AccountDashboardViewModel model)
-        {
-            return PartialView(model.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single());
-        }
-
-        [ChildActionOnly]
-        public ActionResult SingleApprenticeshipReadyForReview(AccountDashboardViewModel model)
-        {
-            return PartialView(model.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single());
-        }
-
-        [ChildActionOnly]
-        public ActionResult SingleApprenticeshipApproved(AccountDashboardViewModel model)
-        {
-            return PartialView(model.CallToActionViewModel.Apprenticeships.First());
-        }
-
-        [ChildActionOnly]
-        public ActionResult SingleApprenticeshipContinueWithProvider(AccountDashboardViewModel model)
-        {
-            model.CallToActionViewModel.Cohorts.Single().Apprenticeships = new List<ApprenticeshipViewModel>()
-            {
-                new ApprenticeshipViewModel()
+            case TriageOptions.Yes:
                 {
-                    CourseName = model.CallToActionViewModel.Cohorts?.Single()?.CohortApprenticeshipsCount > 0 ? model.CallToActionViewModel.Cohorts?.Single()?.Apprenticeships?.Single()?.CourseName : string.Empty,
-                    HashedCohortId = model.CallToActionViewModel.Cohorts?.Single().HashedCohortId,
-                    TrainingProvider = model.CallToActionViewModel.Cohorts?.Single().TrainingProvider.First()
-                }
-            };          
-            return PartialView(model.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single());
-        }
-
-        [ChildActionOnly]
-        public override ActionResult SupportUserBanner(IAccountIdentifier model = null)
-        {
-            EmployerAccounts.Models.Account.Account account = null;
-
-            if (model != null && model.HashedAccountId != null)
-            {
-                var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-                var response = AsyncHelper.RunSync(() => _employerTeamOrchestrator.GetAccountSummary(model.HashedAccountId, externalUserId));
-                account = response.Status != HttpStatusCode.OK ? null : response.Data.Account;
-            }
-
-            var consoleUserType = OwinWrapper.GetClaimValue(ClaimTypes.Role) == "Tier2User" ? "Service user (T2 Support)" : "Standard user";
-            
-            return PartialView("_SupportUserBanner", new SupportUserBannerViewModel
-            {
-                Account = account,
-                ConsoleUserType = consoleUserType
-            });
-        }
-
-        [ChildActionOnly]
-        public ActionResult Row1Panel1(AccountDashboardViewModel model)
-        {
-            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "Empty", Data = model };
-
-            if (model.PayeSchemeCount == 0)
-            {
-                viewModel.ViewName = "AddPAYE";                
-            }
-            else
-            {
-                _employerTeamOrchestrator.GetCallToActionViewName(viewModel);
-            }
-
-            return PartialView(viewModel);
-        }
-
-        [ChildActionOnly]
-        public ActionResult AddPAYE(AccountDashboardViewModel model)
-        {
-            return PartialView(model);
-        }
-
-        [ChildActionOnly]
-        public ActionResult SignAgreement(AccountDashboardViewModel model)
-        {
-            return PartialView(model);
-        }        
-
-        [ChildActionOnly]
-        public ActionResult Empty(AccountDashboardViewModel model)
-        {
-            return PartialView(model);
-        }
-
-        [ChildActionOnly]
-        public ActionResult CheckFunding(AccountDashboardViewModel model)
-        {
-            return PartialView(model);
-        }
-
-        [ChildActionOnly]
-        public ActionResult ContinueSetupForSingleReservation(AccountDashboardViewModel model)
-        {
-            var reservation = model.CallToActionViewModel.Reservations?.FirstOrDefault();
-            var viewModel = new ReservationViewModel(reservation);
-            return PartialView(viewModel);
-        }
-
-        [ChildActionOnly]
-        public ActionResult VacancyDraft(AccountDashboardViewModel model)
-        {   
-            return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Draft));
-        }
-
-        [ChildActionOnly]
-        public ActionResult VacancyPendingReview(AccountDashboardViewModel model)
-        {
-            return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Submitted));
-        }
-
-        [ChildActionOnly]
-        public ActionResult VacancyRejected(AccountDashboardViewModel model)
-        {
-            return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Referred));
-        }
-
-        [ChildActionOnly]
-        public ActionResult VacancyLive(AccountDashboardViewModel model)
-        {
-            return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Live));
-        }
-
-        [ChildActionOnly]
-        public ActionResult VacancyClosed(AccountDashboardViewModel model)
-        {
-            return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Closed));
-        }
-
-        [HttpGet]
-        [Route("triagewhichcourseyourapprenticewilltake")]
-        public ActionResult TriageWhichCourseYourApprenticeWillTake()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [Route("triagewhichcourseyourapprenticewilltake")]
-        [ValidateAntiForgeryToken]
-        public ActionResult TriageWhichCourseYourApprenticeWillTake(TriageViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            switch (model.TriageOption)
-            {
-                case TriageOptions.Yes:
-                {
-                    return RedirectToAction(ControllerConstants.TriageHaveYouChosenATrainingProviderActionName);
+                    return RedirectToRoute(RouteNames.TriageChosenProvider, new { hashedAccountId });
                 }
 
-                case TriageOptions.No:
+            case TriageOptions.No:
                 {
-                    return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetCourseProviderActionName);
+                    return RedirectToRoute(RouteNames.TriageCannotSetupWithoutChosenCourseAndProvider, new { hashedAccountId });
                 }
 
-                default:
+            default:
                 {
                     return View(model);
                 }
-            }
+        }
+    }
+
+    [HttpGet]
+    [Route("triageyoucannotsetupanapprenticeshipyetcourseprovider", Name = RouteNames.TriageCannotSetupWithoutChosenCourseAndProvider)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    public IActionResult TriageYouCannotSetupAnApprenticeshipYetCourseProvider()
+    {
+        return View();
+    }
+
+    [HttpGet]
+    [Route("triagehaveyouchosenatrainingprovider", Name = RouteNames.TriageChosenProvider)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    public IActionResult TriageHaveYouChosenATrainingProvider()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    [Route("triagehaveyouchosenatrainingprovider", Name = RouteNames.TriageChosenProviderPost)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    public IActionResult TriageHaveYouChosenATrainingProvider(string hashedAccountId, TriageViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
         }
 
-        [HttpGet]
-        [Route("triageyoucannotsetupanapprenticeshipyetcourseprovider")]
-        public ActionResult TriageYouCannotSetupAnApprenticeshipYetCourseProvider()
+        switch (model.TriageOption)
         {
-            return View();
-        }
-
-        [HttpGet]
-        [Route("triagehaveyouchosenatrainingprovider")]
-        public ActionResult TriageHaveYouChosenATrainingProvider()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [Route("triagehaveyouchosenatrainingprovider")]
-        [ValidateAntiForgeryToken]
-        public ActionResult TriageHaveYouChosenATrainingProvider(TriageViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            switch (model.TriageOption)
-            {
-                case TriageOptions.Yes:
+            case TriageOptions.Yes:
                 {
-                    return RedirectToAction(ControllerConstants.TriageWillApprenticeshipTrainingStartActionName);
+                    return RedirectToRoute(RouteNames.TriageWhenWillApprenticeshipStart, new { hashedAccountId });
                 }
 
-                case TriageOptions.No:
+            case TriageOptions.No:
                 {
-                    return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetProviderActionName);
+                    return RedirectToRoute(RouteNames.TriageCannotSetupWithoutChosenProvider, new { hashedAccountId });
                 }
 
-                default:
-                {
-                    return View(model);
-                }
-            }
-        }
-
-        [HttpGet]
-        [Route("triageyoucannotsetupanapprenticeshipyetprovider")]
-        public ActionResult TriageYouCannotSetupAnApprenticeshipYetProvider()
-        {
-            return View();
-        }
-
-        [HttpGet]
-        [Route("triagewillapprenticeshiptrainingstart")]
-        public ActionResult TriageWillApprenticeshipTrainingStart()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [Route("triagewillapprenticeshiptrainingstart")]
-        [ValidateAntiForgeryToken]
-        public ActionResult TriageWillApprenticeshipTrainingStart(TriageViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            switch (model.TriageOption)
-            {
-                case TriageOptions.Yes:
-                {
-                    return RedirectToAction(ControllerConstants.TriageApprenticeForExistingEmployeeActionName);
-                }
-
-                case TriageOptions.No:
-                {
-                    return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetStartDateActionName);
-                }
-
-                case TriageOptions.Unknown:
-                {
-                    return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetApproximateStartDateActionName);
-                }
-
-                default:
+            default:
                 {
                     return View(model);
                 }
-            }
+        }
+    }
+
+    [HttpGet]
+    [Route("triageyoucannotsetupanapprenticeshipyetprovider", Name = RouteNames.TriageCannotSetupWithoutChosenProvider)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    public IActionResult TriageYouCannotSetupAnApprenticeshipYetProvider()
+    {
+        return View();
+    }
+
+    [HttpGet]
+    [Route("triagewillapprenticeshiptrainingstart", Name = RouteNames.TriageWhenWillApprenticeshipStart)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    public IActionResult TriageWillApprenticeshipTrainingStart()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    [Route("triagewillapprenticeshiptrainingstart", Name = RouteNames.TriageWhenWillApprenticeshipStartPost)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    public IActionResult TriageWillApprenticeshipTrainingStart(string hashedAccountId,TriageViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
         }
 
-        [HttpGet]
-        [Route("triageyoucannotsetupanapprenticeshipyetstartdate")]
-        public ActionResult TriageYouCannotSetupAnApprenticeshipYetStartDate()
+        switch (model.TriageOption)
         {
-            return View();
+            case TriageOptions.Yes:
+                {
+                    return RedirectToRoute(RouteNames.TriageWhenApprenticeshipForExistingEmployee, new { hashedAccountId });
+                }
+
+            case TriageOptions.No:
+                {
+                    return RedirectToRoute(RouteNames.TriageCannotSetupWithoutStartDate, new { hashedAccountId });
+                }
+
+            case TriageOptions.Unknown:
+                {
+                    return RedirectToRoute(RouteNames.TriageCannotSetupWithoutApproximateStartDate, new { hashedAccountId });
+                }
+
+            default:
+                {
+                    return View(model);
+                }
+        }
+    }
+
+    [HttpGet]
+    [Route("triageyoucannotsetupanapprenticeshipyetstartdate", Name = RouteNames.TriageCannotSetupWithoutStartDate)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    public IActionResult TriageYouCannotSetupAnApprenticeshipYetStartDate()
+    {
+        return View();
+    }
+
+    [HttpGet]
+    [Route("triageyoucannotsetupanapprenticeshipyetapproximatestartdate", Name = RouteNames.TriageCannotSetupWithoutApproximateStartDate)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    public IActionResult TriageYouCannotSetupAnApprenticeshipYetApproximateStartDate()
+    {
+        return View();
+    }
+
+    [HttpGet]
+    [Route("triageapprenticeforexistingemployee", Name = RouteNames.TriageWhenApprenticeshipForExistingEmployee)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    public IActionResult TriageApprenticeForExistingEmployee()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    [Route("triageapprenticeforexistingemployee", Name = RouteNames.TriageWhenApprenticeshipForExistingEmployeePost)]
+    [Authorize(Policy = nameof(PolicyNames.HasEmployerViewerTransactorOwnerAccount))]
+    public IActionResult TriageApprenticeForExistingEmployee(TriageViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
         }
 
-        [HttpGet]
-        [Route("triageyoucannotsetupanapprenticeshipyetapproximatestartdate")]
-        public ActionResult TriageYouCannotSetupAnApprenticeshipYetApproximateStartDate()
+        switch (model.TriageOption)
         {
-            return View();
-        }
-
-        [HttpGet]
-        [Route("triageapprenticeforexistingemployee")]
-        public ActionResult TriageApprenticeForExistingEmployee()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [Route("triageapprenticeforexistingemployee")]
-        [ValidateAntiForgeryToken]
-        public ActionResult TriageApprenticeForExistingEmployee(TriageViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            switch (model.TriageOption)
-            {
-                case TriageOptions.Yes:
+            case TriageOptions.Yes:
                 {
                     return View(ControllerConstants.TriageSetupApprenticeshipExistingEmployeeViewName);
                 }
 
-                case TriageOptions.No:
+            case TriageOptions.No:
                 {
                     return View(ControllerConstants.TriageSetupApprenticeshipNewEmployeeViewName);
                 }
 
-                default:
+            default:
                 {
                     return View(model);
                 }
-            }
+        }
+    }
+
+    private async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccountInformation(string hashedAccountId)
+    {
+        var externalUserId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+        var response = await _employerTeamOrchestrator.GetAccount(hashedAccountId, externalUserId);
+
+        var flashMessage = GetFlashMessageViewModelFromCookie();
+
+        if (flashMessage != null)
+        {
+            response.FlashMessage = flashMessage;
+            response.Data.EmployerAccountType = flashMessage.HiddenFlashMessageInformation;
         }
 
-        private async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccountInformation(string hashedAccountId)
+        return response;
+    }
+
+    private void PopulateViewBagWithExternalUserId()
+    {
+        var externalUserId = HttpContext.User.FindFirstValue(ControllerConstants.UserRefClaimKeyName);
+        
+        if (externalUserId != null)
         {
-            var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-            var response = await _employerTeamOrchestrator.GetAccount(hashedAccountId, externalUserId);
-
-            var flashMessage = GetFlashMessageViewModelFromCookie();
-
-            if (flashMessage != null)
-            {
-                response.FlashMessage = flashMessage;
-                response.Data.EmployerAccountType = flashMessage.HiddenFlashMessageInformation;
-            }
-
-            return response;
-        }
-
-        private void PopulateViewBagWithExternalUserId()
-        {
-            var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-            if (externalUserId != null)
-                ViewBag.UserId = externalUserId;
+            ViewBag.UserId = externalUserId;
         }
     }
 }

@@ -1,35 +1,35 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Validation;
+﻿using System.Threading;
+using Microsoft.Extensions.Logging;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 
-namespace SFA.DAS.EmployerAccounts.Commands.UpdateShowWizard
+namespace SFA.DAS.EmployerAccounts.Commands.UpdateShowWizard;
+
+public class UpdateShowAccountWizardCommandHandler : IRequestHandler<UpdateShowAccountWizardCommand>
 {
-    public class UpdateShowAccountWizardCommandHandler : AsyncRequestHandler<UpdateShowAccountWizardCommand>
+    private readonly IMembershipRepository _membershipRepository;
+    private readonly IValidator<UpdateShowAccountWizardCommand> _validator;
+    private readonly ILogger<UpdateShowAccountWizardCommandHandler> _logger;
+
+    public UpdateShowAccountWizardCommandHandler(IMembershipRepository membershipRepository, IValidator<UpdateShowAccountWizardCommand> validator, ILogger<UpdateShowAccountWizardCommandHandler> logger)
     {
-        private readonly IMembershipRepository _membershipRepository;
-        private readonly IValidator<UpdateShowAccountWizardCommand> _validator;
-        private readonly ILog _logger;
+        _membershipRepository = membershipRepository;
+        _validator = validator;
+        _logger = logger;
+    }
 
-        public UpdateShowAccountWizardCommandHandler(IMembershipRepository membershipRepository, IValidator<UpdateShowAccountWizardCommand> validator, ILog logger)
+    public async Task<Unit> Handle(UpdateShowAccountWizardCommand message, CancellationToken cancellationToken)
+    {
+        var validationResult = _validator.Validate(message);
+
+        if (!validationResult.IsValid())
         {
-            _membershipRepository = membershipRepository;
-            _validator = validator;
-            _logger = logger;
+            throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
-        protected override async Task HandleCore(UpdateShowAccountWizardCommand message)
-        {
-            var validationResult = _validator.Validate(message);
 
-            if (!validationResult.IsValid())
-            {
-                throw new InvalidRequestException(validationResult.ValidationDictionary);
-            }
+        _logger.LogInformation("User {ExternalUserId} has set the show wizard toggle to {ShowWizard} for account {HashedAccountId}", message.ExternalUserId, message.ShowWizard, message.HashedAccountId);
 
-            _logger.Info($"User {message.ExternalUserId} has set the show wizard toggle to {message.ShowWizard} for account {message.HashedAccountId}");
+        await _membershipRepository.SetShowAccountWizard(message.HashedAccountId, message.ExternalUserId, message.ShowWizard);
 
-            await _membershipRepository.SetShowAccountWizard(message.HashedAccountId, message.ExternalUserId, message.ShowWizard);
-        }
+        return Unit.Value;
     }
 }

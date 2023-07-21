@@ -7,7 +7,6 @@
     ViewBag.Section = "organisations";
     ViewBag.ZenDeskLabel = "eas-remove-organisation";
     ViewBag.GaData.Vpv = "/accounts/agreements/remove/organisation-remove-confirmation";
-    Layout = "~/Views/Shared/_Layout_CDN.cshtml";
 }
 
 <div class="govuk-grid-row">
@@ -33,8 +32,10 @@
         {
             <p class="govuk-body">This will end @Model.Data.Name’s agreement with ESFA.</p>
         }
-        <form method="POST" action="@Url.Action(ControllerConstants.ConfirmRemoveOrganisationActionName)">
-            @Html.AntiForgeryToken()
+        <form method="POST" 
+            asp-route-hashedAccountId="@Model.Data.HashedAccountId" 
+            asp-route-accountLegalEntityHashedId="@Model.Data.HashedAccountLegalEntitytId" 
+            asp-route="@RouteNames.PostConfirmRemoveOrganisation">
             <input type="hidden" value="@Model.Data.Name" name="Name" />
             <input type="hidden" value="@Model.Data.CanBeRemoved.ToString()" name="CanBeRemoved" />
             <input type="hidden" value="@Model.Data.HasSignedAgreement.ToString()" name="HasSignedAgreement" />
@@ -75,10 +76,10 @@
     <div class="govuk-breadcrumbs">
         <ol class="govuk-breadcrumbs__list">
             <li class="govuk-breadcrumbs__list-item">
-                <a class="govuk-breadcrumbs__link" href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName)">Home</a>
+                <a class="govuk-breadcrumbs__link" asp-route="@RouteNames.EmployerTeamIndex" asp-route-hashedAccountId="@Model.Data.HashedAccountId">Home</a>
             </li>
             <li class="govuk-breadcrumbs__list-item">
-                <a class="govuk-breadcrumbs__link" href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerAgreementControllerName)">Your organisations and agreements</a>
+                <a class="govuk-breadcrumbs__link" asp-route="@RouteNames.EmployerAgreementIndex" asp-route-hashedAccountId="@Model.Data.HashedAccountId">Your organisations and agreements</a>
             </li>
             <li class="govuk-breadcrumbs__list-item" aria-current="page">Remove organisation</li>
         </ol>

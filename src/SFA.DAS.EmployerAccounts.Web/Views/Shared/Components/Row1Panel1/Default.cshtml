@@ -1,0 +1,9 @@
+﻿@using SFA.DAS.EmployerAccounts.Web.ViewComponents
+@model SFA.DAS.EmployerAccounts.Web.ViewModels.PanelViewModel<SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel>
+
+@if (!Model.ComponentName.Equals(ComponentConstants.Empty))
+{
+    <div class="das-highlight das-highlight--@(Model.PanelType.ToString().ToLower()) govuk-!-margin-top-0">
+        @await Component.InvokeAsync(Model.ComponentName, new { model = Model.Data })
+    </div>
+}

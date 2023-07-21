@@ -17,7 +17,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
         public void ThenShouldReturnValidIfRequestIsValid()
         {
             //Act
-            var result = _validator.Validate(new GetSingleCohortRequest { HashedAccountId = "Abc123" });
+            var result = _validator.Validate(new GetSingleCohortRequest { AccountId = 1231 });
 
             //Assert
             Assert.IsTrue(result.IsValid());
@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
         public void ThenShouldReturnInValidIfRequestIsNotValid()
         {
             //Act
-            var result = _validator.Validate(new GetSingleCohortRequest { HashedAccountId = string.Empty });
+            var result = _validator.Validate(new GetSingleCohortRequest { AccountId = 0 });
 
             //Assert
             Assert.IsFalse(result.IsValid());

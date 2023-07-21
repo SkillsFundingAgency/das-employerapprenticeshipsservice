@@ -1,37 +1,34 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.Validation;
+﻿using System.Threading;
+using SFA.DAS.EmployerAccounts.Data.Contracts;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetUserNotificationSettings
+namespace SFA.DAS.EmployerAccounts.Queries.GetUserNotificationSettings;
+
+public class GetUserNotificationSettingsQueryHandler : IRequestHandler<GetUserNotificationSettingsQuery, GetUserNotificationSettingsQueryResponse>
 {
-    public class GetUserNotificationSettingsQueryHandler: IAsyncRequestHandler<GetUserNotificationSettingsQuery,GetUserNotificationSettingsQueryResponse>
+    private readonly IValidator<GetUserNotificationSettingsQuery> _validator;
+    private readonly IAccountRepository _accountRepository;
+
+    public GetUserNotificationSettingsQueryHandler(IAccountRepository accountRepository, IValidator<GetUserNotificationSettingsQuery> validator)
     {
-        private readonly IValidator<GetUserNotificationSettingsQuery> _validator;
-        private readonly IAccountRepository _accountRepository;
+        _accountRepository = accountRepository;
+        _validator = validator;
+    }
 
-        public GetUserNotificationSettingsQueryHandler(IAccountRepository accountRepository, IValidator<GetUserNotificationSettingsQuery> validator)
+    public async Task<GetUserNotificationSettingsQueryResponse> Handle(GetUserNotificationSettingsQuery message, CancellationToken cancellationToken)
+    {
+        var validationResult = _validator.Validate(message);
+
+        if (!validationResult.IsValid())
         {
-            _accountRepository = accountRepository;
-            _validator = validator;
+            throw new InvalidRequestException(validationResult.ValidationDictionary);
         }
 
-        public async Task<GetUserNotificationSettingsQueryResponse> Handle(GetUserNotificationSettingsQuery message)
+        var data = await _accountRepository.GetUserAccountSettings(message.UserRef);
+
+        return new GetUserNotificationSettingsQueryResponse
         {
-            var validationResult = _validator.Validate(message);
+            NotificationSettings = data
+        };
 
-            if (!validationResult.IsValid())
-            {
-                throw new InvalidRequestException(validationResult.ValidationDictionary);
-            }
-
-            var data = await _accountRepository.GetUserAccountSettings(message.UserRef);
-
-            return new GetUserNotificationSettingsQueryResponse
-            {
-                NotificationSettings = data
-            };
-
-        }
     }
 }

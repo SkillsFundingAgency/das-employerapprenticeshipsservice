@@ -1,11 +1,9 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
-@{ViewBag.PageID = "unsubscibe-from-emails"; }
-@{ViewBag.Title = "Unsubscribe from emails"; }
-@{ViewBag.MetaDesc = "Unsubscribe from emails"; }
-@{ViewBag.HideNav = true; }
-@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
-
 @{
+    ViewBag.PageID = "unsubscibe-from-emails";
+    ViewBag.Title = "Unsubscribe from emails"; ViewBag.MetaDesc = "Unsubscribe from emails";
+    ViewBag.ShowNav = false;
+
     var inError = Model?.GetType().GetProperty("InError") != null;
     ViewBag.GaData.Vpv = "/unsubscibe-from-emails";
 }
@@ -16,7 +14,6 @@
         <p class="govuk-body">If you would like to unsubscribe, please select the option below.</p>
         @using (Html.BeginForm("Unsubscribe", "Home", FormMethod.Post))
         {
-            @Html.AntiForgeryToken()
             <div class="govuk-form-group @(inError ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset">
                     @if (inError)

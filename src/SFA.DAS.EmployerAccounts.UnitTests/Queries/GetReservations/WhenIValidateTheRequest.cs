@@ -17,7 +17,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetReservations
         public void ThenShouldReturnValidIfRequestIsValid()
         {
             //Act
-            var result = _validator.Validate(new GetReservationsRequest { HashedAccountId = "123ABC", ExternalUserId = "user123" });
+            var result = _validator.Validate(new GetReservationsRequest { AccountId = 1876, ExternalUserId = "user123" });
 
             //Assert
             Assert.IsTrue(result.IsValid());
@@ -37,7 +37,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetReservations
         public void ThenShouldReturnInvalidIfNoExternalUserIdIsProvided()
         {
             //Act
-            var result = _validator.Validate(new GetReservationsRequest { HashedAccountId = "123ABC" });
+            var result = _validator.Validate(new GetReservationsRequest { AccountId = 1231 });
 
             //Assert
             Assert.IsFalse(result.IsValid());
@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetReservations
         public void ThenShouldReturnInvalidIfAccountIdIsEmpty()
         {
             //Act
-            var result = _validator.Validate(new GetReservationsRequest { HashedAccountId = string.Empty, ExternalUserId = "user123" });
+            var result = _validator.Validate(new GetReservationsRequest { AccountId = 0, ExternalUserId = "user123" });
 
             //Assert
             Assert.IsFalse(result.IsValid());
@@ -57,7 +57,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetReservations
         public void ThenShouldReturnInvalidIfExternalUserIdIsEmpty()
         {
             //Act
-            var result = _validator.Validate(new GetReservationsRequest { HashedAccountId = "123ABC", ExternalUserId = string.Empty });
+            var result = _validator.Validate(new GetReservationsRequest { AccountId = 1231, ExternalUserId = string.Empty });
 
             //Assert
             Assert.IsFalse(result.IsValid());

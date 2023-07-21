@@ -1,9 +1,8 @@
 ﻿using SFA.DAS.EmployerAccounts.Models;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetProviderInvitation
+namespace SFA.DAS.EmployerAccounts.Queries.GetProviderInvitation;
+
+public class GetProviderInvitationResponse
 {
-    public class GetProviderInvitationResponse
-    {
-        public ProviderInvitation Result { get; set; }
-    }
+    public ProviderInvitation Result { get; set; }
 }

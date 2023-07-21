@@ -1,29 +1,27 @@
-﻿@using SFA.DAS.Authorization
-@using SFA.DAS.Authorization.Mvc
-@using SFA.DAS.EmployerAccounts.Web.Helpers
-@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
-
-@model OrchestratorResponse<EmployerAgreementViewModel>
+﻿@model OrchestratorResponse<EmployerAgreementViewModel>
 
 @{
     ViewBag.PageID = "agreement-about";
     ViewBag.Title = "About your agreement";
     ViewBag.Section = "organisations";
     ViewBag.GaData.Vpv = "/accounts/agreements/about-your-agreement/agreement-about";
-    ViewBag.HideNav = true;
+    ViewBag.ShowNav = false;
     ViewBag.ZenDeskLabel = "eas-about-your-agreement";
 }
 
 <div class="govuk-grid-row header-index">
     <div class="govuk-grid-column-two-thirds">
         <span class="govuk-caption-xl">@Model.Data.EmployerAgreement.LegalEntityName</span>
-        <h1 class="govuk-heading-xl">About your agreement</h1>
+        <h1 class="govuk-heading-xl">@ViewBag.Title</h1>
 
-         <p class="govuk-body">This agreement creates a legal contract between <span class="govuk-!-font-weight-bold">@Model.Data.EmployerAgreement.LegalEntityName</span> and the <span class="bold">Education and Skills Funding Agency (ESFA)</span>. It allows you to transfer funds to other employers and pay training providers for apprenticeships.</p>
-         <p class="govuk-body">You need to ensure you have the authority from your organisation before you accept this agreement.</p>       
+        <p class="govuk-body">This agreement is a legal contract between <span class="govuk-!-font-weight-bold">@Model.Data.EmployerAgreement.LegalEntityName</span> and The Secretary of State acting through the Department for Education (<abbr>DfE</abbr>) and/or its executive agency, the Education and Skills Funding Agency. It allows you to pay training providers for apprenticeship and transfer funds to other employers.</p>
+        <p class="govuk-body">You need to ensure you have the authority from your organisation before you accept this agreement.</p>
 
-        <form method="get" action="@Url.Action(ControllerConstants.SignAgreementActionName ,ControllerConstants.EmployerAgreementControllerName)">
-            @Html.AntiForgeryToken()
+        <form method="get"
+              asp-controller="@ControllerConstants.EmployerAgreementControllerName"
+              asp-action="@ControllerConstants.SignAgreementActionName"
+              asp-route-hashedAccountId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAccountId]"
+              asp-route-hashedAgreementId="@ViewContext.RouteData.Values[RouteValueKeys.HashedAgreementId]">
             <input class="govuk-button" type="submit" value="Continue to your agreement" />
         </form>
     </div>
