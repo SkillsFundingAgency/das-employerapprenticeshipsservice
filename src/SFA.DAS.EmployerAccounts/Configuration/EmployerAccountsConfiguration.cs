@@ -42,6 +42,7 @@ public class EmployerAccountsConfiguration
     public AccountApiConfiguration AccountApi { get; set; }
     public TokenServiceApiClientConfiguration TokenServiceApi { get; set; }
     public UserAornPayeLockConfiguration UserAornPayeLock { get; set; }
+    public string GovUkSignInToASAccountUrl { get; set; }
     public string ZenDeskHelpCentreUrl { get; set; }
     public string ReportTrainingProviderEmailAddress { get; set; }
     public string AdfsMetadata { get; set; }

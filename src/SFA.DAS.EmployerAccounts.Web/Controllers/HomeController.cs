@@ -90,6 +90,12 @@ public class HomeController : BaseController
         }
         else
         {
+            if (_config["ResourceEnvironmentName"].Equals("PROD"))
+            {
+                //GDS requirement that users begin their service journey on .gov.uk
+                return Redirect(_configuration.GovUkSignInToASAccountUrl);
+            }
+
             var model = new ServiceStartPageViewModel
             {
                 HideHeaderSignInLink = true,
@@ -98,6 +104,8 @@ public class HomeController : BaseController
 
             return View(ControllerConstants.ServiceStartPageViewName, model);
         }
+
+
 
         if (accounts.Data.Invitations > 0)
         {
