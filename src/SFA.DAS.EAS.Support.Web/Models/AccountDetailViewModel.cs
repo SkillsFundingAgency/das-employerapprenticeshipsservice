@@ -9,4 +9,5 @@ public class AccountDetailViewModel
     public string SearchUrl { get; set; }
     public string AccountUri { get; set; }
     public bool IsTier2User { get; set; }
+    public string TeamMemberUrl { get; set; }
 }

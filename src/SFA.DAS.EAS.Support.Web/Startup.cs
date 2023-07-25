@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.EAS.Support.Web.Authorization;
 using SFA.DAS.EAS.Support.Web.Configuration;
 using SFA.DAS.EAS.Support.Web.Extensions;
 using SFA.DAS.EAS.Support.Web.ServiceRegistrations;
@@ -9,31 +11,39 @@ namespace SFA.DAS.EAS.Support.Web;
 
 public class Startup
 {
+    private readonly IHostEnvironment _environment;
     private readonly IConfiguration _configuration;
 
-    public Startup(IConfiguration configuration)
+    public Startup(IConfiguration configuration, IHostEnvironment environment)
     {
+        _environment = environment;
         _configuration = configuration.BuildDasConfiguration();
     }
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddLogging();
+
         services.AddConfigurationSections(_configuration);
 
         services.AddSingleton(_configuration);
-        var webConfiguration = _configuration.Get<EasSupportConfiguration>();
-
-        services.AddAndConfigureSupportAuthentication(webConfiguration);
 
         services.AddApiClientServices();
         services.AddRepositories();
         services.AddApplicationServices();
 
-        services.AddControllersWithViews()
-            .AddNewtonsoftJson(options =>
+        var supportConfiguration = _configuration.Get<EasSupportConfiguration>();
+        services.AddActiveDirectoryAuthentication(supportConfiguration);
+
+        services.AddMvc(opt =>
+        {
+            if (!_environment.IsDevelopment())
             {
-                options.UseMemberCasing();
-            });
+                opt.Filters.Add(new AuthorizeFilter(PolicyNames.Default));
+            }
+        }).AddNewtonsoftJson(options => { options.UseMemberCasing(); });
+
+        services.AddApplicationInsightsTelemetry();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -42,16 +52,18 @@ public class Startup
         {
             app.UseDeveloperExceptionPage();
         }
-
+        else
+        {
+            app.UseHsts();
+            app.UseAuthentication();
+        }
+        
         app.UseStaticFiles();
-        app.UseAuthentication();
         app.UseRouting();
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>
         {
-            endpoints.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+            endpoints.MapControllers();
         });
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EAS.Support.Web;
+﻿using NLog.Web;
+
+namespace SFA.DAS.EAS.Support.Web;
 
 public class Program
 {
@@ -7,10 +9,12 @@ public class Program
         CreateHostBuilder(args).Build().Run();
     }
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
+    private static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(webBuilder =>
             {
-                webBuilder.UseStartup<Startup>();
+                webBuilder
+                    .UseStartup<Startup>()
+                    .UseNLog();
             });
 }

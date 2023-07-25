@@ -17,7 +17,7 @@ public static class ApplicationServiceRegistrations
     {
         services.AddSingleton<IPayRefHashingService, PayRefHashingService>(sp =>
         {
-            var hashConfig = sp.GetService<IEasSupportConfiguration>().HashingService;
+            var hashConfig = sp.GetService<EasSupportConfiguration>().HashingService;
             return new PayRefHashingService(hashConfig.AllowedCharacters, hashConfig.Hashstring);
         });
 
@@ -25,6 +25,7 @@ public static class ApplicationServiceRegistrations
         services.AddSingleton<IChallengeService, ChallengeService>();
         services.AddSingleton<IDatetimeService, DatetimeService>();
         services.AddSingleton<IChallengeHandler, ChallengeHandler>();
+
         services.AddSingleton<IPayeLevySubmissionsHandler, PayeLevySubmissionsHandler>();
         services.AddSingleton<IPayeLevyMapper, PayeLevyMapper>();
         services.AddSingleton<IPayeSchemeObfuscator, PayeSchemeObfuscator>();

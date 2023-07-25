@@ -5,7 +5,6 @@ using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Support.Core.Models;
 using SFA.DAS.EAS.Support.Core.Services;
 using SFA.DAS.EAS.Support.Infrastructure.Services.Contracts;
-using ResourceList = SFA.DAS.EAS.Account.Api.Types.ResourceList;
 
 namespace SFA.DAS.EAS.Support.Infrastructure.Services;
 

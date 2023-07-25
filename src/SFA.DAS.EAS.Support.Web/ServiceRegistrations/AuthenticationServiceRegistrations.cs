@@ -1,34 +1,33 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.EAS.Support.Web.Authorization;
 using SFA.DAS.EAS.Support.Web.Configuration;
 
 namespace SFA.DAS.EAS.Support.Web.ServiceRegistrations;
 
 public static class AuthenticationServiceRegistrations
 {
-
-    public static IServiceCollection AddAndConfigureSupportAuthentication(this IServiceCollection services, EasSupportConfiguration configuration)
+    public static IServiceCollection AddActiveDirectoryAuthentication(this IServiceCollection services,
+        EasSupportConfiguration configuration)
     {
-        services.AddAuthorization(o =>
+        services.AddAuthorization(options =>
         {
-            o.AddPolicy("default", policy =>
+            options.AddPolicy(PolicyNames.Default, policy =>
             {
                 policy.RequireAuthenticatedUser();
-                policy.RequireRole("das-support-portal");
+                policy.RequireRole(RoleNames.SupportPortal);
             });
         });
 
-        services.AddAuthentication(auth =>
-        {
-            auth.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-        }).AddJwtBearer(auth =>
-        {
-            auth.Authority = $"https://login.microsoftonline.com/{configuration.SiteValidator.Tenant}";
-            auth.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        services.AddAuthentication(auth => { auth.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
+            .AddJwtBearer(auth =>
             {
-                ValidAudiences = configuration.SiteValidator.Audience.Split(','),
-            };
-        });
+                auth.Authority = $"https://login.microsoftonline.com/{configuration.SiteValidator.Tenant}";
+                auth.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidAudiences = configuration.SiteValidator.Audience.Split(','),
+                };
+            });
 
         return services;
     }
