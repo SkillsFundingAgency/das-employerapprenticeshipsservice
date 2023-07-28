@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SFA.DAS.EAS.Domain.Models;
+﻿namespace SFA.DAS.EAS.Domain.Models;
 
 public enum Role
 {

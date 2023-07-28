@@ -5,7 +5,7 @@ using SFA.DAS.EAS.Domain.Configuration;
 
 namespace SFA.DAS.EAS.Application.Http;
 
-public class ManagedIdentityHttpClientFactory : IHttpClientFactory
+public class ManagedIdentityHttpClientFactory 
 {
     private readonly IManagedIdentityClientConfiguration _configuration;
 

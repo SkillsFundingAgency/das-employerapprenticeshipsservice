@@ -1,5 +1,4 @@
-﻿using System;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
+﻿using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Domain.Models.TransferConnections;
 

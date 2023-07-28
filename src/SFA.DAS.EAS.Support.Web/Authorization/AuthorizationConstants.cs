@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EAS.Support.Web.Helpers;
+﻿namespace SFA.DAS.EAS.Support.Web.Authorization;
 
 public static class AuthorizationConstants
 {
