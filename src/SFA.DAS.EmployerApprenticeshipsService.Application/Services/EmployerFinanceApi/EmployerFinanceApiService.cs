@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Http;
-using SFA.DAS.EAS.Application.Services.EmployerFinanceApi.Http;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Transfers;
 
@@ -14,60 +13,60 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
 
 public class EmployerFinanceApiService : ApiClientService, IEmployerFinanceApiService
 {
-    private readonly ILogger<EmployerFinanceApiService> _log;
-
-    public EmployerFinanceApiService(IEmployerFinanceApiHttpClientFactory clientFactory, ILogger<EmployerFinanceApiService> log) : base(clientFactory.CreateHttpClient())
+    private readonly ILogger<EmployerFinanceApiService> _logger;
+    
+    public EmployerFinanceApiService(HttpClient httpClient, ILogger<EmployerFinanceApiService> logger) : base(httpClient)
     {
-        _log = log;
+        _logger = logger;
     }
 
     public Task<List<LevyDeclarationViewModel>> GetLevyDeclarations(string hashedAccountId, CancellationToken cancellationToken = default)
     {
-        _log.LogInformation("Getting EmployerFinanceApiService: GetLevyDeclarations {HashedAccountId}", hashedAccountId);
+        _logger.LogInformation("Getting EmployerFinanceApiService: GetLevyDeclarations {HashedAccountId}", hashedAccountId);
 
         var url = $"api/accounts/{hashedAccountId}/levy";
 
-        _log.LogInformation("Getting EmployerFinanceApiService : GetLevyDeclarations url : {Url}", url);
+        _logger.LogInformation("Getting EmployerFinanceApiService : GetLevyDeclarations url : {Url}", url);
 
         return GetResponse<List<LevyDeclarationViewModel>>(url, cancellationToken: cancellationToken);
     }
 
     public Task<List<LevyDeclarationViewModel>> GetLevyForPeriod(string hashedAccountId, string payrollYear, short payrollMonth, CancellationToken cancellationToken = default)
     {
-        _log.LogInformation("Getting EmployerFinanceApiService: GetLevyForPeriod {HashedAccountId} year: {PayrollYear} month: {PayrollMonth}", hashedAccountId, payrollYear, payrollMonth);
+        _logger.LogInformation("Getting EmployerFinanceApiService: GetLevyForPeriod {HashedAccountId} year: {PayrollYear} month: {PayrollMonth}", hashedAccountId, payrollYear, payrollMonth);
 
         var url = $"api/accounts/{hashedAccountId}/levy/{payrollYear}/{payrollMonth}";
 
-        _log.LogInformation("Getting EmployerFinanceApiService : GetLevyForPeriod url : {Url}", url);
+        _logger.LogInformation("Getting EmployerFinanceApiService : GetLevyForPeriod url : {Url}", url);
 
         return GetResponse<List<LevyDeclarationViewModel>>(url, cancellationToken: cancellationToken);
     }
 
     public Task<TransactionsViewModel> GetTransactions(string accountId, int year, int month, CancellationToken cancellationToken = default)
     {
-        _log.LogInformation("Getting EmployerFinanceApiService: GetTransactions {AccountId} year : {Year} month : {Month}", accountId, year, month);
+        _logger.LogInformation("Getting EmployerFinanceApiService: GetTransactions {AccountId} year : {Year} month : {Month}", accountId, year, month);
 
         var url = $"api/accounts/{accountId}/transactions/{year}/{month}";
 
-        _log.LogInformation("Getting EmployerFinanceApiService : GetTransactions url : {Url}", url);
+        _logger.LogInformation("Getting EmployerFinanceApiService : GetTransactions url : {Url}", url);
 
         return GetResponse<TransactionsViewModel>(url, cancellationToken: cancellationToken);
     }
 
     public Task<List<TransactionSummaryViewModel>> GetTransactionSummary(string accountId, CancellationToken cancellationToken = default)
     {
-        _log.LogInformation("Getting EmployerFinanceApiService: GetTransactionSummary {AccountId}", accountId);
+        _logger.LogInformation("Getting EmployerFinanceApiService: GetTransactionSummary {AccountId}", accountId);
 
         var url = $"api/accounts/{accountId}/transactions";
 
-        _log.LogInformation("Getting EmployerFinanceApiService : GetTransactionSummary url : {Url}", url);
+        _logger.LogInformation("Getting EmployerFinanceApiService : GetTransactionSummary url : {Url}", url);
 
         return GetResponse<List<TransactionSummaryViewModel>>(url, cancellationToken: cancellationToken);
     }
 
     public Task<TotalPaymentsModel> GetStatistics(CancellationToken cancellationToken = default)
     {
-        _log.LogInformation("Getting EmployerFinanceApiService : statistics");
+        _logger.LogInformation("Getting EmployerFinanceApiService : statistics");
 
         return GetResponse<TotalPaymentsModel>("/api/financestatistics", cancellationToken: cancellationToken);
     }
@@ -78,8 +77,8 @@ public class EmployerFinanceApiService : ApiClientService, IEmployerFinanceApiSe
         var data = JsonConvert.SerializeObject(accountIds);
         var stringContent = new StringContent(data, System.Text.Encoding.UTF8, "application/json");
 
-        _log.LogInformation("Getting EmployerFinanceApiService : GetAccountBalances url : {Url}", url);
-        _log.LogInformation("stringContent {StringContent}", stringContent);
+        _logger.LogInformation("Getting EmployerFinanceApiService : GetAccountBalances url : {Url}", url);
+        _logger.LogInformation("stringContent {StringContent}", stringContent);
 
         // This uses a POST instead of a get due to the potential volume of accountId's being passed is too much for a GET request.
         var response = await BaseHttpClient.PostAsync(url, stringContent, cancellationToken);
@@ -96,11 +95,11 @@ public class EmployerFinanceApiService : ApiClientService, IEmployerFinanceApiSe
 
     public Task<TransferAllowance> GetTransferAllowance(string hashedAccountId, CancellationToken cancellationToken = default)
     {
-        _log.LogInformation("Getting EmployerFinanceApiService : GetTransferAllowance {HashedAccountId}", hashedAccountId);
+        _logger.LogInformation("Getting EmployerFinanceApiService : GetTransferAllowance {HashedAccountId}", hashedAccountId);
 
         var url = $"api/accounts/{hashedAccountId}/transferAllowance";
 
-        _log.LogInformation("Getting EmployerFinanceApiService : GetTransferAllowance url : {Url}", url);
+        _logger.LogInformation("Getting EmployerFinanceApiService : GetTransferAllowance url : {Url}", url);
 
         return GetResponse<TransferAllowance>(url, cancellationToken: cancellationToken);
     }
