@@ -2,8 +2,6 @@
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Support.Infrastructure.Services;
 using SFA.DAS.EAS.Support.Infrastructure.Services.Contracts;
-using SFA.DAS.EAS.Support.Web.Clients;
-using SFA.DAS.EmployerAccounts.Api.Client;
 
 namespace SFA.DAS.EAS.Support.Web.ServiceRegistrations;
 
@@ -13,9 +11,7 @@ public static class ApiClientServiceRegistrations
     {
         services.AddSingleton<IAccountApiClient, AccountApiClient>();
         services.AddSingleton<ILevyTokenHttpClientFactory, LevyTokenHttpClientFactory>();
-        
         services.AddSingleton<ITokenServiceApiClient, TokenServiceApiClient>();
-        services.AddSingleton<ISecureHttpClient, EmployerAccountsSecureHttpClient>();
         
         return services;
     }
