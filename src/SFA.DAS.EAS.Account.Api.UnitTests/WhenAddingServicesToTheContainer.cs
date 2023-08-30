@@ -8,6 +8,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Controllers;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.Account.Api.ServiceRegistrations;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.Encoding;
 using IConfigurationProvider = Microsoft.Extensions.Configuration.IConfigurationProvider;
 
@@ -58,7 +59,9 @@ public class WhenAddingServicesToTheContainer
         services.AddSingleton(mockHostingEnvironment.Object);
         services.AddAutoMapper(typeof(Startup).Assembly);
         services.AddApiConfigurationSections(config);
-        services.AddClientServices();
+        
+        var easConfiguration = config.Get<EmployerApprenticeshipsServiceConfiguration>();
+        services.AddClientServices(easConfiguration);
         services.AddOrchestrators();
 
         services.AddSingleton<IEncodingService, EncodingService>();

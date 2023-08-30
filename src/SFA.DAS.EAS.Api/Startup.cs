@@ -35,9 +35,11 @@ public class Startup
             .AddApiAuthentication(_configuration, _configuration.IsDevOrLocal())
             .AddApiAuthorization();
 
-
         services.AddAutoMapper(typeof(Startup));
-        services.AddClientServices();
+        
+        var easConfiguration = _configuration.Get<EmployerApprenticeshipsServiceConfiguration>();
+        
+        services.AddClientServices(easConfiguration);
         services.AddOrchestrators();
 
         services.AddSingleton<IEncodingService, EncodingService>();

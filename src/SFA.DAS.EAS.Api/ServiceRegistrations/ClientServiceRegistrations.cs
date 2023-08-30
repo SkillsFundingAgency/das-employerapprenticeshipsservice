@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.EAS.Application.Http;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
 using SFA.DAS.EAS.Domain.Configuration;
@@ -8,19 +9,23 @@ namespace SFA.DAS.EAS.Account.Api.ServiceRegistrations;
 
 public static class ClientServiceRegistrations
 {
-    public static IServiceCollection AddClientServices(this IServiceCollection services)
+    public static IServiceCollection AddClientServices(this IServiceCollection services, EmployerApprenticeshipsServiceConfiguration configuration)
     {
-        services.AddHttpClient<IEmployerAccountsApiService, EmployerAccountsApiService>((serviceProvider, client) =>
+        services.AddHttpClient<IEmployerAccountsApiService, EmployerAccountsApiService>(client =>
         {
-            var config = serviceProvider.GetService<EmployerAccountsApiConfiguration>();
-            client.BaseAddress = new Uri(config.ApiBaseUrl);
-        });
-        
-        services.AddHttpClient<IEmployerFinanceApiService, EmployerFinanceApiService>((serviceProvider, client) =>
+            client.BaseAddress = new Uri(configuration.EmployerAccountsApi.ApiBaseUrl);
+        }).ConfigurePrimaryHttpMessageHandler(_ =>
+            new ManagedIdentityHeadersHandler(
+                new ManagedIdentityTokenGenerator(configuration.EmployerAccountsApi)
+                ));
+
+        services.AddHttpClient<IEmployerFinanceApiService, EmployerFinanceApiService>(client =>
         {
-            var config = serviceProvider.GetService<EmployerFinanceApiConfiguration>();
-            client.BaseAddress = new Uri(config.ApiBaseUrl);
-        });
+            client.BaseAddress = new Uri(configuration.EmployerFinanceApi.ApiBaseUrl);
+        }).ConfigurePrimaryHttpMessageHandler(_ =>
+            new ManagedIdentityHeadersHandler(
+                new ManagedIdentityTokenGenerator(configuration.EmployerFinanceApi)
+                ));
 
         return services;
     }
