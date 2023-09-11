@@ -6,13 +6,13 @@ using SFA.DAS.Http.TokenGenerators;
 
 namespace SFA.DAS.EAS.Application.Http;
 
-public interface IManagedIdentityTokenGenerator : IGenerateBearerToken { }
+public interface IManagedIdentityTokenGenerator<T> : IGenerateBearerToken { }
 
-public class ManagedIdentityTokenGenerator : IManagedIdentityTokenGenerator
+public class ManagedIdentityTokenGenerator<T> : IManagedIdentityTokenGenerator<T> where T : IManagedIdentityClientConfiguration
 {
-    private readonly IManagedIdentityClientConfiguration _config;
+    private readonly T _config;
 
-    public ManagedIdentityTokenGenerator(IManagedIdentityClientConfiguration config) => _config = config;
+    public ManagedIdentityTokenGenerator(T config) => _config = config;
 
     public async Task<string> Generate()
     {

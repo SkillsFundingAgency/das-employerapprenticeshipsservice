@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Http;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.WebUtilities;
@@ -17,6 +16,8 @@ public abstract class ApiClientService
     {
         BaseHttpClient = baseHttpClient;
     }
+    
+    protected abstract Task AddAuthenticationHeader(HttpRequestMessage httpRequestMessage);
 
     protected Task<TResponse> GetResponse<TResponse>(string uri, object queryData = null, CancellationToken cancellationToken = default)
     {
@@ -49,7 +50,7 @@ public abstract class ApiClientService
 
     private static string AddQueryString(string uri, object queryData)
     {
-        var queryString = queryData.GetType().GetProperties().ToDictionary((PropertyInfo x) => x.Name, (PropertyInfo x) => x.GetValue(queryData)?.ToString() ?? string.Empty);
+        var queryString = queryData.GetType().GetProperties().ToDictionary(propertyInfo => propertyInfo.Name, propertyInfo => propertyInfo.GetValue(queryData)?.ToString() ?? string.Empty);
         return QueryHelpers.AddQueryString(uri, queryString);
     }
 

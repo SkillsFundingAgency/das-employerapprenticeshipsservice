@@ -8,7 +8,9 @@ namespace SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 public interface IEmployerAccountsApiService
 {
     Task<Statistics> GetStatistics(CancellationToken cancellationToken = default);
+
     Task<PagedApiResponseViewModel<AccountWithBalanceViewModel>> GetAccounts(string toDate, int pageSize, int pageNumber, CancellationToken cancellationToken = default);
+
     Task<AccountDetailViewModel> GetAccount(string hashedAccountId, CancellationToken cancellationToken = default);
     Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default);
 }

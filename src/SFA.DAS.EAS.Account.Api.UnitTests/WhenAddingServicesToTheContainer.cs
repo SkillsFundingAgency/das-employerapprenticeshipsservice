@@ -60,8 +60,7 @@ public class WhenAddingServicesToTheContainer
         services.AddAutoMapper(typeof(Startup).Assembly);
         services.AddApiConfigurationSections(config);
         
-        var easConfiguration = config.Get<EmployerApprenticeshipsServiceConfiguration>();
-        services.AddClientServices(easConfiguration);
+        services.AddClientServices();
         services.AddOrchestrators();
 
         services.AddSingleton<IEncodingService, EncodingService>();

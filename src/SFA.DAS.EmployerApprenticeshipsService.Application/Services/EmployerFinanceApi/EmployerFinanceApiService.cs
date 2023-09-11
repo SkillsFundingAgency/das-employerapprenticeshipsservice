@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Http;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Transfers;
 
@@ -14,10 +16,16 @@ namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
 public class EmployerFinanceApiService : ApiClientService, IEmployerFinanceApiService
 {
     private readonly ILogger<EmployerFinanceApiService> _logger;
-    
-    public EmployerFinanceApiService(HttpClient httpClient, ILogger<EmployerFinanceApiService> logger) : base(httpClient)
+    private readonly IManagedIdentityTokenGenerator<EmployerFinanceApiConfiguration> _tokenGenerator;
+
+    public EmployerFinanceApiService(
+        HttpClient httpClient,
+        ILogger<EmployerFinanceApiService> logger,
+        IManagedIdentityTokenGenerator<EmployerFinanceApiConfiguration> tokenGenerator)
+        : base(httpClient)
     {
         _logger = logger;
+        _tokenGenerator = tokenGenerator;
     }
 
     public Task<List<LevyDeclarationViewModel>> GetLevyDeclarations(string hashedAccountId, CancellationToken cancellationToken = default)
@@ -107,5 +115,12 @@ public class EmployerFinanceApiService : ApiClientService, IEmployerFinanceApiSe
     public Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default)
     {
         return GetResponse<dynamic>(url, cancellationToken: cancellationToken);
+    }
+
+    protected override async Task AddAuthenticationHeader(HttpRequestMessage httpRequestMessage)
+    {
+        var accessToken = await _tokenGenerator.Generate();
+        
+        httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
     }
 }

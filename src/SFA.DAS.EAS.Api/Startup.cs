@@ -37,9 +37,7 @@ public class Startup
 
         services.AddAutoMapper(typeof(Startup));
         
-        var easConfiguration = _configuration.Get<EmployerApprenticeshipsServiceConfiguration>();
-        
-        services.AddClientServices(easConfiguration);
+        services.AddClientServices();
         services.AddOrchestrators();
 
         services.AddSingleton<IEncodingService, EncodingService>();
