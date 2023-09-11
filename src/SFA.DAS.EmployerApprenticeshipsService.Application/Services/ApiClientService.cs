@@ -1,24 +1,26 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.WebUtilities;
 using SFA.DAS.EAS.Application.Http;
+using SFA.DAS.EAS.Domain.Configuration;
 
 namespace SFA.DAS.EAS.Application.Services;
 
-public abstract class ApiClientService
+public abstract class ApiClientService<T> where T : IManagedIdentityClientConfiguration
 {
-    protected readonly HttpClient BaseHttpClient;
+    protected readonly HttpClient Client;
+    private readonly IManagedIdentityTokenGenerator<T> _tokenGenerator;
 
-    protected ApiClientService(HttpClient baseHttpClient)
+    protected ApiClientService(HttpClient client, IManagedIdentityTokenGenerator<T> tokenGenerator)
     {
-        BaseHttpClient = baseHttpClient;
+        Client = client;
+        _tokenGenerator = tokenGenerator;
     }
     
-    protected abstract Task AddAuthenticationHeader(HttpRequestMessage httpRequestMessage);
-
     protected Task<TResponse> GetResponse<TResponse>(string uri, object queryData = null, CancellationToken cancellationToken = default)
     {
         return GetInternal<TResponse>(new Uri(uri, UriKind.RelativeOrAbsolute), queryData, cancellationToken);
@@ -38,7 +40,9 @@ public abstract class ApiClientService
             uri = new Uri(AddQueryString(uri.ToString(), queryData), UriKind.RelativeOrAbsolute);
         }
 
-        var httpResponseMessage = await BaseHttpClient.GetAsync(uri, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
+        await AddAuthenticationHeader();
+        
+        var httpResponseMessage = await Client.GetAsync(uri, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
         if (!httpResponseMessage.IsSuccessStatusCode)
         {
             var httpResponseMessage2 = httpResponseMessage;
@@ -57,5 +61,12 @@ public abstract class ApiClientService
     private static Exception CreateClientException(HttpResponseMessage httpResponseMessage, string content)
     {
         return new RestHttpClientException(httpResponseMessage, content);
+    }
+    
+    private async Task AddAuthenticationHeader()
+    {
+        var accessToken = await _tokenGenerator.Generate();
+
+        Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
     }
 }

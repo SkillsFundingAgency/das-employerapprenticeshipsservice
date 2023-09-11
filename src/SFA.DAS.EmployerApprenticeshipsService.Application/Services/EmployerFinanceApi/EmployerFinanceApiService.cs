@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
-using System.Net.Http.Headers;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -13,19 +14,19 @@ using SFA.DAS.EAS.Domain.Models.Transfers;
 
 namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
 
-public class EmployerFinanceApiService : ApiClientService, IEmployerFinanceApiService
+public class EmployerFinanceApiService : ApiClientService<EmployerFinanceApiConfiguration>, IEmployerFinanceApiService
 {
     private readonly ILogger<EmployerFinanceApiService> _logger;
-    private readonly IManagedIdentityTokenGenerator<EmployerFinanceApiConfiguration> _tokenGenerator;
 
     public EmployerFinanceApiService(
         HttpClient httpClient,
         ILogger<EmployerFinanceApiService> logger,
-        IManagedIdentityTokenGenerator<EmployerFinanceApiConfiguration> tokenGenerator)
-        : base(httpClient)
+        IManagedIdentityTokenGenerator<EmployerFinanceApiConfiguration> tokenGenerator,
+        EmployerFinanceApiConfiguration configuration)
+        : base(httpClient, tokenGenerator)
     {
         _logger = logger;
-        _tokenGenerator = tokenGenerator;
+        httpClient.BaseAddress = new Uri(configuration.ApiBaseUrl);
     }
 
     public Task<List<LevyDeclarationViewModel>> GetLevyDeclarations(string hashedAccountId, CancellationToken cancellationToken = default)
@@ -83,13 +84,13 @@ public class EmployerFinanceApiService : ApiClientService, IEmployerFinanceApiSe
     {
         const string url = "api/accounts/balances";
         var data = JsonConvert.SerializeObject(accountIds);
-        var stringContent = new StringContent(data, System.Text.Encoding.UTF8, "application/json");
+        var stringContent = new StringContent(data, Encoding.UTF8, "application/json");
 
         _logger.LogInformation("Getting EmployerFinanceApiService : GetAccountBalances url : {Url}", url);
         _logger.LogInformation("stringContent {StringContent}", stringContent);
 
         // This uses a POST instead of a get due to the potential volume of accountId's being passed is too much for a GET request.
-        var response = await BaseHttpClient.PostAsync(url, stringContent, cancellationToken);
+        var response = await Client.PostAsync(url, stringContent, cancellationToken);
 
         var content = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 
@@ -115,12 +116,5 @@ public class EmployerFinanceApiService : ApiClientService, IEmployerFinanceApiSe
     public Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default)
     {
         return GetResponse<dynamic>(url, cancellationToken: cancellationToken);
-    }
-
-    protected override async Task AddAuthenticationHeader(HttpRequestMessage httpRequestMessage)
-    {
-        var accessToken = await _tokenGenerator.Generate();
-        
-        httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
     }
 }

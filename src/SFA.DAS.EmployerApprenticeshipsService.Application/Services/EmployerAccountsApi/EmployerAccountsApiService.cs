@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -11,7 +10,7 @@ using SFA.DAS.EmployerAccounts.Api.Types;
 
 namespace SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
-public class EmployerAccountsApiService : ApiClientService, IEmployerAccountsApiService
+public class EmployerAccountsApiService : ApiClientService<EmployerAccountsApiConfiguration>, IEmployerAccountsApiService
 {
     private readonly ILogger<EmployerAccountsApiService> _logger;
     private readonly IManagedIdentityTokenGenerator<EmployerAccountsApiConfiguration> _tokenGenerator;
@@ -19,7 +18,7 @@ public class EmployerAccountsApiService : ApiClientService, IEmployerAccountsApi
     public EmployerAccountsApiService(HttpClient httpClient, 
         ILogger<EmployerAccountsApiService> logger,
         IManagedIdentityTokenGenerator<EmployerAccountsApiConfiguration> tokenGenerator,
-        EmployerAccountsApiConfiguration configuration) : base(httpClient)
+        EmployerAccountsApiConfiguration configuration) : base(httpClient, tokenGenerator)
     {
         _logger = logger;
         _tokenGenerator = tokenGenerator;
@@ -51,12 +50,5 @@ public class EmployerAccountsApiService : ApiClientService, IEmployerAccountsApi
     public Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default)
     {
         return GetResponse<dynamic>(url, cancellationToken: cancellationToken);
-    }
-
-    protected override async Task AddAuthenticationHeader(HttpRequestMessage httpRequestMessage)
-    {
-        var accessToken = await _tokenGenerator.Generate();
-        
-        httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
     }
 }
