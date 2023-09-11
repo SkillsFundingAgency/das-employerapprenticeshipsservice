@@ -14,14 +14,14 @@ using SFA.DAS.EAS.Domain.Models.Transfers;
 
 namespace SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
 
-public class EmployerFinanceApiService : ApiClientService<EmployerFinanceApiConfiguration>, IEmployerFinanceApiService
+public class EmployerFinanceApiService : ApiClientService, IEmployerFinanceApiService
 {
     private readonly ILogger<EmployerFinanceApiService> _logger;
 
     public EmployerFinanceApiService(
         HttpClient httpClient,
         ILogger<EmployerFinanceApiService> logger,
-        IManagedIdentityTokenGenerator<EmployerFinanceApiConfiguration> tokenGenerator,
+        IManagedIdentityTokenGenerator tokenGenerator,
         EmployerFinanceApiConfiguration configuration)
         : base(httpClient, tokenGenerator)
     {

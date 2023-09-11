@@ -10,19 +10,16 @@ using SFA.DAS.EmployerAccounts.Api.Types;
 
 namespace SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
-public class EmployerAccountsApiService : ApiClientService<EmployerAccountsApiConfiguration>, IEmployerAccountsApiService
+public class EmployerAccountsApiService : ApiClientService, IEmployerAccountsApiService
 {
     private readonly ILogger<EmployerAccountsApiService> _logger;
-    private readonly IManagedIdentityTokenGenerator<EmployerAccountsApiConfiguration> _tokenGenerator;
 
     public EmployerAccountsApiService(HttpClient httpClient, 
         ILogger<EmployerAccountsApiService> logger,
-        IManagedIdentityTokenGenerator<EmployerAccountsApiConfiguration> tokenGenerator,
+        IManagedIdentityTokenGenerator tokenGenerator,
         EmployerAccountsApiConfiguration configuration) : base(httpClient, tokenGenerator)
     {
         _logger = logger;
-        _tokenGenerator = tokenGenerator;
-
         httpClient.BaseAddress = new Uri(configuration.ApiBaseUrl);
     }
 

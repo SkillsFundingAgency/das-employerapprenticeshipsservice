@@ -10,8 +10,8 @@ public static class ClientServiceRegistrations
 {
     public static IServiceCollection AddClientServices(this IServiceCollection services)
     {
-        services.AddTransient<IManagedIdentityTokenGenerator<EmployerAccountsApiConfiguration>, ManagedIdentityTokenGenerator<EmployerAccountsApiConfiguration>>();
-        services.AddTransient<IManagedIdentityTokenGenerator<EmployerFinanceApiConfiguration>, ManagedIdentityTokenGenerator<EmployerFinanceApiConfiguration>>();
+        services.AddTransient<IManagedIdentityTokenGenerator, ManagedIdentityTokenGenerator<EmployerAccountsApiConfiguration>>();
+        services.AddTransient<IManagedIdentityTokenGenerator, ManagedIdentityTokenGenerator<EmployerFinanceApiConfiguration>>();
         
         services.AddHttpClient<IEmployerAccountsApiService, EmployerAccountsApiService>();
         services.AddHttpClient<IEmployerFinanceApiService, EmployerFinanceApiService>();

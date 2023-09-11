@@ -6,16 +6,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.WebUtilities;
 using SFA.DAS.EAS.Application.Http;
-using SFA.DAS.EAS.Domain.Configuration;
 
 namespace SFA.DAS.EAS.Application.Services;
 
-public abstract class ApiClientService<T> where T : IManagedIdentityClientConfiguration
+public abstract class ApiClientService
 {
     protected readonly HttpClient Client;
-    private readonly IManagedIdentityTokenGenerator<T> _tokenGenerator;
+    private readonly IManagedIdentityTokenGenerator _tokenGenerator;
 
-    protected ApiClientService(HttpClient client, IManagedIdentityTokenGenerator<T> tokenGenerator)
+    protected ApiClientService(HttpClient client, IManagedIdentityTokenGenerator tokenGenerator)
     {
         Client = client;
         _tokenGenerator = tokenGenerator;

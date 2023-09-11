@@ -6,9 +6,9 @@ using SFA.DAS.Http.TokenGenerators;
 
 namespace SFA.DAS.EAS.Application.Http;
 
-public interface IManagedIdentityTokenGenerator<T> : IGenerateBearerToken { }
+public interface IManagedIdentityTokenGenerator : IGenerateBearerToken { }
 
-public class ManagedIdentityTokenGenerator<T> : IManagedIdentityTokenGenerator<T> where T : IManagedIdentityClientConfiguration
+public class ManagedIdentityTokenGenerator<T> : IManagedIdentityTokenGenerator where T : IManagedIdentityClientConfiguration
 {
     private readonly T _config;
 
