@@ -46,7 +46,8 @@ public abstract class ApiClientService<T> where T : IManagedIdentityClientConfig
         if (!httpResponseMessage.IsSuccessStatusCode)
         {
             var httpResponseMessage2 = httpResponseMessage;
-            throw CreateClientException(httpResponseMessage2, await httpResponseMessage.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(continueOnCapturedContext: false));
+            var restClientException = await CreateClientException(httpResponseMessage2, cancellationToken);
+            throw restClientException;
         }
 
         return httpResponseMessage;
@@ -58,8 +59,10 @@ public abstract class ApiClientService<T> where T : IManagedIdentityClientConfig
         return QueryHelpers.AddQueryString(uri, queryString);
     }
 
-    private static Exception CreateClientException(HttpResponseMessage httpResponseMessage, string content)
+    private static async Task<RestHttpClientException> CreateClientException(HttpResponseMessage httpResponseMessage, CancellationToken cancellationToken)
     {
+        var content = await httpResponseMessage.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
+        
         return new RestHttpClientException(httpResponseMessage, content);
     }
     
