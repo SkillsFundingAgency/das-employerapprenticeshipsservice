@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,9 +9,7 @@ using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.Account.Api.ServiceRegistrations;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
-using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.Encoding;
-using IConfigurationProvider = Microsoft.Extensions.Configuration.IConfigurationProvider;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests;
 
