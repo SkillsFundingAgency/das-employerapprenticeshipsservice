@@ -18,7 +18,7 @@ public static class ConfigurationServiceRegistrations
         services.AddSingleton(sp => sp.GetService<EmployerApprenticeshipsServiceConfiguration>().EmployerAccountsApi);
         services.AddSingleton(sp => sp.GetService<EmployerApprenticeshipsServiceConfiguration>().EmployerFinanceApi);
 
-        var encodingConfigJson = configuration.GetSection("SFA.DAS.Encoding").Value;
+        var encodingConfigJson = configuration.GetSection(ConfigurationKeys.EncodingConfig).Value;
         var encodingConfig = JsonConvert.DeserializeObject<EncodingConfig>(encodingConfigJson);
         services.AddSingleton(encodingConfig);
 
