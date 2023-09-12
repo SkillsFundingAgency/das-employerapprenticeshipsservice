@@ -3,13 +3,14 @@ using System.Threading.Tasks;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerAccounts.Api.Types;
 
-namespace SFA.DAS.EAS.Application.Services.EmployerAccountsApi
+namespace SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
+
+public interface IEmployerAccountsApiService
 {
-    public interface IEmployerAccountsApiService
-    {
-        Task<Statistics> GetStatistics(CancellationToken cancellationToken = default(CancellationToken));
-        Task<PagedApiResponseViewModel<AccountWithBalanceViewModel>> GetAccounts(string toDate, int pageSize, int pageNumber, CancellationToken cancellationToken = default(CancellationToken));
-        Task<AccountDetailViewModel> GetAccount(string hashedAccountId, CancellationToken cancellationToken = default(CancellationToken));
-        Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default(CancellationToken));
-    }
+    Task<Statistics> GetStatistics(CancellationToken cancellationToken = default);
+
+    Task<PagedApiResponseViewModel<AccountWithBalanceViewModel>> GetAccounts(string toDate, int pageSize, int pageNumber, CancellationToken cancellationToken = default);
+
+    Task<AccountDetailViewModel> GetAccount(string hashedAccountId, CancellationToken cancellationToken = default);
+    Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default);
 }

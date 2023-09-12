@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,8 +7,9 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Controllers;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.Account.Api.ServiceRegistrations;
+using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
+using SFA.DAS.EAS.Application.Services.EmployerFinanceApi;
 using SFA.DAS.Encoding;
-using IConfigurationProvider = Microsoft.Extensions.Configuration.IConfigurationProvider;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests;
 
@@ -22,7 +22,14 @@ public class WhenAddingServicesToTheContainer
     {
         RunTestForType(toResolve);
     }
-
+    
+    [TestCase(typeof(IEmployerAccountsApiService))]
+    [TestCase(typeof(IEmployerFinanceApiService))]
+    public void Then_The_Dependencies_Are_Correctly_Resolved_For_ApiServices(Type toResolve)
+    {
+        RunTestForType(toResolve);
+    }
+        
     [TestCase(typeof(AccountLegalEntitiesController))]
     [TestCase(typeof(AccountLevyController))]
     [TestCase(typeof(AccountPayeSchemesController))]
@@ -58,6 +65,7 @@ public class WhenAddingServicesToTheContainer
         services.AddSingleton(mockHostingEnvironment.Object);
         services.AddAutoMapper(typeof(Startup).Assembly);
         services.AddApiConfigurationSections(config);
+        
         services.AddClientServices();
         services.AddOrchestrators();
 

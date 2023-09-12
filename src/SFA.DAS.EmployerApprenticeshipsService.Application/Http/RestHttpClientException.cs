@@ -34,5 +34,4 @@ public class RestHttpClientException : Exception
     {
         GenerateMessage(httpResponseMessage, errorResponse);
     }
-
 }

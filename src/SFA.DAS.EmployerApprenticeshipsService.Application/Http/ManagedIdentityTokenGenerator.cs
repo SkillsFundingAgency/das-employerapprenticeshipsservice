@@ -2,28 +2,26 @@
 using Azure.Core;
 using Azure.Identity;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.Http.TokenGenerators;
 
 namespace SFA.DAS.EAS.Application.Http;
 
-public class ManagedIdentityTokenGenerator : IManagedIdentityTokenGenerator
-{
-    private readonly IManagedIdentityClientConfiguration _config;
+public interface IManagedIdentityTokenGenerator : IGenerateBearerToken { }
 
-    public ManagedIdentityTokenGenerator(IManagedIdentityClientConfiguration config)
-    {
-        _config = config;
-    }
+public class ManagedIdentityTokenGenerator<TConfiguration> : IManagedIdentityTokenGenerator where TConfiguration : IManagedIdentityClientConfiguration
+{
+    private readonly TConfiguration _config;
+
+    public ManagedIdentityTokenGenerator(TConfiguration config) => _config = config;
 
     public async Task<string> Generate()
     {
         var tokenCredential = new DefaultAzureCredential();
         
         var accessToken = await tokenCredential.GetTokenAsync(
-            new TokenRequestContext(scopes: new string[] { _config.IdentifierUri + "/.default" }) { }
+            new TokenRequestContext(scopes: new[] { _config.IdentifierUri + "/.default" })
         );
 
         return accessToken.Token;
     }
 }
-
-
