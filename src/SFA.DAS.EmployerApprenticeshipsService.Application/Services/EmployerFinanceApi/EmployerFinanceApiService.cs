@@ -21,7 +21,7 @@ public class EmployerFinanceApiService : ApiClientService, IEmployerFinanceApiSe
     public EmployerFinanceApiService(
         HttpClient httpClient,
         ILogger<EmployerFinanceApiService> logger,
-        IManagedIdentityTokenGenerator tokenGenerator,
+        ManagedIdentityTokenGenerator<EmployerFinanceApiConfiguration> tokenGenerator,
         EmployerFinanceApiConfiguration configuration)
         : base(httpClient, tokenGenerator)
     {
@@ -83,21 +83,27 @@ public class EmployerFinanceApiService : ApiClientService, IEmployerFinanceApiSe
     public async Task<List<AccountBalance>> GetAccountBalances(List<string> accountIds, CancellationToken cancellationToken = default)
     {
         const string url = "api/accounts/balances";
+        
         var data = JsonConvert.SerializeObject(accountIds);
-        var stringContent = new StringContent(data, Encoding.UTF8, "application/json");
+        using var stringContent = new StringContent(data, Encoding.UTF8, "application/json");
 
         _logger.LogInformation("Getting EmployerFinanceApiService : GetAccountBalances url : {Url}", url);
         _logger.LogInformation("stringContent {StringContent}", stringContent);
 
         // This uses a POST instead of a get due to the potential volume of accountId's being passed is too much for a GET request.
-        var response = await Client.PostAsync(url, stringContent, cancellationToken);
-
-        var content = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+        using var request = new HttpRequestMessage(HttpMethod.Post, url);
+        request.Content = stringContent;
+        
+        await AddAuthenticationHeader(request);
+        
+        using var response = await Client.SendAsync(request, cancellationToken);
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new RestHttpClientException(response, content);
+            await ThrowRestHttpClientException(response, cancellationToken);
         }
+        
+        var content = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 
         return JsonConvert.DeserializeObject<List<AccountBalance>>(content);
     }

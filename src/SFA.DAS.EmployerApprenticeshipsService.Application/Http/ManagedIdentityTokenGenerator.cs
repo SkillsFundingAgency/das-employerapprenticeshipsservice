@@ -8,11 +8,11 @@ namespace SFA.DAS.EAS.Application.Http;
 
 public interface IManagedIdentityTokenGenerator : IGenerateBearerToken { }
 
-public class ManagedIdentityTokenGenerator<T> : IManagedIdentityTokenGenerator where T : IManagedIdentityClientConfiguration
+public class ManagedIdentityTokenGenerator<TConfiguration> : IManagedIdentityTokenGenerator where TConfiguration : IManagedIdentityClientConfiguration
 {
-    private readonly T _config;
+    private readonly TConfiguration _config;
 
-    public ManagedIdentityTokenGenerator(T config) => _config = config;
+    public ManagedIdentityTokenGenerator(TConfiguration config) => _config = config;
 
     public async Task<string> Generate()
     {

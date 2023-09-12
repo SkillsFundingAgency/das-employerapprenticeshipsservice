@@ -39,14 +39,14 @@ public abstract class ApiClientService
             uri = new Uri(AddQueryString(uri.ToString(), queryData), UriKind.RelativeOrAbsolute);
         }
 
-        await AddAuthenticationHeader();
+        using var request = new HttpRequestMessage(HttpMethod.Get, uri);
+
+        await AddAuthenticationHeader(request);
         
-        var httpResponseMessage = await Client.GetAsync(uri, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
+        var httpResponseMessage = await Client.SendAsync(request, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
         if (!httpResponseMessage.IsSuccessStatusCode)
         {
-            var httpResponseMessage2 = httpResponseMessage;
-            var restClientException = await CreateClientException(httpResponseMessage2, cancellationToken);
-            throw restClientException;
+            await ThrowRestHttpClientException(httpResponseMessage, cancellationToken);
         }
 
         return httpResponseMessage;
@@ -54,21 +54,26 @@ public abstract class ApiClientService
 
     private static string AddQueryString(string uri, object queryData)
     {
-        var queryString = queryData.GetType().GetProperties().ToDictionary(propertyInfo => propertyInfo.Name, propertyInfo => propertyInfo.GetValue(queryData)?.ToString() ?? string.Empty);
+        var queryString = queryData
+            .GetType()
+            .GetProperties()
+            .ToDictionary(propertyInfo => propertyInfo.Name, propertyInfo => propertyInfo.GetValue(queryData)?.ToString() ?? string.Empty);
+        
         return QueryHelpers.AddQueryString(uri, queryString);
     }
 
-    private static async Task<RestHttpClientException> CreateClientException(HttpResponseMessage httpResponseMessage, CancellationToken cancellationToken)
+    protected static async Task ThrowRestHttpClientException(HttpResponseMessage httpResponseMessage, CancellationToken cancellationToken)
     {
-        var content = await httpResponseMessage.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
+        var content = await httpResponseMessage.Content
+            .ReadAsStringAsync(cancellationToken)
+            .ConfigureAwait(continueOnCapturedContext: false);
         
-        return new RestHttpClientException(httpResponseMessage, content);
+        throw new RestHttpClientException(httpResponseMessage, content);
     }
     
-    private async Task AddAuthenticationHeader()
+    protected async Task AddAuthenticationHeader(HttpRequestMessage httpRequestMessage)
     {
         var accessToken = await _tokenGenerator.Generate();
-
-        Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
     }
 }

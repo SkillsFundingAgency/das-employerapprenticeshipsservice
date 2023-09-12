@@ -16,7 +16,7 @@ public class EmployerAccountsApiService : ApiClientService, IEmployerAccountsApi
 
     public EmployerAccountsApiService(HttpClient httpClient, 
         ILogger<EmployerAccountsApiService> logger,
-        IManagedIdentityTokenGenerator tokenGenerator,
+        ManagedIdentityTokenGenerator<EmployerAccountsApiConfiguration> tokenGenerator,
         EmployerAccountsApiConfiguration configuration) : base(httpClient, tokenGenerator)
     {
         _logger = logger;
