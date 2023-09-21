@@ -18,7 +18,7 @@
         <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.16" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
-        <PackageReference Include="SFA.DAS.Employer.Shared.UI" Version="17.1.44" />
+        <PackageReference Include="SFA.DAS.Employer.Shared.UI" Version="17.1.64" />
         <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.1.338" />
         <PackageReference Include="SFA.DAS.GovUK.Auth" Version="17.1.55" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.16" />
