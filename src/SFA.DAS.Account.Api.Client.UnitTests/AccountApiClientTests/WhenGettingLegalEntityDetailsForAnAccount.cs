@@ -10,7 +10,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
         private List<LegalEntityViewModel>? _legalEntities;
         private string? _uri;
 
-        public override void HttpClientSetup()
+        protected override void HttpClientSetup()
         {
             _uri = $"/api/accounts/{TextualAccountId}/legalentities?includeDetails=true";
             var absoluteUri = Configuration!.ApiBaseUrl.TrimEnd('/') + _uri;

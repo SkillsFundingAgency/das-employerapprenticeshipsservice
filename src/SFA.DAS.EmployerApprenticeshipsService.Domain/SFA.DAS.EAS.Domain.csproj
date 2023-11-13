@@ -9,8 +9,7 @@
 		<PackageReference Include="SFA.DAS.Authentication" Version="1.1.2" />
 		<PackageReference Include="SFA.DAS.Provider.Events.Api.Client" Version="3.0.1-prerelease-5">
 		</PackageReference>
-		<PackageReference Include="SFA.DAS.Audit.Client" Version="1.1.61">
-		</PackageReference>
+		<PackageReference Include="SFA.DAS.Audit.Client" Version="1.1.61"/>
 		<PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.283">
 		</PackageReference>
 		<PackageReference Include="SFA.DAS.Commitments.Api.Client" Version="8.28.1">

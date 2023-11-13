@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
         protected const long NumericalAccountId = 12345;
         protected const string TextualAccountId = "ABC123";
 
-        public abstract void HttpClientSetup();
+        protected abstract void HttpClientSetup();
 
         [SetUp]
         public void Arrange()

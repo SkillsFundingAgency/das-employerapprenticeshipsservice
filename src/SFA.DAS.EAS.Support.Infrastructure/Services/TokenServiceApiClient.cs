@@ -10,7 +10,6 @@ public class TokenServiceApiClient : ITokenServiceApiClient
     private readonly ITokenServiceApiClientConfiguration _configuration;
     private readonly ISecureTokenHttpClient _httpClient;
 
-
     public TokenServiceApiClient(ITokenServiceApiClientConfiguration configuration)
         : this(configuration, new SecureTokenHttpClient(configuration)) { }
 
