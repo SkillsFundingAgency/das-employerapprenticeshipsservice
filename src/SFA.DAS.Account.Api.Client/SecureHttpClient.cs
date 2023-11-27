@@ -16,10 +16,8 @@ public class SecureHttpClient
         _configuration = configuration;
     }
 
-    protected SecureHttpClient()
-    {
-        // so we can mock for testing
-    }
+    // so we can mock for testing
+    public SecureHttpClient() { }
 
     public virtual async Task<string> GetAsync(string url)
     {
@@ -30,10 +28,11 @@ public class SecureHttpClient
                 : await GetManagedIdentityAuthenticationResult(_configuration.IdentifierUri);
 
         using var client = new HttpClient();
-        
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-        var response = await client.GetAsync(url);
+        using var httpRequest = new HttpRequestMessage(HttpMethod.Get, url);
+        httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+        using var response = await client.SendAsync(httpRequest);
         response.EnsureSuccessStatusCode();
 
         return await response.Content.ReadAsStringAsync();

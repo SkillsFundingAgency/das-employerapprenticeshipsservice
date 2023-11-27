@@ -19,23 +19,25 @@ internal class SecureTokenHttpClient: ISecureTokenHttpClient
 
     public async Task<string> GetAsync(string url)
     {
-        string text = !IsClientCredentialConfiguration(_configuration.ClientId, _configuration.ClientSecret, _configuration.Tenant) 
+        var accessToken = !IsClientCredentialConfiguration(_configuration.ClientId, _configuration.ClientSecret, _configuration.Tenant) 
             ? await GetManagedIdentityAuthenticationResult(_configuration.IdentifierUri) 
             : await GetClientCredentialAuthenticationResult(_configuration.ClientId, _configuration.ClientSecret, _configuration.IdentifierUri, _configuration.Tenant);
 
-        string parameter = text;
-        using HttpClient client = new();
+        using var client = new HttpClient();
 
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", parameter);
-        HttpResponseMessage obj = await client.GetAsync(url);
-        obj.EnsureSuccessStatusCode();
+        using var httpRequest = new HttpRequestMessage(HttpMethod.Get, url);
+        httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        
+        using var response = await client.SendAsync(httpRequest);
+        
+        response.EnsureSuccessStatusCode();
 
-        return await obj.Content.ReadAsStringAsync();
+        return await response.Content.ReadAsStringAsync();
     }
 
     private static async Task<string> GetClientCredentialAuthenticationResult(string clientId, string clientSecret, string resource, string tenant)
     {
-        string authority = "https://login.microsoftonline.com/" + tenant;
+        var authority = "https://login.microsoftonline.com/" + tenant;
         var app = ConfidentialClientApplicationBuilder.Create(clientId)
             .WithAuthority(authority)
             .Build();
