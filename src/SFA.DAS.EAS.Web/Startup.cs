@@ -47,7 +47,7 @@ public class Startup
             services.AddMaMenuConfiguration(RouteNames.SignOut, identityServerConfiguration.ClientId, _configuration["ResourceEnvironmentName"]);
         }
 
-        services.AddOuterApiClient();
+        services.AddOuterApiClient(easConfiguration.EmployerAccountsOuterApiConfiguration);
         services.AddAuthenticationServices();
 
         if (_configuration.UseGovUkSignIn())

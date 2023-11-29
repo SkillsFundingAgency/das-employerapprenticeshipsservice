@@ -8,9 +8,12 @@ namespace SFA.DAS.EAS.Application.ServiceRegistrations;
 
 public static class OuterApiServiceRegistrations
 {
-    public static IServiceCollection AddOuterApiClient(this IServiceCollection services)
+    public static IServiceCollection AddOuterApiClient(this IServiceCollection services, OuterApiConfiguration outerApiConfiguration)
     {
-        services.AddHttpClient<IOuterApiClient, OuterApiClient>();
+        services.AddHttpClient<IOuterApiClient, OuterApiClient>(x =>
+        {
+            x.BaseAddress = new Uri(outerApiConfiguration.BaseUrl);
+        });
 
         return services;
     }

@@ -7,6 +7,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Contracts.OuterApi;
 using SFA.DAS.EAS.Application.ServiceRegistrations;
 using SFA.DAS.EAS.Application.Services;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.StartupExtensions;
 
@@ -58,7 +59,10 @@ public class WhenAddingServicesToTheContainer
         services.AddSingleton(mockHostingEnvironment.Object);
 
         services.AddConfigurationSections(config);
-        services.AddOuterApiClient();
+        
+        var easConfiguration = config.Get<EmployerApprenticeshipsServiceConfiguration>();
+        
+        services.AddOuterApiClient(easConfiguration.EmployerAccountsOuterApiConfiguration);
         services.AddAuthenticationServices();
 
         services.AddTransient<AccessDeniedController>();
