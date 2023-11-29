@@ -56,7 +56,7 @@ public class WhenAddingServicesToTheContainer
         var config = GenerateConfiguration();
         services.AddSingleton<IConfiguration>(config);
         services.AddSingleton(mockHostingEnvironment.Object);
-        
+
         services.AddConfigurationSections(config);
         services.AddOuterApiClient();
         services.AddAuthenticationServices();
@@ -81,11 +81,6 @@ public class WhenAddingServicesToTheContainer
         {
             InitialData = new List<KeyValuePair<string, string>>
             {
-                new("EnvironmentName", "LOCAL"),
-                new("HashingService:Hashstring", "SaltAndVinegar"),
-                new("HashingService:AllowedCharacters", "0123456789QWERTYUIOPASDFGHJKLZXCVBNM"),
-                new("LevySubmission:TokenServiceApi:ApiBaseUrl", "https://localhost:123"),
-                new("LevySubmission:TokenServiceApi:IdentifierUri", "https://localhost:321"),
                 new("EmployerAccountsOuterApiConfiguration:BaseUrl", "https://localhost:321"),
                 new("EmployerAccountsOuterApiConfiguration:Key", "ABC123"),
             }
