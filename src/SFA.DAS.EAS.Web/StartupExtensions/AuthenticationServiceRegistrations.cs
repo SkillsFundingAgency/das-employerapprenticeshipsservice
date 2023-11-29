@@ -20,8 +20,6 @@ public static class AuthenticationServiceRegistrations
 {
     public static IServiceCollection AddAuthenticationServices(this IServiceCollection services)
     {
-        services.AddHttpContextAccessor();
-
         services.AddTransient<ICustomClaims, EmployerAccountPostAuthenticationClaimsHandler>();
         services.AddTransient<IEmployerAccountAuthorisationHandler, EmployerAccountAuthorisationHandler>();
         services.AddSingleton<IAuthorizationHandler, EmployerAccountAllRolesAuthorizationHandler>();
