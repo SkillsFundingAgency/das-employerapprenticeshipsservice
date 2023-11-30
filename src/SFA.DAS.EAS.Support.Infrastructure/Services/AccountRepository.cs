@@ -201,7 +201,7 @@ public sealed class AccountRepository : IAccountRepository
 
         foreach (var payeBatch in payesBatches)
         {
-            var payeTasks = response.PayeSchemes.Select(payeScheme =>
+            var payeTasks = payeBatch.Select(payeScheme =>
             {
                 var obscured = _payeSchemeObfuscator.ObscurePayeScheme(payeScheme.Id).Replace("/", "%252f");
                 var paye = payeScheme.Id.Replace("/", "%252f");
@@ -213,11 +213,9 @@ public sealed class AccountRepository : IAccountRepository
                     {
                         return payeTask.Result;
                     }
-                    else
-                    {
-                        _logger.LogError(payeTask.Exception, "Exception occured in Account API type of {PayeSchemeViewModelName} at {PayeSchemeHref} id {PayeSchemeId}", nameof(PayeSchemeModel), payeScheme.Href, payeScheme.Id);
-                        return new PayeSchemeModel();
-                    }
+
+                    _logger.LogError(payeTask.Exception, "Exception occured in Account API type of {PayeSchemeViewModelName} at {PayeSchemeHref} id {PayeSchemeId}", nameof(PayeSchemeModel), payeScheme.Href, payeScheme.Id);
+                    return new PayeSchemeModel();
                 });
             });
 

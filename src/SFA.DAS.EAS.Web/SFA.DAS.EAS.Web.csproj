@@ -17,7 +17,7 @@
         <PackageReference Include="Azure.Core" Version="1.36.0" />
         <PackageReference Include="Azure.Identity" Version="1.10.4" />
         <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.16" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.24" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
         <PackageReference Include="SFA.DAS.Employer.Shared.UI" Version="17.1.64" />
         <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.1.338" />

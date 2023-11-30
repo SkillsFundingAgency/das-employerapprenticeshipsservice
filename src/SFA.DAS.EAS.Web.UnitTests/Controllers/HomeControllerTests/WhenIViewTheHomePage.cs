@@ -18,9 +18,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         private Mock<HttpContext>? _mockHttpContext;
         private Mock<HttpRequest>? _mockHttpRequest;
         private QueryCollection? _queryString;
-        private IConfiguration? _config;
         private string? _gaValue;
-
+        
+#pragma warning disable NUnit1032
+        private IConfiguration? _config;
+#pragma warning restore NUnit1032
+        
         [SetUp]
         public void Arrange()
         {
@@ -42,7 +45,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
 
             _mockControllerContext.Object.HttpContext = _mockHttpContext.Object;
 
-
             _homeController = new HomeController(_config)
             {
                 ControllerContext = _mockControllerContext.Object,
@@ -58,6 +60,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
 
             //Assert
             Assert.That(result.Query, Does.Contain($"_ga={_gaValue}"));
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _homeController?.Dispose();
         }
     }
 }

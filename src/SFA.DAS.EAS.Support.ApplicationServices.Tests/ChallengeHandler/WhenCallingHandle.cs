@@ -31,8 +31,7 @@ public class WhenCallingHandle : WhenTestingChallengeHandler
     [TestCase(ValidBalance, ValidElement1, EmptyElement2)]
     [TestCase(ValidBalance, EmptyElement1, ValidElement2)]
     [TestCase(EmptyBalance, ValidElement1, ValidElement2)]
-    public async Task ItShouldReturnAnInvalidResponseIfTheQueryIsNotValid(string balance, string element1,
-        string element2)
+    public async Task ItShouldReturnAnInvalidResponseIfTheQueryIsNotValid(string? balance, string? element1, string? element2)
     {
         var message = new ChallengePermissionQuery
         {

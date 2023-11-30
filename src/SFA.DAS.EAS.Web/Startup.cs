@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using SFA.DAS.Authentication;
 using SFA.DAS.EAS.Application.ServiceRegistrations;
 using SFA.DAS.EAS.Domain.Configuration;
@@ -29,22 +28,16 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddSingleton(_configuration);
-        services.AddOptions();
-
+       
         var identityServerConfiguration = _configuration
                .GetSection("Identity")
                .Get<IdentityServerConfiguration>();
 
         services.AddHttpContextAccessor();
-
-        services.Configure<IdentityServerConfiguration>(_configuration.GetSection("Identity"));
-        services.AddSingleton(cfg => cfg.GetService<IOptions<IdentityServerConfiguration>>().Value);
-
-        services.Configure<EmployerApprenticeshipsServiceConfiguration>(_configuration);
-        services.AddSingleton(cfg => cfg.GetService<IOptions<EmployerApprenticeshipsServiceConfiguration>>().Value);
+        services.AddConfigurationSections(_configuration);
 
         var easConfiguration = _configuration.Get<EmployerApprenticeshipsServiceConfiguration>();
-
+        
         if (easConfiguration.UseGovSignIn)
         {
             services.AddMaMenuConfiguration(RouteNames.SignOut, _configuration["ResourceEnvironmentName"]);
