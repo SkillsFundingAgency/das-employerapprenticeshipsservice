@@ -10,7 +10,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
         private PayeSchemeModel? _expectedPayeScheme;
         private string? _uri;
 
-        public override void HttpClientSetup()
+        protected override void HttpClientSetup()
         {
             _uri = $"/api/accounts/{TextualAccountId}/payeschemes/scheme?ref=ABC%F123";
             var absoluteUri = Configuration!.ApiBaseUrl.TrimEnd('/') + _uri;

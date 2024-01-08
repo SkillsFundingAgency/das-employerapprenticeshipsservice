@@ -6,6 +6,7 @@
         <OutputPath>bin\</OutputPath>
     </PropertyGroup>
     <ItemGroup>
+        <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj" />
         <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj" />
         <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj" />
     </ItemGroup>
@@ -13,12 +14,12 @@
         <WCFMetadata Include="Connected Services\" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Azure.Core" Version="1.34.0" />
-        <PackageReference Include="Azure.Identity" Version="1.9.0" />
+        <PackageReference Include="Azure.Core" Version="1.36.0" />
+        <PackageReference Include="Azure.Identity" Version="1.10.4" />
         <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.16" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.24" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
-        <PackageReference Include="SFA.DAS.Employer.Shared.UI" Version="17.1.44" />
+        <PackageReference Include="SFA.DAS.Employer.Shared.UI" Version="17.1.64" />
         <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.1.338" />
         <PackageReference Include="SFA.DAS.GovUK.Auth" Version="17.1.55" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.16" />

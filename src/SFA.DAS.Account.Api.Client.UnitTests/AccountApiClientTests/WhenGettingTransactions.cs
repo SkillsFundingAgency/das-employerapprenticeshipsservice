@@ -9,7 +9,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
 {
     public class WhenGettingTransactions : ApiClientTestBase
     {
-        public override void HttpClientSetup()
+        protected override void HttpClientSetup()
         {
             HttpClient!.Setup(c => c.GetAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(

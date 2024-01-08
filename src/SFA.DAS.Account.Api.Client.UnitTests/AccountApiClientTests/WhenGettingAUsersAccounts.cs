@@ -10,7 +10,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
         private AccountDetailViewModel? _accountViewModel;
         private string? _uri;
 
-        public override void HttpClientSetup()
+        protected override void HttpClientSetup()
         {
             _uri = $"/api/user/{TextualAccountId}/accounts";
             var absoluteUri = Configuration!.ApiBaseUrl.TrimEnd('/') + _uri;
