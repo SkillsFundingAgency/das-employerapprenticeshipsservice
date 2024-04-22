@@ -28,7 +28,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
 
             // Assert
             Assert.That(response, Is.Not.Null);
-            Assert.IsAssignableFrom<ResourceList>(response);
+            Assert.That(response, Is.AssignableFrom<ResourceList>());
             response.Should().NotBeNull();
             response.Should().BeEquivalentTo(_legalEntities);
         }

@@ -58,18 +58,18 @@ public class WebConfigurationTesting
     public void ItShouldDeserializeFaithfully()
     {
         var json = JsonConvert.SerializeObject(_unit);
-        Assert.IsNotNull(json);
+        Assert.That(json, Is.Not.Null);
         var actual = JsonConvert.DeserializeObject<EasSupportConfiguration>(json);
-        Assert.AreEqual(json, JsonConvert.SerializeObject(actual));
+        Assert.That(json, Is.EqualTo(JsonConvert.SerializeObject(actual)));
     }
 
     [Test]
     public void ItShouldDeserialize()
     {
         var json = JsonConvert.SerializeObject(_unit);
-        Assert.IsNotNull(json);
+        Assert.That(json, Is.Not.Null);
         var actual = JsonConvert.DeserializeObject<EasSupportConfiguration>(json);
-        Assert.IsNotNull(actual);
+        Assert.That(actual, Is.Not.Null);
     }
 
     [Test]
@@ -81,10 +81,10 @@ public class WebConfigurationTesting
         jSchemaGenerator.GenerationProviders.Add(provider);
         var actual = jSchemaGenerator.Generate(typeof(EasSupportConfiguration));
 
-        Assert.IsNotNull(actual);
+        Assert.That(actual, Is.Not.Null);
         // hack to leverage format as 'environmentVariable'
         var schemaString = actual.ToString().Replace($"\"format\":", "\"environmentVariable\":");
-        Assert.IsNotNull(schemaString);
+        Assert.That(schemaString, Is.Not.Null);
         File.WriteAllText($@"{AppDomain.CurrentDomain.BaseDirectory}\{SiteConfigFileName}.schema.json",
             schemaString);
     }
@@ -93,7 +93,7 @@ public class WebConfigurationTesting
     public void ItShouldSerialize()
     {
         var json = JsonConvert.SerializeObject(_unit);
-        Assert.IsFalse(string.IsNullOrWhiteSpace(json));
+        Assert.That(string.IsNullOrWhiteSpace(json), Is.False);
 
         File.WriteAllText($@"{AppDomain.CurrentDomain.BaseDirectory}\{SiteConfigFileName}.json", json);
     }

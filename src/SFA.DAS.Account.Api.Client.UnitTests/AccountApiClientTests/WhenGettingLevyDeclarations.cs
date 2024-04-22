@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
             var actual = await ApiClient!.GetLevyDeclarations(TextualAccountId);
 
             // Assert
-            Assert.IsAssignableFrom<List<LevyDeclarationViewModel>>(actual);
+            Assert.That(actual, Is.AssignableFrom<List<LevyDeclarationViewModel>>());
         }
     }
 }

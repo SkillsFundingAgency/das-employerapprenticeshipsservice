@@ -12,7 +12,7 @@ public class WhenTestingChallengeHelper
         var challengeCharacters = new List<int> { 0, 1 };
         var actual = ChallengeHelper.GetChallengeMessage(challengeCharacters);
 
-        Assert.AreEqual($"1st & 2nd character of a PAYE scheme (excluding the /):", actual);
+        Assert.That($"1st & 2nd character of a PAYE scheme (excluding the /):", Is.EqualTo(actual));
     }
 
     [Test]
@@ -21,7 +21,7 @@ public class WhenTestingChallengeHelper
         var challengeCharacters = new List<int> { 21, 22 };
         var actual = ChallengeHelper.GetChallengeMessage(challengeCharacters);
 
-        Assert.AreEqual($"22nd & 23rd character of a PAYE scheme (excluding the /):", actual);
+        Assert.That("22nd & 23rd character of a PAYE scheme (excluding the /):", Is.EqualTo(actual));
     }
 
     [Test]
@@ -30,6 +30,6 @@ public class WhenTestingChallengeHelper
         var challengeCharacters = new List<int> { 2, 3 };
         var actual = ChallengeHelper.GetChallengeMessage(challengeCharacters);
 
-        Assert.AreEqual($"3rd & 4th character of a PAYE scheme (excluding the /):", actual);
+        Assert.That($"3rd & 4th character of a PAYE scheme (excluding the /):", Is.EqualTo(actual));
     }
 }

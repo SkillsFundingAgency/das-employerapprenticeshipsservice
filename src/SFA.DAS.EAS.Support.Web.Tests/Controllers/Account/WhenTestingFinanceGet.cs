@@ -29,13 +29,12 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Account
             AccountHandler!.Setup(x => x.FindFinance(id)).ReturnsAsync(accountFinanceResponse);
             var actual = await Unit!.Finance("123");
 
-            Assert.IsNotNull(actual);
-            Assert.IsNotNull(actual);
-            Assert.IsInstanceOf<ViewResult>(actual);
-            Assert.AreEqual(true, string.IsNullOrEmpty(((ViewResult)actual).ViewName));
-            Assert.IsInstanceOf<FinanceViewModel>(((ViewResult)actual).Model);
-            Assert.AreEqual(accountFinanceResponse.Account, ((FinanceViewModel)((ViewResult)actual).Model!).Account);
-            Assert.AreEqual(accountFinanceResponse.Balance, ((FinanceViewModel)((ViewResult)actual).Model!)!.Balance);
+            Assert.That(actual, Is.Not.Null);
+            Assert.That(actual, Is.InstanceOf<ViewResult>());
+            Assert.That(true, Is.EqualTo(string.IsNullOrEmpty(((ViewResult)actual).ViewName)));
+            Assert.That(((ViewResult)actual).Model, Is.InstanceOf<FinanceViewModel>());
+            Assert.That(accountFinanceResponse.Account, Is.EqualTo(((FinanceViewModel)((ViewResult)actual).Model!).Account));
+            Assert.That(accountFinanceResponse.Balance, Is.EqualTo(((FinanceViewModel)((ViewResult)actual).Model!)!.Balance));
         }
 
         [Test]
@@ -55,8 +54,8 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Account
             const string id = "123";
             AccountHandler!.Setup(x => x.FindFinance(id)).ReturnsAsync(accountFinanceResponse);
             var actual = await Unit!.Finance("123");
-            Assert.IsNotNull(actual);
-            Assert.IsInstanceOf<NotFoundResult>(actual);
+            Assert.That(actual, Is.Not.Null);
+            Assert.That(actual, Is.InstanceOf<NotFoundResult>());
         }
 
         [Test]
@@ -78,8 +77,8 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Account
             AccountHandler!.Setup(x => x.FindFinance(id)).ReturnsAsync(accountFinanceResponse);
             var actual = await Unit!.Finance("123");
 
-            Assert.IsNotNull(actual);
-            Assert.IsInstanceOf<NotFoundResult>(actual);
+            Assert.That(actual, Is.Not.Null);
+            Assert.That(actual, Is.InstanceOf<NotFoundResult>());
         }
     }
 }

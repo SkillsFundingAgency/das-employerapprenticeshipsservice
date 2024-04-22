@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
 
             // Assert
             Assert.That(response, Is.Not.Null);
-            Assert.IsAssignableFrom<AccountDetailViewModel>(response);
+            Assert.That(response, Is.AssignableFrom<AccountDetailViewModel>());
             response.Should().NotBeNull();
             response.Should().BeEquivalentTo(_expectedAccount);
         }

@@ -2,30 +2,29 @@
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Support.Web.Models;
 
-namespace SFA.DAS.EAS.Support.Web.Tests
+namespace SFA.DAS.EAS.Support.Web.Tests;
+
+[TestFixture]
+public class ViewModelExtensionTests
 {
-    [TestFixture]
-    public class ViewModelExtensionTests
+    [Test]
+    public void ItShouldRenderActive()
     {
-        [Test]
-        public void ItShouldRenderActive()
-        {
-            Assert.AreEqual("Active", InvitationStatus.Accepted.GetTeamMemberStatus());
-        }
-        [Test]
-        public void ItShouldRenderAwaiting()
-        {
-            Assert.AreEqual("Invitation awaiting response", InvitationStatus.Pending.GetTeamMemberStatus());
-        }
-        [Test]
-        public void ItShouldRenderExpired()
-        {
-            Assert.AreEqual("Invitation expired", InvitationStatus.Expired.GetTeamMemberStatus());
-        }
-        [Test]
-        public void ItShouldRenderEmpty()
-        {
-            Assert.AreEqual(string.Empty, InvitationStatus.Deleted.GetTeamMemberStatus());
-        }
+        Assert.That("Active", Is.EqualTo(InvitationStatus.Accepted.GetTeamMemberStatus()));
+    }
+    [Test]
+    public void ItShouldRenderAwaiting()
+    {
+        Assert.That("Invitation awaiting response", Is.EqualTo(InvitationStatus.Pending.GetTeamMemberStatus()));
+    }
+    [Test]
+    public void ItShouldRenderExpired()
+    {
+        Assert.That("Invitation expired", Is.EqualTo(InvitationStatus.Expired.GetTeamMemberStatus()));
+    }
+    [Test]
+    public void ItShouldRenderEmpty()
+    {
+        Assert.That(string.Empty, Is.EqualTo(InvitationStatus.Deleted.GetTeamMemberStatus()));
     }
 }
