@@ -1,9 +1,12 @@
-﻿using SFA.DAS.EAS.Support.ApplicationServices.Models;
+﻿using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EAS.Domain.Models;
+using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Web.Authorization;
 using SFA.DAS.EAS.Support.Web.Configuration;
 using SFA.DAS.EAS.Support.Web.Models;
 using SFA.DAS.EAS.Support.Web.Services;
+using AccountDetailViewModel = SFA.DAS.EAS.Support.Web.Models.AccountDetailViewModel;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers;
 
@@ -135,6 +138,41 @@ public class AccountController : Controller
         model.UnexpectedError = response.StatusCode == PayeLevySubmissionsResponseCodes.UnexpectedError;
 
         return View(model);
+    }
+
+    [HttpGet]
+    [Route("account/{id}/member-permission/{userRef}")]
+    public async Task<IActionResult> MemberPermission(string id, string userRef)
+    {
+        var accountResponse = await _accountHandler.FindTeamMembers(id);
+        
+        if (accountResponse.StatusCode == SearchResponseCodes.NoSearchResultsFound)
+        {
+            return NotFound();
+        }
+
+        var teamMember = accountResponse.Account.TeamMembers.Single(x => x.UserRef == userRef);
+        
+        return View(new MemberPermissionViewModel
+        {
+            HashedAccountId = accountResponse.Account.HashedAccountId,
+            TeamMemberUserRef = teamMember.UserRef,
+            Role = Enum.Parse<Role>(teamMember.Role)
+        });
+    }
+    
+    [HttpPost]
+    [Route("account/{id}/member-permission/{userRef}")]
+    public async Task<IActionResult> MemberPermission(string id, string userRef, Role role)
+    {
+        throw new NotImplementedException();
+    }
+    
+    [HttpGet]
+    [Route("account/resend-invitation/{id}")]
+    public async Task<IActionResult> ResendInvitation(string id)
+    {
+        throw new NotImplementedException();
     }
 
     private string GetTeamMemberUrl(string hashedAccountId)
