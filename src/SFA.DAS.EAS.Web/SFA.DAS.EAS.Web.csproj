@@ -21,6 +21,7 @@
         <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.29" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
         <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="7.5.1" />
+        <PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="7.5.1" />
         <PackageReference Include="SFA.DAS.Employer.Shared.UI" Version="17.1.91" />
         <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.1.338" />
         <PackageReference Include="SFA.DAS.GovUK.Auth" Version="17.1.80" />
