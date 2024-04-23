@@ -40,11 +40,10 @@
                     <td data-label="Action" id="Navigate">
                         @{
                             var navigationUrl = item.Status == InvitationStatus.Accepted
-                                ? Url.Action("MemberPermission", new { item.UserRef })
+                                ? Url.Action("ChangeRole", new { id = Model.Account.AccountId, item.UserRef })
                                 : Url.Action("ResendInvitation", new { item.UserRef });
-                            var navigationText = item.Status == InvitationStatus.Accepted ? "Change" : "Resend invitation";
                         }
-                        <a href="@navigationUrl">@navigationText</a>
+                        <a href="@navigationUrl">@(item.Status == InvitationStatus.Accepted ? "Change" : "Resend invitation")</a>
                     </td>
                 </tr>
             }

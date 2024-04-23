@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EAS.Support.Web.Models;
 
-public class MemberPermissionViewModel
+public class ChangeRoleViewModel
 {
     public string HashedAccountId { get; set; }
     public string TeamMemberUserRef { get; set; }

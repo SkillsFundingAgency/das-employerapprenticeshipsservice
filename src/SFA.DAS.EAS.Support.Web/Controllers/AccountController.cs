@@ -141,8 +141,8 @@ public class AccountController : Controller
     }
 
     [HttpGet]
-    [Route("account/{id}/member-permission/{userRef}")]
-    public async Task<IActionResult> MemberPermission(string id, string userRef)
+    [Route("account/{id}/change-role/{userRef}")]
+    public async Task<IActionResult> ChangeRole(string id, string userRef)
     {
         var accountResponse = await _accountHandler.FindTeamMembers(id);
         
@@ -153,7 +153,7 @@ public class AccountController : Controller
 
         var teamMember = accountResponse.Account.TeamMembers.Single(x => x.UserRef == userRef);
         
-        return View(new MemberPermissionViewModel
+        return View(new ChangeRoleViewModel
         {
             HashedAccountId = accountResponse.Account.HashedAccountId,
             TeamMemberUserRef = teamMember.UserRef,
@@ -162,8 +162,8 @@ public class AccountController : Controller
     }
     
     [HttpPost]
-    [Route("account/{id}/member-permission/{userRef}")]
-    public async Task<IActionResult> MemberPermission(string id, string userRef, Role role)
+    [Route("account/{id}/change-role/{userRef}")]
+    public async Task<IActionResult> ChangeRole(string id, string userRef, Role role)
     {
         throw new NotImplementedException();
     }

@@ -1,5 +1,5 @@
 ﻿@using SFA.DAS.EAS.Domain.Models
-@model SFA.DAS.EAS.Support.Web.Models.MemberPermissionViewModel;
+@model SFA.DAS.EAS.Support.Web.Models.ChangeRoleViewModel;
 
 @{
     var errorMessage = string.Empty;
@@ -32,7 +32,7 @@
     <div class="govuk-grid-column-two-thirds">
         <p class="govuk-body-l">Choose what you allow this team member to do.</p>
 
-        <form method="POST" asp-route="@Url.Action("MemberPermission")" asp-route-Id="@Model.HashedAccountId">
+        <form method="POST" asp-route="@Url.Action("ChangeRole")" asp-route-Id="@Model.HashedAccountId">
             <div class="govuk-form-group @(!ViewContext.ViewData.ModelState.IsValid ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset">
                     <legend id="change-role-selection" class="govuk-fieldset__legend">
