@@ -38,12 +38,7 @@
                     <td data-label="User Role" id="Role">@item.Role</td>
                     <td data-label="User Status" id="Status">@item.Status.GetTeamMemberStatus()</td>
                     <td data-label="Action" id="Navigate">
-                        @{
-                            var navigationUrl = item.Status == InvitationStatus.Accepted
-                                ? Url.Action("ChangeRole", new { id = Model.Account.AccountId, item.UserRef })
-                                : Url.Action("ResendInvitation", new { item.UserRef });
-                        }
-                        <a href="@navigationUrl">@(item.Status == InvitationStatus.Accepted ? "Change" : "Resend invitation")</a>
+                        <a href="@string.Format(Model.AccountUri, Model.Account.PublicHashedAccountId, item.UserRef)">@(item.Status == InvitationStatus.Accepted ? "Change" : "Resend invitation")</a>
                     </td>
                 </tr>
             }

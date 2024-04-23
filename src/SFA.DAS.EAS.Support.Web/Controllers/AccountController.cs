@@ -44,7 +44,6 @@ public class AccountController : Controller
         {
             Account = response.Account,
             AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}"
-
         };
 
         return View(model);
@@ -101,7 +100,6 @@ public class AccountController : Controller
         };
 
         return View(model);
-
     }
 
     [Route("account/finance/{id}")]
@@ -141,33 +139,36 @@ public class AccountController : Controller
     }
 
     [HttpGet]
-    [Route("account/{id}/change-role/{userRef}")]
+    [Route("account/{id}change-role/{userRef}")]
     public async Task<IActionResult> ChangeRole(string id, string userRef)
     {
         var accountResponse = await _accountHandler.FindTeamMembers(id);
-        
+
         if (accountResponse.StatusCode == SearchResponseCodes.NoSearchResultsFound)
         {
             return NotFound();
         }
 
         var teamMember = accountResponse.Account.TeamMembers.Single(x => x.UserRef == userRef);
-        
+
         return View(new ChangeRoleViewModel
         {
             HashedAccountId = accountResponse.Account.HashedAccountId,
             TeamMemberUserRef = teamMember.UserRef,
-            Role = Enum.Parse<Role>(teamMember.Role)
+            Role = Enum.Parse<Role>(teamMember.Role),
+            AccountUri = teamMember.Status == InvitationStatus.Accepted
+                ? $"/resource/index/{{0}}/?childId={{1}}key={SupportServiceResourceKey.EmployerAccountChangeRole}"
+                : "",
         });
     }
-    
+
     [HttpPost]
-    [Route("account/{id}/change-role/{userRef}")]
+    [Route("account/change-role/}{userRef}")]
     public async Task<IActionResult> ChangeRole(string id, string userRef, Role role)
     {
         throw new NotImplementedException();
     }
-    
+
     [HttpGet]
     [Route("account/resend-invitation/{id}")]
     public async Task<IActionResult> ResendInvitation(string id)
