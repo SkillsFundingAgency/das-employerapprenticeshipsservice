@@ -86,16 +86,16 @@ jobs:
             ResourceName: $(SupportAppServiceName)
             Tenant: $(Tenant)
             IsMultiRepoCheckout: true
-        # - template: azure-pipelines-templates/deploy/step/app-deploy.yml@das-platform-building-blocks
-        #   parameters:
-        #     ServiceConnection: ${{ parameters.ServiceConnection }}
-        #     AppServiceName: $(UIAppServiceName)
-        #     DeploymentPackagePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/${{ parameters.SolutionBaseName }}.Web.zip
-        # - template: azure-pipelines-templates/deploy/step/app-deploy.yml@das-platform-building-blocks
-        #   parameters:
-        #     ServiceConnection: ${{ parameters.ServiceConnection }}
-        #     AppServiceName: $(ApiAppServiceName)
-        #     DeploymentPackagePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/${{ parameters.SolutionBaseName }}.Api.zip
+        - template: azure-pipelines-templates/deploy/step/app-deploy.yml@das-platform-building-blocks
+          parameters:
+            ServiceConnection: ${{ parameters.ServiceConnection }}
+            AppServiceName: $(UIAppServiceName)
+            DeploymentPackagePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/${{ parameters.SolutionBaseName }}.Web.zip
+        - template: azure-pipelines-templates/deploy/step/app-deploy.yml@das-platform-building-blocks
+          parameters:
+            ServiceConnection: ${{ parameters.ServiceConnection }}
+            AppServiceName: $(ApiAppServiceName)
+            DeploymentPackagePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/${{ parameters.SolutionBaseName }}.Api.zip
         - template: azure-pipelines-templates/deploy/step/app-deploy.yml@das-platform-building-blocks
           parameters:
             ServiceConnection: ${{ parameters.ServiceConnection }}
