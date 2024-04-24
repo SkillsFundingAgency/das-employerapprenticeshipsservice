@@ -158,7 +158,7 @@ public class AccountController : Controller
             Role = Enum.Parse<Role>(teamMember.Role),
             AccountUri = teamMember.Status == InvitationStatus.Accepted
                 ? $"/resource/index/{{0}}/?childId={{1}}key={SupportServiceResourceKey.EmployerAccountChangeRole}"
-                : "",
+                : $"/resource/index/{{0}}/?childId={{1}}key={SupportServiceResourceKey.EmployerAccountResendInvitation}"
         });
     }
 
