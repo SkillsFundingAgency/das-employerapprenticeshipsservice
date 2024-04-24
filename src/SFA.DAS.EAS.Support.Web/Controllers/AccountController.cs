@@ -146,27 +146,21 @@ public class AccountController : Controller
     [Route("account/{id}/change-role/{userRef}")]
     public async Task<IActionResult> ChangeRole(string id, string userRef)
     {
-        // var accountResponse = await _accountHandler.FindTeamMembers(id);
-        //
-        // if (accountResponse.StatusCode == SearchResponseCodes.NoSearchResultsFound)
-        // {
-        //     return NotFound();
-        // }
-        //
-        // var teamMember = accountResponse.Account.TeamMembers.Single(x => x.UserRef == userRef);
-        //
-        // return View(new ChangeRoleViewModel
-        // {
-        //     HashedAccountId = accountResponse.Account.HashedAccountId,
-        //     TeamMemberUserRef = teamMember.UserRef,
-        //     Role = Enum.Parse<Role>(teamMember.Role)
-        // });
+        var accountResponse = await _accountHandler.FindTeamMembers(id);
+        
+        if (accountResponse.StatusCode == SearchResponseCodes.NoSearchResultsFound)
+        {
+            return NotFound();
+        }
+        
+        var teamMember = accountResponse.Account.TeamMembers.Single(x => x.UserRef == userRef);
         
         return View(new ChangeRoleViewModel
         {
-            HashedAccountId = "ABC123",
-            UserRef = userRef,
-            Role = Role.Viewer,
+            HashedAccountId = accountResponse.Account.HashedAccountId,
+            UserRef = teamMember.UserRef,
+            Role = Enum.Parse<Role>(teamMember.Role),
+            Name = teamMember.Name,
         });
     }
 

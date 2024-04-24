@@ -6,5 +6,6 @@ public class ChangeRoleViewModel
 {
     public string HashedAccountId { get; set; }
     public string UserRef { get; set; }
+    public string Name { get; set; }
     public Role Role { get; set; }
 }
