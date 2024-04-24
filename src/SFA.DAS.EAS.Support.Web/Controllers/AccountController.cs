@@ -96,8 +96,8 @@ public class AccountController : Controller
             AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}",
             IsTier2User = User.IsInRole(AuthorizationConstants.Tier2User),
             TeamMemberUrl = GetTeamMemberUrl(id),
-            ChangeRoleUrl = $"/resource/index/{{0}}/?childId={{1}}key={SupportServiceResourceKey.EmployerAccountChangeRole}",
-            ResendInviteUrl = $"/resource/index/{{0}}/?childId={{1}}key={SupportServiceResourceKey.EmployerAccountResendInvitation}"
+            ChangeRoleUrl = $"/resource/index/{{0}}/?childId={{1}}&key={SupportServiceResourceKey.EmployerAccountChangeRole}",
+            ResendInviteUrl = $"/resource/index/{{0}}/?childId={{1}}&key={SupportServiceResourceKey.EmployerAccountResendInvitation}"
         };
 
         return View(model);
@@ -143,20 +143,27 @@ public class AccountController : Controller
     [Route("account/{id}change-role/{userRef}")]
     public async Task<IActionResult> ChangeRole(string id, string userRef)
     {
-        var accountResponse = await _accountHandler.FindTeamMembers(id);
-
-        if (accountResponse.StatusCode == SearchResponseCodes.NoSearchResultsFound)
-        {
-            return NotFound();
-        }
-
-        var teamMember = accountResponse.Account.TeamMembers.Single(x => x.UserRef == userRef);
-
+        // var accountResponse = await _accountHandler.FindTeamMembers(id);
+        //
+        // if (accountResponse.StatusCode == SearchResponseCodes.NoSearchResultsFound)
+        // {
+        //     return NotFound();
+        // }
+        //
+        // var teamMember = accountResponse.Account.TeamMembers.Single(x => x.UserRef == userRef);
+        //
+        // return View(new ChangeRoleViewModel
+        // {
+        //     HashedAccountId = accountResponse.Account.HashedAccountId,
+        //     TeamMemberUserRef = teamMember.UserRef,
+        //     Role = Enum.Parse<Role>(teamMember.Role)
+        // });
+        
         return View(new ChangeRoleViewModel
         {
-            HashedAccountId = accountResponse.Account.HashedAccountId,
-            TeamMemberUserRef = teamMember.UserRef,
-            Role = Enum.Parse<Role>(teamMember.Role)
+            HashedAccountId = "ABC123",
+            TeamMemberUserRef = Guid.NewGuid().ToString(),
+            Role = Role.Viewer,
         });
     }
 
