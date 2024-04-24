@@ -16,20 +16,17 @@ public class AccountController : Controller
     private readonly IAccountHandler _accountHandler;
     private readonly IPayeLevySubmissionsHandler _payeLevySubmissionsHandler;
     private readonly IPayeLevyMapper _payeLevyMapper;
-    private readonly ILogger<AccountController> _logger;
 
     public AccountController(
         IEasSupportConfiguration easSupportConfiguration,
         IAccountHandler accountHandler,
         IPayeLevySubmissionsHandler payeLevySubmissionsHandler,
-        IPayeLevyMapper payeLevyDeclarationMapper,
-        ILogger<AccountController> logger)
+        IPayeLevyMapper payeLevyDeclarationMapper)
     {
         _easSupportConfiguration = easSupportConfiguration;
         _accountHandler = accountHandler;
         _payeLevySubmissionsHandler = payeLevySubmissionsHandler;
         _payeLevyMapper = payeLevyDeclarationMapper;
-        _logger = logger;
     }
 
     [Route("account/{id}")]
@@ -141,39 +138,7 @@ public class AccountController : Controller
 
         return View(model);
     }
-
-    [HttpGet]
-    [Route("account/{id}/change-role/{userRef}")]
-    public async Task<IActionResult> ChangeRole(string id, string userRef)
-    {
-        var accountResponse = await _accountHandler.FindTeamMembers(id);
-        
-        if (accountResponse.StatusCode == SearchResponseCodes.NoSearchResultsFound)
-        {
-            return NotFound();
-        }
-        
-        var teamMember = accountResponse.Account.TeamMembers.Single(x => x.UserRef == userRef);
-        
-        return View(new ChangeRoleViewModel
-        {
-            HashedAccountId = accountResponse.Account.HashedAccountId,
-            UserRef = teamMember.UserRef,
-            Role = Enum.Parse<Role>(teamMember.Role),
-            Name = teamMember.Name,
-            PostbackUrl = string.Format($"/resource/index/{{0}}/?childId={{1}}&key={SupportServiceResourceKey.EmployerAccountChangeRole}", id, userRef),
-        });
-    }
-
-    [HttpPost]
-    [Route("account/{id}change-role/{userRef}")]
-    public async Task<IActionResult> ChangeRole(string id, string userRef, Role role)
-    {
-        _logger.LogInformation("Account controller, POST ChangeRole. AccountId: {AccountId}. UserRef: {UserRef}. UpdatedRole: {Role}", id, userRef, role);
-        
-        return RedirectToAction(nameof(Team), new { id });
-    }
-
+    
     [HttpGet]
     [Route("account/{id}/resend-invitation/{userRef}")]
     public async Task<IActionResult> ResendInvitation(string id, string userRef)
