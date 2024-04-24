@@ -16,17 +16,20 @@ public class AccountController : Controller
     private readonly IAccountHandler _accountHandler;
     private readonly IPayeLevySubmissionsHandler _payeLevySubmissionsHandler;
     private readonly IPayeLevyMapper _payeLevyMapper;
+    private readonly ILogger<AccountController> _logger;
 
     public AccountController(
         IEasSupportConfiguration easSupportConfiguration,
         IAccountHandler accountHandler,
         IPayeLevySubmissionsHandler payeLevySubmissionsHandler,
-        IPayeLevyMapper payeLevyDeclarationMapper)
+        IPayeLevyMapper payeLevyDeclarationMapper,
+        ILogger<AccountController> logger)
     {
         _easSupportConfiguration = easSupportConfiguration;
         _accountHandler = accountHandler;
         _payeLevySubmissionsHandler = payeLevySubmissionsHandler;
         _payeLevyMapper = payeLevyDeclarationMapper;
+        _logger = logger;
     }
 
     [Route("account/{id}")]
@@ -140,7 +143,7 @@ public class AccountController : Controller
     }
 
     [HttpGet]
-    [Route("account/{id}change-role/{userRef}")]
+    [Route("account/{id}/change-role/{userRef}")]
     public async Task<IActionResult> ChangeRole(string id, string userRef)
     {
         // var accountResponse = await _accountHandler.FindTeamMembers(id);
@@ -162,7 +165,7 @@ public class AccountController : Controller
         return View(new ChangeRoleViewModel
         {
             HashedAccountId = "ABC123",
-            TeamMemberUserRef = Guid.NewGuid().ToString(),
+            UserRef = userRef,
             Role = Role.Viewer,
         });
     }
@@ -171,6 +174,7 @@ public class AccountController : Controller
     [Route("account/{id}change-role/{userRef}")]
     public async Task<IActionResult> ChangeRole(string id, string userRef, Role role)
     {
+        _logger.LogInformation("Account controller, POST ChangeRole. AccountId: {AccountId}. UserRef: {UserRef}. UpdatedRole: {Role}", id, userRef, role);
         throw new NotImplementedException();
     }
 

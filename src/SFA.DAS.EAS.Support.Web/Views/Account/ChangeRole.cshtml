@@ -32,7 +32,7 @@
     <div class="govuk-grid-column-two-thirds">
         <p class="govuk-body-l">Choose what you allow this team member to do.</p>
 
-        <form method="POST" asp-route="@Url.Action("ChangeRole")" asp-route-Id="@Model.HashedAccountId">
+        <form method="POST" asp-route="@Url.Action("ChangeRole")" asp-route-Id="@Model.HashedAccountId" asp-route-UserRef="@Model.UserRef">
             <div class="govuk-form-group @(!ViewContext.ViewData.ModelState.IsValid ? "govuk-form-group--error" : "")">
                 <fieldset class="govuk-fieldset">
                     <legend id="change-role-selection" class="govuk-fieldset__legend">
@@ -68,7 +68,7 @@
                             </label>
                         </div>
                     </div>
-                    <input type="hidden" value="@Model.TeamMemberUserRef"/>
+                    <input type="hidden" value="@Model.UserRef"/>
                 </fieldset>
             </div>
             <button type="submit" class="govuk-button" id="update">Update</button>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
@@ -28,7 +29,9 @@ public abstract class WhenTestingAccountController
             Mock.Of<IEasSupportConfiguration>(),
             AccountHandler.Object,
             _payeLevySubmissionsHandler.Object,
-            _payeLevyDeclarationMapper.Object);
+            _payeLevyDeclarationMapper.Object,
+            Mock.Of<ILogger<AccountController>>()
+            );
     }
 }
 

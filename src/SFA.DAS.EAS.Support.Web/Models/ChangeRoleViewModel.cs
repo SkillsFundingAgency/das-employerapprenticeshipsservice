@@ -5,6 +5,6 @@ namespace SFA.DAS.EAS.Support.Web.Models;
 public class ChangeRoleViewModel
 {
     public string HashedAccountId { get; set; }
-    public string TeamMemberUserRef { get; set; }
+    public string UserRef { get; set; }
     public Role Role { get; set; }
 }
