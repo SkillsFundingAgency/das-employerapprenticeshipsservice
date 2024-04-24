@@ -33,7 +33,7 @@
         <h1 class="heading-large">@Model.Name</h1>
         <span class="heading-secondary">Choose what you allow this team member to do.</span>
 
-        <form method="POST" asp-route="@Url.Action("ChangeRole")" asp-route-Id="@Model.HashedAccountId" asp-route-UserRef="@Model.UserRef">
+        <form method="POST" action="@Model.PostbackUrl">
             <div class="form-group @(!ViewContext.ViewData.ModelState.IsValid ? "form-group--error" : "")">
                 <fieldset class="fieldset">
                     <legend id="change-role-selection" class="">

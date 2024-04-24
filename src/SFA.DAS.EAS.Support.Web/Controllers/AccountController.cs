@@ -161,6 +161,7 @@ public class AccountController : Controller
             UserRef = teamMember.UserRef,
             Role = Enum.Parse<Role>(teamMember.Role),
             Name = teamMember.Name,
+            PostbackUrl = string.Format($"/resource/index/{{0}}/?childId={{1}}&key={SupportServiceResourceKey.EmployerAccountChangeRole}", id, userRef),
         });
     }
 
