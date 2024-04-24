@@ -55,7 +55,7 @@ public class RoleController(IAccountHandler accountHandler, ILogger<RoleControll
     [Route("change/{userRef}")]
     public async Task<IActionResult> ChangeRole(string id, string userRef, Role role)
     {
-        logger.LogInformation("Account controller, POST ChangeRole. AccountId: {AccountId}. UserRef: {UserRef}. UpdatedRole: {Role}", id, userRef, role);
+        logger.LogInformation("Role controller, POST ChangeRole. AccountId: {AccountId}. UserRef: {UserRef}. UpdatedRole: {Role}", id, userRef, role);
 
         return Redirect(string.Format($"/resource/index/{{0}}/?key={SupportServiceResourceKey.EmployerAccountTeam}", id));
     }
