@@ -175,7 +175,8 @@ public class AccountController : Controller
     public async Task<IActionResult> ChangeRole(string id, string userRef, Role role)
     {
         _logger.LogInformation("Account controller, POST ChangeRole. AccountId: {AccountId}. UserRef: {UserRef}. UpdatedRole: {Role}", id, userRef, role);
-        throw new NotImplementedException();
+        
+        return RedirectToAction(nameof(Team), new { id });
     }
 
     [HttpGet]
