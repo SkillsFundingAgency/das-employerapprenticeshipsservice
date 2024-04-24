@@ -1,5 +1,4 @@
-﻿using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Domain.Models;
+﻿using SFA.DAS.EAS.Domain.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Web.Authorization;
@@ -96,7 +95,9 @@ public class AccountController : Controller
             Account = response.Account,
             AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}",
             IsTier2User = User.IsInRole(AuthorizationConstants.Tier2User),
-            TeamMemberUrl = GetTeamMemberUrl(id)
+            TeamMemberUrl = GetTeamMemberUrl(id),
+            ChangeRoleUrl = $"/resource/index/{{0}}/?childId={{1}}key={SupportServiceResourceKey.EmployerAccountChangeRole}",
+            ResendInviteUrl = $"/resource/index/{{0}}/?childId={{1}}key={SupportServiceResourceKey.EmployerAccountResendInvitation}"
         };
 
         return View(model);
@@ -155,23 +156,20 @@ public class AccountController : Controller
         {
             HashedAccountId = accountResponse.Account.HashedAccountId,
             TeamMemberUserRef = teamMember.UserRef,
-            Role = Enum.Parse<Role>(teamMember.Role),
-            AccountUri = teamMember.Status == InvitationStatus.Accepted
-                ? $"/resource/index/{{0}}/?childId={{1}}key={SupportServiceResourceKey.EmployerAccountChangeRole}"
-                : $"/resource/index/{{0}}/?childId={{1}}key={SupportServiceResourceKey.EmployerAccountResendInvitation}"
+            Role = Enum.Parse<Role>(teamMember.Role)
         });
     }
 
     [HttpPost]
-    [Route("account/change-role/}{userRef}")]
+    [Route("account/{id}change-role/{userRef}")]
     public async Task<IActionResult> ChangeRole(string id, string userRef, Role role)
     {
         throw new NotImplementedException();
     }
 
     [HttpGet]
-    [Route("account/resend-invitation/{id}")]
-    public async Task<IActionResult> ResendInvitation(string id)
+    [Route("account/{id}/resend-invitation/{userRef}")]
+    public async Task<IActionResult> ResendInvitation(string id, string userRef)
     {
         throw new NotImplementedException();
     }

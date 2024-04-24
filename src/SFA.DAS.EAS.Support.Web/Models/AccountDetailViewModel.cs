@@ -10,4 +10,6 @@ public class AccountDetailViewModel
     public string AccountUri { get; set; }
     public bool IsTier2User { get; set; }
     public string TeamMemberUrl { get; set; }
+    public string ChangeRoleUrl { get; set; }
+    public string ResendInviteUrl { get; set; }
 }
