@@ -9,7 +9,7 @@ namespace SFA.DAS.EAS.Support.Web.Controllers;
 
 [Route("roles/{id}")]
 [Authorize(Policy = PolicyNames.Default)]
-public class RolesController(IAccountHandler accountHandler, ILogger<RolesController> logger) : Controller
+public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRolesController> logger) : Controller
 {
     [HttpGet]
     [Route("header/{userRef}")]
