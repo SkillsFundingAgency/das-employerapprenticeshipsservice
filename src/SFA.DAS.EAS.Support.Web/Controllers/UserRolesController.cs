@@ -7,12 +7,12 @@ using SFA.DAS.EAS.Support.Web.Models;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers;
 
-[Route("roles/{id}")]
+[Route("roles")]
 [Authorize(Policy = PolicyNames.Default)]
 public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRolesController> logger) : Controller
 {
     [HttpGet]
-    [Route("header/{userRef}")]
+    [Route("header/{id}/{userRef}")]
     public async Task<ActionResult> Header(string id, string userRef)
     {
         if (string.IsNullOrWhiteSpace(id)) throw new BadRequestException();
@@ -30,7 +30,7 @@ public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRol
     }
 
     [HttpGet]
-    [Route("{userRef}")]
+    [Route("{id}/{userRef}")]
     public async Task<IActionResult> Index(string id, string userRef)
     {
         var accountResponse = await accountHandler.FindTeamMembers(id);
@@ -53,7 +53,7 @@ public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRol
     }
 
     [HttpPost]
-    [Route("{userRef}")]
+    [Route("{id}/{userRef}")]
     public IActionResult Index(string id, string userRef, Role role)
     {
         logger.LogInformation("Roles controller, POST ChangeRole. AccountId: {AccountId}. UserRef: {UserRef}. UpdatedRole: {Role}", id, userRef, role);
