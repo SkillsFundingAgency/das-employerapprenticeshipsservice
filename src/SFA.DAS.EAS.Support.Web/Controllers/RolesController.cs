@@ -7,7 +7,7 @@ using SFA.DAS.EAS.Support.Web.Models;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers;
 
-[Route("role/{id}")]
+[Route("roles/{id}")]
 [Authorize(Policy = PolicyNames.Default)]
 public class RolesController(IAccountHandler accountHandler, ILogger<RolesController> logger) : Controller
 {
