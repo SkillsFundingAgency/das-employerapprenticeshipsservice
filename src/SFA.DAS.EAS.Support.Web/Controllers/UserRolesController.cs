@@ -1,5 +1,4 @@
-﻿using Opw.HttpExceptions;
-using SFA.DAS.EAS.Domain.Models;
+﻿using SFA.DAS.EAS.Domain.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Web.Authorization;
@@ -11,24 +10,6 @@ namespace SFA.DAS.EAS.Support.Web.Controllers;
 [Authorize(Policy = PolicyNames.Default)]
 public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRolesController> logger) : Controller
 {
-    [HttpGet]
-    [Route("header/{id}/{userRef}")]
-    public async Task<ActionResult> Header(string id, string userRef)
-    {
-        if (string.IsNullOrWhiteSpace(id)) throw new BadRequestException();
-
-        var response = await accountHandler.FindOrganisations(id);
-
-        if (response == null)
-        {
-            return NotFound();
-        }
-
-        var teamMember = response.Account.TeamMembers.Single(x => x.UserRef == userRef);
-
-        return View("SubHeader", new ChangeRoleViewModel { Name = teamMember.Name });
-    }
-
     [HttpGet]
     [Route("{id}/{userRef}")]
     public async Task<IActionResult> Index(string id, string userRef)
