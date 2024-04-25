@@ -53,7 +53,7 @@ public class RoleController(IAccountHandler accountHandler, ILogger<RoleControll
 
     [HttpPost]
     [Route("change/{userRef}")]
-    public async Task<IActionResult> ChangeRole(string id, string userRef, Role role)
+    public IActionResult ChangeRole(string id, string userRef, Role role)
     {
         logger.LogInformation("Role controller, POST ChangeRole. AccountId: {AccountId}. UserRef: {UserRef}. UpdatedRole: {Role}", id, userRef, role);
 

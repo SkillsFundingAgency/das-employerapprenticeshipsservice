@@ -30,10 +30,7 @@
 
 <div class="grid-row">
     <div class="grid-column-two-thirds">
-        <h1 class="heading-large">
-            @Model.Name
-            <span class="heading-secondary">Choose what you allow this team member to do.</span>
-        </h1>
+        <h1 class="heading-large">Choose what you allow this team member to do.</h1>
         <form method="POST" action="@Model.PostbackUrl">
             <div class="form-group @(!ViewContext.ViewData.ModelState.IsValid ? "form-group--error" : "")">
                 <fieldset class="fieldset">

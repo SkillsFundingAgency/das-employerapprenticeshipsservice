@@ -11,6 +11,7 @@ public enum SupportServiceResourceKey
     CommitmentCohortDetail,
     EmployerAccount,
     EmployerAccountChangeRole,
+    EmployerAccountChangeRoleHeader,
     EmployerAccountHeader,
     EmployerAccountTeam,
     EmployerAccountFinance,
