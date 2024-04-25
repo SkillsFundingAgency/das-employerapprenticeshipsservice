@@ -9,9 +9,10 @@ namespace SFA.DAS.EAS.Support.Web.Controllers;
 
 [Route("role/{id}")]
 [Authorize(Policy = PolicyNames.Default)]
-public class RoleController(IAccountHandler accountHandler, ILogger<RoleController> logger) : Controller
+public class RolesController(IAccountHandler accountHandler, ILogger<RolesController> logger) : Controller
 {
     [HttpGet]
+    [Route("header/{userRef}")]
     public async Task<ActionResult> Header(string id, string userRef)
     {
         if (string.IsNullOrWhiteSpace(id)) throw new BadRequestException();
@@ -55,7 +56,7 @@ public class RoleController(IAccountHandler accountHandler, ILogger<RoleControll
     [Route("{userRef}")]
     public IActionResult Index(string id, string userRef, Role role)
     {
-        logger.LogInformation("Role controller, POST ChangeRole. AccountId: {AccountId}. UserRef: {UserRef}. UpdatedRole: {Role}", id, userRef, role);
+        logger.LogInformation("Roles controller, POST ChangeRole. AccountId: {AccountId}. UserRef: {UserRef}. UpdatedRole: {Role}", id, userRef, role);
 
         return Redirect(string.Format($"/resource/index/{{0}}/?key={SupportServiceResourceKey.EmployerAccountTeam}", id));
     }
