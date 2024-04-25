@@ -29,7 +29,7 @@ public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRol
             UserRef = teamMember.UserRef,
             Role = Enum.Parse<Role>(teamMember.Role),
             Name = teamMember.Name,
-            PostbackUrl = string.Format($"/resource/index/{{0}}/?childId={{1}}&key={SupportServiceResourceKey.EmployerAccountChangeRole}", id, userRef),
+            ResponseUrl = string.Format($"/resource/index/{{0}}/?childId={{1}}&key={SupportServiceResourceKey.EmployerAccountChangeRole}", id, userRef),
         });
     }
 

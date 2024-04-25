@@ -8,5 +8,5 @@ public class ChangeRoleViewModel
     public string UserRef { get; set; }
     public string Name { get; set; }
     public Role Role { get; set; }
-    public string PostbackUrl { get; set; }
+    public string ResponseUrl { get; set; }
 }

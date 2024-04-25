@@ -34,8 +34,18 @@
             @Model.Name
             <span class="heading-secondary">Choose what you allow this team member to do.</span>
         </h1>
-        <form method="POST" action="@Model.PostbackUrl">
-            <div class="form-group @(!ViewContext.ViewData.ModelState.IsValid ? "form-group--error" : "")">
+        <div class="form-group @(!ViewContext.ViewData.ModelState.IsValid ? "form-group--error" : "")">
+            @using (Html.BeginForm("resource", "Role",
+                        FormMethod.Get,
+                        new Dictionary<string, object>
+                        {
+                            { "action", $"{Model.ResponseUrl}" },
+                            { "accept_charset", "utf-8" },
+                            { "@class", "search-header search-header-2" },
+                            { "role", "change" },
+                            { "id", "searchForm" }
+                        }))
+            {
                 <fieldset class="fieldset">
                     <legend id="change-role-selection" class="">
                         <span class="visually-hidden">Select a role</span>
@@ -46,7 +56,7 @@
                     </legend>
                     <div class="radios" data-module="radios">
                         <div class="form-radio">
-                            <input class="radios__input" id="radio1" type="radio" name="Role" value="0" @(Model.Role == Role.None ? "checked" : "")/>
+                            <input class="" id="radio1" type="radio" name="Role" value="0" @(Model.Role == Role.None ? "checked" : "")/>
                             <label class="label radios__label" for="radio0">
                                 @(RoleStrings.GetRoleDescription(Role.None))
                             </label>
@@ -58,13 +68,13 @@
                             </label>
                         </div>
                         <div class="form-radio">
-                            <input class="radios__input" id="radio2" type="radio" name="Role" value="2" @(Model.Role == Role.Transactor ? "checked" : "")/>
+                            <input class="" id="radio2" type="radio" name="Role" value="2" @(Model.Role == Role.Transactor ? "checked" : "")/>
                             <label class="label radios__label" for="radio2">
                                 @(RoleStrings.GetRoleDescription(Role.Transactor))
                             </label>
                         </div>
                         <div class="form-radio">
-                            <input class="radios__input" id="radio3" type="radio" name="Role" value="1" @(Model.Role == Role.Owner ? "checked" : "")/>
+                            <input class="" id="radio3" type="radio" name="Role" value="1" @(Model.Role == Role.Owner ? "checked" : "")/>
                             <label class="label radios__label" for="radio3">
                                 @(RoleStrings.GetRoleDescription(Role.Owner))
                             </label>
@@ -72,8 +82,9 @@
                     </div>
                     <input type="hidden" value="@Model.UserRef"/>
                 </fieldset>
-            </div>
-            <button type="submit" class="button" id="update">Update</button>
-        </form>
+
+                <button type="submit" class="button" id="update">Update</button>
+            }
+        </div>
     </div>
 </div>
