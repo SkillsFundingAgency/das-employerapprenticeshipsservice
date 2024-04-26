@@ -37,11 +37,11 @@ public class EmployerAccountsApiService : ApiClientService, IEmployerAccountsApi
         return GetResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>>($"/api/accounts?{(string.IsNullOrWhiteSpace(toDate) ? "" : "toDate=" + toDate + "&")}pageNumber={pageNumber}&pageSize={pageSize}", cancellationToken: cancellationToken);
     }
 
-    public Task<AccountDetailViewModel> GetAccount(string hashedAccountId, CancellationToken cancellationToken = default)
+    public Task<AccountDetailViewModel> GetAccount(long accountId, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Getting paged accounts");
 
-        return GetResponse<AccountDetailViewModel>($"/api/accounts/{hashedAccountId}", cancellationToken: cancellationToken);
+        return GetResponse<AccountDetailViewModel>($"/api/accounts/{accountId}", cancellationToken: cancellationToken);
     }
 
     public Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default)

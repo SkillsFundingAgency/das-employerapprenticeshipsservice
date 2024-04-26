@@ -11,6 +11,6 @@ public interface IEmployerAccountsApiService
 
     Task<PagedApiResponseViewModel<AccountWithBalanceViewModel>> GetAccounts(string toDate, int pageSize, int pageNumber, CancellationToken cancellationToken = default);
 
-    Task<AccountDetailViewModel> GetAccount(string hashedAccountId, CancellationToken cancellationToken = default);
+    Task<AccountDetailViewModel> GetAccount(long accountId, CancellationToken cancellationToken = default);
     Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default);
 }
