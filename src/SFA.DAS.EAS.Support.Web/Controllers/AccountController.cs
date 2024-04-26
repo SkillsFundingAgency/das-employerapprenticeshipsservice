@@ -1,5 +1,4 @@
-﻿using SFA.DAS.EAS.Domain.Models;
-using SFA.DAS.EAS.Support.ApplicationServices.Models;
+﻿using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Web.Authorization;
 using SFA.DAS.EAS.Support.Web.Configuration;
