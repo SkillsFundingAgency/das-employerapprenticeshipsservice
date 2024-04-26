@@ -92,6 +92,19 @@ public sealed class AccountRepository : IAccountRepository
         }
     }
 
+    public async Task ChangeRole(string hashedId, string email, int role, string externalUserId)
+    {
+        try
+        {
+            await _accountApiClient.ChangeRole(hashedId, email, role, externalUserId);
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(exception, "Exception while changing role.");
+            throw;
+        }
+    }
+
     public async Task<decimal> GetAccountBalance(string id)
     {
         try

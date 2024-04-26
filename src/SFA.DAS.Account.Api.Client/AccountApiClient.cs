@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Account.Api.Types;
@@ -72,7 +73,7 @@ public class AccountApiClient : IAccountApiClient
     {
         var baseUrl = GetBaseUrl();
         var url = $"{baseUrl}api/accounts/{accountId}/legalentities";
-            
+
         var json = await _httpClient.GetAsync(url);
 
         return JsonConvert.DeserializeObject<List<ResourceViewModel>>(json);
@@ -82,7 +83,7 @@ public class AccountApiClient : IAccountApiClient
     {
         var baseUrl = GetBaseUrl();
         var url = $"{baseUrl}api/accounts/{accountId}/legalentities?includeDetails=true";
-            
+
         var json = await _httpClient.GetAsync(url);
 
         return JsonConvert.DeserializeObject<List<LegalEntityViewModel>>(json);
@@ -191,6 +192,19 @@ public class AccountApiClient : IAccountApiClient
         var json = await _httpClient.GetAsync(url);
 
         return JsonConvert.DeserializeObject<ICollection<AccountDetailViewModel>>(json);
+    }
+
+    public async Task ChangeRole(string hashedId, string email, int role, string externalUserId)
+    {
+        var request = new ChangeTeamMemberRoleRequest(hashedId, email, role, externalUserId);
+        
+        var baseUrl = GetBaseUrl();
+        var url = $"{baseUrl}api/team/change-role";
+        
+        using var httpRequest = new HttpRequestMessage(HttpMethod.Put, url);
+        httpRequest.Content = new StringContent(JsonConvert.SerializeObject(request));
+        
+        await _httpClient.SendWithNoResult(httpRequest);
     }
 
     public Task Ping()

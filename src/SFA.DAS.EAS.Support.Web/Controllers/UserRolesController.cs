@@ -1,4 +1,6 @@
-﻿using SFA.DAS.EAS.Domain.Models;
+﻿using System.Security.Claims;
+using SFA.DAS.EAS.Application.Infrastructure;
+using SFA.DAS.EAS.Domain.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Web.Authorization;
@@ -35,7 +37,7 @@ public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRol
 
     [HttpPost]
     [Route("{id}/{userRef}")]
-    public IActionResult Update(string id, string userRef, int role)
+    public async Task<IActionResult> Update(string id, string userRef, int role)
     {
         var model = new ChangeRoleCompletedModel
         {
@@ -46,7 +48,11 @@ public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRol
 
         try
         {
-            
+            var accountResponse = await accountHandler.FindTeamMembers(id);
+
+            var teamMember = accountResponse.Account.TeamMembers.Single(x => x.UserRef == userRef);
+
+            await accountHandler.ChangeRole(id, teamMember.Email, role, HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserIdClaimTypeIdentifier));
         }
         catch (Exception exception)
         {

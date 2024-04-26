@@ -117,6 +117,12 @@ public class AccountHandler : IAccountHandler
 
         return response;
     }
+
+    public async Task ChangeRole(string hashedId, string email, int role, string externalUserId)
+    {
+        await _accountRepository.ChangeRole(hashedId, email, role, externalUserId);
+    }
+
     private static AccountSearchModel Map(Core.Models.Account account)
     {
         return new AccountSearchModel
