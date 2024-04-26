@@ -8,11 +8,6 @@
         Team members
     </h1>
     
-    @if (TempData["RoleUpdateSuccess"] != null)
-    {
-        <h1>Role change was @((bool)TempData["RoleUpdateSuccess"] ? "successful": "not successful").</h1>
-    }
-    
     if (Model.Account.TeamMembers.Any())
     {
         <table class="responsive">

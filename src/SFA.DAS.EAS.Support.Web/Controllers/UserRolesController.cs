@@ -37,12 +37,23 @@ public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRol
     [Route("{id}/{userRef}")]
     public IActionResult Update(string id, string userRef, int role)
     {
-        logger.LogInformation("Roles controller, POST Update. AccountId: {AccountId}. UserRef: {UserRef}. UpdatedRole: {Role}", id, userRef, (Role)role);
+        var model = new ChangeRoleCompletedModel
+        {
+            ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id),
+            RoleString = RoleStrings.GetRoleDescription((Role)role),
+            Success = true,
+        };
 
-        TempData["RoleUpdateSuccess"] = true;
+        try
+        {
+            
+        }
+        catch (Exception exception)
+        {
+            logger.LogError(exception, $"{nameof(UserRolesController)}.{nameof(Update)} caught exception.");
+            model.Success = false;
+        }
 
-       // return Redirect(string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={0}", id));
-
-       return View("Confirm", string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id));
+        return View("Confirm", model);
     }
 }

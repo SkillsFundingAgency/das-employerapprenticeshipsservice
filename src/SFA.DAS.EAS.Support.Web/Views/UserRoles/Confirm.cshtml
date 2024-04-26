@@ -1,5 +1,20 @@
-﻿@model string;
+﻿@model SFA.DAS.EAS.Support.Web.Models.ChangeRoleCompletedModel;
 
-<h1>Confirmed POSTback</h1>
+<div class="panel">
+    @if (Model.Success)
+    {
+        <h1 class="heading-large">
+            The team member role was updated successfully.
+            <span class="heading-secondary">The member now has permissions to: @Model.RoleString.</span>
+        </h1>
+    }
+    else
+    {
+        <h1 class="heading-large ">
+            The team member role was update failed.
+            <span class="heading-secondary">The team member's role remains unchanged.</span>
+        </h1>
+    }
+</div>
 
-<a href="@Model">Click to return to Team</a>
+<a href="@Model.ReturnToTeamUrl">Click to return to Team members</a>
