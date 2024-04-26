@@ -43,8 +43,9 @@
                             { "accept_charset", "utf-8" },
                             { "@class", "search-header search-header-2" },
                             { "role", "change" },
-                            { "id", "searchForm" }
-                        }))
+                            { "id", "changeRoleForm" }
+                        }
+                    ))
             {
                 <fieldset class="fieldset">
                     <legend id="change-role-selection" class="">
@@ -55,27 +56,27 @@
                         }
                     </legend>
                     <div class="radios" data-module="radios">
-                        <div class="form-radio">
-                            <input class="" id="radio1" type="radio" name="Role" value="0" @(Model.Role == Role.None ? "checked" : "")/>
-                            <label class="label radios__label" for="radio0">
+                        <div class="multiple-choice">
+                            <input class="" id="radio0" type="radio" name="Role" value="0" @(Model.Role == Role.None ? "checked" : "")/>
+                            <label for="radio0">
                                 @(RoleStrings.GetRoleDescription(Role.None))
                             </label>
                         </div>
-                        <div class="form-radio">
+                        <div class="multiple-choice">
                             <input class="" id="radio1" type="radio" name="Role" value="3" @(Model.Role == Role.Viewer ? "checked" : "")/>
-                            <label class="label radios__label" for="radio1">
+                            <label for="radio1">
                                 @(RoleStrings.GetRoleDescription(Role.Viewer))
                             </label>
                         </div>
-                        <div class="form-radio">
+                        <div class="multiple-choice">
                             <input class="" id="radio2" type="radio" name="Role" value="2" @(Model.Role == Role.Transactor ? "checked" : "")/>
-                            <label class="label radios__label" for="radio2">
+                            <label for="radio2">
                                 @(RoleStrings.GetRoleDescription(Role.Transactor))
                             </label>
                         </div>
-                        <div class="form-radio">
+                        <div class="multiple-choice">
                             <input class="" id="radio3" type="radio" name="Role" value="1" @(Model.Role == Role.Owner ? "checked" : "")/>
-                            <label class="label radios__label" for="radio3">
+                            <label for="radio3">
                                 @(RoleStrings.GetRoleDescription(Role.Owner))
                             </label>
                         </div>
