@@ -7,7 +7,8 @@ using SFA.DAS.EAS.Support.Web.Models;
 namespace SFA.DAS.EAS.Support.Web.Controllers;
 
 [Route("roles")]
-[Authorize(Policy = PolicyNames.Default)]
+[AllowAnonymous]
+//[Authorize(Policy = PolicyNames.Default)]
 public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRolesController> logger) : Controller
 {
     [HttpGet]
