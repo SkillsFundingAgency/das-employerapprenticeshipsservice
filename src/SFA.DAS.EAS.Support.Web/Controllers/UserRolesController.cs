@@ -36,9 +36,10 @@ public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRol
 
     [HttpPost]
     [Route("{id}/{userRef}")]
-    public IActionResult Index(string id, string userRef, int role)
+    public IActionResult IndexPost(string id, string userRef)
     {
-        logger.LogInformation("Roles controller, POST ChangeRole. AccountId: {AccountId}. UserRef: {UserRef}. UpdatedRole: {Role}", id, userRef, (Role)role);
+        logger.LogInformation("Roles controller, POST ChangeRole. AccountId: {AccountId}. UserRef: {UserRef}. UpdatedRole: MISSING", id, userRef);
+        //logger.LogInformation("Roles controller, POST ChangeRole. AccountId: {AccountId}. UserRef: {UserRef}. UpdatedRole: {Role}", id, userRef, (Role)role);
 
         return Redirect(string.Format($"/resource/index/{{0}}/?key={SupportServiceResourceKey.EmployerAccountTeam}", id));
     }
