@@ -41,6 +41,8 @@ public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRol
 
         TempData["RoleUpdateSuccess"] = true;
 
-        return Redirect(string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={0}", id));
+       // return Redirect(string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={0}", id));
+
+       return View("Confirm", string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id));
     }
 }
