@@ -3,34 +3,32 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 
-namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
+namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests;
+
+public class WhenGettingLegalEntityDetailsForAnAccount : ApiClientTestBase
 {
-    public class WhenGettingLegalEntityDetailsForAnAccount : ApiClientTestBase
+    private List<LegalEntityViewModel>? _legalEntities;
+    private string? _uri;
+
+    protected override void HttpClientSetup()
     {
-        private List<LegalEntityViewModel>? _legalEntities;
-        private string? _uri;
+        _uri = $"/api/accounts/{TextualAccountId}/legalentities?includeDetails=true";
+        var absoluteUri = Configuration!.ApiBaseUrl.TrimEnd('/') + _uri;
 
-        protected override void HttpClientSetup()
-        {
-            _uri = $"/api/accounts/{TextualAccountId}/legalentities?includeDetails=true";
-            var absoluteUri = Configuration!.ApiBaseUrl.TrimEnd('/') + _uri;
-
-            _legalEntities = new List<LegalEntityViewModel> { new LegalEntityViewModel { AccountLegalEntityId = 1} };
+        _legalEntities = new List<LegalEntityViewModel> { new LegalEntityViewModel { AccountLegalEntityId = 1} };
             
-            HttpClient!.Setup(c => c.GetAsync(absoluteUri)).Returns(Task.FromResult(JsonConvert.SerializeObject(_legalEntities)));
-        }
+        HttpClient!.Setup(c => c.GetAsync(absoluteUri)).Returns(Task.FromResult(JsonConvert.SerializeObject(_legalEntities)));
+    }
         
-        [Test]
-        public async Task ThenTheLegalEntitiesAreReturned()
-        {
-            // Act
-            var response = await ApiClient!.GetLegalEntityDetailsConnectedToAccount(TextualAccountId);
+    [Test]
+    public async Task ThenTheLegalEntitiesAreReturned()
+    {
+        // Act
+        var response = await ApiClient!.GetLegalEntityDetailsConnectedToAccount(TextualAccountId);
 
-            // Assert
-            Assert.That(response, Is.Not.Null);
-            Assert.IsAssignableFrom<List<LegalEntityViewModel>>(response);
-            response.Should().NotBeNull();
-            response.Should().BeEquivalentTo(_legalEntities);
-        }
+        // Assert
+        response.Should().BeAssignableTo<List<LegalEntityViewModel>>();
+        response.Should().NotBeNull();
+        response.Should().BeEquivalentTo(_legalEntities);
     }
 }

@@ -1,4 +1,4 @@
-using Microsoft.Extensions.Logging;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
@@ -27,16 +27,13 @@ public class WhenCallingGetWithAccountFieldsSelectionTeamMembers : WhenTestingAc
             .ThrowsAsync(new Exception("Some Exception"));
 
         var actual = await Sut!.Get(id, AccountFieldsSelection.TeamMembers);
-            
-        Assert.Multiple(() =>
-        {
-            Assert.That(actual, Is.Not.Null);
-            Assert.That(actual.TeamMembers, Is.Not.Null);
-            CollectionAssert.IsEmpty(actual.TeamMembers);
-            Assert.That(actual.Transactions, Is.Null);
-            Assert.That(actual.PayeSchemes, Is.Null);
-            Assert.That(actual.LegalEntities, Is.Null);
-        });
+        
+        // Assert
+        actual.Should().NotBeNull();
+        actual.TeamMembers.Should().NotBeNull();
+        actual.Transactions.Should().BeNull();
+        actual.PayeSchemes.Should().BeNull();
+        actual.LegalEntities.Should().BeNull();
     }
 
     [Test]

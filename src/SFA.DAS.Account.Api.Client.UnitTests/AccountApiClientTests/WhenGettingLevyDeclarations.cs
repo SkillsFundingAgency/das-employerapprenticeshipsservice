@@ -1,54 +1,52 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using FluentAssertions;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 
-namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
+namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests;
+
+public class WhenGettingLevyDeclarations : ApiClientTestBase
 {
-    public class WhenGettingLevyDeclarations : ApiClientTestBase
+    protected override void HttpClientSetup()
     {
-        protected override void HttpClientSetup()
-        {
-            HttpClient!.Setup(c => c.GetAsync(It.IsAny<string>()))
-                .Returns(Task.FromResult(
-                    JsonConvert.SerializeObject(new List<LevyDeclarationViewModel>
-                        {
-                            new()
-                        }
-                    )));
-        }
+        HttpClient!.Setup(c => c.GetAsync(It.IsAny<string>()))
+            .Returns(Task.FromResult(
+                JsonConvert.SerializeObject(new List<LevyDeclarationViewModel>
+                    {
+                        new()
+                    }
+                )));
+    }
 
-        [Test]
-        public async Task ThenItShouldCallTheApiWithTheCorrectUrl()
-        {
-            // Act
-            await ApiClient!.GetLevyDeclarations(TextualAccountId);
+    [Test]
+    public async Task ThenItShouldCallTheApiWithTheCorrectUrl()
+    {
+        // Act
+        await ApiClient!.GetLevyDeclarations(TextualAccountId);
 
-            // Assert
-            const string expectedUrl = $"http://some-url/api/accounts/{TextualAccountId}/levy";
-            HttpClient!.Verify(c => c.GetAsync(expectedUrl), Times.Once);
-        }
+        // Assert
+        const string expectedUrl = $"http://some-url/api/accounts/{TextualAccountId}/levy";
+        HttpClient!.Verify(c => c.GetAsync(expectedUrl), Times.Once);
+    }
 
-        [Test]
-        public async Task ThenItShouldReturnLevyDeclarations()
-        {
-            // Act
-            var actual = await ApiClient!.GetLevyDeclarations(TextualAccountId);
+    [Test]
+    public async Task ThenItShouldReturnLevyDeclarations()
+    {
+        // Act
+        var actual = await ApiClient!.GetLevyDeclarations(TextualAccountId);
 
-            // Assert
-            Assert.That(actual, Is.Not.Null);
-        }
+        // Assert
+        Assert.That(actual, Is.Not.Null);
+    }
 
-        [Test]
-        public async Task ThenItShouldDeserializeTheResponseCorrectly()
-        {
-            // Act
-            var actual = await ApiClient!.GetLevyDeclarations(TextualAccountId);
+    [Test]
+    public async Task ThenItShouldDeserializeTheResponseCorrectly()
+    {
+        // Act
+        var response = await ApiClient!.GetLevyDeclarations(TextualAccountId);
 
-            // Assert
-            Assert.IsAssignableFrom<List<LevyDeclarationViewModel>>(actual);
-        }
+        // Assert
+        response.Should().BeAssignableTo<List<LevyDeclarationViewModel>>();
     }
 }

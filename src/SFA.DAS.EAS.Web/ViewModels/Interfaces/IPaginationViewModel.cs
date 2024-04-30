@@ -1,13 +1,12 @@
-﻿namespace SFA.DAS.EAS.Web.ViewModels.Interfaces
+﻿namespace SFA.DAS.EAS.Web.ViewModels.Interfaces;
+
+public interface IPaginationViewModel
 {
-    public interface IPaginationViewModel
-    {
-        int PageNumber { get; }
+    int PageNumber { get; }
 
-        int TotalPages { get; }
+    int TotalPages { get; }
 
-        int PageSize { get; }
+    int PageSize { get; }
 
-        int TotalResults { get; }
-    }
+    int TotalResults { get; }
 }

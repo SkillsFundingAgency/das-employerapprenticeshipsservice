@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
@@ -81,9 +82,9 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
             It.IsAny<Func<It.IsAnyType, Exception?, string>>()
         ));
 
-        Assert.That(actual, Is.Not.Null);
-        var list = actual.ToList();
-        CollectionAssert.IsEmpty(list);
+        // Assert
+        actual.Should().NotBeNull();
+        actual.Should().BeEmpty();
     }
 
     [Test]
@@ -117,8 +118,9 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
             It.IsAny<Func<It.IsAnyType, Exception?, string>>()
         ), Times.Once);
 
-        Assert.That(actual, Is.Not.Null);
-        CollectionAssert.IsEmpty(actual.ToList());
+        // Assert
+        actual.Should().NotBeNull();
+        actual.Should().BeEmpty();
     }
 
     [Test]
@@ -148,9 +150,9 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
 
         Assert.That(actual, Is.Not.Null);
 
-        var list = actual.ToList();
-        CollectionAssert.IsNotEmpty(list);
-        Assert.That(list, Has.Count.EqualTo(2));
+        // Assert
+        actual.Should().NotBeNull();
+        actual.Length.Should().Be(2);
     }
 
     [Test]
@@ -189,10 +191,8 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
         AccountApiClient.Verify(x => x.GetPageOfAccounts(It.IsAny<int>(), It.IsAny<int>(), null), Times.Once);
         AccountApiClient.Verify(x => x.GetAccount(It.IsAny<string>()), Times.Exactly(2));
         
-        Assert.That(actual, Is.Not.Null);
-        var list = actual.ToList();
-        CollectionAssert.IsNotEmpty(list);
-        Assert.That(list, Has.Count.EqualTo(2));
+        actual.Should().NotBeNull();
+        actual.Length.Should().Be(2);
     }
 
     [Test]
@@ -232,9 +232,7 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
         AccountApiClient.Verify(x => x.GetPageOfAccounts(It.IsAny<int>(), It.IsAny<int>(), null), Times.Once);
         AccountApiClient.Verify(x => x.GetAccount(It.IsAny<string>()), Times.Exactly(2));
 
-        Assert.That(actual, Is.Not.Null);
-        var list = actual.ToList();
-        CollectionAssert.IsNotEmpty(list);
-        Assert.That(list, Has.Count.EqualTo(2));
+        actual.Should().NotBeNull();
+        actual.Length.Should().Be(2);
     }
 }

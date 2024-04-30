@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using FluentAssertions;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Schema.Generation;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Client;
@@ -58,18 +59,9 @@ public class WebConfigurationTesting
     public void ItShouldDeserializeFaithfully()
     {
         var json = JsonConvert.SerializeObject(_unit);
-        Assert.IsNotNull(json);
+        json.Should().NotBeNull();
         var actual = JsonConvert.DeserializeObject<EasSupportConfiguration>(json);
-        Assert.AreEqual(json, JsonConvert.SerializeObject(actual));
-    }
-
-    [Test]
-    public void ItShouldDeserialize()
-    {
-        var json = JsonConvert.SerializeObject(_unit);
-        Assert.IsNotNull(json);
-        var actual = JsonConvert.DeserializeObject<EasSupportConfiguration>(json);
-        Assert.IsNotNull(actual);
+        json.Should().BeEquivalentTo(JsonConvert.SerializeObject(actual));
     }
 
     [Test]
@@ -81,10 +73,10 @@ public class WebConfigurationTesting
         jSchemaGenerator.GenerationProviders.Add(provider);
         var actual = jSchemaGenerator.Generate(typeof(EasSupportConfiguration));
 
-        Assert.IsNotNull(actual);
+        actual.Should().NotBeNull();
         // hack to leverage format as 'environmentVariable'
         var schemaString = actual.ToString().Replace($"\"format\":", "\"environmentVariable\":");
-        Assert.IsNotNull(schemaString);
+        schemaString.Should().NotBeNull();
         File.WriteAllText($@"{AppDomain.CurrentDomain.BaseDirectory}\{SiteConfigFileName}.schema.json",
             schemaString);
     }
@@ -93,7 +85,7 @@ public class WebConfigurationTesting
     public void ItShouldSerialize()
     {
         var json = JsonConvert.SerializeObject(_unit);
-        Assert.IsFalse(string.IsNullOrWhiteSpace(json));
+        json.Should().NotBeEmpty();
 
         File.WriteAllText($@"{AppDomain.CurrentDomain.BaseDirectory}\{SiteConfigFileName}.json", json);
     }

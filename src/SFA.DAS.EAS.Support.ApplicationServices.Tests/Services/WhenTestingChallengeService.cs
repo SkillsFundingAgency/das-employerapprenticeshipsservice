@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using FluentAssertions;
+using NUnit.Framework;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Core.Models;
 
@@ -33,7 +34,8 @@ public class WhenTestingChallengeService
 
         var actual = _sut?.GetPayeSchemesCharacters(payeSchemeModel);
 
-        Assert.That(actual, Is.Not.Null);
-        CollectionAssert.IsNotEmpty(actual);
+        // Assert
+        actual.Should().NotBeNull();
+        actual.Should().NotBeEmpty();
     }
 }

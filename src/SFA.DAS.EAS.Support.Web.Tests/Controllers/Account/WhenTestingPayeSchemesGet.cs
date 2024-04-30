@@ -1,3 +1,4 @@
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
@@ -12,6 +13,7 @@ public class WhenTestingPayeSchemesGet : WhenTestingAccountController
     [Test]
     public async Task ItShouldReturnAViewAndModelOnSuccess()
     {
+        // Arrange
         var response = new AccountPayeSchemesResponse
         {
             Account = new Core.Models.Account
@@ -26,15 +28,17 @@ public class WhenTestingPayeSchemesGet : WhenTestingAccountController
             
         const string id = "123";
         AccountHandler!.Setup(x => x.FindPayeSchemes(id)).ReturnsAsync(response);
+        
+        // Act
         var actual = await Unit!.PayeSchemes("123");
 
-        Assert.IsNotNull(actual);
-        Assert.IsNotNull(actual);
-        Assert.IsInstanceOf<ViewResult>(actual);
-        Assert.AreEqual(true, string.IsNullOrEmpty(((ViewResult)actual).ViewName));
-        Assert.IsInstanceOf<AccountDetailViewModel>(((ViewResult)actual).Model);
-        Assert.AreEqual(response.Account, ((AccountDetailViewModel)((ViewResult)actual).Model!).Account);
-        Assert.IsNull(((AccountDetailViewModel)((ViewResult)actual).Model!).SearchUrl);
+        // Assert
+        actual.Should().NotBeNull();
+        var result = actual.Should().BeAssignableTo<ViewResult>();
+        result.Subject.ViewName.Should().BeEmpty();
+        var model = result.Subject.Model.Should().BeAssignableTo<AccountDetailViewModel>();
+        model.Subject.Account.Should().BeEquivalentTo(response.Account);
+        model.Subject.SearchUrl.Should().BeNull();
     }
 
     [Test]
@@ -53,14 +57,18 @@ public class WhenTestingPayeSchemesGet : WhenTestingAccountController
         };
         const string id = "123";
         AccountHandler!.Setup(x => x.FindPayeSchemes(id)).ReturnsAsync(response);
+        
+        // Act
         var actual = await Unit!.PayeSchemes("123");
-        Assert.IsNotNull(actual);
-        Assert.IsInstanceOf<NotFoundResult>(actual);
+        
+        // Assert
+        actual.Should().BeAssignableTo<NotFoundResult>();
     }
 
     [Test]
     public async Task ItShouldReturnHttpNotFoundOnSearchFailed()
     {
+        // Arrange
         var response = new AccountPayeSchemesResponse
         {
             Account = new Core.Models.Account
@@ -76,9 +84,12 @@ public class WhenTestingPayeSchemesGet : WhenTestingAccountController
         const string id = "123";
             
         AccountHandler!.Setup(x => x.FindPayeSchemes(id)).ReturnsAsync(response);
+        
+        // Act
         var actual = await Unit!.PayeSchemes("123");
 
-        Assert.IsNotNull(actual);
-        Assert.IsInstanceOf<NotFoundResult>(actual);
+        // Assert
+        actual.Should().NotBeNull();
+        actual.Should().BeAssignableTo<NotFoundResult>();
     }
 }
