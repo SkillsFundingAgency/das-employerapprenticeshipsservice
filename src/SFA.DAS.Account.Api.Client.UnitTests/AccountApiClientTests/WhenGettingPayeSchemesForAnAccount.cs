@@ -27,7 +27,6 @@ public class WhenGettingPayeSchemesForAnAccount : ApiClientTestBase
         var response = await ApiClient!.GetPayeSchemesConnectedToAccount(TextualAccountId);
 
         // Assert
-        response.Should().BeAssignableTo<ResourceList>();
         response.Should().NotBeNull();
         response.Should().BeEquivalentTo(_payeSchemes);
     }

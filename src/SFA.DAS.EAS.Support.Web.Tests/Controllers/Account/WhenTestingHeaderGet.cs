@@ -62,8 +62,8 @@ public class WhenTestingHeaderGet : WhenTestingAccountController
         // Assert
         actual.Should().NotBeNull();
         var result = actual.Should().BeAssignableTo<ViewResult>();
-        result.Subject.ViewName.Should().BeNull("SubHeader");
+        result.Subject.ViewName.Should().Be("SubHeader");
         var model = result.Subject.Model.Should().BeAssignableTo<Core.Models.Account>();
-        model.Should().BeEquivalentTo(accountResponse.Account);
+        model.Subject.Should().BeEquivalentTo(accountResponse.Account);
     }
 }

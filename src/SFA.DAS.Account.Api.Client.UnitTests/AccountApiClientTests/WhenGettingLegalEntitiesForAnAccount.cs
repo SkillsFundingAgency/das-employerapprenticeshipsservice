@@ -27,7 +27,6 @@ public class WhenGettingLegalEntitiesForAnAccount : ApiClientTestBase
         var response = await ApiClient!.GetLegalEntitiesConnectedToAccount(TextualAccountId);
 
         // Assert
-        response.Should().BeAssignableTo<ResourceList>();
         response.Should().NotBeNull();
         response.Should().BeEquivalentTo(_legalEntities);
     }

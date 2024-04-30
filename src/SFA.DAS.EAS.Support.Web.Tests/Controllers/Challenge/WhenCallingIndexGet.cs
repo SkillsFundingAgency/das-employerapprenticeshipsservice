@@ -79,6 +79,6 @@ public class WhenCallingIndexGet : WhenTestingChallengeController
 
         // Assert
         var viewResult = actual.Should().BeAssignableTo<ViewResult>();
-        viewResult.Should().BeAssignableTo<ChallengeViewModel>();
+        viewResult.Subject.Model.Should().BeAssignableTo<ChallengeViewModel>();
     }
 }

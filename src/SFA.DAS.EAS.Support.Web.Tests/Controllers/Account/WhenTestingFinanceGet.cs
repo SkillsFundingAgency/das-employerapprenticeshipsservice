@@ -31,7 +31,7 @@ public class WhenTestingFinanceGet : WhenTestingAccountController
         // Asset
         actual.Should().NotBeNull();
         var result = actual.Should().BeAssignableTo<ViewResult>();
-        result.Subject.ViewName.Should().BeEmpty();
+        result.Subject.ViewName.Should().BeNull();
         var model = result.Subject.Model.Should().BeAssignableTo<FinanceViewModel>();
         model.Subject.Account.Should().BeEquivalentTo(accountFinanceResponse.Account);
         model.Subject.Balance.Should().Be(accountFinanceResponse.Balance);

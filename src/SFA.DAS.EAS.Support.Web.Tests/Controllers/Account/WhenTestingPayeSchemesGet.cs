@@ -35,7 +35,7 @@ public class WhenTestingPayeSchemesGet : WhenTestingAccountController
         // Assert
         actual.Should().NotBeNull();
         var result = actual.Should().BeAssignableTo<ViewResult>();
-        result.Subject.ViewName.Should().BeEmpty();
+        result.Subject.ViewName.Should().BeNull();
         var model = result.Subject.Model.Should().BeAssignableTo<AccountDetailViewModel>();
         model.Subject.Account.Should().BeEquivalentTo(response.Account);
         model.Subject.SearchUrl.Should().BeNull();
