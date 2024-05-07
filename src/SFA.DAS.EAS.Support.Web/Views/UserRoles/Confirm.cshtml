@@ -1,19 +1,35 @@
-﻿@model SFA.DAS.EAS.Support.Web.Models.ChangeRoleCompletedModel;
+﻿@using SFA.DAS.EAS.Domain.Models
+@model SFA.DAS.EAS.Support.Web.Models.ChangeRoleCompletedModel;
 
 <div class="panel">
     @if (Model.Success)
     {
         <h1 class="heading-large">
-            The team member role was updated successfully.
-            <span class="heading-secondary">The member now has permissions to: @Model.RoleString.</span>
+            Team member updated
+            
         </h1>
+        <p>
+            @{
+                var resultText = (Role)Model.Role switch
+                {
+                    Role.Owner => $"{Model.MemberEmail} can now accept agreements, view information and manage PAYE schemes, organisations, apprentices and team members.",
+                    Role.Transactor => $"{Model.MemberEmail} can now add apprentices and view information.",
+                    Role.Viewer => $"{Model.MemberEmail} can now view information but can’t make changes.",
+                    Role.None => $"{Model.MemberEmail} can now minimal access for Employer services.",
+                    _ => string.Empty
+                };
+            }
+            @resultText
+        </p>
     }
     else
     {
         <h1 class="heading-large ">
             The team member role was update failed.
-            <span class="heading-secondary">The team member's role remains unchanged.</span>
         </h1>
+        <p>
+            @Model.MemberEmail role remains unchanged.
+        </p>
     }
 </div>
 

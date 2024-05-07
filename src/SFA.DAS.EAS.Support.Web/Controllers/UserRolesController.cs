@@ -42,7 +42,7 @@ public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRol
         var model = new ChangeRoleCompletedModel
         {
             ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id),
-            RoleString = RoleStrings.GetRoleDescription((Role)role),
+            Role = role,
             Success = true,
         };
 
@@ -51,8 +51,9 @@ public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRol
             var accountResponse = await accountHandler.FindTeamMembers(id);
 
             var teamMember = accountResponse.Account.TeamMembers.Single(x => x.UserRef == userRef);
+            model.MemberEmail = teamMember.Email;
 
-            await accountHandler.ChangeRole(id, teamMember.Email, role, HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserIdClaimTypeIdentifier));
+           // await accountHandler.ChangeRole(id, teamMember.Email, role, HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserIdClaimTypeIdentifier));
         }
         catch (Exception exception)
         {
