@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Infrastructure;
+using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Web.Controllers;
 using SFA.DAS.EAS.Support.Web.Models;
@@ -39,10 +40,13 @@ public class WhenTestingResendGet
             Assert.That(actual, Is.Not.Null);
             Assert.That(actual, Is.InstanceOf<ViewResult>());
             Assert.That(((ViewResult)actual).ViewName,  Is.EqualTo("Confirm"));
+            
             var model = ((ViewResult)actual).Model as ResendInvitationCompletedModel;
+            
             Assert.That(model, Is.InstanceOf<ResendInvitationCompletedModel>());
             Assert.That(model.Success, Is.True);
             Assert.That(model.MemberEmail, Is.EqualTo(email));
+            Assert.That(model.ReturnToTeamUrl, Is.EqualTo(string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", hashedAccountId)));
             
             accountHandler.Verify(x => x.ResendInvitation(hashedAccountId, email, email, externalUserId), Times.Once);
         });
