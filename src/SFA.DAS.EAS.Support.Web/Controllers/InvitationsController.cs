@@ -8,7 +8,7 @@ namespace SFA.DAS.EAS.Support.Web.Controllers;
 
 public class InvitationsController(IAccountHandler accountHandler, ILogger<InvitationsController> logger) : Controller
 {
-    [HttpPost]
+    [HttpGet]
     [Route("{id}/{email}")]
     public async Task<IActionResult> Resend(string id, string email)
     {
