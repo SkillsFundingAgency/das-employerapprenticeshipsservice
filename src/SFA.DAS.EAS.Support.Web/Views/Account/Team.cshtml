@@ -7,7 +7,7 @@
     <h1 class="heading-xlarge">
         Team members
     </h1>
-    
+
     if (Model.Account.TeamMembers.Any())
     {
         <table class="responsive">
@@ -38,7 +38,7 @@
                     <td data-label="User Role" id="Role">@item.Role</td>
                     <td data-label="User Status" id="Status">@item.Status.GetTeamMemberStatus()</td>
                     <td data-label="Action" id="Navigate">
-                        <a href="@string.Format(item.Status == InvitationStatus.Accepted ? Model.ChangeRoleUrl : Model.ResendInviteUrl, Model.Account.HashedAccountId, item.UserRef)">
+                        <a href="@string.Format(item.Status == InvitationStatus.Accepted ? Model.ChangeRoleUrl : Model.ResendInviteUrl, Model.Account.HashedAccountId, item.Status == InvitationStatus.Accepted ? item.UserRef : item.Email)">
                             @(item.Status == InvitationStatus.Accepted ? "Change" : "Resend invitation")
                         </a>
                     </td>
