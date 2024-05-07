@@ -2,14 +2,17 @@
 using SFA.DAS.EAS.Application.Infrastructure;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
+using SFA.DAS.EAS.Support.Web.Authorization;
 using SFA.DAS.EAS.Support.Web.Models;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers;
 
+[Route("invitations")]
+[Authorize(Policy = PolicyNames.Default)]
 public class InvitationsController(IAccountHandler accountHandler, ILogger<InvitationsController> logger) : Controller
 {
     [HttpGet]
-    [Route("{id}/{email}")]
+    [Route("resend/{id}")]
     public async Task<IActionResult> Resend(string id, string email)
     {
         var model = new ResendInvitationCompletedModel { 
