@@ -105,6 +105,19 @@ public sealed class AccountRepository : IAccountRepository
         }
     }
 
+    public async Task ResendInvitation(string hashedAccountId, string email, string firstName, string externalUserId)
+    {
+        try
+        {
+            await _accountApiClient.ResendInvitation(hashedAccountId, email, firstName, externalUserId);
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(exception, "Exception while resending invitation.");
+            throw;
+        }
+    }
+
     public async Task<decimal> GetAccountBalance(string id)
     {
         try

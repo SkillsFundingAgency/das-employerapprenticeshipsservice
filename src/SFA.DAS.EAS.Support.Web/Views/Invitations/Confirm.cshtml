@@ -1,0 +1,21 @@
+﻿@model SFA.DAS.EAS.Support.Web.Models.ResendInvitationCompletedModel;
+
+<div class="panel">
+    @if (Model.Success)
+    {
+        <h1 class="heading-large">
+            Invitation resent
+        </h1>
+        <p>
+           You've resent an invitation to @Model.MemberEmail.
+        </p>
+    }
+    else
+    {
+        <h1 class="heading-large ">
+            The resend invitation request failed.
+        </h1>
+    }
+</div>
+
+<a href="@Model.ReturnToTeamUrl">Click to return to Team members</a>

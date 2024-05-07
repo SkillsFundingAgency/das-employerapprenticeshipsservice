@@ -207,6 +207,19 @@ public class AccountApiClient : IAccountApiClient
         await _httpClient.SendWithNoResult(httpRequest);
     }
 
+    public async Task ResendInvitation(string hashedAccountId, string email, string firstName, string externalUserId)
+    {
+        var request = new ResendInvitationRequest(hashedAccountId, email, firstName, externalUserId);
+        
+        var baseUrl = GetBaseUrl();
+        var url = $"{baseUrl}api/team/resend-invitation";
+        
+        using var httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
+        httpRequest.Content = new StringContent(JsonConvert.SerializeObject(request));
+        
+        await _httpClient.SendWithNoResult(httpRequest);
+    }
+
     public Task Ping()
     {
         var baseUrl = GetBaseUrl();
