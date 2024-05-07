@@ -94,7 +94,6 @@ public class AccountController : Controller
             Account = response.Account,
             AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}",
             IsTier2User = User.IsInRole(AuthorizationConstants.Tier2User),
-            TeamMemberUrl = GetTeamMemberUrl(id),
             ChangeRoleUrl = $"/resource/index/{{0}}/?childId={{1}}&key={SupportServiceResourceKey.EmployerAccountChangeRole}",
             ResendInviteUrl = $"/resource/index/{{0}}/?childId={{1}}&key={SupportServiceResourceKey.EmployerAccountResendInvitation}"
         };
@@ -138,19 +137,4 @@ public class AccountController : Controller
         return View(model);
     }
     
-    [HttpGet]
-    [Route("account/{id}/resend-invitation/{userRef}")]
-    public async Task<IActionResult> ResendInvitation(string id, string userRef)
-    {
-        throw new NotImplementedException();
-    }
-
-    private string GetTeamMemberUrl(string hashedAccountId)
-    {
-        var baseUrl = _easSupportConfiguration.EmployerAccountsConfiguration.EmployerAccountsBaseUrl;
-        var trimmedBaseUrl = baseUrl?.TrimEnd('/') ?? string.Empty;
-        string path = $"login/staff?HashedAccountId={hashedAccountId}";
-
-        return $"{trimmedBaseUrl}/{path}".TrimEnd('/');
-    }
 }

@@ -23,12 +23,12 @@ public class InvitationsController(IAccountHandler accountHandler, ILogger<Invit
 
         try
         {
-            // await accountHandler.ResendInvitation(
-            //     id,
-            //     email,
-            //     email,
-            //     HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserIdClaimTypeIdentifier)
-            // );
+            await accountHandler.ResendInvitation(
+                id,
+                email,
+                email,
+                HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserIdClaimTypeIdentifier)
+            );
         }
         catch (Exception exception)
         {
