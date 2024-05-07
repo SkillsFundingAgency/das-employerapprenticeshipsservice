@@ -1,4 +1,5 @@
-﻿@using SFA.DAS.EAS.Account.Api.Types
+﻿@using System.Net
+@using SFA.DAS.EAS.Account.Api.Types
 @using SFA.DAS.EAS.Support.Web.Models
 @model SFA.DAS.EAS.Support.Web.Models.AccountDetailViewModel
 
@@ -38,7 +39,7 @@
                     <td data-label="User Role" id="Role">@item.Role</td>
                     <td data-label="User Status" id="Status">@item.Status.GetTeamMemberStatus()</td>
                     <td data-label="Action" id="Navigate">
-                        <a href="@string.Format(item.Status == InvitationStatus.Accepted ? Model.ChangeRoleUrl : Model.ResendInviteUrl, Model.Account.HashedAccountId, item.Status == InvitationStatus.Accepted ? item.UserRef : item.Email)">
+                        <a href="@string.Format(item.Status == InvitationStatus.Accepted ? Model.ChangeRoleUrl : Model.ResendInviteUrl, Model.Account.HashedAccountId, item.Status == InvitationStatus.Accepted ? item.UserRef : WebUtility.HtmlEncode(item.Email))">
                             @(item.Status == InvitationStatus.Accepted ? "Change" : "Resend invitation")
                         </a>
                     </td>
