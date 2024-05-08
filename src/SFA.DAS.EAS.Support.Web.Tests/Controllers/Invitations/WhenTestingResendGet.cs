@@ -1,4 +1,6 @@
 ﻿using System.Security.Claims;
+using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,7 +15,6 @@ using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Invitations;
 
-[TestFixture]
 public class WhenTestingResendGet
 {
     [Test, MoqAutoData]
@@ -22,7 +23,7 @@ public class WhenTestingResendGet
         string email,
         string externalUserId,
         Mock<IAccountHandler> accountHandler
-        )
+    )
     {
         var sut = new InvitationsController(accountHandler.Object, Mock.Of<ILogger<InvitationsController>>());
         sut.ControllerContext = new ControllerContext
@@ -32,23 +33,23 @@ public class WhenTestingResendGet
                 User = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { new(EmployerClaims.IdamsUserIdClaimTypeIdentifier, externalUserId) })),
             }
         };
-        
-        var actual = await sut!.Resend(hashedAccountId, email);
 
-        Assert.Multiple(() =>
+        var actual = await sut.Resend(hashedAccountId, email);
+
+        using (new AssertionScope())
         {
-            Assert.That(actual, Is.Not.Null);
-            Assert.That(actual, Is.InstanceOf<ViewResult>());
-            Assert.That(((ViewResult)actual).ViewName,  Is.EqualTo("Confirm"));
-            
+            actual.Should().NotBeNull();
+            actual.Should().BeOfType<ViewResult>();
+            ((ViewResult)actual).ViewName.Should().Be("Confirm");
+
             var model = ((ViewResult)actual).Model as ResendInvitationCompletedModel;
-            
-            Assert.That(model, Is.InstanceOf<ResendInvitationCompletedModel>());
-            Assert.That(model.Success, Is.True);
-            Assert.That(model.MemberEmail, Is.EqualTo(email));
-            Assert.That(model.ReturnToTeamUrl, Is.EqualTo(string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", hashedAccountId)));
-            
+
+            model.Should().BeOfType<ResendInvitationCompletedModel>();
+            model.Success.Should().BeTrue();
+            model.MemberEmail.Should().Be(email);
+            model.ReturnToTeamUrl.Should().Be(string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", hashedAccountId));
+
             accountHandler.Verify(x => x.ResendInvitation(hashedAccountId, email, email, externalUserId), Times.Once);
-        });
+        }
     }
 }
