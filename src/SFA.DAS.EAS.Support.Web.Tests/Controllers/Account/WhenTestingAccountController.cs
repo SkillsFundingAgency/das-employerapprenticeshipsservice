@@ -5,7 +5,6 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
-using SFA.DAS.EAS.Support.Web.Configuration;
 using SFA.DAS.EAS.Support.Web.Controllers;
 using SFA.DAS.EAS.Support.Web.Models;
 using SFA.DAS.EAS.Support.Web.Services;
@@ -26,9 +25,7 @@ public abstract class WhenTestingAccountController
         _payeLevySubmissionsHandler = new Mock<IPayeLevySubmissionsHandler>();
         _payeLevyDeclarationMapper = new Mock<IPayeLevyMapper>();
 
-        Unit = new AccountController(
-            Mock.Of<IEasSupportConfiguration>(),
-            AccountHandler.Object,
+        Unit = new AccountController(AccountHandler.Object,
             _payeLevySubmissionsHandler.Object,
             _payeLevyDeclarationMapper.Object
             );

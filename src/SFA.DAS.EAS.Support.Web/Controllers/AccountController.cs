@@ -1,7 +1,6 @@
 ﻿using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Web.Authorization;
-using SFA.DAS.EAS.Support.Web.Configuration;
 using SFA.DAS.EAS.Support.Web.Models;
 using SFA.DAS.EAS.Support.Web.Services;
 using AccountDetailViewModel = SFA.DAS.EAS.Support.Web.Models.AccountDetailViewModel;
@@ -11,18 +10,14 @@ namespace SFA.DAS.EAS.Support.Web.Controllers;
 [Authorize(Policy = PolicyNames.Default)]
 public class AccountController : Controller
 {
-    private readonly IEasSupportConfiguration _easSupportConfiguration;
     private readonly IAccountHandler _accountHandler;
     private readonly IPayeLevySubmissionsHandler _payeLevySubmissionsHandler;
     private readonly IPayeLevyMapper _payeLevyMapper;
 
-    public AccountController(
-        IEasSupportConfiguration easSupportConfiguration,
-        IAccountHandler accountHandler,
+    public AccountController(IAccountHandler accountHandler,
         IPayeLevySubmissionsHandler payeLevySubmissionsHandler,
         IPayeLevyMapper payeLevyDeclarationMapper)
     {
-        _easSupportConfiguration = easSupportConfiguration;
         _accountHandler = accountHandler;
         _payeLevySubmissionsHandler = payeLevySubmissionsHandler;
         _payeLevyMapper = payeLevyDeclarationMapper;

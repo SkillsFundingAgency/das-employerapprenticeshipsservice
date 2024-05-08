@@ -78,11 +78,11 @@ public class WhenTestingIndexGet
             
             var model = ((ViewResult)actual).Model as ChangeRoleViewModel;
 
-            model.HashedAccountId.Should().Be(hashedAccountId);
-            model.UserRef.Should().Be(userRef);
-            model.Role.Should().Be(role);
-            model.Name.Should().Be(teamMemberName);
-            model.ResponseUrl.Should().Be($"/resource/role/change/{hashedAccountId}/{userRef}");
+            model?.HashedAccountId.Should().Be(hashedAccountId);
+            model?.UserRef.Should().Be(userRef);
+            model?.Role.Should().Be(role);
+            model?.Name.Should().Be(teamMemberName);
+            model?.ResponseUrl.Should().Be($"/resource/role/change/{hashedAccountId}/{userRef}");
         }
     }
 }

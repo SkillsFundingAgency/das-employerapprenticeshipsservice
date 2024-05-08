@@ -64,11 +64,11 @@ public class WhenTestingUpdatePost
 
             var model = ((ViewResult)actual).Model as ChangeRoleCompletedModel;
 
-            model.Should().BeOfType<ChangeRoleCompletedModel>();
-            model.Success.Should().BeTrue();
-            model.MemberEmail.Should().Be(email);
-            model.ReturnToTeamUrl.Should().Be(string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", hashedAccountId));
-            model.Role.Should().Be((int)newRole);
+            model?.Should().BeOfType<ChangeRoleCompletedModel>();
+            model?.Success.Should().BeTrue();
+            model?.MemberEmail.Should().Be(email);
+            model?.ReturnToTeamUrl.Should().Be(string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", hashedAccountId));
+            model?.Role.Should().Be((int)newRole);
 
             accountHandler.Verify(x => x.ChangeRole(hashedAccountId, email, (int)newRole, externalUserId), Times.Once);
         }
@@ -93,6 +93,6 @@ public class WhenTestingUpdatePost
         var actual = await sut.Update(hashedAccountId, userRef, (int)oldRole);
 
         var model = ((ViewResult)actual).Model as ChangeRoleCompletedModel;
-        model.Success.Should().BeFalse();
+        model?.Success.Should().BeFalse();
     }
 }

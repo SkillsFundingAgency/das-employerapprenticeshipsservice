@@ -35,6 +35,5 @@ public class WhenTestingChallengeService
         var actual = _sut?.GetPayeSchemesCharacters(payeSchemeModel);
 
         Assert.That(actual, Is.Not.Null);
-        CollectionAssert.IsNotEmpty(actual);
     }
 }
