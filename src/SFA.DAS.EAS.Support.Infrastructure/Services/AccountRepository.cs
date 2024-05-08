@@ -2,14 +2,18 @@
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Support.Core.Models;
 using SFA.DAS.EAS.Support.Core.Services;
 using SFA.DAS.EAS.Support.Infrastructure.Services.Contracts;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EAS.Support.Infrastructure.Services;
 
 public sealed class AccountRepository : IAccountRepository
 {
+    private readonly IEncodingService _encodingService;
+    private readonly IEmployerAccountsApiService _apiService;
     private readonly IAccountApiClient _accountApiClient;
     private readonly IDatetimeService _datetimeService;
     private readonly ILogger<AccountRepository> _logger;
@@ -20,26 +24,31 @@ public sealed class AccountRepository : IAccountRepository
         IPayeSchemeObfuscator payeSchemeObfuscator,
         IDatetimeService datetimeService,
         ILogger<AccountRepository> logger,
-        IPayRefHashingService hashingService)
+        IPayRefHashingService hashingService,
+        IEncodingService encodingService,
+        IEmployerAccountsApiService apiService)
     {
+        _apiService = apiService;
         _accountApiClient = accountApiClient;
         _payeSchemeObfuscator = payeSchemeObfuscator;
         _datetimeService = datetimeService;
         _logger = logger;
         _hashingService = hashingService;
+        _encodingService = encodingService;
     }
 
-    public async Task<Core.Models.Account> Get(string id, AccountFieldsSelection selection)
+    public async Task<Core.Models.Account> Get(string hashedAccountId, AccountFieldsSelection selection)
     {
         try
         {
-            var response = await _accountApiClient.GetResource<AccountDetailViewModel>($"/api/accounts/{id.ToUpper()}");
+            var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+            var response = await _apiService.GetAccount(accountId);
 
             return await GetAdditionalFields(response, selection);
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception, "Account with id {Id} not found", id);
+            _logger.LogError(exception, "Account with id {Id} not found", hashedAccountId);
             return null;
         }
     }
@@ -50,7 +59,7 @@ public sealed class AccountRepository : IAccountRepository
 
         try
         {
-            var accountPageModel = await _accountApiClient.GetPageOfAccounts(pageNumber, pageSize);
+            var accountPageModel = await _apiService.GetAccounts(null, pageSize, pageNumber);
             if (accountPageModel?.Data?.Count > 0)
             {
                 var accountsDetail = await GetAccountSearchDetails(accountPageModel.Data);
@@ -75,13 +84,13 @@ public sealed class AccountRepository : IAccountRepository
     {
         try
         {
-            var accountFirstPageModel = await _accountApiClient.GetPageOfAccounts(1, pagesize);
+            var accountFirstPageModel = await _apiService.GetAccounts(null, 1, pagesize);
             if (accountFirstPageModel == null)
             {
                 return 0;
             }
 
-            return (accountFirstPageModel.TotalPages * pagesize);
+            return accountFirstPageModel.TotalPages * pagesize;
 
         }
         catch (Exception exception)
@@ -92,17 +101,18 @@ public sealed class AccountRepository : IAccountRepository
         }
     }
 
-    public async Task<decimal> GetAccountBalance(string id)
+    public async Task<decimal> GetAccountBalance(string hashedAccountId)
     {
         try
         {
-            var response = await _accountApiClient.GetResource<AccountWithBalanceViewModel>($"/api/accounts/{id}");
+            var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+            var response = await _apiService.GetAccount(accountId);
 
             return response.Balance;
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception, "Account Balance with id {Id} not found", id);
+            _logger.LogError(exception, "Account Balance with id {Id} not found", hashedAccountId);
             return 0;
         }
     }
@@ -111,7 +121,7 @@ public sealed class AccountRepository : IAccountRepository
     {
         var accountsWithDetails = new List<Core.Models.Account>();
 
-        var accountDetailTasks = accounts.Select(account => _accountApiClient.GetAccount(account.AccountHashId));
+        var accountDetailTasks = accounts.Select(account => _apiService.GetAccount(account.AccountId));
         var accountDetails = await Task.WhenAll(accountDetailTasks);
 
         foreach (var account in accountDetails)
@@ -144,7 +154,7 @@ public sealed class AccountRepository : IAccountRepository
                 break;
             case AccountFieldsSelection.TeamMembers:
                 _logger.LogInformation("Getting TeamMembers for the account {AccountId}", result.AccountId);
-                var teamMembers = await GetAccountTeamMembers(result.HashedAccountId);
+                var teamMembers = await GetAccountTeamMembers(result.AccountId);
                 result.TeamMembers = teamMembers;
                 break;
             case AccountFieldsSelection.PayeSchemes:
@@ -207,7 +217,7 @@ public sealed class AccountRepository : IAccountRepository
                 var paye = payeScheme.Id.Replace("/", "%252f");
                 _logger.LogDebug("IAccountApiClient.GetResource<PayeSchemeViewModel>(\"{Obscured}\");", payeScheme.Href.Replace(paye, obscured));
 
-                return _accountApiClient.GetResource<PayeSchemeModel>(payeScheme.Href).ContinueWith(payeTask =>
+                return _apiService.GetResource<PayeSchemeModel>(payeScheme.Href).ContinueWith(payeTask =>
                 {
                     if (!payeTask.IsFaulted)
                     {
@@ -250,17 +260,17 @@ public sealed class AccountRepository : IAccountRepository
                (result.RemovedDate == null || result.RemovedDate > DateTime.UtcNow);
     }
 
-    private async Task<ICollection<TeamMemberViewModel>> GetAccountTeamMembers(string resultHashedAccountId)
+    private async Task<ICollection<TeamMemberViewModel>> GetAccountTeamMembers(long accountId)
     {
         try
         {
-            var teamMembers = await _accountApiClient.GetAccountUsers(resultHashedAccountId);
+            var teamMembers = await _apiService.GetAccountUsers(accountId);
 
             return teamMembers;
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception, "Account Team Member with id {ResultHashedAccountId} not found", resultHashedAccountId);
+            _logger.LogError(exception, "Account Team Members for Account: ({AccountId}) not found", accountId);
             return new List<TeamMemberViewModel>();
         }
     }
@@ -273,7 +283,7 @@ public sealed class AccountRepository : IAccountRepository
         {
             try
             {
-                var legalResponse = await _accountApiClient.GetResource<LegalEntityViewModel>(legalEntity.Href);
+                var legalResponse = await _apiService.GetResource<LegalEntityViewModel>(legalEntity.Href);
 
                 if (legalResponse.AgreementStatus == EmployerAgreementStatus.Signed ||
                     legalResponse.AgreementStatus == EmployerAgreementStatus.Pending ||

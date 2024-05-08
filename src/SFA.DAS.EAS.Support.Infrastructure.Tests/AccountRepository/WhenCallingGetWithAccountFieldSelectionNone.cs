@@ -1,8 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Support.Core.Models;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository;
 
@@ -12,35 +14,42 @@ public class WhenCallingGetWithAccountFieldSelectionNone : WhenTestingAccountRep
     [Test]
     public async Task ItShouldReturnJustTheAccount()
     {
-        const string id = "123";
-
-        AccountApiClient!.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
+        // Arrange
+        const string hashedAccountId = "ABH3D";
+        const long accountId = 44332;
+        EncodingService.Setup(x => x.Decode(hashedAccountId, EncodingType.AccountId)).Returns(accountId);
+        EmployerAccountsApiService
+            .Setup(x => x.GetAccount(accountId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(new AccountDetailViewModel());
 
-        var actual = await Sut!.Get(id, AccountFieldsSelection.None);
+        // Act
+        var actual = await Sut.Get(hashedAccountId, AccountFieldsSelection.None);
             
-        Assert.That(actual, Is.Not.Null);
-        Assert.Multiple(() =>
-        {
-            Assert.That(actual.PayeSchemes, Is.Null);
-            Assert.That(actual.LegalEntities, Is.Null);
-            Assert.That(actual.TeamMembers, Is.Null);
-            Assert.That(actual.Transactions, Is.Null);
-        });
+        // Assert
+        actual.Should().NotBeNull();
+        actual.PayeSchemes.Should().BeNull();
+        actual.LegalEntities.Should().BeNull();
+        actual.TeamMembers.Should().BeNull();
+        actual.Transactions.Should().BeNull();
     }
 
     [Test]
     public async Task ItShouldReturnNullOnException()
     {
-        const string id = "123";
+        // Arrange
+        const string hashedAccountId = "ABH3D";
+        const long accountId = 44332;
+        EncodingService.Setup(x => x.Decode(hashedAccountId, EncodingType.AccountId)).Returns(accountId);
 
-        AccountApiClient!.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
+        EmployerAccountsApiService
+            .Setup(x => x.GetAccount(accountId, It.IsAny<CancellationToken>()))
             .ThrowsAsync(new Exception());
 
-        var actual = await Sut!.Get(id, AccountFieldsSelection.None);
+        // Arrange
+        var actual = await Sut!.Get(hashedAccountId, AccountFieldsSelection.None);
 
-        Logger!.Verify(x => x.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
-
-        Assert.That(actual, Is.Null);
+        // Assert
+        Logger.Verify(x => x.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
+        actual.Should().BeNull();
     }
 }

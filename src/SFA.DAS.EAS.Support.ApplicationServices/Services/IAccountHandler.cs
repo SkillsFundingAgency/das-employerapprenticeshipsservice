@@ -8,7 +8,7 @@ public interface IAccountHandler
 {
     Task<AccountDetailOrganisationsResponse> FindOrganisations(string id);
     Task<AccountPayeSchemesResponse> FindPayeSchemes(string id);
-    Task<AccountFinanceResponse> FindFinance(string id);
+    Task<AccountFinanceResponse> FindFinance(string hashedAccountId);
     Task<IEnumerable<AccountSearchModel>> FindAllAccounts(int pagesize, int pageNumber);
     Task<int> TotalAccountRecords(int pagesize);
     Task<AccountReponse> Find(string id);

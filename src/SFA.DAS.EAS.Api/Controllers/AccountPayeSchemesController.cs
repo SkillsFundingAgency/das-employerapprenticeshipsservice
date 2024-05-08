@@ -36,7 +36,6 @@ public class AccountPayeSchemesController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetPayeScheme([FromRoute] string hashedAccountId, [FromQuery] string payeSchemeRef)
     {
-        
         var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
         var redirectResponse = await _apiService.Redirect($"/api/accounts/{accountId}/payeschemes/scheme?payeSchemeRef={Uri.EscapeDataString(payeSchemeRef)}");
         return Content(redirectResponse.ToString(), "application/json");

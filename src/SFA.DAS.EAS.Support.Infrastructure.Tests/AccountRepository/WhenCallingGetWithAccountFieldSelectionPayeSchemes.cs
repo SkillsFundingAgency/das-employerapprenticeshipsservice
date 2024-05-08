@@ -1,8 +1,10 @@
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Support.Core.Models;
+using SFA.DAS.Encoding;
 using ResourceList = SFA.DAS.EAS.Account.Api.Types.ResourceList;
 
 namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository;
@@ -13,22 +15,29 @@ public class WhenCallingGetWithAccountFieldSelectionPayeSchemes : WhenTestingAcc
     [Test]
     public async Task ItShouldReturnNullOnException()
     {
-        const string id = "123";
-
-        AccountApiClient!.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
+        const string hashedAccountId = "ABH3D";
+        const long accountId = 44332;
+        EncodingService.Setup(x => x.Decode(hashedAccountId, EncodingType.AccountId)).Returns(accountId);
+        EmployerAccountsApiService
+            .Setup(x => x.GetAccount(accountId, It.IsAny<CancellationToken>()))
             .ThrowsAsync(new Exception());
 
-        var actual = await Sut!.Get(id, AccountFieldsSelection.PayeSchemes);
+        // Act
+        var actual = await Sut.Get(hashedAccountId, AccountFieldsSelection.PayeSchemes);
 
+        // Assert
         Logger!.Verify(x => x.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception>(), It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
-
-        Assert.That(actual, Is.Null);
+        actual.Should().BeNull();
     }
 
     [Test]
     public async Task ItShouldReturnTheAccountWithPayeSchemes()
     {
-        const string id = "123";
+        // Arrange
+        const string hashedAccountId = "ABH3D";
+        const long accountId = 44332;
+        const string payeRef = "123/123456";
+        EncodingService.Setup(x => x.Decode(hashedAccountId, EncodingType.AccountId)).Returns(accountId);
 
         var accountDetailViewModel = new AccountDetailViewModel
         {
@@ -39,7 +48,7 @@ public class WhenCallingGetWithAccountFieldSelectionPayeSchemes : WhenTestingAcc
                 {
                     new ResourceViewModel
                     {
-                        Id = "123/123456",
+                        Id = payeRef,
                         Href = "https://tempuri.org/payescheme/{1}"
                     }
                 }),
@@ -58,38 +67,39 @@ public class WhenCallingGetWithAccountFieldSelectionPayeSchemes : WhenTestingAcc
             DasAccountName = "Test Account 1"
         };
 
-        AccountApiClient!.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
+        EmployerAccountsApiService
+            .Setup(x => x.GetAccount(accountId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(accountDetailViewModel);
 
-        const string obscuredPayePayeScheme = "123/123456";
+        const string obscuredPayePayeScheme = "1**/****6";
 
-        PayeSchemeObsfuscator!.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
-            .Returns(obscuredPayePayeScheme);
+        PayeSchemeObsfuscator!.Setup(x => x.ObscurePayeScheme(payeRef))
+            .Returns(obscuredPayePayeScheme)
+            .Verifiable(Times.Exactly(2));
 
         var payeSchemeViewModel = new PayeSchemeModel
         {
             AddedDate = DateTime.Today.AddMonths(-4),
-            Ref = "123/123456",
+            Ref = payeRef,
             Name = "123/123456",
             DasAccountId = "123",
             RemovedDate = null
         };
 
-        AccountApiClient.Setup(x => x.GetResource<PayeSchemeModel>(It.IsAny<string>()))
+        EmployerAccountsApiService
+            .Setup(x => x.GetResource<PayeSchemeModel>(It.IsAny<string>()))
             .ReturnsAsync(payeSchemeViewModel);
 
-        var actual = await Sut!.Get(id, AccountFieldsSelection.PayeSchemes);
+        // Act
+        var actual = await Sut!.Get(hashedAccountId, AccountFieldsSelection.PayeSchemes);
 
-        PayeSchemeObsfuscator.Verify(x => x.ObscurePayeScheme(It.IsAny<string>()), Times.Exactly(2));
-
-        Assert.That(actual, Is.Not.Null);
-        Assert.That(actual.PayeSchemes, Is.Not.Null);
-        Assert.Multiple(() =>
-        {
-            Assert.That(actual.PayeSchemes.Count(), Is.EqualTo(1));
-            Assert.That(actual.LegalEntities, Is.Null);
-            Assert.That(actual.TeamMembers, Is.Null);
-            Assert.That(actual.Transactions, Is.Null);
-        });
+        // Assert
+        PayeSchemeObsfuscator.Verify();
+        actual.Should().NotBeNull();
+        actual.PayeSchemes.Should().NotBeNull();
+        actual.PayeSchemes.Count().Should().Be(1);
+        actual.LegalEntities.Should().BeNull();
+        actual.TeamMembers.Should().BeNull();
+        actual.Transactions.Should().BeNull();
     }
 }
