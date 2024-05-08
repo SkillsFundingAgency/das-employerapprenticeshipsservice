@@ -1,10 +1,10 @@
 ﻿@using SFA.DAS.EAS.Domain.Models
 @model SFA.DAS.EAS.Support.Web.Models.ChangeRoleCompletedModel;
 
-<div class="panel">
-    @if (Model.Success)
-    {
-        <h1 class="heading-large">
+@if (Model.Success)
+{
+    <div class="info-summary">
+        <h1>
             Team member updated
         </h1>
         <p>
@@ -20,16 +20,22 @@
             }
             @resultText
         </p>
-    }
-    else
-    {
-        <h1 class="heading-large ">
-            The team member role was update failed.
+        <p>
+            <a href="@Model.ReturnToTeamUrl">Click to return to Team members</a>
+        </p>
+    </div>
+}
+else
+{
+    <div class="error-summary">
+        <h1>
+            The team member role update failed.
         </h1>
         <p>
             @Model.MemberEmail role remains unchanged.
         </p>
-    }
-</div>
-
-<a href="@Model.ReturnToTeamUrl">Click to return to Team members</a>
+        <p>
+            <a href="@Model.ReturnToTeamUrl">Click to return to Team members</a>
+        </p>
+    </div>
+}
