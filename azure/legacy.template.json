@@ -112,7 +112,8 @@
         "supportAppServiceName": "[concat(variables('resourceNamePrefix'), 's', parameters('serviceName'), '-as')]",
         "resourceGroupName": "[concat(variables('resourceNamePrefix'), parameters('serviceName'), '-rg')]",
         "configNames": "SFA.DAS.EmployerApprenticeshipsService",
-        "configNamesApi": "SFA.DAS.EmployerApprenticeshipsService,SFA.DAS.Encoding"
+        "configNamesApi": "SFA.DAS.EmployerApprenticeshipsService,SFA.DAS.Encoding",
+        "configNamesSupport": "SFA.DAS.EmployerAccounts.Api.Client,SFA.DAS.TokenServiceApiClient,SFA.DAS.Support.EAS,SFA.DAS.EmployerAccountAPI,SFA.DAS.Encoding"
     },
     "resources": [
         {
@@ -516,6 +517,10 @@
                                 {
                                     "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                                     "value": "[if(parameters('deploySupportSite'), reference(concat('support-app-insights-', parameters('utcValue')), '2018-11-01').outputs.InstrumentationKey.value, '')]"
+                                },
+                                {
+                                    "name": "ConfigNames",
+                                    "value": "[variables('configNamesSupport')]"
                                 }
                             ]
                         }

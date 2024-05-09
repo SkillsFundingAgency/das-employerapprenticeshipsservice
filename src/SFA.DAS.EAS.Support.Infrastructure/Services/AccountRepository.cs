@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Concurrent;
+using System.Net.Http;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
@@ -119,24 +120,24 @@ public sealed class AccountRepository : IAccountRepository
 
     private async Task<IEnumerable<Core.Models.Account>> GetAccountSearchDetails(IEnumerable<AccountWithBalanceViewModel> accounts)
     {
-        var accountsWithDetails = new List<Core.Models.Account>();
+        var accountsWithDetails = new ConcurrentBag<Core.Models.Account>();
 
-        var accountDetailTasks = accounts.Select(account => _apiService.GetAccount(account.AccountId));
-        var accountDetails = await Task.WhenAll(accountDetailTasks);
-
-        foreach (var account in accountDetails)
+        await Parallel.ForEachAsync(accounts, async (acc, cancellationToken) =>
         {
             try
             {
-                _logger.LogInformation("GetAdditionalFields for account ID {HashedAccountId}", account.HashedAccountId);
+                _logger.LogInformation("Getting account {AccountId}", acc.AccountId);
+                var account  = await _apiService.GetAccount(acc.AccountId, cancellationToken);
+                
+                _logger.LogInformation("GetAdditionalFields for account ID {AccountId}", account.AccountId);
                 var accountWithDetails = await GetAdditionalFields(account, AccountFieldsSelection.PayeSchemes);
                 accountsWithDetails.Add(accountWithDetails);
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, "Exception while retrieving details for account ID {HashedAccountId}", account.HashedAccountId);
+                _logger.LogError(exception, "Exception while retrieving details for account ID {AccountId}", acc.AccountId);
             }
-        }
+        });
 
         return accountsWithDetails;
     }
