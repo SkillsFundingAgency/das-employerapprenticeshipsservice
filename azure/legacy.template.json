@@ -113,7 +113,7 @@
         "resourceGroupName": "[concat(variables('resourceNamePrefix'), parameters('serviceName'), '-rg')]",
         "configNames": "SFA.DAS.EmployerApprenticeshipsService",
         "configNamesApi": "SFA.DAS.EmployerApprenticeshipsService,SFA.DAS.Encoding",
-        "configNamesSupport": "SFA.DAS.EmployerAccounts.Api.Client,SFA.DAS.TokenServiceApiClient,SFA.DAS.Support.EAS,SFA.DAS.EmployerAccountAPI,SFA.DAS.Encoding"
+        "configNamesSupport": "SFA.DAS.EmployerAccounts.Api.Client,SFA.DAS.TokenServiceApiClient,SFA.DAS.Support.EAS,SFA.DAS.EmployerAccountAPI,SFA.DAS.Encoding,SFA.DAS.EmployerApprenticeshipsService"
     },
     "resources": [
         {
