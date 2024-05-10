@@ -40,7 +40,7 @@ public class EmployerAccountsApiService : ApiClientService, IEmployerAccountsApi
 
     public async Task<AccountDetailViewModel> GetAccount(long accountId, CancellationToken cancellationToken = default)
     {
-        _logger.LogInformation("Getting paged accounts: {AccountId}");
+        _logger.LogInformation("Getting account: {AccountId}");
 
         return await GetResponse<AccountDetailViewModel>($"/api/accounts/{accountId}", cancellationToken: cancellationToken);
     }
