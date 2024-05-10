@@ -13,7 +13,9 @@ public abstract class ApiClientService
 {
     protected readonly HttpClient Client;
     private readonly IManagedIdentityTokenGenerator _tokenGenerator;
-
+    private readonly SemaphoreSlim _tokenLock = new SemaphoreSlim(1);
+    private string _accessToken;
+    
     protected ApiClientService(HttpClient client, IManagedIdentityTokenGenerator tokenGenerator)
     {
         Client = client;
@@ -41,15 +43,56 @@ public abstract class ApiClientService
 
         using var request = new HttpRequestMessage(HttpMethod.Get, uri);
 
-        await AddAuthenticationHeader(request);
-        
-        var httpResponseMessage = await Client.SendAsync(request, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
+        var accessToken = await GetAccessTokenAsync().ConfigureAwait(false);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+        var httpResponseMessage = await Client.SendAsync(request, cancellationToken).ConfigureAwait(false);
         if (!httpResponseMessage.IsSuccessStatusCode)
         {
-            await ThrowRestHttpClientException(httpResponseMessage, cancellationToken);
+            if (httpResponseMessage.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                await RefreshAccessTokenAsync().ConfigureAwait(false);
+                // Retry the request with the new access token
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
+                httpResponseMessage = await Client.SendAsync(request, cancellationToken).ConfigureAwait(false);
+            }
+            else
+            {
+                await ThrowRestHttpClientException(httpResponseMessage, cancellationToken).ConfigureAwait(false);
+            }
         }
 
         return httpResponseMessage;
+    }
+    
+    private async Task<string> GetAccessTokenAsync()
+    {
+        await _tokenLock.WaitAsync().ConfigureAwait(false);
+        try
+        {
+            if (string.IsNullOrEmpty(_accessToken))
+            {
+                _accessToken = await _tokenGenerator.Generate().ConfigureAwait(false);
+            }
+            return _accessToken;
+        }
+        finally
+        {
+            _tokenLock.Release();
+        }
+    }
+
+    private async Task RefreshAccessTokenAsync()
+    {
+        await _tokenLock.WaitAsync().ConfigureAwait(false);
+        try
+        {
+            _accessToken = await _tokenGenerator.Generate().ConfigureAwait(false);
+        }
+        finally
+        {
+            _tokenLock.Release();
+        }
     }
 
     private static string AddQueryString(string uri, object queryData)
