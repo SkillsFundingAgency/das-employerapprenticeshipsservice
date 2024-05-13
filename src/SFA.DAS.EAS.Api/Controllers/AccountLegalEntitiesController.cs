@@ -10,7 +10,7 @@ namespace SFA.DAS.EAS.Account.Api.Controllers;
 [Authorize(Policy = ApiRoles.ReadUserAccounts)]
 [Route("api/accountlegalentities")]
 public class AccountLegalEntitiesController : ControllerBase
-{      
+{
     private readonly IEmployerAccountsApiService _apiService;
 
     public AccountLegalEntitiesController(IEmployerAccountsApiService apiService)

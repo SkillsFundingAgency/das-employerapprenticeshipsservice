@@ -19,7 +19,22 @@ public abstract class ApiClientService
         Client = client;
         _tokenGenerator = tokenGenerator;
     }
-    
+
+    protected async Task PostContent(string uri, string content, CancellationToken cancellationToken = default)
+    {
+        using var request = new HttpRequestMessage(HttpMethod.Post, uri);
+        request.Content = new StringContent(content);
+        
+        await AddAuthenticationHeader(request);
+
+        var httpResponseMessage  = await Client.SendAsync(request, cancellationToken);
+
+        if (!httpResponseMessage.IsSuccessStatusCode)
+        {
+            await ThrowRestHttpClientException(httpResponseMessage, cancellationToken);
+        }
+    }
+
     protected Task<TResponse> GetResponse<TResponse>(string uri, object queryData = null, CancellationToken cancellationToken = default)
     {
         return GetInternal<TResponse>(new Uri(uri, UriKind.RelativeOrAbsolute), queryData, cancellationToken);
@@ -42,7 +57,7 @@ public abstract class ApiClientService
         using var request = new HttpRequestMessage(HttpMethod.Get, uri);
 
         await AddAuthenticationHeader(request);
-        
+
         var httpResponseMessage = await Client.SendAsync(request, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
         if (!httpResponseMessage.IsSuccessStatusCode)
         {
@@ -58,7 +73,7 @@ public abstract class ApiClientService
             .GetType()
             .GetProperties()
             .ToDictionary(propertyInfo => propertyInfo.Name, propertyInfo => propertyInfo.GetValue(queryData)?.ToString() ?? string.Empty);
-        
+
         return QueryHelpers.AddQueryString(uri, queryString);
     }
 
@@ -67,10 +82,10 @@ public abstract class ApiClientService
         var content = await httpResponseMessage.Content
             .ReadAsStringAsync(cancellationToken)
             .ConfigureAwait(continueOnCapturedContext: false);
-        
+
         throw new RestHttpClientException(httpResponseMessage, content);
     }
-    
+
     protected async Task AddAuthenticationHeader(HttpRequestMessage httpRequestMessage)
     {
         var accessToken = await _tokenGenerator.Generate();

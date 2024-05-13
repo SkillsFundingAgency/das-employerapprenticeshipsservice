@@ -48,4 +48,9 @@ public class EmployerAccountsApiService : ApiClientService, IEmployerAccountsApi
     {
         return GetResponse<dynamic>(url, cancellationToken: cancellationToken);
     }
+
+    public async Task RedirectPost(string uri, string content, CancellationToken cancellationToken)
+    {
+        await PostContent(uri, content, cancellationToken);
+    }
 }

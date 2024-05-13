@@ -13,4 +13,5 @@ public interface IEmployerAccountsApiService
 
     Task<AccountDetailViewModel> GetAccount(string hashedAccountId, CancellationToken cancellationToken = default);
     Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default);
+    Task RedirectPost(string uri, string content, CancellationToken cancellationToken);
 }
