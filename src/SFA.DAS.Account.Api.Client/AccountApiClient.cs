@@ -201,7 +201,7 @@ public class AccountApiClient : IAccountApiClient
         var baseUrl = GetBaseUrl();
         var url = $"{baseUrl}api/team/change-role";
         
-        using var httpRequest = new HttpRequestMessage(HttpMethod.Put, url);
+        using var httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
         httpRequest.Content = new StringContent(JsonConvert.SerializeObject(request));
         
         await _httpClient.SendWithNoResult(httpRequest);
