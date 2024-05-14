@@ -48,7 +48,7 @@ public class EmployerTeamController : ControllerBase
     {
         try
         {
-            await _apiService.RedirectPost("/api/team/resend-invitation", JsonConvert.SerializeObject(request), CancellationToken.None);
+            await _apiService.RedirectPost("/api/team/resend-invitation", request, CancellationToken.None);
             return Ok();
         }
         catch (Exception exception)
