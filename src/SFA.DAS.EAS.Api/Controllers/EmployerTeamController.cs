@@ -46,6 +46,8 @@ public class EmployerTeamController : ControllerBase
     [Route("resend-invitation")]
     public async Task<IActionResult> ResendInvitation([FromBody] ResendInvitationRequest request)
     {
+        _logger.LogWarning("{Controller}.{Action} request: {Request}", nameof(EmployerTeamController), nameof(ResendInvitation), JsonConvert.SerializeObject(request));
+        
         try
         {
             await _apiService.RedirectPost("/api/team/resend-invitation", request, CancellationToken.None);
