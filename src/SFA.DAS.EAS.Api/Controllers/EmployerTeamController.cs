@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Account.Api.Authorization;
+using SFA.DAS.EAS.Account.Api.Requests;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers;
@@ -26,12 +27,28 @@ public class EmployerTeamController : ControllerBase
     }
 
     [HttpPost]
-    [Route("resend-invitation")]
-    public async Task<IActionResult> ResendInvitation([FromBody] ResendInvitationCommand command)
+    [Route("change-role")]
+    public async Task<IActionResult> ChangeRole([FromBody] ChangeTeamMemberRoleRequest request)
     {
         try
         {
-            await _apiService.RedirectPost("/api/team/resend-invitation", JsonConvert.SerializeObject(command), new CancellationToken());
+            await _apiService.RedirectPost("/api/team/change-role", JsonConvert.SerializeObject(request), CancellationToken.None);
+            return Ok();
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(exception, "Error in {Controller}.{Action}", nameof(EmployerTeamController), nameof(ChangeRole));
+            return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+        }
+    }
+
+    [HttpPost]
+    [Route("resend-invitation")]
+    public async Task<IActionResult> ResendInvitation([FromBody] ResendInvitationRequest request)
+    {
+        try
+        {
+            await _apiService.RedirectPost("/api/team/resend-invitation", JsonConvert.SerializeObject(request), CancellationToken.None);
             return Ok();
         }
         catch (Exception exception)
@@ -40,12 +57,4 @@ public class EmployerTeamController : ControllerBase
             return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
         }
     }
-}
-
-public class ResendInvitationCommand
-{
-    public string Email { get; set; }
-    public string HashedAccountId { get; set; }
-    public string ExternalUserId { get; set; }
-    public string FirstName { get; set; }
 }
