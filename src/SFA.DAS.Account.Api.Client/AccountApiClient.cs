@@ -203,7 +203,7 @@ public class AccountApiClient : IAccountApiClient
         var url = $"{baseUrl}api/team/change-role";
         
         using var httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
-        httpRequest.Content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
+        httpRequest.Content = CreateJsonContent(request);
         
         await _httpClient.SendWithNoResult(httpRequest);
     }
@@ -216,10 +216,12 @@ public class AccountApiClient : IAccountApiClient
         var url = $"{baseUrl}api/team/resend-invitation";
         
         using var httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
-        httpRequest.Content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
+        httpRequest.Content = CreateJsonContent(request);
         
         await _httpClient.SendWithNoResult(httpRequest);
     }
+    
+    private static HttpContent CreateJsonContent<T>(T data) => data == null ? null : new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
 
     public Task Ping()
     {
