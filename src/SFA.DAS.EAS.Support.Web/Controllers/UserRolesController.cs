@@ -37,7 +37,7 @@ public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRol
 
     [HttpPost]
     [Route("{id}/{userRef}")]
-    public async Task<IActionResult> Update(string id, string userRef, int role)
+    public async Task<IActionResult> Update(string id, string userRef, [FromBody] int role)
     {
         var model = new ChangeRoleCompletedModel
         {
