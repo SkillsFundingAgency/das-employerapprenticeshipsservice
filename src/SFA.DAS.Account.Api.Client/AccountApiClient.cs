@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Account.Api.Types;
@@ -202,7 +203,7 @@ public class AccountApiClient : IAccountApiClient
         var url = $"{baseUrl}api/team/change-role";
         
         using var httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
-        httpRequest.Content = new StringContent(JsonConvert.SerializeObject(request));
+        httpRequest.Content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
         
         await _httpClient.SendWithNoResult(httpRequest);
     }
@@ -215,7 +216,7 @@ public class AccountApiClient : IAccountApiClient
         var url = $"{baseUrl}api/team/resend-invitation";
         
         using var httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
-        httpRequest.Content = new StringContent(JsonConvert.SerializeObject(request));
+        httpRequest.Content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
         
         await _httpClient.SendWithNoResult(httpRequest);
     }
