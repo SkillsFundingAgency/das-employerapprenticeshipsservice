@@ -1,6 +1,9 @@
 ﻿namespace SFA.DAS.EAS.Account.Api.Types;
 
-public record ResendInvitationRequest
+public class ResendInvitationRequest
 {
-    public ResendInvitationRequest(string HashedAccountId, string Email, string FirstName, string ExternalUserId) { }
+    public string HashedAccountId { get; set; }
+    public string Email { get; set; }
+    public string FirstName { get; set; }
+    public string ExternalUserId { get; set; }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Account.Api.Types;
 
@@ -11,11 +12,13 @@ namespace SFA.DAS.EAS.Account.Api.Client;
 public class AccountApiClient : IAccountApiClient
 {
     private readonly IAccountApiConfiguration _configuration;
+    private readonly ILogger<AccountApiClient> _logger;
     private readonly SecureHttpClient _httpClient;
 
-    public AccountApiClient(IAccountApiConfiguration configuration)
+    public AccountApiClient(IAccountApiConfiguration configuration, ILogger<AccountApiClient> logger)
     {
         _configuration = configuration;
+        _logger = logger;
         _httpClient = new SecureHttpClient(configuration);
     }
 
@@ -198,29 +201,37 @@ public class AccountApiClient : IAccountApiClient
     public async Task ChangeRole(string hashedId, string email, int role, string externalUserId)
     {
         var request = new ChangeTeamMemberRoleRequest(hashedId, email, role, externalUserId);
-        
+
         var baseUrl = GetBaseUrl();
         var url = $"{baseUrl}api/team/change-role";
-        
+
         using var httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
         httpRequest.Content = CreateJsonContent(request);
-        
+
         await _httpClient.SendWithNoResult(httpRequest);
     }
 
     public async Task ResendInvitation(string hashedAccountId, string email, string firstName, string externalUserId)
     {
-        var request = new ResendInvitationRequest(hashedAccountId, email, firstName, externalUserId);
-        
+        var request = new ResendInvitationRequest
+        {
+            HashedAccountId = hashedAccountId,
+            Email = email,
+            FirstName = firstName,
+            ExternalUserId = externalUserId
+        };
+
         var baseUrl = GetBaseUrl();
         var url = $"{baseUrl}api/team/resend-invitation";
-        
+
         using var httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
         httpRequest.Content = CreateJsonContent(request);
         
+        _logger.LogWarning("ResendInvitation httpRequest.Content {Content}.", httpRequest.Content.ToString());
+
         await _httpClient.SendWithNoResult(httpRequest);
     }
-    
+
     private static HttpContent CreateJsonContent<T>(T data) => data == null ? null : new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
 
     public Task Ping()
