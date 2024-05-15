@@ -22,7 +22,8 @@ public class WhenTestingResendGet
         string hashedAccountId,
         string email,
         string externalUserId,
-        Mock<IAccountHandler> accountHandler
+        Mock<IAccountHandler> accountHandler,
+        string supportUserEmail
     )
     {
         var sut = new InvitationsController(accountHandler.Object, Mock.Of<ILogger<InvitationsController>>());
@@ -30,7 +31,11 @@ public class WhenTestingResendGet
         {
             HttpContext = new DefaultHttpContext
             {
-                User = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { new(EmployerClaims.IdamsUserIdClaimTypeIdentifier, externalUserId) })),
+                User = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
+                {
+                    new(EmployerClaims.IdamsUserIdClaimTypeIdentifier, externalUserId),
+                    new(ClaimTypes.Email, supportUserEmail),
+                })),
             }
         };
 
@@ -49,7 +54,7 @@ public class WhenTestingResendGet
             model?.MemberEmail.Should().Be(email);
             model?.ReturnToTeamUrl.Should().Be(string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", hashedAccountId));
 
-            accountHandler.Verify(x => x.ResendInvitation(hashedAccountId, email, email), Times.Once);
+            accountHandler.Verify(x => x.ResendInvitation(hashedAccountId, email, email, supportUserEmail), Times.Once);
         }
     }
 }

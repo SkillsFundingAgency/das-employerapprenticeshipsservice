@@ -118,14 +118,14 @@ public class AccountHandler : IAccountHandler
         return response;
     }
 
-    public async Task ChangeRole(string hashedAccountId, string email, int role)
+    public async Task ChangeRole(string hashedAccountId, string email, int role, string supportUserEmail)
     {
-        await _accountRepository.ChangeRole(hashedAccountId, email, role);
+        await _accountRepository.ChangeRole(hashedAccountId, email, role, supportUserEmail);
     }
 
-    public async Task ResendInvitation(string hashedAccountId, string email, string firstName)
+    public async Task ResendInvitation(string hashedAccountId, string email, string firstName, string supportUserEmail)
     {
-        await _accountRepository.ResendInvitation(hashedAccountId, email, firstName);
+        await _accountRepository.ResendInvitation(hashedAccountId, email, firstName, supportUserEmail);
     }
 
     private static AccountSearchModel Map(Core.Models.Account account)

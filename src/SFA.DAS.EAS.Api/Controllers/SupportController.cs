@@ -28,7 +28,7 @@ public class SupportController : ControllerBase
 
     [HttpPost]
     [Route("change-role")]
-    public async Task<IActionResult> ChangeRole([FromBody] ChangeTeamMemberRoleRequest request)
+    public async Task<IActionResult> ChangeRole([FromBody] SupportChangeTeamMemberRoleRequest request)
     {
         try
         {
@@ -44,7 +44,7 @@ public class SupportController : ControllerBase
 
     [HttpPost]
     [Route("resend-invitation")]
-    public async Task<IActionResult> ResendInvitation([FromBody] ResendInvitationRequest request)
+    public async Task<IActionResult> ResendInvitation([FromBody] SupportResendInvitationRequest request)
     {
         _logger.LogWarning("{Controller}.{Action} request: {Request}", nameof(SupportController), nameof(ResendInvitation), JsonConvert.SerializeObject(request));
         

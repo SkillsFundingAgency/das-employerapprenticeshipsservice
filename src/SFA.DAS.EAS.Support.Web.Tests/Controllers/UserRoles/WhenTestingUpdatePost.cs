@@ -29,14 +29,19 @@ public class WhenTestingUpdatePost
         Role newRole,
         string externalUserId,
         string teamMemberName,
-        string email)
+        string email,
+        string supportUserEmail)
     {
         var sut = new UserRolesController(accountHandler.Object, Mock.Of<ILogger<UserRolesController>>());
         sut.ControllerContext = new ControllerContext
         {
             HttpContext = new DefaultHttpContext
             {
-                User = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> { new(EmployerClaims.IdamsUserIdClaimTypeIdentifier, externalUserId) })),
+                User = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
+                {
+                    new(EmployerClaims.IdamsUserIdClaimTypeIdentifier, externalUserId),
+                    new(ClaimTypes.Email, supportUserEmail),
+                })),
             }
         };
 
@@ -70,7 +75,7 @@ public class WhenTestingUpdatePost
             model?.ReturnToTeamUrl.Should().Be(string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", hashedAccountId));
             model?.Role.Should().Be((int)newRole);
 
-            accountHandler.Verify(x => x.ChangeRole(hashedAccountId, email, (int)newRole), Times.Once);
+            accountHandler.Verify(x => x.ChangeRole(hashedAccountId, email, (int)newRole, supportUserEmail), Times.Once);
         }
     }
 

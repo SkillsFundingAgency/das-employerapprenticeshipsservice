@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EAS.Support.ApplicationServices.Models;
+﻿using System.Security.Claims;
+using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Web.Authorization;
 using SFA.DAS.EAS.Support.Web.Models;
@@ -20,12 +21,15 @@ public class InvitationsController(IAccountHandler accountHandler, ILogger<Invit
             ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id)
         };
         
+        var supportUserEmail = HttpContext.User.FindFirstValue(ClaimTypes.Email);
+        
         try
         {
             await accountHandler.ResendInvitation(
                 id,
                 email,
-                email
+                email,
+                supportUserEmail
             );
         }
         catch (Exception exception)

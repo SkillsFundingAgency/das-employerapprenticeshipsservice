@@ -198,13 +198,14 @@ public class AccountApiClient : IAccountApiClient
         return JsonConvert.DeserializeObject<ICollection<AccountDetailViewModel>>(json);
     }
 
-    public async Task ChangeRole(string hashedId, string email, int role)
+    public async Task ChangeRole(string hashedId, string email, int role, string supportUserEmail)
     {
         var request = new SupportChangeTeamMemberRoleRequest
         {
             HashedAccountId = hashedId,
             Email = email,
-            Role = role
+            Role = role,
+            SupportUserEmail = supportUserEmail
         };
 
         var baseUrl = GetBaseUrl();
@@ -216,13 +217,14 @@ public class AccountApiClient : IAccountApiClient
         await _httpClient.SendWithNoResult(httpRequest);
     }
 
-    public async Task ResendInvitation(string hashedAccountId, string email, string firstName)
+    public async Task ResendInvitation(string hashedAccountId, string email, string firstName, string supportUserEmail)
     {
         var request = new SupportResendInvitationRequest
         {
             HashedAccountId = hashedAccountId,
             Email = email,
             FirstName = firstName,
+            SupportUserEmail = supportUserEmail
         };
 
         var baseUrl = GetBaseUrl();

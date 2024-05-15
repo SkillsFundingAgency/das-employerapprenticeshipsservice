@@ -8,6 +8,6 @@ public interface IAccountRepository
     Task<decimal> GetAccountBalance(string id);
     Task<IEnumerable<Core.Models.Account>> FindAllDetails(int pageSize, int pageNumber);
     Task<int> TotalAccountRecords(int pagesize);
-    Task ChangeRole(string hashedId, string email, int role);
-    Task ResendInvitation(string hashedAccountId, string email, string firstName);
+    Task ChangeRole(string hashedId, string email, int role, string supportUserEmail);
+    Task ResendInvitation(string hashedAccountId, string email, string firstName, string supportUserEmail);
 }
