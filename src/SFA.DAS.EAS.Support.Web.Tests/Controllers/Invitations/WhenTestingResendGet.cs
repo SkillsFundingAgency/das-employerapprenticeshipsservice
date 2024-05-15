@@ -49,7 +49,7 @@ public class WhenTestingResendGet
             model?.MemberEmail.Should().Be(email);
             model?.ReturnToTeamUrl.Should().Be(string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", hashedAccountId));
 
-            accountHandler.Verify(x => x.ResendInvitation(hashedAccountId, email, email, externalUserId), Times.Once);
+            accountHandler.Verify(x => x.ResendInvitation(hashedAccountId, email, email), Times.Once);
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-using SFA.DAS.EAS.Application.Infrastructure;
-using SFA.DAS.EAS.Domain.Models;
+﻿using SFA.DAS.EAS.Domain.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Web.Authorization;
@@ -53,7 +51,7 @@ public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRol
             var teamMember = accountResponse.Account.TeamMembers.Single(x => x.UserRef == userRef);
             model.MemberEmail = teamMember.Email;
 
-            await accountHandler.ChangeRole(id, teamMember.Email, role, HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            await accountHandler.ChangeRole(id, teamMember.Email, role);
         }
         catch (Exception exception)
         {

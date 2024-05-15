@@ -70,7 +70,7 @@ public class WhenTestingUpdatePost
             model?.ReturnToTeamUrl.Should().Be(string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", hashedAccountId));
             model?.Role.Should().Be((int)newRole);
 
-            accountHandler.Verify(x => x.ChangeRole(hashedAccountId, email, (int)newRole, externalUserId), Times.Once);
+            accountHandler.Verify(x => x.ChangeRole(hashedAccountId, email, (int)newRole), Times.Once);
         }
     }
 

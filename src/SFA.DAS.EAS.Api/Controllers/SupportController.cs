@@ -13,14 +13,14 @@ using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 namespace SFA.DAS.EAS.Account.Api.Controllers;
 
 [ApiController]
-[Route("api/team")]
+[Route("api/support")]
 [Authorize(Policy = ApiRoles.ReadUserAccounts)]
-public class EmployerTeamController : ControllerBase
+public class SupportController : ControllerBase
 {
     private readonly IEmployerAccountsApiService _apiService;
-    private readonly ILogger<EmployerTeamController> _logger;
+    private readonly ILogger<SupportController> _logger;
 
-    public EmployerTeamController(IEmployerAccountsApiService apiService, ILogger<EmployerTeamController> logger)
+    public SupportController(IEmployerAccountsApiService apiService, ILogger<SupportController> logger)
     {
         _apiService = apiService;
         _logger = logger;
@@ -32,12 +32,12 @@ public class EmployerTeamController : ControllerBase
     {
         try
         {
-            await _apiService.RedirectPost("/api/team/change-role", JsonConvert.SerializeObject(request), CancellationToken.None);
+            await _apiService.RedirectPost("/api/support/change-role", JsonConvert.SerializeObject(request), CancellationToken.None);
             return Ok();
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception, "Error in {Controller}.{Action}", nameof(EmployerTeamController), nameof(ChangeRole));
+            _logger.LogError(exception, "Error in {Controller}.{Action}", nameof(SupportController), nameof(ChangeRole));
             return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
         }
     }
@@ -46,16 +46,16 @@ public class EmployerTeamController : ControllerBase
     [Route("resend-invitation")]
     public async Task<IActionResult> ResendInvitation([FromBody] ResendInvitationRequest request)
     {
-        _logger.LogWarning("{Controller}.{Action} request: {Request}", nameof(EmployerTeamController), nameof(ResendInvitation), JsonConvert.SerializeObject(request));
+        _logger.LogWarning("{Controller}.{Action} request: {Request}", nameof(SupportController), nameof(ResendInvitation), JsonConvert.SerializeObject(request));
         
         try
         {
-            await _apiService.RedirectPost("/api/team/resend-invitation", request, CancellationToken.None);
+            await _apiService.RedirectPost("/api/support/resend-invitation", request, CancellationToken.None);
             return Ok();
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception, "Error in {Controller}.{Action}", nameof(EmployerTeamController), nameof(ResendInvitation));
+            _logger.LogError(exception, "Error in {Controller}.{Action}", nameof(SupportController), nameof(ResendInvitation));
             return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
         }
     }

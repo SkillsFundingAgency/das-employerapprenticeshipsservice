@@ -91,11 +91,11 @@ public sealed class AccountRepository : IAccountRepository
         }
     }
 
-    public async Task ChangeRole(string hashedId, string email, int role, string externalUserId)
+    public async Task ChangeRole(string hashedId, string email, int role)
     {
         try
         {
-            await _accountApiClient.ChangeRole(hashedId, email, role, externalUserId);
+            await _accountApiClient.ChangeRole(hashedId, email, role);
         }
         catch (Exception exception)
         {
@@ -104,11 +104,11 @@ public sealed class AccountRepository : IAccountRepository
         }
     }
 
-    public async Task ResendInvitation(string hashedAccountId, string email, string firstName, string externalUserId)
+    public async Task ResendInvitation(string hashedAccountId, string email, string firstName)
     {
         try
         {
-            await _accountApiClient.ResendInvitation(hashedAccountId, email, firstName, externalUserId);
+            await _accountApiClient.ResendInvitation(hashedAccountId, email, firstName);
         }
         catch (Exception exception)
         {

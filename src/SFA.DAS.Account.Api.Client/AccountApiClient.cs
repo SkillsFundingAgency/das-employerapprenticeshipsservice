@@ -198,12 +198,17 @@ public class AccountApiClient : IAccountApiClient
         return JsonConvert.DeserializeObject<ICollection<AccountDetailViewModel>>(json);
     }
 
-    public async Task ChangeRole(string hashedId, string email, int role, string externalUserId)
+    public async Task ChangeRole(string hashedId, string email, int role)
     {
-        var request = new ChangeTeamMemberRoleRequest(hashedId, email, role, externalUserId);
+        var request = new SupportChangeTeamMemberRoleRequest
+        {
+            HashedAccountId = hashedId,
+            Email = email,
+            Role = role
+        };
 
         var baseUrl = GetBaseUrl();
-        var url = $"{baseUrl}api/team/change-role";
+        var url = $"{baseUrl}api/support/change-role";
 
         using var httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
         httpRequest.Content = CreateJsonContent(request);
@@ -211,23 +216,22 @@ public class AccountApiClient : IAccountApiClient
         await _httpClient.SendWithNoResult(httpRequest);
     }
 
-    public async Task ResendInvitation(string hashedAccountId, string email, string firstName, string externalUserId)
+    public async Task ResendInvitation(string hashedAccountId, string email, string firstName)
     {
-        var request = new ResendInvitationRequest
+        var request = new SupportResendInvitationRequest
         {
             HashedAccountId = hashedAccountId,
             Email = email,
             FirstName = firstName,
-            ExternalUserId = externalUserId
         };
 
         var baseUrl = GetBaseUrl();
-        var url = $"{baseUrl}api/team/resend-invitation";
+        var url = $"{baseUrl}api/support/resend-invitation";
 
         using var httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
         httpRequest.Content = CreateJsonContent(request);
-        
-        _logger.LogWarning("ResendInvitation httpRequest.Content {Content}.",JsonConvert.SerializeObject(request));
+
+        _logger.LogWarning("ResendInvitation httpRequest.Content {Content}.", JsonConvert.SerializeObject(request));
 
         await _httpClient.SendWithNoResult(httpRequest);
     }

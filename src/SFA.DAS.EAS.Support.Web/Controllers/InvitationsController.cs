@@ -1,7 +1,4 @@
-﻿using System.Security.Claims;
-using Newtonsoft.Json;
-using SFA.DAS.EAS.Application.Infrastructure;
-using SFA.DAS.EAS.Support.ApplicationServices.Models;
+﻿using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Web.Authorization;
 using SFA.DAS.EAS.Support.Web.Models;
@@ -22,19 +19,13 @@ public class InvitationsController(IAccountHandler accountHandler, ILogger<Invit
             MemberEmail = email,
             ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id)
         };
-
-        var externalUserId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        logger.LogWarning("{Controller}.{Action} UserClaims: {Claims}", nameof(InvitationsController), nameof(Resend), JsonConvert.SerializeObject(HttpContext.User.Claims.ToDictionary(x => x.Type, y => y.Value)));
-        logger.LogWarning("{Controller}.{Action} id: {Id}, email: {Email}, externalUserId: {ExternalUserId}", nameof(InvitationsController), nameof(Resend), id, email, externalUserId);
-
+        
         try
         {
             await accountHandler.ResendInvitation(
                 id,
                 email,
-                email,
-                externalUserId
+                email
             );
         }
         catch (Exception exception)
