@@ -23,7 +23,7 @@ public class InvitationsController(IAccountHandler accountHandler, ILogger<Invit
             ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id)
         };
 
-        var externalUserId = HttpContext.User.FindFirstValue(EmployerClaims.IdamsUserIdClaimTypeIdentifier);
+        var externalUserId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         logger.LogWarning("{Controller}.{Action} UserClaims: {Claims}", nameof(InvitationsController), nameof(Resend), JsonConvert.SerializeObject(HttpContext.User.Claims.ToDictionary(x => x.Type, y => y.Value)));
         logger.LogWarning("{Controller}.{Action} id: {Id}, email: {Email}, externalUserId: {ExternalUserId}", nameof(InvitationsController), nameof(Resend), id, email, externalUserId);
