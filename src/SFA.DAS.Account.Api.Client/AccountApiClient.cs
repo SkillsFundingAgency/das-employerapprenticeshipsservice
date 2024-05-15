@@ -227,7 +227,7 @@ public class AccountApiClient : IAccountApiClient
         using var httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
         httpRequest.Content = CreateJsonContent(request);
         
-        _logger.LogWarning("ResendInvitation httpRequest.Content {Content}.", httpRequest.Content.ToString());
+        _logger.LogWarning("ResendInvitation httpRequest.Content {Content}.",JsonConvert.SerializeObject(request));
 
         await _httpClient.SendWithNoResult(httpRequest);
     }
