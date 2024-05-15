@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EAS.Account.Api.Authorization;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers;
 
@@ -11,17 +12,20 @@ namespace SFA.DAS.EAS.Account.Api.Controllers;
 public class LegalEntitiesController : ControllerBase
 {
     private readonly IEmployerAccountsApiService _apiService;
+    private readonly IEncodingService _encodingService;
 
-    public LegalEntitiesController(IEmployerAccountsApiService apiService)
+    public LegalEntitiesController(IEmployerAccountsApiService apiService, IEncodingService encodingService)
     {
         _apiService = apiService;
+        _encodingService = encodingService;
     }
 
     [Authorize(Policy = ApiRoles.ReadAllEmployerAccountBalances)]
     [HttpGet(Name = "GetLegalEntities")]
     public async Task<IActionResult> GetLegalEntities(string hashedAccountId)
     {
-        var redirectResponse = await _apiService.Redirect($"/api/accounts/{hashedAccountId}/legalentities");
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+        var redirectResponse = await _apiService.Redirect($"/api/accounts/{accountId}/legalentities");
         return Content(redirectResponse.ToString(), "application/json");
     }
 
@@ -31,7 +35,8 @@ public class LegalEntitiesController : ControllerBase
         string hashedAccountId,
         long legalEntityId)
     {
-        var redirectResponse = await _apiService.Redirect($"/api/accounts/{hashedAccountId}/legalentities/{legalEntityId}");
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+        var redirectResponse = await _apiService.Redirect($"/api/accounts/{accountId}/legalentities/{legalEntityId}");
         return Content(redirectResponse.ToString(), "application/json");
     }
 }
