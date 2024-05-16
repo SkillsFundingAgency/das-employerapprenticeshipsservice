@@ -29,12 +29,8 @@ public abstract class ApiClientService
         
         await AddAuthenticationHeader(request);
 
-        var httpResponseMessage  = await Client.SendAsync(request, cancellationToken);
-
-        if (!httpResponseMessage.IsSuccessStatusCode)
-        {
-            await ThrowRestHttpClientException(httpResponseMessage, cancellationToken);
-        }
+        var response  = await Client.SendAsync(request, cancellationToken);
+        response.EnsureSuccessStatusCode();
     }
 
     protected Task<TResponse> GetResponse<TResponse>(string uri, object queryData = null, CancellationToken cancellationToken = default)
