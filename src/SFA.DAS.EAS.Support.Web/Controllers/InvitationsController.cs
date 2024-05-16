@@ -15,7 +15,7 @@ public class InvitationsController(IAccountHandler accountHandler, ILogger<Invit
 {
     [HttpGet]
     [Route("resend/{id}")]
-    public async Task<IActionResult> Resend(string id, string email)
+    public async Task<IActionResult> Resend(string id, string email, string supportUserEmail)
     {
         email = WebUtility.HtmlDecode(email);
         
@@ -27,8 +27,6 @@ public class InvitationsController(IAccountHandler accountHandler, ILogger<Invit
         };
 
         logger.LogWarning("InvitationsController.Resend user claims: {Claims}",  JsonConvert.SerializeObject(HttpContext.User.Claims.Select(x => new { x.Type, x.Value})));
-
-        var supportUserEmail = HttpContext.User.FindFirstValue(ClaimTypes.Email);
 
         try
         {

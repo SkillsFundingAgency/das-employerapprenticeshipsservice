@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EAS.Support.ApplicationServices.Models;
+﻿using System.Security.Claims;
+using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Web.Authorization;
 using SFA.DAS.EAS.Support.Web.Models;
@@ -83,6 +84,8 @@ public class AccountController : Controller
         {
             return NotFound();
         }
+        
+        var supportUserEmail = HttpContext.User.FindFirstValue(ClaimTypes.Email);
 
         var model = new AccountDetailViewModel
         {
@@ -90,7 +93,7 @@ public class AccountController : Controller
             AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}",
             IsTier2User = User.IsInRole(AuthorizationConstants.Tier2User),
             ChangeRoleUrl = $"/resource/index/{{0}}/?childId={{1}}&key={SupportServiceResourceKey.EmployerAccountChangeRole}",
-            ResendInviteUrl = $"/resource/index/{{0}}/?childId={{1}}&key={SupportServiceResourceKey.EmployerAccountResendInvitation}"
+            ResendInviteUrl = $"/resource/index/{{0}}/?childId={{1}}&key={SupportServiceResourceKey.EmployerAccountResendInvitation}&data={supportUserEmail}"
         };
 
         return View(model);
