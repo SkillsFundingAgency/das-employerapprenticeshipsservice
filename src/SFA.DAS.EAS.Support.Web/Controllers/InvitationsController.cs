@@ -1,5 +1,7 @@
 ﻿using System.Net;
 using System.Security.Claims;
+using ASP;
+using Newtonsoft.Json;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Web.Authorization;
@@ -23,6 +25,8 @@ public class InvitationsController(IAccountHandler accountHandler, ILogger<Invit
             MemberEmail = email,
             ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id)
         };
+
+        logger.LogWarning("InvitationsController.Resend user claims: {Claims}",  JsonConvert.SerializeObject(HttpContext.User.Claims.Select(x => new { x.Type, x.Value})));
 
         var supportUserEmail = HttpContext.User.FindFirstValue(ClaimTypes.Email);
 
