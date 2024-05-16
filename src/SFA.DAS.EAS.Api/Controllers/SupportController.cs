@@ -32,7 +32,7 @@ public class SupportController : ControllerBase
     {
         try
         {
-            await _apiService.RedirectPost("/api/support/change-role", JsonConvert.SerializeObject(request), CancellationToken.None);
+            await _apiService.RedirectPost("/api/support/change-role", request, CancellationToken.None);
             return Ok();
         }
         catch (Exception exception)
