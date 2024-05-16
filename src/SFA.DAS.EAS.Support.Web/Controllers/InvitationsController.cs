@@ -1,6 +1,4 @@
 ﻿using System.Net;
-using System.Security.Claims;
-using ASP;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
