@@ -34,12 +34,11 @@ public class WhenTestingResendGet
                 User = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
                 {
                     new(EmployerClaims.IdamsUserIdClaimTypeIdentifier, externalUserId),
-                    new(ClaimTypes.Email, supportUserEmail),
                 })),
             }
         };
 
-        var actual = await sut.Resend(hashedAccountId, email);
+        var actual = await sut.Resend(hashedAccountId, email, supportUserEmail);
 
         using (new AssertionScope())
         {
