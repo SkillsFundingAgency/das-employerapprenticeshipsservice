@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Newtonsoft.Json;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Web.Authorization;
@@ -14,14 +15,17 @@ public class AccountController : Controller
     private readonly IAccountHandler _accountHandler;
     private readonly IPayeLevySubmissionsHandler _payeLevySubmissionsHandler;
     private readonly IPayeLevyMapper _payeLevyMapper;
+    private readonly ILogger<AccountController> _logger;
 
     public AccountController(IAccountHandler accountHandler,
         IPayeLevySubmissionsHandler payeLevySubmissionsHandler,
-        IPayeLevyMapper payeLevyDeclarationMapper)
+        IPayeLevyMapper payeLevyDeclarationMapper,
+        ILogger<AccountController> logger)
     {
         _accountHandler = accountHandler;
         _payeLevySubmissionsHandler = payeLevySubmissionsHandler;
         _payeLevyMapper = payeLevyDeclarationMapper;
+        _logger = logger;
     }
 
     [Route("account/{id}")]
@@ -86,6 +90,8 @@ public class AccountController : Controller
         }
         
         var supportUserEmail = HttpContext.User.FindFirstValue(ClaimTypes.Email);
+        
+        _logger.LogWarning("InvitationsController.Resend user claims: {Claims}",  JsonConvert.SerializeObject(HttpContext.User.Claims.Select(x => new { x.Type, x.Value})));
 
         var model = new AccountDetailViewModel
         {
