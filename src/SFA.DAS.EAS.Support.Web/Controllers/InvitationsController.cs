@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Net;
+using System.Security.Claims;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Web.Authorization;
@@ -14,15 +15,17 @@ public class InvitationsController(IAccountHandler accountHandler, ILogger<Invit
     [Route("resend/{id}")]
     public async Task<IActionResult> Resend(string id, string email)
     {
+        email = WebUtility.HtmlDecode(email);
+        
         var model = new ResendInvitationCompletedModel
         {
             Success = true,
             MemberEmail = email,
             ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id)
         };
-        
+
         var supportUserEmail = HttpContext.User.FindFirstValue(ClaimTypes.Email);
-        
+
         try
         {
             await accountHandler.ResendInvitation(
