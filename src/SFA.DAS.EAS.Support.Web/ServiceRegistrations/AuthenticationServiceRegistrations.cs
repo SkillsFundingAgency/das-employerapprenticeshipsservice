@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.EAS.Support.Infrastructure.Config;
 using SFA.DAS.EAS.Support.Web.Authorization;
 using SFA.DAS.EAS.Support.Web.Configuration;
 
@@ -28,6 +30,7 @@ public static class AuthenticationServiceRegistrations
                     ValidAudiences = configuration.SiteValidator.Audience.Split(','),
                 };
             });
+        services.AddSingleton<IClaimsTransformation, AzureAdScopeClaimTransformation>();
 
         return services;
     }
