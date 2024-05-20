@@ -13,7 +13,7 @@ public class InvitationsController(IAccountHandler accountHandler, ILogger<Invit
 {
     [HttpGet]
     [Route("resend/{id}")]
-    public async Task<IActionResult> Resend(string id, string email, string supportUserEmail)
+    public async Task<IActionResult> Resend(string id, string email, string sid)
     {
         email = WebUtility.HtmlDecode(email);
         
@@ -32,7 +32,7 @@ public class InvitationsController(IAccountHandler accountHandler, ILogger<Invit
                 id,
                 email,
                 email,
-                supportUserEmail
+                sid
             );
         }
         catch (Exception exception)
