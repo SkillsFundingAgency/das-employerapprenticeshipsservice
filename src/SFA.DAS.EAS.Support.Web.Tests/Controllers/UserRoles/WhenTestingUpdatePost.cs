@@ -60,7 +60,13 @@ public class WhenTestingUpdatePost
             }
         });
 
-        var actual = await sut.Update(hashedAccountId, userRef, (int)newRole);
+        var request = new UserRolesController.UpdateRoleRequest
+        {
+            Role = (int)newRole,
+            SupportUserEmail = supportUserEmail
+        };
+
+        var actual = await sut.Update(hashedAccountId, userRef, request);
 
         using (new AssertionScope())
         {
@@ -84,8 +90,8 @@ public class WhenTestingUpdatePost
         Mock<IAccountHandler> accountHandler,
         string hashedAccountId,
         string userRef,
-        Role oldRole
-        )
+        Role oldRole,
+        string supportUserEmail)
     {
         var sut = new UserRolesController(accountHandler.Object, Mock.Of<ILogger<UserRolesController>>());
         sut.ControllerContext = new ControllerContext
@@ -94,8 +100,14 @@ public class WhenTestingUpdatePost
         };
 
         accountHandler.Setup(x => x.FindTeamMembers(hashedAccountId)).ThrowsAsync(new ApplicationException("Test"));
+        
+        var request = new UserRolesController.UpdateRoleRequest
+        {
+            Role = (int)oldRole,
+            SupportUserEmail = supportUserEmail
+        };
 
-        var actual = await sut.Update(hashedAccountId, userRef, (int)oldRole);
+        var actual = await sut.Update(hashedAccountId, userRef, request);
 
         var model = ((ViewResult)actual).Model as ChangeRoleCompletedModel;
         model?.Success.Should().BeFalse();

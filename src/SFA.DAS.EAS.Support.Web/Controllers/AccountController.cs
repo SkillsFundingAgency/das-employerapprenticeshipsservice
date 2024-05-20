@@ -80,7 +80,7 @@ public class AccountController : Controller
     }
 
     [Route("account/team/{id}")]
-    public async Task<IActionResult> Team(string id)
+    public async Task<IActionResult> Team(string id, [FromQuery] string sid)
     {
         var response = await _accountHandler.FindTeamMembers(id);
 
@@ -88,8 +88,6 @@ public class AccountController : Controller
         {
             return NotFound();
         }
-        
-        var supportUserEmail = HttpContext.User.FindFirstValue(ClaimTypes.Email);
         
         _logger.LogWarning("InvitationsController.Resend user claims: {Claims}",  JsonConvert.SerializeObject(HttpContext.User.Claims.Select(x => new { x.Type, x.Value})));
 
@@ -99,7 +97,7 @@ public class AccountController : Controller
             AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}",
             IsTier2User = User.IsInRole(AuthorizationConstants.Tier2User),
             ChangeRoleUrl = $"/resource/index/{{0}}/?childId={{1}}&key={SupportServiceResourceKey.EmployerAccountChangeRole}",
-            ResendInviteUrl = $"/resource/index/{{0}}/?childId={{1}}&key={SupportServiceResourceKey.EmployerAccountResendInvitation}&data={supportUserEmail}"
+            ResendInviteUrl = $"/resource/index/{{0}}/?childId={{1}}&key={SupportServiceResourceKey.EmployerAccountResendInvitation}&sid={sid}"
         };
 
         return View(model);

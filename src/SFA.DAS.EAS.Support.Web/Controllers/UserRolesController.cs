@@ -34,14 +34,20 @@ public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRol
         });
     }
 
+    public record UpdateRoleRequest
+    {
+        public int Role { get; set; }
+        public string SupportUserEmail { get; set; }
+    }
+
     [HttpPost]
     [Route("{id}/{userRef}")]
-    public async Task<IActionResult> Update(string id, string userRef, [FromBody] int role)
+    public async Task<IActionResult> Update(string id, string userRef, [FromBody] UpdateRoleRequest request)
     {
         var model = new ChangeRoleCompletedModel
         {
             ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id),
-            Role = role,
+            Role = request.Role,
             Success = true,
         };
 
@@ -52,9 +58,8 @@ public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRol
             var teamMember = accountResponse.Account.TeamMembers.Single(x => x.UserRef == userRef);
             model.MemberEmail = teamMember.Email;
 
-            var supportUserEmail = HttpContext.User.FindFirstValue(ClaimTypes.Email);
             
-            await accountHandler.ChangeRole(id, teamMember.Email, role, supportUserEmail);
+            await accountHandler.ChangeRole(id, teamMember.Email, request.Role, request.SupportUserEmail);
         }
         catch (Exception exception)
         {
