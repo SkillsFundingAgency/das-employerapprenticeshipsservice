@@ -31,7 +31,6 @@ public class InvitationsController(IAccountHandler accountHandler, ILogger<Invit
             await accountHandler.ResendInvitation(
                 id,
                 email,
-                email,
                 sid
             );
         }

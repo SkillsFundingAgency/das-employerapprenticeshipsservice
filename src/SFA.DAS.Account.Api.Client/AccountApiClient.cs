@@ -216,14 +216,12 @@ public class AccountApiClient : IAccountApiClient
 
         await _httpClient.SendWithNoResult(httpRequest);
     }
-
-    public async Task ResendInvitation(string hashedAccountId, string email, string firstName, string supportUserEmail)
+    public async Task ResendInvitation(string hashedAccountId, string email, string supportUserEmail)
     {
         var request = new SupportResendInvitationRequest
         {
             HashedAccountId = hashedAccountId,
             Email = email,
-            FirstName = firstName,
             SupportUserEmail = supportUserEmail
         };
 

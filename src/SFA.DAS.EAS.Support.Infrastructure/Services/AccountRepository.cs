@@ -104,11 +104,11 @@ public sealed class AccountRepository : IAccountRepository
         }
     }
 
-    public async Task ResendInvitation(string hashedAccountId, string email, string firstName, string supportUserEmail)
+    public async Task ResendInvitation(string hashedAccountId, string email, string supportUserEmail)
     {
         try
         {
-            await _accountApiClient.ResendInvitation(hashedAccountId, email, firstName, supportUserEmail);
+            await _accountApiClient.ResendInvitation(hashedAccountId, email, supportUserEmail);
         }
         catch (Exception exception)
         {

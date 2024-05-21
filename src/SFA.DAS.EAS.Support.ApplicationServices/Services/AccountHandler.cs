@@ -123,9 +123,9 @@ public class AccountHandler : IAccountHandler
         await _accountRepository.ChangeRole(hashedAccountId, email, role, supportUserEmail);
     }
 
-    public async Task ResendInvitation(string hashedAccountId, string email, string firstName, string supportUserEmail)
+    public async Task ResendInvitation(string hashedAccountId, string email, string supportUserEmail)
     {
-        await _accountRepository.ResendInvitation(hashedAccountId, email, firstName, supportUserEmail);
+        await _accountRepository.ResendInvitation(hashedAccountId, email, supportUserEmail);
     }
 
     private static AccountSearchModel Map(Core.Models.Account account)
