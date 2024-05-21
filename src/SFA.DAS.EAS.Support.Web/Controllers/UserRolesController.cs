@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using SFA.DAS.EAS.Domain.Models;
+﻿using SFA.DAS.EAS.Domain.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Web.Authorization;
@@ -47,8 +46,8 @@ public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRol
         var model = new ChangeRoleCompletedModel
         {
             ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id),
-            Role = request.Role,
             Success = true,
+            Role = request.Role
         };
 
         try
@@ -57,7 +56,7 @@ public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRol
 
             var teamMember = accountResponse.Account.TeamMembers.Single(x => x.UserRef == userRef);
             model.MemberEmail = teamMember.Email;
-            
+
             await accountHandler.ChangeRole(id, teamMember.Email, request.Role, request.SupportUserEmail);
         }
         catch (Exception exception)
@@ -65,6 +64,25 @@ public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRol
             logger.LogError(exception, $"{nameof(UserRolesController)}.{nameof(Update)} caught exception.");
             model.Success = false;
         }
+
+        return View("Confirm", model);
+    }
+
+    [Route("Confirm/{id}/{userRef}")]
+    public async Task<IActionResult> Confirm(string id, string userRef)
+    {
+        var model = new ChangeRoleCompletedModel
+        {
+            ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id),
+            Success = true,
+        };
+
+        var accountResponse = await accountHandler.FindTeamMembers(id);
+
+        var teamMember = accountResponse.Account.TeamMembers.Single(x => x.UserRef == userRef);
+        var newRole = Enum.Parse<Role>(teamMember.Role);
+
+        model.Role = (int)newRole;
 
         return View("Confirm", model);
     }
