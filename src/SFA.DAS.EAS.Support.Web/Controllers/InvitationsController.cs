@@ -15,7 +15,7 @@ public class InvitationsController(IAccountHandler accountHandler, ILogger<Invit
     [Route("resend/{id}")]
     public async Task<IActionResult> Resend(string id, string email, string sid)
     {
-        email = WebUtility.HtmlDecode(email);
+        email = WebUtility.UrlDecode(email);
         
         var model = new ResendInvitationCompletedModel
         {

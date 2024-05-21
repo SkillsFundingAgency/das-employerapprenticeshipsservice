@@ -57,7 +57,6 @@ public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRol
 
             var teamMember = accountResponse.Account.TeamMembers.Single(x => x.UserRef == userRef);
             model.MemberEmail = teamMember.Email;
-
             
             await accountHandler.ChangeRole(id, teamMember.Email, request.Role, request.SupportUserEmail);
         }
