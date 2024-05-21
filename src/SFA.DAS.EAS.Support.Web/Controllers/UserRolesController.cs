@@ -71,19 +71,19 @@ public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRol
     [Route("Confirm/{id}/{userRef}")]
     public async Task<IActionResult> Confirm(string id, string userRef)
     {
-        var model = new ChangeRoleCompletedModel
-        {
-            ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id),
-            Success = true,
-        };
-
         var accountResponse = await accountHandler.FindTeamMembers(id);
 
         var teamMember = accountResponse.Account.TeamMembers.Single(x => x.UserRef == userRef);
         var newRole = Enum.Parse<Role>(teamMember.Role);
-
-        model.Role = (int)newRole;
-
+        
+        var model = new ChangeRoleCompletedModel
+        {
+            ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id),
+            Success = true,
+            Role = (int)newRole,
+            MemberEmail = teamMember.Email
+        };
+        
         return View("Confirm", model);
     }
 }
