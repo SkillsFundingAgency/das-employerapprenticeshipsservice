@@ -8,6 +8,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Infrastructure;
+using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Domain.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
@@ -22,6 +23,7 @@ public class WhenTestingUpdatePost
     [Test, MoqAutoData]
     public async Task ItShouldReturnTheConfirmViewAndModel(
         Mock<IAccountHandler> accountHandler,
+        Mock<IEmployerAccountsApiService> accountsApiService,
         ICollection<TeamMemberViewModel> teamMembers,
         string hashedAccountId,
         string userRef,
@@ -32,7 +34,7 @@ public class WhenTestingUpdatePost
         string email,
         string supportUserEmail)
     {
-        var sut = new UserRolesController(accountHandler.Object, Mock.Of<ILogger<UserRolesController>>());
+        var sut = new UserRolesController(accountHandler.Object, Mock.Of<ILogger<UserRolesController>>(), accountsApiService.Object);
         sut.ControllerContext = new ControllerContext
         {
             HttpContext = new DefaultHttpContext
@@ -81,19 +83,20 @@ public class WhenTestingUpdatePost
             model?.ReturnToTeamUrl.Should().Be(string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", hashedAccountId));
             model?.Role.Should().Be((int)newRole);
 
-            accountHandler.Verify(x => x.ChangeRole(hashedAccountId, email, (int)newRole, supportUserEmail), Times.Once);
+            accountsApiService.Verify(x => x.ChangeRole(hashedAccountId, email, (int)newRole, supportUserEmail, CancellationToken.None), Times.Once);
         }
     }
 
     [Test, MoqAutoData]
     public async Task ItShouldReturnSuccessFalseWhenExceptionIsCaught(
         Mock<IAccountHandler> accountHandler,
+        Mock<IEmployerAccountsApiService> accountsApiService,
         string hashedAccountId,
         string userRef,
         Role oldRole,
         string supportUserEmail)
     {
-        var sut = new UserRolesController(accountHandler.Object, Mock.Of<ILogger<UserRolesController>>());
+        var sut = new UserRolesController(accountHandler.Object, Mock.Of<ILogger<UserRolesController>>(), accountsApiService.Object);
         sut.ControllerContext = new ControllerContext
         {
             HttpContext = new DefaultHttpContext()

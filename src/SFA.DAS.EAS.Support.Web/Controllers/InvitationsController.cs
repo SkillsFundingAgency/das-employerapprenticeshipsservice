@@ -1,7 +1,6 @@
 ﻿using System.Net;
-using Newtonsoft.Json;
+using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
-using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Web.Authorization;
 using SFA.DAS.EAS.Support.Web.Models;
 
@@ -9,7 +8,7 @@ namespace SFA.DAS.EAS.Support.Web.Controllers;
 
 [Route("invitations")]
 [Authorize(Policy = PolicyNames.Default)]
-public class InvitationsController(IAccountHandler accountHandler, ILogger<InvitationsController> logger) : Controller
+public class InvitationsController(ILogger<InvitationsController> logger, IEmployerAccountsApiService accountsApiService) : Controller
 {
     [HttpGet]
     [Route("resend/{id}")]
@@ -23,12 +22,10 @@ public class InvitationsController(IAccountHandler accountHandler, ILogger<Invit
             MemberEmail = email,
             ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id)
         };
-
-        logger.LogWarning("InvitationsController.Resend user claims: {Claims}",  JsonConvert.SerializeObject(HttpContext.User.Claims.Select(x => new { x.Type, x.Value})));
-
+        
         try
         {
-            await accountHandler.ResendInvitation(
+            await accountsApiService.ResendInvitation(
                 id,
                 email,
                 sid

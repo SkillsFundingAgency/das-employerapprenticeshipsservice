@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Account.Api.Types;
 
@@ -12,13 +9,11 @@ namespace SFA.DAS.EAS.Account.Api.Client;
 public class AccountApiClient : IAccountApiClient
 {
     private readonly IAccountApiConfiguration _configuration;
-    private readonly ILogger<AccountApiClient> _logger;
     private readonly SecureHttpClient _httpClient;
 
-    public AccountApiClient(IAccountApiConfiguration configuration, ILogger<AccountApiClient> logger)
+    public AccountApiClient(IAccountApiConfiguration configuration)
     {
         _configuration = configuration;
-        _logger = logger;
         _httpClient = new SecureHttpClient(configuration);
     }
 
@@ -197,47 +192,7 @@ public class AccountApiClient : IAccountApiClient
 
         return JsonConvert.DeserializeObject<ICollection<AccountDetailViewModel>>(json);
     }
-
-    public async Task ChangeRole(string hashedId, string email, int role, string supportUserEmail)
-    {
-        var request = new SupportChangeTeamMemberRoleRequest
-        {
-            HashedAccountId = hashedId,
-            Email = email,
-            Role = role,
-            SupportUserEmail = supportUserEmail
-        };
-
-        var baseUrl = GetBaseUrl();
-        var url = $"{baseUrl}api/support/change-role";
-
-        using var httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
-        httpRequest.Content = CreateJsonContent(request);
-
-        await _httpClient.SendWithNoResult(httpRequest);
-    }
-    public async Task ResendInvitation(string hashedAccountId, string email, string supportUserEmail)
-    {
-        var request = new SupportResendInvitationRequest
-        {
-            HashedAccountId = hashedAccountId,
-            Email = email,
-            SupportUserEmail = supportUserEmail
-        };
-
-        var baseUrl = GetBaseUrl();
-        var url = $"{baseUrl}api/support/resend-invitation";
-
-        using var httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
-        httpRequest.Content = CreateJsonContent(request);
-
-        _logger.LogWarning("ResendInvitation httpRequest.Content {Content}.", JsonConvert.SerializeObject(request));
-
-        await _httpClient.SendWithNoResult(httpRequest);
-    }
-
-    private static HttpContent CreateJsonContent<T>(T data) => data == null ? null : new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
-
+    
     public Task Ping()
     {
         var baseUrl = GetBaseUrl();

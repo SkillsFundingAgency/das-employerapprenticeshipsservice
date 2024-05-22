@@ -13,6 +13,4 @@ public interface IAccountHandler
     Task<int> TotalAccountRecords(int pagesize);
     Task<AccountReponse> Find(string id);
     Task<AccountReponse> FindTeamMembers(string id);
-    Task ChangeRole(string hashedAccountId, string email, int role, string supportUserEmail);
-    Task ResendInvitation(string hashedAccountId, string email, string supportUserEmail);
 }

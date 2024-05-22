@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Domain.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
@@ -20,10 +21,11 @@ public class WhenTestingIndexGet
     [Test, MoqAutoData]
     public async Task ItShouldReturnNotFoundWhenFindTeamMembersFails(
         Mock<IAccountHandler> accountHandler,
+        Mock<IEmployerAccountsApiService> accountsApiService,
         string hashedAccountId
     )
     {
-        var sut = new UserRolesController(accountHandler.Object, Mock.Of<ILogger<UserRolesController>>());
+        var sut = new UserRolesController(accountHandler.Object, Mock.Of<ILogger<UserRolesController>>(), accountsApiService.Object);
         sut.ControllerContext = new ControllerContext
         {
             HttpContext = new DefaultHttpContext()
@@ -42,6 +44,7 @@ public class WhenTestingIndexGet
     [Test, MoqAutoData]
     public async Task ItShouldReturnViewAndModel(
         Mock<IAccountHandler> accountHandler,
+        Mock<IEmployerAccountsApiService> accountsApiService,
         ICollection<TeamMemberViewModel> teamMembers,
         string hashedAccountId,
         string userRef,
@@ -49,7 +52,7 @@ public class WhenTestingIndexGet
         string teamMemberName
     )
     {
-        var sut = new UserRolesController(accountHandler.Object, Mock.Of<ILogger<UserRolesController>>());
+        var sut = new UserRolesController(accountHandler.Object, Mock.Of<ILogger<UserRolesController>>(), accountsApiService.Object);
         sut.ControllerContext = new ControllerContext
         {
             HttpContext = new DefaultHttpContext()
@@ -75,7 +78,7 @@ public class WhenTestingIndexGet
         {
             actual.Should().NotBeNull();
             actual.Should().BeOfType<ViewResult>();
-            
+
             var model = ((ViewResult)actual).Model as ChangeRoleViewModel;
 
             model?.HashedAccountId.Should().Be(hashedAccountId);

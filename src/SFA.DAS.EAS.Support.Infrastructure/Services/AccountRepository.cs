@@ -90,33 +90,7 @@ public sealed class AccountRepository : IAccountRepository
             throw;
         }
     }
-
-    public async Task ChangeRole(string hashedId, string email, int role, string supportUserEmail)
-    {
-        try
-        {
-            await _accountApiClient.ChangeRole(hashedId, email, role, supportUserEmail);
-        }
-        catch (Exception exception)
-        {
-            _logger.LogError(exception, "Exception while changing role.");
-            throw;
-        }
-    }
-
-    public async Task ResendInvitation(string hashedAccountId, string email, string supportUserEmail)
-    {
-        try
-        {
-            await _accountApiClient.ResendInvitation(hashedAccountId, email, supportUserEmail);
-        }
-        catch (Exception exception)
-        {
-            _logger.LogError(exception, "Exception while resending invitation.");
-            throw;
-        }
-    }
-
+    
     public async Task<decimal> GetAccountBalance(string id)
     {
         try

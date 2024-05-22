@@ -26,6 +26,4 @@ public interface IAccountApiClient
     Task<ICollection<AccountDetailViewModel>> GetUserAccounts(string userId);
     Task Ping();
     Task<ICollection<LegalEntityViewModel>> GetLegalEntityDetailsConnectedToAccount(string accountId);
-    Task ChangeRole(string hashedId, string email, int role, string supportUserEmail);
-    Task ResendInvitation(string hashedAccountId, string email, string supportUserEmail);
 }

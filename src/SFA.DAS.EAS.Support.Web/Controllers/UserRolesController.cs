@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EAS.Domain.Models;
+﻿using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
+using SFA.DAS.EAS.Domain.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Web.Authorization;
@@ -8,7 +9,7 @@ namespace SFA.DAS.EAS.Support.Web.Controllers;
 
 [Route("roles")]
 [Authorize(Policy = PolicyNames.Default)]
-public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRolesController> logger) : Controller
+public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRolesController> logger, IEmployerAccountsApiService accountsApiService) : Controller
 {
     [HttpGet]
     [Route("{id}/{userRef}")]
@@ -57,7 +58,7 @@ public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRol
             var teamMember = accountResponse.Account.TeamMembers.Single(x => x.UserRef == userRef);
             model.MemberEmail = teamMember.Email;
 
-            await accountHandler.ChangeRole(id, teamMember.Email, request.Role, request.SupportUserEmail);
+            await accountsApiService.ChangeRole(id, teamMember.Email, request.Role, request.SupportUserEmail);
         }
         catch (Exception exception)
         {

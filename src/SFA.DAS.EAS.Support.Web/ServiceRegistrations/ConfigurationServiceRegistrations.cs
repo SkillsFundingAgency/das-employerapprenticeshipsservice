@@ -15,6 +15,11 @@ public static class ConfigurationServiceRegistrations
         IConfiguration configuration)
     {
         services.AddOptions();
+        
+        var easConfiguration = configuration.Get<EmployerApprenticeshipsServiceConfiguration>();
+        services.AddSingleton(easConfiguration);
+
+        services.AddSingleton(sp => sp.GetService<EmployerApprenticeshipsServiceConfiguration>().EmployerAccountsApi);
 
         services.Configure<EasSupportConfiguration>(configuration);
         services.AddSingleton(cfg => cfg.GetService<IOptions<EasSupportConfiguration>>().Value);

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Infrastructure;
+using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Web.Controllers;
@@ -22,11 +23,11 @@ public class WhenTestingResendGet
         string hashedAccountId,
         string email,
         string externalUserId,
-        Mock<IAccountHandler> accountHandler,
+        Mock<IEmployerAccountsApiService> accountsApiService,
         string supportUserEmail
     )
     {
-        var sut = new InvitationsController(accountHandler.Object, Mock.Of<ILogger<InvitationsController>>());
+        var sut = new InvitationsController(Mock.Of<ILogger<InvitationsController>>(), accountsApiService.Object);
         sut.ControllerContext = new ControllerContext
         {
             HttpContext = new DefaultHttpContext
@@ -53,7 +54,7 @@ public class WhenTestingResendGet
             model?.MemberEmail.Should().Be(email);
             model?.ReturnToTeamUrl.Should().Be(string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", hashedAccountId));
 
-            accountHandler.Verify(x => x.ResendInvitation(hashedAccountId, email, supportUserEmail), Times.Once);
+            accountsApiService.Verify(x => x.ResendInvitation(hashedAccountId, email, supportUserEmail, CancellationToken.None), Times.Once);
         }
     }
 }

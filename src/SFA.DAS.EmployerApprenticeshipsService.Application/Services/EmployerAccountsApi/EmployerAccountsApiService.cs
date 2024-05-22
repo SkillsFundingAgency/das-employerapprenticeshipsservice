@@ -14,7 +14,7 @@ public class EmployerAccountsApiService : ApiClientService, IEmployerAccountsApi
 {
     private readonly ILogger<EmployerAccountsApiService> _logger;
 
-    public EmployerAccountsApiService(HttpClient httpClient, 
+    public EmployerAccountsApiService(HttpClient httpClient,
         ILogger<EmployerAccountsApiService> logger,
         ManagedIdentityTokenGenerator<EmployerAccountsApiConfiguration> tokenGenerator,
         EmployerAccountsApiConfiguration configuration) : base(httpClient, tokenGenerator)
@@ -26,7 +26,7 @@ public class EmployerAccountsApiService : ApiClientService, IEmployerAccountsApi
     public Task<Statistics> GetStatistics(CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Getting statistics");
-        
+
         return GetResponse<Statistics>("/api/statistics", cancellationToken: cancellationToken);
     }
 
@@ -47,5 +47,30 @@ public class EmployerAccountsApiService : ApiClientService, IEmployerAccountsApi
     public Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default)
     {
         return GetResponse<dynamic>(url, cancellationToken: cancellationToken);
+    }
+
+    public async Task ChangeRole(string hashedId, string email, int role, string supportUserEmail, CancellationToken cancellationToken = default)
+    {
+        var request = new SupportChangeTeamMemberRoleRequest
+        {
+            HashedAccountId = hashedId,
+            Email = email,
+            Role = role,
+            SupportUserEmail = supportUserEmail
+        };
+
+        await PostContent("/api/support/change-role", request, cancellationToken);
+    }
+
+    public async Task ResendInvitation(string hashedAccountId, string email, string supportUserEmail, CancellationToken cancellationToken = default)
+    {
+        var request = new SupportResendInvitationRequest
+        {
+            HashedAccountId = hashedAccountId,
+            Email = email,
+            SupportUserEmail = supportUserEmail
+        };
+
+        await PostContent("/api/support/resend-invitation", request, cancellationToken);
     }
 }
