@@ -2,11 +2,9 @@
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.WebUtilities;
-using Newtonsoft.Json;
 using SFA.DAS.EAS.Application.Http;
 
 namespace SFA.DAS.EAS.Application.Services;
@@ -21,18 +19,7 @@ public abstract class ApiClientService
         Client = client;
         _tokenGenerator = tokenGenerator;
     }
-
-    protected async Task PostContent<T>(string uri, T data, CancellationToken cancellationToken = default)
-    {
-        using var request = new HttpRequestMessage(HttpMethod.Post, uri);
-        request.Content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
-        
-        await AddAuthenticationHeader(request);
-
-        var response  = await Client.SendAsync(request, cancellationToken);
-        response.EnsureSuccessStatusCode();
-    }
-
+    
     protected Task<TResponse> GetResponse<TResponse>(string uri, object queryData = null, CancellationToken cancellationToken = default)
     {
         return GetInternal<TResponse>(new Uri(uri, UriKind.RelativeOrAbsolute), queryData, cancellationToken);
