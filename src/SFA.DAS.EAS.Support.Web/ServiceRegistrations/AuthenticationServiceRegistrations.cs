@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using SFA.DAS.EAS.Support.Web.Authorization;
 using SFA.DAS.EAS.Support.Web.Configuration;
 
@@ -23,7 +24,7 @@ public static class AuthenticationServiceRegistrations
             .AddJwtBearer(auth =>
             {
                 auth.Authority = $"https://login.microsoftonline.com/{configuration.SiteValidator.Tenant}";
-                auth.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                auth.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidAudiences = configuration.SiteValidator.Audience.Split(','),
                 };

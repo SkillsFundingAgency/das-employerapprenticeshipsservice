@@ -43,10 +43,10 @@ public class WhenCallingIndexPost : WhenTestingChallengeController
 
         var actual = await Unit!.Index(challengeEntry.Id, challengeEntry);
 
-        Assert.IsNotNull(actual);
-        Assert.IsInstanceOf<ViewResult>(actual);
-        Assert.IsInstanceOf<ChallengeViewModel>(((ViewResult)actual).Model);
-        Assert.AreEqual(true, ((ChallengeViewModel)((ViewResult)actual).Model!).HasError);
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual, Is.InstanceOf<ViewResult>());
+        Assert.That(((ViewResult)actual).Model, Is.InstanceOf<ChallengeViewModel>());
+        Assert.That(true, Is.EqualTo(((ChallengeViewModel)((ViewResult)actual).Model!).HasError));
     }
 
     [Test]
@@ -75,11 +75,11 @@ public class WhenCallingIndexPost : WhenTestingChallengeController
 
         var actual = await Unit!.Index(challengeEntry.Id, challengeEntry);
 
-        Assert.IsNotNull(actual);
-        Assert.IsInstanceOf<JsonResult>(actual);
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual, Is.InstanceOf<JsonResult>());
 
         var result = ((JsonResult)actual).Value as ChallengeValidationResult;
-        Assert.IsNotNull(result);
-        Assert.IsTrue(result!.IsValidResponse);
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result!.IsValidResponse, Is.True);
     }
 }

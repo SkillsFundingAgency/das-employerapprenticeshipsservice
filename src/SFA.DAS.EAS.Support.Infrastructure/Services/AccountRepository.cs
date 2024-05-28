@@ -82,7 +82,6 @@ public sealed class AccountRepository : IAccountRepository
             }
 
             return (accountFirstPageModel.TotalPages * pagesize);
-
         }
         catch (Exception exception)
         {
@@ -91,7 +90,7 @@ public sealed class AccountRepository : IAccountRepository
             throw;
         }
     }
-
+    
     public async Task<decimal> GetAccountBalance(string id)
     {
         try
@@ -179,6 +178,7 @@ public sealed class AccountRepository : IAccountRepository
             {
                 _logger.LogError(exception, "Exception occured in Account API type of {TransactionsViewModelName} for period {FinancialYearIteratorYear}.{FinancialYearIteratorMonth} id {AccountId}", nameof(TransactionsViewModel), financialYearIterator.Year, financialYearIterator.Month, accountId);
             }
+
             financialYearIterator = financialYearIterator.AddMonths(1);
         }
 
@@ -193,11 +193,11 @@ public sealed class AccountRepository : IAccountRepository
     private async Task<IEnumerable<PayeSchemeModel>> GetPayeSchemes(AccountDetailViewModel response)
     {
         var payes = new List<PayeSchemeModel>();
-        
+
         var payesBatches = response.PayeSchemes
-                .Select((item, inx) => new { item, inx })
-                .GroupBy(x => x.inx / 50)
-                .Select(g => g.Select(x => x.item));
+            .Select((item, inx) => new { item, inx })
+            .GroupBy(x => x.inx / 50)
+            .Select(g => g.Select(x => x.item));
 
         foreach (var payeBatch in payesBatches)
         {
@@ -223,25 +223,24 @@ public sealed class AccountRepository : IAccountRepository
         }
 
         return payes.Select(payeSchemeViewModel =>
-        {
-            if (!IsValidPayeScheme(payeSchemeViewModel))
             {
-                return null;
-            }
-            
-            var item = new PayeSchemeModel
-            {
-                Ref = payeSchemeViewModel.Ref,
-                DasAccountId = payeSchemeViewModel.DasAccountId,
-                AddedDate = payeSchemeViewModel.AddedDate,
-                RemovedDate = payeSchemeViewModel.RemovedDate,
-                Name = payeSchemeViewModel.Name
-            };
+                if (!IsValidPayeScheme(payeSchemeViewModel))
+                {
+                    return null;
+                }
 
-            return item;
+                var item = new PayeSchemeModel
+                {
+                    Ref = payeSchemeViewModel.Ref,
+                    DasAccountId = payeSchemeViewModel.DasAccountId,
+                    AddedDate = payeSchemeViewModel.AddedDate,
+                    RemovedDate = payeSchemeViewModel.RemovedDate,
+                    Name = payeSchemeViewModel.Name
+                };
 
-        }).Where(x => x != null)
-          .OrderBy(x => x.Ref);
+                return item;
+            }).Where(x => x != null)
+            .OrderBy(x => x.Ref);
     }
 
     private static bool IsValidPayeScheme(PayeSchemeModel result)

@@ -2,9 +2,11 @@
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.WebUtilities;
+using Newtonsoft.Json;
 using SFA.DAS.EAS.Application.Http;
 
 namespace SFA.DAS.EAS.Application.Services;
@@ -19,6 +21,20 @@ public abstract class ApiClientService
         Client = client;
         _tokenGenerator = tokenGenerator;
     }
+
+    protected async Task PostContent<T>(string uri, T data, CancellationToken cancellationToken)
+    {
+        using var request = new HttpRequestMessage(HttpMethod.Post, uri);
+        request.Content = CreateJsonContent(data);
+
+        await AddAuthenticationHeader(request);
+
+        var httpResponseMessage = await Client.SendAsync(request, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
+
+        httpResponseMessage.EnsureSuccessStatusCode();
+    }
+    
+    private static HttpContent CreateJsonContent<T>(T data) => data == null ? null : new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
     
     protected Task<TResponse> GetResponse<TResponse>(string uri, object queryData = null, CancellationToken cancellationToken = default)
     {
@@ -42,7 +58,7 @@ public abstract class ApiClientService
         using var request = new HttpRequestMessage(HttpMethod.Get, uri);
 
         await AddAuthenticationHeader(request);
-        
+
         var httpResponseMessage = await Client.SendAsync(request, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
         if (!httpResponseMessage.IsSuccessStatusCode)
         {
@@ -58,7 +74,7 @@ public abstract class ApiClientService
             .GetType()
             .GetProperties()
             .ToDictionary(propertyInfo => propertyInfo.Name, propertyInfo => propertyInfo.GetValue(queryData)?.ToString() ?? string.Empty);
-        
+
         return QueryHelpers.AddQueryString(uri, queryString);
     }
 
@@ -67,10 +83,10 @@ public abstract class ApiClientService
         var content = await httpResponseMessage.Content
             .ReadAsStringAsync(cancellationToken)
             .ConfigureAwait(continueOnCapturedContext: false);
-        
+
         throw new RestHttpClientException(httpResponseMessage, content);
     }
-    
+
     protected async Task AddAuthenticationHeader(HttpRequestMessage httpRequestMessage)
     {
         var accessToken = await _tokenGenerator.Generate();

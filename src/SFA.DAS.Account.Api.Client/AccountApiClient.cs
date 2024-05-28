@@ -72,7 +72,7 @@ public class AccountApiClient : IAccountApiClient
     {
         var baseUrl = GetBaseUrl();
         var url = $"{baseUrl}api/accounts/{accountId}/legalentities";
-            
+
         var json = await _httpClient.GetAsync(url);
 
         return JsonConvert.DeserializeObject<List<ResourceViewModel>>(json);
@@ -82,7 +82,7 @@ public class AccountApiClient : IAccountApiClient
     {
         var baseUrl = GetBaseUrl();
         var url = $"{baseUrl}api/accounts/{accountId}/legalentities?includeDetails=true";
-            
+
         var json = await _httpClient.GetAsync(url);
 
         return JsonConvert.DeserializeObject<List<LegalEntityViewModel>>(json);
@@ -192,7 +192,7 @@ public class AccountApiClient : IAccountApiClient
 
         return JsonConvert.DeserializeObject<ICollection<AccountDetailViewModel>>(json);
     }
-
+    
     public Task Ping()
     {
         var baseUrl = GetBaseUrl();

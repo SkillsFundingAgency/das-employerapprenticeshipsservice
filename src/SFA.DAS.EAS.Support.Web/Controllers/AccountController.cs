@@ -1,30 +1,30 @@
-﻿using SFA.DAS.EAS.Support.ApplicationServices.Models;
+﻿using Newtonsoft.Json;
+using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Web.Authorization;
-using SFA.DAS.EAS.Support.Web.Configuration;
 using SFA.DAS.EAS.Support.Web.Models;
 using SFA.DAS.EAS.Support.Web.Services;
+using AccountDetailViewModel = SFA.DAS.EAS.Support.Web.Models.AccountDetailViewModel;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers;
 
 [Authorize(Policy = PolicyNames.Default)]
 public class AccountController : Controller
 {
-    private readonly IEasSupportConfiguration _easSupportConfiguration;
     private readonly IAccountHandler _accountHandler;
     private readonly IPayeLevySubmissionsHandler _payeLevySubmissionsHandler;
     private readonly IPayeLevyMapper _payeLevyMapper;
+    private readonly ILogger<AccountController> _logger;
 
-    public AccountController(
-        IEasSupportConfiguration easSupportConfiguration,
-        IAccountHandler accountHandler,
+    public AccountController(IAccountHandler accountHandler,
         IPayeLevySubmissionsHandler payeLevySubmissionsHandler,
-        IPayeLevyMapper payeLevyDeclarationMapper)
+        IPayeLevyMapper payeLevyDeclarationMapper,
+        ILogger<AccountController> logger)
     {
-        _easSupportConfiguration = easSupportConfiguration;
         _accountHandler = accountHandler;
         _payeLevySubmissionsHandler = payeLevySubmissionsHandler;
         _payeLevyMapper = payeLevyDeclarationMapper;
+        _logger = logger;
     }
 
     [Route("account/{id}")]
@@ -41,7 +41,6 @@ public class AccountController : Controller
         {
             Account = response.Account,
             AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}"
-
         };
 
         return View(model);
@@ -80,7 +79,7 @@ public class AccountController : Controller
     }
 
     [Route("account/team/{id}")]
-    public async Task<IActionResult> Team(string id)
+    public async Task<IActionResult> Team(string id, [FromQuery] string sid)
     {
         var response = await _accountHandler.FindTeamMembers(id);
 
@@ -88,17 +87,19 @@ public class AccountController : Controller
         {
             return NotFound();
         }
+        
+        _logger.LogWarning("InvitationsController.Resend user claims: {Claims}",  JsonConvert.SerializeObject(HttpContext.User.Claims.Select(x => new { x.Type, x.Value})));
 
         var model = new AccountDetailViewModel
         {
             Account = response.Account,
             AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}",
             IsTier2User = User.IsInRole(AuthorizationConstants.Tier2User),
-            TeamMemberUrl = GetTeamMemberUrl(id)
+            ChangeRoleUrl = $"/resource/index/{{0}}/?childId={{1}}&key={SupportServiceResourceKey.EmployerAccountChangeRole}",
+            ResendInviteUrl = $"/resource/index/{{0}}/?childId={{1}}&key={SupportServiceResourceKey.EmployerAccountResendInvitation}"
         };
 
         return View(model);
-
     }
 
     [Route("account/finance/{id}")]
@@ -136,13 +137,5 @@ public class AccountController : Controller
 
         return View(model);
     }
-
-    private string GetTeamMemberUrl(string hashedAccountId)
-    {
-        var baseUrl = _easSupportConfiguration.EmployerAccountsConfiguration.EmployerAccountsBaseUrl;
-        var trimmedBaseUrl = baseUrl?.TrimEnd('/') ?? string.Empty;
-        string path = $"login/staff?HashedAccountId={hashedAccountId}";
-
-        return $"{trimmedBaseUrl}/{path}".TrimEnd('/');
-    }
+    
 }

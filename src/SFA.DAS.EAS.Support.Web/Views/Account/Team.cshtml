@@ -1,5 +1,7 @@
-﻿@using SFA.DAS.EAS.Support.Web.Models
-@model AccountDetailViewModel
+﻿@using System.Net
+@using SFA.DAS.EAS.Account.Api.Types
+@using SFA.DAS.EAS.Support.Web.Models
+@model SFA.DAS.EAS.Support.Web.Models.AccountDetailViewModel
 
 @if (Model.Account != null)
 {
@@ -11,38 +13,40 @@
     {
         <table class="responsive">
             <thead>
-                <tr>
-                    <th scope="col" class="">Name</th>
-                    <th scope="col" class="">Email</th>
-                    <th scope="col" class="">Role</th>
-                    <th scope="col" class="">Invitation Status</th>
-                </tr>
+            <tr>
+                <th scope="col" class="">Name</th>
+                <th scope="col" class="">Email</th>
+                <th scope="col" class="">Role</th>
+                <th scope="col" class="">Invitation Status</th>
+                <th scope="col" class="">&nbsp;</th>
+            </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.Account.TeamMembers)
-                {
-                    <tr>
-                        @if (string.IsNullOrWhiteSpace(item.UserRef))
-                        {
-                            <td data-label="User Name" id="Name">@item.Name</td>
-                        }
-                        else
-                        {
-                            <td data-label="User Name" id="Name">
-                                <a href="@string.Format(Model.AccountUri, item.UserRef)">@item.Name</a>
-                            </td>
-                        }
-                        <td data-label="User Email" id="Email">@item.Email</td>
-                        <td data-label="User Role" id="Role">@item.Role</td>
-                        <td data-label="User Status" id="Status">@item.Status.GetTeamMemberStatus()</td>
-
-                    </tr>
-                }
+            @foreach (var item in Model.Account.TeamMembers)
+            {
+                <tr>
+                    @if (string.IsNullOrWhiteSpace(item.UserRef))
+                    {
+                        <td data-label="User Name" id="Name">@item.Name</td>
+                    }
+                    else
+                    {
+                        <td data-label="User Name" id="Name">
+                            <a href="@string.Format(Model.AccountUri, item.UserRef)">@item.Name</a>
+                        </td>
+                    }
+                    <td data-label="User Email" id="Email">@item.Email</td>
+                    <td data-label="User Role" id="Role">@item.Role</td>
+                    <td data-label="User Status" id="Status">@item.Status.GetTeamMemberStatus()</td>
+                    <td data-label="Action" id="Navigate">
+                        <a href="@string.Format(item.Status == InvitationStatus.Accepted ? Model.ChangeRoleUrl : Model.ResendInviteUrl, Model.Account.HashedAccountId, item.Status == InvitationStatus.Accepted ? item.UserRef : WebUtility.UrlEncode(item.Email))">
+                            @(item.Status == InvitationStatus.Accepted ? "Change" : "Resend invitation")
+                        </a>
+                    </td>
+                </tr>
+            }
             </tbody>
         </table>
-        <br />
-        <a href="@Model.TeamMemberUrl" class="button" target="_blank">Change team members or roles</a>
-        <span>(opens in a new window)</span>
     }
     else
     {

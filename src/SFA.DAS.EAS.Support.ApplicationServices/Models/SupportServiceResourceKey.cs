@@ -10,9 +10,12 @@ public enum SupportServiceResourceKey
     CommitmentApprenticeDetail,
     CommitmentCohortDetail,
     EmployerAccount,
+    EmployerAccountChangeRole,
+    EmployerAccountChangeRoleHeader,
     EmployerAccountHeader,
     EmployerAccountTeam,
     EmployerAccountFinance,
+    EmployerAccountResendInvitation,
     EmployerAccountPayeSchemeLevys,
     EmployerAccountFinanceChallenge,
 }

@@ -28,16 +28,16 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddSingleton(_configuration);
-       
+
         var identityServerConfiguration = _configuration
-               .GetSection("Identity")
-               .Get<IdentityServerConfiguration>();
+            .GetSection("Identity")
+            .Get<IdentityServerConfiguration>();
 
         services.AddHttpContextAccessor();
         services.AddConfigurationSections(_configuration);
 
         var easConfiguration = _configuration.Get<EmployerApprenticeshipsServiceConfiguration>();
-        
+
         if (easConfiguration.UseGovSignIn)
         {
             services.AddMaMenuConfiguration(RouteNames.SignOut, _configuration["ResourceEnvironmentName"]);
@@ -66,10 +66,7 @@ public class Startup
         }
 
         services.AddControllersWithViews()
-            .AddNewtonsoftJson(options =>
-            {
-                options.UseMemberCasing();
-            });
+            .AddNewtonsoftJson(options => { options.UseMemberCasing(); });
 
         services.Configure<CookiePolicyOptions>(options =>
         {
@@ -77,7 +74,7 @@ public class Startup
             options.CheckConsentNeeded = context => true;
             options.MinimumSameSitePolicy = SameSiteMode.None;
         });
-        
+
         SetupUserLinks(identityServerConfiguration);
 
         services.AddApplicationInsightsTelemetry();
@@ -94,12 +91,7 @@ public class Startup
         app.UseAuthentication();
         app.UseRouting();
         app.UseAuthorization();
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
-        });
+        app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
     }
 
     private void SetupUserLinks(IdentityServerConfiguration identityServerConfiguration)

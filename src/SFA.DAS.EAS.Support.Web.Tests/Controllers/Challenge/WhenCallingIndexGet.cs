@@ -25,7 +25,7 @@ public class WhenCallingIndexGet : WhenTestingChallengeController
 
         var actual = await Unit!.Index(id);
 
-        Assert.IsInstanceOf<NotFoundObjectResult>(actual);
+        Assert.That(actual, Is.InstanceOf<NotFoundObjectResult>());
     }
 
     [Test]
@@ -44,7 +44,7 @@ public class WhenCallingIndexGet : WhenTestingChallengeController
 
         var actual = await Unit!.Index(id);
 
-        Assert.IsInstanceOf<NotFoundObjectResult>(actual);
+        Assert.That(actual, Is.InstanceOf<NotFoundObjectResult>());
     }
 
     [Test]
@@ -68,8 +68,8 @@ public class WhenCallingIndexGet : WhenTestingChallengeController
 
         var actual = await Unit!.Index(id);
 
-        Assert.IsInstanceOf<ViewResult>(actual);
+        Assert.That(actual, Is.InstanceOf<ViewResult>());
         var viewResult = (ViewResult)actual;
-        Assert.IsInstanceOf<ChallengeViewModel>(viewResult.Model);
+        Assert.That(viewResult.Model, Is.InstanceOf<ChallengeViewModel>());
     }
 }

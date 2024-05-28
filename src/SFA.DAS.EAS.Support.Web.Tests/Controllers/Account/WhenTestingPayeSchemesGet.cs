@@ -28,13 +28,12 @@ public class WhenTestingPayeSchemesGet : WhenTestingAccountController
         AccountHandler!.Setup(x => x.FindPayeSchemes(id)).ReturnsAsync(response);
         var actual = await Unit!.PayeSchemes("123");
 
-        Assert.IsNotNull(actual);
-        Assert.IsNotNull(actual);
-        Assert.IsInstanceOf<ViewResult>(actual);
-        Assert.AreEqual(true, string.IsNullOrEmpty(((ViewResult)actual).ViewName));
-        Assert.IsInstanceOf<AccountDetailViewModel>(((ViewResult)actual).Model);
-        Assert.AreEqual(response.Account, ((AccountDetailViewModel)((ViewResult)actual).Model!).Account);
-        Assert.IsNull(((AccountDetailViewModel)((ViewResult)actual).Model!).SearchUrl);
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual, Is.InstanceOf<ViewResult>());
+        Assert.That(true, Is.EqualTo(string.IsNullOrEmpty(((ViewResult)actual).ViewName)));
+        Assert.That(((ViewResult)actual).Model, Is.InstanceOf<AccountDetailViewModel>());
+        Assert.That(response.Account, Is.EqualTo(((AccountDetailViewModel)((ViewResult)actual).Model!).Account));
+        Assert.That(((AccountDetailViewModel)((ViewResult)actual).Model!).SearchUrl, Is.Null);
     }
 
     [Test]
@@ -53,9 +52,10 @@ public class WhenTestingPayeSchemesGet : WhenTestingAccountController
         };
         const string id = "123";
         AccountHandler!.Setup(x => x.FindPayeSchemes(id)).ReturnsAsync(response);
+        
         var actual = await Unit!.PayeSchemes("123");
-        Assert.IsNotNull(actual);
-        Assert.IsInstanceOf<NotFoundResult>(actual);
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual, Is.InstanceOf<NotFoundResult>());
     }
 
     [Test]
@@ -78,7 +78,7 @@ public class WhenTestingPayeSchemesGet : WhenTestingAccountController
         AccountHandler!.Setup(x => x.FindPayeSchemes(id)).ReturnsAsync(response);
         var actual = await Unit!.PayeSchemes("123");
 
-        Assert.IsNotNull(actual);
-        Assert.IsInstanceOf<NotFoundResult>(actual);
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual, Is.InstanceOf<NotFoundResult>());
     }
 }
