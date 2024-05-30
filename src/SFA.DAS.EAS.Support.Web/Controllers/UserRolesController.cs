@@ -34,40 +34,40 @@ public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRol
         });
     }
 
-    public record UpdateRoleRequest
-    {
-        public int Role { get; set; }
-        public string SupportUserEmail { get; set; }
-    }
-
-    [HttpPost]
-    [Route("{id}/{userRef}")]
-    public async Task<IActionResult> Update(string id, string userRef, [FromBody] UpdateRoleRequest request)
-    {
-        var model = new ChangeRoleCompletedModel
-        {
-            ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id),
-            Success = true,
-            Role = request.Role
-        };
-
-        try
-        {
-            var accountResponse = await accountHandler.FindTeamMembers(id);
-
-            var teamMember = accountResponse.Account.TeamMembers.Single(x => x.UserRef == userRef);
-            model.MemberEmail = teamMember.Email;
-
-            await accountsApiService.ChangeRole(id, teamMember.Email, request.Role, request.SupportUserEmail);
-        }
-        catch (Exception exception)
-        {
-            logger.LogError(exception, $"{nameof(UserRolesController)}.{nameof(Update)} caught exception.");
-            model.Success = false;
-        }
-
-        return View("Confirm", model);
-    }
+    // public record UpdateRoleRequest
+    // {
+    //     public int Role { get; set; }
+    //     public string SupportUserEmail { get; set; }
+    // }
+    //
+    // [HttpPost]
+    // [Route("{id}/{userRef}")]
+    // public async Task<IActionResult> Update(string id, string userRef, [FromBody] UpdateRoleRequest request)
+    // {
+    //     var model = new ChangeRoleCompletedModel
+    //     {
+    //         ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id),
+    //         Success = true,
+    //         Role = request.Role
+    //     };
+    //
+    //     try
+    //     {
+    //         var accountResponse = await accountHandler.FindTeamMembers(id);
+    //
+    //         var teamMember = accountResponse.Account.TeamMembers.Single(x => x.UserRef == userRef);
+    //         model.MemberEmail = teamMember.Email;
+    //
+    //         await accountsApiService.ChangeRole(id, teamMember.Email, request.Role, request.SupportUserEmail);
+    //     }
+    //     catch (Exception exception)
+    //     {
+    //         logger.LogError(exception, $"{nameof(UserRolesController)}.{nameof(Update)} caught exception.");
+    //         model.Success = false;
+    //     }
+    //
+    //     return View("Confirm", model);
+    // }
 
     [Route("Confirm/{id}/{userRef}")]
     public async Task<IActionResult> Confirm(string id, string userRef)
