@@ -48,7 +48,7 @@
             </tbody>
         </table>
         <br/>
-        <a href="@Model.InviteMemberUrl" class="button" target="_blank">Invite a new member</a>
+        <a href="@string.Format(Model.InviteMemberUrl, Model.Account.HashedAccountId)" class="button" target="_blank">Invite a new member</a>
     }
     else
     {
