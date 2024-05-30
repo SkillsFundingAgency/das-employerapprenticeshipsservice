@@ -73,4 +73,18 @@ public class EmployerAccountsApiService : ApiClientService, IEmployerAccountsApi
 
         await PostContent("/api/support/resend-invitation", request, cancellationToken);
     }
+
+    public async Task SendInvitation(string hashedAccountId, string email, string fullName, string supportUserEmail, int role, CancellationToken cancellationToken = default)
+    {
+        var request = new SupportCreateInvitationRequest
+        {
+            HashedAccountId = hashedAccountId,
+            SupportUserEmail = supportUserEmail,
+            EmailOfPersonBeingInvited = email,
+            NameOfPersonBeingInvited = fullName,
+            RoleOfPersonBeingInvited = role
+        };
+
+        await PostContent("/api/support/send-invitation", request, cancellationToken);
+    }
 }
