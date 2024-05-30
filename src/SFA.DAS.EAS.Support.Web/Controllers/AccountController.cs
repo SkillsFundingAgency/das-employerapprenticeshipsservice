@@ -79,7 +79,7 @@ public class AccountController : Controller
     }
 
     [Route("account/team/{id}")]
-    public async Task<IActionResult> Team(string id, [FromQuery] string sid)
+    public async Task<IActionResult> Team(string id)
     {
         var response = await _accountHandler.FindTeamMembers(id);
 

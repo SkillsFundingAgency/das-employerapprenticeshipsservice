@@ -20,33 +20,25 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
             HashedAccountId = id,
             ResponseUrl = $"/resource/invitemember/{id}"
         };
-        
+
         return View(model);
     }
-    
-    public class CreateInvitationRequest
-    {
-        public string HashedAccountId { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public int Role { get; set; }
-        public string SupportUserEmail { get; set; }
-    }
-    
+
+
     [HttpPost]
-    [Route("")]
-    public async Task<IActionResult> SendInvitation([FromBody] CreateInvitationRequest request)
+    [Route("{id}")]
+    public async Task<IActionResult> SendInvitation(string id, string email, string fullName, string sid, int role)
     {
         var model = new SendInvitationCompletedModel
         {
-            ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", request.HashedAccountId),
+            ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id),
             Success = true,
-            MemberEmail = request.Email
+            MemberEmail = email
         };
 
         try
         {
-            await accountsApiService.SendInvitation(request.HashedAccountId, request.Email, request.Name, request.SupportUserEmail, request.Role);
+            await accountsApiService.SendInvitation(id, email, fullName, sid, role);
         }
         catch (Exception exception)
         {
@@ -56,7 +48,7 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
 
         return View("Confirm", model);
     }
-    
+
     [HttpGet]
     [Route("resend/{id}")]
     public async Task<IActionResult> Resend(string id, string email, string sid)
