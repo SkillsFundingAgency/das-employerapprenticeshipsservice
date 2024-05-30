@@ -47,9 +47,9 @@ public class WhenTestingResendGet
             actual.Should().BeOfType<ViewResult>();
             ((ViewResult)actual).ViewName.Should().Be("Confirm");
 
-            var model = ((ViewResult)actual).Model as ResendInvitationCompletedModel;
+            var model = ((ViewResult)actual).Model as SendInvitationCompletedModel;
 
-            model?.Should().BeOfType<ResendInvitationCompletedModel>();
+            model?.Should().BeOfType<SendInvitationCompletedModel>();
             model?.Success.Should().BeTrue();
             model?.MemberEmail.Should().Be(email);
             model?.ReturnToTeamUrl.Should().Be(string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", hashedAccountId));

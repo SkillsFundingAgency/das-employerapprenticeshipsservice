@@ -1,4 +1,4 @@
-﻿@model SFA.DAS.EAS.Support.Web.Models.ResendInvitationCompletedModel;
+﻿@model SFA.DAS.EAS.Support.Web.Models.SendInvitationCompletedModel;
 
 @if (Model.Success)
 {
@@ -7,7 +7,7 @@
             Invitation resent
         </h1>
         <p>
-            You've resent an invitation to @Model.MemberEmail.
+            You've sent an invitation to @Model.MemberEmail.
         </p>
         <p>
             <a href="@Model.ReturnToTeamUrl">Click to return to Team members</a>
@@ -18,7 +18,7 @@ else
 {
     <div class="error-summary">
         <h1>
-            The resend invitation request to @Model.MemberEmail failed.
+            The send invitation request to @Model.MemberEmail failed.
         </h1>
         <p>
             <a href="@Model.ReturnToTeamUrl">Click to return to Team members</a>

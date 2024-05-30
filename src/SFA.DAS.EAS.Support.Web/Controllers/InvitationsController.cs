@@ -11,18 +11,31 @@ namespace SFA.DAS.EAS.Support.Web.Controllers;
 public class InvitationsController(ILogger<InvitationsController> logger, IEmployerAccountsApiService accountsApiService) : Controller
 {
     [HttpGet]
+    [Route("{id}")]
+    public IActionResult Index(string id)
+    {
+        var model = new InvitationViewModel
+        {
+            HashedAccountId = id,
+            ResponseUrl = $"/resource/invitemember/{id}"
+        };
+        
+        return View(model);
+    }
+    
+    [HttpGet]
     [Route("resend/{id}")]
     public async Task<IActionResult> Resend(string id, string email, string sid)
     {
         email = WebUtility.UrlDecode(email);
-        
-        var model = new ResendInvitationCompletedModel
+
+        var model = new SendInvitationCompletedModel
         {
             Success = true,
             MemberEmail = email,
             ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id)
         };
-        
+
         try
         {
             await accountsApiService.ResendInvitation(

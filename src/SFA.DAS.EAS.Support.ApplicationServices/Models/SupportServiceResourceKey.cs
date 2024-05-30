@@ -14,6 +14,7 @@ public enum SupportServiceResourceKey
     EmployerAccountChangeRoleHeader,
     EmployerAccountHeader,
     EmployerAccountTeam,
+    EmployerAccountInvitation,
     EmployerAccountFinance,
     EmployerAccountResendInvitation,
     EmployerAccountPayeSchemeLevys,

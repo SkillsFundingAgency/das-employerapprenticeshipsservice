@@ -1,0 +1,82 @@
+﻿@using SFA.DAS.EAS.Domain.Models
+@model SFA.DAS.EAS.Support.Web.Models.InvitationViewModel;
+
+@{
+    var errorMessage = string.Empty;
+}
+
+<div class="grid-row">
+    <div class="grid-column-two-thirds">
+        <h1 class="heading-large">
+            Create Invitation
+        </h1>
+        <div class="form-group @(!ViewContext.ViewData.ModelState.IsValid ? "form-group--error" : "")">
+            @using (Html.BeginForm("resource", "Role",
+                        FormMethod.Get,
+                        new Dictionary<string, object>
+                        {
+                            { "action", $"{Model.ResponseUrl}" },
+                            { "accept_charset", "utf-8" },
+                            { "@class", "search-header search-header-2" },
+                            { "id", "invitationForm" }
+                        }
+                    ))
+            {
+                <div class="govuk-form-group ">
+                    <label for="Email" class="govuk-label">
+                        <span>Email</span>
+                    </label>
+                    <div class="govuk-hint">An invitation will be sent to this email address</div>
+                    <input asp-for="Email" class="govuk-input govuk-!-width-three-quarters" type="email" aria-required="true" value="" required>
+                    <div data-lastpass-icon-root="" style="position: relative !important; height: 0px !important; width: 0px !important; float: left !important;"></div>
+                </div>
+
+                <div class="govuk-form-group ">
+                    <label for="Name" class="govuk-label">
+                        <span id="error-message-name">Full name</span>
+                    </label>
+                    <input asp-for="FullName" class="govuk-input govuk-!-width-three-quarters" type="text" aria-required="true" value="" required pattern="[a-z]">
+                </div>
+
+                <fieldset class="fieldset">
+                    <legend id="change-role-selection" class="">
+                        <span class="visually-hidden">Select a role</span>
+                        @if (!string.IsNullOrWhiteSpace(errorMessage))
+                        {
+                            <span class="error-message">@errorMessage</span>
+                        }
+                    </legend>
+                    <div class="radios" data-module="radios">
+                        <div class="multiple-choice">
+                            <input class="" id="radio0" type="radio" name="Role" value="0" @(Model.Role == Role.None ? "checked" : "")/>
+                            <label for="radio0">
+                                @(RoleStrings.GetRoleDescription(Role.None))
+                            </label>
+                        </div>
+                        <div class="multiple-choice">
+                            <input class="" id="radio1" type="radio" name="Role" value="3" @(Model.Role == Role.Viewer ? "checked" : "")/>
+                            <label for="radio1">
+                                @(RoleStrings.GetRoleDescription(Role.Viewer))
+                            </label>
+                        </div>
+                        <div class="multiple-choice">
+                            <input class="" id="radio2" type="radio" name="Role" value="2" @(Model.Role == Role.Transactor ? "checked" : "")/>
+                            <label for="radio2">
+                                @(RoleStrings.GetRoleDescription(Role.Transactor))
+                            </label>
+                        </div>
+                        <div class="multiple-choice">
+                            <input class="" id="radio3" type="radio" name="Role" value="1" @(Model.Role == Role.Owner ? "checked" : "")/>
+                            <label for="radio3">
+                                @(RoleStrings.GetRoleDescription(Role.Owner))
+                            </label>
+                        </div>
+                    </div>
+                    <input type="hidden" value="@Model.HashedAccountId"/>
+                </fieldset>
+
+                <button type="submit" class="button" id="update">Update</button>
+            }
+        </div>
+    </div>
+</div>
