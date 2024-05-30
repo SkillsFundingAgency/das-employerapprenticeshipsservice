@@ -15,4 +15,5 @@ public interface IEmployerAccountsApiService
     Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default);
     Task ChangeRole(string hashedAccountId, string email, int role, string supportUserEmail, CancellationToken cancellationToken = default);
     Task ResendInvitation(string hashedAccountId, string email, string supportUserEmail, CancellationToken cancellationToken = default);
+    Task SendInvitation(string hashedAccountId, string email, string fullName, string supportUserEmail, int role, CancellationToken cancellationToken = default);
 }
