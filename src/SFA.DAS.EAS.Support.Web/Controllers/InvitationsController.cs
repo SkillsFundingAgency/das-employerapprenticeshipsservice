@@ -17,12 +17,11 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
         var model = new InvitationViewModel
         {
             HashedAccountId = id,
-            ResponseUrl = $"/resource/invitemember/{id}"
+            ResponseUrl = $"/resource/invitemember/{id}",
         };
 
         return View(model);
     }
-
 
     [HttpPost]
     [Route("{id}")]
@@ -76,5 +75,19 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
         }
 
         return View("Confirm", model);
+    }
+    
+    [HttpGet]
+    [Route("confirm/{id}")]
+    public IActionResult Confirm(string id, string email)
+    {
+        var model = new SendInvitationCompletedModel
+        {
+            Success = true,
+            MemberEmail = WebUtility.UrlDecode(email),
+            ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id)
+        };
+        
+        return View(model);
     }
 }
