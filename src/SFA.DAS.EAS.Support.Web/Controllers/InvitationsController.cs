@@ -23,20 +23,30 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
         return View(model);
     }
 
+    public class CreateInvitationRequest
+    {
+        public string NameOfPersonBeingInvited { get; set; }
+
+        public string EmailOfPersonBeingInvited { get; set; }
+
+        public int RoleOfPersonBeingInvited { get; set; }
+        public string SupportUserEmail { get; set; }
+    }
+
     [HttpPost]
     [Route("{id}")]
-    public async Task<IActionResult> SendInvitation(string id, string email, string fullName, string sid, int role)
+    public async Task<IActionResult> SendInvitation(string id, [FromBody] CreateInvitationRequest request)
     {
         var model = new SendInvitationCompletedModel
         {
             ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id),
             Success = true,
-            MemberEmail = email
+            MemberEmail = request.EmailOfPersonBeingInvited
         };
 
         try
         {
-            await accountsApiService.SendInvitation(id, email, fullName, sid, role);
+            await accountsApiService.SendInvitation(id, request.EmailOfPersonBeingInvited, request.NameOfPersonBeingInvited, request.SupportUserEmail, request.RoleOfPersonBeingInvited);
         }
         catch (Exception exception)
         {
@@ -76,7 +86,7 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
 
         return View("Confirm", model);
     }
-    
+
     [HttpGet]
     [Route("confirm/{id}")]
     public IActionResult Confirm(string id, string email)
@@ -87,7 +97,7 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
             MemberEmail = WebUtility.UrlDecode(email),
             ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id)
         };
-        
+
         return View(model);
     }
 }
