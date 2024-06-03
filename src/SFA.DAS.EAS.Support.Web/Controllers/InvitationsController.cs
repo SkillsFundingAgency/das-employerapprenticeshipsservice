@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Newtonsoft.Json;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.Web.Authorization;
@@ -43,6 +44,8 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
             Success = true,
             MemberEmail = request.EmailOfPersonBeingInvited
         };
+
+        logger.LogWarning("{Controller}.{Action}. Request: {Request}", nameof(InvitationsController), nameof(SendInvitation), JsonConvert.SerializeObject(request));
 
         try
         {
@@ -97,6 +100,8 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
             MemberEmail = WebUtility.UrlDecode(email),
             ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id)
         };
+        
+        logger.LogWarning("{Controller}.{Action}. Model: {Model}", nameof(InvitationsController), nameof(Confirm), JsonConvert.SerializeObject(model));
 
         return View(model);
     }
