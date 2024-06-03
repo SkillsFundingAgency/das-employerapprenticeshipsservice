@@ -88,8 +88,6 @@ public class AccountController : Controller
             return NotFound();
         }
         
-        _logger.LogWarning("InvitationsController.Resend user claims: {Claims}",  JsonConvert.SerializeObject(HttpContext.User.Claims.Select(x => new { x.Type, x.Value})));
-
         var model = new AccountDetailViewModel
         {
             Account = response.Account,

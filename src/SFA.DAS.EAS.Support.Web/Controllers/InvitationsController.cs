@@ -41,22 +41,22 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
         var model = new SendInvitationCompletedModel
         {
             ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id),
-            Success = true,
             MemberEmail = request.EmailOfPersonBeingInvited
         };
-
-        logger.LogWarning("{Controller}.{Action}. Request: {Request}", nameof(InvitationsController), nameof(SendInvitation), JsonConvert.SerializeObject(request));
 
         try
         {
             await accountsApiService.SendInvitation(id, request.EmailOfPersonBeingInvited, request.NameOfPersonBeingInvited, request.SupportUserEmail, request.RoleOfPersonBeingInvited);
+            
+            model.Success = true;
         }
         catch (Exception exception)
         {
             logger.LogError(exception, $"{nameof(InvitationsController)}.{nameof(SendInvitation)} caught exception.");
-            model.Success = false;
         }
 
+        logger.LogWarning("{Controller}.{Action} model: {Model}", nameof(InvitationsController), nameof(SendInvitation), JsonConvert.SerializeObject(model));
+        
         return View("Confirm", model);
     }
 
@@ -68,23 +68,19 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
 
         var model = new SendInvitationCompletedModel
         {
-            Success = true,
             MemberEmail = email,
             ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id)
         };
 
         try
         {
-            await accountsApiService.ResendInvitation(
-                id,
-                email,
-                sid
-            );
+            await accountsApiService.ResendInvitation(id, email, sid);
+            
+            model.Success = true;
         }
         catch (Exception exception)
         {
             logger.LogError(exception, $"{nameof(InvitationsController)}.{nameof(Resend)} caught exception.");
-            model.Success = false;
         }
 
         return View("Confirm", model);
