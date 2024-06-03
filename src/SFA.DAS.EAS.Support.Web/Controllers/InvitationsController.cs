@@ -54,8 +54,6 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
         {
             logger.LogError(exception, $"{nameof(InvitationsController)}.{nameof(SendInvitation)} caught exception.");
         }
-
-        logger.LogWarning("{Controller}.{Action} model: {Model}", nameof(InvitationsController), nameof(SendInvitation), JsonConvert.SerializeObject(model));
         
         return View("Confirm", model);
     }
