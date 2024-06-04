@@ -38,6 +38,8 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
     [Route("{id}")]
     public async Task<IActionResult> SendInvitation(string id, [FromBody] CreateInvitationRequest request)
     {
+        logger.LogWarning("InvitationsController.SendInvitation called.");
+        
         var model = new SendInvitationCompletedModel
         {
             ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id),
@@ -54,6 +56,8 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
         {
             logger.LogError(exception, $"{nameof(InvitationsController)}.{nameof(SendInvitation)} caught exception.");
         }
+        
+        logger.LogWarning("InvitationsController.SendInvitation model {Model}.", model);
         
         return View("Confirm", model);
     }
@@ -88,6 +92,8 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
     [Route("confirm/{id}")]
     public IActionResult Confirm(string id, string email, bool success)
     {
+        logger.LogWarning("InvitationsController.Confirm called.");
+        
         var model = new SendInvitationCompletedModel
         {
             Success = success,
