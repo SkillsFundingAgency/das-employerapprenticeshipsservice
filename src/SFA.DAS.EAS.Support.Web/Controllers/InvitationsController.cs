@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using Newtonsoft.Json;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.Web.Authorization;
@@ -38,8 +37,6 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
     [Route("{id}")]
     public async Task<IActionResult> SendInvitation(string id, [FromBody] CreateInvitationRequest request)
     {
-        logger.LogWarning("InvitationsController.SendInvitation called.");
-        
         var model = new SendInvitationCompletedModel
         {
             ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id),
@@ -56,8 +53,6 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
         {
             logger.LogError(exception, $"{nameof(InvitationsController)}.{nameof(SendInvitation)} caught exception.");
         }
-        
-        logger.LogWarning("InvitationsController.SendInvitation model {Model}.", model);
         
         return View("Confirm", model);
     }
@@ -86,23 +81,5 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
         }
 
         return View("Confirm", model);
-    }
-
-    [HttpGet]
-    [Route("confirm/{id}")]
-    public IActionResult Confirm(string id, string email, bool success)
-    {
-        logger.LogWarning("InvitationsController.Confirm called.");
-        
-        var model = new SendInvitationCompletedModel
-        {
-            Success = success,
-            MemberEmail = WebUtility.UrlDecode(email),
-            ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id)
-        };
-        
-        logger.LogWarning("{Controller}.{Action}. Model: {Model}", nameof(InvitationsController), nameof(Confirm), JsonConvert.SerializeObject(model));
-
-        return View(model);
     }
 }
