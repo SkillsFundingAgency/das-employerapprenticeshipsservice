@@ -86,11 +86,11 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
 
     [HttpGet]
     [Route("confirm/{id}")]
-    public IActionResult Confirm(string id, string email)
+    public IActionResult Confirm(string id, string email, bool success)
     {
         var model = new SendInvitationCompletedModel
         {
-            Success = true,
+            Success = success,
             MemberEmail = WebUtility.UrlDecode(email),
             ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id)
         };
