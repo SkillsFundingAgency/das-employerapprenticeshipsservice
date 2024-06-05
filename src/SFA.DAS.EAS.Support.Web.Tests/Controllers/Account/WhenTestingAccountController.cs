@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Models;
@@ -28,8 +27,7 @@ public abstract class WhenTestingAccountController
 
         Unit = new AccountController(AccountHandler.Object,
             _payeLevySubmissionsHandler.Object,
-            _payeLevyDeclarationMapper.Object,
-            Mock.Of<ILogger<AccountController>>()
+            _payeLevyDeclarationMapper.Object
             );
     }
 }
