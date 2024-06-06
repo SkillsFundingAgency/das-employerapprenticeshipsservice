@@ -28,7 +28,6 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
         public string NameOfPersonBeingInvited { get; set; }
         public string EmailOfPersonBeingInvited { get; set; }
         public int RoleOfPersonBeingInvited { get; set; }
-        public string SupportUserEmail { get; set; }
     }
 
     [HttpPost]
@@ -43,7 +42,7 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
 
         try
         {
-            await accountsApiService.SendInvitation(id, request.EmailOfPersonBeingInvited, request.NameOfPersonBeingInvited, request.SupportUserEmail, request.RoleOfPersonBeingInvited);
+            await accountsApiService.SendInvitation(id, request.EmailOfPersonBeingInvited, request.NameOfPersonBeingInvited, request.RoleOfPersonBeingInvited);
             
             model.Success = true;
         }
@@ -57,7 +56,7 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
 
     [HttpGet]
     [Route("resend/{id}")]
-    public async Task<IActionResult> Resend(string id, string email, string sid)
+    public async Task<IActionResult> Resend(string id, string email)
     {
         email = WebUtility.UrlDecode(email);
 
@@ -69,7 +68,7 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
 
         try
         {
-            await accountsApiService.ResendInvitation(id, email, sid);
+            await accountsApiService.ResendInvitation(id, email);
             
             model.Success = true;
         }

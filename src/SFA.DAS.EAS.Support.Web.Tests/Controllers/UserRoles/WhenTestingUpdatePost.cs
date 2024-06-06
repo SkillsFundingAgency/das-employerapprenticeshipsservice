@@ -31,8 +31,7 @@ public class WhenTestingUpdatePost
         Role newRole,
         string externalUserId,
         string teamMemberName,
-        string email,
-        string supportUserEmail)
+        string email)
     {
         var sut = new UserRolesController(accountHandler.Object, Mock.Of<ILogger<UserRolesController>>(), accountsApiService.Object);
         sut.ControllerContext = new ControllerContext
@@ -42,7 +41,6 @@ public class WhenTestingUpdatePost
                 User = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
                 {
                     new(EmployerClaims.IdamsUserIdClaimTypeIdentifier, externalUserId),
-                    new(ClaimTypes.Email, supportUserEmail),
                 })),
             }
         };
@@ -65,7 +63,6 @@ public class WhenTestingUpdatePost
         var request = new UserRolesController.UpdateRoleRequest
         {
             Role = (int)newRole,
-            SupportUserEmail = supportUserEmail
         };
 
         var actual = await sut.Update(hashedAccountId, userRef, request);
@@ -83,7 +80,7 @@ public class WhenTestingUpdatePost
             model?.ReturnToTeamUrl.Should().Be(string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", hashedAccountId));
             model?.Role.Should().Be((int)newRole);
 
-            accountsApiService.Verify(x => x.ChangeRole(hashedAccountId, email, (int)newRole, supportUserEmail, CancellationToken.None), Times.Once);
+            accountsApiService.Verify(x => x.ChangeRole(hashedAccountId, email, (int)newRole, CancellationToken.None), Times.Once);
         }
     }
 
@@ -93,8 +90,7 @@ public class WhenTestingUpdatePost
         Mock<IEmployerAccountsApiService> accountsApiService,
         string hashedAccountId,
         string userRef,
-        Role oldRole,
-        string supportUserEmail)
+        Role oldRole)
     {
         var sut = new UserRolesController(accountHandler.Object, Mock.Of<ILogger<UserRolesController>>(), accountsApiService.Object);
         sut.ControllerContext = new ControllerContext
@@ -107,7 +103,6 @@ public class WhenTestingUpdatePost
         var request = new UserRolesController.UpdateRoleRequest
         {
             Role = (int)oldRole,
-            SupportUserEmail = supportUserEmail
         };
 
         var actual = await sut.Update(hashedAccountId, userRef, request);

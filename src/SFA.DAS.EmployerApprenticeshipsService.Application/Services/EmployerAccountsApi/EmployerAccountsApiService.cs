@@ -49,37 +49,34 @@ public class EmployerAccountsApiService : ApiClientService, IEmployerAccountsApi
         return GetResponse<dynamic>(url, cancellationToken: cancellationToken);
     }
 
-    public async Task ChangeRole(string hashedId, string email, int role, string supportUserEmail, CancellationToken cancellationToken = default)
+    public async Task ChangeRole(string hashedId, string email, int role, CancellationToken cancellationToken = default)
     {
         var request = new SupportChangeTeamMemberRoleRequest
         {
             HashedAccountId = hashedId,
             Email = email,
             Role = role,
-            SupportUserEmail = supportUserEmail
         };
 
         await PostContent("/api/support/change-role", request, cancellationToken);
     }
 
-    public async Task ResendInvitation(string hashedAccountId, string email, string supportUserEmail, CancellationToken cancellationToken = default)
+    public async Task ResendInvitation(string hashedAccountId, string email, CancellationToken cancellationToken = default)
     {
         var request = new SupportResendInvitationRequest
         {
             HashedAccountId = hashedAccountId,
             Email = email,
-            SupportUserEmail = supportUserEmail
         };
 
         await PostContent("/api/support/resend-invitation", request, cancellationToken);
     }
 
-    public async Task SendInvitation(string hashedAccountId, string email, string fullName, string supportUserEmail, int role, CancellationToken cancellationToken = default)
+    public async Task SendInvitation(string hashedAccountId, string email, string fullName, int role, CancellationToken cancellationToken = default)
     {
         var request = new SupportCreateInvitationRequest
         {
             HashedAccountId = hashedAccountId,
-            SupportUserEmail = supportUserEmail,
             EmailOfPersonBeingInvited = email,
             NameOfPersonBeingInvited = fullName,
             RoleOfPersonBeingInvited = role
