@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using SFA.DAS.EAS.Support.ApplicationServices.Models;
+﻿using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Web.Authorization;
 using SFA.DAS.EAS.Support.Web.Models;
@@ -14,17 +13,14 @@ public class AccountController : Controller
     private readonly IAccountHandler _accountHandler;
     private readonly IPayeLevySubmissionsHandler _payeLevySubmissionsHandler;
     private readonly IPayeLevyMapper _payeLevyMapper;
-    private readonly ILogger<AccountController> _logger;
 
     public AccountController(IAccountHandler accountHandler,
         IPayeLevySubmissionsHandler payeLevySubmissionsHandler,
-        IPayeLevyMapper payeLevyDeclarationMapper,
-        ILogger<AccountController> logger)
+        IPayeLevyMapper payeLevyDeclarationMapper)
     {
         _accountHandler = accountHandler;
         _payeLevySubmissionsHandler = payeLevySubmissionsHandler;
         _payeLevyMapper = payeLevyDeclarationMapper;
-        _logger = logger;
     }
 
     [Route("account/{id}")]
@@ -79,7 +75,7 @@ public class AccountController : Controller
     }
 
     [Route("account/team/{id}")]
-    public async Task<IActionResult> Team(string id, [FromQuery] string sid)
+    public async Task<IActionResult> Team(string id)
     {
         var response = await _accountHandler.FindTeamMembers(id);
 
@@ -88,15 +84,14 @@ public class AccountController : Controller
             return NotFound();
         }
         
-        _logger.LogWarning("InvitationsController.Resend user claims: {Claims}",  JsonConvert.SerializeObject(HttpContext.User.Claims.Select(x => new { x.Type, x.Value})));
-
         var model = new AccountDetailViewModel
         {
             Account = response.Account,
             AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}",
             IsTier2User = User.IsInRole(AuthorizationConstants.Tier2User),
             ChangeRoleUrl = $"/resource/index/{{0}}/?childId={{1}}&key={SupportServiceResourceKey.EmployerAccountChangeRole}",
-            ResendInviteUrl = $"/resource/index/{{0}}/?childId={{1}}&key={SupportServiceResourceKey.EmployerAccountResendInvitation}"
+            ResendInviteUrl = $"/resource/index/{{0}}/?childId={{1}}&key={SupportServiceResourceKey.EmployerAccountResendInvitation}",
+            InviteMemberUrl = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerAccountInvitation}",
         };
 
         return View(model);

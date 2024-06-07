@@ -25,7 +25,7 @@
             @foreach (var item in Model.Account.TeamMembers)
             {
                 <tr>
-                    @if (string.IsNullOrWhiteSpace(item.UserRef))
+                    @if (item.Status != InvitationStatus.Accepted)
                     {
                         <td data-label="User Name" id="Name">@item.Name</td>
                     }
@@ -47,6 +47,8 @@
             }
             </tbody>
         </table>
+        <br/>
+        <a href="@string.Format(Model.InviteMemberUrl, Model.Account.HashedAccountId)" class="button">Invite a new member</a>
     }
     else
     {

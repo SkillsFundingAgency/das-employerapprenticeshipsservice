@@ -1,6 +1,6 @@
 namespace SFA.DAS.EAS.Support.Web.Models;
 
-public class ResendInvitationCompletedModel
+public class SendInvitationCompletedModel
 {
     public string ReturnToTeamUrl { get; set; }
     public bool Success { get; set; }

@@ -13,6 +13,7 @@ public interface IEmployerAccountsApiService
 
     Task<AccountDetailViewModel> GetAccount(string hashedAccountId, CancellationToken cancellationToken = default);
     Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default);
-    Task ChangeRole(string hashedAccountId, string email, int role, string supportUserEmail, CancellationToken cancellationToken = default);
-    Task ResendInvitation(string hashedAccountId, string email, string supportUserEmail, CancellationToken cancellationToken = default);
+    Task ChangeRole(string hashedAccountId, string email, int role, CancellationToken cancellationToken = default);
+    Task ResendInvitation(string hashedAccountId, string email, CancellationToken cancellationToken = default);
+    Task SendInvitation(string hashedAccountId, string email, string fullName, int role, CancellationToken cancellationToken = default);
 }

@@ -11,30 +11,70 @@ namespace SFA.DAS.EAS.Support.Web.Controllers;
 public class InvitationsController(ILogger<InvitationsController> logger, IEmployerAccountsApiService accountsApiService) : Controller
 {
     [HttpGet]
+    [Route("{id}")]
+    public IActionResult Index(string id)
+    {
+        var model = new InvitationViewModel
+        {
+            HashedAccountId = id,
+            ResponseUrl = $"/resource/invitemember/{id}",
+        };
+
+        return View(model);
+    }
+
+    public class CreateInvitationRequest
+    {
+        public string NameOfPersonBeingInvited { get; set; }
+        public string EmailOfPersonBeingInvited { get; set; }
+        public int RoleOfPersonBeingInvited { get; set; }
+    }
+
+    [HttpPost]
+    [Route("{id}")]
+    public async Task<IActionResult> SendInvitation(string id, [FromBody] CreateInvitationRequest request)
+    {
+        var model = new SendInvitationCompletedModel
+        {
+            ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id),
+            MemberEmail = request.EmailOfPersonBeingInvited
+        };
+
+        try
+        {
+            await accountsApiService.SendInvitation(id, request.EmailOfPersonBeingInvited, request.NameOfPersonBeingInvited, request.RoleOfPersonBeingInvited);
+            
+            model.Success = true;
+        }
+        catch (Exception exception)
+        {
+            logger.LogError(exception, $"{nameof(InvitationsController)}.{nameof(SendInvitation)} caught exception.");
+        }
+        
+        return View("Confirm", model);
+    }
+
+    [HttpGet]
     [Route("resend/{id}")]
-    public async Task<IActionResult> Resend(string id, string email, string sid)
+    public async Task<IActionResult> Resend(string id, string email)
     {
         email = WebUtility.UrlDecode(email);
-        
-        var model = new ResendInvitationCompletedModel
+
+        var model = new SendInvitationCompletedModel
         {
-            Success = true,
             MemberEmail = email,
             ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id)
         };
-        
+
         try
         {
-            await accountsApiService.ResendInvitation(
-                id,
-                email,
-                sid
-            );
+            await accountsApiService.ResendInvitation(id, email);
+            
+            model.Success = true;
         }
         catch (Exception exception)
         {
             logger.LogError(exception, $"{nameof(InvitationsController)}.{nameof(Resend)} caught exception.");
-            model.Success = false;
         }
 
         return View("Confirm", model);

@@ -4,6 +4,5 @@ public class SupportResendInvitationRequest
 {
     public string Email { get; set; }
     public string HashedAccountId { get; set; }
-    public string SupportUserEmail { get; set; }
     public string FirstName { get; set; }
 }

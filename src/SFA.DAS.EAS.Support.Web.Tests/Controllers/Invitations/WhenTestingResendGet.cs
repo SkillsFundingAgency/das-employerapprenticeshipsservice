@@ -9,7 +9,6 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Infrastructure;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
-using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Web.Controllers;
 using SFA.DAS.EAS.Support.Web.Models;
 using SFA.DAS.Testing.AutoFixture;
@@ -23,8 +22,7 @@ public class WhenTestingResendGet
         string hashedAccountId,
         string email,
         string externalUserId,
-        Mock<IEmployerAccountsApiService> accountsApiService,
-        string supportUserEmail
+        Mock<IEmployerAccountsApiService> accountsApiService
     )
     {
         var sut = new InvitationsController(Mock.Of<ILogger<InvitationsController>>(), accountsApiService.Object);
@@ -39,7 +37,7 @@ public class WhenTestingResendGet
             }
         };
 
-        var actual = await sut.Resend(hashedAccountId, email, supportUserEmail);
+        var actual = await sut.Resend(hashedAccountId, email);
 
         using (new AssertionScope())
         {
@@ -47,14 +45,14 @@ public class WhenTestingResendGet
             actual.Should().BeOfType<ViewResult>();
             ((ViewResult)actual).ViewName.Should().Be("Confirm");
 
-            var model = ((ViewResult)actual).Model as ResendInvitationCompletedModel;
+            var model = ((ViewResult)actual).Model as SendInvitationCompletedModel;
 
-            model?.Should().BeOfType<ResendInvitationCompletedModel>();
+            model?.Should().BeOfType<SendInvitationCompletedModel>();
             model?.Success.Should().BeTrue();
             model?.MemberEmail.Should().Be(email);
             model?.ReturnToTeamUrl.Should().Be(string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", hashedAccountId));
 
-            accountsApiService.Verify(x => x.ResendInvitation(hashedAccountId, email, supportUserEmail, CancellationToken.None), Times.Once);
+            accountsApiService.Verify(x => x.ResendInvitation(hashedAccountId, email, CancellationToken.None), Times.Once);
         }
     }
 }

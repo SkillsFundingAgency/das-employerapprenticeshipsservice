@@ -37,7 +37,6 @@ public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRol
     public record UpdateRoleRequest
     {
         public int Role { get; set; }
-        public string SupportUserEmail { get; set; }
     }
 
     [HttpPost]
@@ -58,7 +57,7 @@ public class UserRolesController(IAccountHandler accountHandler, ILogger<UserRol
             var teamMember = accountResponse.Account.TeamMembers.Single(x => x.UserRef == userRef);
             model.MemberEmail = teamMember.Email;
 
-            await accountsApiService.ChangeRole(id, teamMember.Email, request.Role, request.SupportUserEmail);
+            await accountsApiService.ChangeRole(id, teamMember.Email, request.Role);
         }
         catch (Exception exception)
         {

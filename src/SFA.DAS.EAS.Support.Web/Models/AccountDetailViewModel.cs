@@ -11,4 +11,5 @@ public class AccountDetailViewModel
     public bool IsTier2User { get; set; }
     public string ChangeRoleUrl { get; set; }
     public string ResendInviteUrl { get; set; }
+    public string InviteMemberUrl { get; set; }
 }
