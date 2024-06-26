@@ -1,7 +1,9 @@
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Support.Core.Models;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository;
 
@@ -11,7 +13,9 @@ public class WhenCallingGetWithAccountFieldsSelectionFinance : WhenTestingAccoun
     [Test]
     public async Task ItShouldReturntheMatchingAccountWithTransaction()
     {
-        const string id = "123";
+        // Arrange
+        const string hashedAccountId = "123";
+        const long accountId = 222;
 
         var accountDetailViewModel = new AccountDetailViewModel
         {
@@ -41,13 +45,15 @@ public class WhenCallingGetWithAccountFieldsSelectionFinance : WhenTestingAccoun
             OwnerEmail = "Owner@tempuri.org",
             DasAccountName = "Test Account 1"
         };
-
-        AccountApiClient!.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
+        
+        EncodingService.Setup(x => x.Decode(hashedAccountId, EncodingType.AccountId)).Returns(accountId);
+        EmployerAccountsApiService
+            .Setup(x => x.GetAccount(accountId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(accountDetailViewModel);
 
         var obscuredPayePayeScheme = "123/123456";
 
-        PayeSchemeObsfuscator!.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
+        PayeSchemeObfuscator!.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
             .Returns(obscuredPayePayeScheme);
 
 
@@ -60,10 +66,9 @@ public class WhenCallingGetWithAccountFieldsSelectionFinance : WhenTestingAccoun
             RemovedDate = null
         };
 
-        AccountApiClient.Setup(x => x.GetResource<PayeSchemeModel>(It.IsAny<string>()))
+        EmployerAccountsApiService.Setup(x => x.GetResource<PayeSchemeModel>(It.IsAny<string>()))
             .ReturnsAsync(payeSchemeViewModel);
-
-
+        
         /* 
          * This is a testing HACK to avoid using a concrete datetime service
          * because our collegues used DateTime.Now in the code! 
@@ -75,15 +80,6 @@ public class WhenCallingGetWithAccountFieldsSelectionFinance : WhenTestingAccoun
 
         DatetimeService!.Setup(x => x.GetBeginningFinancialYear(It.IsAny<DateTime>()))
             .Returns(startOfFinancialYear);
-
-        // Q: 2016,4,1 -> 2016,11,1    
-        // A: (2016 - 2016 = 1 ) * 12  = 0
-        //    + 11 - 4 + 1             = 8 (4,5,6,7,8,9,10,11)
-
-        // Q: 2016,4,1 -> 2017,3,31    
-        // A: 2017 - 2016 = 1 * 12     = 12
-        //    3 - 4 = -1 + 1           = 0
-        //                             = 12 (4,5,6,7,8,9,10,11,12,1,2,3)
 
         var monthsToQuery = (now.Year - startOfFinancialYear.Year) * 12 +
                             (now.Month - startOfFinancialYear.Month) + 1;
@@ -112,31 +108,30 @@ public class WhenCallingGetWithAccountFieldsSelectionFinance : WhenTestingAccoun
             .ReturnsAsync(transactionsViewModel
             );
 
-        var actual = await Sut!.Get(id, AccountFieldsSelection.Finance);
+        // Act
+        var actual = await Sut!.Get(hashedAccountId, AccountFieldsSelection.Finance);
 
-        PayeSchemeObsfuscator
+        // Assert
+        PayeSchemeObfuscator
             .Verify(x => x.ObscurePayeScheme(It.IsAny<string>()), Times.Exactly(2));
 
         AccountApiClient
             .Verify(x => x.GetTransactions(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()),
                 Times.Exactly(monthsToQuery));
 
-        Assert.Multiple(() =>
-        {
-            Assert.That(actual, Is.Not.Null);
-            Assert.That(actual.PayeSchemes, Is.Not.Null);
-            Assert.That(actual.PayeSchemes.Count(), Is.EqualTo(1));
-            Assert.That(actual.Transactions, Is.Not.Null);
-            Assert.That(actual.Transactions.Count(), Is.EqualTo(2 * monthsToQuery));
-            Assert.That(actual.LegalEntities, Is.Null);
-            Assert.That(actual.TeamMembers, Is.Null);
-        });
+        actual.Should().NotBeNull();
+        actual.PayeSchemes.Should().HaveCount(1);
+        actual.Transactions.Should().HaveCount(2 * monthsToQuery);
+        actual.LegalEntities.Should().BeNull();
+        actual.TeamMembers.Should().BeNull();
     }
 
     [Test]
     public async Task ItShouldReturnZeroAccountTransactionsIfTheApiThrowsAnException()
     {
-        const string id = "123";
+        // Arrange
+        const string hashedAccountId = "123";
+        const long accountId = 222;
 
         var accountDetailViewModel = new AccountDetailViewModel
         {
@@ -145,7 +140,7 @@ public class WhenCallingGetWithAccountFieldsSelectionFinance : WhenTestingAccoun
             PayeSchemes = new ResourceList(
                 new List<ResourceViewModel>
                 {
-                    new ResourceViewModel
+                    new()
                     {
                         Id = "123/123456",
                         Href = "https://tempuri.org/payescheme/{1}"
@@ -154,7 +149,7 @@ public class WhenCallingGetWithAccountFieldsSelectionFinance : WhenTestingAccoun
             LegalEntities = new ResourceList(
                 new List<ResourceViewModel>
                 {
-                    new ResourceViewModel
+                    new()
                     {
                         Id = "TempUri Limited",
                         Href = "https://tempuri.org/organisation/{1}"
@@ -166,13 +161,15 @@ public class WhenCallingGetWithAccountFieldsSelectionFinance : WhenTestingAccoun
             OwnerEmail = "Owner@tempuri.org",
             DasAccountName = "Test Account 1"
         };
-
-        AccountApiClient!.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
+        
+        EncodingService.Setup(x => x.Decode(hashedAccountId, EncodingType.AccountId)).Returns(accountId);
+        EmployerAccountsApiService
+            .Setup(x => x.GetAccount(accountId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(accountDetailViewModel);
 
-        const string obscuredPayePayeScheme = "123/123456";
+        var obscuredPayePayeScheme = "123/123456";
 
-        PayeSchemeObsfuscator!.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
+        PayeSchemeObfuscator!.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
             .Returns(obscuredPayePayeScheme);
 
         var payeSchemeViewModel = new PayeSchemeModel
@@ -184,7 +181,8 @@ public class WhenCallingGetWithAccountFieldsSelectionFinance : WhenTestingAccoun
             RemovedDate = null
         };
 
-        AccountApiClient.Setup(x => x.GetResource<PayeSchemeModel>(It.IsAny<string>()))
+        EmployerAccountsApiService
+            .Setup(x => x.GetResource<PayeSchemeModel>(It.IsAny<string>()))
             .ReturnsAsync(payeSchemeViewModel);
 
         /* 
@@ -205,24 +203,19 @@ public class WhenCallingGetWithAccountFieldsSelectionFinance : WhenTestingAccoun
                 It.IsAny<int>()))
             .ThrowsAsync(new Exception("Waaaaaaaah"));
 
-        var actual = await Sut!.Get(id, AccountFieldsSelection.Finance);
+        var actual = await Sut!.Get(hashedAccountId, AccountFieldsSelection.Finance);
 
-        PayeSchemeObsfuscator
+        PayeSchemeObfuscator
             .Verify(x => x.ObscurePayeScheme(It.IsAny<string>()), Times.Exactly(2));
 
         AccountApiClient
             .Verify(x => x.GetTransactions(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()),
                 Times.Exactly(monthsToQuery));
 
-        Assert.Multiple(() =>
-        {
-            Assert.That(actual.PayeSchemes.Count(), Is.EqualTo(1));
-            Assert.That(actual.Transactions, Is.Not.Null);
-            Assert.That(actual, Is.Not.Null);
-            Assert.That(actual.PayeSchemes, Is.Not.Null);
-            Assert.That(actual.Transactions.Count(), Is.EqualTo(0));
-            Assert.That(actual.LegalEntities, Is.Null);
-            Assert.That(actual.TeamMembers, Is.Null);
-        });
+        actual.Should().NotBeNull();
+        actual.PayeSchemes.Should().HaveCount(1);
+        actual.Transactions.Should().HaveCount(0);
+        actual.LegalEntities.Should().BeNull();
+        actual.TeamMembers.Should().BeNull();
     }
 }

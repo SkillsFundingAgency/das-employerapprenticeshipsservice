@@ -73,7 +73,7 @@ public class WhenCallingGetWithAccountFieldSelectionPayeSchemes : WhenTestingAcc
 
         const string obscuredPayePayeScheme = "1**/****6";
 
-        PayeSchemeObsfuscator!.Setup(x => x.ObscurePayeScheme(payeRef))
+        PayeSchemeObfuscator!.Setup(x => x.ObscurePayeScheme(payeRef))
             .Returns(obscuredPayePayeScheme)
             .Verifiable(Times.Exactly(2));
 
@@ -94,7 +94,7 @@ public class WhenCallingGetWithAccountFieldSelectionPayeSchemes : WhenTestingAcc
         var actual = await Sut!.Get(hashedAccountId, AccountFieldsSelection.PayeSchemes);
 
         // Assert
-        PayeSchemeObsfuscator.Verify();
+        PayeSchemeObfuscator.Verify();
         actual.Should().NotBeNull();
         actual.PayeSchemes.Should().NotBeNull();
         actual.PayeSchemes.Count().Should().Be(1);

@@ -128,7 +128,7 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
             .ReturnsAsync(new PayeSchemeModel { Name = "Test", Ref = payeRef });
 
         var obscuredPayePayeScheme = "1**/*B2*";
-        PayeSchemeObsfuscator.Setup(x => x.ObscurePayeScheme("123%252fAB23"))
+        PayeSchemeObfuscator.Setup(x => x.ObscurePayeScheme("123%252fAB23"))
             .Returns(obscuredPayePayeScheme);
 
         //Act
@@ -161,7 +161,7 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
             .Verifiable(Times.Exactly(2));
 
         var obscuredPayePayeScheme = "1**/*B2*";
-        PayeSchemeObsfuscator.Setup(x => x.ObscurePayeScheme("123%252fAB23"))
+        PayeSchemeObfuscator.Setup(x => x.ObscurePayeScheme("123%252fAB23"))
             .Returns(obscuredPayePayeScheme);
 
         //Act

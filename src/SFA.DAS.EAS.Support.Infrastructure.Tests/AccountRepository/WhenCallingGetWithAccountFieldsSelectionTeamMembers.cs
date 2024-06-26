@@ -3,6 +3,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Support.Core.Models;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository;
 
@@ -13,24 +14,31 @@ public class WhenCallingGetWithAccountFieldsSelectionTeamMembers : WhenTestingAc
     public async Task
         ItShouldReturnTheMatchingAccountWithAnEmptyListOfTeamMembersWhenAnExceptionIsThrownObtainingTheTeeamMembers()
     {
-        const string id = "123";
-
+        // Arrange
+        const string hashedAccountId = "123";
+        const long accountId = 222;
+        
         var accountDetailViewModel = new AccountDetailViewModel
         {
             HashedAccountId = "ASDAS",
-            AccountId = 123
+            AccountId = accountId
         };
-        AccountApiClient!.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
-            .ReturnsAsync(accountDetailViewModel);
 
-        AccountApiClient.Setup(x => x.GetAccountUsers(accountDetailViewModel.HashedAccountId))
+        EncodingService.Setup(x => x.Decode(hashedAccountId, EncodingType.AccountId)).Returns(accountId);
+        EmployerAccountsApiService
+            .Setup(x => x.GetAccount(accountId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(accountDetailViewModel)
+            .Verifiable();
+
+        EmployerAccountsApiService.Setup(x => x.GetAccountUsers(accountId))
             .ThrowsAsync(new Exception("Some Exception"));
 
-        var actual = await Sut!.Get(id, AccountFieldsSelection.TeamMembers);
+        // Act
+        var actual = await Sut!.Get(hashedAccountId, AccountFieldsSelection.TeamMembers);
         
         // Assert
         actual.Should().NotBeNull();
-        actual.TeamMembers.Should().NotBeNull();
+        actual.TeamMembers.Should().HaveCount(0);
         actual.Transactions.Should().BeNull();
         actual.PayeSchemes.Should().BeNull();
         actual.LegalEntities.Should().BeNull();
@@ -39,35 +47,40 @@ public class WhenCallingGetWithAccountFieldsSelectionTeamMembers : WhenTestingAc
     [Test]
     public async Task ItShouldReturnTheMatchingAccountWithTeamMembers()
     {
-        const string id = "123";
-
+        // Arrange
+        const string hashedAccountId = "123";
+        const long accountId = 222;
+        
         var accountDetailViewModel = new AccountDetailViewModel
         {
             HashedAccountId = "ASDAS",
-            AccountId = 123
+            AccountId = accountId
         };
 
-        AccountApiClient!.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
-            .ReturnsAsync(accountDetailViewModel);
+        EncodingService.Setup(x => x.Decode(hashedAccountId, EncodingType.AccountId)).Returns(accountId);
+        EmployerAccountsApiService
+            .Setup(x => x.GetAccount(accountId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(accountDetailViewModel)
+            .Verifiable();
 
         var teamMemberResponse = new List<TeamMemberViewModel>
         {
             new() { Email = "member.1.@tempuri.org" },
             new() { Email = "member.1.@tempuri.org" }
         };
-        AccountApiClient.Setup(x => x.GetAccountUsers(accountDetailViewModel.HashedAccountId))
+
+        EmployerAccountsApiService
+            .Setup(x => x.GetAccountUsers(accountId))
             .ReturnsAsync(teamMemberResponse);
 
-        var actual = await Sut!.Get(id, AccountFieldsSelection.TeamMembers);
+        // Act
+        var actual = await Sut!.Get(hashedAccountId, AccountFieldsSelection.TeamMembers);
         
-        Assert.Multiple(() =>
-        {
-            Assert.That(actual, Is.Not.Null);
-            Assert.That(actual.TeamMembers, Is.Not.Null);
-            Assert.That(actual.TeamMembers, Has.Count.EqualTo(teamMemberResponse.Count));
-            Assert.That(actual.Transactions, Is.Null);
-            Assert.That(actual.PayeSchemes, Is.Null);
-            Assert.That(actual.LegalEntities, Is.Null);
-        });
+        // Assert
+        actual.Should().NotBeNull();
+        actual.TeamMembers.Should().BeEquivalentTo(teamMemberResponse);
+        actual.Transactions.Should().BeNull();
+        actual.PayeSchemes.Should().BeNull();
+        actual.LegalEntities.Should().BeNull();
     }
 }

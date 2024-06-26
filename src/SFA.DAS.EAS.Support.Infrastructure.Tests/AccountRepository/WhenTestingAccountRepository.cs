@@ -11,22 +11,30 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository;
 
 public abstract class WhenTestingAccountRepository
 {
-    protected Mock<IAccountApiClient> AccountApiClient = new();
-    protected Mock<IDatetimeService> DatetimeService = new();
-    protected Mock<ILogger<Services.AccountRepository>> Logger = new();
-    protected Mock<IPayeSchemeObfuscator> PayeSchemeObsfuscator = new();
-    protected Mock<IPayRefHashingService> HashingService = new();
-    protected readonly Mock<IEncodingService> EncodingService = new();
-    protected readonly Mock<IEmployerAccountsApiService> EmployerAccountsApiService = new();
+    protected Mock<IAccountApiClient> AccountApiClient;
+    protected Mock<IDatetimeService> DatetimeService;
+    protected Mock<ILogger<Services.AccountRepository>> Logger;
+    protected Mock<IPayeSchemeObfuscator> PayeSchemeObfuscator;
+    protected Mock<IPayRefHashingService> HashingService;
+    protected Mock<IEncodingService> EncodingService;
+    protected Mock<IEmployerAccountsApiService> EmployerAccountsApiService;
 
     protected IAccountRepository? Sut;
 
     [SetUp]
     public void Setup()
     {
+        HashingService = new();
+        PayeSchemeObfuscator = new();
+        AccountApiClient = new();
+        EmployerAccountsApiService = new();
+        Logger = new();
+        DatetimeService = new();
+        EncodingService = new();
+        
         Sut = new Services.AccountRepository(
             AccountApiClient.Object,
-            PayeSchemeObsfuscator.Object,
+            PayeSchemeObfuscator.Object,
             DatetimeService.Object,
             Logger.Object,
             HashingService.Object,

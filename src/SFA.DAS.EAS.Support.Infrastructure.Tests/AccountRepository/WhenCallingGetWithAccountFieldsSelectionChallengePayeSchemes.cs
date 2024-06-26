@@ -1,7 +1,9 @@
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Support.Core.Models;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository;
 
@@ -11,8 +13,10 @@ public class WhenCallingGetWithAccountFieldsSelectionChallengePayeSchemes : When
     [Test]
     public async Task ItShouldReturnTheAccountWithTheChallengedPayeSchemes()
     {
-        const string id = "123";
-
+        // Arrange
+        const string hashedAccountId = "123";
+        const long accountId = 222;
+        
         var accountDetailViewModel = new AccountDetailViewModel
         {
             AccountId = 123,
@@ -41,18 +45,16 @@ public class WhenCallingGetWithAccountFieldsSelectionChallengePayeSchemes : When
             DasAccountName = "Test Account 1"
         };
 
-        AccountApiClient!.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
+        EncodingService.Setup(x => x.Decode(hashedAccountId, EncodingType.AccountId)).Returns(accountId);
+        EmployerAccountsApiService
+            .Setup(x => x.GetAccount(accountId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(accountDetailViewModel);
-
-        AccountApiClient.Setup(x => x.GetResource<AccountDetailViewModel>($"/api/accounts/{id}"))
-            .ReturnsAsync(accountDetailViewModel);
-
+        
         var obscuredPayePayeScheme = "123/123456";
 
-        PayeSchemeObsfuscator!.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
+        PayeSchemeObfuscator!.Setup(x => x.ObscurePayeScheme(It.IsAny<string>()))
             .Returns(obscuredPayePayeScheme);
-
-
+        
         var payeSchemeViewModel = new PayeSchemeModel
         {
             AddedDate = DateTime.Today.AddMonths(-4),
@@ -62,22 +64,20 @@ public class WhenCallingGetWithAccountFieldsSelectionChallengePayeSchemes : When
             RemovedDate = null
         };
 
-        AccountApiClient.Setup(x => x.GetResource<PayeSchemeModel>(It.IsAny<string>()))
+        EmployerAccountsApiService
+            .Setup(x => x.GetResource<PayeSchemeModel>(It.IsAny<string>()))
             .ReturnsAsync(payeSchemeViewModel);
+        
+        // Act
+        var actual = await Sut!.Get(hashedAccountId, AccountFieldsSelection.PayeSchemes);
 
-        var actual = await Sut!.Get(id, AccountFieldsSelection.PayeSchemes);
+        // Assert
+        PayeSchemeObfuscator.Verify(x => x.ObscurePayeScheme(It.IsAny<string>()), Times.Exactly(2));
 
-        PayeSchemeObsfuscator.Verify(x => x.ObscurePayeScheme(It.IsAny<string>()), Times.Exactly(2));
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(actual, Is.Not.Null);
-            Assert.That(actual.PayeSchemes, Is.Not.Null);
-            Assert.That(actual.PayeSchemes.Count(), Is.EqualTo(1));
-            
-            Assert.That(actual.LegalEntities, Is.Null);
-            Assert.That(actual.TeamMembers, Is.Null);
-            Assert.That(actual.Transactions, Is.Null);
-        });
+        actual.Should().NotBeNull();
+        actual.PayeSchemes.Should().HaveCount(1);
+        actual.LegalEntities.Should().BeNull();
+        actual.TeamMembers.Should().BeNull();
+        actual.Transactions.Should().BeNull();
     }
 }
