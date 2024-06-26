@@ -10,21 +10,25 @@ public enum Role
 
 public static class RoleStrings
 {
+    public const string NoneDescription = "Minimal access for Employer services";
+    public const string OwnerDescription = "Accept agreements, view information and manage PAYE schemes, organisations, apprentices and team members";
+    public const string TransactorDescription = "Add apprentices and view information";
+    public const string ViewerDescription = "View information but can’t make changes";
+    
     public static string GetRoleDescription(Role role)
     {
         return GetRoleDescription(role.ToString());
     }
 
     public static string GetRoleDescription(string role)
-    {
-        switch (role)
+        => role switch
         {
-            case "Owner": return "Accept agreements, view information and manage PAYE schemes, organisations, apprentices and team members";
-            case "Transactor": return "Add apprentices and view information";
-            case "Viewer": return "View information but can’t make changes";
-            default: throw new ArgumentException("Unexpected role: " + role);
-        }
-    }
+            "None" => NoneDescription,
+            "Owner" => OwnerDescription,
+            "Transactor" => TransactorDescription,
+            "Viewer" => ViewerDescription,
+            _ => throw new ArgumentException("Unexpected role: " + role)
+        };
 
     public static string GetRoleDescriptionToLower(Role role)
     {

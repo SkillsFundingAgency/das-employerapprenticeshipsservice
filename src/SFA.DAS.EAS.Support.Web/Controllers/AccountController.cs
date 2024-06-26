@@ -1,27 +1,23 @@
 ﻿using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Web.Authorization;
-using SFA.DAS.EAS.Support.Web.Configuration;
 using SFA.DAS.EAS.Support.Web.Models;
 using SFA.DAS.EAS.Support.Web.Services;
+using AccountDetailViewModel = SFA.DAS.EAS.Support.Web.Models.AccountDetailViewModel;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers;
 
 [Authorize(Policy = PolicyNames.Default)]
 public class AccountController : Controller
 {
-    private readonly IEasSupportConfiguration _easSupportConfiguration;
     private readonly IAccountHandler _accountHandler;
     private readonly IPayeLevySubmissionsHandler _payeLevySubmissionsHandler;
     private readonly IPayeLevyMapper _payeLevyMapper;
 
-    public AccountController(
-        IEasSupportConfiguration easSupportConfiguration,
-        IAccountHandler accountHandler,
+    public AccountController(IAccountHandler accountHandler,
         IPayeLevySubmissionsHandler payeLevySubmissionsHandler,
         IPayeLevyMapper payeLevyDeclarationMapper)
     {
-        _easSupportConfiguration = easSupportConfiguration;
         _accountHandler = accountHandler;
         _payeLevySubmissionsHandler = payeLevySubmissionsHandler;
         _payeLevyMapper = payeLevyDeclarationMapper;
@@ -41,7 +37,6 @@ public class AccountController : Controller
         {
             Account = response.Account,
             AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}"
-
         };
 
         return View(model);
@@ -88,17 +83,18 @@ public class AccountController : Controller
         {
             return NotFound();
         }
-
+        
         var model = new AccountDetailViewModel
         {
             Account = response.Account,
             AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}",
             IsTier2User = User.IsInRole(AuthorizationConstants.Tier2User),
-            TeamMemberUrl = GetTeamMemberUrl(id)
+            ChangeRoleUrl = $"/resource/index/{{0}}/?childId={{1}}&key={SupportServiceResourceKey.EmployerAccountChangeRole}",
+            ResendInviteUrl = $"/resource/index/{{0}}/?childId={{1}}&key={SupportServiceResourceKey.EmployerAccountResendInvitation}",
+            InviteMemberUrl = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerAccountInvitation}",
         };
 
         return View(model);
-
     }
 
     [Route("account/finance/{id}")]
@@ -136,13 +132,5 @@ public class AccountController : Controller
 
         return View(model);
     }
-
-    private string GetTeamMemberUrl(string hashedAccountId)
-    {
-        var baseUrl = _easSupportConfiguration.EmployerAccountsConfiguration.EmployerAccountsBaseUrl;
-        var trimmedBaseUrl = baseUrl?.TrimEnd('/') ?? string.Empty;
-        string path = $"login/staff?HashedAccountId={hashedAccountId}";
-
-        return $"{trimmedBaseUrl}/{path}".TrimEnd('/');
-    }
+    
 }

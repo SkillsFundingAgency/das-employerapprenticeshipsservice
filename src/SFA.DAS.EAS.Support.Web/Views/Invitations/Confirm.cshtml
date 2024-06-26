@@ -1,0 +1,30 @@
+﻿@model SFA.DAS.EAS.Support.Web.Models.SendInvitationCompletedModel;
+
+@if (Model.Success)
+{
+    <div class="info-summary">
+        <h1 class="heading-small">
+            Invitation sent
+        </h1>
+        <p>
+            You've sent an invitation to @Model.MemberEmail.
+        </p>
+        <p>
+            <a href="@Model.ReturnToTeamUrl">Click to return to Team members</a>
+        </p>
+    </div>
+}
+else
+{
+    <div class="error-summary">
+        <h1 class="heading-small">
+            The send invitation request to @Model.MemberEmail failed.
+        </h1>
+        <p>
+            If you have tried to invite a new user using an existing email address, this will cause a failure.
+        </p>
+        <p>
+            <a href="@Model.ReturnToTeamUrl">Click to return to Team members</a>
+        </p>
+    </div>
+}

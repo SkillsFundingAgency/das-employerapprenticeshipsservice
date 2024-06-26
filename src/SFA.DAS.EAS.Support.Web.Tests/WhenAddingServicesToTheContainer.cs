@@ -19,6 +19,12 @@ public class WhenAddingServicesToTheContainer
     {
         RunTestForType(toResolve);
     }
+    
+    [TestCase(typeof(EmployerAccountsApiConfiguration))]
+    public void Then_The_Dependencies_Are_Correctly_Resolved_For_Configuration(Type toResolve)
+    {
+        RunTestForType(toResolve);
+    }
 
     private static void RunTestForType(Type toResolve)
     {
@@ -61,6 +67,9 @@ public class WhenAddingServicesToTheContainer
                 new("HashingService:AllowedCharacters", "0123456789QWERTYUIOPASDFGHJKLZXCVBNM"),
                 new("LevySubmission:TokenServiceApi:ApiBaseUrl", "https://localhost:123"),
                 new("LevySubmission:TokenServiceApi:IdentifierUri", "https://localhost:321"),
+                
+                new("EmployerAccountsApi:IdentifierUri", "https://localhost:321"),
+                new("EmployerAccountsApi:ApiBaseUrl", "https://localhost:321"),
             }
         };
 

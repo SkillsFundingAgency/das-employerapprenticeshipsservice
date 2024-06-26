@@ -37,6 +37,22 @@ public class SecureHttpClient
 
         return await response.Content.ReadAsStringAsync();
     }
+    
+    public virtual async Task SendWithNoResult(HttpRequestMessage httpRequest)
+    {
+        var accessToken =
+            IsClientCredentialConfiguration(_configuration.ClientId, _configuration.ClientSecret, _configuration.Tenant)
+                ? await GetClientCredentialAuthenticationResult(_configuration.ClientId, _configuration.ClientSecret,
+                    _configuration.IdentifierUri, _configuration.Tenant)
+                : await GetManagedIdentityAuthenticationResult(_configuration.IdentifierUri);
+
+        using var client = new HttpClient();
+
+        httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+        using var response = await client.SendAsync(httpRequest);
+        response.EnsureSuccessStatusCode();
+    }
 
     private static async Task<string> GetClientCredentialAuthenticationResult(string clientId, string clientSecret,
         string resource, string tenant)

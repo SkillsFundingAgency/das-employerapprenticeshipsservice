@@ -270,3 +270,5 @@ src/Tools/PhantomJS/tools/phantomjs/ChangeLog
 .learningtransport/
 App_Data/
 src/SFA.DAS.EmployerAccounts.ReadStore/SFA.DAS.EmployerAccounts.ReadStore/SFA.DAS.EmployerAccounts.ReadStore.csproj.DotSettings
+/src/SFA.DAS.EAS.Support.Web/internal-nlog.txt
+/src/SFA.DAS.EAS.Api/internal-nlog.txt

@@ -1,0 +1,68 @@
+﻿@using SFA.DAS.EAS.Domain.Models
+@model SFA.DAS.EAS.Support.Web.Models.ChangeRoleViewModel;
+
+@{
+    var errorMessage = string.Empty;
+}
+
+<div class="grid-row">
+    <div class="grid-column-two-thirds">
+        <h1 class="heading-large">
+            @Model.Name
+            <span class="heading-secondary">Choose what you allow this team member to do.</span>
+        </h1>
+        <div class="form-group @(!ViewContext.ViewData.ModelState.IsValid ? "form-group--error" : "")">
+            @using (Html.BeginForm("resource", "Role",
+                        FormMethod.Get,
+                        new Dictionary<string, object>
+                        {
+                            { "action", $"{Model.ResponseUrl}" },
+                            { "accept_charset", "utf-8" },
+                            { "@class", "search-header search-header-2" },
+                            { "role", "change" },
+                            { "id", "changeRoleForm" }
+                        }
+                    ))
+            {
+                <fieldset class="fieldset">
+                    <legend id="change-role-selection" class="">
+                        <span class="visually-hidden">Select a role</span>
+                        @if (!string.IsNullOrWhiteSpace(errorMessage))
+                        {
+                            <span class="error-message">@errorMessage</span>
+                        }
+                    </legend>
+                    <div class="radios" data-module="radios">
+                        <div class="multiple-choice">
+                            <input class="" id="radio0" type="radio" name="Role" value="0" @(Model.Role == Role.None ? "checked" : "")/>
+                            <label for="radio0">
+                                @(RoleStrings.GetRoleDescription(Role.None))
+                            </label>
+                        </div>
+                        <div class="multiple-choice">
+                            <input class="" id="radio1" type="radio" name="Role" value="3" @(Model.Role == Role.Viewer ? "checked" : "")/>
+                            <label for="radio1">
+                                @(RoleStrings.GetRoleDescription(Role.Viewer))
+                            </label>
+                        </div>
+                        <div class="multiple-choice">
+                            <input class="" id="radio2" type="radio" name="Role" value="2" @(Model.Role == Role.Transactor ? "checked" : "")/>
+                            <label for="radio2">
+                                @(RoleStrings.GetRoleDescription(Role.Transactor))
+                            </label>
+                        </div>
+                        <div class="multiple-choice">
+                            <input class="" id="radio3" type="radio" name="Role" value="1" @(Model.Role == Role.Owner ? "checked" : "")/>
+                            <label for="radio3">
+                                @(RoleStrings.GetRoleDescription(Role.Owner))
+                            </label>
+                        </div>
+                    </div>
+                    <input type="hidden" value="@Model.UserRef"/>
+                </fieldset>
+
+                <button type="submit" class="button" id="update">Update</button>
+            }
+        </div>
+    </div>
+</div>

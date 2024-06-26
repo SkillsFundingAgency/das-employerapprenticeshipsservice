@@ -1,0 +1,76 @@
+﻿@using SFA.DAS.EAS.Domain.Models
+@model SFA.DAS.EAS.Support.Web.Models.InvitationViewModel;
+
+@{
+    var errorMessage = string.Empty;
+}
+
+<div class="grid-row">
+    <div class="grid-column-two-thirds">
+        <h1 class="heading-large">
+            Create Invitation
+        </h1>
+        <div class="form-group @(!ViewContext.ViewData.ModelState.IsValid ? "form-group--error" : "")">
+            @using (Html.BeginForm("resource", "Role",
+                        FormMethod.Get,
+                        new Dictionary<string, object>
+                        {
+                            { "action", $"{Model.ResponseUrl}" },
+                            { "accept_charset", "utf-8" },
+                            { "@class", "search-header search-header-2" },
+                            { "id", "invitationForm" }
+                        }
+                    ))
+            {
+                <fieldset class="fieldset">
+                    <div class="form-group ">
+                        <label asp-for="Email" class="form-label">Email</label>
+                        <div class="form-hint">An invitation will be sent to this email address</div>
+                        <input asp-for="Email" class="form-control" type="email" aria-required="true" value="" required>
+                    </div>
+
+                    <div class="form-group ">
+                        <label asp-for="FullName" class="form-label">Full name</label>
+                        <input asp-for="FullName" class="form-control" type="text" aria-required="true" value="" required>
+                    </div>
+                    <span class="visually-hidden">Select a role</span>
+                    @if (!string.IsNullOrWhiteSpace(errorMessage))
+                    {
+                        <span class="error-message">@errorMessage</span>
+                    }
+                    <div>Team member access</div>
+                    <div class="form-hint">Choose the level of access this user can have.</div>
+                    <div class="radios" data-module="radios">
+                        <div class="multiple-choice">
+                            <input class="" id="radio0" type="radio" name="Role" value="0" @(Model.Role == Role.None ? "checked" : "")/>
+                            <label for="radio0">
+                                @(RoleStrings.GetRoleDescription(Role.None))
+                            </label>
+                        </div>
+                        <div class="multiple-choice">
+                            <input class="" id="radio1" type="radio" name="Role" value="3" @(Model.Role == Role.Viewer ? "checked" : "")/>
+                            <label for="radio1">
+                                @(RoleStrings.GetRoleDescription(Role.Viewer))
+                            </label>
+                        </div>
+                        <div class="multiple-choice">
+                            <input class="" id="radio2" type="radio" name="Role" value="2" @(Model.Role == Role.Transactor ? "checked" : "")/>
+                            <label for="radio2">
+                                @(RoleStrings.GetRoleDescription(Role.Transactor))
+                            </label>
+                        </div>
+                        <div class="multiple-choice">
+                            <input class="" id="radio3" type="radio" name="Role" value="1" @(Model.Role == Role.Owner ? "checked" : "")/>
+                            <label for="radio3">
+                                @(RoleStrings.GetRoleDescription(Role.Owner))
+                            </label>
+                        </div>
+                    </div>
+                    <input type="hidden" value="@Model.HashedAccountId"/>
+                </fieldset>
+                <br/>
+                <button type="submit" class="button" id="update">Send invitation</button>
+            }
+        </div>
+    </div>
+</div>

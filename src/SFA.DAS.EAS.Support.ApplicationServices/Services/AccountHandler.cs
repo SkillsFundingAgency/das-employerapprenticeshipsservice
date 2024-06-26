@@ -117,6 +117,7 @@ public class AccountHandler : IAccountHandler
 
         return response;
     }
+    
     private static AccountSearchModel Map(Core.Models.Account account)
     {
         return new AccountSearchModel
