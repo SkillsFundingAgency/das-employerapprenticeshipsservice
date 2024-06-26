@@ -63,7 +63,6 @@ public class EmployerAccountsApiService : ApiClientService, IEmployerAccountsApi
 
         return GetResponse<ICollection<TeamMemberViewModel>>($"/api/accounts/internal/{accountId}/users");
     }
-}
 
     public async Task ChangeRole(string hashedId, string email, int role, CancellationToken cancellationToken = default)
     {

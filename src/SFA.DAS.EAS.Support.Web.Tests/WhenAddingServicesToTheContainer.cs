@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Support.Web.Controllers;
 using SFA.DAS.EAS.Support.Web.ServiceRegistrations;
 
