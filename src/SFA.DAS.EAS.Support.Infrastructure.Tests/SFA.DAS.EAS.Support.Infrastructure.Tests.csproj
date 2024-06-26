@@ -52,5 +52,6 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\SFA.DAS.EAS.Support.Infrastructure\SFA.DAS.EAS.Support.Infrastructure.csproj" />
+		<ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj" />
 	</ItemGroup>
 </Project>

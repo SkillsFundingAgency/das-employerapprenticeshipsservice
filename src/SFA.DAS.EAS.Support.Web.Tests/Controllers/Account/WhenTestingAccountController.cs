@@ -26,7 +26,6 @@ public abstract class WhenTestingAccountController
         _payeLevyDeclarationMapper = new Mock<IPayeLevyMapper>();
 
         Unit = new AccountController(
-            Mock.Of<IEasSupportConfiguration>(),
             AccountHandler.Object,
             _payeLevySubmissionsHandler.Object,
             _payeLevyDeclarationMapper.Object);
