@@ -23,12 +23,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EAS.Domain", "SFA.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EAS.Application", "SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj", "{0226F97A-704E-49B0-A100-B75FEEC9C8AD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PreReqs", "PreReqs", "{15DE899B-AD05-470D-B0F8-E5696141CA9A}"
-	ProjectSection(SolutionItems) = preProject
-		DevInstall.ps1 = DevInstall.ps1
-		GenCert.ps1 = GenCert.ps1
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EAS.Account.Api.Client", "SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj", "{0F0122D6-36F6-4D6C-856E-3DAAE1B13464}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EAS.Account.Api.Client.UnitTests", "SFA.DAS.Account.Api.Client.UnitTests\SFA.DAS.EAS.Account.Api.Client.UnitTests.csproj", "{47A8FD28-BC68-4938-A508-95482FB98BA5}"
@@ -45,14 +39,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EAS.Account.Api", "SFA.DAS.EAS.Api\SFA.DAS.EAS.Account.Api.csproj", "{40190475-1220-4CF8-8A60-223FACAFEDA1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{19BA54F2-A356-49AF-8062-9D492E8D03D5}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Certificates", "Certificates", "{30621570-5457-4505-9B76-D498FEF6C480}"
-	ProjectSection(SolutionItems) = preProject
-		DasAmlCert.pfx = DasAmlCert.pfx
-		DasIDPCert.pfx = DasIDPCert.pfx
-		GenCert.ps1 = GenCert.ps1
-		Certificates\localhost.pfx = Certificates\localhost.pfx
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EAS.Support.Web.Tests", "SFA.DAS.EAS.Support.Web.Tests\SFA.DAS.EAS.Support.Web.Tests.csproj", "{423C5471-4CEA-4031-9007-412C79CCFA26}"
 EndProject

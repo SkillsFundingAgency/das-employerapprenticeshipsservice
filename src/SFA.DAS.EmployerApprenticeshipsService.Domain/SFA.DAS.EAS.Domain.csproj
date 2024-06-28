@@ -1,19 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
-		<OutputType>Library</OutputType>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<LangVersion>latest</LangVersion>
-	</PropertyGroup>
-	<ItemGroup>
-		<PackageReference Include="SFA.DAS.Authentication" Version="1.1.2" />
-		<PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.283">
-		</PackageReference>
-		<PackageReference Include="SFA.DAS.UnitOfWork" Version="9.0.13">
-		</PackageReference>
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-	</ItemGroup>
-	<ItemGroup>
-		<FrameworkReference Include="Microsoft.AspNetCore.App" />
-	</ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="SFA.DAS.Authentication" Version="1.1.2" />
+    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.283">
+    </PackageReference>
+    <PackageReference Include="SFA.DAS.UnitOfWork" Version="9.0.13">
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
 </Project>

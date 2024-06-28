@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <OutputType>Library</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
@@ -11,7 +11,7 @@
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="SFA.DAS.EmployerAccounts.Api.Types" Version="1.6.3195"/>
+    <PackageReference Include="SFA.DAS.EmployerAccounts.Api.Types" Version="1.6.3195" />
     <PackageReference Include="SFA.DAS.Encoding" Version="1.1.76" />
     <PackageReference Include="HMRC.ESFA.Levy.Api.Client" Version="2.0.4" />
   </ItemGroup>

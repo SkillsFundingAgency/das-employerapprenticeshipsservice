@@ -1,37 +1,37 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
-        <OutputType>Library</OutputType>
-        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    </PropertyGroup>
-    <ItemGroup>
-        <Compile Remove="Commands\**" />
-        <Compile Remove="MarkerInterfaces\**" />
-        <EmbeddedResource Remove="Commands\**" />
-        <EmbeddedResource Remove="MarkerInterfaces\**" />
-        <None Remove="Commands\**" />
-        <None Remove="MarkerInterfaces\**" />
-    </ItemGroup>
-    <ItemGroup>
-        <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj" />
-        <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj" />
-    </ItemGroup>
-    <ItemGroup>
-        <PackageReference Include="AutoMapper" Version="13.0.1" />
-        <PackageReference Include="Azure.Identity" Version="1.11.2" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.29" />
-        <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageReference Include="NLog" Version="5.2.8" />
-        <PackageReference Include="SFA.DAS.EmployerAccounts.Api.Types" Version="1.6.3195" />
-        <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
-        <PackageReference Include="SFA.DAS.Http" Version="3.2.69" />
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.5.1" />
-    </ItemGroup>
-    <ItemGroup>
-        <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    </ItemGroup>
-    <ItemGroup>
-        <Folder Include="Contracts\" />
-    </ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Commands\**" />
+    <Compile Remove="MarkerInterfaces\**" />
+    <EmbeddedResource Remove="Commands\**" />
+    <EmbeddedResource Remove="MarkerInterfaces\**" />
+    <None Remove="Commands\**" />
+    <None Remove="MarkerInterfaces\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj" />
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="Azure.Identity" Version="1.12.0" />
+    <PackageReference Include="NLog" Version="5.2.8" />
+    <PackageReference Include="SFA.DAS.EmployerAccounts.Api.Types" Version="1.6.3195" />
+    <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
+    <PackageReference Include="SFA.DAS.Http" Version="3.2.69" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.5.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.6" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Contracts\" />
+  </ItemGroup>
 </Project>
