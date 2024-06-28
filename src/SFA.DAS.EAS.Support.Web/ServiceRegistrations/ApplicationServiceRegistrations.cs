@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Support.Infrastructure.Services;
 using SFA.DAS.EAS.Support.Infrastructure.Services.Contracts;
 using SFA.DAS.EAS.Support.Web.Configuration;
 using SFA.DAS.EAS.Support.Web.Services;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EAS.Support.Web.ServiceRegistrations;
 
@@ -29,6 +30,7 @@ public static class ApplicationServiceRegistrations
         services.AddSingleton<IPayeLevySubmissionsHandler, PayeLevySubmissionsHandler>();
         services.AddSingleton<IPayeLevyMapper, PayeLevyMapper>();
         services.AddSingleton<IPayeSchemeObfuscator, PayeSchemeObfuscator>();
+        services.AddSingleton<IEncodingService, EncodingService>();
 
         return services;
     }

@@ -2,13 +2,12 @@
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 
-namespace SFA.DAS.EAS.Account.Api.Mappings
+namespace SFA.DAS.EAS.Account.Api.Mappings;
+
+public class UserMappings : Profile
 {
-    public class UserMappings : Profile
+    public UserMappings()
     {
-        public UserMappings()
-        {
-            CreateMap<TeamMember, TeamMemberViewModel>();
-        }
+        CreateMap<TeamMember, TeamMemberViewModel>();
     }
 }

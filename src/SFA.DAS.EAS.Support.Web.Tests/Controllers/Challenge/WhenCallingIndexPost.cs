@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Support.ApplicationServices;
@@ -12,14 +13,10 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Challenge;
 [TestFixture]
 public class WhenCallingIndexPost : WhenTestingChallengeController
 {
-    /// <summary>
-    ///     Note that this Controller method scenario sets HttpResponse.StatusCode = 403 (Forbidden), this result is not
-    ///     testable from a unit test
-    /// </summary>
-    /// <returns></returns>
     [Test]
     public async Task ItShouldReturnAViewModelWhenTheChallengeEntryIsInvalid()
     {
+        // Arrange
         var challengeEntry = new ChallengeEntry
         {
             Id = "123",
@@ -41,17 +38,19 @@ public class WhenCallingIndexPost : WhenTestingChallengeController
         MockChallengeHandler!.Setup(x => x.Handle(It.IsAny<ChallengePermissionQuery>()))
             .ReturnsAsync(response);
 
+        // Act
         var actual = await Unit!.Index(challengeEntry.Id, challengeEntry);
 
-        Assert.That(actual, Is.Not.Null);
-        Assert.That(actual, Is.InstanceOf<ViewResult>());
-        Assert.That(((ViewResult)actual).Model, Is.InstanceOf<ChallengeViewModel>());
-        Assert.That(true, Is.EqualTo(((ChallengeViewModel)((ViewResult)actual).Model!).HasError));
+        // Assert
+        var result = actual.Should().BeAssignableTo<ViewResult>();
+        var model = result.Subject.Model.Should().BeAssignableTo<ChallengeViewModel>();
+        model.Subject.HasError.Should().BeTrue();
     }
 
     [Test]
     public async Task ItShouldReturnChallengeValidationJsonResultWhenTheChallengeEntryIsValid()
     {
+        // Arrange
         var challengeEntry = new ChallengeEntry
         {
             Id = "123",
@@ -73,13 +72,17 @@ public class WhenCallingIndexPost : WhenTestingChallengeController
         MockChallengeHandler!.Setup(x => x.Handle(It.IsAny<ChallengePermissionQuery>()))
             .ReturnsAsync(response);
 
+        // Act
         var actual = await Unit!.Index(challengeEntry.Id, challengeEntry);
 
-        Assert.That(actual, Is.Not.Null);
-        Assert.That(actual, Is.InstanceOf<JsonResult>());
+        // Assert
+        var result = actual
+            .Should()
+            .BeAssignableTo<JsonResult>()
+            .Which.Value
+            .Should()
+            .BeAssignableTo<ChallengeValidationResult>();
 
-        var result = ((JsonResult)actual).Value as ChallengeValidationResult;
-        Assert.That(result, Is.Not.Null);
-        Assert.That(result!.IsValidResponse, Is.True);
+        result.Subject.IsValidResponse.Should().BeTrue();
     }
 }

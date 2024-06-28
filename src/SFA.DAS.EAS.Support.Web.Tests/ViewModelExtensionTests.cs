@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using FluentAssertions;
+using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Support.Web.Models;
 
@@ -10,21 +11,21 @@ public class ViewModelExtensionTests
     [Test]
     public void ItShouldRenderActive()
     {
-        Assert.That("Active", Is.EqualTo(InvitationStatus.Accepted.GetTeamMemberStatus()));
+        InvitationStatus.Accepted.GetTeamMemberStatus().Should().Be("Active");
     }
     [Test]
     public void ItShouldRenderAwaiting()
     {
-        Assert.That("Invitation awaiting response", Is.EqualTo(InvitationStatus.Pending.GetTeamMemberStatus()));
+        InvitationStatus.Pending.GetTeamMemberStatus().Should().Be("Invitation awaiting response");
     }
     [Test]
     public void ItShouldRenderExpired()
     {
-        Assert.That("Invitation expired", Is.EqualTo(InvitationStatus.Expired.GetTeamMemberStatus()));
+        InvitationStatus.Expired.GetTeamMemberStatus().Should().Be("Invitation expired");
     }
     [Test]
     public void ItShouldRenderEmpty()
     {
-        Assert.That(string.Empty, Is.EqualTo(InvitationStatus.Deleted.GetTeamMemberStatus()));
+        InvitationStatus.Deleted.GetTeamMemberStatus().Should().Be(string.Empty);
     }
 }

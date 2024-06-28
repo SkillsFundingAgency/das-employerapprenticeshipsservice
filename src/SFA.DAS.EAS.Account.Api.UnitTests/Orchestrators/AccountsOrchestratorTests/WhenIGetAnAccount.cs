@@ -25,7 +25,8 @@ internal class WhenIGetAnAccount
     private TransferAllowance? _transferAllowance;
 
     private const decimal AccountBalance = 678.90M;
-    private const string HashedAgreementId = "ABC123";
+    private const string HashedAccountId = "ABC123";
+    private const long AccountId = 883748;
 
     private AccountDetailViewModel? _accountDetailViewModel;
     private AccountBalance? _accountBalanceResult;
@@ -41,26 +42,37 @@ internal class WhenIGetAnAccount
         _financeApiService = new Mock<IEmployerFinanceApiService>();
         _orchestrator = new AccountsOrchestrator(_log.Object, _mapper, _encodingService.Object, _apiService.Object, _financeApiService.Object);
         
-        _accountDetailViewModel = new AccountDetailViewModel { AccountId = 1, ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy.ToString() };
+        _accountDetailViewModel = new AccountDetailViewModel
+        {
+            AccountId = AccountId, 
+            HashedAccountId = HashedAccountId,
+            ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy.ToString()
+        };
 
         _apiService
-            .Setup(x => x.GetAccount("ABC123", It.IsAny<CancellationToken>()))
+            .Setup(x => x.GetAccount(AccountId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(_accountDetailViewModel)
             .Verifiable("Get account was not called");
 
         var transferAllowance = _transferAllowance;            
-        _financeApiService.Setup(x => x.GetTransferAllowance(It.IsAny<string>(), CancellationToken.None)).ReturnsAsync(transferAllowance);
+        _financeApiService
+            .Setup(x => x.GetTransferAllowance(HashedAccountId, CancellationToken.None))
+            .ReturnsAsync(transferAllowance);
 
         _accountBalanceResult = new AccountBalance { Balance = AccountBalance };
         var accountBalances = new List<AccountBalance?> { _accountBalanceResult };
-        _financeApiService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>(), CancellationToken.None)).ReturnsAsync(accountBalances);
+        _financeApiService
+            .Setup(x => x.GetAccountBalances(It.Is<List<string>>(x => x.Contains(HashedAccountId)), CancellationToken.None))
+            .ReturnsAsync(accountBalances);
+        
+        _encodingService.Setup(x => x.Decode(HashedAccountId, EncodingType.AccountId)).Returns(AccountId);
     }
 
     [Test]
     public async Task ThenARequestShouldMakeCallsToGetBalances()
     {
         //Act
-        await _orchestrator!.GetAccount(HashedAgreementId);
+        await _orchestrator!.GetAccount(HashedAccountId);
 
         //Assert            
         _apiService!.VerifyAll();
@@ -71,7 +83,7 @@ internal class WhenIGetAnAccount
     public async Task ThenResponseShouldHaveBalanceSet()
     {
         //Act
-        var result = await _orchestrator!.GetAccount(HashedAgreementId);
+        var result = await _orchestrator!.GetAccount(HashedAccountId);
 
         //Assert
         Assert.That(result.Data.Balance, Is.EqualTo(AccountBalance));
@@ -81,7 +93,7 @@ internal class WhenIGetAnAccount
     public async Task ThenResponseShouldHaveTransferAllowanceSet()
     {
         //Act
-        var result = await _orchestrator!.GetAccount(HashedAgreementId);
+        var result = await _orchestrator!.GetAccount(HashedAccountId);
 
         //Assert
         Assert.That(result.Data.RemainingTransferAllowance, Is.EqualTo(_transferAllowance!.RemainingTransferAllowance));
@@ -90,10 +102,13 @@ internal class WhenIGetAnAccount
     [Test]
     public async Task AndTheAccountHasALevyOverrideThenTheyShouldNotBeAllowedPaymentOnTheService()
     {
+        // Arrange
         _accountBalanceResult!.LevyOverride = false;
+        
+        // Act
+        var response = await _orchestrator!.GetAccount(HashedAccountId);
 
-        var response = await _orchestrator!.GetAccount(HashedAgreementId);
-
+        // Assert
         Assert.That(response.Data.IsAllowedPaymentOnService, Is.False);
     }
 
@@ -102,7 +117,7 @@ internal class WhenIGetAnAccount
     {
         _accountDetailViewModel!.AccountAgreementType = AccountAgreementType.NonLevyExpressionOfInterest;
 
-        var response = await _orchestrator!.GetAccount(HashedAgreementId);
+        var response = await _orchestrator!.GetAccount(HashedAccountId);
 
         Assert.That(response.Data.IsAllowedPaymentOnService, Is.True);
     }
@@ -112,7 +127,7 @@ internal class WhenIGetAnAccount
     {
         _accountDetailViewModel!.ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy.ToString();
 
-        var response = await _orchestrator!.GetAccount(HashedAgreementId);
+        var response = await _orchestrator!.GetAccount(HashedAccountId);
 
         Assert.That(response.Data.IsAllowedPaymentOnService, Is.True);
     }
@@ -122,7 +137,7 @@ internal class WhenIGetAnAccount
     {
         _accountDetailViewModel!.ApprenticeshipEmployerType = ApprenticeshipEmployerType.NonLevy.ToString();
 
-        var response = await _orchestrator!.GetAccount(HashedAgreementId);
+        var response = await _orchestrator!.GetAccount(HashedAccountId);
 
         Assert.That(response.Data.IsAllowedPaymentOnService, Is.False);
     }

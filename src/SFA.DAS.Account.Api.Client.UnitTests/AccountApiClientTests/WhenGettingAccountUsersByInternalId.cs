@@ -1,42 +1,38 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoFixture;
+﻿using AutoFixture;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 
-namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
+namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests;
+
+public class WhenGettingAccountUsersByInternalId : ApiClientTestBase
 {
-    public class WhenGettingAccountUsersByInternalId : ApiClientTestBase
+    private TeamMemberViewModel? _teamMember;
+    private string? _uri;
+
+    protected override void HttpClientSetup()
     {
-        private TeamMemberViewModel? _teamMember;
-        private string? _uri;
+        _uri = $"/api/accounts/internal/{NumericalAccountId}/users";
+        var absoluteUri = Configuration!.ApiBaseUrl.TrimEnd('/') + _uri;
 
-        protected override void HttpClientSetup()
-        {
-            _uri = $"/api/accounts/internal/{NumericalAccountId}/users";
-            var absoluteUri = Configuration!.ApiBaseUrl.TrimEnd('/') + _uri;
+        var fixture = new Fixture();
 
-            var fixture = new Fixture();
+        _teamMember = fixture.Create<TeamMemberViewModel>();
 
-            _teamMember = fixture.Create<TeamMemberViewModel>();
+        var members = new List<TeamMemberViewModel?> { _teamMember };
 
-            var members = new List<TeamMemberViewModel?> { _teamMember };
+        HttpClient!.Setup(c => c.GetAsync(absoluteUri))
+            .Returns(Task.FromResult(JsonConvert.SerializeObject(members)));
+    }
 
-            HttpClient!.Setup(c => c.GetAsync(absoluteUri))
-                .Returns(Task.FromResult(JsonConvert.SerializeObject(members)));
-        }
+    [Test]
+    public async Task ThenTheCorrectEndpointIsCalled()
+    {
+        //Act
+        var actual = await ApiClient!.GetAccountUsers(NumericalAccountId);
 
-        [Test]
-        public async Task ThenTheCorrectEndpointIsCalled()
-        {
-            //Act
-            var actual = await ApiClient!.GetAccountUsers(NumericalAccountId);
-
-            //Assert
-            Assert.That(actual, Is.Not.Null);
-            Assert.That(actual.Any(), Is.True);
-        }
+        //Assert
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual.Any(), Is.True);
     }
 }

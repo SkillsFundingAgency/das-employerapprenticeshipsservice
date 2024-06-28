@@ -1,7 +1,6 @@
-namespace SFA.DAS.EAS.Web.Cookies
+namespace SFA.DAS.EAS.Web.Cookies;
+
+public static class CookieNames
 {
-    public static class CookieNames
-    {
-        public const string Authentication = "SFA.DAS.EAS.Web.Auth";
-    }
+    public const string Authentication = "SFA.DAS.EAS.Web.Auth";
 }

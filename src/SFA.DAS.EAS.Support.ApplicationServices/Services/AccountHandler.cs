@@ -52,15 +52,15 @@ public class AccountHandler : IAccountHandler
         return response;
     }
 
-    public async Task<AccountFinanceResponse> FindFinance(string id)
+    public async Task<AccountFinanceResponse> FindFinance(string hashedAccountId)
     {
         var response = new AccountFinanceResponse
         {
             StatusCode = SearchResponseCodes.NoSearchResultsFound
         };
 
-        var getAccountTask = _accountRepository.Get(id, AccountFieldsSelection.Finance);
-        var getBalanceTask = _accountRepository.GetAccountBalance(id);
+        var getAccountTask = _accountRepository.Get(hashedAccountId, AccountFieldsSelection.Finance);
+        var getBalanceTask = _accountRepository.GetAccountBalance(hashedAccountId);
 
         await Task.WhenAll(getAccountTask, getBalanceTask);
 

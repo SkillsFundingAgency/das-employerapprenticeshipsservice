@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -37,16 +38,30 @@ public class EmployerAccountsApiService : ApiClientService, IEmployerAccountsApi
         return GetResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>>($"/api/accounts?{(string.IsNullOrWhiteSpace(toDate) ? "" : "toDate=" + toDate + "&")}pageNumber={pageNumber}&pageSize={pageSize}", cancellationToken: cancellationToken);
     }
 
-    public Task<AccountDetailViewModel> GetAccount(string hashedAccountId, CancellationToken cancellationToken = default)
+    public async Task<AccountDetailViewModel> GetAccount(long accountId, CancellationToken cancellationToken = default)
     {
-        _logger.LogInformation("Getting paged accounts");
+        _logger.LogInformation("Getting account: {AccountId}");
 
-        return GetResponse<AccountDetailViewModel>($"/api/accounts/{hashedAccountId}", cancellationToken: cancellationToken);
+        return await GetResponse<AccountDetailViewModel>($"/api/accounts/{accountId}", cancellationToken: cancellationToken);
     }
 
     public Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default)
     {
         return GetResponse<dynamic>(url, cancellationToken: cancellationToken);
+    }
+    
+    public async Task<T> GetResource<T>(string uri)
+    {
+        _logger.LogInformation("Getting resource: {ResourceUri}", uri);
+
+        return await GetResponse<T>(uri);
+    }
+
+    public Task<ICollection<TeamMemberViewModel>> GetAccountUsers(long accountId)
+    {
+        _logger.LogInformation("Getting paged accounts");
+
+        return GetResponse<ICollection<TeamMemberViewModel>>($"/api/accounts/internal/{accountId}/users");
     }
 
     public async Task ChangeRole(string hashedId, string email, int role, CancellationToken cancellationToken = default)

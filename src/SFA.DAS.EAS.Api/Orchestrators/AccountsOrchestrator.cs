@@ -110,12 +110,13 @@ public class AccountsOrchestrator
         var response = await GetAccount(hashedAccountId);
         return response;
     }
-
+    
     public async Task<OrchestratorResponse<AccountDetailViewModel>> GetAccount(string hashedAccountId)
     {
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
         _logger.LogInformation("Getting account {HashedAccountId}", hashedAccountId);
         
-        var accountResult = await _employerAccountsApiService.GetAccount(hashedAccountId);
+        var accountResult = await _employerAccountsApiService.GetAccount(accountId);
 
         if (accountResult.AccountId == 0)
         {

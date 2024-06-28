@@ -1,19 +1,18 @@
 ﻿using System.Net;
 
-namespace SFA.DAS.EAS.Account.Api.Orchestrators
+namespace SFA.DAS.EAS.Account.Api.Orchestrators;
+
+public class OrchestratorResponse
 {
-    public class OrchestratorResponse
+    protected OrchestratorResponse()
     {
-        protected OrchestratorResponse()
-        {
-            Status = HttpStatusCode.OK;
-        }
-
-        public HttpStatusCode Status { get; set; }
+        Status = HttpStatusCode.OK;
     }
 
-    public class OrchestratorResponse<T> : OrchestratorResponse
-    {
-        public T Data { get; set; }
-    }
+    public HttpStatusCode Status { get; set; }
+}
+
+public class OrchestratorResponse<T> : OrchestratorResponse
+{
+    public T Data { get; set; }
 }
