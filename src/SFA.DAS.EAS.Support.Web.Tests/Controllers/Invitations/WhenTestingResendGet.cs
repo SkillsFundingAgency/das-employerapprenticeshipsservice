@@ -46,21 +46,19 @@ public class WhenTestingResendGet
             accountsApiService.Verify(x => x.ResendInvitation(hashedAccountId, email, CancellationToken.None), Times.Once);
         }
     }
-    
+
     [Test, MoqAutoData]
-    public async Task ItShouldCorrectlyHandleUrlEncodedEmail(
+    public async Task ItShouldCorrectlyHandleEmailWithPlusSymbol(
         string hashedAccountId,
         string externalUserId,
         Mock<IEmployerAccountsApiService> accountsApiService
     )
     {
         const string email = "test+email@address.test";
-        
-        var encodedEmail = WebUtility.UrlEncode(email);
-            
+
         var sut = new InvitationsController(Mock.Of<ILogger<InvitationsController>>(), accountsApiService.Object);
-        
-        var actual = await sut.Resend(hashedAccountId, encodedEmail);
+
+        var actual = await sut.Resend(hashedAccountId, email);
 
         using (new AssertionScope())
         {
