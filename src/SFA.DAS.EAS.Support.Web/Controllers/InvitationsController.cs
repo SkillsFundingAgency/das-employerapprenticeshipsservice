@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Newtonsoft.Json;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.Web.Authorization;
@@ -58,14 +59,16 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
     [Route("resend/{id}")]
     public async Task<IActionResult> Resend(string id, string email)
     {
+        logger.LogInformation("InvitationResend Email before decoding: {Email}", email);
         email = WebUtility.UrlDecode(email);
+        logger.LogInformation("InvitationResend Email after decoding: {Email}", email);
 
         var model = new SendInvitationCompletedModel
         {
             MemberEmail = email,
             ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id)
         };
-
+        
         try
         {
             await accountsApiService.ResendInvitation(id, email);
