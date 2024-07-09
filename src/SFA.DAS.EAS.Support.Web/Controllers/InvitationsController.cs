@@ -59,7 +59,7 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
     [Route("resend/{id}")]
     public async Task<IActionResult> Resend(string id, string email)
     {
-        logger.LogInformation("InvitationResend Email before decoding: {Email}", email);
+        logger.LogInformation("InvitationResend Email before decoding: {Email}", email); 
         
         email = WebUtility.UrlDecode(email);
         
