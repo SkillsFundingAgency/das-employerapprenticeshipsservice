@@ -59,13 +59,10 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
     [Route("resend/{id}")]
     public async Task<IActionResult> Resend(string id, string email)
     {
-        logger.LogInformation("InvitationResend Email parameter: {Email}", email);
-
         var resendInvitationSuccess = true;
 
         try
         {
-            logger.LogInformation("InvitationResend accountsApiService.ResendInvitation for email: {Email}", email);
             await accountsApiService.ResendInvitation(id, email);
         }
         catch (Exception exception)
