@@ -27,7 +27,7 @@
                         <label asp-for="Email" class="form-label">Email</label>
                         <div class="form-hint">An invitation will be sent to this email address</div>
                         @{
-                            const string emailRegex = @"[^@\\\/]+@[^@.]+\.[^@]+";
+                            const string emailRegex = @"[^@\\\/]+@[^@\\\/.]+\.[^@]+";
                         }
                         <input asp-for="Email" class="form-control" type="email" aria-required="true" value="" required pattern="@emailRegex" title="Invalid email address">
                     </div>
