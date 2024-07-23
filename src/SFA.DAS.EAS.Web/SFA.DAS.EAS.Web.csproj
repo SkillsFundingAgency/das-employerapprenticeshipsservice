@@ -27,6 +27,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="SFA.DAS.GovUK.Auth" Version="17.1.92" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.6" />
+    <PackageReference Include="System.Formats.Asn1" Version="8.0.1" />
     <PackageReference Include="System.Security.Cryptography.Pkcs" Version="8.0.0" />
     <PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.1" />
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.1.338" />
