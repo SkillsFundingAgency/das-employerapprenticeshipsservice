@@ -1,18 +1,19 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Support.Infrastructure.Settings;
 using SFA.DAS.EAS.Support.Web.Configuration;
 using SFA.DAS.EmployerAccounts.Api.Client;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EAS.Support.Web.ServiceRegistrations;
 
 public static class ConfigurationServiceRegistrations
 {
-    public static IServiceCollection AddConfigurationSections(this IServiceCollection services,
-        IConfiguration configuration)
+    public static IServiceCollection AddConfigurationSections(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddOptions();
         
@@ -20,6 +21,7 @@ public static class ConfigurationServiceRegistrations
         services.AddSingleton(easConfiguration);
 
         services.AddSingleton(sp => sp.GetService<EmployerApprenticeshipsServiceConfiguration>().EmployerAccountsApi);
+        services.AddSingleton(sp => sp.GetService<EmployerApprenticeshipsServiceConfiguration>().EmployerFinanceApi);
 
         services.Configure<EasSupportConfiguration>(configuration);
         services.AddSingleton(cfg => cfg.GetService<IOptions<EasSupportConfiguration>>().Value);
@@ -36,6 +38,10 @@ public static class ConfigurationServiceRegistrations
         services.AddSingleton<IHmrcApiClientConfiguration>(sp => sp.GetService<EasSupportConfiguration>().LevySubmission.HmrcApi);
         services.AddSingleton<ITokenServiceApiClientConfiguration>(sp => sp.GetService<EasSupportConfiguration>().LevySubmission.TokenServiceApi);
 
+        
+        var encodingConfigJson = configuration.GetSection(ConfigurationKeys.EncodingConfig).Value;
+        var encodingConfig = JsonConvert.DeserializeObject<EncodingConfig>(encodingConfigJson);
+        services.AddSingleton(encodingConfig);
         return services;
     }
 }

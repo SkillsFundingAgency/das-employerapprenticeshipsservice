@@ -7,7 +7,7 @@ namespace SFA.DAS.EAS.Account.Api.Types
     {
         public string AccountName { get; set; }
 
-        public string AccountHashId { get; set; }
+        public string HashedAccountId { get; set; }
 
         public string PublicAccountHashId { get; set; }
 

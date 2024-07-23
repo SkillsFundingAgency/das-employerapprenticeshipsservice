@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
@@ -12,6 +13,7 @@ public class WhenCallingIndexGet : WhenTestingChallengeController
     [Test]
     public async Task ItShouldReturnHttpNoFoundWhenThereIsNotAMatch()
     {
+        // Arrange
         var challengeResponse = new ChallengeResponse
         {
             Account = null,
@@ -23,14 +25,17 @@ public class WhenCallingIndexGet : WhenTestingChallengeController
         MockChallengeHandler!.Setup(x => x.Get(id))
             .ReturnsAsync(challengeResponse);
 
+        // Act
         var actual = await Unit!.Index(id);
 
-        Assert.That(actual, Is.InstanceOf<NotFoundObjectResult>());
+        // Assert
+        actual.Should().BeAssignableTo<NotFoundObjectResult>();
     }
 
     [Test]
     public async Task ItShouldReturnHttpNoFoundWhenTheSearchFails()
     {
+        // Arrange
         var challengeResponse = new ChallengeResponse
         {
             Account = null,
@@ -42,14 +47,17 @@ public class WhenCallingIndexGet : WhenTestingChallengeController
         MockChallengeHandler!.Setup(x => x.Get(id))
             .ReturnsAsync(challengeResponse);
 
+        // Act
         var actual = await Unit!.Index(id);
 
-        Assert.That(actual, Is.InstanceOf<NotFoundObjectResult>());
+        // Assert
+        actual.Should().BeAssignableTo<NotFoundObjectResult>();
     }
 
     [Test]
     public async Task ItShouldReturnTheChallengeViewWithAModelWhenThereIsAMatch()
     {
+        // Arrange
         var challengeResponse = new ChallengeResponse
         {
             Account = new Core.Models.Account
@@ -66,10 +74,11 @@ public class WhenCallingIndexGet : WhenTestingChallengeController
         MockChallengeHandler!.Setup(x => x.Get(id))
             .ReturnsAsync(challengeResponse);
 
+        // Act
         var actual = await Unit!.Index(id);
 
-        Assert.That(actual, Is.InstanceOf<ViewResult>());
-        var viewResult = (ViewResult)actual;
-        Assert.That(viewResult.Model, Is.InstanceOf<ChallengeViewModel>());
+        // Assert
+        var viewResult = actual.Should().BeAssignableTo<ViewResult>();
+        viewResult.Subject.Model.Should().BeAssignableTo<ChallengeViewModel>();
     }
 }

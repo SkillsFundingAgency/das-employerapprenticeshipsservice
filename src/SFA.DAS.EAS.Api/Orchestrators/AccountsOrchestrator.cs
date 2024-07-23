@@ -43,7 +43,7 @@ public class AccountsOrchestrator
         var accountsResult = await _employerAccountsApiService.GetAccounts(toDate, pageSize, pageNumber);
 
         _logger.LogInformation("calling finance api service to GetAccountBalances");
-        var transactionResult = await _employerFinanceApiService.GetAccountBalances(accountsResult.Data.Select(account => account.AccountHashId).ToList());
+        var transactionResult = await _employerFinanceApiService.GetAccountBalances(accountsResult.Data.Select(account => account.HashedAccountId).ToList());
         var accountBalanceHash = BuildAccountBalanceHash(transactionResult);
         _logger.LogInformation("received response from finance api service to GetAccountBalances {TransactionResultCount} ", transactionResult.Count);
 
@@ -110,12 +110,13 @@ public class AccountsOrchestrator
         var response = await GetAccount(hashedAccountId);
         return response;
     }
-
+    
     public async Task<OrchestratorResponse<AccountDetailViewModel>> GetAccount(string hashedAccountId)
     {
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
         _logger.LogInformation("Getting account {HashedAccountId}", hashedAccountId);
         
-        var accountResult = await _employerAccountsApiService.GetAccount(hashedAccountId);
+        var accountResult = await _employerAccountsApiService.GetAccount(accountId);
 
         if (accountResult.AccountId == 0)
         {

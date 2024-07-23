@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Domain.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
+using SFA.DAS.EAS.Support.Web.Configuration;
 using SFA.DAS.EAS.Support.Web.Controllers;
 using SFA.DAS.EAS.Support.Web.Models;
 using SFA.DAS.EAS.Support.Web.Services;
@@ -25,10 +25,10 @@ public abstract class WhenTestingAccountController
         _payeLevySubmissionsHandler = new Mock<IPayeLevySubmissionsHandler>();
         _payeLevyDeclarationMapper = new Mock<IPayeLevyMapper>();
 
-        Unit = new AccountController(AccountHandler.Object,
+        Unit = new AccountController(
+            AccountHandler.Object,
             _payeLevySubmissionsHandler.Object,
-            _payeLevyDeclarationMapper.Object
-            );
+            _payeLevyDeclarationMapper.Object);
     }
 }
 
@@ -54,17 +54,19 @@ public class WhenTestingIndexGet : WhenTestingAccountController
         AccountHandler!.Setup(x => x.FindOrganisations(id)).ReturnsAsync(response);
         var actual = await Unit!.Index("123");
 
-        Assert.That(actual, Is.Not.Null);
-        Assert.That(actual, Is.InstanceOf<ViewResult>());
-        Assert.That(true, Is.EqualTo(string.IsNullOrEmpty(((ViewResult)actual).ViewName)));
-        Assert.That(((ViewResult)actual).Model, Is.InstanceOf<AccountDetailViewModel>());
-        Assert.That(response.Account, Is.EqualTo(((AccountDetailViewModel)((ViewResult)actual).Model!).Account));
-        Assert.That(((AccountDetailViewModel)((ViewResult)actual).Model!).SearchUrl, Is.Null);
+        // Assert
+        actual.Should().NotBeNull();
+        var result = actual.Should().BeAssignableTo<ViewResult>();
+        result.Subject.ViewName.Should().BeNull();
+        var model = result.Subject.Model.Should().BeAssignableTo<AccountDetailViewModel>();
+        model.Subject.Account.Should().BeEquivalentTo(response.Account);
+        model.Subject.SearchUrl.Should().BeNull();
     }
 
     [Test]
     public async Task ItShouldReturnHttpNotFoundOnNoSearchResultsFound()
     {
+        // Arrange
         var response = new AccountDetailOrganisationsResponse
         {
             Account = new Core.Models.Account
@@ -78,14 +80,18 @@ public class WhenTestingIndexGet : WhenTestingAccountController
         };
         const string id = "123";
         AccountHandler!.Setup(x => x.FindOrganisations(id)).ReturnsAsync(response);
+        
+        // Act
         var actual = await Unit!.Index("123");
-        Assert.That(actual, Is.Not.Null);
-        Assert.That(actual, Is.InstanceOf<NotFoundResult>());
+        
+        // Assert
+        actual.Should().BeAssignableTo<NotFoundResult>();
     }
 
     [Test]
     public async Task ItShouldReturnHttpNotFoundOnSearchFailed()
     {
+        // Arrange
         var response = new AccountDetailOrganisationsResponse
         {
             Account = new Core.Models.Account
@@ -100,9 +106,11 @@ public class WhenTestingIndexGet : WhenTestingAccountController
             
         const string id = "123";
         AccountHandler!.Setup(x => x.FindOrganisations(id)).ReturnsAsync(response);
+        
+        // Act
         var actual = await Unit!.Index("123");
 
-        Assert.That(actual, Is.Not.Null);
-        Assert.That(actual, Is.InstanceOf<NotFoundResult>());
+        // Assert
+        actual.Should().BeAssignableTo<NotFoundResult>();
     }
 }
