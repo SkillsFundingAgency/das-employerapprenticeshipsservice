@@ -21,7 +21,7 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
             new()
             {
                 AccountId = 123,
-                AccountHashId = "ERERE",
+                HashedAccountId = "ERERE",
                 Balance = 1000m,
                 Href = "https://tempuri.org/account/ERERE",
                 AccountName = "Test Account",
@@ -30,7 +30,7 @@ public class WhenCallingFindAllDetails : WhenTestingAccountRepository
             new()
             {
                 AccountId = 345,
-                AccountHashId = "CNDFJ",
+                HashedAccountId = "CNDFJ",
                 Balance = 1000m,
                 Href = "https://tempuri.org/account/CNDFJ",
                 AccountName = "Test Account 2",

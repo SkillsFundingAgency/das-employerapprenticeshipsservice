@@ -21,7 +21,7 @@ public class WhenGettingAPageOfAccounts : ApiClientTestBase
                         new()
                         {
                             AccountId = 1,
-                            AccountHashId = "1",
+                            HashedAccountId = "1",
                             PublicAccountHashId = "2",
                             AccountName = "Account 1",
                             Balance = 1234567.89m,

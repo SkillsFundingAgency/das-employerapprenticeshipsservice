@@ -43,7 +43,7 @@ public class AccountsOrchestrator
         var accountsResult = await _employerAccountsApiService.GetAccounts(toDate, pageSize, pageNumber);
 
         _logger.LogInformation("calling finance api service to GetAccountBalances");
-        var transactionResult = await _employerFinanceApiService.GetAccountBalances(accountsResult.Data.Select(account => account.AccountHashId).ToList());
+        var transactionResult = await _employerFinanceApiService.GetAccountBalances(accountsResult.Data.Select(account => account.HashedAccountId).ToList());
         var accountBalanceHash = BuildAccountBalanceHash(transactionResult);
         _logger.LogInformation("received response from finance api service to GetAccountBalances {TransactionResultCount} ", transactionResult.Count);
 
