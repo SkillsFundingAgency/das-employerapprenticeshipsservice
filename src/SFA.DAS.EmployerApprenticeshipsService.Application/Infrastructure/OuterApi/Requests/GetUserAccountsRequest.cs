@@ -1,8 +1,7 @@
-using System.Net;
+using System;
 using SFA.DAS.EAS.Application.Contracts.OuterApi;
 
 namespace SFA.DAS.EAS.Application.Infrastructure.OuterApi.Requests;
-
 
 public class GetUserAccountsRequest : IGetApiRequest
 {
@@ -11,7 +10,7 @@ public class GetUserAccountsRequest : IGetApiRequest
 
     public GetUserAccountsRequest(string email, string userId)
     {
-        _email = WebUtility.UrlEncode(email);
+        _email = Uri.EscapeDataString(email);
         _userId = userId;
     }
 
