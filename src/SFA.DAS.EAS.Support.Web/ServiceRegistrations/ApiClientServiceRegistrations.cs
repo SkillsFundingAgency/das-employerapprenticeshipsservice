@@ -13,13 +13,13 @@ public static class ApiClientServiceRegistrations
     public static IServiceCollection AddApiClientServices(this IServiceCollection services)
     {
         services.AddTransient<ManagedIdentityTokenGenerator<EmployerAccountsApiConfiguration>>();
+        services.AddTransient<ManagedIdentityTokenGenerator<EmployerFinanceApiConfiguration>>();
         
+        services.AddHttpClient<IEmployerAccountsApiService, EmployerAccountsApiService>();
         services.AddSingleton<IAccountApiClient, AccountApiClient>();
         services.AddSingleton<ILevyTokenHttpClientFactory, LevyTokenHttpClientFactory>();
         services.AddSingleton<ITokenServiceApiClient, TokenServiceApiClient>();
-        services.AddHttpClient<IEmployerAccountsApiService, EmployerAccountsApiService>();
         
         return services;
     }
 }
-

@@ -21,8 +21,8 @@ public class WhenIGetAccounts : EmployerAccountsControllerTests
             TotalPages = 123,
             Data = new List<AccountWithBalanceViewModel>
             {
-                new() { AccountHashId = "ABC123", AccountId = 123, AccountName = "Test 1", IsAllowedPaymentOnService = true },
-                new() { AccountHashId = "ABC999", AccountId = 987, AccountName = "Test 2", IsAllowedPaymentOnService = true }
+                new() { HashedAccountId = "ABC123", AccountId = 123, AccountName = "Test 1", IsAllowedPaymentOnService = true },
+                new() { HashedAccountId = "ABC999", AccountId = 987, AccountName = "Test 2", IsAllowedPaymentOnService = true }
             }
         };
 

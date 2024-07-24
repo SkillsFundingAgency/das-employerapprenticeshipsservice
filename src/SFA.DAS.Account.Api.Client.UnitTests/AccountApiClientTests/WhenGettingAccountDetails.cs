@@ -3,45 +3,43 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 
-namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
+namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests;
+
+[TestFixture]
+public class WhenGettingAccountDetails : ApiClientTestBase
 {
-    [TestFixture]
-    public class WhenGettingAccountDetails : ApiClientTestBase
+    private AccountDetailViewModel? _expectedAccount;
+    private string? _uri;
+
+    protected override void HttpClientSetup()
     {
-        private AccountDetailViewModel? _expectedAccount;
-        private string? _uri;
+        _uri = "/api/accounts/ABC123";
+        var absoluteUri = Configuration?.ApiBaseUrl.TrimEnd('/') + _uri;
 
-        protected override void HttpClientSetup()
+        _expectedAccount = new AccountDetailViewModel
         {
-            _uri = "/api/accounts/ABC123";
-            var absoluteUri = Configuration?.ApiBaseUrl.TrimEnd('/') + _uri;
+            AccountId = 123,
+            HashedAccountId = "ABC123",
+            PublicHashedAccountId = "ABC321",
+            DasAccountName = "Account 1",
+            DateRegistered = DateTime.Now.AddYears(-1),
+            OwnerEmail = "test@email.com",
+            LegalEntities = new ResourceList(new[] { new ResourceViewModel { Id = "1", Href = "/api/legalentities/test1" } }),
+            PayeSchemes = new ResourceList(new[] { new ResourceViewModel { Id = "1", Href = "/api/payeschemes/scheme?ref=test1" } })
+        };
 
-            _expectedAccount = new AccountDetailViewModel
-            {
-                AccountId = 123,
-                HashedAccountId = "ABC123",
-                PublicHashedAccountId = "ABC321",
-                DasAccountName = "Account 1",
-                DateRegistered = DateTime.Now.AddYears(-1),
-                OwnerEmail = "test@email.com",
-                LegalEntities = new ResourceList(new[] { new ResourceViewModel { Id = "1", Href = "/api/legalentities/test1" } }),
-                PayeSchemes = new ResourceList(new[] { new ResourceViewModel { Id = "1", Href = "/api/payeschemes/scheme?ref=test1" } })
-            };
+        HttpClient?.Setup(c => c.GetAsync(absoluteUri)).Returns(Task.FromResult(JsonConvert.SerializeObject(_expectedAccount)));
+    }
 
-            HttpClient?.Setup(c => c.GetAsync(absoluteUri)).Returns(Task.FromResult(JsonConvert.SerializeObject(_expectedAccount)));
-        }
+    [Test]
+    public async Task ThenTheAccountDetailsAreReturned()
+    {
+        // Act
+        var response = await ApiClient?.GetResource<AccountDetailViewModel>(_uri);
 
-        [Test]
-        public async Task ThenTheAccountDetailsAreReturned()
-        {
-            // Act
-            var response = await ApiClient?.GetResource<AccountDetailViewModel>(_uri);
-
-            // Assert
-            Assert.That(response, Is.Not.Null);
-            Assert.That(response, Is.AssignableFrom<AccountDetailViewModel>());
-            response.Should().NotBeNull();
-            response.Should().BeEquivalentTo(_expectedAccount);
-        }
+        // Assert
+        response.Should().BeAssignableTo<AccountDetailViewModel>();
+        response.Should().NotBeNull();
+        response.Should().BeEquivalentTo(_expectedAccount);
     }
 }

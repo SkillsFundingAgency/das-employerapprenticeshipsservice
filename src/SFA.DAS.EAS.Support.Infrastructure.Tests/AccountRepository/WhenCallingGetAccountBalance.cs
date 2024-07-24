@@ -62,7 +62,7 @@ public class WhenCallingGetAccountBalance : WhenTestingAccountRepository
         var response = new AccountWithBalanceViewModel
         {
             AccountId = 123,
-            AccountHashId = "ERWERW",
+            HashedAccountId = "ERWERW",
             AccountName = "Test Account",
             Balance = 0m,
             Href = "https://tempuri.org/account/{id}",

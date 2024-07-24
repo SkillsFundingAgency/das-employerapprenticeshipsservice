@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
@@ -19,8 +20,10 @@ public class WhenTestingHeaderGet : WhenTestingAccountController
         const string id = "123";
         AccountHandler!.Setup(x => x.Find(id)).ReturnsAsync(accountResponse);
         var actual = await Unit!.Header(id);
-        Assert.That(actual, Is.Not.Null);
-        Assert.That(actual, Is.InstanceOf<NotFoundResult>());
+        
+        // Assert
+        actual.Should().NotBeNull();
+        actual.Should().BeAssignableTo<NotFoundResult>();
     }
 
     [Test]
@@ -33,8 +36,8 @@ public class WhenTestingHeaderGet : WhenTestingAccountController
         const string id = "123";
         AccountHandler!.Setup(x => x.Find(id)).ReturnsAsync(accountResponse);
         var actual = await Unit!.Header(id);
-        Assert.That(actual, Is.Not.Null);
-        Assert.That(actual, Is.InstanceOf<NotFoundResult>());
+        actual.Should().NotBeNull();
+        actual.Should().BeAssignableTo<NotFoundResult>();
     }
 
     [Test]
@@ -55,10 +58,12 @@ public class WhenTestingHeaderGet : WhenTestingAccountController
         const string id = "123";
         AccountHandler!.Setup(x => x.Find(id)).ReturnsAsync(accountResponse);
         var actual = await Unit!.Header(id);
-        Assert.That(actual, Is.Not.Null);
-        Assert.That(actual, Is.InstanceOf<ViewResult>());
-        Assert.That("SubHeader", Is.EqualTo(((ViewResult)actual).ViewName));
-        Assert.That(((ViewResult)actual).Model, Is.InstanceOf<Core.Models.Account>());
-        Assert.That(accountResponse.Account, Is.EqualTo(((ViewResult)actual).Model));
+        
+        // Assert
+        actual.Should().NotBeNull();
+        var result = actual.Should().BeAssignableTo<ViewResult>();
+        result.Subject.ViewName.Should().Be("SubHeader");
+        var model = result.Subject.Model.Should().BeAssignableTo<Core.Models.Account>();
+        model.Subject.Should().BeEquivalentTo(accountResponse.Account);
     }
 }

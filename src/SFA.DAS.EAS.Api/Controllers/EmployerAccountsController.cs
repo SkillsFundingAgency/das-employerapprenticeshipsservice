@@ -29,7 +29,7 @@ public class EmployerAccountsController : ControllerBase
         
         if (result.Status == HttpStatusCode.OK)
         {
-            result.Data.Data.ForEach(x => x.Href = Url.Link("GetAccount", new { hashedAccountId = x.AccountHashId }));
+            result.Data.Data.ForEach(x => x.Href = Url.Link("GetAccount", new { hashedAccountId = x.HashedAccountId }));
             return Ok(result.Data);
         }
     
