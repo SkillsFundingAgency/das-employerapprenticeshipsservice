@@ -295,7 +295,7 @@
                                 },
                                 {
                                     "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                                    "value": "[reference(concat(variables('uiAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.ConnectionString.value]"
+                                    "value": "[reference(concat('ui-app-insights-', parameters('utcValue'))).outputs.ConnectionString.value]"
                                 },
                                 {
                                     "name": "WEBSITE_LOAD_CERTIFICATES",
@@ -398,7 +398,7 @@
                                 },
                                 {
                                     "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                                    "value": "[reference(concat(variables('apiAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.ConnectionString.value]"
+                                    "value": "[reference(concat('api-app-insights-', parameters('utcValue'))).outputs.ConnectionString.value]"
                                 },
                                 {
                                     "name": "idaAudience",
@@ -528,7 +528,7 @@
                                 },
                                 {
                                     "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                                    "value": "[reference(concat(variables('supportAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.ConnectionString.value]"
+                                    "value": "[if(parameters('deploySupportSite'), reference(concat('support-app-insights-', parameters('utcValue')), '2018-11-01').outputs.ConnectionString.value, '')]"
                                 },
                                 {
                                     "name": "ConfigNames",
