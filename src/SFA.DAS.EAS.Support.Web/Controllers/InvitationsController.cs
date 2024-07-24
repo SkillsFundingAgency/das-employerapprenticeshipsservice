@@ -60,11 +60,7 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
     [Route("resend/{id}")]
     public async Task<IActionResult> Resend(string id, string email)
     {
-        logger.LogInformation("InvitationsController:Resend. Id: {Id}. Email: {Email}", id, email);
-
         var decodedEmail = Uri.UnescapeDataString(email);
-        
-        logger.LogInformation("InvitationsController:Resend. DecodedEmail: {Email}", decodedEmail);
         
         var resendInvitationSuccess = true;
 
