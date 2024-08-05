@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Net;
+using System.Security.Claims;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Http;
@@ -26,16 +27,36 @@ public class WhenTestingResendGet
     )
     {
         var sut = new InvitationsController(Mock.Of<ILogger<InvitationsController>>(), accountsApiService.Object);
-        sut.ControllerContext = new ControllerContext
+
+        var actual = await sut.Resend(hashedAccountId, email);
+
+        using (new AssertionScope())
         {
-            HttpContext = new DefaultHttpContext
-            {
-                User = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
-                {
-                    new(EmployerClaims.IdamsUserIdClaimTypeIdentifier, externalUserId),
-                })),
-            }
-        };
+            actual.Should().NotBeNull();
+            actual.Should().BeOfType<ViewResult>();
+            ((ViewResult)actual).ViewName.Should().Be("Confirm");
+
+            var model = ((ViewResult)actual).Model as SendInvitationCompletedModel;
+
+            model?.Should().BeOfType<SendInvitationCompletedModel>();
+            model?.Success.Should().BeTrue();
+            model?.MemberEmail.Should().Be(email);
+            model?.ReturnToTeamUrl.Should().Be(string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", hashedAccountId));
+
+            accountsApiService.Verify(x => x.ResendInvitation(hashedAccountId, email, CancellationToken.None), Times.Once);
+        }
+    }
+
+    [Test, MoqAutoData]
+    public async Task ItShouldCorrectlyHandleEmailWithPlusSymbol(
+        string hashedAccountId,
+        string externalUserId,
+        Mock<IEmployerAccountsApiService> accountsApiService
+    )
+    {
+        const string email = "test+email@address.test";
+
+        var sut = new InvitationsController(Mock.Of<ILogger<InvitationsController>>(), accountsApiService.Object);
 
         var actual = await sut.Resend(hashedAccountId, email);
 

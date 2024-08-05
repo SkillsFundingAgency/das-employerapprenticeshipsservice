@@ -1,4 +1,6 @@
 ﻿using System.Net;
+using System.Web;
+using Newtonsoft.Json;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.Web.Authorization;
@@ -43,14 +45,14 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
         try
         {
             await accountsApiService.SendInvitation(id, request.EmailOfPersonBeingInvited, request.NameOfPersonBeingInvited, request.RoleOfPersonBeingInvited);
-            
+
             model.Success = true;
         }
         catch (Exception exception)
         {
             logger.LogError(exception, $"{nameof(InvitationsController)}.{nameof(SendInvitation)} caught exception.");
         }
-        
+
         return View("Confirm", model);
     }
 
@@ -58,24 +60,26 @@ public class InvitationsController(ILogger<InvitationsController> logger, IEmplo
     [Route("resend/{id}")]
     public async Task<IActionResult> Resend(string id, string email)
     {
-        email = WebUtility.UrlDecode(email);
-
-        var model = new SendInvitationCompletedModel
-        {
-            MemberEmail = email,
-            ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id)
-        };
+        var decodedEmail = Uri.UnescapeDataString(email);
+        
+        var resendInvitationSuccess = true;
 
         try
         {
-            await accountsApiService.ResendInvitation(id, email);
-            
-            model.Success = true;
+            await accountsApiService.ResendInvitation(id, decodedEmail);
         }
         catch (Exception exception)
         {
+            resendInvitationSuccess = false;
             logger.LogError(exception, $"{nameof(InvitationsController)}.{nameof(Resend)} caught exception.");
         }
+        
+        var model = new SendInvitationCompletedModel
+        {
+            Success = resendInvitationSuccess,
+            MemberEmail = email,
+            ReturnToTeamUrl = string.Format($"/resource?key={SupportServiceResourceKey.EmployerAccountTeam}&id={{0}}", id)
+        };
 
         return View("Confirm", model);
     }
