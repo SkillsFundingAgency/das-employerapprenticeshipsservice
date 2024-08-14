@@ -42,7 +42,9 @@ public class EmployerAccountsApiService : ApiClientService, IEmployerAccountsApi
     {
         _logger.LogInformation("Getting account: {AccountId}");
 
-        return await GetResponse<AccountDetailViewModel>($"/api/accounts/{accountId}", cancellationToken: cancellationToken);
+        var result =  await GetResponse<AccountDetailViewModel>($"/api/accounts/{accountId}", cancellationToken: cancellationToken);
+        
+        _logger.LogInformation("GetAccount response for {AccountId}");
     }
 
     public Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default)

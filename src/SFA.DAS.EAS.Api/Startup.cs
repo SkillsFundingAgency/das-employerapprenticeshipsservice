@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.ApplicationInsights;
 using Microsoft.OpenApi.Models;
 using SFA.DAS.Api.Common.Infrastructure;
 using SFA.DAS.EAS.Account.Api.Authentication;
@@ -36,11 +38,17 @@ public class Startup
             .AddApiAuthorization();
 
         services.AddAutoMapper(typeof(Startup));
-        
+
         services.AddClientServices();
         services.AddOrchestrators();
 
         services.AddSingleton<IEncodingService, EncodingService>();
+
+        services.AddLogging(builder =>
+        {
+            builder.AddFilter<ApplicationInsightsLoggerProvider>(string.Empty, LogLevel.Information);
+            builder.AddFilter<ApplicationInsightsLoggerProvider>("Microsoft", LogLevel.Information);
+        });
 
         services.AddSwaggerGen(c =>
         {
@@ -67,6 +75,7 @@ public class Startup
 
         services.AddApplicationInsightsTelemetry();
     }
+
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         if (env.IsDevelopment())
@@ -78,15 +87,12 @@ public class Startup
         app.UseAuthentication();
         app.UseRouting();
         app.UseAuthorization();
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllers();
-        })
-        .UseSwagger()
-        .UseSwaggerUI(opt =>
-        {
-            opt.SwaggerEndpoint("/swagger/v1/swagger.json", "Employer Finance API");
-            opt.RoutePrefix = "swagger";
-        });
+        app.UseEndpoints(endpoints => { endpoints.MapControllers(); })
+            .UseSwagger()
+            .UseSwaggerUI(opt =>
+            {
+                opt.SwaggerEndpoint("/swagger/v1/swagger.json", "Employer Finance API");
+                opt.RoutePrefix = "swagger";
+            });
     }
 }
