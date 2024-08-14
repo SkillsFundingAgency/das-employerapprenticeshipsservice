@@ -3,7 +3,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Support.Core.Models;
 using SFA.DAS.EAS.Support.Infrastructure.Models;
-using SFA.DAS.EAS.Support.Infrastructure.Services.Contracts;
+using SFA.DAS.EAS.Support.Infrastructure.Services;
 
 namespace SFA.DAS.EAS.Support.Infrastructure.Tests.ChallengeRepository;
 
@@ -13,12 +13,12 @@ public class WhenTestingChallengeRepository
     [SetUp]
     public void Setup()
     {
-        _accountRepository = new Mock<IAccountRepository>();
-        _unit = new Services.ChallengeRepository();
+        _financeRepository = new Mock<IFinanceRepository>();
+        _unit = new Services.ChallengeRepository(_financeRepository.Object);
     }
 
     private Services.ChallengeRepository? _unit;
-    private Mock<IAccountRepository>? _accountRepository;
+    private Mock<IFinanceRepository>? _financeRepository;
 
     [Test]
     public async Task ItShouldReturnFalseWhenCheckDataHasIncorrectBalance()
@@ -56,7 +56,7 @@ public class WhenTestingChallengeRepository
 
         const decimal balance = 999m;
 
-        _accountRepository!.Setup(x => x.GetAccountBalance(challengePermissionQuery.Id))
+        _financeRepository!.Setup(x => x.GetAccountBalance(challengePermissionQuery.Id))
             .ReturnsAsync(balance);
 
         var actual = await _unit!.CheckData(account, challengePermissionQuery);
@@ -100,7 +100,7 @@ public class WhenTestingChallengeRepository
 
         const decimal balance = 1000m;
 
-        _accountRepository!.Setup(x => x.GetAccountBalance(challengePermissionQuery.Id))
+        _financeRepository!.Setup(x => x.GetAccountBalance(challengePermissionQuery.Id))
             .ReturnsAsync(balance);
 
         var actual = await _unit!.CheckData(account, challengePermissionQuery);
@@ -145,7 +145,7 @@ public class WhenTestingChallengeRepository
 
         const decimal balance = 1000m;
 
-        _accountRepository!.Setup(x => x.GetAccountBalance(challengePermissionQuery.Id))
+        _financeRepository!.Setup(x => x.GetAccountBalance(challengePermissionQuery.Id))
             .ReturnsAsync(balance);
 
         var actual = await _unit!.CheckData(account, challengePermissionQuery);
@@ -189,7 +189,7 @@ public class WhenTestingChallengeRepository
 
         const decimal balance = 1000m;
 
-        _accountRepository!.Setup(x => x.GetAccountBalance(challengePermissionQuery.Id))
+        _financeRepository!.Setup(x => x.GetAccountBalance(challengePermissionQuery.Id))
             .ReturnsAsync(balance);
 
         var actual = await _unit!.CheckData(account, challengePermissionQuery);
