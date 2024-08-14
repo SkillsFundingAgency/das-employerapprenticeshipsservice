@@ -15,6 +15,11 @@ public class FinanceRepository(IEmployerFinanceApiService financeApiService, ILo
         {
             var response = await financeApiService.GetAccountBalances([hashedAccountId]);
 
+            if (response == null || response.Count == 0)
+            {
+                return 0;
+            }
+
             return response.First().Balance;
         }
         catch (Exception exception)

@@ -12,8 +12,8 @@ public class WhenCallingGetFinanceBalance : WhenTestingFinanceRepository
     public async Task ItShouldReturnTheMatchingAccountBalanceValue()
     {
         const string id = "123";
-        
-        var balances = new List<AccountBalance>()
+
+        var balances = new List<AccountBalance>
         {
             new()
             {
@@ -26,10 +26,34 @@ public class WhenCallingGetFinanceBalance : WhenTestingFinanceRepository
             }
         };
 
-       FinanceService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>(), It.IsAny<CancellationToken>())).ReturnsAsync(balances);
+        FinanceService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>(), It.IsAny<CancellationToken>())).ReturnsAsync(balances);
 
         var actual = await Sut!.GetAccountBalance(id);
 
         actual.Should().Be(balances.First().Balance);
+    }
+
+    [Test]
+    public async Task ItShouldReturnZeroIfThereAreEmptyResultsFromApi()
+    {
+        const string id = "123";
+
+        FinanceService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>(), It.IsAny<CancellationToken>())).ReturnsAsync(new List<AccountBalance>());
+
+        var actual = await Sut!.GetAccountBalance(id);
+
+        actual.Should().Be(0);
+    }
+    
+    [Test]
+    public async Task ItShouldReturnZeroIfThereResponseFromApiIsNull()
+    {
+        const string id = "123";
+
+        FinanceService.Setup(x => x.GetAccountBalances(It.IsAny<List<string>>(), It.IsAny<CancellationToken>())).ReturnsAsync(() => null);
+
+        var actual = await Sut!.GetAccountBalance(id);
+
+        actual.Should().Be(0);
     }
 }
