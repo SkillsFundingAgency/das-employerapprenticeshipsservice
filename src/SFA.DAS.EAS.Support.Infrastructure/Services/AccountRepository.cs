@@ -97,7 +97,6 @@ public sealed class AccountRepository : IAccountRepository
         catch (Exception exception)
         {
             _logger.LogError(exception, "Exception while loading all account details");
-
             throw;
         }
     }
@@ -114,7 +113,7 @@ public sealed class AccountRepository : IAccountRepository
         catch (Exception exception)
         {
             _logger.LogError(exception, "Account Balance with id {Id} not found", hashedAccountId);
-            return 0;
+            throw;
         }
     }
 
