@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.Core.Models;
+using SFA.DAS.EAS.Support.Infrastructure.Services;
 using SFA.DAS.EAS.Support.Infrastructure.Services.Contracts;
 
 namespace SFA.DAS.EAS.Support.ApplicationServices.Services;
@@ -10,10 +11,12 @@ namespace SFA.DAS.EAS.Support.ApplicationServices.Services;
 public class AccountHandler : IAccountHandler
 {
     private readonly IAccountRepository _accountRepository;
+    private readonly IFinanceRepository _financeRepository;
 
-    public AccountHandler(IAccountRepository accountRepository)
+    public AccountHandler(IAccountRepository accountRepository, IFinanceRepository financeRepository)
     {
         _accountRepository = accountRepository;
+        _financeRepository = financeRepository;
     }
 
     public async Task<AccountDetailOrganisationsResponse> FindOrganisations(string id)
@@ -60,7 +63,7 @@ public class AccountHandler : IAccountHandler
         };
 
         var getAccountTask = _accountRepository.Get(hashedAccountId, AccountFieldsSelection.Finance);
-        var getBalanceTask = _accountRepository.GetAccountBalance(hashedAccountId);
+        var getBalanceTask = _financeRepository.GetAccountBalance(hashedAccountId);
 
         await Task.WhenAll(getAccountTask, getBalanceTask);
 

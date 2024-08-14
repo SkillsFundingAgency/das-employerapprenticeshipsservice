@@ -14,7 +14,7 @@ public class WhenTestingChallengeRepository
     public void Setup()
     {
         _accountRepository = new Mock<IAccountRepository>();
-        _unit = new Services.ChallengeRepository(_accountRepository.Object);
+        _unit = new Services.ChallengeRepository();
     }
 
     private Services.ChallengeRepository? _unit;

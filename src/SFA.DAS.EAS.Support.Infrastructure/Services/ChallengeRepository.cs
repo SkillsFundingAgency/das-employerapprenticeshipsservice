@@ -6,16 +6,16 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services;
 
 public class ChallengeRepository : IChallengeRepository
 {
-    private readonly IAccountRepository _accountRepository;
+    private readonly IFinanceRepository _financeRepository;
 
-    public ChallengeRepository(IAccountRepository accountRepository)
+    public ChallengeRepository(IFinanceRepository financeRepository)
     {
-        _accountRepository = accountRepository;
+        _financeRepository = financeRepository;
     }
 
     public async Task<bool> CheckData(Core.Models.Account record, ChallengePermissionQuery message)
     {
-        var balance = await _accountRepository.GetAccountBalance(message.Id);
+        var balance = await _financeRepository.GetAccountBalance(message.Id);
 
         var validPayeSchemesData = CheckPayeSchemesData(record.PayeSchemes, message);
 
