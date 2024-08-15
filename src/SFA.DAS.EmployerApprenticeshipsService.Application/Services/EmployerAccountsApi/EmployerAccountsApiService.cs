@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EAS.Application.Http;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EmployerAccounts.Api.Types;
 

@@ -3,7 +3,7 @@ using Azure.Core;
 using Azure.Identity;
 using SFA.DAS.EAS.Domain.Configuration;
 
-namespace SFA.DAS.EAS.Application;
+namespace SFA.DAS.EAS.Application.Http;
 
 public interface IAzureServiceTokenProvider
 {
