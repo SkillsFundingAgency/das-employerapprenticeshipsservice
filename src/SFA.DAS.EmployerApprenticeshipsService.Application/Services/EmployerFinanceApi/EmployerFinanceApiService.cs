@@ -97,11 +97,7 @@ public class EmployerFinanceApiService : ApiClientService, IEmployerFinanceApiSe
         await AddAuthenticationHeader(request);
         
         using var response = await Client.SendAsync(request, cancellationToken);
-
-        if (!response.IsSuccessStatusCode)
-        {
-            await ThrowRestHttpClientException(response, cancellationToken);
-        }
+        response.EnsureSuccessStatusCode();
         
         var content = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 

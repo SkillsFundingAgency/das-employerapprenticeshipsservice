@@ -10,8 +10,8 @@ public interface IAzureServiceTokenProvider
     Task<string> GetTokenAsync();
 }
 
-public class AzureServiceTokenProvider<TConfiguration>(TConfiguration configuration) : IAzureServiceTokenProvider
-    where TConfiguration : IManagedIdentityClientConfiguration
+public class AzureServiceTokenProvider<TConfiguration>(TConfiguration configuration)
+    : IAzureServiceTokenProvider where TConfiguration : IManagedIdentityClientConfiguration
 {
     private readonly ChainedTokenCredential _azureServiceTokenProvider = new(
         new ManagedIdentityCredential(),
