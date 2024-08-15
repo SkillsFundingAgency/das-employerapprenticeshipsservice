@@ -40,16 +40,17 @@ public sealed class AccountRepository : IAccountRepository
 
     public async Task<Core.Models.Account> Get(string hashedAccountId, AccountFieldsSelection selection)
     {
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+        
         try
         {
-            var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
             var response = await _apiService.GetAccount(accountId);
 
             return await GetAdditionalFields(response, selection);
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception, "Account with id {Id} not found", hashedAccountId);
+            _logger.LogError(exception, "An exception occurred whilst attempting to GET EmployerAccount from API. HashedAccountId: {hashedId}, AccountId {Id}.", hashedAccountId, accountId);
             return null;
         }
     }
