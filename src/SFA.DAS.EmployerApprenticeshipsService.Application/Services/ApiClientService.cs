@@ -14,11 +14,9 @@ namespace SFA.DAS.EAS.Application.Services;
 public abstract class ApiClientService
 {
     protected readonly HttpClient Client;
-    private readonly IManagedIdentityTokenGenerator _tokenGenerator;
-    private readonly SemaphoreSlim _tokenLock = new SemaphoreSlim(1);
-    private string _accessToken;
+    private readonly IAzureServiceTokenProvider _tokenGenerator;
     
-    protected ApiClientService(HttpClient client, IManagedIdentityTokenGenerator tokenGenerator)
+    protected ApiClientService(HttpClient client, IAzureServiceTokenProvider tokenGenerator)
     {
         Client = client;
         _tokenGenerator = tokenGenerator;
@@ -35,9 +33,9 @@ public abstract class ApiClientService
 
         httpResponseMessage.EnsureSuccessStatusCode();
     }
-    
+
     private static HttpContent CreateJsonContent<T>(T data) => data == null ? null : new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
-    
+
     protected Task<TResponse> GetResponse<TResponse>(string uri, object queryData = null, CancellationToken cancellationToken = default)
     {
         return GetInternal<TResponse>(new Uri(uri, UriKind.RelativeOrAbsolute), queryData, cancellationToken);
@@ -59,56 +57,33 @@ public abstract class ApiClientService
 
         using var request = new HttpRequestMessage(HttpMethod.Get, uri);
 
-        var accessToken = await GetAccessTokenAsync().ConfigureAwait(false);
+        var accessToken = await GetAccessTokenAsync();
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-        var httpResponseMessage = await Client.SendAsync(request, cancellationToken).ConfigureAwait(false);
-        if (!httpResponseMessage.IsSuccessStatusCode)
+        var httpResponseMessage = await Client.SendAsync(request, cancellationToken);
+        if (httpResponseMessage.IsSuccessStatusCode)
         {
-            if (httpResponseMessage.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-            {
-                await RefreshAccessTokenAsync().ConfigureAwait(false);
-                // Retry the request with the new access token
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
-                httpResponseMessage = await Client.SendAsync(request, cancellationToken).ConfigureAwait(false);
-            }
-            else
-            {
-                await ThrowRestHttpClientException(httpResponseMessage, cancellationToken).ConfigureAwait(false);
-            }
+            return httpResponseMessage;
+        }
+        
+        if (httpResponseMessage.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            accessToken = await GetAccessTokenAsync();
+            // Retry the request with the new access token
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            httpResponseMessage = await Client.SendAsync(request, cancellationToken);
+        }
+        else
+        {
+            await ThrowRestHttpClientException(httpResponseMessage, cancellationToken);
         }
 
         return httpResponseMessage;
     }
-    
+
     private async Task<string> GetAccessTokenAsync()
     {
-        await _tokenLock.WaitAsync().ConfigureAwait(false);
-        try
-        {
-            if (string.IsNullOrEmpty(_accessToken))
-            {
-                _accessToken = await _tokenGenerator.Generate().ConfigureAwait(false);
-            }
-            return _accessToken;
-        }
-        finally
-        {
-            _tokenLock.Release();
-        }
-    }
-
-    private async Task RefreshAccessTokenAsync()
-    {
-        await _tokenLock.WaitAsync().ConfigureAwait(false);
-        try
-        {
-            _accessToken = await _tokenGenerator.Generate().ConfigureAwait(false);
-        }
-        finally
-        {
-            _tokenLock.Release();
-        }
+        return await _tokenGenerator.GetTokenAsync();
     }
 
     private static string AddQueryString(string uri, object queryData)
@@ -132,7 +107,7 @@ public abstract class ApiClientService
 
     protected async Task AddAuthenticationHeader(HttpRequestMessage httpRequestMessage)
     {
-        var accessToken = await _tokenGenerator.Generate();
+        var accessToken = await _tokenGenerator.GetTokenAsync();
         httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
     }
 }
