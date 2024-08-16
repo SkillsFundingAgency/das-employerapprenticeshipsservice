@@ -24,7 +24,7 @@ public class ChallengeRepository : IChallengeRepository
             return false;
         }
 
-        return Math.Round(balance) == Math.Round(Convert.ToDecimal(messageBalance)) && validPayeSchemesData;
+        return Math.Round(balance) == Math.Round(messageBalance) && validPayeSchemesData;
     }
 
     private static bool CheckPayeSchemesData(IEnumerable<PayeSchemeModel> recordPayeSchemes, ChallengePermissionQuery message)
