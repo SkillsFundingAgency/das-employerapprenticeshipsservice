@@ -7,7 +7,6 @@ using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Support.Core.Models;
 using SFA.DAS.EAS.Support.Infrastructure.Models;
 using SFA.DAS.EAS.Support.Infrastructure.Services;
-using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EAS.Support.Infrastructure.Tests.ChallengeRepository;
 
