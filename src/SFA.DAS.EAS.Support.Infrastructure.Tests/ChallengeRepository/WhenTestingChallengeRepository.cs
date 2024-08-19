@@ -200,10 +200,9 @@ public class WhenTestingChallengeRepository
         actual.Should().BeTrue();
     }
 
-    [TestCase(593940.60)]
-    [TestCase(593940.10)]
-    [TestCase(593940.00)]
-    public async Task ItShouldReturnTrueWhenCheckDataHasValidData(decimal accountBalance)
+    [TestCase("593941",593940.60)]
+    [TestCase("593940",593940.10)]
+    public async Task ItShouldReturnTrueWhenCheckDataHasValidData(string messageBalance, decimal accountBalance)
     {
         var account = new Core.Models.Account
         {
@@ -230,8 +229,7 @@ public class WhenTestingChallengeRepository
         var challengePermissionQuery = new ChallengePermissionQuery
         {
             Id = "123",
-            // Employer Finance UI current balance formats the value as below
-            Balance = accountBalance.ToString("C0", new CultureInfo("en-GB")),
+            Balance = messageBalance,
             ChallengeElement1 = "1",
             ChallengeElement2 = "A",
             FirstCharacterPosition = 0,

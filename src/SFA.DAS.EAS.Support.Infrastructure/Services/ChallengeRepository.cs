@@ -31,7 +31,7 @@ public class ChallengeRepository(
             roundedMessageBalance
             );
         
-        return roundedAccountBalance == roundedMessageBalance && validPayeSchemesData;
+        return roundedAccountBalance.Equals(roundedMessageBalance) && validPayeSchemesData;
     }
 
     private static bool CheckPayeSchemesData(IEnumerable<PayeSchemeModel> recordPayeSchemes, ChallengePermissionQuery message)
