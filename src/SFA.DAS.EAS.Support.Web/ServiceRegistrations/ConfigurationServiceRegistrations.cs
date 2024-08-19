@@ -32,13 +32,12 @@ public static class ConfigurationServiceRegistrations
         
         services.Configure<IEmployerAccountsApiClientConfiguration>(configuration.GetSection(ConfigurationKeys.EmployerAccountApiConfig));
         services.Configure<EmployerAccountsApiClientConfiguration>(configuration.GetSection(ConfigurationKeys.EmployerAccountApiConfig));
-
+        
         services.AddSingleton<IAccountApiConfiguration>(sp => sp.GetService<EasSupportConfiguration>().AccountApi);
         services.AddSingleton<ISiteValidatorSettings>(sp => sp.GetService<EasSupportConfiguration>().SiteValidator);
         services.AddSingleton<IHmrcApiClientConfiguration>(sp => sp.GetService<EasSupportConfiguration>().LevySubmission.HmrcApi);
         services.AddSingleton<ITokenServiceApiClientConfiguration>(sp => sp.GetService<EasSupportConfiguration>().LevySubmission.TokenServiceApi);
 
-        
         var encodingConfigJson = configuration.GetSection(ConfigurationKeys.EncodingConfig).Value;
         var encodingConfig = JsonConvert.DeserializeObject<EncodingConfig>(encodingConfigJson);
         services.AddSingleton(encodingConfig);

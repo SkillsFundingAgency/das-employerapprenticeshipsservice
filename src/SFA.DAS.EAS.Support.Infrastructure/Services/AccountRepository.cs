@@ -40,16 +40,17 @@ public sealed class AccountRepository : IAccountRepository
 
     public async Task<Core.Models.Account> Get(string hashedAccountId, AccountFieldsSelection selection)
     {
+        var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+        
         try
         {
-            var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
             var response = await _apiService.GetAccount(accountId);
 
             return await GetAdditionalFields(response, selection);
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception, "Account with id {Id} not found", hashedAccountId);
+            _logger.LogError(exception, "An exception occurred whilst attempting to GET EmployerAccount from API. HashedAccountId: {hashedId}, AccountId {Id}.", hashedAccountId, accountId);
             return null;
         }
     }
@@ -92,31 +93,15 @@ public sealed class AccountRepository : IAccountRepository
             }
 
             return accountFirstPageModel.TotalPages * pagesize;
-
         }
         catch (Exception exception)
         {
             _logger.LogError(exception, "Exception while loading all account details");
-
             throw;
         }
     }
 
-    public async Task<decimal> GetAccountBalance(string hashedAccountId)
-    {
-        try
-        {
-            var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
-            var response = await _apiService.GetAccount(accountId);
 
-            return response.Balance;
-        }
-        catch (Exception exception)
-        {
-            _logger.LogError(exception, "Account Balance with id {Id} not found", hashedAccountId);
-            return 0;
-        }
-    }
 
     private async Task<IEnumerable<Core.Models.Account>> GetAccountSearchDetails(IEnumerable<AccountWithBalanceViewModel> accounts)
     {
@@ -127,8 +112,8 @@ public sealed class AccountRepository : IAccountRepository
             try
             {
                 _logger.LogInformation("Getting account {AccountId}", acc.AccountId);
-                var account  = await _apiService.GetAccount(acc.AccountId, cancellationToken);
-                
+                var account = await _apiService.GetAccount(acc.AccountId, cancellationToken);
+
                 _logger.LogInformation("GetAdditionalFields for account ID {AccountId}", account.AccountId);
                 var accountWithDetails = await GetAdditionalFields(account, AccountFieldsSelection.PayeSchemes);
                 accountsWithDetails.Add(accountWithDetails);
@@ -190,6 +175,7 @@ public sealed class AccountRepository : IAccountRepository
             {
                 _logger.LogError(exception, "Exception occured in Account API type of {TransactionsViewModelName} for period {FinancialYearIteratorYear}.{FinancialYearIteratorMonth} id {AccountId}", nameof(TransactionsViewModel), financialYearIterator.Year, financialYearIterator.Month, accountId);
             }
+
             financialYearIterator = financialYearIterator.AddMonths(1);
         }
 
@@ -204,11 +190,11 @@ public sealed class AccountRepository : IAccountRepository
     private async Task<IEnumerable<PayeSchemeModel>> GetPayeSchemes(AccountDetailViewModel response)
     {
         var payes = new List<PayeSchemeModel>();
-        
+
         var payesBatches = response.PayeSchemes
-                .Select((item, inx) => new { item, inx })
-                .GroupBy(x => x.inx / 50)
-                .Select(g => g.Select(x => x.item));
+            .Select((item, inx) => new { item, inx })
+            .GroupBy(x => x.inx / 50)
+            .Select(g => g.Select(x => x.item));
 
         foreach (var payeBatch in payesBatches)
         {
@@ -234,25 +220,24 @@ public sealed class AccountRepository : IAccountRepository
         }
 
         return payes.Select(payeSchemeViewModel =>
-        {
-            if (!IsValidPayeScheme(payeSchemeViewModel))
             {
-                return null;
-            }
-            
-            var item = new PayeSchemeModel
-            {
-                Ref = payeSchemeViewModel.Ref,
-                DasAccountId = payeSchemeViewModel.DasAccountId,
-                AddedDate = payeSchemeViewModel.AddedDate,
-                RemovedDate = payeSchemeViewModel.RemovedDate,
-                Name = payeSchemeViewModel.Name
-            };
+                if (!IsValidPayeScheme(payeSchemeViewModel))
+                {
+                    return null;
+                }
 
-            return item;
+                var item = new PayeSchemeModel
+                {
+                    Ref = payeSchemeViewModel.Ref,
+                    DasAccountId = payeSchemeViewModel.DasAccountId,
+                    AddedDate = payeSchemeViewModel.AddedDate,
+                    RemovedDate = payeSchemeViewModel.RemovedDate,
+                    Name = payeSchemeViewModel.Name
+                };
 
-        }).Where(x => x != null)
-          .OrderBy(x => x.Ref);
+                return item;
+            }).Where(x => x != null)
+            .OrderBy(x => x.Ref);
     }
 
     private static bool IsValidPayeScheme(PayeSchemeModel result)

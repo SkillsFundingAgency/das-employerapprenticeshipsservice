@@ -71,8 +71,12 @@ public class WhenAddingServicesToTheContainer
                 
                 new("EmployerAccountsApi:IdentifierUri", "https://localhost:321"),
                 new("EmployerAccountsApi:ApiBaseUrl", "https://localhost:321"),
+                
+                new("EmployerFinanceApi:IdentifierUri", "https://localhost:321"),
+                new("EmployerFinanceApi:ApiBaseUrl", "https://localhost:321"),
+                
                 new("SFA.DAS.Encoding", "{\"Encodings\": [{\"EncodingType\": \"AccountId\",\"Salt\": \"and vinegar\",\"MinHashLength\": 32,\"Alphabet\": \"46789BCDFGHJKLMNPRSTVWXY\"}]}")
-            }
+            }!
         };
 
         var provider = new MemoryConfigurationProvider(configSource);

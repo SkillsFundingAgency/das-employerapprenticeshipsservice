@@ -12,6 +12,7 @@ public static class RepositoryServiceRegistrations
     {
         services.AddSingleton<ILevySubmissionsRepository, LevySubmissionsRepository>();
         services.AddSingleton<IAccountRepository, AccountRepository>();
+        services.AddSingleton<IFinanceRepository, FinanceRepository>();
         services.AddSingleton<IChallengeRepository, ChallengeRepository>();
         
         return services;

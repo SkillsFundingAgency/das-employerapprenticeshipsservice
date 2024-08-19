@@ -27,12 +27,12 @@ public class WhenCallingFindFinance : WhenTestingAccountHandler
                 Transactions = new List<TransactionViewModel>()
             }));
 
-        MockAccountRepository.Setup(x => x.GetAccountBalance(Id))
+        MockFinanceRepository.Setup(x => x.GetAccountBalance(Id))
             .ReturnsAsync(0m);
 
         var actual = await Unit!.FindFinance(Id);
 
-        MockAccountRepository.Verify(x => x.GetAccountBalance(Id), Times.Once);
+        MockFinanceRepository.Verify(x => x.GetAccountBalance(Id), Times.Once);
         Assert.Multiple(() =>
         {
             Assert.That(actual.StatusCode, Is.EqualTo(SearchResponseCodes.Success));

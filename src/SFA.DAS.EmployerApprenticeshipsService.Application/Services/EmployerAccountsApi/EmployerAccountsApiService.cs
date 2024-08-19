@@ -17,7 +17,7 @@ public class EmployerAccountsApiService : ApiClientService, IEmployerAccountsApi
 
     public EmployerAccountsApiService(HttpClient httpClient,
         ILogger<EmployerAccountsApiService> logger,
-        ManagedIdentityTokenGenerator<EmployerAccountsApiConfiguration> tokenGenerator,
+        AzureServiceTokenProvider<EmployerAccountsApiConfiguration> tokenGenerator,
         EmployerAccountsApiConfiguration configuration) : base(httpClient, tokenGenerator)
     {
         _logger = logger;
@@ -40,7 +40,7 @@ public class EmployerAccountsApiService : ApiClientService, IEmployerAccountsApi
 
     public async Task<AccountDetailViewModel> GetAccount(long accountId, CancellationToken cancellationToken = default)
     {
-        _logger.LogInformation("Getting account: {AccountId}");
+        _logger.LogInformation("Getting account: {AccountId}", accountId);
 
         return await GetResponse<AccountDetailViewModel>($"/api/accounts/{accountId}", cancellationToken: cancellationToken);
     }

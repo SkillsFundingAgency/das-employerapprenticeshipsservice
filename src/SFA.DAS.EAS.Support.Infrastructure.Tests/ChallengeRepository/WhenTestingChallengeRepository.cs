@@ -1,9 +1,12 @@
-﻿using Moq;
+﻿using System.Globalization;
+using FluentAssertions;
+using Microsoft.Extensions.Logging;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Support.Core.Models;
 using SFA.DAS.EAS.Support.Infrastructure.Models;
-using SFA.DAS.EAS.Support.Infrastructure.Services.Contracts;
+using SFA.DAS.EAS.Support.Infrastructure.Services;
 
 namespace SFA.DAS.EAS.Support.Infrastructure.Tests.ChallengeRepository;
 
@@ -13,12 +16,12 @@ public class WhenTestingChallengeRepository
     [SetUp]
     public void Setup()
     {
-        _accountRepository = new Mock<IAccountRepository>();
-        _unit = new Services.ChallengeRepository(_accountRepository.Object);
+        _financeRepository = new Mock<IFinanceRepository>();
+        _unit = new Services.ChallengeRepository(_financeRepository.Object, Mock.Of<ILogger<Services.ChallengeRepository>>());
     }
 
     private Services.ChallengeRepository? _unit;
-    private Mock<IAccountRepository>? _accountRepository;
+    private Mock<IFinanceRepository>? _financeRepository;
 
     [Test]
     public async Task ItShouldReturnFalseWhenCheckDataHasIncorrectBalance()
@@ -27,8 +30,8 @@ public class WhenTestingChallengeRepository
         {
             Transactions = new List<TransactionViewModel>
             {
-                new() {Balance = 300m},
-                new() {Balance = 700m}
+                new() { Balance = 300m },
+                new() { Balance = 700m }
             },
             PayeSchemes = new List<PayeSchemeModel>
             {
@@ -46,7 +49,7 @@ public class WhenTestingChallengeRepository
         };
         var challengePermissionQuery = new ChallengePermissionQuery
         {
-            Id = "123",
+            Id = Guid.NewGuid().ToString(),
             Balance = "£1000",
             ChallengeElement1 = "1",
             ChallengeElement2 = "4",
@@ -56,12 +59,12 @@ public class WhenTestingChallengeRepository
 
         const decimal balance = 999m;
 
-        _accountRepository!.Setup(x => x.GetAccountBalance(challengePermissionQuery.Id))
+        _financeRepository!.Setup(x => x.GetAccountBalance(challengePermissionQuery.Id))
             .ReturnsAsync(balance);
 
         var actual = await _unit!.CheckData(account, challengePermissionQuery);
 
-        Assert.That(actual, Is.False);
+        actual.Should().BeFalse();
     }
 
     [Test]
@@ -71,8 +74,8 @@ public class WhenTestingChallengeRepository
         {
             Transactions = new List<TransactionViewModel>
             {
-                new() {Balance = 300m},
-                new() {Balance = 700m}
+                new() { Balance = 300m },
+                new() { Balance = 700m }
             },
             PayeSchemes = new List<PayeSchemeModel>
             {
@@ -90,7 +93,7 @@ public class WhenTestingChallengeRepository
         };
         var challengePermissionQuery = new ChallengePermissionQuery
         {
-            Id = "123",
+            Id = Guid.NewGuid().ToString(),
             Balance = "£Z000",
             ChallengeElement1 = "1",
             ChallengeElement2 = "A",
@@ -100,12 +103,12 @@ public class WhenTestingChallengeRepository
 
         const decimal balance = 1000m;
 
-        _accountRepository!.Setup(x => x.GetAccountBalance(challengePermissionQuery.Id))
+        _financeRepository!.Setup(x => x.GetAccountBalance(challengePermissionQuery.Id))
             .ReturnsAsync(balance);
 
         var actual = await _unit!.CheckData(account, challengePermissionQuery);
 
-        Assert.That(actual, Is.False);
+        actual.Should().BeFalse();
     }
 
     [Test]
@@ -115,8 +118,8 @@ public class WhenTestingChallengeRepository
         {
             Transactions = new List<TransactionViewModel>
             {
-                new() {Balance = 300m},
-                new() {Balance = 700m}
+                new() { Balance = 300m },
+                new() { Balance = 700m }
             },
             PayeSchemes = new List<PayeSchemeModel>
             {
@@ -132,10 +135,10 @@ public class WhenTestingChallengeRepository
                 }
             }
         };
-            
+
         var challengePermissionQuery = new ChallengePermissionQuery
         {
-            Id = "123",
+            Id = Guid.NewGuid().ToString(),
             Balance = "£1000",
             ChallengeElement1 = "1",
             ChallengeElement2 = "A",
@@ -145,12 +148,12 @@ public class WhenTestingChallengeRepository
 
         const decimal balance = 1000m;
 
-        _accountRepository!.Setup(x => x.GetAccountBalance(challengePermissionQuery.Id))
+        _financeRepository!.Setup(x => x.GetAccountBalance(challengePermissionQuery.Id))
             .ReturnsAsync(balance);
 
         var actual = await _unit!.CheckData(account, challengePermissionQuery);
 
-        Assert.That(actual, Is.False);
+        actual.Should().BeFalse();
     }
 
     [Test]
@@ -160,8 +163,8 @@ public class WhenTestingChallengeRepository
         {
             Transactions = new List<TransactionViewModel>
             {
-                new() {Balance = 300m},
-                new() {Balance = 700m}
+                new() { Balance = 300m },
+                new() { Balance = 700m }
             },
             PayeSchemes = new List<PayeSchemeModel>
             {
@@ -189,11 +192,55 @@ public class WhenTestingChallengeRepository
 
         const decimal balance = 1000m;
 
-        _accountRepository!.Setup(x => x.GetAccountBalance(challengePermissionQuery.Id))
+        _financeRepository!.Setup(x => x.GetAccountBalance(challengePermissionQuery.Id))
             .ReturnsAsync(balance);
 
         var actual = await _unit!.CheckData(account, challengePermissionQuery);
 
-        Assert.That(actual, Is.True);
+        actual.Should().BeTrue();
+    }
+
+    [TestCase("593941",593940.60)]
+    [TestCase("593940",593940.10)]
+    public async Task ItShouldReturnTrueWhenCheckDataHasValidData(string messageBalance, decimal accountBalance)
+    {
+        var account = new Core.Models.Account
+        {
+            Transactions = new List<TransactionViewModel>
+            {
+                new() { Balance = 300m },
+                new() { Balance = 700m }
+            },
+            PayeSchemes = new List<PayeSchemeModel>
+            {
+                new()
+                {
+                    AddedDate = DateTime.Today.AddMonths(-12),
+                    Ref = "123/456789"
+                },
+                new()
+                {
+                    AddedDate = DateTime.Today.AddMonths(-12),
+                    Ref = "124/45A789"
+                }
+            }
+        };
+
+        var challengePermissionQuery = new ChallengePermissionQuery
+        {
+            Id = "123",
+            Balance = messageBalance,
+            ChallengeElement1 = "1",
+            ChallengeElement2 = "A",
+            FirstCharacterPosition = 0,
+            SecondCharacterPosition = 5
+        };
+
+        _financeRepository!.Setup(x => x.GetAccountBalance(challengePermissionQuery.Id))
+            .ReturnsAsync(accountBalance);
+
+        var actual = await _unit!.CheckData(account, challengePermissionQuery);
+
+        actual.Should().BeTrue();
     }
 }

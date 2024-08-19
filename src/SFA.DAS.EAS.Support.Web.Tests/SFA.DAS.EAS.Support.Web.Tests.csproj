@@ -21,7 +21,7 @@
     <PackageReference Include="NLog" Version="5.2.8" />
     <PackageReference Include="NUnit" Version="4.1.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
-    <PackageReference Include="SFA.DAS.Testing.AutoFixture" Version="3.0.169" />
+    <PackageReference Include="SFA.DAS.Testing.AutoFixture" Version="17.1.103" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.6" />
   </ItemGroup>
   <ItemGroup>
