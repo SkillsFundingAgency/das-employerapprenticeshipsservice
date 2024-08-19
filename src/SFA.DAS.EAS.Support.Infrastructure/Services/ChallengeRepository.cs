@@ -4,18 +4,13 @@ using SFA.DAS.EAS.Support.Infrastructure.Services.Contracts;
 
 namespace SFA.DAS.EAS.Support.Infrastructure.Services;
 
-public class ChallengeRepository : IChallengeRepository
+public class ChallengeRepository(
+    IFinanceRepository financeRepository,
+    ILogger<ChallengeRepository> logger) : IChallengeRepository
 {
-    private readonly IFinanceRepository _financeRepository;
-
-    public ChallengeRepository(IFinanceRepository financeRepository)
-    {
-        _financeRepository = financeRepository;
-    }
-
     public async Task<bool> CheckData(Core.Models.Account record, ChallengePermissionQuery message)
     {
-        var balance = await _financeRepository.GetAccountBalance(message.Id);
+        var accountBalance = await financeRepository.GetAccountBalance(message.Id);
 
         var validPayeSchemesData = CheckPayeSchemesData(record.PayeSchemes, message);
 
@@ -24,7 +19,19 @@ public class ChallengeRepository : IChallengeRepository
             return false;
         }
 
-        return Math.Round(balance) == Math.Round(messageBalance) && validPayeSchemesData;
+        var roundedAccountBalance = Math.Round(accountBalance);
+        var roundedMessageBalance = Math.Round(messageBalance);
+        
+        logger.LogInformation("{TypeName}.{MethodName}: accountBalance: {AccountBalance}. messageBalance: {MessageBalance}. roundedAccountBalance: {RoundedAccountBalance}. roundedMessageBalance: {RoundedMessageBalance}",
+            nameof(ChallengeRepository),
+            nameof(CheckData),
+            accountBalance,
+            messageBalance,
+            roundedAccountBalance,
+            roundedMessageBalance
+            );
+        
+        return roundedAccountBalance == roundedMessageBalance && validPayeSchemesData;
     }
 
     private static bool CheckPayeSchemesData(IEnumerable<PayeSchemeModel> recordPayeSchemes, ChallengePermissionQuery message)
