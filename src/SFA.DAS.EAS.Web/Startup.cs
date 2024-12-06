@@ -59,7 +59,7 @@ public class Startup
         govConfig["ResourceEnvironmentName"] = _configuration["ResourceEnvironmentName"];
         govConfig["StubAuth"] = _configuration["StubAuth"];
 
-        services.AddAndConfigureGovUkAuthentication(_configuration, new AuthRedirects
+        services.AddAndConfigureGovUkAuthentication(govConfig, new AuthRedirects
         {
             SignedOutRedirectUrl = "",
             LocalStubLoginPath = "/service/SignIn-Stub",
