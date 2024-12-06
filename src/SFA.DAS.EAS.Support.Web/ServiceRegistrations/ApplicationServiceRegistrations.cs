@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.EAS.Application.Services;
 using SFA.DAS.EAS.Support.ApplicationServices;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Core.Services;
@@ -31,6 +32,8 @@ public static class ApplicationServiceRegistrations
         services.AddSingleton<IPayeLevyMapper, PayeLevyMapper>();
         services.AddSingleton<IPayeSchemeObfuscator, PayeSchemeObfuscator>();
         services.AddSingleton<IEncodingService, EncodingService>();
+        
+       services.AddTransient<IAssociatedAccountsService, AssociatedAccountsService>();
 
         return services;
     }

@@ -17,10 +17,8 @@ public class UserAccountService(IOuterApiClient outerApiClient) : IUserAccountSe
 {
     public async Task<EmployerUserAccounts> GetUserAccounts(string userId, string email)
     {
-        var actual = await outerApiClient.Get<GetUserAccountsResponse>(new GetUserAccountsRequest(email, userId));
+        var result = await outerApiClient.Get<GetUserAccountsResponse>(new GetUserAccountsRequest(email, userId));
 
-        var result = actual;
-        
         return new EmployerUserAccounts
         {
             EmployerAccounts = result.UserAccounts != null? result.UserAccounts.Select(c => new EmployerUserAccountItem
