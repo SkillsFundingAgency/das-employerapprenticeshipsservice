@@ -54,12 +54,8 @@ public class Startup
 
         services.AddTransient<IUserAccountService, UserAccountService>();
         services.AddTransient<IAssociatedAccountsService, AssociatedAccountsService>();
-
-        var govConfig = _configuration.GetSection("SFA.DAS.Employer.GovSignIn");
-        govConfig["ResourceEnvironmentName"] = _configuration["ResourceEnvironmentName"];
-        govConfig["StubAuth"] = _configuration["StubAuth"];
-
-        services.AddAndConfigureGovUkAuthentication(govConfig, new AuthRedirects
+        
+        services.AddAndConfigureGovUkAuthentication(_configuration, new AuthRedirects
         {
             SignedOutRedirectUrl = "",
             LocalStubLoginPath = "/service/SignIn-Stub",
