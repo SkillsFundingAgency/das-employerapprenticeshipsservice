@@ -32,8 +32,6 @@ public static class ApplicationServiceRegistrations
         services.AddSingleton<IPayeLevyMapper, PayeLevyMapper>();
         services.AddSingleton<IPayeSchemeObfuscator, PayeSchemeObfuscator>();
         services.AddSingleton<IEncodingService, EncodingService>();
-        
-       services.AddTransient<IAssociatedAccountsService, AssociatedAccountsService>();
 
         return services;
     }

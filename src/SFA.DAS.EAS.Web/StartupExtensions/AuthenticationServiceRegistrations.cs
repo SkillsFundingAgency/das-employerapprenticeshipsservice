@@ -24,7 +24,6 @@ public static class AuthenticationServiceRegistrations
         services.AddSingleton<IAuthorizationHandler, EmployerUsersIsOutsideAccountAuthorizationHandler>();
         services.AddSingleton<IAuthorizationHandler, EmployerAccountOwnerAuthorizationHandler>();
         services.AddSingleton<IAuthorizationHandler, AccountActiveAuthorizationHandler>(); //TODO remove after gov login enabled
-        services.AddTransient<IUserAccountService, UserAccountService>();
 
         services
             .AddAuthorizationBuilder()
