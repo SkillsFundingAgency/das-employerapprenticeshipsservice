@@ -51,22 +51,15 @@ public class Startup
         services.AddOuterApiClient(easConfiguration.EmployerAccountsOuterApiConfiguration);
         services.AddAuthenticationServices();
 
-        if (_configuration.UseGovUkSignIn())
-        {
-            var govConfig = _configuration.GetSection("SFA.DAS.Employer.GovSignIn");
-            govConfig["ResourceEnvironmentName"] = _configuration["ResourceEnvironmentName"];
-            govConfig["StubAuth"] = _configuration["StubAuth"];
+        var govConfig = _configuration.GetSection("SFA.DAS.Employer.GovSignIn");
+        govConfig["ResourceEnvironmentName"] = _configuration["ResourceEnvironmentName"];
+        govConfig["StubAuth"] = _configuration["StubAuth"];
             
-            services.AddAndConfigureGovUkAuthentication(govConfig, new AuthRedirects
-            {
-                SignedOutRedirectUrl = "",
-                LocalStubLoginPath = "/service/SignIn-Stub",
-            }, null, typeof(UserAccountService));
-        }
-        else
+        services.AddAndConfigureGovUkAuthentication(govConfig, new AuthRedirects
         {
-            services.AddAndConfigureEmployerAuthentication(identityServerConfiguration);
-        }
+            SignedOutRedirectUrl = "",
+            LocalStubLoginPath = "/service/SignIn-Stub",
+        }, null, typeof(UserAccountService));
 
         services.AddControllersWithViews()
             .AddNewtonsoftJson(options => { options.UseMemberCasing(); });
