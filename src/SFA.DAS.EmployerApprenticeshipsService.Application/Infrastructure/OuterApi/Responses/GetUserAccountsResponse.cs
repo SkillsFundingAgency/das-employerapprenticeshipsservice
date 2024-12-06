@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using Newtonsoft.Json;
+using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EAS.Domain.Serialization.Converters;
 
 namespace SFA.DAS.EAS.Application.Infrastructure.OuterApi.Responses;
 
@@ -27,4 +30,7 @@ public class EmployerIdentifier
     public string EmployerName { get; set; }
     [JsonProperty("role")]
     public string Role { get; set; }
+    [JsonProperty("apprenticeshipEmployerType")]
+    [Newtonsoft.Json.JsonConverter(typeof(ApprenticeshipEmployerTypeConverter))]
+    public ApprenticeshipEmployerType ApprenticeshipEmployerType { get; set; }
 }

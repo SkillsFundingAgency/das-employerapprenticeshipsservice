@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.Authentication;
 using SFA.DAS.EAS.Application.ServiceRegistrations;
+using SFA.DAS.EAS.Application.Services;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Web.Handlers;
@@ -13,6 +14,7 @@ using SFA.DAS.EAS.Web.StartupExtensions;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.Employer.Shared.UI;
 using SFA.DAS.GovUK.Auth.AppStart;
+using SFA.DAS.GovUK.Auth.Models;
 
 namespace SFA.DAS.EAS.Web;
 
@@ -55,10 +57,12 @@ public class Startup
             var govConfig = _configuration.GetSection("SFA.DAS.Employer.GovSignIn");
             govConfig["ResourceEnvironmentName"] = _configuration["ResourceEnvironmentName"];
             govConfig["StubAuth"] = _configuration["StubAuth"];
-            services.AddAndConfigureGovUkAuthentication(govConfig,
-                typeof(EmployerAccountPostAuthenticationClaimsHandler),
-                "",
-                "/service/SignIn-Stub");
+            
+            services.AddAndConfigureGovUkAuthentication(govConfig, new AuthRedirects
+            {
+                SignedOutRedirectUrl = "",
+                LocalStubLoginPath = "/service/SignIn-Stub",
+            }, null, typeof(UserAccountService));
         }
         else
         {
