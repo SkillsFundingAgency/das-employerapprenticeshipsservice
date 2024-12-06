@@ -3,13 +3,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Application.Infrastructure;
 using SFA.DAS.EAS.Application.Services;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.Authorization;
 using SFA.DAS.EAS.Web.RouteValues;
+using EmployerClaims = SFA.DAS.GovUK.Auth.Employer.EmployerClaims;
+using EmployerUserAccountItem = SFA.DAS.GovUK.Auth.Employer.EmployerUserAccountItem;
 
 namespace SFA.DAS.EAS.Web.Authentication;
 
@@ -22,15 +23,19 @@ public interface IEmployerAccountAuthorisationHandler
 public class EmployerAccountAuthorisationHandler : IEmployerAccountAuthorisationHandler
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IUserAccountService _accountsService;
+    private readonly IAssociatedAccountsService _associatedAccountsService;
     private readonly ILogger<EmployerAccountAuthorisationHandler> _logger;
     private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
 
-    public EmployerAccountAuthorisationHandler(IHttpContextAccessor httpContextAccessor, IUserAccountService accountsService, ILogger<EmployerAccountAuthorisationHandler> logger, IOptions<EmployerApprenticeshipsServiceConfiguration> configuration)
+    public EmployerAccountAuthorisationHandler(
+        IHttpContextAccessor httpContextAccessor, 
+        ILogger<EmployerAccountAuthorisationHandler> logger,
+        IOptions<EmployerApprenticeshipsServiceConfiguration> configuration, 
+        IAssociatedAccountsService associatedAccountsService)
     {
         _httpContextAccessor = httpContextAccessor;
-        _accountsService = accountsService;
         _logger = logger;
+        _associatedAccountsService = associatedAccountsService;
         _configuration = configuration.Value;
     }
 
@@ -40,17 +45,14 @@ public class EmployerAccountAuthorisationHandler : IEmployerAccountAuthorisation
         {
             return false;
         }
+        
         var accountIdFromUrl = _httpContextAccessor.HttpContext.Request.RouteValues[RouteValueKeys.HashedAccountId].ToString().ToUpper();
-        var employerAccountClaim = context.User.FindFirst(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier));
-
-        if (employerAccountClaim?.Value == null)
-            return false;
-
+        
         Dictionary<string, EmployerUserAccountItem> employerAccounts;
 
         try
         {
-            employerAccounts = JsonConvert.DeserializeObject<Dictionary<string, EmployerUserAccountItem>>(employerAccountClaim.Value);
+            employerAccounts = await _associatedAccountsService.GetAccounts(forceRefresh: false);
         }
         catch (JsonSerializationException e)
         {
@@ -62,38 +64,25 @@ public class EmployerAccountAuthorisationHandler : IEmployerAccountAuthorisation
 
         if (employerAccounts != null)
         {
-            employerIdentifier = employerAccounts.ContainsKey(accountIdFromUrl)
-                ? employerAccounts[accountIdFromUrl] : null;
+            employerIdentifier = employerAccounts.TryGetValue(accountIdFromUrl, out var account)
+                ? account
+                : null;
         }
 
         if (employerAccounts == null || !employerAccounts.ContainsKey(accountIdFromUrl))
         {
-            var requiredIdClaim = _configuration.UseGovSignIn
-                ? ClaimTypes.NameIdentifier : EmployerClaims.IdamsUserIdClaimTypeIdentifier;
-
-            if (!context.User.HasClaim(c => c.Type.Equals(requiredIdClaim)))
+            if (!context.User.HasClaim(c => c.Type.Equals(ClaimTypes.NameIdentifier)))
+            {
                 return false;
+            }
 
-            var userClaim = context.User.Claims
-                .First(c => c.Type.Equals(requiredIdClaim));
-
-            var email = context.User.Claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.Email))?.Value;
-
-            var userId = userClaim.Value;
-
-            var result = await _accountsService.GetUserAccounts(userId, email);
-
-            var accountsAsJson = JsonConvert.SerializeObject(result.EmployerAccounts.ToDictionary(k => k.AccountId));
-            var associatedAccountsClaim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, accountsAsJson, JsonClaimValueTypes.Json);
-
-            var updatedEmployerAccounts = JsonConvert.DeserializeObject<Dictionary<string, EmployerUserAccountItem>>(associatedAccountsClaim.Value);
-
-            userClaim.Subject.AddClaim(associatedAccountsClaim);
+            var updatedEmployerAccounts = await _associatedAccountsService.GetAccounts(forceRefresh: true);
 
             if (!updatedEmployerAccounts.ContainsKey(accountIdFromUrl))
             {
                 return false;
             }
+
             employerIdentifier = updatedEmployerAccounts[accountIdFromUrl];
         }
 
@@ -102,12 +91,7 @@ public class EmployerAccountAuthorisationHandler : IEmployerAccountAuthorisation
             _httpContextAccessor.HttpContext.Items.Add(ContextItemKeys.EmployerIdentifier, employerAccounts.GetValueOrDefault(accountIdFromUrl));
         }
 
-        if (!CheckUserRoleForAccess(employerIdentifier, allowAllUserRoles))
-        {
-            return false;
-        }
-
-        return true;
+        return CheckUserRoleForAccess(employerIdentifier, allowAllUserRoles);
     }
 
     public Task<bool> IsOutsideAccount(AuthorizationHandlerContext context)
@@ -119,10 +103,7 @@ public class EmployerAccountAuthorisationHandler : IEmployerAccountAuthorisation
 
         var requiredIdClaim = _configuration.UseGovSignIn ? ClaimTypes.NameIdentifier : EmployerClaims.IdamsUserIdClaimTypeIdentifier;
 
-        if (!context.User.HasClaim(c => c.Type.Equals(requiredIdClaim)))
-            return Task.FromResult(false);
-
-        return Task.FromResult(true);
+        return Task.FromResult(context.User.HasClaim(c => c.Type.Equals(requiredIdClaim)));
     }
 
     private static bool CheckUserRoleForAccess(EmployerUserAccountItem employerIdentifier, bool allowAllUserRoles)
