@@ -7,7 +7,6 @@ using SFA.DAS.EAS.Application.ServiceRegistrations;
 using SFA.DAS.EAS.Application.Services;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.Extensions;
-using SFA.DAS.EAS.Web.Handlers;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.RouteValues;
 using SFA.DAS.EAS.Web.StartupExtensions;

@@ -10,7 +10,6 @@ using SFA.DAS.EAS.Application.Services;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Authorization;
 using SFA.DAS.EAS.Web.Cookies;
-using SFA.DAS.EAS.Web.Handlers;
 using SFA.DAS.GovUK.Auth.Authentication;
 using SFA.DAS.GovUK.Auth.Services;
 
@@ -20,17 +19,16 @@ public static class AuthenticationServiceRegistrations
 {
     public static IServiceCollection AddAuthenticationServices(this IServiceCollection services)
     {
-        services.AddTransient<ICustomClaims, EmployerAccountPostAuthenticationClaimsHandler>();
         services.AddTransient<IEmployerAccountAuthorisationHandler, EmployerAccountAuthorisationHandler>();
         services.AddSingleton<IAuthorizationHandler, EmployerAccountAllRolesAuthorizationHandler>();
         services.AddSingleton<IAuthorizationHandler, EmployerUsersIsOutsideAccountAuthorizationHandler>();
         services.AddSingleton<IAuthorizationHandler, EmployerAccountOwnerAuthorizationHandler>();
-        services.AddSingleton<IAuthorizationHandler, AccountActiveAuthorizationHandler>();//TODO remove after gov login enabled
+        services.AddSingleton<IAuthorizationHandler, AccountActiveAuthorizationHandler>(); //TODO remove after gov login enabled
         services.AddTransient<IUserAccountService, UserAccountService>();
 
-        services.AddAuthorization(options =>
-        {
-            options.AddPolicy(
+        services
+            .AddAuthorizationBuilder()
+            .AddPolicy(
                 PolicyNames.HasUserAccount
                 , policy =>
                 {
@@ -38,14 +36,13 @@ public static class AuthenticationServiceRegistrations
                     policy.RequireAuthenticatedUser();
                     policy.Requirements.Add(new AccountActiveRequirement());
                 });
-        });
 
         return services;
     }
 
     public static IServiceCollection AddAndConfigureEmployerAuthentication(
-            this IServiceCollection services,
-            IdentityServerConfiguration configuration)
+        this IServiceCollection services,
+        IdentityServerConfiguration configuration)
     {
         services
             .AddAuthentication(sharedOptions =>
@@ -54,7 +51,6 @@ public static class AuthenticationServiceRegistrations
                 sharedOptions.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 sharedOptions.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
                 sharedOptions.DefaultSignOutScheme = OpenIdConnectDefaults.AuthenticationScheme;
-
             }).AddOpenIdConnect(options =>
             {
                 options.ClientId = configuration.ClientId;
@@ -69,6 +65,7 @@ public static class AuthenticationServiceRegistrations
                 {
                     options.Scope.Add(scope);
                 }
+
                 options.ClaimActions.MapUniqueJsonKey("sub", "id");
                 options.Events.OnRemoteFailure = c =>
                 {
