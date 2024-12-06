@@ -5,13 +5,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.Authentication;
-using SFA.DAS.EAS.Application.Infrastructure;
 using SFA.DAS.EAS.Application.Services;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Authorization;
 using SFA.DAS.EAS.Web.Cookies;
 using SFA.DAS.GovUK.Auth.Authentication;
+using SFA.DAS.GovUK.Auth.Employer;
 using SFA.DAS.GovUK.Auth.Services;
+using EmployerClaims = SFA.DAS.EAS.Application.Infrastructure.EmployerClaims;
 
 namespace SFA.DAS.EAS.Web.StartupExtensions;
 
@@ -23,7 +24,8 @@ public static class AuthenticationServiceRegistrations
         services.AddSingleton<IAuthorizationHandler, EmployerAccountAllRolesAuthorizationHandler>();
         services.AddSingleton<IAuthorizationHandler, EmployerUsersIsOutsideAccountAuthorizationHandler>();
         services.AddSingleton<IAuthorizationHandler, EmployerAccountOwnerAuthorizationHandler>();
-        services.AddSingleton<IAuthorizationHandler, AccountActiveAuthorizationHandler>(); //TODO remove after gov login enabled
+        
+        services.AddTransient<ICustomClaims, EmployerAccountPostAuthenticationClaimsHandler>();    
 
         services
             .AddAuthorizationBuilder()
