@@ -64,7 +64,7 @@ public class AccountClaimsService(IGovAuthEmployerAccountService accountsService
         var result = await accountsService.GetUserAccounts(userId, email);
         var associatedAccounts = result.EmployerAccounts.ToDictionary(k => k.AccountId);
 
-        logger.LogWarning("AssociatedAccountsService.GetAccounts: Accounts returned {Count }items.", associatedAccounts.Count);
+        logger.LogWarning("AssociatedAccountsService.GetAccounts: Accounts returned {Count} items.", associatedAccounts.Count);
 
         if (forceRefresh)
         {
