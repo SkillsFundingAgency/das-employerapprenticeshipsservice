@@ -23,7 +23,7 @@
     <PackageReference Include="NLog" Version="5.2.8" />
     <PackageReference Include="SFA.DAS.EmployerAccounts.Api.Types" Version="1.6.3195" />
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="17.1.113" />
-    <PackageReference Include="SFA.DAS.GovUK.Auth" Version="17.1.121-prerelease-7" />
+    <PackageReference Include="SFA.DAS.GovUK.Auth" Version="17.1.121-prerelease-8" />
     <PackageReference Include="SFA.DAS.Http" Version="3.2.69" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.11" />

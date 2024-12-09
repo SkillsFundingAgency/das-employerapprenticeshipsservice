@@ -60,8 +60,8 @@ public class WhenGettingAssociatedAccounts
 
         result.Should().BeEquivalentTo(accountData);
     }
-    
-   [Test]
+
+    [Test]
     [MoqInlineAutoData(true)]
     [MoqInlineAutoData(false)]
     public async Task Then_User_EmployerAccounts_Should_Be_Retrieved_From_UserService_When_Claims_Are_Populated_But_Empty(
@@ -101,16 +101,16 @@ public class WhenGettingAssociatedAccounts
 
         //Assert
         userAccountService.Verify(x => x.GetUserAccounts(userId, email), Times.Once);
-        
+
         if (forceRefresh)
         {
             claimsPrinciple.Claims.Should().Contain(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier));
-            
+
             var actualClaimValue = claimsPrinciple.Claims.First(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier)).Value;
             var expectedClaimValue = JsonConvert.SerializeObject(updatedAccountData.EmployerAccounts.ToDictionary(x => x.AccountId));
             actualClaimValue.Should().Be(expectedClaimValue);
         }
-      
+
         result.Should().BeEquivalentTo(updatedAccountData.EmployerAccounts.ToDictionary(x => x.AccountId));
     }
 
@@ -158,11 +158,11 @@ public class WhenGettingAssociatedAccounts
         var actualClaimValue = claimsPrinciple.Claims.First(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier)).Value;
         var expectedClaimValue = JsonConvert.SerializeObject(updatedAccountData.EmployerAccounts.ToDictionary(x => x.AccountId));
         actualClaimValue.Should().Be(expectedClaimValue);
-        
+
         result.Should().BeEquivalentTo(updatedAccountData.EmployerAccounts.ToDictionary(x => x.AccountId));
     }
 
-  [Test]
+    [Test]
     [MoqInlineAutoData(true)]
     [MoqInlineAutoData(false)]
     public async Task Then_User_EmployerAccounts_Should_Be_Retrieved_From_AccountsService_And_Stored_When_Claim_Value_Is_Empty_And_Within_Max_Number_Of_Accounts(
@@ -204,21 +204,21 @@ public class WhenGettingAssociatedAccounts
         if (forceRefresh)
         {
             claimsPrinciple.Claims.Should().Contain(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier));
-            
+
             var actualClaimValue = claimsPrinciple.Claims.First(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier)).Value;
-        
+
             var action = () => JsonConvert.DeserializeObject<Dictionary<string, EmployerUserAccountItem>>(actualClaimValue)
                 .Select(x => x.Value)
                 .ToList();
-        
+
             action.Should().NotThrow();
         }
         else
         {
             claimsPrinciple.Claims.Should().NotContain(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier));
         }
-        
-        result.Should().BeEquivalentTo(accountData.EmployerAccounts.ToDictionary(x=> x.AccountId));
+
+        result.Should().BeEquivalentTo(accountData.EmployerAccounts.ToDictionary(x => x.AccountId));
     }
 
     [Test]
@@ -264,20 +264,20 @@ public class WhenGettingAssociatedAccounts
         if (forceRefresh)
         {
             claimsPrinciple.Claims.Should().Contain(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier));
-            
+
             var actualClaimValue = claimsPrinciple.Claims.First(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier)).Value;
-        
+
             var action = () => JsonConvert.DeserializeObject<Dictionary<string, EmployerUserAccountItem>>(actualClaimValue)
                 .Select(x => x.Value)
                 .ToList();
-        
+
             action.Should().NotThrow();
         }
         else
         {
             claimsPrinciple.Claims.Should().NotContain(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier));
         }
-        
-        result.Should().BeEquivalentTo(accountData.EmployerAccounts.ToDictionary(x=> x.AccountId));
+
+        result.Should().BeEquivalentTo(accountData.EmployerAccounts.ToDictionary(x => x.AccountId));
     }
 }
