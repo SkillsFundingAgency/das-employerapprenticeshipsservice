@@ -27,7 +27,7 @@ public class WhenHandlingEmployerAccountAuthorization
         EmployerAccountOwnerRequirement ownerRequirement,
         EmployerUserAccountItem serviceResponse,
         [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
-        [Frozen] Mock<IAssociatedAccountsService> associatedAccountsHelper,
+        [Frozen] Mock<IAccountClaimsService> associatedAccountsHelper,
         EmployerAccountAuthorisationHandler authorizationHandler)
     {
         //Arrange
@@ -67,7 +67,7 @@ public class WhenHandlingEmployerAccountAuthorization
         string accountId,
         EmployerUserAccountItem serviceResponse,
         EmployerAccountOwnerRequirement ownerRequirement,
-        [Frozen] Mock<IAssociatedAccountsService> associatedAccountsHelper,
+        [Frozen] Mock<IAccountClaimsService> associatedAccountsHelper,
         [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
         EmployerAccountAuthorisationHandler authorizationHandler)
     {
@@ -109,7 +109,7 @@ public class WhenHandlingEmployerAccountAuthorization
         EmployerAccountOwnerRequirement ownerRequirement,
         EmployerUserAccountItem serviceResponse,
         [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
-        [Frozen] Mock<IAssociatedAccountsService> associatedAccountsHelper,
+        [Frozen] Mock<IAccountClaimsService> associatedAccountsHelper,
         EmployerAccountAuthorisationHandler authorizationHandler)
     {
         //Arrange
@@ -177,7 +177,7 @@ public class WhenHandlingEmployerAccountAuthorization
         EmployerAccountOwnerRequirement ownerRequirement,
         EmployerUserAccountItem serviceResponse,
         [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
-        [Frozen] Mock<IAssociatedAccountsService> associatedAccountsService,
+        [Frozen] Mock<IAccountClaimsService> associatedAccountsService,
         [Frozen] Mock<IOptions<EmployerApprenticeshipsServiceConfiguration>> configuration,
         EmployerAccountAuthorisationHandler authorizationHandler)
     {
@@ -221,7 +221,7 @@ public class WhenHandlingEmployerAccountAuthorization
         EmployerAccountOwnerRequirement ownerRequirement,
         EmployerUserAccountItem serviceResponse,
         [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
-        [Frozen] Mock<IAssociatedAccountsService> associatedAccountsService,
+        [Frozen] Mock<IAccountClaimsService> associatedAccountsService,
         EmployerAccountAuthorisationHandler authorizationHandler)
     {
         //Arrange

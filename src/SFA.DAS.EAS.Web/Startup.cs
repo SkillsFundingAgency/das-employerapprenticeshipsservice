@@ -53,7 +53,7 @@ public class Startup
         services.AddAuthenticationServices();
 
         services.AddTransient<IUserAccountService, UserAccountService>();
-        services.AddTransient<IAssociatedAccountsService, AssociatedAccountsService>();
+        services.AddTransient<IAccountClaimsService, AccountClaimsService>();
         
         services.AddAndConfigureGovUkAuthentication(_configuration, new AuthRedirects
         {

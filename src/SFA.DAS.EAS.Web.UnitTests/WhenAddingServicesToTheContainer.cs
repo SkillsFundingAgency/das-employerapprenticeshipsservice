@@ -79,7 +79,7 @@ public class WhenAddingServicesToTheContainer
         services.AddTransient<TransfersController>();
         
         services.AddTransient<IUserAccountService, UserAccountService>();
-        services.AddTransient<IAssociatedAccountsService, AssociatedAccountsService>();
+        services.AddTransient<IAccountClaimsService, AccountClaimsService>();
     }
 
     private static IConfigurationRoot GenerateConfiguration()

@@ -20,7 +20,7 @@ public class WhenGettingAssociatedAccounts
         string userId,
         string email,
         [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
-        Mock<ILogger<AssociatedAccountsService>> logger,
+        Mock<ILogger<AccountClaimsService>> logger,
         Mock<IGovAuthEmployerAccountService> userAccountService,
         Dictionary<string, EmployerUserAccountItem> accountData
     )
@@ -43,7 +43,7 @@ public class WhenGettingAssociatedAccounts
 
         httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
 
-        var helper = new AssociatedAccountsService(userAccountService.Object, httpContextAccessor.Object, logger.Object)
+        var helper = new AccountClaimsService(userAccountService.Object, httpContextAccessor.Object, logger.Object)
         {
             MaxPermittedNumberOfAccountsOnClaim = accountData.Count
         };
@@ -69,7 +69,7 @@ public class WhenGettingAssociatedAccounts
         string userId,
         string email,
         [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
-        Mock<ILogger<AssociatedAccountsService>> logger,
+        Mock<ILogger<AccountClaimsService>> logger,
         Mock<IGovAuthEmployerAccountService> userAccountService,
         EmployerUserAccounts updatedAccountData
     )
@@ -91,7 +91,7 @@ public class WhenGettingAssociatedAccounts
         httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
         userAccountService.Setup(x => x.GetUserAccounts(userId, email)).ReturnsAsync(updatedAccountData);
 
-        var associatedAccountsService = new AssociatedAccountsService(userAccountService.Object, httpContextAccessor.Object, logger.Object)
+        var associatedAccountsService = new AccountClaimsService(userAccountService.Object, httpContextAccessor.Object, logger.Object)
         {
             MaxPermittedNumberOfAccountsOnClaim = updatedAccountData.EmployerAccounts.Count()
         };
@@ -120,7 +120,7 @@ public class WhenGettingAssociatedAccounts
         string userId,
         string email,
         [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
-        Mock<ILogger<AssociatedAccountsService>> logger,
+        Mock<ILogger<AccountClaimsService>> logger,
         Mock<IGovAuthEmployerAccountService> userAccountService,
         Dictionary<string, EmployerUserAccountItem> existingAccountData,
         EmployerUserAccounts updatedAccountData
@@ -143,7 +143,7 @@ public class WhenGettingAssociatedAccounts
         httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
         userAccountService.Setup(x => x.GetUserAccounts(userId, email)).ReturnsAsync(updatedAccountData);
 
-        var helper = new AssociatedAccountsService(userAccountService.Object, httpContextAccessor.Object, logger.Object)
+        var helper = new AccountClaimsService(userAccountService.Object, httpContextAccessor.Object, logger.Object)
         {
             MaxPermittedNumberOfAccountsOnClaim = existingAccountData.Count
         };
@@ -170,7 +170,7 @@ public class WhenGettingAssociatedAccounts
         string userId,
         string email,
         [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
-        Mock<ILogger<AssociatedAccountsService>> logger,
+        Mock<ILogger<AccountClaimsService>> logger,
         Mock<IGovAuthEmployerAccountService> userAccountService,
         EmployerUserAccounts accountData
     )
@@ -191,7 +191,7 @@ public class WhenGettingAssociatedAccounts
         httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
         userAccountService.Setup(x => x.GetUserAccounts(userId, email)).ReturnsAsync(accountData);
 
-        var associatedAccountsService = new AssociatedAccountsService(userAccountService.Object, httpContextAccessor.Object, logger.Object)
+        var associatedAccountsService = new AccountClaimsService(userAccountService.Object, httpContextAccessor.Object, logger.Object)
         {
             MaxPermittedNumberOfAccountsOnClaim = accountData.EmployerAccounts.Count()
         };
@@ -229,7 +229,7 @@ public class WhenGettingAssociatedAccounts
         string userId,
         string email,
         [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
-        Mock<ILogger<AssociatedAccountsService>> logger,
+        Mock<ILogger<AccountClaimsService>> logger,
         Mock<IGovAuthEmployerAccountService> userAccountService,
         EmployerUserAccounts accountData
     )
@@ -250,7 +250,7 @@ public class WhenGettingAssociatedAccounts
         httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
         userAccountService.Setup(x => x.GetUserAccounts(userId, email)).ReturnsAsync(accountData);
 
-        var associatedAccountsService = new AssociatedAccountsService(userAccountService.Object, httpContextAccessor.Object, logger.Object)
+        var associatedAccountsService = new AccountClaimsService(userAccountService.Object, httpContextAccessor.Object, logger.Object)
         {
             MaxPermittedNumberOfAccountsOnClaim = accountData.EmployerAccounts.Count() - 1
         };
