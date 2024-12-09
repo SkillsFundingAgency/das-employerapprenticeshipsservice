@@ -52,7 +52,7 @@ public class EmployerAccountAuthorisationHandler : IEmployerAccountAuthorisation
 
         try
         {
-            employerAccounts = await _iAccountClaimsService.GetAccounts(forceRefresh: false);
+            employerAccounts = await _iAccountClaimsService.GetAssociatedAccounts(forceRefresh: false);
         }
         catch (JsonSerializationException e)
         {
@@ -76,7 +76,7 @@ public class EmployerAccountAuthorisationHandler : IEmployerAccountAuthorisation
                 return false;
             }
 
-            var updatedEmployerAccounts = await _iAccountClaimsService.GetAccounts(forceRefresh: true);
+            var updatedEmployerAccounts = await _iAccountClaimsService.GetAssociatedAccounts(forceRefresh: true);
 
             if (!updatedEmployerAccounts.ContainsKey(accountIdFromUrl))
             {

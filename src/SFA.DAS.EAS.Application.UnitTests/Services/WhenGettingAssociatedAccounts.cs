@@ -49,7 +49,7 @@ public class WhenGettingAssociatedAccounts
         };
 
         //Act
-        var result = await helper.GetAccounts(forceRefresh: false);
+        var result = await helper.GetAssociatedAccounts(forceRefresh: false);
 
         //Assert
         userAccountService.Verify(x => x.GetUserAccounts(userId, email), Times.Never);
@@ -97,7 +97,7 @@ public class WhenGettingAssociatedAccounts
         };
 
         //Act
-        var result = await associatedAccountsService.GetAccounts(forceRefresh);
+        var result = await associatedAccountsService.GetAssociatedAccounts(forceRefresh);
 
         //Assert
         userAccountService.Verify(x => x.GetUserAccounts(userId, email), Times.Once);
@@ -149,7 +149,7 @@ public class WhenGettingAssociatedAccounts
         };
 
         //Act
-        var result = await helper.GetAccounts(forceRefresh: true);
+        var result = await helper.GetAssociatedAccounts(forceRefresh: true);
 
         //Assert
         userAccountService.Verify(x => x.GetUserAccounts(userId, email), Times.Once);
@@ -197,7 +197,7 @@ public class WhenGettingAssociatedAccounts
         };
 
         //Act
-        var result = await associatedAccountsService.GetAccounts(forceRefresh);
+        var result = await associatedAccountsService.GetAssociatedAccounts(forceRefresh);
 
         //Assert
         userAccountService.Verify(x => x.GetUserAccounts(userId, email), Times.Once);
@@ -256,7 +256,7 @@ public class WhenGettingAssociatedAccounts
         };
 
         //Act
-        var result = await associatedAccountsService.GetAccounts(forceRefresh);
+        var result = await associatedAccountsService.GetAssociatedAccounts(forceRefresh);
 
         //Assert
         userAccountService.Verify(x => x.GetUserAccounts(userId, email), Times.Once);

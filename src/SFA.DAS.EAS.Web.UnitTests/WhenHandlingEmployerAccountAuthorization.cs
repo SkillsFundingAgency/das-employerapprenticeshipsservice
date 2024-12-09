@@ -41,7 +41,7 @@ public class WhenHandlingEmployerAccountAuthorization
 
         var accountsDictionary = accounts.ToDictionary(x => x.AccountId);
 
-        associatedAccountsHelper.Setup(x => x.GetAccounts(false))
+        associatedAccountsHelper.Setup(x => x.GetAssociatedAccounts(false))
             .ReturnsAsync(accountsDictionary);
 
         var claim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, JsonConvert.SerializeObject(accountsDictionary));
@@ -82,7 +82,7 @@ public class WhenHandlingEmployerAccountAuthorization
 
         var accountsDictionary = accounts.ToDictionary(x => x.AccountId);
 
-        associatedAccountsHelper.Setup(x => x.GetAccounts(false))
+        associatedAccountsHelper.Setup(x => x.GetAssociatedAccounts(false))
             .ReturnsAsync(accountsDictionary);
 
         var claim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, JsonConvert.SerializeObject(accountsDictionary));
@@ -123,7 +123,7 @@ public class WhenHandlingEmployerAccountAuthorization
 
         var accountsDictionary = accounts.ToDictionary(x => x.AccountId);
 
-        associatedAccountsHelper.Setup(x => x.GetAccounts(false))
+        associatedAccountsHelper.Setup(x => x.GetAssociatedAccounts(false))
             .ReturnsAsync(accountsDictionary);
 
         var claim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, JsonConvert.SerializeObject(accountsDictionary));
@@ -192,7 +192,7 @@ public class WhenHandlingEmployerAccountAuthorization
 
         var accountsDictionary = accounts.ToDictionary(x => x.AccountId);
 
-        associatedAccountsService.Setup(x => x.GetAccounts(false)).ReturnsAsync(accountsDictionary);
+        associatedAccountsService.Setup(x => x.GetAssociatedAccounts(false)).ReturnsAsync(accountsDictionary);
 
         var userClaim = new Claim(ClaimTypes.NameIdentifier, userId);
         var employerAccounts = new Dictionary<string, EmployerIdentifier> { { employerIdentifier.AccountId, employerIdentifier } };
@@ -209,8 +209,8 @@ public class WhenHandlingEmployerAccountAuthorization
 
         //Assert
         actual.Should().BeTrue();
-        associatedAccountsService.Verify(x => x.GetAccounts(false), Times.Once);
-        associatedAccountsService.Verify(x => x.GetAccounts(true), Times.Never);
+        associatedAccountsService.Verify(x => x.GetAssociatedAccounts(false), Times.Once);
+        associatedAccountsService.Verify(x => x.GetAssociatedAccounts(true), Times.Never);
     }
 
     [Test, MoqAutoData]
@@ -235,7 +235,7 @@ public class WhenHandlingEmployerAccountAuthorization
 
         var accountsDictionary = accounts.ToDictionary(x => x.AccountId);
 
-        associatedAccountsService.Setup(x => x.GetAccounts(false)).ReturnsAsync(accountsDictionary);
+        associatedAccountsService.Setup(x => x.GetAssociatedAccounts(false)).ReturnsAsync(accountsDictionary);
 
         var userClaim = new Claim(ClaimTypes.NameIdentifier, userId);
         var employerAccountClaim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, JsonConvert.SerializeObject(accountsDictionary));
@@ -251,8 +251,8 @@ public class WhenHandlingEmployerAccountAuthorization
 
         //Assert
         actual.Should().BeFalse();
-        associatedAccountsService.Verify(x => x.GetAccounts(false), Times.Once);
-        associatedAccountsService.Verify(x => x.GetAccounts(true), Times.Once);
+        associatedAccountsService.Verify(x => x.GetAssociatedAccounts(false), Times.Once);
+        associatedAccountsService.Verify(x => x.GetAssociatedAccounts(true), Times.Once);
     }
     [Test, MoqAutoData]
     public async Task Then_Returns_False_If_Employer_Is_Authorized_But_Has_Invalid_Role_But_Should_Allow_All_known_Roles(

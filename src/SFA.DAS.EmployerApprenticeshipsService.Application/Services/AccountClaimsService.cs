@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Application.Services;
 
 public interface IAccountClaimsService
 {
-    Task<Dictionary<string, EmployerUserAccountItem>> GetAccounts(bool forceRefresh);
+    Task<Dictionary<string, EmployerUserAccountItem>> GetAssociatedAccounts(bool forceRefresh);
 }
 
 public class AccountClaimsService(IGovAuthEmployerAccountService accountsService, IHttpContextAccessor httpContextAccessor, ILogger<AccountClaimsService> logger) : IAccountClaimsService
@@ -26,7 +26,7 @@ public class AccountClaimsService(IGovAuthEmployerAccountService accountsService
     /// </summary>
     /// <param name="forceRefresh">Forces data to be refreshed from UserAccountsService and persisted to user claims regardless of claims state.</param>
     /// <returns>Dictionary of string, EmployerUserAccountItem</returns>
-    public async Task<Dictionary<string, EmployerUserAccountItem>> GetAccounts(bool forceRefresh)
+    public async Task<Dictionary<string, EmployerUserAccountItem>> GetAssociatedAccounts(bool forceRefresh)
     {
         var user = httpContextAccessor.HttpContext.User;
         var employerAccountsClaim = user.FindFirst(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier));
