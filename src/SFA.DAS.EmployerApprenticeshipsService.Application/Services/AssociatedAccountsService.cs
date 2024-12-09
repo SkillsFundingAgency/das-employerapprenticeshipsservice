@@ -66,7 +66,10 @@ public class AssociatedAccountsService(IGovAuthEmployerAccountService accountsSe
         
         logger.LogWarning("AssociatedAccountsService.GetAccounts: Accounts returned from accountsService {Data}.",JsonConvert.SerializeObject(associatedAccounts));
 
-        PersistToClaims(associatedAccounts, employerAccountsClaim, userClaim);
+        if (forceRefresh)
+        {
+            PersistToClaims(associatedAccounts, employerAccountsClaim, userClaim);
+        }
 
         return associatedAccounts;
     }
