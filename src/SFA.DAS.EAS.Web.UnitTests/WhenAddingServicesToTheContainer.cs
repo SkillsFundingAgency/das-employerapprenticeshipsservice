@@ -77,6 +77,9 @@ public class WhenAddingServicesToTheContainer
         services.AddTransient<SearchOrganisationController>();
         services.AddTransient<SettingsController>();
         services.AddTransient<TransfersController>();
+        
+        services.AddTransient<IUserAccountService, UserAccountService>();
+        services.AddTransient<IAccountClaimsService, AccountClaimsService>();
     }
 
     private static IConfigurationRoot GenerateConfiguration()

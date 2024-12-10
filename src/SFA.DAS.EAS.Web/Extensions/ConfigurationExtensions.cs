@@ -7,13 +7,6 @@ namespace SFA.DAS.EAS.Web.Extensions;
 
 public static class ConfigurationExtensions
 {
-    public static bool UseGovUkSignIn(this IConfiguration configuration)
-    {
-        return configuration["SFA.DAS.EmployerApprenticeshipsService:UseGovSignIn"] != null &&
-               configuration["SFA.DAS.EmployerApprenticeshipsService:UseGovSignIn"]
-                  .Equals("true", StringComparison.CurrentCultureIgnoreCase);
-    }
-
     public static IConfiguration BuildDasConfiguration(this IConfiguration configuration)
     {
         var configurationBuilder = new ConfigurationBuilder()
@@ -36,7 +29,7 @@ public static class ConfigurationExtensions
             options.StorageConnectionString = configuration["ConfigurationStorageConnectionString"];
             options.EnvironmentName = configuration["EnvironmentName"];
             options.PreFixConfigurationKeys = false ;
-            options.ConfigurationKeysRawJsonResult = new[] { ConfigurationKeys.EncodingConfig };
+            options.ConfigurationKeysRawJsonResult = [ConfigurationKeys.EncodingConfig];
         }
         );
 
