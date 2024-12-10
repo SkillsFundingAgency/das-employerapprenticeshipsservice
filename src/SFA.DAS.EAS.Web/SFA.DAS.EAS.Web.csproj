@@ -25,7 +25,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.11" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="SFA.DAS.GovUK.Auth" Version="17.1.121-prerelease-8" />
+    <PackageReference Include="SFA.DAS.GovUK.Auth" Version="17.1.121" />
     <PackageReference Include="System.Drawing.Common" Version="9.0.0" />
     <PackageReference Include="System.Formats.Asn1" Version="9.0.0" />
     <PackageReference Include="System.Security.Cryptography.Pkcs" Version="9.0.0" />
