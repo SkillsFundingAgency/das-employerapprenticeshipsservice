@@ -28,6 +28,12 @@ jobs:
             ResourceEnvironmentName: $(ResourceEnvironmentName)
             UnrestrictedEnvironments: $(UnrestrictedEnvironments)
             UptimeMonitoringAccessRestrictions: $(UptimeMonitoringAccessRestrictions)
+        - template: azure-pipelines-templates/deploy/step/get-product-app-insights.yml@das-platform-building-blocks
+          parameters:
+            ServiceConnection: ${{ parameters.ServiceConnection }}
+            AppInsightsResourceGroup: $(SharedEnvResourceGroup)
+            AppInsightsName: $(ProductAppInsightsName)
+            IsMultiRepoCheckout: true
         - template: azure-pipelines-templates/deploy/step/arm-deploy.yml@das-platform-building-blocks
           parameters:
             ServiceConnection: ${{ parameters.ServiceConnection }}
@@ -41,6 +47,7 @@ jobs:
               LoggingRedisConnectionString: $(LoggingRedisConnectionString)
               ConfigurationStorageConnectionString: $(ConfigurationStorageConnectionString)
               StorageConnectionString: $(StorageConnectionString)
+              ApplicationInsightsConnectionString: $(ApplicationInsightsConnectionString)
         - template: azure-pipelines-templates/deploy/step/get-apim-subscription-key.yml@das-platform-building-blocks
           parameters:
             ServiceConnection: ${{ parameters.ServiceConnection }}
@@ -73,7 +80,7 @@ jobs:
             TargetFileName: '*.schema.json'
             TableName: Configuration
             ConfigurationSecrets:
-              HashingServiceHashstring: $(HashingServiceHashstring)              
+              HashingServiceHashstring: $(HashingServiceHashstring)
         - template: azure-pipelines-templates/deploy/step/app-role-assignments.yml@das-platform-building-blocks
           parameters:
             ServiceConnection: ${{ parameters.AppRoleAssignmentsServiceConnection }}
