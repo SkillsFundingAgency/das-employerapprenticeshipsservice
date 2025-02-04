@@ -546,7 +546,6 @@
                 }
             },
             "dependsOn": [
-                "[concat('support-app-insights-', parameters('utcValue'))]",
                 "[concat('support-app-service-certificate-', parameters('utcValue'))]"
             ]
         },
