@@ -32,12 +32,6 @@
         "configurationStorageConnectionString": {
             "type": "securestring"
         },
-        "loggingRedisConnectionString": {
-            "type": "securestring"
-        },
-        "loggingRedisKey": {
-            "type": "string"
-        },
         "storageConnectionString": {
             "type": "securestring"
         },
@@ -84,8 +78,7 @@
         },
         "appServiceAllowedIPs": {
             "type": "array",
-            "defaultValue": [
-            ]
+            "defaultValue": []
         },
         "resourceGroupLocation": {
             "type": "string"
@@ -122,8 +115,7 @@
             "type": "Microsoft.Resources/resourceGroups",
             "location": "[parameters('resourceGroupLocation')]",
             "tags": "[parameters('tags')]",
-            "properties": {
-            }
+            "properties": {}
         },
         {
             "apiVersion": "2020-06-01",
@@ -166,8 +158,7 @@
                     }
                 }
             },
-            "dependsOn": [
-            ]
+            "dependsOn": []
         },
         {
             "condition": "[greater(length(parameters('uiCustomHostname')), 0)]",
@@ -270,14 +261,6 @@
                         "value": {
                             "array": [
                                 {
-                                    "name": "LoggingRedisConnectionString",
-                                    "value": "[parameters('loggingRedisConnectionString')]"
-                                },
-                                {
-                                    "name": "LoggingRedisKey",
-                                    "value": "[parameters('loggingRedisKey')]"
-                                },
-                                {
                                     "name": "ConfigurationStorageConnectionString",
                                     "value": "[parameters('configurationStorageConnectionString')]"
                                 },
@@ -288,10 +271,6 @@
                                 {
                                     "name": "StorageConnectionString",
                                     "value": "[parameters('storageConnectionString')]"
-                                },
-                                {
-                                    "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                                    "value": "[reference(concat('ui-app-insights-', parameters('utcValue'))).outputs.InstrumentationKey.value]"
                                 },
                                 {
                                     "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
@@ -377,24 +356,12 @@
                         "value": {
                             "array": [
                                 {
-                                    "name": "LoggingRedisConnectionString",
-                                    "value": "[parameters('loggingRedisConnectionString')]"
-                                },
-                                {
-                                    "name": "LoggingRedisKey",
-                                    "value": "[parameters('loggingRedisKey')]"
-                                },
-                                {
                                     "name": "ConfigurationStorageConnectionString",
                                     "value": "[parameters('configurationStorageConnectionString')]"
                                 },
                                 {
                                     "name": "EnvironmentName",
                                     "value": "[parameters('environmentName')]"
-                                },
-                                {
-                                    "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                                    "value": "[reference(concat('api-app-insights-', parameters('utcValue'))).outputs.InstrumentationKey.value]"
                                 },
                                 {
                                     "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
@@ -452,7 +419,7 @@
         {
             "apiVersion": "2020-06-01",
             "name": "[concat('support-app-service-certificate-', parameters('utcValue'))]",
-            "condition": "[and(greater(length(parameters('supportCustomHostname')), 0), parameters('deploySupportSite'))]",            
+            "condition": "[and(greater(length(parameters('supportCustomHostname')), 0), parameters('deploySupportSite'))]",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "properties": {
@@ -503,14 +470,6 @@
                         "value": {
                             "array": [
                                 {
-                                    "name": "LoggingRedisConnectionString",
-                                    "value": "[parameters('loggingRedisConnectionString')]"
-                                },
-                                {
-                                    "name": "LoggingRedisKey",
-                                    "value": "[parameters('loggingRedisKey')]"
-                                },
-                                {
                                     "name": "ConfigurationStorageConnectionString",
                                     "value": "[parameters('configurationStorageConnectionString')]"
                                 },
@@ -521,10 +480,6 @@
                                 {
                                     "name": "StorageConnectionString",
                                     "value": "[parameters('storageConnectionString')]"
-                                },
-                                {
-                                    "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                                    "value": "[if(parameters('deploySupportSite'), reference(concat('support-app-insights-', parameters('utcValue')), '2018-11-01').outputs.InstrumentationKey.value, '')]"
                                 },
                                 {
                                     "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
