@@ -108,3 +108,6 @@ jobs:
             ServiceConnection: ${{ parameters.ServiceConnection }}
             AppServiceName: $(SupportAppServiceName)
             DeploymentPackagePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/${{ parameters.SolutionBaseName }}.Support.Web.zip
+        - template: azure-pipelines-templates/deploy/step/retain-on-success.yml@das-platform-building-blocks
+          parameters:
+            Environment: ${{ parameters.Environment }}
