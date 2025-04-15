@@ -34,7 +34,7 @@
     </PackageReference>
     <PackageReference Include="System.Formats.Asn1" Version="9.0.0" />
     <PackageReference Include="System.ServiceModel.Federation" Version="8.1.0" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.3.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.8.0" />
     <PackageReference Include="NLog" Version="5.2.8">
     </PackageReference>
     <PackageReference Include="HMRC.ESFA.Levy.Api.Client" Version="2.0.4" />
